@@ -224,10 +224,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	};
 
-	private static boolean isSystemFile(final IFile file) {
-		return SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase(file.getFileExtension());
-	}
-
 	private boolean handleResourceChanged(final IResourceDelta delta) {
 		if (isFileChange(delta)) {
 			collectTypeEntries(delta);
@@ -346,28 +342,19 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private void handleFileCopy(final IResourceDelta delta) {
 		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
 		if (file.getProject().isOpen() && delta.getFlags() != IResourceDelta.MARKERS) {
-
-			if (isSystemFile(file)) {
-				// in case of a copied system file we just need to fix the name in the root XML
-				// node
-				renameSystemFileCopy(file);
-			} else {
-				final TypeLibrary typeLib = TypeLibraryManager.INSTANCE
-						.getTypeLibrary(delta.getResource().getProject());
-				final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-				if (typeEntryForFile == null) {
-					final TypeEntry entry = typeLib.createTypeEntry(file);
-					if (null != entry && containedTypeNameIsDifferent(file)) {
-						// we only need to update the type entry if the file content is different from the file name
-						// this happens when a type is copied into a new project or when a project is opened or imported
-						updateTypeEntry(file, entry);
-					}
-				} else if (!file.equals(typeEntryForFile.getFile())) {
-					// After a file has been copied and the copied file is not the same as the founded type entry
-					// the file and the resulting type must be renamed with a unique name put it in the rename list
-					filesToRename.add(new FileToRenameEntry(file, typeEntryForFile));
+			final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(delta.getResource().getProject());
+			final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+			if (typeEntryForFile == null) {
+				final TypeEntry entry = typeLib.createTypeEntry(file);
+				if (null != entry && containedTypeNameIsDifferent(file)) {
+					// we only need to update the type entry if the file content is different from the file name
+					// this happens when a type is copied into a new project or when a project is opened or imported
+					updateTypeEntry(file, entry);
 				}
-
+			} else if (!file.equals(typeEntryForFile.getFile())) {
+				// After a file has been copied and the copied file is not the same as the founded type entry
+				// the file and the resulting type must be renamed with a unique name put it in the rename list
+				filesToRename.add(new FileToRenameEntry(file, typeEntryForFile));
 			}
 		}
 	}
@@ -405,38 +392,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	public static String replaceLast(final String text, final String regex, final String replacement) {
 		return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
-	static final Pattern systemNamePattern = Pattern
-			.compile("\\<System\\p{javaWhitespace}+(Comment=\".*\"\\p{javaWhitespace}+)?Name=\"([^\"]*)"); //$NON-NLS-1$
-
-	private void renameSystemFileCopy(final IFile file) {
-		final WorkspaceJob job = new WorkspaceJob(Messages.FordiacResourceChangeListener_5 + file.getName()) {
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				boolean wrongName = false;
-				final String newTypeName = TypeEntry.getTypeNameFromFile(file);
-				try (Scanner scanner = new Scanner(file.getContents())) {
-					final String name = scanner.findWithinHorizon(systemNamePattern, 0);
-					wrongName = (null != name) && (!name.endsWith("\"" + newTypeName)); //$NON-NLS-1$
-				} catch (final Exception e) {
-					FordiacLogHelper.logError(e.getMessage(), e);
-				}
-				if (wrongName) {
-					final AutomationSystem system = systemManager.getSystem(file);
-					if ((null != system) && (!newTypeName.equals(system.getName()))) {
-						system.setName(TypeEntry.getTypeNameFromFile(file));
-						SystemManager.saveSystem(system);
-					}
-				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setUser(false);
-		job.setSystem(true);
-		job.setPriority(Job.SHORT);
-		job.setRule(file.getProject());
-		job.schedule();
 	}
 
 	private void handleProjectRename(final IResourceDelta delta) {
