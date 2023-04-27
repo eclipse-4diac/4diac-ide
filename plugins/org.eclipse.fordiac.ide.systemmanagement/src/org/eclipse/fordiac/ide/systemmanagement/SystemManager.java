@@ -26,7 +26,6 @@ package org.eclipse.fordiac.ide.systemmanagement;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.ICommand;
@@ -96,8 +95,8 @@ public enum SystemManager {
 	}
 
 	public static boolean isSystemFile(final Object entry) {
-		return ((entry instanceof IFile)
-				&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase(((IFile) entry).getFileExtension()));
+		return ((entry instanceof final IFile file)
+				&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase((file).getFileExtension()));
 	}
 
 	@SuppressWarnings("static-method")
@@ -118,7 +117,7 @@ public enum SystemManager {
 			final ICommand command = description.newCommand();
 			command.setBuilderName(builder);
 			return command;
-		}).collect(Collectors.toList());
+		}).toList();
 		description.setBuildSpec(commands.toArray(new ICommand[commands.size()]));
 
 		project.create(description, monitor);
@@ -203,7 +202,7 @@ public enum SystemManager {
 	@SuppressWarnings("static-method")
 	public synchronized List<AutomationSystem> getProjectSystems(final IProject project) {
 		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).getSystems().values().stream()
-				.map(SystemEntry::getSystem).collect(Collectors.toList());
+				.map(SystemEntry::getSystem).toList();
 	}
 
 	private static String[] getNatureIDs() {

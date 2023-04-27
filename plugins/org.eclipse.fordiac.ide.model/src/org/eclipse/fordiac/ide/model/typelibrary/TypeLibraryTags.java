@@ -49,7 +49,7 @@ public final class TypeLibraryTags {
 
 	public static final String SYSTEM_TYPE_FILE_ENDING = "SYS"; //$NON-NLS-1$
 
-	public static final String SYSTEM_TYPE_FILE_ENDING_WITH_DOT = "." + SUBAPP_TYPE_FILE_ENDING; //$NON-NLS-1$
+	public static final String SYSTEM_TYPE_FILE_ENDING_WITH_DOT = "." + SYSTEM_TYPE_FILE_ENDING; //$NON-NLS-1$
 
 	/** The Constant TYPE_LIBRARY. */
 	public static final String TYPE_LIBRARY = "typelibrary";//$NON-NLS-1$
