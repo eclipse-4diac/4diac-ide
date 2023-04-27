@@ -150,7 +150,8 @@ public abstract class CommonElementImporter {
 	}
 
 	private XMLStreamReader reader;
-	private final IFile file;
+	private IFile file = null;
+	private InputStream inputStream = null;
 	private final TypeLibrary typeLibrary;
 	private LibraryElement element;
 	protected final List<ErrorMarkerBuilder> errorMarkerBuilders;
@@ -180,6 +181,13 @@ public abstract class CommonElementImporter {
 
 	protected void setElement(final LibraryElement element) {
 		this.element = element;
+	}
+
+	protected CommonElementImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
+		Assert.isNotNull(inputStream);
+		this.inputStream = inputStream;
+		this.typeLibrary = typeLibrary;
+		errorMarkerBuilders = new ArrayList<>();
 	}
 
 	protected CommonElementImporter(final IFile file) {
@@ -213,6 +221,9 @@ public abstract class CommonElementImporter {
 	}
 
 	protected InputStream getInputStream() throws Exception {
+		if (inputStream != null) {
+			return inputStream;
+		}
 		return file.getContents();
 	}
 
@@ -295,13 +306,13 @@ public abstract class CommonElementImporter {
 				if (!childHandler.checkChild(getReader().getLocalName())) {
 					throw new XMLStreamException(
 							"Unexpected xml child (" + getReader().getLocalName() + ") found in " + elementName //$NON-NLS-1$ //$NON-NLS-2$
-									+ getParseLocation());
+							+ getParseLocation());
 				}
 			} else if (XMLStreamConstants.END_ELEMENT == event) {
 				if (!getReader().getLocalName().equals(elementName)) {
 					throw new XMLStreamException(
 							"Unexpected xml end tag found in " + elementName + ": " + getReader().getLocalName() //$NON-NLS-1$ //$NON-NLS-2$
-									+ getParseLocation());
+							+ getParseLocation());
 				}
 				// we came to the end
 				break;

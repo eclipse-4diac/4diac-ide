@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2021 Johannes Kepler University Austria
- *               2022 Primetals Technologies Austria GmbH
+ *               2022 - 2023 Primetals Technologies Austria GmbH
  *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -16,6 +16,8 @@
  *    - adapted for emf compare
  *  Martin Jobst
  *    - gracefully handle exceptions during load or save
+ *  Fabio Gandolfi
+ *    - load types via inputstream
  ********************************************************************************/
 
 package org.eclipse.fordiac.ide.model.resource;
@@ -32,8 +34,19 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
+import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
+import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
+import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
+import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
+import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
+import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
+import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class FordiacTypeResource extends ResourceImpl {
 
@@ -47,13 +60,11 @@ public class FordiacTypeResource extends ResourceImpl {
 			throw new IOException("Cannot load type from non-workspace URI " + uri.toString()); //$NON-NLS-1$
 		}
 		try {
-			final IFile fbtFile = ResourcesPlugin.getWorkspace().getRoot()
+			final IFile typeFile = ResourcesPlugin.getWorkspace().getRoot()
 					.getFile(new Path(this.uri.toPlatformString(true)));
-			final var typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fbtFile);
-			// Load the Type
-			final var lib = EcoreUtil.copy(typeEntryForFile.getType());
-			// Do not modify any fordiac element
-			getContents().add(lib);
+			final CommonElementImporter importer = createImporterByFileExtensions(inputStream, typeFile);
+			importer.loadElement();
+			getContents().add(importer.getElement());
 		} catch (final Exception e) {
 			throw new IOWrappedException(e);
 		}
@@ -83,5 +94,31 @@ public class FordiacTypeResource extends ResourceImpl {
 	@Override
 	protected void doUnload() {
 		getContents().clear();
+	}
+
+	private static CommonElementImporter createImporterByFileExtensions(final InputStream inputStream,
+			final IFile typeFile)
+					throws IOException {
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(typeFile.getProject());
+		switch (typeFile.getFileExtension().toUpperCase()) {
+		case TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING:
+			return new SystemImporter(inputStream, typeLib);
+		case TypeLibraryTags.FB_TYPE_FILE_ENDING:
+			return new FBTImporter(inputStream, typeLib);
+		case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING:
+			return new ADPImporter(inputStream, typeLib);
+		case TypeLibraryTags.DATA_TYPE_FILE_ENDING:
+			return new DataTypeImporter(inputStream, typeLib);
+		case TypeLibraryTags.DEVICE_TYPE_FILE_ENDING:
+			return new DEVImporter(inputStream, typeLib);
+		case TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING:
+			return new RESImporter(inputStream, typeLib);
+		case TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING:
+			return new SEGImporter(inputStream, typeLib);
+		case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING:
+			return new SubAppTImporter(inputStream, typeLib);
+		default:
+			throw new IOException("Could not load/import file: " + typeFile.toString()); //$NON-NLS-1$
+		}
 	}
 }

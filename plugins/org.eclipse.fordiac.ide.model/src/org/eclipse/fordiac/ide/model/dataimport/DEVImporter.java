@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -44,6 +46,10 @@ public class DEVImporter extends TypeImporter {
 
 	public DEVImporter(final IFile typeFile) {
 		super(typeFile);
+	}
+
+	public DEVImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
+		super(inputStream, typeLibrary);
 	}
 
 	@Override

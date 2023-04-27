@@ -22,6 +22,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +77,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /** Managing class for importing *.fbt files */
 
@@ -105,6 +107,10 @@ public class FBTImporter extends TypeImporter {
 
 	public FBTImporter(final IFile typeFile) {
 		super(typeFile);
+	}
+
+	public FBTImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
+		super(inputStream, typeLibrary);
 	}
 
 	protected FBTImporter(final CommonElementImporter importer) {
