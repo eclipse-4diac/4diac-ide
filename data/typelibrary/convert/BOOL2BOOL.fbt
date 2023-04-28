@@ -1,25 +1,34 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
-<FBType Comment="" Name="BOOL2BOOL">
-  <Identification Description="Copyright (c) 2006 Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
-  <VersionInfo Author="Thomas Strasser" Date="2006-11-14" Organization="PROFACTOR GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
-  <CompilerInfo/>
-  <InterfaceList>
-    <EventInputs>
-      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
-        <With Var="IN"/>
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
-        <With Var="OUT"/>
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Comment="Input event qualifier" Name="IN" Type="BOOL"/>
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Comment="Output event qualifier" Name="OUT" Type="BOOL"/>
-    </OutputVars>
-  </InterfaceList>
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="BOOL2BOOL" Comment="">
+	<Identification Standard="61499-1" Description="Copyright (c) 2023 Martin Erich Jobst&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="Martin Jobst" Date="2023-04-28">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="BOOL" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="BOOL" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<SimpleFB>
+		<Algorithm Name="REQ" Comment="">
+			<ST><![CDATA[ALGORITHM REQ
+OUT := IN;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</SimpleFB>
 </FBType>
