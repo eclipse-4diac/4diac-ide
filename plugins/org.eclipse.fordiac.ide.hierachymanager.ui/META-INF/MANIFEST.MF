@@ -4,10 +4,17 @@ Bundle-Name: Hierarchy Manager UI
 Bundle-SymbolicName: org.eclipse.fordiac.ide.hierachymanager.ui;singleton:=true
 Bundle-Version: 2.1.0.qualifier
 Require-Bundle: org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.emf.edit,
+ org.eclipse.emf.edit.ui,
+ org.eclipse.fordiac.ide.hierachymanager,
+ org.eclipse.fordiac.ide.hierachymanager.edit,
+ org.eclipse.ui,
  org.eclipse.ui.navigator,
  org.eclipse.ui.navigator.resources,
- org.eclipse.ui,
- org.eclipse.core.runtime
+ org.eclipse.emf.ecore.xmi,
+ org.eclipse.emf.ecore,
+ org.eclipse.fordiac.ide.ui
 Bundle-Vendor: Eclipse 4diac Project
 Automatic-Module-Name: org.eclipse.fordiac.ide.hierachymanager.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-17

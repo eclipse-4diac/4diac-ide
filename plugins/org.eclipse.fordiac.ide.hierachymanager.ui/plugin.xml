@@ -31,9 +31,44 @@
     			viewerId="org.eclipse.fordiac.ide.hierachymanager.view">         
   		</viewerActionBinding>
   		<viewerContentBinding
-    			viewerId="org.eclipse.fordiac.ide.hierachymanager.view">         
+    			viewerId="org.eclipse.fordiac.ide.hierachymanager.view"> 
+			<includes>
+				<contentExtension isRoot="true"
+	            		pattern="org.eclipse.fordiac.ide.hierachymanager.ui.hierarchycontent" />
+           	</includes>
   		</viewerContentBinding>
    	</extension>
+   	<extension
+			point="org.eclipse.ui.navigator.navigatorContent">
+		<navigatorContent
+	            activeByDefault="true"
+	            id="org.eclipse.fordiac.ide.hierachymanager.ui.hierarchycontent"
+	            contentProvider="org.eclipse.fordiac.ide.hierachymanager.ui.providers.HierachyContentProvider"
+	            labelProvider="org.eclipse.fordiac.ide.hierachymanager.ui.providers.HierachyProvider"
+	            name="Plant Hierachy Content"
+	            priority="highest">
+            <possibleChildren>
+	              <instanceof value="org.eclipse.emf.ecore.EObject"/>
+	        </possibleChildren> 
+            <triggerPoints>
+                <or>
+                    <instanceof value="org.eclipse.emf.ecore.EObject"/>
+                    <instanceof value="org.eclipse.core.resources.IProject" />
+                </or>
+            </triggerPoints>
+<!--            <commonSorter
+                  class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.DeviceContentSorter"
+                  id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.DeviceContentSorter">
+               <parentExpression>
+                  <or>
+                      <instanceof value="org.eclipse.emf.ecore.EObject"/>
+                    <instanceof value="org.eclipse.core.resources.IProject" />
+                  </or>
+               </parentExpression>
+            </commonSorter>-->                    
+		</navigatorContent>
+   	</extension>
+
    	<extension point="org.eclipse.ui.perspectiveExtensions">  
 		<perspectiveExtension 
 				targetID="org.eclipse.fordiac.ide.SystemPerspective">
