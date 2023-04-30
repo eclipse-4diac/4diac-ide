@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ *******************************************************************************
+  Copyright (c) 2023 Primetals Technologies Austria GmbH
+ 
+  This program and the accompanying materials are made available under the
+  terms of the Eclipse Public License 2.0 which is available at
+  http://www.eclipse.org/legal/epl-2.0.
+ 
+  SPDX-License-Identifier: EPL-2.0
+ 
+  Contributors:
+    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
+  *******************************************************************************
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
+      <!-- @generated hierachy -->
+      <factory
+            uri="org.eclipse.fordiac.ide.hierachymanager"
+            class="org.eclipse.fordiac.ide.hierachymanager.hierachyPackage.provider.HierachPackageItemProviderAdapterFactory"
+            supportedTypes=
+              "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
+               org.eclipse.emf.edit.provider.IStructuredItemContentProvider
+               org.eclipse.emf.edit.provider.ITreeItemContentProvider
+               org.eclipse.emf.edit.provider.IItemLabelProvider
+               org.eclipse.emf.edit.provider.IItemPropertySource"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
+      <!-- @generated hierachy -->
+      <factory
+            uri="http://www.eclipse.org/emf/2003/XMLType"
+            class="type.provider.TypeItemProviderAdapterFactory"
+            supportedTypes=
+              "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
+               org.eclipse.emf.edit.provider.IStructuredItemContentProvider
+               org.eclipse.emf.edit.provider.ITreeItemContentProvider
+               org.eclipse.emf.edit.provider.IItemLabelProvider
+               org.eclipse.emf.edit.provider.IItemPropertySource"/>
+   </extension>
+
+</plugin>
