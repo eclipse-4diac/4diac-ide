@@ -1,24 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="org.eclipse.ui.views">
-      <view
-            category="org.eclipse.fordiac.ide.view.category"
-            class="org.eclipse.ui.navigator.CommonNavigator"
-            icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/filenav_nav.png"
-            id="org.eclipse.fordiac.ide.hierachymanager.view"
-            name="Plant Hierarchy">
-      </view>
-   </extension>
-   <extension
-         point="org.eclipse.ui.navigator.viewer">
-      <viewerActionBinding
-            viewerId="org.eclipse.fordiac.ide.hierachymanager.view">         
-      </viewerActionBinding>
-      <viewerContentBinding
-            viewerId="org.eclipse.fordiac.ide.hierachymanager.view">         
-      </viewerContentBinding>
-   </extension>
-
+	<extension
+ 			point="org.eclipse.ui.views">
+  		<view
+			    category="org.eclipse.fordiac.ide.view.category"
+			    class="org.eclipse.fordiac.ide.hierachymanager.view.PlantHierachyView"
+			    icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/filenav_nav.png"
+			    id="org.eclipse.fordiac.ide.hierachymanager.view"
+			    name="Plant Hierarchy">
+  		</view>
+	</extension>
+   	<extension
+ 			point="org.eclipse.ui.navigator.viewer">
+	    <viewer
+            viewerId="org.eclipse.fordiac.ide.hierachymanager.view">
+         <options> 
+            <property
+                  name="org.eclipse.ui.navigator.hideAvailableExtensionsTab"
+                  value="true"/>
+            <property
+                  name="org.eclipse.ui.navigator.hideAvailableCustomizationsDialog"
+                  value="true"/> 
+            <property
+                  name="org.eclipse.ui.navigator.hideLinkWithEditorAction"
+                  value="true"/> 
+         </options>
+      </viewer>
+  		<viewerActionBinding
+    			viewerId="org.eclipse.fordiac.ide.hierachymanager.view">         
+  		</viewerActionBinding>
+  		<viewerContentBinding
+    			viewerId="org.eclipse.fordiac.ide.hierachymanager.view">         
+  		</viewerContentBinding>
+   	</extension>
+   	<extension point="org.eclipse.ui.perspectiveExtensions">  
+		<perspectiveExtension 
+				targetID="org.eclipse.fordiac.ide.SystemPerspective">
+			<showInPart id ="org.eclipse.fordiac.ide.hierachymanager.view"/>
+		</perspectiveExtension>
+   	</extension>
 </plugin>
