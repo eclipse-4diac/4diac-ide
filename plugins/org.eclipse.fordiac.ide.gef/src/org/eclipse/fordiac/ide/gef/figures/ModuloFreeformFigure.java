@@ -45,21 +45,27 @@ public class ModuloFreeformFigure extends AbstractFreeformFigure {
 		final int width = calcAxisExtent(contentsExtent.x, x, contentsExtent.width, BASE_WIDTH);
 		final int height = calcAxisExtent(contentsExtent.y, y, contentsExtent.height, BASE_HEIGHT);
 		contentsExtent = new Rectangle(x, y, width, height);
-		contentsExtent.scale(this.zoomScalableFreeformRootEditPart.getZoomManager().getZoom());
+		contentsExtent.scale(getZoomScalableFreeformRootEditPart().getZoomManager().getZoom());
 		return contentsExtent;
 	}
 
 	protected Rectangle getUnscaledContentsExtent() {
-		final Rectangle contentsExtent = ((FreeformFigure) this.zoomScalableFreeformRootEditPart.getContentPane())
+		final Rectangle contentsExtent = ((FreeformFigure) getZoomScalableFreeformRootEditPart().getContentPane())
 				.getFreeformExtent().getCopy();
 		if (useFeedbackLayer) {
 			// add handle and feedback layer so that dragging elements result in growing the modulo extend
-			contentsExtent.union(((FreeformFigure) this.zoomScalableFreeformRootEditPart
-					.getLayer(LayerConstants.HANDLE_LAYER)).getFreeformExtent());
-			contentsExtent.union(((FreeformFigure) this.zoomScalableFreeformRootEditPart
-					.getLayer(LayerConstants.FEEDBACK_LAYER)).getFreeformExtent());
+			contentsExtent.union(
+					((FreeformFigure) getZoomScalableFreeformRootEditPart().getLayer(LayerConstants.HANDLE_LAYER))
+							.getFreeformExtent());
+			contentsExtent.union(
+					((FreeformFigure) getZoomScalableFreeformRootEditPart().getLayer(LayerConstants.FEEDBACK_LAYER))
+							.getFreeformExtent());
 		}
 		return contentsExtent;
+	}
+
+	protected final ZoomScalableFreeformRootEditPart getZoomScalableFreeformRootEditPart() {
+		return zoomScalableFreeformRootEditPart;
 	}
 
 	private static int calcAxisExtent(final int baseOrigin, final int newOrigin, final int sourceExtent,
