@@ -30,8 +30,8 @@ import org.eclipse.emf.ecore.xmi.impl.GenericXMLResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.fordiac.ide.hierachymanager.hierachyPackage.HierachPackagePackage;
-import org.eclipse.fordiac.ide.hierachymanager.hierachyPackage.provider.HierachPackageItemProviderAdapterFactory;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider.HierarchyItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class HierachyContentProvider extends AdapterFactoryContentProvider {
@@ -42,7 +42,7 @@ public class HierachyContentProvider extends AdapterFactoryContentProvider {
 	private final ResourceSet hierachyResouceSet = new ResourceSetImpl();
 
 	public HierachyContentProvider() {
-		super(new HierachPackageItemProviderAdapterFactory());
+		super(new HierarchyItemProviderAdapterFactory());
 		setupEMFInfra();
 
 	}
@@ -64,6 +64,7 @@ public class HierachyContentProvider extends AdapterFactoryContentProvider {
 		final IFile file = proj.getFile(PLANT_HIERARCHY_FILE_NAME);
 		if (file.exists()) {
 			final URI uri = URI.createFileURI(file.getLocation().toOSString());
+			// we don't want to load the resource content as we can not give the mapping options
 			Resource resource = hierachyResouceSet.getResource(uri, false);
 			try {
 				if (resource == null) {
@@ -83,12 +84,12 @@ public class HierachyContentProvider extends AdapterFactoryContentProvider {
 	private void setupLoadOptions() {
 		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
 		final XMLMapImpl map = new XMLMapImpl();
-		map.setNoNamespacePackage(HierachPackagePackage.eINSTANCE);
+		map.setNoNamespacePackage(HierarchyPackage.eINSTANCE);
 		loadOptions.put(XMLResource.OPTION_XML_MAP, map);
 	}
 
 	private void setupEMFInfra() {
-		EPackage.Registry.INSTANCE.put(HierachPackagePackage.eNS_URI, HierachPackagePackage.eINSTANCE);
+		EPackage.Registry.INSTANCE.put(HierarchyPackage.eNS_URI, HierarchyPackage.eINSTANCE);
 
 		// add file extension to registry
 		ResourceFactoryRegistryImpl.INSTANCE.getExtensionToFactoryMap().put(PLANT_HIERARCHY_FILE_NAME_EXTENSION,

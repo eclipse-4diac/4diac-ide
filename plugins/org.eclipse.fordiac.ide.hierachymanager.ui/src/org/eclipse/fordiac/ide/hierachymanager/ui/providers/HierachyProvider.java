@@ -13,12 +13,12 @@
 package org.eclipse.fordiac.ide.hierachymanager.ui.providers;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.hierachymanager.hierachyPackage.provider.HierachPackageItemProviderAdapterFactory;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider.HierarchyItemProviderAdapterFactory;
 
 public class HierachyProvider extends AdapterFactoryLabelProvider {
 
 	public HierachyProvider() {
-		super(new HierachPackageItemProviderAdapterFactory());
+		super(new HierarchyItemProviderAdapterFactory());
 	}
 
 }
