@@ -23,7 +23,7 @@
  			point="org.eclipse.ui.views">
   		<view
 			    category="org.eclipse.fordiac.ide.view.category"
-			    class="org.eclipse.fordiac.ide.hierarchymanager.view.PlantHierarchyView"
+			    class="org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView"
 			    icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/filenav_nav.png"
 			    id="org.eclipse.fordiac.ide.hierarchymanager.view"
 			    name="Plant Hierarchy">
@@ -59,6 +59,9 @@
 			<includes>
 				<contentExtension isRoot="true"
 	            		pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchycontent" />
+        		<contentExtension
+                     pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchySorter" >
+               </contentExtension>      
            	</includes>
   		</viewerContentBinding>
    	</extension>
@@ -80,16 +83,16 @@
                     <instanceof value="org.eclipse.core.resources.IProject" />
                 </or>
             </triggerPoints>
-<!--            <commonSorter
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.DeviceContentSorter"
-                  id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.DeviceContentSorter">
-               <parentExpression>
-                  <or>
-                      <instanceof value="org.eclipse.emf.ecore.EObject"/>
-                    <instanceof value="org.eclipse.core.resources.IProject" />
-                  </or>
-               </parentExpression>
-            </commonSorter>-->                    
+			<commonSorter
+					class="org.eclipse.fordiac.ide.typemanagement.navigator.KeepOrderContentSorter"
+                	id="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchySorter">
+				<parentExpression>
+                	<or>
+                    	<instanceof value="org.eclipse.emf.ecore.EObject"/>
+                    	<instanceof value="org.eclipse.core.resources.IProject" />
+					</or>
+				</parentExpression>
+			</commonSorter>                
 		</navigatorContent>
 		<actionProvider
             	class="org.eclipse.fordiac.ide.hierarchymanager.ui.actions.OpenLeafActionProvider"

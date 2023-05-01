@@ -10,7 +10,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.hierarchymanager.view;
+package org.eclipse.fordiac.ide.hierarchymanager.ui.view;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;

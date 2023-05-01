@@ -22,7 +22,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
-import org.eclipse.fordiac.ide.hierarchymanager.view.PlantHierarchyView;
+import org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;

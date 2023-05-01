@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.hierarchymanager.ui.actions;
 
-import org.eclipse.fordiac.ide.hierarchymanager.view.PlantHierarchyView;
+import org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionBars;
