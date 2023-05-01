@@ -10,7 +10,7 @@
   <foreignModel>hierarchy.ecore</foreignModel>
   <genPackages prefix="Hierarchy" basePackage="org.eclipse.fordiac.ide.hierarchymanager.model"
       disposableProviderFactory="true" ecorePackage="hierarchy.ecore#/">
-    <genClasses ecoreClass="hierarchy.ecore#//Level">
+    <genClasses image="false" ecoreClass="hierarchy.ecore#//Level">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Level/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Level/comment"/>
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
@@ -20,7 +20,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference hierarchy.ecore#//RootLevel/levels"/>
     </genClasses>
     <genClasses ecoreClass="hierarchy.ecore#//Node"/>
-    <genClasses ecoreClass="hierarchy.ecore#//Leaf">
+    <genClasses image="false" ecoreClass="hierarchy.ecore#//Leaf">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Leaf/ref"/>
     </genClasses>
   </genPackages>

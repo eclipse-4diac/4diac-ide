@@ -30,6 +30,8 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level} object.
@@ -166,25 +168,24 @@ public class LevelItemProvider extends NodeItemProvider {
 	 * This returns Level.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Level"));
+		return overlayImage(object, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER));
 	}
 
 	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Level)object).getName();
+		final String label = ((Level)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Level_type") :
-			getString("_UI_Level_type") + " " + label;
+				getString("_UI_Level_type") : label;
 	}
 
 

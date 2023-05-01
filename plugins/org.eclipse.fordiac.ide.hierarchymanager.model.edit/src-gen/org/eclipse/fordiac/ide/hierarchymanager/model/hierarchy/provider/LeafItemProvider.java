@@ -28,6 +28,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf} object.
@@ -88,25 +89,22 @@ public class LeafItemProvider extends NodeItemProvider {
 	 * This returns Leaf.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Leaf"));
+		return overlayImage(object, FordiacImage.ICON_SUB_APP.getImage());
 	}
 
 	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Leaf)object).getRef();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Leaf_type") :
-			getString("_UI_Leaf_type") + " " + label;
+		return HierarchyAnnotations.getLeafText((Leaf) object, this);
 	}
 
 

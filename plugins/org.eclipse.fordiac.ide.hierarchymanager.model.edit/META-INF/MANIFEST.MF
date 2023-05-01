@@ -12,5 +12,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.hierarchymanager.model;visibility:=reexport,
- org.eclipse.emf.edit;visibility:=reexport
+ org.eclipse.emf.edit;visibility:=reexport,
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.swt,
+ org.eclipse.ui.workbench
 Bundle-ActivationPolicy: lazy
