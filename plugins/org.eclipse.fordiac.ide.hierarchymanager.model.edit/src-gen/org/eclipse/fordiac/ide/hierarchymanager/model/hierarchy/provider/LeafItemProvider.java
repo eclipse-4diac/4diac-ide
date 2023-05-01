@@ -59,6 +59,7 @@ public class LeafItemProvider extends NodeItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addRefPropertyDescriptor(object);
+			addContainerFileNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -77,6 +78,28 @@ public class LeafItemProvider extends NodeItemProvider {
 				 getString("_UI_Leaf_ref_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Leaf_ref_feature", "_UI_Leaf_type"),
 				 HierarchyPackage.Literals.LEAF__REF,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Container File Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContainerFileNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Leaf_containerFileName_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Leaf_containerFileName_feature", "_UI_Leaf_type"),
+				 HierarchyPackage.Literals.LEAF__CONTAINER_FILE_NAME,
 				 true,
 				 false,
 				 false,
@@ -121,6 +144,7 @@ public class LeafItemProvider extends NodeItemProvider {
 
 		switch (notification.getFeatureID(Leaf.class)) {
 			case HierarchyPackage.LEAF__REF:
+			case HierarchyPackage.LEAF__CONTAINER_FILE_NAME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			default:

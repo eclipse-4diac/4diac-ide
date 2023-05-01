@@ -180,13 +180,22 @@ public interface HierarchyPackage extends EPackage {
 	int LEAF__REF = NODE_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Container File Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEAF__CONTAINER_FILE_NAME = NODE_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Leaf</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LEAF_FEATURE_COUNT = NODE_FEATURE_COUNT + 1;
+	int LEAF_FEATURE_COUNT = NODE_FEATURE_COUNT + 2;
 
 
 	/**
@@ -283,6 +292,17 @@ public interface HierarchyPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getLeaf_Ref();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getContainerFileName <em>Container File Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Container File Name</em>'.
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getContainerFileName()
+	 * @see #getLeaf()
+	 * @generated
+	 */
+	EAttribute getLeaf_ContainerFileName();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -385,6 +405,14 @@ public interface HierarchyPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LEAF__REF = eINSTANCE.getLeaf_Ref();
+
+		/**
+		 * The meta object literal for the '<em><b>Container File Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LEAF__CONTAINER_FILE_NAME = eINSTANCE.getLeaf_ContainerFileName();
 
 	}
 

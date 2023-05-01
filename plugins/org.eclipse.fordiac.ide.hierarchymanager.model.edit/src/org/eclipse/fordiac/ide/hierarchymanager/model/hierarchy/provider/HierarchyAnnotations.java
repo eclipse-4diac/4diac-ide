@@ -19,7 +19,7 @@ public final class HierarchyAnnotations {
 	static String getLeafText(final Leaf leaf, final LeafItemProvider leafItemProvider) {
 		final String label = leaf.getRef();
 		if (label != null && !label.isBlank()) {
-			final String[] split = label.split("."); //$NON-NLS-1$
+			final String[] split = label.split("\\."); //$NON-NLS-1$
 			return (split.length > 0) ? split[split.length - 1] : // we want the last entry as label
 				label;
 		}

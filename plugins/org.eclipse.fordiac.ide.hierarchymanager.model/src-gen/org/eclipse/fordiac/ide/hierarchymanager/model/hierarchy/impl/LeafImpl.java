@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LeafImpl#getRef <em>Ref</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LeafImpl#getContainerFileName <em>Container File Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -56,6 +57,26 @@ public class LeafImpl extends NodeImpl implements Leaf {
 	 * @ordered
 	 */
 	protected String ref = REF_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getContainerFileName() <em>Container File Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContainerFileName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CONTAINER_FILE_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getContainerFileName() <em>Container File Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContainerFileName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String containerFileName = CONTAINER_FILE_NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -105,10 +126,35 @@ public class LeafImpl extends NodeImpl implements Leaf {
 	 * @generated
 	 */
 	@Override
+	public String getContainerFileName() {
+		return containerFileName;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setContainerFileName(String newContainerFileName) {
+		String oldContainerFileName = containerFileName;
+		containerFileName = newContainerFileName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, HierarchyPackage.LEAF__CONTAINER_FILE_NAME, oldContainerFileName, containerFileName));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case HierarchyPackage.LEAF__REF:
 				return getRef();
+			case HierarchyPackage.LEAF__CONTAINER_FILE_NAME:
+				return getContainerFileName();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -124,6 +170,9 @@ public class LeafImpl extends NodeImpl implements Leaf {
 		switch (featureID) {
 			case HierarchyPackage.LEAF__REF:
 				setRef((String)newValue);
+				return;
+			case HierarchyPackage.LEAF__CONTAINER_FILE_NAME:
+				setContainerFileName((String)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -142,6 +191,9 @@ public class LeafImpl extends NodeImpl implements Leaf {
 			case HierarchyPackage.LEAF__REF:
 				setRef(REF_EDEFAULT);
 				return;
+			case HierarchyPackage.LEAF__CONTAINER_FILE_NAME:
+				setContainerFileName(CONTAINER_FILE_NAME_EDEFAULT);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -158,6 +210,8 @@ public class LeafImpl extends NodeImpl implements Leaf {
 		switch (featureID) {
 			case HierarchyPackage.LEAF__REF:
 				return REF_EDEFAULT == null ? ref != null : !REF_EDEFAULT.equals(ref);
+			case HierarchyPackage.LEAF__CONTAINER_FILE_NAME:
+				return CONTAINER_FILE_NAME_EDEFAULT == null ? containerFileName != null : !CONTAINER_FILE_NAME_EDEFAULT.equals(containerFileName);
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -175,6 +229,8 @@ public class LeafImpl extends NodeImpl implements Leaf {
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (ref: ");
 		result.append(ref);
+		result.append(", containerFileName: ");
+		result.append(containerFileName);
 		result.append(')');
 		return result.toString();
 	}

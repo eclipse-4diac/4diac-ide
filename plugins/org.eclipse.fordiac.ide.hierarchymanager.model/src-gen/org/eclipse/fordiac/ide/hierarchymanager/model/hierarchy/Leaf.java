@@ -25,6 +25,7 @@ package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getRef <em>Ref</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getContainerFileName <em>Container File Name</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage#getLeaf()
@@ -53,5 +54,27 @@ public interface Leaf extends Node {
 	 * @generated
 	 */
 	void setRef(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Container File Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Container File Name</em>' attribute.
+	 * @see #setContainerFileName(String)
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage#getLeaf_ContainerFileName()
+	 * @model
+	 * @generated
+	 */
+	String getContainerFileName();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getContainerFileName <em>Container File Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Container File Name</em>' attribute.
+	 * @see #getContainerFileName()
+	 * @generated
+	 */
+	void setContainerFileName(String value);
 
 } // Leaf

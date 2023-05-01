@@ -22,6 +22,7 @@
     <genClasses ecoreClass="hierarchy.ecore#//Node"/>
     <genClasses image="false" ecoreClass="hierarchy.ecore#//Leaf">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Leaf/ref"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Leaf/containerFileName"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

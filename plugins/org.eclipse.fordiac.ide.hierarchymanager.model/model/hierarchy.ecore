@@ -15,5 +15,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="Node"/>
   <eClassifiers xsi:type="ecore:EClass" name="Leaf" eSuperTypes="#//Node">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ref" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="containerFileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>

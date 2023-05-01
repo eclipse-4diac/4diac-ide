@@ -219,6 +219,16 @@ public class HierarchyPackageImpl extends EPackageImpl implements HierarchyPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getLeaf_ContainerFileName() {
+		return (EAttribute)leafEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public HierarchyFactory getHierarchyFactory() {
 		return (HierarchyFactory)getEFactoryInstance();
 	}
@@ -254,6 +264,7 @@ public class HierarchyPackageImpl extends EPackageImpl implements HierarchyPacka
 
 		leafEClass = createEClass(LEAF);
 		createEAttribute(leafEClass, LEAF__REF);
+		createEAttribute(leafEClass, LEAF__CONTAINER_FILE_NAME);
 	}
 
 	/**
@@ -300,6 +311,7 @@ public class HierarchyPackageImpl extends EPackageImpl implements HierarchyPacka
 
 		initEClass(leafEClass, Leaf.class, "Leaf", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLeaf_Ref(), ecorePackage.getEString(), "ref", null, 0, 1, Leaf.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLeaf_ContainerFileName(), ecorePackage.getEString(), "containerFileName", null, 0, 1, Leaf.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -46,7 +46,13 @@
          </options>
       </viewer>
   		<viewerActionBinding
-    			viewerId="org.eclipse.fordiac.ide.hierarchymanager.view">         
+    			viewerId="org.eclipse.fordiac.ide.hierarchymanager.view">
+       <includes>
+          <actionExtension
+                pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.openLeafActionProvider">
+          </actionExtension>
+       </includes>   
+			  
   		</viewerActionBinding>
   		<viewerContentBinding
     			viewerId="org.eclipse.fordiac.ide.hierarchymanager.view"> 
@@ -85,6 +91,15 @@
                </parentExpression>
             </commonSorter>-->                    
 		</navigatorContent>
+		<actionProvider
+            	class="org.eclipse.fordiac.ide.hierarchymanager.ui.actions.OpenLeafActionProvider"
+            	id="org.eclipse.fordiac.ide.hierarchymanager.ui.openLeafActionProvider">
+            <enablement>
+	            <or>
+	               <instanceof value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf"> </instanceof>               
+	            </or>
+        	</enablement>
+  		</actionProvider>    
    	</extension>
 
    	<extension point="org.eclipse.ui.perspectiveExtensions">  
