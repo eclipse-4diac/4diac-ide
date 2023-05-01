@@ -107,6 +107,8 @@ public final class StructManipulation {
 				}
 			});
 			final Event ev = muxer.getInterface().getEventInputs().get(0);
+			// clear any previous withs
+			ev.getWith().clear();
 
 			// create with constructs
 			list.forEach(varDecl -> {
@@ -129,6 +131,8 @@ public final class StructManipulation {
 			varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
 		});
 		final List<Event> outputEvents = muxer.getInterface().getEventOutputs();
+		// clear any previous withs
+		outputEvents.forEach(ev -> ev.getWith().clear());
 
 		// create with constructs
 		list.forEach(varDecl -> {
