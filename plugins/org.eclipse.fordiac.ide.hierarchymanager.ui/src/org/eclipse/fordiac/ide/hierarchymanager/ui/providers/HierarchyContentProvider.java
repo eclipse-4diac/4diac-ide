@@ -20,10 +20,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.GenericXMLResourceFactoryImpl;
@@ -35,6 +33,7 @@ import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider.Hierarc
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class HierarchyContentProvider extends AdapterFactoryContentProvider {
+
 	private static final String PLANT_HIERARCHY_FILE_NAME = ".plant.hier"; //$NON-NLS-1$
 	private static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION = "hier"; //$NON-NLS-1$
 
@@ -65,7 +64,7 @@ public class HierarchyContentProvider extends AdapterFactoryContentProvider {
 		if (file.exists()) {
 			final URI uri = URI.createFileURI(file.getLocation().toOSString());
 			// we don't want to load the resource content as we can not give the mapping options
-			Resource resource = hierarchyResouceSet.getResource(uri, false);
+			Resource resource = hierarchyResouceSet.getResource(uri, true);
 			try {
 				if (resource == null) {
 					resource = new XMLResourceImpl(uri);
@@ -78,7 +77,14 @@ public class HierarchyContentProvider extends AdapterFactoryContentProvider {
 				FordiacLogHelper.logWarning("Could not load plant hierarchy", e); //$NON-NLS-1$
 			}
 		}
-		return null;
+		return new Object[0];
+	}
+
+	private void setupEMFInfra() {
+		// add file extension to registry
+		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+				.put(PLANT_HIERARCHY_FILE_NAME_EXTENSION, new GenericXMLResourceFactoryImpl());
+		setupLoadOptions();
 	}
 
 	private void setupLoadOptions() {
@@ -86,14 +92,7 @@ public class HierarchyContentProvider extends AdapterFactoryContentProvider {
 		final XMLMapImpl map = new XMLMapImpl();
 		map.setNoNamespacePackage(HierarchyPackage.eINSTANCE);
 		loadOptions.put(XMLResource.OPTION_XML_MAP, map);
+		hierarchyResouceSet.getLoadOptions().put(XMLResource.OPTION_XML_MAP, map);
 	}
 
-	private void setupEMFInfra() {
-		EPackage.Registry.INSTANCE.put(HierarchyPackage.eNS_URI, HierarchyPackage.eINSTANCE);
-
-		// add file extension to registry
-		ResourceFactoryRegistryImpl.INSTANCE.getExtensionToFactoryMap().put(PLANT_HIERARCHY_FILE_NAME_EXTENSION,
-				new GenericXMLResourceFactoryImpl());
-		setupLoadOptions();
-	}
 }
