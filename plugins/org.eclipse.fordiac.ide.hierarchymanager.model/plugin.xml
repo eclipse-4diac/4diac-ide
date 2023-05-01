@@ -19,22 +19,6 @@
 <plugin>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated hierachy -->
-      <package
-            uri="org.eclipse.fordiac.ide.hierachymanager"
-            class="org.eclipse.fordiac.ide.hierachymanager.hierachyPackage.HierachPackagePackage"
-            genModel="model/hierarchy.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated hierachy -->
-      <package
-            uri="http://www.eclipse.org/emf/2003/XMLType"
-            class="type.TypePackage"
-            genModel="model/hierarchy.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated hierarchy -->
       <package
             uri="org.eclipse.fordiac.ide.hierarchymanager"

@@ -39,7 +39,7 @@ public class HierarchyContentProvider extends AdapterFactoryContentProvider {
 	private static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION = "hier"; //$NON-NLS-1$
 
 	final Map<String, Object> loadOptions = new HashMap<>();
-	private final ResourceSet hierachyResouceSet = new ResourceSetImpl();
+	private final ResourceSet hierarchyResouceSet = new ResourceSetImpl();
 
 	public HierarchyContentProvider() {
 		super(new HierarchyItemProviderAdapterFactory());
@@ -65,11 +65,11 @@ public class HierarchyContentProvider extends AdapterFactoryContentProvider {
 		if (file.exists()) {
 			final URI uri = URI.createFileURI(file.getLocation().toOSString());
 			// we don't want to load the resource content as we can not give the mapping options
-			Resource resource = hierachyResouceSet.getResource(uri, false);
+			Resource resource = hierarchyResouceSet.getResource(uri, false);
 			try {
 				if (resource == null) {
 					resource = new XMLResourceImpl(uri);
-					hierachyResouceSet.getResources().add(resource);
+					hierarchyResouceSet.getResources().add(resource);
 					resource.load(loadOptions);
 				}
 				final EObject root = resource.getContents().get(0);
