@@ -10,14 +10,14 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.hierachymanager.ui.providers;
+package org.eclipse.fordiac.ide.hierarchymanager.ui.providers;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider.HierarchyItemProviderAdapterFactory;
 
-public class HierachyProvider extends AdapterFactoryLabelProvider {
+public class HierarchyProvider extends AdapterFactoryLabelProvider {
 
-	public HierachyProvider() {
+	public HierarchyProvider() {
 		super(new HierarchyItemProviderAdapterFactory());
 	}
 

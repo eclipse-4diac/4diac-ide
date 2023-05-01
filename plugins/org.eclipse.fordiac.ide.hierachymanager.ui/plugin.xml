@@ -5,7 +5,7 @@
  			point="org.eclipse.ui.views">
   		<view
 			    category="org.eclipse.fordiac.ide.view.category"
-			    class="org.eclipse.fordiac.ide.hierachymanager.view.PlantHierachyView"
+			    class="org.eclipse.fordiac.ide.hierarchymanager.view.PlantHierarchyView"
 			    icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/filenav_nav.png"
 			    id="org.eclipse.fordiac.ide.hierachymanager.view"
 			    name="Plant Hierarchy">
@@ -43,8 +43,8 @@
 		<navigatorContent
 	            activeByDefault="true"
 	            id="org.eclipse.fordiac.ide.hierachymanager.ui.hierarchycontent"
-	            contentProvider="org.eclipse.fordiac.ide.hierachymanager.ui.providers.HierachyContentProvider"
-	            labelProvider="org.eclipse.fordiac.ide.hierachymanager.ui.providers.HierachyProvider"
+	            contentProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyContentProvider"
+	            labelProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyProvider"
 	            name="Plant Hierachy Content"
 	            priority="highest">
             <possibleChildren>

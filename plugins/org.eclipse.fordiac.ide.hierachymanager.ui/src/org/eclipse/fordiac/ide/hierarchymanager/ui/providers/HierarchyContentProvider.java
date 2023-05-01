@@ -10,7 +10,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.hierachymanager.ui.providers;
+package org.eclipse.fordiac.ide.hierarchymanager.ui.providers;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -34,14 +34,14 @@ import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider.HierarchyItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class HierachyContentProvider extends AdapterFactoryContentProvider {
+public class HierarchyContentProvider extends AdapterFactoryContentProvider {
 	private static final String PLANT_HIERARCHY_FILE_NAME = ".plant.hier"; //$NON-NLS-1$
 	private static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION = "hier"; //$NON-NLS-1$
 
 	final Map<String, Object> loadOptions = new HashMap<>();
 	private final ResourceSet hierachyResouceSet = new ResourceSetImpl();
 
-	public HierachyContentProvider() {
+	public HierarchyContentProvider() {
 		super(new HierarchyItemProviderAdapterFactory());
 		setupEMFInfra();
 

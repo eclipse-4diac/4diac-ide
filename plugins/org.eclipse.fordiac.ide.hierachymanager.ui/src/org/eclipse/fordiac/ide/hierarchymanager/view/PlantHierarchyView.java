@@ -10,7 +10,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.hierachymanager.view;
+package org.eclipse.fordiac.ide.hierarchymanager.view;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ISelection;
@@ -18,7 +18,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.part.ShowInContext;
 
-public class PlantHierachyView extends CommonNavigator {
+public class PlantHierarchyView extends CommonNavigator {
 
 	@Override
 	public boolean show(final ShowInContext context) {
