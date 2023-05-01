@@ -13,12 +13,16 @@
 package org.eclipse.fordiac.ide.hierarchymanager.view;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.part.ShowInContext;
 
 public class PlantHierarchyView extends CommonNavigator {
+
+	private static final String PLANT_HIERARCHY_PROJECT = "PlantHierarchy.Project";
 
 	@Override
 	public boolean show(final ShowInContext context) {
@@ -32,6 +36,29 @@ public class PlantHierarchyView extends CommonNavigator {
 			return true;
 		}
 		return super.show(context);
+	}
+
+	@Override
+	public void saveState(final IMemento aMemento) {
+		super.saveState(aMemento);
+		final Object input = getCommonViewer().getInput();
+		if (input instanceof final IProject project) {
+			aMemento.putString(PLANT_HIERARCHY_PROJECT, project.getName());
+		}
+	}
+
+	@Override
+	protected Object getInitialInput() {
+		if (memento != null) {
+			final String projectName = memento.getString(PLANT_HIERARCHY_PROJECT);
+			if (projectName != null) {
+				final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+				if (project != null && project.exists() && project.isOpen()) {
+					return project;
+				}
+			}
+		}
+		return super.getInitialInput();
 	}
 
 	private void setInput(final IProject proj) {
