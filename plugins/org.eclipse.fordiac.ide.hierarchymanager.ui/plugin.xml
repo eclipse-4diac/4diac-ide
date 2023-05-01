@@ -93,4 +93,29 @@
 			<showInPart id ="org.eclipse.fordiac.ide.hierarchymanager.view"/>
 		</perspectiveExtension>
    	</extension>
+    <extension
+          point="org.eclipse.ui.commands">
+       <category
+             id="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
+             name="4diac IDE Plant Hierarchy Commands">
+       </category>
+       <command
+             categoryId="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
+             defaultHandler="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.ExpandAll"
+             id="org.eclipse.fordiac.ide.hierarchymanager.ui.expandAll"
+             name="Expand All">
+       </command>
+    </extension>
+    <extension
+          point="org.eclipse.ui.menus">
+       <menuContribution
+             allPopups="false"
+             locationURI="toolbar:org.eclipse.fordiac.ide.hierarchymanager.view">
+          <command
+                commandId="org.eclipse.fordiac.ide.hierarchymanager.ui.expandAll"
+                icon="platform:/plugin/org.eclipse.ui/icons/full/elcl16/expandall.png"
+                style="push">
+          </command>
+       </menuContribution>
+    </extension>
 </plugin>

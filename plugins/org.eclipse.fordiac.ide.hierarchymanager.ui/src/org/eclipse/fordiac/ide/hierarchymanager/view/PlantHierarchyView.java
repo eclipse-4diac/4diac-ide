@@ -22,7 +22,7 @@ import org.eclipse.ui.part.ShowInContext;
 
 public class PlantHierarchyView extends CommonNavigator {
 
-	private static final String PLANT_HIERARCHY_PROJECT = "PlantHierarchy.Project";
+	private static final String PLANT_HIERARCHY_PROJECT = "PlantHierarchy.Project"; //$NON-NLS-1$
 
 	@Override
 	public boolean show(final ShowInContext context) {
