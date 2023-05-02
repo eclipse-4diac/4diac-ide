@@ -516,6 +516,31 @@
       </dragAssistant>
    </extension>
    <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.eclipse.fordiac.ide.typemanagement.wizards.sampleCategory"
+            name="Library Importer">
+      </category>
+      <wizard
+            category="org.eclipse.fordiac.ide.typemanagement.wizards.sampleCategory"
+            class="org.eclipse.fordiac.ide.typemanagement.wizards.ArchivedLibraryImportWizard"
+            id="org.eclipse.fordiac.ide.typemanagement.wizards.ArchivedLibraryImportWizard"
+            name="Archived Package Import">
+         <description>
+            Import a zipped package into the workspace.
+         </description>
+      </wizard>
+      <wizard
+            category="org.eclipse.fordiac.ide.typemanagement.wizards.sampleCategory"
+            class="org.eclipse.fordiac.ide.typemanagement.wizards.ExtractedLibraryImportWizard"
+            id="org.eclipse.fordiac.ide.typemanagement.wizards.UnzippedLibraryImportWizard"
+            name="Existing Package Import">
+         <description>
+            Import an existing file into the workspace.
+         </description>
+      </wizard>
+   </extension>
+   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
