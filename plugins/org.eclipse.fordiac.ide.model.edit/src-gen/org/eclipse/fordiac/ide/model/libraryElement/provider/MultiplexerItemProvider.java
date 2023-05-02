@@ -61,7 +61,8 @@ public class MultiplexerItemProvider extends StructManipulatorItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((Multiplexer) object).getName();
-		return (label == null) || (label.length() == 0) ? getString("_UI_Multiplexer_type") : //$NON-NLS-1$
+		return (label == null) || (((Multiplexer) object).getStructType() == null) || (label.length() == 0)
+		        ? getString("_UI_Multiplexer_type") : //$NON-NLS-1$
 				label + " (" + ((Multiplexer) object).getStructType().getName() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -86,3 +87,4 @@ public class MultiplexerItemProvider extends StructManipulatorItemProvider {
 	}
 
 }
+

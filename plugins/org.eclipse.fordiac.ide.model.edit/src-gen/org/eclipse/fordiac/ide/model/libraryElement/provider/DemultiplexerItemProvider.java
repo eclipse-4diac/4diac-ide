@@ -61,7 +61,8 @@ public class DemultiplexerItemProvider extends StructManipulatorItemProvider {
 	@Override
 	public String getText(Object object) {
 		String label = ((Demultiplexer) object).getName();
-		return (label == null) || (label.length() == 0) ? getString("_UI_Demultiplexer_type") : //$NON-NLS-1$
+		return (label == null) || (((Demultiplexer) object).getStructType() == null) || (label.length() == 0) 
+		        ? getString("_UI_Demultiplexer_type") : //$NON-NLS-1$
 				label + " (" + ((Demultiplexer) object).getStructType().getName() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -86,3 +87,4 @@ public class DemultiplexerItemProvider extends StructManipulatorItemProvider {
 	}
 
 }
+
