@@ -94,8 +94,8 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 
 	def protected generateAccessors(List<VarDeclaration> vars, String socketFunction, String plugFunction) '''
 		«FOR v : vars»
-			«v.generateInterfaceTypeName» &«v.generateName» {
-			  return *static_cast<«v.generateInterfaceTypeName»*>((isSocket()) ? «socketFunction»(«vars.indexOf(v)») : «plugFunction»(«vars.indexOf(v)»));
+			«v.generateVariableTypeName» &«v.generateName» {
+			  return *static_cast<«v.generateVariableTypeName»*>((isSocket()) ? «socketFunction»(«vars.indexOf(v)») : «plugFunction»(«vars.indexOf(v)»));
 			}
 			
 		«ENDFOR»

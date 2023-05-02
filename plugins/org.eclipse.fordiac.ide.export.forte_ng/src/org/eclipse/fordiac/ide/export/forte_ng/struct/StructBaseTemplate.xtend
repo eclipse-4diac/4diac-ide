@@ -32,5 +32,5 @@ abstract class StructBaseTemplate extends ForteLibraryElementTemplate<Structured
 	def static structuredTypeFileName(StructuredType type) '''forte_«type.name.toLowerCase»'''
 
 	def protected CharSequence generateConstructorParameters() //
-	'''«FOR param : type.memberVariables SEPARATOR ", "»const «param.generateTypeName» &«param.generateNameAsParameter»«ENDFOR»'''
+	'''«FOR param : type.memberVariables SEPARATOR ", "»const «param.generateVariableTypeNameAsParameter» &«param.generateNameAsParameter»«ENDFOR»'''
 }

@@ -336,7 +336,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateConnectionVariableDeclarations(List<VarDeclaration> variables) '''
 		«FOR variable : variables»
-			«variable.generateInterfaceTypeName» «variable.generateNameAsConnectionVariable»;
+			«variable.generateVariableTypeName» «variable.generateNameAsConnectionVariable»;
 		«ENDFOR»
 	'''
 
@@ -448,7 +448,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def protected generateEventAccessorName(Event event) '''evt_«event.name»'''
 
 	def protected CharSequence generateEventAccessorParameters(Event event) //
-	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«IF param.isIsInput»const «ENDIF»«param.generateTypeName» &«param.generateNameAsParameter»«ENDFOR»'''
+	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«IF param.isIsInput»const «ENDIF»«param.generateVariableTypeNameAsParameter» &«param.generateNameAsParameter»«ENDFOR»'''
 
 	def protected CharSequence generateEventAccessorForwardArguments(Event event) //
 	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«param.generateNameAsParameter»«ENDFOR»'''

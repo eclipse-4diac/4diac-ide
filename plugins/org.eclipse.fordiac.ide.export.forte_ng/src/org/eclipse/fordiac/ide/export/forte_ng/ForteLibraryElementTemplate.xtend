@@ -72,13 +72,13 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 
 	def protected generateVariableDeclarations(List<VarDeclaration> variables, boolean const) '''
 		«FOR variable : variables»
-			«IF const»static const «ENDIF»«variable.generateInterfaceTypeName» «variable.generateName»;
+			«IF const»static const «ENDIF»«variable.generateVariableTypeName» «variable.generateName»;
 		«ENDFOR»
 	'''
 
 	def protected generateVariableDefinitions(List<VarDeclaration> variables, boolean const) '''
 		«FOR variable : variables»
-			«IF const»const «ENDIF»«variable.generateInterfaceTypeName» FORTE_«type.name»::«variable.generateName» = «variable.generateVariableDefaultValue»;
+			«IF const»const «ENDIF»«variable.generateVariableTypeName» FORTE_«type.name»::«variable.generateName» = «variable.generateVariableDefaultValue»;
 		«ENDFOR»
 	'''
 
@@ -113,11 +113,16 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 
 	def protected CharSequence generateNameAsParameter(VarDeclaration variable) '''pa_«variable.name»'''
 
-	def protected CharSequence generateInterfaceTypeName(VarDeclaration variable) //
-	'''«IF variable.array»CIEC_ARRAY<«ENDIF»«variable.type.generateTypeName»«IF variable.array»>«ENDIF»'''
-
 	def CharSequence generateVariableDefaultValue(VarDeclaration decl) {
 		variableLanguageSupport.get(decl)?.generate(emptyMap)
+	}
+
+	def CharSequence generateVariableTypeName(VarDeclaration decl) {
+		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE -> Boolean.TRUE})
+	}
+
+	def CharSequence generateVariableTypeNameAsParameter(VarDeclaration decl) {
+		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_PARAM -> Boolean.TRUE})
 	}
 
 	def protected getFORTEStringId(String s) '''g_nStringId«s»'''
@@ -128,7 +133,8 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 
 	def protected getFORTETypeList(List<? extends VarDeclaration> elements) {
 		elements.map [
-			'''«IF it.array»«"ARRAY".FORTEStringId», «it.arraySize», «ENDIF»«it.type.generateTypeNamePlain.FORTEStringId»'''
+			val arraySize = try { arraySizeAsInt } catch (Exception e) { 0 }
+			'''«IF it.array»«"ARRAY".FORTEStringId», «arraySize», «ENDIF»«it.type.generateTypeNamePlain.FORTEStringId»'''
 		].join(", ")
 	}
 

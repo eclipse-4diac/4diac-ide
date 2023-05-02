@@ -19,20 +19,43 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
 @FinalFieldsConstructor
 class VarDeclarationSupport extends StructuredTextSupport {
 	final VarDeclaration varDeclaration
 
+	INamedElement resultType
 	STInitializerExpressionSource parseResult
 
 	override prepare(Map<?, ?> options) {
+		prepareResultType && prepareInitialValue
+	}
+
+	def protected prepareResultType() {
+		if (resultType === null) {
+			if (varDeclaration.array) {
+				try {
+					resultType = VariableOperations.evaluateResultType(varDeclaration)
+				} catch (Exception e) {
+					errors.add(e.message)
+				}
+			} else
+				resultType = varDeclaration.type
+		}
+		return resultType !== null
+	}
+
+	def protected prepareInitialValue() {
+		prepareResultType
 		if (parseResult === null && errors.empty) {
 			parseResult = (varDeclaration.value?.value ?: "").parse(
 				varDeclaration?.eResource?.URI,
-				varDeclaration.featureType,
+				resultType,
 				null,
 				null,
 				errors,
@@ -44,10 +67,17 @@ class VarDeclarationSupport extends StructuredTextSupport {
 	}
 
 	override generate(Map<?, ?> options) throws ExportException {
-		if (varDeclaration.value?.value.nullOrEmpty) {
-			varDeclaration.featureType.generateTypeDefaultValue
+		if (options.get(ForteNgExportFilter.OPTION_TYPE) == Boolean.TRUE) {
+			prepareResultType
+			resultType?.generateTypeName
+		} else if (options.get(ForteNgExportFilter.OPTION_TYPE_PARAM) == Boolean.TRUE) {
+			prepareResultType
+			resultType?.generateTypeNameAsParameter
+		} else if (varDeclaration.value?.value.nullOrEmpty) {
+			prepareResultType
+			resultType?.generateTypeDefaultValue
 		} else {
-			prepare(options)
+			prepareInitialValue
 			parseResult?.initializerExpression?.generateInitializerExpression
 		}
 	}
@@ -56,7 +86,7 @@ class VarDeclarationSupport extends StructuredTextSupport {
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE) {
 			#{varDeclaration.type}
 		} else if (!varDeclaration.value?.value.nullOrEmpty) {
-			prepare(options)
+			prepareInitialValue
 			parseResult?.containedDependencies ?: emptySet
 		} else
 			emptySet

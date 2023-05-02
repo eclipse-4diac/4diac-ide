@@ -51,7 +51,7 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 	}
 
 	def private CharSequence generateStructuredTextVarDeclarationSourceImpl(STVarDeclaration declaration) '''
-		const «declaration.generateTypeName» «declaration.generateFeatureName» = «declaration.defaultValue.generateInitializerExpression»;
+		const «declaration.generateFeatureTypeName» «declaration.generateFeatureName» = «declaration.defaultValue.generateInitializerExpression»;
 	'''
 
 	def private CharSequence generateStructuredTextGlobalVariablesSourceHeader(STGlobalConstsSource source) {
@@ -71,7 +71,7 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 	}
 
 	def private CharSequence generateStructuredTextVarDeclarationHeader(STVarDeclaration declaration) '''
-		extern const «declaration.generateTypeName» «declaration.generateFeatureName»;
+		extern const «declaration.generateFeatureTypeName» «declaration.generateFeatureName»;
 	'''
 
 	override getDependencies(Map<?, ?> options) {

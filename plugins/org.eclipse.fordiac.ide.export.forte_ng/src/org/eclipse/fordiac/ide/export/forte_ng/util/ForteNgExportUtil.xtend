@@ -30,23 +30,41 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
 final class ForteNgExportUtil {
 	private new() {
 	}
 
 	def static CharSequence generateName(VarDeclaration variable) {
-		switch(root : variable.rootContainer) {
+		switch (root : variable.rootContainer) {
 			BaseFBType case root.internalConstVars.contains(variable): '''var_const_«variable.name»'''
 			AdapterType: '''var_«variable.name»()'''
 			default: '''var_«variable.name»'''
 		}
 	}
 
-	def static CharSequence generateTypeName(VarDeclaration variable) //
-	'''«IF variable.array»CIEC_ARRAY_COMMON<«ENDIF»«variable.type.generateTypeName»«IF variable.array»>«ENDIF»'''
+	def static CharSequence generateTypeName(INamedElement type) {
+		switch (type) {
+			ArrayType:
+				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
+					val fixed = subrange.setLowerLimit && subrange.setUpperLimit
+					'''«IF fixed»CIEC_ARRAY_FIXED«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«result»«IF fixed», «subrange.lowerLimit», «subrange.upperLimit»«ENDIF»>'''
+				].toString
+			DataType: '''CIEC_«type.generateTypeNamePlain»«IF GenericTypes.isAnyType(type)»_VARIANT«ENDIF»'''
+			default: type.name
+		}
+	}
 
-	def static CharSequence generateTypeName(DataType type) '''CIEC_«type.generateTypeNamePlain»«IF GenericTypes.isAnyType(type)»_VARIANT«ENDIF»'''
+	def static CharSequence generateTypeNameAsParameter(INamedElement type) {
+		switch (type) {
+			ArrayType:
+				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
+					'''CIEC_ARRAY_COMMON<«result»>'''
+				].toString
+			default: type.generateTypeName
+		}
+	}
 
 	def static String generateTypeNamePlain(DataType type) {
 		switch (type) {

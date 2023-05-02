@@ -80,7 +80,7 @@ class STFunctionSupport extends StructuredTextSupport {
 	'''«func.returnType?.generateTypeName ?: "void"» func_«func.name»(«func.generateStructuredTextFunctionParameters»)'''
 
 	def private CharSequence generateStructuredTextFunctionParameters(STFunction func) //
-	'''«FOR param : func.structuredTextFunctionParameters SEPARATOR ", "»«param.key.generateTypeName(param.value)» «IF param.value»&«ENDIF»«param.key.generateFeatureName»«ENDFOR»'''
+	'''«FOR param : func.structuredTextFunctionParameters SEPARATOR ", "»«param.key.generateFeatureTypeName(param.value)» «IF param.value»&«ENDIF»«param.key.generateFeatureName»«ENDFOR»'''
 
 	def private getStructuredTextFunctionParameters(STFunction func) {
 		func.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].map[it -> false] +
