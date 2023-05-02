@@ -50,9 +50,7 @@ import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection<VarDeclaration> {
 
-	protected static final String ARRAY_SIZE = "arraysize"; //$NON-NLS-1$
 	protected static final String INITIAL_VALUE = "initialvalue"; //$NON-NLS-1$
-	protected static final int ARRAYSIZE_WIDTH = 100;
 	protected static final int INITIALVALUE_WIDTH = 100;
 	private DataTypeDropdown typeDropdown;
 
@@ -70,8 +68,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value, final TableViewer viewer) {
-		if (value instanceof String) {
-			final DataType dataType = typeDropdown.getType((String) value);
+		if (value instanceof final String string) {
+			final DataType dataType = typeDropdown.getType(string);
 			return (dataType == null) ? null : newChangeTypeCommand(data, dataType);
 		}
 		return null;

@@ -27,7 +27,7 @@ import org.eclipse.swt.graphics.Image;
  */
 public class InterfaceElementLabelProvider extends LabelProvider implements ITableLabelProvider, ITableColorProvider {
 	private static final int NAME_COL_INDEX = 0;
-	private static final int TYPE_COL_INDEX = 1;
+	protected static final int TYPE_COL_INDEX = 1;
 	private static final int COMMENT_COL_INDEX = 2;
 
 	@Override
@@ -37,8 +37,7 @@ public class InterfaceElementLabelProvider extends LabelProvider implements ITab
 
 	@Override
 	public String getColumnText(final Object element, final int columnIndex) {
-		if (element instanceof IInterfaceElement) {
-			IInterfaceElement interfaceElement = ((IInterfaceElement) element);
+		if (element instanceof final IInterfaceElement interfaceElement) {
 			switch (columnIndex) {
 			case NAME_COL_INDEX:
 				return interfaceElement.getName();
@@ -54,12 +53,12 @@ public class InterfaceElementLabelProvider extends LabelProvider implements ITab
 	}
 
 	@Override
-	public Color getForeground(Object element, int columnIndex) {
+	public Color getForeground(final Object element, final int columnIndex) {
 		return null;
 	}
 
 	@Override
-	public Color getBackground(Object element, int columnIndex) {
+	public Color getBackground(final Object element, final int columnIndex) {
 		return null;
 	}
 }

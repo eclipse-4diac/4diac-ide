@@ -76,7 +76,7 @@ public class AdapterColumnAcessor implements IColumnAccessor<AdapterDeclaration>
 
 	@Override
 	public int getColumnCount() {
-		return 3;
+		return I4diacNatTableUtil.COMMENT + 1;
 	}
 
 }

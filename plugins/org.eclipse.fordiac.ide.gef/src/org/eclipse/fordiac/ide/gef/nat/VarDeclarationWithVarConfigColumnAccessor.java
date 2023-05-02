@@ -47,6 +47,6 @@ public class VarDeclarationWithVarConfigColumnAccessor extends VarDeclarationCol
 
 	@Override
 	public int getColumnCount() {
-		return 6;
+		return I4diacNatTableUtil.VAR_CONFIG + 1;
 	}
 }

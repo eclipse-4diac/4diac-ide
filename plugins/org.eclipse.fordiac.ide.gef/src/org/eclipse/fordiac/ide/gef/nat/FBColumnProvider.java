@@ -34,7 +34,7 @@ public class FBColumnProvider implements IDataProvider {
 
 	@Override
 	public int getColumnCount() {
-		return 3;
+		return I4diacNatTableUtil.COMMENT + 1;
 	}
 
 	@Override

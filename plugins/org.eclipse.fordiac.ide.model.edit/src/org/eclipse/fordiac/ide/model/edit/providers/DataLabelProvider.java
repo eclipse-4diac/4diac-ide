@@ -23,7 +23,6 @@ import org.eclipse.swt.graphics.Image;
  * A label provider that can be used to display data in columns
  */
 public class DataLabelProvider extends InitialValueLabelProvider {
-	public static final int ARRAYSIZE_COL_INDEX = 4;
 
 	@Override
 	public Image getColumnImage(final Object element, final int columnIndex) {
@@ -32,19 +31,18 @@ public class DataLabelProvider extends InitialValueLabelProvider {
 
 	@Override
 	public String getColumnText(final Object element, final int columnIndex) {
-		if (element instanceof VarDeclaration) {
-			final VarDeclaration varDecl = ((VarDeclaration) element);
-			if (columnIndex == ARRAYSIZE_COL_INDEX) {
-				return getArraySizeText(varDecl);
-			}
-			return super.getColumnText(element, columnIndex);
+		if (element instanceof final VarDeclaration varDecl && columnIndex == TYPE_COL_INDEX) {
+			return getDataTypeText(varDecl);
 		}
-		return element.toString();
+		return super.getColumnText(element, columnIndex);
 	}
 
-	public static String getArraySizeText(final VarDeclaration varDecl) {
-		final int arraySize = varDecl.getArraySize();
-		return (arraySize <= 0) ? "" : String.valueOf(arraySize); //$NON-NLS-1$
+
+	public static String getDataTypeText(final VarDeclaration varDecl) {
+		if (varDecl.isArray()) {
+			return "ARRAY [0.." + varDecl.getArraySize() + "] OF " + varDecl.getTypeName(); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		return varDecl.getTypeName();
 	}
 
 }
