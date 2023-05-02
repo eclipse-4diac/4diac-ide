@@ -107,12 +107,12 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 
 			@Override
 			public void ancestorMoved(final IFigure ancestor) {
-				update();
+				refreshVisuals();
 			}
 
 			@Override
 			public void ancestorAdded(final IFigure ancestor) {
-				update();
+				refreshVisuals();
 			}
 
 		});
@@ -126,7 +126,6 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
 				refresh();
-				update();
 				if (LibraryElementPackage.eINSTANCE.getEvent_With().equals(notification.getFeature())) {
 					refreshTypeRoot();
 				}
@@ -135,7 +134,8 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	}
 
 	@Override
-	protected void update() {
+	protected void refreshVisuals() {
+		super.refreshVisuals();
 		if (getCastedModel() instanceof Event && null != sourceConnections) {
 			for (final Object con : sourceConnections) {
 				final WithEditPart with = (WithEditPart) con;
@@ -180,14 +180,14 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	public void setInOutConnectionsWith(final int with) {
 		for (final Object element : getSourceConnections()) {
 			final ConnectionEditPart cep = (ConnectionEditPart) element;
-			if (cep.getFigure() instanceof PolylineConnection) {
-				((PolylineConnection) cep.getFigure()).setLineWidth(with);
+			if (cep.getFigure() instanceof final PolylineConnection plc) {
+				plc.setLineWidth(with);
 			}
 		}
 		for (final Object element : getTargetConnections()) {
 			final ConnectionEditPart cep = (ConnectionEditPart) element;
-			if (cep.getFigure() instanceof PolylineConnection) {
-				((PolylineConnection) cep.getFigure()).setLineWidth(with);
+			if (cep.getFigure() instanceof final PolylineConnection plc) {
+				plc.setLineWidth(with);
 			}
 		}
 	}

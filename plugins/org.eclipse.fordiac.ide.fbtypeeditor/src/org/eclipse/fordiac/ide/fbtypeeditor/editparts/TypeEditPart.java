@@ -53,7 +53,6 @@ import org.eclipse.swt.widgets.Display;
 public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
 	private final TypeLibrary typeLib;
-	private Label comment;
 
 	private DiagramFontChangeListener fontChangeListener;
 
@@ -81,22 +80,10 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 		return fontChangeListener;
 	}
 
-	public class TypeFigure extends Label implements IFontUpdateListener {
+	private static class TypeFigure extends Label implements IFontUpdateListener {
 		public TypeFigure() {
 			super();
 			setTypeLabelFonts();
-		}
-
-		@Override
-		public void setText(String s) {
-			if (getCastedModel() instanceof VarDeclaration) {
-				// if is array append array size
-				final VarDeclaration varDec = (VarDeclaration) getCastedModel();
-				if (varDec.isArray()) {
-					s = s + "[" + varDec.getArraySize() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
-				}
-			}
-			super.setText(s);
 		}
 
 		@Override
@@ -113,14 +100,19 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
 	@Override
 	public IInterfaceElement getCastedModel() {
-		return ((TypeField) getModel()).getReferencedElement();
+		return getModel().getReferencedElement();
+	}
+
+	@Override
+	public TypeField getModel() {
+		return (TypeField) super.getModel();
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		comment = new TypeFigure();
-		update();
-		return comment;
+		final TypeFigure fig = new TypeFigure();
+		updateFigure(fig);
+		return fig;
 	}
 
 	@Override
@@ -129,23 +121,28 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	}
 
 	@Override
-	protected void update() {
-		comment.setText(getTypeName());
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+		updateFigure(getFigure());
+	}
+
+	private void updateFigure(final TypeFigure typeFigure) {
+		typeFigure.setText(getTypeName());
 
 		final Display display = Display.getCurrent();
 		if (null != display) {
-			if (getINamedElement() instanceof VarDeclaration
-					&& ((VarDeclaration) getINamedElement()).getType() instanceof ErrorMarkerDataType) {
-				comment.setOpaque(true);
-				comment.setBackgroundColor(display.getSystemColor(SWT.COLOR_RED));
+			if (getINamedElement() instanceof final VarDeclaration varDecl
+					&& varDecl.getType() instanceof ErrorMarkerDataType) {
+				typeFigure.setOpaque(true);
+				typeFigure.setBackgroundColor(display.getSystemColor(SWT.COLOR_RED));
 			} else {
-				comment.setOpaque(false);
+				typeFigure.setOpaque(false);
 			}
 		}
 	}
 
 	private String getTypeName() {
-		return ((TypeField) getModel()).getLabel();
+		return getModel().getLabel();
 	}
 
 	@Override
@@ -169,8 +166,8 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 					if (index >= 0 && index < combo.getItemCount()) {
 						final String typeName = combo.getItem(index);
 						ChangeDataTypeCommand cmd;
-						if (getCastedModel() instanceof AdapterDeclaration) {
-							cmd = new ChangeAdapterTypeCommand((AdapterDeclaration) getCastedModel(),
+						if (getCastedModel() instanceof final AdapterDeclaration adp) {
+							cmd = new ChangeAdapterTypeCommand(adp,
 									typeLib.getAdapterTypeEntry(typeName).getType());
 						} else {
 							cmd = new ChangeDataTypeCommand(getCastedModel(),
@@ -204,7 +201,8 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
 	@Override
 	protected ComboDirectEditManager createDirectEditManager() {
-		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(comment), comment);
+		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(getFigure()),
+				getFigure());
 	}
 
 	@Override
