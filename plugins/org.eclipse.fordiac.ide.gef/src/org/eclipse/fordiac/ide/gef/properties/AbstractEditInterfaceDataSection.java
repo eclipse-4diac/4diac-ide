@@ -61,12 +61,6 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	}
 
 	@Override
-	protected Object getTypeValue(final Object element, final TableViewer viewer, final int TYPE_COLUMN_INDEX) {
-		final VarDeclaration variable = (VarDeclaration) element;
-		return variable.getTypeName();
-	}
-
-	@Override
 	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value, final TableViewer viewer) {
 		if (value instanceof final String string) {
 			final DataType dataType = typeDropdown.getType(string);

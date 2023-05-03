@@ -881,8 +881,21 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 */
 	@Override
 	public int getArraySizeAsInt() {
-		return Integer.parseInt(getArraySize());
+		if(getArraySize() != null){
+		   return Integer.parseInt(getArraySize());
+		}
+		return 0;
 
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getFullTypeName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);
 	}
 
 } // AdapterMonitoringVarDeclarationImpl

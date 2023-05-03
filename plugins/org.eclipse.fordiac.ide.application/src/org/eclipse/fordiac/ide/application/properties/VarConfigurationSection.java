@@ -279,7 +279,7 @@ public class VarConfigurationSection extends AbstractSection {
 				}
 				return name;
 			case TYPE_COL_ID:
-				return rowObject.getTypeName();
+				return rowObject.getFullTypeName();
 			case COMMENT_COL_ID:
 				if (!rowObject.getComment().isBlank()) {
 					return rowObject.getComment();

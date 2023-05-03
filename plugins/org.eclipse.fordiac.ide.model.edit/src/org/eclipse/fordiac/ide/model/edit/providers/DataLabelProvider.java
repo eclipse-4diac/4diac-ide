@@ -16,7 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.edit.providers;
 
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -31,18 +30,6 @@ public class DataLabelProvider extends InitialValueLabelProvider {
 
 	@Override
 	public String getColumnText(final Object element, final int columnIndex) {
-		if (element instanceof final VarDeclaration varDecl && columnIndex == TYPE_COL_INDEX) {
-			return getDataTypeText(varDecl);
-		}
 		return super.getColumnText(element, columnIndex);
 	}
-
-
-	public static String getDataTypeText(final VarDeclaration varDecl) {
-		if (varDecl.isArray()) {
-			return "ARRAY [0.." + varDecl.getArraySize() + "] OF " + varDecl.getTypeName(); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		return varDecl.getTypeName();
-	}
-
 }

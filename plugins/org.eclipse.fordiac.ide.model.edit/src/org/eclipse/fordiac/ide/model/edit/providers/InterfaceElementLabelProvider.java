@@ -42,7 +42,7 @@ public class InterfaceElementLabelProvider extends LabelProvider implements ITab
 			case NAME_COL_INDEX:
 				return interfaceElement.getName();
 			case TYPE_COL_INDEX:
-				return element instanceof Event ? FordiacMessages.Event : interfaceElement.getTypeName();
+				return element instanceof Event ? FordiacMessages.Event : interfaceElement.getFullTypeName();
 			case COMMENT_COL_INDEX:
 				return interfaceElement.getComment() != null ? interfaceElement.getComment() : ""; //$NON-NLS-1$
 			default:

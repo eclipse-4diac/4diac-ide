@@ -127,4 +127,12 @@ public interface VarDeclaration extends IInterfaceElement {
 	 */
 	int getArraySizeAsInt();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	String getFullTypeName();
+
 } // VarDeclaration

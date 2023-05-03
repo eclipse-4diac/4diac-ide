@@ -383,6 +383,8 @@
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getFBNetworkElement"
           body="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getTypeName" body="DataType dataType = getType();&#xA;if(dataType != null){&#xA;&#x9;return dataType.getName();&#xA;}&#xA;return null;"/>
+      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getFullTypeName"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//INamedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/name"/>
@@ -609,7 +611,8 @@
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/setVarConfig/config"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/getArraySizeAsInt"
-          body="return Integer.parseInt(getArraySize());&#xA;"/>
+          body="if(getArraySize() != null){&#xA;   return Integer.parseInt(getArraySize());&#xA;}&#xA;return 0;&#xA;"/>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/getFullTypeName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VersionInfo/author"/>

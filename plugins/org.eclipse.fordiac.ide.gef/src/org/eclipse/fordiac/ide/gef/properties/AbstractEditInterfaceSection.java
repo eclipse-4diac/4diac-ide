@@ -23,7 +23,6 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,15 +142,6 @@ implements I4diacNatTableUtil {
 	// can be overridden by subclasses to use a different type dropdown
 	protected CellEditor createTypeCellEditor(final TableViewer viewer) {
 		return ComboBoxWidgetFactory.createComboBoxCellEditor(viewer.getTable(), fillTypeCombo(), SWT.READ_ONLY);
-	}
-
-	// subclasses need to override this method if they use a different type dropdown
-	@SuppressWarnings("static-method")
-	protected Object getTypeValue(final Object element, final TableViewer viewer, final int TYPE_COLUMN_INDEX) {
-		final String type = ((IInterfaceElement) element).getTypeName();
-		final List<String> items = Arrays
-				.asList(((ComboBoxCellEditor) viewer.getCellEditors()[TYPE_COLUMN_INDEX]).getItems());
-		return Integer.valueOf(items.indexOf(type));
 	}
 
 	// subclasses need to override this method if they use a different type dropdown

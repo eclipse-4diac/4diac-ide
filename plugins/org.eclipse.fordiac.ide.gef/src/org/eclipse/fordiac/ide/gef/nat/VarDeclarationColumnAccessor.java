@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
-import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -46,7 +45,7 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 		case I4diacNatTableUtil.NAME:
 			return rowObject.getName();
 		case I4diacNatTableUtil.TYPE:
-			return DataLabelProvider.getDataTypeText(rowObject);
+			return rowObject.getFullTypeName();
 		case I4diacNatTableUtil.COMMENT:
 			return rowObject.getComment();
 		case I4diacNatTableUtil.INITIAL_VALUE:

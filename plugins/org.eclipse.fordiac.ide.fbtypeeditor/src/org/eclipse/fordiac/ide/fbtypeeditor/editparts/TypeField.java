@@ -14,9 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
-import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class TypeField {
 	private final IInterfaceElement referencedElement;
@@ -30,10 +28,7 @@ public class TypeField {
 	}
 
 	public String getLabel() {
-		if (referencedElement instanceof final VarDeclaration varDecl) {
-			return DataLabelProvider.getDataTypeText(varDecl);
-		}
-		return getReferencedElement().getTypeName();
+		return getReferencedElement().getFullTypeName();
 	}
 
 }

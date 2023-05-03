@@ -434,7 +434,7 @@ public class InstancePropertySection extends AbstractSection {
 			case NAME_COL_ID:
 				return rowObject.getName();
 			case TYPE_COL_ID:
-				return rowObject.getTypeName();
+				return rowObject.getFullTypeName();
 			case INITIAL_VALUE_COL_ID:
 				return InitialValueHelper.getInitalOrDefaultValue(rowObject);
 			case COMMENT_COL_ID:

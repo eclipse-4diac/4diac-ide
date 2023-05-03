@@ -501,6 +501,16 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 * @generated
 	 */
 	@Override
+	public String getFullTypeName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void setVisible(final boolean visible) {
 		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);
 	}

@@ -317,10 +317,10 @@ public class VarDeclarationItemProvider
 	 * @generated not
 	 */
 	@Override
-	public String getText(Object object) {
-		String label = ((VarDeclaration) object).getName();
+	public String getText(final Object object) {
+		final String label = ((VarDeclaration) object).getName();
 		return label == null || label.length() == 0 ? getString("_UI_VarDeclaration_type") : //$NON-NLS-1$
-				label + " : " + ((VarDeclaration) object).getTypeName(); //$NON-NLS-1$
+			label + " : " + ((VarDeclaration) object).getFullTypeName(); //$NON-NLS-1$
 	}
 
 

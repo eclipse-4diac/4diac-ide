@@ -406,6 +406,16 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 * @generated
 	 */
 	@Override
+	public String getFullTypeName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getErrorMessage() {
 		return errorMessage;
 	}
