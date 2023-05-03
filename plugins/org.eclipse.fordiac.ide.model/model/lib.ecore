@@ -1195,7 +1195,7 @@
         eOpposite="#//Device/inConnections"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LocalVariable" eSuperTypes="#//VarDeclaration">
-    <eOperations name="getArraySize" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
+    <eOperations name="getArraySizeAsInt" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return arrayStop-arrayStart+1;"/>
         <details key="documentation" value="overwrite"/>
@@ -1606,7 +1606,12 @@
       </eAnnotations>
       <eParameters name="config" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arraySize" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
+    <eOperations name="getArraySizeAsInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if(getArraySize() != null){&#xA;   return Integer.parseInt(getArraySize());&#xA;}&#xA;return 0;&#xA;"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arraySize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="arraySize"/>

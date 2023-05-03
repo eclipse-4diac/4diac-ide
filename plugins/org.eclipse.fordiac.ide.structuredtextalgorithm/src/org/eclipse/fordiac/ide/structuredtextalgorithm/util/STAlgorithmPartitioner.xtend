@@ -142,7 +142,7 @@ class STAlgorithmPartitioner {
 			name = declaration.name
 			type = declaration.type as DataType
 			if (declaration.array) {
-				arraySize = declaration.ranges.head.convertArrayRange
+				arraySize = declaration.ranges.head.convertArrayRange.toString
 			}
 			isInput = input
 		]

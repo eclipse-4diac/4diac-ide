@@ -18,45 +18,24 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class ChangeArraySizeCommand extends AbstractChangeInterfaceElementCommand {
-	private final String newArraySizeString;
-	private int oldArraySize;
-	private int newArraySize;
+	private final String newArraySize;
+	private String oldArraySize;
 
-	public ChangeArraySizeCommand(final VarDeclaration variable, final String newArraySizeString) {
+	public ChangeArraySizeCommand(final VarDeclaration variable, final String newArraySize) {
 		super(variable);
-		this.newArraySizeString = newArraySizeString;
+		this.newArraySize = newArraySize;
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (null != getInterfaceElement()) && (null != newArraySizeString);
+		return (null != getInterfaceElement());
 	}
 
 	@Override
 	protected void doExecute() {
 		final VarDeclaration variable = getInterfaceElement();
-		if (variable.isArray()) {
-			oldArraySize = variable.getArraySize();
-		} else {
-			oldArraySize = 0;
-		}
-		if (newArraySizeString.length() == 0) {
-			newArraySize = 0;
-		} else if (newArraySizeString.length() > 0) {
-			try {
-				newArraySize = Integer.parseInt(newArraySizeString);
-			} catch (final NumberFormatException nfe) {
-				newArraySize = 0;
-			}
-		}
-		if(newArraySize < 0) {
-			newArraySize = 0;
-		}
+		oldArraySize = variable.getArraySize();
 		setArraySize(newArraySize);
-	}
-
-	private void setArraySize(final int arraySize) {
-		getInterfaceElement().setArraySize(arraySize);
 	}
 
 	@Override
@@ -72,5 +51,9 @@ public class ChangeArraySizeCommand extends AbstractChangeInterfaceElementComman
 	@Override
 	public VarDeclaration getInterfaceElement() {
 		return (VarDeclaration) super.getInterfaceElement();
+	}
+
+	private void setArraySize(final String arraySize) {
+		getInterfaceElement().setArraySize(arraySize);
 	}
 }

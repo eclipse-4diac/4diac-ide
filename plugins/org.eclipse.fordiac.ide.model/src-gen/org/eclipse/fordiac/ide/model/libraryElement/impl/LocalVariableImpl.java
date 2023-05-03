@@ -151,7 +151,7 @@ public class LocalVariableImpl extends VarDeclarationImpl implements LocalVariab
 	 * @generated
 	 */
 	@Override
-	public int getArraySize() {
+	public int getArraySizeAsInt() {
 		return arrayStop-arrayStart+1;
 	}
 

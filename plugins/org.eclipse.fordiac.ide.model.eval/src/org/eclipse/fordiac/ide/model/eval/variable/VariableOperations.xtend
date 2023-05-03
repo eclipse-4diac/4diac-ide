@@ -134,7 +134,7 @@ final class VariableOperations {
 
 	def static DataType getActualType(VarDeclaration decl) {
 		if (decl.array)
-			decl.type.newArrayType(newSubrange(0, decl.arraySize - 1))
+			decl.type.newArrayType(newSubrange(0, decl.arraySizeAsInt - 1))
 		else
 			decl.type
 	}

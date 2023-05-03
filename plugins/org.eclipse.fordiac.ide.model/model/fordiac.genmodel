@@ -437,7 +437,8 @@
     <genClasses ecoreClass="lib.ecore#//LocalVariable">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStart"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStop"/>
-      <genOperations ecoreOperation="lib.ecore#//LocalVariable/getArraySize" body="return arrayStop-arrayStart+1;"/>
+      <genOperations ecoreOperation="lib.ecore#//LocalVariable/getArraySizeAsInt"
+          body="return arrayStop-arrayStart+1;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Mapping">
       <genFeatures createChild="false" ecoreFeature="ecore:EReference lib.ecore#//Mapping/from"/>
@@ -607,6 +608,8 @@
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/setVarConfig" body="org.eclipse.fordiac.ide.model.Annotations.setVarConfig(this,config);">
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/setVarConfig/config"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/getArraySizeAsInt"
+          body="return Integer.parseInt(getArraySize());&#xA;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VersionInfo/author"/>

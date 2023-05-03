@@ -88,6 +88,6 @@ public interface LocalVariable extends VarDeclaration {
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int" unique="false"
 	 * @generated
 	 */
-	int getArraySize();
+	int getArraySizeAsInt();
 
 } // LocalVariable
