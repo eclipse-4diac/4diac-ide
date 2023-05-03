@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.util
 
 import com.google.inject.Inject
 import java.io.ByteArrayOutputStream
-import java.math.BigInteger
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -25,10 +24,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGramm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.xtext.nodemodel.ICompositeNode
 import org.eclipse.xtext.resource.XtextResource
@@ -142,23 +138,14 @@ class STAlgorithmPartitioner {
 			name = declaration.name
 			type = declaration.type as DataType
 			if (declaration.array) {
-				arraySize = declaration.ranges.head.convertArrayRange.toString
+				arraySize = declaration.extractArraySize
 			}
 			isInput = input
 		]
 	}
 
-	def protected int convertArrayRange(STExpression expression) {
-		switch (expression) {
-			case null:
-				0
-			STBinaryExpression case expression.op == STBinaryOperator.RANGE:
-				expression.right.convertArrayRange - expression.left.convertArrayRange
-			STNumericLiteral:
-				(expression.value as BigInteger).intValueExact
-			default:
-				throw new IllegalArgumentException("Unsupported array range expression")
-		}
+	def protected String extractArraySize(STVarDeclaration declaration) {
+		declaration.findNodesForFeature(STCorePackage.eINSTANCE.STVarDeclaration_Ranges).map[text].join(",")
 	}
 
 	def protected extractComments(ICompositeNode node) {
