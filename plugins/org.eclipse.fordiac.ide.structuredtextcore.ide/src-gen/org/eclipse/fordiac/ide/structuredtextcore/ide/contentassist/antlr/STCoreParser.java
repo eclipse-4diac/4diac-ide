@@ -32,6 +32,7 @@ public class STCoreParser extends AbstractContentAssistParser {
 		
 		private static void init(ImmutableMap.Builder<AbstractElement, String> builder, STCoreGrammarAccess grammarAccess) {
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getAlternatives_4_1(), "rule__STVarDeclaration__Alternatives_4_1");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getAlternatives_1_1(), "rule__STTypeDeclaration__Alternatives_1_1");
 			builder.put(grammarAccess.getSTInitializerExpressionAccess().getAlternatives(), "rule__STInitializerExpression__Alternatives");
 			builder.put(grammarAccess.getSTStatementAccess().getAlternatives(), "rule__STStatement__Alternatives");
 			builder.put(grammarAccess.getSTStatementAccess().getAlternatives_0_0(), "rule__STStatement__Alternatives_0_0");
@@ -87,6 +88,13 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getGroup_4_1_1_2(), "rule__STVarDeclaration__Group_4_1_1_2__0");
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getGroup_6(), "rule__STVarDeclaration__Group_6__0");
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getGroup_7(), "rule__STVarDeclaration__Group_7__0");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getGroup(), "rule__STTypeDeclaration__Group__0");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getGroup_1(), "rule__STTypeDeclaration__Group_1__0");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getGroup_1_1_0(), "rule__STTypeDeclaration__Group_1_1_0__0");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getGroup_1_1_0_2(), "rule__STTypeDeclaration__Group_1_1_0_2__0");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getGroup_1_1_1(), "rule__STTypeDeclaration__Group_1_1_1__0");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getGroup_1_1_1_2(), "rule__STTypeDeclaration__Group_1_1_1_2__0");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getGroup_3(), "rule__STTypeDeclaration__Group_3__0");
 			builder.put(grammarAccess.getSTArrayInitializerExpressionAccess().getGroup(), "rule__STArrayInitializerExpression__Group__0");
 			builder.put(grammarAccess.getSTArrayInitializerExpressionAccess().getGroup_2(), "rule__STArrayInitializerExpression__Group_2__0");
 			builder.put(grammarAccess.getSTArrayInitElementAccess().getGroup(), "rule__STArrayInitElement__Group__0");
@@ -197,6 +205,13 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getTypeAssignment_5(), "rule__STVarDeclaration__TypeAssignment_5");
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getMaxLengthAssignment_6_1(), "rule__STVarDeclaration__MaxLengthAssignment_6_1");
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getDefaultValueAssignment_7_1(), "rule__STVarDeclaration__DefaultValueAssignment_7_1");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getArrayAssignment_1_0(), "rule__STTypeDeclaration__ArrayAssignment_1_0");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getRangesAssignment_1_1_0_1(), "rule__STTypeDeclaration__RangesAssignment_1_1_0_1");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getRangesAssignment_1_1_0_2_1(), "rule__STTypeDeclaration__RangesAssignment_1_1_0_2_1");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getCountAssignment_1_1_1_1(), "rule__STTypeDeclaration__CountAssignment_1_1_1_1");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getCountAssignment_1_1_1_2_1(), "rule__STTypeDeclaration__CountAssignment_1_1_1_2_1");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getTypeAssignment_2(), "rule__STTypeDeclaration__TypeAssignment_2");
+			builder.put(grammarAccess.getSTTypeDeclarationAccess().getMaxLengthAssignment_3_1(), "rule__STTypeDeclaration__MaxLengthAssignment_3_1");
 			builder.put(grammarAccess.getSTElementaryInitializerExpressionAccess().getValueAssignment(), "rule__STElementaryInitializerExpression__ValueAssignment");
 			builder.put(grammarAccess.getSTArrayInitializerExpressionAccess().getValuesAssignment_1(), "rule__STArrayInitializerExpression__ValuesAssignment_1");
 			builder.put(grammarAccess.getSTArrayInitializerExpressionAccess().getValuesAssignment_2_1(), "rule__STArrayInitializerExpression__ValuesAssignment_2_1");

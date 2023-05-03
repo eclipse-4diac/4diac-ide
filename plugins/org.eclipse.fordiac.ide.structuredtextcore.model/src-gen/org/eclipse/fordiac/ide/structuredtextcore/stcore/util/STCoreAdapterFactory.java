@@ -225,6 +225,10 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTVarDeclarationAdapter();
 			}
 			@Override
+			public Adapter caseSTTypeDeclaration(STTypeDeclaration object) {
+				return createSTTypeDeclarationAdapter();
+			}
+			@Override
 			public Adapter caseSTReturn(STReturn object) {
 				return createSTReturnAdapter();
 			}
@@ -807,6 +811,20 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTVarDeclarationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration <em>ST Type Declaration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration
+	 * @generated
+	 */
+	public Adapter createSTTypeDeclarationAdapter() {
 		return null;
 	}
 

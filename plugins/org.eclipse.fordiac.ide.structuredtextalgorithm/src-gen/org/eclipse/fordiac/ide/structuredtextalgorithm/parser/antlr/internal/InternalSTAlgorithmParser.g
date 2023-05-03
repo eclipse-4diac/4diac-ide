@@ -1083,6 +1083,198 @@ ruleSTVarDeclaration returns [EObject current=null]
 	)
 ;
 
+// Entry rule entryRuleSTTypeDeclaration
+entryRuleSTTypeDeclaration returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTTypeDeclarationRule()); }
+	iv_ruleSTTypeDeclaration=ruleSTTypeDeclaration
+	{ $current=$iv_ruleSTTypeDeclaration.current; }
+	EOF;
+
+// Rule STTypeDeclaration
+ruleSTTypeDeclaration returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{
+				$current = forceCreateModelElement(
+					grammarAccess.getSTTypeDeclarationAccess().getSTTypeDeclarationAction_0(),
+					$current);
+			}
+		)
+		(
+			(
+				(
+					lv_array_1_0=ARRAY
+					{
+						newLeafNode(lv_array_1_0, grammarAccess.getSTTypeDeclarationAccess().getArrayARRAYKeyword_1_0_0());
+					}
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getSTTypeDeclarationRule());
+						}
+						setWithLastConsumed($current, "array", lv_array_1_0 != null, "ARRAY");
+					}
+				)
+			)
+			(
+				(
+					otherlv_2=LeftSquareBracket
+					{
+						newLeafNode(otherlv_2, grammarAccess.getSTTypeDeclarationAccess().getLeftSquareBracketKeyword_1_1_0_0());
+					}
+					(
+						(
+							{
+								newCompositeNode(grammarAccess.getSTTypeDeclarationAccess().getRangesSTExpressionParserRuleCall_1_1_0_1_0());
+							}
+							lv_ranges_3_0=ruleSTExpression
+							{
+								if ($current==null) {
+									$current = createModelElementForParent(grammarAccess.getSTTypeDeclarationRule());
+								}
+								add(
+									$current,
+									"ranges",
+									lv_ranges_3_0,
+									"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+								afterParserOrEnumRuleCall();
+							}
+						)
+					)
+					(
+						otherlv_4=Comma
+						{
+							newLeafNode(otherlv_4, grammarAccess.getSTTypeDeclarationAccess().getCommaKeyword_1_1_0_2_0());
+						}
+						(
+							(
+								{
+									newCompositeNode(grammarAccess.getSTTypeDeclarationAccess().getRangesSTExpressionParserRuleCall_1_1_0_2_1_0());
+								}
+								lv_ranges_5_0=ruleSTExpression
+								{
+									if ($current==null) {
+										$current = createModelElementForParent(grammarAccess.getSTTypeDeclarationRule());
+									}
+									add(
+										$current,
+										"ranges",
+										lv_ranges_5_0,
+										"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+									afterParserOrEnumRuleCall();
+								}
+							)
+						)
+					)*
+					otherlv_6=RightSquareBracket
+					{
+						newLeafNode(otherlv_6, grammarAccess.getSTTypeDeclarationAccess().getRightSquareBracketKeyword_1_1_0_3());
+					}
+				)
+				    |
+				(
+					otherlv_7=LeftSquareBracket
+					{
+						newLeafNode(otherlv_7, grammarAccess.getSTTypeDeclarationAccess().getLeftSquareBracketKeyword_1_1_1_0());
+					}
+					(
+						(
+							lv_count_8_0=Asterisk
+							{
+								newLeafNode(lv_count_8_0, grammarAccess.getSTTypeDeclarationAccess().getCountAsteriskKeyword_1_1_1_1_0());
+							}
+							{
+								if ($current==null) {
+									$current = createModelElement(grammarAccess.getSTTypeDeclarationRule());
+								}
+								addWithLastConsumed($current, "count", lv_count_8_0, "*");
+							}
+						)
+					)
+					(
+						otherlv_9=Comma
+						{
+							newLeafNode(otherlv_9, grammarAccess.getSTTypeDeclarationAccess().getCommaKeyword_1_1_1_2_0());
+						}
+						(
+							(
+								lv_count_10_0=Asterisk
+								{
+									newLeafNode(lv_count_10_0, grammarAccess.getSTTypeDeclarationAccess().getCountAsteriskKeyword_1_1_1_2_1_0());
+								}
+								{
+									if ($current==null) {
+										$current = createModelElement(grammarAccess.getSTTypeDeclarationRule());
+									}
+									addWithLastConsumed($current, "count", lv_count_10_0, "*");
+								}
+							)
+						)
+					)*
+					otherlv_11=RightSquareBracket
+					{
+						newLeafNode(otherlv_11, grammarAccess.getSTTypeDeclarationAccess().getRightSquareBracketKeyword_1_1_1_3());
+					}
+				)
+			)
+			otherlv_12=OF
+			{
+				newLeafNode(otherlv_12, grammarAccess.getSTTypeDeclarationAccess().getOFKeyword_1_2());
+			}
+		)?
+		(
+			(
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getSTTypeDeclarationRule());
+					}
+				}
+				{
+					newCompositeNode(grammarAccess.getSTTypeDeclarationAccess().getTypeINamedElementCrossReference_2_0());
+				}
+				ruleSTAnyType
+				{
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		(
+			otherlv_14=LeftSquareBracket
+			{
+				newLeafNode(otherlv_14, grammarAccess.getSTTypeDeclarationAccess().getLeftSquareBracketKeyword_3_0());
+			}
+			(
+				(
+					{
+						newCompositeNode(grammarAccess.getSTTypeDeclarationAccess().getMaxLengthSTExpressionParserRuleCall_3_1_0());
+					}
+					lv_maxLength_15_0=ruleSTExpression
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getSTTypeDeclarationRule());
+						}
+						set(
+							$current,
+							"maxLength",
+							lv_maxLength_15_0,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+			otherlv_16=RightSquareBracket
+			{
+				newLeafNode(otherlv_16, grammarAccess.getSTTypeDeclarationAccess().getRightSquareBracketKeyword_3_2());
+			}
+		)?
+	)
+;
+
 // Entry rule entryRuleSTInitializerExpression
 entryRuleSTInitializerExpression returns [EObject current=null]:
 	{ newCompositeNode(grammarAccess.getSTInitializerExpressionRule()); }

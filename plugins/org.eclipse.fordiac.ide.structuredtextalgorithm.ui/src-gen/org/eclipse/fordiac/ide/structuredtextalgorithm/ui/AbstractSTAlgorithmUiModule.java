@@ -261,15 +261,10 @@ public abstract class AbstractSTAlgorithmUiModule extends DefaultUiModule {
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.codemining.CodeMiningFragment
 	public void configureCodeMinding(Binder binder) {
-		try {
-			Class.forName("org.eclipse.jface.text.codemining.ICodeMiningProvider");
-			binder.bind(ICodeMiningProvider.class)
-				.to(STAlgorithmCodeMiningProvider.class);
-			binder.bind(IReconcileStrategyFactory.class).annotatedWith(Names.named("codeMinding"))
-				.to(XtextCodeMiningReconcileStrategy.Factory.class);
-		} catch(ClassNotFoundException ignore) {
-			// no bindings if code mining is not available at runtime
-		}
+		binder.bind(ICodeMiningProvider.class)
+			.to(STAlgorithmCodeMiningProvider.class);
+		binder.bind(IReconcileStrategyFactory.class).annotatedWith(Names.named("codeMinding"))
+			.to(XtextCodeMiningReconcileStrategy.Factory.class);
 	}
 	
 }

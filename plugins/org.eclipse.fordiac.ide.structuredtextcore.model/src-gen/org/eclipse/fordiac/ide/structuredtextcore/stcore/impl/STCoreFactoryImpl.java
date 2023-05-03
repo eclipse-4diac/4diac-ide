@@ -111,6 +111,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 			case STCorePackage.ST_DATE_AND_TIME_LITERAL: return createSTDateAndTimeLiteral();
 			case STCorePackage.ST_STRING_LITERAL: return createSTStringLiteral();
 			case STCorePackage.ST_VAR_DECLARATION: return createSTVarDeclaration();
+			case STCorePackage.ST_TYPE_DECLARATION: return createSTTypeDeclaration();
 			case STCorePackage.ST_RETURN: return createSTReturn();
 			case STCorePackage.ST_CONTINUE: return createSTContinue();
 			case STCorePackage.ST_EXIT: return createSTExit();
@@ -586,6 +587,17 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	public STVarDeclaration createSTVarDeclaration() {
 		STVarDeclarationImpl stVarDeclaration = new STVarDeclarationImpl();
 		return stVarDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STTypeDeclaration createSTTypeDeclaration() {
+		STTypeDeclarationImpl stTypeDeclaration = new STTypeDeclarationImpl();
+		return stTypeDeclaration;
 	}
 
 	/**

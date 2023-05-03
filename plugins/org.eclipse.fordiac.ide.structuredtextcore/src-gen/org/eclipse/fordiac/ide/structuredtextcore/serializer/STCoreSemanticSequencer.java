@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock;
@@ -182,6 +183,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				return; 
 			case STCorePackage.ST_TIME_OF_DAY_LITERAL:
 				sequence_STTimeOfDayLiteral(context, (STTimeOfDayLiteral) semanticObject); 
+				return; 
+			case STCorePackage.ST_TYPE_DECLARATION:
+				sequence_STTypeDeclaration(context, (STTypeDeclaration) semanticObject); 
 				return; 
 			case STCorePackage.ST_UNARY_EXPRESSION:
 				sequence_STUnaryExpression(context, (STUnaryExpression) semanticObject); 
@@ -1085,6 +1089,25 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 		feeder.accept(grammarAccess.getSTTimeOfDayLiteralAccess().getTypeDataTypeSTTimeOfDayTypeParserRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL__TYPE, false));
 		feeder.accept(grammarAccess.getSTTimeOfDayLiteralAccess().getValueTimeOfDayParserRuleCall_2_0(), semanticObject.getValue());
 		feeder.finish();
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     STTypeDeclaration returns STTypeDeclaration
+	 *     STTypeDeclaration0 returns STTypeDeclaration
+	 *
+	 * Constraint:
+	 *     (
+	 *         (array?='ARRAY' ((ranges+=STExpression ranges+=STExpression*) | (count+='*' count+='*'*)))? 
+	 *         type=[INamedElement|STAnyType] 
+	 *         maxLength=STExpression?
+	 *     )
+	 * </pre>
+	 */
+	protected void sequence_STTypeDeclaration(ISerializationContext context, STTypeDeclaration semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

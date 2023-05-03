@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 - 2022 Primetals Technologies GmbH, 
- *               2022-2023 Martin Erich Jobst
+ * Copyright (c) 2021, 2023 Primetals Technologies GmbH, 
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +18,7 @@
  *       - enhanced partial access
  *       - input/output variable blocks
  *       - (initializer) expression source
+ *       - type declaration
  *******************************************************************************/
 grammar org.eclipse.fordiac.ide.structuredtextcore.STCore hidden(WS, ML_COMMENT, SL_COMMENT)
 
@@ -72,6 +73,16 @@ STVarDeclaration:
 	ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
 	(type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
 	defaultValue=STInitializerExpression)? ';';
+
+STTypeDeclaration:
+	{STTypeDeclaration}
+	(array?='ARRAY' (('[' ranges+=(STExpression) (',' ranges+=STExpression)* ']') |
+	('[' count+='*' (',' count+='*')* ']')) 'OF')?
+	(type=[libraryElement::INamedElement|STAnyType])
+	('[' maxLength=STExpression ']')?;
+
+STTypeDeclaration0 returns STTypeDeclaration:
+	STTypeDeclaration; // necessary to keep Xtext from skipping this rule
 
 STInitializerExpression:
 	STElementaryInitializerExpression | STArrayInitializerExpression | STStructInitializerExpression;
