@@ -23,7 +23,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeConnectionCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -184,7 +184,7 @@ public class ConnectionDisplayWidget {
 
 			if (COMMENT.equals(property)) {
 				final Connection con = (Connection) data;
-				parentSection.executeCommand(new ChangeCommentCommand(con, value.toString()));
+				parentSection.executeCommand(new ChangeConnectionCommentCommand(con, value.toString()));
 				viewer.refresh(data);
 			}
 		}

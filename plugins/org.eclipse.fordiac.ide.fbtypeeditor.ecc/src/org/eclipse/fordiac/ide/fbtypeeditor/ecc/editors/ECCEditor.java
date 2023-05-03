@@ -21,6 +21,8 @@ import java.util.Map;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.FreeformFigure;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.AddECCActionAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.DeleteECCAction;
@@ -33,6 +35,8 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
+import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedMarqueeDragTracker;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -51,6 +55,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
+import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
@@ -68,6 +73,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 
@@ -75,6 +81,34 @@ import org.eclipse.ui.actions.ActionFactory;
  * The Class ECCEditor.
  */
 public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
+
+	private static final class ECCEditorRootEditPart extends ZoomScalableFreeformRootEditPart {
+		private ECCEditorRootEditPart(final IWorkbenchPartSite site, final ActionRegistry actionRegistry) {
+			super(site, actionRegistry);
+		}
+
+		@Override
+		public DragTracker getDragTracker(final Request req) {
+			final AdvancedMarqueeDragTracker dragTracker = new AdvancedMarqueeDragTracker();
+			dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
+			return dragTracker;
+		}
+
+		@Override
+		protected AbstractFreeformFigure createDrawingAreaContainer() {
+			return new ModuloFreeformFigure(this) {
+
+				@Override
+				protected Rectangle getUnscaledContentsExtent() {
+					final Rectangle contentsExtent = super.getUnscaledContentsExtent();
+					contentsExtent.union(((FreeformFigure) getZoomScalableFreeformRootEditPart()
+							.getLayer(LayerConstants.CONNECTION_LAYER)).getFreeformExtent());
+					return contentsExtent;
+				}
+
+			};
+		}
+	}
 
 	/** The fb type. */
 	private BasicFBType fbType;
@@ -86,11 +120,9 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInput(input);
-		if (input instanceof FBTypeEditorInput) {
-			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
-			if (untypedInput.getContent() instanceof BasicFBType) {
-				fbType = (BasicFBType) untypedInput.getContent();
-			}
+		if ((input instanceof final FBTypeEditorInput fbtEditorInput)
+				&& (fbtEditorInput.getContent() instanceof final BasicFBType bfbType)) {
+			fbType = bfbType;
 		}
 		super.init(site, input);
 		setPartName(Messages.ECCEditor_LABEL_ECCEditorTabName);
@@ -140,16 +172,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	protected ScalableFreeformRootEditPart createRootEditPart() {
-		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()) {
-
-			@Override
-			public DragTracker getDragTracker(final Request req) {
-				final AdvancedMarqueeDragTracker dragTracker = new AdvancedMarqueeDragTracker();
-				dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
-				return dragTracker;
-			}
-
-		};
+		return new ECCEditorRootEditPart(getSite(), getActionRegistry());
 	}
 
 	/** The palette root. */
@@ -207,15 +230,15 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	@Override
 	public boolean outlineSelectionChanged(final Object selectedElement) {
 		final Object obj = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
-		if (obj instanceof EditPart) {
-			getGraphicalViewer().select((EditPart) obj);
+		if (obj instanceof final EditPart ep) {
+			getGraphicalViewer().select(ep);
 			return true;
 		}
 		if (selectedElement instanceof ECCItemProvider) {
 			return true;
 		}
-		if (selectedElement instanceof ECAction) {
-			handleActionOutlineSelection((ECAction) selectedElement);
+		if (selectedElement instanceof final ECAction ecAction) {
+			handleActionOutlineSelection(ecAction);
 			return true;
 		}
 
@@ -226,8 +249,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		Object obj = getGraphicalViewer().getEditPartRegistry().get(action.getECState());
 		if (null != obj) {
 			for (final Object element : ((ECStateEditPart) obj).getCurrentChildren()) {
-				if ((element instanceof ECActionAlgorithm)
-						&& (action.equals(((ECActionAlgorithm) element).getAction()))) {
+				if ((element instanceof final ECActionAlgorithm ecAlg) && (action.equals(ecAlg.getAction()))) {
 					obj = getGraphicalViewer().getEditPartRegistry().get(element);
 					if (null != obj) {
 						getGraphicalViewer().select((EditPart) obj);
@@ -305,8 +327,8 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 			for (final Object key : map.keySet()) {
 				if (key.hashCode() == hashCode) {
 					final Object obj = getGraphicalViewer().getEditPartRegistry().get(key);
-					if (obj instanceof EditPart) {
-						getGraphicalViewer().select((EditPart) obj);
+					if (obj instanceof final EditPart ep) {
+						getGraphicalViewer().select(ep);
 						break;
 					}
 				}
@@ -321,8 +343,8 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public void reloadType(final FBType type) {
-		if (type instanceof BasicFBType) {
-			fbType = (BasicFBType) type;
+		if (type instanceof final BasicFBType bfbType) {
+			fbType = bfbType;
 			getGraphicalViewer().setContents(getModel());
 		} else {
 			EditorUtils.CloseEditor.run(this);

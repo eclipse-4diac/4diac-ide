@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
- * 		 2018 - 2020 Johannes Kepler University
- * 		 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                          Johannes Kepler University,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,37 +16,25 @@
  *   Bianca Wiesmayr - fixed copy/paste position
  *   Bianca Wiesmayr, Daniel Lindhuber, Lukas Wais - fixed ctrl+c, ctrl+v, ctrl+v
  *   Fabio Gandolfi - growing frame for copy in group & subapp
+ *   Alois Zoitl - harmonized cut and copy paste
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
-
-import java.util.Collections;
-import java.util.List;
 
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.actions.CopyPasteMessage.CopyStatus;
-import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.CopyElementsToGroupCommand;
-import org.eclipse.fordiac.ide.application.commands.CutAndPasteFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
-import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -90,13 +78,13 @@ public class PasteEditPartsAction extends SelectionAction {
 			final AbstractContainerContentEditPart editPart = findAbstractContainerContentEditPartUnderMouse(fbNetwork);
 			if (editPart != null) {
 				Command cmd = null;
-				if ((editPart instanceof GroupContentEditPart)
-						&& getClipboardContents().stream().noneMatch(Group.class::isInstance)) {
-					cmd = createPasteCommandForGroup((GroupContentEditPart) editPart);
+				if ((editPart instanceof final GroupContentEditPart groupEP)
+						&& getClipboardContents().elements().stream().noneMatch(Group.class::isInstance)) {
+					cmd = createPasteCommandForGroup(groupEP);
 				}
 
-				if (editPart instanceof UnfoldedSubappContentEditPart) {
-					cmd = createPasteCommandForSubApp((UnfoldedSubappContentEditPart) editPart);
+				if (editPart instanceof final UnfoldedSubappContentEditPart subAppEP) {
+					cmd = createPasteCommandForSubApp(subAppEP);
 				}
 				if (cmd != null) {
 					return new ResizeGroupOrSubappCommand(editPart, cmd);
@@ -124,13 +112,12 @@ public class PasteEditPartsAction extends SelectionAction {
 	private AbstractContainerContentEditPart findAbstractContainerContentEditPartUnderMouse(final FBNetwork fbNetwork) {
 		final GraphicalViewer graphicalViewer = getWorkbenchPart().getAdapter(GraphicalViewer.class);
 		final Object object = graphicalViewer.getEditPartRegistry().get(fbNetwork);
-		if (object instanceof GraphicalEditPart) {
-			final IFigure figure = ((GraphicalEditPart) object).getFigure().findFigureAt(pasteRefPosition.x,
-					pasteRefPosition.y);
+		if (object instanceof final GraphicalEditPart gep) {
+			final IFigure figure = gep.getFigure().findFigureAt(pasteRefPosition.x, pasteRefPosition.y);
 			if (figure != null) {
 				final Object targetObject = graphicalViewer.getVisualPartMap().get(figure);
-				if (targetObject instanceof AbstractContainerContentEditPart) {
-					return ((AbstractContainerContentEditPart) targetObject);
+				if (targetObject instanceof final AbstractContainerContentEditPart contContentEP) {
+					return contContentEP;
 				}
 			}
 		}
@@ -141,13 +128,12 @@ public class PasteEditPartsAction extends SelectionAction {
 		return ContainerContentLayoutPolicy.getContainerAreaBounds(group).getTopLeft();
 	}
 
-	private static List<? extends Object> getClipboardContents() {
+	private static CopyPasteData getClipboardContents() {
 		final Object obj = FordiacClipboard.INSTANCE.getGraphicalContents();
-		if (obj instanceof CopyPasteMessage) {
-			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) obj;
-			return copyPasteMessage.getData();
+		if (obj instanceof final CopyPasteData copyPasteMessage) {
+			return copyPasteMessage;
 		}
-		return Collections.emptyList();
+		return CopyPasteData.EMPTY_COPY_PASTE_DATA;
 	}
 
 	@Override
@@ -195,161 +181,14 @@ public class PasteEditPartsAction extends SelectionAction {
 	@Override
 	public void run() {
 		final FordiacClipboard clipboard = FordiacClipboard.INSTANCE;
-		if (clipboard.getGraphicalContents() instanceof CopyPasteMessage) {
-			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) clipboard.getGraphicalContents();
-			if ((pasteRefPosition != null) && (copyPasteMessage.getCutAndPasteFromSubAppCommandos() != null)) {
-				copyPasteMessage.getCutAndPasteFromSubAppCommandos().setPastePos(pasteRefPosition);
-			}
-			if ((copyPasteMessage.getCopyStatus() == CopyStatus.CUT_PASTED)
-					|| (copyPasteMessage.getCopyStatus() == CopyStatus.COPY)) {
-				execute(createPasteCommand());
-			} else if (isCutFromSubappToParent(copyPasteMessage)) {
-				handleCutFromSubappToParent(copyPasteMessage);
-			} else if (isCutFromRootToSubapp(copyPasteMessage)) {
-				handleCutFromRootToSubapp(copyPasteMessage);
-			} else if (isCutFromSubappToChildSubapp(copyPasteMessage)) {
-				handleCutFromSubappToChildSubapp(copyPasteMessage);
-			} else {
-				handleCutFromSubappToAnywhere(copyPasteMessage);
-			}
-
+		if (clipboard.getGraphicalContents() instanceof CopyPasteData) {
+			execute(createPasteCommand());
 		}
 		pasteRefPosition = null;
 	}
 
-	public void handleCutFromSubappToAnywhere(final CopyPasteMessage copyPasteMessage) {
-		if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP) {
-			copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
-			execute(copyPasteMessage.getDeleteCommandos());
-		}
-		final Command createPasteCommand = createPasteCommand();
-		if ((createPasteCommand instanceof PasteCommand)
-				&& (copyPasteMessage.getCutAndPasteFromSubAppCommandos() != null)) {
-			((PasteCommand) createPasteCommand).setCutPasteCmd(copyPasteMessage.getCutAndPasteFromSubAppCommandos());
-		}
 
-		execute(createPasteCommand);
-	}
-
-	@Override
-	protected void execute(final Command command) {
-		if ((command != null) && command.canExecute()) {
-			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) FordiacClipboard.INSTANCE.getGraphicalContents();
-			if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_ROOT) {
-				copyPasteMessage.setCopyInfo(CopyStatus.CUT_PASTED);
-			}
-		}
-		super.execute(command);
-	}
-
-	private void handleCutFromSubappToChildSubapp(final CopyPasteMessage copyPasteMessage) {
-		final Object selection = getSelectedObjects().get(0);
-		final SubApp targetSubapp = getSubapp(selection);
-		copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
-		execute(new AddElementsToSubAppCommand(targetSubapp, copyPasteMessage.getData()));
-	}
-
-	private boolean isCutFromSubappToChildSubapp(final CopyPasteMessage copyPasteMessage) {
-		if (!isSelectionSubapp()) {
-			return false;
-		}
-		final SubApp targetSubapp = getSubapp(getSelectedObjects().get(0));
-
-		final List<FBNetworkElement> elements = copyPasteMessage.getCutAndPasteFromSubAppCommandos().getElements();
-
-		if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP) {
-			// we need to undo the delete because otherwise it would not be possible to
-			// check whether they are in the
-			// same network
-			copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
-			if (!FBNetworkHelper.targetSubappIsInSameFbNetwork(elements, targetSubapp)) {
-				copyPasteMessage.getCutAndPasteFromSubAppCommandos().redo();
-				return false;
-			}
-			copyPasteMessage.getCutAndPasteFromSubAppCommandos().redo();
-		}
-
-		return copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP;
-	}
-
-	private void handleCutFromRootToSubapp(final CopyPasteMessage copyPasteMessage) {
-		final Object selection = getSelectedObjects().get(0);
-		final SubApp targetSubapp = getSubapp(selection);
-		copyPasteMessage.getDeleteCommandos().undo();
-		execute(new AddElementsToSubAppCommand(targetSubapp, copyPasteMessage.getData()));
-
-	}
-
-	protected static SubApp getSubapp(final Object object) {
-		SubApp targetSubapp = null;
-		if (object instanceof UISubAppNetworkEditPart) {
-			targetSubapp = ((UISubAppNetworkEditPart) object).getSubApp();
-		} else {
-			targetSubapp = ((SubAppForFBNetworkEditPart) object).getModel();
-		}
-		return targetSubapp;
-	}
-
-	private boolean isCutFromRootToSubapp(final CopyPasteMessage copyPasteMessage) {
-		if (!isSelectionSubapp()) {
-			return false;
-		}
-		return copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_ROOT;
-	}
-
-	protected boolean isSelectionSubapp() {
-		return (getSelectedObjects().get(0) instanceof SubAppForFBNetworkEditPart)
-				|| (getSelectedObjects().get(0) instanceof UISubAppNetworkEditPart);
-	}
-
-	protected boolean isCutFromSubappToParent(final CopyPasteMessage copyPasteMessage) {
-
-		if (copyPasteMessage.getCopyStatus() != CopyStatus.CUT_FROM_SUBAPP) {
-			return false;
-		}
-
-		final List<?> selectedObjects = getSelectedObjects();
-		if (selectedObjects.size() > 1) {
-			return false;
-		}
-
-		final CutAndPasteFromSubAppCommand cutAndPasteFromSubAppCommand = copyPasteMessage
-				.getCutAndPasteFromSubAppCommandos();
-		final SubApp sourceSubApp = cutAndPasteFromSubAppCommand.getSourceSubApp();
-
-		if (selectedObjects.get(0) instanceof FBNetworkEditPart) {
-			final FBNetworkEditPart networkEdit = (FBNetworkEditPart) selectedObjects.get(0);
-			if ((networkEdit.getParent() instanceof FBNetworkRootEditPart)
-					&& (sourceSubApp.eContainer().equals(networkEdit.getModel()))) {
-				return true;
-			}
-		}
-
-		if (!isSelectionSubapp()) {
-			return false;
-		}
-
-		final FBNetworkElement outerFBNetworkElement = sourceSubApp.getOuterFBNetworkElement();
-
-		if (outerFBNetworkElement == null) {
-			return false;
-		}
-		final SubApp selectedSubapp = getSubapp(selectedObjects.get(0));
-
-		if (!outerFBNetworkElement.equals(selectedSubapp)) {
-			return false;
-		}
-
-		return copyPasteMessage.isCutFromSubApp();
-	}
-
-	protected void handleCutFromSubappToParent(final CopyPasteMessage copyPasteMessage) {
-		execute(copyPasteMessage.getCutAndPasteFromSubAppCommandos());
-		FordiacClipboard.INSTANCE.setGraphicalContents(new Object()); // Clear clipboard afterwards to prevent double
-		// pasting
-	}
-
-	protected FBNetwork getFBNetwork() {
+	private FBNetwork getFBNetwork() {
 		if (getWorkbenchPart() instanceof IEditorPart) {
 			return getWorkbenchPart().getAdapter(FBNetwork.class);
 		}

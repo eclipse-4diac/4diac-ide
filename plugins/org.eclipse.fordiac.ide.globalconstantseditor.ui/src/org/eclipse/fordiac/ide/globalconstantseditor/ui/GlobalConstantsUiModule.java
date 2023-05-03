@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
- *               
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -14,9 +14,9 @@
 
 package org.eclipse.fordiac.ide.globalconstantseditor.ui;
 
-
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocument;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrT
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
@@ -43,27 +44,30 @@ import com.google.inject.name.Names;
 @SuppressWarnings("restriction")
 public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 
-	public GlobalConstantsUiModule(AbstractUIPlugin plugin) {
+	public GlobalConstantsUiModule(final AbstractUIPlugin plugin) {
 		super(plugin);
 	}
-	
+
 	public Class<? extends XtextDocument> bindXtextDocument() {
 		return GlobalConstantsDocument.class;
 	}
-	
+
 	public Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {
 		return STCoreHoverProvider.class;
 	}
-	
+
 	public Class<? extends IEObjectHoverDocumentationProvider> bindIEObjectHoverDocumentationProvider() {
 		return STCoreHoverDocumentationProvider.class;
+	}
+
+	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
+		return STCoreCommentDocumentationProvider.class;
 	}
 
 	public void configureIEObjectDocumentationProvider(final Binder binder) {
 		binder.bindConstant().annotatedWith(Names.named(AbstractMultiLineCommentProvider.START_TAG)).to("[/(]\\*\\*?"); //$NON-NLS-1$
 		binder.bindConstant().annotatedWith(Names.named(AbstractMultiLineCommentProvider.END_TAG)).to("\\*[/)]"); //$NON-NLS-1$
 	}
-	
 
 	public Class<? extends IRefactoringDocument.Provider> bindIRefactoringDocument$Provider() {
 		return STCoreRefactoringDocumentProvider.class;
@@ -85,6 +89,5 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 	public Class<? extends DefaultAntlrTokenToAttributeIdMapper> bindDefaultAntlrTokenToAttributeIdMapper() {
 		return STCoreAntlrTokenToAttributeIdMapper.class;
 	}
-	
 
 }

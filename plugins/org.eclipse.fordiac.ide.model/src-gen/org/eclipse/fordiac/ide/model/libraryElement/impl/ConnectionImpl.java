@@ -16,24 +16,12 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
@@ -51,70 +39,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getComment <em>Comment</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getAttributes <em>Attributes</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getErrorMessage <em>Error Message</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isResTypeConnection <em>Res Type Connection</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isBrokenConnection <em>Broken Connection</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getSource <em>Source</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDestination <em>Destination</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getRoutingData <em>Routing Data</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getComment <em>Comment</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class ConnectionImpl extends EObjectImpl implements Connection {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
-
-	/**
-	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getComment()
-	 * @generated
-	 * @ordered
-	 */
-	protected String comment = COMMENT_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAttributes()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Attribute> attributes;
-
+public abstract class ConnectionImpl extends ConfigurableObjectImpl implements Connection {
 	/**
 	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -134,26 +69,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	 * @ordered
 	 */
 	protected String errorMessage = ERROR_MESSAGE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isResTypeConnection() <em>Res Type Connection</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isResTypeConnection()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean RES_TYPE_CONNECTION_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isResTypeConnection() <em>Res Type Connection</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isResTypeConnection()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean resTypeConnection = RES_TYPE_CONNECTION_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isBrokenConnection() <em>Broken Connection</em>}' attribute.
@@ -206,6 +121,26 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	protected ConnectionRoutingData routingData;
 
 	/**
+	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
+
+	/**
+	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected String comment = COMMENT_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -222,29 +157,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.CONNECTION;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__NAME, oldName, name));
 	}
 
 	/**
@@ -276,29 +188,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	 * @generated
 	 */
 	@Override
-	public String getQualifiedName() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<Attribute> getAttributes() {
-		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.CONNECTION__ATTRIBUTES);
-		}
-		return attributes;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getErrorMessage() {
 		return errorMessage;
 	}
@@ -314,29 +203,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 		errorMessage = newErrorMessage;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__ERROR_MESSAGE, oldErrorMessage, errorMessage));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isResTypeConnection() {
-		return resTypeConnection;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setResTypeConnection(boolean newResTypeConnection) {
-		boolean oldResTypeConnection = resTypeConnection;
-		resTypeConnection = newResTypeConnection;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION, oldResTypeConnection, resTypeConnection));
 	}
 
 	/**
@@ -685,46 +551,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	 * @generated
 	 */
 	@Override
-	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
-		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Attribute getAttribute(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getAttributeValue(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean deleteAttribute(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.CONNECTION__SOURCE:
@@ -748,8 +574,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__ATTRIBUTES:
-				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.CONNECTION__SOURCE:
 				return basicSetSource(null, msgs);
 			case LibraryElementPackage.CONNECTION__DESTINATION:
@@ -769,16 +593,8 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__NAME:
-				return getName();
-			case LibraryElementPackage.CONNECTION__COMMENT:
-				return getComment();
-			case LibraryElementPackage.CONNECTION__ATTRIBUTES:
-				return getAttributes();
 			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
 				return getErrorMessage();
-			case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
-				return isResTypeConnection();
 			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
 				return isBrokenConnection();
 			case LibraryElementPackage.CONNECTION__SOURCE:
@@ -790,6 +606,8 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 			case LibraryElementPackage.CONNECTION__ROUTING_DATA:
 				if (resolve) return getRoutingData();
 				return basicGetRoutingData();
+			case LibraryElementPackage.CONNECTION__COMMENT:
+				return getComment();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -804,21 +622,8 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__NAME:
-				setName((String)newValue);
-				return;
-			case LibraryElementPackage.CONNECTION__COMMENT:
-				setComment((String)newValue);
-				return;
-			case LibraryElementPackage.CONNECTION__ATTRIBUTES:
-				getAttributes().clear();
-				getAttributes().addAll((Collection<? extends Attribute>)newValue);
-				return;
 			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
 				setErrorMessage((String)newValue);
-				return;
-			case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
-				setResTypeConnection((Boolean)newValue);
 				return;
 			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
 				setBrokenConnection((Boolean)newValue);
@@ -831,6 +636,9 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 				return;
 			case LibraryElementPackage.CONNECTION__ROUTING_DATA:
 				setRoutingData((ConnectionRoutingData)newValue);
+				return;
+			case LibraryElementPackage.CONNECTION__COMMENT:
+				setComment((String)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -846,20 +654,8 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case LibraryElementPackage.CONNECTION__COMMENT:
-				setComment(COMMENT_EDEFAULT);
-				return;
-			case LibraryElementPackage.CONNECTION__ATTRIBUTES:
-				getAttributes().clear();
-				return;
 			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
 				setErrorMessage(ERROR_MESSAGE_EDEFAULT);
-				return;
-			case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
-				setResTypeConnection(RES_TYPE_CONNECTION_EDEFAULT);
 				return;
 			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
 				setBrokenConnection(BROKEN_CONNECTION_EDEFAULT);
@@ -872,6 +668,9 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 				return;
 			case LibraryElementPackage.CONNECTION__ROUTING_DATA:
 				setRoutingData((ConnectionRoutingData)null);
+				return;
+			case LibraryElementPackage.CONNECTION__COMMENT:
+				setComment(COMMENT_EDEFAULT);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -887,16 +686,8 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case LibraryElementPackage.CONNECTION__COMMENT:
-				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
-			case LibraryElementPackage.CONNECTION__ATTRIBUTES:
-				return attributes != null && !attributes.isEmpty();
 			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
 				return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
-			case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
-				return resTypeConnection != RES_TYPE_CONNECTION_EDEFAULT;
 			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
 				return brokenConnection != BROKEN_CONNECTION_EDEFAULT;
 			case LibraryElementPackage.CONNECTION__SOURCE:
@@ -905,6 +696,8 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 				return destination != null;
 			case LibraryElementPackage.CONNECTION__ROUTING_DATA:
 				return routingData != null;
+			case LibraryElementPackage.CONNECTION__COMMENT:
+				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -917,12 +710,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	 */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == ConfigurableObject.class) {
-			switch (derivedFeatureID) {
-				case LibraryElementPackage.CONNECTION__ATTRIBUTES: return LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
-				default: return -1;
-			}
-		}
 		if (baseClass == ErrorMarkerRef.class) {
 			switch (derivedFeatureID) {
 				case LibraryElementPackage.CONNECTION__ERROR_MESSAGE: return LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE;
@@ -944,12 +731,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	 */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == ConfigurableObject.class) {
-			switch (baseFeatureID) {
-				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return LibraryElementPackage.CONNECTION__ATTRIBUTES;
-				default: return -1;
-			}
-		}
 		if (baseClass == ErrorMarkerRef.class) {
 			switch (baseFeatureID) {
 				case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE: return LibraryElementPackage.CONNECTION__ERROR_MESSAGE;
@@ -974,16 +755,12 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (name: "); //$NON-NLS-1$
-		result.append(name);
-		result.append(", comment: "); //$NON-NLS-1$
-		result.append(comment);
-		result.append(", errorMessage: "); //$NON-NLS-1$
+		result.append(" (errorMessage: "); //$NON-NLS-1$
 		result.append(errorMessage);
-		result.append(", resTypeConnection: "); //$NON-NLS-1$
-		result.append(resTypeConnection);
 		result.append(", brokenConnection: "); //$NON-NLS-1$
 		result.append(brokenConnection);
+		result.append(", comment: "); //$NON-NLS-1$
+		result.append(comment);
 		result.append(')');
 		return result.toString();
 	}

@@ -1550,7 +1550,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EAttribute getConnection_ResTypeConnection() {
+	public EAttribute getConnection_BrokenConnection() {
 		return (EAttribute)connectionEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -1560,18 +1560,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EAttribute getConnection_BrokenConnection() {
-		return (EAttribute)connectionEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getConnection_Source() {
-		return (EReference)connectionEClass.getEStructuralFeatures().get(2);
+		return (EReference)connectionEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1581,7 +1571,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 */
 	@Override
 	public EReference getConnection_Destination() {
-		return (EReference)connectionEClass.getEStructuralFeatures().get(3);
+		return (EReference)connectionEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1591,7 +1581,17 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 */
 	@Override
 	public EReference getConnection_RoutingData() {
-		return (EReference)connectionEClass.getEStructuralFeatures().get(4);
+		return (EReference)connectionEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getConnection_Comment() {
+		return (EAttribute)connectionEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -2402,16 +2402,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EReference getIInterfaceElement_Type() {
 		return (EReference)iInterfaceElementEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getIInterfaceElement_TypeName() {
-		return (EAttribute)iInterfaceElementEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -3770,11 +3760,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(configurableObjectEClass, CONFIGURABLE_OBJECT__ATTRIBUTES);
 
 		connectionEClass = createEClass(CONNECTION);
-		createEAttribute(connectionEClass, CONNECTION__RES_TYPE_CONNECTION);
 		createEAttribute(connectionEClass, CONNECTION__BROKEN_CONNECTION);
 		createEReference(connectionEClass, CONNECTION__SOURCE);
 		createEReference(connectionEClass, CONNECTION__DESTINATION);
 		createEReference(connectionEClass, CONNECTION__ROUTING_DATA);
+		createEAttribute(connectionEClass, CONNECTION__COMMENT);
 
 		connectionRoutingDataEClass = createEClass(CONNECTION_ROUTING_DATA);
 		createEAttribute(connectionRoutingDataEClass, CONNECTION_ROUTING_DATA__DX1);
@@ -3880,7 +3870,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__INPUT_CONNECTIONS);
 		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS);
 		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__TYPE);
-		createEAttribute(iInterfaceElementEClass, IINTERFACE_ELEMENT__TYPE_NAME);
 
 		iNamedElementEClass = createEClass(INAMED_ELEMENT);
 		createEAttribute(iNamedElementEClass, INAMED_ELEMENT__NAME);
@@ -4109,7 +4098,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		compilableTypeEClass.getESuperTypes().add(this.getLibraryElement());
 		compilableTypeEClass.getESuperTypes().add(this.getConfigurableObject());
 		compositeFBTypeEClass.getESuperTypes().add(this.getFBType());
-		connectionEClass.getESuperTypes().add(this.getINamedElement());
 		connectionEClass.getESuperTypes().add(this.getConfigurableObject());
 		connectionEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		connectionEClass.getESuperTypes().add(this.getHiddenElement());
@@ -4334,11 +4322,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEParameter(op, theXMLTypePackage.getString(), "attributeName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(connectionEClass, Connection.class, "Connection", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getConnection_ResTypeConnection(), theXMLTypePackage.getBoolean(), "resTypeConnection", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getConnection_BrokenConnection(), theXMLTypePackage.getBoolean(), "brokenConnection", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getConnection_Source(), this.getIInterfaceElement(), this.getIInterfaceElement_OutputConnections(), "source", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getConnection_Destination(), this.getIInterfaceElement(), this.getIInterfaceElement_InputConnections(), "destination", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getConnection_RoutingData(), this.getConnectionRoutingData(), null, "routingData", null, 1, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getConnection_Comment(), theXMLTypePackage.getString(), "comment", "", 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		addEOperation(connectionEClass, this.getFBNetworkElement(), "getSourceElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -4594,9 +4582,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getIInterfaceElement_InputConnections(), this.getConnection(), this.getConnection_Destination(), "inputConnections", null, 0, -1, IInterfaceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getIInterfaceElement_OutputConnections(), this.getConnection(), this.getConnection_Source(), "outputConnections", null, 0, -1, IInterfaceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getIInterfaceElement_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, IInterfaceElement.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getIInterfaceElement_TypeName(), ecorePackage.getEString(), "typeName", null, 0, 1, IInterfaceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(iInterfaceElementEClass, this.getFBNetworkElement(), "getFBNetworkElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(iInterfaceElementEClass, ecorePackage.getEString(), "getTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(iNamedElementEClass, INamedElement.class, "INamedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getINamedElement_Name(), theXMLTypePackage.getString(), "name", "", 1, 1, INamedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$

@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.ui
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
-Export-Package: org.eclipse.fordiac.ide.model.ui.actions,
+Export-Package: org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.fordiac.ide.model.ui.actions,
  org.eclipse.fordiac.ide.model.ui.editors,
  org.eclipse.fordiac.ide.model.ui.listeners,
  org.eclipse.fordiac.ide.model.ui.nat,

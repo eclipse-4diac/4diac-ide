@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.application.actions.CopyPasteData;
 import org.eclipse.fordiac.ide.model.commands.create.ConnectionCommandsTest;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
@@ -41,8 +42,9 @@ public class PasteCommandTest extends FBNetworkTestBase {
 	}
 
 	private static State copyFB(final State s) {
-		s.setCommand(
-				new PasteCommand(List.of(s.getFbNetwork().getNetworkElements().get(1)), s.getFbNetwork(), 0, 0));
+		final CopyPasteData copyPasteData = new CopyPasteData(s.getFbNetwork());
+		copyPasteData.elements().add(s.getFbNetwork().getNetworkElements().get(1));
+		s.setCommand(new PasteCommand(copyPasteData, s.getFbNetwork(), 0, 0));
 		return commandExecution(s);
 	}
 
@@ -58,10 +60,12 @@ public class PasteCommandTest extends FBNetworkTestBase {
 	}
 
 	private static State copyFBWithConnections(final State s) {
-		s.setCommand(new PasteCommand(List.of(s.getFbNetwork().getNetworkElements().get(1), //
-				new ConnectionReference(s.getFbNetwork().getDataConnections().get(0)), //
-				new ConnectionReference(s.getFbNetwork().getEventConnections().get(0)) //
-				), s.getFbNetwork(), 0, 0));
+		final CopyPasteData copyPasteData = new CopyPasteData(s.getFbNetwork());
+		copyPasteData.elements().add(s.getFbNetwork().getNetworkElements().get(1));
+		copyPasteData.conns().add(new ConnectionReference(s.getFbNetwork().getDataConnections().get(0)));
+		copyPasteData.conns().add(new ConnectionReference(s.getFbNetwork().getEventConnections().get(0)));
+
+		s.setCommand(new PasteCommand(copyPasteData, s.getFbNetwork(), 0, 0));
 		return commandExecution(s);
 	}
 

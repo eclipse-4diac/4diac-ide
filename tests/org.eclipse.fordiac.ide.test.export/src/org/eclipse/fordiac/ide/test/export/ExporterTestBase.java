@@ -406,12 +406,10 @@ public abstract class ExporterTestBase<T extends FBType> {
 		functionBlock.getInterfaceList().getEventOutputs().add(outputEvent);
 		inputData = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		inputData.setType(new DataTypeLibrary().getType(FordiacKeywords.INT));
-		inputData.setTypeName(FordiacKeywords.INT);
 		inputData.setName(DATA_INPUT_NAME);
 		functionBlock.getInterfaceList().getInputVars().add(inputData);
 		outputData = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		outputData.setType(new DataTypeLibrary().getType(FordiacKeywords.INT));
-		outputData.setTypeName(FordiacKeywords.INT);
 		outputData.setName(DATA_OUTPUT_NAME);
 		functionBlock.getInterfaceList().getOutputVars().add(outputData);
 
@@ -420,15 +418,14 @@ public abstract class ExporterTestBase<T extends FBType> {
 		final ExporterTestAdapterFBType adapterFBType = new ExporterTestAdapterFBType();
 		adapterFBType.setupFunctionBlock();
 		adapterType.setAdapterFBType(adapterFBType.getFunctionBlock());
+		adapterType.setName(adapterFBType.getFunctionBlock().getName());
 		adapterSocketDecl.setType(adapterType);
 		adapterSocketDecl.setName(ADAPTER_SOCKET_NAME);
-		adapterSocketDecl.setTypeName(ADAPTERFUNCTIONBLOCK_NAME);
 		adapterSocketDecl.setIsInput(true);
 		functionBlock.getInterfaceList().getSockets().add(adapterSocketDecl);
 		final AdapterDeclaration adapterPlugDecl = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
 		adapterPlugDecl.setType(adapterType);
 		adapterPlugDecl.setName(ADAPTER_PLUG_NAME);
-		adapterPlugDecl.setTypeName(ADAPTERFUNCTIONBLOCK_NAME);
 		functionBlock.getInterfaceList().getPlugs().add(adapterPlugDecl);
 
 	}

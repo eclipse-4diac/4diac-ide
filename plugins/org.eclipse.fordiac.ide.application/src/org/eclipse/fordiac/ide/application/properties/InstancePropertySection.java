@@ -24,6 +24,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
@@ -59,6 +60,7 @@ import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -162,58 +164,72 @@ public class InstancePropertySection extends AbstractSection {
 
 	private void configureDataLayerLabels(final DataLayer dataLayer, final boolean isInput) {
 		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			final VarDeclaration rowItem;
-			String defaultComment = null;
 			if (isInput) {
-				rowItem = inputDataProvider.getRowObject(rowPosition);
-				final FBType fbType = rowItem.getFBNetworkElement().getType();
-				final INamedElement currentFB = getType();
-
-				if (currentFB instanceof final StructManipulator structMan) {
-					final List<VarDeclaration> variableList = structMan.getStructType().getMemberVariables();
-					if (!variableList.isEmpty()) {
-						defaultComment = variableList.get(rowPosition).getComment();
-					}
-				} else if (fbType != null) {
-					defaultComment = fbType.getInterfaceList().getInputVars().get(rowPosition).getComment();
-				}
-
-				if (columnPosition == INITIAL_VALUE_COL_ID && rowItem.getValue().hasError()) {
-					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-				}
+				configureDataLayerLabelsInputs(configLabels, columnPosition, rowPosition);
 			} else {
-				rowItem = outputDataProvider.getRowObject(rowPosition);
-				final FBType fbType = rowItem.getFBNetworkElement().getType();
-				final INamedElement currentFB = getType();
-				if (currentFB instanceof final StructManipulator structMan) {
-					final List<VarDeclaration> variableList = structMan.getStructType().getMemberVariables();
-					if (!variableList.isEmpty()) {
-						defaultComment = variableList.get(rowPosition).getComment();
-					}
-				} else if (fbType != null) {
-					defaultComment = fbType.getInterfaceList().getOutputVars().get(rowPosition).getComment();
-				}
-			}
-
-			if (columnPosition == INITIAL_VALUE_COL_ID && !InitialValueHelper.hasInitalValue(rowItem)
-					|| columnPosition == COMMENT_COL_ID && defaultComment != null
-					&& rowItem.getComment().equals(defaultComment)) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
-			}
-			if (columnPosition == NAME_COL_ID || columnPosition == COMMENT_COL_ID) {
-				// We want to align the pin names and comments to the left side
-				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			}
-			if (columnPosition == INITIAL_VALUE_COL_ID) {
-				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
-			}
-			if (columnPosition == VISIBLE_COL_ID) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
-			}
-			if (columnPosition == ISVARCONFIG_COL_ID) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
+				configureDataLayerLabelsOutputs(configLabels, columnPosition, rowPosition);
 			}
 		});
+	}
+
+	private void configureDataLayerLabelsOutputs(final LabelStack configLabels, final int columnPosition,
+			final int rowPosition) {
+		final VarDeclaration rowItem = outputDataProvider.getRowObject(rowPosition);
+		final FBType fbType = rowItem.getFBNetworkElement().getType();
+		final EList<VarDeclaration> varDeclarations = fbType != null ? fbType.getInterfaceList().getOutputVars() : null;
+
+		final String defaultComment = getDefaultComment(getType(), rowPosition, varDeclarations);
+		configureColumns(configLabels, columnPosition, rowItem, defaultComment);
+	}
+
+	private void configureDataLayerLabelsInputs(final LabelStack configLabels, final int columnPosition,
+			final int rowPosition) {
+		final VarDeclaration rowItem = inputDataProvider.getRowObject(rowPosition);
+		final FBType fbType = rowItem.getFBNetworkElement().getType();
+		final EList<VarDeclaration> varDeclarations = fbType != null ? fbType.getInterfaceList().getInputVars() : null;
+
+		final String defaultComment = getDefaultComment(getType(), rowPosition, varDeclarations);
+
+		if (columnPosition == INITIAL_VALUE_COL_ID && rowItem.getValue().hasError()) {
+			configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+		}
+		configureColumns(configLabels, columnPosition, rowItem, defaultComment);
+	}
+
+	private static String getDefaultComment(final INamedElement type, final int rowPosition,
+			final EList<VarDeclaration> varDeclarations) {
+		if (type instanceof final StructManipulator structManipulator) {
+			final List<VarDeclaration> variableList = structManipulator.getStructType().getMemberVariables();
+			if (!variableList.isEmpty()) {
+				return variableList.get(rowPosition).getComment();
+			}
+		} else if (varDeclarations != null) {
+			return varDeclarations.get(rowPosition).getComment();
+		}
+		return null;
+	}
+
+	private static void configureColumns(final LabelStack configLabels, final int columnPosition,
+			final VarDeclaration rowItem,
+			final String defaultComment) {
+		if (columnPosition == INITIAL_VALUE_COL_ID && !InitialValueHelper.hasInitalValue(rowItem)
+				|| columnPosition == COMMENT_COL_ID && defaultComment != null
+				&& rowItem.getComment().equals(defaultComment)) {
+			configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
+		}
+		if (columnPosition == NAME_COL_ID || columnPosition == COMMENT_COL_ID) {
+			// We want to align the pin names and comments to the left side
+			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+		}
+		if (columnPosition == INITIAL_VALUE_COL_ID) {
+			configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
+		}
+		if (columnPosition == VISIBLE_COL_ID) {
+			configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
+		}
+		if (columnPosition == ISVARCONFIG_COL_ID) {
+			configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
+		}
 	}
 
 	protected void createFBInfoGroup(final Composite parent) {
@@ -246,11 +262,11 @@ public class InstancePropertySection extends AbstractSection {
 	private Command createChangeCommentCommand() {
 		Command cmd = new ChangeCommentCommand(getType(), commentText.getText());
 		if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof SubApp) {
-			final Object subAppforFBNetworkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
-					.getEditPartRegistry().get(getType());
-			if (subAppforFBNetworkEditPart instanceof final SubAppForFBNetworkEditPart subappEP
-					&& subappEP.getContentEP() != null) {
-				cmd = new ResizeGroupOrSubappCommand(subappEP.getContentEP(), cmd);
+			final Object editPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor().getEditPartRegistry()
+					.get(getType());
+			if (editPart instanceof final SubAppForFBNetworkEditPart subAppforFBNetworkEditPart
+					&& subAppforFBNetworkEditPart.getContentEP() != null) {
+				cmd = new ResizeGroupOrSubappCommand(subAppforFBNetworkEditPart.getContentEP(), cmd);
 			}
 		}
 		return cmd;
@@ -301,8 +317,8 @@ public class InstancePropertySection extends AbstractSection {
 
 	@Override
 	protected FBNetworkElement getType() {
-		if (type instanceof final FBNetworkElement fbne) {
-			return fbne;
+		if (type instanceof final FBNetworkElement fbNetworkElement) {
+			return fbNetworkElement;
 		}
 		return null;
 	}
@@ -357,8 +373,7 @@ public class InstancePropertySection extends AbstractSection {
 
 	protected static boolean isExpandedSubAppPinAndConnected(final VarDeclaration rowObject) {
 		return rowObject.getFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded()
-				&& !rowObject.getInputConnections().isEmpty()
-				&& !rowObject.getOutputConnections().isEmpty();
+				&& !rowObject.getInputConnections().isEmpty() && !rowObject.getOutputConnections().isEmpty();
 	}
 
 	private class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> {
@@ -379,11 +394,11 @@ public class InstancePropertySection extends AbstractSection {
 		}
 
 		public void setInput(final Object inputElement) {
-			if (inputElement instanceof final FBNetworkElement fbne) {
+			if (inputElement instanceof final FBNetworkElement fbNetworkElement) {
 				if (isInputData) {
-					this.list = fbne.getInterface().getInputVars();
+					this.list = fbNetworkElement.getInterface().getInputVars();
 				} else {
-					this.list = fbne.getInterface().getOutputVars();
+					this.list = fbNetworkElement.getInterface().getOutputVars();
 				}
 			}
 		}

@@ -24,9 +24,9 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.actions.CopyPasteMessage.CopyStatus;
 import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.FordiacClipboard;
@@ -66,22 +66,19 @@ public class CopyEditPartsAction extends SelectionAction {
 
 	@Override
 	public void run() {
-		final List<Object> templates = getSelectedTemplates();
-
-		final CopyPasteMessage info = new CopyPasteMessage(CopyStatus.COPY, templates);
-		FordiacClipboard.INSTANCE.setGraphicalContents(info);
+		FordiacClipboard.INSTANCE.setGraphicalContents(getSelectedTemplates());
 	}
 
-	protected List<Object> getSelectedTemplates() {
+	protected CopyPasteData getSelectedTemplates() {
+		final CopyPasteData copyPasteData = new CopyPasteData(getWorkbenchPart().getAdapter(FBNetwork.class));
 		final Set<Connection> connectionSet = new HashSet<>();
-		final List<Object> templates = new ArrayList<>();
 		for (final Object obj : getSelectedObjects()) {
 			if ((obj instanceof final EditPart ep) && (ep.getModel() instanceof final FBNetworkElement fbne)) {
-				templates.add(fbne);
-				templates.addAll(getAllFBNElementConnections(fbne, connectionSet));
+				copyPasteData.elements().add(fbne);
+				copyPasteData.conns().addAll(getAllFBNElementConnections(fbne, connectionSet));
 			}
 		}
-		return templates;
+		return copyPasteData;
 	}
 
 	private static Collection<ConnectionReference> getAllFBNElementConnections(final FBNetworkElement model,

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:hierarchy="org.eclipse.fordiac.ide.hierarchymanager" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ecore:nsPrefix="hierarchy" ecore:package="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy" targetNamespace="org.eclipse.fordiac.ide.hierarchymanager">
+  <xsd:import namespace="http://www.eclipse.org/emf/2002/Ecore" schemaLocation="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.xsd"/>
+  <xsd:element ecore:ignore="true" name="Level" type="hierarchy:Level"/>
+  <xsd:element ecore:ignore="true" name="RootLevel" type="hierarchy:RootLevel"/>
+  <xsd:element ecore:ignore="true" name="Node" type="hierarchy:Node"/>
+  <xsd:element ecore:ignore="true" name="Leaf" type="hierarchy:Leaf"/>
+  <xsd:complexType name="Level">
+    <xsd:complexContent>
+      <xsd:extension base="hierarchy:Node">
+        <xsd:attribute name="name" type="ecore:EString" use="required"/>
+        <xsd:attribute name="comment" type="ecore:EString"/>
+        <xsd:attribute ecore:reference="hierarchy:Node" name="children">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="RootLevel">
+    <xsd:sequence>
+      <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="levels" type="hierarchy:Level"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Node"/>
+  <xsd:complexType name="Leaf">
+    <xsd:complexContent>
+      <xsd:extension base="hierarchy:Node">
+        <xsd:attribute name="ref" type="ecore:EString"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>

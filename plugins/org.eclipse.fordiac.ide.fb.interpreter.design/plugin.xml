@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+  <extension point="org.eclipse.sirius.componentization">
+    <component class="org.eclipse.fordiac.ide.fb.interpreter.design.Activator"
+               id="org.eclipse.fordiac.ide.fb.interpreter.design"
+	       name="OpSem">
+    </component>
+  </extension>
+</plugin>

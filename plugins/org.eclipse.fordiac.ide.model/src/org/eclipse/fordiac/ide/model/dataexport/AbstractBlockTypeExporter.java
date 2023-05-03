@@ -149,7 +149,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 				if (null != fb.getType()) {
 					addTypeAttribute(fb.getType());
 				}
-				addCommentAttribute(fb);
+				addCommentAttribute(fb.getComment());
 
 				addAttributes(fb.getAttributes());
 				addEndElement();
@@ -192,7 +192,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		addStartElement(getEventElementName());
 		addNameAttribute(event.getName());
 		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, "Event"); //$NON-NLS-1$
-		addCommentAttribute(event);
+		addCommentAttribute(event.getComment());
 		addWith(event);
 		addAttributes(event.getAttributes());
 		addEndElement();
@@ -230,7 +230,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 					sfb.getService().getRightInterface().getName());
 			getWriter().writeAttribute(LibraryElementTags.LEFT_INTERFACE_ATTRIBUTE,
 					sfb.getService().getLeftInterface().getName());
-			addCommentAttribute(sfb);
+			addCommentAttribute(sfb.getComment());
 
 			addServiceSequences(sfb.getService().getServiceSequence());
 
@@ -246,8 +246,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		for (final ServiceSequence seq : sequences) {
 			addStartElement(LibraryElementTags.SERVICE_SEQUENCE_ELEMENT);
 
-			addNameAttribute(seq.getName());
-			addCommentAttribute(seq);
+			addNameAndCommentAttribute(seq);
 			if (seq.getStartState() != null) {
 				addAttributeElement(LibraryElementTags.START_STATE_ATTRIBUTE, IecTypes.ElementaryTypes.STRING.getName(),
 						seq.getStartState(), null);

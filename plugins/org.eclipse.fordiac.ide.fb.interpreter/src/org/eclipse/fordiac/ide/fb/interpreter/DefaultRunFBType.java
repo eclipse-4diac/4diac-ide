@@ -27,8 +27,10 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
@@ -112,14 +114,22 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		}
 		// apply event and evaluate transitions
 		var firedTransition = evaluateOutTransitions(basicFBTypeRuntime);
+		addToTrace(firedTransition, basicFBTypeRuntime.eContainer().eContainer());
 		while (firedTransition != null) {
 			isConsumed(this.eventOccurrence);
 			basicFBTypeRuntime.setActiveState(firedTransition.getDestination());// fire transition
 			outputEvents.addAll(performEntryAction(basicFBTypeRuntime));
 			firedTransition = evaluateOutTransitions(basicFBTypeRuntime);
+			addToTrace(firedTransition, basicFBTypeRuntime.eContainer().eContainer());
 		}
-
 		return outputEvents;
+	}
+
+	private static void addToTrace(final ECTransition firedTransition, final EObject transaction) {
+		if (transaction instanceof final FBTransaction fbTransaction
+				&& fbTransaction.getTrace() instanceof final EccTrace eccTrace && (firedTransition != null)) {
+			eccTrace.getTransitions().add(firedTransition);
+		}
 	}
 
 	private static EList<EventOccurrence> performEntryAction(final BasicFBTypeRuntime basicFBTypeRuntime) {

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2014, 2015, 2017 Profactor GbmH, fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
+ * 				 2019 - 2020, 2023 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@
  *   Lisa Sonnleithner - deleted setting for corner dimensions, replaced with constant
  *   				   - moved max label size into a group
  *   				   - moved creating a group into a method
+ *   Prankur Agarwal - added a field to input maximum hidden connection label size
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
@@ -60,6 +61,8 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	public static final String MAX_VALUE_LABEL_SIZE = "MaxValueLabelSize"; //$NON-NLS-1$
 
 	public static final String MAX_PIN_LABEL_SIZE = "MaxPinLabelSize"; //$NON-NLS-1$
+
+	public static final String MAX_HIDDEN_CONNECTION_LABEL_SIZE = "MaxHiddenConnectionLabelSize"; //$NON-NLS-1$
 
 	public static final String MAX_TYPE_LABEL_SIZE = "MaxTypeLabelSize"; //$NON-NLS-1$
 
@@ -126,7 +129,9 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 				|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
 				.equalsIgnoreCase(MAX_TYPE_LABEL_SIZE)
 				|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
-				.equalsIgnoreCase(MAX_VALUE_LABEL_SIZE);
+				.equalsIgnoreCase(MAX_VALUE_LABEL_SIZE)
+				|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
+				.equalsIgnoreCase(MAX_HIDDEN_CONNECTION_LABEL_SIZE);
 	}
 
 	@Override
@@ -174,6 +179,12 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 				Messages.DiagramPreferences_MaximumPinLabelSize, labelSize);
 		integerFieldEditorPin.setValidRange(0, 60);
 		addField(integerFieldEditorPin);
+
+		final IntegerFieldEditor integerFieldEditorConnection = new IntegerFieldEditor(MAX_HIDDEN_CONNECTION_LABEL_SIZE,
+				Messages.DiagramPreferences_MaximumHiddenConnectionLabelSize, labelSize);
+		integerFieldEditorConnection.setValidRange(0, 100);
+		addField(integerFieldEditorConnection);
+
 		configGroup(labelSize);
 	}
 

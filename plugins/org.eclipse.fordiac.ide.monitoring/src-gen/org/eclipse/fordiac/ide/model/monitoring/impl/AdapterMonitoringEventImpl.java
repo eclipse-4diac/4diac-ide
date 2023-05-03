@@ -56,7 +56,6 @@ import org.eclipse.gef.EditPart;
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getWith <em>With</em>}</li>
  * </ul>
  *
@@ -160,24 +159,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	 * @ordered
 	 */
 	protected DataType type;
-
-	/**
-	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getTypeName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String TYPE_NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getTypeName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String typeName = TYPE_NAME_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getWith() <em>With</em>}' containment reference list.
@@ -287,19 +268,11 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	 */
 	@Override
 	public String getTypeName() {
-		return typeName;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setTypeName(String newTypeName) {
-		String oldTypeName = typeName;
-		typeName = newTypeName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE_NAME, oldTypeName, typeName));
+		DataType dataType = getType();
+		if(dataType != null){
+			return dataType.getName();
+		}
+		return null;
 	}
 
 	/**
@@ -553,8 +526,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE_NAME:
-				return getTypeName();
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH:
 				return getWith();
 			default:
@@ -594,9 +565,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE:
 				setType((DataType)newValue);
 				return;
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE_NAME:
-				setTypeName((String)newValue);
-				return;
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH:
 				getWith().clear();
 				getWith().addAll((Collection<? extends With>)newValue);
@@ -635,9 +603,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE:
 				setType((DataType)null);
 				return;
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE_NAME:
-				setTypeName(TYPE_NAME_EDEFAULT);
-				return;
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH:
 				getWith().clear();
 				return;
@@ -668,8 +633,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 				return outputConnections != null && !outputConnections.isEmpty();
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE:
 				return type != null;
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE_NAME:
-				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH:
 				return with != null && !with.isEmpty();
 			default:
@@ -707,7 +670,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 				case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS: return LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS;
 				case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS: return LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
 				case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE: return LibraryElementPackage.IINTERFACE_ELEMENT__TYPE;
-				case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE_NAME: return LibraryElementPackage.IINTERFACE_ELEMENT__TYPE_NAME;
 				default: return -1;
 			}
 		}
@@ -755,7 +717,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 				case LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS: return MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS;
 				case LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS: return MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS;
 				case LibraryElementPackage.IINTERFACE_ELEMENT__TYPE: return MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE;
-				case LibraryElementPackage.IINTERFACE_ELEMENT__TYPE_NAME: return MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE_NAME;
 				default: return -1;
 			}
 		}
@@ -788,8 +749,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 		result.append(comment);
 		result.append(", isInput: "); //$NON-NLS-1$
 		result.append(isInput);
-		result.append(", typeName: "); //$NON-NLS-1$
-		result.append(typeName);
 		result.append(')');
 		return result.toString();
 	}

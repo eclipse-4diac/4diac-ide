@@ -182,11 +182,9 @@ class AnnotationsIsInterfaceConnectionTest {
 		final var a = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		a.setName(STRUCT_ELEMENT_1);
 		a.setType(IecTypes.ElementaryTypes.DINT);
-		a.setTypeName(IecTypes.ElementaryTypes.DINT.getName());
 		final var b = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		b.setName(STRUCT_ELEMENT_2);
 		b.setType(IecTypes.ElementaryTypes.DINT);
-		b.setTypeName(IecTypes.ElementaryTypes.DINT.getName());
 
 		struct.getMemberVariables().add(a);
 		struct.getMemberVariables().add(b);

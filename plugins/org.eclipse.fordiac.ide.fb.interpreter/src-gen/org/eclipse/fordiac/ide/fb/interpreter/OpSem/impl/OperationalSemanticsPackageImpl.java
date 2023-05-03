@@ -17,11 +17,11 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -87,6 +88,16 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 *
 	 * @generated */
 	private EClass runtimeMapEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	private EClass traceEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	private EClass eccTraceEClass = null;
 
 	/** Creates an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry
 	 * EPackage.Registry} by the package package URI value.
@@ -370,6 +381,14 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 *
 	 * @generated */
 	@Override
+	public EReference getFBTransaction_Trace() {
+		return (EReference) fbTransactionEClass.getEStructuralFeatures().get(2);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
 	public EClass getConnectionToValueMap() {
 		return connectionToValueMapEClass;
 	}
@@ -412,6 +431,30 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	@Override
 	public EReference getRuntimeMap_Value() {
 		return (EReference) runtimeMapEClass.getEStructuralFeatures().get(1);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EClass getTrace() {
+		return traceEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EClass getEccTrace() {
+		return eccTraceEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EReference getEccTrace_Transitions() {
+		return (EReference) eccTraceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -471,6 +514,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		fbTransactionEClass = createEClass(FB_TRANSACTION);
 		createEReference(fbTransactionEClass, FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES);
 		createEReference(fbTransactionEClass, FB_TRANSACTION__INPUT_VARIABLES);
+		createEReference(fbTransactionEClass, FB_TRANSACTION__TRACE);
 
 		connectionToValueMapEClass = createEClass(CONNECTION_TO_VALUE_MAP);
 		createEReference(connectionToValueMapEClass, CONNECTION_TO_VALUE_MAP__KEY);
@@ -479,6 +523,11 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		runtimeMapEClass = createEClass(RUNTIME_MAP);
 		createEReference(runtimeMapEClass, RUNTIME_MAP__KEY);
 		createEReference(runtimeMapEClass, RUNTIME_MAP__VALUE);
+
+		traceEClass = createEClass(TRACE);
+
+		eccTraceEClass = createEClass(ECC_TRACE);
+		createEReference(eccTraceEClass, ECC_TRACE__TRANSITIONS);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -513,6 +562,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		simpleFBTypeRuntimeEClass.getESuperTypes().add(this.getFBRuntimeAbstract());
 		fbNetworkRuntimeEClass.getESuperTypes().add(this.getFBRuntimeAbstract());
 		fbTransactionEClass.getESuperTypes().add(this.getTransaction());
+		eccTraceEClass.getESuperTypes().add(this.getTrace());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(eventOccurrenceEClass, EventOccurrence.class, "EventOccurrence", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
@@ -548,8 +598,9 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 				EventManager.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		EOperation op = addEOperation(eventManagerEClass, null, "process", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getEventManager(), "eventManager", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(eventManagerEClass, null, "process", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(eventManagerEClass, null, "processNetwork", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(fbRuntimeAbstractEClass, FBRuntimeAbstract.class, "FBRuntimeAbstract", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -612,6 +663,11 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEReference(getFBTransaction_InputVariables(), theLibraryElementPackage.getVarDeclaration(), null,
 				"inputVariables", null, 0, -1, FBTransaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFBTransaction_Trace(), this.getTrace(), null, "trace", null, 0, 1, FBTransaction.class, //$NON-NLS-1$
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+
+		addEOperation(fbTransactionEClass, null, "process", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(connectionToValueMapEClass, Map.Entry.class, "ConnectionToValueMap", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				!IS_GENERATED_INSTANCE_CLASS);
@@ -630,6 +686,14 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEReference(getRuntimeMap_Value(), this.getFBRuntimeAbstract(), null, "value", null, 0, 1, Map.Entry.class, //$NON-NLS-1$
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
+
+		initEClass(traceEClass, Trace.class, "Trace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(eccTraceEClass, EccTrace.class, "EccTrace", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+				IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getEccTrace_Transitions(), theLibraryElementPackage.getECTransition(), null, "transitions", null, //$NON-NLS-1$
+				0, -1, EccTrace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

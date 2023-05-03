@@ -391,7 +391,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
         eType="#//Attribute" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//INamedElement #//ConfigurableObject #//ErrorMarkerRef #//HiddenElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//ConfigurableObject #//ErrorMarkerRef #//HiddenElement">
     <eOperations name="getSourceElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);"/>
@@ -430,7 +430,6 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isInterfaceConnection(this);"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resTypeConnection" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="brokenConnection" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//IInterfaceElement"
         eOpposite="#//IInterfaceElement/outputConnections"/>
@@ -438,6 +437,8 @@
         eOpposite="#//IInterfaceElement/inputConnections"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="routingData" lowerBound="1"
         eType="#//ConnectionRoutingData" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
+        defaultValueLiteral=""/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConnectionRoutingData">
     <eOperations name="is1SegementData" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
@@ -1029,6 +1030,11 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="DataType dataType = getType();&#xA;if(dataType != null){&#xA;&#x9;return dataType.getName();&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInput" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputConnections" upperBound="-1"
         eType="#//Connection" eOpposite="#//Connection/destination"/>
@@ -1036,7 +1042,6 @@
         eType="#//Connection" eOpposite="#//Connection/source"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass data.ecore#//DataType"
         transient="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="INamedElement" abstract="true" interface="true">
     <eOperations name="getQualifiedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">

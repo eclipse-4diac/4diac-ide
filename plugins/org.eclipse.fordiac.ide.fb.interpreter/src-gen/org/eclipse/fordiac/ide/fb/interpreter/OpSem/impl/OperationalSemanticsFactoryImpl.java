@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
@@ -29,6 +30,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -82,6 +84,10 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 			return (EObject) createConnectionToValueMap();
 		case OperationalSemanticsPackage.RUNTIME_MAP:
 			return (EObject) createRuntimeMap();
+		case OperationalSemanticsPackage.TRACE:
+			return createTrace();
+		case OperationalSemanticsPackage.ECC_TRACE:
+			return createEccTrace();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -155,6 +161,24 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 	public Map.Entry<FBNetworkElement, FBRuntimeAbstract> createRuntimeMap() {
 		RuntimeMapImpl runtimeMap = new RuntimeMapImpl();
 		return runtimeMap;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public Trace createTrace() {
+		TraceImpl trace = new TraceImpl();
+		return trace;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EccTrace createEccTrace() {
+		EccTraceImpl eccTrace = new EccTraceImpl();
+		return eccTrace;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

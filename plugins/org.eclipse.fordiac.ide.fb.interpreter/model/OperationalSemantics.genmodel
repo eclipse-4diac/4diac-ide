@@ -67,6 +67,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/inputVariables"/>
       <genOperations ecoreOperation="OperationalSemantics.ecore#//FBTransaction/process"
           body="EventManagerUtils.processFbTransaction(this);"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/trace"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//ConnectionToValueMap">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//ConnectionToValueMap/key"/>
@@ -75,6 +76,10 @@
     <genClasses ecoreClass="OperationalSemantics.ecore#//RuntimeMap">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//RuntimeMap/key"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//RuntimeMap/value"/>
+    </genClasses>
+    <genClasses ecoreClass="OperationalSemantics.ecore#//Trace"/>
+    <genClasses ecoreClass="OperationalSemantics.ecore#//EccTrace">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EccTrace/transitions"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -70,6 +70,8 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public boolean performFinish() {
+		bootFilePage.saveWidgetValues();
+
 		final IRunnableWithProgress iop = monitor -> {
 			final String outputDirectory = bootFilePage.getDirectory();
 			final Map<Device, List<Object>> workLoad = prepareWorkload();

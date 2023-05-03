@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
- * 				 2022 - 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Martin Erich Jobst,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -2407,6 +2407,348 @@ public interface StandardFunctions extends Functions {
 	@Comment("Converts Char to WChar value.")
 	static WCharValue CHAR_TO_WCHAR(final CharValue value) {
 		return WCharValue.toWCharValue(value);
+	}
+
+	/* string conversions */
+	@Comment("Converts Real to STRING value.")
+	static StringValue REAL_AS_STRING(final RealValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Lreal to STRING value.")
+	static StringValue LREAL_AS_STRING(final LRealValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Usint to STRING value.")
+	static StringValue USINT_AS_STRING(final USIntValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Uint to STRING value.")
+	static StringValue UINT_AS_STRING(final UIntValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Udint to STRING value.")
+	static StringValue UDINT_AS_STRING(final UDIntValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Ulint to STRING value.")
+	static StringValue ULINT_AS_STRING(final ULIntValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Sint to STRING value.")
+	static StringValue SINT_AS_STRING(final SIntValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Int to STRING value.")
+	static StringValue INT_AS_STRING(final IntValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Dint to STRING value.")
+	static StringValue DINT_AS_STRING(final DIntValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Lint to STRING value.")
+	static StringValue LINT_AS_STRING(final LIntValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Time to STRING value.")
+	static StringValue TIME_AS_STRING(final TimeValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Ltime to STRING value.")
+	static StringValue LTIME_AS_STRING(final LTimeValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Bool to STRING value.")
+	static StringValue BOOL_AS_STRING(final BoolValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Byte to STRING value.")
+	static StringValue BYTE_AS_STRING(final ByteValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Word to STRING value.")
+	static StringValue WORD_AS_STRING(final WordValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Dword to STRING value.")
+	static StringValue DWORD_AS_STRING(final DWordValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts Lword to STRING value.")
+	static StringValue LWORD_AS_STRING(final LWordValue value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
+	@Comment("Converts STRING to Real value.")
+	static RealValue STRING_AS_REAL(final StringValue value) {
+		return RealValue.toRealValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Lreal value.")
+	static LRealValue STRING_AS_LREAL(final StringValue value) {
+		return LRealValue.toLRealValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Usint value.")
+	static USIntValue STRING_AS_USINT(final StringValue value) {
+		return USIntValue.toUSIntValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Uint value.")
+	static UIntValue STRING_AS_UINT(final StringValue value) {
+		return UIntValue.toUIntValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Udint value.")
+	static UDIntValue STRING_AS_UDINT(final StringValue value) {
+		return UDIntValue.toUDIntValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Ulint value.")
+	static ULIntValue STRING_AS_ULINT(final StringValue value) {
+		return ULIntValue.toULIntValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Sint value.")
+	static SIntValue STRING_AS_SINT(final StringValue value) {
+		return SIntValue.toSIntValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Int value.")
+	static IntValue STRING_AS_INT(final StringValue value) {
+		return IntValue.toIntValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Dint value.")
+	static DIntValue STRING_AS_DINT(final StringValue value) {
+		return DIntValue.toDIntValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Lint value.")
+	static LIntValue STRING_AS_LINT(final StringValue value) {
+		return LIntValue.toLIntValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Time value.")
+	static TimeValue STRING_AS_TIME(final StringValue value) {
+		return TimeValue.toTimeValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Ltime value.")
+	static LTimeValue STRING_AS_LTIME(final StringValue value) {
+		return LTimeValue.toLTimeValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Bool value.")
+	static BoolValue STRING_AS_BOOL(final StringValue value) {
+		return BoolValue.toBoolValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Byte value.")
+	static ByteValue STRING_AS_BYTE(final StringValue value) {
+		return ByteValue.toByteValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Word value.")
+	static WordValue STRING_AS_WORD(final StringValue value) {
+		return WordValue.toWordValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Dword value.")
+	static DWordValue STRING_AS_DWORD(final StringValue value) {
+		return DWordValue.toDWordValue(value.stringValue());
+	}
+
+	@Comment("Converts STRING to Lword value.")
+	static LWordValue STRING_AS_LWORD(final StringValue value) {
+		return LWordValue.toLWordValue(value.stringValue());
+	}
+
+	/* wide string conversions */
+	@Comment("Converts Real to WSTRING value.")
+	static WStringValue REAL_AS_WSTRING(final RealValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Lreal to WSTRING value.")
+	static WStringValue LREAL_AS_WSTRING(final LRealValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Usint to WSTRING value.")
+	static WStringValue USINT_AS_WSTRING(final USIntValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Uint to WSTRING value.")
+	static WStringValue UINT_AS_WSTRING(final UIntValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Udint to WSTRING value.")
+	static WStringValue UDINT_AS_WSTRING(final UDIntValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Ulint to WSTRING value.")
+	static WStringValue ULINT_AS_WSTRING(final ULIntValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Sint to WSTRING value.")
+	static WStringValue SINT_AS_WSTRING(final SIntValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Int to WSTRING value.")
+	static WStringValue INT_AS_WSTRING(final IntValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Dint to WSTRING value.")
+	static WStringValue DINT_AS_WSTRING(final DIntValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Lint to WSTRING value.")
+	static WStringValue LINT_AS_WSTRING(final LIntValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Time to WSTRING value.")
+	static WStringValue TIME_AS_WSTRING(final TimeValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Ltime to WSTRING value.")
+	static WStringValue LTIME_AS_WSTRING(final LTimeValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Bool to WSTRING value.")
+	static WStringValue BOOL_AS_WSTRING(final BoolValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Byte to WSTRING value.")
+	static WStringValue BYTE_AS_WSTRING(final ByteValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Word to WSTRING value.")
+	static WStringValue WORD_AS_WSTRING(final WordValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Dword to WSTRING value.")
+	static WStringValue DWORD_AS_WSTRING(final DWordValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts Lword to WSTRING value.")
+	static WStringValue LWORD_AS_WSTRING(final LWordValue value) {
+		return WStringValue.toWStringValue(value.toString());
+	}
+
+	@Comment("Converts WSTRING to Real value.")
+	static RealValue WSTRING_AS_REAL(final WStringValue value) {
+		return RealValue.toRealValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Lreal value.")
+	static LRealValue WSTRING_AS_LREAL(final WStringValue value) {
+		return LRealValue.toLRealValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Usint value.")
+	static USIntValue WSTRING_AS_USINT(final WStringValue value) {
+		return USIntValue.toUSIntValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Uint value.")
+	static UIntValue WSTRING_AS_UINT(final WStringValue value) {
+		return UIntValue.toUIntValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Udint value.")
+	static UDIntValue WSTRING_AS_UDINT(final WStringValue value) {
+		return UDIntValue.toUDIntValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Ulint value.")
+	static ULIntValue WSTRING_AS_ULINT(final WStringValue value) {
+		return ULIntValue.toULIntValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Sint value.")
+	static SIntValue WSTRING_AS_SINT(final WStringValue value) {
+		return SIntValue.toSIntValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Int value.")
+	static IntValue WSTRING_AS_INT(final WStringValue value) {
+		return IntValue.toIntValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Dint value.")
+	static DIntValue WSTRING_AS_DINT(final WStringValue value) {
+		return DIntValue.toDIntValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Lint value.")
+	static LIntValue WSTRING_AS_LINT(final WStringValue value) {
+		return LIntValue.toLIntValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Time value.")
+	static TimeValue WSTRING_AS_TIME(final WStringValue value) {
+		return TimeValue.toTimeValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Ltime value.")
+	static LTimeValue WSTRING_AS_LTIME(final WStringValue value) {
+		return LTimeValue.toLTimeValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Bool value.")
+	static BoolValue WSTRING_AS_BOOL(final WStringValue value) {
+		return BoolValue.toBoolValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Byte value.")
+	static ByteValue WSTRING_AS_BYTE(final WStringValue value) {
+		return ByteValue.toByteValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Word value.")
+	static WordValue WSTRING_AS_WORD(final WStringValue value) {
+		return WordValue.toWordValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Dword value.")
+	static DWordValue WSTRING_AS_DWORD(final WStringValue value) {
+		return DWordValue.toDWordValue(value.stringValue());
+	}
+
+	@Comment("Converts WSTRING to Lword value.")
+	static LWordValue WSTRING_AS_LWORD(final WStringValue value) {
+		return LWordValue.toLWordValue(value.stringValue());
 	}
 
 	@SuppressWarnings("unchecked")

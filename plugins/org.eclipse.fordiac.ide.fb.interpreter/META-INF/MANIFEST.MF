@@ -12,6 +12,7 @@ Export-Package: org.eclipse.fordiac.ide.fb.interpreter.OpSem,
  org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl,
  org.eclipse.fordiac.ide.fb.interpreter.OpSem.util,
  org.eclipse.fordiac.ide.fb.interpreter.api,
+ org.eclipse.fordiac.ide.fb.interpreter.compare,
  org.eclipse.fordiac.ide.fb.interpreter.inputgenerator,
  org.eclipse.fordiac.ide.fb.interpreter.mm
 Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,

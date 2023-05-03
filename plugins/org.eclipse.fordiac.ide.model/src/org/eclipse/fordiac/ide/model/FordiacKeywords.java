@@ -43,7 +43,7 @@ public final class FordiacKeywords {
 	@SuppressWarnings("squid:S2386") // This is a final, immutable Set
 	public static final Set<String> RESERVED_KEYWORDS = Stream.of(RESERVED_ST_KEYWORDS, RESERVED_DATATYPE_KEYWORDS,
 			RESERVED_DATATYPE_CLASS_KEYWORDS, RESERVED_TIME_UNIT_KEYWORDS).flatMap(Set::stream)
-	.collect(Collectors.toUnmodifiableSet());
+			.collect(Collectors.toUnmodifiableSet());
 
 	public enum KeywordTypes {
 		DATATYPE, DATATYPE_CLASS, TIME_UNIT, STRUCTURED_TEXT
@@ -314,6 +314,8 @@ public final class FordiacKeywords {
 	@Keyword(KeywordTypes.STRUCTURED_TEXT)
 	public static final String LE = "LE"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String LT = "LT"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
 	public static final String LEFT = "LEFT"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.STRUCTURED_TEXT)
 	public static final String LEN = "LEN"; //$NON-NLS-1$
@@ -499,7 +501,6 @@ public final class FordiacKeywords {
 
 	@ModelString
 	public static final String INTERFACE_Y_POSITION = "YPOSITION"; //$NON-NLS-1$
-
 
 	private FordiacKeywords() {
 		throw new UnsupportedOperationException();
