@@ -12,15 +12,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.eclipse.fordiac.ide.typemanagement.librarylinker.ArchivedLibraryImportContentProvider;
+import org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryLinker;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TreeItem;
 
 public class ArchivedLibraryImportWizardPage extends WizardPage {
 	
 	private Composite container;
+	private TreeViewer viewer;
+	private LibraryLinker libraryLinker;
+	private File selectedFile;
 
 	protected ArchivedLibraryImportWizardPage(String pageName) {
 		super(pageName);
@@ -28,22 +42,67 @@ public class ArchivedLibraryImportWizardPage extends WizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-    	container = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout();
+		container = new Composite(parent, SWT.NONE);
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+	    container.setLayoutData(gd);
+	    
+        GridLayout layout = new GridLayout(1, true);
         container.setLayout(layout);
-        layout.numColumns = 2;
         
-        createLabel("Test label");
+        viewer = new TreeViewer(container, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+        
+        viewer.getTree().setHeaderVisible(true);
+        viewer.getTree().setLinesVisible(true);
+        viewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+        viewer.getTree().addSelectionListener(new SelectionAdapter() {
+        	@Override
+        	public void widgetSelected(SelectionEvent e) {
+        		TreeItem item = (TreeItem) e.item;
+        		if (item.getData() instanceof File file && !file.isDirectory()) {
+        			selectedFile = file;
+        			setPageComplete(isComplete());
+        		}
+        	}
+		});
+       
+        createColumns();
         
         // required to avoid an error in the system
         setControl(container);
         setPageComplete(false);
 	}
 	
-	private Label createLabel(String labelText) {
-    	Label label = new Label(container, SWT.NONE);
-        label.setText(labelText);
-    	return label;
-    }
+	private void createColumns() {
+		// Projects and packages column
+		TreeViewerColumn viewerColumn = new TreeViewerColumn(viewer, SWT.NONE);
+		viewerColumn.getColumn().setWidth(500);
+		viewerColumn.getColumn().setText("Directories containing archives");
+		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if (element instanceof File file) {
+					return file.getName();
+				}
+				return "";
+			}
+		});
 
+	}
+	
+	private boolean isComplete() {
+    	return !viewer.getStructuredSelection().isEmpty();
+    }
+	
+	@Override
+	public void setVisible(boolean visible) {
+		libraryLinker = new LibraryLinker();
+		viewer.setContentProvider(new ArchivedLibraryImportContentProvider());
+        viewer.setInput(libraryLinker.listDirectoriesContainingArchives());
+		super.setVisible(visible);
+	}
+	
+	public void importAndUnzipArchive() throws IOException {
+		libraryLinker.extractLibrary(selectedFile);
+	}
+	
 }
