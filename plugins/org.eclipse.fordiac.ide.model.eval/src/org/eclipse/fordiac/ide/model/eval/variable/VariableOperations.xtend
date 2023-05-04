@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 import static extension org.eclipse.fordiac.ide.model.eval.EvaluatorFactory.*
-import static extension org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable.*
 
 final class VariableOperations {
 	private new() {
@@ -66,14 +65,14 @@ final class VariableOperations {
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl) {
-		if (decl.initialValue !== null) {
+		if (decl.array || !decl.initialValue.nullOrEmpty) {
 			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
 			if (evaluator instanceof VariableEvaluator) {
 				evaluator.evaluateVariable
 			} else
 				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
 		} else
-			newVariable(decl.name, decl.actualType)
+			newVariable(decl.name, decl.type)
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl, String initialValue) {
@@ -81,11 +80,22 @@ final class VariableOperations {
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl, Value value) {
-		newVariable(decl.name, decl.actualType, value)
+		newVariable(decl.name, decl.evaluateResultType, value)
 	}
 
 	def static Variable<?> newVariable(FB fb) {
 		newVariable(fb.name, fb.type)
+	}
+
+	def static INamedElement evaluateResultType(VarDeclaration decl) {
+		if (decl.array) {
+			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				evaluator.evaluateResultType
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+		} else
+			decl.type
 	}
 
 	def static String validateValue(VarDeclaration decl) {
@@ -130,13 +140,6 @@ final class VariableOperations {
 	def static String getInheritedInitialValue(VarDeclaration decl) {
 		val result = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name)?.value?.value
 		if(result.nullOrEmpty) null else result
-	}
-
-	def static DataType getActualType(VarDeclaration decl) {
-		if (decl.array)
-			decl.type.newArrayType(newSubrange(0, decl.arraySizeAsInt - 1))
-		else
-			decl.type
 	}
 
 	def private static withValue(VarDeclaration decl, String valueString) {
