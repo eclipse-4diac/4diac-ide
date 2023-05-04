@@ -34,13 +34,31 @@
             class="org.eclipse.fordiac.ide.deployment.iec61499.preferences.PreferenceInitializer">
       </initializer>
    </extension>
-     <extension
+   <extension
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="org.eclipse.fordiac.ide.deployment.iec61499.handlers.GetResourcesHandler"
             id="org.eclipse.fordiac.ide.discovery.getResources"
             name="Get Resources">
       </command>
+   </extension>
+   <extension
+      point="org.eclipse.ui.commands">
+   	<command
+         categoryId="org.eclipse.fordiac.ide.commands.category"
+         id="org.eclipse.fordiac.ide.deployment.iec61499.compareDevice"
+         name="compare Device">
+   	</command>
+   </extension>
+   <extension
+      point="org.eclipse.ui.handlers">
+   	<handler
+         class="org.eclipse.fordiac.ide.deployment.iec61499.handlers.CompareDeviceHandler"
+         commandId="org.eclipse.fordiac.ide.deployment.iec61499.compareDevice">
+      <activeWhen>
+         <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition" />
+      </activeWhen>
+   	</handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -60,4 +78,30 @@
          </command>
       </menuContribution>
    </extension>
+  <extension point="org.eclipse.ui.menus">
+   <menuContribution
+         allPopups="false"
+         locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+	   <command
+	         commandId="org.eclipse.fordiac.ide.deployment.iec61499.compareDevice"
+	         icon="fordiacimage://ICON_PROPERTIES"
+	         label="compare Device"
+	         style="push">
+	      <visibleWhen
+	            checkEnabled="false">
+	         <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition" />
+	      </visibleWhen>
+	   </command>
+	</menuContribution>
+	<menuContribution
+            locationURI="menu:org.eclipse.ui.run?after=additions">
+        <command
+			 commandId="org.eclipse.fordiac.ide.deployment.iec61499.compareDevice"
+			 icon="fordiacimage://ICON_PROPERTIES"
+			 label="compare Device"
+			 style="push">
+		</command>
+    </menuContribution>
+  </extension>
+
 </plugin>
