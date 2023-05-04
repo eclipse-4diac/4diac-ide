@@ -388,7 +388,8 @@ final class STCoreUtil {
 		switch (feature) {
 			VarDeclaration:
 				if (feature.array)
-					feature.type.newArrayType(newSubrange(0, feature.arraySizeAsInt - 1))
+					STTypeDeclarationParser.parseLegacyTypeDeclaration(feature.type, feature.arraySize) ?:
+						STTypeDeclarationParser.parseSimpleTypeDeclaration(feature.type, feature.arraySize)
 				else
 					feature.type
 			STVarDeclaration:
