@@ -37,7 +37,7 @@
      <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="org.eclipse.fordiac.ide.deployment.iec61499.GetResourcesHandler"
+            defaultHandler="org.eclipse.fordiac.ide.deployment.iec61499.handlers.GetResourcesHandler"
             id="org.eclipse.fordiac.ide.discovery.getResources"
             name="Get Resources">
       </command>

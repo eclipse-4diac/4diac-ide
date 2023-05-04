@@ -13,7 +13,7 @@
  *  		- initial API and implementation and/or initial documentation
  *  Alois Zoitl - Harmonized deployment and monitoring communication
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.iec61499;
+package org.eclipse.fordiac.ide.deployment.iec61499.executors;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -34,6 +34,9 @@ import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
+import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
+import org.eclipse.fordiac.ide.deployment.iec61499.handlers.EthernetDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;

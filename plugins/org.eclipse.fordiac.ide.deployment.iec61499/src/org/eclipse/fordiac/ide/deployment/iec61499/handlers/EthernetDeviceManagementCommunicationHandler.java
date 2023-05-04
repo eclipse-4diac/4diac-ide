@@ -10,7 +10,7 @@
  *   Alois Zoitl, Florian Noack, Monika Wenger - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.iec61499;
+package org.eclipse.fordiac.ide.deployment.iec61499.handlers;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -26,6 +26,7 @@ import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
 import org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferences;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
