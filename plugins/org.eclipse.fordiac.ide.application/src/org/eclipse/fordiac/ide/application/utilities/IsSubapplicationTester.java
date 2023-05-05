@@ -27,7 +27,6 @@ public class IsSubapplicationTester extends PropertyTester {
 	@Override
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
 		final IEditorPart editor = EditorUtils.getCurrentActiveEditor();
-
 		if (null != editor) {
 			final FBNetwork fbnetwork = editor.getAdapter(FBNetwork.class);
 			return ((null != fbnetwork) && fbnetwork.isSubApplicationNetwork()) || isSelectionMovable(receiver);
@@ -44,10 +43,10 @@ public class IsSubapplicationTester extends PropertyTester {
 	}
 
 	private static boolean isNestedInSubApp(final Object obj) {
-		if (obj instanceof EditPart) {
-			final Object model = ((EditPart) obj).getModel();
-			if (model instanceof FBNetworkElement) {
-				return ((FBNetworkElement) model).isNestedInSubApp();
+		if (obj instanceof final EditPart ep) {
+			final Object model = ep.getModel();
+			if (model instanceof final FBNetworkElement fbne) {
+				return fbne.isNestedInSubApp();
 			}
 		}
 		return false;}

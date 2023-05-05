@@ -27,10 +27,7 @@ import org.eclipse.ui.IEditorPart;
 public class ViewerPropertyTester extends PropertyTester {
 
 	@Override
-	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		final IEditorPart part = EditorUtils.getCurrentActiveEditor();
-		final FBNetwork network = part.getAdapter(FBNetwork.class);
-
+	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
 		if (receiver instanceof List) {
 			final List<?> selectedElements = (List<?>) receiver;
 			if (selectedElements.size() > 1) {
@@ -41,6 +38,8 @@ public class ViewerPropertyTester extends PropertyTester {
 				return false;
 			}
 		}
-		return null != network;
+
+		final IEditorPart part = EditorUtils.getCurrentActiveEditor();
+		return (part != null) && (part.getAdapter(FBNetwork.class) != null);
 	}
 }

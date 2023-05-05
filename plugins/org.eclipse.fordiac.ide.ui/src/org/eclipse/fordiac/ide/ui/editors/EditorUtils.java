@@ -28,7 +28,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 public final class EditorUtils {
@@ -96,16 +95,16 @@ public final class EditorUtils {
 		forEachOpenEditorFiltered(filter, CloseEditor);
 	}
 
-	public static void refreshPropertySheetWithSelection(final EditorPart activeEditor, final EditPartViewer viewer,
+	public static void refreshPropertySheetWithSelection(final IEditorPart activeEditor, final EditPartViewer viewer,
 			final Object obj) {
 		if (viewer != null) {
 			viewer.select((EditPart) obj);
 		}
 		final IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.findView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
-		if (view instanceof PropertySheet) {
+		if (activeEditor != null && view instanceof final PropertySheet propertySheet) {
 			final ISelection selection = activeEditor.getSite().getSelectionProvider().getSelection();
-			((PropertySheet) view).selectionChanged(activeEditor, selection);
+			propertySheet.selectionChanged(activeEditor, selection);
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(view);
 		}
 	}

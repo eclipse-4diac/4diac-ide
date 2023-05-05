@@ -27,6 +27,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.ui.IEditorPart;
 
 /**
  * The Class AbstractDirectEditableEditPart.
@@ -132,12 +133,15 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 
 	// TODO already duplicated on several places put it into a util class
 	public static void executeCommand(final Command cmd) {
-		final Object viewer = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
-		if (viewer instanceof GraphicalViewer) {
-			((GraphicalViewer) viewer).getEditDomain().getCommandStack().execute(cmd);
-		} else {
-			cmd.execute();
+		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
+		if(currentActiveEditor != null) {
+			final GraphicalViewer viewer = currentActiveEditor.getAdapter(GraphicalViewer.class);
+			if (viewer != null) {
+				viewer.getEditDomain().getCommandStack().execute(cmd);
+				return;
+			}
 		}
+		cmd.execute();
 	}
 
 }
