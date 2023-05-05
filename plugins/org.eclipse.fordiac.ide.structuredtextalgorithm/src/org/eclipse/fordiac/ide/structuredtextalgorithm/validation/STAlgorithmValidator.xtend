@@ -65,39 +65,39 @@ class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 		val fbType = (resource as STAlgorithmResource)?.fbType 
 		if (fbType instanceof BaseFBType) {
 			val baseFBType = fbType as BaseFBType
-			if (baseFBType.interfaceList.eventInputs.stream.anyMatch[it.name.equals(varDeclaration.name)]) {
+			if (baseFBType.interfaceList.eventInputs.stream.anyMatch[it.name.equalsIgnoreCase(varDeclaration.name)]) {
 				error(MessageFormat.format(Messages.STAlgorithmValidator_NameUsedAsEventInput, varDeclaration.name), varDeclaration,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, VARIABLE_NAME_IN_USE_ON_INTERFACE, varDeclaration.name)
 			}
-			if (baseFBType.interfaceList.inputVars.stream.anyMatch[it.name.equals(varDeclaration.name)]) {
+			if (baseFBType.interfaceList.inputVars.stream.anyMatch[it.name.equalsIgnoreCase(varDeclaration.name)]) {
 				error(MessageFormat.format(Messages.STAlgorithmValidator_NameUsedAsDataInput, varDeclaration.name), varDeclaration,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, VARIABLE_NAME_IN_USE_ON_INTERFACE, varDeclaration.name)
 			}
-			if (baseFBType.interfaceList.eventOutputs.stream.anyMatch[it.name.equals(varDeclaration.name)]) {
+			if (baseFBType.interfaceList.eventOutputs.stream.anyMatch[it.name.equalsIgnoreCase(varDeclaration.name)]) {
 				error(MessageFormat.format(Messages.STAlgorithmValidator_NameUsedAsEventOutput, varDeclaration.name), varDeclaration,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, VARIABLE_NAME_IN_USE_ON_INTERFACE, varDeclaration.name)
 			}
-			if (baseFBType.interfaceList.outputVars.stream.anyMatch[it.name.equals(varDeclaration.name)]) {
+			if (baseFBType.interfaceList.outputVars.stream.anyMatch[it.name.equalsIgnoreCase(varDeclaration.name)]) {
 				error(MessageFormat.format(Messages.STAlgorithmValidator_NameUsedAsDataOutput, varDeclaration.name), varDeclaration,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, VARIABLE_NAME_IN_USE_ON_INTERFACE, varDeclaration.name)
 			}
-			if (baseFBType.internalVars.stream.anyMatch[it.name.equals(varDeclaration.name)]) {
+			if (baseFBType.internalVars.stream.anyMatch[it.name.equalsIgnoreCase(varDeclaration.name)]) {
 				error(MessageFormat.format(Messages.STAlgorithmValidator_NameUsedAsVariable, varDeclaration.name), varDeclaration,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, VARIABLE_NAME_IN_USE_ON_INTERFACE, varDeclaration.name)
 			}
-			if (baseFBType.internalConstVars.stream.anyMatch[it.name.equals(varDeclaration.name)]) {
+			if (baseFBType.internalConstVars.stream.anyMatch[it.name.equalsIgnoreCase(varDeclaration.name)]) {
 				error(MessageFormat.format(Messages.STAlgorithmValidator_NameUsedAsConstant, varDeclaration.name), varDeclaration,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, VARIABLE_NAME_IN_USE_ON_INTERFACE, varDeclaration.name)
 			}
-			if (baseFBType.internalFbs.stream.anyMatch[it.name.equals(varDeclaration.name)]) {
+			if (baseFBType.internalFbs.stream.anyMatch[it.name.equalsIgnoreCase(varDeclaration.name)]) {
 				error(MessageFormat.format(Messages.STAlgorithmValidator_NameUsedAsFunctionBlockVariable, varDeclaration.name), varDeclaration,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, VARIABLE_NAME_IN_USE_ON_INTERFACE, varDeclaration.name)
 			}
-			if (baseFBType.algorithm.stream.anyMatch[it.name.equals(varDeclaration.name)]) {
+			if (baseFBType.algorithm.stream.anyMatch[it.name.equalsIgnoreCase(varDeclaration.name)]) {
 				error(MessageFormat.format(Messages.STAlgorithmValidator_NameUsedAsAlgorithm, varDeclaration.name), varDeclaration,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, VARIABLE_NAME_IN_USE_ON_INTERFACE, varDeclaration.name)
 			}
-			if (baseFBType.methods.stream.anyMatch[it.name.equals(varDeclaration.name)]) {
+			if (baseFBType.methods.stream.anyMatch[it.name.equalsIgnoreCase(varDeclaration.name)]) {
 				error(MessageFormat.format(Messages.STAlgorithmValidator_NameUsedAsMethod, varDeclaration.name), varDeclaration,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, VARIABLE_NAME_IN_USE_ON_INTERFACE, varDeclaration.name)
 			}
