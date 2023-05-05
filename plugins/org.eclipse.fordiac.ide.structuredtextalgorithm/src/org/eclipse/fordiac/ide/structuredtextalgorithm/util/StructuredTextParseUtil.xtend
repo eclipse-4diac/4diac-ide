@@ -104,6 +104,11 @@ class StructuredTextParseUtil extends ParseUtil {
 			additionalContent, issues)
 	}
 
+	def static void validateType(VarDeclaration decl, List<Issue> issues) {
+		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
+		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, decl.getContainerOfType(FBType), issues)
+	}
+
 	def static STExpressionSource parse(String expression, INamedElement expectedType, FBType fbType,
 		List<String> errors, List<String> warnings, List<String> infos) {
 		expression.parse(expectedType, fbType, null, errors, warnings, infos)
