@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
@@ -115,6 +116,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),
 				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
+		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(structMemberProvider));
 		natTable.configure();
 	}
 
@@ -139,7 +141,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			if (rowItem.getType() instanceof ErrorMarkerDataType) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 			}
-			configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+			configLabels.addLabel(TypeDeclarationEditorConfiguration.TYPE_DECLARATION_CELL);
 			break;
 		case I4diacNatTableUtil.INITIAL_VALUE:
 			if (rowItem.getValue() != null && rowItem.getValue().hasError()) {

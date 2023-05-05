@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -173,8 +174,7 @@ public abstract class AbstractInternalVarsSection extends AbstractSection implem
 			if (rowItem.getType() instanceof ErrorMarkerDataType) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 			}
-			configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-
+			configLabels.addLabel(TypeDeclarationEditorConfiguration.TYPE_DECLARATION_CELL);
 			break;
 		case I4diacNatTableUtil.INITIAL_VALUE:
 			if (rowItem.getValue() != null && rowItem.getValue().hasError()) {

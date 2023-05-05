@@ -25,6 +25,7 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
@@ -111,8 +112,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 			}
 			if (isEditable()) {
-
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+				configLabels.addLabel(TypeDeclarationEditorConfiguration.TYPE_DECLARATION_CELL);
 			}
 			break;
 		case I4diacNatTableUtil.INITIAL_VALUE:
@@ -150,6 +150,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
+		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.configure();
 	}
 
@@ -165,6 +166,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
+		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.configure();
 	}
 

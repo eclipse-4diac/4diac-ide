@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElement
 import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.ResizingSubappInterfaceCreationCommand;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationWithVarConfigColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationWithVarConfigColumnProvider;
@@ -81,6 +82,7 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 				new VarDeclarationWithVarConfigColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this,
 				true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
+		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.configure();
 	}
