@@ -18,11 +18,9 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -30,7 +28,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
@@ -57,11 +54,6 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 
 	@Override
 	protected ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection, final boolean moveUp) {
-		return null;
-	}
-
-	@Override
-	protected ChangeDataTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
 		return null;
 	}
 

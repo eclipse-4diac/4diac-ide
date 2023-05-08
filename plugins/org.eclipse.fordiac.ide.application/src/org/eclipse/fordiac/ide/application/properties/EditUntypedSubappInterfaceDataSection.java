@@ -18,7 +18,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.application.commands.ChangeSubAppIETypeCommand;
 import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
@@ -28,7 +27,6 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationWithVarConfigColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationWithVarConfigColumnProvider;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -131,11 +129,6 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 	@Override
 	protected ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection, final boolean moveUp) {
 		return new ChangeSubAppInterfaceOrderCommand(selection, moveUp);
-	}
-
-	@Override
-	protected ChangeDataTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
-		return new ChangeSubAppIETypeCommand(data, newType);
 	}
 
 	@Override

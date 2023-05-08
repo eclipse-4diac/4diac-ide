@@ -38,7 +38,6 @@ import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
@@ -58,15 +57,6 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	protected CellEditor createTypeCellEditor(final TableViewer viewer) {
 		typeDropdown = new DataTypeDropdown(() -> getDataTypeLib().getDataTypesSorted(), viewer);
 		return typeDropdown;
-	}
-
-	@Override
-	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value, final TableViewer viewer) {
-		if (value instanceof final String string) {
-			final DataType dataType = typeDropdown.getType(string);
-			return (dataType == null) ? null : newChangeTypeCommand(data, dataType);
-		}
-		return null;
 	}
 
 	@Override
