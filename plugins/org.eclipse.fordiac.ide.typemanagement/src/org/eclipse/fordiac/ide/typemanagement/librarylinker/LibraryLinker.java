@@ -85,14 +85,14 @@ public class LibraryLinker {
 	    return destFile;
 	}
 	
-	private String getProjectName(StructuredSelection selection) {
+	public String getProjectName(StructuredSelection selection) {
 		if (!selection.isEmpty()) {
 			if (selection.getFirstElement() instanceof IProject project) {
 				return project.getName();
 			} else if (selection.getFirstElement() instanceof IFolder folder) {
 				return folder.getParent().getName();
 			}
-		}
+		} 
 		return "";
 	}
 	
@@ -118,9 +118,11 @@ public class LibraryLinker {
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
+			} else {
+				MessageDialog.openWarning(null, Messages.Warning, Messages.ImportFailed);
 			}
 		} else {
-			MessageDialog.openWarning(null, Messages.warning, Messages.typeLibraryHasAlreadyBeenExtracted);
+			MessageDialog.openWarning(null, Messages.Warning, Messages.typeLibraryHasAlreadyBeenExtracted);
 		}
 	} 
 	
@@ -135,7 +137,6 @@ public class LibraryLinker {
 	
 	
 	public File[] listExtractedFiles() {
-		File[] extractedFiles = listLibDirectories(EXTRACTED_LIB_DIRECTORY);
-		return EMPTY_ARRAY;
+		return listLibDirectories(EXTRACTED_LIB_DIRECTORY);
 	}
 }

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.typemanagement.wizards;
 import java.io.File;
 import java.io.IOException;
 
+import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.librarylinker.ArchivedLibraryImportContentProvider;
 import org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryLinker;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -79,7 +80,7 @@ public class ArchivedLibraryImportWizardPage extends WizardPage {
 		// Projects and packages column
 		TreeViewerColumn viewerColumn = new TreeViewerColumn(viewer, SWT.NONE);
 		viewerColumn.getColumn().setWidth(500);
-		viewerColumn.getColumn().setText("Directories containing archives");
+		viewerColumn.getColumn().setText(Messages.DirsWithArchives);
 		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {

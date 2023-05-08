@@ -12,7 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
+import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
@@ -20,21 +22,24 @@ import org.eclipse.ui.IWorkbench;
 public class ExtractedLibraryImportWizard extends Wizard implements IImportWizard {
 	
 	private ExtractedLibraryImportWizardPage firstPage;
+	private StructuredSelection selection;
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		setWindowTitle("Extracted Library Import Wizard"); //NON-NLS-1
+		this.selection = new StructuredSelection(selection.toList());
+		setWindowTitle(Messages.ExtractedLibraryImportWizard);
 		setNeedsProgressMonitor(true);
 	}
 
 	@Override
 	public boolean performFinish() {
-		return false;
+		firstPage.importLib();
+		return true;
 	}
 	
 	@Override
 	public void addPages() {
-		firstPage = new ExtractedLibraryImportWizardPage("Import Extracted Files"); //NON-NLS-1
+		firstPage = new ExtractedLibraryImportWizardPage(Messages.ImportExtractedFiles, selection);
         addPage(firstPage);
 	}
 
