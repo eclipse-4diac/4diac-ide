@@ -18,6 +18,7 @@ import java.io.IOException;
 import org.eclipse.fordiac.ide.typemanagement.librarylinker.ArchivedLibraryImportContentProvider;
 import org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryLinker;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.wizard.WizardPage;
@@ -35,9 +36,11 @@ public class ArchivedLibraryImportWizardPage extends WizardPage {
 	private TreeViewer viewer;
 	private LibraryLinker libraryLinker;
 	private File selectedFile;
+	private StructuredSelection selection;
 
-	protected ArchivedLibraryImportWizardPage(String pageName) {
+	protected ArchivedLibraryImportWizardPage(String pageName, StructuredSelection selection) {
 		super(pageName);
+		this.selection = selection;
 	}
 
 	@Override
@@ -101,8 +104,8 @@ public class ArchivedLibraryImportWizardPage extends WizardPage {
 		super.setVisible(visible);
 	}
 	
-	public void importAndUnzipArchive() throws IOException {
-		libraryLinker.extractLibrary(selectedFile);
+	public void unzipAndImportArchive() throws IOException {
+		libraryLinker.extractLibrary(selectedFile, selection);
 	}
 	
 }

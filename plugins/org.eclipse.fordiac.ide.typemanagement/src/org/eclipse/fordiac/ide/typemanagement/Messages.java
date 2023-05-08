@@ -44,10 +44,12 @@ public final class Messages extends NLS {
 	public static String OpenTypeHandler_OPEN_TYPE_ERROR_TITLE;
 	public static String OpenTypeHandler_OPEN_TYPE_TITLE;
 
+	public static String typeLibraryHasAlreadyBeenExtracted;
 	public static String typeManagementPreferencePageTitle;
 	public static String typeManagementPreferencePageIdentificationTitle;
 	public static String typeManagementPreferencePageVersionTitle;
 	public static String typeManagementPreferencePageDescription;
+	public static String warning;
 
 	static {
 		// initialize resource bundle
