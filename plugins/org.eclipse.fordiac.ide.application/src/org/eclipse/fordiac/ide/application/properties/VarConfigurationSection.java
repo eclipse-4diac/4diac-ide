@@ -24,12 +24,11 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVarDeclarationTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -321,12 +320,7 @@ public class VarConfigurationSection extends AbstractSection {
 				cmd = new ChangeNameCommand(rowObject, value);
 				break;
 			case TYPE_COL_ID:
-				DataType dataType = getLibrary().getDataTypeLibrary().getDataTypesSorted().stream()
-				.filter(type -> type.getName().equals(value)).findAny().orElse(null);
-				if (dataType == null) {
-					dataType = getLibrary().getDataTypeLibrary().getType(null);
-				}
-				cmd = new ChangeDataTypeCommand(rowObject, dataType);
+				cmd = ChangeVarDeclarationTypeCommand.forTypeDeclaration(rowObject, value);
 				break;
 			case COMMENT_COL_ID:
 				cmd = new ChangeCommentCommand(rowObject, value);

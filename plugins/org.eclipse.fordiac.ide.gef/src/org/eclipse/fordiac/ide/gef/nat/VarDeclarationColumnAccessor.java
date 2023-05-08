@@ -13,10 +13,9 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVarDeclarationTypeCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -68,12 +67,7 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 			cmd = new ChangeNameCommand(rowObject, value);
 			break;
 		case I4diacNatTableUtil.TYPE:
-			final DataType dataType = dataTypeLib.getTypeIfExists(value);
-			if (dataType == null) {
-				// we couldn't find a data type do nothing.
-				return;
-			}
-			cmd = new ChangeDataTypeCommand(rowObject, dataType);
+			cmd = ChangeVarDeclarationTypeCommand.forTypeDeclaration(rowObject, value);
 			break;
 		case I4diacNatTableUtil.COMMENT:
 			cmd = new ChangeCommentCommand(rowObject, value);
