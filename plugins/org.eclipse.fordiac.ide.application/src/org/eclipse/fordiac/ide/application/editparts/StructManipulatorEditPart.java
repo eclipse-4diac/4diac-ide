@@ -10,6 +10,7 @@
  * Contributors:
  *   Bianca Wiesmayr - initial implementation
  *   Prankur Agarwal - add edit part for Struct Type
+ *   				 - add edit policy for changing struct type
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.application.editparts;
@@ -22,9 +23,11 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
+import org.eclipse.fordiac.ide.application.policies.StructuredManipulatorLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPolicy;
 
 public abstract class StructManipulatorEditPart extends AbstractFBNElementEditPart {
 	protected StructManipulatorEditPart() {
@@ -91,5 +94,11 @@ public abstract class StructManipulatorEditPart extends AbstractFBNElementEditPa
 				}
 			}
 		};
+	}
+
+	@Override
+	protected void createEditPolicies() {
+		super.createEditPolicies();
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new StructuredManipulatorLayoutEditPolicy());
 	}
 }
