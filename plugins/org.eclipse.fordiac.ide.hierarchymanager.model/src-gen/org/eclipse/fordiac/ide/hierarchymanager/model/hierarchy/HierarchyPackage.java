@@ -115,7 +115,7 @@ public interface HierarchyPackage extends EPackage {
 	int LEVEL__COMMENT = NODE_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Children</b></em>' reference list.
+	 * The feature id for the '<em><b>Children</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -231,10 +231,10 @@ public interface HierarchyPackage extends EPackage {
 	EAttribute getLevel_Comment();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level#getChildren <em>Children</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level#getChildren <em>Children</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Children</em>'.
+	 * @return the meta object for the containment reference list '<em>Children</em>'.
 	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level#getChildren()
 	 * @see #getLevel()
 	 * @generated
@@ -353,7 +353,7 @@ public interface HierarchyPackage extends EPackage {
 		EAttribute LEVEL__COMMENT = eINSTANCE.getLevel_Comment();
 
 		/**
-		 * The meta object literal for the '<em><b>Children</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Children</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

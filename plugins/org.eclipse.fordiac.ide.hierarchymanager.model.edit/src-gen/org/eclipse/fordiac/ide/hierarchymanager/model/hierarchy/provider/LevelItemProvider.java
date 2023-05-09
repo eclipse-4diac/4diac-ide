@@ -205,6 +205,9 @@ public class LevelItemProvider extends NodeItemProvider {
 			case HierarchyPackage.LEVEL__COMMENT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
+			case HierarchyPackage.LEVEL__CHILDREN:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
 			default:
 				super.notifyChanged(notification);
 				return;

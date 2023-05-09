@@ -13,7 +13,7 @@
     <genClasses image="false" ecoreClass="hierarchy.ecore#//Level">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Level/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Level/comment"/>
-      <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
+      <genFeatures children="true" createChild="false" propertySortChoices="true"
           ecoreFeature="ecore:EReference hierarchy.ecore#//Level/children"/>
     </genClasses>
     <genClasses ecoreClass="hierarchy.ecore#//RootLevel">
