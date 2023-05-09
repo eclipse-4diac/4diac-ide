@@ -103,7 +103,7 @@ public class RenameTypeRefactoring extends Refactoring {
 				return null;
 			}
 
-			final InstanceSearch search = new StructDataTypeSearch((StructuredType) typeEntry.getTypeEditable());
+			final InstanceSearch search = StructDataTypeSearch.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable());
 
 			final List<INamedElement> allTypesWithStruct = search
 					.searchStructuredTypes(typeEntry.getTypeLibrary());

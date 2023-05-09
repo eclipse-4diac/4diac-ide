@@ -13,13 +13,23 @@
 package org.eclipse.fordiac.ide.model.search.types;
 
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class StructDataTypeSearch extends InstanceSearch {
 
-	public StructDataTypeSearch(final StructuredType entry) {
-		super(new StructMemberFilter(entry));
+	
+	public static StructDataTypeSearch createStructMemberSearch(final StructuredType entry) {
+		return new StructDataTypeSearch(new StructMemberFilter(entry));
+	}
+	
+	public static StructDataTypeSearch createStructInterfaceSearch(final StructuredType entry) {
+		return new StructDataTypeSearch(new StructInterfaceFilter(entry));
+	}
+	
+	private StructDataTypeSearch(SearchFilter filter) {
+		super(filter);
 	}
 
 	private static class StructMemberFilter implements SearchFilter {
@@ -32,8 +42,7 @@ public class StructDataTypeSearch extends InstanceSearch {
 
 		@Override
 		public boolean apply(final INamedElement searchCandiate) {
-			if (searchCandiate instanceof StructuredType) {
-				final StructuredType structuredType = (StructuredType) searchCandiate;
+			if (searchCandiate instanceof StructuredType structuredType) {
 				for (final VarDeclaration varDecl : structuredType.getMemberVariables()) {
 					if (varDecl.getTypeName().equals(entry.getName())) {
 						return true;
@@ -43,4 +52,23 @@ public class StructDataTypeSearch extends InstanceSearch {
 			return false;
 		}
 	}
+	
+	private static class StructInterfaceFilter implements SearchFilter{
+
+		private final StructuredType entry;
+
+		public StructInterfaceFilter(final StructuredType entry) {
+			this.entry = entry;
+		}
+		
+		@Override
+		public boolean apply(INamedElement searchCanditate) {
+			if(searchCanditate instanceof FBType type) {
+				return type.getInterfaceList().getAllInterfaceElements().stream().anyMatch(e -> e.getTypeName().equals(entry.getName()));
+			}
+			return false;
+		}
+		
+	}
+	
 }
