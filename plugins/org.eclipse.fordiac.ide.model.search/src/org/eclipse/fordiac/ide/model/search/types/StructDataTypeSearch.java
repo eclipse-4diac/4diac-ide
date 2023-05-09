@@ -64,7 +64,7 @@ public class StructDataTypeSearch extends InstanceSearch {
 		@Override
 		public boolean apply(INamedElement searchCanditate) {
 			if(searchCanditate instanceof FBType type) {
-				return type.getInterfaceList().getAllInterfaceElements().stream().anyMatch(e -> e.getTypeName().equals(entry.getName()));
+				return type.getInterfaceList().getAllInterfaceElements().stream().anyMatch(fb -> fb.getTypeName().equals(entry.getName()));
 			}
 			return false;
 		}

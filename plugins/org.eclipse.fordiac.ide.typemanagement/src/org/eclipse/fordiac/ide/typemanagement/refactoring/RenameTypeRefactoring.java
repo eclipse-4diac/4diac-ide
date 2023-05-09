@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
@@ -103,7 +104,7 @@ public class RenameTypeRefactoring extends Refactoring {
 				return null;
 			}
 
-			final InstanceSearch search = StructDataTypeSearch.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable());
+			InstanceSearch search = StructDataTypeSearch.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable());
 
 			final List<INamedElement> allTypesWithStruct = search
 					.searchStructuredTypes(typeEntry.getTypeLibrary());
@@ -126,6 +127,13 @@ public class RenameTypeRefactoring extends Refactoring {
 				parentChange.add(change);
 			}
 
+			final CompositeChange fbTypeChanges = new CompositeChange("Fb Types:");
+			search = StructDataTypeSearch.createStructInterfaceSearch((StructuredType) typeEntry.getTypeEditable());
+			List<INamedElement> fbTypes = search.performTypeLibBlockSearch(typeEntry.getTypeLibrary());
+			System.out.println(fbTypes.size());
+			fbTypes.forEach(fb -> fbTypeChanges.add(new InterfaceDataTypeChange((FBType) fb, typeEntry, oldName, newName)));
+			parentChange.add(fbTypeChanges);
+			
 			return parentChange;
 
 		} finally {
