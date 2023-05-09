@@ -36,6 +36,6 @@ public class InitialValueDirectEditManager extends TextDirectEditManager {
 	@Override
 	protected void initCellEditor() {
 		super.initCellEditor();
-		getCellEditor().setValue(InitialValueHelper.getInitalOrDefaultValue(varDeclaration));
+		getCellEditor().setValue(InitialValueHelper.getInitialOrDefaultValue(varDeclaration));
 	}
 }

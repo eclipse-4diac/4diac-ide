@@ -126,7 +126,7 @@ public class InitialValueEditor {
 		final var commandExecutorCache = this.commandExecutor;
 		this.commandExecutor = null;
 		STAlgorithmEmbeddedEditorUtil.updateEditor(embeddedEditor, interfaceElement);
-		modelAccess.updateModel(InitialValueHelper.getInitalOrDefaultValue(interfaceElement));
+		modelAccess.updateModel(InitialValueHelper.getInitialOrDefaultValue(interfaceElement));
 		control.setSelection(0);
 		this.commandExecutor = commandExecutorCache;
 	}

@@ -73,20 +73,19 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
 	protected void setTableInput() {
 		final FBNetworkElement selection = getType();
-		if (selection instanceof StructManipulator) {
-			final StructManipulator structManipulator = (StructManipulator) selection;
+		if (selection instanceof final StructManipulator structManipulator) {
 			if (selection instanceof Multiplexer) {
 				((FordiacInterfaceListProvider) inputProvider)
-				.setInput(structManipulator.getStructType().getMemberVariables());
+						.setInput(structManipulator.getStructType().getMemberVariables());
 				((FordiacInterfaceListProvider) outputProvider)
-				.setInput(structManipulator.getInterface().getOutputVars());
+						.setInput(structManipulator.getInterface().getOutputVars());
 			} else if (selection instanceof Demultiplexer) {
 				((FordiacInterfaceListProvider) inputProvider)
-				.setInput(structManipulator.getInterface().getInputVars());
+						.setInput(structManipulator.getInterface().getInputVars());
 				((FordiacInterfaceListProvider) outputProvider)
-				.setInput(structManipulator.getStructType().getMemberVariables());
+						.setInput(structManipulator.getStructType().getMemberVariables());
 			}
-		} else if (selection instanceof SubApp && selection.getType() != null) { // typed subapp
+		} else if ((selection instanceof SubApp) && (selection.getType() != null)) { // typed subapp
 			setTableInput(selection.getType().getInterfaceList());
 		} else {
 			super.setTableInput();

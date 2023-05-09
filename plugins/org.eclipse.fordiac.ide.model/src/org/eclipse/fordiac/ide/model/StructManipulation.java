@@ -33,11 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
-/**
- * Helper class for methods that will be - accessed from the model or - used
- * directly as static helper methods
- *
- */
+/** Helper class for methods that will be - accessed from the model or - used directly as static helper methods */
 public final class StructManipulation {
 
 	public static final String STRUCT_ATTRIBUTE = "StructuredType"; //$NON-NLS-1$
@@ -45,8 +41,8 @@ public final class StructManipulation {
 	public static final String DEMUX_NAME = "STRUCT_DEMUX"; //$NON-NLS-1$
 	public static final String MUX_NAME = "STRUCT_MUX"; //$NON-NLS-1$
 
-
-	public static void setStructTypeElementsAtInterface(final StructManipulator muxer, final StructuredType newStructType) {
+	public static void setStructTypeElementsAtInterface(final StructManipulator muxer,
+			final StructuredType newStructType) {
 		muxer.setStructType(newStructType);
 		configureAttributes(muxer);
 		setMemberVariablesAsPorts(muxer, newStructType);
@@ -65,14 +61,11 @@ public final class StructManipulation {
 		if (muxer instanceof Demultiplexer) {
 			if (null == newStructType) {
 				setVariablesAsOutputs(muxer, Collections.emptyList(), null);
+			} else if (muxer.getAttribute(CHILDREN_ATTRIBUTE) != null) {
+				setVariablesAsOutputs(muxer, collectVisibleChildren(muxer, newStructType).getMemberVariables(),
+						newStructType);
 			} else {
-				if (muxer.getAttribute(CHILDREN_ATTRIBUTE) != null) {
-					setVariablesAsOutputs(muxer,
-							collectVisibleChildren(muxer, newStructType).getMemberVariables(),
-							newStructType);
-				} else {
-					setVariablesAsOutputs(muxer, newStructType.getMemberVariables(), newStructType);
-				}
+				setVariablesAsOutputs(muxer, newStructType.getMemberVariables(), newStructType);
 			}
 		}
 
@@ -148,7 +141,8 @@ public final class StructManipulation {
 
 	}
 
-	private static Collection<VarDeclaration> getVarDeclarations(final StructuredType structType, final List<String> varDeclNames) {
+	private static Collection<VarDeclaration> getVarDeclarations(final StructuredType structType,
+			final List<String> varDeclNames) {
 		final List<VarDeclaration> vars = new ArrayList<>();
 		varDeclNames.forEach(name -> {
 			final VarDeclaration varDecl = EcoreUtil.copy(findVarDeclarationInStruct(structType, name));
@@ -169,8 +163,8 @@ public final class StructManipulation {
 			if (findings.length > 0) {
 				found = (VarDeclaration) findings[0];
 			}
-			if ((null != found) && (found.getType() instanceof StructuredType)) {
-				members = ((StructuredType) found.getType()).getMemberVariables();
+			if ((null != found) && (found.getType() instanceof final StructuredType structType)) {
+				members = structType.getMemberVariables();
 			}
 		}
 		return found;
@@ -178,5 +172,17 @@ public final class StructManipulation {
 
 	private StructManipulation() {
 		throw new UnsupportedOperationException();
+	}
+
+	public static String getMemberVarValue(final VarDeclaration v) {
+		if ((v != null) && (v.getName() != null) && v.getFBNetworkElement() instanceof final StructManipulator muxer) {
+			final VarDeclaration matchingMember = muxer.getStructType().getMemberVariables().stream()
+					.filter(member -> v.getName().equals(member.getName())).findFirst().orElse(null);
+			if ((matchingMember != null) && (matchingMember.getValue() != null)) {
+				return matchingMember.getValue().getValue();
+			}
+		}
+
+		return ""; //$NON-NLS-1$
 	}
 }

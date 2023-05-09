@@ -436,7 +436,7 @@ public class InstancePropertySection extends AbstractSection {
 			case TYPE_COL_ID:
 				return rowObject.getTypeName();
 			case INITIAL_VALUE_COL_ID:
-				return InitialValueHelper.getInitalOrDefaultValue(rowObject);
+				return InitialValueHelper.getInitialOrDefaultValue(rowObject);
 			case COMMENT_COL_ID:
 				return rowObject.getComment();
 			case VISIBLE_COL_ID: // I added

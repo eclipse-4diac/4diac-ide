@@ -27,7 +27,7 @@ public class InitialValueLabelProvider extends InterfaceElementLabelProvider {
 		if (element instanceof VarDeclaration) {
 			if (columnIndex == INITIALVALUE_COL_INDEX) {
 
-				return InitialValueHelper.getInitalOrDefaultValue(element);
+				return InitialValueHelper.getInitialOrDefaultValue(element);
 			}
 			return super.getColumnText(element, columnIndex);
 		}

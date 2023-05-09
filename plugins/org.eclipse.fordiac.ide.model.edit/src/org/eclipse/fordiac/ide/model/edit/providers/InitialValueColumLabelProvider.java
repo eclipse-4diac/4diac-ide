@@ -24,7 +24,7 @@ public class InitialValueColumLabelProvider extends ColumnLabelProvider {
 	@Override
 	public String getText(final Object element) {
 		if (element instanceof VarDeclaration) {
-			return InitialValueHelper.getInitalOrDefaultValue(element);
+			return InitialValueHelper.getInitialOrDefaultValue(element);
 
 		}
 		return super.getText(element);
