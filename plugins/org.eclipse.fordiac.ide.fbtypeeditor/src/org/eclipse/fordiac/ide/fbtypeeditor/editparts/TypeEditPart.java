@@ -17,32 +17,37 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
+import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
+import org.eclipse.fordiac.ide.gef.editparts.TypeDeclarationDirectEditManager;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
-import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAdapterTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVarDeclarationTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
+import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -152,7 +157,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 		handle.setDragAllowed(false);
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, handle);
 
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
 			@Override
 			protected void showCurrentEditValue(final DirectEditRequest request) {
 				// nothing to do
@@ -161,17 +166,31 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					final int index = ((Integer) request.getCellEditor().getValue()).intValue();
-					final CCombo combo = (CCombo) request.getCellEditor().getControl();
-					if (index >= 0 && index < combo.getItemCount()) {
-						final String typeName = combo.getItem(index);
+					final Object value = request.getCellEditor().getValue();
+					if (value instanceof final Integer intValue) {
+						final int index = intValue.intValue();
+						if (request.getCellEditor().getControl() instanceof final CCombo combo && index >= 0
+								&& index < combo.getItemCount()) {
+							final String typeName = combo.getItem(index);
+							ChangeDataTypeCommand cmd;
+							if (getCastedModel() instanceof final AdapterDeclaration adp) {
+								cmd = new ChangeAdapterTypeCommand(adp,
+										typeLib.getAdapterTypeEntry(typeName).getType());
+							} else {
+								cmd = new ChangeDataTypeCommand(getCastedModel(),
+										typeLib.getDataTypeLibrary().getType(typeName));
+							}
+							return cmd;
+						}
+					} else if (value instanceof final String stringValue) {
 						ChangeDataTypeCommand cmd;
 						if (getCastedModel() instanceof final AdapterDeclaration adp) {
-							cmd = new ChangeAdapterTypeCommand(adp,
-									typeLib.getAdapterTypeEntry(typeName).getType());
+							cmd = new ChangeAdapterTypeCommand(adp, typeLib.getAdapterTypeEntry(stringValue).getType());
+						} else if (getCastedModel() instanceof final VarDeclaration varDecl) {
+							cmd = ChangeVarDeclarationTypeCommand.forTypeDeclaration(varDecl, stringValue);
 						} else {
 							cmd = new ChangeDataTypeCommand(getCastedModel(),
-									typeLib.getDataTypeLibrary().getType(typeName));
+									typeLib.getDataTypeLibrary().getType(stringValue));
 						}
 						return cmd;
 					}
@@ -200,25 +219,29 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	}
 
 	@Override
-	protected ComboDirectEditManager createDirectEditManager() {
+	protected DirectEditManager createDirectEditManager() {
+		final IInterfaceElement interfaceElement = getCastedModel();
+		if (interfaceElement instanceof final VarDeclaration varDecl) {
+			return new TypeDeclarationDirectEditManager(this, new FigureCellEditorLocator(getFigure()), varDecl);
+		}
 		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(getFigure()),
 				getFigure());
 	}
 
 	@Override
 	public void performDirectEdit() {
-		// First update the list of available types
-		final ArrayList<String> dataTypeNames = new ArrayList<>();
-		if (getCastedModel() instanceof AdapterDeclaration) {
-			typeLib.getAdapterTypesSorted().forEach(adapterType -> dataTypeNames.add(adapterType.getTypeName()));
-		} else {
-			for (final DataType dataType : typeLib.getDataTypeLibrary().getDataTypesSorted()) {
-				dataTypeNames.add(dataType.getName());
+		final DirectEditManager editManager = createDirectEditManager();
+		if (editManager instanceof final ComboDirectEditManager comboEditManager) {
+			final List<String> dataTypeNames;
+			if (getCastedModel() instanceof AdapterDeclaration) {
+				dataTypeNames = typeLib.getAdapterTypesSorted().stream().map(TypeEntry::getTypeName).toList();
+			} else {
+				dataTypeNames = typeLib.getDataTypeLibrary().getDataTypesSorted().stream().map(DataType::getName)
+						.toList();
 			}
+			comboEditManager.updateComboData(dataTypeNames);
+			comboEditManager.setSelectedItem(dataTypeNames.indexOf(getTypeName()));
 		}
-		final ComboDirectEditManager editManager = createDirectEditManager();
-		editManager.updateComboData(dataTypeNames);
-		editManager.setSelectedItem(dataTypeNames.indexOf(getTypeName()));
 		editManager.show();
 	}
 
