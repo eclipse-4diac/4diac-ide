@@ -22,8 +22,10 @@ import java.text.MessageFormat;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -143,11 +145,20 @@ public final class LinkConstraints {
 	 * @return true, if successful
 	 */
 	public static boolean typeCheck(final IInterfaceElement source, final IInterfaceElement target) {
+		final DataType sourceType = getFullDataType(source);
+		final DataType targetType = getFullDataType(target);
 		// if source has generic type, it adapts to the target, which must fall into the generic type category
-		if (GenericTypes.isAnyType(source.getType()) && source.getType().isAssignableFrom(target.getType())) {
+		if (GenericTypes.isAnyType(sourceType) && sourceType.isAssignableFrom(targetType)) {
 			return true;
 		}
-		return target.getType().isAssignableFrom(source.getType());
+		return targetType.isAssignableFrom(sourceType);
+	}
+
+	private static DataType getFullDataType(final IInterfaceElement element) {
+		if (element instanceof final VarDeclaration varDeclaration && varDeclaration.isArray()) {
+			return TypeDeclarationParser.parseTypeDeclaration(varDeclaration.getType(), varDeclaration.getArraySize());
+		}
+		return element.getType();
 	}
 
 	/** Checks for already input connections check.

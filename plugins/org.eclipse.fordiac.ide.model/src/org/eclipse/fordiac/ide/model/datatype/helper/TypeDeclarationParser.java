@@ -10,44 +10,54 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextcore.stcore.util;
+package org.eclipse.fordiac.ide.model.datatype.helper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 
-public final class STTypeDeclarationParser {
+public final class TypeDeclarationParser {
 
 	private static final Pattern SIMPLE_SUBRANGE_PATTERN = Pattern
 			.compile("([\\+\\-]?\\d+)\\s*\\.\\.\\s*([\\+\\-]?\\d+)"); //$NON-NLS-1$
 
-	public static ArrayType parseLegacyTypeDeclaration(final DataType baseType, final String arraySize) {
+	public static DataType parseTypeDeclaration(final DataType baseType, final String arraySize) {
+		final DataType result = parseLegacyTypeDeclaration(baseType, arraySize);
+		if (result != null) {
+			return result;
+		}
+		return parseSimpleTypeDeclaration(baseType, arraySize);
+	}
+
+	public static DataType parseLegacyTypeDeclaration(final DataType baseType, final String arraySize) {
 		try {
 			final int length = Integer.parseInt(arraySize.trim());
 			if (length <= 0) {
 				return null;
 			}
-			return STCoreUtil.newArrayType(baseType, STCoreUtil.newSubrange(0, length - 1));
+			return newArrayType(baseType, newSubrange(0, length - 1));
 		} catch (final NumberFormatException e) {
 			return null;
 		}
 	}
 
-	public static ArrayType parseSimpleTypeDeclaration(final DataType baseType, final String arraySize) {
+	public static DataType parseSimpleTypeDeclaration(final DataType baseType, final String arraySize) {
 		final List<String> subrangeStrings = splitString(arraySize);
 		if (subrangeStrings.isEmpty()) {
 			return null; // not a proper array type declaration
 		}
-		final List<Subrange> subranges = subrangeStrings.stream().map(STTypeDeclarationParser::parseSimpleSubrange)
+		final List<Subrange> subranges = subrangeStrings.stream().map(TypeDeclarationParser::parseSimpleSubrange)
 				.toList();
-		return STCoreUtil.newArrayType(baseType, subranges);
+		return newArrayType(baseType, subranges);
 	}
 
 	private static Subrange parseSimpleSubrange(final String text) {
@@ -56,7 +66,7 @@ public final class STTypeDeclarationParser {
 			final String lowerBoundString = matcher.group(1);
 			final String upperBoundString = matcher.group(2);
 			try {
-				return STCoreUtil.newSubrange(Integer.parseInt(lowerBoundString), Integer.parseInt(upperBoundString));
+				return newSubrange(Integer.parseInt(lowerBoundString), Integer.parseInt(upperBoundString));
 			} catch (final NumberFormatException e) {
 				// fallthrough
 			}
@@ -109,7 +119,37 @@ public final class STTypeDeclarationParser {
 		return result;
 	}
 
-	private STTypeDeclarationParser() {
+	private static ArrayType newArrayType(final DataType arrayBaseType, final Subrange... arraySubranges) {
+		return newArrayType(arrayBaseType, Arrays.asList(arraySubranges));
+	}
+
+	private static ArrayType newArrayType(final DataType arrayBaseType, final List<Subrange> arraySubranges) {
+		if (arrayBaseType == null) {
+			return null;
+		}
+		final ArrayType result = DataFactory.eINSTANCE.createArrayType();
+		result.setName("ARRAY [" + arraySubranges.stream().map(TypeDeclarationParser::getSubrangeString) //$NON-NLS-1$
+				.collect(Collectors.joining(", ")) + "] OF " + arrayBaseType.getName()); //$NON-NLS-1$ //$NON-NLS-2$
+		result.setBaseType(arrayBaseType);
+		result.getSubranges().addAll(arraySubranges);
+		return result;
+	}
+
+	private static Subrange newSubrange(final int lower, final int upper) {
+		final Subrange result = DataFactory.eINSTANCE.createSubrange();
+		result.setLowerLimit(lower);
+		result.setUpperLimit(upper);
+		return result;
+	}
+
+	private static String getSubrangeString(final Subrange subrange) {
+		if (subrange.isSetLowerLimit() && subrange.isSetUpperLimit()) {
+			return subrange.getLowerLimit() + ".." + subrange.getUpperLimit(); //$NON-NLS-1$
+		}
+		return "*"; //$NON-NLS-1$
+	}
+
+	private TypeDeclarationParser() {
 		throw new UnsupportedOperationException();
 	}
 }

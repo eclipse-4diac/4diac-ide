@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
+import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -388,8 +389,8 @@ final class STCoreUtil {
 		switch (feature) {
 			VarDeclaration:
 				if (feature.array)
-					STTypeDeclarationParser.parseLegacyTypeDeclaration(feature.type, feature.arraySize) ?:
-						STTypeDeclarationParser.parseSimpleTypeDeclaration(feature.type, feature.arraySize)
+					TypeDeclarationParser.parseLegacyTypeDeclaration(feature.type, feature.arraySize) ?:
+						TypeDeclarationParser.parseSimpleTypeDeclaration(feature.type, feature.arraySize)
 				else
 					feature.type
 			STVarDeclaration:
