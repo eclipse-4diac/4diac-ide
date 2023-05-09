@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.gef.widgets;
 
 import java.util.function.Consumer;
 
+import org.eclipse.fordiac.ide.gef.editors.TypeDeclarationEditor;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -26,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -37,7 +39,8 @@ public class PinInfoBasicWidget implements CommandExecutor {
 
 	private Text nameText;
 	private Text commentText;
-	protected TypeSelectionWidget typeSelectionWidget;
+	private TypeSelectionWidget typeSelectionWidget;
+	private TypeDeclarationEditor typeDeclarationEditor;
 	private IInterfaceElement type;
 
 	protected final TabbedPropertySheetWidgetFactory widgetFactory;
@@ -64,6 +67,8 @@ public class PinInfoBasicWidget implements CommandExecutor {
 		widgetFactory.createCLabel(parent, FordiacMessages.Type + ":"); //$NON-NLS-1$
 		typeSelectionWidget = new TypeSelectionWidget(widgetFactory, this::handleTypeSelectionChanged);
 		typeSelectionWidget.createControls(parent);
+		typeDeclarationEditor = new TypeDeclarationEditor(parent, SWT.SINGLE | SWT.BORDER);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(typeDeclarationEditor.getControl());
 	}
 
 	private ChangeNameCommand createChangeNameCommand() {
@@ -95,6 +100,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 				nameText.setText(type.getName());
 				commentText.setText(type.getComment());
 				typeSelectionWidget.refresh();
+				typeDeclarationEditor.refresh();
 				checkFieldEnablements();
 			}
 			commandExecutor = commandExecutorBuffer;
@@ -105,6 +111,8 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	public void initialize(final IInterfaceElement type, final Consumer<Command> commandExecutor) {
 		this.type = type;
 		this.commandExecutor = commandExecutor;
+		typeDeclarationEditor.setInterfaceElement(type);
+		typeDeclarationEditor.setCommandExecutor(commandExecutor);
 	}
 
 	@Override
@@ -115,7 +123,21 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	}
 
 	protected void checkFieldEnablements() {
-		typeSelectionWidget.setEditable(isTypeChangeable());
+		if(type instanceof VarDeclaration) {
+			typeSelectionWidget.setEditable(false);
+			typeSelectionWidget.getControl().setVisible(false);
+			GridDataFactory.swtDefaults().exclude(true).applyTo(typeSelectionWidget.getControl());
+			typeDeclarationEditor.setEditable(isTypeChangeable());
+			typeDeclarationEditor.getControl().setVisible(true);
+			GridDataFactory.fillDefaults().grab(true, false).applyTo(typeDeclarationEditor.getControl());
+		} else {
+			typeSelectionWidget.setEditable(isTypeChangeable());
+			typeSelectionWidget.getControl().setVisible(true);
+			GridDataFactory.fillDefaults().grab(true, false).applyTo(typeSelectionWidget.getControl());
+			typeDeclarationEditor.setEditable(false);
+			typeDeclarationEditor.getControl().setVisible(false);
+			GridDataFactory.swtDefaults().exclude(true).applyTo(typeDeclarationEditor.getControl());
+		}
 	}
 
 	protected boolean isTypeChangeable() {

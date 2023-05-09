@@ -12,49 +12,33 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editors;
 
-import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
-import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVarDeclarationTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorUtil;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmInitialValueEditedResourceProvider;
-import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmTypeDeclarationEditedResourceProvider;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.xtext.ui.editor.XtextSourceViewer;
 import org.eclipse.xtext.ui.editor.embedded.IEditedResourceProvider;
 
 @SuppressWarnings("restriction")
-public class InitialValueEditor extends XtextEmbeddedFieldEditor {
+public class TypeDeclarationEditor extends XtextEmbeddedFieldEditor {
 
 	private IInterfaceElement interfaceElement;
 
-	public InitialValueEditor(final Composite parent, final int style) {
+	public TypeDeclarationEditor(final Composite parent, final int style) {
 		super(parent, style);
 	}
 
 	@Override
-	protected void createControl(final Composite parent, final int style) {
-		super.createControl(parent, style);
-		final XtextSourceViewer viewer = getEmbeddedEditor().getViewer();
-		viewer.addTextPresentationListener(textPresentation -> {
-			if (!viewer.getUndoManager().undoable()
-					&& !InitialValueHelper.hasInitalValue(interfaceElement)) {
-				textPresentation.replaceStyleRange(new StyleRange(textPresentation.getExtent().getOffset(),
-						textPresentation.getExtent().getLength(),
-						InitialValueHelper.getForegroundColor(interfaceElement), getControl().getBackground()));
-			}
-		});
-	}
-
-	@Override
 	protected IEditedResourceProvider createEditedResourceProvider() {
-		return new STAlgorithmInitialValueEditedResourceProvider(null);
+		return new STAlgorithmTypeDeclarationEditedResourceProvider(null);
 	}
 
 	@Override
 	public void commit() {
 		if (interfaceElement instanceof final VarDeclaration varDeclaration) {
-			executeCommand(new ChangeValueCommand(varDeclaration, getModelAccess().getEditablePart()));
+			executeCommand(ChangeVarDeclarationTypeCommand.forTypeDeclaration(varDeclaration,
+					getModelAccess().getEditablePart()));
 		}
 		refresh();
 	}
@@ -64,7 +48,7 @@ public class InitialValueEditor extends XtextEmbeddedFieldEditor {
 		final var commandExecutorCache = getCommandExecutor();
 		setCommandExecutor(null);
 		STAlgorithmEmbeddedEditorUtil.updateEditor(getEmbeddedEditor(), interfaceElement);
-		getModelAccess().updateModel(InitialValueHelper.getInitialOrDefaultValue(interfaceElement));
+		getModelAccess().updateModel(interfaceElement != null ? interfaceElement.getFullTypeName() : ""); //$NON-NLS-1$
 		getControl().setSelection(0);
 		setCommandExecutor(commandExecutorCache);
 	}
