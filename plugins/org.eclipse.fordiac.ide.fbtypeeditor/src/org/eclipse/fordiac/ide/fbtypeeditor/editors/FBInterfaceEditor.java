@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.gef.figures.MinSpaceFreeformFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -108,6 +109,9 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	public <T> T getAdapter(final Class<T> type) {
 		if (type == InterfaceList.class) {
 			return type.cast(getModel().getInterfaceList());
+		}
+		if (type == SubAppType.class) {
+			return fbType instanceof SubAppType ? type.cast(fbType) : null;
 		}
 		return super.getAdapter(type);
 	}

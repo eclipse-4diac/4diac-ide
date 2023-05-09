@@ -65,4 +65,12 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 		super.refreshToolTip();
 	}
 
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == ErrorMarkerFBNEditPart.class) {
+			return key.cast(this);
+		}
+		return super.getAdapter(key);
+	}
+
 }

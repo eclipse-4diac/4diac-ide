@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
@@ -256,5 +257,14 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements An
 	@Override
 	public boolean isConnectable() {
 		return false;
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == ErrorMarkerDataTypeImpl.class) {
+			final DataType marker = getCastedModel().getType();
+			return marker instanceof ErrorMarkerDataTypeImpl ? key.cast(marker) : null;
+		}
+		return super.getAdapter(key);
 	}
 }

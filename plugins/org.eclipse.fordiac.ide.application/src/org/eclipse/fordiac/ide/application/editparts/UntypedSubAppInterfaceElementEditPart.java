@@ -43,8 +43,11 @@ import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -247,6 +250,22 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		}
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		getContentPane().add(child, new GridData(SWT.FILL, SWT.BEGINNING, true, false), index);
+	}
+	
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == UntypedSubAppInterfaceElementEditPart.class) {
+			return key.cast(this);
+		}
+		if (key == ErrorMarkerDataTypeImpl.class) {
+			final IInterfaceElement model = getModel();
+			final ErrorMarkerDataTypeImpl marker = model instanceof VarDeclaration
+					? (ErrorMarkerDataTypeImpl) ((VarDeclaration) model).getType()
+					: null;
+			return key.cast(marker);
+		}
+
+		return super.getAdapter(key);
 	}
 
 }
