@@ -29,9 +29,7 @@ import org.eclipse.fordiac.ide.gef.editparts.TypeDeclarationDirectEditManager;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeAdapterTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeVarDeclarationTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
@@ -172,27 +170,10 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 						if (request.getCellEditor().getControl() instanceof final CCombo combo && index >= 0
 								&& index < combo.getItemCount()) {
 							final String typeName = combo.getItem(index);
-							ChangeDataTypeCommand cmd;
-							if (getCastedModel() instanceof final AdapterDeclaration adp) {
-								cmd = new ChangeAdapterTypeCommand(adp,
-										typeLib.getAdapterTypeEntry(typeName).getType());
-							} else {
-								cmd = new ChangeDataTypeCommand(getCastedModel(),
-										typeLib.getDataTypeLibrary().getType(typeName));
-							}
-							return cmd;
+							return ChangeDataTypeCommand.forTypeName(getCastedModel(), typeName);
 						}
 					} else if (value instanceof final String stringValue) {
-						ChangeDataTypeCommand cmd;
-						if (getCastedModel() instanceof final AdapterDeclaration adp) {
-							cmd = new ChangeAdapterTypeCommand(adp, typeLib.getAdapterTypeEntry(stringValue).getType());
-						} else if (getCastedModel() instanceof final VarDeclaration varDecl) {
-							cmd = ChangeVarDeclarationTypeCommand.forTypeDeclaration(varDecl, stringValue);
-						} else {
-							cmd = new ChangeDataTypeCommand(getCastedModel(),
-									typeLib.getDataTypeLibrary().getType(stringValue));
-						}
-						return cmd;
+						return ChangeDataTypeCommand.forTypeDeclaration(getCastedModel(), stringValue);
 					}
 				}
 				return null;

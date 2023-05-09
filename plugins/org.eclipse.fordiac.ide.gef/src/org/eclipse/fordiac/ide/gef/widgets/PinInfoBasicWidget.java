@@ -19,7 +19,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -166,22 +165,14 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	}
 
 	private void handleTypeSelectionChanged(final String newTypeName) {
-		if (getType() instanceof VarDeclaration) {
-			final DataType newType = getSelectedType(newTypeName);
-			if (newType != null) {
-				executeCommand(new ChangeDataTypeCommand(getType(), newType));
-				// ensure that the new value is shown
-				final Consumer<Command> commandExecutorBuffer = commandExecutor;
-				commandExecutor = null;
-				refresh();
-				commandExecutor = commandExecutorBuffer;
-			}
+		if (isTypeChangeable()) {
+			executeCommand(ChangeDataTypeCommand.forTypeName(getType(), newTypeName));
+			// ensure that the new value is shown
+			final Consumer<Command> commandExecutorBuffer = commandExecutor;
+			commandExecutor = null;
+			refresh();
+			commandExecutor = commandExecutorBuffer;
 		}
-	}
-
-	private DataType getSelectedType(final String newTypeName) {
-		return getTypeSelectionWidget().getContentProvider().getTypes().stream()
-				.filter(el -> el.getName().equals(newTypeName)).findFirst().orElse(null);
 	}
 
 	private boolean isSubappPin() {

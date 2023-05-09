@@ -30,9 +30,9 @@ public class StructuredTypeMemberChange extends Change {
 	private final TypeEntry typeEntry;
 	private final String oldName;
 
-	private CompoundCommand cmd = new CompoundCommand();
+	private final CompoundCommand cmd = new CompoundCommand();
 
-	
+
 	public StructuredTypeMemberChange(final StructuredType affectedStruct, final TypeEntry oldTypeEntry,
 			final String oldName, final String newName) {
 		this.affectedStruct = affectedStruct;
@@ -66,11 +66,10 @@ public class StructuredTypeMemberChange extends Change {
 		for (final VarDeclaration varDeclaration : structuredTypeEditable.getMemberVariables()) {
 			final String typeName = varDeclaration.getTypeName();
 			if (typeName.equals(oldName)) {
-				cmd.add(new ChangeDataTypeCommand(varDeclaration,
-						(DataType) typeEntry.getTypeEditable()));
+				cmd.add(ChangeDataTypeCommand.forDataType(varDeclaration, (DataType) typeEntry.getTypeEditable()));
 			}
 		}
-		
+
 		cmd.execute();
 		structuredTypeEditable.getTypeEntry().save();
 

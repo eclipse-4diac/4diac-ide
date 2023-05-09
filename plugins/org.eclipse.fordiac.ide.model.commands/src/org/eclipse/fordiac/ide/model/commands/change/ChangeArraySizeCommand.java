@@ -15,15 +15,28 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.gef.commands.CompoundCommand;
 
 public class ChangeArraySizeCommand extends AbstractChangeInterfaceElementCommand {
 	private final String newArraySize;
 	private String oldArraySize;
+	private final CompoundCommand additionalCommands = new CompoundCommand();
 
-	public ChangeArraySizeCommand(final VarDeclaration variable, final String newArraySize) {
+	protected ChangeArraySizeCommand(final VarDeclaration variable, final String newArraySize) {
 		super(variable);
 		this.newArraySize = newArraySize;
+	}
+
+	public static ChangeArraySizeCommand forArraySize(final VarDeclaration variable, final String newArraySize) {
+		final ChangeArraySizeCommand result = new ChangeArraySizeCommand(variable, newArraySize);
+		if (variable != null && variable.getFBNetworkElement() instanceof final SubApp subApp
+				&& subApp.isMapped()) {
+			result.getAdditionalCommands().add(new ChangeArraySizeCommand(
+					subApp.getOpposite().getInterface().getVariable(variable.getName()), newArraySize));
+		}
+		return result;
 	}
 
 	@Override
@@ -36,21 +49,28 @@ public class ChangeArraySizeCommand extends AbstractChangeInterfaceElementComman
 		final VarDeclaration variable = getInterfaceElement();
 		oldArraySize = variable.getArraySize();
 		setArraySize(newArraySize);
+		additionalCommands.execute();
 	}
 
 	@Override
 	protected void doUndo() {
+		additionalCommands.undo();
 		setArraySize(oldArraySize);
 	}
 
 	@Override
 	protected void doRedo() {
 		setArraySize(newArraySize);
+		additionalCommands.redo();
 	}
 
 	@Override
 	public VarDeclaration getInterfaceElement() {
 		return (VarDeclaration) super.getInterfaceElement();
+	}
+
+	public CompoundCommand getAdditionalCommands() {
+		return additionalCommands;
 	}
 
 	private void setArraySize(final String arraySize) {

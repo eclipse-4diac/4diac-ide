@@ -14,11 +14,10 @@ package org.eclipse.fordiac.ide.gef.nat;
 
 
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeAdapterTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
@@ -57,11 +56,7 @@ public class AdapterColumnAcessor implements IColumnAccessor<AdapterDeclaration>
 			cmd = new ChangeNameCommand(rowObject, value);
 			break;
 		case I4diacNatTableUtil.TYPE:
-			final AdapterTypeEntry adapterTypeEntry = section.getTypeLibrary().getAdapterTypeEntry(value);
-			if (adapterTypeEntry == null) {
-				return;
-			}
-			cmd = new ChangeAdapterTypeCommand(rowObject, adapterTypeEntry.getType());
+			cmd = ChangeDataTypeCommand.forTypeName(rowObject, value);
 			break;
 		case I4diacNatTableUtil.COMMENT:
 			cmd = new ChangeCommentCommand(rowObject, value);

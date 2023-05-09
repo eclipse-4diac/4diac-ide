@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editors;
 
-import org.eclipse.fordiac.ide.model.commands.change.ChangeVarDeclarationTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorUtil;
@@ -37,7 +37,8 @@ public class TypeDeclarationEditor extends XtextEmbeddedFieldEditor {
 	@Override
 	public void commit() {
 		if (interfaceElement instanceof final VarDeclaration varDeclaration) {
-			executeCommand(ChangeVarDeclarationTypeCommand.forTypeDeclaration(varDeclaration,
+			executeCommand(
+					ChangeDataTypeCommand.forTypeDeclaration(varDeclaration,
 					getModelAccess().getEditablePart()));
 		}
 		refresh();
