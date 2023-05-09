@@ -107,7 +107,7 @@ public class LibraryLinker {
 	public void importLibrary(String directory, String projectName) {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot workspaceRoot = workspace.getRoot();
-		// Make/find a folder inside of the Type Library
+		// Make a folder inside of the Type Library
 		IFolder directoryForExtraction = workspaceRoot.getProject(projectName).getFolder(TYPE_LIB).getFolder(directory);
 		if (!directoryForExtraction.exists()) {
 			java.nio.file.Path path = Paths.get(WORKSPACE_ROOT, EXTRACTED_LIB_DIRECTORY, directory, "typelib");
