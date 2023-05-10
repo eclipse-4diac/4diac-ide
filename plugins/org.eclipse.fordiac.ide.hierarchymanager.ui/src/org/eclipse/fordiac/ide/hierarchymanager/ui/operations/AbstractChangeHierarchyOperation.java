@@ -24,7 +24,15 @@ public abstract class AbstractChangeHierarchyOperation extends AbstractOperation
 
 	protected void saveHierarchy(final EObject node, final IProgressMonitor monitor) {
 		// TODO Auto-generated method stub
-
+		// final Resource eResource = node.eResource();
+		// if (eResource != null) {
+		// try {
+		// eResource.save(HierarchyContentProvider.LOAD_OPTIONS);
+		// } catch (final IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
 	}
 
 }

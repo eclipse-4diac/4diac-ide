@@ -12,12 +12,27 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.hierarchymanager.ui.view;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.GenericXMLResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IMemento;
@@ -27,6 +42,17 @@ import org.eclipse.ui.part.ShowInContext;
 public class PlantHierarchyView extends CommonNavigator {
 
 	private static final String PLANT_HIERARCHY_PROJECT = "PlantHierarchy.Project"; //$NON-NLS-1$
+	private static final String PLANT_HIERARCHY_FILE_NAME = ".plant.hier"; //$NON-NLS-1$
+	private static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION = "hier"; //$NON-NLS-1$
+
+	final Map<String, Object> loadOptions = new HashMap<>();
+	private final ResourceSet hierarchyResouceSet = new ResourceSetImpl();
+
+	private IProject currentProject;
+
+	public PlantHierarchyView() {
+		setupEMFInfra();
+	}
 
 	@Override
 	public boolean show(final ShowInContext context) {
@@ -60,17 +86,24 @@ public class PlantHierarchyView extends CommonNavigator {
 			if (projectName != null) {
 				final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 				if (project != null && project.exists() && project.isOpen()) {
-					return project;
+					// we can not use setInput here as getInitialInput is interacting with the viewer in the base class
+					currentProject = project;
+					return loadHierachyForProject(currentProject);
 				}
 			}
 		}
 		return super.getInitialInput();
 	}
 
+	public IProject getCurrentProject() {
+		return currentProject;
+	}
+
 	private void setInput(final IProject proj) {
-		if (getCommonViewer().getInput() != proj) {
+		if (currentProject != proj) {
 			// the new project is different set
-			getCommonViewer().setInput(proj);
+			currentProject = proj;
+			getCommonViewer().setInput(loadHierachyForProject(proj));
 		}
 	}
 
@@ -93,5 +126,40 @@ public class PlantHierarchyView extends CommonNavigator {
 			return le.getTypeEntry().getFile().getProject();
 		}
 		return null;
+	}
+
+	private EObject loadHierachyForProject(final IProject proj) {
+		final IFile file = proj.getFile(PLANT_HIERARCHY_FILE_NAME);
+		if (file.exists()) {
+			final URI uri = URI.createFileURI(file.getLocation().toOSString());
+			// we don't want to load the resource content as we can not give the mapping options
+			Resource resource = hierarchyResouceSet.getResource(uri, true);
+			try {
+				if (resource == null) {
+					resource = new XMLResourceImpl(uri);
+					hierarchyResouceSet.getResources().add(resource);
+					resource.load(loadOptions);
+				}
+				return resource.getContents().get(0);
+			} catch (final IOException e) {
+				FordiacLogHelper.logWarning("Could not load plant hierarchy", e); //$NON-NLS-1$
+			}
+		}
+		return null;
+	}
+
+	private void setupEMFInfra() {
+		// add file extension to registry
+		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+				.put(PLANT_HIERARCHY_FILE_NAME_EXTENSION, new GenericXMLResourceFactoryImpl());
+		setupLoadOptions();
+	}
+
+	private void setupLoadOptions() {
+		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
+		final XMLMapImpl map = new XMLMapImpl();
+		map.setNoNamespacePackage(HierarchyPackage.eINSTANCE);
+		loadOptions.put(XMLResource.OPTION_XML_MAP, map);
+		hierarchyResouceSet.getLoadOptions().put(XMLResource.OPTION_XML_MAP, map);
 	}
 }
