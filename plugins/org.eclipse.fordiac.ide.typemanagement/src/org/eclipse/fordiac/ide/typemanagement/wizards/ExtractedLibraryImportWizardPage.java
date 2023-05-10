@@ -12,38 +12,52 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import java.io.File;
 
-public class ExtractedLibraryImportWizardPage extends WizardPage {
+import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.librarylinker.ExtractedLibraryImportContentProvider;
+import org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryLinker;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.TreeItem;
 
-	private Composite container;
+public class ExtractedLibraryImportWizardPage extends LibraryImportWizardPage {
+
+	private LibraryLinker libraryLinker;
+	private File selectedFile;
+	private StructuredSelection selection;
 	
-	protected ExtractedLibraryImportWizardPage(String pageName) {
+	protected ExtractedLibraryImportWizardPage(String pageName, StructuredSelection selection) {
 		super(pageName);
+		this.selection = selection;
+		setColumnTitle(Messages.DirsWithUnzippedTypeLibs);
+	}
+
+	public void importLib() {
+		libraryLinker.importLibrary(selectedFile.getName(), libraryLinker.getProjectName(selection));
 	}
 
 	@Override
-	public void createControl(Composite parent) {
-		container = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout();
-        container.setLayout(layout);
-        layout.numColumns = 2;
-        
-        createLabel("Test label");
-        
-        // required to avoid an error in the system
-        setControl(container);
-        setPageComplete(false);
+	void configureSelectionListener() {
+		viewer.getTree().addSelectionListener(new SelectionAdapter() {
+        	@Override
+        	public void widgetSelected(SelectionEvent e) {
+        		TreeItem item = (TreeItem) e.item;
+        		if (item.getData() instanceof File file && file.isDirectory()) {
+        			selectedFile = file;
+        			setPageComplete(isComplete());
+        		}
+        	}
+		});
 	}
 	
-	private Label createLabel(String labelText) {
-    	Label label = new Label(container, SWT.NONE);
-        label.setText(labelText);
-    	return label;
-    }
+	@Override
+	public void setVisible(boolean visible) {
+		libraryLinker = new LibraryLinker();
+		viewer.setContentProvider(new ExtractedLibraryImportContentProvider());
+        viewer.setInput(libraryLinker.listExtractedFiles());
+		super.setVisible(visible);
+	}
 
 }

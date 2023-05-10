@@ -1,5 +1,7 @@
 Manifest-Version: 1.0
-Export-Package: org.eclipse.fordiac.ide.deployment.iec61499
+Export-Package: org.eclipse.fordiac.ide.deployment.iec61499,
+ org.eclipse.fordiac.ide.deployment.iec61499.executors,
+ org.eclipse.fordiac.ide.deployment.iec61499.handlers
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.model,

@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.iec61499.providers;
 
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
-import org.eclipse.fordiac.ide.deployment.iec61499.DynamicTypeLoadDeploymentExecutor;
+import org.eclipse.fordiac.ide.deployment.iec61499.executors.DynamicTypeLoadDeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractorProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;

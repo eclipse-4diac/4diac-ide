@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
@@ -20,6 +21,7 @@ import org.eclipse.ui.IWorkbench;
 public class ArchivedLibraryImportWizard extends Wizard implements IImportWizard {
 	
 	private ArchivedLibraryImportWizardPage firstPage;
+
 
 	@Override
 	public boolean performFinish() {
@@ -31,11 +33,7 @@ public class ArchivedLibraryImportWizard extends Wizard implements IImportWizard
 		setWindowTitle("Archive Import Wizard"); //NON-NLS-1
 		setNeedsProgressMonitor(true);
 	}
+
 	
-	@Override
-    public void addPages() {
-		firstPage = new ArchivedLibraryImportWizardPage("Import Archived Files"); //NON-NLS-1
-        addPage(firstPage);
-    }
 
 }

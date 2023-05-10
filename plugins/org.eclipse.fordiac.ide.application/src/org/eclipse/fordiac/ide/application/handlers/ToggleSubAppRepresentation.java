@@ -33,6 +33,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -77,14 +78,17 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 
 	@Override
 	public void updateElement(final UIElement element, final Map parameters) {
-		final GraphicalViewer viewer = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
-		final EditPart editPart = (EditPart) viewer.getSelectedEditParts().get(0);
+		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
+		if (currentActiveEditor != null) {
+			final GraphicalViewer viewer = currentActiveEditor.getAdapter(GraphicalViewer.class);
+			final EditPart editPart = (EditPart) viewer.getSelectedEditParts().get(0);
 
-		if ((editPart.getModel() instanceof SubApp)) {
-			if (((SubApp) editPart.getModel()).isUnfolded()) {
-				element.setText(Messages.ToggleSubAppRepresentation_Collapse);
-			} else {
-				element.setText(Messages.ToggleSubAppRepresentation_Expand);
+			if ((editPart.getModel() instanceof final SubApp subApp)) {
+				if (subApp.isUnfolded()) {
+					element.setText(Messages.ToggleSubAppRepresentation_Collapse);
+				} else {
+					element.setText(Messages.ToggleSubAppRepresentation_Expand);
+				}
 			}
 		}
 	}
@@ -98,8 +102,7 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 	}
 
 	private static SubApp getSelectedSubApp(final Object selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structSel = ((IStructuredSelection) selection);
+		if (selection instanceof final IStructuredSelection structSel) {
 			if (!structSel.isEmpty() && (structSel.size() == 1)) {
 				return getSubApp(structSel.getFirstElement());
 			}
@@ -108,11 +111,11 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 	}
 
 	private static SubApp getSubApp(final Object currentElement) {
-		if (currentElement instanceof SubApp) {
-			return (SubApp) currentElement;
+		if (currentElement instanceof final SubApp subApp) {
+			return subApp;
 		}
-		if (currentElement instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) currentElement).getModel();
+		if (currentElement instanceof final SubAppForFBNetworkEditPart subAppNetworkEP) {
+			return subAppNetworkEP.getModel();
 		} else if (currentElement instanceof UISubAppNetworkEditPart) {
 			return (SubApp) ((UISubAppNetworkEditPart) currentElement).getModel().eContainer();
 		}

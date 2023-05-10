@@ -48,6 +48,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -146,8 +147,11 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 
 	private void replaceWithType(final TypeEntry entry) {
 		CommandUtil.closeOpenedSubApp(subApp.getSubAppNetwork());
-		final CommandStack commandStack = EditorUtils.getCurrentActiveEditor().getAdapter(CommandStack.class);
-		commandStack.execute(new UpdateFBTypeCommand(subApp, entry));
+		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
+		if (currentActiveEditor != null) {
+			final CommandStack commandStack = currentActiveEditor.getAdapter(CommandStack.class);
+			commandStack.execute(new UpdateFBTypeCommand(subApp, entry));
+		}
 	}
 
 	private void performTypeSetup(final SubAppType type) {

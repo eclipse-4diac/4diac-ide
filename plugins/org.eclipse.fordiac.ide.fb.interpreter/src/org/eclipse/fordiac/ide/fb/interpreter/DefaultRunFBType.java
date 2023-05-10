@@ -444,7 +444,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		type.getInterfaceList().getOutputVars().forEach(pin -> getEquivalentNetworkPin(runtime, eo.getParentFB(), pin)
 				.getOutputConnections().stream().forEach(conn -> {
 					if (map.get(conn) == null) {
-						final String val = InitialValueHelper.getInitalOrDefaultValue(pin);
+						final String val = InitialValueHelper.getInitialOrDefaultValue(pin);
 						final Value value = LibraryElementFactory.eINSTANCE.createValue();
 						value.setValue(val);
 						map.put(conn, value);

@@ -12,30 +12,52 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.ui.IImportWizard;
-import org.eclipse.ui.IWorkbench;
+import java.io.File;
 
-public class ExtractedLibraryImportWizard extends Wizard implements IImportWizard {
+import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.librarylinker.ExtractedLibraryImportContentProvider;
+import org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryLinker;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.TreeItem;
+
+public class ExtractedLibraryImportWizard extends LibraryImportWizardPage {
+
+	private LibraryLinker libraryLinker;
+	private File selectedFile;
+	private StructuredSelection selection;
 	
-	private ExtractedLibraryImportWizardPage firstPage;
+	protected ExtractedLibraryImportWizard(String pageName, StructuredSelection selection) {
+		super(pageName);
+		this.selection = selection;
+		setColumnTitle(Messages.DirsWithUnzippedTypeLibs);
+	}
 
-	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		setWindowTitle("Extracted Library Import Wizard"); //NON-NLS-1
-		setNeedsProgressMonitor(true);
+	public void importLib() {
+		libraryLinker.importLibrary(selectedFile.getName(), libraryLinker.getProjectName(selection));
 	}
 
 	@Override
-	public boolean performFinish() {
-		return false;
+	void configureSelectionListener() {
+		viewer.getTree().addSelectionListener(new SelectionAdapter() {
+        	@Override
+        	public void widgetSelected(SelectionEvent e) {
+        		TreeItem item = (TreeItem) e.item;
+        		if (item.getData() instanceof File file && file.isDirectory()) {
+        			selectedFile = file;
+        			setPageComplete(isComplete());
+        		}
+        	}
+		});
 	}
 	
 	@Override
-	public void addPages() {
-		firstPage = new ExtractedLibraryImportWizardPage("Import Extracted Files"); //NON-NLS-1
-        addPage(firstPage);
+	public void setVisible(boolean visible) {
+		libraryLinker = new LibraryLinker();
+		viewer.setContentProvider(new ExtractedLibraryImportContentProvider());
+        viewer.setInput(libraryLinker.listExtractedFiles());
+		super.setVisible(visible);
 	}
 
 }

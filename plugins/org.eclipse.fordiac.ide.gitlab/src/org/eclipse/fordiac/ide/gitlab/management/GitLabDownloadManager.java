@@ -41,7 +41,7 @@ import org.gitlab4j.api.models.Project;
 public class GitLabDownloadManager {
 	
 	private static final String PATH = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toPortableString();
-	private static final String ROOT_DIRECTORY = ".fblib";
+	private static final String ROOT_DIRECTORY = ".download";
 	private static final String API_VERSION = "api/v4/projects/";
 	private static final String PACKAGES = "/packages/";
 	private static final String PACKAGE_FILES = "/package_files";

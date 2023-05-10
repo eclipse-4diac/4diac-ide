@@ -17,7 +17,7 @@
  *   Jan Holzweber - reworked deploying mechanism
  *   Fabio Gandolfi - reconstruct subapp hierarchy from resources + connections
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.iec61499;
+package org.eclipse.fordiac.ide.deployment.iec61499.executors;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,6 +53,9 @@ import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
+import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
+import org.eclipse.fordiac.ide.deployment.iec61499.handlers.QueryResponseHandler;
 import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
 import org.eclipse.fordiac.ide.model.Annotations;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -478,7 +481,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private static SubApp findSubAppOfFB(final String path, final FBNetwork network) {
-		final String[] paths = path.split("\\.");
+		final String[] paths = path.split("\\."); //$NON-NLS-1$
 		SubApp subapp = null;
 		for (final String pathPice : paths) {
 			if (Arrays.asList(paths).indexOf(pathPice) == 0) {

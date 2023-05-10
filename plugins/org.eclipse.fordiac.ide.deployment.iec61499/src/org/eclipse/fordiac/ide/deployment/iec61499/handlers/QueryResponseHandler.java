@@ -11,7 +11,7 @@
  *   Florian Noack, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.iec61499;
+package org.eclipse.fordiac.ide.deployment.iec61499.handlers;
 
 import java.util.HashSet;
 import java.util.Set;

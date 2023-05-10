@@ -82,7 +82,7 @@
 		</parser>
 		<parser
 			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
-			type="SUB">
+			type="sub">
 		</parser>
 		<parser
 			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
@@ -99,6 +99,38 @@
 		<parser
 			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
 			type="dtp">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="FBT">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="SYS">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="ADP">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="SUB">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="RES">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="DEV">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="SEG">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="DTP">
 		</parser>
 	</extension>
 	<extension

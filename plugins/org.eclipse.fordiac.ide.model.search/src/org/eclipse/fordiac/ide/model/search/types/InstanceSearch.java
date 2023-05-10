@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.model.search.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -53,9 +55,9 @@ public class InstanceSearch {
 		return searchResult;
 	}
 
-	public List<INamedElement> performTypeLibrarySearch(final TypeLibrary library) {
+	public List<INamedElement> performTypeLibraryNetworkSearch(final TypeLibrary library) {
 		searchResult = new ArrayList<>();
-		searchTypeLibrary(library);
+		searchTypeLibraryNetworks(library);
 		return searchResult;
 	}
 
@@ -88,12 +90,23 @@ public class InstanceSearch {
 
 		for (final AutomationSystem sys : searchRootSystems) {
 			searchApplications(sys);
-			searchTypeLibrary(sys.getTypeLibrary());
+			searchTypeLibraryNetworks(sys.getTypeLibrary());
 		}
 
 		return searchResult;
 	}
 
+	
+	
+	public List<INamedElement> performTypeLibBlockSearch(final TypeLibrary typeLibrary) {
+		searchResult = new ArrayList<>();
+		List<TypeEntry> allBlockTypes = new ArrayList<>();
+		allBlockTypes.addAll(typeLibrary.getSubAppTypes().values());
+		allBlockTypes.addAll(typeLibrary.getFbTypes().values());
+		allBlockTypes.parallelStream().forEach(f-> match(f.getTypeEditable()));
+		return searchResult;
+	}
+	
 	private void searchApplications(final AutomationSystem sys) {
 		for (final Application app : sys.getApplication()) {
 			searchApplication(app);
@@ -138,13 +151,13 @@ public class InstanceSearch {
 			}
 		}
 	}
-
-	private void searchTypeLibrary(final TypeLibrary typeLibrary) {
-		searchCFBs(typeLibrary);
-		searchSubappTypes(typeLibrary);
+	
+	private void searchTypeLibraryNetworks(final TypeLibrary typeLibrary) {
+		searchCFBNetworks(typeLibrary);
+		searchSubappTypesNetworks(typeLibrary);
 	}
 
-	public void searchSubappTypes(final TypeLibrary typeLibrary) {
+	public void searchSubappTypesNetworks(final TypeLibrary typeLibrary) {
 		for (final SubAppTypeEntry entry : typeLibrary.getSubAppTypes().values()) {
 			if (entry.getTypeEditable().getFBNetwork() != null) {
 				searchFBNetwork(entry.getTypeEditable().getFBNetwork());
@@ -152,7 +165,7 @@ public class InstanceSearch {
 		}
 	}
 
-	public void searchCFBs(final TypeLibrary typeLibrary) {
+	public void searchCFBNetworks(final TypeLibrary typeLibrary) {
 		for (final CompositeFBType entry : typeLibrary.getCompositeFBTypes()) {
 			if (entry.getFBNetwork() != null) {
 				searchFBNetwork(entry.getFBNetwork());

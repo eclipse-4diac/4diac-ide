@@ -13,7 +13,11 @@
 package org.eclipse.fordiac.ide.hierarchymanager.ui.view;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IMemento;
@@ -30,10 +34,12 @@ public class PlantHierarchyView extends CommonNavigator {
 			return false;
 		}
 		final ISelection selection = context.getSelection();
-		if (selection instanceof final IStructuredSelection structSel && !selection.isEmpty()
-				&& structSel.getFirstElement() instanceof final IProject proj) {
-			setInput(proj);
-			return true;
+		if (selection instanceof final IStructuredSelection structSel && !selection.isEmpty()) {
+			final IProject selProject = getSelectedProject(structSel.getFirstElement());
+			if (selProject != null) {
+				setInput(selProject);
+				return true;
+			}
 		}
 		return super.show(context);
 	}
@@ -66,5 +72,26 @@ public class PlantHierarchyView extends CommonNavigator {
 			// the new project is different set
 			getCommonViewer().setInput(proj);
 		}
+	}
+
+	private static IProject getSelectedProject(final Object firstElement) {
+		if (firstElement instanceof final EObject eObj) {
+			return getProjectFromEObject(eObj);
+		}
+
+		if (firstElement instanceof final IResource res) {
+			return res.getProject();
+		}
+
+		return firstElement instanceof final IProject proj ? proj : null;
+	}
+
+	private static IProject getProjectFromEObject(final EObject eObj) {
+		final EObject rootContainer = EcoreUtil.getRootContainer(eObj);
+
+		if (rootContainer instanceof final LibraryElement le) {
+			return le.getTypeEntry().getFile().getProject();
+		}
+		return null;
 	}
 }

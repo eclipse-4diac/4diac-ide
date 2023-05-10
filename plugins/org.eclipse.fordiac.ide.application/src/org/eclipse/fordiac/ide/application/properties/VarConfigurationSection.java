@@ -286,7 +286,7 @@ public class VarConfigurationSection extends AbstractSection {
 				}
 				return getTypeComment(rowObject);
 			case INITIAL_VALUE_COL_ID:
-				return InitialValueHelper.getInitalOrDefaultValue(rowObject);
+				return InitialValueHelper.getInitialOrDefaultValue(rowObject);
 			case VISIBLE_COL_ID:
 				return Boolean.valueOf(rowObject.isVisible());
 			case VAR_CONFIG_COL_ID:

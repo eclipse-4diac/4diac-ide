@@ -18,7 +18,6 @@
 package org.eclipse.fordiac.ide.gef.figures;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
@@ -231,7 +230,7 @@ public class HideableConnection extends PolylineConnection {
 			final StringBuilder builder = new StringBuilder();
 			hiddenConnections.forEach(con -> {
 				if (con.getDestination() != null) {
-					builder.append(generateIEString(con.getDestination()));
+					builder.append(generateFullIEString(con.getDestination()));
 					builder.append('\n');
 				}
 			});
@@ -247,7 +246,7 @@ public class HideableConnection extends PolylineConnection {
 			final StringBuilder builder = new StringBuilder();
 			hiddenConnections.forEach(con -> {
 				if (con.getSource() != null) {
-					builder.append(generateIEString(con.getSource()));
+					builder.append(generateFullIEString(con.getSource()));
 					builder.append('\n');
 				}
 			});
@@ -271,31 +270,33 @@ public class HideableConnection extends PolylineConnection {
 
 
 	private String generateIEString(final IInterfaceElement ie) {
+		final StringBuilder builder = generateFullIEString(ie);
+		if (builder.length() > maxWidth) {
+			builder.delete(0, builder.length() - maxWidth);
+			builder.insert(0, "\u2026"); //$NON-NLS-1$
+		}
+		return builder.toString();
+	}
+
+	private StringBuilder generateFullIEString(final IInterfaceElement ie) {
 		final StringBuilder builder = new StringBuilder();
 		if (ie.getFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
 			builder.append(ie.getFBNetworkElement().getName());
 			builder.append('.');
 		}
 		builder.append(ie.getName());
-		final String iesString = builder.toString();
-
-		if (iesString.length() > maxWidth) {
-			return "..." + iesString.substring(iesString.length() - maxWidth); //$NON-NLS-1$
-		}
-
-		return iesString;
+		return builder;
 	}
 
 	private boolean isInterfaceBarElement(final IInterfaceElement ie) {
-		if (ie.getFBNetworkElement() instanceof SubApp) {
-			final SubApp subapp = (SubApp) ie.getFBNetworkElement();
+		if (ie.getFBNetworkElement() instanceof final SubApp subapp) {
 			return (subapp.getSubAppNetwork() != null) && subapp.getSubAppNetwork().equals(getModel().getFBNetwork());
 		}
 		return false;
 	}
 
 	private static List<Connection> getHiddenConnections(final EList<Connection> connections) {
-		return connections.stream().filter(con -> !con.isVisible()).collect(Collectors.toList());
+		return connections.stream().filter(con -> !con.isVisible()).toList();
 	}
 
 	@Override
