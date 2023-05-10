@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2023 Primetals Technologies Austria GmbH
- * 
+ *  
  *  This program and the accompanying materials are made available under the
  *  terms of the Eclipse Public License 2.0 which is available at
  *  http://www.eclipse.org/legal/epl-2.0.
@@ -10,7 +10,7 @@
  * 
  *  Contributors:
  *    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider;
 
@@ -28,6 +28,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyFactory;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.ui.ISharedImages;
@@ -40,6 +41,13 @@ import org.eclipse.ui.PlatformUI;
  * @generated
  */
 public class LevelItemProvider extends NodeItemProvider {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final String copyright = "*******************************************************************************\n Copyright (c) 2023 Primetals Technologies Austria GmbH\n \n This program and the accompanying materials are made available under the\n terms of the Eclipse Public License 2.0 which is available at\n http://www.eclipse.org/legal/epl-2.0.\n\n SPDX-License-Identifier: EPL-2.0\n\n Contributors:\n   Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation\n*******************************************************************************";
+
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -61,33 +69,10 @@ public class LevelItemProvider extends NodeItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
 			addCommentPropertyDescriptor(object);
-			addChildrenPropertyDescriptor(object);
+			addNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Level_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Level_name_feature", "_UI_Level_type"),
-				 HierarchyPackage.Literals.LEVEL__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -113,23 +98,23 @@ public class LevelItemProvider extends NodeItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Children feature.
+	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addChildrenPropertyDescriptor(Object object) {
+	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Level_children_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Level_children_feature", "_UI_Level_type"),
-				 HierarchyPackage.Literals.LEVEL__CHILDREN,
+				 getString("_UI_Level_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Level_name_feature", "_UI_Level_type"),
+				 HierarchyPackage.Literals.LEVEL__NAME,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -201,8 +186,8 @@ public class LevelItemProvider extends NodeItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Level.class)) {
-			case HierarchyPackage.LEVEL__NAME:
 			case HierarchyPackage.LEVEL__COMMENT:
+			case HierarchyPackage.LEVEL__NAME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case HierarchyPackage.LEVEL__CHILDREN:
@@ -224,6 +209,21 @@ public class LevelItemProvider extends NodeItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(HierarchyPackage.Literals.LEVEL__CHILDREN,
+				 HierarchyFactory.eINSTANCE.createNode()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(HierarchyPackage.Literals.LEVEL__CHILDREN,
+				 HierarchyFactory.eINSTANCE.createLeaf()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(HierarchyPackage.Literals.LEVEL__CHILDREN,
+				 HierarchyFactory.eINSTANCE.createLevel()));
 	}
 
 }

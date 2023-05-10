@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2023 Primetals Technologies Austria GmbH
- * 
+ *  
  *  This program and the accompanying materials are made available under the
  *  terms of the Eclipse Public License 2.0 which is available at
  *  http://www.eclipse.org/legal/epl-2.0.
@@ -10,7 +10,7 @@
  * 
  *  Contributors:
  *    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy;
 
@@ -26,12 +26,14 @@ import org.eclipse.emf.ecore.EReference;
  * <ul>
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
  * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyFactory
  * @model kind="package"
+ *        extendedMetaData="qualified='false'"
  * @generated
  */
 public interface HierarchyPackage extends EPackage {
@@ -49,7 +51,7 @@ public interface HierarchyPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "org.eclipse.fordiac.ide.hierarchymanager";
+	String eNS_URI = "platform:/resource/org.eclipse.fordiac.ide.hierarchymanager.model/model/hierarchy.xsd";
 
 	/**
 	 * The package namespace name.
@@ -87,6 +89,61 @@ public interface HierarchyPackage extends EPackage {
 	int NODE_FEATURE_COUNT = 0;
 
 	/**
+	 * The number of operations of the '<em>Node</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LeafImpl <em>Leaf</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LeafImpl
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.HierarchyPackageImpl#getLeaf()
+	 * @generated
+	 */
+	int LEAF = 0;
+
+	/**
+	 * The feature id for the '<em><b>Container File Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEAF__CONTAINER_FILE_NAME = NODE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Ref</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEAF__REF = NODE_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Leaf</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEAF_FEATURE_COUNT = NODE_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Leaf</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEAF_OPERATION_COUNT = NODE_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LevelImpl <em>Level</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -94,16 +151,16 @@ public interface HierarchyPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.HierarchyPackageImpl#getLevel()
 	 * @generated
 	 */
-	int LEVEL = 0;
+	int LEVEL = 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * The feature id for the '<em><b>Children</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LEVEL__NAME = NODE_FEATURE_COUNT + 0;
+	int LEVEL__CHILDREN = NODE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -115,13 +172,13 @@ public interface HierarchyPackage extends EPackage {
 	int LEVEL__COMMENT = NODE_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Children</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LEVEL__CHILDREN = NODE_FEATURE_COUNT + 2;
+	int LEVEL__NAME = NODE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Level</em>' class.
@@ -133,6 +190,15 @@ public interface HierarchyPackage extends EPackage {
 	int LEVEL_FEATURE_COUNT = NODE_FEATURE_COUNT + 3;
 
 	/**
+	 * The number of operations of the '<em>Level</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEVEL_OPERATION_COUNT = NODE_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.RootLevelImpl <em>Root Level</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -140,7 +206,7 @@ public interface HierarchyPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.HierarchyPackageImpl#getRootLevel()
 	 * @generated
 	 */
-	int ROOT_LEVEL = 1;
+	int ROOT_LEVEL = 3;
 
 	/**
 	 * The feature id for the '<em><b>Levels</b></em>' containment reference list.
@@ -161,42 +227,46 @@ public interface HierarchyPackage extends EPackage {
 	int ROOT_LEVEL_FEATURE_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LeafImpl <em>Leaf</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LeafImpl
-	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.HierarchyPackageImpl#getLeaf()
-	 * @generated
-	 */
-	int LEAF = 3;
-
-	/**
-	 * The feature id for the '<em><b>Ref</b></em>' attribute.
+	 * The number of operations of the '<em>Root Level</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LEAF__REF = NODE_FEATURE_COUNT + 0;
+	int ROOT_LEVEL_OPERATION_COUNT = 0;
+
 
 	/**
-	 * The feature id for the '<em><b>Container File Name</b></em>' attribute.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf <em>Leaf</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Leaf</em>'.
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf
 	 * @generated
-	 * @ordered
 	 */
-	int LEAF__CONTAINER_FILE_NAME = NODE_FEATURE_COUNT + 1;
+	EClass getLeaf();
 
 	/**
-	 * The number of structural features of the '<em>Leaf</em>' class.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getContainerFileName <em>Container File Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Container File Name</em>'.
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getContainerFileName()
+	 * @see #getLeaf()
 	 * @generated
-	 * @ordered
 	 */
-	int LEAF_FEATURE_COUNT = NODE_FEATURE_COUNT + 2;
+	EAttribute getLeaf_ContainerFileName();
 
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getRef <em>Ref</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ref</em>'.
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getRef()
+	 * @see #getLeaf()
+	 * @generated
+	 */
+	EAttribute getLeaf_Ref();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level <em>Level</em>}'.
@@ -209,15 +279,15 @@ public interface HierarchyPackage extends EPackage {
 	EClass getLevel();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level#getName <em>Name</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level#getChildren <em>Children</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level#getName()
+	 * @return the meta object for the containment reference list '<em>Children</em>'.
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level#getChildren()
 	 * @see #getLevel()
 	 * @generated
 	 */
-	EAttribute getLevel_Name();
+	EReference getLevel_Children();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level#getComment <em>Comment</em>}'.
@@ -231,15 +301,25 @@ public interface HierarchyPackage extends EPackage {
 	EAttribute getLevel_Comment();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level#getChildren <em>Children</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Children</em>'.
-	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level#getChildren()
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level#getName()
 	 * @see #getLevel()
 	 * @generated
 	 */
-	EReference getLevel_Children();
+	EAttribute getLevel_Name();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node <em>Node</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Node</em>'.
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node
+	 * @generated
+	 */
+	EClass getNode();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel <em>Root Level</em>}'.
@@ -263,48 +343,6 @@ public interface HierarchyPackage extends EPackage {
 	EReference getRootLevel_Levels();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node <em>Node</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Node</em>'.
-	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node
-	 * @generated
-	 */
-	EClass getNode();
-
-	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf <em>Leaf</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Leaf</em>'.
-	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf
-	 * @generated
-	 */
-	EClass getLeaf();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getRef <em>Ref</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Ref</em>'.
-	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getRef()
-	 * @see #getLeaf()
-	 * @generated
-	 */
-	EAttribute getLeaf_Ref();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getContainerFileName <em>Container File Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Container File Name</em>'.
-	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getContainerFileName()
-	 * @see #getLeaf()
-	 * @generated
-	 */
-	EAttribute getLeaf_ContainerFileName();
-
-	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -319,6 +357,7 @@ public interface HierarchyPackage extends EPackage {
 	 * <ul>
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>
@@ -326,6 +365,32 @@ public interface HierarchyPackage extends EPackage {
 	 * @generated
 	 */
 	interface Literals {
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LeafImpl <em>Leaf</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LeafImpl
+		 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.HierarchyPackageImpl#getLeaf()
+		 * @generated
+		 */
+		EClass LEAF = eINSTANCE.getLeaf();
+
+		/**
+		 * The meta object literal for the '<em><b>Container File Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LEAF__CONTAINER_FILE_NAME = eINSTANCE.getLeaf_ContainerFileName();
+
+		/**
+		 * The meta object literal for the '<em><b>Ref</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LEAF__REF = eINSTANCE.getLeaf_Ref();
+
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LevelImpl <em>Level</em>}' class.
 		 * <!-- begin-user-doc -->
@@ -337,12 +402,12 @@ public interface HierarchyPackage extends EPackage {
 		EClass LEVEL = eINSTANCE.getLevel();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Children</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute LEVEL__NAME = eINSTANCE.getLevel_Name();
+		EReference LEVEL__CHILDREN = eINSTANCE.getLevel_Children();
 
 		/**
 		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
@@ -353,12 +418,22 @@ public interface HierarchyPackage extends EPackage {
 		EAttribute LEVEL__COMMENT = eINSTANCE.getLevel_Comment();
 
 		/**
-		 * The meta object literal for the '<em><b>Children</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference LEVEL__CHILDREN = eINSTANCE.getLevel_Children();
+		EAttribute LEVEL__NAME = eINSTANCE.getLevel_Name();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.NodeImpl <em>Node</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.NodeImpl
+		 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.HierarchyPackageImpl#getNode()
+		 * @generated
+		 */
+		EClass NODE = eINSTANCE.getNode();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.RootLevelImpl <em>Root Level</em>}' class.
@@ -377,42 +452,6 @@ public interface HierarchyPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ROOT_LEVEL__LEVELS = eINSTANCE.getRootLevel_Levels();
-
-		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.NodeImpl <em>Node</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.NodeImpl
-		 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.HierarchyPackageImpl#getNode()
-		 * @generated
-		 */
-		EClass NODE = eINSTANCE.getNode();
-
-		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LeafImpl <em>Leaf</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LeafImpl
-		 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.HierarchyPackageImpl#getLeaf()
-		 * @generated
-		 */
-		EClass LEAF = eINSTANCE.getLeaf();
-
-		/**
-		 * The meta object literal for the '<em><b>Ref</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute LEAF__REF = eINSTANCE.getLeaf_Ref();
-
-		/**
-		 * The meta object literal for the '<em><b>Container File Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute LEAF__CONTAINER_FILE_NAME = eINSTANCE.getLeaf_ContainerFileName();
 
 	}
 

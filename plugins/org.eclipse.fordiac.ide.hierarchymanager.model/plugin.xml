@@ -21,9 +21,15 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated hierarchy -->
       <package
-            uri="org.eclipse.fordiac.ide.hierarchymanager"
+            uri="platform:/resource/org.eclipse.fordiac.ide.hierarchymanager.model/model/hierarchy.xsd"
             class="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage"
             genModel="model/hierarchy.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated hierarchy -->
+      <parser
+            type="hierarchy"
+            class="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl"/>
+   </extension>
 </plugin>

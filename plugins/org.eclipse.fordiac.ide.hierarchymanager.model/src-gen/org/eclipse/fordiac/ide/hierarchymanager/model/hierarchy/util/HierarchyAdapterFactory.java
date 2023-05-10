@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2023 Primetals Technologies Austria GmbH
- * 
+ *  
  *  This program and the accompanying materials are made available under the
  *  terms of the Eclipse Public License 2.0 which is available at
  *  http://www.eclipse.org/legal/epl-2.0.
@@ -10,7 +10,7 @@
  * 
  *  Contributors:
  *    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util;
 
@@ -80,20 +80,20 @@ public class HierarchyAdapterFactory extends AdapterFactoryImpl {
 	protected HierarchySwitch<Adapter> modelSwitch =
 		new HierarchySwitch<Adapter>() {
 			@Override
-			public Adapter caseLevel(Level object) {
-				return createLevelAdapter();
+			public Adapter caseLeaf(Leaf object) {
+				return createLeafAdapter();
 			}
 			@Override
-			public Adapter caseRootLevel(RootLevel object) {
-				return createRootLevelAdapter();
+			public Adapter caseLevel(Level object) {
+				return createLevelAdapter();
 			}
 			@Override
 			public Adapter caseNode(Node object) {
 				return createNodeAdapter();
 			}
 			@Override
-			public Adapter caseLeaf(Leaf object) {
-				return createLeafAdapter();
+			public Adapter caseRootLevel(RootLevel object) {
+				return createRootLevelAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -116,6 +116,20 @@ public class HierarchyAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf <em>Leaf</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf
+	 * @generated
+	 */
+	public Adapter createLeafAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level <em>Level</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -126,20 +140,6 @@ public class HierarchyAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createLevelAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel <em>Root Level</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel
-	 * @generated
-	 */
-	public Adapter createRootLevelAdapter() {
 		return null;
 	}
 
@@ -158,16 +158,16 @@ public class HierarchyAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf <em>Leaf</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel <em>Root Level</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel
 	 * @generated
 	 */
-	public Adapter createLeafAdapter() {
+	public Adapter createRootLevelAdapter() {
 		return null;
 	}
 

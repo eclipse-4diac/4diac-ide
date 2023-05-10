@@ -176,7 +176,16 @@
          </command>
          <command
                commandId="org.eclipse.ui.edit.delete"
-               tooltip="Delete selected node">            
+               tooltip="Delete selected node">  
+               <visibleWhen
+                  checkEnabled="false">
+               <with variable="selection">
+            		<count value="1" />
+			    	<iterate operator="and" ifEmpty="false">
+	         			<adapt type="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node" />
+	      			</iterate>
+		   		</with>
+            </visibleWhen>           
          </command>
       </menuContribution>
     </extension>

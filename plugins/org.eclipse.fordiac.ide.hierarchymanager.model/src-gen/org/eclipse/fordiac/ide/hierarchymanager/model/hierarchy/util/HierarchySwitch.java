@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2023 Primetals Technologies Austria GmbH
- * 
+ *  
  *  This program and the accompanying materials are made available under the
  *  terms of the Eclipse Public License 2.0 which is available at
  *  http://www.eclipse.org/legal/epl-2.0.
@@ -10,7 +10,7 @@
  * 
  *  Contributors:
  *    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util;
 
@@ -78,16 +78,17 @@ public class HierarchySwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case HierarchyPackage.LEAF: {
+				Leaf leaf = (Leaf)theEObject;
+				T result = caseLeaf(leaf);
+				if (result == null) result = caseNode(leaf);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case HierarchyPackage.LEVEL: {
 				Level level = (Level)theEObject;
 				T result = caseLevel(level);
 				if (result == null) result = caseNode(level);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case HierarchyPackage.ROOT_LEVEL: {
-				RootLevel rootLevel = (RootLevel)theEObject;
-				T result = caseRootLevel(rootLevel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -97,15 +98,29 @@ public class HierarchySwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case HierarchyPackage.LEAF: {
-				Leaf leaf = (Leaf)theEObject;
-				T result = caseLeaf(leaf);
-				if (result == null) result = caseNode(leaf);
+			case HierarchyPackage.ROOT_LEVEL: {
+				RootLevel rootLevel = (RootLevel)theEObject;
+				T result = caseRootLevel(rootLevel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			default: return defaultCase(theEObject);
 		}
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Leaf</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Leaf</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLeaf(Leaf object) {
+		return null;
 	}
 
 	/**
@@ -120,21 +135,6 @@ public class HierarchySwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseLevel(Level object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Root Level</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Root Level</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseRootLevel(RootLevel object) {
 		return null;
 	}
 
@@ -154,17 +154,17 @@ public class HierarchySwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Leaf</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Root Level</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Leaf</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Root Level</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseLeaf(Leaf object) {
+	public T caseRootLevel(RootLevel object) {
 		return null;
 	}
 

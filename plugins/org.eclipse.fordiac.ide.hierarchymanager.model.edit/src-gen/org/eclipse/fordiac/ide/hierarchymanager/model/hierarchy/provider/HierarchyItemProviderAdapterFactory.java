@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2023 Primetals Technologies Austria GmbH
- * 
+ *  
  *  This program and the accompanying materials are made available under the
  *  terms of the Eclipse Public License 2.0 which is available at
  *  http://www.eclipse.org/legal/epl-2.0.
@@ -10,7 +10,7 @@
  * 
  *  Contributors:
  *    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider;
 
@@ -45,6 +45,13 @@ import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyAd
  * @generated
  */
 public class HierarchyItemProviderAdapterFactory extends HierarchyAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final String copyright = "*******************************************************************************\n Copyright (c) 2023 Primetals Technologies Austria GmbH\n \n This program and the accompanying materials are made available under the\n terms of the Eclipse Public License 2.0 which is available at\n http://www.eclipse.org/legal/epl-2.0.\n\n SPDX-License-Identifier: EPL-2.0\n\n Contributors:\n   Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation\n*******************************************************************************";
+
 	/**
 	 * This keeps track of the root adapter factory that delegates to this adapter factory.
 	 * <!-- begin-user-doc -->
@@ -84,6 +91,29 @@ public class HierarchyItemProviderAdapterFactory extends HierarchyAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LeafItemProvider leafItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLeafAdapter() {
+		if (leafItemProvider == null) {
+			leafItemProvider = new LeafItemProvider(this);
+		}
+
+		return leafItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -104,29 +134,6 @@ public class HierarchyItemProviderAdapterFactory extends HierarchyAdapterFactory
 		}
 
 		return levelItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected RootLevelItemProvider rootLevelItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createRootLevelAdapter() {
-		if (rootLevelItemProvider == null) {
-			rootLevelItemProvider = new RootLevelItemProvider(this);
-		}
-
-		return rootLevelItemProvider;
 	}
 
 	/**
@@ -153,26 +160,26 @@ public class HierarchyItemProviderAdapterFactory extends HierarchyAdapterFactory
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf} instances.
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected LeafItemProvider leafItemProvider;
+	protected RootLevelItemProvider rootLevelItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf}.
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createLeafAdapter() {
-		if (leafItemProvider == null) {
-			leafItemProvider = new LeafItemProvider(this);
+	public Adapter createRootLevelAdapter() {
+		if (rootLevelItemProvider == null) {
+			rootLevelItemProvider = new RootLevelItemProvider(this);
 		}
 
-		return leafItemProvider;
+		return rootLevelItemProvider;
 	}
 
 	/**
@@ -280,10 +287,10 @@ public class HierarchyItemProviderAdapterFactory extends HierarchyAdapterFactory
 	 */
 	@Override
 	public void dispose() {
-		if (levelItemProvider != null) levelItemProvider.dispose();
-		if (rootLevelItemProvider != null) rootLevelItemProvider.dispose();
-		if (nodeItemProvider != null) nodeItemProvider.dispose();
 		if (leafItemProvider != null) leafItemProvider.dispose();
+		if (levelItemProvider != null) levelItemProvider.dispose();
+		if (nodeItemProvider != null) nodeItemProvider.dispose();
+		if (rootLevelItemProvider != null) rootLevelItemProvider.dispose();
 	}
 
 }

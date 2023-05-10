@@ -27,10 +27,10 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.GenericXMLResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ISelection;
@@ -73,9 +73,8 @@ public class PlantHierarchyView extends CommonNavigator {
 	@Override
 	public void saveState(final IMemento aMemento) {
 		super.saveState(aMemento);
-		final Object input = getCommonViewer().getInput();
-		if (input instanceof final IProject project) {
-			aMemento.putString(PLANT_HIERARCHY_PROJECT, project.getName());
+		if (currentProject != null) {
+			aMemento.putString(PLANT_HIERARCHY_PROJECT, currentProject.getName());
 		}
 	}
 
@@ -131,12 +130,12 @@ public class PlantHierarchyView extends CommonNavigator {
 	private EObject loadHierachyForProject(final IProject proj) {
 		final IFile file = proj.getFile(PLANT_HIERARCHY_FILE_NAME);
 		if (file.exists()) {
-			final URI uri = URI.createFileURI(file.getLocation().toOSString());
+			final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 			// we don't want to load the resource content as we can not give the mapping options
 			Resource resource = hierarchyResouceSet.getResource(uri, true);
 			try {
 				if (resource == null) {
-					resource = new XMLResourceImpl(uri);
+					resource = new HierarchyResourceImpl(uri);
 					hierarchyResouceSet.getResources().add(resource);
 					resource.load(loadOptions);
 				}
@@ -151,7 +150,7 @@ public class PlantHierarchyView extends CommonNavigator {
 	private void setupEMFInfra() {
 		// add file extension to registry
 		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put(PLANT_HIERARCHY_FILE_NAME_EXTENSION, new GenericXMLResourceFactoryImpl());
+				.put(PLANT_HIERARCHY_FILE_NAME_EXTENSION, new HierarchyResourceFactoryImpl());
 		setupLoadOptions();
 	}
 

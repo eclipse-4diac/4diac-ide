@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="*******************************************************************************&#xA; Copyright (c) 2023 Primetals Technologies Austria GmbH&#xA;&#xA; This program and the accompanying materials are made available under the&#xA; terms of the Eclipse Public License 2.0 which is available at&#xA; http://www.eclipse.org/legal/epl-2.0.&#xA;&#xA; SPDX-License-Identifier: EPL-2.0&#xA;&#xA; Contributors:&#xA;   Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation&#xA; *******************************************************************************"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="*******************************************************************************&#xA; Copyright (c) 2023 Primetals Technologies Austria GmbH&#xA; &#xA; This program and the accompanying materials are made available under the&#xA; terms of the Eclipse Public License 2.0 which is available at&#xA; http://www.eclipse.org/legal/epl-2.0.&#xA;&#xA; SPDX-License-Identifier: EPL-2.0&#xA;&#xA; Contributors:&#xA;   Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation&#xA;*******************************************************************************"
     modelDirectory="/org.eclipse.fordiac.ide.hierarchymanager.model/src-gen" editDirectory="/org.eclipse.fordiac.ide.hierarchymanager.model.edit/src-gen"
-    editorDirectory="/org.eclipse.fordiac.ide.hierarchymanager.model.editor/src-gen"
-    modelPluginID="org.eclipse.fordiac.ide.hierarchymanager.model" modelName="Hierarchy"
-    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="17.0" suppressGenModelAnnotations="false" copyrightFields="false"
-    importOrganizing="true">
-  <foreignModel>hierarchy.ecore</foreignModel>
+    modelPluginID="org.eclipse.fordiac.ide.hierarchymanager.model" modelName="hierarchy"
+    editPluginClass="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider.HierarchyEditPlugin"
+    nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.xsd.ecore.importer" complianceLevel="17.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>hierarchy.xsd</foreignModel>
   <genPackages prefix="Hierarchy" basePackage="org.eclipse.fordiac.ide.hierarchymanager.model"
-      disposableProviderFactory="true" ecorePackage="hierarchy.ecore#/">
-    <genClasses image="false" ecoreClass="hierarchy.ecore#//Level">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Level/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Level/comment"/>
-      <genFeatures children="true" createChild="false" propertySortChoices="true"
-          ecoreFeature="ecore:EReference hierarchy.ecore#//Level/children"/>
+      resource="XML" disposableProviderFactory="true" ecorePackage="hierarchy.ecore#/">
+    <genClasses image="false" ecoreClass="hierarchy.ecore#//Leaf">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Leaf/containerFileName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Leaf/ref"/>
     </genClasses>
-    <genClasses ecoreClass="hierarchy.ecore#//RootLevel">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference hierarchy.ecore#//RootLevel/levels"/>
+    <genClasses image="false" ecoreClass="hierarchy.ecore#//Level">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference hierarchy.ecore#//Level/children"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Level/comment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Level/name"/>
     </genClasses>
     <genClasses ecoreClass="hierarchy.ecore#//Node"/>
-    <genClasses image="false" ecoreClass="hierarchy.ecore#//Leaf">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Leaf/ref"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute hierarchy.ecore#//Leaf/containerFileName"/>
+    <genClasses ecoreClass="hierarchy.ecore#//RootLevel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference hierarchy.ecore#//RootLevel/levels"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

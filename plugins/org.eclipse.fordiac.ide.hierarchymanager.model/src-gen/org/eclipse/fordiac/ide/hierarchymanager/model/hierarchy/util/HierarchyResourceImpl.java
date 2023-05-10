@@ -12,20 +12,29 @@
  *    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy;
+package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util;
 
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.common.util.URI;
+
+import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Node</b></em>'.
+ * The <b>Resource </b> associated with the package.
  * <!-- end-user-doc -->
- *
- *
- * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage#getNode()
- * @model extendedMetaData="name='Node' kind='empty'"
+ * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl
  * @generated
  */
-public interface Node extends EObject {
+public class HierarchyResourceImpl extends XMLResourceImpl {
+	/**
+	 * Creates an instance of the resource.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param uri the URI of the new resource.
+	 * @generated
+	 */
+	public HierarchyResourceImpl(URI uri) {
+		super(uri);
+	}
 
-} // Node
+} //HierarchyResourceImpl
