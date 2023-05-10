@@ -49,6 +49,7 @@
     			viewerId="org.eclipse.fordiac.ide.hierarchymanager.view">
 			<includes>
           		<actionExtension pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.openLeafActionProvider"/>
+          		<actionExtension pattern="org.eclipse.ui.navigator.resources.UndoRedoActionProvider"/>
        		</includes>
   		</viewerActionBinding>
   		<viewerContentBinding
@@ -99,7 +100,7 @@
 	               <instanceof value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf"> </instanceof>               
 	            </or>
         	</enablement>
-  		</actionProvider>    
+  		</actionProvider>   		  
    	</extension>
 
    	<extension point="org.eclipse.ui.perspectiveExtensions">  
