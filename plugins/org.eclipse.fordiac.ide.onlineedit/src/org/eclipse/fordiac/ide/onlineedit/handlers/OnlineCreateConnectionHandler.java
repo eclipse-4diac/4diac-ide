@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.deployment.ui.handlers.AbstractDeploymentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.provider.ConnectProviderAnnotation;
 import org.eclipse.gef.ConnectionEditPart;
 
 public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand {
@@ -75,6 +76,6 @@ public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand {
 
 	@Override
 	protected String getCurrentElementName() {
-		return "Connection: " + conn.getName();
+		return ConnectProviderAnnotation.getConnectionName(conn);
 	}
 }

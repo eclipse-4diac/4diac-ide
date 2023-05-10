@@ -29,6 +29,8 @@ public class GitLabImportWizard extends Wizard implements IImportWizard {
 
 	// What happens after the "Finish" button has been clicked
 	public boolean performFinish() {
+		listOfLibsPage.finish();
+		// should be the last thing to be done
 		mainPage.getDownloadManager().getGitLabApi().close();
 		return true; 
 	}

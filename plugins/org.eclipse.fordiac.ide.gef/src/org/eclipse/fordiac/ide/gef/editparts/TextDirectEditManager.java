@@ -15,10 +15,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
+import org.eclipse.draw2d.zoom.ZoomListener;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.draw2d.zoom.ZoomListener;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.gef.tools.DirectEditManager;
@@ -30,6 +30,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.CellEditorActionHandler;
 
@@ -99,11 +100,14 @@ public abstract class TextDirectEditManager extends DirectEditManager {
 	// Hook the cell editor's copy/paste actions to the actionBars so that
 	// they can be invoked via keyboard shortcuts.
 	private void setupActions() {
-		actionBars = EditorUtils.getCurrentActiveEditor().getEditorSite().getActionBars();
-		saveCurrentActions(actionBars);
-		actionHandler = new CellEditorActionHandler(actionBars);
-		actionHandler.addCellEditor(getCellEditor());
-		actionBars.updateActionBars();
+		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
+		if (currentActiveEditor != null) {
+			actionBars = currentActiveEditor.getEditorSite().getActionBars();
+			saveCurrentActions(actionBars);
+			actionHandler = new CellEditorActionHandler(actionBars);
+			actionHandler.addCellEditor(getCellEditor());
+			actionBars.updateActionBars();
+		}
 	}
 
 	private void setupZoomHandling() {

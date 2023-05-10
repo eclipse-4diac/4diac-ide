@@ -39,7 +39,6 @@ public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 		element.setIsInput(!isInput); // also test copying from inputs to outputs and vice-versa
 		element.setName(INTERFACE_ELEMENT);
 		final DataType type = getDatatypelib().getType(typeName);
-		element.setTypeName(typeName);
 		element.setType(type);
 		state.setCommand(new CreateInterfaceElementCommand(element, isInput,
 				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), 0));

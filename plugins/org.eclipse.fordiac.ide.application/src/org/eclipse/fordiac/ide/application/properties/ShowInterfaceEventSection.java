@@ -13,26 +13,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceEventSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.gef.EditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 
 public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
 	protected FBNetworkElement getInputType(final Object input) {
-		if ((input instanceof SubAppForFBNetworkEditPart) || (input instanceof AbstractFBNElementEditPart)) {
-			return (FBNetworkElement) ((EditPart) input).getModel();
-		}
-		if (input instanceof FBNetworkElement) {
-			return (FBNetworkElement) input;
-		}
-		return null;
+		return ShowInterfaceAdapterSection.getFBNetworkElementFromInput(input);
 	}
 
 	@Override
@@ -65,6 +57,11 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 	@Override
 	public boolean isEditable() {
 		return false;
+	}
+
+	@Override
+	protected InterfaceList getInterface() {
+		return getType().getInterface();
 	}
 
 }

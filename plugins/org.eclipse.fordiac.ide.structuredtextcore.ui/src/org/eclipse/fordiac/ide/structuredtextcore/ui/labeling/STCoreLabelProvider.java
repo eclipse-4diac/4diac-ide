@@ -21,9 +21,13 @@ import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider;
 
 import com.google.inject.Inject;
 
-/** Provides labels for EObjects.
+/**
+ * Provides labels for EObjects.
  *
- * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#label-provider */
+ * See
+ * https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#label-provider
+ */
+@SuppressWarnings("static-method")
 public class STCoreLabelProvider extends DefaultEObjectLabelProvider {
 
 	private static final String TYPE_SEPARATOR = " : "; //$NON-NLS-1$
@@ -33,12 +37,10 @@ public class STCoreLabelProvider extends DefaultEObjectLabelProvider {
 		super(delegate);
 	}
 
-	@SuppressWarnings("static-method")
 	String text(final STVarDeclaration stVarDeclaration) {
 		return stVarDeclaration.getName() + TYPE_SEPARATOR + stVarDeclaration.getType().getName();
 	}
 
-	@SuppressWarnings("static-method")
 	String text(final STFunction function) {
 		var labelString = function.getName();
 		if (function.getReturnType() != null) {

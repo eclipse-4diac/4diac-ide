@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -61,7 +61,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl#getWith <em>With</em>}</li>
  * </ul>
  *
@@ -169,26 +168,6 @@ public class EventImpl extends EObjectImpl implements Event {
 	protected DataType type;
 
 	/**
-	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTypeName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String TYPE_NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTypeName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String typeName = TYPE_NAME_EDEFAULT;
-
-	/**
 	 * The cached value of the '{@link #getWith() <em>With</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -261,16 +240,6 @@ public class EventImpl extends EObjectImpl implements Event {
 		comment = newComment;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__COMMENT, oldComment, comment));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getQualifiedName() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
 	}
 
 	/**
@@ -381,29 +350,6 @@ public class EventImpl extends EObjectImpl implements Event {
 	 * @generated
 	 */
 	@Override
-	public String getTypeName() {
-		return typeName;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setTypeName(String newTypeName) {
-		String oldTypeName = typeName;
-		typeName = newTypeName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.EVENT__TYPE_NAME, oldTypeName, typeName));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<With> getWith() {
 		if (with == null) {
 			with = new EObjectContainmentEList<With>(With.class, this, LibraryElementPackage.EVENT__WITH);
@@ -459,6 +405,20 @@ public class EventImpl extends EObjectImpl implements Event {
 	@Override
 	public FBNetworkElement getFBNetworkElement() {
 		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getTypeName() {
+		DataType dataType = getType();
+		if(dataType != null){
+			return dataType.getName();
+		}
+		return null;
 	}
 
 	/**
@@ -526,6 +486,16 @@ public class EventImpl extends EObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public String getQualifiedName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -583,8 +553,6 @@ public class EventImpl extends EObjectImpl implements Event {
 			case LibraryElementPackage.EVENT__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case LibraryElementPackage.EVENT__TYPE_NAME:
-				return getTypeName();
 			case LibraryElementPackage.EVENT__WITH:
 				return getWith();
 			default:
@@ -625,9 +593,6 @@ public class EventImpl extends EObjectImpl implements Event {
 			case LibraryElementPackage.EVENT__TYPE:
 				setType((DataType)newValue);
 				return;
-			case LibraryElementPackage.EVENT__TYPE_NAME:
-				setTypeName((String)newValue);
-				return;
 			case LibraryElementPackage.EVENT__WITH:
 				getWith().clear();
 				getWith().addAll((Collection<? extends With>)newValue);
@@ -667,9 +632,6 @@ public class EventImpl extends EObjectImpl implements Event {
 			case LibraryElementPackage.EVENT__TYPE:
 				setType((DataType)null);
 				return;
-			case LibraryElementPackage.EVENT__TYPE_NAME:
-				setTypeName(TYPE_NAME_EDEFAULT);
-				return;
 			case LibraryElementPackage.EVENT__WITH:
 				getWith().clear();
 				return;
@@ -701,8 +663,6 @@ public class EventImpl extends EObjectImpl implements Event {
 				return outputConnections != null && !outputConnections.isEmpty();
 			case LibraryElementPackage.EVENT__TYPE:
 				return type != null;
-			case LibraryElementPackage.EVENT__TYPE_NAME:
-				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case LibraryElementPackage.EVENT__WITH:
 				return with != null && !with.isEmpty();
 			default:
@@ -778,8 +738,6 @@ public class EventImpl extends EObjectImpl implements Event {
 		result.append(comment);
 		result.append(", isInput: "); //$NON-NLS-1$
 		result.append(isInput);
-		result.append(", typeName: "); //$NON-NLS-1$
-		result.append(typeName);
 		result.append(')');
 		return result.toString();
 	}

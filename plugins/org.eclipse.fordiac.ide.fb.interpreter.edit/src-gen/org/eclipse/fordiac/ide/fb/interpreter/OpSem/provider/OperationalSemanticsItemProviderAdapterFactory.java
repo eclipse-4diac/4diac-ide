@@ -225,6 +225,44 @@ public class OperationalSemanticsItemProviderAdapterFactory extends OperationalS
 		return runtimeMapItemProvider;
 	}
 
+	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace}
+	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	protected TraceItemProvider traceItemProvider;
+
+	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace}. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public Adapter createTraceAdapter() {
+		if (traceItemProvider == null) {
+			traceItemProvider = new TraceItemProvider(this);
+		}
+
+		return traceItemProvider;
+	}
+
+	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace}
+	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	protected EccTraceItemProvider eccTraceItemProvider;
+
+	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace}. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public Adapter createEccTraceAdapter() {
+		if (eccTraceItemProvider == null) {
+			eccTraceItemProvider = new EccTraceItemProvider(this);
+		}
+
+		return eccTraceItemProvider;
+	}
+
 	/** This returns the root adapter factory that contains this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */

@@ -93,13 +93,11 @@ class StructuredTextParseUtil extends ParseUtil {
 		return issues
 	}
 
-	def static List<Issue> validate(String expression, URI uri, INamedElement expectedType, FBType fbType,
-		Collection<? extends EObject> additionalContent) {
-		val issues = newArrayList
+	def static void validate(String expression, URI uri, INamedElement expectedType, FBType fbType,
+		Collection<? extends EObject> additionalContent, List<Issue> issues) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		expression.parse(parser.grammarAccess.STInitializerExpressionSourceRule, uri, expectedType, fbType,
 			additionalContent, issues)
-		return issues
 	}
 
 	def static STExpressionSource parse(String expression, INamedElement expectedType, FBType fbType,

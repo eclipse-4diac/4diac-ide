@@ -17,10 +17,12 @@
 
 package org.eclipse.fordiac.ide.model.edit.helper;
 
+import org.eclipse.fordiac.ide.model.StructManipulation;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.swt.SWT;
@@ -33,15 +35,17 @@ public final class InitialValueHelper {
 		throw new UnsupportedOperationException("Helper class InitialValueHelper should not be instantiated!"); //$NON-NLS-1$
 	}
 
-	public static String getInitalOrDefaultValue(final Object element) {
-		if (element instanceof VarDeclaration) {
-			final VarDeclaration varDec = (VarDeclaration) element;
+	public static String getInitialOrDefaultValue(final Object element) {
+		if (element instanceof final VarDeclaration varDec) {
 			if (hasInitalValue(element)) {
 				return varDec.getValue().getValue();
 			}
+			if (hasDataTypeInitialValue(varDec)) {
+				return StructManipulation.getMemberVarValue(varDec);
+			}
 			return getDefaultValue(element);
-		} else if (element instanceof ErrorMarkerInterface) {
-			final ErrorMarkerInterface marker = (ErrorMarkerInterface) element;
+		}
+		if (element instanceof final ErrorMarkerInterface marker) {
 			if (hasInitalValue(element)) {
 				return marker.getValue().getValue();
 			}
@@ -50,10 +54,16 @@ public final class InitialValueHelper {
 		return ""; //$NON-NLS-1$
 	}
 
+	private static boolean hasDataTypeInitialValue(final VarDeclaration varDec) {
+		if (varDec.getFBNetworkElement() instanceof final StructManipulator) {
+			return !StructManipulation.getMemberVarValue(varDec).isBlank();
+		}
+		return false;
+	}
+
 	public static String getDefaultValue(final Object element) {
-		if (element instanceof VarDeclaration) {
-			final VarDeclaration varDec = (VarDeclaration) element;
-			if (varDec.getType() instanceof AnyType && !IecTypes.GenericTypes.isAnyType(varDec.getType())) {
+		if (element instanceof final VarDeclaration varDec) {
+			if ((varDec.getType() instanceof AnyType) && !IecTypes.GenericTypes.isAnyType(varDec.getType())) {
 				try {
 					return VariableOperations.newVariable(varDec).toString();
 				} catch (final Exception exc) {
@@ -66,7 +76,7 @@ public final class InitialValueHelper {
 	}
 
 	public static Color getForegroundColor(final Object element) {
-		if (element instanceof VarDeclaration && !hasInitalValue(element)) {
+		if ((element instanceof VarDeclaration) && !hasInitalValue(element)) {
 
 			return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
 		}
@@ -74,13 +84,12 @@ public final class InitialValueHelper {
 	}
 
 	public static boolean hasInitalValue(final Object element) {
-		if (element instanceof VarDeclaration) {
-			final VarDeclaration varDec = (VarDeclaration) element;
-			return varDec.getValue() != null && varDec.getValue().getValue() != null
+		if (element instanceof final VarDeclaration varDec) {
+			return (varDec.getValue() != null) && (varDec.getValue().getValue() != null)
 					&& !varDec.getValue().getValue().isEmpty();
-		} else if (element instanceof ErrorMarkerInterface) {
-			final ErrorMarkerInterface marker = (ErrorMarkerInterface) element;
-			return marker.getValue() != null && marker.getValue().getValue() != null
+		}
+		if (element instanceof final ErrorMarkerInterface marker) {
+			return (marker.getValue() != null) && (marker.getValue().getValue() != null)
 					&& !marker.getValue().getValue().isEmpty();
 		}
 		return false;

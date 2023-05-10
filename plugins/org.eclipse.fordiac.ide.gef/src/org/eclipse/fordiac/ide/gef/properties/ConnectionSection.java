@@ -21,7 +21,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeConnectionCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HideConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -67,7 +67,7 @@ public class ConnectionSection extends AbstractSection {
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(event -> {
 			removeContentAdapter();
-			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+			executeCommand(new ChangeConnectionCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();
 		});
 
@@ -115,18 +115,14 @@ public class ConnectionSection extends AbstractSection {
 	private boolean isViewer() {
 		final EObject sourceBlock = getType().getSource().eContainer().eContainer();
 		return (sourceBlock instanceof CompositeFBType) || // connection to interface
-				((sourceBlock instanceof FBNetworkElement)
-						&& ((FBNetworkElement) sourceBlock).isContainedInTypedInstance());
+				((sourceBlock instanceof final FBNetworkElement fbne) && fbne.isContainedInTypedInstance());
 	}
 
 	@Override
 	protected Connection getInputType(final Object input) {
-		final Object inputHelper = input instanceof EditPart ? ((EditPart) input).getModel() : input;
-		if (inputHelper instanceof Connection) {
-			final Connection con = (Connection) inputHelper;
-			if (isValidConnection(con)) {
-				return con;
-			}
+		final Object inputHelper = (input instanceof final EditPart ep) ? ep.getModel() : input;
+		if ((inputHelper instanceof final Connection con) && (isValidConnection(con))) {
+			return con;
 		}
 		return null;
 	}
@@ -139,9 +135,7 @@ public class ConnectionSection extends AbstractSection {
 	}
 
 	private static String getFBNameFromIInterfaceElement(final IInterfaceElement element) {
-		return element.eContainer().eContainer() instanceof FBNetworkElement
-				? ((FBNetworkElement) element.eContainer().eContainer()).getName()
-						: ""; //$NON-NLS-1$
+		return (element.eContainer().eContainer() instanceof final FBNetworkElement fbne) ? fbne.getName() : ""; //$NON-NLS-1$
 	}
 
 	@Override

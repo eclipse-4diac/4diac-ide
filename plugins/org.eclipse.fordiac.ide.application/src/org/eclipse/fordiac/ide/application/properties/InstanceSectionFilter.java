@@ -30,35 +30,38 @@ public class InstanceSectionFilter implements IFilter {
 	}
 
 	static FBNetworkElement getFBNetworkElementFromSelectedElement(final Object element) {
-		Object retval = element;
-		if (retval instanceof final EditPart ep) {
-			retval = ep.getModel();
+		Object candidate = null;
+		if (element instanceof final EditPart editPart) {
+			candidate = editPart.getModel();
 		}
 
-		if (retval instanceof final FBNetwork fbn) {
-			retval = fbn.eContainer();
+		if (element instanceof final FBNetwork fbNetwork) {
+			candidate = fbNetwork.eContainer();
 		}
 
-		if (retval instanceof final InstanceComment ic) {
-			retval = ic.getRefElement();
+		if (element instanceof final InstanceComment instanceComment) {
+			candidate = instanceComment.getRefElement();
 		}
 
-		if (retval instanceof final InstanceName in) {
-			retval = in.getRefElement();
+		if (element instanceof final InstanceName instanceName) {
+			candidate = instanceName.getRefElement();
 		}
 
-		return isEditableFBNetworkElement(retval) ? (FBNetworkElement) retval : null;
+		if (candidate instanceof final FBNetworkElement fbNetworkElement
+				&& isEditableFBNetworkElement(fbNetworkElement)) {
+			return fbNetworkElement;
+		}
+
+		return null;
 	}
 
-	private static boolean isEditableFBNetworkElement(final Object retval) {
-		if (retval instanceof final FBNetworkElement fnbEl) {
-			if (retval instanceof Group || retval instanceof Comment || retval instanceof Demultiplexer) {
-				// these three do not have instance information to show
-				return false;
-			}
-			return !fnbEl.isContainedInTypedInstance();
+	private static boolean isEditableFBNetworkElement(final FBNetworkElement fbNetworkElement) {
+		if (fbNetworkElement instanceof Group || fbNetworkElement instanceof Comment
+				|| fbNetworkElement instanceof Demultiplexer) {
+			// these three do not have instance information to show
+			return false;
 		}
-		return false;
+		return !fbNetworkElement.isContainedInTypedInstance();
 	}
 
 }

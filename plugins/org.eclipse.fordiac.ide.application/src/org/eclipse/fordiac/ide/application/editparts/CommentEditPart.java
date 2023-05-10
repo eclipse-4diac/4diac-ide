@@ -9,16 +9,22 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Prankur Agarwal - update the figure to look like a sticky note
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import org.eclipse.draw2d.AbstractBorder;
 import org.eclipse.draw2d.Cursors;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -27,10 +33,7 @@ import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
-import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
-import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
@@ -48,15 +51,17 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 public class CommentEditPart extends AbstractPositionableElementEditPart {
 
-	public static final class CommentFigure extends BorderedRoundedRectangle {
+	public static final class StickyNoteCommentFigure extends Figure {
 
 		final InstanceCommentFigure comment;
 
-		public CommentFigure() {
+		public StickyNoteCommentFigure() {
 			setupFigure();
 			setupRootLayout();
 			comment = new InstanceCommentFigure();
@@ -69,11 +74,8 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 		}
 
 		private void setupFigure() {
-			setOutline(false);
-			setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
-			setFillXOR(false);
-			setOpaque(false);
-			setBorder(new RoundedRectangleShadowBorder());
+			setBorder(new DogEar());
+			setOpaque(true);
 		}
 
 		private void setupRootLayout() {
@@ -87,6 +89,50 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 			comment.setText(newCommentTest);
 		}
 
+		@Override
+		public void paintFigure(final Graphics g) {
+			setBackgroundColor(new Color(Display.getCurrent(), 255, 255, 210));
+			final Rectangle r = getBounds();
+			final PointList pl = new PointList(5);
+			pl.addPoint(r.getTopLeft());
+			pl.addPoint(r.getTopRight().translate(-6, 0));
+			pl.addPoint(r.getTopRight().translate(0, 6));
+			pl.addPoint(r.getBottomRight());
+			pl.addPoint(r.getBottomLeft());
+			g.fillPolygon(pl);
+
+		}
+	}
+
+	public static class DogEar extends AbstractBorder {
+		private static final Insets INSETS = new Insets(3, 3, 3, 3);
+
+		/**
+		 * @see org.eclipse.draw2d.Border#getInsets(org.eclipse.draw2d.IFigure)
+		 */
+		@Override
+		public Insets getInsets(final IFigure figure) {
+			return INSETS;
+		}
+
+		/**
+		 * @see org.eclipse.draw2d.Border#paint(org.eclipse.draw2d.IFigure,
+		 *      org.eclipse.draw2d.Graphics, org.eclipse.draw2d.geometry.Insets)
+		 */
+		@Override
+		public void paint(final IFigure figure, final Graphics g, final Insets insets) {
+			final Rectangle r = getPaintRectangle(figure, insets);
+			r.resize(-1, -1);
+			final PointList pl = new PointList(new int[] { -10, 10, 0, 10, -10, 0 });
+			pl.translate(r.getTopRight());
+			g.drawPolygon(pl);
+			g.drawLine(r.getTopLeft(), r.getTopRight().translate(-10, 0));
+			g.drawLine(r.getTopLeft(), r.getTopLeft());
+			g.drawLine(r.getBottomLeft(), r.getBottomRight());
+			g.drawLine(r.getTopRight().translate(0, 10), r.getBottomRight());
+			g.drawLine(r.getTopLeft(), r.getBottomLeft());
+
+		}
 	}
 
 	private class CommentRenameEditPolicy extends AbstractViewRenameEditPolicy {
@@ -147,14 +193,14 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 
 	@Override
 	protected IFigure createFigureForModel() {
-		final CommentFigure mainFigure = new CommentFigure();
+		final StickyNoteCommentFigure mainFigure = new StickyNoteCommentFigure();
 		mainFigure.setCommentText(getModel().getComment());
 		return mainFigure;
 	}
 
 	@Override
-	public CommentFigure getFigure() {
-		return (CommentFigure) super.getFigure();
+	public StickyNoteCommentFigure getFigure() {
+		return (StickyNoteCommentFigure) super.getFigure();
 	}
 
 	@Override

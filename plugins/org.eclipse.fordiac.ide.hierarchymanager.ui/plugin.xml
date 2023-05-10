@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+
+
+<!--
+ /*******************************************************************************
+  * Copyright (c) 2023 Primetals Technologies Austria GmbH
+  *
+  * This program and the accompanying materials are made available under the
+  * terms of the Eclipse Public License 2.0 which is available at
+  * http://www.eclipse.org/legal/epl-2.0.
+  *
+  * SPDX-License-Identifier: EPL-2.0
+  *
+  * Contributors:
+  *   Allois Zoitl - initial API and implementation and/or initial documentation
+  *******************************************************************************/
+-->
+
+
+<plugin>
+	<extension
+ 			point="org.eclipse.ui.views">
+  		<view
+			    category="org.eclipse.fordiac.ide.view.category"
+			    class="org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView"
+			    icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/filenav_nav.png"
+			    id="org.eclipse.fordiac.ide.hierarchymanager.view"
+			    name="Plant Hierarchy">
+  		</view>
+	</extension>
+   	<extension
+ 			point="org.eclipse.ui.navigator.viewer">
+	    <viewer
+            viewerId="org.eclipse.fordiac.ide.hierarchymanager.view">
+         <options> 
+            <property
+                  name="org.eclipse.ui.navigator.hideAvailableExtensionsTab"
+                  value="true"/>
+            <property
+                  name="org.eclipse.ui.navigator.hideAvailableCustomizationsDialog"
+                  value="true"/> 
+            <property
+                  name="org.eclipse.ui.navigator.hideLinkWithEditorAction"
+                  value="true"/> 
+         </options>
+      </viewer>
+  		<viewerActionBinding
+    			viewerId="org.eclipse.fordiac.ide.hierarchymanager.view">
+       <includes>
+          <actionExtension
+                pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.openLeafActionProvider">
+          </actionExtension>
+       </includes>   
+			  
+  		</viewerActionBinding>
+  		<viewerContentBinding
+    			viewerId="org.eclipse.fordiac.ide.hierarchymanager.view"> 
+			<includes>
+				<contentExtension isRoot="true"
+	            		pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchycontent" />
+        		<contentExtension
+                     pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchySorter" >
+               </contentExtension>      
+           	</includes>
+  		</viewerContentBinding>
+   	</extension>
+   	<extension
+			point="org.eclipse.ui.navigator.navigatorContent">
+		<navigatorContent
+	            activeByDefault="true"
+	            id="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchycontent"
+	            contentProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyContentProvider"
+	            labelProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyProvider"
+	            name="Plant Hierachy Content"
+	            priority="highest">
+            <possibleChildren>
+	              <instanceof value="org.eclipse.emf.ecore.EObject"/>
+	        </possibleChildren> 
+            <triggerPoints>
+                <or>
+                    <instanceof value="org.eclipse.emf.ecore.EObject"/>
+                    <instanceof value="org.eclipse.core.resources.IProject" />
+                </or>
+            </triggerPoints>
+			<commonSorter
+					class="org.eclipse.fordiac.ide.typemanagement.navigator.KeepOrderContentSorter"
+                	id="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchySorter">
+				<parentExpression>
+                	<or>
+                    	<instanceof value="org.eclipse.emf.ecore.EObject"/>
+                    	<instanceof value="org.eclipse.core.resources.IProject" />
+					</or>
+				</parentExpression>
+			</commonSorter>                
+		</navigatorContent>
+		<actionProvider
+            	class="org.eclipse.fordiac.ide.hierarchymanager.ui.actions.OpenLeafActionProvider"
+            	id="org.eclipse.fordiac.ide.hierarchymanager.ui.openLeafActionProvider">
+            <enablement>
+	            <or>
+	               <instanceof value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf"> </instanceof>               
+	            </or>
+        	</enablement>
+  		</actionProvider>    
+   	</extension>
+
+   	<extension point="org.eclipse.ui.perspectiveExtensions">  
+		<perspectiveExtension 
+				targetID="org.eclipse.fordiac.ide.SystemPerspective">
+			<showInPart id ="org.eclipse.fordiac.ide.hierarchymanager.view"/>
+		</perspectiveExtension>
+   	</extension>
+    <extension
+          point="org.eclipse.ui.commands">
+       <category
+             id="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
+             name="4diac IDE Plant Hierarchy Commands">
+       </category>
+       <command
+             categoryId="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
+             defaultHandler="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.ExpandAll"
+             id="org.eclipse.fordiac.ide.hierarchymanager.ui.expandAll"
+             name="Expand All">
+       </command>
+    </extension>
+    <extension
+          point="org.eclipse.ui.menus">
+       <menuContribution
+             allPopups="false"
+             locationURI="toolbar:org.eclipse.fordiac.ide.hierarchymanager.view">
+          <command
+                commandId="org.eclipse.fordiac.ide.hierarchymanager.ui.expandAll"
+                icon="platform:/plugin/org.eclipse.ui/icons/full/elcl16/expandall.png"
+                style="push">
+          </command>
+       </menuContribution>
+    </extension>
+</plugin>

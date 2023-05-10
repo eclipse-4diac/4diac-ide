@@ -28,7 +28,7 @@ import org.eclipse.emf.compare.Comparison;
 import org.eclipse.emf.compare.utils.EMFComparePrettyPrinter;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerComparisonUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.compare.EventManagerComparisonUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.FBNetworkTestRunner;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -61,7 +61,8 @@ public class ReferenceExamplesTest {
 
 	public static IResource[] getTraceNames() throws CoreException {
 		loadProject();
-		return Stream.of(resources).filter(res -> FILE_EXTENSION.equals(res.getFileExtension()))
+		return Stream.of(resources)
+				.filter(res -> FILE_EXTENSION.equals(res.getFileExtension()))
 				.toArray(IResource[]::new);
 	}
 
@@ -95,10 +96,10 @@ public class ReferenceExamplesTest {
 
 		// prepare for emf compare
 		final Resource resRight = EventManagerUtils.addResourceToManager(eventManager,
-				URI.createURI("platform:/resource/ReferenceExamples/" + res.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
+				URI.createURI("platform:/resource/ReferenceExamples/" + res.getName())); //$NON-NLS-1$ //$NON-NLS-2$
 
 		final Resource resLeft = EventManagerUtils
-				.loadResource(URI.createPlatformResourceURI(res.getFullPath().toString(), true));
+				.loadResourceNotOnDemand (URI.createPlatformResourceURI(res.getFullPath().toString(), true));
 
 		final Comparison eventComparison = EventManagerComparisonUtils.compareEventManager(resLeft, resRight);
 		EMFComparePrettyPrinter.printComparison(eventComparison, System.out);

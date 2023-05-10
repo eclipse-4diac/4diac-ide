@@ -23,6 +23,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.io.InputStream;
 import java.text.MessageFormat;
 
 import javax.xml.stream.XMLStreamException;
@@ -37,11 +38,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public abstract class TypeImporter extends CommonElementImporter {
 
 	protected TypeImporter(final IFile file) {
 		super(file);
+	}
+
+	protected TypeImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
+		super(inputStream, typeLibrary);
 	}
 
 	protected TypeImporter(final CommonElementImporter importer) {
@@ -62,15 +68,12 @@ public abstract class TypeImporter extends CommonElementImporter {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
 			final DataType dataType = getDataTypeLibrary().getType(typeName);
-			v.setTypeName(typeName);
-			if (dataType != null) {
-				v.setType(dataType);
-			}
+			v.setType(dataType);
 
 			if (dataType instanceof ErrorMarkerDataType) {
 				errorMarkerBuilders.add(ErrorMarkerBuilder
-						.createErrorMarkerBuilder(MessageFormat.format(Messages.TypeImporter_TypeMissing,
-								typeName, v.getName()))
+						.createErrorMarkerBuilder(
+								MessageFormat.format(Messages.TypeImporter_TypeMissing, typeName, v.getName()))
 						.setTarget(v));
 			}
 

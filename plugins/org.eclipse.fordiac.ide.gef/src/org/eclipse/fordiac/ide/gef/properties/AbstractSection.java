@@ -19,12 +19,12 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
+import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -101,19 +101,23 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		setInputInit();
 	}
 
-	private final Adapter contentAdapter = new EContentAdapter() {
+	private final Adapter contentAdapter = new SingleRecursiveContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if ((null != getType()) && getType().eAdapters().contains(contentAdapter) && !blockRefresh) {
-				parent.getDisplay().asyncExec(() -> {
-					if (!parent.isDisposed()) {
-						refresh();
-					}
-				});
-			}
+			notifiyRefresh();
 		}
 	};
+
+	protected void notifiyRefresh() {
+		if ((null != getType()) && getType().eAdapters().contains(contentAdapter) && !blockRefresh) {
+			parent.getDisplay().asyncExec(() -> {
+				if (!parent.isDisposed()) {
+					refresh();
+				}
+			});
+		}
+	}
 
 	@Override
 	public void dispose() {

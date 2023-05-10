@@ -20,6 +20,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
@@ -27,6 +28,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -121,6 +123,16 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseRuntimeMap(Map.Entry<FBNetworkElement, FBRuntimeAbstract> object) {
 			return createRuntimeMapAdapter();
+		}
+
+		@Override
+		public Adapter caseTrace(Trace object) {
+			return createTraceAdapter();
+		}
+
+		@Override
+		public Adapter caseEccTrace(EccTrace object) {
+			return createEccTraceAdapter();
 		}
 
 		@Override
@@ -254,6 +266,29 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 	 * @see java.util.Map.Entry
 	 * @generated */
 	public Adapter createRuntimeMapAdapter() {
+		return null;
+	}
+
+	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace
+	 * <em>Trace</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore
+	 * cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace
+	 * @generated */
+	public Adapter createTraceAdapter() {
+		return null;
+	}
+
+	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace
+	 * <em>Ecc Trace</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
+	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
+	 * -->
+	 *
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace
+	 * @generated */
+	public Adapter createEccTraceAdapter() {
 		return null;
 	}
 

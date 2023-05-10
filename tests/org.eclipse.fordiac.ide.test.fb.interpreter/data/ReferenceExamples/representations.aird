@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:description_2="http://www.eclipse.org/sirius/table/description/1.1.0" xmlns:diagram="http://www.eclipse.org/sirius/diagram/1.1.0" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.3/notation" xmlns:opsem="http://OperationalSemantics/1.0" xmlns:org.eclipse.fordiac.ide.model.libraryElement="org.eclipse.fordiac.ide.model.libraryElement" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:table="http://www.eclipse.org/sirius/table/1.1.0" xmlns:viewpoint="http://www.eclipse.org/sirius/1.1.0" xsi:schemaLocation="http://www.eclipse.org/sirius/description/1.1.0 http://www.eclipse.org/sirius/1.1.0#//description http://www.eclipse.org/sirius/diagram/description/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description http://www.eclipse.org/sirius/table/description/1.1.0 http://www.eclipse.org/sirius/table/1.1.0#//description http://OperationalSemantics/1.0 platform:/resource/org.eclipse.fordiac.ide.fb.interpreter/model/OperationalSemantics.ecore http://www.eclipse.org/sirius/diagram/description/style/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description/style">
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:description_2="http://www.eclipse.org/sirius/table/description/1.1.0" xmlns:diagram="http://www.eclipse.org/sirius/diagram/1.1.0" xmlns:libraryElement="org.eclipse.fordiac.ide.model.libraryElement" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.3/notation" xmlns:opsem="http://OperationalSemantics/1.0" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:table="http://www.eclipse.org/sirius/table/1.1.0" xmlns:viewpoint="http://www.eclipse.org/sirius/1.1.0" xsi:schemaLocation="http://www.eclipse.org/sirius/description/1.1.0 http://www.eclipse.org/sirius/1.1.0#//description http://www.eclipse.org/sirius/diagram/description/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description http://www.eclipse.org/sirius/table/description/1.1.0 http://www.eclipse.org/sirius/table/1.1.0#//description http://www.eclipse.org/sirius/diagram/description/style/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description/style">
   <viewpoint:DAnalysis uid="_sbrisMNIEe2kK57dxjXZjA" selectedViews="_cSrCUMNJEe2kK57dxjXZjA" version="15.0.0.202209061200">
     <semanticResources>ReferenceExamples.sys</semanticResources>
     <semanticResources>Type%20Library/SimpleIO.fbt</semanticResources>
@@ -48,6 +48,45 @@
     <semanticResources>Type%20Library/custom/WithInputs.fbt</semanticResources>
     <semanticResources>Type%20Library/custom/WithOutputs.fbt</semanticResources>
     <semanticResources>Type%20Library/custom/structtype.dtp</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem</semanticResources>
+    <semanticResources>Type%20Library/custom/CompoundAdapterWith.adp</semanticResources>
+    <semanticResources>Type%20Library/custom/DefaultOutputValueAdapter.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/DefaultValueAdapter.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/EnhancedAdapterWith.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/EnhancedAdapterWith2.fbt</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._01_EventConnections.Ex1a.E_SPLIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._01_EventConnections.Ex1c.E_SPLIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._01_EventConnections.Ex1d.E_SPLIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._01_EventConnections.Ex2a.E_SPLIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._01_EventConnections.Ex2b.E_SPLIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._01_EventConnections.Ex4a.E_CTU.R.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._01_EventConnections.Ex5a.E_PERMIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._01_EventConnections.Ex5b.E_PERMIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._01_EventConnections.Ex6a.E_PERMIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._01_EventConnections.Ex6b.E_PERMIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._02_Parameters.Ex1a.E_PERMIT_1.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._02_Parameters.Ex2a.E_PERMIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._02_Parameters.Ex3a.E_PERMIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._02_Parameters.Ex3b.E_PERMIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._02_Parameters.Ex4a.E_PERMIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._02_Parameters.Ex5a.INT2INT.REQ.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._02_Parameters.Ex5b.INT2INT.REQ.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._02_Parameters.Ex5c.INT2INT.REQ.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._03_DataConnections.Ex1a.Fb1.REQ.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._03_DataConnections.Ex1b.Fb1.REQ.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._03_DataConnections.Ex1c.Fb1.REQ.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._03_DataConnections.Ex2a.Fb1.REQ.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._03_DataConnections.Ex2b.Fb1.REQ.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._03_DataConnections.Ex3.FB1.CU.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._03_DataConnections.Ex4a.Fb1.CU.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._03_DataConnections.Ex4b.Fb1.REQ.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._04_DataWith.Ex1a.WithInputs.REQ.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._04_DataWith.Ex1b.WithInputs.UPDATE.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._04_DataWith.Ex2a.WithOutputs.REQ.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._04_DataWith.Ex2b.WithOutputs.UPDATE.opsem</semanticResources>
+    <semanticResources>comparison/ReferenceExamples._01_EventConnections.Ex1b.E_SPLIT.EI.opsem</semanticResources>
+    <semanticResources>network_traces/ReferenceExamples._01_EventConnections.Ex1b.E_SPLIT.EI2.opsem</semanticResources>
+    <semanticResources>comparison/ReferenceExamples._01_EventConnections.Ex1b.E_SPLIT.EI2.opsem</semanticResources>
     <ownedViews xmi:type="viewpoint:DView" uid="_cSrCUMNJEe2kK57dxjXZjA">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']"/>
       <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_z6aWYMNOEe2eTaDh8rGj-A" name="new OpSem" repPath="#_z6ZvUMNOEe2eTaDh8rGj-A" changeId="49c31517-6706-492f-b938-ec326a89bf13">
@@ -759,30 +798,30 @@
   <table:DTable uid="_-VNtcMiVEe2l0JnMlaLHyw" headerColumnWidth="210">
     <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1"/>
     <lines xmi:type="table:DLine" uid="_PTB5cMiWEe2l0JnMlaLHyw" label="Var Declaration Q">
+      <target xmi:type="libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
+      <semanticElements xmi:type="libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
       <originMapping xmi:type="description_2:LineMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']/@ownedLineMappings[name='VarDeclarationLine']"/>
       <cells xmi:type="table:DCell" uid="_PTDHkMiWEe2l0JnMlaLHyw" label="Q" column="_-VOUgMiVEe2l0JnMlaLHyw">
-        <target xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
-        <semanticElements xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
+        <target xmi:type="libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
+        <semanticElements xmi:type="libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
       </cells>
       <cells xmi:type="table:DCell" uid="_i-qWlciWEe2l0JnMlaLHyw" label="" column="_i-qWk8iWEe2l0JnMlaLHyw">
-        <target xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
-        <semanticElements xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
+        <target xmi:type="libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
+        <semanticElements xmi:type="libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
       </cells>
-      <target xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
-      <semanticElements xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
     </lines>
     <lines xmi:type="table:DLine" uid="_PTB5csiWEe2l0JnMlaLHyw" label="Var Declaration CV">
+      <target xmi:type="libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
+      <semanticElements xmi:type="libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
       <originMapping xmi:type="description_2:LineMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']/@ownedLineMappings[name='VarDeclarationLine']"/>
       <cells xmi:type="table:DCell" uid="_PTDuoMiWEe2l0JnMlaLHyw" label="CV" column="_-VOUgMiVEe2l0JnMlaLHyw">
-        <target xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
-        <semanticElements xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
+        <target xmi:type="libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
+        <semanticElements xmi:type="libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
       </cells>
       <cells xmi:type="table:DCell" uid="_i-qWmMiWEe2l0JnMlaLHyw" label="" column="_i-qWk8iWEe2l0JnMlaLHyw">
-        <target xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
-        <semanticElements xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
+        <target xmi:type="libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
+        <semanticElements xmi:type="libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
       </cells>
-      <target xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
-      <semanticElements xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
     </lines>
     <columns xmi:type="table:DFeatureColumn" uid="_-VOUgMiVEe2l0JnMlaLHyw" label="Name" cells="_PTDHkMiWEe2l0JnMlaLHyw _PTDuoMiWEe2l0JnMlaLHyw" width="120" featureName="name">
       <originMapping xmi:type="description_2:FeatureColumnMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']/@ownedColumnMappings[name='Variable%20Name']"/>

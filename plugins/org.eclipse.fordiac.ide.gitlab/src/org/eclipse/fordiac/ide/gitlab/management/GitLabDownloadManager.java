@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.gitlab.Messages;
+import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.gitlab.wizard.GitLabImportWizardPage;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
@@ -40,13 +41,14 @@ import org.gitlab4j.api.models.Project;
 public class GitLabDownloadManager {
 	
 	private static final String PATH = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toPortableString();
-	private static final String ROOT_DIRECTORY = ".fblib";
+	private static final String ROOT_DIRECTORY = ".download";
 	private static final String API_VERSION = "api/v4/projects/";
 	private static final String PACKAGES = "/packages/";
 	private static final String PACKAGE_FILES = "/package_files";
 	private GitLabApi gitLabApi;
 	private HashMap<Project, List<Package>> projectAndPackageMap;
-	private HashMap<String, List<String>> packagesAndVersions;
+	private HashMap<String, List<LeafNode>> packagesAndLeaves;
+
 	private GitLabImportWizardPage gitLabImportPage;
 	
 	public GitLabDownloadManager(GitLabImportWizardPage gitLabImportPage) {
@@ -57,8 +59,12 @@ public class GitLabDownloadManager {
 		return gitLabApi;
 	}
 	
-	public Map<String, List<String>> getPackagesAndVersions() {
-		return packagesAndVersions;
+	public Map<String, List<LeafNode>> getPackagesAndLeaves() {
+		return packagesAndLeaves;
+	}
+	
+	public Map<Project, List<Package>> getProjectsAndPackages() {
+		return projectAndPackageMap;
 	}
 	
 	public void connectToGitLab(String url, String personalToken) {
@@ -70,15 +76,15 @@ public class GitLabDownloadManager {
 		try {
 			List<Package> packages;
 			projectAndPackageMap = new HashMap<>();
-			packagesAndVersions = new HashMap<>();
+			packagesAndLeaves = new HashMap<>();
 			for(Project p: gitLabApi.getProjectApi().getProjects()) {
 				packages = gitLabApi.getPackagesApi().getPackages(p.getId());
 				projectAndPackageMap.put(p, packages);
 				for(Package pack: packages) {
-					if (packagesAndVersions.get(pack.getName()) == null) {
-						packagesAndVersions.put(pack.getName(), new ArrayList<>());
-					} 
-					packagesAndVersions.get(pack.getName()).add(pack.getVersion());
+					if (packagesAndLeaves.get(pack.getName()) == null) {
+						packagesAndLeaves.put(pack.getName(), new ArrayList<>());
+					}
+					packagesAndLeaves.get(pack.getName()).add(new LeafNode(p, pack, pack.getVersion()));
 				}
 			}
 		} catch (GitLabApiException e) {
@@ -87,10 +93,6 @@ public class GitLabDownloadManager {
 		
 	}
 	
-	public Map<Project, List<Package>> getProjectsAndPackages() {
-		return projectAndPackageMap;
-	}
-
 	private void createRootDir() throws IOException {
 		Path path = Paths.get(PATH, ROOT_DIRECTORY);
 		if (!Files.exists(path)) {
@@ -105,24 +107,22 @@ public class GitLabDownloadManager {
 		}
 	}
 	
-	public void packageDownloader(Package p, Object project) throws IOException {
-		if (project instanceof Project) {
-			for(String filename: findFilenamesInPackage(p, ((Project)project))) {
-				URL url = new URL(buildDownloadURL(p, project, filename));
-				
-				HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
-				httpConn.setRequestMethod(Messages.GET);
-				httpConn.setRequestProperty(Messages.Private_Token, gitLabImportPage.getToken());
+	public void packageDownloader(Project project, Package p) throws IOException {
+		for(String filename: findFilenamesInPackage(p, project)) {
+			URL url = new URL(buildDownloadURL(p, project, filename));
 
-				InputStream responseStream = httpConn.getInputStream();
+			HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+			httpConn.setRequestMethod(Messages.GET);
+			httpConn.setRequestProperty(Messages.Private_Token, gitLabImportPage.getToken());
 
-				createRootDir();
-				createPackageDir(p);
-				Files.copy(responseStream, Paths.get(PATH, ROOT_DIRECTORY, p.getName() + "-" + p.getVersion(), filename), StandardCopyOption.REPLACE_EXISTING);
-			
-				responseStream.close();
-				httpConn.disconnect();
-			}
+			InputStream responseStream = httpConn.getInputStream();
+
+			createRootDir();
+			createPackageDir(p);
+			Files.copy(responseStream, Paths.get(PATH, ROOT_DIRECTORY, p.getName() + "-" + p.getVersion(), filename), StandardCopyOption.REPLACE_EXISTING);
+
+			responseStream.close();
+			httpConn.disconnect();
 		}
 	}
 	

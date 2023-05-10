@@ -76,7 +76,6 @@ public class AdapterDeclarationItemProvider extends ItemProviderAdapter implemen
 			addInputConnectionsPropertyDescriptor(object);
 			addOutputConnectionsPropertyDescriptor(object);
 			addTypePropertyDescriptor(object);
-			addTypeNamePropertyDescriptor(object);
 			addAdapterFBPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -215,28 +214,6 @@ public class AdapterDeclarationItemProvider extends ItemProviderAdapter implemen
 	}
 
 	/**
-	 * This adds a property descriptor for the Type Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addTypeNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_IInterfaceElement_typeName_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_IInterfaceElement_typeName_feature", "_UI_IInterfaceElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.IINTERFACE_ELEMENT__TYPE_NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Adapter FB feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -329,7 +306,6 @@ public class AdapterDeclarationItemProvider extends ItemProviderAdapter implemen
 			case LibraryElementPackage.ADAPTER_DECLARATION__COMMENT:
 			case LibraryElementPackage.ADAPTER_DECLARATION__ATTRIBUTES:
 			case LibraryElementPackage.ADAPTER_DECLARATION__IS_INPUT:
-			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_NAME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:

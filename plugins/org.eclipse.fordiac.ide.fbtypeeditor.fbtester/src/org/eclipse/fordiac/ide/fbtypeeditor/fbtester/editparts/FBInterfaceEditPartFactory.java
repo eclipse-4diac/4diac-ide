@@ -31,7 +31,7 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 public class FBInterfaceEditPartFactory
 		extends org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory {
 
-	public FBInterfaceEditPartFactory(GraphicalEditor editor, TypeLibrary typeLib) {
+	public FBInterfaceEditPartFactory(final GraphicalEditor editor, final TypeLibrary typeLib) {
 		super(editor, typeLib);
 	}
 
@@ -48,8 +48,7 @@ public class FBInterfaceEditPartFactory
 		}
 
 		if (modelElement instanceof Value) {
-			ValueEditPart part = new ValueEditPart();
-			part.setContext(context);
+			final ValueEditPart part = new ValueEditPart();
 			return part;
 		}
 		if (modelElement instanceof TestElement) {

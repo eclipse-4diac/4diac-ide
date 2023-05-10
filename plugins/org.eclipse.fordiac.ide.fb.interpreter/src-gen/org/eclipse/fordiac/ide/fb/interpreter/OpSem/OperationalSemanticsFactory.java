@@ -63,6 +63,18 @@ public interface OperationalSemanticsFactory extends EFactory {
 	 * @generated */
 	FBTransaction createFBTransaction();
 
+	/** Returns a new object of class '<em>Trace</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return a new object of class '<em>Trace</em>'.
+	 * @generated */
+	Trace createTrace();
+
+	/** Returns a new object of class '<em>Ecc Trace</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return a new object of class '<em>Ecc Trace</em>'.
+	 * @generated */
+	EccTrace createEccTrace();
+
 	/** Returns the package supported by this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @return the package supported by this factory.

@@ -116,14 +116,6 @@ public class EventManagerImpl extends MinimalEObjectImpl.Container implements Ev
 	 *
 	 * @generated */
 	@Override
-	public void process(final EventManager eventManager) {
-		EventManagerUtils.process(this);
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.EVENT_MANAGER__TRANSACTIONS:

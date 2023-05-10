@@ -14,6 +14,10 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.getCommandStack;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -21,7 +25,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
+import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
@@ -38,16 +44,19 @@ public class TrimHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IContainerEditPart containerEditPart = getContainerEditPart(HandlerUtil.getCurrentSelection(event));
+
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		if ((containerEditPart != null) && (editor != null)) {
 			final GraphicalEditPart contentEP = containerEditPart.getContentEP();
-			if(contentEP != null) {
+
+			if (contentEP != null) {
 				final Rectangle contentContainerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(contentEP);
 				final Rectangle groupContentBounds = containerEditPart.getMinContentBounds();
-				groupContentBounds.setWidth(Math.max(groupContentBounds.width, containerEditPart.getCommentWidth()));
+				final int adjustedCommentWidth = adjustCommentWidth(containerEditPart.getCommentWidth(),
+						containerEditPart.getChildren());
+				groupContentBounds.setWidth(Math.max(groupContentBounds.width, adjustedCommentWidth));
 				final Command cmd = ContainerContentLayoutPolicy.createChangeBoundsCommand(
-						(FBNetworkElement) containerEditPart.getModel(),
-						contentContainerBounds, groupContentBounds);
+						(FBNetworkElement) containerEditPart.getModel(), contentContainerBounds, groupContentBounds);
 				getCommandStack(editor).execute(cmd);
 			}
 		}
@@ -84,5 +93,17 @@ public class TrimHandler extends AbstractHandler {
 		return null;
 	}
 
+	private static int adjustCommentWidth(final int commentWidth, final List<Object> children) {
+		final int widestInput = children.stream().filter(Objects::nonNull)
+				.filter(UntypedSubAppInterfaceElementEditPart.class::isInstance)
+				.map(UntypedSubAppInterfaceElementEditPart.class::cast).filter(InterfaceEditPart::isInput)
+				.map(GraphicalEditPart.class::cast).mapToInt(e -> e.getFigure().getBounds().width()).max().getAsInt();
+		final int widestOutput = children.stream().filter(Objects::nonNull)
+				.filter(UntypedSubAppInterfaceElementEditPart.class::isInstance)
+				.map(UntypedSubAppInterfaceElementEditPart.class::cast)
+				.filter(Predicate.not(InterfaceEditPart::isInput)).map(GraphicalEditPart.class::cast)
+				.mapToInt(e -> e.getFigure().getBounds().width()).max().getAsInt();
+		return commentWidth - widestInput - widestOutput;
+	}
 
 }

@@ -24,7 +24,12 @@ public final class Messages extends NLS {
 
 	public static String DeleteFBTypeParticipant_Name;
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
+	public static String DirsWithArchives;
+	public static String DirsWithUnzippedTypeLibs;
+	public static String ExtractedLibraryImportWizard;
 	public static String FBTypeComposedAdapterFactory_FBTypecomposedAdapterFactoryShouldNotBeInsantiated;
+	public static String ImportExtractedFiles;
+	public static String ImportFailed;
 	public static String NewFBTypeWizard_TemplateNotAvailable;
 	public static String NewFBTypeWizardPage_TypeAlreadyExists;
 	public static String NewFBTypeWizardPage_CreateNewType;
@@ -38,17 +43,18 @@ public final class Messages extends NLS {
 	public static String NewFBTypeWizardPage_InvalidOrNoComment;
 	public static String RenameType_Name;
 	public static String RenameType_TypeExists;
-	public static String RenameType_NameReservedKeyWord;
 	public static String OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE;
 	public static String OpenTypeHandler_NO_FILES_IN_WORKSPACE;
 	public static String OpenTypeHandler_NO_FILES_SELECTED;
 	public static String OpenTypeHandler_OPEN_TYPE_ERROR_TITLE;
 	public static String OpenTypeHandler_OPEN_TYPE_TITLE;
 
+	public static String typeLibraryHasAlreadyBeenExtracted;
 	public static String typeManagementPreferencePageTitle;
 	public static String typeManagementPreferencePageIdentificationTitle;
 	public static String typeManagementPreferencePageVersionTitle;
 	public static String typeManagementPreferencePageDescription;
+	public static String Warning;
 
 	static {
 		// initialize resource bundle

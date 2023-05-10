@@ -350,21 +350,12 @@ public interface MonitoringPackage extends EPackage {
 	int ADAPTER_MONITORING_EVENT__TYPE = IEDIT_PART_CREATOR_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_MONITORING_EVENT__TYPE_NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 7;
-
-	/**
 	 * The feature id for the '<em><b>With</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT__WITH = IEDIT_PART_CREATOR_FEATURE_COUNT + 8;
+	int ADAPTER_MONITORING_EVENT__WITH = IEDIT_PART_CREATOR_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Adapter Monitoring Event</em>' class.
@@ -372,7 +363,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_EVENT_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 9;
+	int ADAPTER_MONITORING_EVENT_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl <em>Adapter Monitoring Var Declaration</em>}' class.
@@ -446,22 +437,13 @@ public interface MonitoringPackage extends EPackage {
 	int ADAPTER_MONITORING_VAR_DECLARATION__TYPE = IEDIT_PART_CREATOR_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Type Name</b></em>' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__TYPE_NAME = IEDIT_PART_CREATOR_FEATURE_COUNT + 7;
-
-	/**
 	 * The feature id for the '<em><b>Array Size</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE = IEDIT_PART_CREATOR_FEATURE_COUNT + 8;
+	int ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE = IEDIT_PART_CREATOR_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Withs</b></em>' reference list. <!--
@@ -470,7 +452,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__WITHS = IEDIT_PART_CREATOR_FEATURE_COUNT + 9;
+	int ADAPTER_MONITORING_VAR_DECLARATION__WITHS = IEDIT_PART_CREATOR_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference. <!--
@@ -479,7 +461,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION__VALUE = IEDIT_PART_CREATOR_FEATURE_COUNT + 10;
+	int ADAPTER_MONITORING_VAR_DECLARATION__VALUE = IEDIT_PART_CREATOR_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>Adapter Monitoring Var Declaration</em>' class.
@@ -487,7 +469,7 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_MONITORING_VAR_DECLARATION_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 11;
+	int ADAPTER_MONITORING_VAR_DECLARATION_FEATURE_COUNT = IEDIT_PART_CREATOR_FEATURE_COUNT + 10;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.SubAppPortElementImpl <em>Sub App Port Element</em>}' class.

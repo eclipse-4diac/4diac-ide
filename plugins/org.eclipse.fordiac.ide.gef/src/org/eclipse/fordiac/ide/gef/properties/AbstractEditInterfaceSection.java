@@ -28,14 +28,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -184,14 +185,7 @@ implements I4diacNatTableUtil {
 	}
 
 	protected void setTableInput() {
-		if (getType() instanceof FBNetworkElement) {
-			setTableInput(((FBNetworkElement) getType()).getInterface());
-		}
-
-		if (getType() instanceof FBType) {
-			setTableInput(((FBType) getType()).getInterfaceList());
-		}
-
+		setTableInput(getInterface());
 		if (isEditable()) {
 			initTypeSelection(getDataTypeLib());
 		}
@@ -243,4 +237,37 @@ implements I4diacNatTableUtil {
 		.forEach(type -> structuredTypes.add(type.getName()));
 		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
+
+	private final Adapter interfaceAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			notifiyRefresh();
+		}
+	};
+
+	@Override
+	protected void addContentAdapter() {
+		super.addContentAdapter();
+		if (isEditable()) {
+			final InterfaceList interfaceList = getInterface();
+			if (interfaceList != null) {
+				interfaceList.eAdapters().add(interfaceAdapter);
+			}
+		}
+	}
+
+	@Override
+	protected void removeContentAdapter() {
+		super.removeContentAdapter();
+		if (isEditable()) {
+			final InterfaceList interfaceList = getInterface();
+			if (interfaceList != null) {
+				getInterface().eAdapters().remove(interfaceAdapter);
+			}
+		}
+	}
+
+	protected abstract InterfaceList getInterface();
+
 }

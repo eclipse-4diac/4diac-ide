@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * Occurrences</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getInputVariables <em>Input
  * Variables</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getTrace <em>Trace</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBTransaction()
@@ -51,6 +52,24 @@ public interface FBTransaction extends Transaction {
 	 * @model
 	 * @generated */
 	EList<VarDeclaration> getInputVariables();
+
+	/** Returns the value of the '<em><b>Trace</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @return the value of the '<em>Trace</em>' containment reference.
+	 * @see #setTrace(Trace)
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBTransaction_Trace()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated */
+	Trace getTrace();
+
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getTrace
+	 * <em>Trace</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @param value the new value of the '<em>Trace</em>' containment reference.
+	 * @see #getTrace()
+	 * @generated */
+	void setTrace(Trace value);
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *

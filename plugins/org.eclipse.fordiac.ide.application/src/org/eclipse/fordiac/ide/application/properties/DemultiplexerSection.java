@@ -84,13 +84,11 @@ public class DemultiplexerSection extends StructManipulatorSection {
 	private void selectStructManipulator(final Command cmd) {
 		Demultiplexer type = null;
 
-		if (cmd instanceof AddDemuxPortCommand) {
-			final AddDemuxPortCommand addCommand = (AddDemuxPortCommand) cmd;
+		if (cmd instanceof final AddDemuxPortCommand addCommand) {
 			type = addCommand.getType();
 		}
 
-		if (cmd instanceof DeleteDemuxPortCommand) {
-			final DeleteDemuxPortCommand deleteCommand = (DeleteDemuxPortCommand) cmd;
+		if (cmd instanceof final DeleteDemuxPortCommand deleteCommand) {
 			type = deleteCommand.getType();
 		}
 		setInitTree(false);

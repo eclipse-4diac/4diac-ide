@@ -82,10 +82,8 @@ public class GroupPropertySection extends AbstractSection {
 			if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof Group) {
 				final Object groupforFBNetowrkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
 						.getEditPartRegistry().get(getType());
-				if (groupforFBNetowrkEditPart instanceof GroupEditPart
-						&& ((GroupEditPart) groupforFBNetowrkEditPart).getContentEP() != null) {
-					executeCommand(new ResizeGroupOrSubappCommand(
-							((GroupEditPart) groupforFBNetowrkEditPart).getContentEP(),
+				if (groupforFBNetowrkEditPart instanceof final GroupEditPart gep && gep.getContentEP() != null) {
+					executeCommand(new ResizeGroupOrSubappCommand(gep.getContentEP(),
 							new ChangeCommentCommand(getType(), commentText.getText())));
 				}
 			} else {
@@ -104,8 +102,8 @@ public class GroupPropertySection extends AbstractSection {
 
 	@Override
 	protected Group getType() {
-		if (type instanceof Group) {
-			return (Group) type;
+		if (type instanceof final Group group) {
+			return group;
 		}
 		return null;
 	}

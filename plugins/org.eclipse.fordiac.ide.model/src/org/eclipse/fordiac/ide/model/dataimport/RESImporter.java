@@ -16,12 +16,15 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.io.InputStream;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * Managing class for importing *.res files
@@ -32,6 +35,10 @@ public class RESImporter extends TypeImporter {
 
 	public RESImporter(final IFile typeFile) {
 		super(typeFile);
+	}
+
+	public RESImporter(final InputStream inputStream, final TypeLibrary typeLib) {
+		super(inputStream, typeLib);
 	}
 
 	@Override

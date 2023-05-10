@@ -122,5 +122,10 @@ public final class EventManagerUtils {
 		final ResourceSet reset = new ResourceSetImpl();
 		return reset.getResource(uri, true);
 	}
+	
+	public static Resource loadResourceNotOnDemand(final URI uri) {
+		final ResourceSet reset = new ResourceSetImpl();
+		return reset.getResource(uri, false);
+	}
 
 }

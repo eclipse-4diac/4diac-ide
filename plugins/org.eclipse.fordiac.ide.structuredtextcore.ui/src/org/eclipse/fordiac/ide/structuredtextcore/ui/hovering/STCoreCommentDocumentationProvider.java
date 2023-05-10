@@ -45,8 +45,8 @@ public class STCoreCommentDocumentationProvider extends MultiLineCommentDocument
 			while (node != null && node.hasNextSibling()) {
 				final var iter = node.getNextSibling().getAsTreeIterable();
 				for (final INode iNode : iter) {
-					if (iNode.getGrammarElement() instanceof TerminalRule
-							&& "SL_Comment".equalsIgnoreCase(((TerminalRule) iNode.getGrammarElement()).getName())) {
+					if (iNode.getGrammarElement() instanceof final TerminalRule terminalrule
+							&& "SL_Comment".equalsIgnoreCase(terminalrule.getName())) {
 						return Collections.<INode>singletonList(iNode);
 					}
 				}

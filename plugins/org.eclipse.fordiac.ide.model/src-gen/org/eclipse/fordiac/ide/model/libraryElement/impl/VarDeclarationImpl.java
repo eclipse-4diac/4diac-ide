@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -60,7 +60,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getArraySize <em>Array Size</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getWiths <em>Withs</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl#getValue <em>Value</em>}</li>
@@ -168,26 +167,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @ordered
 	 */
 	protected DataType type;
-
-	/**
-	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTypeName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String TYPE_NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTypeName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String typeName = TYPE_NAME_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getArraySize() <em>Array Size</em>}' attribute.
@@ -300,16 +279,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @generated
 	 */
 	@Override
-	public String getQualifiedName() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
 			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.VAR_DECLARATION__ATTRIBUTES);
@@ -404,29 +373,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		type = newType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__TYPE, oldType, type));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getTypeName() {
-		return typeName;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setTypeName(String newTypeName) {
-		String oldTypeName = typeName;
-		typeName = newTypeName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__TYPE_NAME, oldTypeName, typeName));
 	}
 
 	/**
@@ -579,6 +525,20 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @generated
 	 */
 	@Override
+	public String getTypeName() {
+		DataType dataType = getType();
+		if(dataType != null){
+			return dataType.getName();
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void setVisible(final boolean visible) {
 		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);
 	}
@@ -631,6 +591,16 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public boolean deleteAttribute(final String attributeName) {
 		return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getQualifiedName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
 	}
 
 	/**
@@ -699,8 +669,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
-				return getTypeName();
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				return getArraySize();
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
@@ -745,9 +713,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 				return;
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				setType((DataType)newValue);
-				return;
-			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
-				setTypeName((String)newValue);
 				return;
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				setArraySize((Integer)newValue);
@@ -794,9 +759,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				setType((DataType)null);
 				return;
-			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
-				setTypeName(TYPE_NAME_EDEFAULT);
-				return;
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				setArraySize(ARRAY_SIZE_EDEFAULT);
 				return;
@@ -834,8 +796,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 				return outputConnections != null && !outputConnections.isEmpty();
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				return type != null;
-			case LibraryElementPackage.VAR_DECLARATION__TYPE_NAME:
-				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				return arraySize != ARRAY_SIZE_EDEFAULT;
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
@@ -905,8 +865,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		result.append(comment);
 		result.append(", isInput: "); //$NON-NLS-1$
 		result.append(isInput);
-		result.append(", typeName: "); //$NON-NLS-1$
-		result.append(typeName);
 		result.append(", arraySize: "); //$NON-NLS-1$
 		result.append(arraySize);
 		result.append(')');

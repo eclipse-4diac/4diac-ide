@@ -16,6 +16,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -38,6 +41,14 @@ public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 
 	private Text fbTypeNameText;
 	private Text commentText;
+
+	private final Adapter typeInfoAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			notifiyRefresh();
+		}
+	};
 
 	@Override
 	protected LibraryElement getType() {
@@ -84,6 +95,22 @@ public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 			typeInfo.refresh();
 		}
 		commandStack = commandStackBuffer;
+	}
+
+	@Override
+	protected void addContentAdapter() {
+		super.addContentAdapter();
+		if (getType() != null) {
+			getType().getIdentification().eAdapters().add(typeInfoAdapter);
+		}
+	}
+
+	@Override
+	protected void removeContentAdapter() {
+		super.removeContentAdapter();
+		if (getType() != null) {
+			getType().getIdentification().eAdapters().remove(typeInfoAdapter);
+		}
 	}
 
 }

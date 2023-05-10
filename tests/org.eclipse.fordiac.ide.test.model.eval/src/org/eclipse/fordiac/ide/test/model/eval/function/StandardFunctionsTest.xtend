@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -85,6 +85,7 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.WCharValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.WStringValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.WordValue.*
 import static extension org.junit.jupiter.api.Assertions.*
+import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 
 class StandardFunctionsTest {
 
@@ -1272,6 +1273,49 @@ class StandardFunctionsTest {
 	}
 
 	@ParameterizedTest(name="{index}: {0}")
+	@MethodSource("typeArgumentsProvider")
+	def void testStringConversions(String typeName) {
+		val type = ElementaryTypes.getTypeByName(typeName)
+		switch (type) {
+			AnyMagnitudeType,
+			AnyBitType: {
+				// STRING
+				type.defaultValue.toString.toStringValue.assertEquals(
+					StandardFunctions.invoke('''«typeName»_AS_STRING''', type.defaultValue))
+				17.wrapValue(type).toString.toStringValue.toStringValue.assertEquals(
+					StandardFunctions.invoke('''«typeName»_AS_STRING''', 17.wrapValue(type)))
+				type.defaultValue.assertEquals(
+					StandardFunctions.invoke('''STRING_AS_«typeName»''', type.defaultValue.toString.toStringValue))
+				17.wrapValue(type).assertEquals(
+					StandardFunctions.invoke('''STRING_AS_«typeName»''', 17.wrapValue(type).toString.toStringValue))
+				// WSTRING
+				type.defaultValue.toString.toWStringValue.assertEquals(
+					StandardFunctions.invoke('''«typeName»_AS_WSTRING''', type.defaultValue))
+				17.wrapValue(type).toString.toWStringValue.toWStringValue.assertEquals(
+					StandardFunctions.invoke('''«typeName»_AS_WSTRING''', 17.wrapValue(type)))
+				type.defaultValue.assertEquals(
+					StandardFunctions.invoke('''WSTRING_AS_«typeName»''', type.defaultValue.toString.toWStringValue))
+				17.wrapValue(type).assertEquals(
+					StandardFunctions.invoke('''WSTRING_AS_«typeName»''', 17.wrapValue(type).toString.toWStringValue))
+			}
+			default: {
+				NoSuchMethodException.assertThrows [
+					StandardFunctions.findMethodFromDataTypes('''«typeName»_AS_STRING''', type)
+				]
+				NoSuchMethodException.assertThrows [
+					StandardFunctions.findMethodFromDataTypes('''«typeName»_AS_WSTRING''', type)
+				]
+				NoSuchMethodException.assertThrows [
+					StandardFunctions.findMethodFromDataTypes('''STRING_AS_«typeName»''', type)
+				]
+				NoSuchMethodException.assertThrows [
+					StandardFunctions.findMethodFromDataTypes('''WSTRING_AS_«typeName»''', type)
+				]
+			}
+		}
+	}
+
+	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeAnyIntArgumentsProvider")
 	def void testTruncConversions(String typeName) {
 		val type = ElementaryTypes.getTypeByName(typeName)
@@ -1381,6 +1425,10 @@ class StandardFunctionsTest {
 		BoolValue.TRUE.assertEquals(StandardFunctions.invoke("IS_VALID_BCD", 0x42.wrapValue(bitType)))
 		BoolValue.TRUE.assertEquals(StandardFunctions.invoke("IS_VALID_BCD", 0x84.wrapValue(bitType)))
 		BoolValue.FALSE.assertEquals(StandardFunctions.invoke("IS_VALID_BCD", 0x1A.wrapValue(bitType)))
+	}
+
+	def static Stream<String> typeArgumentsProvider() {
+		DataTypeLibrary.nonUserDefinedDataTypes.stream.map[name]
 	}
 
 	def static Stream<String> typeAnyIntArgumentsProvider() {

@@ -17,6 +17,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
@@ -50,11 +51,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.CommandStack;
 
 public class SystemImporter extends CommonElementImporter {
+
+	public SystemImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
+		super(inputStream, typeLibrary);
+	}
 
 	public SystemImporter(final IFile systemfile) {
 		super(systemfile);
@@ -75,18 +80,16 @@ public class SystemImporter extends CommonElementImporter {
 
 	@Override
 	protected LibraryElement createRootModelElement() {
-		return createAutomationSystem(getFile());
+		return createAutomationSystem();
 	}
 
-	/** Create an empty automation system model for a given file.
+	/** Create an empty automation system model
 	 *
 	 * this can either be used for the importer or for creating a new system
 	 *
-	 * @param systemFile the file where the system should be stored
 	 * @return the automation system model with its basic setup */
-	public static AutomationSystem createAutomationSystem(final IFile systemFile) {
+	public static AutomationSystem createAutomationSystem() {
 		final AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
-		system.setName(TypeEntry.getTypeNameFromFile(systemFile));
 		system.setCommandStack(new CommandStack());
 		// create PhysicalConfiguration
 		final SystemConfiguration sysConf = LibraryElementFactory.eINSTANCE.createSystemConfiguration();

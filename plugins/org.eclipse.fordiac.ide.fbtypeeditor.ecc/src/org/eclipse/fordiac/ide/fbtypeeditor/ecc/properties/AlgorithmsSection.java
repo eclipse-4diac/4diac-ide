@@ -55,7 +55,7 @@ public class AlgorithmsSection extends AbstractSection {
 
 		getAlgorithmList().getViewer().addSelectionChangedListener(event -> {
 			final Object selection = ((IStructuredSelection) getAlgorithmList().getViewer().getSelection()).getFirstElement();
-			algorithmGroup.setAlgorithm((selection instanceof Algorithm) ? (Algorithm) selection : null);
+			algorithmGroup.setAlgorithm((selection instanceof final Algorithm alg) ? alg : null);
 		});
 
 		final Composite algComposite = getWidgetFactory().createComposite(view);

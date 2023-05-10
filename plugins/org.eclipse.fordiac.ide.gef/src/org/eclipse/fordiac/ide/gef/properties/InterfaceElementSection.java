@@ -16,8 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
@@ -27,10 +25,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
@@ -87,9 +87,8 @@ public class InterfaceElementSection extends AbstractSection {
 				final DataType newType = getTypeLibrary().getAdapterTypeEntry(typeCombo.getText()).getType();
 				cmd = newChangeTypeCommand((VarDeclaration) getType(), newType);
 			} else {
-				if (getType() instanceof VarDeclaration) {
-					cmd = newChangeTypeCommand((VarDeclaration) getType(),
-							getDataTypeLib().getType(typeCombo.getText()));
+				if (getType() instanceof final VarDeclaration varDecl) {
+					cmd = newChangeTypeCommand(varDecl, getDataTypeLib().getType(typeCombo.getText()));
 				}
 			}
 			executeCommand(cmd);
@@ -127,13 +126,12 @@ public class InterfaceElementSection extends AbstractSection {
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			String itype = ""; //$NON-NLS-1$
-			if (getType() instanceof VarDeclaration) {
-				final VarDeclaration variable = (VarDeclaration) getType();
-				itype = variable.getType() != null ? variable.getType().getName() : ""; //$NON-NLS-1$
+			if (getType() instanceof final VarDeclaration varDecl) {
+				itype = varDecl.getType() != null ? varDecl.getTypeName() : ""; //$NON-NLS-1$
 				if (getType().isIsInput()) {
 					parameterText.setVisible(true);
 					valueCLabel.setVisible(true);
-					parameterText.setText((variable.getValue() != null) ? variable.getValue().getValue() : ""); //$NON-NLS-1$
+					parameterText.setText((varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""); //$NON-NLS-1$
 				} else {
 					valueCLabel.setVisible(false);
 					parameterText.setVisible(false);
@@ -173,10 +171,12 @@ public class InterfaceElementSection extends AbstractSection {
 
 	@Override
 	protected IInterfaceElement getInputType(final Object input) {
-		if (input instanceof InterfaceEditPart) {
-			return ((InterfaceEditPart) input).getModel();
-		} else if (input instanceof ValueEditPart) {
-			return ((ValueEditPart) input).getModel().getParentIE();
+		final Object objToCheck = (input instanceof final EditPart ep) ? ep.getModel() : input;
+
+		if (objToCheck instanceof final IInterfaceElement ie) {
+			return ie;
+		} else if (input instanceof final Value value) {
+			return value.getParentIE();
 		}
 		return null;
 	}

@@ -72,7 +72,6 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.ui.part.EditorPart;
 
 /** This class implements an EditPart for a FunctionBlock. */
 public abstract class AbstractFBNElementEditPart extends AbstractPositionableElementEditPart {
@@ -461,8 +460,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	public void selectPropertySheet() {
 		if (null != getViewer()) {
 			getViewer().flush();
-			EditorUtils.refreshPropertySheetWithSelection((EditorPart) EditorUtils.getCurrentActiveEditor(),
-					getViewer(), this);
+			EditorUtils.refreshPropertySheetWithSelection(EditorUtils.getCurrentActiveEditor(), getViewer(), this);
 		}
 	}
 

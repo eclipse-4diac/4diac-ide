@@ -26,40 +26,18 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection <em>Res Type Connection</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isBrokenConnection <em>Broken Connection</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource <em>Source</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination <em>Destination</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getRoutingData <em>Routing Data</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getComment <em>Comment</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection()
  * @model abstract="true"
  * @generated
  */
-public interface Connection extends INamedElement, ConfigurableObject, ErrorMarkerRef, HiddenElement {
-	/**
-	 * Returns the value of the '<em><b>Res Type Connection</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Res Type Connection</em>' attribute.
-	 * @see #setResTypeConnection(boolean)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_ResTypeConnection()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 * @generated
-	 */
-	boolean isResTypeConnection();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#isResTypeConnection <em>Res Type Connection</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Res Type Connection</em>' attribute.
-	 * @see #isResTypeConnection()
-	 * @generated
-	 */
-	void setResTypeConnection(boolean value);
-
+public interface Connection extends ConfigurableObject, ErrorMarkerRef, HiddenElement {
 	/**
 	 * Returns the value of the '<em><b>Broken Connection</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -151,6 +129,29 @@ public interface Connection extends INamedElement, ConfigurableObject, ErrorMark
 	 * @generated
 	 */
 	void setRoutingData(ConnectionRoutingData value);
+
+	/**
+	 * Returns the value of the '<em><b>Comment</b></em>' attribute.
+	 * The default value is <code>""</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Comment</em>' attribute.
+	 * @see #setComment(String)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Comment()
+	 * @model default="" dataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @generated
+	 */
+	String getComment();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getComment <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Comment</em>' attribute.
+	 * @see #getComment()
+	 * @generated
+	 */
+	void setComment(String value);
 
 	/**
 	 * <!-- begin-user-doc -->

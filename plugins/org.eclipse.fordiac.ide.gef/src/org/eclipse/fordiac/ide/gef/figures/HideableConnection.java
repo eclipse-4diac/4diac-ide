@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2021 Profactor GbmH, fortiss GmbH,
- *                          Johannes Kepler University Linz
+ *               2023       Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,11 +12,12 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Muddasir Shakil - Added double line for Adapter and Struct connection
+ *   Prankur Agarwal - Added handling for truncating label according to the
+ *   				   max size preference option value
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
@@ -38,6 +39,8 @@ import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.Activator;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -62,6 +65,12 @@ public class HideableConnection extends PolylineConnection {
 	private boolean hidden = false;
 	private Connection model;
 	private Color lighterColor;
+	private static int maxWidth;
+
+	static {
+		maxWidth = Activator.getDefault().getPreferenceStore()
+				.getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
+	}
 
 	public static class ConnectionLabel extends RoundedRectangle implements RotatableDecoration {
 
@@ -221,7 +230,7 @@ public class HideableConnection extends PolylineConnection {
 			final StringBuilder builder = new StringBuilder();
 			hiddenConnections.forEach(con -> {
 				if (con.getDestination() != null) {
-					builder.append(generateIEString(con.getDestination()));
+					builder.append(generateFullIEString(con.getDestination()));
 					builder.append('\n');
 				}
 			});
@@ -237,7 +246,7 @@ public class HideableConnection extends PolylineConnection {
 			final StringBuilder builder = new StringBuilder();
 			hiddenConnections.forEach(con -> {
 				if (con.getSource() != null) {
-					builder.append(generateIEString(con.getSource()));
+					builder.append(generateFullIEString(con.getSource()));
 					builder.append('\n');
 				}
 			});
@@ -259,26 +268,35 @@ public class HideableConnection extends PolylineConnection {
 		return ""; //$NON-NLS-1$
 	}
 
+
 	private String generateIEString(final IInterfaceElement ie) {
+		final StringBuilder builder = generateFullIEString(ie);
+		if (builder.length() > maxWidth) {
+			builder.delete(0, builder.length() - maxWidth);
+			builder.insert(0, "\u2026"); //$NON-NLS-1$
+		}
+		return builder.toString();
+	}
+
+	private StringBuilder generateFullIEString(final IInterfaceElement ie) {
 		final StringBuilder builder = new StringBuilder();
 		if (ie.getFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
 			builder.append(ie.getFBNetworkElement().getName());
 			builder.append('.');
 		}
 		builder.append(ie.getName());
-		return builder.toString();
+		return builder;
 	}
 
 	private boolean isInterfaceBarElement(final IInterfaceElement ie) {
-		if (ie.getFBNetworkElement() instanceof SubApp) {
-			final SubApp subapp = (SubApp) ie.getFBNetworkElement();
+		if (ie.getFBNetworkElement() instanceof final SubApp subapp) {
 			return (subapp.getSubAppNetwork() != null) && subapp.getSubAppNetwork().equals(getModel().getFBNetwork());
 		}
 		return false;
 	}
 
 	private static List<Connection> getHiddenConnections(final EList<Connection> connections) {
-		return connections.stream().filter(con -> !con.isVisible()).collect(Collectors.toList());
+		return connections.stream().filter(con -> !con.isVisible()).toList();
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getTypeName <em>Type Name</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIInterfaceElement()
@@ -114,26 +113,12 @@ public interface IInterfaceElement extends INamedElement, ConfigurableObject, Hi
 	void setType(DataType value);
 
 	/**
-	 * Returns the value of the '<em><b>Type Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Type Name</em>' attribute.
-	 * @see #setTypeName(String)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIInterfaceElement_TypeName()
-	 * @model
+	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	String getTypeName();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getTypeName <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Type Name</em>' attribute.
-	 * @see #getTypeName()
-	 * @generated
-	 */
-	void setTypeName(String value);
+	FBNetworkElement getFBNetworkElement();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -141,6 +126,6 @@ public interface IInterfaceElement extends INamedElement, ConfigurableObject, Hi
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	FBNetworkElement getFBNetworkElement();
+	String getTypeName();
 
 } // IInterfaceElement

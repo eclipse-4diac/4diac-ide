@@ -146,7 +146,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		currentParameterEditor = new InitialValueEditor(composite, SWT.SINGLE | SWT.BORDER);
 		currentParameterEditor.setCommandExecutor(this::executeCommand);
 		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false)
-		.applyTo(currentParameterEditor.getControl());
+				.applyTo(currentParameterEditor.getControl());
 
 		currentVarConfigTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.VarConfig + ":"); //$NON-NLS-1$
 		currentVarConfigCheckBox = getWidgetFactory().createButton(composite, null, SWT.CHECK);
@@ -186,8 +186,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 
 			connectionDisplayWidget.refreshConnectionsViewer(getType());
 
-			if (getType() instanceof VarDeclaration) {
-				final var verDeclaration = (VarDeclaration) getType();
+			if (getType() instanceof final VarDeclaration verDeclaration) {
 				currentVarConfigCheckBox.setSelection(verDeclaration.isVarConfig());
 			}
 
@@ -214,8 +213,8 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	}
 
 	private String getPinTypeName() {
-		if (getType().getType() instanceof StructuredType) {
-			return getStructTypes((StructuredType) getType().getType());
+		if (getType().getType() instanceof final StructuredType structuredType) {
+			return getStructTypes(structuredType);
 		}
 		return getType().getType() != null ? getType().getType().getName() : ""; //$NON-NLS-1$
 	}
@@ -244,13 +243,12 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	}
 
 	protected String getTypeInitialValue() {
-		if (getType() instanceof VarDeclaration) {
-			final VarDeclaration varDecl = (VarDeclaration) getType();
-			if (varDecl.isIsInput() && (varDecl.getFBNetworkElement() != null)) {
-				final FBType fbType = varDecl.getFBNetworkElement().getType();
+		if (getType() instanceof final VarDeclaration varDeclaration) {
+			if (varDeclaration.isIsInput() && (varDeclaration.getFBNetworkElement() != null)) {
+				final FBType fbType = varDeclaration.getFBNetworkElement().getType();
 				if (null != fbType) {
 					return InitialValueHelper
-							.getDefaultValue(fbType.getInterfaceList().getInterfaceElement(varDecl.getName()));
+							.getDefaultValue(fbType.getInterfaceList().getInterfaceElement(varDeclaration.getName()));
 				}
 			}
 		}

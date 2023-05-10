@@ -64,10 +64,9 @@ public class CreateConnectionSection extends AbstractSection {
 	@Override
 	protected List<IInterfaceElement> getInputType(final Object input) {
 		final List<IInterfaceElement> editParts = new ArrayList<>();
-		if (input instanceof IStructuredSelection
-				&& ((IStructuredSelection) input).getFirstElement() instanceof EditPart
-				&& ((EditPart) ((IStructuredSelection) input).getFirstElement())
-				.getModel() instanceof IInterfaceElement) {
+		if (input instanceof final IStructuredSelection structSel
+				&& structSel.getFirstElement() instanceof final EditPart ep
+				&& ep.getModel() instanceof IInterfaceElement) {
 
 			final List<Object> selectionList = ((IStructuredSelection) input).toList();
 
@@ -127,13 +126,12 @@ public class CreateConnectionSection extends AbstractSection {
 	}
 
 	private static FBNetwork getFBNetwork(final IInterfaceElement source, final IInterfaceElement dest) {
-		if (source.eContainer().eContainer() instanceof CompositeFBType) {
-			return ((CompositeFBType) source.eContainer().eContainer()).getFBNetwork();
+		if (source.eContainer().eContainer() instanceof final CompositeFBType cfbt) {
+			return cfbt.getFBNetwork();
 		} else if ((source.getFBNetworkElement().getFbNetwork() != dest.getFBNetworkElement().getFbNetwork())
-				&& (source.getFBNetworkElement() instanceof SubApp)) {
+				&& (source.getFBNetworkElement() instanceof final SubApp subApp)) {
 			// one of the both is a untyped subapp interface element
-			if (((SubApp) source.getFBNetworkElement()).getSubAppNetwork() == dest.getFBNetworkElement()
-					.getFbNetwork()) {
+			if (subApp.getSubAppNetwork() == dest.getFBNetworkElement().getFbNetwork()) {
 				return dest.getFBNetworkElement().getFbNetwork();
 			}
 			return source.getFBNetworkElement().getFbNetwork();

@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
@@ -27,14 +28,15 @@ public class StructuredTypeMemberChange extends Change {
 
 	private final StructuredType affectedStruct;
 	private final TypeEntry typeEntry;
-	private final String newName;
 	private final String oldName;
 
+	private CompoundCommand cmd = new CompoundCommand();
+
+	
 	public StructuredTypeMemberChange(final StructuredType affectedStruct, final TypeEntry oldTypeEntry,
 			final String oldName, final String newName) {
 		this.affectedStruct = affectedStruct;
 		this.typeEntry = oldTypeEntry;
-		this.newName = newName;
 		this.oldName = oldName;
 	}
 
@@ -64,11 +66,12 @@ public class StructuredTypeMemberChange extends Change {
 		for (final VarDeclaration varDeclaration : structuredTypeEditable.getMemberVariables()) {
 			final String typeName = varDeclaration.getTypeName();
 			if (typeName.equals(oldName)) {
-				final ChangeDataTypeCommand cmd = new ChangeDataTypeCommand(varDeclaration,
-						(DataType) typeEntry.getTypeEditable());
-				cmd.execute();
+				cmd.add(new ChangeDataTypeCommand(varDeclaration,
+						(DataType) typeEntry.getTypeEditable()));
 			}
 		}
+		
+		cmd.execute();
 		structuredTypeEditable.getTypeEntry().save();
 
 		return null;

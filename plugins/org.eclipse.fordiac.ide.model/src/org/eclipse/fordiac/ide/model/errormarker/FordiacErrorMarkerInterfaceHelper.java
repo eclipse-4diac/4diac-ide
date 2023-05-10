@@ -66,7 +66,6 @@ public final class FordiacErrorMarkerInterfaceHelper {
 		errorMarkerInterface.setName(name);
 		errorMarkerInterface.setIsInput(isInput);
 		errorMarkerInterface.setType(type);
-		errorMarkerInterface.setTypeName(type.getName());
 		errorMarkerInterface.setErrorMessage(errorMessage);
 		ieList.getErrorMarker().add(errorMarkerInterface);
 		return errorMarkerInterface;

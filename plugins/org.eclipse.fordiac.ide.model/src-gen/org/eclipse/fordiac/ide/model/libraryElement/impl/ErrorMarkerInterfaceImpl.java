@@ -61,7 +61,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getErrorMessage <em>Error Message</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getRepairedEndpoint <em>Repaired Endpoint</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getValue <em>Value</em>}</li>
@@ -169,26 +168,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 * @ordered
 	 */
 	protected DataType type;
-
-	/**
-	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTypeName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String TYPE_NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTypeName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String typeName = TYPE_NAME_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
@@ -414,20 +393,11 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 */
 	@Override
 	public String getTypeName() {
-		return typeName;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setTypeName(String newTypeName) {
-		String oldTypeName = typeName;
-		typeName = newTypeName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE_NAME, oldTypeName, typeName));
+		DataType dataType = getType();
+		if(dataType != null){
+			return dataType.getName();
+		}
+		return null;
 	}
 
 	/**
@@ -703,8 +673,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE_NAME:
-				return getTypeName();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
 				return getErrorMessage();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
@@ -751,9 +719,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
 				setType((DataType)newValue);
 				return;
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE_NAME:
-				setTypeName((String)newValue);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
 				setErrorMessage((String)newValue);
 				return;
@@ -798,9 +763,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
 				setType((DataType)null);
 				return;
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE_NAME:
-				setTypeName(TYPE_NAME_EDEFAULT);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
 				setErrorMessage(ERROR_MESSAGE_EDEFAULT);
 				return;
@@ -838,8 +800,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 				return outputConnections != null && !outputConnections.isEmpty();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
 				return type != null;
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE_NAME:
-				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
 				return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
@@ -921,8 +881,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 		result.append(comment);
 		result.append(", isInput: "); //$NON-NLS-1$
 		result.append(isInput);
-		result.append(", typeName: "); //$NON-NLS-1$
-		result.append(typeName);
 		result.append(", errorMessage: "); //$NON-NLS-1$
 		result.append(errorMessage);
 		result.append(')');

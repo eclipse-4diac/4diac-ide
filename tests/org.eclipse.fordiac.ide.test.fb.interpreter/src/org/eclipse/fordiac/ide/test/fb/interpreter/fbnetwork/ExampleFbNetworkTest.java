@@ -26,6 +26,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 
 /** small fb network consisting of e_sr, e_switch, and e_ctud */
+/*
+ * @deprecated This test case will be added in the ReferenceExamplesTest
+ */
+@Deprecated
 public class ExampleFbNetworkTest extends AbstractInterpreterTest {
 
 	@Override

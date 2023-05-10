@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
@@ -79,7 +80,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		for (final Object selected : selection.toList()) {
 			ServiceSequence seq = getSequence(selected);
-			if (seq == null && selected instanceof SequenceRootEditPart && selection.toList().size() == 1) {
+			if ((seq == null) && (selected instanceof SequenceRootEditPart) && (selection.toList().size() == 1)) {
 				final CreateServiceSequenceCommand cmd = new CreateServiceSequenceCommand(
 						((FBType) ((EditPart) selected).getModel()).getService());
 				if (cmd.canExecute()) {
@@ -124,6 +125,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		}
 		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, events, isRandom,
 				startState);
+		TransactionFactory.addTraceInfoTo(eventManager.getTransactions());
 		EventManagerUtils.process(eventManager);
 		if (!isAppend) {
 			seq.getServiceTransaction().clear();

@@ -16,13 +16,14 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.actions.CopyPasteData;
+import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
@@ -41,6 +42,7 @@ import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -197,10 +199,17 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
 	protected Command getCloneCommand(final ChangeBoundsRequest request) {
-		final List<EObject> elements = ((Stream<?>) (request.getEditParts()).stream())
-				.map(n -> (EObject) (((EditPart) n).getModel())).toList();
+		final CopyPasteData copyPasteData = new CopyPasteData(getFBNetwork());
+		request.getEditParts().stream().map(n -> (EObject) (((EditPart) n).getModel())).forEach(m -> {
+			if (m instanceof final FBNetworkElement el) {
+				copyPasteData.elements().add(el);
+			}
+			if (m instanceof final Connection conn) {
+				copyPasteData.conns().add(new ConnectionReference(conn));
+			}
+		});
 		final Point scaledPoint = getDestinationPoint(request);
-		return new PasteCommand(elements, (FBNetwork) getHost().getModel(), scaledPoint.x, scaledPoint.y);
+		return new PasteCommand(copyPasteData, getFBNetwork(), scaledPoint.x, scaledPoint.y);
 	}
 
 	private Point getDestinationPoint(final ChangeBoundsRequest request) {

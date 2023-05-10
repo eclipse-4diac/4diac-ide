@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -60,7 +60,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getAdapterFB <em>Adapter FB</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getAdapterNetworkFB <em>Adapter Network FB</em>}</li>
  * </ul>
@@ -169,26 +168,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	protected DataType type;
 
 	/**
-	 * The default value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTypeName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String TYPE_NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getTypeName() <em>Type Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTypeName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String typeName = TYPE_NAME_EDEFAULT;
-
-	/**
 	 * The cached value of the '{@link #getAdapterFB() <em>Adapter FB</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -271,16 +250,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 		comment = newComment;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_DECLARATION__COMMENT, oldComment, comment));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getQualifiedName() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
 	}
 
 	/**
@@ -382,29 +351,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 		type = newType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_DECLARATION__TYPE, oldType, type));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getTypeName() {
-		return typeName;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setTypeName(String newTypeName) {
-		String oldTypeName = typeName;
-		typeName = newTypeName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_DECLARATION__TYPE_NAME, oldTypeName, typeName));
 	}
 
 	/**
@@ -541,6 +487,20 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 * @generated
 	 */
 	@Override
+	public String getTypeName() {
+		DataType dataType = getType();
+		if(dataType != null){
+			return dataType.getName();
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void setVisible(final boolean visible) {
 		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);
 	}
@@ -593,6 +553,16 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	@Override
 	public boolean deleteAttribute(final String attributeName) {
 		return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getQualifiedName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
 	}
 
 	/**
@@ -657,8 +627,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_NAME:
-				return getTypeName();
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				if (resolve) return getAdapterFB();
 				return basicGetAdapterFB();
@@ -703,9 +671,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE:
 				setType((DataType)newValue);
 				return;
-			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_NAME:
-				setTypeName((String)newValue);
-				return;
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				setAdapterFB((AdapterFB)newValue);
 				return;
@@ -747,9 +712,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE:
 				setType((DataType)null);
 				return;
-			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_NAME:
-				setTypeName(TYPE_NAME_EDEFAULT);
-				return;
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				setAdapterFB((AdapterFB)null);
 				return;
@@ -784,8 +746,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 				return outputConnections != null && !outputConnections.isEmpty();
 			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE:
 				return type != null;
-			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_NAME:
-				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				return adapterFB != null;
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
@@ -853,8 +813,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 		result.append(comment);
 		result.append(", isInput: "); //$NON-NLS-1$
 		result.append(isInput);
-		result.append(", typeName: "); //$NON-NLS-1$
-		result.append(typeName);
 		result.append(')');
 		return result.toString();
 	}

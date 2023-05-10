@@ -344,22 +344,22 @@ public class CommonElementExporter {
 		}
 	}
 
-	protected void addCommentAttribute(final INamedElement namedElement) throws XMLStreamException {
-		if (null != namedElement.getComment()) {
-			writer.writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, fullyEscapeValue(namedElement.getComment()));
+	protected void addCommentAttribute(final String comment) throws XMLStreamException {
+		if (null != comment) {
+			writer.writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, fullyEscapeValue(comment));
 		}
 	}
 
 	protected void addNameAndCommentAttribute(final INamedElement namedElement) throws XMLStreamException {
 		addNameAttribute(namedElement.getName());
-		addCommentAttribute(namedElement);
+		addCommentAttribute(namedElement.getComment());
 	}
 
 	protected void addNameTypeCommentAttribute(final INamedElement namedElement, final INamedElement type)
 			throws XMLStreamException {
 		addNameAttribute(namedElement.getName());
 		addTypeAttribute(type);
-		addCommentAttribute(namedElement);
+		addCommentAttribute(namedElement.getComment());
 	}
 
 	protected void addAttributes(final EList<Attribute> attributes) throws XMLStreamException {

@@ -184,12 +184,15 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 
 	@Override
 	public void updateElement(final UIElement element, final Map parameters) {
-		final GraphicalViewer viewer = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
-		if (viewer != null) {
-			final boolean isVisible = checkVisibilityOfSelection(viewer.getSelectedEditParts());
-			setElementText(element, isVisible, viewer.getSelectedEditParts().size() == 1
-					&& viewer.getSelectedEditParts().get(0) instanceof ConnectionEditPart);
-		}
+		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
+		if (currentActiveEditor != null) {
+			final GraphicalViewer viewer = currentActiveEditor.getAdapter(GraphicalViewer.class);
+			if (viewer != null) {
+				final boolean isVisible = checkVisibilityOfSelection(viewer.getSelectedEditParts());
+				setElementText(element, isVisible, viewer.getSelectedEditParts().size() == 1
+						&& viewer.getSelectedEditParts().get(0) instanceof ConnectionEditPart);
+			}
+	}
 	}
 
 	private static void setElementText(final UIElement element, final boolean isVisible, final boolean isSingular) {

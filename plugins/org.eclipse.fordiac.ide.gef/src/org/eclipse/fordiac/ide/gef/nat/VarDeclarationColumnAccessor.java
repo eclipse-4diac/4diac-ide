@@ -51,7 +51,7 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 		case I4diacNatTableUtil.COMMENT:
 			return rowObject.getComment();
 		case I4diacNatTableUtil.INITIAL_VALUE:
-			return InitialValueHelper.getInitalOrDefaultValue(rowObject);
+			return InitialValueHelper.getInitialOrDefaultValue(rowObject);
 		case I4diacNatTableUtil.ARRAY_SIZE:
 			return DataLabelProvider.getArraySizeText(rowObject);
 		default:
