@@ -147,6 +147,12 @@
              id="org.eclipse.fordiac.ide.hierarchymanager.ui.expandAll"
              name="Expand All">
        </command>
+       <command
+             categoryId="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
+             defaultHandler="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.CreateLevel"
+             id="org.eclipse.fordiac.ide.hierarchymanager.ui.createLevel"
+             name="Create Level">
+       </command>
     </extension>
     <extension
         	point="org.eclipse.ui.menus">
@@ -161,6 +167,16 @@
 		</menuContribution>
 		<menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
+         <command
+               commandId="org.eclipse.fordiac.ide.hierarchymanager.ui.createLevel"
+               tooltip="Create a new level">
+			<visibleWhen
+            		checkEnabled="false">
+				<with variable="activePartId">
+					<equals value="org.eclipse.fordiac.ide.hierarchymanager.view" />
+				</with>
+            </visibleWhen>
+         </command>
          <command
                commandId="org.eclipse.ui.edit.rename"
                tooltip="Rename selected level">
