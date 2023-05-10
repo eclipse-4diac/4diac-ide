@@ -141,10 +141,10 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«ENDIF»'''
 
 	def protected generateEventConstants(List<Event> events) '''«FOR event : events»
-			static const TEventID «event.generateEventName» = «events.indexOf(event)»;
+			static const TEventID «event.generateEventID» = «events.indexOf(event)»;
 		«ENDFOR»'''
 
-	def protected generateEventName(Event event) '''scm_nEvent«event.name»ID'''
+	def protected generateEventID(Event event) '''scm_nEvent«event.name»ID'''
 
 	def protected generateFBInterfaceDefinition() {
 		val inputWith = newArrayList
@@ -263,7 +263,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		  «IF type.interfaceList.eventInputs.exists[!with.empty]»
 		  	switch(pa_nEIID) {
 		  	  «FOR event : type.interfaceList.eventInputs»
-		  	  	case «event.generateEventName»: {
+		  	  	case «event.generateEventID»: {
 		  	  	  CCriticalRegion criticalRegion(getResource().m_oResDataConSync);
 		  	  	  «FOR with : event.with»
 		  	  	  	«val index = type.interfaceList.inputVars.indexOf(with.variables)»readData(«index», &«with.variables.generateName», «with.variables.generateNameAsConnection»);
@@ -287,7 +287,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		  «IF type.interfaceList.eventOutputs.exists[!with.empty]»
 		  	switch(pa_nEIID) {
 		  	  «FOR event : type.interfaceList.eventOutputs»
-		  	  	case «event.generateEventName»: {
+		  	  	case «event.generateEventID»: {
 		  	  	  CCriticalRegion criticalRegion(getResource().m_oResDataConSync);
 		  	  	  «FOR with : event.with»
 		  	  	  	«val index = type.interfaceList.outputVars.indexOf(with.variables)»writeData(«index», &«with.variables.generateName», &«with.variables.generateNameAsConnection»);
@@ -400,8 +400,8 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateAccessors(List<AdapterDeclaration> adapters) '''
 		«FOR adapter : adapters»
-			FORTE_«adapter.typeName»& «EXPORT_PREFIX»«adapter.name»() {
-			  return (*static_cast<FORTE_«adapter.typeName»*>(m_apoAdapters[«adapters.indexOf(adapter)»]));
+			«adapter.type.generateTypeName» &«adapter.generateName» {
+			  return *static_cast<«adapter.type.generateTypeName»*>(m_apoAdapters[«adapters.indexOf(adapter)»]);
 			};
 			
 		«ENDFOR»
@@ -428,11 +428,11 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateEventAccessorDefinition(Event event) '''
-		void «event.generateEventAccessorName»(«event.generateEventAccessorParameters») {
+		void «event.generateName»(«event.generateEventAccessorParameters») {
 		  «FOR variable : event.inputParameters.filter(VarDeclaration)»
 		  	«variable.generateName» = «variable.generateNameAsParameter»;
 		  «ENDFOR»
-		  receiveInputEvent(«event.generateEventName», nullptr);
+		  receiveInputEvent(«event.generateEventID», nullptr);
 		  «FOR variable : event.outputParameters.filter(VarDeclaration)»
 		  	«variable.generateNameAsParameter» = «variable.generateName»;
 		  «ENDFOR»
@@ -441,11 +441,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateEventAccessorCallOperator(Event event) '''
 		void operator()(«event.generateEventAccessorParameters») {
-		  «event.generateEventAccessorName»(«event.generateEventAccessorForwardArguments»);
+		  «event.generateName»(«event.generateEventAccessorForwardArguments»);
 		}
 	'''
-
-	def protected generateEventAccessorName(Event event) '''evt_«event.name»'''
 
 	def protected CharSequence generateEventAccessorParameters(Event event) //
 	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«IF param.isIsInput»const «ENDIF»«param.generateVariableTypeNameAsParameter» &«param.generateNameAsParameter»«ENDFOR»'''

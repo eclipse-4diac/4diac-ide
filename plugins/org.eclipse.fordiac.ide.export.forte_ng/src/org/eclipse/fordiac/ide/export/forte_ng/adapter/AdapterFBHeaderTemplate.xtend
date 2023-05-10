@@ -103,7 +103,7 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 
 	def protected generateEventAccessors(List<Event> events) '''
 		«FOR event : events»
-			int «event.name»() {
+			int «event.generateName»() {
 			  return m_nParentAdapterListEventID + scm_nEvent«event.name»ID;
 			}
 			

@@ -33,6 +33,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	final Map<ECTransition, ILanguageSupport> transitionLanguageSupport
 
@@ -111,10 +113,11 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	}
 
 	def protected generateTransitionEvent(Event event) {
-		if (event.FBNetworkElement instanceof AdapterFB) {
-			return '''«EXPORT_PREFIX»«event.FBNetworkElement.name»().«event.name»()'''
+		var fbNetworkElement = event.FBNetworkElement
+		if (fbNetworkElement instanceof AdapterFB) {
+			return '''«fbNetworkElement.generateName».«event.generateName»()'''
 		}
-		event.generateEventName
+		event.generateEventID
 	}
 
 	def protected generateStateName(ECState state) '''scm_nState«state.name»'''

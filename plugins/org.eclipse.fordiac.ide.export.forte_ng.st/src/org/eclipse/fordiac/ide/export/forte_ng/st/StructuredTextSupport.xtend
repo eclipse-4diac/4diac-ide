@@ -421,11 +421,17 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(STMethod feature) '''method_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(FB feature) '''fb_«feature.name»()'''
+	def protected dispatch CharSequence generateFeatureName(FB feature) {
+		ForteNgExportUtil.generateName(feature)
+	}
 
-	def protected dispatch CharSequence generateFeatureName(Event feature) '''evt_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(Event feature) {
+		ForteNgExportUtil.generateName(feature)
+	}
 
-	def protected dispatch CharSequence generateFeatureName(AdapterDeclaration feature) '''var_«feature.name»()'''
+	def protected dispatch CharSequence generateFeatureName(AdapterDeclaration feature) {
+		ForteNgExportUtil.generateName(feature)
+	}
 
 	def protected CharSequence generateFeatureTypeName(STVarDeclaration variable) {
 		variable.generateFeatureTypeName(false)

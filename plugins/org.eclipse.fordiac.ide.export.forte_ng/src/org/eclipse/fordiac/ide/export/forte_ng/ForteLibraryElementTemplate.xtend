@@ -33,8 +33,6 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
 
 abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends ForteNgExportTemplate {
 
-	public static final CharSequence EXPORT_PREFIX = "var_"
-
 	@Accessors(PROTECTED_GETTER) final T type
 	final Map<VarDeclaration, ILanguageSupport> variableLanguageSupport
 
