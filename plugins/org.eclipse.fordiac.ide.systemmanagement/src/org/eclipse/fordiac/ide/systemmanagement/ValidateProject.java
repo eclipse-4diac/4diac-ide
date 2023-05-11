@@ -12,9 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
-import java.util.List;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -26,17 +23,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
-import org.eclipse.xtext.validation.Issue;
 
 public final class ValidateProject {
 
@@ -69,32 +62,6 @@ public final class ValidateProject {
 			typeLibrary.getAdapterTypes().values().forEach(AdapterTypeEntry::getType);
 			typeLibrary.getFbTypes().values().forEach(FBTypeEntry::getType);
 			typeLibrary.getDataTypeLibrary().getDerivedDataTypes().values().forEach(DataTypeEntry::getType);
-		}
-	}
-
-	public static void checkSTInProjects(final IProject project) {
-		if (isFordiacProject(project)) {
-			final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
-
-			typeLibrary.getFbTypes().values().stream().filter(f -> f.getType() instanceof BaseFBType)
-			.forEach(f -> checkBaseFB((BaseFBType) f.getType()));
-		}
-	}
-
-	public static void checkBaseFB(final BaseFBType baseFB) {
-		final List<Issue> errors = StructuredTextParseUtil.validate(baseFB);
-		final IFile file = baseFB.getTypeEntry().getFile();
-
-		final MarkerCreator markerCreator = new MarkerCreator();
-		synchronized (baseFB.getTypeEntry()) {
-			for (final Issue issue : errors) {
-				try {
-					markerCreator.createMarker(issue, file, IMarker.PROBLEM);
-					baseFB.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp());
-				} catch (final CoreException e) {
-					FordiacLogHelper.logError(e.getMessage(), e);
-				}
-			}
 		}
 	}
 
