@@ -53,6 +53,8 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 		
 		    CStringDictionary::TStringId getStructTypeNameID() const override;
 		
+		    void setValue(const CIEC_ANY &paValue) override;
+		
 		    «generateAccessorDeclaration("getMember", false)»
 		    «generateAccessorDeclaration("getMember", true)»
 		

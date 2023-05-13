@@ -45,6 +45,8 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		  return «type.name.FORTEStringId»;
 		}
 		
+		«generateSetValue»
+		
 		«type.memberVariables.generateAccessorDefinition("getMember", false)»
 		«type.memberVariables.generateAccessorDefinition("getMember", true)»
 	'''
@@ -56,6 +58,17 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		#endif
 		
 		«getDependencies(emptyMap).generateDependencyIncludes»
+	'''
+	
+	def protected generateSetValue() '''
+		void «className»::setValue(const CIEC_ANY &paValue) {
+		  if (paValue.getDataTypeID() == e_STRUCT) {
+		    auto &otherStruct = static_cast<const CIEC_STRUCT &>(paValue);
+		    if («type.name.FORTEStringId» == otherStruct.getStructTypeNameID()) {
+		      operator=(static_cast<const «className» &>(paValue));
+		    }
+		  }
+		}
 	'''
 
 }
