@@ -74,7 +74,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	'''
 
 	override generateExecuteEvent() '''
-		void «FBClassName»::executeEvent(int pa_nEIID){
+		void «FBClassName»::executeEvent(TEventID paEIID){
 		  do {
 		    switch(m_nECCState) {
 		      «FOR state : type.ECC.ECState»
@@ -90,7 +90,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 		        m_nECCState = 0; // 0 is always the initial state
 		        return;
 		    }
-		    pa_nEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
+		    paEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
 		  } while(true);
 		}
 	'''
@@ -98,9 +98,9 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	def protected generateTransitionCondition(ECTransition transition) {
 		switch (it : transition) {
 			case conditionEvent !== null && !conditionExpression.nullOrEmpty: //
-			'''(«generateTransitionEvent(transition.conditionEvent)» == pa_nEIID) && («transitionLanguageSupport.get(transition)?.generate(emptyMap)»)'''
+			'''(«generateTransitionEvent(transition.conditionEvent)» == paEIID) && («transitionLanguageSupport.get(transition)?.generate(emptyMap)»)'''
 			case conditionEvent !== null: //
-			'''«generateTransitionEvent(transition.conditionEvent)» == pa_nEIID'''
+			'''«generateTransitionEvent(transition.conditionEvent)» == paEIID'''
 			case !conditionExpression.nullOrEmpty:
 				if(conditionExpression == "1"){
 					"1"	

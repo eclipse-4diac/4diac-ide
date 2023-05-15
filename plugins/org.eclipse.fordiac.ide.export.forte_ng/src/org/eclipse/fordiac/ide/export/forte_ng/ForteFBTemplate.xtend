@@ -255,13 +255,13 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateReadInputDataDeclaration() '''
-		void readInputData(size_t pa_nEIID) override;
+		void readInputData(TEventID paEIID) override;
 	'''
 
 	def protected generateReadInputDataDefinition() '''
-		void FORTE_«type.name»::readInputData(size_t pa_nEIID) {
+		void FORTE_«type.name»::readInputData(TEventID paEIID) {
 		  «IF type.interfaceList.eventInputs.exists[!with.empty]»
-		  	switch(pa_nEIID) {
+		  	switch(paEIID) {
 		  	  «FOR event : type.interfaceList.eventInputs»
 		  	  	case «event.generateEventID»: {
 		  	  	  CCriticalRegion criticalRegion(getResource().m_oResDataConSync);
@@ -279,13 +279,13 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateWriteOutputDataDeclaration() '''
-		void writeOutputData(size_t pa_nEIID) override;
+		void writeOutputData(TEventID paEIID) override;
 	'''
 
 	def protected generateWriteOutputDataDefinition() '''
-		void FORTE_«type.name»::writeOutputData(size_t pa_nEIID) {
+		void FORTE_«type.name»::writeOutputData(TEventID paEIID) {
 		  «IF type.interfaceList.eventOutputs.exists[!with.empty]»
-		  	switch(pa_nEIID) {
+		  	switch(paEIID) {
 		  	  «FOR event : type.interfaceList.eventOutputs»
 		  	  	case «event.generateEventID»: {
 		  	  	  CCriticalRegion criticalRegion(getResource().m_oResDataConSync);

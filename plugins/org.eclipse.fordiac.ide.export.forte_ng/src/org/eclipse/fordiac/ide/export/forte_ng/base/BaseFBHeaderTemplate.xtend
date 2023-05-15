@@ -73,7 +73,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		  «generateMethods»
 		  «generateAdditionalDeclarations»
 		
-		  void executeEvent(int pa_nEIID) override;
+		  void executeEvent(TEventID paEIID) override;
 		
 		  «generateReadInputDataDeclaration»
 		  «generateWriteOutputDataDeclaration»

@@ -79,10 +79,10 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						  
 						  void enterStateINIT(void);
 						
-						  void executeEvent(int pa_nEIID) override;
+						  void executeEvent(TEventID paEIID) override;
 						
-						  void readInputData(size_t pa_nEIID) override;
-						  void writeOutputData(size_t pa_nEIID) override;
+						  void readInputData(TEventID paEIID) override;
+						  void writeOutputData(TEventID paEIID) override;
 						
 						public:
 						  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);
@@ -161,7 +161,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						}
 						
 						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::executeEvent(int pa_nEIID){
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID){
 						  do {
 						    switch(m_nECCState) {
 						      case scm_nStateINIT:
@@ -171,14 +171,14 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						        m_nECCState = 0; // 0 is always the initial state
 						        return;
 						    }
-						    pa_nEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
+						    paEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
 						  } while(true);
 						}
 						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::readInputData(size_t pa_nEIID) {
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::readInputData(TEventID paEIID) {
 						}
 						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::writeOutputData(size_t pa_nEIID) {
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::writeOutputData(TEventID paEIID) {
 						}
 						
 						CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getDI(size_t) {
