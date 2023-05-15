@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateComman
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -205,19 +204,12 @@ public class PasteCommand extends Command {
 
 		// copy content of Groups
 		if (element instanceof final Group group) {
-			addConnections(group.getFbNetwork().getEventConnections());
-			addConnections(group.getFbNetwork().getDataConnections());
-			addConnections(group.getFbNetwork().getAdapterConnections());
 			for (final FBNetworkElement groupElement : group.getGroupElements()) {
 				((Group) copiedElement).getGroupElements().add(copyAndCreateFB(groupElement, true));
 			}
 		}
 
 		return copiedElement;
-	}
-
-	private void addConnections(final EList<? extends Connection> conns) {
-		copyPasteData.conns().addAll(conns.stream().map(ConnectionReference::new).toList());
 	}
 
 	private static void checkDataValues(final FBNetworkElement src, final FBNetworkElement copy) {
