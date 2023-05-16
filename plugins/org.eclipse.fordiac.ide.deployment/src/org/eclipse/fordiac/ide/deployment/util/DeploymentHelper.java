@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.deployment.util;
 
 import java.text.MessageFormat;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
@@ -27,13 +28,18 @@ public interface DeploymentHelper {
 
 	String MGR_ID = "MGR_ID";  //$NON-NLS-1$
 
+
 	static String getVariableValue(final VarDeclaration varDecl) throws DeploymentException {
 		if (hasInitalValue(varDecl)) {
 			try {
 				return VariableOperations.newVariable(varDecl).toString();
 			} catch (final Exception e) {
-				throw new DeploymentException(MessageFormat.format(Messages.DeploymentHelper_VariableValueError,
-						varDecl.getValue().getValue(), varDecl.getQualifiedName(), e.getMessage()), e);
+				if (forceDeployement()) {
+					return varDecl.getValue().getValue();
+				} else {
+					throw new DeploymentException(MessageFormat.format(Messages.DeploymentHelper_VariableValueError,
+							varDecl.getValue().getValue(), varDecl.getQualifiedName(), e.getMessage()), e);
+				}
 			}
 		}
 		return null;
@@ -63,5 +69,23 @@ public interface DeploymentHelper {
 			FordiacLogHelper.logWarning(e.getMessage(), e);
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	static boolean forceDeployement() {
+		if (ForceDeploymentHelper.forceDeployment == null) {
+			ForceDeploymentHelper.forceDeployment = Boolean.FALSE;
+			final String[] args = Platform.getCommandLineArgs();
+			for (final String arg : args) {
+				if ("-forceDeployment".equals(arg)) { //$NON-NLS-1$
+					ForceDeploymentHelper.forceDeployment = Boolean.TRUE;
+					break;
+				}
+			}
+		}
+		return ForceDeploymentHelper.forceDeployment.booleanValue();
+	}
+
+	static class ForceDeploymentHelper {
+		private static Boolean forceDeployment = null;
 	}
 }
