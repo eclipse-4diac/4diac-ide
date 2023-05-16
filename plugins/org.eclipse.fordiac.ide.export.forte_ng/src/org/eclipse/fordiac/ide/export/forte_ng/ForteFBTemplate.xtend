@@ -158,7 +158,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 					for (With with : event.with) {
 						inputWith.add(type.interfaceList.inputVars.indexOf(with.variables))
 					}
-					inputWith.add(255)
+					inputWith.add("scmWithListDelimiter")
 				}
 			}
 		]
@@ -173,7 +173,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 					for (With with : event.with) {
 						outputWith.add(type.interfaceList.outputVars.indexOf(with.variables))
 					}
-					outputWith.add(255)
+					outputWith.add("scmWithListDelimiter")
 				}
 			}
 		]
