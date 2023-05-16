@@ -264,7 +264,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		  	switch(paEIID) {
 		  	  «FOR event : type.interfaceList.eventInputs»
 		  	  	case «event.generateEventID»: {
-		  	  	  CCriticalRegion criticalRegion(getResource().m_oResDataConSync);
+		  	  	  RES_DATA_CON_CRITICAL_REGION();
 		  	  	  «FOR with : event.with»
 		  	  	  	«val index = type.interfaceList.inputVars.indexOf(with.variables)»readData(«index», &«with.variables.generateName», «with.variables.generateNameAsConnection»);
 		  	  	  «ENDFOR»
@@ -288,7 +288,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		  	switch(paEIID) {
 		  	  «FOR event : type.interfaceList.eventOutputs»
 		  	  	case «event.generateEventID»: {
-		  	  	  CCriticalRegion criticalRegion(getResource().m_oResDataConSync);
+		  	  	  RES_DATA_CON_CRITICAL_REGION();
 		  	  	  «FOR with : event.with»
 		  	  	  	«val index = type.interfaceList.outputVars.indexOf(with.variables)»writeData(«index», &«with.variables.generateName», &«with.variables.generateNameAsConnection»);
 		  	  	  «ENDFOR»
