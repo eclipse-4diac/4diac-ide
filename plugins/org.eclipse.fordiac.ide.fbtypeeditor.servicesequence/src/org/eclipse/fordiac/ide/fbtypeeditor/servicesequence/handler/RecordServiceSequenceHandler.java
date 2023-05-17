@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServi
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.CoverageCalculator;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.EventManagerSaveAndLoadHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -136,6 +137,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		}
 		seq.setComment("Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions()));
 		seq.setEventManager(eventManager);
+		EventManagerSaveAndLoadHelper.saveEventManagerToFile(fbType, eventManager);
 	}
 
 	static void setParameters(final FBType fbType, final List<String> parameters) {

@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.CoverageCalculator;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.EventManagerSaveAndLoadHelper;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.Permutations;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -81,12 +82,11 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 				seq.setEventManager(eventManager);
 
 				for (final Transaction transaction : eventManager.getTransactions()) {
-
 					ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbtype, (FBTransaction) transaction);
 				}
 
+				EventManagerSaveAndLoadHelper.saveEventManagerToFile(fbtype, eventManager);
 			}
-
 		}
 		return null;
 	}
@@ -98,7 +98,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 		return Permutations.permute(events);
 	}
 
-	private List<InputObject> getAllCombinationsWithStartStates(final List<List<Object>> allCombinationsSimple,
+	private static List<InputObject> getAllCombinationsWithStartStates(final List<List<Object>> allCombinationsSimple,
 			final EList<ECState> states) {
 
 		final List<InputObject> combinations = new ArrayList<>();
@@ -114,7 +114,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 
 	}
 
-	private List<EventManager> createEventManagers(final FBType fbtype, final List<InputObject> combinations) {
+	private static List<EventManager> createEventManagers(final FBType fbtype, final List<InputObject> combinations) {
 		final List<EventManager> eventmanagers = new ArrayList<>();
 		for (final InputObject comb : combinations) {
 			final FBType typeCopy = EcoreUtil.copy(fbtype);
