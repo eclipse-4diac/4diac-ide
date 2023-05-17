@@ -87,7 +87,7 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 
 	override protected generateEventConstants(List<Event> events) '''
 	public:
-		«super.generateEventConstants(events)»
+	  «super.generateEventConstants(events)»
 	
 	private:
 	'''

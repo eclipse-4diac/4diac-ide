@@ -80,8 +80,8 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		
 		public:
 		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);
-		
 		«IF !type.internalFbs.empty»
+			
 			  EMGMResponse changeFBExecutionState(EMGMCommandType paCommand) override;
 			
 			  ~«FBClassName»() override {

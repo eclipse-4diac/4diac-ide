@@ -30,9 +30,7 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBT
 		«generateImplIncludes»
 		
 		«generateFBDefinition»
-		
 		«generateFBInterfaceDefinition»
-		
 		«generateFBInterfaceSpecDefinition»
 		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :

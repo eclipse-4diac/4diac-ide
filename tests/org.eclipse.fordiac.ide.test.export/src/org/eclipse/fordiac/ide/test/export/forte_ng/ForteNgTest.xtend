@@ -252,10 +252,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						  DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
 						
 						private:
-						  
-						  
-						  
-						  
 						
 						  static const SFBInterfaceSpec scm_stFBInterfaceSpec;
 						  CIEC_ANY *getVarInternal(size_t) override;
@@ -272,17 +268,11 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						public:
 						  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);
 						
-						
-						  
-						  
 						  CIEC_ANY *getDI(size_t) override;
 						  CIEC_ANY *getDO(size_t) override;
 						  CEventConnection *getEOConUnchecked(TPortId) override;
 						  CDataConnection **getDIConUnchecked(TPortId) override;
 						  CDataConnection *getDOConUnchecked(TPortId) override;
-						  
-						  
-						  
 						};
 						
 						
@@ -320,11 +310,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						
 						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringIdfunctionblock)
 						
-						
-						
-						
-						
-						
 						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scm_stFBInterfaceSpec = {
 						  0, nullptr, nullptr, nullptr,
 						  0, nullptr, nullptr, nullptr,
@@ -332,7 +317,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						  0, nullptr, nullptr,
 						  0, nullptr
 						};
-						
 						
 						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
 						    CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr) {

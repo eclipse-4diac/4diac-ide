@@ -50,9 +50,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		«generateImplIncludes»
 		
 		«generateFBDefinition»
-		
 		«generateFBInterfaceDefinition»
-		
 		«generateFBInterfaceSpecDefinition»
 		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
