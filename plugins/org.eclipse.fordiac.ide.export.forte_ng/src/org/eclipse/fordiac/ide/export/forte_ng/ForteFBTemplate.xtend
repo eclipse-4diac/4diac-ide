@@ -56,7 +56,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	}
 
 	def protected generateFBClassHeader() '''
-		class «FBClassName»: public «baseClass» {
+		class «FBClassName» final : public «baseClass» {
 	'''
 
 	def protected generateHeaderIncludes() '''

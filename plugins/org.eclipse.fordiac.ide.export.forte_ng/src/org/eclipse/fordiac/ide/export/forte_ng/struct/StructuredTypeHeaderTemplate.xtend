@@ -33,7 +33,7 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 		
 		«generateHeaderIncludes»
 		
-		class «className»: public CIEC_STRUCT {
+		class «className» final : public CIEC_STRUCT {
 		  DECLARE_FIRMWARE_DATATYPE(«type.name»)
 		
 		  public:
