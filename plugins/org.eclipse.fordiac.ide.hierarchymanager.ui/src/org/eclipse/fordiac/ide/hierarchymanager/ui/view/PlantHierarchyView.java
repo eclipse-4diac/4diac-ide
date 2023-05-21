@@ -35,6 +35,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.part.ShowInContext;
@@ -94,6 +100,19 @@ public class PlantHierarchyView extends CommonNavigator {
 		return super.getInitialInput();
 	}
 
+	@Override
+	public void createPartControl(final Composite aParent) {
+		super.createPartControl(aParent);
+		final Tree treeWidget = getCommonViewer().getTree();
+		treeWidget.addListener(SWT.MouseDown, event -> {
+			final TreeItem item = treeWidget.getItem(new Point(event.x, event.y));
+			if (item == null) {
+				// No tree item at the click location deselect everything
+				getCommonViewer().setSelection(TreeSelection.EMPTY);
+			}
+		});
+	}
+
 	public IProject getCurrentProject() {
 		return currentProject;
 	}
@@ -150,7 +169,7 @@ public class PlantHierarchyView extends CommonNavigator {
 	private void setupEMFInfra() {
 		// add file extension to registry
 		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put(PLANT_HIERARCHY_FILE_NAME_EXTENSION, new HierarchyResourceFactoryImpl());
+		.put(PLANT_HIERARCHY_FILE_NAME_EXTENSION, new HierarchyResourceFactoryImpl());
 		setupLoadOptions();
 	}
 
