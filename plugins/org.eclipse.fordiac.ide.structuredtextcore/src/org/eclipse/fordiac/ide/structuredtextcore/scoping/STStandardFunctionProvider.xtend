@@ -67,7 +67,21 @@ class STStandardFunctionProvider {
 	 * Get a list of all standard functions matching the given argument types
 	 */
 	def Iterable<STStandardFunction> get(List<DataType> argumentTypes) {
-		return functions.flatMap[findMethodsFromDataTypes(argumentTypes)].map[toStandardFunction(argumentTypes)].toList
+		return (functions.flatMap[findMethodsFromDataTypes(argumentTypes)] +
+			functions.flatMap[Functions.getMethods(it)]).toSet.map[toStandardFunction(argumentTypes)].toList
+	}
+
+	/**
+	 * Get a list of all standard functions matching the given argument types
+	 */
+	def Iterable<STStandardFunction> get(String name, List<DataType> argumentTypes) {
+		return (functions.map [
+			try {
+				findMethodFromDataTypes(name, argumentTypes)
+			} catch (NoSuchMethodException e) {
+				null
+			}
+		] + functions.flatMap[findMethods(name)]).filterNull.toSet.map[toStandardFunction(argumentTypes)].toList
 	}
 
 	/**
