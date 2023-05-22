@@ -72,11 +72,11 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 			«generateChangeFBExecutionState»
 			
 		«ENDIF»	
+		«generateExecuteEvent»
+		
 		«generateAlgorithms»
 		
 		«generateMethods»
-		
-		«generateExecuteEvent»
 		
 	'''
 	

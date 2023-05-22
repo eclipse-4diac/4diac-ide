@@ -142,12 +142,6 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						  0, nullptr
 						};
 						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
-						  CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31> st_lv_variable = CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31>{};
-						  
-						}
-						
-						
 						void «EXPORTED_FUNCTIONBLOCK_NAME»::executeEvent(int pa_nEIID){
 						  do {
 						    switch(m_nECCState) {
@@ -162,9 +156,14 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						  } while(true);
 						}
 						
-						
 						void FORTE_functionblock::enterStateINIT(void) {
 						  m_nECCState = scm_nStateINIT;
+						}
+						
+						
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
+						  CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31> st_lv_variable = CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31>{};
+						  
 						}
 						
 						

@@ -133,6 +133,10 @@ public abstract class ExporterTestBase<T extends FBType> {
 		} catch (final ExportException e) {
 			errorList.add(e.getMessage());
 		}
+		// remove #line directives
+		if (result != null) {
+			result = result.toString().replaceAll("(?m)^\\h*#line.*$\\R", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 		return result;
 	}
 
