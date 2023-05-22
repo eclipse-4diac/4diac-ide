@@ -11,6 +11,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Martin Jobst - add constructor with member list
+ *                - refactor memory layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.struct
 
@@ -22,16 +23,14 @@ import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExpo
 
 abstract class StructBaseTemplate extends ForteLibraryElementTemplate<StructuredType> {
 
-	override protected getExportPrefix() '''''' // currently we don't want to have prefixes for structs members
-
 	new(StructuredType type, String name, Path prefix) {
 		super(type, name, prefix)
 	}
 
-	def protected getStructClassName() '''CIEC_«type.name»'''
+	override protected getClassName() '''CIEC_«type.name»'''
 
 	def static structuredTypeFileName(StructuredType type) '''forte_«type.name.toLowerCase»'''
 
 	def protected CharSequence generateConstructorParameters() //
-	'''«FOR param : type.memberVariables SEPARATOR ", "»const «param.generateTypeName» &«param.generateName»«ENDFOR»'''
+	'''«FOR param : type.memberVariables SEPARATOR ", "»const «param.generateVariableTypeNameAsParameter» &«param.generateNameAsParameter»«ENDFOR»'''
 }

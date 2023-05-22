@@ -452,7 +452,7 @@ public final class Annotations {
 
 	// *** VarDeclaration ***//
 	public static boolean isArray(final VarDeclaration vd) {
-		return vd.getArraySize() > 0;
+		return vd.getArraySize() != null && !vd.getArraySize().isBlank();
 	}
 
 	public static void setVarConfig(final VarDeclarationImpl varDeclarationImpl, final boolean config) {

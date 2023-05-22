@@ -12,6 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
+
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import java.io.File;
 import java.io.IOException;
 
@@ -60,5 +66,5 @@ public class ArchivedLibraryImportWizardPage extends LibraryImportWizardPage {
         viewer.setInput(libraryLinker.listDirectoriesContainingArchives());
 		super.setVisible(visible);
 	}
-	
+
 }

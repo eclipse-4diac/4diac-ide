@@ -42,13 +42,12 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Array Size</em>' attribute.
-	 * @see #setArraySize(int)
+	 * @see #setArraySize(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getVarDeclaration_ArraySize()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.Int"
-	 *        extendedMetaData="kind='attribute' name='arraySize'"
+	 * @model extendedMetaData="kind='attribute' name='arraySize'"
 	 * @generated
 	 */
-	int getArraySize();
+	String getArraySize();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getArraySize <em>Array Size</em>}' attribute.
@@ -58,7 +57,7 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * @see #getArraySize()
 	 * @generated
 	 */
-	void setArraySize(int value);
+	void setArraySize(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Withs</b></em>' reference list.
@@ -119,5 +118,21 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * @generated
 	 */
 	void setVarConfig(boolean config);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getArraySizeAsInt();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	String getFullTypeName();
 
 } // VarDeclaration

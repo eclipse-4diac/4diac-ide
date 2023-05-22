@@ -24,6 +24,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -53,6 +54,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getServiceTransaction <em>Service Transaction</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getServiceSequenceType <em>Service Sequence Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getStartState <em>Start State</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl#getEventManager <em>Event Manager</em>}</li>
  * </ul>
  *
  * @generated
@@ -157,6 +159,16 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	 * @ordered
 	 */
 	protected String startState = START_STATE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getEventManager() <em>Event Manager</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEventManager()
+	 * @generated
+	 * @ordered
+	 */
+	protected EObject eventManager;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -311,6 +323,51 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	 * @generated
 	 */
 	@Override
+	public EObject getEventManager() {
+		return eventManager;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetEventManager(EObject newEventManager, NotificationChain msgs) {
+		EObject oldEventManager = eventManager;
+		eventManager = newEventManager;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_SEQUENCE__EVENT_MANAGER, oldEventManager, newEventManager);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setEventManager(EObject newEventManager) {
+		if (newEventManager != eventManager) {
+			NotificationChain msgs = null;
+			if (eventManager != null)
+				msgs = ((InternalEObject)eventManager).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE_SEQUENCE__EVENT_MANAGER, null, msgs);
+			if (newEventManager != null)
+				msgs = ((InternalEObject)newEventManager).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE_SEQUENCE__EVENT_MANAGER, null, msgs);
+			msgs = basicSetEventManager(newEventManager, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_SEQUENCE__EVENT_MANAGER, newEventManager, newEventManager));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Service getService() {
 		return (Service) this.eContainer();
 	}
@@ -367,6 +424,8 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION:
 				return ((InternalEList<?>)getServiceTransaction()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.SERVICE_SEQUENCE__EVENT_MANAGER:
+				return basicSetEventManager(null, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -392,6 +451,8 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 				return getServiceSequenceType();
 			case LibraryElementPackage.SERVICE_SEQUENCE__START_STATE:
 				return getStartState();
+			case LibraryElementPackage.SERVICE_SEQUENCE__EVENT_MANAGER:
+				return getEventManager();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -426,6 +487,9 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 			case LibraryElementPackage.SERVICE_SEQUENCE__START_STATE:
 				setStartState((String)newValue);
 				return;
+			case LibraryElementPackage.SERVICE_SEQUENCE__EVENT_MANAGER:
+				setEventManager((EObject)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -458,6 +522,9 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 			case LibraryElementPackage.SERVICE_SEQUENCE__START_STATE:
 				setStartState(START_STATE_EDEFAULT);
 				return;
+			case LibraryElementPackage.SERVICE_SEQUENCE__EVENT_MANAGER:
+				setEventManager((EObject)null);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -484,6 +551,8 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 				return SERVICE_SEQUENCE_TYPE_EDEFAULT == null ? serviceSequenceType != null : !SERVICE_SEQUENCE_TYPE_EDEFAULT.equals(serviceSequenceType);
 			case LibraryElementPackage.SERVICE_SEQUENCE__START_STATE:
 				return START_STATE_EDEFAULT == null ? startState != null : !START_STATE_EDEFAULT.equals(startState);
+			case LibraryElementPackage.SERVICE_SEQUENCE__EVENT_MANAGER:
+				return eventManager != null;
 			default:
 				return super.eIsSet(featureID);
 		}

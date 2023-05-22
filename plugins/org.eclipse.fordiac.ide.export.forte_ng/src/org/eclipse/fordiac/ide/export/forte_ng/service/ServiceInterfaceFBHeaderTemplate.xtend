@@ -38,20 +38,15 @@ class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate<ServiceInterfaceF
 		
 		  «generateFBInterfaceSpecDeclaration»
 		
-		  «type.interfaceList.inputVars.generateAccessors("getDI")»
-		  «type.interfaceList.outputVars.generateAccessors("getDO")»
-		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
+		  void executeEvent(TEventID paEIID);
 		
-		  FORTE_FB_DATA_ARRAY(«type.interfaceList.eventOutputs.size», «type.interfaceList.inputVars.size», «type.interfaceList.outputVars.size», «type.interfaceList.sockets.size + type.interfaceList.plugs.size»);
-		
-		  void executeEvent(int pa_nEIID);
+		  «generateReadInputDataDeclaration»
+		  «generateWriteOutputDataDeclaration»
 		
 		public:
-		   «FBClassName»(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-		       «baseClass»( pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, m_anFBConnData, m_anFBVarsData) {
-		   };
+		  «FBClassName»(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);
 		
-		  ~«FBClassName»() override = default;
+		  «generateInterfaceDeclarations»
 		};
 		
 		«generateIncludeGuardEnd»

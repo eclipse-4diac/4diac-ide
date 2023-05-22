@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
@@ -50,6 +51,7 @@ public class InternalConstVarsSection extends AbstractInternalVarsSection {
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new VarDeclarationColumnProvider(),
 				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
+		table.addConfiguration(new TypeDeclarationEditorConfiguration(provider));
 		table.configure();
 
 		buttons.bindToTableViewer(table, this,

@@ -37,10 +37,7 @@ public class WatchesTypeLabelProvider extends ColumnLabelProvider {
 			ie = tn.getVariable();
 		}
 		if (ie instanceof VarDeclaration) {
-			if (((VarDeclaration) ie).isArray()) {
-				return "[" + ie.getTypeName() + "]";
-			}
-			return ie.getTypeName();
+			return ie.getFullTypeName();
 		}
 		return FordiacMessages.Event.toUpperCase();
 	}

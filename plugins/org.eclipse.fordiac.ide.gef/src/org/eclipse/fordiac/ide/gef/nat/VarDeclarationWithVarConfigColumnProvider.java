@@ -27,6 +27,6 @@ public class VarDeclarationWithVarConfigColumnProvider extends VarDeclarationCol
 
 	@Override
 	public int getColumnCount() {
-		return 6;
+		return super.getColumnCount() + 1;
 	}
 }

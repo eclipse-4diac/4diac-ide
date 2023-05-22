@@ -67,7 +67,7 @@ public class EventColumnAcesssor implements IColumnAccessor<Event> {
 
 	@Override
 	public int getColumnCount() {
-		return 3;
+		return I4diacNatTableUtil.COMMENT + 1;
 	}
 
 }

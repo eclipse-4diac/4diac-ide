@@ -630,6 +630,45 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	}
 
 	@Test
+	def void testSimpleWithLegacyArray() {
+		val inputVarDecl = newVarDeclaration("DI1", ElementaryTypes.INT, true, "[1,2,3,4,5,6]")
+		inputVarDecl.arraySize = "6"
+		val inputVar = newVariable(inputVarDecl)
+		val outputVarDecl = newVarDeclaration("DO1", ElementaryTypes.INT, false)
+		21.toIntValue.assertEquals(#[
+			'''
+				DO1 := DI1[0] + DI1[1] + DI1[2] + DI1[3] + DI1[4] + DI1[5];
+			'''.newSTAlgorithm("REQ")
+		].evaluateSimpleFB("REQ", #[inputVar], outputVarDecl).variables.get("DO1").value)
+	}
+
+	@Test
+	def void testSimpleWithSimpleArray() {
+		val inputVarDecl = newVarDeclaration("DI1", ElementaryTypes.INT, true, "[1,2,3,4,5,6]")
+		inputVarDecl.arraySize = "0..5"
+		val inputVar = newVariable(inputVarDecl)
+		val outputVarDecl = newVarDeclaration("DO1", ElementaryTypes.INT, false)
+		21.toIntValue.assertEquals(#[
+			'''
+				DO1 := DI1[0] + DI1[1] + DI1[2] + DI1[3] + DI1[4] + DI1[5];
+			'''.newSTAlgorithm("REQ")
+		].evaluateSimpleFB("REQ", #[inputVar], outputVarDecl).variables.get("DO1").value)
+	}
+
+	@Test
+	def void testSimpleWithComplexArray() {
+		val inputVarDecl = newVarDeclaration("DI1", ElementaryTypes.INT, true, "[1,2,3,4,5,6]")
+		inputVarDecl.arraySize = "0..21-17+2"
+		val inputVar = newVariable(inputVarDecl)
+		val outputVarDecl = newVarDeclaration("DO1", ElementaryTypes.INT, false)
+		21.toIntValue.assertEquals(#[
+			'''
+				DO1 := DI1[0] + DI1[1] + DI1[2] + DI1[3] + DI1[4] + DI1[5];
+			'''.newSTAlgorithm("REQ")
+		].evaluateSimpleFB("REQ", #[inputVar], outputVarDecl).variables.get("DO1").value)
+	}
+
+	@Test
 	def void testSimpleWithStruct() {
 		val structType = DataFactory.eINSTANCE.createStructuredType => [
 			name = "TestStruct"

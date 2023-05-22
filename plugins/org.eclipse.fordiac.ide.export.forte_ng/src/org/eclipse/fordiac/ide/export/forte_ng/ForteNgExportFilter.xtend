@@ -46,6 +46,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker
 
 class ForteNgExportFilter extends TemplateExportFilter {
 
+	public static final String OPTION_TYPE = "type"
+	public static final String OPTION_TYPE_PARAM = "type_param"
 	public static final String OPTION_HEADER = "header"
 
 	override protected getTemplates(String name, EObject source) {

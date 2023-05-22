@@ -23,6 +23,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 
 	new(AdapterFBType type, String name, Path prefix) {
@@ -85,19 +87,15 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 
 	override protected generateEventConstants(List<Event> events) '''
 	public:
-		«super.generateEventConstants(events)»
+	  «super.generateEventConstants(events)»
 	
 	private:
 	'''
 
 	def protected generateAccessors(List<VarDeclaration> vars, String socketFunction, String plugFunction) '''
 		«FOR v : vars»
-			CIEC_«v.typeName» «IF v.array»*«ELSE»&«ENDIF»«v.name»() {
-			  «IF v.array»
-			  	return static_cast<CIEC_«v.typeName»*>(static_cast<CIEC_ARRAY *>((isSocket()) ? «socketFunction»(«vars.indexOf(v)») : «plugFunction»(«vars.indexOf(v)»))[0]); //the first element marks the start of the array
-			  «ELSE»
-			  	return *static_cast<CIEC_«v.typeName»*>((isSocket()) ? «socketFunction»(«vars.indexOf(v)») : «plugFunction»(«vars.indexOf(v)»));
-			  «ENDIF»
+			«v.generateVariableTypeName» &«v.generateName» {
+			  return *static_cast<«v.generateVariableTypeName»*>((isSocket()) ? «socketFunction»(«vars.indexOf(v)») : «plugFunction»(«vars.indexOf(v)»));
 			}
 			
 		«ENDFOR»
@@ -105,7 +103,7 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 
 	def protected generateEventAccessors(List<Event> events) '''
 		«FOR event : events»
-			int «event.name»() {
+			int «event.generateName»() {
 			  return m_nParentAdapterListEventID + scm_nEvent«event.name»ID;
 			}
 			

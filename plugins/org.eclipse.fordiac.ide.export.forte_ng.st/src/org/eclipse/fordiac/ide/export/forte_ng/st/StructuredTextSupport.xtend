@@ -38,8 +38,8 @@ import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.WcharType
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -88,6 +88,7 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util.GlobalConstantsUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
@@ -115,9 +116,9 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected CharSequence generateVariable(STVarDeclaration variable, boolean decl, boolean const) {
 		if (variable.locatedAt !== null)
-			'''«IF decl»«IF const»const «ENDIF»«variable.generateTypeName» «IF !variable.array»&«ENDIF»«ENDIF»«variable.generateFeatureName» = «variable.locatedAt.generateFeatureName»;'''
+			'''«IF decl»«IF const»const «ENDIF»«variable.generateFeatureTypeName» «IF !variable.array»&«ENDIF»«ENDIF»«variable.generateFeatureName» = «variable.locatedAt.generateFeatureName»;'''
 		else
-			'''«IF decl»«IF const»const «ENDIF»«variable.generateTypeName» «ENDIF»«variable.generateFeatureName» = «variable.generateVariableDefaultValue»;'''
+			'''«IF decl»«IF const»const «ENDIF»«variable.generateFeatureTypeName» «ENDIF»«variable.generateFeatureName» = «variable.generateVariableDefaultValue»;'''
 	}
 
 	def protected dispatch CharSequence generateInitializerExpression(STElementaryInitializerExpression expr) {
@@ -125,7 +126,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateInitializerExpression(STArrayInitializerExpression expr) //
-	'''«(expr.expectedType as DataType).generateTypeName»{«FOR elem : expr.values SEPARATOR ", "»«elem.generateArrayInitElement»«ENDFOR»}'''
+	'''«expr.expectedType.generateTypeName»{«FOR elem : expr.values SEPARATOR ", "»«elem.generateArrayInitElement»«ENDFOR»}'''
 
 	def protected CharSequence generateArrayInitElement(STArrayInitElement elem) //
 	'''«IF elem.initExpressions.empty»«elem.indexOrInitExpression.generateInitializerExpression»«ELSE»«elem.generateMultiArrayInitElement»«ENDIF»'''
@@ -134,7 +135,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''«FOR i : 0..<(elem.indexOrInitExpression as STElementaryInitializerExpression).value.integerFromConstantExpression SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateInitializerExpression»«ENDFOR»«ENDFOR»'''
 
 	def protected dispatch CharSequence generateInitializerExpression(STStructInitializerExpression expr) //
-	'''«(expr.expectedType as DataType).generateTypeName»(«FOR elem : expr.generateStructInitElements SEPARATOR ", "»«elem»«ENDFOR»)'''
+	'''«expr.expectedType.generateTypeName»(«FOR elem : expr.generateStructInitElements SEPARATOR ", "»«elem»«ENDFOR»)'''
 
 	def protected Iterable<CharSequence> generateStructInitElements(STStructInitializerExpression expr) {
 		expr.mappedStructInitElements.entrySet.map[key.generateStructInitElement(value)]
@@ -201,7 +202,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch generateStatement(STForStatement stmt) '''
-		for (auto «generateUniqueVariableName» : ST_FOR_ITER<«stmt.variable.generateTypeName»«IF stmt.by !== null», «(stmt.by.resultType as DataType).generateTypeName»«ENDIF»>(«stmt.variable.generateFeatureName», «stmt.from.generateExpression», «stmt.to.generateExpression»«IF stmt.by !== null», «stmt.by.generateExpression»«ENDIF»)) {
+		for (auto «generateUniqueVariableName» : ST_FOR_ITER<«stmt.variable.generateFeatureTypeName»«IF stmt.by !== null», «stmt.by.resultType.generateTypeName»«ENDIF»>(«stmt.variable.generateFeatureName», «stmt.from.generateExpression», «stmt.to.generateExpression»«IF stmt.by !== null», «stmt.by.generateExpression»«ENDIF»)) {
 		  «stmt.statements.generateStatementList»
 		}
 	'''
@@ -236,10 +237,10 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			case AMPERSAND: "func_AND"
 			case POWER: "func_EXPT"
 			default: '''func_«expr.op.getName»'''
-		}»«IF expr.op.arithmetic || expr.op.logical»<«(expr.resultType as DataType).generateTypeName»>«ENDIF»(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+		}»«IF expr.op.arithmetic || expr.op.logical»<«expr.resultType.generateTypeName»>«ENDIF»(«expr.left.generateExpression», «expr.right.generateExpression»)'''
 
 	def protected dispatch CharSequence generateExpression(STUnaryExpression expr) //
-	'''func_«expr.op.getName»<«(expr.resultType as DataType).generateTypeName»>(«expr.expression.generateExpression»)'''
+	'''func_«expr.op.getName»<«expr.resultType.generateTypeName»>(«expr.expression.generateExpression»)'''
 
 	def protected dispatch CharSequence generateExpression(STMemberAccessExpression expr) //
 	'''«expr.receiver.generateExpression».«expr.member.generateExpression»'''
@@ -338,10 +339,10 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateExpression(STNumericLiteral expr) //
-	'''«(expr.resultType as DataType).generateTypeName»(«expr.value»)'''
+	'''«expr.resultType.generateTypeName»(«expr.value»)'''
 
 	def protected dispatch CharSequence generateExpression(STStringLiteral expr) {
-		val type = expr.resultType as DataType
+		val type = expr.resultType
 		'''«type.generateTypeName»''' + switch (type) {
 			AnyStringType: '''("«expr.value.toString.convertToJavaString»")'''
 			CharType: '''(«String.format("0x%02x",  expr.value.toString.getBytes(StandardCharsets.UTF_8).get(0))»)'''
@@ -350,23 +351,19 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateExpression(STDateLiteral expr) {
-		val type = expr.resultType as DataType
-		'''«type.generateTypeName»(«expr.value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L»)'''
+		'''«expr.resultType.generateTypeName»(«expr.value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L»)'''
 	}
 
 	def protected dispatch CharSequence generateExpression(STTimeLiteral expr) {
-		val type = expr.resultType as DataType
-		'''«type.generateTypeName»(«expr.value.toNanos»)'''
+		'''«expr.resultType.generateTypeName»(«expr.value.toNanos»)'''
 	}
 
 	def protected dispatch CharSequence generateExpression(STTimeOfDayLiteral expr) {
-		val type = expr.resultType as DataType
-		'''«type.generateTypeName»(«expr.value.toNanoOfDay»)'''
+		'''«expr.resultType.generateTypeName»(«expr.value.toNanoOfDay»)'''
 	}
 
 	def protected dispatch CharSequence generateExpression(STDateAndTimeLiteral expr) {
-		val type = expr.resultType as DataType
-		'''«type.generateTypeName»(«LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(expr.value, ChronoUnit.NANOS)»)'''
+		'''«expr.resultType.generateTypeName»(«LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(expr.value, ChronoUnit.NANOS)»)'''
 	}
 
 	def protected dispatch CharSequence generateTemplateExpression(STBinaryExpression expr) {
@@ -409,15 +406,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature) {
-		if (feature.rootContainer instanceof BaseFBType) {
-			val fbType = feature.rootContainer as BaseFBType
-			if (fbType.internalConstVars.contains(feature))
-				'''st_const_«feature.name»'''
-			else
-				'''st_«feature.name»()'''
-		} else {
-			'''«feature.name»()'''
-		}
+		ForteNgExportUtil.generateName(feature)
 	}
 
 	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) {
@@ -433,38 +422,32 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(STMethod feature) '''method_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(FB feature) '''fb_«feature.name»()'''
-
-	def protected dispatch CharSequence generateFeatureName(Event feature) '''evt_«feature.name»'''
-
-	def protected dispatch CharSequence generateFeatureName(AdapterDeclaration feature) '''st_«feature.name»()'''
-
-	def protected CharSequence generateTypeName(STVarDeclaration variable) { variable.generateTypeName(false) }
-
-	def protected CharSequence generateTypeName(STVarDeclaration variable, boolean output) {
-		variable.count.reverseView.fold(
-			variable.ranges.reverseView.fold((variable.type as DataType).generateTypeName) [ type, range |
-				'''«IF output»CIEC_ARRAY_COMMON«ELSE»CIEC_ARRAY_FIXED«ENDIF»<«type»«IF !output», «range.generateTemplateExpression»«ENDIF»>'''
-			].toString
-		) [ type, count |
-			'''«IF output»CIEC_ARRAY_COMMON«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«type»>'''
-		]
+	def protected dispatch CharSequence generateFeatureName(FB feature) {
+		ForteNgExportUtil.generateName(feature)
 	}
 
-	def protected CharSequence generateTypeName(DataType type) {
-		switch (type) {
-			ArrayType:
-				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
-					val fixed = subrange.setLowerLimit && subrange.setUpperLimit
-					'''«IF fixed»CIEC_ARRAY_FIXED«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«result»«IF fixed», «subrange.lowerLimit», «subrange.upperLimit»«ENDIF»>'''
-				].toString
-			default:
-				ForteNgExportUtil.generateTypeName(type)
-		}
+	def protected dispatch CharSequence generateFeatureName(Event feature) {
+		ForteNgExportUtil.generateName(feature)
+	}
+
+	def protected dispatch CharSequence generateFeatureName(AdapterDeclaration feature) {
+		ForteNgExportUtil.generateName(feature)
+	}
+
+	def protected CharSequence generateFeatureTypeName(STVarDeclaration variable) {
+		variable.generateFeatureTypeName(false)
+	}
+
+	def protected CharSequence generateFeatureTypeName(STVarDeclaration variable, boolean output) {
+		if (output)
+			variable.featureType.generateTypeNameAsParameter
+		else
+			variable.featureType.generateTypeName
 	}
 
 	def protected CharSequence generateTypeDefaultValue(INamedElement type) {
 		switch (type) {
+			DataType case GenericTypes.isAnyType(type): '''«type.generateTypeName»()'''
 			AnyStringType: '''«type.generateTypeName»("")'''
 			AnyElementaryType: '''«type.generateTypeName»(0)'''
 			ArrayType: '''«type.generateTypeName»{}'''

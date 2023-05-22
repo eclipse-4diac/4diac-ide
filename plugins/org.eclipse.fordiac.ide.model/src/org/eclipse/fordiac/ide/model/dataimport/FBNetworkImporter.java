@@ -391,12 +391,12 @@ class FBNetworkImporter extends CommonElementImporter {
 		final IInterfaceElement src = builder.getSourceEndpoint();
 		final IInterfaceElement dst = builder.getDestinationEndpoint();
 		final String errorMessage = MessageFormat.format(Messages.FBNetworkImporter_ConnectionTypeMismatch,
-				src.getName() + ":" + src.getTypeName(), dst.getName() + ":" + dst.getTypeName()); //$NON-NLS-1$ //$NON-NLS-2$
+				src.getName() + ":" + src.getFullTypeName(), dst.getName() + ":" + dst.getFullTypeName()); //$NON-NLS-1$ //$NON-NLS-2$
 		final ErrorMarkerInterface srcErrorMarker = FordiacErrorMarkerInterfaceHelper
-				.createErrorMarkerInterfaceElement(src.getFBNetworkElement(), src, src.getTypeName(), null);
+				.createErrorMarkerInterfaceElement(src.getFBNetworkElement(), src, src.getFullTypeName(), null);
 		srcErrorMarker.setRepairedEndpoint(src);
 		final ErrorMarkerInterface dstErrorMarker = FordiacErrorMarkerInterfaceHelper
-				.createErrorMarkerInterfaceElement(dst.getFBNetworkElement(), dst, dst.getTypeName(), null);
+				.createErrorMarkerInterfaceElement(dst.getFBNetworkElement(), dst, dst.getFullTypeName(), null);
 		dstErrorMarker.setRepairedEndpoint(dst);
 		connection.setErrorMessage(errorMessage);
 		connection.setSource(srcErrorMarker);

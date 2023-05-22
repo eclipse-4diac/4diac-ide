@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.data.WstringType
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 
 abstract class ForteNgExportTemplate extends ExportTemplate {
 
@@ -63,6 +64,7 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 			LdtType: "forte_ldate_and_time.h"
 			StringType: "forte_string.h"
 			WstringType: "forte_wstring.h"
+			case GenericTypes.isAnyType(type): '''forte_«type.name.toLowerCase»_variant.h'''
 			default: '''forte_«type.name.toLowerCase».h'''
 		}
 	}

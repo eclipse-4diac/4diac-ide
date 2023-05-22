@@ -242,7 +242,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 			if (!interfaceElement.getType().isAssignableFrom(oldInterface.getType())) {
 				final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
-						oldInterface.getTypeName(), interfaceElement.getTypeName());
+						oldInterface.getFullTypeName(), interfaceElement.getFullTypeName());
 
 				final List<ErrorMarkerBuilder> errorMarkerBuilders = new ArrayList<>();
 				interfaceElement = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(newElement,
@@ -464,7 +464,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			// create wrong type error marker
 			// if connected with itself, prefer marker in destination
 			final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
-					source.getTypeName(), destination.getTypeName());
+					source.getFullTypeName(), destination.getFullTypeName());
 			final List<ErrorMarkerBuilder> errorMarkerBuilders = new ArrayList<>();
 			if (connection.getDestinationElement() == oldElement) {
 				destination = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(newElement,

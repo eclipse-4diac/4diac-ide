@@ -12,12 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
-import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -47,13 +45,11 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 		case I4diacNatTableUtil.NAME:
 			return rowObject.getName();
 		case I4diacNatTableUtil.TYPE:
-			return rowObject.getTypeName();
+			return rowObject.getFullTypeName();
 		case I4diacNatTableUtil.COMMENT:
 			return rowObject.getComment();
 		case I4diacNatTableUtil.INITIAL_VALUE:
 			return InitialValueHelper.getInitialOrDefaultValue(rowObject);
-		case I4diacNatTableUtil.ARRAY_SIZE:
-			return DataLabelProvider.getArraySizeText(rowObject);
 		default:
 			return rowObject.getValue() == null ? "" : rowObject.getValue().getValue(); //$NON-NLS-1$
 		}
@@ -71,21 +67,13 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 			cmd = new ChangeNameCommand(rowObject, value);
 			break;
 		case I4diacNatTableUtil.TYPE:
-			final DataType dataType = dataTypeLib.getTypeIfExists(value);
-			if (dataType == null) {
-				// we couldn't find a data type do nothing.
-				return;
-			}
-			cmd = new ChangeDataTypeCommand(rowObject, dataType);
+			cmd = ChangeDataTypeCommand.forTypeDeclaration(rowObject, value);
 			break;
 		case I4diacNatTableUtil.COMMENT:
 			cmd = new ChangeCommentCommand(rowObject, value);
 			break;
 		case I4diacNatTableUtil.INITIAL_VALUE:
 			cmd = new ChangeValueCommand(rowObject, value);
-			break;
-		case I4diacNatTableUtil.ARRAY_SIZE:
-			cmd = new ChangeArraySizeCommand(rowObject, value);
 			break;
 		default:
 			return;
@@ -96,7 +84,7 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 
 	@Override
 	public int getColumnCount() {
-		return 5;
+		return I4diacNatTableUtil.INITIAL_VALUE + 1;
 	}
 
 	public void setTypeLib(final DataTypeLibrary dataTypeLib) {

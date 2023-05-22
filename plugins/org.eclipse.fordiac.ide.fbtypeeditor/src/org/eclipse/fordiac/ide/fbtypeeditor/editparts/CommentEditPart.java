@@ -31,23 +31,30 @@ import org.eclipse.gef.requests.DirectEditRequest;
 
 public class CommentEditPart extends AbstractInterfaceElementEditPart {
 
-	private Label comment;
-
 	@Override
 	public IInterfaceElement getCastedModel() {
-		return ((CommentField) getModel()).getReferencedElement();
+		return getModel().getReferencedElement();
+	}
+
+	@Override
+	public CommentField getModel() {
+		return (CommentField) super.getModel();
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		comment = new Label();
-		update();
-		return comment;
+		return new Label(getModel().getLabel());
 	}
 
 	@Override
-	protected void update() {
-		comment.setText(((CommentField) getModel()).getLabel());
+	public Label getFigure() {
+		return (Label) super.getFigure();
+	}
+
+	@Override
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+		getFigure().setText(getModel().getLabel());
 	}
 
 	@Override
@@ -66,9 +73,8 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart {
 			}
 
 			@Override
-			protected void revertOldEditValue(DirectEditRequest request) {
-				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					final AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
+			protected void revertOldEditValue(final DirectEditRequest request) {
+				if (getHost() instanceof final AbstractDirectEditableEditPart viewEditPart) {
 					viewEditPart.getNameLabel().setText(viewEditPart.getINamedElement().getComment());
 				}
 			}
@@ -89,7 +95,7 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart {
 
 	@Override
 	public Label getNameLabel() {
-		return (Label) getFigure();
+		return getFigure();
 	}
 
 	@Override

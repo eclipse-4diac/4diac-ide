@@ -19,9 +19,7 @@ package org.eclipse.fordiac.ide.gef.widgets;
 import java.util.function.Consumer;
 
 import org.eclipse.fordiac.ide.gef.editors.InitialValueEditor;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
-import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -31,12 +29,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class PinInfoDataWidget extends PinInfoBasicWidget {
 
-	private Text arraySizeText;
 	private InitialValueEditor initialValueEditor;
 	private CLabel varConfigLabel;
 	private Button varConfigCheckBox;
@@ -66,7 +62,6 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 		if (type != null) {
 			final Consumer<Command> commandExecutorBuffer = commandExecutor;
 			commandExecutor = null;
-			arraySizeText.setText(DataLabelProvider.getArraySizeText(type));
 			varConfigCheckBox.setSelection(type.isVarConfig());
 			commandExecutor = commandExecutorBuffer;
 		}
@@ -81,12 +76,6 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 	@Override
 	protected void createWidget(final Composite parent) {
 		super.createWidget(parent);
-		widgetFactory.createCLabel(parent, FordiacMessages.ArraySize + ":"); //$NON-NLS-1$
-		arraySizeText = createText(parent);
-		arraySizeText.addModifyListener(e -> {
-			executeCommand(new ChangeArraySizeCommand(getType(), arraySizeText.getText()));
-			initialValueEditor.refresh();
-		});
 
 		widgetFactory.createCLabel(parent, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		initialValueEditor = new InitialValueEditor(parent, SWT.SINGLE | SWT.BORDER);
@@ -100,14 +89,12 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 	@Override
 	public void disableAllFields() {
 		super.disableAllFields();
-		arraySizeText.setEnabled(false);
 		initialValueEditor.setEditable(false);
 	}
 
 	@Override
 	protected void checkFieldEnablements() {
 		super.checkFieldEnablements();
-		arraySizeText.setEnabled(isTypeChangeable());
 		initialValueEditor.setEditable(isTypeChangeable());
 	}
 }

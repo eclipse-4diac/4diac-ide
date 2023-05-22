@@ -269,8 +269,8 @@ We'll export the four Function Block Types we just created.</p>
 <p>Now that you have exported the Service Interface Function Block, you need to edit it in order to get the desired behavior. 
 Open the ServiceTest.cpp file that was recently exported, and take a look at the executeEvent function at the bottom.</p>
 
-<div class="code">void FORTE_ServiceInterfaceTest::executeEvent(int pa_nEIID){
-  switch(pa_nEIID){
+<div class="code">void FORTE_ServiceInterfaceTest::executeEvent(TEventID paEIID){
+  switch(paEIID){
     case scm_nEventREQID:
 #error add code for REQ event!
 /*
@@ -283,8 +283,8 @@ Open the ServiceTest.cpp file that was recently exported, and take a look at the
 
 <p>The comment reminds us to set an output event, replace <i>#error add code for REQ event!</i> with <i>st_STATE() = !st_STATE();</i> for the toggling effect.</p>
 
-<div class="code">void FORTE_ServiceTest::executeEvent(int pa_nEIID){
-  switch(pa_nEIID){
+<div class="code">void FORTE_ServiceTest::executeEvent(TEventID paEIID){
+  switch(paEIID){
     case scm_nEventREQID:
 	  st_STATE() = !st_STATE();
 	  sendOutputEvent(scm_nEventCNFID);

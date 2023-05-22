@@ -103,7 +103,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		final Label label = new Label(composite, SWT.NONE);
 		label.setText(Messages.SelectFBTypesWizardPage_Exporter);
 
-		filters = new Combo(composite, SWT.NONE);
+		filters = new Combo(composite, SWT.READ_ONLY);
 		final GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 		filters.setLayoutData(data);

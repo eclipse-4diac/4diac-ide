@@ -1035,6 +1035,11 @@
         <details key="body" value="DataType dataType = getType();&#xA;if(dataType != null){&#xA;&#x9;return dataType.getName();&#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getFullTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInput" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputConnections" upperBound="-1"
         eType="#//Connection" eOpposite="#//Connection/destination"/>
@@ -1195,7 +1200,7 @@
         eOpposite="#//Device/inConnections"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LocalVariable" eSuperTypes="#//VarDeclaration">
-    <eOperations name="getArraySize" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
+    <eOperations name="getArraySizeAsInt" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return arrayStop-arrayStart+1;"/>
         <details key="documentation" value="overwrite"/>
@@ -1419,6 +1424,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceSequenceType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral="POSSIBLE"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startState" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventManager" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true" resolveProxies="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceTransaction">
     <eOperations name="getServiceSequence" lowerBound="1" eType="#//ServiceSequence">
@@ -1604,7 +1611,17 @@
       </eAnnotations>
       <eParameters name="config" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arraySize" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
+    <eOperations name="getArraySizeAsInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if(getArraySize() != null){&#xA;   return Integer.parseInt(getArraySize());&#xA;}&#xA;return 0;&#xA;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getFullTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arraySize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="arraySize"/>

@@ -1,12 +1,13 @@
 /*******************************************************************************
  * Copyright (c) 2019 fortiss GmbH
- *
+ *               2023 Martin Erich Jobst
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
@@ -29,18 +30,22 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBT
 		«generateImplIncludes»
 		
 		«generateFBDefinition»
-		
 		«generateFBInterfaceDefinition»
-		
 		«generateFBInterfaceSpecDefinition»
+		
+		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
+		    «baseClass»( pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId)«//no newline
+			»«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«generateConnectionInitializer» {
+		};
 		
 		«generateExecuteEvent»
 		
+		«generateInterfaceDefinitions»
 	'''
-	
+
 	def protected generateExecuteEvent() '''
-		void «FBClassName»::executeEvent(int pa_nEIID) {
-		  switch(pa_nEIID) {
+		void «FBClassName»::executeEvent(TEventID paEIID) {
+		  switch(paEIID) {
 		    «FOR event : type.interfaceList.eventInputs»
 		    	case scm_nEvent«event.name»ID:
 		    	  #error add code for «event.name» event!

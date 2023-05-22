@@ -23,7 +23,6 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,25 +31,20 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
@@ -95,12 +89,6 @@ implements I4diacNatTableUtil {
 	@Override
 	protected abstract INamedElement getInputType(Object input);
 
-	@SuppressWarnings("static-method") // this method allows sub-classes to provide own change type commands, e.g.,
-	// subapps
-	protected ChangeDataTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
-		return new ChangeDataTypeCommand(data, newType);
-	}
-
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
@@ -143,23 +131,6 @@ implements I4diacNatTableUtil {
 	// can be overridden by subclasses to use a different type dropdown
 	protected CellEditor createTypeCellEditor(final TableViewer viewer) {
 		return ComboBoxWidgetFactory.createComboBoxCellEditor(viewer.getTable(), fillTypeCombo(), SWT.READ_ONLY);
-	}
-
-	// subclasses need to override this method if they use a different type dropdown
-	@SuppressWarnings("static-method")
-	protected Object getTypeValue(final Object element, final TableViewer viewer, final int TYPE_COLUMN_INDEX) {
-		final String type = ((IInterfaceElement) element).getTypeName();
-		final List<String> items = Arrays
-				.asList(((ComboBoxCellEditor) viewer.getCellEditors()[TYPE_COLUMN_INDEX]).getItems());
-		return Integer.valueOf(items.indexOf(type));
-	}
-
-	// subclasses need to override this method if they use a different type dropdown
-	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value,
-			final TableViewer viewer) {
-		final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[((Integer) value)
-		                                                                                         .intValue()];
-		return newChangeTypeCommand(data, getDataTypeLib().getType(dataTypeName));
 	}
 
 	@Override

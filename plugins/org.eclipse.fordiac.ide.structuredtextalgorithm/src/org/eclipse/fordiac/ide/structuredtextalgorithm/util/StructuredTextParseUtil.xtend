@@ -22,11 +22,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.STAlgorithmParser
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
 import org.eclipse.xtext.ParserRule
 import org.eclipse.xtext.parser.IParseResult
@@ -34,6 +36,8 @@ import org.eclipse.xtext.parser.IParser
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.eclipse.xtext.validation.Issue
+
+import static extension org.eclipse.xtext.EcoreUtil2.*
 
 class StructuredTextParseUtil extends ParseUtil {
 	static final URI SYNTHETIC_URI = URI.createURI("__synthetic.stalg")
@@ -100,6 +104,11 @@ class StructuredTextParseUtil extends ParseUtil {
 			additionalContent, issues)
 	}
 
+	def static void validateType(VarDeclaration decl, List<Issue> issues) {
+		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
+		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, decl.getContainerOfType(FBType), issues)
+	}
+
 	def static STExpressionSource parse(String expression, INamedElement expectedType, FBType fbType,
 		List<String> errors, List<String> warnings, List<String> infos) {
 		expression.parse(expectedType, fbType, null, errors, warnings, infos)
@@ -119,6 +128,13 @@ class StructuredTextParseUtil extends ParseUtil {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		expression.parse(parser.grammarAccess.STInitializerExpressionSourceRule, uri, expectedType, fbType,
 			additionalContent, errors, warnings, infos)?.rootASTElement as STInitializerExpressionSource
+	}
+
+	def static STTypeDeclaration parseType(VarDeclaration decl, List<String> errors, List<String> warnings,
+		List<String> infos) {
+		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
+		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, decl.name, decl.getContainerOfType(FBType),
+			errors, warnings, infos)?.rootASTElement as STTypeDeclaration
 	}
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, String name, FBType fbType,

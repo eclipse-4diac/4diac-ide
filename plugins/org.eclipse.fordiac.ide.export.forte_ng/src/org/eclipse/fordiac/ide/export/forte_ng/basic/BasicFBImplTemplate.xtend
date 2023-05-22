@@ -33,6 +33,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	final Map<ECTransition, ILanguageSupport> transitionLanguageSupport
 
@@ -65,7 +67,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	'''
 
 	override generateExecuteEvent() '''
-		void «FBClassName»::executeEvent(int pa_nEIID){
+		void «FBClassName»::executeEvent(TEventID paEIID){
 		  do {
 		    switch(m_nECCState) {
 		      «FOR state : type.ECC.ECState»
@@ -81,7 +83,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 		        m_nECCState = 0; // 0 is always the initial state
 		        return;
 		    }
-		    pa_nEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
+		    paEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
 		  } while(true);
 		}
 		
@@ -91,9 +93,9 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	def protected generateTransitionCondition(ECTransition transition) {
 		switch (it : transition) {
 			case conditionEvent !== null && !conditionExpression.nullOrEmpty: //
-			'''(«generateTransitionEvent(transition.conditionEvent)» == pa_nEIID) && («transitionLanguageSupport.get(transition)?.generate(emptyMap)»)'''
+			'''(«generateTransitionEvent(transition.conditionEvent)» == paEIID) && («transitionLanguageSupport.get(transition)?.generate(emptyMap)»)'''
 			case conditionEvent !== null: //
-			'''«generateTransitionEvent(transition.conditionEvent)» == pa_nEIID'''
+			'''«generateTransitionEvent(transition.conditionEvent)» == paEIID'''
 			case !conditionExpression.nullOrEmpty:
 				if(conditionExpression == "1"){
 					"1"	
@@ -106,10 +108,11 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	}
 
 	def protected generateTransitionEvent(Event event) {
-		if (event.FBNetworkElement instanceof AdapterFB) {
-			return '''«EXPORT_PREFIX»«event.FBNetworkElement.name»().«event.name»()'''
+		var fbNetworkElement = event.FBNetworkElement
+		if (fbNetworkElement instanceof AdapterFB) {
+			return '''«fbNetworkElement.generateName».«event.generateName»()'''
 		}
-		event.generateEventName
+		event.generateEventID
 	}
 
 	def protected generateStateName(ECState state) '''scm_nState«state.name»'''

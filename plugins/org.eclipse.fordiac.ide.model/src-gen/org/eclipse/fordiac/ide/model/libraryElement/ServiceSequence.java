@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,6 +31,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceTransaction <em>Service Transaction</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceSequenceType <em>Service Sequence Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getStartState <em>Start State</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getEventManager <em>Event Manager</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceSequence()
@@ -94,6 +96,28 @@ public interface ServiceSequence extends INamedElement, ConfigurableObject {
 	 * @generated
 	 */
 	void setStartState(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Event Manager</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Event Manager</em>' containment reference.
+	 * @see #setEventManager(EObject)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceSequence_EventManager()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EObject getEventManager();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getEventManager <em>Event Manager</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Event Manager</em>' containment reference.
+	 * @see #getEventManager()
+	 * @generated
+	 */
+	void setEventManager(EObject value);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -54,6 +54,7 @@ public class TypeSelectionWidget {
 	private ConfigurableObject configurableObject;
 	private ITypeSelectionContentProvider contentProvider;
 
+	private Composite composite;
 	private TableViewer tableViewer;
 	private Button openEditorButton;
 
@@ -74,7 +75,7 @@ public class TypeSelectionWidget {
 	}
 
 	public void createControls(final Composite parent) {
-		final Composite composite = getWidgetFactory().createComposite(parent);
+		composite = getWidgetFactory().createComposite(parent);
 		final GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.marginWidth = 0;
 		gridLayout.marginHeight = 0;
@@ -193,5 +194,9 @@ public class TypeSelectionWidget {
 			final DataType dtp = ((VarDeclaration) configurableObject).getType();
 			openEditorButton.setEnabled((dtp instanceof StructuredType) && !IecTypes.GenericTypes.isAnyType(dtp)); // $NON-NLS-1$
 		}
+	}
+
+	public Composite getControl() {
+		return composite;
 	}
 }

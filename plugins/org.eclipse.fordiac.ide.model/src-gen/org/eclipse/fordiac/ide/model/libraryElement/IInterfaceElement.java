@@ -128,4 +128,12 @@ public interface IInterfaceElement extends INamedElement, ConfigurableObject, Hi
 	 */
 	String getTypeName();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	String getFullTypeName();
+
 } // IInterfaceElement

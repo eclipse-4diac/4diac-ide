@@ -63,8 +63,8 @@
 <h3>Edit the Sourcefile</h3>
 <p>Then you need to edit the <span class="specificText">executeEvent</span> method. The usual start and stop Events will register this block to the <span class="specificText">CTimerHandler</span>. Add a new event <span class="specificText">cg_nExternalEventID</span>, which is defined in <span class="specificText">CEventSourceFB</span>, and let it set your outputs. This will be triggered if your Function Block receives an External Event.</p>
 
-<div class="code">void FORTE_SIBF_T_FF3::executeEvent(int pa_nEIID){
-  switch(pa_nEIID){
+<div class="code">void FORTE_SIBF_T_FF3::executeEvent(TEventID paEIID){
+  switch(paEIID){
 	case cg_nExternalEventID:
 		Q() = !Q();
 	  sendOutputEvent(scm_nEventEOID);
