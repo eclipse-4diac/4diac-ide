@@ -96,7 +96,7 @@ class STStandardFunctionProvider {
 			if (input.xor(method.getParameterType(index) == Variable)) {
 				STCoreFactory.eINSTANCE.createSTVarDeclaration => [
 					name = '''«IF input»IN«ELSE»OUT«ENDIF»«index»'''
-					comment = MessageFormat.format(method.getParameter(index).getAnnotation(Comment)?.value ?: "",
+					comment = MessageFormat.format(method.getParameter(index)?.getAnnotation(Comment)?.value ?: "",
 						index)
 					type = ptypes.get(index)
 				]

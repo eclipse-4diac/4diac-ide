@@ -168,7 +168,7 @@ class FunctionsTest {
 			SampleFunctions.inferReturnTypeFromDataTypes("VARARGS", ElementaryTypes.INT, ElementaryTypes.INT,
 				ElementaryTypes.INT))
 		// parameter types
-		emptyList.assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("VARARGS"))
+		#[ElementaryTypes.INT].assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("VARARGS"))
 		#[ElementaryTypes.INT].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS", ElementaryTypes.INT))
 		#[ElementaryTypes.INT, ElementaryTypes.INT].assertIterableEquals(
@@ -206,7 +206,7 @@ class FunctionsTest {
 			SampleFunctions.inferReturnTypeFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT, ElementaryTypes.INT,
 				ElementaryTypes.SINT))
 		// parameter types
-		emptyList.assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC"))
+		#[GenericTypes.ANY_MAGNITUDE].assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC"))
 		#[ElementaryTypes.LINT].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT))
 		#[ElementaryTypes.LINT, ElementaryTypes.LINT].assertIterableEquals(
