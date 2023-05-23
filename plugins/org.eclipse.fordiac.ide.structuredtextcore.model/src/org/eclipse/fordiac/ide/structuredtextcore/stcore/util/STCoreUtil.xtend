@@ -12,8 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.util
 
+import java.lang.reflect.Method
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.text.MessageFormat
+import java.util.List
 import org.eclipse.emf.ecore.EClassifier
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.data.AnyBitType
@@ -56,6 +59,8 @@ import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser
+import org.eclipse.fordiac.ide.model.eval.function.Comment
+import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -72,6 +77,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgumen
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
@@ -92,6 +98,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
+import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 
 final class STCoreUtil {
 	public static final String OPTION_EXPECTED_TYPE = STCoreUtil.name + ".EXPECTED_TYPE"
@@ -362,14 +370,17 @@ final class STCoreUtil {
 			if (index >= 0) {
 				val feature = featureExpression.featureNoresolve
 				if (feature instanceof ICallable) {
-					if (index < feature.inputParameters.size)
-						feature.inputParameters.get(index)
-					else if (index < feature.inputParameters.size + feature.inOutParameters.size)
-						feature.inOutParameters.get(index - feature.inputParameters.size)
-					else if (index <
-						feature.inputParameters.size + feature.inOutParameters.size + feature.outputParameters.size)
-						feature.outputParameters.get(index - feature.inputParameters.size -
-							feature.inOutParameters.size)
+					val inputParameters = feature.inputParameters
+					val outputParameters = feature.outputParameters
+					val inOutParameters = feature.inOutParameters
+					if (index < inputParameters.size)
+						inputParameters.get(index)
+					else if (feature.callableVarargs)
+						inputParameters.last
+					else if (index < inputParameters.size + inOutParameters.size)
+						inOutParameters.get(index - inputParameters.size)
+					else if (index < inputParameters.size + inOutParameters.size + outputParameters.size)
+						outputParameters.get(index - inputParameters.size - inOutParameters.size)
 				}
 			}
 		}
@@ -383,6 +394,49 @@ final class STCoreUtil {
 
 	def package static getFeatureExpression(STCallUnnamedArgument argument) {
 		switch (container: argument.eContainer) { STFeatureExpression: container }
+	}
+
+	def static List<? extends INamedElement> computeInputParameters(ICallable callable,
+		Iterable<STCallArgument> arguments) {
+		if (callable instanceof STStandardFunction)
+			callable.javaMethod.inferParameterVariables(arguments.map[resultType].filter(DataType).toList, true)
+		else
+			callable.inputParameters
+	}
+
+	def static List<? extends INamedElement> computeOutputParameters(ICallable callable,
+		Iterable<STCallArgument> arguments) {
+		if (callable instanceof STStandardFunction)
+			callable.javaMethod.inferParameterVariables(arguments.map[resultType].filter(DataType).toList, false)
+		else
+			callable.outputParameters
+	}
+
+	def static List<? extends INamedElement> computeInOutParameters(ICallable callable,
+		Iterable<STCallArgument> arguments) {
+		callable.inOutParameters
+	}
+
+	def static boolean isCallableVarargs(ICallable callable) {
+		switch (callable) {
+			STStandardFunction: callable.varargs
+			default: false
+		}
+	}
+
+	def package static List<STVarDeclaration> inferParameterVariables(Method method, List<DataType> argumentTypes,
+		boolean input) {
+		val ptypes = method.inferParameterTypesFromDataTypes(argumentTypes)
+		(0 ..< ptypes.size).map [ index |
+			if (input.xor(method.getParameterType(index) == Variable)) {
+				STCoreFactory.eINSTANCE.createSTVarDeclaration => [
+					name = '''«IF input»IN«ELSE»OUT«ENDIF»«index»'''
+					comment = MessageFormat.format(method.getParameter(index)?.getAnnotation(Comment)?.value ?: "",
+						index)
+					type = ptypes.get(index)
+				]
+			}
+		].filterNull.toList
 	}
 
 	def static getFeatureType(INamedElement feature) {

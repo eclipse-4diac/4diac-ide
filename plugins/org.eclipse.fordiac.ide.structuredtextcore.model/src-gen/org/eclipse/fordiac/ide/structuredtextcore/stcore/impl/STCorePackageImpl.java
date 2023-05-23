@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -553,6 +554,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EDataType stStringEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType stJavaMethodEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -1955,8 +1963,28 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSTStandardFunction_OnlySupportedBy() {
+	public EAttribute getSTStandardFunction_Varargs() {
 		return (EAttribute)stStandardFunctionEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSTStandardFunction_OnlySupportedBy() {
+		return (EAttribute)stStandardFunctionEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSTStandardFunction_JavaMethod() {
+		return (EAttribute)stStandardFunctionEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -2205,6 +2233,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
+	public EDataType getSTJavaMethod() {
+		return stJavaMethodEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public STCoreFactory getSTCoreFactory() {
 		return (STCoreFactory)getEFactoryInstance();
 	}
@@ -2408,7 +2446,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEReference(stStandardFunctionEClass, ST_STANDARD_FUNCTION__INPUT_PARAMETERS);
 		createEReference(stStandardFunctionEClass, ST_STANDARD_FUNCTION__OUTPUT_PARAMETERS);
 		createEReference(stStandardFunctionEClass, ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS);
+		createEAttribute(stStandardFunctionEClass, ST_STANDARD_FUNCTION__VARARGS);
 		createEAttribute(stStandardFunctionEClass, ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY);
+		createEAttribute(stStandardFunctionEClass, ST_STANDARD_FUNCTION__JAVA_METHOD);
 
 		stCommentEClass = createEClass(ST_COMMENT);
 		createEReference(stCommentEClass, ST_COMMENT__CONTEXT);
@@ -2442,6 +2482,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stTimeOfDayEDataType = createEDataType(ST_TIME_OF_DAY);
 		stDateAndTimeEDataType = createEDataType(ST_DATE_AND_TIME);
 		stStringEDataType = createEDataType(ST_STRING);
+		stJavaMethodEDataType = createEDataType(ST_JAVA_METHOD);
 	}
 
 	/**
@@ -2834,7 +2875,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEReference(getSTStandardFunction_InputParameters(), theLibraryElementPackage.getINamedElement(), null, "inputParameters", null, 0, -1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTStandardFunction_OutputParameters(), theLibraryElementPackage.getINamedElement(), null, "outputParameters", null, 0, -1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTStandardFunction_InOutParameters(), theLibraryElementPackage.getINamedElement(), null, "inOutParameters", null, 0, -1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSTStandardFunction_Varargs(), ecorePackage.getEBoolean(), "varargs", null, 0, 1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getSTStandardFunction_OnlySupportedBy(), ecorePackage.getEString(), "onlySupportedBy", null, 0, -1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSTStandardFunction_JavaMethod(), this.getSTJavaMethod(), "javaMethod", null, 0, 1, STStandardFunction.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stCommentEClass, STComment.class, "STComment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTComment_Context(), ecorePackage.getEObject(), null, "context", null, 0, 1, STComment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -2923,6 +2966,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEDataType(stTimeOfDayEDataType, LocalTime.class, "STTimeOfDay", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEDataType(stDateAndTimeEDataType, LocalDateTime.class, "STDateAndTime", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEDataType(stStringEDataType, STString.class, "STString", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEDataType(stJavaMethodEDataType, Method.class, "STJavaMethod", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

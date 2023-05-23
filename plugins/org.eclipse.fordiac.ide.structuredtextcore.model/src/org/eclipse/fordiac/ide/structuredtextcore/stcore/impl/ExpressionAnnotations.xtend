@@ -12,9 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl
 
+import java.lang.reflect.Method
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.text.MessageFormat
 import java.util.Collection
+import java.util.List
 import java.util.Map
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyDateType
@@ -28,6 +31,8 @@ import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.eval.function.Comment
+import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
@@ -43,6 +48,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
@@ -60,7 +66,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
+import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 
 final package class ExpressionAnnotations {
 
@@ -148,6 +156,8 @@ final package class ExpressionAnnotations {
 			AdapterDeclaration,
 			FB:
 				feature.featureType
+			STStandardFunction:
+				feature.javaMethod.inferReturnTypeFromDataTypes(expr.parameters.map[resultType].filter(DataType).toList)
 			ICallable:
 				feature.returnType
 		}
@@ -327,7 +337,7 @@ final package class ExpressionAnnotations {
 	def package static Map<INamedElement, STCallArgument> computeMappedInputArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
-			val parameters = feature.inputParameters
+			val parameters = feature.computeInputParameters(arguments)
 			if (arguments.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
 				parameters.toInvertedMap [ parameter |
 					arguments.get(parameters.indexOf(parameter))
@@ -345,7 +355,7 @@ final package class ExpressionAnnotations {
 	def package static Map<INamedElement, STCallArgument> computeMappedOutputArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
-			val parameters = feature.outputParameters
+			val parameters = feature.computeOutputParameters(arguments)
 			if (arguments.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
 				val inputCount = feature.inputParameters.size
 				val inOutCount = feature.inOutParameters.size
@@ -365,7 +375,7 @@ final package class ExpressionAnnotations {
 	def package static Map<INamedElement, STCallArgument> computeMappedInOutArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
-			val parameters = feature.inOutParameters
+			val parameters = feature.computeInOutParameters(arguments)
 			if (arguments.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
 				val inputCount = feature.inputParameters.size
 				parameters.toInvertedMap [ parameter |

@@ -65,6 +65,7 @@
     <genDataTypes ecoreDataType="STCore.ecore#//STDateAndTime"/>
     <genDataTypes ecoreDataType="STCore.ecore#//STString" create="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStringAnnotations.createSTString(it);"
         convert="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStringAnnotations.convertSTString(it);"/>
+    <genDataTypes ecoreDataType="STCore.ecore#//STJavaMethod"/>
     <genClasses ecoreClass="STCore.ecore#//STSource">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSource/comments"/>
     </genClasses>
@@ -332,7 +333,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStandardFunction/inputParameters"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStandardFunction/outputParameters"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStandardFunction/inOutParameters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STStandardFunction/varargs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STStandardFunction/onlySupportedBy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STStandardFunction/javaMethod"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STComment">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STComment/context"/>

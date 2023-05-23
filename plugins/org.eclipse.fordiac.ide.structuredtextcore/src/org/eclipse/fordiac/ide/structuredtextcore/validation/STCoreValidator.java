@@ -30,6 +30,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.validation;
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType;
+import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isCallableVarargs;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isNumericValueValid;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isStringValueValid;
 
@@ -63,8 +64,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpre
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
@@ -503,55 +502,19 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			// check argument count matches parameter count for non-formal call
 			final int parameterCount = callable.getInputParameters().size() + callable.getInOutParameters().size()
 					+ callable.getOutputParameters().size();
-			if (expression.getParameters().size() != parameterCount) {
+			if (expression.getParameters().size() != parameterCount
+					&& !(isCallableVarargs(callable) && expression.getParameters().size() >= parameterCount)) {
 				error(MessageFormat.format(Messages.STCoreValidator_Wrong_Number_Of_Arguments, callable.getName(),
 						Integer.toString(parameterCount), Integer.toString(expression.getParameters().size())),
 						expression, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, WRONG_NUMBER_OF_ARGUMENTS);
 				return;
 			}
-			// check non-formal argument kind
-			boolean error = false;
-			for (int index = callable.getInputParameters().size(); index < expression.getParameters().size(); ++index) {
-				final STCallUnnamedArgument arg = (STCallUnnamedArgument) expression.getParameters().get(index);
-				if (isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
-					error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
-							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, VALUE_NOT_ASSIGNABLE);
-					error = true;
-				}
-			}
-			if (error) {
-				return;
-			}
-		} else if (!expression.getParameters().isEmpty()) {
-			// check no formal arguments for standard functions
-			if (callable instanceof STStandardFunction) {
-				error(MessageFormat.format(
-						Messages.STCoreValidator_Attempting_To_Call_Standard_Function_With_Formal_Arguments,
-						callable.getName()), expression, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
-						STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS);
-				return;
-			}
-			// check formal argument kind
-			boolean error = false;
-			for (int index = 0; index < expression.getParameters().size(); ++index) {
-				final STCallArgument elem = expression.getParameters().get(index);
-				if (elem instanceof final STCallNamedInputArgument arg) {
-					if (callable.getInOutParameters().contains(arg.getParameter())
-							&& isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
-						error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
-								STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, VALUE_NOT_ASSIGNABLE);
-						error = true;
-					}
-				} else if (elem instanceof final STCallNamedOutputArgument arg
-						&& isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
-					error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
-							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, VALUE_NOT_ASSIGNABLE);
-					error = true;
-				}
-			}
-			if (error) {
-				return;
-			}
+		} else if (callable instanceof STStandardFunction && !expression.getParameters().isEmpty()) {
+			error(MessageFormat.format(
+					Messages.STCoreValidator_Attempting_To_Call_Standard_Function_With_Formal_Arguments,
+					callable.getName()), expression, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+					STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS);
+			return;
 		}
 
 		// check argument type
@@ -567,6 +530,11 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				checkTypeCompatibility(arg.getResultType(), getFeatureType(param),
 						STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
 						expression.getParameters().indexOf(arg));
+				if (isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
+					error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
+							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
+							expression.getParameters().indexOf(arg), VALUE_NOT_ASSIGNABLE);
+				}
 			}
 		});
 		expression.getMappedInOutArguments().forEach((param, arg) -> {
@@ -574,6 +542,11 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				checkTypeStrictCompatibility(arg.getResultType(), getFeatureType(param),
 						STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
 						expression.getParameters().indexOf(arg));
+				if (isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
+					error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
+							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
+							expression.getParameters().indexOf(arg), VALUE_NOT_ASSIGNABLE);
+				}
 			}
 		});
 	}
