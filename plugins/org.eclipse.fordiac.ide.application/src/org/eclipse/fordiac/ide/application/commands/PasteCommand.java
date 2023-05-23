@@ -230,8 +230,8 @@ public class PasteCommand extends Command {
 
 	private void copyConnections() {
 		for (final ConnectionReference connRef : copyPasteData.conns()) {
-			final FBNetworkElement copiedSrc = copiedElements.get(connRef.getSourceElement());
-			final FBNetworkElement copiedDest = copiedElements.get(connRef.getDestinationElement());
+			final FBNetworkElement copiedSrc = copiedElements.get(connRef.sourceElement());
+			final FBNetworkElement copiedDest = copiedElements.get(connRef.destinationElement());
 
 			if ((null != copiedSrc) || (null != copiedDest)) {
 				// Only copy if one end of the connection is copied as well otherwise we will
@@ -243,7 +243,7 @@ public class PasteCommand extends Command {
 						connCreateCmds.add(cmd);
 					}
 				} else {
-					final AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(connRef.getSource());
+					final AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(connRef.source());
 					if (null != cmd) {
 						copyConnection(connRef, copiedSrc, copiedDest, cmd);
 						if (cmd.canExecute()) { // checks if the resulting connection is valid
@@ -270,19 +270,19 @@ public class PasteCommand extends Command {
 
 	private void copyConnection(final ConnectionReference connRef, final FBNetworkElement copiedSrc,
 			final FBNetworkElement copiedDest, final AbstractConnectionCreateCommand cmd) {
-		final IInterfaceElement source = getInterfaceElement(connRef.getSource(), copiedSrc);
-		final IInterfaceElement destination = getInterfaceElement(connRef.getDestination(), copiedDest);
+		final IInterfaceElement source = getInterfaceElement(connRef.source(), copiedSrc);
+		final IInterfaceElement destination = getInterfaceElement(connRef.destination(), copiedDest);
 
 		cmd.setSource(source);
 		cmd.setDestination(destination);
-		cmd.setArrangementConstraints(connRef.getRoutingData());
-		cmd.setVisible(connRef.isVisible());
+		cmd.setArrangementConstraints(connRef.routingData());
+		cmd.setVisible(connRef.visible());
 	}
 
 	private Command copyConnectionToSubApp(final ConnectionReference connRef, final FBNetworkElement copiedSrc,
 			final FBNetworkElement copiedDest) {
-		final IInterfaceElement source = getInterfaceElement(connRef.getSource(), copiedSrc);
-		final IInterfaceElement destination = getInterfaceElement(connRef.getDestination(), copiedDest);
+		final IInterfaceElement source = getInterfaceElement(connRef.source(), copiedSrc);
+		final IInterfaceElement destination = getInterfaceElement(connRef.destination(), copiedDest);
 
 		if (source != null && destination != null) {
 			final Application sourceApp = source.getFBNetworkElement().getFbNetwork().getApplication();

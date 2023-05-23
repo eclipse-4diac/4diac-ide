@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2023 Johannes Kepler University Linz
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,41 +23,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
  * This is needed for paste as it can be that the source is deleted in the
  * meantime (e.g., for when using cut)
  */
-public class ConnectionReference {
-
-	private final IInterfaceElement source;
-	private final IInterfaceElement destination;
-	private final ConnectionRoutingData routingData;
-	private final boolean visible;
+public record ConnectionReference(IInterfaceElement source, IInterfaceElement destination,
+		ConnectionRoutingData routingData, boolean visible) {
 
 	public ConnectionReference(final Connection con) {
-		this.source = con.getSource();
-		this.destination = con.getDestination();
-		routingData = EcoreUtil.copy(con.getRoutingData());
-		visible = con.isVisible();
+		this(con.getSource(), con.getDestination(), EcoreUtil.copy(con.getRoutingData()), con.isVisible());
 	}
 
-	public IInterfaceElement getSource() {
-		return source;
-	}
-
-	public IInterfaceElement getDestination() {
-		return destination;
-	}
-
-	public FBNetworkElement getSourceElement() {
+	public FBNetworkElement sourceElement() {
 		return source.getFBNetworkElement();
 	}
 
-	public FBNetworkElement getDestinationElement() {
+	public FBNetworkElement destinationElement() {
 		return destination.getFBNetworkElement();
 	}
 
-	public ConnectionRoutingData getRoutingData() {
-		return routingData;
-	}
-
-	public boolean isVisible() {
-		return visible;
-	}
 }
