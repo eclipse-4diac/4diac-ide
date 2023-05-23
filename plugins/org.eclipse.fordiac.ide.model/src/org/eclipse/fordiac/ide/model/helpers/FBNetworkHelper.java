@@ -54,6 +54,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorFBTypeEntryImpl;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorSubAppTypeEntryImpl;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -257,12 +259,15 @@ public final class FBNetworkHelper {
 	}
 
 	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBType type) {
-		if (type instanceof final BaseFBType baseFBType) { // basic and simple fb type
+		if (type instanceof final BaseFBType baseFBType
+				&& !(baseFBType.getTypeEntry() instanceof ErrorFBTypeEntryImpl)) { // basic and simple fb type
 			return baseFBType.getInternalFbs();
 		}
-		if (type instanceof final CompositeFBType cFBType) { // subapp and composite fb type
+		if (type instanceof final CompositeFBType cFBType
+				&& !(cFBType.getTypeEntry() instanceof ErrorSubAppTypeEntryImpl)) { // subapp and composite fb type
 			return cFBType.getFBNetwork().getNetworkElements();
 		}
+
 		return new BasicEList<>();
 	}
 
