@@ -97,12 +97,13 @@ public class TrimHandler extends AbstractHandler {
 		final int widestInput = children.stream().filter(Objects::nonNull)
 				.filter(UntypedSubAppInterfaceElementEditPart.class::isInstance)
 				.map(UntypedSubAppInterfaceElementEditPart.class::cast).filter(InterfaceEditPart::isInput)
-				.map(GraphicalEditPart.class::cast).mapToInt(e -> e.getFigure().getBounds().width()).max().getAsInt();
+				.map(GraphicalEditPart.class::cast).mapToInt(e -> e.getFigure().getBounds().width()).max()
+				.orElse(0);
 		final int widestOutput = children.stream().filter(Objects::nonNull)
 				.filter(UntypedSubAppInterfaceElementEditPart.class::isInstance)
 				.map(UntypedSubAppInterfaceElementEditPart.class::cast)
 				.filter(Predicate.not(InterfaceEditPart::isInput)).map(GraphicalEditPart.class::cast)
-				.mapToInt(e -> e.getFigure().getBounds().width()).max().getAsInt();
+				.mapToInt(e -> e.getFigure().getBounds().width()).max().orElse(0);
 		return commentWidth - widestInput - widestOutput;
 	}
 
