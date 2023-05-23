@@ -31,7 +31,7 @@ public class STFunctionScopeProvider extends AbstractSTFunctionScopeProvider {
 	@Override
 	public IScope getScope(final EObject context, final EReference reference) {
 		if (reference == STFunctionPackage.Literals.ST_FUNCTION__RETURN_TYPE) {
-			final IScope globalScope = super.getScope(context, reference);
+			final IScope globalScope = delegateGetScope(context, reference);
 			return scopeFor(DataTypeLibrary.getNonUserDefinedDataTypes(), globalScope);
 		}
 		return super.getScope(context, reference);
