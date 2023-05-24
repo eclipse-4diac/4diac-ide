@@ -13,21 +13,34 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *       - exclude proposals based disallowing qualified names only
+ *       - add proposal for callables
  */
 package org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.CrossReference;
+import org.eclipse.xtext.naming.IQualifiedNameConverter;
+import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
+import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 
-/**
- * See
- * https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#content-assist
- * on how to customize the content assistant.
- */
+import com.google.common.base.Function;
+import com.google.common.collect.Streams;
+
+/** See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#content-assist on how to customize the
+ * content assistant. */
 public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 
 	@Override
@@ -35,5 +48,93 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
 		lookupCrossReference((CrossReference) assignment.getTerminal(), context, acceptor,
 				(final IEObjectDescription desc) -> desc.getName().getSegmentCount() == 1);
+	}
+
+	@Override
+	protected StyledString getStyledDisplayString(final EObject element, final String qualifiedNameAsString,
+			final String shortName) {
+		if (element instanceof final ICallable callable) {
+			final StyledString result = new StyledString(shortName).append('(')
+					.append(Streams
+							.concat(callable.getInputParameters().stream(), callable.getInOutParameters().stream(),
+									callable.getOutputParameters().stream())
+							.map(getLabelProvider()::getText).collect(Collectors.joining(", "))); //$NON-NLS-1$
+			if (callable instanceof final STStandardFunction standardFunction && standardFunction.isVarargs()) {
+				result.append(" ..."); //$NON-NLS-1$
+			}
+			result.append(')');
+			if (callable.getReturnType() != null) {
+				result.append(" : ").append(callable.getReturnType().getName()); //$NON-NLS-1$
+			}
+			final QualifiedName qualifiedName = getQualifiedNameConverter().toQualifiedName(qualifiedNameAsString);
+			if (qualifiedName.getSegmentCount() > 1) {
+				result.append(" - " + qualifiedNameAsString, StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
+			}
+			return result;
+		}
+		return super.getStyledDisplayString(element, qualifiedNameAsString, shortName);
+	}
+
+	@Override
+	protected Function<IEObjectDescription, ICompletionProposal> getProposalFactory(final String ruleName,
+			final ContentAssistContext contentAssistContext) {
+		return new STCoreProposalCreator(contentAssistContext, ruleName, getQualifiedNameConverter());
+	}
+
+	protected class STCoreProposalCreator extends DefaultProposalCreator {
+
+		private final ContentAssistContext contentAssistContext;
+
+		public STCoreProposalCreator(final ContentAssistContext contentAssistContext, final String ruleName,
+				final IQualifiedNameConverter qualifiedNameConverter) {
+			super(contentAssistContext, ruleName, qualifiedNameConverter);
+			this.contentAssistContext = contentAssistContext;
+		}
+
+		@Override
+		public ICompletionProposal apply(final IEObjectDescription candidate) {
+			final ICompletionProposal result = super.apply(candidate);
+			if (result instanceof final ConfigurableCompletionProposal configurableResult
+					&& isCallableDescription(candidate)
+					&& candidate.getEObjectOrProxy() instanceof final ICallable callable) {
+				final String proposal = configurableResult.getReplacementString();
+				final int replacementOffset = configurableResult.getReplacementOffset();
+				final int cursorPosition = configurableResult.getCursorPosition();
+				final String parameterProposal = getCallableParameterProposal(callable);
+				final int parameterOffset = getCallableParameterCaretPositionOffset(callable);
+				configurableResult.setReplacementString(proposal + parameterProposal);
+				configurableResult.setCursorPosition(cursorPosition + parameterOffset);
+				configurableResult.setSelectionStart(replacementOffset + cursorPosition + parameterOffset);
+				configurableResult.setSimpleLinkedMode(contentAssistContext.getViewer(), ')');
+			}
+			return result;
+		}
+
+		protected String getCallableParameterProposal(final ICallable callable) {
+			return "(" + getCallableParameterProposals(callable).collect(Collectors.joining(", ")) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		}
+
+		protected int getCallableParameterCaretPositionOffset(final ICallable callable) {
+			return 1 + getCallableParameterProposals(callable).findFirst().orElse("").length(); //$NON-NLS-1$
+		}
+
+		protected Stream<String> getCallableParameterProposals(final ICallable callable) {
+			if (callable instanceof STStandardFunction) {
+				return Stream.empty();
+			}
+			return Streams
+					.concat(callable.getInputParameters().stream(), callable.getInOutParameters().stream(),
+							callable.getOutputParameters().stream())
+					.map(parameter -> getCallableParameterProposal(callable, parameter));
+		}
+
+		protected String getCallableParameterProposal(final ICallable callable, final INamedElement parameter) {
+			return parameter.getName() + (callable.getOutputParameters().contains(parameter) ? " => " : " := "); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+
+		protected boolean isCallableDescription(final IEObjectDescription description) {
+			return description != null && description.getEClass() != null
+					&& LibraryElementPackage.eINSTANCE.getICallable().isSuperTypeOf(description.getEClass());
+		}
 	}
 }
