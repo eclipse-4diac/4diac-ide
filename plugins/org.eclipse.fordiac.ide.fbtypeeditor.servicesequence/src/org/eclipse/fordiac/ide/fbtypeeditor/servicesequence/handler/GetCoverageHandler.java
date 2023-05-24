@@ -40,21 +40,22 @@ public class GetCoverageHandler extends AbstractHandler {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 
 		if (!selection.isEmpty()){
+			clearLists();
 
-			if (((EditPart) selection.getFirstElement()) instanceof final SequenceRootEditPart serviceSeqEP) {
-				clearLists();
-				for (final Object service : serviceSeqEP.getChildren()) {
-					if (service instanceof ServiceSequenceEditPart
-							&& ((ServiceSequenceEditPart) service).getModel()
-							.getEventManager() instanceof final EventManager evntMngr) {
-						setCoverageData(evntMngr);
+			for (final Object sel : selection) {
+				if (((EditPart) sel) instanceof final SequenceRootEditPart serviceSeqEP) {
+					for (final Object service : serviceSeqEP.getChildren()) {
+						if (service instanceof final ServiceSequenceEditPart serviceEP
+								&& serviceEP.getModel()
+								.getEventManager() instanceof final EventManager evntMngr) {
+							setCoverageData(evntMngr);
+						}
 					}
 				}
-			}
-			else if (((EditPart) selection.getFirstElement()) instanceof final ServiceSequenceEditPart serviceSeqEP
-					&& serviceSeqEP.getModel().getEventManager() instanceof final EventManager evntMngr) {
-				clearLists();
-				setCoverageData(evntMngr);
+				else if (((EditPart) sel) instanceof final ServiceSequenceEditPart serviceSeqEP
+						&& serviceSeqEP.getModel().getEventManager() instanceof final EventManager evntMngr) {
+					setCoverageData(evntMngr);
+				}
 			}
 		}
 		final GetCoverageDialog dialog = new GetCoverageDialog(HandlerUtil.getActiveShell(event), visitedStates,
