@@ -39,40 +39,53 @@ public class GetCoverageHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 
-		if (!selection.isEmpty()
-				&& ((EditPart) selection.getFirstElement()) instanceof final SequenceRootEditPart serviceSeqEP) {
+		if (!selection.isEmpty()){
 
-			for(final Object service : serviceSeqEP.getChildren()) {
-				if (service instanceof ServiceSequenceEditPart
-						&& ((ServiceSequenceEditPart) service).getModel()
-						.getEventManager() instanceof final EventManager evntMngr) {
-
-					final EccTraceHelper eccTraceHelper = new EccTraceHelper(evntMngr.getTransactions());
-
-					if (visitedStates.isEmpty()) {
-						eccTraceHelper.getAllPossibleStates().forEach(s -> {
-							visitedStates.put(s.getName(), 0);
-						});
+			if (((EditPart) selection.getFirstElement()) instanceof final SequenceRootEditPart serviceSeqEP) {
+				clearLists();
+				for (final Object service : serviceSeqEP.getChildren()) {
+					if (service instanceof ServiceSequenceEditPart
+							&& ((ServiceSequenceEditPart) service).getModel()
+							.getEventManager() instanceof final EventManager evntMngr) {
+						setCoverageData(evntMngr);
 					}
-
-					if (visitedPaths.isEmpty()) {
-						eccTraceHelper.getAllPossiblePaths().forEach(p -> {
-							visitedPaths.put(p, 0);
-						});
-					}
-
-					eccTraceHelper.getAllStatesOfSequence()
-					.forEach(s -> visitedStates.merge(s.getName(), 1, Integer::sum));
-
-					eccTraceHelper.getAllPathsOfSequence().forEach(p -> visitedPaths.merge(p, 1, Integer::sum));
 				}
 			}
+			else if (((EditPart) selection.getFirstElement()) instanceof final ServiceSequenceEditPart serviceSeqEP
+					&& serviceSeqEP.getModel().getEventManager() instanceof final EventManager evntMngr) {
+				clearLists();
+				setCoverageData(evntMngr);
+			}
 		}
-
 		final GetCoverageDialog dialog = new GetCoverageDialog(HandlerUtil.getActiveShell(event), visitedStates,
 				visitedPaths);
 		dialog.open();
 
 		return null;
+	}
+
+	private void setCoverageData(final EventManager evntMngr) {
+		final EccTraceHelper eccTraceHelper = new EccTraceHelper(evntMngr.getTransactions());
+
+		if (visitedStates.isEmpty()) {
+			eccTraceHelper.getAllPossibleStates().forEach(s -> {
+				visitedStates.put(s.getName(), 0);
+			});
+		}
+
+		if (visitedPaths.isEmpty()) {
+			eccTraceHelper.getAllPossiblePaths().forEach(p -> {
+				visitedPaths.put(p, 0);
+			});
+		}
+
+		eccTraceHelper.getAllStatesOfSequence().forEach(s -> visitedStates.merge(s.getName(), 1, Integer::sum));
+
+		eccTraceHelper.getAllPathsOfSequence().forEach(p -> visitedPaths.merge(p, 1, Integer::sum));
+	}
+
+	private void clearLists() {
+		visitedStates.clear();
+		visitedPaths.clear();
 	}
 }

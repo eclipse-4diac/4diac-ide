@@ -343,6 +343,8 @@
             			<or>
             				<instanceof
                        			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+                       		<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
             			</or>
             		</iterate>
             	</with>
