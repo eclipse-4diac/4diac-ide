@@ -121,7 +121,7 @@ public class PasteCommand extends Command {
 	// remove elements, if they are already inside a selected top-level subapp.
 	private void removeDuplicateElements() {
 		copyPasteData.elements().removeIf(element -> copyPasteData.elements().stream()
-				.filter(SubApp.class::isInstance).map(SubApp.class::cast)
+				.filter(SubApp.class::isInstance).map(SubApp.class::cast).filter(subapp -> !subapp.isTyped())
 				.anyMatch(subapp -> subapp.getSubAppNetwork().getNetworkElements().contains(element)));
 	}
 
