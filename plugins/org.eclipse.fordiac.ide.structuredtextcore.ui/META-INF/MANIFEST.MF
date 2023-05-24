@@ -21,6 +21,7 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.xtext.builder,
  org.eclipse.ltk.ui.refactoring,
  org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.model,
  org.eclipse.fordiac.ide.structuredtextalgorithm.model,
  org.eclipse.fordiac.ide.globalconstantseditor.model

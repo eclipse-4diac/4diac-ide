@@ -21,10 +21,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.xtext.Assignment;
@@ -119,9 +124,6 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 		}
 
 		protected Stream<String> getCallableParameterProposals(final ICallable callable) {
-			if (callable instanceof STStandardFunction) {
-				return Stream.empty();
-			}
 			return Streams
 					.concat(callable.getInputParameters().stream(), callable.getInOutParameters().stream(),
 							callable.getOutputParameters().stream())
@@ -129,7 +131,35 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 		}
 
 		protected String getCallableParameterProposal(final ICallable callable, final INamedElement parameter) {
-			return parameter.getName() + (callable.getOutputParameters().contains(parameter) ? " => " : " := "); //$NON-NLS-1$ //$NON-NLS-2$
+			if (callable instanceof STStandardFunction) {
+				return getCallableParameterDefaultValue(callable, parameter); // non-formal call for standard functions
+			}
+			return parameter.getName() + (callable.getOutputParameters().contains(parameter) ? " => " : " := ") //$NON-NLS-1$ //$NON-NLS-2$
+					+ getCallableParameterDefaultValue(callable, parameter);
+		}
+
+		protected String getCallableParameterDefaultValue(final ICallable callable, final INamedElement parameter) {
+			if (callable.getInOutParameters().contains(parameter)
+					|| callable.getOutputParameters().contains(parameter)) {
+				return "VAR"; //$NON-NLS-1$
+			} else if (parameter instanceof final VarDeclaration varDeclaration) {
+				return getCallableParameterTypeDefaultValue(varDeclaration.getType());
+			} else if (parameter instanceof final STVarDeclaration stVarDeclaration) {
+				return getCallableParameterTypeDefaultValue(stVarDeclaration.getType());
+			}
+			return ""; //$NON-NLS-1$
+		}
+
+		protected String getCallableParameterTypeDefaultValue(final INamedElement type) {
+			if (type instanceof AnyDerivedType) {
+				return "VAR"; //$NON-NLS-1$
+			}
+			try {
+				return ValueOperations.defaultValue(type).toString();
+			} catch (final Exception e) {
+				FordiacLogHelper.logWarning(e.getMessage(), e);
+			}
+			return ""; //$NON-NLS-1$
 		}
 
 		protected boolean isCallableDescription(final IEObjectDescription description) {
