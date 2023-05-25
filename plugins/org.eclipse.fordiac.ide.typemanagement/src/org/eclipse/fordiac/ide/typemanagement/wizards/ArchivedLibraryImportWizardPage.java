@@ -12,12 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
-
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import java.io.File;
 import java.io.IOException;
 
@@ -30,17 +24,17 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.TreeItem;
 
 public class ArchivedLibraryImportWizardPage extends LibraryImportWizardPage {
-	
+
 	private LibraryLinker libraryLinker;
 	private File selectedFile;
-	private StructuredSelection selection;
-	
-	protected ArchivedLibraryImportWizardPage(String pageName, StructuredSelection selection) {
+	private final StructuredSelection selection;
+
+	protected ArchivedLibraryImportWizardPage(final String pageName, final StructuredSelection selection) {
 		super(pageName);
 		this.selection = selection;
 		setColumnTitle(Messages.DirsWithArchives);
 	}
-	
+
 	public void unzipAndImportArchive() throws IOException {
 		libraryLinker.extractLibrary(selectedFile, selection);
 	}
@@ -48,22 +42,22 @@ public class ArchivedLibraryImportWizardPage extends LibraryImportWizardPage {
 	@Override
 	protected void configureSelectionListener() {
 		viewer.getTree().addSelectionListener(new SelectionAdapter() {
-        	@Override
-        	public void widgetSelected(SelectionEvent e) {
-        		TreeItem item = (TreeItem) e.item;
-        		if (item.getData() instanceof File file && !file.isDirectory()) {
-        			selectedFile = file;
-        			setPageComplete(isComplete());
-        		}
-        	}
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final TreeItem item = (TreeItem) e.item;
+				if (item.getData() instanceof final File file && !file.isDirectory()) {
+					selectedFile = file;
+					setPageComplete(isComplete());
+				}
+			}
 		});
 	}
-	
+
 	@Override
-	public void setVisible(boolean visible) {
+	public void setVisible(final boolean visible) {
 		libraryLinker = new LibraryLinker();
 		viewer.setContentProvider(new ArchivedLibraryImportContentProvider());
-        viewer.setInput(libraryLinker.listDirectoriesContainingArchives());
+		viewer.setInput(libraryLinker.listDirectoriesContainingArchives());
 		super.setVisible(visible);
 	}
 
