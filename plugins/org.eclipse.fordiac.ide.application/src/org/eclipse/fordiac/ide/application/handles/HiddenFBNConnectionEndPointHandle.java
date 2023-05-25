@@ -19,9 +19,9 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.application.tools.FBNScrollingConnectionEndpointTracker;
 import org.eclipse.fordiac.ide.application.tools.MultiFBNScrollingconnectionEndpointTracker;
-import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.gef.ConnectionEditPart;
@@ -55,7 +55,7 @@ public class HiddenFBNConnectionEndPointHandle extends ScrollingConnectionEndpoi
 	}
 
 	private Rectangle getLabelBounds() {
-		final HideableConnection con = (HideableConnection) getOwner().getFigure();
+		final FBNetworkConnection con = (FBNetworkConnection) getOwner().getFigure();
 		if (getEndPoint() == ConnectionLocator.SOURCE) {
 			return con.getSourceDecoration().getBounds();
 		}

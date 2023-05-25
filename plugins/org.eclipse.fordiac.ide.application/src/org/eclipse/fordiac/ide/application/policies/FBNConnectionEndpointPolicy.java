@@ -21,10 +21,10 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkConnectionLabel;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.application.handles.FBNConnectionEndPointHandle;
 import org.eclipse.fordiac.ide.application.handles.HiddenFBNConnectionEndPointHandle;
-import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
-import org.eclipse.fordiac.ide.gef.figures.HideableConnection.ConnectionLabel;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
@@ -38,7 +38,7 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 	@Override
 	protected ConnectionEndpointHandle createConnectionEndPointHandle(
 			final org.eclipse.gef.ConnectionEditPart connectionEditPart, final int connectionLocator) {
-		final HideableConnection con = (HideableConnection) connectionEditPart.getFigure();
+		final FBNetworkConnection con = (FBNetworkConnection) connectionEditPart.getFigure();
 
 		if (!con.isHidden()) {
 			return new FBNConnectionEndPointHandle(connectionEditPart, connectionLocator);
@@ -48,8 +48,8 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 
 	@Override
 	protected IFigure createSelectionFeedbackFigure(final PolylineConnection connFigure) {
-		// in the FBN we always have a HideableConnection
-		final HideableConnection con = (HideableConnection) connFigure;
+		// in the FBN we always have a FBNetworkConnection
+		final FBNetworkConnection con = (FBNetworkConnection) connFigure;
 		if (!con.isHidden()) {
 			return super.createSelectionFeedbackFigure(connFigure);
 		}
@@ -99,7 +99,7 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 		}
 	}
 
-	private static Figure createHiddenConnectionSelectionFeedbackFigure(final HideableConnection con) {
+	private static Figure createHiddenConnectionSelectionFeedbackFigure(final FBNetworkConnection con) {
 		final Figure figure = new Figure() {
 			@Override
 			public Rectangle getBounds() {
@@ -123,7 +123,7 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 		return figure;
 	}
 
-	private static IFigure createHidenSelectionFeedbackEndpoint(final ConnectionLabel label) {
+	private static IFigure createHidenSelectionFeedbackEndpoint(final FBNetworkConnectionLabel label) {
 		final RoundedRectangle newSelFeedbackFigure = new RoundedRectangle();
 		newSelFeedbackFigure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 		newSelFeedbackFigure.setOutline(false);
