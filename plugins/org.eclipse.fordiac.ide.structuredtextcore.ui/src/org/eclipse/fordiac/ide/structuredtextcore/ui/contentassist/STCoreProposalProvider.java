@@ -18,7 +18,6 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist;
 
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
@@ -32,6 +31,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.CrossReference;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
@@ -40,6 +40,7 @@ import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
+import org.eclipse.xtext.util.ITextRegion;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Streams;
@@ -81,6 +82,13 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 	}
 
 	@Override
+	protected ConfigurableCompletionProposal doCreateProposal(final String proposal, final StyledString displayString,
+			final Image image, final int replacementOffset, final int replacementLength) {
+		return new STCoreConfigurableCompletionProposal(proposal, replacementOffset, replacementLength,
+				proposal.length(), image, displayString, null, null);
+	}
+
+	@Override
 	protected Function<IEObjectDescription, ICompletionProposal> getProposalFactory(final String ruleName,
 			final ContentAssistContext contentAssistContext) {
 		return new STCoreProposalCreator(contentAssistContext, ruleName, getQualifiedNameConverter());
@@ -99,43 +107,50 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 		@Override
 		public ICompletionProposal apply(final IEObjectDescription candidate) {
 			final ICompletionProposal result = super.apply(candidate);
-			if (result instanceof final ConfigurableCompletionProposal configurableResult
+			if (result instanceof final STCoreConfigurableCompletionProposal configurableResult
 					&& isCallableDescription(candidate)
 					&& candidate.getEObjectOrProxy() instanceof final ICallable callable) {
-				final String proposal = configurableResult.getReplacementString();
+				final String nameProposal = configurableResult.getReplacementString();
 				final int replacementOffset = configurableResult.getReplacementOffset();
-				final int cursorPosition = configurableResult.getCursorPosition();
-				final String parameterProposal = getCallableParameterProposal(callable);
-				final int parameterOffset = getCallableParameterCaretPositionOffset(callable);
-				configurableResult.setReplacementString(proposal + parameterProposal);
-				configurableResult.setCursorPosition(cursorPosition + parameterOffset);
-				configurableResult.setSelectionStart(replacementOffset + cursorPosition + parameterOffset);
-				configurableResult.setSimpleLinkedMode(contentAssistContext.getViewer(), ')');
+				final STCoreProposalString proposal = getCallableParameterProposal(callable, nameProposal);
+				configurableResult.setReplacementString(proposal.toString());
+				if (proposal.getRegions().isEmpty()) {
+					configurableResult.setCursorPosition(proposal.length());
+					configurableResult.setSelectionStart(replacementOffset + proposal.length() - 1);
+					configurableResult.setSelectionLength(0);
+					configurableResult.setSimpleLinkedMode(contentAssistContext.getViewer(), ')');
+				} else {
+					final ITextRegion firstRegion = proposal.getRegions().get(0);
+					configurableResult.setCursorPosition(firstRegion.getOffset() + firstRegion.getLength());
+					configurableResult.setSelectionStart(replacementOffset + firstRegion.getOffset());
+					configurableResult.setSelectionLength(firstRegion.getLength());
+					configurableResult.setCustomLinkedMode(contentAssistContext.getViewer(),
+							proposal.getRegions(replacementOffset), ')');
+				}
 			}
 			return result;
 		}
 
-		protected String getCallableParameterProposal(final ICallable callable) {
-			return "(" + getCallableParameterProposals(callable).collect(Collectors.joining(", ")) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		}
-
-		protected int getCallableParameterCaretPositionOffset(final ICallable callable) {
-			return 1 + getCallableParameterProposals(callable).findFirst().orElse("").length(); //$NON-NLS-1$
-		}
-
-		protected Stream<String> getCallableParameterProposals(final ICallable callable) {
-			return Streams
+		protected STCoreProposalString getCallableParameterProposal(final ICallable callable,
+				final String nameProposal) {
+			if (callable instanceof final STStandardFunction standardFunction && standardFunction.isVarargs()) {
+				return new STCoreProposalString(nameProposal).append("()"); //$NON-NLS-1$
+			}
+			return new STCoreProposalString(nameProposal).concat(Streams
 					.concat(callable.getInputParameters().stream(), callable.getInOutParameters().stream(),
 							callable.getOutputParameters().stream())
-					.map(parameter -> getCallableParameterProposal(callable, parameter));
+					.map(parameter -> getCallableParameterProposal(callable, parameter))
+					.collect(STCoreProposalStringCollectors.joining(", ", "(", ")"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 
-		protected String getCallableParameterProposal(final ICallable callable, final INamedElement parameter) {
-			if (callable instanceof STStandardFunction) {
-				return getCallableParameterDefaultValue(callable, parameter); // non-formal call for standard functions
+		protected STCoreProposalString getCallableParameterProposal(final ICallable callable,
+				final INamedElement parameter) {
+			if (callable instanceof STStandardFunction) { // non-formal call for standard functions
+				return new STCoreProposalString(getCallableParameterDefaultValue(callable, parameter), true);
 			}
-			return parameter.getName() + (callable.getOutputParameters().contains(parameter) ? " => " : " := ") //$NON-NLS-1$ //$NON-NLS-2$
-					+ getCallableParameterDefaultValue(callable, parameter);
+			return new STCoreProposalString(parameter.getName())
+					.append(callable.getOutputParameters().contains(parameter) ? " => " : " := ") //$NON-NLS-1$ //$NON-NLS-2$
+					.append(getCallableParameterDefaultValue(callable, parameter), true);
 		}
 
 		protected String getCallableParameterDefaultValue(final ICallable callable, final INamedElement parameter) {
