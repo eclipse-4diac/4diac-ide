@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
 
+import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolylineConnection;
@@ -21,8 +22,9 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
-import org.eclipse.fordiac.ide.application.figures.FBNetworkConnectionLabel;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkConnectionLabel;
+import org.eclipse.fordiac.ide.application.figures.GroupInterfaceConnectionLabel;
 import org.eclipse.fordiac.ide.application.handles.FBNConnectionEndPointHandle;
 import org.eclipse.fordiac.ide.application.handles.HiddenFBNConnectionEndPointHandle;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
@@ -40,7 +42,7 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 			final org.eclipse.gef.ConnectionEditPart connectionEditPart, final int connectionLocator) {
 		final FBNetworkConnection con = (FBNetworkConnection) connectionEditPart.getFigure();
 
-		if (!con.isHidden()) {
+		if (!con.isHidden() || isGroupCrossingEndPoint((ConnectionEditPart) connectionEditPart, connectionLocator)) {
 			return new FBNConnectionEndPointHandle(connectionEditPart, connectionLocator);
 		}
 		return new HiddenFBNConnectionEndPointHandle(connectionEditPart, connectionLocator);
@@ -138,4 +140,17 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 	private static Rectangle getSelectableFigureBounds(final IFigure figure) {
 		return figure.getBounds().getExpanded(2, 2);
 	}
+
+	private static boolean isGroupCrossingEndPoint(final ConnectionEditPart connectionEditPart,
+			final int connectionLocator) {
+		switch (connectionLocator) {
+		case ConnectionLocator.SOURCE:
+			return connectionEditPart.getFigure().getSourceDecoration() instanceof GroupInterfaceConnectionLabel;
+		case ConnectionLocator.TARGET:
+			return connectionEditPart.getFigure().getTargetDecoration() instanceof GroupInterfaceConnectionLabel;
+		default:
+			return false;
+		}
+	}
+
 }
