@@ -121,7 +121,7 @@ public class FBNetworkConnection extends HideableConnection {
 	private RotatableDecoration createTargetLabel() {
 		FBNetworkConnectionLabel label;
 		if (isSubappCrossingConnection() && isInGroup(getModel().getDestinationElement())) {
-			label = new GroupInterfaceConnectionLabel(false, getGroupFigure(getModel().getDestinationElement()));
+			label = new GroupInterfaceConnectionLabel(false, getGroupFigure(getModel().getDestinationElement()), this);
 		} else {
 			label = new FBNetworkConnectionLabel(false);
 		}
@@ -132,7 +132,7 @@ public class FBNetworkConnection extends HideableConnection {
 	private RotatableDecoration createSourceLabel() {
 		FBNetworkConnectionLabel label;
 		if (isSubappCrossingConnection() && isInGroup(getModel().getSourceElement())) {
-			label = new GroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()));
+			label = new GroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()), this);
 		} else {
 			label = new FBNetworkConnectionLabel(true);
 		}

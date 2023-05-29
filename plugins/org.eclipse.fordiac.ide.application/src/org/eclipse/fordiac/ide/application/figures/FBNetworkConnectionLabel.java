@@ -18,18 +18,20 @@
 package org.eclipse.fordiac.ide.application.figures;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.RotatableDecoration;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.StackLayout;
+import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Font;
 
-public class FBNetworkConnectionLabel extends RoundedRectangle implements RotatableDecoration {
+public class FBNetworkConnectionLabel extends Figure implements RotatableDecoration {
 
 	private final Label label;
 	private final boolean srcLabel;
@@ -37,14 +39,21 @@ public class FBNetworkConnectionLabel extends RoundedRectangle implements Rotata
 	public FBNetworkConnectionLabel(final boolean srcLabel) {
 		super();
 		this.srcLabel = srcLabel;
-		setLayoutManager(new StackLayout());
-		setFill(true);
-		setAntialias(1);
-		setOutline(false);
-		setCornerDimensions(new Dimension(10, 10));
-
+		setLayoutManager(new ToolbarLayout(true));
+		final RoundedRectangle rect = createBaseShape();
+		add(rect);
 		label = createLabel();
-		add(label);
+		rect.add(label);
+	}
+
+	protected static RoundedRectangle createBaseShape() {
+		final RoundedRectangle rect = new RoundedRectangle();
+		rect.setLayoutManager(new StackLayout());
+		rect.setFill(true);
+		rect.setAntialias(1);
+		rect.setOutline(false);
+		rect.setCornerDimensions(new Dimension(10, 10));
+		return rect;
 	}
 
 	protected boolean isSrcLabel() {

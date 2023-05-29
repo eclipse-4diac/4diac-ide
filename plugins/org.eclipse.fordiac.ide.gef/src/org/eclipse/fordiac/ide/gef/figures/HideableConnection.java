@@ -38,7 +38,7 @@ public class HideableConnection extends PolylineConnection {
 
 	private static final int CONNECTION_SELECTION_TOLERANCE = 6;
 	public static final int BEND_POINT_BEVEL_SIZE = 5;
-	private static final int NORMAL_DOUBLE_LINE_WIDTH = 3;
+	public static final int NORMAL_DOUBLE_LINE_WIDTH = 3;
 	private static final int DOUBLE_LINE_AMPLIFICATION = 2;
 
 	private boolean hidden = false;
@@ -55,6 +55,10 @@ public class HideableConnection extends PolylineConnection {
 
 	public boolean isHidden() {
 		return hidden;
+	}
+
+	public Color getLighterColor() {
+		return lighterColor;
 	}
 
 	public void setHidden(final boolean hidden) {
@@ -74,21 +78,21 @@ public class HideableConnection extends PolylineConnection {
 	@Override
 	public void setForegroundColor(final Color fg) {
 		super.setForegroundColor(fg);
-		if (isAdapterConnectionOrStructConnection()) {
+		if (isAdapterOrStructConnection()) {
 			lighterColor = ColorHelper.lighter(fg);
 		}
 	}
 
 	@Override
 	protected void outlineShape(final Graphics g) {
-		if (isAdapterConnectionOrStructConnection()) {
+		if (isAdapterOrStructConnection()) {
 			drawDoublePolyline(g, getBeveledPoints());
 		} else {
 			g.drawPolyline(getBeveledPoints());
 		}
 	}
 
-	private boolean isAdapterConnectionOrStructConnection() {
+	public boolean isAdapterOrStructConnection() {
 		if (model instanceof DataConnection) {
 			final IInterfaceElement refElement = getRefPin();
 			return ((null != refElement) && (refElement.getType() instanceof StructuredType));
@@ -132,7 +136,7 @@ public class HideableConnection extends PolylineConnection {
 	@Override
 	public void setLineWidth(final int w) {
 		int width = w;
-		if (isAdapterConnectionOrStructConnection()) {
+		if (isAdapterOrStructConnection()) {
 			width = Math.max(w * DOUBLE_LINE_AMPLIFICATION, NORMAL_DOUBLE_LINE_WIDTH);
 		}
 		super.setLineWidth(width);
