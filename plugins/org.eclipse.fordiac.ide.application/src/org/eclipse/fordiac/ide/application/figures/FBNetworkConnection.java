@@ -28,12 +28,16 @@ import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.gef.GraphicalEditPart;
 
 public class FBNetworkConnection extends HideableConnection {
 
@@ -42,6 +46,13 @@ public class FBNetworkConnection extends HideableConnection {
 	static {
 		maxWidth = Activator.getDefault().getPreferenceStore()
 				.getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
+	}
+
+	private final ConnectionEditPart connEP;
+
+	public FBNetworkConnection(final ConnectionEditPart connEP) {
+		this.connEP = connEP;
+		super.setModel(connEP.getModel());
 	}
 
 	@Override
@@ -92,22 +103,61 @@ public class FBNetworkConnection extends HideableConnection {
 	public void updateConLabels() {
 		if (isHidden()) {
 			getSourceDecoration().getLabel().setText(createDestinationLabelText());
+			if ((getSourceDecoration() instanceof final GroupInterfaceConnectionLabel srcLabel)
+					&& (srcLabel.getGroupFigure() == null)) {
+				srcLabel.setGroupFigure(getGroupFigure(getModel().getSourceElement()));
+			}
 			updateSourceTooltip();
+
 			getTargetDecoration().getLabel().setText(createSourceLabelText());
+			if ((getTargetDecoration() instanceof final GroupInterfaceConnectionLabel dstLabel)
+					&& (dstLabel.getGroupFigure() == null)) {
+				dstLabel.setGroupFigure(getGroupFigure(getModel().getDestinationElement()));
+			}
 			updateTargetTooltip();
 		}
 	}
 
 	private RotatableDecoration createTargetLabel() {
-		final FBNetworkConnectionLabel label = new FBNetworkConnectionLabel(false);
+		FBNetworkConnectionLabel label;
+		if (isSubappCrossingConnection() && isInGroup(getModel().getDestinationElement())) {
+			label = new GroupInterfaceConnectionLabel(false, getGroupFigure(getModel().getDestinationElement()));
+		} else {
+			label = new FBNetworkConnectionLabel(false);
+		}
 		label.setBackgroundColor(getForegroundColor());
 		return label;
 	}
 
 	private RotatableDecoration createSourceLabel() {
-		final FBNetworkConnectionLabel label = new FBNetworkConnectionLabel(true);
+		FBNetworkConnectionLabel label;
+		if (isSubappCrossingConnection() && isInGroup(getModel().getSourceElement())) {
+			label = new GroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()));
+		} else {
+			label = new FBNetworkConnectionLabel(true);
+		}
 		label.setBackgroundColor(getForegroundColor());
 		return label;
+	}
+
+	private IFigure getGroupFigure(final FBNetworkElement sourceElement) {
+		final GraphicalEditPart groupEP = (GraphicalEditPart) connEP.getViewer().getEditPartRegistry()
+				.get(sourceElement.getGroup());
+		return (groupEP != null) ? groupEP.getFigure() : null;
+	}
+
+	private boolean isSubappCrossingConnection() {
+		final Group srcGroup = getGroup(getModel().getSourceElement());
+		final Group dstGroup = getGroup(getModel().getDestinationElement());
+		return ((srcGroup != null) || (dstGroup != null)) && (srcGroup != dstGroup);
+	}
+
+	private Group getGroup(final FBNetworkElement dstElement) {
+		return (isInGroup(dstElement)) ? dstElement.getGroup() : null;
+	}
+
+	private boolean isInGroup(final FBNetworkElement element) {
+		return (element != null) && (element.isInGroup()) && element.getFbNetwork().equals(getModel().getFBNetwork());
 	}
 
 	private String createSourceLabelText() {

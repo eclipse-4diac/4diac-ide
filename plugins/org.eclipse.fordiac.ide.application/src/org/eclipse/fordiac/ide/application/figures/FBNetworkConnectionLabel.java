@@ -47,6 +47,10 @@ public class FBNetworkConnectionLabel extends RoundedRectangle implements Rotata
 		add(label);
 	}
 
+	protected boolean isSrcLabel() {
+		return srcLabel;
+	}
+
 	private static Label createLabel() {
 		final Label label = new Label();
 		label.setOpaque(false);
