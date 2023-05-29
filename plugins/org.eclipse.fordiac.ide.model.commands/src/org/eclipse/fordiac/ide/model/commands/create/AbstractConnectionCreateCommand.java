@@ -122,9 +122,10 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 		connection.setSource(source);
 		connection.setDestination(destination);
 		connection.setRoutingData(routingData);
-		connection.setVisible(visible);
 
 		parent.addConnection(connection);
+		// visible needs to be setup after the connection is added to correctly update ui
+		connection.setVisible(visible);
 
 		if (performMappingCheck) {
 			mirroredConnection = checkAndCreateMirroredConnection();

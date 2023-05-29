@@ -183,6 +183,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	protected IFigure createFigure() {
 		final FBNetworkConnection connectionFigure = new FBNetworkConnection(this);
 		setConnectionColor(connectionFigure);  // needs to be done before setHidden
+		connectionFigure.setHidden(!getModel().isVisible());
 
 		performConnTypeConfiguration(connectionFigure);
 		connectionFigure.setToolTip(new ConnectionTooltipFigure(getModel()));
@@ -284,7 +285,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			getModel().eAdapters().add(getContentAdapter());
 			addSourceAdapters();
 			addDestinationAdapters();
-			getFigure().setHidden(!getModel().isVisible());
 		}
 	}
 
