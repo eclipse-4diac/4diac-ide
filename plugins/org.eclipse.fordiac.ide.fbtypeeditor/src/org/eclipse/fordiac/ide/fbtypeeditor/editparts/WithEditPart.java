@@ -32,9 +32,9 @@ import org.eclipse.gef.requests.GroupRequest;
 
 public class WithEditPart extends AbstractConnectionEditPart {
 
-	private static final int WITH_BOX_SIZE = 15;
-	private static final float WITH_SCALE = 0.2f;
-	private static final int SCALED_WITH_DISTANCE = (int) (WithAnchor.WITH_DISTANCE / WITH_SCALE);
+	private static final int WITH_BOX_SIZE = 4;
+	private static final float WITH_SCALE = 1f;
+	private static final int SCALED_WITH_DISTANCE = (int) WithAnchor.WITH_DISTANCE;
 
 	public With getCastedModel() {
 		return (With) getModel();
@@ -115,13 +115,13 @@ public class WithEditPart extends AbstractConnectionEditPart {
 	}
 
 	private static void addLeftAlignedLine(final int withPos, final PointList rect) {
-		rect.addPoint(0, -WITH_BOX_SIZE - SCALED_WITH_DISTANCE * withPos);
-		rect.addPoint(0, +WITH_BOX_SIZE + SCALED_WITH_DISTANCE);
+		rect.addPoint(0, -SCALED_WITH_DISTANCE * withPos);
+		rect.addPoint(0, (int) (SCALED_WITH_DISTANCE * 0.8));
 	}
 
 	private static void addRightAlignedLine(final int withPos, final PointList rect) {
-		rect.addPoint(0, -WITH_BOX_SIZE - SCALED_WITH_DISTANCE);
-		rect.addPoint(0, +WITH_BOX_SIZE + SCALED_WITH_DISTANCE * withPos);
+		rect.addPoint(0, (int) (-SCALED_WITH_DISTANCE * 0.8));
+		rect.addPoint(0, SCALED_WITH_DISTANCE * withPos);
 	}
 
 	public void updateWithPos() {
