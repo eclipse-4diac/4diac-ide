@@ -206,7 +206,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated */
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(EventOccurrence.class)) {
@@ -228,7 +228,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated */
 	@Override
-	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors

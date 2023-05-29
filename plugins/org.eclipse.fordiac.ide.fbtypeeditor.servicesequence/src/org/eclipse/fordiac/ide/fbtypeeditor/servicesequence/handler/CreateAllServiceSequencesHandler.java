@@ -49,7 +49,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 
-		final FBType fbtype = ((BasicFBType) ((EditPart) selection.getFirstElement()).getModel());
+		final BasicFBType fbtype = ((BasicFBType) ((EditPart) selection.getFirstElement()).getModel());
 
 		if ((selection.getFirstElement() instanceof SequenceRootEditPart) && (selection.toList().size() == 1)) {
 
@@ -57,7 +57,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 					((FBType) ((EditPart) selection.getFirstElement()).getModel()).getInterfaceList().getEventInputs()
 					.stream().toArray());
 
-			final EList<ECState> states = ((BasicFBType) fbtype).getECC().getECState();
+			final EList<ECState> states = fbtype.getECC().getECState();
 
 			final List<InputObject> combinations = getAllCombinationsWithStartStates(allCombinationsSimple, states);
 
@@ -78,7 +78,8 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 				seq.setStartState(combinations.get(eventManagers.indexOf(eventManager)).getStartState().getName());
 
 				seq.setComment(
-						"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions())); //$NON-NLS-1$
+						"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), //$NON-NLS-1$
+								fbtype));
 				seq.setEventManager(eventManager);
 
 				for (final Transaction transaction : eventManager.getTransactions()) {

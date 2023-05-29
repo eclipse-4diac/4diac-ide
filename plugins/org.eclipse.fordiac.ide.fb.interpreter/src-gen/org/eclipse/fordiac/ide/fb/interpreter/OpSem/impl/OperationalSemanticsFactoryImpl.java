@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -88,6 +89,8 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 			return createTrace();
 		case OperationalSemanticsPackage.ECC_TRACE:
 			return createEccTrace();
+		case OperationalSemanticsPackage.TRANSITION_TRACE:
+			return createTransitionTrace();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -179,6 +182,15 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 	public EccTrace createEccTrace() {
 		EccTraceImpl eccTrace = new EccTraceImpl();
 		return eccTrace;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public TransitionTrace createTransitionTrace() {
+		TransitionTraceImpl transitionTrace = new TransitionTraceImpl();
+		return transitionTrace;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

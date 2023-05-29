@@ -31,7 +31,7 @@ public class EventManagerSaveAndLoadHelper {
 	public static void saveEventManagerToFile(final FBType fbtype, final EventManager evntMngr) {
 		final ResourceSet reset = new ResourceSetImpl();
 		final IProject project = fbtype.getTypeEntry().getFile().getProject();
-		final IFolder folder = project.getFolder("network_traces"); //$NON-NLS-1$
+		final IFolder folder = project.getFolder("traces"); //$NON-NLS-1$
 		if (!folder.exists()) {
 			try {
 				folder.create(false, false, null);
@@ -43,11 +43,10 @@ public class EventManagerSaveAndLoadHelper {
 		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		final Resource res = reset.createResource(uri);
 
-		// HOW TO SAVE THE ECSTATE CORRECTLY TO NOT GET A DANGLING REFERENCE
-		final EccTraceHelper eccTraceHelper = new EccTraceHelper(evntMngr.getTransactions());
-		res.getContents().addAll(eccTraceHelper.getAllPossibleStates());
+		// HOW TO SAVE THE ECSTATE CORRECTLY TO NOT GET A DANGLING REFERENC
 
 		res.getContents().add(evntMngr);
+		reset.getResources().add(fbtype.eResource());
 		try {
 			res.save(Collections.emptyMap());
 

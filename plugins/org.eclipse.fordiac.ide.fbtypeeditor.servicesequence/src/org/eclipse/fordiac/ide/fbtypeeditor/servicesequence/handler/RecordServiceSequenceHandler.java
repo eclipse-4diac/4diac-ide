@@ -118,7 +118,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 
 	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames, final boolean isAppend,
 			final boolean isRandom, final FBType fbType, final int count, final String startState) {
-		List<Event> events;
+		final List<Event> events;
 		final FBType typeCopy = EcoreUtil.copy(fbType);
 		events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
 				.filter(Objects::nonNull).collect(Collectors.toList());
@@ -135,7 +135,8 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		for (final Transaction transaction : eventManager.getTransactions()) {
 			ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
 		}
-		seq.setComment("Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions()));
+		seq.setComment(
+				"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), fbType));
 		seq.setEventManager(eventManager);
 		EventManagerSaveAndLoadHelper.saveEventManagerToFile(fbType, eventManager);
 	}

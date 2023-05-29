@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventOccFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.IRunFBTypeVisitor;
 import org.eclipse.fordiac.ide.fb.interpreter.api.LambdaVisitor;
@@ -83,7 +84,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		if (this.eventOccurrence.getFbRuntime() instanceof final FBNetworkRuntime fbNetworkRuntime) {
 			final FBNetwork fbNetwork = fbNetworkRuntime.getFbnetwork();
 			fbNetwork.getNetworkElements()
-					.forEach(networkElement -> nameToFBNetwork.put(networkElement.getName(), networkElement));
+			.forEach(networkElement -> nameToFBNetwork.put(networkElement.getName(), networkElement));
 		}
 	}
 
@@ -128,7 +129,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	private static void addToTrace(final ECTransition firedTransition, final EObject transaction) {
 		if (transaction instanceof final FBTransaction fbTransaction
 				&& fbTransaction.getTrace() instanceof final EccTrace eccTrace && (firedTransition != null)) {
-			eccTrace.getTransitions().add(firedTransition);
+			final TransitionTrace trace = OperationalSemanticsFactory.eINSTANCE.createTransitionTrace();
+			if (firedTransition.getConditionEvent() != null) {
+				trace.setCondEvent(firedTransition.getConditionEvent().getName());
+			}
+			trace.setCondExpression(firedTransition.getConditionExpression());
+			trace.setSourceState(firedTransition.getSource().getName());
+			trace.setDestinationState(firedTransition.getDestination().getName());
+			eccTrace.getTransitionTraces().add(trace);
 		}
 	}
 
