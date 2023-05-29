@@ -175,7 +175,8 @@ public final class StructManipulation {
 	}
 
 	public static String getMemberVarValue(final VarDeclaration v) {
-		if ((v != null) && (v.getName() != null) && v.getFBNetworkElement() instanceof final StructManipulator muxer) {
+		if ((v != null) && (v.getName() != null) && (v.getFBNetworkElement() instanceof final StructManipulator muxer)
+				&& (muxer.getStructType() != null)) {
 			final VarDeclaration matchingMember = muxer.getStructType().getMemberVariables().stream()
 					.filter(member -> v.getName().equals(member.getName())).findFirst().orElse(null);
 			if ((matchingMember != null) && (matchingMember.getValue() != null)) {
