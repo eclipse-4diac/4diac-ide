@@ -170,6 +170,13 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case OperationalSemanticsPackage.TRANSITION_TRACE: {
+			TransitionTrace transitionTrace = (TransitionTrace) theEObject;
+			T result = caseTransitionTrace(transitionTrace);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		default:
 			return defaultCase(theEObject);
 		}

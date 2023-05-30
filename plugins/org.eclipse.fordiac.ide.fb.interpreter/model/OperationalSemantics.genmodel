@@ -42,9 +42,13 @@
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//BasicFBTypeRuntime">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//BasicFBTypeRuntime/basicfbtype"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//BasicFBTypeRuntime/activeState"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute OperationalSemantics.ecore#//BasicFBTypeRuntime/activeState"/>
       <genOperations ecoreOperation="OperationalSemantics.ecore#//BasicFBTypeRuntime/getModel"
           body="return this.getBasicfbtype();"/>
+      <genOperations ecoreOperation="OperationalSemantics.ecore#//BasicFBTypeRuntime/getActiveState"
+          body="return ECStateAnnotations.getActiveState(activeState,(BasicFBType)this);">
+        <genParameters ecoreParameter="OperationalSemantics.ecore#//BasicFBTypeRuntime/getActiveState/activeStateString"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//SimpleFBTypeRuntime">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//SimpleFBTypeRuntime/simpleFBType"/>

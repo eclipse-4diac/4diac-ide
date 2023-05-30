@@ -49,22 +49,22 @@ public interface BasicFBTypeRuntime extends FBRuntimeAbstract {
 	 * @generated */
 	void setBasicfbtype(BasicFBType value);
 
-	/** Returns the value of the '<em><b>Active State</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** Returns the value of the '<em><b>Active State</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the value of the '<em>Active State</em>' reference.
-	 * @see #setActiveState(ECState)
+	 * @return the value of the '<em>Active State</em>' attribute.
+	 * @see #setActiveState(String)
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getBasicFBTypeRuntime_ActiveState()
-	 * @model
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated */
-	ECState getActiveState();
+	String getActiveState();
 
 	/** Sets the value of the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime#getActiveState
-	 * <em>Active State</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <em>Active State</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @param value the new value of the '<em>Active State</em>' reference.
+	 * @param value the new value of the '<em>Active State</em>' attribute.
 	 * @see #getActiveState()
 	 * @generated */
-	void setActiveState(ECState value);
+	void setActiveState(String value);
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -72,5 +72,11 @@ public interface BasicFBTypeRuntime extends FBRuntimeAbstract {
 	 * @generated */
 	@Override
 	BasicFBType getModel();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model activeStateStringDataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @generated */
+	ECState getActiveState(String activeStateString);
 
 } // BasicFBTypeRuntime

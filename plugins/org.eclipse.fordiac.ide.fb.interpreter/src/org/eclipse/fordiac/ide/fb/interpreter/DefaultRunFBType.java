@@ -111,14 +111,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// Active State
 		final var eCState = basicFBTypeRuntime.getActiveState();
 		if (eCState == null) {
-			basicFBTypeRuntime.setActiveState(eCC.getStart());
+			basicFBTypeRuntime.setActiveState(eCC.getStart().getName());
 		}
 		// apply event and evaluate transitions
 		var firedTransition = evaluateOutTransitions(basicFBTypeRuntime);
 		addToTrace(firedTransition, basicFBTypeRuntime.eContainer().eContainer());
 		while (firedTransition != null) {
 			isConsumed(this.eventOccurrence);
-			basicFBTypeRuntime.setActiveState(firedTransition.getDestination());// fire transition
+			basicFBTypeRuntime.setActiveState(firedTransition.getDestination().getName());// fire transition
 			outputEvents.addAll(performEntryAction(basicFBTypeRuntime));
 			firedTransition = evaluateOutTransitions(basicFBTypeRuntime);
 			addToTrace(firedTransition, basicFBTypeRuntime.eContainer().eContainer());
@@ -142,7 +142,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	private static EList<EventOccurrence> performEntryAction(final BasicFBTypeRuntime basicFBTypeRuntime) {
 		final var outputEvents = new BasicEList<EventOccurrence>();
-		for (final ECAction action : basicFBTypeRuntime.getActiveState().getECAction()) {
+		for (final ECAction action : basicFBTypeRuntime.getActiveState(basicFBTypeRuntime.getActiveState())
+				.getECAction()) {
 			if (action.getAlgorithm() != null) {
 				processAlgorithmWithEvaluator(basicFBTypeRuntime.getBasicfbtype(), action.getAlgorithm());
 			}
@@ -263,7 +264,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	}
 
 	private ECTransition evaluateOutTransitions(final BasicFBTypeRuntime basicFBTypeRuntime) {
-		final var outTransitions = basicFBTypeRuntime.getActiveState().getOutTransitions();
+		final var outTransitions = basicFBTypeRuntime.getActiveState(basicFBTypeRuntime.getActiveState())
+				.getOutTransitions();
 		for (final ECTransition outTransition : outTransitions) {
 			if (transitionCanFire(outTransition, basicFBTypeRuntime)) {
 				return outTransition;

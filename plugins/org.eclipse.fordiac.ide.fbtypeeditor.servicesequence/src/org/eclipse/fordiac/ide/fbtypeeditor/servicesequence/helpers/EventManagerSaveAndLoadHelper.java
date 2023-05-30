@@ -43,14 +43,10 @@ public class EventManagerSaveAndLoadHelper {
 		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		final Resource res = reset.createResource(uri);
 
-		// HOW TO SAVE THE ECSTATE CORRECTLY TO NOT GET A DANGLING REFERENC
-
 		res.getContents().add(evntMngr);
 		reset.getResources().add(fbtype.eResource());
 		try {
 			res.save(Collections.emptyMap());
-
-			// openEditorForGeneratedFile(event, file);
 		} catch (final IOException e) {
 			FordiacLogHelper.logError(e.getMessage());
 		}

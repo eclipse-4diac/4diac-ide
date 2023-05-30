@@ -63,7 +63,7 @@ public final class RuntimeFactory {
 	private static FBRuntimeAbstract createFrom(final BasicFBType fb, final ECState startState) {
 		final BasicFBTypeRuntime basicFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createBasicFBTypeRuntime();
 		basicFBTypeRT.setBasicfbtype(fb);
-		basicFBTypeRT.setActiveState(startState);
+		basicFBTypeRT.setActiveState(startState.getName());
 		return basicFBTypeRT;
 	}
 
@@ -103,11 +103,11 @@ public final class RuntimeFactory {
 				final ECState startState = stateList.stream().filter(s -> s.getName().equals(startStateName))
 						.findFirst().orElse(null);
 				if (startState != null) {
-					basicFBTypeRT.setActiveState(startState);
+					basicFBTypeRT.setActiveState(startState.getName());
 					return;
 				}
 			}
-			basicFBTypeRT.setActiveState(basicFBTypeRT.getBasicfbtype().getECC().getStart());
+			basicFBTypeRT.setActiveState(basicFBTypeRT.getBasicfbtype().getECC().getStart().getName());
 		}
 	}
 

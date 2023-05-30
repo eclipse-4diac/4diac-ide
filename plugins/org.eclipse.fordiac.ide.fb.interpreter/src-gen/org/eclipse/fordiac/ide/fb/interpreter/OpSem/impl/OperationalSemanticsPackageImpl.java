@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
@@ -153,6 +154,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		// Initialize simple dependencies
 		LibraryElementPackage.eINSTANCE.eClass();
 		DataPackage.eINSTANCE.eClass();
+		XMLTypePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theOperationalSemanticsPackage.createPackageContents();
@@ -284,8 +286,8 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 *
 	 * @generated */
 	@Override
-	public EReference getBasicFBTypeRuntime_ActiveState() {
-		return (EReference) basicFBTypeRuntimeEClass.getEStructuralFeatures().get(1);
+	public EAttribute getBasicFBTypeRuntime_ActiveState() {
+		return (EAttribute) basicFBTypeRuntimeEClass.getEStructuralFeatures().get(1);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -544,7 +546,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 
 		basicFBTypeRuntimeEClass = createEClass(BASIC_FB_TYPE_RUNTIME);
 		createEReference(basicFBTypeRuntimeEClass, BASIC_FB_TYPE_RUNTIME__BASICFBTYPE);
-		createEReference(basicFBTypeRuntimeEClass, BASIC_FB_TYPE_RUNTIME__ACTIVE_STATE);
+		createEAttribute(basicFBTypeRuntimeEClass, BASIC_FB_TYPE_RUNTIME__ACTIVE_STATE);
 
 		simpleFBTypeRuntimeEClass = createEClass(SIMPLE_FB_TYPE_RUNTIME);
 		createEReference(simpleFBTypeRuntimeEClass, SIMPLE_FB_TYPE_RUNTIME__SIMPLE_FB_TYPE);
@@ -605,6 +607,8 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		// Obtain other dependent packages
 		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage) EPackage.Registry.INSTANCE
 				.getEPackage(LibraryElementPackage.eNS_URI);
+		XMLTypePackage theXMLTypePackage = (XMLTypePackage) EPackage.Registry.INSTANCE
+				.getEPackage(XMLTypePackage.eNS_URI);
 
 		// Create type parameters
 
@@ -667,12 +671,16 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEReference(getBasicFBTypeRuntime_Basicfbtype(), theLibraryElementPackage.getBasicFBType(), null,
 				"basicfbtype", null, 1, 1, BasicFBTypeRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBasicFBTypeRuntime_ActiveState(), theLibraryElementPackage.getECState(), null, "activeState", //$NON-NLS-1$
-				null, 0, 1, BasicFBTypeRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBasicFBTypeRuntime_ActiveState(), theXMLTypePackage.getString(), "activeState", null, 0, 1, //$NON-NLS-1$
+				BasicFBTypeRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
 
 		addEOperation(basicFBTypeRuntimeEClass, theLibraryElementPackage.getBasicFBType(), "getModel", 1, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
+
+		EOperation op = addEOperation(basicFBTypeRuntimeEClass, theLibraryElementPackage.getECState(), "getActiveState", //$NON-NLS-1$
+				0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theXMLTypePackage.getString(), "activeStateString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(simpleFBTypeRuntimeEClass, SimpleFBTypeRuntime.class, "SimpleFBTypeRuntime", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -748,8 +756,8 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 				EccTrace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		EOperation op = addEOperation(eccTraceEClass, theLibraryElementPackage.getECTransition(), "getTransitions", 0, //$NON-NLS-1$
-				-1, IS_UNIQUE, IS_ORDERED);
+		op = addEOperation(eccTraceEClass, theLibraryElementPackage.getECTransition(), "getTransitions", 0, -1, //$NON-NLS-1$
+				IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, theLibraryElementPackage.getECC(), "ecc", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(transitionTraceEClass, TransitionTrace.class, "TransitionTrace", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$

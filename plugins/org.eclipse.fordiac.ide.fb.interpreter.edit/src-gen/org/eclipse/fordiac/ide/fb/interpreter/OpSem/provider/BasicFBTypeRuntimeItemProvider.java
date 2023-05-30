@@ -92,7 +92,7 @@ public class BasicFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvide
 		if (object instanceof final BasicFBTypeRuntime rt && (rt.getBasicfbtype() != null)) {
 			if (rt.getActiveState() != null) {
 				return super.getText(object) + "Runtime for type " + rt.getBasicfbtype().getName() + ", active state: " //$NON-NLS-1$ //$NON-NLS-2$
-						+ rt.getActiveState().getName();
+						+ rt.getActiveState();
 			}
 			return super.getText(object) + getString("_UI_BasicFBTypeRuntime_type") + " for type " //$NON-NLS-1$ //$NON-NLS-2$
 					+ rt.getBasicfbtype().getName();

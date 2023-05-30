@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -133,6 +134,11 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseEccTrace(EccTrace object) {
 			return createEccTraceAdapter();
+		}
+
+		@Override
+		public Adapter caseTransitionTrace(TransitionTrace object) {
+			return createTransitionTraceAdapter();
 		}
 
 		@Override

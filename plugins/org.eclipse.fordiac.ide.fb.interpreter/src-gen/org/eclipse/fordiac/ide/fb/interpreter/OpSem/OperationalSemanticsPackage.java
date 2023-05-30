@@ -171,7 +171,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @ordered */
 	int BASIC_FB_TYPE_RUNTIME__BASICFBTYPE = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 0;
 
-	/** The feature id for the '<em><b>Active State</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Active State</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered */
@@ -582,15 +582,15 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated */
 	EReference getBasicFBTypeRuntime_Basicfbtype();
 
-	/** Returns the meta object for the reference
+	/** Returns the meta object for the attribute
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime#getActiveState <em>Active State</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the meta object for the reference '<em>Active State</em>'.
+	 * @return the meta object for the attribute '<em>Active State</em>'.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime#getActiveState()
 	 * @see #getBasicFBTypeRuntime()
 	 * @generated */
-	EReference getBasicFBTypeRuntime_ActiveState();
+	EAttribute getBasicFBTypeRuntime_ActiveState();
 
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime
 	 * <em>Simple FB Type Runtime</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -958,11 +958,11 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated */
 		EReference BASIC_FB_TYPE_RUNTIME__BASICFBTYPE = eINSTANCE.getBasicFBTypeRuntime_Basicfbtype();
 
-		/** The meta object literal for the '<em><b>Active State</b></em>' reference feature. <!-- begin-user-doc -->
+		/** The meta object literal for the '<em><b>Active State</b></em>' attribute feature. <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 *
 		 * @generated */
-		EReference BASIC_FB_TYPE_RUNTIME__ACTIVE_STATE = eINSTANCE.getBasicFBTypeRuntime_ActiveState();
+		EAttribute BASIC_FB_TYPE_RUNTIME__ACTIVE_STATE = eINSTANCE.getBasicFBTypeRuntime_ActiveState();
 
 		/** The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.SimpleFBTypeRuntimeImpl <em>Simple FB Type
