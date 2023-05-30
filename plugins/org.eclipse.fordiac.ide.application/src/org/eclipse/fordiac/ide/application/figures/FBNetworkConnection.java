@@ -41,12 +41,11 @@ import org.eclipse.gef.GraphicalEditPart;
 
 public class FBNetworkConnection extends HideableConnection {
 
-	private static int maxWidth;
+	private static int maxWidth = Activator.getDefault().getPreferenceStore()
+			.getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
 
-	static {
-		maxWidth = Activator.getDefault().getPreferenceStore()
-				.getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
-	}
+	private static String pinLabelStyle = Activator.getDefault().getPreferenceStore()
+			.getString(DiagramPreferences.PIN_LABEL_STYLE);
 
 	private final ConnectionEditPart connEP;
 
@@ -241,11 +240,16 @@ public class FBNetworkConnection extends HideableConnection {
 
 	private StringBuilder generateFullIEString(final IInterfaceElement ie) {
 		final StringBuilder builder = new StringBuilder();
-		if (ie.getFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
-			builder.append(ie.getFBNetworkElement().getName());
-			builder.append('.');
+		if (pinLabelStyle.equals(DiagramPreferences.PIN_LABEL_STYLE_PIN_COMMENT) && ie.getComment() != null
+				&& !ie.getComment().isBlank()) {
+			builder.append(ie.getComment());
+		} else {
+			if (ie.getFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
+				builder.append(ie.getFBNetworkElement().getName());
+				builder.append('.');
+			}
+			builder.append(ie.getName());
 		}
-		builder.append(ie.getName());
 		return builder;
 	}
 

@@ -124,7 +124,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)) {
+					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
 				getConnectionFigure().updateConLabels();
 			}
 		}
