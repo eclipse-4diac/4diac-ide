@@ -19,6 +19,14 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextcore.messages"; //$NON-NLS-1$
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedCallable;
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedCallableForType;
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedDataType;
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedParameter;
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedParameterForCallable;
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedVariable;
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedVariableForType;
+	public static String STCoreLinkingDiagnosticMessageProvider_UnknownType;
 	public static String STCoreValidator_Consecutive_Underscores_In_Identifier;
 	public static String STCoreValidator_Identifier_Is_Reserved;
 	public static String STCoreValidator_Implicit_Conversion_In_Literal;
