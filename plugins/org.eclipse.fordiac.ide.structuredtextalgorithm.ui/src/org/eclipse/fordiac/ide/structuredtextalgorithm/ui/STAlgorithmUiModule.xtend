@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.reconciler.STAl
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.ExtractMethodRefactoring
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceForIEditorInputFactory
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer
@@ -53,6 +54,7 @@ import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.editor.XtextSourceViewer
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorActions
+import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper
@@ -176,5 +178,13 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	def Class<? extends ExtractCallableRefactoring> bindExtractCallableRefactoring() {
 		return ExtractMethodRefactoring
+	}
+
+	def void configureContentAssist(Binder binder) {
+		binder.bind(IPreferenceStoreInitializer).annotatedWith(Names.named("contentAssistInitializer")) //$NON-NLS-1$
+		.to(STCoreContentAssistPreferences.Initializer);
+		binder.bind(String).annotatedWith(
+				Names.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS))
+		.toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider);
 	}
 }

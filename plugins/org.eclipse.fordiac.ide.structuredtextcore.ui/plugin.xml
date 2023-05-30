@@ -561,5 +561,14 @@
              id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
        </keywordReference>
     </page>
+    <page
+          category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
+          class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferencePage"
+          id="org.eclipse.fordiac.ide.structuredtextcore.ui.contentAssist"
+          name="Content Assist">
+       <keywordReference
+             id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
+       </keywordReference>
+    </page>
  </extension>
 </plugin>

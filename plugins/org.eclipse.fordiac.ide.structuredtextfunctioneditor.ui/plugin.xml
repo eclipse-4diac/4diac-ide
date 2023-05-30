@@ -537,5 +537,14 @@
              id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction">
        </keywordReference>
     </page>
+    <page
+          category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
+          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferencePage"
+          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.contentAssist"
+          name="Content Assist">
+       <keywordReference
+             id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction">
+       </keywordReference>
+    </page>
  </extension>
 </plugin>

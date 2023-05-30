@@ -482,6 +482,15 @@
              id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm">
        </keywordReference>
     </page>
+    <page
+          category="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"
+          class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferencePage"
+          id="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.contentAssist"
+          name="Content Assist">
+       <keywordReference
+             id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm">
+       </keywordReference>
+    </page>
  </extension>
  <extension
        point="org.eclipse.xtext.builder.participant">
