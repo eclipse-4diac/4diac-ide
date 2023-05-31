@@ -112,8 +112,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		createNewFB();
 		checkGroup(oldElement, newElement); // needs to be done before anything is changed on the old element Bug
 		// 579570
-
-		network.getNetworkElements().add(newElement);
+		if (network != null) {
+			network.getNetworkElements().add(newElement);
+		}
 
 		handleErrorMarker();
 
@@ -127,7 +128,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		handleConnections();
 		reconnCmds.execute();
 
-		network.getNetworkElements().remove(oldElement);
+		if (network != null) {
+			network.getNetworkElements().remove(oldElement);
+		}
 
 		newElement.setName(oldElement.getName());
 

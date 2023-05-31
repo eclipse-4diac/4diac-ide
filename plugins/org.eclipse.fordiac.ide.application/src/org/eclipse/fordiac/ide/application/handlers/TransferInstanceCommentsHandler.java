@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.application.handlers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -35,7 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.search.dialog.StructUpdateDialog;
+import org.eclipse.fordiac.ide.model.search.dialog.FBUpdateDialog;
 import org.eclipse.fordiac.ide.model.search.types.StructManipulatorSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.gef.commands.CommandStack;
@@ -62,28 +63,27 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		selectedItem = struct.getModel();
 		final String[] labels = { Messages.TransferInstanceComments_TransferLabel, SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
-		final StructUpdateDialog structUpdateDialog = new StructUpdateDialog(null,
-				Messages.TransferInstanceComments_WizardTitle, null, "",
-				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX,
-				(DataTypeEntry) struct.getModel().getStructType().getTypeEntry()) {
+		final FBUpdateDialog structUpdateDialog = new FBUpdateDialog(null,
+				Messages.TransferInstanceComments_WizardTitle, null, "", MessageDialog.NONE, labels,
+				DEFAULT_BUTTON_INDEX, (DataTypeEntry) struct.getModel().getStructType().getTypeEntry()) {
 			@Override
-			protected final List<INamedElement> performStructSearch() {
+			protected final Set<INamedElement> performStructSearch() {
 				final StructManipulatorSearch structSearch = new StructManipulatorSearch(dataTypeEntry);
 
-				List<INamedElement> elements = Collections.emptyList();
+				Set<INamedElement> elements = Collections.emptySet();
 
 				final EObject root = EcoreUtil.getRootContainer(struct.getModel());
 				if (root instanceof AutomationSystem) {
 					elements = structSearch.performApplicationSearch((AutomationSystem) root);
 				} else if (root instanceof SubAppType) {
-					elements = structSearch.performFBNetworkSearch(
-							((SubAppType) root).getFBNetwork());
+					elements = structSearch.performFBNetworkSearch(((SubAppType) root).getFBNetwork());
 				}
 				elements.removeIf(el -> el.equals(struct.getModel()) || isTypedOrContainedInTypedInstance(el));
 
 				// output connected elements only searchFilter
 				final List<INamedElement> elementsFilteredOut = new ArrayList<>();
-				if (outputConnectedOnlyBtn != null && !outputConnectedOnlyBtn.isDisposed() && outputConnectedOnlyBtn.getSelection()) {
+				if (outputConnectedOnlyBtn != null && !outputConnectedOnlyBtn.isDisposed()
+						&& outputConnectedOnlyBtn.getSelection()) {
 					final List<FBNetworkElement> connectedFbs = FBEndpointFinder.getConnectedFbs(new ArrayList<>(),
 							selectedItem);
 					elements.forEach(res -> {
@@ -122,8 +122,9 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final CommandStack commandStack = editor.getAdapter(CommandStack.class);
 		if (structUpdateDialog.open() == DEFAULT_BUTTON_INDEX) {
-			final TransferInstanceCommentsCommand cmd = new TransferInstanceCommentsCommand(
-					struct.getModel(), structUpdateDialog.getCollectedMultiplexer());
+			final TransferInstanceCommentsCommand cmd = new TransferInstanceCommentsCommand(struct.getModel(),
+					structUpdateDialog.getCollectedFBs().stream().filter(StructManipulator.class::isInstance)
+					.map(StructManipulator.class::cast).collect(Collectors.toSet()));
 			commandStack.execute(cmd);
 		}
 		return null;

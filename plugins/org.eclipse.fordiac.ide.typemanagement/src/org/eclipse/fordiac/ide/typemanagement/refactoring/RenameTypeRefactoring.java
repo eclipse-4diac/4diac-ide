@@ -1,7 +1,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
-import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -106,7 +106,7 @@ public class RenameTypeRefactoring extends Refactoring {
 
 			InstanceSearch search = StructDataTypeSearch.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable());
 
-			final List<INamedElement> allTypesWithStruct = search
+			final Set<INamedElement> allTypesWithStruct = search
 					.searchStructuredTypes(typeEntry.getTypeLibrary());
 
 
@@ -129,11 +129,10 @@ public class RenameTypeRefactoring extends Refactoring {
 
 			final CompositeChange fbTypeChanges = new CompositeChange("Fb Types:");
 			search = StructDataTypeSearch.createStructInterfaceSearch((StructuredType) typeEntry.getTypeEditable());
-			List<INamedElement> fbTypes = search.performTypeLibBlockSearch(typeEntry.getTypeLibrary());
-			System.out.println(fbTypes.size());
+			final Set<INamedElement> fbTypes = search.performTypeLibBlockSearch(typeEntry.getTypeLibrary());
 			fbTypes.forEach(fb -> fbTypeChanges.add(new InterfaceDataTypeChange((FBType) fb, typeEntry, oldName, newName)));
 			parentChange.add(fbTypeChanges);
-			
+
 			return parentChange;
 
 		} finally {

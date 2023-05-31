@@ -13,17 +13,18 @@
 package org.eclipse.fordiac.ide.model.search.dialog;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.search.Messages;
 import org.eclipse.fordiac.ide.model.search.ModelSearchResultPage;
 import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructManipulatorSearch;
+import org.eclipse.fordiac.ide.model.search.types.SubAppSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -35,9 +36,13 @@ import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.widgets.LabelFactory;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -46,11 +51,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-public class StructUpdateDialog extends MessageDialog {
+public class FBUpdateDialog extends MessageDialog {
 
 	protected final DataTypeEntry dataTypeEntry;
 
@@ -59,20 +65,23 @@ public class StructUpdateDialog extends MessageDialog {
 	private static final int CHECK_BOX_COL_WIDTH = 30;
 	private boolean selectAll = true;
 
-	private final Set<StructManipulator> collectedMulitplexer;
+	private final Set<FBNetworkElement> collectedElements;
 	private TableViewer viewer;
+	private ColumnLabelProvider labelElement;
+	private ColumnLabelProvider labelPath;
+	private ColumnLabelProvider labelType;
 
-	public StructUpdateDialog(final Shell parentShell, final String dialogTitle, final Image dialogTitleImage,
+	public FBUpdateDialog(final Shell parentShell, final String dialogTitle, final Image dialogTitleImage,
 			final String dialogMessage, final int dialogImageType, final String[] dialogButtonLabels,
 			final int defaultIndex, final DataTypeEntry dataTypeEntry) {
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels,
 				defaultIndex);
 		this.dataTypeEntry = dataTypeEntry;
-		collectedMulitplexer = new HashSet<>();
+		collectedElements = new HashSet<>();
 	}
 
-	public Set<StructManipulator> getCollectedMultiplexer() {
-		return collectedMulitplexer;
+	public Set<FBNetworkElement> getCollectedFBs() {
+		return collectedElements;
 	}
 
 	@Override
@@ -83,7 +92,8 @@ public class StructUpdateDialog extends MessageDialog {
 		searchResArea.setLayout(new GridLayout(1, true));
 		searchResArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final List<INamedElement> result = performStructSearch();
+		final Set<INamedElement> result = performSearch(new SubAppSearch(dataTypeEntry),
+				new StructManipulatorSearch(dataTypeEntry));
 		if (result.isEmpty()) {
 			// No results - display just the info
 			final Label warningLabel = LabelFactory.newLabel(NONE).create(searchResArea);
@@ -103,13 +113,60 @@ public class StructUpdateDialog extends MessageDialog {
 		// Override this method to add searchFilter buttons
 	}
 
-	public void refresh() {
-		viewer.setInput(performStructSearch());
+	private void createLabelProviders() {
+		this.labelElement = new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof final INamedElement namedElem) {
+					return namedElem.getName();
+				}
+				if (element instanceof final FBNetworkElement networkElem) {
+					return networkElem.getName();
+				}
+				return super.getText(element);
+			}
+		};
+		this.labelPath = new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return ModelSearchResultPage.hierarchicalName(element);
+			}
+		};
+		this.labelType = new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof final SubApp subapp) {
+					return subapp.isTyped() ? "Typed SubApp" : "Untyped SubApp";  //$NON-NLS-1$//$NON-NLS-2$
+				} else if (element instanceof final IInterfaceElement interfaceElem) {
+					return interfaceElem.getTypeName();
+				} else if (element instanceof final StructManipulator manipulator) {
+					return manipulator.getTypeName();
+				}
+				return super.getText(element);
+			}
+		};
 	}
 
-	protected List<INamedElement> performStructSearch() {
+	public void refresh() {
+		viewer.setInput(performSearch(new SubAppSearch(dataTypeEntry), new StructManipulatorSearch(dataTypeEntry)));
+	}
+
+	protected Set<INamedElement> performStructSearch() {
 		final InstanceSearch structSearch = new StructManipulatorSearch(dataTypeEntry);
 		return structSearch.performCompleteSearch();
+	}
+
+	protected Set<INamedElement> performSubAppSearch() {
+		final InstanceSearch subAppSearch = new SubAppSearch(dataTypeEntry);
+		return subAppSearch.performCompleteSearch();
+	}
+
+	protected static Set<INamedElement> performSearch(final InstanceSearch... searchers) {
+		final Set<INamedElement> results = new HashSet<>();
+		for (final InstanceSearch search : searchers) {
+			results.addAll(search.performCompleteSearch());
+		}
+		return results;
 	}
 
 	private static TableViewer createTableViewer(final Composite parent) {
@@ -118,32 +175,32 @@ public class StructUpdateDialog extends MessageDialog {
 	}
 
 	private void configureTableViewer(final TableViewer viewer) {
-		collectedMulitplexer.clear();
+		collectedElements.clear();
+		createLabelProviders();
 		viewer.setContentProvider(new ArrayContentProvider());
-		final Table table = viewer.getTable();
 
+		final Table table = viewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		table.setLayout(createTableLayout());
+		table.setSortDirection(SWT.DOWN);
 
 		table.addListener(SWT.Selection, event -> {
 			if (event.detail == SWT.CHECK) {
 				final TableItem tableItem = (TableItem) event.item;
-				if (tableItem.getData() instanceof StructManipulator) {
+				if (tableItem.getData() instanceof final FBNetworkElement fb) {
 					if (tableItem.getChecked()) {
-						collectedMulitplexer.add((StructManipulator) tableItem.getData());
+						collectedElements.add(fb);
 					} else {
-						collectedMulitplexer.remove(tableItem.getData());
+						collectedElements.remove(tableItem.getData());
 					}
 				}
-
 			}
 		});
 
 		// Check-box column
 		final TableViewerColumn colCheckBox = new TableViewerColumn(viewer, SWT.WRAP);
-		colCheckBox.getColumn()
-		.setImage(FordiacImage.ICON_EXPAND_ALL.getImage());
+		colCheckBox.getColumn().setImage(FordiacImage.ICON_EXPAND_ALL.getImage());
 		colCheckBox.getColumn().addListener(SWT.Selection, event -> {
 			changeSelectionState(table, selectAll);
 			if (selectAll) {
@@ -164,44 +221,66 @@ public class StructUpdateDialog extends MessageDialog {
 			}
 		});
 
+		final SelectionListener sortListener = new SelectionListener() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				// Get the selected column
+
+				final TableColumn selectedColumn = (TableColumn) e.getSource();
+				if (!table.getSortColumn().equals(selectedColumn)) {
+					table.setSortColumn(selectedColumn);
+				} else {
+					table.setSortDirection(table.getSortDirection() == SWT.DOWN ? SWT.UP : SWT.DOWN);
+				}
+				table.redraw();
+				viewer.refresh();
+			}
+
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+				// Do nothing
+			}
+		};
+
 		// Element column
 		final TableViewerColumn colElement = new TableViewerColumn(viewer, SWT.LEAD);
 		colElement.getColumn().setText(Messages.Element);
-		colElement.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				if (element instanceof INamedElement) {
-					return ((INamedElement) element).getName();
-				}
-				if (element instanceof FBNetworkElement) {
-					return ((FBNetworkElement) element).getName();
-				}
-				return super.getText(element);
-			}
-		});
+		colElement.setLabelProvider(labelElement);
+
+		table.setSortColumn(colElement.getColumn());
+
+		colElement.getColumn().addSelectionListener(sortListener);
 
 		// Location name column
 		final TableViewerColumn colPath = new TableViewerColumn(viewer, SWT.LEAD);
 		colPath.getColumn().setText(Messages.Location);
-		colPath.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return ModelSearchResultPage.hierarchicalName(element);
-			}
-		});
+		colPath.setLabelProvider(labelPath);
+
+		colPath.getColumn().addSelectionListener(sortListener);
 
 		// Type name column
 		final TableViewerColumn colType = new TableViewerColumn(viewer, SWT.LEAD);
 		colType.getColumn().setText(FordiacMessages.Type);
-		colType.setLabelProvider(new ColumnLabelProvider() {
+		colType.setLabelProvider(labelType);
+		colType.getColumn().addSelectionListener(sortListener);
+
+		viewer.setComparator(new ViewerComparator() {
 			@Override
-			public String getText(final Object element) {
-				if (element instanceof IInterfaceElement) {
-					return ((IInterfaceElement) element).getTypeName();
-				} else if (element instanceof StructManipulator) {
-					return ((StructManipulator) element).getTypeName();
+			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+				final TableColumn sortCol = table.getSortColumn();
+				String s1 = "";
+				String s2 = "";
+				if (sortCol.equals(colElement.getColumn())) {
+					s1 = labelElement.getText(e1);
+					s2 = labelElement.getText(e2);
+				} else if (sortCol.equals(colPath.getColumn())) {
+					s1 = labelPath.getText(e1);
+					s2 = labelPath.getText(e2);
+				} else if (sortCol.equals(colType.getColumn())) {
+					s1 = labelType.getText(e1);
+					s2 = labelType.getText(e2);
 				}
-				return super.getText(element);
+				return table.getSortDirection() == SWT.DOWN ? s1.compareTo(s2) : s2.compareTo(s1);
 			}
 		});
 
@@ -219,11 +298,11 @@ public class StructUpdateDialog extends MessageDialog {
 	void changeSelectionState(final Table table, final boolean state) {
 		for (final TableItem tableItem : table.getItems()) {
 			tableItem.setChecked(state);
-			if (tableItem.getData() instanceof StructManipulator) {
+			if (tableItem.getData() instanceof final FBNetworkElement fb) {
 				if (state) {
-					collectedMulitplexer.add((StructManipulator) tableItem.getData());
+					collectedElements.add(fb);
 				} else {
-					collectedMulitplexer.remove(tableItem.getData());
+					collectedElements.remove(tableItem.getData());
 				}
 			}
 		}

@@ -24,6 +24,7 @@ package org.eclipse.fordiac.ide.datatypeeditor.editors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -40,12 +41,18 @@ import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppPinCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.search.dialog.StructUpdateDialog;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.dialog.FBUpdateDialog;
+import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
+import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -103,7 +110,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	private final List<String> propertyActions = new ArrayList<>();
 
 	private DataTypeEntry dataTypeEntry;
-	private StructUpdateDialog structSaveDialog;
+	private FBUpdateDialog structSaveDialog;
 
 	private final Adapter adapter = new AdapterImpl() {
 
@@ -168,7 +175,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		final String[] labels = { Messages.StructAlteringButton_SaveAndUpdate, Messages.StructAlteringButton_SaveAs,
 				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
-		structSaveDialog = new StructUpdateDialog(null, Messages.StructViewingComposite_Headline, null, "",
+		structSaveDialog = new FBUpdateDialog(null, Messages.StructViewingComposite_Headline, null, "",
 				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, dataTypeEntry);
 
 		// Depending on the button clicked:
@@ -177,8 +184,8 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 			dataTypeEntry.save();
 			addListenerToDataTypeObj();
 			commandStack.markSaveLocation();
+			updateFB();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
-			updateMultiplexer();
 			break;
 		case SAVE_AS_BUTTON_INDEX:
 			doSaveAs();
@@ -194,35 +201,76 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 
 	@Override
 	public void doSaveAs() {
-		if (dataTypeEntry.getTypeEditable() instanceof StructuredType) {
-			final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
+		if (dataTypeEntry.getTypeEditable() instanceof final StructuredType structuredType) {
 			new WizardDialog(null, new SaveAsStructTypeWizard(structuredType, this)).open();
 		}
 	}
 
-	private void updateMultiplexer() {
-		if (!structSaveDialog.getCollectedMultiplexer().isEmpty()) {
-			for (final StructManipulator mux : structSaveDialog.getCollectedMultiplexer()) {
-				final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
-				final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(mux));
+	private void updateFB() {
+		updateStructManipulators();
+		updateTypes();
+		updateInstances();
+	}
 
-				if (rootContainer instanceof AutomationSystem) {
-					((AutomationSystem) rootContainer).getCommandStack()
-					.execute(new ChangeStructCommand(mux, structuredType));
-
-				} else if (rootContainer instanceof SubAppType) {
-					final IFile file = ((SubAppType) rootContainer).getTypeEntry().getFile();
-					final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-							.findEditor(new FileEditorInput(file));
-					if (editor != null) {
-						HandlerHelper.getCommandStack(editor).execute(new ChangeStructCommand(mux, structuredType));
-					} else {
-						final ChangeStructCommand cmd = new ChangeStructCommand(mux, structuredType);
-						cmd.execute();
+	private void updateTypes() {
+		final InstanceSearch search = StructDataTypeSearch
+				.createStructInterfaceSearch((StructuredType) dataTypeEntry.getTypeEditable());
+		final Set<INamedElement> fbTypes = search.performTypeLibBlockSearch(dataTypeEntry.getTypeLibrary());
+		Display.getDefault().asyncExec(() -> {
+			fbTypes.stream().filter(SubAppType.class::isInstance).map(SubAppType.class::cast).forEach(sApp -> {
+				sApp.getInterfaceList().getAllInterfaceElements().stream()
+				.filter(i -> i.getTypeName().equals(dataTypeEntry.getTypeName()))
+				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(el -> {
+					el.setType(dataTypeEntry.getType());
+					if (el.getValue() != null && !el.getValue().getValue().equals("")) {
+						el.getValue().setValue("");
 					}
+				});
+				sApp.getTypeEntry().save();
+			});
+		});
+	}
+
+	private void updateInstances() {
+		structSaveDialog.getCollectedFBs().stream().filter(SubApp.class::isInstance).map(SubApp.class::cast)
+		.forEach(subApp -> {
+			if (subApp.isTyped()) {
+				final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
+				(new ChangeSubAppPinCommand(subApp, structuredType)).execute();
+			} else {
+				subApp.getInterface().getAllInterfaceElements().stream()
+				.filter(i -> i.getTypeName().equals(dataTypeEntry.getTypeName()))
+				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
+				.forEach(el -> {
+					el.setType(dataTypeEntry.getType());
+					if (!el.getValue().getValue().equals("")) {
+						el.getValue().setValue("");
+					}
+				});
+			}
+		});
+
+	}
+
+	private void updateStructManipulators() {
+		structSaveDialog.getCollectedFBs().stream().filter(StructManipulator.class::isInstance)
+		.map(StructManipulator.class::cast).forEach(mux -> {
+			final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
+			final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(mux));
+
+			if (rootContainer instanceof final AutomationSystem autoSys) {
+				autoSys.getCommandStack().execute(new ChangeStructCommand(mux, structuredType));
+			} else if (rootContainer instanceof final SubAppType subApp) {
+				final IFile file = subApp.getTypeEntry().getFile();
+				final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						.findEditor(new FileEditorInput(file));
+				if (editor != null) {
+					HandlerHelper.getCommandStack(editor).execute(new ChangeStructCommand(mux, structuredType));
+				} else {
+					(new ChangeStructCommand(mux, structuredType)).execute();
 				}
 			}
-		}
+		});
 	}
 
 	private static void loadAllOpenEditors() {
@@ -259,8 +307,8 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	}
 
 	private void importType(final IEditorInput input) throws PartInitException {
-		if (input instanceof FileEditorInput) {
-			final IFile file = ((FileEditorInput) input).getFile();
+		if (input instanceof final FileEditorInput fileEditorInput) {
+			final IFile file = fileEditorInput.getFile();
 			try {
 				importFailed = importTypeBasedOnFile(file);
 			} catch (final Exception e) {
@@ -393,8 +441,8 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		final ActionRegistry registry = getActionRegistry();
 		actionIds.forEach(id -> {
 			final IAction action = registry.getAction(id);
-			if (action instanceof UpdateAction) {
-				((UpdateAction) action).update();
+			if (action instanceof final UpdateAction updateAction) {
+				updateAction.update();
 			}
 		});
 	}
@@ -432,5 +480,4 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		setInput(newInput);
 		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
 	}
-
 }
