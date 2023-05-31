@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -134,7 +135,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	@Override
 	public EList<DataConnection> getDataConnections() {
 		if (dataConnections == null) {
-			dataConnections = new EObjectContainmentEList<DataConnection>(DataConnection.class, this, LibraryElementPackage.FB_NETWORK__DATA_CONNECTIONS);
+			dataConnections = new EObjectContainmentWithInverseEList<DataConnection>(DataConnection.class, this, LibraryElementPackage.FB_NETWORK__DATA_CONNECTIONS, LibraryElementPackage.DATA_CONNECTION__FB_NETWORK);
 		}
 		return dataConnections;
 	}
@@ -147,7 +148,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	@Override
 	public EList<EventConnection> getEventConnections() {
 		if (eventConnections == null) {
-			eventConnections = new EObjectContainmentEList.Resolving<EventConnection>(EventConnection.class, this, LibraryElementPackage.FB_NETWORK__EVENT_CONNECTIONS);
+			eventConnections = new EObjectContainmentWithInverseEList.Resolving<EventConnection>(EventConnection.class, this, LibraryElementPackage.FB_NETWORK__EVENT_CONNECTIONS, LibraryElementPackage.EVENT_CONNECTION__FB_NETWORK);
 		}
 		return eventConnections;
 	}
@@ -160,7 +161,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	@Override
 	public EList<AdapterConnection> getAdapterConnections() {
 		if (adapterConnections == null) {
-			adapterConnections = new EObjectContainmentEList<AdapterConnection>(AdapterConnection.class, this, LibraryElementPackage.FB_NETWORK__ADAPTER_CONNECTIONS);
+			adapterConnections = new EObjectContainmentWithInverseEList<AdapterConnection>(AdapterConnection.class, this, LibraryElementPackage.FB_NETWORK__ADAPTER_CONNECTIONS, LibraryElementPackage.ADAPTER_CONNECTION__FB_NETWORK);
 		}
 		return adapterConnections;
 	}
@@ -283,6 +284,26 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	@Override
 	public int getConnectionIndex(final Connection connection) {
 		return org.eclipse.fordiac.ide.model.Annotations.getConnectionIndex(this, connection);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.FB_NETWORK__DATA_CONNECTIONS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getDataConnections()).basicAdd(otherEnd, msgs);
+			case LibraryElementPackage.FB_NETWORK__EVENT_CONNECTIONS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getEventConnections()).basicAdd(otherEnd, msgs);
+			case LibraryElementPackage.FB_NETWORK__ADAPTER_CONNECTIONS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getAdapterConnections()).basicAdd(otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
+		}
 	}
 
 	/**

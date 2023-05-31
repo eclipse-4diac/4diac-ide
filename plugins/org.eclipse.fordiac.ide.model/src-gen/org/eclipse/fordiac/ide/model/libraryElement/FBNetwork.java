@@ -56,11 +56,13 @@ public interface FBNetwork extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Data Connections</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.DataConnection}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.DataConnection#getFBNetwork <em>FB Network</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Data Connections</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetwork_DataConnections()
-	 * @model containment="true"
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.DataConnection#getFBNetwork
+	 * @model opposite="fBNetwork" containment="true"
 	 *        extendedMetaData="kind='element' name='DataConnections' namespace='##targetNamespace'"
 	 * @generated
 	 */
@@ -69,11 +71,13 @@ public interface FBNetwork extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Event Connections</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.EventConnection}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.EventConnection#getFBNetwork <em>FB Network</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Event Connections</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetwork_EventConnections()
-	 * @model containment="true" resolveProxies="true"
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.EventConnection#getFBNetwork
+	 * @model opposite="fBNetwork" containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<EventConnection> getEventConnections();
@@ -81,11 +85,13 @@ public interface FBNetwork extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Adapter Connections</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection#getFBNetwork <em>FB Network</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Adapter Connections</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetwork_AdapterConnections()
-	 * @model containment="true"
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection#getFBNetwork
+	 * @model opposite="fBNetwork" containment="true"
 	 *        extendedMetaData="kind='element' name='AdapterConnections' namespace='##targetNamespace'"
 	 * @generated
 	 */
