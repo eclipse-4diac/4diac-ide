@@ -21,8 +21,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
@@ -36,7 +38,6 @@ import org.eclipse.xtext.ui.codemining.AbstractXtextCodeMiningProvider
 import org.eclipse.xtext.util.CancelIndicator
 import org.eclipse.xtext.util.IAcceptor
 
-import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.eclipse.xtext.EcoreUtil2.*
 
 class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
@@ -57,10 +58,7 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 	def dispatch void createCodeMinings(STNumericLiteral literal, IDocument document,
 		IAcceptor<? super ICodeMining> acceptor) throws BadLocationException {
 		if (isEnableLiteralTypeCodeMinings && literal.declaredResultType === null &&
-			!(literal.eContainer instanceof STArrayAccessExpression ||
-				literal.eContainer instanceof STMultibitPartialExpression) &&
-			(STCorePackage.eINSTANCE.STStatement.isAncestor(literal) ||
-				STCorePackage.eINSTANCE.STInitializerExpression.isAncestor(literal))) {
+			literal.showLiteralTypeCodeMining) {
 			val inferredType = literal.resultType
 			if (inferredType !== null) {
 				NodeModelUtils.findActualNodeFor(literal).asTreeIterable.filter [
@@ -75,8 +73,7 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 	def dispatch void createCodeMinings(STStringLiteral literal, IDocument document,
 		IAcceptor<? super ICodeMining> acceptor) throws BadLocationException {
 		if (isEnableLiteralTypeCodeMinings && literal.declaredResultType === null &&
-			(STCorePackage.eINSTANCE.STStatement.isAncestor(literal) ||
-				STCorePackage.eINSTANCE.STInitializerExpression.isAncestor(literal))) {
+			literal.showLiteralTypeCodeMining) {
 			val inferredType = literal.resultType
 			if (inferredType !== null) {
 				NodeModelUtils.findActualNodeFor(literal).asTreeIterable.filter [
@@ -85,6 +82,30 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 					acceptor.accept(createNewLineContentCodeMining(value.offset, '''«inferredType.name»#'''))
 				]
 			}
+		}
+	}
+
+	def static boolean isShowLiteralTypeCodeMining(STExpression expression) {
+		switch (it : expression.eContainer) {
+			STVarDeclaration case ranges.contains(expression), // suppress in array bounds
+			STArrayAccessExpression case index.contains(expression), // suppress in array subscript
+			STMultibitPartialExpression: // suppress in bit access
+				false
+			STInitializerExpression:
+				showLiteralTypeCodeMining
+			STExpression:
+				showLiteralTypeCodeMining
+			default:
+				true
+		}
+	}
+
+	def static boolean isShowLiteralTypeCodeMining(STInitializerExpression expression) {
+		switch (it : expression.eContainer) {
+			STArrayInitElement: // only show if array value (suppress in repeat count)
+				initExpressions.empty || expression !== indexOrInitExpression
+			default:
+				true
 		}
 	}
 
