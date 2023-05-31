@@ -76,7 +76,7 @@ public class FBNetworkConnection extends HideableConnection {
 	}
 
 	@Override
-	protected void handleVisibilityChange(final boolean hidden) {
+	public void handleVisibilityChange(final boolean hidden) {
 		if (hidden) {
 			setSourceDecoration(createSourceLabel());
 			setTargetDecoration(createTargetLabel());
