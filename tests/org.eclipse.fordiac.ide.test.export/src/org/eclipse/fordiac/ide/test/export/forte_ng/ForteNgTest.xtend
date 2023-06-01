@@ -348,10 +348,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						}
 						
 						
-						void FORTE_functionblock::readInputData(TEventID paEIID) {
+						void FORTE_functionblock::readInputData(TEventID) {
 						}
 						
-						void FORTE_functionblock::writeOutputData(TEventID paEIID) {
+						void FORTE_functionblock::writeOutputData(TEventID) {
 						}
 						
 						CIEC_ANY *FORTE_functionblock::getDI(size_t) {

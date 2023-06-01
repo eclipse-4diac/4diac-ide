@@ -248,14 +248,14 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateReadInputDataDefinition() '''
-		void FORTE_«type.name»::readInputData(TEventID paEIID) {
+		void FORTE_«type.name»::readInputData(TEventID«IF type.interfaceList.eventInputs.exists[!with.empty]» paEIID«ENDIF») {
 		  «IF type.interfaceList.eventInputs.exists[!with.empty]»
 		  	switch(paEIID) {
 		  	  «FOR event : type.interfaceList.eventInputs»
 		  	  	case «event.generateEventID»: {
 		  	  	  RES_DATA_CON_CRITICAL_REGION();
 		  	  	  «FOR with : event.with»
-		  	  	  	«val index = type.interfaceList.inputVars.indexOf(with.variables)»readData(«index», &«with.variables.generateName», «with.variables.generateNameAsConnection»);
+		  	  	  	«val index = type.interfaceList.inputVars.indexOf(with.variables)»readData(«index», «with.variables.generateName», «with.variables.generateNameAsConnection»);
 		  	  	  «ENDFOR»
 		  	  	  break;
 		  	  	}
@@ -272,14 +272,14 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateWriteOutputDataDefinition() '''
-		void FORTE_«type.name»::writeOutputData(TEventID paEIID) {
+		void FORTE_«type.name»::writeOutputData(TEventID«IF type.interfaceList.eventOutputs.exists[!with.empty]» paEIID«ENDIF») {
 		  «IF type.interfaceList.eventOutputs.exists[!with.empty]»
 		  	switch(paEIID) {
 		  	  «FOR event : type.interfaceList.eventOutputs»
 		  	  	case «event.generateEventID»: {
 		  	  	  RES_DATA_CON_CRITICAL_REGION();
 		  	  	  «FOR with : event.with»
-		  	  	  	«val index = type.interfaceList.outputVars.indexOf(with.variables)»writeData(«index», &«with.variables.generateName», &«with.variables.generateNameAsConnection»);
+		  	  	  	«val index = type.interfaceList.outputVars.indexOf(with.variables)»writeData(«index», «with.variables.generateName», «with.variables.generateNameAsConnection»);
 		  	  	  «ENDFOR»
 		  	  	  break;
 		  	  	}
