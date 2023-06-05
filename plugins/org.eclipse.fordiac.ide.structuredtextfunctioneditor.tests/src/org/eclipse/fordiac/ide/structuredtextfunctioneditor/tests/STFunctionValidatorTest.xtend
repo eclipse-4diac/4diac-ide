@@ -1300,4 +1300,44 @@ class STFunctionValidatorTest {
 		'''.parse.assertError(STCorePackage.eINSTANCE.STCallNamedInputArgument, Diagnostic.LINKING_DIAGNOSTIC,
 			"The parameter IN2 is undefined for the callable test2")
 	}
+
+	@Test
+	def void testNonConstantExpressionInVariableDeclaration() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				in1 : INT;
+				in2 : INT := in1;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.NON_CONSTANT_DECLARATION)
+		'''
+			FUNCTION test
+			VAR_TEMP CONSTANT
+				in1 : INT;
+				in2 : INT := in1;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testMaybeNotInitialized() {
+		'''
+			FUNCTION test
+			VAR_TEMP CONSTANT
+				in2 : INT := in1;
+				in1 : INT;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.MAYBE_NOT_INITIALIZED)
+		'''
+			FUNCTION test
+			VAR_TEMP CONSTANT
+				in1 : INT;
+				in2 : INT := in1;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
 }

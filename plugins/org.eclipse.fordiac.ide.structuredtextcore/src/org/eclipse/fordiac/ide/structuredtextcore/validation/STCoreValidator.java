@@ -151,6 +151,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String UNNECESSARY_WIDE_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryWideConversion"; //$NON-NLS-1$
 	public static final String UNNECESSARY_NARROW_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryNarrowConversion"; //$NON-NLS-1$
 	public static final String UNNECESSARY_LITERAL_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryLiteralConversion"; //$NON-NLS-1$
+	public static final String NON_CONSTANT_DECLARATION = ISSUE_CODE_PREFIX + "nonConstantInInitializer"; //$NON-NLS-1$
+	public static final String MAYBE_NOT_INITIALIZED = ISSUE_CODE_PREFIX + "maybeNotInitialized"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
 
@@ -450,6 +452,32 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 								returnDataType.getName(), expectedReturnDataType.getName(), value);
 					} catch (final ClassCastException e) {
 						// ignore (conversion is actually necessary)
+					}
+				}
+			}
+		}
+	}
+
+	@Check
+	public void checkVariableReference(final STFeatureExpression featureExpression) {
+		final STVarDeclaration declaration = EcoreUtil2.getContainerOfType(featureExpression, STVarDeclaration.class);
+		if (declaration != null
+				&& featureExpression.getFeature() instanceof final STVarDeclaration referencedVariable) {
+			if (referencedVariable.eContainer() instanceof final STVarDeclarationBlock referencedVariableBlock
+					&& !referencedVariableBlock.isConstant()) {
+				error(Messages.STCoreValidator_NonConstantExpressionInVariableDeclaration,
+						STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, NON_CONSTANT_DECLARATION);
+			} else if (STCoreUtil.getVariableScope(declaration) == STCoreUtil.getVariableScope(referencedVariable)) {
+				final INode declarationNode = NodeModelUtils.getNode(declaration);
+				final INode referencedVariableNode = NodeModelUtils.getNode(referencedVariable);
+				if (declarationNode != null && referencedVariableNode != null
+						&& declarationNode.getOffset() < referencedVariableNode.getOffset()) {
+					if (EcoreUtil2.getContainerOfType(featureExpression, ICallable.class) != null) { // local variable
+						error(Messages.STCoreValidator_VariableMaybeNotInitialized,
+								STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, MAYBE_NOT_INITIALIZED);
+					} else {
+						warning(Messages.STCoreValidator_VariableMaybeNotInitialized,
+								STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, MAYBE_NOT_INITIALIZED);
 					}
 				}
 			}

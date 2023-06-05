@@ -589,6 +589,10 @@ final class STCoreUtil {
 		}
 	}
 
+	def static EObject getVariableScope(STVarDeclaration decl) {
+		decl?.eContainer?.eContainer
+	}
+
 	def static boolean isAncestor(EClassifier clazz, EObject object) {
 		if (object === null)
 			false

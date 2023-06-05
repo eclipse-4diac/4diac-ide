@@ -57,6 +57,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_Duplicate_Variable_Name;
 	public static String STCoreValidator_IndexRangeTypeInvalid;
 	public static String STCoreValidator_NonAnyStringNotMaxLengthSettingNotAllowed;
+	public static String STCoreValidator_NonConstantExpressionInVariableDeclaration;
 	public static String STCoreValidator_MaxLengthTypeInvalid;
 	public static String STCoreValidator_TooManyIndicesGiven;
 	public static String STCoreValidator_IndexAccessTypeInvalid;
@@ -72,6 +73,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_InputsCannotBeAssigned;
 	public static String STCoreValidator_InsufficientArrayDimensions;
 	public static String STCoreValidator_CallsCannotBeAssignedTo;
+	public static String STCoreValidator_VariableMaybeNotInitialized;
 
 	static {
 		// initialize resource bundle
