@@ -17,30 +17,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
-import java.util.List;
-
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.GridLayout;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PolylineConnection;
-import org.eclipse.draw2d.RotatableDecoration;
-import org.eclipse.draw2d.RoundedRectangle;
-import org.eclipse.draw2d.StackLayout;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Geometry;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.draw2d.text.FlowPage;
-import org.eclipse.draw2d.text.ParagraphTextLayout;
-import org.eclipse.draw2d.text.TextFlow;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.Activator;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -49,95 +31,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.util.ColorHelper;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 
 public class HideableConnection extends PolylineConnection {
 
 	private static final int CONNECTION_SELECTION_TOLERANCE = 6;
 	public static final int BEND_POINT_BEVEL_SIZE = 5;
-	private static final int NORMAL_DOUBLE_LINE_WIDTH = 3;
+	public static final int NORMAL_DOUBLE_LINE_WIDTH = 3;
 	private static final int DOUBLE_LINE_AMPLIFICATION = 2;
 
 	private boolean hidden = false;
 	private Connection model;
 	private Color lighterColor;
-	private static int maxWidth;
-
-	static {
-		maxWidth = Activator.getDefault().getPreferenceStore()
-				.getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
-	}
-
-	public static class ConnectionLabel extends RoundedRectangle implements RotatableDecoration {
-
-		private final Label label;
-		private final boolean srcLabel;
-
-		public ConnectionLabel(final boolean srcLabel) {
-			super();
-			this.srcLabel = srcLabel;
-			setLayoutManager(new StackLayout());
-			setFill(true);
-			setAntialias(1);
-			setOutline(false);
-			setCornerDimensions(new Dimension(10, 10));
-
-			label = createLabel();
-			add(label);
-		}
-
-		private static Label createLabel() {
-			final Label label = new Label();
-			label.setOpaque(false);
-			label.setForegroundColor(ColorConstants.white);
-			label.setFont(getLabelFont());
-			label.setBorder(new MarginBorder(0,2,0,2));
-			return label;
-		}
-
-		public Label getLabel() {
-			return label;
-		}
-
-		private static Font getLabelFont() {
-			return JFaceResources.getFontRegistry()
-					.get(org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants.DIAGRAM_FONT);
-		}
-
-		@Override
-		public void setReferencePoint(final Point p) {
-			// we don't want this decorator to be rotated so that the number keeps readable
-		}
-
-		@Override
-		public void setLocation(final Point p) {
-			final Dimension preferredSize = super.getPreferredSize();
-			if (!srcLabel) {
-				p.x -= preferredSize.width;
-			}
-			p.y -= preferredSize.height / 2;
-			super.setBounds(new Rectangle(p, preferredSize));
-		}
-
-	}
-
-	private static class ConLabelToolTip extends Figure {
-		private final TextFlow content = new TextFlow();
-		private final FlowPage fp = new FlowPage();
-
-		public ConLabelToolTip(final String tooltipText) {
-			setLayoutManager(new GridLayout());
-			content.setText(tooltipText);
-			content.setLayoutManager(new ParagraphTextLayout(content, ParagraphTextLayout.WORD_WRAP_HARD));
-			fp.add(content);
-			add(fp);
-		}
-
-	}
 
 	public void setModel(final Connection newModel) {
 		model = newModel;
@@ -151,174 +57,42 @@ public class HideableConnection extends PolylineConnection {
 		return hidden;
 	}
 
+	public Color getLighterColor() {
+		return lighterColor;
+	}
+
 	public void setHidden(final boolean hidden) {
 		final boolean oldHidden = this.hidden;
 		this.hidden = hidden;
 		if (oldHidden != hidden) {
-			if (hidden) {
-				setSourceDecoration(createSourceLabel());
-				setTargetDecoration(createTargetLabel());
-				updateConLabels();
-			} else {
-				setSourceDecoration(null);
-				setTargetDecoration(null);
-			}
+			handleVisibilityChange(hidden);
 			invalidate();
 			repaint();
 		}
 	}
 
-	@Override
-	public ConnectionLabel getSourceDecoration() {
-		return (ConnectionLabel) super.getSourceDecoration();
-	}
-
-	@Override
-	public ConnectionLabel getTargetDecoration() {
-		return (ConnectionLabel) super.getTargetDecoration();
-	}
-
-	public void updateConLabels() {
-		if (isHidden()) {
-			getSourceDecoration().getLabel().setText(createDestinationLabelText());
-			updateSourceTooltip();
-			getTargetDecoration().getLabel().setText(createSourceLabelText());
-			updateTargetTooltip();
-		}
-	}
-
-	private RotatableDecoration createTargetLabel() {
-		final ConnectionLabel label = new ConnectionLabel(false);
-		label.setBackgroundColor(getForegroundColor());
-		return label;
-	}
-	private RotatableDecoration createSourceLabel() {
-		final ConnectionLabel label = new ConnectionLabel(true);
-		label.setBackgroundColor(getForegroundColor());
-		return label;
-	}
-
-	private String createSourceLabelText() {
-		if (getModel().getSource() != null && getModel().getDestination() != null) {
-			return createLabelText(getModel().getSource(), getModel().getDestination().getInputConnections());
-		}
-		return ""; //$NON-NLS-1$
-	}
-
-	private String createDestinationLabelText() {
-		if (getModel().getSource() != null && getModel().getDestination() != null) {
-			return createLabelText(getModel().getDestination(), getModel().getSource().getOutputConnections());
-		}
-		return ""; //$NON-NLS-1$
-	}
-
-	private void updateSourceTooltip() {
-		if (getModel().getSource() != null && getModel().getDestination() != null) {
-			getSourceDecoration().setToolTip(createSourceLabelToolTip(getModel().getSource().getOutputConnections()));
-		}
-	}
-
-	private void updateTargetTooltip() {
-		if (getModel().getSource() != null && getModel().getDestination() != null) {
-			getTargetDecoration().setToolTip(createDstLabelToolTip(getModel().getDestination().getInputConnections()));
-		}
-	}
-
-	private IFigure createSourceLabelToolTip(final EList<Connection> connections) {
-		final List<Connection> hiddenConnections = getHiddenConnections(connections);
-		if (hiddenConnections.size() > 1) {
-			final StringBuilder builder = new StringBuilder();
-			hiddenConnections.forEach(con -> {
-				if (con.getDestination() != null) {
-					builder.append(generateFullIEString(con.getDestination()));
-					builder.append('\n');
-				}
-			});
-			builder.deleteCharAt(builder.length() - 1);
-			return new ConLabelToolTip(builder.toString());
-		}
-		return null;
-	}
-
-	private IFigure createDstLabelToolTip(final EList<Connection> connections) {
-		final List<Connection> hiddenConnections = getHiddenConnections(connections);
-		if (hiddenConnections.size() > 1) {
-			final StringBuilder builder = new StringBuilder();
-			hiddenConnections.forEach(con -> {
-				if (con.getSource() != null) {
-					builder.append(generateFullIEString(con.getSource()));
-					builder.append('\n');
-				}
-			});
-			builder.deleteCharAt(builder.length() - 1);
-			return new ConLabelToolTip(builder.toString());
-		}
-		return null;
-	}
-
-	private String createLabelText(final IInterfaceElement ie, final EList<Connection> connections) {
-		final List<Connection> hiddenConnections = getHiddenConnections(connections);
-		if (hiddenConnections.size() > 1) {
-			// we have more then one hidden connection so we show the number
-			return Integer.toString(hiddenConnections.size());
-		}
-		if (ie != null) {
-			return generateIEString(ie);
-		}
-		return ""; //$NON-NLS-1$
-	}
-
-
-	private String generateIEString(final IInterfaceElement ie) {
-		final StringBuilder builder = generateFullIEString(ie);
-		if (builder.length() > maxWidth) {
-			builder.delete(0, builder.length() - maxWidth);
-			builder.insert(0, "\u2026"); //$NON-NLS-1$
-		}
-		return builder.toString();
-	}
-
-	private StringBuilder generateFullIEString(final IInterfaceElement ie) {
-		final StringBuilder builder = new StringBuilder();
-		if (ie.getFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
-			builder.append(ie.getFBNetworkElement().getName());
-			builder.append('.');
-		}
-		builder.append(ie.getName());
-		return builder;
-	}
-
-	private boolean isInterfaceBarElement(final IInterfaceElement ie) {
-		if (ie.getFBNetworkElement() instanceof final SubApp subapp) {
-			return (subapp.getSubAppNetwork() != null) && subapp.getSubAppNetwork().equals(getModel().getFBNetwork());
-		}
-		return false;
-	}
-
-	private static List<Connection> getHiddenConnections(final EList<Connection> connections) {
-		return connections.stream().filter(con -> !con.isVisible()).toList();
+	protected void handleVisibilityChange(final boolean hidden) {
+		// nothing to do here
 	}
 
 	@Override
 	public void setForegroundColor(final Color fg) {
 		super.setForegroundColor(fg);
-		if (isAdapterConnectionOrStructConnection()) {
+		if (isAdapterOrStructConnection()) {
 			lighterColor = ColorHelper.lighter(fg);
 		}
 	}
 
 	@Override
 	protected void outlineShape(final Graphics g) {
-		if (!isHidden()) {
-			if (isAdapterConnectionOrStructConnection()) {
-				drawDoublePolyline(g, getBeveledPoints());
-			} else {
-				g.drawPolyline(getBeveledPoints());
-			}
+		if (isAdapterOrStructConnection()) {
+			drawDoublePolyline(g, getBeveledPoints());
+		} else {
+			g.drawPolyline(getBeveledPoints());
 		}
 	}
 
-	private boolean isAdapterConnectionOrStructConnection() {
+	public boolean isAdapterOrStructConnection() {
 		if (model instanceof DataConnection) {
 			final IInterfaceElement refElement = getRefPin();
 			return ((null != refElement) && (refElement.getType() instanceof StructuredType));
@@ -362,7 +136,7 @@ public class HideableConnection extends PolylineConnection {
 	@Override
 	public void setLineWidth(final int w) {
 		int width = w;
-		if (isAdapterConnectionOrStructConnection()) {
+		if (isAdapterOrStructConnection()) {
 			width = Math.max(w * DOUBLE_LINE_AMPLIFICATION, NORMAL_DOUBLE_LINE_WIDTH);
 		}
 		super.setLineWidth(width);
@@ -370,8 +144,7 @@ public class HideableConnection extends PolylineConnection {
 
 	@Override
 	protected boolean shapeContainsPoint(final int x, final int y) {
-		return !isHidden()
-				&& Geometry.polylineContainsPoint(getPoints(), x, y, getLineWidth() + CONNECTION_SELECTION_TOLERANCE);
+		return Geometry.polylineContainsPoint(getPoints(), x, y, getLineWidth() + CONNECTION_SELECTION_TOLERANCE);
 	}
 
 	private PointList getBeveledPoints() {

@@ -71,11 +71,11 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 			«generateChangeFBExecutionState»
 			
 		«ENDIF»	
+		«generateExecuteEvent»
+		
 		«generateAlgorithms»
 		
 		«generateMethods»
-		
-		«generateExecuteEvent»
 		
 		«generateInterfaceDefinitions»
 		«type.internalVars.generateAccessorDefinition("getVarInternal", false)»

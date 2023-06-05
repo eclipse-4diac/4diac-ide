@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2023 Primetals Technologies Austria GmbH
- * 
+ *  
  *  This program and the accompanying materials are made available under the
  *  terms of the Eclipse Public License 2.0 which is available at
  *  http://www.eclipse.org/legal/epl-2.0.
@@ -10,7 +10,7 @@
  * 
  *  Contributors:
  *    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy;
 
@@ -31,7 +31,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage#getRootLevel()
- * @model
+ * @model extendedMetaData="name='RootLevel' kind='elementOnly'"
  * @generated
  */
 public interface RootLevel extends EObject {
@@ -43,6 +43,7 @@ public interface RootLevel extends EObject {
 	 * @return the value of the '<em>Levels</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage#getRootLevel_Levels()
 	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='levels' namespace='##targetNamespace'"
 	 * @generated
 	 */
 	EList<Level> getLevels();

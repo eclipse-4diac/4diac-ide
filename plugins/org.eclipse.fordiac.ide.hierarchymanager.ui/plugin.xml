@@ -47,12 +47,10 @@
       </viewer>
   		<viewerActionBinding
     			viewerId="org.eclipse.fordiac.ide.hierarchymanager.view">
-       <includes>
-          <actionExtension
-                pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.openLeafActionProvider">
-          </actionExtension>
-       </includes>   
-			  
+			<includes>
+          		<actionExtension pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.openLeafActionProvider"/>
+          		<actionExtension pattern="org.eclipse.ui.navigator.resources.UndoRedoActionProvider"/>
+       		</includes>
   		</viewerActionBinding>
   		<viewerContentBinding
     			viewerId="org.eclipse.fordiac.ide.hierarchymanager.view"> 
@@ -102,7 +100,7 @@
 	               <instanceof value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf"> </instanceof>               
 	            </or>
         	</enablement>
-  		</actionProvider>    
+  		</actionProvider>   		  
    	</extension>
 
    	<extension point="org.eclipse.ui.perspectiveExtensions">  
@@ -111,6 +109,33 @@
 			<showInPart id ="org.eclipse.fordiac.ide.hierarchymanager.view"/>
 		</perspectiveExtension>
    	</extension>
+	<extension
+    		point="org.eclipse.ui.handlers">
+      	<handler 
+            	class="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.RenameLevel"
+            	commandId="org.eclipse.ui.edit.rename">
+         	<activeWhen>
+         		<with variable="selection">
+			    	<count value="1" />
+			    	<iterate operator="and">
+			     		<adapt type="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level" />
+			    	</iterate>
+		   		</with>           
+         	</activeWhen>
+      	</handler>
+      	<handler 
+            	class="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.DeleteLevel"
+            	commandId="org.eclipse.ui.edit.delete">
+			<activeWhen>
+            	<with variable="selection">
+            		<count value="1" />
+			    	<iterate operator="and" ifEmpty="false">
+	         			<adapt type="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node" />
+	      			</iterate>
+		   		</with>            
+         	</activeWhen>
+		</handler>
+    </extension>  
     <extension
           point="org.eclipse.ui.commands">
        <category
@@ -123,10 +148,16 @@
              id="org.eclipse.fordiac.ide.hierarchymanager.ui.expandAll"
              name="Expand All">
        </command>
+       <command
+             categoryId="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
+             defaultHandler="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.CreateLevel"
+             id="org.eclipse.fordiac.ide.hierarchymanager.ui.createLevel"
+             name="Create Level">
+       </command>
     </extension>
     <extension
-          point="org.eclipse.ui.menus">
-       <menuContribution
+        	point="org.eclipse.ui.menus">
+       	<menuContribution
              allPopups="false"
              locationURI="toolbar:org.eclipse.fordiac.ide.hierarchymanager.view">
           <command
@@ -134,6 +165,45 @@
                 icon="platform:/plugin/org.eclipse.ui/icons/full/elcl16/expandall.png"
                 style="push">
           </command>
-       </menuContribution>
+		</menuContribution>
+		<menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
+         <command
+               commandId="org.eclipse.fordiac.ide.hierarchymanager.ui.createLevel"
+               tooltip="Create a new level">
+			<visibleWhen
+            		checkEnabled="false">
+				<with variable="activePartId">
+					<equals value="org.eclipse.fordiac.ide.hierarchymanager.view" />
+				</with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.rename"
+               tooltip="Rename selected level">
+            <visibleWhen
+                  checkEnabled="false">
+               <iterate
+                     operator="or">
+                  <instanceof
+                        value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level">
+                  </instanceof>
+               </iterate>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.delete"
+               tooltip="Delete selected node">  
+               <visibleWhen
+                  checkEnabled="false">
+               <with variable="selection">
+            		<count value="1" />
+			    	<iterate operator="and" ifEmpty="false">
+	         			<adapt type="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node" />
+	      			</iterate>
+		   		</with>
+            </visibleWhen>           
+         </command>
+      </menuContribution>
     </extension>
 </plugin>

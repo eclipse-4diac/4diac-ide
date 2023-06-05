@@ -533,7 +533,7 @@
       <wizard
             category="org.eclipse.fordiac.ide.typemanagement.wizards.sampleCategory"
             class="org.eclipse.fordiac.ide.typemanagement.wizards.ExtractedLibraryImportWizard"
-            id="org.eclipse.fordiac.ide.typemanagement.wizards.UnzippedLibraryImportWizard"
+            id="org.eclipse.fordiac.ide.typemanagement.wizards.ExtractedLibraryImportWizard"
             name="Existing Package Import">
          <description>
             Import an existing file into the workspace.
@@ -619,5 +619,36 @@
             description="Renames a iec 61499 type"
             id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
             name="Rename Type"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.activities">
+    <activity
+    	name="Library Import Wizard Hiding Activity"
+    	description="Activity for disabling the library import wizards when the selection is not correct"
+    	id="org.eclipse.fordiac.ide.ui.wizardDisabling">
+    	<enabledWhen>
+    		<and>
+    			<count value="1"/>
+      			<iterate ifEmpty="false">
+      				<or>
+      					<and>
+                        	<instanceof value="org.eclipse.core.resources.IFolder"/>
+                          	<test property="org.eclipse.core.resources.name"
+                             	value="Type Library"/>
+                        </and>
+        				<instanceof value="org.eclipse.core.resources.IProject"/>
+        			</or>
+    			</iterate>
+    		</and>
+   		</enabledWhen>
+  	</activity>
+  	<activityPatternBinding 
+  		activityId="org.eclipse.fordiac.ide.ui.wizardDisabling" 
+  		pattern=".*/org.eclipse.fordiac.ide.typemanagement.wizards.ArchivedLibraryImportWizard">
+	</activityPatternBinding>
+	<activityPatternBinding 
+  		activityId="org.eclipse.fordiac.ide.ui.wizardDisabling" 
+  		pattern=".*/org.eclipse.fordiac.ide.typemanagement.wizards.ExtractedLibraryImportWizard">
+	</activityPatternBinding>
    </extension>
 </plugin>

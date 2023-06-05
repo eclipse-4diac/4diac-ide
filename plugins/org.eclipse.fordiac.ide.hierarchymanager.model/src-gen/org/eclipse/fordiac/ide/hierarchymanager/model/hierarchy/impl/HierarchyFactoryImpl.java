@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2023 Primetals Technologies Austria GmbH
- * 
+ *  
  *  This program and the accompanying materials are made available under the
  *  terms of the Eclipse Public License 2.0 which is available at
  *  http://www.eclipse.org/legal/epl-2.0.
@@ -10,7 +10,7 @@
  * 
  *  Contributors:
  *    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl;
 
@@ -68,13 +68,24 @@ public class HierarchyFactoryImpl extends EFactoryImpl implements HierarchyFacto
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case HierarchyPackage.LEVEL: return createLevel();
-			case HierarchyPackage.ROOT_LEVEL: return createRootLevel();
-			case HierarchyPackage.NODE: return createNode();
 			case HierarchyPackage.LEAF: return createLeaf();
+			case HierarchyPackage.LEVEL: return createLevel();
+			case HierarchyPackage.NODE: return createNode();
+			case HierarchyPackage.ROOT_LEVEL: return createRootLevel();
 			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Leaf createLeaf() {
+		LeafImpl leaf = new LeafImpl();
+		return leaf;
 	}
 
 	/**
@@ -94,17 +105,6 @@ public class HierarchyFactoryImpl extends EFactoryImpl implements HierarchyFacto
 	 * @generated
 	 */
 	@Override
-	public RootLevel createRootLevel() {
-		RootLevelImpl rootLevel = new RootLevelImpl();
-		return rootLevel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Node createNode() {
 		NodeImpl node = new NodeImpl();
 		return node;
@@ -116,9 +116,9 @@ public class HierarchyFactoryImpl extends EFactoryImpl implements HierarchyFacto
 	 * @generated
 	 */
 	@Override
-	public Leaf createLeaf() {
-		LeafImpl leaf = new LeafImpl();
-		return leaf;
+	public RootLevel createRootLevel() {
+		RootLevelImpl rootLevel = new RootLevelImpl();
+		return rootLevel;
 	}
 
 	/**

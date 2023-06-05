@@ -35,10 +35,10 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNConnectionEndpointPolicy;
 import org.eclipse.fordiac.ide.application.tools.ConnectionSelectEditPartTracker;
-import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
@@ -181,8 +181,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		final HideableConnection connectionFigure = new HideableConnection();
-		connectionFigure.setModel(getModel());
+		final FBNetworkConnection connectionFigure = new FBNetworkConnection(this);
 		setConnectionColor(connectionFigure);  // needs to be done before setHidden
 		connectionFigure.setHidden(!getModel().isVisible());
 
@@ -192,7 +191,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		return connectionFigure;
 	}
 
-	private void performConnTypeConfiguration(final HideableConnection connectionFigure) {
+	private void performConnTypeConfiguration(final FBNetworkConnection connectionFigure) {
 		if (getModel() instanceof EventConnection) {
 			connectionFigure.setVisible(
 					!UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_HIDE_EVENT_CON));
@@ -205,13 +204,13 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	}
 
 	@Override
-	public HideableConnection getFigure() {
-		return (HideableConnection) super.getFigure();
+	public FBNetworkConnection getFigure() {
+		return (FBNetworkConnection) super.getFigure();
 	}
 
 	@Override
-	public HideableConnection getConnectionFigure() {
-		return (HideableConnection) super.getConnectionFigure();
+	public FBNetworkConnection getConnectionFigure() {
+		return (FBNetworkConnection) super.getConnectionFigure();
 	}
 
 	private void setConnectionColor(final PolylineConnection connection) {

@@ -322,13 +322,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						    CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr) {
 						}
 						
-						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
-						  #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
-						  #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
-						  «ALGORITHM_TEXT»
-						}
-						
-						
 						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID){
 						  do {
 						    switch(m_nECCState) {
@@ -342,6 +335,18 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						    paEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
 						  } while(true);
 						}
+						
+						void FORTE_functionblock::enterStateINIT(void) {
+						  m_nECCState = scm_nStateINIT;
+						}
+						
+						
+						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
+						  #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
+						  #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
+						  «ALGORITHM_TEXT»
+						}
+						
 						
 						void FORTE_functionblock::readInputData(TEventID paEIID) {
 						}
@@ -372,12 +377,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						CIEC_ANY *FORTE_functionblock::getVarInternal(size_t) {
 						  return nullptr;
 						}
-						
-						
-						void FORTE_functionblock::enterStateINIT(void) {
-						  m_nECCState = scm_nStateINIT;
-						}
-						
 						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)

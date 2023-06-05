@@ -43,10 +43,10 @@ import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutMapping;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
-import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -127,7 +127,7 @@ public final class FordiacGraphBuilder {
 	}
 
 	public static boolean isVisible(final ConnectionEditPart con) {
-		final HideableConnection conFigure = con.getFigure();
+		final FBNetworkConnection conFigure = con.getFigure();
 		return conFigure.isVisible() && !conFigure.isHidden();
 	}
 

@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.ant.ant;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -46,18 +47,19 @@ public class CheckSystem extends Task {
 							systemPathString));
 		}
 
-		// load the system to get the error markers is place
+		// load the system to get the error markers in place
 		SystemManager.INSTANCE.getSystem(systemFile);
-		CheckTypeLibrary.waitMarkerJobsComplete();
+		Import4diacProject.waitBuilderJobsComplete();
 
 		try {
-			final IMarker[] markers = systemFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO);
+			final var markers = Arrays.asList(systemFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO));
 
 			// log Markers, only visible in console output
 			CheckTypeLibrary.printMarkers(markers, this);
-			if (markers.length != 0) {
+			if (!markers.isEmpty()) {
 				throw new BuildException(
-						String.format("The system %s has %d errors or warnings!", systemPathString, markers.length)); //$NON-NLS-1$
+						String.format("The system %s has %d errors or warnings!", systemPathString, //$NON-NLS-1$
+								Integer.valueOf(markers.size())));
 			}
 		} catch (final CoreException e) {
 			throw new BuildException("Cannot get markers", e); //$NON-NLS-1$

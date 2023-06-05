@@ -130,17 +130,17 @@ See <a href="#buildBinary">Building a binary 4diac IDE package from source</a> f
 <h2 id="buildBinary">Building a Binary 4diac IDE Package from Source</h2>
 
 <p>For building a binary 4diac IDE package from the source code the best is to use the Maven configuration which is also used to build 4diac IDE on our build server.
-To utilize this it is best that you add the <span class="specificText">M2E - Maven Integration for Eclipse</span> to your Eclipse installation.
-You can do this by invoking <span class="menu4diac">Help &rarr; Install New Software</span>.</p> 
-  
-<p>Then the necessary steps for generating binary 4diac IDE packages are:</p>
+A modern Eclipse IDE comes with Maven integration out of the box. 
+Then the necessary steps for generating binary 4diac IDE packages are:</p>
 
 <ol>
 	<li>Have the 4diac IDE source code in an Eclipse workspace as described in <a href="#buildFromSource">Building and Running 4diac IDE from Source</a></li>
-	<li>Got to the <span class="inlineCode">org.eclipse.fordiac.ide.master</span> plugin and right click on the master.pom</li>
-	<li>Invoke the <span class="menu4diac">Run As &rarr; Maven Install</span>.</li> 
+	<li>Go to the root plugin <span class="inlineCode">org.eclipse.fordiac.ide</span> and right-click on the pom.xml</li>
+	<li>Invoke the <span class="menu4diac">Run As &rarr; Maven Install</span>.</li>	 
 	<li>After a successful build you will find the output in  <span class="folderLocation">plugins/org.eclipse.fordiac.ide.product/target/products</span> directory.</li>
 </ol>
+
+<p>Alternatively you can run <span class="mvn install"> on the command line in the root folder of 4diac IDE source code.</span>
 
 <h1>Where to go from here?</h1>
 

@@ -45,13 +45,6 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 		]
 	}
 
-	override generate() '''
-		«super.generate»
-		
-		«generateStates»
-		
-	'''
-
 	def protected generateStates() '''
 		«FOR state : type.ECC.ECState»
 			«state.generateState»
@@ -93,6 +86,8 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 		    paEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
 		  } while(true);
 		}
+		
+		«generateStates»
 	'''
 
 	def protected generateTransitionCondition(ECTransition transition) {

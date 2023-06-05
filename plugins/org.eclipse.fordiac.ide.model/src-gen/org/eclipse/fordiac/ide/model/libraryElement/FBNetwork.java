@@ -179,4 +179,20 @@ public interface FBNetwork extends EObject {
 	 */
 	FBNetworkElement getElementNamed(String name);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.Int" connectionRequired="true"
+	 * @generated
+	 */
+	int getConnectionIndex(Connection connection);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model connectionRequired="true" indexDataType="org.eclipse.emf.ecore.xml.type.Int" indexRequired="true"
+	 * @generated
+	 */
+	void addConnectionWithIndex(Connection connection, int index);
+
 } // FBNetwork

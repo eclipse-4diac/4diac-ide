@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2023 Primetals Technologies Austria GmbH
- * 
+ *  
  *  This program and the accompanying materials are made available under the
  *  terms of the Eclipse Public License 2.0 which is available at
  *  http://www.eclipse.org/legal/epl-2.0.
@@ -10,21 +10,24 @@
  * 
  *  Contributors:
  *    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
@@ -38,33 +41,23 @@ import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LevelImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LevelImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LevelImpl#getChildren <em>Children</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LevelImpl#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl.LevelImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class LevelImpl extends NodeImpl implements Level {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * The cached value of the '{@link #getChildren() <em>Children</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
+	 * @see #getChildren()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
+	protected EList<Node> children;
 
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -87,14 +80,24 @@ public class LevelImpl extends NodeImpl implements Level {
 	protected String comment = COMMENT_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getChildren() <em>Children</em>}' reference list.
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getChildren()
+	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Node> children;
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -121,21 +124,11 @@ public class LevelImpl extends NodeImpl implements Level {
 	 * @generated
 	 */
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, HierarchyPackage.LEVEL__NAME, oldName, name));
+	public EList<Node> getChildren() {
+		if (children == null) {
+			children = new EObjectContainmentEList<Node>(Node.class, this, HierarchyPackage.LEVEL__CHILDREN);
+		}
+		return children;
 	}
 
 	/**
@@ -167,11 +160,36 @@ public class LevelImpl extends NodeImpl implements Level {
 	 * @generated
 	 */
 	@Override
-	public EList<Node> getChildren() {
-		if (children == null) {
-			children = new EObjectResolvingEList<Node>(Node.class, this, HierarchyPackage.LEVEL__CHILDREN);
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, HierarchyPackage.LEVEL__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case HierarchyPackage.LEVEL__CHILDREN:
+				return ((InternalEList<?>)getChildren()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return children;
 	}
 
 	/**
@@ -182,12 +200,12 @@ public class LevelImpl extends NodeImpl implements Level {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case HierarchyPackage.LEVEL__NAME:
-				return getName();
-			case HierarchyPackage.LEVEL__COMMENT:
-				return getComment();
 			case HierarchyPackage.LEVEL__CHILDREN:
 				return getChildren();
+			case HierarchyPackage.LEVEL__COMMENT:
+				return getComment();
+			case HierarchyPackage.LEVEL__NAME:
+				return getName();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -202,15 +220,15 @@ public class LevelImpl extends NodeImpl implements Level {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case HierarchyPackage.LEVEL__NAME:
-				setName((String)newValue);
+			case HierarchyPackage.LEVEL__CHILDREN:
+				getChildren().clear();
+				getChildren().addAll((Collection<? extends Node>)newValue);
 				return;
 			case HierarchyPackage.LEVEL__COMMENT:
 				setComment((String)newValue);
 				return;
-			case HierarchyPackage.LEVEL__CHILDREN:
-				getChildren().clear();
-				getChildren().addAll((Collection<? extends Node>)newValue);
+			case HierarchyPackage.LEVEL__NAME:
+				setName((String)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -226,14 +244,14 @@ public class LevelImpl extends NodeImpl implements Level {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case HierarchyPackage.LEVEL__NAME:
-				setName(NAME_EDEFAULT);
+			case HierarchyPackage.LEVEL__CHILDREN:
+				getChildren().clear();
 				return;
 			case HierarchyPackage.LEVEL__COMMENT:
 				setComment(COMMENT_EDEFAULT);
 				return;
-			case HierarchyPackage.LEVEL__CHILDREN:
-				getChildren().clear();
+			case HierarchyPackage.LEVEL__NAME:
+				setName(NAME_EDEFAULT);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -249,12 +267,12 @@ public class LevelImpl extends NodeImpl implements Level {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case HierarchyPackage.LEVEL__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case HierarchyPackage.LEVEL__COMMENT:
-				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 			case HierarchyPackage.LEVEL__CHILDREN:
 				return children != null && !children.isEmpty();
+			case HierarchyPackage.LEVEL__COMMENT:
+				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			case HierarchyPackage.LEVEL__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -270,10 +288,10 @@ public class LevelImpl extends NodeImpl implements Level {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", comment: ");
+		result.append(" (comment: "); //$NON-NLS-1$
 		result.append(comment);
+		result.append(", name: "); //$NON-NLS-1$
+		result.append(name);
 		result.append(')');
 		return result.toString();
 	}

@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateComman
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -122,7 +121,7 @@ public class PasteCommand extends Command {
 	// remove elements, if they are already inside a selected top-level subapp.
 	private void removeDuplicateElements() {
 		copyPasteData.elements().removeIf(element -> copyPasteData.elements().stream()
-				.filter(SubApp.class::isInstance).map(SubApp.class::cast)
+				.filter(SubApp.class::isInstance).map(SubApp.class::cast).filter(subapp -> !subapp.isTyped())
 				.anyMatch(subapp -> subapp.getSubAppNetwork().getNetworkElements().contains(element)));
 	}
 
@@ -205,19 +204,12 @@ public class PasteCommand extends Command {
 
 		// copy content of Groups
 		if (element instanceof final Group group) {
-			addConnections(group.getFbNetwork().getEventConnections());
-			addConnections(group.getFbNetwork().getDataConnections());
-			addConnections(group.getFbNetwork().getAdapterConnections());
 			for (final FBNetworkElement groupElement : group.getGroupElements()) {
 				((Group) copiedElement).getGroupElements().add(copyAndCreateFB(groupElement, true));
 			}
 		}
 
 		return copiedElement;
-	}
-
-	private void addConnections(final EList<? extends Connection> conns) {
-		copyPasteData.conns().addAll(conns.stream().map(ConnectionReference::new).toList());
 	}
 
 	private static void checkDataValues(final FBNetworkElement src, final FBNetworkElement copy) {
@@ -238,8 +230,8 @@ public class PasteCommand extends Command {
 
 	private void copyConnections() {
 		for (final ConnectionReference connRef : copyPasteData.conns()) {
-			final FBNetworkElement copiedSrc = copiedElements.get(connRef.getSourceElement());
-			final FBNetworkElement copiedDest = copiedElements.get(connRef.getDestinationElement());
+			final FBNetworkElement copiedSrc = copiedElements.get(connRef.sourceElement());
+			final FBNetworkElement copiedDest = copiedElements.get(connRef.destinationElement());
 
 			if ((null != copiedSrc) || (null != copiedDest)) {
 				// Only copy if one end of the connection is copied as well otherwise we will
@@ -251,7 +243,7 @@ public class PasteCommand extends Command {
 						connCreateCmds.add(cmd);
 					}
 				} else {
-					final AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(connRef.getSource());
+					final AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(connRef.source());
 					if (null != cmd) {
 						copyConnection(connRef, copiedSrc, copiedDest, cmd);
 						if (cmd.canExecute()) { // checks if the resulting connection is valid
@@ -278,19 +270,19 @@ public class PasteCommand extends Command {
 
 	private void copyConnection(final ConnectionReference connRef, final FBNetworkElement copiedSrc,
 			final FBNetworkElement copiedDest, final AbstractConnectionCreateCommand cmd) {
-		final IInterfaceElement source = getInterfaceElement(connRef.getSource(), copiedSrc);
-		final IInterfaceElement destination = getInterfaceElement(connRef.getDestination(), copiedDest);
+		final IInterfaceElement source = getInterfaceElement(connRef.source(), copiedSrc);
+		final IInterfaceElement destination = getInterfaceElement(connRef.destination(), copiedDest);
 
 		cmd.setSource(source);
 		cmd.setDestination(destination);
-		cmd.setArrangementConstraints(connRef.getRoutingData());
-		cmd.setVisible(connRef.isVisible());
+		cmd.setArrangementConstraints(connRef.routingData());
+		cmd.setVisible(connRef.visible());
 	}
 
 	private Command copyConnectionToSubApp(final ConnectionReference connRef, final FBNetworkElement copiedSrc,
 			final FBNetworkElement copiedDest) {
-		final IInterfaceElement source = getInterfaceElement(connRef.getSource(), copiedSrc);
-		final IInterfaceElement destination = getInterfaceElement(connRef.getDestination(), copiedDest);
+		final IInterfaceElement source = getInterfaceElement(connRef.source(), copiedSrc);
+		final IInterfaceElement destination = getInterfaceElement(connRef.destination(), copiedDest);
 
 		if (source != null && destination != null) {
 			final Application sourceApp = source.getFBNetworkElement().getFbNetwork().getApplication();

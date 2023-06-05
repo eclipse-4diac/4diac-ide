@@ -28,7 +28,7 @@ public class InputWithAnchor extends WithAnchor {
 	public Point getLocation(final Point reference) {
 		final Rectangle r = Rectangle.SINGLETON;
 		r.setBounds(getBox());
-		r.translate(-1, -1);
+		r.translate(0, -1);
 		r.resize(1, 1);
 		getOwner().translateToAbsolute(r);
 		final int leftX = (int) (r.x - (float) ((WITH_DISTANCE * getZoomFactor()) * getPos()));

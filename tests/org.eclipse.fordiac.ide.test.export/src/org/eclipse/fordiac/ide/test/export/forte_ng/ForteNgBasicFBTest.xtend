@@ -139,12 +139,6 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						    CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr) {
 						}
 						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
-						  CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31> st_lv_variable = CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31>{};
-						  
-						}
-						
-						
 						void «EXPORTED_FUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID){
 						  do {
 						    switch(m_nECCState) {
@@ -158,6 +152,17 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						    paEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
 						  } while(true);
 						}
+						
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::enterStateINIT(void) {
+						  m_nECCState = scm_nStateINIT;
+						}
+
+						
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
+						  CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31> st_lv_variable = CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31>{};
+						  
+						}
+						
 						
 						void «EXPORTED_FUNCTIONBLOCK_NAME»::readInputData(TEventID paEIID) {
 						}
@@ -188,12 +193,6 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getVarInternal(size_t) {
 						  return nullptr;
 						}
-						
-						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::enterStateINIT(void) {
-						  m_nECCState = scm_nStateINIT;
-						}
-						
 						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)

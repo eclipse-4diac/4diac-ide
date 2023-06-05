@@ -92,6 +92,7 @@ import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExpo
 import static extension org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util.GlobalConstantsUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
+import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.findActualNodeFor
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
 abstract class StructuredTextSupport implements ILanguageSupport {
@@ -146,7 +147,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected CharSequence generateStatementList(List<STStatement> statements) '''
 		«FOR statement : statements»
-			«statement.generateStatement»
+			«statement.generateLineDirective»«statement.generateStatement»
 		«ENDFOR»
 	'''
 
@@ -554,6 +555,19 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			]]
 		else
 			emptySet
+	}
+
+	def protected generateLineDirective(EObject element) {
+		val node = element.findActualNodeFor
+		val sourceName = element.eResource?.URI?.lastSegment
+		if (node !== null && sourceName !== null)
+			'''#line «node.startLine» "«sourceName»"
+			'''
+		else if (node !== null)
+			'''#line «node.startLine» "unknown"
+			'''
+		else
+			""
 	}
 
 	def protected generateUniqueVariableName() '''st_lv_synthetic_«uniqueVariableIndex++»'''

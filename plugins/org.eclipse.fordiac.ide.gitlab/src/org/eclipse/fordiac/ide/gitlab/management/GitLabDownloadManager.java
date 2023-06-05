@@ -33,6 +33,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.gitlab.wizard.GitLabImportWizardPage;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Package;
@@ -89,6 +90,7 @@ public class GitLabDownloadManager {
 			}
 		} catch (GitLabApiException e) {
 			e.printStackTrace();
+			FordiacLogHelper.logError("Problem with GitLab file download", e);
 		}
 		
 	}
