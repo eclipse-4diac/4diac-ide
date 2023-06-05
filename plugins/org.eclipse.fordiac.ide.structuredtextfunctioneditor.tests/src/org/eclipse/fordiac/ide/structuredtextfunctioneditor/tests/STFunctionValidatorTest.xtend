@@ -1197,4 +1197,47 @@ class STFunctionValidatorTest {
 		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
 			"Constants cannot be assigned.")
 	}
+
+	@Test
+	def void testUnnecessaryConversions() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				INT_VAR: INT;
+				DINT_VAR: DINT;
+			END_VAR
+			DINT_VAR := INT_TO_SINT(INT_VAR);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.UNNECESSARY_CONVERSION,
+			"Unnecessary conversion from INT to SINT")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				DINT_VAR: DINT;
+				LINT_VAR: LINT;
+			END_VAR
+			DINT_VAR := LINT_TO_INT(LINT_VAR);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.UNNECESSARY_NARROW_CONVERSION, "Unnecessary narrow conversion to INT")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				INT_VAR: INT;
+				DINT_VAR: DINT;
+			END_VAR
+			INT_VAR := LINT_TO_INT(DINT_VAR);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.UNNECESSARY_WIDE_CONVERSION, "Unnecessary wide conversion from LINT")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				USINT_VAR: USINT;
+			END_VAR
+			USINT_VAR := INT_TO_USINT(INT#1024);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.UNNECESSARY_LITERAL_CONVERSION, "Unnecessary conversion of literal to USINT")
+	}
 }
