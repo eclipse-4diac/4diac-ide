@@ -19,6 +19,7 @@ import java.util.List
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextcore.FBTypeXtextResource
 import org.eclipse.xtext.ParserRule
@@ -37,17 +38,19 @@ import static extension org.eclipse.emf.common.util.URI.createPlatformResourceUR
 
 class ParseUtil {
 	
-	def protected static postProcess(IResourceServiceProvider serviceProvider, XtextResourceSet resourceSet, String text, ParserRule entryPoint, FBType fbType,
+	def protected static postProcess(IResourceServiceProvider serviceProvider, XtextResourceSet resourceSet, String text, ParserRule entryPoint, LibraryElement type,
 		Collection<? extends EObject> additionalContent, List<Issue> issues,URI uri){
 		resourceSet.loadOptions.putAll(#{
 			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
 			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
 		})
 		val resource = serviceProvider.get(XtextResource) as FBTypeXtextResource
-		resource.URI = fbType?.typeEntry?.file?.fullPath?.toString?.createPlatformResourceURI(true) ?: uri
+		resource.URI = type?.typeEntry?.file?.fullPath?.toString?.createPlatformResourceURI(true) ?: uri
 		resourceSet.resources.add(resource)
 		resource.entryPoint = entryPoint
-		resource.fbType = fbType
+		if(type instanceof FBType){
+			resource.fbType = type
+		}
 		if(!additionalContent.nullOrEmpty) (resource as STAlgorithmResource).additionalContent.addAll(additionalContent)
 		resource.load(new LazyStringInputStream(text), resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
