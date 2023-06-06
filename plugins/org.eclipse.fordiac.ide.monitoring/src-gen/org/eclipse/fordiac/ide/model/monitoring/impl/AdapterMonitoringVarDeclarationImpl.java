@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -163,22 +164,13 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	protected DataType type;
 
 	/**
-	 * The default value of the '{@link #getArraySize() <em>Array Size</em>}' attribute.
+	 * The cached value of the '{@link #getArraySize() <em>Array Size</em>}' containment reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getArraySize()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String ARRAY_SIZE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getArraySize() <em>Array Size</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getArraySize()
-	 * @generated
-	 * @ordered
-	 */
-	protected String arraySize = ARRAY_SIZE_EDEFAULT;
+	protected ArraySize arraySize;
 
 	/**
 	 * The cached value of the '{@link #getWiths() <em>Withs</em>}' reference list.
@@ -384,7 +376,21 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 */
 	@Override
-	public String getArraySize() {
+	public ArraySize getArraySize() {
+		if (arraySize != null && arraySize.eIsProxy()) {
+			InternalEObject oldArraySize = (InternalEObject)arraySize;
+			arraySize = (ArraySize)eResolveProxy(oldArraySize);
+			if (arraySize != oldArraySize) {
+				InternalEObject newArraySize = (InternalEObject)arraySize;
+				NotificationChain msgs =  oldArraySize.eInverseRemove(this, LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, null);
+				if (newArraySize.eInternalContainer() == null) {
+					msgs =  newArraySize.eInverseAdd(this, LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, oldArraySize, arraySize));
+			}
+		}
 		return arraySize;
 	}
 
@@ -393,12 +399,43 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setArraySize(String newArraySize) {
-		String oldArraySize = arraySize;
+	public ArraySize basicGetArraySize() {
+		return arraySize;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetArraySize(ArraySize newArraySize, NotificationChain msgs) {
+		ArraySize oldArraySize = arraySize;
 		arraySize = newArraySize;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, oldArraySize, arraySize));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, oldArraySize, newArraySize);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setArraySize(ArraySize newArraySize) {
+		if (newArraySize != arraySize) {
+			NotificationChain msgs = null;
+			if (arraySize != null)
+				msgs = ((InternalEObject)arraySize).eInverseRemove(this, LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, msgs);
+			if (newArraySize != null)
+				msgs = ((InternalEObject)newArraySize).eInverseAdd(this, LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, msgs);
+			msgs = basicSetArraySize(newArraySize, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, newArraySize, newArraySize));
 	}
 
 	/**
@@ -563,6 +600,10 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputConnections()).basicAdd(otherEnd, msgs);
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputConnections()).basicAdd(otherEnd, msgs);
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
+				if (arraySize != null)
+					msgs = ((InternalEObject)arraySize).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, null, msgs);
+				return basicSetArraySize((ArraySize)otherEnd, msgs);
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getWiths()).basicAdd(otherEnd, msgs);
 			default:
@@ -583,6 +624,8 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				return ((InternalEList<?>)getInputConnections()).basicRemove(otherEnd, msgs);
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
 				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
+				return basicSetArraySize(null, msgs);
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				return ((InternalEList<?>)getWiths()).basicRemove(otherEnd, msgs);
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
@@ -615,7 +658,8 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				if (resolve) return getType();
 				return basicGetType();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
-				return getArraySize();
+				if (resolve) return getArraySize();
+				return basicGetArraySize();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				return getWiths();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
@@ -659,7 +703,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				setType((DataType)newValue);
 				return;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
-				setArraySize((String)newValue);
+				setArraySize((ArraySize)newValue);
 				return;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				getWiths().clear();
@@ -703,7 +747,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				setType((DataType)null);
 				return;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
-				setArraySize(ARRAY_SIZE_EDEFAULT);
+				setArraySize((ArraySize)null);
 				return;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				getWiths().clear();
@@ -739,7 +783,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
 				return type != null;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
-				return ARRAY_SIZE_EDEFAULT == null ? arraySize != null : !ARRAY_SIZE_EDEFAULT.equals(arraySize);
+				return arraySize != null;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				return withs != null && !withs.isEmpty();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
@@ -852,8 +896,6 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 		result.append(comment);
 		result.append(", isInput: "); //$NON-NLS-1$
 		result.append(isInput);
-		result.append(", arraySize: "); //$NON-NLS-1$
-		result.append(arraySize);
 		result.append(')');
 		return result.toString();
 	}
@@ -871,20 +913,6 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public void setVarConfig(boolean config) {
 		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getArraySizeAsInt() {
-		if(getArraySize() != null){
-		   return Integer.parseInt(getArraySize());
-		}
-		return 0;
 
 	}
 

@@ -90,6 +90,15 @@ public interface LibraryElementFactory extends EFactory {
 	Application createApplication();
 
 	/**
+	 * Returns a new object of class '<em>Array Size</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Array Size</em>'.
+	 * @generated
+	 */
+	ArraySize createArraySize();
+
+	/**
 	 * Returns a new object of class '<em>Attribute</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize;
+
 import java.util.Collection;
 
 import org.eclipse.emf.common.util.EList;
@@ -97,7 +100,7 @@ public final class InterfaceListCopier {
 	public static VarDeclaration copyVar(final VarDeclaration variable, final boolean copyValues,
 			final boolean copyComments) {
 		final VarDeclaration copy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		copy.setArraySize(variable.getArraySize());
+		setArraySize(copy, getArraySize(variable));
 		copy.setVarConfig(variable.isVarConfig());
 
 		copyInterfaceElement(variable, copy, copyComments);

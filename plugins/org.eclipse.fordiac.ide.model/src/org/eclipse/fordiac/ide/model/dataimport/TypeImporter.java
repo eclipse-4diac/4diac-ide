@@ -23,6 +23,8 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize;
+
 import java.io.InputStream;
 import java.text.MessageFormat;
 
@@ -83,7 +85,7 @@ public abstract class TypeImporter extends CommonElementImporter {
 
 		final String arraySize = getAttributeValue(LibraryElementTags.ARRAYSIZE_ATTRIBUTE);
 		if (null != arraySize) {
-			v.setArraySize(arraySize);
+			setArraySize(v, arraySize);
 		}
 
 		final String initialValue = getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE);

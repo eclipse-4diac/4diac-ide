@@ -30,6 +30,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.xtext.EcoreUtil2.*
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 
 abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends ForteNgExportTemplate {
 
@@ -131,7 +132,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 
 	def protected getFORTETypeList(List<? extends VarDeclaration> elements) {
 		elements.map [
-			val arraySize = try { arraySizeAsInt } catch (Exception e) { 0 }
+			val arraySize = try { Integer.parseInt(ArraySizeHelper.getArraySize(it)) } catch (NumberFormatException e) { 0 }
 			'''«IF it.array»«"ARRAY".FORTEStringId», «arraySize», «ENDIF»«it.type.generateTypeNamePlain.FORTEStringId»'''
 		].join(", ")
 	}

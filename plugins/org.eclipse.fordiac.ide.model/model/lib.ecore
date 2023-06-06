@@ -117,6 +117,12 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArraySize" eSuperTypes="#//ErrorMarkerRef">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclaration" eType="#//VarDeclaration"
+        eOpposite="#//VarDeclaration/arraySize"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//INamedElement #//TypedElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeDeclaration" eType="#//AttributeDeclaration"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
@@ -1630,22 +1636,13 @@
       </eAnnotations>
       <eParameters name="config" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     </eOperations>
-    <eOperations name="getArraySizeAsInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if(getArraySize() != null){&#xA;   return Integer.parseInt(getArraySize());&#xA;}&#xA;return 0;&#xA;"/>
-      </eAnnotations>
-    </eOperations>
     <eOperations name="getFullTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arraySize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
-        <details key="kind" value="attribute"/>
-        <details key="name" value="arraySize"/>
-      </eAnnotations>
-    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arraySize" eType="#//ArraySize"
+        containment="true" eOpposite="#//ArraySize/varDeclaration"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="withs" upperBound="-1"
         eType="#//With" eOpposite="#//With/variables"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Value"

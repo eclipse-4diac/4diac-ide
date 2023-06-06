@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -155,7 +156,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 			newInterfaceElement = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
 		} else {
 			final VarDeclaration varDeclaration = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-			varDeclaration.setArraySize(arraySize);
+			ArraySizeHelper.setArraySize(varDeclaration, arraySize);
 			if (isInput) {
 				varDeclaration.setValue(LibraryElementFactory.eINSTANCE.createValue());
 				varDeclaration.getValue().setValue(value);

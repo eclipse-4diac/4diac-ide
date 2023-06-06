@@ -31,6 +31,7 @@ import org.eclipse.xtext.resource.XtextResource
 
 import static extension org.eclipse.emf.common.util.ECollections.*
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 
 class STAlgorithmPartitioner {
 	final static String LOST_AND_FOUND_NAME = "LOST_AND_FOUND"
@@ -138,7 +139,7 @@ class STAlgorithmPartitioner {
 			name = declaration.name
 			type = declaration.type as DataType
 			if (declaration.array) {
-				arraySize = declaration.extractArraySize
+				ArraySizeHelper.setArraySize(it, declaration.extractArraySize)
 			}
 			isInput = input
 		]

@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -193,6 +194,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass applicationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass arraySizeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1052,6 +1060,36 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EReference getApplication_FBNetwork() {
 		return (EReference)applicationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getArraySize() {
+		return arraySizeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getArraySize_Value() {
+		return (EAttribute)arraySizeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getArraySize_VarDeclaration() {
+		return (EReference)arraySizeEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -3500,8 +3538,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EAttribute getVarDeclaration_ArraySize() {
-		return (EAttribute)varDeclarationEClass.getEStructuralFeatures().get(0);
+	public EReference getVarDeclaration_ArraySize() {
+		return (EReference)varDeclarationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -3733,6 +3771,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		applicationEClass = createEClass(APPLICATION);
 		createEReference(applicationEClass, APPLICATION__FB_NETWORK);
+
+		arraySizeEClass = createEClass(ARRAY_SIZE);
+		createEAttribute(arraySizeEClass, ARRAY_SIZE__VALUE);
+		createEReference(arraySizeEClass, ARRAY_SIZE__VAR_DECLARATION);
 
 		attributeEClass = createEClass(ATTRIBUTE);
 		createEReference(attributeEClass, ATTRIBUTE__ATTRIBUTE_DECLARATION);
@@ -4060,7 +4102,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEAttribute(valueEClass, VALUE__VALUE);
 
 		varDeclarationEClass = createEClass(VAR_DECLARATION);
-		createEAttribute(varDeclarationEClass, VAR_DECLARATION__ARRAY_SIZE);
+		createEReference(varDeclarationEClass, VAR_DECLARATION__ARRAY_SIZE);
 		createEReference(varDeclarationEClass, VAR_DECLARATION__WITHS);
 		createEReference(varDeclarationEClass, VAR_DECLARATION__VALUE);
 
@@ -4127,6 +4169,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		algorithmEClass.getESuperTypes().add(this.getICallable());
 		applicationEClass.getESuperTypes().add(this.getINamedElement());
 		applicationEClass.getESuperTypes().add(this.getConfigurableObject());
+		arraySizeEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		attributeEClass.getESuperTypes().add(this.getINamedElement());
 		attributeEClass.getESuperTypes().add(this.getTypedElement());
 		attributeDeclarationEClass.getESuperTypes().add(this.getINamedElement());
@@ -4263,6 +4306,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getApplication_FBNetwork(), this.getFBNetwork(), null, "fBNetwork", null, 1, 1, Application.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(applicationEClass, this.getAutomationSystem(), "getAutomationSystem", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(arraySizeEClass, ArraySize.class, "ArraySize", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getArraySize_Value(), ecorePackage.getEString(), "value", "", 0, 1, ArraySize.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEReference(getArraySize_VarDeclaration(), this.getVarDeclaration(), this.getVarDeclaration_ArraySize(), "varDeclaration", null, 0, 1, ArraySize.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(attributeEClass, Attribute.class, "Attribute", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getAttribute_AttributeDeclaration(), this.getAttributeDeclaration(), null, "attributeDeclaration", null, 0, 1, Attribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -4885,7 +4932,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(valueEClass, this.getIInterfaceElement(), "getParentIE", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(varDeclarationEClass, VarDeclaration.class, "VarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getVarDeclaration_ArraySize(), ecorePackage.getEString(), "arraySize", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getVarDeclaration_ArraySize(), this.getArraySize(), this.getArraySize_VarDeclaration(), "arraySize", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getVarDeclaration_Withs(), this.getWith(), this.getWith_Variables(), "withs", null, 0, -1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getVarDeclaration_Value(), this.getValue(), null, "value", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -4895,8 +4942,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		op = addEOperation(varDeclarationEClass, null, "setVarConfig", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theXMLTypePackage.getBoolean(), "config", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		addEOperation(varDeclarationEClass, ecorePackage.getEInt(), "getArraySizeAsInt", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(varDeclarationEClass, ecorePackage.getEString(), "getFullTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -5483,13 +5528,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 			   "name", "Link", //$NON-NLS-1$ //$NON-NLS-2$
 			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
-		   });
-		addAnnotation
-		  (getVarDeclaration_ArraySize(),
-		   source,
-		   new String[] {
-			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
-			   "name", "arraySize" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
 		  (getVersionInfo_Author(),

@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -170,6 +171,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.ADAPTER_FB_TYPE: return createAdapterFBType();
 			case LibraryElementPackage.ADAPTER_TYPE: return createAdapterType();
 			case LibraryElementPackage.APPLICATION: return createApplication();
+			case LibraryElementPackage.ARRAY_SIZE: return createArraySize();
 			case LibraryElementPackage.ATTRIBUTE: return createAttribute();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
 			case LibraryElementPackage.BASE_FB_TYPE: return createBaseFBType();
@@ -371,6 +373,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public Application createApplication() {
 		ApplicationImpl application = new ApplicationImpl();
 		return application;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ArraySize createArraySize() {
+		ArraySizeImpl arraySize = new ArraySizeImpl();
+		return arraySize;
 	}
 
 	/**

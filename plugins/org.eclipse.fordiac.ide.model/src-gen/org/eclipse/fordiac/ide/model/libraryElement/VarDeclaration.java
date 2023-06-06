@@ -38,26 +38,28 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface VarDeclaration extends IInterfaceElement {
 	/**
-	 * Returns the value of the '<em><b>Array Size</b></em>' attribute.
+	 * Returns the value of the '<em><b>Array Size</b></em>' containment reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ArraySize#getVarDeclaration <em>Var Declaration</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Array Size</em>' attribute.
-	 * @see #setArraySize(String)
+	 * @return the value of the '<em>Array Size</em>' containment reference.
+	 * @see #setArraySize(ArraySize)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getVarDeclaration_ArraySize()
-	 * @model extendedMetaData="kind='attribute' name='arraySize'"
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ArraySize#getVarDeclaration
+	 * @model opposite="varDeclaration" containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	String getArraySize();
+	ArraySize getArraySize();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getArraySize <em>Array Size</em>}' attribute.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getArraySize <em>Array Size</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Array Size</em>' attribute.
+	 * @param value the new value of the '<em>Array Size</em>' containment reference.
 	 * @see #getArraySize()
 	 * @generated
 	 */
-	void setArraySize(String value);
+	void setArraySize(ArraySize value);
 
 	/**
 	 * Returns the value of the '<em><b>Withs</b></em>' reference list.
@@ -118,14 +120,6 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * @generated
 	 */
 	void setVarConfig(boolean config);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	int getArraySizeAsInt();
 
 	/**
 	 * <!-- begin-user-doc -->

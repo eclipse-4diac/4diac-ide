@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -240,6 +241,13 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseApplication(application);
 				if (result == null) result = caseINamedElement(application);
 				if (result == null) result = caseConfigurableObject(application);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ARRAY_SIZE: {
+				ArraySize arraySize = (ArraySize)theEObject;
+				T result = caseArraySize(arraySize);
+				if (result == null) result = caseErrorMarkerRef(arraySize);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1097,6 +1105,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseApplication(Application object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Array Size</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Array Size</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseArraySize(ArraySize object) {
 		return null;
 	}
 

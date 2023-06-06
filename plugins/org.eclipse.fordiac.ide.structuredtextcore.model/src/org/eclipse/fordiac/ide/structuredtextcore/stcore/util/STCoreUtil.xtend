@@ -61,6 +61,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser
 import org.eclipse.fordiac.ide.model.eval.function.Comment
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -89,6 +90,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression
@@ -99,7 +101,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 
 final class STCoreUtil {
 	public static final String OPTION_EXPECTED_TYPE = STCoreUtil.name + ".EXPECTED_TYPE"
@@ -443,8 +444,7 @@ final class STCoreUtil {
 		switch (feature) {
 			VarDeclaration:
 				if (feature.array)
-					TypeDeclarationParser.parseLegacyTypeDeclaration(feature.type, feature.arraySize) ?:
-						TypeDeclarationParser.parseSimpleTypeDeclaration(feature.type, feature.arraySize)
+					TypeDeclarationParser.parseTypeDeclaration(feature.type, ArraySizeHelper.getArraySize(feature))
 				else
 					feature.type
 			STVarDeclaration:

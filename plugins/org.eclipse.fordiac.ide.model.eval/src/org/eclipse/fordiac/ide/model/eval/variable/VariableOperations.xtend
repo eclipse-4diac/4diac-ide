@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.eval.value.Value
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -146,7 +147,7 @@ final class VariableOperations {
 		val copy = LibraryElementFactory.eINSTANCE.createVarDeclaration => [
 			name = decl.name
 			type = decl.type
-			arraySize = decl.arraySize
+			ArraySizeHelper.setArraySize(it, ArraySizeHelper.getArraySize(decl))
 			value = LibraryElementFactory.eINSTANCE.createValue => [value = valueString]
 		]
 		if (decl.eResource !== null) {

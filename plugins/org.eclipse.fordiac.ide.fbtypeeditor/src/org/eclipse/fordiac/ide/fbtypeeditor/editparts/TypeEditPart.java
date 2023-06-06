@@ -21,6 +21,9 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
@@ -74,6 +77,17 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	public void deactivate() {
 		super.deactivate();
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
+	}
+
+	@Override
+	protected Adapter createAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				refresh();
+			}
+		};
 	}
 
 	private IPropertyChangeListener getFontChangeListener() {

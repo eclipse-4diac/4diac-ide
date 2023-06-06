@@ -164,6 +164,29 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ArraySize} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ArraySizeItemProvider arraySizeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ArraySize}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createArraySizeAdapter() {
+		if (arraySizeItemProvider == null) {
+			arraySizeItemProvider = new ArraySizeItemProvider(this);
+		}
+
+		return arraySizeItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
