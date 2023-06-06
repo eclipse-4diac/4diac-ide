@@ -108,7 +108,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		final VarDeclaration rowItem = provider.getRowObject(rowPosition);
 		switch (columnPosition) {
 		case I4diacNatTableUtil.TYPE:
-			if (rowItem.getType() instanceof ErrorMarkerDataType) {
+			if (rowItem.getType() instanceof ErrorMarkerDataType
+					|| (rowItem.isArray() && rowItem.getArraySize().hasError())) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 			}
 			if (isEditable()) {

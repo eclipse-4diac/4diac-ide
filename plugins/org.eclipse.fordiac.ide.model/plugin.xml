@@ -165,5 +165,16 @@
     <persistent
           value="true">
     </persistent>
+ </extension>
+ <extension
+       id="typeDeclaration"
+       name="4diac IDE Type Declaration Problem"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.model.problem">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
  </extension> 
 </plugin>

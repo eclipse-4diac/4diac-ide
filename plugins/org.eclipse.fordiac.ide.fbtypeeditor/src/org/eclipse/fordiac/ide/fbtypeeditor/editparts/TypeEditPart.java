@@ -149,7 +149,8 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 		final Display display = Display.getCurrent();
 		if (null != display) {
 			if (getINamedElement() instanceof final VarDeclaration varDecl
-					&& varDecl.getType() instanceof ErrorMarkerDataType) {
+					&& (varDecl.getType() instanceof ErrorMarkerDataType
+							|| (varDecl.isArray() && varDecl.getArraySize().hasError()))) {
 				typeFigure.setOpaque(true);
 				typeFigure.setBackgroundColor(display.getSystemColor(SWT.COLOR_RED));
 			} else {

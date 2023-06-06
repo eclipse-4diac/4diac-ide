@@ -109,6 +109,22 @@ final class VariableOperations {
 		}
 	}
 
+	def static String validateType(VarDeclaration decl) {
+		if (decl.array) {
+			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				try {
+					evaluator.evaluateResultType
+					""
+				} catch (Exception e) {
+					e.message;
+				}
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+		} else
+			""
+	}
+
 	def static String validateValue(VarDeclaration decl, String initialValue) {
 		decl.withValue(initialValue).validateValue
 	}
