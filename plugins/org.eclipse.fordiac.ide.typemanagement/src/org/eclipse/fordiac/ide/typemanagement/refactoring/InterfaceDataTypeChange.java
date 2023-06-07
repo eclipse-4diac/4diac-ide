@@ -21,9 +21,9 @@ public class InterfaceDataTypeChange extends Change {
 	private final FBType fbType;
 	private final TypeEntry typeEntry;
 	private final String oldName;
-	private List<String> pinNames;
+	private final List<String> pinNames;
 
-	private CompoundCommand cmd = new CompoundCommand();
+	private final CompoundCommand cmd = new CompoundCommand();
 
 	public InterfaceDataTypeChange(final FBType fbType, final TypeEntry oldTypeEntry, final String oldName,
 			final String newName) {
@@ -47,7 +47,7 @@ public class InterfaceDataTypeChange extends Change {
 			final String typeName = varDeclaration.getTypeName();
 			if (typeName.equals(oldName)) {
 				pinNames.add(varDeclaration.getName() + ":" + typeName);
-				cmd.add(new ChangeDataTypeCommand(varDeclaration, (DataType) typeEntry.getTypeEditable()));
+				cmd.add(ChangeDataTypeCommand.forDataType(varDeclaration, (DataType) typeEntry.getTypeEditable()));
 			}
 		}
 	}

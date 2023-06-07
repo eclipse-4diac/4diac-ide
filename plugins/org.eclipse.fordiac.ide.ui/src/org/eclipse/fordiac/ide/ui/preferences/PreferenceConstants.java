@@ -48,6 +48,9 @@ public final class PreferenceConstants {
 	/** The Constant P_HIDE_DATA_CON. */
 	public static final String P_HIDE_DATA_CON = "hideDataConnections";//$NON-NLS-1$
 
+	/** The Constant P_TOGGLE_VIRTUAL_GROUP_INTERFACES. */
+	public static final String P_TOGGLE_VIRTUAL_GROUP_INTERFACES = "toggleVirtualGroupInterfaces";//$NON-NLS-1$
+
 	/**
 	 * The font to be used on all 4diac IDE graphical editors and diagrams,
 	 * currently defaults to the Text_Font
@@ -73,7 +76,7 @@ public final class PreferenceConstants {
 
 	public static final String P_SHOW_ERRORS_AT_MOUSE_CURSOR = "ShowErrorsAtMouseCursor"; //$NON-NLS-1$
 	public static final boolean P_SHOW_ERRORS_AT_MOUSE_CURSOR_DEFAULT_VALUE = true;
-	
+
 	public static final String P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX = "DeactivateCommentsTransferringDemuxToMux"; //$NON-NLS-1$
 	public static final boolean P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE = false;
 

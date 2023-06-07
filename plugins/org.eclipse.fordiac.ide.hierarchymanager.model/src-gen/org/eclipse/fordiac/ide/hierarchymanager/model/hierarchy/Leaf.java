@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2023 Primetals Technologies Austria GmbH
- * 
+ *  
  *  This program and the accompanying materials are made available under the
  *  terms of the Eclipse Public License 2.0 which is available at
  *  http://www.eclipse.org/legal/epl-2.0.
@@ -10,7 +10,7 @@
  * 
  *  Contributors:
  *    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy;
 
@@ -24,37 +24,15 @@ package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getRef <em>Ref</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getContainerFileName <em>Container File Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getRef <em>Ref</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage#getLeaf()
- * @model
+ * @model extendedMetaData="name='Leaf' kind='empty'"
  * @generated
  */
 public interface Leaf extends Node {
-	/**
-	 * Returns the value of the '<em><b>Ref</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Ref</em>' attribute.
-	 * @see #setRef(String)
-	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage#getLeaf_Ref()
-	 * @model
-	 * @generated
-	 */
-	String getRef();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getRef <em>Ref</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Ref</em>' attribute.
-	 * @see #getRef()
-	 * @generated
-	 */
-	void setRef(String value);
-
 	/**
 	 * Returns the value of the '<em><b>Container File Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -62,7 +40,8 @@ public interface Leaf extends Node {
 	 * @return the value of the '<em>Container File Name</em>' attribute.
 	 * @see #setContainerFileName(String)
 	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage#getLeaf_ContainerFileName()
-	 * @model
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        extendedMetaData="kind='attribute' name='containerFileName' namespace='##targetNamespace'"
 	 * @generated
 	 */
 	String getContainerFileName();
@@ -76,5 +55,28 @@ public interface Leaf extends Node {
 	 * @generated
 	 */
 	void setContainerFileName(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Ref</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ref</em>' attribute.
+	 * @see #setRef(String)
+	 * @see org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage#getLeaf_Ref()
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        extendedMetaData="kind='attribute' name='ref' namespace='##targetNamespace'"
+	 * @generated
+	 */
+	String getRef();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf#getRef <em>Ref</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ref</em>' attribute.
+	 * @see #getRef()
+	 * @generated
+	 */
+	void setRef(String value);
 
 } // Leaf

@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2023 Primetals Technologies Austria GmbH
- * 
+ *  
  *  This program and the accompanying materials are made available under the
  *  terms of the Eclipse Public License 2.0 which is available at
  *  http://www.eclipse.org/legal/epl-2.0.
@@ -10,7 +10,7 @@
  * 
  *  Contributors:
  *    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl;
 
@@ -20,6 +20,8 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+
+import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyFactory;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
@@ -40,14 +42,14 @@ public class HierarchyPackageImpl extends EPackageImpl implements HierarchyPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass levelEClass = null;
+	private EClass leafEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass rootLevelEClass = null;
+	private EClass levelEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -61,7 +63,7 @@ public class HierarchyPackageImpl extends EPackageImpl implements HierarchyPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass leafEClass = null;
+	private EClass rootLevelEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -109,6 +111,9 @@ public class HierarchyPackageImpl extends EPackageImpl implements HierarchyPacka
 
 		isInited = true;
 
+		// Initialize simple dependencies
+		XMLTypePackage.eINSTANCE.eClass();
+
 		// Create package meta-data objects
 		theHierarchyPackage.createPackageContents();
 
@@ -129,6 +134,36 @@ public class HierarchyPackageImpl extends EPackageImpl implements HierarchyPacka
 	 * @generated
 	 */
 	@Override
+	public EClass getLeaf() {
+		return leafEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getLeaf_ContainerFileName() {
+		return (EAttribute)leafEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getLeaf_Ref() {
+		return (EAttribute)leafEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getLevel() {
 		return levelEClass;
 	}
@@ -139,8 +174,8 @@ public class HierarchyPackageImpl extends EPackageImpl implements HierarchyPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getLevel_Name() {
-		return (EAttribute)levelEClass.getEStructuralFeatures().get(0);
+	public EReference getLevel_Children() {
+		return (EReference)levelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -159,8 +194,18 @@ public class HierarchyPackageImpl extends EPackageImpl implements HierarchyPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getLevel_Children() {
-		return (EReference)levelEClass.getEStructuralFeatures().get(2);
+	public EAttribute getLevel_Name() {
+		return (EAttribute)levelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getNode() {
+		return nodeEClass;
 	}
 
 	/**
@@ -181,46 +226,6 @@ public class HierarchyPackageImpl extends EPackageImpl implements HierarchyPacka
 	@Override
 	public EReference getRootLevel_Levels() {
 		return (EReference)rootLevelEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getNode() {
-		return nodeEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getLeaf() {
-		return leafEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getLeaf_Ref() {
-		return (EAttribute)leafEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getLeaf_ContainerFileName() {
-		return (EAttribute)leafEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -252,19 +257,19 @@ public class HierarchyPackageImpl extends EPackageImpl implements HierarchyPacka
 		isCreated = true;
 
 		// Create classes and their features
-		levelEClass = createEClass(LEVEL);
-		createEAttribute(levelEClass, LEVEL__NAME);
-		createEAttribute(levelEClass, LEVEL__COMMENT);
-		createEReference(levelEClass, LEVEL__CHILDREN);
+		leafEClass = createEClass(LEAF);
+		createEAttribute(leafEClass, LEAF__CONTAINER_FILE_NAME);
+		createEAttribute(leafEClass, LEAF__REF);
 
-		rootLevelEClass = createEClass(ROOT_LEVEL);
-		createEReference(rootLevelEClass, ROOT_LEVEL__LEVELS);
+		levelEClass = createEClass(LEVEL);
+		createEReference(levelEClass, LEVEL__CHILDREN);
+		createEAttribute(levelEClass, LEVEL__COMMENT);
+		createEAttribute(levelEClass, LEVEL__NAME);
 
 		nodeEClass = createEClass(NODE);
 
-		leafEClass = createEClass(LEAF);
-		createEAttribute(leafEClass, LEAF__REF);
-		createEAttribute(leafEClass, LEAF__CONTAINER_FILE_NAME);
+		rootLevelEClass = createEClass(ROOT_LEVEL);
+		createEReference(rootLevelEClass, ROOT_LEVEL__LEVELS);
 	}
 
 	/**
@@ -290,31 +295,130 @@ public class HierarchyPackageImpl extends EPackageImpl implements HierarchyPacka
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
 
+		// Obtain other dependent packages
+		XMLTypePackage theXMLTypePackage = (XMLTypePackage)EPackage.Registry.INSTANCE.getEPackage(XMLTypePackage.eNS_URI);
+
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		levelEClass.getESuperTypes().add(this.getNode());
 		leafEClass.getESuperTypes().add(this.getNode());
+		levelEClass.getESuperTypes().add(this.getNode());
 
-		// Initialize classes and features; add operations and parameters
-		initEClass(levelEClass, Level.class, "Level", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getLevel_Name(), ecorePackage.getEString(), "name", null, 1, 1, Level.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getLevel_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, Level.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLevel_Children(), this.getNode(), null, "children", null, 0, -1, Level.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		// Initialize classes, features, and operations; add parameters
+		initEClass(leafEClass, Leaf.class, "Leaf", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getLeaf_ContainerFileName(), theXMLTypePackage.getString(), "containerFileName", null, 0, 1, Leaf.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getLeaf_Ref(), theXMLTypePackage.getString(), "ref", null, 0, 1, Leaf.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(rootLevelEClass, RootLevel.class, "RootLevel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getRootLevel_Levels(), this.getLevel(), null, "levels", null, 0, -1, RootLevel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(levelEClass, Level.class, "Level", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getLevel_Children(), this.getNode(), null, "children", null, 0, -1, Level.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getLevel_Comment(), theXMLTypePackage.getString(), "comment", null, 0, 1, Level.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getLevel_Name(), theXMLTypePackage.getString(), "name", null, 1, 1, Level.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(nodeEClass, Node.class, "Node", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(nodeEClass, Node.class, "Node", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		initEClass(leafEClass, Leaf.class, "Leaf", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getLeaf_Ref(), ecorePackage.getEString(), "ref", null, 0, 1, Leaf.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getLeaf_ContainerFileName(), ecorePackage.getEString(), "containerFileName", null, 0, 1, Leaf.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(rootLevelEClass, RootLevel.class, "RootLevel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getRootLevel_Levels(), this.getLevel(), null, "levels", null, 0, -1, RootLevel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+		createExtendedMetaDataAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createExtendedMetaDataAnnotations() {
+		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+		addAnnotation
+		  (this,
+		   source,
+		   new String[] {
+			   "qualified", "false" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (leafEClass,
+		   source,
+		   new String[] {
+			   "name", "Leaf", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "empty" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getLeaf_ContainerFileName(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "containerFileName", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getLeaf_Ref(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "ref", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (levelEClass,
+		   source,
+		   new String[] {
+			   "name", "Level", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "elementOnly" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getLevel_Children(),
+		   source,
+		   new String[] {
+			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "children", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getLevel_Comment(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "comment", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getLevel_Name(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "name", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (nodeEClass,
+		   source,
+		   new String[] {
+			   "name", "Node", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "empty" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (rootLevelEClass,
+		   source,
+		   new String[] {
+			   "name", "RootLevel", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "elementOnly" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getRootLevel_Levels(),
+		   source,
+		   new String[] {
+			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "levels", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
 	}
 
 } //HierarchyPackageImpl

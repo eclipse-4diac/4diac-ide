@@ -28,7 +28,7 @@ public class EventColumnProvider implements IDataProvider {
 		case  I4diacNatTableUtil.COMMENT:
 			return FordiacMessages.Comment;
 		default:
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 
@@ -39,7 +39,7 @@ public class EventColumnProvider implements IDataProvider {
 
 	@Override
 	public int getColumnCount() {
-		return 3;
+		return I4diacNatTableUtil.COMMENT + 1;
 	}
 
 	@Override

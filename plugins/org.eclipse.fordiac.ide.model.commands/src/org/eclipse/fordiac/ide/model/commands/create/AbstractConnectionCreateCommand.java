@@ -19,6 +19,7 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -122,9 +123,10 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 		connection.setSource(source);
 		connection.setDestination(destination);
 		connection.setRoutingData(routingData);
-		connection.setVisible(visible);
 
 		parent.addConnection(connection);
+		// visible needs to be setup after the connection is added to correctly update ui
+		connection.setVisible(visible);
 
 		if (performMappingCheck) {
 			mirroredConnection = checkAndCreateMirroredConnection();
@@ -248,6 +250,9 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 		if (ie instanceof Event) {
 			return new EventConnectionCreateCommand(network);
 		} else if (ie instanceof VarDeclaration) {
+			if (ie.getType() instanceof StructuredType) {
+				return new StructDataConnectionCreateCommand(network);
+			}
 			return new DataConnectionCreateCommand(network);
 		}
 		return new AdapterConnectionCreateCommand(network);

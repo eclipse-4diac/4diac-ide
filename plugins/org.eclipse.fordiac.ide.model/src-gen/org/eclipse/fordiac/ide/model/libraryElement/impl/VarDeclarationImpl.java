@@ -176,7 +176,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int ARRAY_SIZE_EDEFAULT = 0;
+	protected static final String ARRAY_SIZE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getArraySize() <em>Array Size</em>}' attribute.
@@ -186,7 +186,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @generated
 	 * @ordered
 	 */
-	protected int arraySize = ARRAY_SIZE_EDEFAULT;
+	protected String arraySize = ARRAY_SIZE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getWiths() <em>Withs</em>}' reference list.
@@ -381,7 +381,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @generated
 	 */
 	@Override
-	public int getArraySize() {
+	public String getArraySize() {
 		return arraySize;
 	}
 
@@ -391,8 +391,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @generated
 	 */
 	@Override
-	public void setArraySize(int newArraySize) {
-		int oldArraySize = arraySize;
+	public void setArraySize(String newArraySize) {
+		String oldArraySize = arraySize;
 		arraySize = newArraySize;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE, oldArraySize, arraySize));
@@ -507,6 +507,30 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public void setVarConfig(final boolean config) {
 		org.eclipse.fordiac.ide.model.Annotations.setVarConfig(this,config);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getArraySizeAsInt() {
+		if(getArraySize() != null){
+		   return Integer.parseInt(getArraySize());
+		}
+		return 0;
+		
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getFullTypeName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);
 	}
 
 	/**
@@ -715,7 +739,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 				setType((DataType)newValue);
 				return;
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
-				setArraySize((Integer)newValue);
+				setArraySize((String)newValue);
 				return;
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				getWiths().clear();
@@ -797,7 +821,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
 				return type != null;
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
-				return arraySize != ARRAY_SIZE_EDEFAULT;
+				return ARRAY_SIZE_EDEFAULT == null ? arraySize != null : !ARRAY_SIZE_EDEFAULT.equals(arraySize);
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				return withs != null && !withs.isEmpty();
 			case LibraryElementPackage.VAR_DECLARATION__VALUE:

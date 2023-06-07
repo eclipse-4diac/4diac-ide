@@ -25,6 +25,7 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
@@ -38,7 +39,6 @@ import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
@@ -50,9 +50,7 @@ import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection<VarDeclaration> {
 
-	protected static final String ARRAY_SIZE = "arraysize"; //$NON-NLS-1$
 	protected static final String INITIAL_VALUE = "initialvalue"; //$NON-NLS-1$
-	protected static final int ARRAYSIZE_WIDTH = 100;
 	protected static final int INITIALVALUE_WIDTH = 100;
 	private DataTypeDropdown typeDropdown;
 
@@ -60,21 +58,6 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	protected CellEditor createTypeCellEditor(final TableViewer viewer) {
 		typeDropdown = new DataTypeDropdown(() -> getDataTypeLib().getDataTypesSorted(), viewer);
 		return typeDropdown;
-	}
-
-	@Override
-	protected Object getTypeValue(final Object element, final TableViewer viewer, final int TYPE_COLUMN_INDEX) {
-		final VarDeclaration variable = (VarDeclaration) element;
-		return variable.getTypeName();
-	}
-
-	@Override
-	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value, final TableViewer viewer) {
-		if (value instanceof String) {
-			final DataType dataType = typeDropdown.getType((String) value);
-			return (dataType == null) ? null : newChangeTypeCommand(data, dataType);
-		}
-		return null;
 	}
 
 	@Override
@@ -129,8 +112,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 			}
 			if (isEditable()) {
-
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+				configLabels.addLabel(TypeDeclarationEditorConfiguration.TYPE_DECLARATION_CELL);
 			}
 			break;
 		case I4diacNatTableUtil.INITIAL_VALUE:
@@ -168,6 +150,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
+		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.configure();
 	}
 
@@ -183,6 +166,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
+		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.configure();
 	}
 

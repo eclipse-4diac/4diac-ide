@@ -42,7 +42,7 @@ public class AdapterColumnProvider implements IDataProvider {
 
 	@Override
 	public int getColumnCount() {
-		return 3;
+		return COMMENT + 1;
 	}
 
 	@Override

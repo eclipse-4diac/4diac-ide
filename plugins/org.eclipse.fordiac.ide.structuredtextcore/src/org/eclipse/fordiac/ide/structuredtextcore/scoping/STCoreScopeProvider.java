@@ -91,6 +91,11 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			return scopeFor(DataTypeLibrary.getNonUserDefinedDataTypes(),
 					filterScope(globalScope, this::isApplicableForVariableType));
 		}
+		if (reference == STCorePackage.Literals.ST_TYPE_DECLARATION__TYPE) {
+			final IScope globalScope = super.getScope(context, reference);
+			return scopeFor(DataTypeLibrary.getNonUserDefinedDataTypes(),
+					filterScope(globalScope, this::isApplicableForTypeDeclaration));
+		}
 		if (isAnyElementaryLiteral(reference)) {
 			return new SimpleScope(Stream.concat(
 					StreamSupport.stream(Scopes.scopedElementsFor(DataTypeLibrary.getNonUserDefinedDataTypes(),
@@ -163,6 +168,11 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 		final var clazz = description.getEClass();
 		return DataPackage.eINSTANCE.getDataType().isSuperTypeOf(clazz)
 				|| LibraryElementPackage.eINSTANCE.getFBType().isSuperTypeOf(clazz);
+	}
+
+	protected boolean isApplicableForTypeDeclaration(final IEObjectDescription description) {
+		final var clazz = description.getEClass();
+		return DataPackage.eINSTANCE.getDataType().isSuperTypeOf(clazz);
 	}
 
 	protected boolean isApplicableForVariableReference(final IEObjectDescription description) {

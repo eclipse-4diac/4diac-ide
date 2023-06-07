@@ -2,7 +2,7 @@
  * Copyright (c) 2019 fortiss GmbH
  * 				 2020 Johannes Kepler Unviersity Linz
  * 				 2020 TU Wien
- *               2022 Martin Erich Jobst
+ *               2022 - 2023 Martin Erich Jobst
  *               2023 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
@@ -20,6 +20,7 @@
  *   Martin Jobst - add event accessors
  *                - add constructor calls for initial value assignments
  *                - add value conversion for initial value assignments
+ *                - refactor memory layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
 
@@ -54,7 +56,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	}
 
 	def protected generateFBClassHeader() '''
-		class «FBClassName»: public «baseClass» {
+		class «FBClassName» final : public «baseClass» {
 	'''
 
 	def protected generateHeaderIncludes() '''
@@ -70,6 +72,8 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		#include "«type.name»_gen.cpp"
 		#endif
 		
+		#include "criticalregion.h"
+		#include "resource.h"
 		«type.compilerInfo?.header»
 	'''
 
@@ -91,6 +95,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateFBDefinition() '''
 		DEFINE_FIRMWARE_FB(«FBClassName», «type.name.FORTEStringId»)
+		
 	'''
 
 	def protected generateFBInterfaceDeclaration() '''
@@ -98,16 +103,12 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			static const CStringDictionary::TStringId scm_anDataInputNames[];
 			static const CStringDictionary::TStringId scm_anDataInputTypeIds[];
 		«ENDIF»
-		
 		«IF !type.interfaceList.outputVars.empty»
 			static const CStringDictionary::TStringId scm_anDataOutputNames[];
 			static const CStringDictionary::TStringId scm_anDataOutputTypeIds[];
 		«ENDIF»
-		
-		«generateFBEventInputInterfaceDecl()»
-		
-		«generateFBEventOutputInterfaceDecl()»
-		
+		«generateFBEventInputInterfaceDecl»
+		«generateFBEventOutputInterfaceDecl»
 		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
 			«FOR adapter : type.interfaceList.sockets»
 				static const int scm_n«adapter.name»AdpNum = «type.interfaceList.sockets.indexOf(adapter)»;
@@ -122,25 +123,23 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateFBEventOutputInterfaceDecl() '''«IF !type.interfaceList.eventOutputs.empty»
 			«type.interfaceList.eventOutputs.generateEventConstants»
-			
-			«IF hasOutputWith» static const TDataIOID scm_anEOWith[]; «ENDIF»
+			«IF hasOutputWith»static const TDataIOID scm_anEOWith[]; «ENDIF»
 			static const TForteInt16 scm_anEOWithIndexes[];
 			static const CStringDictionary::TStringId scm_anEventOutputNames[];
 		«ENDIF»'''
 
 	def protected generateFBEventInputInterfaceDecl() '''«IF !type.interfaceList.eventInputs.empty»
 			«type.interfaceList.eventInputs.generateEventConstants»
-			
-			«IF hasInputWith» static const TDataIOID scm_anEIWith[];«ENDIF»
+			«IF hasInputWith»static const TDataIOID scm_anEIWith[];«ENDIF»
 			static const TForteInt16 scm_anEIWithIndexes[];
 			static const CStringDictionary::TStringId scm_anEventInputNames[];
 		«ENDIF»'''
 
 	def protected generateEventConstants(List<Event> events) '''«FOR event : events»
-			static const TEventID «event.generateEventName» = «events.indexOf(event)»;
+			static const TEventID «event.generateEventID» = «events.indexOf(event)»;
 		«ENDFOR»'''
 
-	def protected generateEventName(Event event) '''scm_nEvent«event.name»ID'''
+	def protected generateEventID(Event event) '''scm_nEvent«event.name»ID'''
 
 	def protected generateFBInterfaceDefinition() {
 		val inputWith = newArrayList
@@ -154,7 +153,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 					for (With with : event.with) {
 						inputWith.add(type.interfaceList.inputVars.indexOf(with.variables))
 					}
-					inputWith.add(255)
+					inputWith.add("scmWithListDelimiter")
 				}
 			}
 		]
@@ -169,23 +168,19 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 					for (With with : event.with) {
 						outputWith.add(type.interfaceList.outputVars.indexOf(with.variables))
 					}
-					outputWith.add(255)
+					outputWith.add("scmWithListDelimiter")
 				}
 			}
 		]
 		'''
 			«IF !type.interfaceList.inputVars.empty»
 				const CStringDictionary::TStringId «FBClassName»::scm_anDataInputNames[] = {«type.interfaceList.inputVars.FORTENameList»};
-				
 				const CStringDictionary::TStringId «FBClassName»::scm_anDataInputTypeIds[] = {«type.interfaceList.inputVars.FORTETypeList»};
 			«ENDIF»
-			
 			«IF !type.interfaceList.outputVars.empty»
 				const CStringDictionary::TStringId «FBClassName»::scm_anDataOutputNames[] = {«type.interfaceList.outputVars.FORTENameList»};
-				
 				const CStringDictionary::TStringId «FBClassName»::scm_anDataOutputTypeIds[] = {«type.interfaceList.outputVars.FORTETypeList»};
 			«ENDIF»
-			
 			«IF !type.interfaceList.eventInputs.empty»
 				«IF !inputWith.empty»
 					const TDataIOID «FBClassName»::scm_anEIWith[] = {«inputWith.join(", ")»};
@@ -193,7 +188,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 				const TForteInt16 «FBClassName»::scm_anEIWithIndexes[] = {«inputWithIndexes.join(", ")»};
 				const CStringDictionary::TStringId «FBClassName»::scm_anEventInputNames[] = {«type.interfaceList.eventInputs.FORTENameList»};
 			«ENDIF»
-			
 			«IF !type.interfaceList.eventOutputs.empty»
 				«IF !outputWith.empty»
 					const TDataIOID «FBClassName»::scm_anEOWith[] = {«outputWith.join(", ")»};
@@ -201,7 +195,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 				const TForteInt16 «FBClassName»::scm_anEOWithIndexes[] = {«outputWithIndexes.join(", ")»};
 				const CStringDictionary::TStringId «FBClassName»::scm_anEventOutputNames[] = {«type.interfaceList.eventOutputs.FORTENameList»};
 			«ENDIF»
-			
 			«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
 				const SAdapterInstanceDef «FBClassName»::scm_astAdapterInstances[] = {
 				  «FOR adapter : (type.interfaceList.sockets + type.interfaceList.plugs) SEPARATOR ",\n"»{«adapter.typeName.FORTEStringId», «adapter.name.FORTEStringId», «!adapter.isInput»}«ENDFOR»
@@ -222,8 +215,8 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		type.interfaceList.eventOutputs.exists[!it.with.empty]
 	}
 
-    // changes to this method require a recheck of the two methods generateFBInterfaceSpecSocket, generateFBInterfaceSpecPlug of AdapterFBImplTemplate
-    // as there this code is duplicated
+	// changes to this method require a recheck of the two methods generateFBInterfaceSpecSocket, generateFBInterfaceSpecPlug of AdapterFBImplTemplate
+	// as there this code is duplicated
 	def protected generateFBInterfaceSpecDefinition() '''
 		const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpec = {
 		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventInputNames, «IF hasInputWith»scm_anEIWith«ELSE»nullptr«ENDIF», scm_anEIWithIndexes«ENDIF»,
@@ -241,37 +234,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			static const SInternalVarsInformation scm_stInternalVars;
 		«ENDIF»
 	'''
-	
-	def protected generateInternalConstsDeclaration(BaseFBType baseFBType) '''
-		«IF !baseFBType.internalConstVars.isEmpty»
-		«FOR constant : baseFBType.internalConstVars»
-			static const «constant.generateTypeName» st_const_«constant.name»;
-		«ENDFOR»
-		«ENDIF»
-	'''
-
-	def protected generateInitialValueAssignmentDeclaration() '''
-		virtual void setInitialValues();
-	'''
-
-	def protected generateInitialValueAssignmentDefinition(Iterable<VarDeclaration> declarationList) '''
-		void FORTE_«type.name»::setInitialValues() {
-		  «FOR variable : declarationList»
-		  	«IF null !== variable.value && !variable.value.value.isEmpty »
-		  		«variable.generateInitialAssignment»
-		  	«ENDIF»
-		  «ENDFOR»
-		}
-	'''
-
-	def protected CharSequence generateInitialAssignment(VarDeclaration variable) {
-		try {
-			'''«EXPORT_PREFIX»«variable.name»() = «variable.generateVariableDefaultValue»;'''
-		} catch (Exception e) {
-			errors.add(e.message)
-			'''// «e.message»'''
-		}
-	}
 
 	def protected generateInternalVarDefinition(BaseFBType baseFBType) '''
 		«IF !baseFBType.internalVars.isEmpty»
@@ -280,19 +242,151 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			const SInternalVarsInformation «FBClassName»::scm_stInternalVars = {«baseFBType.internalVars.size», scm_anInternalsNames, scm_anInternalsTypeIds};
 		«ENDIF»
 	'''
+
+	def protected generateReadInputDataDeclaration() '''
+		void readInputData(TEventID paEIID) override;
+	'''
+
+	def protected generateReadInputDataDefinition() '''
+		void FORTE_«type.name»::readInputData(TEventID paEIID) {
+		  «IF type.interfaceList.eventInputs.exists[!with.empty]»
+		  	switch(paEIID) {
+		  	  «FOR event : type.interfaceList.eventInputs»
+		  	  	case «event.generateEventID»: {
+		  	  	  RES_DATA_CON_CRITICAL_REGION();
+		  	  	  «FOR with : event.with»
+		  	  	  	«val index = type.interfaceList.inputVars.indexOf(with.variables)»readData(«index», &«with.variables.generateName», «with.variables.generateNameAsConnection»);
+		  	  	  «ENDFOR»
+		  	  	  break;
+		  	  	}
+		  	  «ENDFOR»
+		  	  default:
+		  	    break;
+		  	}
+		  «ENDIF»
+		}
+	'''
+
+	def protected generateWriteOutputDataDeclaration() '''
+		void writeOutputData(TEventID paEIID) override;
+	'''
+
+	def protected generateWriteOutputDataDefinition() '''
+		void FORTE_«type.name»::writeOutputData(TEventID paEIID) {
+		  «IF type.interfaceList.eventOutputs.exists[!with.empty]»
+		  	switch(paEIID) {
+		  	  «FOR event : type.interfaceList.eventOutputs»
+		  	  	case «event.generateEventID»: {
+		  	  	  RES_DATA_CON_CRITICAL_REGION();
+		  	  	  «FOR with : event.with»
+		  	  	  	«val index = type.interfaceList.outputVars.indexOf(with.variables)»writeData(«index», &«with.variables.generateName», &«with.variables.generateNameAsConnection»);
+		  	  	  «ENDFOR»
+		  	  	  break;
+		  	  	}
+		  	  «ENDFOR»
+		  	  default:
+		  	    break;
+		  	}
+		  «ENDIF»
+		}
+	'''
 	
-	def protected generateInternalConstsDefinition(BaseFBType baseFBType) '''
-		«IF !baseFBType.internalConstVars.isEmpty»
-		«FOR constant : baseFBType.internalConstVars»
-			const «constant.generateTypeName» «FBClassName»::st_const_«constant.name» = «constant.generateVariableDefaultValue»;
+	def protected generateInterfaceDeclarations() '''
+		«type.interfaceList.inputVars.generateVariableDeclarations(false)»
+		«type.interfaceList.outputVars.generateVariableDeclarations(false)»
+		«type.interfaceList.outputVars.generateConnectionVariableDeclarations»
+		«type.interfaceList.eventOutputs.generateEventConnectionDeclarations»
+		«type.interfaceList.inputVars.generateDataConnectionDeclarations(true)»
+		«type.interfaceList.outputVars.generateDataConnectionDeclarations(false)»
+		«generateAccessorDeclaration("getDI", false)»
+		«generateAccessorDeclaration("getDO", false)»
+		«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
+		«generateConnectionAccessorsDeclaration("getEOConUnchecked", "CEventConnection *")»
+		«generateConnectionAccessorsDeclaration("getDIConUnchecked", "CDataConnection **")»
+		«generateConnectionAccessorsDeclaration("getDOConUnchecked", "CDataConnection *")»
+		«generateEventAccessorDefinitions»
+	'''
+
+	def protected generateInterfaceDefinitions() '''
+		«generateReadInputDataDefinition»
+		
+		«generateWriteOutputDataDefinition»
+		
+		«type.interfaceList.inputVars.generateAccessorDefinition("getDI", false)»
+		«type.interfaceList.outputVars.generateAccessorDefinition("getDO", false)»
+		«type.interfaceList.eventOutputs.generateConnectionAccessorsDefinition("getEOConUnchecked", "CEventConnection *")»
+		«type.interfaceList.inputVars.generateConnectionAccessorsDefinition("getDIConUnchecked", "CDataConnection **")»
+		«type.interfaceList.outputVars.generateConnectionAccessorsDefinition("getDOConUnchecked", "CDataConnection *")»
+	'''
+
+	def protected generateConnectionVariableDeclarations(List<VarDeclaration> variables) '''
+		«FOR variable : variables»
+			«variable.generateVariableTypeName» «variable.generateNameAsConnectionVariable»;
 		«ENDFOR»
+	'''
+
+	def protected generateConnectionVariableInitializer(Iterable<VarDeclaration> variables) '''
+	«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateNameAsConnectionVariable»(«variable.generateName»)«ENDFOR»'''
+
+	def protected generateEventConnectionDeclarations(List<Event> elements) '''
+		«FOR element : elements»
+			CEventConnection «element.generateNameAsConnection»;
+		«ENDFOR»
+	'''
+
+	def protected generateDataConnectionDeclarations(List<VarDeclaration> elements, boolean input) '''
+		«FOR element : elements»
+			CDataConnection «IF input»*«ENDIF»«element.generateNameAsConnection»;
+		«ENDFOR»
+	'''
+
+	def protected generateConnectionInitializer() //
+	'''«type.interfaceList.outputVars.generateConnectionVariableInitializer»«// no newline
+		»«type.interfaceList.eventOutputs.generateEventConnectionInitializer»«//no newline
+		»«type.interfaceList.inputVars.generateDataConnectionPointerInitializer»«//no newline
+		»«type.interfaceList.outputVars.generateDataConnectionInitializer»'''
+
+	def protected generateEventConnectionInitializer(List<Event> events) //
+	'''«FOR event : events BEFORE ",\n" SEPARATOR ",\n"»«event.generateNameAsConnection»(this, «events.indexOf(event)»)«ENDFOR»'''
+
+	def protected generateDataConnectionInitializer(List<VarDeclaration> variables) //
+	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateNameAsConnection»(this, «variables.indexOf(variable)», &«variable.generateNameAsConnectionVariable»)«ENDFOR»'''
+
+	def protected generateDataConnectionPointerInitializer(List<VarDeclaration> variables) //
+	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateNameAsConnection»(nullptr)«ENDFOR»'''
+
+	def protected generateConnectionAccessorsDeclaration(String function, String type) '''
+		«type»«function»(TPortId) override;
+	'''
+
+	def protected generateConnectionAccessorsDefinition(List<? extends INamedElement> elements, String function,
+		String type) '''
+		«IF elements.empty»
+			«type»«className»::«function»(TPortId) {
+			  return nullptr;
+			}
+			
+		«ELSE»
+			«type»«className»::«function»(TPortId paIndex) {
+			  switch(paIndex) {
+			    «FOR element : elements»
+			    	case «elements.indexOf(element)»: return &«element.generateNameAsConnection»;
+			    «ENDFOR»
+			  }
+			  return nullptr;
+			}
+			
 		«ENDIF»
 	'''
 
+	def protected CharSequence generateNameAsConnection(INamedElement element) '''conn_«element.name»'''
+
+	def protected CharSequence generateNameAsConnectionVariable(INamedElement element) '''var_conn_«element.name»'''
+
 	def protected generateAccessors(List<AdapterDeclaration> adapters) '''
 		«FOR adapter : adapters»
-			FORTE_«adapter.typeName»& «EXPORT_PREFIX»«adapter.name»() {
-			  return (*static_cast<FORTE_«adapter.typeName»*>(m_apoAdapters[«adapters.indexOf(adapter)»]));
+			«adapter.type.generateTypeName» &«adapter.generateName» {
+			  return *static_cast<«adapter.type.generateTypeName»*>(m_apoAdapters[«adapters.indexOf(adapter)»]);
 			};
 			
 		«ENDFOR»
@@ -318,39 +412,34 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateEventAccessorDefinition(Event event) '''
-		void «event.generateEventAccessorName»(«event.generateEventAccessorParameters») {
+		void «event.generateName»(«event.generateEventAccessorParameters») {
 		  «FOR variable : event.inputParameters.filter(VarDeclaration)»
-		  	«exportPrefix»«variable.name»() = «variable.generateName»;
+		  	«variable.generateName» = «variable.generateNameAsParameter»;
 		  «ENDFOR»
-		  receiveInputEvent(«event.generateEventName», nullptr);
+		  receiveInputEvent(«event.generateEventID», nullptr);
 		  «FOR variable : event.outputParameters.filter(VarDeclaration)»
-		  	«variable.generateName» = «exportPrefix»«variable.name»();
+		  	«variable.generateNameAsParameter» = «variable.generateName»;
 		  «ENDFOR»
 		}
 	'''
 
 	def protected generateEventAccessorCallOperator(Event event) '''
 		void operator()(«event.generateEventAccessorParameters») {
-			«event.generateEventAccessorName»(«event.generateEventAccessorForwardArguments»);
+		  «event.generateName»(«event.generateEventAccessorForwardArguments»);
 		}
 	'''
 
-	def protected generateEventAccessorName(Event event) '''evt_«event.name»'''
-
 	def protected CharSequence generateEventAccessorParameters(Event event) //
-	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«IF param.isIsInput»const «ENDIF»«param.generateTypeName» &«param.generateName»«ENDFOR»'''
+	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«IF param.isIsInput»const «ENDIF»«param.generateVariableTypeNameAsParameter» &«param.generateNameAsParameter»«ENDFOR»'''
 
 	def protected CharSequence generateEventAccessorForwardArguments(Event event) //
-	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«param.generateName»«ENDFOR»'''
+	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«param.generateNameAsParameter»«ENDFOR»'''
 
 	def protected getEventAccessorParameters(Event event) {
 		(event.inputParameters + event.outputParameters).filter(VarDeclaration)
 	}
 
 	def protected getFBClassName() '''FORTE_«type.name»'''
-
-	def protected generateBasicFBDataArray(
-		BaseFBType baseType) '''FORTE_BASIC_FB_DATA_ARRAY(«baseType.interfaceList.eventOutputs.size», «baseType.interfaceList.inputVars.size», «baseType.interfaceList.outputVars.size», «baseType.internalVars.size», «type.interfaceList.sockets.size + baseType.interfaceList.plugs.size»);'''
 
 	def generateInternalFbDefinition() '''
 		static const SCFB_FBInstanceData scmInternalFBDefinitions[];

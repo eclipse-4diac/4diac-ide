@@ -87,6 +87,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
@@ -349,6 +350,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EClass stVarDeclarationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stTypeDeclarationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1527,6 +1535,66 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getSTTypeDeclaration() {
+		return stTypeDeclarationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSTTypeDeclaration_Array() {
+		return (EAttribute)stTypeDeclarationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTTypeDeclaration_Ranges() {
+		return (EReference)stTypeDeclarationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSTTypeDeclaration_Count() {
+		return (EAttribute)stTypeDeclarationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTTypeDeclaration_Type() {
+		return (EReference)stTypeDeclarationEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTTypeDeclaration_MaxLength() {
+		return (EReference)stTypeDeclarationEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSTReturn() {
 		return stReturnEClass;
 	}
@@ -2286,6 +2354,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEReference(stVarDeclarationEClass, ST_VAR_DECLARATION__MAX_LENGTH);
 		createEReference(stVarDeclarationEClass, ST_VAR_DECLARATION__DEFAULT_VALUE);
 
+		stTypeDeclarationEClass = createEClass(ST_TYPE_DECLARATION);
+		createEAttribute(stTypeDeclarationEClass, ST_TYPE_DECLARATION__ARRAY);
+		createEReference(stTypeDeclarationEClass, ST_TYPE_DECLARATION__RANGES);
+		createEAttribute(stTypeDeclarationEClass, ST_TYPE_DECLARATION__COUNT);
+		createEReference(stTypeDeclarationEClass, ST_TYPE_DECLARATION__TYPE);
+		createEReference(stTypeDeclarationEClass, ST_TYPE_DECLARATION__MAX_LENGTH);
+
 		stReturnEClass = createEClass(ST_RETURN);
 
 		stContinueEClass = createEClass(ST_CONTINUE);
@@ -2628,6 +2703,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEReference(getSTVarDeclaration_Type(), theLibraryElementPackage.getINamedElement(), null, "type", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTVarDeclaration_MaxLength(), this.getSTExpression(), null, "maxLength", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTVarDeclaration_DefaultValue(), this.getSTInitializerExpression(), null, "defaultValue", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(stTypeDeclarationEClass, STTypeDeclaration.class, "STTypeDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getSTTypeDeclaration_Array(), ecorePackage.getEBoolean(), "array", null, 0, 1, STTypeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTTypeDeclaration_Ranges(), this.getSTExpression(), null, "ranges", null, 0, -1, STTypeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSTTypeDeclaration_Count(), ecorePackage.getEString(), "count", null, 0, -1, STTypeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTTypeDeclaration_Type(), theLibraryElementPackage.getINamedElement(), null, "type", null, 0, 1, STTypeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTTypeDeclaration_MaxLength(), this.getSTExpression(), null, "maxLength", null, 0, 1, STTypeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stReturnEClass, STReturn.class, "STReturn", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 

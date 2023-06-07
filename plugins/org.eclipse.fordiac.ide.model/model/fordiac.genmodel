@@ -23,6 +23,7 @@
     <genDataTypes ecoreDataType="lib.ecore#//TypeLibrary"/>
     <genDataTypes ecoreDataType="lib.ecore#//VarDeclList"/>
     <genClasses ecoreClass="lib.ecore#//AdapterConnection">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//AdapterConnection/fBNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterSource"
           body="return org.eclipse.fordiac.ide.model.Annotations.getAdapterSource(this);"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterDestination"
@@ -176,7 +177,7 @@
           body="return org.eclipse.fordiac.ide.model.Annotations.getDestinationElement(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/isResourceConnection"
           body="return org.eclipse.fordiac.ide.model.Annotations.isResourceConnection(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//Connection/getFBNetwork" body="return org.eclipse.fordiac.ide.model.Annotations.getFBNetwork(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Connection/getFBNetwork" body="throw new UnsupportedOperationException(&quot;subclasses will need to provide it&quot;);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/checkIfConnectionBroken"
           body="org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/updateRoutingData" body="final ConnectionRoutingData newRoutingData = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createConnectionRoutingData();&#xA;newRoutingData.setDx1(dx1);&#xA;newRoutingData.setDy(dy);&#xA;newRoutingData.setDx2(dx2);&#xA;setRoutingData(newRoutingData);">
@@ -200,6 +201,7 @@
           body="return getDx1() != 0 &amp;&amp; getDy() != 0;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//DataConnection">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//DataConnection/fBNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//DataConnection/getDataSource" body="return org.eclipse.fordiac.ide.model.Annotations.getDataSource(this);"/>
       <genOperations ecoreOperation="lib.ecore#//DataConnection/getDataDestination"
           body="return org.eclipse.fordiac.ide.model.Annotations.getDataDestination(this);"/>
@@ -272,6 +274,7 @@
       <genOperations ecoreOperation="lib.ecore#//Event/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//EventConnection">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//EventConnection/fBNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//EventConnection/getEventSource" body="return org.eclipse.fordiac.ide.model.Annotations.getEventSource(this);"/>
       <genOperations ecoreOperation="lib.ecore#//EventConnection/getEventDestination"
           body="return org.eclipse.fordiac.ide.model.Annotations.getEventDestination(this);"/>
@@ -293,6 +296,11 @@
       <genOperations ecoreOperation="lib.ecore#//FBNetwork/addConnection" body="org.eclipse.fordiac.ide.model.Annotations.addConnection(this, connection);">
         <genParameters ecoreParameter="lib.ecore#//FBNetwork/addConnection/connection"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/addConnectionWithIndex"
+          body="org.eclipse.fordiac.ide.model.Annotations.addConnectionWithIndex(this, connection, index);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/addConnectionWithIndex/connection"/>
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/addConnectionWithIndex/index"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//FBNetwork/removeConnection" body="org.eclipse.fordiac.ide.model.Annotations.removeConnection(this, connection);">
         <genParameters ecoreParameter="lib.ecore#//FBNetwork/removeConnection/connection"/>
       </genOperations>
@@ -311,6 +319,9 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//FBNetwork/getElementNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getElementNamed(this, name);">
         <genParameters ecoreParameter="lib.ecore#//FBNetwork/getElementNamed/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getConnectionIndex" body="return org.eclipse.fordiac.ide.model.Annotations.getConnectionIndex(this, connection);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/getConnectionIndex/connection"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBNetworkElement">
@@ -383,6 +394,8 @@
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getFBNetworkElement"
           body="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getTypeName" body="DataType dataType = getType();&#xA;if(dataType != null){&#xA;&#x9;return dataType.getName();&#xA;}&#xA;return null;"/>
+      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getFullTypeName"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//INamedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/name"/>
@@ -437,7 +450,8 @@
     <genClasses ecoreClass="lib.ecore#//LocalVariable">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStart"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStop"/>
-      <genOperations ecoreOperation="lib.ecore#//LocalVariable/getArraySize" body="return arrayStop-arrayStart+1;"/>
+      <genOperations ecoreOperation="lib.ecore#//LocalVariable/getArraySizeAsInt"
+          body="return arrayStop-arrayStart+1;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Mapping">
       <genFeatures createChild="false" ecoreFeature="ecore:EReference lib.ecore#//Mapping/from"/>
@@ -521,6 +535,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceSequence/serviceTransaction"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ServiceSequence/serviceSequenceType"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute lib.ecore#//ServiceSequence/startState"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceSequence/eventManager"/>
       <genOperations ecoreOperation="lib.ecore#//ServiceSequence/getService" body="return (Service) this.eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceTransaction">
@@ -606,6 +621,9 @@
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/setVarConfig" body="org.eclipse.fordiac.ide.model.Annotations.setVarConfig(this,config);">
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/setVarConfig/config"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/getArraySizeAsInt"
+          body="if(getArraySize() != null){&#xA;   return Integer.parseInt(getArraySize());&#xA;}&#xA;return 0;&#xA;"/>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/getFullTypeName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VersionInfo/author"/>

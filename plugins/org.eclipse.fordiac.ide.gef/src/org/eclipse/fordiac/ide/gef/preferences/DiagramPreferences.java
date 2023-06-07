@@ -96,6 +96,9 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to hold the layout options field
 		createGroupLayoutOptionsPins();
+
+		// Create a Group to hold the virtual group interface fields
+		createGroupVirtualGroupInterfaceOptionsPins();
 	}
 
 	private Group createGroup(final String title) {
@@ -215,6 +218,14 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		final BooleanFieldEditor connectionAutoLayout = new BooleanFieldEditor("ConnectionAutoLayout",
 				"Layout connections automatically", group);
 		addField(connectionAutoLayout);
+		configGroup(group);
+	}
+
+	private void createGroupVirtualGroupInterfaceOptionsPins() {
+		final Group group = createGroup("Virtual Group Interface Options");
+		final BooleanFieldEditor vgi = new BooleanFieldEditor("VirtualGroupInterfaces",
+				"Enable Virtual Group Interfaces", group);
+		addField(vgi);
 		configGroup(group);
 	}
 

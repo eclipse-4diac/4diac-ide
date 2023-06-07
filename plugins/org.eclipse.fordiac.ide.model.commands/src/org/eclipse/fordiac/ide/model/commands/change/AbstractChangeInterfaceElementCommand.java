@@ -36,8 +36,8 @@ public abstract class AbstractChangeInterfaceElementCommand extends Command {
 	@Override
 	public final void execute() {
 		doExecute();
-		if (interfaceElement instanceof VarDeclaration && ((VarDeclaration) interfaceElement).getValue() != null) {
-			validateValue((VarDeclaration) interfaceElement);
+		if (interfaceElement instanceof final VarDeclaration varDeclaration && varDeclaration.getValue() != null) {
+			validateValue(varDeclaration);
 		}
 		errorMarkerUpdateCmds.execute();
 	}
@@ -64,18 +64,18 @@ public abstract class AbstractChangeInterfaceElementCommand extends Command {
 
 	@Override
 	public final void undo() {
-		doUndo();
-		if (interfaceElement instanceof VarDeclaration && ((VarDeclaration) interfaceElement).getValue() != null) {
-			((VarDeclaration) interfaceElement).getValue().setErrorMessage(oldValueErrorMessage);
-		}
 		errorMarkerUpdateCmds.undo();
+		if (interfaceElement instanceof final VarDeclaration varDeclaration && varDeclaration.getValue() != null) {
+			varDeclaration.getValue().setErrorMessage(oldValueErrorMessage);
+		}
+		doUndo();
 	}
 
 	@Override
 	public final void redo() {
 		doRedo();
-		if (interfaceElement instanceof VarDeclaration && ((VarDeclaration) interfaceElement).getValue() != null) {
-			((VarDeclaration) interfaceElement).getValue().setErrorMessage(newValueErrorMessage);
+		if (interfaceElement instanceof final VarDeclaration varDeclaration && varDeclaration.getValue() != null) {
+			varDeclaration.getValue().setErrorMessage(newValueErrorMessage);
 		}
 		errorMarkerUpdateCmds.redo();
 	}

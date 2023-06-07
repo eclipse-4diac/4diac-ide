@@ -11,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Prankur Agarwal - added handling for structs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
@@ -19,6 +20,8 @@ import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnection
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -38,6 +41,13 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 			return null; // Elements which are not connected by a with construct are not allowed to be
 			// connected
 		}
+
+		if (cmd.getSource().getType() instanceof StructuredType) {
+			final StructDataConnectionCreateCommand command = new StructDataConnectionCreateCommand(getParentNetwork());
+			command.setSource(cmd.getSource());
+			return command;
+		}
+
 		return cmd;
 
 	}

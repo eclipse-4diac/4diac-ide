@@ -20,12 +20,12 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
 public class ExtractedLibraryImportWizard extends Wizard implements IImportWizard {
-	
+
 	private ExtractedLibraryImportWizardPage firstPage;
 	private StructuredSelection selection;
 
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 		this.selection = new StructuredSelection(selection.toList());
 		setWindowTitle(Messages.ExtractedLibraryImportWizard);
 		setNeedsProgressMonitor(true);
@@ -36,11 +36,10 @@ public class ExtractedLibraryImportWizard extends Wizard implements IImportWizar
 		firstPage.importLib();
 		return true;
 	}
-	
+
 	@Override
 	public void addPages() {
 		firstPage = new ExtractedLibraryImportWizardPage(Messages.ImportExtractedFiles, selection);
-        addPage(firstPage);
+		addPage(firstPage);
 	}
-
 }

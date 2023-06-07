@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
+
 import java.io.IOException;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -21,7 +22,7 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
 public class ArchivedLibraryImportWizard extends Wizard implements IImportWizard {
-	
+
 	private ArchivedLibraryImportWizardPage firstPage;
 	private StructuredSelection selection;
 
@@ -29,23 +30,23 @@ public class ArchivedLibraryImportWizard extends Wizard implements IImportWizard
 	public boolean performFinish() {
 		try {
 			firstPage.unzipAndImportArchive();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		return true;
 	}
 
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) { 
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 		this.selection = new StructuredSelection(selection.toList());
 		setWindowTitle("Archive Import Wizard"); //NON-NLS-1
 		setNeedsProgressMonitor(true);
 	}
-	
+
 	@Override
-    public void addPages() {
-		firstPage = new ArchivedLibraryImportWizardPage("Import Archived Files", selection); //NON-NLS-1
-        addPage(firstPage);
-    }
-	
+	public void addPages() {
+		firstPage = new ArchivedLibraryImportWizardPage("Import Archived Files", selection); // NON-NLS-1
+		addPage(firstPage);
+	}
+
 }

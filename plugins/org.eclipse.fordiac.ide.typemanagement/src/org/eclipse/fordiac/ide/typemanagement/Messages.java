@@ -30,6 +30,7 @@ public final class Messages extends NLS {
 	public static String FBTypeComposedAdapterFactory_FBTypecomposedAdapterFactoryShouldNotBeInsantiated;
 	public static String ImportExtractedFiles;
 	public static String ImportFailed;
+	public static String ImportFailedOnLinkCreation;
 	public static String NewFBTypeWizard_TemplateNotAvailable;
 	public static String NewFBTypeWizardPage_TypeAlreadyExists;
 	public static String NewFBTypeWizardPage_CreateNewType;

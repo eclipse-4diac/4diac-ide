@@ -20,20 +20,67 @@ import org.eclipse.fordiac.ide.model.data.LdateType
 import org.eclipse.fordiac.ide.model.data.LdtType
 import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.data.LtodType
+import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.data.WstringType
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 
 final class ForteNgExportUtil {
-	private new() {
+	public static final CharSequence VARIABLE_EXPORT_PREFIX = "var_"
+	public static final CharSequence EVENT_EXPORT_PREFIX = "evt_"
+	public static final CharSequence FB_EXPORT_PREFIX = "fb_"
+
+	def static CharSequence generateName(VarDeclaration variable) {
+		switch (root : variable.rootContainer) {
+			BaseFBType case root.internalConstVars.contains(variable): '''«VARIABLE_EXPORT_PREFIX»const_«variable.name»'''
+			AdapterType: '''«VARIABLE_EXPORT_PREFIX»«variable.name»()'''
+			default: '''«VARIABLE_EXPORT_PREFIX»«variable.name»'''
+		}
 	}
 
-	def static CharSequence generateTypeName(VarDeclaration variable) //
-	'''«IF variable.array»CIEC_ARRAY_COMMON<«ENDIF»«variable.type.generateTypeName»«IF variable.array»>«ENDIF»'''
+	def static CharSequence generateName(FB feature) '''«FB_EXPORT_PREFIX»«feature.name»()'''
 
-	def static CharSequence generateTypeName(DataType type) '''CIEC_«type.generateTypeNamePlain»'''
+	def static CharSequence generateName(Event feature) '''«EVENT_EXPORT_PREFIX»«feature.name»'''
+
+	def static CharSequence generateName(AdapterFB feature) '''«VARIABLE_EXPORT_PREFIX»«feature.name»()'''
+
+	def static CharSequence generateName(AdapterDeclaration feature) '''«VARIABLE_EXPORT_PREFIX»«feature.name»()'''
+
+	def static CharSequence generateTypeName(INamedElement type) {
+		switch (type) {
+			AdapterType: '''FORTE_«type.generateTypeNamePlain»'''
+			ArrayType:
+				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
+					val fixed = subrange.setLowerLimit && subrange.setUpperLimit
+					'''«IF fixed»CIEC_ARRAY_FIXED«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«result»«IF fixed», «subrange.lowerLimit», «subrange.upperLimit»«ENDIF»>'''
+				].toString
+			DataType: '''CIEC_«type.generateTypeNamePlain»«IF GenericTypes.isAnyType(type)»_VARIANT«ENDIF»'''
+			default:
+				type.name
+		}
+	}
+
+	def static CharSequence generateTypeNameAsParameter(INamedElement type) {
+		switch (type) {
+			ArrayType:
+				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
+					'''CIEC_ARRAY_COMMON<«result»>'''
+				].toString
+			default:
+				type.generateTypeName
+		}
+	}
 
 	def static String generateTypeNamePlain(DataType type) {
 		switch (type) {
@@ -50,5 +97,9 @@ final class ForteNgExportUtil {
 			WstringType: "WSTRING"
 			default: type.name
 		}
+	}
+
+	private new() {
+		throw new UnsupportedOperationException
 	}
 }

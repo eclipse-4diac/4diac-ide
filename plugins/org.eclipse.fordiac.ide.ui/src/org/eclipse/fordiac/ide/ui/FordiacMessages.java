@@ -24,7 +24,6 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
 public final class FordiacMessages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.ui.messages"; //$NON-NLS-1$
 
@@ -34,7 +33,6 @@ public final class FordiacMessages extends NLS {
 	public static String Algorithms;  // NOSONAR
 	public static String ApplicationDomain;  // NOSONAR
 	public static String ApplicationName;  // NOSONAR
-	public static String ArraySize;  // NOSONAR
 	public static String Author;  // NOSONAR
 	public static String Classdef;  // NOSONAR
 	public static String Classification;  // NOSONAR
@@ -102,7 +100,7 @@ public final class FordiacMessages extends NLS {
 	public static String FordiacPreferencePage_LABEL_AnyRealConnectorColor;  // NOSONAR
 	public static String FordiacPreferencePage_LABEL_AnyStringConnectorColor;  // NOSONAR
 	public static String FordiacPreferencePage_LABEL_DataConnectorColor;  // NOSONAR
-	public static String FordiacPreferencePage_LABEL_ShowErrorsAtMouseCursor;
+	public static String FordiacPreferencePage_LABEL_ShowErrorsAtMouseCursor;  // NOSONAR
 
 	public static String FordiacPreferencePage_LABEL_DeactivateTransferingComments_DEMUX_to_MUX; // NOSONAR
 	public static String FordiacPreferencePage_LABEL_DefaultAdapterConnectorColor;  // NOSONAR

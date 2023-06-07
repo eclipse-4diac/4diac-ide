@@ -26,10 +26,12 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.CoverageCalculator;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.Permutations;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -52,7 +54,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 
 			final List<List<Object>> allCombinationsSimple = getAllCombinationsOfEvents(
 					((FBType) ((EditPart) selection.getFirstElement()).getModel()).getInterfaceList().getEventInputs()
-							.stream().toArray());
+					.stream().toArray());
 
 			final EList<ECState> states = ((BasicFBType) fbtype).getECC().getECState();
 
@@ -63,6 +65,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 			final List<EventManager> eventManagers = createEventManagers(fbtype, combinations);
 
 			for (final EventManager eventManager : eventManagers) {
+				TransactionFactory.addTraceInfoTo(eventManager.getTransactions());
 				EventManagerUtils.process(eventManager);
 
 				final CreateServiceSequenceCommand cmd = new CreateServiceSequenceCommand(
@@ -73,10 +76,15 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 				final ServiceSequence seq = (ServiceSequence) cmd.getCreatedElement();
 				seq.setStartState(combinations.get(eventManagers.indexOf(eventManager)).getStartState().getName());
 
+				seq.setComment(
+						"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions())); //$NON-NLS-1$
+				seq.setEventManager(eventManager);
+
 				for (final Transaction transaction : eventManager.getTransactions()) {
 
 					ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbtype, (FBTransaction) transaction);
 				}
+
 			}
 
 		}

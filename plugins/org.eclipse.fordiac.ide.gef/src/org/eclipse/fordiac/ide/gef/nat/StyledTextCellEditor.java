@@ -280,7 +280,7 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 		textControl.addVerifyKeyListener(event -> {
 			// if the proposal popup is open we do not handle keystrokes
 			// ourself to ensure proposal handling is working correctly
-			if (!isProposalPopupOpen()) {
+			if (event.doit && !isProposalPopupOpen()) {
 				if (isCommitOnEnter() && (event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR)) {
 
 					boolean commit = event.stateMask != SWT.MOD3;

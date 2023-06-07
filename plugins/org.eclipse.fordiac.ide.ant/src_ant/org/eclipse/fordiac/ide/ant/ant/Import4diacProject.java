@@ -14,8 +14,7 @@ package org.eclipse.fordiac.ide.ant.ant;
 
 import java.io.File;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -27,9 +26,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
 public class Import4diacProject extends Task {
@@ -56,7 +57,7 @@ public class Import4diacProject extends Task {
 				loadProject(description, project, projectPath);
 			}
 			check4diacProject(project);
-
+			TypeLibraryManager.INSTANCE.getTypeLibrary(project).reload();
 			waitBuilderJobsComplete();
 		} catch (final CoreException e) {
 			throw new BuildException(e);
@@ -120,31 +121,70 @@ public class Import4diacProject extends Task {
 
 	private IProgressMonitor getMonitor() {
 		IProgressMonitor monitor = null;
-		final var references = getProject().getReferences();
-		if (references != null) {
-			monitor = (IProgressMonitor) references.get(AntCorePlugin.ECLIPSE_PROGRESS_MONITOR);
+		final var project = getProject();
+		if (project != null) {
+			final var references = project.getReferences();
+			if (references != null) {
+				monitor = (IProgressMonitor) references.get(AntCorePlugin.ECLIPSE_PROGRESS_MONITOR);
+			}
 		}
 		return monitor;
 	}
 
 	public static void waitBuilderJobsComplete() {
-		Job[] jobs = Job.getJobManager().find(null); // get all current scheduled jobs
+		waitJobsComplete(job -> !(job.getName().startsWith("Compacting") //$NON-NLS-1$
+				|| job.getName().startsWith("Periodic workspace save."))); //$NON-NLS-1$
+	}
 
-		while (buildJobExists(jobs)) {
-			try {
-				Thread.sleep(50);
-			} catch (final InterruptedException e) {
-				Thread.currentThread().interrupt();
+	public static void waitJobsComplete(final Predicate<Job> isValidJob) {
+
+		// Minimum wait time is needed to ensure that jobs are started by the ResourceChangeListener
+
+		final int MINIUM_WAIT_TIME_MS = 1000;
+		final int SLEEP_TIME_MS = 50;
+
+		final int ADDITIONAL_CYCLES = (MINIUM_WAIT_TIME_MS + 1 + (SLEEP_TIME_MS / 2)) / SLEEP_TIME_MS;
+
+		int allJobsDone = ADDITIONAL_CYCLES;
+		do {
+			// wait for all jobs to be done
+			final Job[] jobs = Job.getJobManager().find(null); // get all current scheduled jobs
+			boolean unfinishedJobs = false;
+			for (final var job : jobs) {
+				if (isValidJob.test(job)) {
+					if (job.getResult() == null) {
+						unfinishedJobs = true;
+						allJobsDone = ADDITIONAL_CYCLES; // reset allJobsDone if a Job has been added during waiting
+					}
+					join(job, SLEEP_TIME_MS);
+				}
 			}
-			jobs = Job.getJobManager().find(null); // update the job list
+			// if there are no jobs in the list we wait some additional cycles
+			// if new jobs show up we wait for them to finish as well
+			if (!unfinishedJobs) {
+				allJobsDone--;
+				sleep(SLEEP_TIME_MS);
+			}
+		} while (allJobsDone > 0);
+
+	}
+
+	private static void sleep(final int SLEEP_TIME_NS) {
+		try {
+			Thread.sleep(SLEEP_TIME_NS);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
 		}
 	}
 
-	private static boolean buildJobExists(final Job[] jobs) {
-		final Optional<Job> findAny = Arrays.stream(jobs)
-				.filter(j -> (j.getState() != Job.NONE && j.getName().startsWith("Building"))) //$NON-NLS-1$
-				.findAny();
-		return findAny.isPresent();
+	private static void join(final Job job, final int SLEEP_TIME_NS) {
+		try {
+			job.join(SLEEP_TIME_NS, null);
+		} catch (final OperationCanceledException e) {
+			throw new BuildException(e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
 	}
 
 }

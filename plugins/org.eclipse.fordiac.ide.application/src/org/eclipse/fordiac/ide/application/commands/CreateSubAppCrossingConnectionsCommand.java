@@ -23,6 +23,7 @@ import java.util.ListIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -267,11 +268,13 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 			return false;
 		}
 
-		if (!LinkConstraints.typeCheck(source, destination)) {
+		if (!(source.getType() instanceof StructuredType && destination.getType() instanceof StructuredType)
+				&& (!LinkConstraints.typeCheck(source, destination))) {
 			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
 					(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
 							(null != destination.getType()) ? destination.getType().getName() : FordiacMessages.NA));
 			return false;
+
 		}
 
 		return LinkConstraints.isWithConstraintOK(source) && LinkConstraints.isWithConstraintOK(destination);

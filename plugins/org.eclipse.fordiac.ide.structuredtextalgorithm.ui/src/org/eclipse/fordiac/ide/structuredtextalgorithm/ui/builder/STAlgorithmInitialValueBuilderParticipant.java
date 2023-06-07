@@ -105,6 +105,9 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(varDeclaration);
 		final List<Issue> issues = new ArrayList<>();
+		if (varDeclaration.isArray()) {
+			StructuredTextParseUtil.validateType(varDeclaration, issues);
+		}
 		if (!value.isBlank()) { // do not parse value if blank
 			StructuredTextParseUtil.validate(value, delta.getUri(), STCoreUtil.getFeatureType(varDeclaration), null,
 					null, issues);

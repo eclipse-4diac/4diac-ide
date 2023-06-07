@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -38,7 +39,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 	private final DataType dataType;
 	private final boolean isInput;
 	private final int index;
-	private int arraySize;
+	private String arraySize;
 	private String value;
 
 	private AdapterCreateCommand adapterCreateCmd;
@@ -75,7 +76,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 	}
 
 	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
-			final boolean isInput, final int arraySize, final String value, final int index) {
+			final boolean isInput, final String arraySize, final String value, final int index) {
 		this(dataType, name, interfaceList, isInput, index);
 		this.arraySize = arraySize;
 		this.value = value != null ? value : ""; //$NON-NLS-1$
@@ -203,6 +204,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 
 	private boolean shouldAdapterFBBeCreated() {
 		return (dataType instanceof AdapterType)
+				&& (targetInterfaceList.eContainer() instanceof CompositeFBType)
 				&& !(targetInterfaceList.eContainer() instanceof SubAppType);
 	}
 

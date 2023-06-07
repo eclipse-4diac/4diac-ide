@@ -46,13 +46,6 @@ public class CommentTypeField {
 		this.typeField = new TypeField(referencedElement);
 	}
 
-	public String getLabel() {
-		if (getReferencedElement().isIsInput()) {
-			return commentField.getLabel() + separator.getLabel() + typeField.getArrayLabel();
-		}
-		return typeField.getArrayLabel() + separator.getLabel() + commentField.getLabel();
-	}
-
 	@SuppressWarnings("rawtypes")
 	public List getChildren() {
 		final List<Object> children = new ArrayList<>();

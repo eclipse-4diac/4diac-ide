@@ -83,13 +83,7 @@ public abstract class TypeImporter extends CommonElementImporter {
 
 		final String arraySize = getAttributeValue(LibraryElementTags.ARRAYSIZE_ATTRIBUTE);
 		if (null != arraySize) {
-			try {
-				v.setArraySize(Integer.parseInt(arraySize));
-			} catch (final NumberFormatException nfe) {
-				throw new TypeImportException(Messages.Import_ERROR_ArraySize_NumberFormat, nfe);
-			}
-		} else {
-			v.setArraySize(-1);
+			v.setArraySize(arraySize);
 		}
 
 		final String initialValue = getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE);

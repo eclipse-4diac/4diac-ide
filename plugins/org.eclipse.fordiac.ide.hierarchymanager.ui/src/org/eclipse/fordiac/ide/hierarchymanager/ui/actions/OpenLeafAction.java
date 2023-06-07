@@ -75,7 +75,7 @@ public class OpenLeafAction extends BaseSelectionListenerAction {
 	}
 
 	private IProject getProject() {
-		return (phView.getCommonViewer().getInput() instanceof final IProject proj) ? proj : null;
+		return phView.getCurrentProject();
 	}
 
 	private EObject getTypeEditable(final String containerFileName) {

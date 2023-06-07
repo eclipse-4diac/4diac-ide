@@ -343,6 +343,31 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTVarDeclarationAccess().getRule();
 	}
 	
+	//STTypeDeclaration:
+	//    {STTypeDeclaration}
+	//    (array?='ARRAY' (('[' ranges+=(STExpression) (',' ranges+=STExpression)* ']') |
+	//    ('[' count+='*' (',' count+='*')* ']')) 'OF')?
+	//    (type=[libraryElement::INamedElement|STAnyType])
+	//    ('[' maxLength=STExpression ']')?;
+	public STCoreGrammarAccess.STTypeDeclarationElements getSTTypeDeclarationAccess() {
+		return gaSTCore.getSTTypeDeclarationAccess();
+	}
+	
+	public ParserRule getSTTypeDeclarationRule() {
+		return getSTTypeDeclarationAccess().getRule();
+	}
+	
+	//STTypeDeclaration0 returns STTypeDeclaration:
+	//    STTypeDeclaration;
+	public STCoreGrammarAccess.STTypeDeclaration0Elements getSTTypeDeclaration0Access() {
+		return gaSTCore.getSTTypeDeclaration0Access();
+	}
+	
+	public ParserRule getSTTypeDeclaration0Rule() {
+		return getSTTypeDeclaration0Access().getRule();
+	}
+	
+	// // necessary to keep Xtext from skipping this rule
 	//STInitializerExpression:
 	//    STElementaryInitializerExpression | STArrayInitializerExpression | STStructInitializerExpression;
 	public STCoreGrammarAccess.STInitializerExpressionElements getSTInitializerExpressionAccess() {

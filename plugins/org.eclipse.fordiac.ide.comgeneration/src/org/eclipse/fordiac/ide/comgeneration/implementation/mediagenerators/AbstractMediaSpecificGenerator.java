@@ -30,7 +30,7 @@ public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGen
 			"net/SUBL_3", "net/SUBL_4" }; //$NON-NLS-1$ //$NON-NLS-2$
 	private static final String[] PALETTE_ENTRY_SOURCE = { "PUBLISH_0", "PUBLISH_1", "PUBLISH_2", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			"PUBLISH_3", "PUBLISH_4" }; //$NON-NLS-1$ //$NON-NLS-2$
-	private static final String[] PALETTE_ENTRY_DESTINATION = { "SUBSCRIBE_0", "SUBSCRIBE_1", "UBSCRIBE_2", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	private static final String[] PALETTE_ENTRY_DESTINATION = { "SUBSCRIBE_0", "SUBSCRIBE_1", "SUBSCRIBE_2", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			"SUBSCRIBE_3", "SUBSCRIBE_4" }; //$NON-NLS-1$ //$NON-NLS-2$
 
 	private final TypeLibrary typeLib;

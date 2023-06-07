@@ -184,6 +184,12 @@ public class GroupContentNetwork implements FBNetwork {
 	}
 
 	@Override
+	public void addConnectionWithIndex(final Connection connection, final int index) {
+		// do nothing as groups don't have connections
+
+	}
+
+	@Override
 	public boolean isApplicationNetwork() {
 		return false;
 	}
@@ -229,5 +235,10 @@ public class GroupContentNetwork implements FBNetwork {
 	public FBNetworkElement getElementNamed(final String name) {
 		// FBNetworkElements of groups are contained in the parent framework therefore we can delegate
 		return group.getFbNetwork().getElementNamed(name);
+	}
+
+	@Override
+	public int getConnectionIndex(final Connection connection) {
+		return -1;
 	}
 }

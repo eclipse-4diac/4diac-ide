@@ -1,24 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
-<FBType Comment="rising edge detector" Name="FB_R_TRIG">
-  <Identification Description="Copyright (c) 2012 TU Wien ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Classification="rising edge detector" Function="in contrast to the standard a initialization value of true does not detect a rising edge" Standard="61131-3"/>
-  <VersionInfo Author="Monika Wenger" Date="2012-03-25" Organization="TU Wien ACIN" Version="1.0"/>
-  <InterfaceList>
-    <EventInputs>
-      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
-        <With Var="CLK"/>
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
-        <With Var="Q"/>
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Comment="Clock" InitialValue="" Name="CLK" Type="BOOL"/>
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Comment="Output" InitialValue="" Name="Q" Type="BOOL"/>
-    </OutputVars>
-  </InterfaceList>
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="FB_R_TRIG" Comment="Detect rising edge">
+	<Identification Standard="61499-1" Description="Copyright (c) 2023 Martin Erich Jobst&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="Martin Jobst" Date="2023-04-28">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="CLK"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="Q"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="CLK" Type="BOOL" Comment="Clock"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="Output"/>
+		</OutputVars>
+	</InterfaceList>
+	<SimpleFB>
+		<InternalVars>
+			<VarDeclaration Name="MEM" Type="BOOL" Comment=""/>
+		</InternalVars>
+		<Algorithm Name="REQ" Comment="">
+			<ST><![CDATA[ALGORITHM REQ
+Q := CLK AND NOT MEM;
+MEM := CLK;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</SimpleFB>
 </FBType>

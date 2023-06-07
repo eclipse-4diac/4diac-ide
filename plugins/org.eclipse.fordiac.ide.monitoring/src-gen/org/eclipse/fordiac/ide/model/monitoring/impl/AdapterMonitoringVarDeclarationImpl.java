@@ -169,7 +169,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int ARRAY_SIZE_EDEFAULT = 0;
+	protected static final String ARRAY_SIZE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getArraySize() <em>Array Size</em>}' attribute.
@@ -178,7 +178,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected int arraySize = ARRAY_SIZE_EDEFAULT;
+	protected String arraySize = ARRAY_SIZE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getWiths() <em>Withs</em>}' reference list.
@@ -384,17 +384,18 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 */
 	@Override
-	public int getArraySize() {
+	public String getArraySize() {
 		return arraySize;
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public void setArraySize(int newArraySize) {
-		int oldArraySize = arraySize;
+	public void setArraySize(String newArraySize) {
+		String oldArraySize = arraySize;
 		arraySize = newArraySize;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, oldArraySize, arraySize));
@@ -658,7 +659,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				setType((DataType)newValue);
 				return;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
-				setArraySize((Integer)newValue);
+				setArraySize((String)newValue);
 				return;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				getWiths().clear();
@@ -738,7 +739,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
 				return type != null;
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
-				return arraySize != ARRAY_SIZE_EDEFAULT;
+				return ARRAY_SIZE_EDEFAULT == null ? arraySize != null : !ARRAY_SIZE_EDEFAULT.equals(arraySize);
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
 				return withs != null && !withs.isEmpty();
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
@@ -871,6 +872,30 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	public void setVarConfig(boolean config) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getArraySizeAsInt() {
+		if(getArraySize() != null){
+		   return Integer.parseInt(getArraySize());
+		}
+		return 0;
+
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getFullTypeName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);
 	}
 
 } // AdapterMonitoringVarDeclarationImpl

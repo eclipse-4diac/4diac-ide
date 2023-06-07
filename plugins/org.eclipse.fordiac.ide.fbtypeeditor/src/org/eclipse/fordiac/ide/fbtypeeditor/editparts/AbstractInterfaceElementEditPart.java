@@ -25,8 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEditPart {
 	public abstract IInterfaceElement getCastedModel();
 
-	protected abstract void update();
-
 	private Adapter adapter;
 
 	private Adapter getAdapter() {
@@ -42,7 +40,6 @@ abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEd
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
 				refresh();
-				update();
 			}
 		};
 	}

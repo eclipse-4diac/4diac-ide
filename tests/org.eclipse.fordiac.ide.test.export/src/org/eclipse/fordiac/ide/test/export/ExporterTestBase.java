@@ -31,10 +31,10 @@ import java.util.Set;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportTemplate;
 import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
-import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter;
 import org.eclipse.fordiac.ide.export.forte_ng.algorithm.OtherAlgorithmSupportFactory;
 import org.eclipse.fordiac.ide.export.forte_ng.st.StructuredTextSupportFactory;
+import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil;
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport;
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
@@ -132,6 +132,10 @@ public abstract class ExporterTestBase<T extends FBType> {
 			errorList.addAll(languageSupport.getErrors());
 		} catch (final ExportException e) {
 			errorList.add(e.getMessage());
+		}
+		// remove #line directives
+		if (result != null) {
+			result = result.toString().replaceAll("(?m)^\\h*#line.*$\\R", ""); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return result;
 	}
@@ -352,7 +356,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @param name name to add the prefix to
 	 * @return name with prefix added */
 	protected static String addExportPrefix(final String name) {
-		return ForteLibraryElementTemplate.EXPORT_PREFIX + name;
+		return ForteNgExportUtil.VARIABLE_EXPORT_PREFIX + name;
 	}
 
 	/** syntactic sugar: create a Object[] for a test case

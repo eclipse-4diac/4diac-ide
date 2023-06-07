@@ -263,7 +263,7 @@ class ValueValidatorTest {
 		final var varDeclaration = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDeclaration.setName("ArrayTest"); //$NON-NLS-1$
 		varDeclaration.setType(dataType);
-		varDeclaration.setArraySize(10);
+		varDeclaration.setArraySize("10");
 
 		final String resultString = VariableOperations.validateValue(varDeclaration, value);
 		assertEquals(expectedResult, resultString);

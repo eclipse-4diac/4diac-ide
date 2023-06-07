@@ -44,18 +44,13 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		  «generateFBNetwork»
 		
-		  «type.interfaceList.inputVars.generateAccessors("getDI")»
-		  «type.interfaceList.outputVars.generateAccessors("getDO")»
-		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
-		
-		  FORTE_FB_DATA_ARRAY(«type.interfaceList.eventOutputs.size», «type.interfaceList.inputVars.size», «type.interfaceList.outputVars.size», «type.interfaceList.sockets.size + type.interfaceList.plugs.size»);
+		  «generateReadInputDataDeclaration»
+		  «generateWriteOutputDataDeclaration»
 		
 		public:
-		  «FBClassName»(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-		      «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, &scm_stFBNData, m_anFBConnData, m_anFBVarsData) {
-		  };
+		  «FBClassName»(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);
 		
-		  virtual ~«FBClassName»() = default;
+		  «generateInterfaceDeclarations»
 		};
 		
 		«generateIncludeGuardEnd»

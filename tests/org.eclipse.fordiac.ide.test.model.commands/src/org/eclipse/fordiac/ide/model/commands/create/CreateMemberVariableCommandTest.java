@@ -92,7 +92,7 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 		t.test(inserted.getName(), defaultVarName);
 
 		t.test(inserted.getTypeName(), FordiacKeywords.BOOL);
-		t.test(inserted.getArraySize() == 0);
+		t.test(inserted.getArraySize() == null);
 		t.test(inserted.getValue().getValue(), ""); //$NON-NLS-1$
 		t.test(inserted.getComment(), ""); //$NON-NLS-1$
 	}

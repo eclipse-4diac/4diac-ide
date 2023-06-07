@@ -42,15 +42,15 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode);
 		assertEquals('''
 			
-			if (auto st_lv_synthetic_0 = «EXPORTED_VARIABLE_NAME»(); false) {
+			if (auto st_lv_synthetic_0 = «EXPORTED_VARIABLE_NAME»; false) {
 			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(0))) {
-			  «EXPORTED_VARIABLE_NAME»() = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME»(), CIEC_DINT(1));
+			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
 			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(1))) {
-			  «EXPORTED_VARIABLE_NAME»() = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME»(), CIEC_DINT(1));
+			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
 			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(2))) {
-			  «EXPORTED_VARIABLE_NAME»() = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME»(), CIEC_DINT(1));
+			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
 			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(255))) {
-			  «EXPORTED_VARIABLE_NAME»() = CIEC_DINT(0);
+			  «EXPORTED_VARIABLE_NAME» = CIEC_DINT(0);
 			}
 		'''.toString(), generatedCode.toString())
 	}
@@ -70,11 +70,11 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode);
 		assertEquals('''
 			
-			if (auto st_lv_synthetic_0 = «EXPORTED_VARIABLE_NAME»(); false) {
+			if (auto st_lv_synthetic_0 = «EXPORTED_VARIABLE_NAME»; false) {
 			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(0)) || func_EQ(st_lv_synthetic_0, CIEC_DINT(1)) || func_EQ(st_lv_synthetic_0, CIEC_DINT(2))) {
-			  «EXPORTED_VARIABLE_NAME»() = func_ADD<CIEC_DINT>(st_variable(), CIEC_DINT(1));
+			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
 			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(255))) {
-			  «EXPORTED_VARIABLE_NAME»() = CIEC_DINT(0);
+			  «EXPORTED_VARIABLE_NAME» = CIEC_DINT(0);
 			}
 		'''.toString(), generatedCode.toString())
 	}
@@ -96,13 +96,13 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode);
 		assertEquals('''
 			
-			if (auto st_lv_synthetic_0 = «EXPORTED_VARIABLE_NAME»(); false) {
+			if (auto st_lv_synthetic_0 = «EXPORTED_VARIABLE_NAME»; false) {
 			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(0))) {
-			  «EXPORTED_VARIABLE_NAME»() = func_ADD<CIEC_DINT>(st_variable(), CIEC_DINT(1));
+			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
 			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(255))) {
-			  «EXPORTED_VARIABLE_NAME»() = CIEC_DINT(0);
+			  «EXPORTED_VARIABLE_NAME» = CIEC_DINT(0);
 			} else {
-			  «EXPORTED_VARIABLE_NAME»() = CIEC_DINT(255);
+			  «EXPORTED_VARIABLE_NAME» = CIEC_DINT(255);
 			}
 		'''.toString(), generatedCode.toString())
 	}
@@ -129,18 +129,18 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode);
 		assertEquals('''
 			
-			if (auto st_lv_synthetic_0 = «EXPORTED_VARIABLE_NAME»(); false) {
+			if (auto st_lv_synthetic_0 = «EXPORTED_VARIABLE_NAME»; false) {
 			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(0))) {
-			  if (func_LT(«EXPORTED_VARIABLE_NAME»(), CIEC_DINT(20))) {
-			    «EXPORTED_VARIABLE_NAME»() = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME»(), CIEC_DINT(1));
+			  if (func_LT(«EXPORTED_VARIABLE_NAME», CIEC_DINT(20))) {
+			    «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
 			  }
 			  else {
-			    «EXPORTED_VARIABLE_NAME»() = func_SUB<CIEC_DINT>(«EXPORTED_VARIABLE_NAME»(), CIEC_DINT(1));
+			    «EXPORTED_VARIABLE_NAME» = func_SUB<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
 			  }
 			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(255))) {
-			  «EXPORTED_VARIABLE_NAME»() = CIEC_DINT(0);
+			  «EXPORTED_VARIABLE_NAME» = CIEC_DINT(0);
 			} else {
-			  «EXPORTED_VARIABLE_NAME»() = CIEC_DINT(255);
+			  «EXPORTED_VARIABLE_NAME» = CIEC_DINT(255);
 			}
 		'''.toString(), generatedCode.toString())
 	}

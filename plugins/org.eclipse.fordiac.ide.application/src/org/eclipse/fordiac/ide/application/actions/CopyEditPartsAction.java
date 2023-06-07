@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.gef.EditPart;
@@ -76,6 +77,11 @@ public class CopyEditPartsAction extends SelectionAction {
 			if ((obj instanceof final EditPart ep) && (ep.getModel() instanceof final FBNetworkElement fbne)) {
 				copyPasteData.elements().add(fbne);
 				copyPasteData.conns().addAll(getAllFBNElementConnections(fbne, connectionSet));
+				if (fbne instanceof final Group group) {
+					for (final FBNetworkElement groupElement : group.getGroupElements()) {
+						copyPasteData.conns().addAll(getAllFBNElementConnections(groupElement, connectionSet));
+					}
+				}
 			}
 		}
 		return copyPasteData;

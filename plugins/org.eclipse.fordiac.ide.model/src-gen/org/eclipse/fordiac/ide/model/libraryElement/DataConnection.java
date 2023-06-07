@@ -22,12 +22,42 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * A representation of the model object '<em><b>Data Connection</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * </p>
+ * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DataConnection#getFBNetwork <em>FB Network</em>}</li>
+ * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDataConnection()
  * @model
  * @generated
  */
 public interface DataConnection extends Connection {
+	/**
+	 * Returns the value of the '<em><b>FB Network</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getDataConnections <em>Data Connections</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>FB Network</em>' container reference.
+	 * @see #setFBNetwork(FBNetwork)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDataConnection_FBNetwork()
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getDataConnections
+	 * @model opposite="dataConnections" transient="false"
+	 * @generated
+	 */
+	FBNetwork getFBNetwork();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.DataConnection#getFBNetwork <em>FB Network</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>FB Network</em>' container reference.
+	 * @see #getFBNetwork()
+	 * @generated
+	 */
+	void setFBNetwork(FBNetwork value);
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

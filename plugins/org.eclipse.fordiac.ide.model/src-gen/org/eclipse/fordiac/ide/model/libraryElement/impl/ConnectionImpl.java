@@ -478,7 +478,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 */
 	@Override
 	public FBNetwork getFBNetwork() {
-		return org.eclipse.fordiac.ide.model.Annotations.getFBNetwork(this);
+		throw new UnsupportedOperationException("subclasses will need to provide it");
 	}
 
 	/**

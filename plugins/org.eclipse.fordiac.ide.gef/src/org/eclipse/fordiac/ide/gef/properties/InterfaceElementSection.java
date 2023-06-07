@@ -166,7 +166,7 @@ public class InterfaceElementSection extends AbstractSection {
 	@SuppressWarnings("static-method") // this method allows sub-classes to provide own change type commands, e.g.,
 	// subapps
 	protected ChangeDataTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
-		return new ChangeDataTypeCommand(data, newType);
+		return ChangeDataTypeCommand.forDataType(data, newType);
 	}
 
 	@Override

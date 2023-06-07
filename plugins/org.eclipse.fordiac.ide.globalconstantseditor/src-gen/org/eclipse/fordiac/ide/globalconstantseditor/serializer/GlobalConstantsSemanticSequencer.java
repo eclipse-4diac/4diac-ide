@@ -49,6 +49,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock;
@@ -192,6 +193,9 @@ public class GlobalConstantsSemanticSequencer extends STCoreSemanticSequencer {
 				return; 
 			case STCorePackage.ST_TIME_OF_DAY_LITERAL:
 				sequence_STTimeOfDayLiteral(context, (STTimeOfDayLiteral) semanticObject); 
+				return; 
+			case STCorePackage.ST_TYPE_DECLARATION:
+				sequence_STTypeDeclaration(context, (STTypeDeclaration) semanticObject); 
 				return; 
 			case STCorePackage.ST_UNARY_EXPRESSION:
 				sequence_STUnaryExpression(context, (STUnaryExpression) semanticObject); 

@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -137,11 +136,11 @@ public class VarConfigurationSection extends AbstractSection {
 
 	@Override
 	protected INamedElement getInputType(final Object input) {
-		if (input instanceof FBNetworkEditPart) {
-			return ((FBNetworkEditPart) input).getModel().getApplication();
+		if (input instanceof final FBNetworkEditPart fbnEP) {
+			return fbnEP.getModel().getApplication();
 		}
-		if (input instanceof INamedElement) {
-			return ((INamedElement) input);
+		if (input instanceof final INamedElement namedElement) {
+			return namedElement;
 		}
 		return null;
 	}
@@ -163,10 +162,10 @@ public class VarConfigurationSection extends AbstractSection {
 					.eContainer().eContainer();
 			return automationsys.getCommandStack();
 		}
-		if (input instanceof EObject) {
-			final EObject root = EcoreUtil.getRootContainer((EObject) input);
-			if (root instanceof AutomationSystem) {
-				return ((AutomationSystem) root).getCommandStack();
+		if (input instanceof final EObject eObj) {
+			final EObject root = EcoreUtil.getRootContainer(eObj);
+			if (root instanceof final AutomationSystem system) {
+				return system.getCommandStack();
 			}
 		}
 		return null;
@@ -199,16 +198,16 @@ public class VarConfigurationSection extends AbstractSection {
 		}
 
 		public void setInput(final Object inputElement) {
-			if (inputElement instanceof EObject) {
-				this.list = getVarConfigs((EObject) inputElement);
+			if (inputElement instanceof final EObject eObj) {
+				this.list = getVarConfigs(eObj);
 			}
 		}
 
 		private static List<VarDeclaration> getVarConfigs(final EObject obj) {
 			final List<VarDeclaration> varConfigs = new ArrayList<>();
 			EcoreUtil.getAllProperContents(obj, true).forEachRemaining(item -> {
-				if ((item instanceof VarDeclaration) && (((VarDeclaration) item).isVarConfig())) {
-					varConfigs.add((VarDeclaration) item);
+				if ((item instanceof final VarDeclaration varDecl) && (varDecl.isVarConfig())) {
+					varConfigs.add(varDecl);
 				}
 			});
 
@@ -262,7 +261,7 @@ public class VarConfigurationSection extends AbstractSection {
 
 		@Override
 		public int getColumnCount() {
-			return 6;
+			return VAR_CONFIG_COL_ID + 1;
 		}
 
 		@Override
@@ -279,7 +278,7 @@ public class VarConfigurationSection extends AbstractSection {
 				}
 				return name;
 			case TYPE_COL_ID:
-				return rowObject.getTypeName();
+				return rowObject.getFullTypeName();
 			case COMMENT_COL_ID:
 				if (!rowObject.getComment().isBlank()) {
 					return rowObject.getComment();
@@ -321,12 +320,7 @@ public class VarConfigurationSection extends AbstractSection {
 				cmd = new ChangeNameCommand(rowObject, value);
 				break;
 			case TYPE_COL_ID:
-				DataType dataType = getLibrary().getDataTypeLibrary().getDataTypesSorted().stream()
-				.filter(type -> type.getName().equals(value)).findAny().orElse(null);
-				if (dataType == null) {
-					dataType = getLibrary().getDataTypeLibrary().getType(null);
-				}
-				cmd = new ChangeDataTypeCommand(rowObject, dataType);
+				cmd = ChangeDataTypeCommand.forTypeDeclaration(rowObject, value);
 				break;
 			case COMMENT_COL_ID:
 				cmd = new ChangeCommentCommand(rowObject, value);
@@ -376,7 +370,7 @@ public class VarConfigurationSection extends AbstractSection {
 
 		@Override
 		public int getColumnCount() {
-			return 6;
+			return VAR_CONFIG_COL_ID + 1;
 		}
 
 		@Override

@@ -191,10 +191,6 @@ public final class Annotations {
 		return (sourceIsInterface || destinationIsInterface);
 	}
 
-	public static FBNetwork getFBNetwork(final Connection c) {
-		return (FBNetwork) c.eContainer();
-	}
-
 	public static void checkifConnectionBroken(final Connection c) {
 		if (!c.isResourceConnection()) {
 			final Resource sourceRes = (null != c.getSourceElement()) ? c.getSourceElement().getResource() : null;
@@ -352,14 +348,30 @@ public final class Annotations {
 
 	// *** FBNetwork ***//
 	public static void addConnection(final FBNetwork fbn, final Connection connection) {
+		addConnectionWithIndex(fbn, connection, -1);
+	}
+
+	public static void addConnectionWithIndex(final FBNetwork fbn, final Connection connection, final int index) {
 		if (connection instanceof EventConnection) {
-			fbn.getEventConnections().add((EventConnection) connection);
+			if (index != -1) {
+				fbn.getEventConnections().add(index, (EventConnection) connection);
+			} else {
+				fbn.getEventConnections().add((EventConnection) connection);
+			}
 		}
 		if (connection instanceof DataConnection) {
-			fbn.getDataConnections().add((DataConnection) connection);
+			if (index != -1) {
+				fbn.getDataConnections().add(index, (DataConnection) connection);
+			} else {
+				fbn.getDataConnections().add((DataConnection) connection);
+			}
 		}
 		if (connection instanceof AdapterConnection) {
-			fbn.getAdapterConnections().add((AdapterConnection) connection);
+			if (index != -1) {
+				fbn.getAdapterConnections().add(index, (AdapterConnection) connection);
+			} else {
+				fbn.getAdapterConnections().add((AdapterConnection) connection);
+			}
 		}
 	}
 
@@ -373,6 +385,19 @@ public final class Annotations {
 		if (connection instanceof AdapterConnection) {
 			fbn.getAdapterConnections().remove(connection);
 		}
+	}
+
+	public static int getConnectionIndex(final FBNetwork fbn, final Connection connection) {
+		if (connection instanceof EventConnection) {
+			return fbn.getEventConnections().indexOf(connection);
+		}
+		if (connection instanceof DataConnection) {
+			return fbn.getDataConnections().indexOf(connection);
+		}
+		if (connection instanceof AdapterConnection) {
+			return fbn.getAdapterConnections().indexOf(connection);
+		}
+		return -1;
 	}
 
 	public static boolean isApplicationNetwork(final FBNetwork fbn) {
@@ -452,7 +477,7 @@ public final class Annotations {
 
 	// *** VarDeclaration ***//
 	public static boolean isArray(final VarDeclaration vd) {
-		return vd.getArraySize() > 0;
+		return vd.getArraySize() != null && !vd.getArraySize().isBlank();
 	}
 
 	public static void setVarConfig(final VarDeclarationImpl varDeclarationImpl, final boolean config) {

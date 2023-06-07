@@ -112,12 +112,12 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 
 			@Override
 			public void ancestorMoved(final IFigure ancestor) {
-				update();
+				refreshVisuals();
 			}
 
 			@Override
 			public void ancestorAdded(final IFigure ancestor) {
-				update();
+				refreshVisuals();
 			}
 
 		});
@@ -133,8 +133,7 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 
 	@Override
 	public DragTracker getDragTracker(final Request request) {
-		if (request instanceof SelectionRequest) {
-			final SelectionRequest selRequest = (SelectionRequest) request;
+		if (request instanceof final SelectionRequest selRequest) {
 			if ((selRequest.getLastButtonPressed() == 1) && (selRequest.isControlKeyPressed())) {
 				// open the default editor for the adapter file
 				final TypeEntry entry = typeLib.getAdapterTypeEntry(getAdapter().getType().getName());

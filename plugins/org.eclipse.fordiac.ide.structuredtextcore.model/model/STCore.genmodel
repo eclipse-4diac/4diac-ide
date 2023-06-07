@@ -242,6 +242,13 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/maxLength"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/defaultValue"/>
     </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STTypeDeclaration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STTypeDeclaration/array"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STTypeDeclaration/ranges"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STTypeDeclaration/count"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STTypeDeclaration/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STTypeDeclaration/maxLength"/>
+    </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STReturn"/>
     <genClasses ecoreClass="STCore.ecore#//STContinue"/>
     <genClasses ecoreClass="STCore.ecore#//STExit"/>

@@ -351,6 +351,15 @@ public interface STCoreFactory extends EFactory {
 	STVarDeclaration createSTVarDeclaration();
 
 	/**
+	 * Returns a new object of class '<em>ST Type Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Type Declaration</em>'.
+	 * @generated
+	 */
+	STTypeDeclaration createSTTypeDeclaration();
+
+	/**
 	 * Returns a new object of class '<em>ST Return</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

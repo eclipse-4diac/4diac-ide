@@ -47,9 +47,7 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		«generateImplIncludes»
 		
 		«generateFBDefinition»
-		
 		«generateFBInterfaceDefinition»
-		
 		«generateFBInterfaceSpecDefinition»
 		
 		«IF !type.internalVars.isEmpty»
@@ -57,29 +55,32 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 			
 		«ENDIF»
 		«IF !type.internalConstVars.isEmpty»
-			«type.generateInternalConstsDefinition»
+			«type.internalConstVars.generateVariableDefinitions(true)»
 			
 		«ENDIF»
 		«IF !type.internalFbs.isEmpty»
 			«type.generateInternalFbDeclarations»
 			
-		«ENDIF»	
-		«IF !(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).empty»
-			«generateInitialValueAssignmentDefinition((type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars))»
-			
 		«ENDIF»
+		«FBClassName»::«FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
+		    «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF»)«// no newline
+			»«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«generateConnectionInitializer» {
+		}
+		
 		«IF !type.internalFbs.isEmpty»
 			«generateChangeFBExecutionState»
 			
 		«ENDIF»	
+		«generateExecuteEvent»
+		
 		«generateAlgorithms»
 		
 		«generateMethods»
 		
-		«generateExecuteEvent»
-		
+		«generateInterfaceDefinitions»
+		«type.internalVars.generateAccessorDefinition("getVarInternal", false)»
 	'''
-	
+
 	def generateChangeFBExecutionState() //
 	'''
 		EMGMResponse «FBClassName»::changeFBExecutionState(EMGMCommandType paCommand) {
@@ -87,14 +88,14 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		}
 	'''
 
-	def protected generateSendEvent(Event event) { 
-		if(event.FBNetworkElement instanceof AdapterFB){
+	def protected generateSendEvent(Event event) {
+		if (event.FBNetworkElement instanceof AdapterFB) {
 			return '''sendAdapterEvent(scm_n«event.FBNetworkElement.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«event.name»ID);'''
 		}
 		'''sendOutputEvent(scm_nEvent«event.name»ID);'''
 	}
 
-	def private getAdapterDeclaration(Event event){
+	def private getAdapterDeclaration(Event event) {
 		(event.FBNetworkElement as AdapterFB).adapterDecl;
 	}
 
@@ -142,7 +143,7 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 			getInfos
 		].toSet).toList
 	}
-		
+
 	override Set<INamedElement> getDependencies(Map<?, ?> options) {
 		(super.getDependencies(options) +
 			(algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap [

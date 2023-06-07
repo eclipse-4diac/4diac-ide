@@ -318,6 +318,12 @@ public class STCoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case STCorePackage.ST_TYPE_DECLARATION: {
+				STTypeDeclaration stTypeDeclaration = (STTypeDeclaration)theEObject;
+				T result = caseSTTypeDeclaration(stTypeDeclaration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case STCorePackage.ST_RETURN: {
 				STReturn stReturn = (STReturn)theEObject;
 				T result = caseSTReturn(stReturn);
@@ -962,6 +968,21 @@ public class STCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTVarDeclaration(STVarDeclaration object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Type Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Type Declaration</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTTypeDeclaration(STTypeDeclaration object) {
 		return null;
 	}
 

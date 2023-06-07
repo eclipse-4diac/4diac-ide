@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  *  Copyright (c) 2023 Primetals Technologies Austria GmbH
- * 
+ *  
  *  This program and the accompanying materials are made available under the
  *  terms of the Eclipse Public License 2.0 which is available at
  *  http://www.eclipse.org/legal/epl-2.0.
@@ -10,7 +10,7 @@
  * 
  *  Contributors:
  *    Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation
- *  *******************************************************************************
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider;
 
@@ -38,6 +38,13 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
  */
 public class LeafItemProvider extends NodeItemProvider {
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final String copyright = "*******************************************************************************\n Copyright (c) 2023 Primetals Technologies Austria GmbH\n \n This program and the accompanying materials are made available under the\n terms of the Eclipse Public License 2.0 which is available at\n http://www.eclipse.org/legal/epl-2.0.\n\n SPDX-License-Identifier: EPL-2.0\n\n Contributors:\n   Michael Oberlehner , Bianca Wiesmayr- initial API and implementation and/or initial documentation\n*******************************************************************************";
+
+	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -58,32 +65,10 @@ public class LeafItemProvider extends NodeItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addRefPropertyDescriptor(object);
 			addContainerFileNamePropertyDescriptor(object);
+			addRefPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Ref feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRefPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Leaf_ref_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Leaf_ref_feature", "_UI_Leaf_type"),
-				 HierarchyPackage.Literals.LEAF__REF,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -100,6 +85,28 @@ public class LeafItemProvider extends NodeItemProvider {
 				 getString("_UI_Leaf_containerFileName_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Leaf_containerFileName_feature", "_UI_Leaf_type"),
 				 HierarchyPackage.Literals.LEAF__CONTAINER_FILE_NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Ref feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRefPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Leaf_ref_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Leaf_ref_feature", "_UI_Leaf_type"),
+				 HierarchyPackage.Literals.LEAF__REF,
 				 true,
 				 false,
 				 false,
@@ -143,8 +150,8 @@ public class LeafItemProvider extends NodeItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Leaf.class)) {
-			case HierarchyPackage.LEAF__REF:
 			case HierarchyPackage.LEAF__CONTAINER_FILE_NAME:
+			case HierarchyPackage.LEAF__REF:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			default:

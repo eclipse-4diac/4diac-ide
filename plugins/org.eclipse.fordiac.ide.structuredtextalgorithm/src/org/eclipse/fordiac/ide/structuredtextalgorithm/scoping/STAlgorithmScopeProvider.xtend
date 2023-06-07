@@ -35,7 +35,7 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
 class STAlgorithmScopeProvider extends AbstractSTAlgorithmScopeProvider {
 	override getScope(EObject context, EReference reference) {
 		if (reference == STAlgorithmPackage.Literals.ST_METHOD__RETURN_TYPE) {
-			val globalScope = super.getScope(context, reference)
+			val globalScope = delegateGetScope(context, reference)
 			return scopeFor(DataTypeLibrary.nonUserDefinedDataTypes, globalScope)
 		} else if (reference == STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE) {
 			switch (receiver : context.receiver) {

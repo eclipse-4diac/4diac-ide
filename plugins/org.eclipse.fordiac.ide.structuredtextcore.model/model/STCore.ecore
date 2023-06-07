@@ -339,6 +339,16 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" eType="#//STInitializerExpression"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STTypeDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="array" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ranges" upperBound="-1"
+        eType="#//STExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="count" unique="false" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="maxLength" eType="#//STExpression"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STReturn" eSuperTypes="#//STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STContinue" eSuperTypes="#//STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STExit" eSuperTypes="#//STStatement"/>

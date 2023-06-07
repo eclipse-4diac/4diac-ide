@@ -164,8 +164,7 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 
 		addNameTypeCommentAttribute(varDecl, varDecl.getType());
 		if (varDecl.isArray()) {
-			getWriter().writeAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE,
-					Integer.toString(varDecl.getArraySize()));
+			getWriter().writeAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE, varDecl.getArraySize());
 		}
 		if ((null != varDecl.getValue()) && (!varDecl.getValue().getValue().isEmpty())) {
 			getWriter().writeAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl.getValue().getValue());
