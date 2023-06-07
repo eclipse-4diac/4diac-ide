@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.CoverageCalculator;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.EventManagerSaveAndLoadHelper;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.Permutations;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -85,9 +84,9 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 				for (final Transaction transaction : eventManager.getTransactions()) {
 					ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbtype, (FBTransaction) transaction);
 				}
-
-				EventManagerSaveAndLoadHelper.saveEventManagerToFile(fbtype, eventManager);
 			}
+			// TODO SAVE SEQUENCES
+			// EventManagerSaveAndLoadHelper.saveEventManagerToFile(fbtype, eventManagers);
 		}
 		return null;
 	}

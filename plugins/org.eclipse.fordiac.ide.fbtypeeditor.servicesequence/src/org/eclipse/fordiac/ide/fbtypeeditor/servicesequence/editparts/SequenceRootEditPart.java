@@ -160,6 +160,8 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 			final SequenceFigure child = (SequenceFigure) ((GraphicalEditPart) childEditPart).getFigure();
 			final ServiceFigure thisFigure = (ServiceFigure) getFigure();
 			thisFigure.getServiceSequenceContainer().remove(child);
+			// TODO GET EVENTMANAGER AND REMOVE FROM FILE
+			// EventManagerSaveAndLoadHelper.removeEventManagerFromFile(getFBType());
 		}
 	}
 }
