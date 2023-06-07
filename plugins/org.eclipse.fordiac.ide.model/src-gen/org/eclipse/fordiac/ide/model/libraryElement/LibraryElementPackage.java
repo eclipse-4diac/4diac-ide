@@ -257,13 +257,22 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_CONNECTION__COMMENT = CONNECTION__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>FB Network</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTER_CONNECTION__FB_NETWORK = CONNECTION_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Adapter Connection</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
+	int ADAPTER_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}' class.
@@ -2738,13 +2747,22 @@ public interface LibraryElementPackage extends EPackage {
 	int DATA_CONNECTION__COMMENT = CONNECTION__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>FB Network</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_CONNECTION__FB_NETWORK = CONNECTION_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Data Connection</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DATA_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
+	int DATA_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl <em>Struct Manipulator</em>}' class.
@@ -3968,13 +3986,22 @@ public interface LibraryElementPackage extends EPackage {
 	int EVENT_CONNECTION__COMMENT = CONNECTION__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>FB Network</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_CONNECTION__FB_NETWORK = CONNECTION_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Event Connection</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 0;
+	int EVENT_CONNECTION_FEATURE_COUNT = CONNECTION_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkImpl <em>FB Network</em>}' class.
@@ -6926,6 +6953,17 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAdapterConnection();
 
 	/**
+	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection#getFBNetwork <em>FB Network</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>FB Network</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection#getFBNetwork()
+	 * @see #getAdapterConnection()
+	 * @generated
+	 */
+	EReference getAdapterConnection_FBNetwork();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration <em>Adapter Declaration</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7703,6 +7741,17 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getDataConnection();
 
 	/**
+	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.DataConnection#getFBNetwork <em>FB Network</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>FB Network</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.DataConnection#getFBNetwork()
+	 * @see #getDataConnection()
+	 * @generated
+	 */
+	EReference getDataConnection_FBNetwork();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer <em>Demultiplexer</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8172,6 +8221,17 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getEventConnection();
+
+	/**
+	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.EventConnection#getFBNetwork <em>FB Network</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>FB Network</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.EventConnection#getFBNetwork()
+	 * @see #getEventConnection()
+	 * @generated
+	 */
+	EReference getEventConnection_FBNetwork();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.FB <em>FB</em>}'.
@@ -9869,6 +9929,14 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ADAPTER_CONNECTION = eINSTANCE.getAdapterConnection();
 
 		/**
+		 * The meta object literal for the '<em><b>FB Network</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ADAPTER_CONNECTION__FB_NETWORK = eINSTANCE.getAdapterConnection_FBNetwork();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl <em>Adapter Declaration</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10505,6 +10573,14 @@ public interface LibraryElementPackage extends EPackage {
 		EClass DATA_CONNECTION = eINSTANCE.getDataConnection();
 
 		/**
+		 * The meta object literal for the '<em><b>FB Network</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DATA_CONNECTION__FB_NETWORK = eINSTANCE.getDataConnection_FBNetwork();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl <em>Demultiplexer</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10881,6 +10957,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass EVENT_CONNECTION = eINSTANCE.getEventConnection();
+
+		/**
+		 * The meta object literal for the '<em><b>FB Network</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EVENT_CONNECTION__FB_NETWORK = eINSTANCE.getEventConnection_FBNetwork();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl <em>FB</em>}' class.

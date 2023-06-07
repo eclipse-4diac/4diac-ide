@@ -13,6 +13,8 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAdapterDestination(this);"/>
       </eAnnotations>
     </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fBNetwork" eType="#//FBNetwork"
+        eOpposite="#//FBNetwork/adapterConnections"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterDeclaration" eSuperTypes="#//IInterfaceElement">
     <eOperations name="getType" eType="#//AdapterType">
@@ -409,7 +411,7 @@
     </eOperations>
     <eOperations name="getFBNetwork" lowerBound="1" eType="#//FBNetwork">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getFBNetwork(this);"/>
+        <details key="body" value="throw new UnsupportedOperationException(&quot;subclasses will need to provide it&quot;);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="checkIfConnectionBroken" lowerBound="1">
@@ -490,6 +492,8 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getDataDestination(this);"/>
       </eAnnotations>
     </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fBNetwork" eType="#//FBNetwork"
+        eOpposite="#//FBNetwork/dataConnections"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Demultiplexer" eSuperTypes="#//StructManipulator"/>
   <eClassifiers xsi:type="ecore:EClass" name="Device" eSuperTypes="#//TypedConfigureableObject #//PositionableElement #//ColorizableElement #//IVarElement">
@@ -703,6 +707,8 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getEventDestination(this);"/>
       </eAnnotations>
     </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fBNetwork" eType="#//FBNetwork"
+        eOpposite="#//FBNetwork/eventConnections"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FB" eSuperTypes="#//FBNetworkElement #//ICallable">
     <eOperations name="isResourceFB" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
@@ -824,7 +830,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dataConnections" upperBound="-1"
-        eType="#//DataConnection" containment="true" resolveProxies="false">
+        eType="#//DataConnection" containment="true" resolveProxies="false" eOpposite="#//DataConnection/fBNetwork">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="DataConnections"/>
@@ -832,9 +838,9 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eventConnections" upperBound="-1"
-        eType="#//EventConnection" containment="true"/>
+        eType="#//EventConnection" containment="true" eOpposite="#//EventConnection/fBNetwork"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterConnections" upperBound="-1"
-        eType="#//AdapterConnection" containment="true" resolveProxies="false">
+        eType="#//AdapterConnection" containment="true" resolveProxies="false" eOpposite="#//AdapterConnection/fBNetwork">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="AdapterConnections"/>

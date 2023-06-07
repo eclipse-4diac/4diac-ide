@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -203,6 +204,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 
 	private boolean shouldAdapterFBBeCreated() {
 		return (dataType instanceof AdapterType)
+				&& (targetInterfaceList.eContainer() instanceof CompositeFBType)
 				&& !(targetInterfaceList.eContainer() instanceof SubAppType);
 	}
 

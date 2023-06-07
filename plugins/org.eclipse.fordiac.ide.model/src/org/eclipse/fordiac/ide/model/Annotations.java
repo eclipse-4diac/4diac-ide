@@ -191,10 +191,6 @@ public final class Annotations {
 		return (sourceIsInterface || destinationIsInterface);
 	}
 
-	public static FBNetwork getFBNetwork(final Connection c) {
-		return (FBNetwork) c.eContainer();
-	}
-
 	public static void checkifConnectionBroken(final Connection c) {
 		if (!c.isResourceConnection()) {
 			final Resource sourceRes = (null != c.getSourceElement()) ? c.getSourceElement().getResource() : null;

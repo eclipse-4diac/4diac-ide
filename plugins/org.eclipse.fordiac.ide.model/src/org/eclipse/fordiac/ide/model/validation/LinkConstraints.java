@@ -91,15 +91,18 @@ public final class LinkConstraints {
 		}
 
 		if (!typeCheck(source, target)) {
-			ErrorMessenger
-			.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
+
+			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
 					(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
 							(null != target.getType()) ? target.getType().getName() : FordiacMessages.NA));
 			return false;
+
 		}
+
 
 		return isWithConstraintOK(source) && isWithConstraintOK(target);
 	}
+
 
 	/** Elements which are not linked by a with construct are not allowed to be connected
 	 *
@@ -229,7 +232,7 @@ public final class LinkConstraints {
 	 * @param target the target
 	 *
 	 * @return true, if successful */
-	private static boolean sourceAndDestCheck(final IInterfaceElement source, final IInterfaceElement target,
+	public static boolean sourceAndDestCheck(final IInterfaceElement source, final IInterfaceElement target,
 			final FBNetwork parent) {
 		return isValidConnSource(source, parent) && isValidConnDestination(target, parent);
 	}
@@ -302,7 +305,7 @@ public final class LinkConstraints {
 		return (pin != null && pin.getType() instanceof EventType);
 	}
 
-	private static boolean isDataPin(final IInterfaceElement pin) {
+	public static boolean isDataPin(final IInterfaceElement pin) {
 		return (pin != null && !(pin.getType() instanceof EventType) && !(pin.getType() instanceof AdapterType));
 	}
 

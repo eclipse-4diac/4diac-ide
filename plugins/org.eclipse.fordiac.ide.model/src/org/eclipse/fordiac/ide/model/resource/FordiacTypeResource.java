@@ -56,12 +56,20 @@ public class FordiacTypeResource extends ResourceImpl {
 
 	@Override
 	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
-		if (!uri.isPlatformResource()) {
-			throw new IOException("Cannot load type from non-workspace URI " + uri.toString()); //$NON-NLS-1$
+		IFile typeFile = null;
+		if (uri.isPlatformResource()) {
+			typeFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(this.uri.toPlatformString(true)));
+		} else if (uri.isFile()) {
+			typeFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toFileString()));
+			if (!typeFile.exists()) {
+				throw new IOException(
+						"Could not load file " + uri.toString() + ", because its not part of the Resource"); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+		} else {
+			throw new IOException("Cannot load type from unsupported URI " + uri.toString()); //$NON-NLS-1$
 		}
+
 		try {
-			final IFile typeFile = ResourcesPlugin.getWorkspace().getRoot()
-					.getFile(new Path(this.uri.toPlatformString(true)));
 			final CommonElementImporter importer = createImporterByFileExtensions(inputStream, typeFile);
 			importer.loadElement();
 			getContents().add(importer.getElement());

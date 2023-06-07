@@ -96,6 +96,12 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 				// the hidden property was changed inform source and destination so that all labels are updated
 				handleVisibilityUpdate();
 			}
+
+			if (LibraryElementPackage.eINSTANCE.getDataConnection_FBNetwork().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getEventConnection_FBNetwork().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getAdapterConnection_FBNetwork().equals(feature)) {
+				getFigure().handleVisibilityChange(!getModel().isVisible());
+			}
 		}
 
 		private void handleVisibilityUpdate() {
@@ -124,7 +130,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)) {
+					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
 				getConnectionFigure().updateConLabels();
 			}
 		}

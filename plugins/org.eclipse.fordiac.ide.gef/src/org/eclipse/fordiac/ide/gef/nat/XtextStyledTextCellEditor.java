@@ -51,11 +51,17 @@ public abstract class XtextStyledTextCellEditor extends StyledTextCellEditor {
 			@Override
 			public void assistSessionStarted(final ContentAssistEvent event) {
 				proposalPopupOpen = true;
+				if (XtextStyledTextCellEditor.this.focusListener instanceof final InlineFocusListener inlineFocusListener) {
+					inlineFocusListener.handleFocusChanges = false;
+				}
 			}
 
 			@Override
 			public void assistSessionEnded(final ContentAssistEvent event) {
 				proposalPopupOpen = false;
+				if (XtextStyledTextCellEditor.this.focusListener instanceof final InlineFocusListener inlineFocusListener) {
+					inlineFocusListener.handleFocusChanges = true;
+				}
 			}
 		});
 		return (StyledText) embeddedEditor.getViewer().getControl();

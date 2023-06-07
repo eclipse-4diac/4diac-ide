@@ -23,6 +23,7 @@
     <genDataTypes ecoreDataType="lib.ecore#//TypeLibrary"/>
     <genDataTypes ecoreDataType="lib.ecore#//VarDeclList"/>
     <genClasses ecoreClass="lib.ecore#//AdapterConnection">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//AdapterConnection/fBNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterSource"
           body="return org.eclipse.fordiac.ide.model.Annotations.getAdapterSource(this);"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterDestination"
@@ -176,7 +177,7 @@
           body="return org.eclipse.fordiac.ide.model.Annotations.getDestinationElement(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/isResourceConnection"
           body="return org.eclipse.fordiac.ide.model.Annotations.isResourceConnection(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//Connection/getFBNetwork" body="return org.eclipse.fordiac.ide.model.Annotations.getFBNetwork(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Connection/getFBNetwork" body="throw new UnsupportedOperationException(&quot;subclasses will need to provide it&quot;);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/checkIfConnectionBroken"
           body="org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/updateRoutingData" body="final ConnectionRoutingData newRoutingData = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createConnectionRoutingData();&#xA;newRoutingData.setDx1(dx1);&#xA;newRoutingData.setDy(dy);&#xA;newRoutingData.setDx2(dx2);&#xA;setRoutingData(newRoutingData);">
@@ -200,6 +201,7 @@
           body="return getDx1() != 0 &amp;&amp; getDy() != 0;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//DataConnection">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//DataConnection/fBNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//DataConnection/getDataSource" body="return org.eclipse.fordiac.ide.model.Annotations.getDataSource(this);"/>
       <genOperations ecoreOperation="lib.ecore#//DataConnection/getDataDestination"
           body="return org.eclipse.fordiac.ide.model.Annotations.getDataDestination(this);"/>
@@ -272,6 +274,7 @@
       <genOperations ecoreOperation="lib.ecore#//Event/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//EventConnection">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//EventConnection/fBNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//EventConnection/getEventSource" body="return org.eclipse.fordiac.ide.model.Annotations.getEventSource(this);"/>
       <genOperations ecoreOperation="lib.ecore#//EventConnection/getEventDestination"
           body="return org.eclipse.fordiac.ide.model.Annotations.getEventDestination(this);"/>
