@@ -211,7 +211,7 @@
        <propertyContributor
              contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
           <propertyCategory
-                category="comment">
+                category="level">
           </propertyCategory>
        </propertyContributor>
     </extension>
@@ -220,9 +220,9 @@
        <propertyTabs
              contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
           <propertyTab
-                category="comment"
-                id="org.eclipse.fordiac.ide.hierarchymanager.ui.commentPropertyTab"
-                label="Comment">
+                category="level"
+                id="org.eclipse.fordiac.ide.hierarchymanager.ui.levelPropertyTab"
+                label="Level">
           </propertyTab>
        </propertyTabs>
     </extension>
@@ -234,7 +234,7 @@
                 class="org.eclipse.fordiac.ide.hierarchymanager.ui.properties.CommentSection"
                 filter="org.eclipse.fordiac.ide.hierarchymanager.ui.properties.CommentSectionFilter"
                 id="org.eclipse.fordiac.ide.hierarchymanager.ui.commentPropertySection"
-                tab="org.eclipse.fordiac.ide.hierarchymanager.ui.commentPropertyTab">
+                tab="org.eclipse.fordiac.ide.hierarchymanager.ui.levelPropertyTab">
           </propertySection>
        </propertySections>
     </extension>
