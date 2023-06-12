@@ -15,8 +15,11 @@ package org.eclipse.fordiac.ide.model.eval.st
 import java.util.List
 import java.util.Map
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
+import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StringType
+import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
@@ -50,6 +53,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
@@ -129,7 +133,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				newVariable(variable)
 			]
 		else
-			variables.get(variable.name)
+			variables.get(variable.name) ?: newVariable(variable)
 	}
 
 	def protected dispatch Variable<?> findVariable(ICallable variable) {
@@ -137,7 +141,34 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected void evaluateVariableInitialization(STVarDeclaration variable) {
-		variables.put(variable.name, newVariable(variable.name, variable.featureType).evaluateInitializerExpression(variable.defaultValue))
+		variables.put(variable.name, newVariable(variable.name, variable.evaluateType).evaluateInitializerExpression(variable.defaultValue))
+	}
+
+	def protected INamedElement evaluateType(STVarDeclaration declaration) {
+		val type = switch (type: declaration.type) {
+			AnyStringType case declaration.maxLength !== null:
+				type.newStringType(declaration.maxLength.evaluateExpression.asInteger)
+			DataType:
+				type
+		}
+		if (declaration.array)
+			type.newArrayType(
+				if (declaration.ranges.empty)
+					declaration.count.map[DataFactory.eINSTANCE.createSubrange]
+				else
+					declaration.ranges.map[evaluateSubrange]
+			)
+		else
+			type
+	}
+
+	def protected Subrange evaluateSubrange(STExpression expr) {
+		switch (expr) {
+			STBinaryExpression case expr.op === STBinaryOperator.RANGE:
+				newSubrange(expr.left.evaluateExpression.asInteger, expr.right.evaluateExpression.asInteger)
+			default:
+				newSubrange(0, expr.evaluateExpression.asInteger)
+		}
 	}
 
 	def protected dispatch Variable<?> evaluateInitializerExpression(Variable<?> variable, Void expression) {

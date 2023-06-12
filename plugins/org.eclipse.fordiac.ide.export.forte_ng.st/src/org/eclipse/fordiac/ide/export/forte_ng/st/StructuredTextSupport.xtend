@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.WcharType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
+import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -439,10 +440,11 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected CharSequence generateFeatureTypeName(STVarDeclaration variable, boolean output) {
+		val type = STVariableOperations.evaluateResultType(variable)
 		if (output)
-			variable.featureType.generateTypeNameAsParameter
+			type.generateTypeNameAsParameter
 		else
-			variable.featureType.generateTypeName
+			type.generateTypeName
 	}
 
 	def protected CharSequence generateTypeDefaultValue(INamedElement type) {

@@ -447,26 +447,23 @@ final class STCoreUtil {
 					TypeDeclarationParser.parseTypeDeclaration(feature.type, ArraySizeHelper.getArraySize(feature))
 				else
 					feature.type
-			STVarDeclaration:
-				try {
-					val type = switch (type: feature.type) {
-						AnyStringType case feature.maxLength !== null:
-							type.newStringType(feature.maxLength.asConstantInt)
-						DataType:
-							type
-					}
-					if (feature.array)
-						type.newArrayType(
-							if (feature.ranges.empty)
-								feature.count.map[DataFactory.eINSTANCE.createSubrange]
-							else
-								feature.ranges.map[toSubrange]
-						)
-					else
+			STVarDeclaration: {
+				val type = switch (type: feature.type) {
+					AnyStringType case feature.maxLength instanceof STNumericLiteral:
+						type.newStringType(feature.maxLength.asConstantInt)
+					DataType:
 						type
-				} catch (ArithmeticException e) {
-					null // invalid declaration
 				}
+				if (feature.array)
+					type.newArrayType(
+						if (feature.ranges.empty)
+							feature.count.map[DataFactory.eINSTANCE.createSubrange]
+						else
+							feature.ranges.map[toSubrange]
+					)
+				else
+					type
+			}
 			AdapterDeclaration:
 				feature.adapterFB?.type
 			FB:
@@ -492,11 +489,15 @@ final class STCoreUtil {
 	}
 
 	def static Subrange toSubrange(STExpression expr) {
-		switch (expr) {
-			STBinaryExpression case expr.op === STBinaryOperator.RANGE:
-				newSubrange(expr.left.asConstantInt, expr.right.asConstantInt)
-			default:
-				newSubrange(0, expr.asConstantInt)
+		try {
+			switch (expr) {
+				STBinaryExpression case expr.op === STBinaryOperator.RANGE:
+					newSubrange(expr.left.asConstantInt, expr.right.asConstantInt)
+				default:
+					newSubrange(0, expr.asConstantInt - 1)
+			}
+		} catch (ArithmeticException e) {
+			DataFactory.eINSTANCE.createSubrange
 		}
 	}
 

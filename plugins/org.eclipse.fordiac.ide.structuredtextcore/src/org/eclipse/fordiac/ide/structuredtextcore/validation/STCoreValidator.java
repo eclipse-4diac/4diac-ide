@@ -136,7 +136,6 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			+ "bitAccessExpressionNotOfTypeAnyInt"; //$NON-NLS-1$
 	public static final String DUPLICATE_VARIABLE_NAME = ISSUE_CODE_PREFIX + "duplicateVariableName"; //$NON-NLS-1$
 	public static final String INDEX_RANGE_TYPE_INVALID = ISSUE_CODE_PREFIX + "indexRangeTypeInvalid"; //$NON-NLS-1$
-	public static final String INDEX_RANGE_NOT_A_LITERAL = ISSUE_CODE_PREFIX + "indexRangeNotALiteral"; //$NON-NLS-1$
 	public static final String MAX_LENGTH_NOT_ALLOWED = ISSUE_CODE_PREFIX + "maxLengthNotAllowed"; //$NON-NLS-1$
 	public static final String MAX_LENGTH_TYPE_INVALID = ISSUE_CODE_PREFIX + "maxLengthTypeInvalid"; //$NON-NLS-1$
 	public static final String TOO_MANY_INDICES_GIVEN = ISSUE_CODE_PREFIX + "tooManyIndicesGiven"; //$NON-NLS-1$
@@ -163,20 +162,12 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					leftType.getName());
 			// Currently we can only process literals
 		}
-		if (leftType instanceof AnyIntType && !(subRangeExpression.getLeft() instanceof STNumericLiteral)) {
-			error(Messages.STCoreValidator_IndexRangeNotALiteral, subRangeExpression,
-					STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_NOT_A_LITERAL, leftType.getName());
-		}
 		final DataType rightType = (DataType) subRangeExpression.getRight().getResultType();
 		if (!(rightType instanceof AnyIntType)) {
 			error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, rightType.getName()),
 					subRangeExpression, STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_TYPE_INVALID,
 					rightType.getName());
 			// Currently we can only process literals
-		}
-		if (rightType instanceof AnyIntType && !(subRangeExpression.getRight() instanceof STNumericLiteral)) {
-			error(Messages.STCoreValidator_IndexRangeNotALiteral, subRangeExpression,
-					STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_NOT_A_LITERAL, leftType.getName());
 		}
 	}
 
