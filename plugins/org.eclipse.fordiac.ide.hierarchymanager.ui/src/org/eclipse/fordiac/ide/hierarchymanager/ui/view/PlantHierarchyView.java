@@ -44,12 +44,19 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.part.ShowInContext;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class PlantHierarchyView extends CommonNavigator {
+public class PlantHierarchyView extends CommonNavigator
+implements ITabbedPropertySheetPageContributor {
 
 	private static final String PLANT_HIERARCHY_PROJECT = "PlantHierarchy.Project"; //$NON-NLS-1$
 	private static final String PLANT_HIERARCHY_FILE_NAME = ".plant.hier"; //$NON-NLS-1$
 	private static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION = "hier"; //$NON-NLS-1$
+
+	/** The PROPERTY_CONTRIBUTOR_ID. */
+	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
 
 	final Map<String, Object> loadOptions = new HashMap<>();
 	private final ResourceSet hierarchyResouceSet = new ResourceSetImpl();
@@ -179,5 +186,18 @@ public class PlantHierarchyView extends CommonNavigator {
 		map.setNoNamespacePackage(HierarchyPackage.eINSTANCE);
 		loadOptions.put(XMLResource.OPTION_XML_MAP, map);
 		hierarchyResouceSet.getLoadOptions().put(XMLResource.OPTION_XML_MAP, map);
+	}
+
+	@Override
+	public String getContributorId() {
+		return PROPERTY_CONTRIBUTOR_ID;
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == IPropertySheetPage.class) {
+			return adapter.cast(new TabbedPropertySheetPage(this));
+		}
+		return super.getAdapter(adapter);
 	}
 }

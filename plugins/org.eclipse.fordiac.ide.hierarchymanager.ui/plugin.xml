@@ -206,4 +206,36 @@
          </command>
       </menuContribution>
     </extension>
+    <extension
+          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+       <propertyContributor
+             contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
+          <propertyCategory
+                category="comment">
+          </propertyCategory>
+       </propertyContributor>
+    </extension>
+    <extension
+          point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+       <propertyTabs
+             contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
+          <propertyTab
+                category="comment"
+                id="org.eclipse.fordiac.ide.hierarchymanager.ui.commentPropertyTab"
+                label="Comment">
+          </propertyTab>
+       </propertyTabs>
+    </extension>
+    <extension
+          point="org.eclipse.ui.views.properties.tabbed.propertySections">
+       <propertySections
+             contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
+          <propertySection
+                class="org.eclipse.fordiac.ide.hierarchymanager.ui.properties.CommentSection"
+                filter="org.eclipse.fordiac.ide.hierarchymanager.ui.properties.CommentSectionFilter"
+                id="org.eclipse.fordiac.ide.hierarchymanager.ui.commentPropertySection"
+                tab="org.eclipse.fordiac.ide.hierarchymanager.ui.commentPropertyTab">
+          </propertySection>
+       </propertySections>
+    </extension>
 </plugin>
