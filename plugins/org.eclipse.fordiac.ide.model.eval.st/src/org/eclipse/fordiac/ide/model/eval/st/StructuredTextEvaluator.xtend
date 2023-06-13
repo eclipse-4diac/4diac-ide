@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
-import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations
 import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
@@ -85,7 +84,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.xtend.lib.annotations.Accessors
 
-import static org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations.*
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
@@ -129,19 +127,25 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 
 	def protected dispatch Variable<?> findVariable(STVarDeclaration variable) {
 		if (variable.eContainer instanceof STVarGlobalDeclarationBlock)
-			cachedGlobalConstants.computeIfAbsent(variable.name) [
-				newVariable(variable)
-			]
+			cachedGlobalConstants.get(variable.name) ?: variable.evaluateGlobalConstantInitialization
 		else
-			variables.get(variable.name) ?: newVariable(variable)
+			variables.get(variable.name) ?: variable.evaluateVariableInitialization
 	}
 
 	def protected dispatch Variable<?> findVariable(ICallable variable) {
 		variables.get(variable.name)
 	}
 
-	def protected void evaluateVariableInitialization(STVarDeclaration variable) {
-		variables.put(variable.name, newVariable(variable.name, variable.evaluateType).evaluateInitializerExpression(variable.defaultValue))
+	def protected Variable<?> evaluateVariableInitialization(STVarDeclaration decl) {
+		val variable = newVariable(decl.name, decl.evaluateType)
+		variables.put(variable.name, variable)
+		variable.evaluateInitializerExpression(decl.defaultValue)
+	}
+
+	def protected Variable<?> evaluateGlobalConstantInitialization(STVarDeclaration decl) {
+		val variable = newVariable(decl.name, decl.evaluateType)
+		cachedGlobalConstants.put(variable.name, variable)
+		variable.evaluateInitializerExpression(decl.defaultValue)
 	}
 
 	def protected INamedElement evaluateType(STVarDeclaration declaration) {
@@ -594,12 +598,12 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
 	}
 
-	def protected static dispatch Variable<?> newVariable(VarDeclaration v, Value value) {
+	def protected dispatch Variable<?> newVariable(VarDeclaration v, Value value) {
 		VariableOperations.newVariable(v, value)
 	}
 
-	def protected static dispatch Variable<?> newVariable(STVarDeclaration v, Value value) {
-		STVariableOperations.newVariable(v, value)
+	def protected dispatch Variable<?> newVariable(STVarDeclaration v, Value value) {
+		newVariable(v.name, v.evaluateType, value)
 	}
 
 	def protected Value evaluateCall(Variable<?> receiver, ICallable feature, Map<INamedElement, STCallArgument> inputs,
