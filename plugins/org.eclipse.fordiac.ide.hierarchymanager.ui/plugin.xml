@@ -42,7 +42,10 @@
                   value="true"/> 
             <property
                   name="org.eclipse.ui.navigator.hideLinkWithEditorAction"
-                  value="true"/> 
+                  value="true"/>
+            <property
+        		  name="org.eclipse.ui.navigator.enableTooltipSupport"
+        		  value="true" /> 
          </options>
       </viewer>
   		<viewerActionBinding
@@ -69,7 +72,7 @@
 	            activeByDefault="true"
 	            id="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchycontent"
 	            contentProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyContentProvider"
-	            labelProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyProvider"
+	            labelProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyLabelProvider"
 	            name="Plant Hierachy Content"
 	            priority="highest">
             <possibleChildren>

@@ -9,16 +9,27 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi - added Tooltip support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.hierarchymanager.ui.providers;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider.HierarchyItemProviderAdapterFactory;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.IToolTipProvider;
 
-public class HierarchyProvider extends AdapterFactoryLabelProvider {
+public class HierarchyLabelProvider extends AdapterFactoryLabelProvider implements ILabelProvider, IToolTipProvider {
 
-	public HierarchyProvider() {
+	public HierarchyLabelProvider() {
 		super(new HierarchyItemProviderAdapterFactory());
 	}
 
+	@Override
+	public String getToolTipText(final Object element) {
+		if (element instanceof final Level lvl) {
+			return lvl.getComment();
+		}
+		return null;
+	}
 }
