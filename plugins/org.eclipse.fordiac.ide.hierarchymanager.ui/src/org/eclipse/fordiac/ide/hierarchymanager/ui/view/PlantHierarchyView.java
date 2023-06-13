@@ -56,7 +56,7 @@ implements ITabbedPropertySheetPageContributor {
 	private static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION = "hier"; //$NON-NLS-1$
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
-	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
+	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.hierarchymanager.ui.view"; //$NON-NLS-1$
 
 	final Map<String, Object> loadOptions = new HashMap<>();
 	private final ResourceSet hierarchyResouceSet = new ResourceSetImpl();

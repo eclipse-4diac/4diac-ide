@@ -30,7 +30,7 @@ public class ChangeLevelCommentOperation extends AbstractChangeHierarchyOperatio
 		super("change level comment"); //$NON-NLS-1$
 		this.level = level;
 		this.newComment = comment;
-		this.oldComment = (this.level.getComment() != null) ? comment : ""; //$NON-NLS-1$
+		this.oldComment = level.getComment();
 	}
 
 	@Override

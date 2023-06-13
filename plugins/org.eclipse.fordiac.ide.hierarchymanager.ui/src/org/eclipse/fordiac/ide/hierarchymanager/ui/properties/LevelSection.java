@@ -13,28 +13,58 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.hierarchymanager.ui.properties;
 
-import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.AbstractHierarchyHandler;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.ChangeLevelCommentOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.RenameLevelOperation;
+import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class CommentSection extends AbstractSection {
+public class LevelSection extends AbstractPropertySection {
 
 	private Text commentText;
 	private Text nameText;
 
+	private Level type;
+	private Composite parent;
+	private boolean blockListeners;
+
+	private final Adapter contentAdapter = new SingleRecursiveContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			notifiyRefresh();
+		}
+	};
+
+	protected void notifiyRefresh() {
+		if ((null != type) && type.eAdapters().contains(contentAdapter)) {
+			parent.getDisplay().asyncExec(() -> {
+				if (!parent.isDisposed()) {
+					refresh();
+				}
+			});
+		}
+	}
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
+		this.parent = parent;
 		final Composite fbInfoContainer = createFBInfoContainer(parent);
 		createNameEntry(fbInfoContainer);
 		createCommentEntry(fbInfoContainer);
@@ -42,9 +72,11 @@ public class CommentSection extends AbstractSection {
 
 	@Override
 	public void refresh() {
-		if ((getType() != null)) {
-			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			nameText.setText(getType().getName() != null ? getType().getName() : "N/A"); //$NON-NLS-1$
+		if ((type != null)) {
+			blockListeners = true;
+			commentText.setText(type.getComment() != null ? type.getComment() : ""); //$NON-NLS-1$
+			nameText.setText(type.getName() != null ? type.getName() : "N/A"); //$NON-NLS-1$
+			blockListeners = false;
 		}
 	}
 
@@ -62,10 +94,11 @@ public class CommentSection extends AbstractSection {
 		nameText = createGroupText(parent, true, SWT.BORDER | SWT.SINGLE);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, false).applyTo(nameText);
 		nameText.addModifyListener(e -> {
-			removeContentAdapter();
-			AbstractHierarchyHandler
-			.executeOperation(new RenameLevelOperation(getType(), nameText.getText()));
-			addContentAdapter();
+			if (!blockListeners) {
+				removeContentAdapter();
+				AbstractHierarchyHandler.executeOperation(new RenameLevelOperation(type, nameText.getText()));
+				addContentAdapter();
+			}
 		});
 	}
 
@@ -77,34 +110,43 @@ public class CommentSection extends AbstractSection {
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).hint(SWT.DEFAULT, 6 * commentText.getLineHeight())
 		.grab(true, false).applyTo(commentText);
 		commentText.addModifyListener(e -> {
-			removeContentAdapter();
-			AbstractHierarchyHandler
-			.executeOperation(new ChangeLevelCommentOperation(getType(), commentText.getText()));
-			addContentAdapter();
+			if (!blockListeners) {
+				removeContentAdapter();
+				AbstractHierarchyHandler.executeOperation(new ChangeLevelCommentOperation(type, commentText.getText()));
+				addContentAdapter();
+			}
 		});
 	}
 
 	@Override
-	protected Object getInputType(final Object input) {
-		return CommentSectionFilter.levelFromSelectedObject(input);
-	}
-
-	@Override
-	protected Level getType() {
-		if (type instanceof final Level lvl) {
-			return lvl;
+	public void setInput(final IWorkbenchPart part, final ISelection selection) {
+		Object input = selection;
+		if (selection instanceof final IStructuredSelection sel) {
+			input = sel.getFirstElement();
 		}
-		return null;
+		removeContentAdapter();
+		type = LevelSectionFilter.levelFromSelectedObject(input);
+		addContentAdapter();
+
 	}
 
-	@Override
-	protected void setInputCode() {
-		// Nothing for now
+	protected Text createGroupText(final Composite group, final boolean editable, final int style) {
+		final Text text = getWidgetFactory().createText(group, "", style); //$NON-NLS-1$
+		text.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+		text.setEditable(editable);
+		text.setEnabled(editable);
+		return text;
 	}
 
-	@Override
-	protected void setInputInit() {
-		// nothing to do for now
+	protected void removeContentAdapter() {
+		if ((type != null) && type.eAdapters().contains(contentAdapter)) {
+			type.eAdapters().remove(contentAdapter);
+		}
 	}
 
+	protected void addContentAdapter() {
+		if ((null != type) && !type.eAdapters().contains(contentAdapter)) {
+			type.eAdapters().add(contentAdapter);
+		}
+	}
 }

@@ -209,7 +209,7 @@
     <extension
           point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
        <propertyContributor
-             contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
+             contributorId="org.eclipse.fordiac.ide.hierarchymanager.ui.view">
           <propertyCategory
                 category="level">
           </propertyCategory>
@@ -218,7 +218,7 @@
     <extension
           point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
        <propertyTabs
-             contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
+             contributorId="org.eclipse.fordiac.ide.hierarchymanager.ui.view">
           <propertyTab
                 category="level"
                 id="org.eclipse.fordiac.ide.hierarchymanager.ui.levelPropertyTab"
@@ -229,10 +229,10 @@
     <extension
           point="org.eclipse.ui.views.properties.tabbed.propertySections">
        <propertySections
-             contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
+             contributorId="org.eclipse.fordiac.ide.hierarchymanager.ui.view">
           <propertySection
-                class="org.eclipse.fordiac.ide.hierarchymanager.ui.properties.CommentSection"
-                filter="org.eclipse.fordiac.ide.hierarchymanager.ui.properties.CommentSectionFilter"
+                class="org.eclipse.fordiac.ide.hierarchymanager.ui.properties.LevelSection"
+                filter="org.eclipse.fordiac.ide.hierarchymanager.ui.properties.LevelSectionFilter"
                 id="org.eclipse.fordiac.ide.hierarchymanager.ui.commentPropertySection"
                 tab="org.eclipse.fordiac.ide.hierarchymanager.ui.levelPropertyTab">
           </propertySection>

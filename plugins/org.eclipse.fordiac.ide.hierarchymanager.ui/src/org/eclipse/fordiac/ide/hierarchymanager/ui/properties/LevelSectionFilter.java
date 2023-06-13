@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.hierarchymanager.ui.properties;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.jface.viewers.IFilter;
 
-public class CommentSectionFilter implements IFilter {
+public class LevelSectionFilter implements IFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
@@ -24,7 +24,7 @@ public class CommentSectionFilter implements IFilter {
 	}
 
 	static Level levelFromSelectedObject(final Object selObj) {
-		if (selObj instanceof final org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level lvl) {
+		if (selObj instanceof final Level lvl) {
 			return lvl;
 		}
 		return null;
