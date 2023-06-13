@@ -462,7 +462,8 @@ public class InstancePropertySection extends AbstractSection {
 				cmd = new ChangeCommentCommand(rowObject, (String) newValue);
 				break;
 			case VISIBLE_COL_ID:
-				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
+				if (((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
+						|| (!rowObject.isIsInput() && rowObject.getOutputConnections().isEmpty()))
 						&& !isExpandedSubAppPinAndConnected(rowObject)) {
 					final Boolean newValueBool = NatTableHandler.parseNewValueObject(newValue);
 					if (newValueBool != null) {

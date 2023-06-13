@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.codemining;
 
+import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -26,6 +27,7 @@ public class STCoreCodeMiningPreferencePage extends FieldEditorPreferencePage im
 
 	private BooleanFieldEditor enableCodeMinings;
 	private BooleanFieldEditor enableLiteralTypeCodeMinings;
+	private BooleanFieldEditor enableReferencedVariablesCodeMinings;
 
 	@Inject
 	private IPreferenceStoreAccess preferenceStoreAccess;
@@ -42,14 +44,22 @@ public class STCoreCodeMiningPreferencePage extends FieldEditorPreferencePage im
 	@Override
 	protected void createFieldEditors() {
 		enableCodeMinings = new BooleanFieldEditor(STCoreCodeMiningPreferences.ENABLE_CODE_MININGS,
-				"Enable code minings", getFieldEditorParent());
+				Messages.STCoreCodeMiningPreferencePage_EnableCodeMinings, getFieldEditorParent());
 		addField(enableCodeMinings);
 		enableLiteralTypeCodeMinings = new BooleanFieldEditor(
-				STCoreCodeMiningPreferences.ENABLE_LITERAL_TYPE_CODE_MININGS, "Literals", getFieldEditorParent());
+				STCoreCodeMiningPreferences.ENABLE_LITERAL_TYPE_CODE_MININGS,
+				Messages.STCoreCodeMiningPreferencePage_EnableLiteralTypeCodeMinings, getFieldEditorParent());
 		enableLiteralTypeCodeMinings.setEnabled(
-				getPreferenceStore().getBoolean(STCoreCodeMiningPreferences.ENABLE_LITERAL_TYPE_CODE_MININGS),
+				getPreferenceStore().getBoolean(STCoreCodeMiningPreferences.ENABLE_CODE_MININGS),
 				getFieldEditorParent());
 		addField(enableLiteralTypeCodeMinings);
+		enableReferencedVariablesCodeMinings = new BooleanFieldEditor(
+				STCoreCodeMiningPreferences.ENABLE_REFERENCED_VARIABLES_CODE_MININGS,
+				Messages.STCoreCodeMiningPreferencePage_EnableReferencedVariablesCodeMinings, getFieldEditorParent());
+		enableReferencedVariablesCodeMinings.setEnabled(
+				getPreferenceStore().getBoolean(STCoreCodeMiningPreferences.ENABLE_CODE_MININGS),
+				getFieldEditorParent());
+		addField(enableReferencedVariablesCodeMinings);
 	}
 
 	@Override
@@ -66,6 +76,7 @@ public class STCoreCodeMiningPreferencePage extends FieldEditorPreferencePage im
 
 	protected void updateFieldEnablement() {
 		enableLiteralTypeCodeMinings.setEnabled(enableCodeMinings.getBooleanValue(), getFieldEditorParent());
+		enableReferencedVariablesCodeMinings.setEnabled(enableCodeMinings.getBooleanValue(), getFieldEditorParent());
 	}
 
 	@Override

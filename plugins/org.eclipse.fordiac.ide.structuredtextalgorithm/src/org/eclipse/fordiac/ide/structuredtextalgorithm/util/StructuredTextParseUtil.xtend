@@ -89,14 +89,6 @@ class StructuredTextParseUtil extends ParseUtil {
 			rootASTElement as STAlgorithmSource
 	}
 
-	def static List<Issue> validate(BaseFBType fbType) {
-		val issues = newArrayList
-		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
-		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
-		fbType.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, fbType, issues)
-		return issues
-	}
-
 	def static void validate(String expression, URI uri, INamedElement expectedType, LibraryElement type,
 		Collection<? extends EObject> additionalContent, List<Issue> issues) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
@@ -106,7 +98,8 @@ class StructuredTextParseUtil extends ParseUtil {
 
 	def static void validateType(VarDeclaration decl, List<Issue> issues) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
-		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, decl.getContainerOfType(LibraryElement), issues)
+		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, decl?.eResource?.URI, null,
+			decl.getContainerOfType(LibraryElement), null, issues)
 	}
 
 	def static STExpressionSource parse(String expression, INamedElement expectedType, LibraryElement type,
@@ -123,8 +116,8 @@ class StructuredTextParseUtil extends ParseUtil {
 	}
 
 	def static STInitializerExpressionSource parse(String expression, URI uri, INamedElement expectedType,
-		LibraryElement type, Collection<? extends EObject> additionalContent, List<String> errors, List<String> warnings,
-		List<String> infos) {
+		LibraryElement type, Collection<? extends EObject> additionalContent, List<String> errors,
+		List<String> warnings, List<String> infos) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		expression.parse(parser.grammarAccess.STInitializerExpressionSourceRule, uri, expectedType, type,
 			additionalContent, errors, warnings, infos)?.rootASTElement as STInitializerExpressionSource
@@ -133,8 +126,8 @@ class StructuredTextParseUtil extends ParseUtil {
 	def static STTypeDeclaration parseType(VarDeclaration decl, List<String> errors, List<String> warnings,
 		List<String> infos) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
-		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, decl.name, decl.getContainerOfType(LibraryElement),
-			errors, warnings, infos)?.rootASTElement as STTypeDeclaration
+		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, decl?.eResource?.URI, null, decl.name,
+			decl.getContainerOfType(LibraryElement), null, errors, warnings, infos)?.rootASTElement as STTypeDeclaration
 	}
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, String name, LibraryElement type,
@@ -143,11 +136,11 @@ class StructuredTextParseUtil extends ParseUtil {
 	}
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, INamedElement expectedType,
-		LibraryElement type, Collection<? extends EObject> additionalContent, List<String> errors, List<String> warnings,
-		List<String> infos) {
+		LibraryElement type, Collection<? extends EObject> additionalContent, List<String> errors,
+		List<String> warnings, List<String> infos) {
 		val issues = newArrayList
-		text.parse(entryPoint, uri, expectedType, type, additionalContent, issues).postProcess(errors, warnings,
-			infos, issues)
+		text.parse(entryPoint, uri, expectedType, type, additionalContent, issues).postProcess(errors, warnings, infos,
+			issues)
 	}
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, INamedElement expectedType,
@@ -156,10 +149,6 @@ class StructuredTextParseUtil extends ParseUtil {
 		val issues = newArrayList
 		val parseResult = text.parse(entryPoint, uri, expectedType, type, additionalContent, issues)
 		name.postProcess(errors, warnings, infos, issues, parseResult)
-	}
-
-	def private static IParseResult parse(String text, ParserRule entryPoint, LibraryElement type, List<Issue> issues) {
-		text.parse(entryPoint, type?.eResource?.URI, null, type, null, issues)
 	}
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, INamedElement expectedType,
