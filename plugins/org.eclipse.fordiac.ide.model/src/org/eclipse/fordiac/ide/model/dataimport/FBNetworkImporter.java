@@ -176,7 +176,8 @@ class FBNetworkImporter extends CommonElementImporter {
 			group.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(height));
 		}
 
-		// add FB to FBnetwork so that parameter parsing can create error markers correctly.
+		// add FB to FBnetwork so that parameter parsing can create error markers
+		// correctly.
 		fbNetwork.getNetworkElements().add(group);
 		fbNetworkElementMap.put(group.getName(), group);
 		proceedToEndElementNamed(LibraryElementTags.GROUP_ELEMENT);
@@ -217,7 +218,8 @@ class FBNetworkImporter extends CommonElementImporter {
 		readNameCommentAttributes(fb);
 		getXandY(fb);
 
-		// add FB to FBnetwork so that parameter parsing can create error markers correctly.
+		// add FB to FBnetwork so that parameter parsing can create error markers
+		// correctly.
 		fbNetwork.getNetworkElements().add(fb);
 		fbNetworkElementMap.put(fb.getName(), fb);
 
@@ -260,14 +262,14 @@ class FBNetworkImporter extends CommonElementImporter {
 	protected <T extends Connection> void parseConnectionList(final EClass conType, final EList<T> connectionlist,
 			final String parentNodeName) throws XMLStreamException, TypeImportException {
 		processChildren(parentNodeName, name -> {
-			final T connection = parseConnection(conType);
-			if (null != connection) {
+			T connection = parseConnection(conType);
+
+			if (connection != null) {
 				connectionlist.add(connection);
 			}
 			proceedToEndElementNamed(LibraryElementTags.CONNECTION_ELEMENT);
 			return true;
 		});
-
 		checkAndHandleMultipleInputConnections(connectionlist);
 	}
 
@@ -330,6 +332,16 @@ class FBNetworkImporter extends CommonElementImporter {
 		}
 		parseConnectionRouting(connection);
 		parseAttributes(connection);
+
+		if (builder.isEmptyConnection()) {
+			// if 4diac should be capable of seeing the error marker in the FBNetworkEditor
+			// then error marker blocks need to be created at this location
+			ErrorMarkerBuilder createErrorMarkerBuilder = ErrorMarkerBuilder
+					.createErrorMarkerBuilder("Connection parse error at line: " + getLineNumber());
+			createErrorMarkerBuilder.setLineNumber(getLineNumber());
+			errorMarkerBuilders.add(createErrorMarkerBuilder);
+			return null;
+		}
 
 		return connection;
 	}
@@ -631,8 +643,10 @@ class FBNetworkImporter extends CommonElementImporter {
 		return null;
 	}
 
-	/** Check if the element that contains the fbnetwork has an interface element with the given name. this is needed
-	 * for subapps, cfbs, devices and resources */
+	/**
+	 * Check if the element that contains the fbnetwork has an interface element
+	 * with the given name. this is needed for subapps, cfbs, devices and resources
+	 */
 	protected IInterfaceElement getContainingInterfaceElement(final String interfaceElement, final EClass conType,
 			final boolean isInput) {
 		return getInterfaceElement(interfaceList, interfaceElement, conType, !isInput); // for connections to the
@@ -718,10 +732,12 @@ class FBNetworkImporter extends CommonElementImporter {
 		return variable;
 	}
 
-	/** returns an valid dx, dy integer value
+	/**
+	 * returns an valid dx, dy integer value
 	 *
 	 * @param value
-	 * @return if value is valid the converted int of that otherwise 0 */
+	 * @return if value is valid the converted int of that otherwise 0
+	 */
 	private static int parseConnectionValue(final String value) {
 		try {
 			return CoordinateConverter.INSTANCE.convertFrom1499XML(value);

@@ -200,6 +200,11 @@ public final class ConnectionHelper {
 			return connectionState.containsAll(EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING,
 					ConnectionState.DEST_ENDPOINT_MISSING, ConnectionState.SOURCE_EXITS, ConnectionState.DEST_EXISTS));
 		}
+		
+		public boolean isEmptyConnection() {
+			return connectionState.containsAll(EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING,
+					ConnectionState.DEST_ENDPOINT_MISSING, ConnectionState.SOURCE_MISSING, ConnectionState.DEST_MISSING));
+		}
 
 		public boolean dataInputHasMultipleConnections() {
 			return (!(sourceEndpoint.getType().getName().equalsIgnoreCase("Event")) && sourceEndpoint.isIsInput()
