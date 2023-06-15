@@ -229,6 +229,7 @@ public interface InterfaceList extends EObject {
 	 * @return the value of the '<em>Out Mapped In Out Vars</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getInterfaceList_OutMappedInOutVars()
 	 * @model containment="true" changeable="false"
+	 *        annotation="http:///org/eclipse/fordiac/ide/model/MetaData synthetic='true'"
 	 * @generated
 	 */
 	EList<VarDeclaration> getOutMappedInOutVars();

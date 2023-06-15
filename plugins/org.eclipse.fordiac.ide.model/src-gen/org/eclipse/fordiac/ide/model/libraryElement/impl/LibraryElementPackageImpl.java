@@ -5116,6 +5116,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		// Create annotations
 		// http:///org/eclipse/emf/ecore/util/ExtendedMetaData
 		createExtendedMetaDataAnnotations();
+		// http:///org/eclipse/fordiac/ide/model/MetaData
+		createMetaDataAnnotations();
 	}
 
 	/**
@@ -5702,6 +5704,22 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   new String[] {
 			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
 			   "name", "Version" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http:///org/eclipse/fordiac/ide/model/MetaData</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createMetaDataAnnotations() {
+		String source = "http:///org/eclipse/fordiac/ide/model/MetaData"; //$NON-NLS-1$
+		addAnnotation
+		  (getInterfaceList_OutMappedInOutVars(),
+		   source,
+		   new String[] {
+			   "synthetic", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 	}
 

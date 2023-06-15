@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm
 
 import com.google.inject.Binder
 import com.google.inject.name.Names
+import org.eclipse.fordiac.ide.structuredtextalgorithm.naming.STAlgorithmQualifiedNameProvider
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResourceDescriptionStrategy
 import org.eclipse.fordiac.ide.structuredtextalgorithm.scoping.STAlgorithmImportedNamespaceAwareLocalScopeProvider
@@ -22,6 +23,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverter
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater
 import org.eclipse.xtext.Constants
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider
+import org.eclipse.xtext.naming.IQualifiedNameProvider
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater
 import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy
 import org.eclipse.xtext.scoping.IScopeProvider
@@ -60,5 +62,9 @@ class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 
 	def Class<? extends ILinkingDiagnosticMessageProvider> bindILinkingDiagnosticMessageProvider() {
 		return STAlgorithmLinkingDiagnosticMessageProvider;
+	}
+
+	override Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
+		return STAlgorithmQualifiedNameProvider
 	}
 }
