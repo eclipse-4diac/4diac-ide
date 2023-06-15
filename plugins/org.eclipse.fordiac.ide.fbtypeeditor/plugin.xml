@@ -95,6 +95,13 @@
                indented="true"
                label="Edit Data">
          </propertyTab>
+         <propertyTab
+               afterTab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditAdapters"
+               category="fb"
+               id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditVarInOut"
+               indented="true"
+               label="Edit Var IN OUT">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -142,6 +149,12 @@
                filter="org.eclipse.fordiac.ide.fbtypeeditor.properties.FBTypePropertiesFilter"
                id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditData"
                tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData">
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceVarInOutSection"
+               filter="org.eclipse.fordiac.ide.fbtypeeditor.properties.FBTypePropertiesFilter"
+               id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditVarInOut"
+               tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditVarInOut">
          </propertySection>
       </propertySections>
    </extension>
