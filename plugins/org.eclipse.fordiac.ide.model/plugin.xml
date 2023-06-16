@@ -40,6 +40,11 @@
    </extension>   
    <extension point="org.eclipse.fordiac.ide.model.TypeEntryCreator">
       <TypeEntryCreator
+            class="org.eclipse.fordiac.ide.model.typelibrary.impl.CreateFunctionFBTypeEntry">
+      </TypeEntryCreator>
+   </extension>   
+   <extension point="org.eclipse.fordiac.ide.model.TypeEntryCreator">
+      <TypeEntryCreator
             class="org.eclipse.fordiac.ide.model.typelibrary.impl.CreateResourceTypeEntry">
       </TypeEntryCreator>
    </extension>   
@@ -71,6 +76,10 @@
 		<parser
 			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
 			type="fbt">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="fct">
 		</parser>
 		<parser
 			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"

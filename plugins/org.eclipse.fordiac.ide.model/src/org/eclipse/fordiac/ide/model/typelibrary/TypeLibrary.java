@@ -19,6 +19,7 @@
  *              - Added support for project renameing
  *              - Changed TypeLibrary from palette model to TypeEntry POJO classes
  *  Martin Jobst - migrate system handling to typelib
+ *               - add function FB type
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -172,7 +173,7 @@ public final class TypeLibrary {
 				return getAdapterTypes();
 			case TypeLibraryTags.DEVICE_TYPE_FILE_ENDING:
 				return getDeviceTypes();
-			case TypeLibraryTags.FB_TYPE_FILE_ENDING:
+			case TypeLibraryTags.FB_TYPE_FILE_ENDING, TypeLibraryTags.FC_TYPE_FILE_ENDING:
 				return getFbTypes();
 			case TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING:
 				return getResourceTypes();

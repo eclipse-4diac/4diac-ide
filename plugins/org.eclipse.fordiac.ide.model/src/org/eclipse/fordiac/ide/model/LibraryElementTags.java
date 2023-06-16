@@ -1,5 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008, 2009, 2014, 2016, 2017  Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008, 2023 Profactor GmbH, fortiss GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl, Waldemar Eisenmenger
  *    - initial API and implementation and/or initial documentation
+ *  Martin Jobst
+ *    - add function FB type
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
@@ -128,6 +131,7 @@ public final class LibraryElementTags {
 	public static final String SEGMENT_COMMUNICATION_CONFIG = "CommunicationConfiguration"; //$NON-NLS-1$
 
 	public static final String FUNCTION_ELEMENT = "Function"; //$NON-NLS-1$
+	public static final String FUNCTION_BODY_ELEMENT = "FunctionBody"; //$NON-NLS-1$
 
 	public static final String DATE_ATTRIBUTE = "Date"; //$NON-NLS-1$
 	public static final String REMARKS_ATTRIBUTE = "Remarks"; //$NON-NLS-1$

@@ -54,6 +54,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -180,7 +181,7 @@ public class FBTImporter extends TypeImporter {
 
 		if ((newType instanceof BasicFBType) || (newType instanceof CompositeFBType)
 				|| (newType instanceof ServiceInterfaceFBType) || (newType instanceof SimpleFBType)
-				|| (newType instanceof SubAppType)) {
+				|| (newType instanceof SubAppType) || (newType instanceof FunctionFBType)) {
 			return;
 		}
 		setElement(convertToServiceInterfaceType(newType));
