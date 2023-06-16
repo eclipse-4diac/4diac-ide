@@ -37,10 +37,10 @@ public class ServiceSequenceSaveAndLoadHelper {
 	private static final String FOLDER_NAME = "traces"; //$NON-NLS-1$
 
 	public static void saveServiceSequence(final FBType fbtype, final ServiceSequence seq) {
-		saveServiceSequence(fbtype, new ArrayList<>(Arrays.asList(seq)));
+		saveServiceSequences(fbtype, new ArrayList<>(Arrays.asList(seq)));
 	}
 
-	public static void saveServiceSequence(final FBType fbtype, final ArrayList<ServiceSequence> seqs) {
+	public static void saveServiceSequences(final FBType fbtype, final ArrayList<ServiceSequence> seqs) {
 		final IProject project = fbtype.getTypeEntry().getFile().getProject();
 		final IFolder folder = project.getFolder(FOLDER_NAME);
 		if (!folder.exists()) {
@@ -108,7 +108,7 @@ public class ServiceSequenceSaveAndLoadHelper {
 		final ArrayList<ServiceSequence> seqs = loadServiceSequencesFromFile(fbtype);
 
 		for (final ServiceSequence seq : seqs) {
-			if (seq.equals(seqToFind) && seq.getEventManager() != null
+			if (seq.getName().equals(seqToFind.getName()) && seq.getEventManager() != null
 					&& seq.getEventManager() instanceof final EventManager evntMngr) {
 				return evntMngr;
 			}
@@ -119,7 +119,7 @@ public class ServiceSequenceSaveAndLoadHelper {
 
 	public static void removeServiceSequenceFromFile(final FBType fbtype, final ServiceSequence seq) {
 		final ArrayList<ServiceSequence> serviceSequences = loadServiceSequencesFromFile(fbtype);
-		serviceSequences.remove(seq);
+		serviceSequences.removeIf(s -> s.getName().equals(seq.getName()));
 		saveServiceSequenceToFile(fbtype, serviceSequences);
 	}
 }

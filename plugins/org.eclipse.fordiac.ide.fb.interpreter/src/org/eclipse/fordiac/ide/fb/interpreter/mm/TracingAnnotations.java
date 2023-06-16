@@ -14,7 +14,6 @@
 
 package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
-import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
@@ -23,7 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 public class TracingAnnotations {
 
 	public static EList<ECTransition> getTransitions(final ECC ecc, final EccTrace trace) {
-		return ECollections.emptyEList();
+		throw new UnsupportedOperationException("Not implemented yet !!! ");
 	}
 
 	private TracingAnnotations() {

@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServi
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.CoverageCalculator;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.Permutations;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.ServiceSequenceSaveAndLoadHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -63,6 +64,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 			RecordServiceSequenceHandler.setParameters(fbtype, new ArrayList<>());
 
 			final List<EventManager> eventManagers = createEventManagers(fbtype, combinations);
+			final ArrayList<ServiceSequence> serviceSequences = new ArrayList<>();
 
 			for (final EventManager eventManager : eventManagers) {
 				TransactionFactory.addTraceInfoTo(eventManager.getTransactions());
@@ -80,13 +82,13 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 						"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), //$NON-NLS-1$
 								fbtype));
 				seq.setEventManager(eventManager);
+				serviceSequences.add(seq);
 
 				for (final Transaction transaction : eventManager.getTransactions()) {
 					ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbtype, (FBTransaction) transaction);
 				}
 			}
-			// TODO SAVE SEQUENCES
-			// EventManagerSaveAndLoadHelper.saveEventManagerToFile(fbtype, eventManagers);
+			ServiceSequenceSaveAndLoadHelper.saveServiceSequences(fbtype, serviceSequences);
 		}
 		return null;
 	}
