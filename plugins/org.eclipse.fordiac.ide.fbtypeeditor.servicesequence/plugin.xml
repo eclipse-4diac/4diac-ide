@@ -6,7 +6,7 @@
       <editor
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceSequenceEditor"
             sortIndex="66"
-            type="ForAllTypes">
+            type="ForAllNonFunctionFBTypes">
       </editor>
    </extension>
    <extension

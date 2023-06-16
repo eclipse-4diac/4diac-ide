@@ -9,7 +9,7 @@
       <editor
             class="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor"
             contributorClass="org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor"
-            extensions="fbt, adp"
+            extensions="fbt, fct, adp"
             icon="fordiacimage://ICON_FB_TYPE"
             id="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor"
             name="FB Type Editor"

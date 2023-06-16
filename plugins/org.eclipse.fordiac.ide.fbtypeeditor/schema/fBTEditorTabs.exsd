@@ -83,6 +83,8 @@
                   </enumeration>
                   <enumeration value="ForAllNonAdapterFBTypes">
                   </enumeration>
+                  <enumeration value="ForAllNonFunctionFBTypes">
+                  </enumeration>
                   <enumeration value="ForAllTypes">
                   </enumeration>
                </restriction>
