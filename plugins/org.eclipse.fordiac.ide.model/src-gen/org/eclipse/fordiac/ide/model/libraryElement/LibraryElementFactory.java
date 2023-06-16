@@ -414,6 +414,15 @@ public interface LibraryElementFactory extends EFactory {
 	FBType createFBType();
 
 	/**
+	 * Returns a new object of class '<em>Function FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Function FB Type</em>'.
+	 * @generated
+	 */
+	FunctionFBType createFunctionFBType();
+
+	/**
 	 * Returns a new object of class '<em>Group</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -682,6 +691,15 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	STAlgorithm createSTAlgorithm();
+
+	/**
+	 * Returns a new object of class '<em>ST Function Body</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Function Body</em>'.
+	 * @generated
+	 */
+	STFunctionBody createSTFunctionBody();
 
 	/**
 	 * Returns a new object of class '<em>ST Method</em>'.
