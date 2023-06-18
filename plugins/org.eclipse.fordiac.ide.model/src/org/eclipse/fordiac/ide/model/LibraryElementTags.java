@@ -79,6 +79,7 @@ public final class LibraryElementTags {
 	public static final String INITIALVALUE_ATTRIBUTE = "InitialValue"; //$NON-NLS-1$
 	public static final String OUTPUT_VARS_ELEMENT = "OutputVars"; //$NON-NLS-1$
 	public static final String INPUT_VARS_ELEMENT = "InputVars"; //$NON-NLS-1$
+	public static final String INOUT_VARS_ELEMENT = "InOutVars"; //$NON-NLS-1$
 	public static final String EVENT_OUTPUTS = "EventOutputs"; //$NON-NLS-1$
 	public static final String EVENT_INPUTS_ELEMENT = "EventInputs"; //$NON-NLS-1$
 

@@ -196,21 +196,19 @@ public class FBTImporter extends TypeImporter {
 	protected void parseService(final FBType type) throws TypeImportException, XMLStreamException {
 
 		final String rightInterface = getAttributeValue(LibraryElementTags.RIGHT_INTERFACE_ATTRIBUTE);
-		if (null != rightInterface) {
-			final ServiceInterface rightInter = LibraryElementFactory.eINSTANCE.createServiceInterface();
-			rightInter.setName(rightInterface);
-			type.getService().setRightInterface(rightInter);
-		} else {
+		if (null == rightInterface) {
 			throw new TypeImportException(Messages.FBTImporter_SERVICE_INTERFACE_RIGHTINTERFACE_EXCEPTION);
 		}
+		final ServiceInterface rightInter = LibraryElementFactory.eINSTANCE.createServiceInterface();
+		rightInter.setName(rightInterface);
+		type.getService().setRightInterface(rightInter);
 		final String leftInterface = getAttributeValue(LibraryElementTags.LEFT_INTERFACE_ATTRIBUTE);
-		if (null != leftInterface) {
-			final ServiceInterface leftInter = LibraryElementFactory.eINSTANCE.createServiceInterface();
-			leftInter.setName(leftInterface);
-			type.getService().setLeftInterface(leftInter);
-		} else {
+		if (null == leftInterface) {
 			throw new TypeImportException(Messages.FBTImporter_SERVICE_INTERFACE_LEFTINTERFACE_EXCEPTION);
 		}
+		final ServiceInterface leftInter = LibraryElementFactory.eINSTANCE.createServiceInterface();
+		leftInter.setName(leftInterface);
+		type.getService().setLeftInterface(leftInter);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
 			type.setComment(comment);
@@ -239,7 +237,8 @@ public class FBTImporter extends TypeImporter {
 			if (LibraryElementTags.SERVICE_TRANSACTION_ELEMENT.equals(name)) {
 				parseServiceTransaction(serviceSequence, type);
 				return true;
-			} else if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
+			}
+			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
 				parseGenericAttributeNode(serviceSequence);
 				proceedToEndElementNamed(name);
 				return true;
@@ -311,21 +310,19 @@ public class FBTImporter extends TypeImporter {
 
 	private void parsePrimitive(final FBType type, final Primitive outputPrimitive) throws TypeImportException {
 		final String interFace = getAttributeValue(LibraryElementTags.INTERFACE_ATTRIBUTE);
-		if (null != interFace) {
-			if (interFace.equals(type.getService().getLeftInterface().getName())) {
-				outputPrimitive.setInterface(type.getService().getLeftInterface());
-			} else if (interFace.equals(type.getService().getRightInterface().getName())) {
-				outputPrimitive.setInterface(type.getService().getRightInterface());
-			}
-		} else {
+		if (null == interFace) {
 			throw new TypeImportException(Messages.FBTImporter_OUTPUT_PRIMITIVE_EXCEPTION);
 		}
+		if (interFace.equals(type.getService().getLeftInterface().getName())) {
+			outputPrimitive.setInterface(type.getService().getLeftInterface());
+		} else if (interFace.equals(type.getService().getRightInterface().getName())) {
+			outputPrimitive.setInterface(type.getService().getRightInterface());
+		}
 		final String event = getAttributeValue(getEventElement());
-		if (null != event) {
-			outputPrimitive.setEvent(event);
-		} else {
+		if (null == event) {
 			throw new TypeImportException(Messages.FBTImporter_OUTPUT_PRIMITIVE_EVENT_EXCEPTION);
 		}
+		outputPrimitive.setEvent(event);
 		final String parameters = getAttributeValue(LibraryElementTags.PARAMETERS_ATTRIBUTE);
 		if (null != parameters) {
 			outputPrimitive.setParameters(parameters);
@@ -527,11 +524,10 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException */
 	private void parseOtherAlg(final OtherAlgorithm alg) throws TypeImportException, XMLStreamException {
 		final String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
-		if (null != language) {
-			alg.setLanguage(language);
-		} else {
+		if (null == language) {
 			throw new TypeImportException(Messages.FBTImporter_OTHER_ALG_MISSING_LANG_EXCEPTION);
 		}
+		alg.setLanguage(language);
 
 		parseAlgorithmText(alg);
 		proceedToEndElementNamed(LibraryElementTags.OTHER_ELEMENT);
@@ -590,12 +586,12 @@ public class FBTImporter extends TypeImporter {
 					parseOtherMethod((OtherMethod) retVal);
 					break;
 				case LibraryElementTags.VAR_DECLARATION_ELEMENT:
-					if (retVal instanceof TextMethod) {
+					if (retVal instanceof final TextMethod textMethod) {
 						final VarDeclaration declaration = parseVarDeclaration();
 						if (declaration.isIsInput()) {
-							((TextMethod) retVal).getInputParameters().add(declaration);
+							textMethod.getInputParameters().add(declaration);
 						} else {
-							((TextMethod) retVal).getOutputParameters().add(declaration);
+							textMethod.getOutputParameters().add(declaration);
 						}
 						break;
 					}
@@ -632,11 +628,10 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException */
 	private void parseOtherMethod(final OtherMethod method) throws TypeImportException, XMLStreamException {
 		final String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
-		if (null != language) {
-			method.setLanguage(language);
-		} else {
+		if (null == language) {
 			throw new TypeImportException(Messages.FBTImporter_OTHER_METHOD_MISSING_LANG_EXCEPTION);
 		}
+		method.setLanguage(language);
 
 		parseMethodText(method);
 		proceedToEndElementNamed(LibraryElementTags.OTHER_ELEMENT);
@@ -706,20 +701,18 @@ public class FBTImporter extends TypeImporter {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANSITION_SOURCE_EXCEPTION);
 		}
 		final String destination = getAttributeValue(LibraryElementTags.DESTINATION_ATTRIBUTE);
-		if (null != destination) {
-			final ECState state = ecStates.get(destination);
-			if (state != null) {
-				ecTransition.setDestination(state);
-			}
-		} else {
+		if (null == destination) {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANSITION_DEST_EXCEPTION);
 		}
+		final ECState state = ecStates.get(destination);
+		if (state != null) {
+			ecTransition.setDestination(state);
+		}
 		final String condition = getAttributeValue(LibraryElementTags.CONDITION_ATTRIBUTE);
-		if (null != condition) {
-			validateTransitionCondition(ecTransition, condition);
-		} else {
+		if (null == condition) {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANASITION_CONDITION_EXCEPTION);
 		}
+		validateTransitionCondition(ecTransition, condition);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
 			ecTransition.setComment(comment);
@@ -745,13 +738,11 @@ public class FBTImporter extends TypeImporter {
 			if (event != null) {
 				// remainder is expression (except trailing ']')
 				expression = split.length > 1 ? split[1].substring(0, split[1].lastIndexOf(']')).trim() : ""; //$NON-NLS-1$
+			} else // no match (all is expression)
+			if (condition.startsWith("[")) { //$NON-NLS-1$
+				expression = condition.substring(1, condition.lastIndexOf(']'));
 			} else {
-				// no match (all is expression)
-				if (condition.startsWith("[")) { //$NON-NLS-1$
-					expression = condition.substring(1, condition.lastIndexOf(']'));
-				} else {
-					expression = condition;
-				}
+				expression = condition;
 			}
 		}
 
@@ -928,6 +919,10 @@ public class FBTImporter extends TypeImporter {
 				case LibraryElementTags.PLUGS_ELEMENT:
 					parseAdapterList(interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT, false);
 					break;
+				case LibraryElementTags.INOUT_VARS_ELEMENT:
+					parseVariableList(LibraryElementTags.INOUT_VARS_ELEMENT, interfaceList.getInOutVars());
+					interfaceList.getInOutVars().forEach(v -> variables.put(v.getName(), v));
+					break;
 				default:
 					return false;
 				}
@@ -1005,13 +1000,12 @@ public class FBTImporter extends TypeImporter {
 		// socket or plug interface
 		a.setIsInput(input);
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (null != typeName) {
-			final AdapterTypeEntry entry = getTypeLibrary().getAdapterTypeEntry(typeName);
-			if (null != entry) {
-				a.setType(entry.getType());
-			}
-		} else {
+		if (null == typeName) {
 			throw new TypeImportException(Messages.FBTImporter_ADAPTER_DECLARATION_TYPE_EXCEPTION);
+		}
+		final AdapterTypeEntry entry = getTypeLibrary().getAdapterTypeEntry(typeName);
+		if (null != entry) {
+			a.setType(entry.getType());
 		}
 
 		createAdapterFB(a);
@@ -1050,14 +1044,28 @@ public class FBTImporter extends TypeImporter {
 		withList.entrySet().forEach(entry -> {
 			final Event e = entry.getKey();
 			entry.getValue().forEach(varName -> {
-				final VarDeclaration v = variables.get(varName);
+				final VarDeclaration v = getWithedVar(varName, e);
 				if (null != v) {
-					final With withConstruct = LibraryElementFactory.eINSTANCE.createWith();
-					withConstruct.setVariables(v);
-					e.getWith().add(withConstruct);
+					e.getWith().add(createWith(v));
 				}
 			});
 		});
+	}
+
+	private VarDeclaration getWithedVar(final String varName, final Event ev) {
+		final VarDeclaration varDecl = variables.get(varName);
+		if (varDecl.isInOutVar() && !ev.isIsInput()) {
+			// we need to get the mirrored var in out
+			final InterfaceList il = (InterfaceList) varDecl.eContainer();
+			return il.getOutMappedInOutVars().get(il.getInOutVars().indexOf(varDecl));
+		}
+		return varDecl;
+	}
+
+	private static With createWith(final VarDeclaration v) {
+		final With withConstruct = LibraryElementFactory.eINSTANCE.createWith();
+		withConstruct.setVariables(v);
+		return withConstruct;
 	}
 
 	/** This method parses EventInputs of FBTypes.
