@@ -12,7 +12,7 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  * 	 Christoph Binder - Extracted code from StructuredTextParseUtil, to enable possibility to reuse this class for multiple xtexteditors
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextalgorithm.util
+package org.eclipse.fordiac.ide.structuredtextcore.util
 
 import java.util.Collection
 import java.util.List
@@ -20,7 +20,6 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
-import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextcore.FBTypeXtextResource
 import org.eclipse.xtext.ParserRule
 import org.eclipse.xtext.diagnostics.Severity
@@ -36,10 +35,11 @@ import org.eclipse.xtext.validation.Issue
 
 import static extension org.eclipse.emf.common.util.URI.createPlatformResourceURI
 
-class ParseUtil {
-	
-	def protected static postProcess(IResourceServiceProvider serviceProvider, XtextResourceSet resourceSet, String text, ParserRule entryPoint, LibraryElement type,
-		Collection<? extends EObject> additionalContent, List<Issue> issues,URI uri){
+class STCoreParseUtil {
+
+	def static parse(IResourceServiceProvider serviceProvider, XtextResourceSet resourceSet, String text,
+		ParserRule entryPoint, LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues,
+		URI uri) {
 		resourceSet.loadOptions.putAll(#{
 			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
 			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
@@ -48,18 +48,18 @@ class ParseUtil {
 		resource.URI = type?.typeEntry?.file?.fullPath?.toString?.createPlatformResourceURI(true) ?: uri
 		resourceSet.resources.add(resource)
 		resource.entryPoint = entryPoint
-		if(type instanceof FBType){
+		if (type instanceof FBType) {
 			resource.fbType = type
 		}
-		if(!additionalContent.nullOrEmpty) (resource as STAlgorithmResource).additionalContent.addAll(additionalContent)
+		if(!additionalContent.nullOrEmpty) resource.additionalContent.addAll(additionalContent)
 		resource.load(new LazyStringInputStream(text), resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
 		issues.addAll(validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl))
 		return resource.parseResult
 	}
-	
-	def protected static IParseResult postProcess(String name, List<String> errors, List<String> warnings,
-		List<String> infos, List<Issue> issues, IParseResult parseResult) {
+
+	def static IParseResult postProcess(String name, List<String> errors, List<String> warnings, List<String> infos,
+		List<Issue> issues, IParseResult parseResult) {
 
 		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''«name» at «lineNumber»: «message»'''])
 		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''«name» at «lineNumber»: «message»'''])
@@ -69,8 +69,8 @@ class ParseUtil {
 		}
 		return parseResult
 	}
-	
-	def protected static IParseResult postProcess(IParseResult parseResult, List<String> errors, List<String> warnings,
+
+	def static IParseResult postProcess(IParseResult parseResult, List<String> errors, List<String> warnings,
 		List<String> infos, List<Issue> issues) {
 
 		errors?.addAll(issues.filter[severity == Severity.ERROR].map[message])
@@ -80,5 +80,9 @@ class ParseUtil {
 			return null
 		}
 		return parseResult
+	}
+
+	private new() {
+		throw new UnsupportedOperationException
 	}
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
- * 				 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
+ * 				            Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,7 +15,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.document
 
 import org.eclipse.core.runtime.IProgressMonitor
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextcore.FBTypeXtextResource
 import org.eclipse.jface.text.IDocument
@@ -33,10 +33,12 @@ abstract class FBTypeXtextDocumentProvider extends XtextDocumentProvider {
 			val typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(editorInput.file)
 			if (typeEntry !== null) {
 				val libraryElement = typeEntry.typeEditable
-				if (libraryElement instanceof BaseFBType) {
+				if (libraryElement instanceof FBType) {
 					setDocumentContent(document, libraryElement)
 					result = true
 				}
+			} else {
+				result = super.setDocumentContent(document, editorInput, encoding);
 			}
 		}
 		if (result) {
@@ -50,7 +52,7 @@ abstract class FBTypeXtextDocumentProvider extends XtextDocumentProvider {
 			val typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(element.file)
 			if (typeEntry !== null) {
 				val libraryElement = typeEntry.typeEditable
-				if (libraryElement instanceof BaseFBType) {
+				if (libraryElement instanceof FBType) {
 					if (document instanceof XtextDocument) {
 						doSaveDocument(monitor, element, libraryElement, document)
 					}
@@ -78,7 +80,7 @@ abstract class FBTypeXtextDocumentProvider extends XtextDocumentProvider {
 			val typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEditorInput.file)
 			if (typeEntry !== null) {
 				val libraryElement = typeEntry.typeEditable
-				if (libraryElement instanceof BaseFBType) {
+				if (libraryElement instanceof FBType) {
 					removeUnchangedElementListeners(fileEditorInput, info);
 
 					document.internalModify [ resource |
@@ -94,7 +96,7 @@ abstract class FBTypeXtextDocumentProvider extends XtextDocumentProvider {
 		}
 	}
 
-	def abstract void doSaveDocument(IProgressMonitor monitor, IFileEditorInput fileEditorInput, BaseFBType element, XtextDocument document)
+	def abstract void doSaveDocument(IProgressMonitor monitor, IFileEditorInput fileEditorInput, FBType element, XtextDocument document)
 	
-	def abstract void setDocumentContent(IDocument monitor, BaseFBType element)
+	def abstract void setDocumentContent(IDocument monitor, FBType element)
 }

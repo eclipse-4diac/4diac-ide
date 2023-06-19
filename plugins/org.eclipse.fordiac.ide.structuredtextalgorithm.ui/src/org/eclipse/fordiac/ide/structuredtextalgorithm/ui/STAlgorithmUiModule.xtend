@@ -19,25 +19,27 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui
 import com.google.inject.Binder
 import com.google.inject.name.Names
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocument
-import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentProvider
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentPartitioner
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorActions
-import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmURIEditorOpener
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.hyperlinking.STAlgorithmHyperlinkHelper
-import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.quickfix.STAlgorithmQuickAssistProcessor
-import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.reconciler.STAlgorithmDocumentReconcileStrategy
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.ExtractMethodRefactoring
-import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceForIEditorInputFactory
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreURIEditorOpener
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuickAssistProcessor
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDocumentReconcileStrategy
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreCommentDocumentationProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallableRefactoring
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider
+import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceForIEditorInputFactory
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator
@@ -53,8 +55,8 @@ import org.eclipse.xtext.ui.editor.IURIEditorOpener
 import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.editor.XtextSourceViewer
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities
-import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorActions
 import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor
+import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorActions
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper
@@ -88,15 +90,19 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 	}
 
 	def Class<? extends XtextDocumentProvider> bindXtextDocumentProvider() {
-		return STAlgorithmDocumentProvider
+		return STCoreDocumentProvider
+	}
+
+	def Class<? extends STCoreDocumentPartitioner> bindSTCoreDocumentPartitioner() {
+		return STAlgorithmDocumentPartitioner
 	}
 
 	override bindIResourceForEditorInputFactory() {
-		return STAlgorithmResourceForIEditorInputFactory
+		return STCoreResourceForIEditorInputFactory
 	}
 
 	def Class<? extends XtextDocumentReconcileStrategy> bindXtextDocumentReconcileStrategy() {
-		return STAlgorithmDocumentReconcileStrategy
+		return STCoreDocumentReconcileStrategy
 	}
 
 	def Class<? extends IEObjectHoverDocumentationProvider> bindIEObjectHoverDocumentationProvider() {
@@ -147,7 +153,7 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	override void configureLanguageSpecificURIEditorOpener(Binder binder) {
 		if (PlatformUI.isWorkbenchRunning()) {
-			binder.bind(IURIEditorOpener).annotatedWith(LanguageSpecific).to(STAlgorithmURIEditorOpener)
+			binder.bind(IURIEditorOpener).annotatedWith(LanguageSpecific).to(STCoreURIEditorOpener)
 		}
 	}
 
@@ -160,13 +166,13 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 	}
 
 	def Class<? extends XtextQuickAssistProcessor> bindXtextQuickAssistProcessor() {
-		return STAlgorithmQuickAssistProcessor
+		return STCoreQuickAssistProcessor
 	}
 
 	def Class<? extends XtextSourceViewer.Factory> bindXtextSourceViewer$Factory() {
 		return STCoreSourceViewerFactory;
 	}
-	
+
 	def Class<? extends EmbeddedEditorActions.Factory> bindEmbeddedEditorActions$Factory() {
 		return STAlgorithmEmbeddedEditorActions.Factory
 	}
@@ -181,10 +187,9 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 	}
 
 	def void configureContentAssist(Binder binder) {
-		binder.bind(IPreferenceStoreInitializer).annotatedWith(Names.named("contentAssistInitializer")) //$NON-NLS-1$
+		binder.bind(IPreferenceStoreInitializer).annotatedWith(Names.named("contentAssistInitializer")) // $NON-NLS-1$
 		.to(STCoreContentAssistPreferences.Initializer);
-		binder.bind(String).annotatedWith(
-				Names.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS))
-		.toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider);
+		binder.bind(String).annotatedWith(Names.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS)).
+			toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider);
 	}
 }

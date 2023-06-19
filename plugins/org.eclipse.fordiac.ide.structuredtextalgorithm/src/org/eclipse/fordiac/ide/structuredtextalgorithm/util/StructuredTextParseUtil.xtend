@@ -37,9 +37,10 @@ import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.eclipse.xtext.validation.Issue
 
+import static extension org.eclipse.fordiac.ide.structuredtextcore.util.STCoreParseUtil.*
 import static extension org.eclipse.xtext.EcoreUtil2.*
 
-class StructuredTextParseUtil extends ParseUtil {
+class StructuredTextParseUtil {
 	static final URI SYNTHETIC_URI = URI.createURI("__synthetic.stalg")
 	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.
 		getResourceServiceProvider(SYNTHETIC_URI)
@@ -158,7 +159,7 @@ class StructuredTextParseUtil extends ParseUtil {
 			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
 			STCoreUtil.OPTION_EXPECTED_TYPE -> expectedType
 		})
-		SERVICE_PROVIDER.postProcess(resourceSet, text, entryPoint, type, additionalContent, issues,
+		SERVICE_PROVIDER.parse(resourceSet, text, entryPoint, type, additionalContent, issues,
 			uri ?: SYNTHETIC_URI)
 	}
 }

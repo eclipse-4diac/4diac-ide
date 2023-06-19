@@ -14,13 +14,19 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm
 
 import com.google.inject.Binder
 import com.google.inject.name.Names
-import org.eclipse.fordiac.ide.structuredtextalgorithm.naming.STAlgorithmQualifiedNameProvider
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResourceDescriptionStrategy
 import org.eclipse.fordiac.ide.structuredtextalgorithm.scoping.STAlgorithmImportedNamespaceAwareLocalScopeProvider
 import org.eclipse.fordiac.ide.structuredtextalgorithm.scoping.STAlgorithmLinkingDiagnosticMessageProvider
+import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmMapper
+import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmPartitioner
+import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmReconciler
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters
+import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameProvider
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler
 import org.eclipse.xtext.Constants
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider
 import org.eclipse.xtext.naming.IQualifiedNameProvider
@@ -65,6 +71,18 @@ class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 	}
 
 	override Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
-		return STAlgorithmQualifiedNameProvider
+		return STCoreQualifiedNameProvider
+	}
+
+	def Class<? extends STCorePartitioner> bindSTCorePartitioner() {
+		return STAlgorithmPartitioner
+	}
+
+	def Class<? extends STCoreReconciler> bindSTCoreReconciler() {
+		return STAlgorithmReconciler
+	}
+
+	def Class<? extends STCoreMapper> bindSTCoreMapper() {
+		return STAlgorithmMapper
 	}
 }

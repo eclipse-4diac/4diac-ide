@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +16,7 @@ import com.google.inject.Inject
 import java.io.ByteArrayOutputStream
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -24,6 +25,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGramm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.xtext.nodemodel.ICompositeNode
@@ -31,15 +33,14 @@ import org.eclipse.xtext.resource.XtextResource
 
 import static extension org.eclipse.emf.common.util.ECollections.*
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
-import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 
-class STAlgorithmPartitioner {
+class STAlgorithmPartitioner implements STCorePartitioner {
 	final static String LOST_AND_FOUND_NAME = "LOST_AND_FOUND"
 
 	@Inject
 	extension STAlgorithmGrammarAccess grammarAccess
 
-	def String combine(FBType fbType) {
+	override String combine(FBType fbType) {
 		if(fbType instanceof BaseFBType) fbType.combine else ""
 	}
 
@@ -65,7 +66,10 @@ class STAlgorithmPartitioner {
 
 	def dispatch String toSTText(org.eclipse.fordiac.ide.model.libraryElement.STMethod method) { method.text }
 
-	def EList<ICallable> partition(XtextResource resource) {
+	override EList<ICallable> partition(XtextResource resource) {
+		if(resource.entryPoint !== null && resource.entryPoint !== STAlgorithmSourceRule) {
+			return null;
+		}
 		val source = resource.contents.get(0)
 		if (source instanceof STAlgorithmSource) {
 			source.partition

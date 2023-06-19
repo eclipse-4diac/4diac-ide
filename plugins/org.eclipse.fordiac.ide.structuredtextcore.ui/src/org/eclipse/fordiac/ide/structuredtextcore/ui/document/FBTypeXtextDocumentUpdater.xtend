@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
- * 				 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
+ *                          Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.document
 
+import com.google.inject.Inject
+import com.google.inject.name.Named
 import org.eclipse.core.runtime.IProgressMonitor
 import org.eclipse.core.runtime.Status
 import org.eclipse.core.runtime.jobs.Job
@@ -23,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.structuredtextcore.FBTypeXtextResource
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.eclipse.xtext.Constants
 
 class FBTypeXtextDocumentUpdater extends Job{
 	final FBTypeChangeAdapter changeAdapter
@@ -31,7 +34,8 @@ class FBTypeXtextDocumentUpdater extends Job{
 	@Accessors(PUBLIC_GETTER) volatile boolean paused = false
 	@Accessors long delay = 500
 
-	new(String name) {
+	@Inject
+	new(@Named(Constants.LANGUAGE_NAME) String name) {
 		super(name)
 		this.changeAdapter = new FBTypeChangeAdapter(this)
 		setPriority(Job.SHORT)

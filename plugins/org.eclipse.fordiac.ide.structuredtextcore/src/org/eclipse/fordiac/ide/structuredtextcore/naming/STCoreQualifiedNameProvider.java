@@ -10,14 +10,14 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextalgorithm.naming;
+package org.eclipse.fordiac.ide.structuredtextcore.naming;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.emf.FordiacMetaData;
 import org.eclipse.xtext.naming.DefaultDeclarativeQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
 
-public class STAlgorithmQualifiedNameProvider extends DefaultDeclarativeQualifiedNameProvider {
+public class STCoreQualifiedNameProvider extends DefaultDeclarativeQualifiedNameProvider {
 
 	@Override
 	protected QualifiedName computeFullyQualifiedName(final EObject obj) {

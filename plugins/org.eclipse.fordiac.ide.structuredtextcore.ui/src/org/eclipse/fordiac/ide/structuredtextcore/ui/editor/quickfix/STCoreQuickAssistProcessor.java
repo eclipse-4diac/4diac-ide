@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.quickfix;
+package org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix;
 
 import java.util.stream.Collectors;
 
@@ -21,7 +21,7 @@ import org.eclipse.xtext.ui.editor.quickfix.IssueResolution;
 import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor;
 import org.eclipse.xtext.validation.Issue;
 
-public class STAlgorithmQuickAssistProcessor extends XtextQuickAssistProcessor {
+public class STCoreQuickAssistProcessor extends XtextQuickAssistProcessor {
 
 	@Override
 	public Iterable<IssueResolution> getResolutions(final Issue issue, final IXtextDocument document) {
