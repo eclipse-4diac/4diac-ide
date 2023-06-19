@@ -966,6 +966,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Function" abstract="true" eSuperTypes="#//ICallable"/>
   <eClassifiers xsi:type="ecore:EClass" name="FunctionBody" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="FunctionFBType" eSuperTypes="#//FBType">
     <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//FunctionBody"
@@ -1503,6 +1504,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFBType" eSuperTypes="#//FBType"/>
   <eClassifiers xsi:type="ecore:EClass" name="SimpleFBType" eSuperTypes="#//BaseFBType"/>
   <eClassifiers xsi:type="ecore:EClass" name="STAlgorithm" eSuperTypes="#//TextAlgorithm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STFunction" eSuperTypes="#//TextFunction"/>
   <eClassifiers xsi:type="ecore:EClass" name="STFunctionBody" eSuperTypes="#//TextFunctionBody"/>
   <eClassifiers xsi:type="ecore:EClass" name="STMethod" eSuperTypes="#//TextMethod"/>
   <eClassifiers xsi:type="ecore:EClass" name="SubApp" eSuperTypes="#//FBNetworkElement">
@@ -1589,6 +1591,16 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextAlgorithm" abstract="true" eSuperTypes="#//Algorithm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextFunction" abstract="true" eSuperTypes="#//Function">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputParameters" upperBound="-1"
+        eType="#//INamedElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputParameters" upperBound="-1"
+        eType="#//INamedElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inOutParameters" upperBound="-1"
+        eType="#//INamedElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextFunctionBody" abstract="true" eSuperTypes="#//FunctionBody">

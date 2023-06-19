@@ -99,6 +99,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
@@ -240,6 +241,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.SERVICE_INTERFACE_FB_TYPE: return createServiceInterfaceFBType();
 			case LibraryElementPackage.SIMPLE_FB_TYPE: return createSimpleFBType();
 			case LibraryElementPackage.ST_ALGORITHM: return createSTAlgorithm();
+			case LibraryElementPackage.ST_FUNCTION: return createSTFunction();
 			case LibraryElementPackage.ST_FUNCTION_BODY: return createSTFunctionBody();
 			case LibraryElementPackage.ST_METHOD: return createSTMethod();
 			case LibraryElementPackage.SUB_APP: return createSubApp();
@@ -1114,6 +1116,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public STAlgorithm createSTAlgorithm() {
 		STAlgorithmImpl stAlgorithm = new STAlgorithmImpl();
 		return stAlgorithm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STFunction createSTFunction() {
+		STFunctionImpl stFunction = new STFunctionImpl();
+		return stFunction;
 	}
 
 	/**

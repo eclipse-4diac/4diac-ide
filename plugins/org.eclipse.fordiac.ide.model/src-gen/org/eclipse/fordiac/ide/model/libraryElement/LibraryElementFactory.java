@@ -693,6 +693,15 @@ public interface LibraryElementFactory extends EFactory {
 	STAlgorithm createSTAlgorithm();
 
 	/**
+	 * Returns a new object of class '<em>ST Function</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Function</em>'.
+	 * @generated
+	 */
+	STFunction createSTFunction();
+
+	/**
 	 * Returns a new object of class '<em>ST Function Body</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

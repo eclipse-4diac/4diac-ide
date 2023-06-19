@@ -911,6 +911,29 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.STFunction} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected STFunctionItemProvider stFunctionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.STFunction}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSTFunctionAdapter() {
+		if (stFunctionItemProvider == null) {
+			stFunctionItemProvider = new STFunctionItemProvider(this);
+		}
+
+		return stFunctionItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
