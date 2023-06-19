@@ -79,6 +79,8 @@
                   </enumeration>
                   <enumeration value="subapp">
                   </enumeration>
+                  <enumeration value="function">
+                  </enumeration>
                   <enumeration value="ForAllFBTypes">
                   </enumeration>
                   <enumeration value="ForAllNonAdapterFBTypes">

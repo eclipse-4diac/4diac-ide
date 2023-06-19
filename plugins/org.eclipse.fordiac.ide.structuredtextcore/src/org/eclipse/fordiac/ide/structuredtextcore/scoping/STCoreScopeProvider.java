@@ -186,7 +186,8 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 				|| LibraryElementPackage.eINSTANCE.getAdapterDeclaration().isSuperTypeOf(clazz)
 				|| LibraryElementPackage.eINSTANCE.getFB().isSuperTypeOf(clazz)
 				|| (LibraryElementPackage.eINSTANCE.getICallable().isSuperTypeOf(clazz)
-						&& !LibraryElementPackage.eINSTANCE.getFBType().isSuperTypeOf(clazz)
+						&& (!LibraryElementPackage.eINSTANCE.getFBType().isSuperTypeOf(clazz)
+								|| LibraryElementPackage.eINSTANCE.getFunctionFBType().isSuperTypeOf(clazz))
 						&& !LibraryElementPackage.eINSTANCE.getEvent().isSuperTypeOf(clazz));
 	}
 

@@ -13,15 +13,30 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *       - add linking diagnostic message provider
+ *       - add function FB bindings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor;
 
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.naming.STFunctionQualifiedNameProvider;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.resource.STFunctionResource;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.scoping.STFunctionLinkingDiagnosticMessageProvider;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionMapper;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionPartitioner;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionReconciler;
+import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider;
+import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
+import org.eclipse.xtext.resource.XtextResource;
+
+import com.google.inject.Binder;
+import com.google.inject.name.Names;
 
 /**
  * Use this class to register components to be used at runtime / without the
@@ -35,11 +50,40 @@ public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
 		return STCoreValueConverters.class;
 	}
 
+	@Override
+	public Class<? extends XtextResource> bindXtextResource() {
+		return STFunctionResource.class;
+	}
+
+	@Override
+	public void configureFileExtensions(final Binder binder) {
+		if (properties == null || properties.getProperty(Constants.FILE_EXTENSIONS) == null) {
+			binder.bind(String.class).annotatedWith(Names.named(Constants.FILE_EXTENSIONS)).toInstance("stfunc,fct"); //$NON-NLS-1$
+		}
+	}
+
+	@Override
+	public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
+		return STFunctionQualifiedNameProvider.class;
+	}
+
 	public Class<? extends ICommentAssociater> bindICommentAssociater() {
 		return STCoreCommentAssociater.class;
 	}
 
 	public Class<? extends ILinkingDiagnosticMessageProvider> bindILinkingDiagnosticMessageProvider() {
 		return STFunctionLinkingDiagnosticMessageProvider.class;
+	}
+
+	public Class<? extends STCorePartitioner> bindSTCorePartitioner() {
+		return STFunctionPartitioner.class;
+	}
+
+	public Class<? extends STCoreReconciler> bindSTCoreReconciler() {
+		return STFunctionReconciler.class;
+	}
+
+	public Class<? extends STCoreMapper> bindSTCoreMapper() {
+		return STFunctionMapper.class;
 	}
 }

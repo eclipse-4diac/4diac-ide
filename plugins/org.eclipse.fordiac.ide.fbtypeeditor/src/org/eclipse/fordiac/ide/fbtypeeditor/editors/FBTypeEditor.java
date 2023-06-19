@@ -313,6 +313,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 				((fbType instanceof BaseFBType) && editorType.equals("base")) || //$NON-NLS-1$
 				((fbType instanceof BasicFBType) && editorType.equals("basic")) || //$NON-NLS-1$
 				((fbType instanceof SimpleFBType) && editorType.equals("simple")) || //$NON-NLS-1$
+				((fbType instanceof FunctionFBType) && editorType.equals("function")) || //$NON-NLS-1$
 				((fbType instanceof ServiceInterfaceFBType) && editorType.equals("serviceInterface")) || //$NON-NLS-1$
 				((fbType instanceof CompositeFBType) && editorType.equals("composite")) //$NON-NLS-1$
 				);

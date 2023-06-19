@@ -227,6 +227,10 @@
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
 			uriExtension="stfunc">
 		</resourceServiceProvider>
+  <resourceServiceProvider
+        class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+        uriExtension="fct">
+  </resourceServiceProvider>
 	</extension>
 	<!-- marker definitions for org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction -->
 	<extension
@@ -408,7 +412,7 @@
   <menuContribution
         locationURI="popup:#TextEditorContext?after=xtext.ui.SourceMenu">
      <menu
-           id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.RefactoringMenu"
+           id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.RefactoringMenu"
            label="Refactor">
         <command
               commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
@@ -480,14 +484,21 @@
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.CodeMiningProvider"
 			label="STFunction Codemining">
 			<enabledWhen>
-				<with variable="editorInput">
-					<adapt type="org.eclipse.core.resources.IFile">
-						<test
-							property="org.eclipse.core.resources.contentTypeId"
-							value="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.contenttype">
-						</test>
-					</adapt>
-				</with>
+      <and>
+         <with
+               variable="viewer">
+            <instanceof
+                  value="org.eclipse.xtext.ui.editor.XtextSourceViewer">
+            </instanceof>
+         </with>
+        <with
+              variable="editor">
+           <test
+                 property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+                 value="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction">
+           </test>
+        </with>
+      </and>
 			</enabledWhen>
 		</codeMiningProvider>
 	</extension>
@@ -525,6 +536,12 @@
              menubarPath="debug">
        </action>
     </viewerContribution>
+ </extension>
+ <extension
+       point="org.eclipse.xtext.ui.shared.sharedStateContributingModule">
+    <module
+          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionSharedModule">
+    </module>
  </extension>
  <extension
        point="org.eclipse.ui.preferencePages">
