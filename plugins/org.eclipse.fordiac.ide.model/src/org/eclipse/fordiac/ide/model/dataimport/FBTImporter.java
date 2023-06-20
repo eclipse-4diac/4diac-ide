@@ -903,15 +903,10 @@ public class FBTImporter extends TypeImporter {
 			} else {
 				switch (name) {
 				case LibraryElementTags.INPUT_VARS_ELEMENT:
-					parseVariableList(LibraryElementTags.INPUT_VARS_ELEMENT, interfaceList.getInputVars());
-					interfaceList.getInputVars().forEach(v -> {
-						variables.put(v.getName(), v);
-						v.setIsInput(true);
-					});
+					parseVariableList(LibraryElementTags.INPUT_VARS_ELEMENT, interfaceList.getInputVars(), true);
 					break;
 				case LibraryElementTags.OUTPUT_VARS_ELEMENT:
-					parseVariableList(LibraryElementTags.OUTPUT_VARS_ELEMENT, interfaceList.getOutputVars());
-					interfaceList.getOutputVars().forEach(v -> variables.put(v.getName(), v));
+					parseVariableList(LibraryElementTags.OUTPUT_VARS_ELEMENT, interfaceList.getOutputVars(), false);
 					break;
 				case LibraryElementTags.SOCKETS_ELEMENT:
 					parseAdapterList(interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT, true);
@@ -920,8 +915,7 @@ public class FBTImporter extends TypeImporter {
 					parseAdapterList(interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT, false);
 					break;
 				case LibraryElementTags.INOUT_VARS_ELEMENT:
-					parseVariableList(LibraryElementTags.INOUT_VARS_ELEMENT, interfaceList.getInOutVars());
-					interfaceList.getInOutVars().forEach(v -> variables.put(v.getName(), v));
+					parseVariableList(LibraryElementTags.INOUT_VARS_ELEMENT, interfaceList.getInOutVars(), true);
 					break;
 				default:
 					return false;
@@ -944,11 +938,14 @@ public class FBTImporter extends TypeImporter {
 		return LibraryElementTags.EVENT_INPUTS_ELEMENT;
 	}
 
-	private void parseVariableList(final String nodeName, final EList<VarDeclaration> varList)
+	private void parseVariableList(final String nodeName, final EList<VarDeclaration> varList, final boolean input)
 			throws TypeImportException, XMLStreamException {
 		processChildren(nodeName, name -> {
 			if (name.equals(LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
-				varList.add(parseVarDeclaration());
+				final VarDeclaration v = parseVarDeclaration();
+				varList.add(v);
+				variables.put(v.getName(), v);
+				v.setIsInput(input);
 				return true;
 			}
 			return false;
