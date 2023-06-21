@@ -233,16 +233,19 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 						}
 					});
 			fbType.getTypeEntry().save();
+
 		});
 
 	}
 
 	private void updateInstances() {
 		structSaveDialog.getCollectedFBs().stream().forEach(subApp -> {
-			if (subApp instanceof final SubApp s && !s.isTyped()) {
-				udpateUntypedSubapps(subApp);
-			} else {
-				new UpdateFBTypeCommand(subApp, subApp.getTypeEntry()).execute();
+			if (subApp instanceof final SubApp s) {
+				if (!s.isTyped()) {
+					udpateUntypedSubapps(s);
+				} else {
+					new UpdateFBTypeCommand(s, s.getTypeEntry()).execute();
+				}
 			}
 		});
 
