@@ -63,7 +63,7 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 			final StructuredType updated = (StructuredType) lib.getType(mux.getStructType().getName());
 			return new ChangeStructCommand(mux, updated);
 		}
-		return new UpdateFBTypeCommand(element, null);
+		return new UpdateFBTypeCommand(element);
 	}
 
 	@Override

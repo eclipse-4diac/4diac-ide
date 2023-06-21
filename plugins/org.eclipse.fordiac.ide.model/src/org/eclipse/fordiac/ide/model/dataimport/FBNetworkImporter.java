@@ -61,7 +61,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -76,13 +75,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 class FBNetworkImporter extends CommonElementImporter {
 
@@ -239,7 +235,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		final FBTypeEntry entry = getTypeEntry(typeFbElement);
 
 		if (null == entry) {
-			return createTypeErrorMarkerFB(typeFbElement, getTypeLibrary(),
+			return FordiacMarkerHelper.createTypeErrorMarkerFB(typeFbElement, getTypeLibrary(),
 					LibraryElementFactory.eINSTANCE.createFBType());
 		}
 		final FBType type = entry.getType();
@@ -418,7 +414,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	}
 
 	protected void handleMissingConnectionSource(final Connection connection, final ConnectionBuilder builder) {
-		final FBNetworkElement sourceFB = createErrorMarkerFB(builder.getSourceFbName());
+		final FBNetworkElement sourceFB = FordiacMarkerHelper.createErrorMarkerFB(builder.getSourceFbName());
 		builder.setSrcInterfaceList(sourceFB.getInterface());
 		getFbNetwork().getNetworkElements().add(sourceFB);
 		sourceFB.setName(NameRepository.createUniqueName(sourceFB, sourceFB.getName()));
@@ -440,7 +436,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	protected void handleMissingConnectionDestination(final Connection connection, final ConnectionBuilder builder) {
 		// check if there is already one
-		final FBNetworkElement destinationFb = createErrorMarkerFB(builder.getDestFbName());
+		final FBNetworkElement destinationFb = FordiacMarkerHelper.createErrorMarkerFB(builder.getDestFbName());
 		builder.setDestInterfaceList(destinationFb.getInterface());
 		getFbNetwork().getNetworkElements().add(destinationFb);
 		destinationFb.setName(NameRepository.createUniqueName(destinationFb, destinationFb.getName()));
@@ -491,25 +487,6 @@ class FBNetworkImporter extends CommonElementImporter {
 		return null;
 	}
 
-	protected static ErrorMarkerFBNElement createErrorMarkerFB(final String name) {
-		final ErrorMarkerFBNElement createErrorMarkerFBNElement = LibraryElementFactory.eINSTANCE
-				.createErrorMarkerFBNElement();
-		createErrorMarkerFBNElement.setName(name);
-		createErrorMarkerFBNElement.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		final Position position = LibraryElementFactory.eINSTANCE.createPosition();
-		position.setX(0);
-		position.setY(0);
-		createErrorMarkerFBNElement.setPosition(position);
-		return createErrorMarkerFBNElement;
-	}
-
-	protected static FBNetworkElement createTypeErrorMarkerFB(final String typeFbElement, final TypeLibrary typeLibrary,
-			final FBType fbType) {
-		final ErrorMarkerFBNElement errorFb = createErrorMarkerFB(typeFbElement);
-		final TypeEntry entry = typeLibrary.createErrorTypeEntry(typeFbElement, fbType);
-		errorFb.setTypeEntry(entry);
-		return errorFb;
-	}
 
 	private void createConnectionErrorMarkerBuilder(final String message, final String sourceIdentifier,
 			final String destinationIdentifier, final EObject target) {
