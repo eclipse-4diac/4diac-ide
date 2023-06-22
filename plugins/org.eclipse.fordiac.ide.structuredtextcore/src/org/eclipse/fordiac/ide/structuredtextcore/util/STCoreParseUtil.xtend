@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.util
 
 import java.util.Collection
 import java.util.List
+import java.util.Map
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
@@ -40,6 +41,12 @@ class STCoreParseUtil {
 	def static parse(IResourceServiceProvider serviceProvider, XtextResourceSet resourceSet, String text,
 		ParserRule entryPoint, LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues,
 		URI uri) {
+		serviceProvider.parse(resourceSet, text, entryPoint, type, additionalContent, issues, uri, null)
+	}
+
+	def static parse(IResourceServiceProvider serviceProvider, XtextResourceSet resourceSet, String text,
+		ParserRule entryPoint, LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues,
+		URI uri, Map<?, ?> loadOptions) {
 		resourceSet.loadOptions.putAll(#{
 			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
 			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
@@ -52,7 +59,7 @@ class STCoreParseUtil {
 			resource.fbType = type
 		}
 		if(!additionalContent.nullOrEmpty) resource.additionalContent.addAll(additionalContent)
-		resource.load(new LazyStringInputStream(text), resourceSet.loadOptions)
+		resource.load(new LazyStringInputStream(text), loadOptions ?: resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
 		issues.addAll(validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl))
 		return resource.parseResult

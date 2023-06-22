@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtext.parser.IParseResult
+import org.eclipse.xtext.resource.IResourceFactory
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.resource.XtextResourceSet
@@ -41,7 +42,8 @@ final class STFunctionParseUtil {
 	def static STFunctionSource parse(FunctionFBType fbType, List<String> errors, List<String> warnings,
 		List<String> infos) {
 		extension val partitioner = SERVICE_PROVIDER.get(STFunctionPartitioner)
-		fbType.combine.parseInternal(fbType.eResource?.URI, fbType.name, fbType, errors, warnings, infos)?.rootASTElement as STFunctionSource
+		fbType.combine.parseInternal(fbType.eResource?.URI, fbType.name, fbType, errors, warnings, infos)?.
+			rootASTElement as STFunctionSource
 	}
 
 	def static STFunctionSource parse(String source, String name, List<String> errors, List<String> warnings,
@@ -71,9 +73,11 @@ final class STFunctionParseUtil {
 
 	def private static IParseResult parseInternal(String text, URI uri, LibraryElement type, List<Issue> issues) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
-		resourceSet.loadOptions.putAll(#{
+		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("fct", SERVICE_PROVIDER.get(IResourceFactory))
+		SERVICE_PROVIDER.parse(resourceSet, text, null, type, null, issues, uri ?: SYNTHETIC_URI, #{
+			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
+			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE,
 			STCoreResource.OPTION_PLAIN_ST -> Boolean.TRUE
 		})
-		SERVICE_PROVIDER.parse(resourceSet, text, null, type, null, issues, uri ?: SYNTHETIC_URI)
 	}
 }

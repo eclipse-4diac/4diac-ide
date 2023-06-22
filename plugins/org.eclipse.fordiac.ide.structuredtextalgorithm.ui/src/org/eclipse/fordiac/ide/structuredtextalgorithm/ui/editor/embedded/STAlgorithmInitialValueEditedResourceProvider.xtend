@@ -39,7 +39,6 @@ class STAlgorithmInitialValueEditedResourceProvider implements IEditedResourcePr
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		resourceSet.loadOptions.putAll(#{
 			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
-			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
 			STCoreUtil.OPTION_EXPECTED_TYPE -> element.featureType
 		})
 		val resource = SERVICE_PROVIDER.get(XtextResource) as STAlgorithmResource
@@ -47,7 +46,11 @@ class STAlgorithmInitialValueEditedResourceProvider implements IEditedResourcePr
 		resourceSet.resources.add(resource)
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		resource.entryPoint = parser.grammarAccess.STInitializerExpressionSourceRule
-		resource.defaultLoadOptions.putAll(resourceSet.loadOptions)
+		resource.defaultLoadOptions.putAll(#{
+			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
+			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
+			STCoreUtil.OPTION_EXPECTED_TYPE -> element.featureType
+		})
 		return resource
 	}
 }

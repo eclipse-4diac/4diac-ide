@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.model.typelibrary.testmocks.DataTypeEntryMock
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
@@ -49,6 +50,7 @@ class FunctionsTest {
 	@BeforeAll
 	def static void setupXtext() {
 		typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null)
+		STFunctionStandaloneSetup.doSetup
 		STAlgorithmStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register
 	}

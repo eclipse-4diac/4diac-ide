@@ -58,6 +58,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -110,6 +111,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	@BeforeAll
 	public static void setup() {
 		new DataTypeLibrary();
+		STFunctionStandaloneSetup.doSetup();
 		STAlgorithmStandaloneSetup.doSetup();
 		OtherAlgorithmSupportFactory.register();
 		StructuredTextSupportFactory.register();
