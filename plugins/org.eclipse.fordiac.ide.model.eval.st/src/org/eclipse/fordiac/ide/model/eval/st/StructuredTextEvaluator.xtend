@@ -133,7 +133,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch Variable<?> findVariable(ICallable variable) {
-		variables.get(variable.name)
+		variables.get(variable.name) ?: variables.get("")
 	}
 
 	def protected Variable<?> evaluateVariableInitialization(STVarDeclaration decl) {

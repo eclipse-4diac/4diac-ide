@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
+import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtext.parser.IParseResult
@@ -37,6 +38,17 @@ final class STFunctionParseUtil {
 		getResourceServiceProvider(SYNTHETIC_URI)
 
 	private new() {
+	}
+
+	def static STFunctionSource parse(STFunctionBody body, List<String> errors, List<String> warnings,
+		List<String> infos) {
+		switch (fbType : body.eContainer) {
+			FunctionFBType:
+				fbType.parse(errors, warnings, infos)
+			default:
+				body.text.parseInternal(body.eResource?.URI, null, null, errors, warnings, infos)?.
+					rootASTElement as STFunctionSource
+		}
 	}
 
 	def static STFunctionSource parse(FunctionFBType fbType, List<String> errors, List<String> warnings,
