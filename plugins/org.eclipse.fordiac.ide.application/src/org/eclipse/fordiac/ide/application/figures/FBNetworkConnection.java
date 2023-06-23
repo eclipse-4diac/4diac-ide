@@ -64,7 +64,7 @@ public class FBNetworkConnection extends HideableConnection {
 		return (FBNetworkConnectionLabel) super.getTargetDecoration();
 	}
 
-	private static List<Connection> getHiddenConnections(final EList<Connection> connections) {
+	static List<Connection> getHiddenConnections(final EList<Connection> connections) {
 		return connections.stream().filter(con -> !con.isVisible()).toList();
 	}
 
@@ -130,13 +130,22 @@ public class FBNetworkConnection extends HideableConnection {
 
 	private RotatableDecoration createSourceLabel() {
 		FBNetworkConnectionLabel label;
-		if (isSubappCrossingConnection() && isInGroup(getModel().getSourceElement())) {
-			label = new GroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()), this);
+		if (isFanOut()) {
+			final EList<Connection> outputConnections = getModel().getSource().getOutputConnections();
+			if (outputConnections.indexOf(getModel()) == 0) {
+				label = new GroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()), this);
+			} else {
+				label = new FanOutGroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()), this, outputConnections);
+			}
 		} else {
 			label = new FBNetworkConnectionLabel(true);
 		}
 		label.setBackgroundColor(getForegroundColor());
 		return label;
+	}
+
+	private boolean isFanOut() {
+		return isSubappCrossingConnection() && isInGroup(getModel().getSourceElement());
 	}
 
 	private IFigure getGroupFigure(final FBNetworkElement sourceElement) {
@@ -161,14 +170,14 @@ public class FBNetworkConnection extends HideableConnection {
 
 	private String createSourceLabelText() {
 		if (getModel().getSource() != null && getModel().getDestination() != null) {
-			return createLabelText(getModel().getSource(), getModel().getDestination().getInputConnections());
+			return createLabelText(getModel().getSource(), getModel().getDestination().getInputConnections(), false);
 		}
 		return ""; //$NON-NLS-1$
 	}
 
 	private String createDestinationLabelText() {
 		if (getModel().getSource() != null && getModel().getDestination() != null) {
-			return createLabelText(getModel().getDestination(), getModel().getSource().getOutputConnections());
+			return createLabelText(getModel().getDestination(), getModel().getSource().getOutputConnections(), true);
 		}
 		return ""; //$NON-NLS-1$
 	}
@@ -185,9 +194,9 @@ public class FBNetworkConnection extends HideableConnection {
 		}
 	}
 
-	private String createLabelText(final IInterfaceElement ie, final EList<Connection> connections) {
+	private String createLabelText(final IInterfaceElement ie, final EList<Connection> connections, final boolean isDestLabel) {
 		final List<Connection> hiddenConnections = getHiddenConnections(connections);
-		if (hiddenConnections.size() > 1) {
+		if (!(isDestLabel && isFanOut()) && hiddenConnections.size() > 1) {
 			// we have more then one hidden connection so we show the number
 			return Integer.toString(hiddenConnections.size());
 		}

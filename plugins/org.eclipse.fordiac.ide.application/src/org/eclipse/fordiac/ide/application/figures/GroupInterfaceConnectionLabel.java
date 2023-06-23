@@ -24,13 +24,15 @@ import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 
 public class GroupInterfaceConnectionLabel extends FBNetworkConnectionLabel {
 
+	protected final FBNetworkConnection connFigure;
 	private final Figure connectorLine;
 	private IFigure groupFigure;
 
 	public GroupInterfaceConnectionLabel(final boolean srcLabel, final IFigure groupFigure,
-			final HideableConnection connFigure) {
+			final FBNetworkConnection connFigure) {
 		super(srcLabel);
 		this.groupFigure = groupFigure;
+		this.connFigure = connFigure;
 		connectorLine = createConnectorLine(connFigure);
 		add(connectorLine, (srcLabel) ? 0 : -1);
 
@@ -87,12 +89,35 @@ public class GroupInterfaceConnectionLabel extends FBNetworkConnectionLabel {
 				g.setLineWidth(connFigure.getLineWidth());
 				final Rectangle bounds = getBounds();
 				g.drawLine(bounds.getLeft(), bounds.getRight());
+				drawFanOutConnector(connFigure, g, bounds);
 				if (connFigure.isAdapterOrStructConnection()) {
 					g.setLineWidth(connFigure.getLineWidth() / HideableConnection.NORMAL_DOUBLE_LINE_WIDTH);
 					if (g.getAbsoluteScale() >= 1) {
 						g.setForegroundColor(connFigure.getLighterColor());
 						g.drawLine(bounds.getLeft(), bounds.getRight());
 					}
+				}
+			}
+
+			/*
+			 * Draws the small part of the connection that is needed to connect the
+			 * first group interface label with the other fan out labels.
+			 *
+			 * ----------------------------------->
+			 *                       |   <- draws this
+			 *                       |
+			 *                       ------------->
+			 *                       |
+			 *                       |
+			 *                       ------------->
+			 *                       |
+			 */
+			private void drawFanOutConnector(final HideableConnection connFigure, final Graphics g,
+					final Rectangle bounds) {
+				if (isSrcLabel() && FBNetworkConnection.getHiddenConnections(connFigure.getModel().getSource().getOutputConnections()).size() > 1) {
+					final int labelHeight = getLabel().getBounds().height();
+					final Point right = bounds.getRight();
+					g.drawLine(right.x - labelHeight, right.y, right.x - labelHeight, right.y + labelHeight);
 				}
 			}
 		};
