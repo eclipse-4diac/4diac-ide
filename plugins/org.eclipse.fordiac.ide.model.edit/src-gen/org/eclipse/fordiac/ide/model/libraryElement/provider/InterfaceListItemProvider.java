@@ -124,6 +124,8 @@ public class InterfaceListItemProvider
 			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_OUTPUTS);
 			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS);
 			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS);
+			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS);
+			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS);
 		}
 		return childrenFeatures;
 	}
@@ -182,6 +184,8 @@ public class InterfaceListItemProvider
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
 			case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
 			case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
+			case LibraryElementPackage.INTERFACE_LIST__IN_OUT_VARS:
+			case LibraryElementPackage.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:
@@ -240,6 +244,16 @@ public class InterfaceListItemProvider
 			(createChildParameter
 				(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
 				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
+				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
+				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
 	}
 
 	/**
@@ -259,7 +273,8 @@ public class InterfaceListItemProvider
 			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS ||
 			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_OUTPUTS ||
 			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS ||
-			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS;
+			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS ||
+			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS;
 
 		if (qualify) {
 			return getString

@@ -1191,6 +1191,10 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inOutVars" upperBound="-1"
+        eType="#//VarDeclaration" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outMappedInOutVars" upperBound="-1"
+        eType="#//VarDeclaration" changeable="false" containment="true" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="errorMarker" upperBound="-1"
         eType="#//ErrorMarkerInterface" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">

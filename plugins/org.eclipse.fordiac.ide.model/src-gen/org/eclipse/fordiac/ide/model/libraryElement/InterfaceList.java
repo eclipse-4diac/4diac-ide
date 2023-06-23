@@ -36,6 +36,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getEventOutputs <em>Event Outputs</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getInputVars <em>Input Vars</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getOutputVars <em>Output Vars</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getInOutVars <em>In Out Vars</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getOutMappedInOutVars <em>Out Mapped In Out Vars</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getErrorMarker <em>Error Marker</em>}</li>
  * </ul>
  *
@@ -123,6 +125,18 @@ public interface InterfaceList extends EObject {
 	EList<VarDeclaration> getOutputVars();
 
 	/**
+	 * Returns the value of the '<em><b>In Out Vars</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>In Out Vars</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getInterfaceList_InOutVars()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<VarDeclaration> getInOutVars();
+
+	/**
 	 * Returns the value of the '<em><b>Error Marker</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface}.
 	 * <!-- begin-user-doc -->
@@ -206,5 +220,17 @@ public interface InterfaceList extends EObject {
 	 * @generated
 	 */
 	List<VarDeclaration> getVisibleOutputVars();
+
+	/**
+	 * Returns the value of the '<em><b>Out Mapped In Out Vars</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Out Mapped In Out Vars</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getInterfaceList_OutMappedInOutVars()
+	 * @model containment="true" changeable="false"
+	 * @generated
+	 */
+	EList<VarDeclaration> getOutMappedInOutVars();
 
 } // InterfaceList

@@ -4608,13 +4608,31 @@ public interface LibraryElementPackage extends EPackage {
 	int INTERFACE_LIST__OUTPUT_VARS = 5;
 
 	/**
+	 * The feature id for the '<em><b>In Out Vars</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERFACE_LIST__IN_OUT_VARS = 6;
+
+	/**
+	 * The feature id for the '<em><b>Out Mapped In Out Vars</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS = 7;
+
+	/**
 	 * The feature id for the '<em><b>Error Marker</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INTERFACE_LIST__ERROR_MARKER = 6;
+	int INTERFACE_LIST__ERROR_MARKER = 8;
 
 	/**
 	 * The number of structural features of the '<em>Interface List</em>' class.
@@ -4623,7 +4641,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INTERFACE_LIST_FEATURE_COUNT = 7;
+	int INTERFACE_LIST_FEATURE_COUNT = 9;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar Element</em>}' class.
@@ -8977,6 +8995,28 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getInterfaceList_OutputVars();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getInOutVars <em>In Out Vars</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>In Out Vars</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getInOutVars()
+	 * @see #getInterfaceList()
+	 * @generated
+	 */
+	EReference getInterfaceList_InOutVars();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getOutMappedInOutVars <em>Out Mapped In Out Vars</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Out Mapped In Out Vars</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getOutMappedInOutVars()
+	 * @see #getInterfaceList()
+	 * @generated
+	 */
+	EReference getInterfaceList_OutMappedInOutVars();
+
+	/**
 	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getErrorMarker <em>Error Marker</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11703,6 +11743,22 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference INTERFACE_LIST__OUTPUT_VARS = eINSTANCE.getInterfaceList_OutputVars();
+
+		/**
+		 * The meta object literal for the '<em><b>In Out Vars</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INTERFACE_LIST__IN_OUT_VARS = eINSTANCE.getInterfaceList_InOutVars();
+
+		/**
+		 * The meta object literal for the '<em><b>Out Mapped In Out Vars</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS = eINSTANCE.getInterfaceList_OutMappedInOutVars();
 
 		/**
 		 * The meta object literal for the '<em><b>Error Marker</b></em>' containment reference list feature.
