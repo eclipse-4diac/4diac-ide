@@ -275,7 +275,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 */
 	@Override
 	public EList<IInterfaceElement> getAllInterfaceElements() {
-		return org.eclipse.fordiac.ide.model.Annotations.getAllInterfaceElements(this);
+		return InterfaceListAnnotations.getAllInterfaceElements(this);
 	}
 
 	/**
@@ -285,7 +285,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 */
 	@Override
 	public Event getEvent(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.getEvent(this, name);
+		return InterfaceListAnnotations.getEvent(this, name);
 	}
 
 	/**
@@ -295,7 +295,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 */
 	@Override
 	public VarDeclaration getVariable(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.getVariable(this, name);
+		return InterfaceListAnnotations.getVariable(this, name);
 	}
 
 	/**
@@ -305,7 +305,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 */
 	@Override
 	public IInterfaceElement getInterfaceElement(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);
+		return InterfaceListAnnotations.getInterfaceElement(this, name);
 	}
 
 	/**
@@ -315,7 +315,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 */
 	@Override
 	public FBNetworkElement getFBNetworkElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
+		return InterfaceListAnnotations.getFBNetworkElement(this);
 	}
 
 	/**
@@ -325,7 +325,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 */
 	@Override
 	public AdapterDeclaration getAdapter(final String name) {
-		return org.eclipse.fordiac.ide.model.Annotations.getAdapter(this, name);
+		return InterfaceListAnnotations.getAdapter(this, name);
 	}
 
 	/**

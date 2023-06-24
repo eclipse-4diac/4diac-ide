@@ -1093,7 +1093,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="InterfaceList">
     <eOperations name="getAllInterfaceElements" lowerBound="1">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAllInterfaceElements(this);"/>
+        <details key="body" value="return InterfaceListAnnotations.getAllInterfaceElements(this);"/>
       </eAnnotations>
       <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
         <eTypeArguments eClassifier="#//IInterfaceElement"/>
@@ -1101,30 +1101,30 @@
     </eOperations>
     <eOperations name="getEvent" eType="#//Event">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getEvent(this, name);"/>
+        <details key="body" value="return InterfaceListAnnotations.getEvent(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eOperations name="getVariable" eType="#//VarDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getVariable(this, name);"/>
+        <details key="body" value="return InterfaceListAnnotations.getVariable(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eOperations name="getInterfaceElement" lowerBound="1" eType="#//IInterfaceElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);"/>
+        <details key="body" value="return InterfaceListAnnotations.getInterfaceElement(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eOperations name="getFBNetworkElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
+        <details key="body" value="return InterfaceListAnnotations.getFBNetworkElement(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getAdapter" eType="#//AdapterDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAdapter(this, name);"/>
+        <details key="body" value="return InterfaceListAnnotations.getAdapter(this, name);"/>
       </eAnnotations>
       <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>

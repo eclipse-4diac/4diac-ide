@@ -422,20 +422,20 @@
       <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/outMappedInOutVars"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/errorMarker"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAllInterfaceElements"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getAllInterfaceElements(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getEvent" body="return org.eclipse.fordiac.ide.model.Annotations.getEvent(this, name);">
+          body="return InterfaceListAnnotations.getAllInterfaceElements(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getEvent" body="return InterfaceListAnnotations.getEvent(this, name);">
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getEvent/name"/>
       </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getVariable" body="return org.eclipse.fordiac.ide.model.Annotations.getVariable(this, name);">
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getVariable" body="return InterfaceListAnnotations.getVariable(this, name);">
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getVariable/name"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInterfaceElement"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getInterfaceElement(this, name);">
+          body="return InterfaceListAnnotations.getInterfaceElement(this, name);">
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInterfaceElement/name"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getFBNetworkElement"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAdapter" body="return org.eclipse.fordiac.ide.model.Annotations.getAdapter(this, name);">
+          body="return InterfaceListAnnotations.getFBNetworkElement(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAdapter" body="return InterfaceListAnnotations.getAdapter(this, name);">
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getAdapter/name"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/copy" body="return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this);"/>
