@@ -36,9 +36,13 @@ final class InterfaceListAnnotations {
 		final EList<IInterfaceElement> retVal = new BasicEList<>();
 		retVal.addAll(il.getEventInputs());
 		retVal.addAll(il.getInputVars());
+		retVal.addAll(il.getInOutVars());
 		retVal.addAll(il.getSockets());
 		retVal.addAll(il.getEventOutputs());
 		retVal.addAll(il.getOutputVars());
+		// Users of getAllInterfaceElements expect to get all elements for ui and connection checks. Therefore we need
+		// to deliver also the mapped output side here
+		retVal.addAll(il.getOutMappedInOutVars());
 		retVal.addAll(il.getPlugs());
 		retVal.addAll(il.getErrorMarker());
 		return retVal;
@@ -67,6 +71,11 @@ final class InterfaceListAnnotations {
 		for (final VarDeclaration outVar : il.getOutputVars()) {
 			if (outVar.getName().equals(name)) {
 				return outVar;
+			}
+		}
+		for (final VarDeclaration inOutVar : il.getInOutVars()) {
+			if (inOutVar.getName().equals(name)) {
+				return inOutVar;
 			}
 		}
 		return null;
