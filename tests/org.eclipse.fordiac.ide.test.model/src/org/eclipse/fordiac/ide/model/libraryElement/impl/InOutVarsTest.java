@@ -142,6 +142,30 @@ class InOutVarsTest {
 		assertEquals("1..2", interfaceList.getOutMappedInOutVars().get(1).getArraySize().getValue()); //$NON-NLS-1$
 	}
 
+	@Test
+	void testIsInOutVar() {
+		final InterfaceList interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
+		final VarDeclaration inOutVar = newInOutVarDeclaration("DIO1"); //$NON-NLS-1$
+
+		assertFalse(inOutVar.isInOutVar());
+		interfaceList.getInOutVars().add(inOutVar);
+		assertTrue(inOutVar.isInOutVar());
+
+		final VarDeclaration outMappedInOutVar = OutMappedInOutVarAdapter.find(inOutVar);
+		assertTrue(outMappedInOutVar.isInOutVar());
+
+		// test input var
+		final VarDeclaration inVar = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		assertFalse(inVar.isInOutVar());
+		interfaceList.getInputVars().add(inVar);
+		assertFalse(inVar.isInOutVar());
+
+		// test input var
+		final VarDeclaration outVar = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		interfaceList.getOutputVars().add(outVar);
+		assertFalse(outVar.isInOutVar());
+	}
+
 	private static VarDeclaration newInOutVarDeclaration(final String name) {
 		final VarDeclaration inOutVar = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		inOutVar.setName(name);

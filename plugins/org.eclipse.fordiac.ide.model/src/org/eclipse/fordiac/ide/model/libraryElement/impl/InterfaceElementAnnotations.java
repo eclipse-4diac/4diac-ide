@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
 
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class InterfaceElementAnnotations {
@@ -37,6 +38,12 @@ public final class InterfaceElementAnnotations {
 			return "ARRAY [" + arraySize + "] OF " + typeName; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return typeName;
+	}
+
+	public static boolean isInOutVar(final VarDeclaration varDecl) {
+		return LibraryElementPackage.eINSTANCE.getInterfaceList_InOutVars().equals(varDecl.eContainingFeature())
+				|| LibraryElementPackage.eINSTANCE.getInterfaceList_OutMappedInOutVars()
+						.equals(varDecl.eContainingFeature());
 	}
 
 	private InterfaceElementAnnotations() {

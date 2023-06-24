@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringAdapterInterfaceEditPart;
@@ -924,6 +925,16 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public String getFullTypeName() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isInOutVar() {
+		return InterfaceElementAnnotations.isInOutVar(this);
 	}
 
 } // AdapterMonitoringVarDeclarationImpl

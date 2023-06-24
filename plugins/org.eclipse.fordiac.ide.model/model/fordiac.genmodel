@@ -636,6 +636,7 @@
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/setVarConfig/config"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/getFullTypeName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/isInOutVar" body="return InterfaceElementAnnotations.isInOutVar(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VersionInfo/author"/>

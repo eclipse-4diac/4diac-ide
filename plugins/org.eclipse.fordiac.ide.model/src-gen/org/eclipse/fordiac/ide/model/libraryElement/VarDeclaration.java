@@ -129,4 +129,12 @@ public interface VarDeclaration extends IInterfaceElement {
 	 */
 	String getFullTypeName();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	boolean isInOutVar();
+
 } // VarDeclaration
