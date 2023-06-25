@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2022 Johannes Kepler University
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *     Alois Zoitl - initial API and implementation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.tools;
 
 import org.eclipse.draw2d.Figure;
@@ -19,8 +31,8 @@ import org.eclipse.gef.tools.MarqueeDragTracker;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.events.MouseEvent;
 
-/** MarqueeDragTracker which deselects all elements on right click if nothing so that the correct context menu is
- * shown. We are only here if there is no element under the cursor.
+/** MarqueeDragTracker which deselects all elements on right click if nothing so that the correct context menu is shown.
+ * We are only here if there is no element under the cursor.
  *
  * Furthermore it performs autoscrolling if the user went beyond the viewport boundaries. */
 public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
