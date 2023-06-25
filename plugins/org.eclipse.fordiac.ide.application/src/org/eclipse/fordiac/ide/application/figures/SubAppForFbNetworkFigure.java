@@ -42,9 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.SWT;
 
-/**
- * The Class SubAppForFbNetworkFigure.
- */
+/** The Class SubAppForFbNetworkFigure. */
 public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 
 	private InstanceCommentFigure commentFigure;
@@ -117,6 +115,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		// ensure recalculation of the pins as they now have two connection endpoints
 		getFbFigureContainer().invalidateTree();
 	}
+
 	private void transformToCollapsedSubapp() {
 		getFbFigureContainer().setBorder(null);
 		setConstraint(getFbFigureContainer(), createDefaultFBContainerLayoutData());
@@ -140,8 +139,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure
 				.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 		expandedMainFigure.setBorder(new RoundedRectangleShadowBorder());
-		final GridLayout expandedMainLayout = createTopBottomLayout();
-		expandedMainFigure.setLayoutManager(expandedMainLayout);
+		expandedMainFigure.setLayoutManager(createExpandedMainFigureLayout());
 		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		getFbFigureContainer().add(expandedMainFigure, gridData, -1);
@@ -150,9 +148,11 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	private void createExpandedInputs() {
 		expandedInputFigure = new Figure();
 		expandedInputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(expandedInputFigure, createExpandedIOLayoutData(), -1);
-		expandedInputFigure.add(getEventInputs(), createExpandedIOLayoutData(), -1);
-		expandedInputFigure.add(getBottomInputArea(), createExpandedIOLayoutData(), -1);
+		expandedMainFigure.add(expandedInputFigure, createInputLayoutData(), -1);
+		expandedInputFigure.add(getEventInputs(), createInputLayoutData(), -1);
+		expandedInputFigure.add(getDataInputs(), createInputLayoutData(), -1);
+		expandedInputFigure.add(getSockets(), createInputLayoutData(), -1);
+		expandedInputFigure.add(getErrorMarkerInput(), createInputLayoutData(), -1);
 	}
 
 	private void createContentContainer() {
@@ -166,9 +166,11 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	private void createExpandedOutputs() {
 		expandedOutputFigure = new Figure();
 		expandedOutputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(expandedOutputFigure, createExpandedIOLayoutData(), -1);
-		expandedOutputFigure.add(getEventOutputs(), createExpandedOutputLayoutData(), -1);
-		expandedOutputFigure.add(getBottomOutputArea(), createExpandedOutputLayoutData(), -1);
+		expandedMainFigure.add(expandedOutputFigure, createOutputLayoutData(), -1);
+		expandedOutputFigure.add(getEventOutputs(), createOutputLayoutData(), -1);
+		expandedOutputFigure.add(getDataOutputs(), createOutputLayoutData(), -1);
+		expandedOutputFigure.add(getPlugs(), createOutputLayoutData(), -1);
+		expandedOutputFigure.add(getErrorMarkerOutput(), createOutputLayoutData(), -1);
 	}
 
 	private static GridData createExpandedIOLayoutData() {
@@ -225,5 +227,14 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 					expandedOutputFigure.getPreferredSize().height);
 		}
 		return -1;
+	}
+
+	protected static GridLayout createExpandedMainFigureLayout() {
+		final GridLayout topLayout = new GridLayout(3, false);
+		topLayout.marginHeight = 1;
+		topLayout.marginWidth = 0;
+		topLayout.verticalSpacing = 0;
+		topLayout.horizontalSpacing = 0;
+		return topLayout;
 	}
 }
