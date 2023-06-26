@@ -53,13 +53,11 @@ import org.eclipse.gef.RequestConstants;
 public class InterfaceEditPart extends AbstractInterfaceElementEditPart implements NodeEditPart {
 
 	public InterfaceEditPart() {
-		super();
 		setConnectable(true);
 	}
 
 	public class InterfaceFigure extends Label implements InteractionStyleFigure {
 		public InterfaceFigure() {
-			super();
 			setText(getINamedElement().getName());
 			setBorder(new ConnectorBorder(getCastedModel()));
 			setOpaque(false);
@@ -99,7 +97,12 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	@Override
 	protected IFigure createFigure() {
 		final IFigure fig = new InterfaceFigure();
-		fig.addAncestorListener(new AncestorListener() {
+		fig.addAncestorListener(createAncestorListener());
+		return fig;
+	}
+
+	protected AncestorListener createAncestorListener() {
+		return new AncestorListener() {
 			@Override
 			public void ancestorRemoved(final IFigure ancestor) {
 				// nothing to do here
@@ -115,8 +118,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 				refreshVisuals();
 			}
 
-		});
-		return fig;
+		};
 	}
 
 	@Override
@@ -164,7 +166,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		if (typeRootEP != null) {
 			typeRootEP.refresh();
 			typeRootEP.getChildren().stream().filter(CommentTypeEditPart.class::isInstance)
-			.forEach(ep -> ((CommentTypeEditPart) ep).refreshVisuals());
+					.forEach(ep -> ((CommentTypeEditPart) ep).refreshVisuals());
 		}
 	}
 
@@ -238,12 +240,11 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		return new OutputWithAnchor(getFigure(), pos, this);
 	}
 
-
 	public static int calculateWithPos(final With with, final boolean isInput) {
 		final Event event = (Event) with.eContainer();
 		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
 		if (null != interfaceList) {
-			return getnumEventwith( isInput?interfaceList.getEventInputs():interfaceList.getEventOutputs(), event);
+			return getnumEventwith(isInput ? interfaceList.getEventInputs() : interfaceList.getEventOutputs(), event);
 		}
 		return 0;
 	}

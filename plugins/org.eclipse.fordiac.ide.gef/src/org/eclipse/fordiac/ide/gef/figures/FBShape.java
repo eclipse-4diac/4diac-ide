@@ -350,11 +350,14 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	}
 
 	private static ToolbarLayout createInputContainerLayout() {
-		return new ToolbarLayout(false);
+		final ToolbarLayout toolbarLayout = new ToolbarLayout(false);
+		toolbarLayout.setStretchMinorAxis(true);
+		return toolbarLayout;
 	}
 
 	private static ToolbarLayout createOutputContainerLayout() {
 		final ToolbarLayout layout = new ToolbarLayout(false);
+		layout.setStretchMinorAxis(true);
 		layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 		return layout;
 	}
@@ -362,7 +365,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	protected void addBottomIOs() {
 		bottom.add(dataInputs, createInputLayoutData(), -1);
 		bottom.add(dataOutputs, createOutputLayoutData(), -1);
-		bottom.add(varInOutInputs, createOutputLayoutData(), -1);
+		bottom.add(varInOutInputs, createInputLayoutData(), -1);
 		bottom.add(varInOutOutputs, createOutputLayoutData(), -1);
 		bottom.add(sockets, createInputLayoutData(), -1);
 		bottom.add(plugs, createOutputLayoutData(), -1);

@@ -15,7 +15,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
-import org.eclipse.draw2d.AncestorListener;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
@@ -46,7 +45,6 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 
 	private class AdapterInterfaceFigure extends UnderlineAlphaLabel {
 		public AdapterInterfaceFigure() {
-			super();
 			setOpaque(false);
 			setBorder(new ConnectorBorder(getCastedModel()));
 			setText(getINamedElement().getName());
@@ -91,10 +89,8 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 						if (!isDrawUnderline()) {
 							setDrawUnderline(true);
 						}
-					} else {
-						if (isDrawUnderline()) {
-							setDrawUnderline(false);
-						}
+					} else if (isDrawUnderline()) {
+						setDrawUnderline(false);
 					}
 				}
 			});
@@ -104,23 +100,7 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 	@Override
 	protected IFigure createFigure() {
 		final AdapterInterfaceFigure fig = new AdapterInterfaceFigure();
-		fig.addAncestorListener(new AncestorListener() {
-			@Override
-			public void ancestorRemoved(final IFigure ancestor) {
-				// Nothing to be done here
-			}
-
-			@Override
-			public void ancestorMoved(final IFigure ancestor) {
-				refreshVisuals();
-			}
-
-			@Override
-			public void ancestorAdded(final IFigure ancestor) {
-				refreshVisuals();
-			}
-
-		});
+		fig.addAncestorListener(createAncestorListener());
 		return fig;
 	}
 
@@ -133,15 +113,14 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 
 	@Override
 	public DragTracker getDragTracker(final Request request) {
-		if (request instanceof final SelectionRequest selRequest) {
-			if ((selRequest.getLastButtonPressed() == 1) && (selRequest.isControlKeyPressed())) {
-				// open the default editor for the adapter file
-				final TypeEntry entry = typeLib.getAdapterTypeEntry(getAdapter().getType().getName());
-				if (null != entry) {
-					final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-							.getDefaultEditor(entry.getFile().getName());
-					EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
-				}
+		if ((request instanceof final SelectionRequest selRequest)
+				&& ((selRequest.getLastButtonPressed() == 1) && (selRequest.isControlKeyPressed()))) {
+			// open the default editor for the adapter file
+			final TypeEntry entry = typeLib.getAdapterTypeEntry(getAdapter().getType().getName());
+			if (null != entry) {
+				final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
+						.getDefaultEditor(entry.getFile().getName());
+				EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
 			}
 		}
 		return super.getDragTracker(request);

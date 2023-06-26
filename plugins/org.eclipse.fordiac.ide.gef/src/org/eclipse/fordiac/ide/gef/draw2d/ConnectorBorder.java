@@ -25,6 +25,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.swt.graphics.Color;
@@ -43,7 +44,6 @@ public class ConnectorBorder extends AbstractBorder {
 	private Color connectorColor;
 
 	public ConnectorBorder(final IInterfaceElement editPartModelOject) {
-		super();
 		this.editPartModelOject = editPartModelOject;
 		updateColor();
 	}
@@ -62,8 +62,8 @@ public class ConnectorBorder extends AbstractBorder {
 		}
 	}
 
-	protected static void createAdapterSymbolMiniFBrotated(final Graphics graphics, final Rectangle where, final int width,
-			final boolean filled) {
+	protected static void createAdapterSymbolMiniFBrotated(final Graphics graphics, final Rectangle where,
+			final int width, final boolean filled) {
 		graphics.setLineWidth(1);
 		graphics.setAntialias(1);
 		where.x += width;
@@ -110,24 +110,34 @@ public class ConnectorBorder extends AbstractBorder {
 		if (isInput()) {
 			if (isAdapter()) {
 				createAdapterSymbolMiniFBrotated(graphics, where, 0, false);
+			} else if (isVarInOut()) {
+				createVarInOutSymbol(graphics, where.x, where.y + where.height / 2);
 			} else {
-				final PointList pointList = getTrianglePoints(where.x,
-						where.y + (where.height - CONNECTOR_HEIGHT) / 2);
+				final PointList pointList = getTrianglePoints(where.x, where.y + (where.height - CONNECTOR_HEIGHT) / 2);
 				graphics.fillPolygon(pointList);
 			}
+		} else if (isAdapter()) {
+			createAdapterSymbolMiniFBrotated(graphics, where, where.width - ADAPTER_SIZE + 1, true);
+		} else if (isVarInOut()) {
+			createVarInOutSymbol(graphics, where.width + where.x - CONNECTOR_WIDTH * 2, where.y + where.height / 2);
 		} else {
-			if (isAdapter()) {
-				createAdapterSymbolMiniFBrotated(graphics, where, where.width - ADAPTER_SIZE + 1, true);
-			} else {
-				final PointList pointList = getTrianglePoints(where.width + where.x - CONNECTOR_WIDTH,
-						where.y + (where.height - CONNECTOR_HEIGHT) / 2);
-				graphics.fillPolygon(pointList);
-			}
+			final PointList pointList = getTrianglePoints(where.width + where.x - CONNECTOR_WIDTH,
+					where.y + (where.height - CONNECTOR_HEIGHT) / 2);
+			graphics.fillPolygon(pointList);
 		}
 	}
 
-	private static PointList getTrianglePoints(final int startX, final int startY) {
+	private static void createVarInOutSymbol(final Graphics graphics, final int x, final int y) {
 		final PointList pointList = new PointList(4);
+		pointList.addPoint(x, y);
+		pointList.addPoint(x + CONNECTOR_WIDTH, y - CONNECTOR_HEIGHT_HALF);
+		pointList.addPoint(x + 2 * CONNECTOR_WIDTH, y);
+		pointList.addPoint(x + CONNECTOR_WIDTH, y + CONNECTOR_HEIGHT_HALF);
+		graphics.fillPolygon(pointList);
+	}
+
+	private static PointList getTrianglePoints(final int startX, final int startY) {
+		final PointList pointList = new PointList(3);
 		pointList.addPoint(startX, startY);
 		pointList.addPoint(startX + CONNECTOR_WIDTH, startY + CONNECTOR_HEIGHT_HALF);
 		pointList.addPoint(startX, startY + CONNECTOR_HEIGHT);
@@ -136,7 +146,12 @@ public class ConnectorBorder extends AbstractBorder {
 
 	@Override
 	public Insets getInsets(final IFigure figure) {
-		final int lrMargin = (isAdapter()) ? LR_ADAPTER_MARGIN : LR_MARGIN;
+		int lrMargin = LR_MARGIN;
+		if (isAdapter()) {
+			lrMargin = LR_ADAPTER_MARGIN;
+		} else if (isVarInOut()) {
+			lrMargin *= 2;
+		}
 		return (isInput()) ? new Insets(0, lrMargin, 0, 0) : new Insets(0, 0, 0, lrMargin);
 	}
 
@@ -150,5 +165,9 @@ public class ConnectorBorder extends AbstractBorder {
 
 	public final boolean isAdapter() {
 		return editPartModelOject.getType() instanceof AdapterType;
+	}
+
+	private final boolean isVarInOut() {
+		return editPartModelOject instanceof final VarDeclaration varDecl && varDecl.isInOutVar();
 	}
 }

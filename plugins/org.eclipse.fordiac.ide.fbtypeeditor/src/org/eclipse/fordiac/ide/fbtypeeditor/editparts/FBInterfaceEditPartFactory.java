@@ -47,8 +47,8 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 		if (modelElement instanceof Event) {
 			return new InterfaceEditPart();
 		}
-		if (modelElement instanceof VarDeclaration) {
-			return createInterfaceEditPart();
+		if (modelElement instanceof final VarDeclaration varDecl) {
+			return createInterfaceEditPart(varDecl);
 		}
 		if (modelElement instanceof AdapterDeclaration) {
 			return new AdapterInterfaceEditPart(typeLib);
@@ -73,7 +73,10 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 
 	// make it protected none static so that subclasses can override it and provide own interface edit parts if needed
 	@SuppressWarnings("static-method")
-	protected EditPart createInterfaceEditPart() {
+	protected EditPart createInterfaceEditPart(final VarDeclaration varDecl) {
+		if (varDecl.isInOutVar()) {
+			return new VarInOutEditPart();
+		}
 		return new InterfaceEditPart();
 	}
 }

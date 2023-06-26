@@ -16,10 +16,9 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 import java.util.List;
 
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.TextUtilities;
+import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -38,14 +37,10 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 
 	public class InterfaceContainerFigure extends Figure {
 		public InterfaceContainerFigure() {
-			final FlowLayout layout = new FlowLayout();
-			layout.setMajorSpacing(0);
-			layout.setMinorSpacing(0);
+			final ToolbarLayout layout = new ToolbarLayout();
+			layout.setSpacing(0);
 			layout.setHorizontal(false);
 			layout.setStretchMinorAxis(true);
-			if (getModel() instanceof VariableInputContainer || getModel() instanceof SocketContainer) {
-				layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-			}
 			setLayoutManager(layout);
 			setPreferredSize(30, 10);
 		}
