@@ -129,6 +129,11 @@ public final class TypeLibrary {
 		return getSystems().get(name);
 	}
 
+	public TypeEntry getFBOrSubAppType(final String typeName) {
+		final TypeEntry fb = getFBTypeEntry(typeName);
+		return fb != null ? fb : getSubAppTypeEntry(typeName);
+	}
+
 	public TypeEntry getTypeEntry(final IFile typeFile) {
 		if (isDataTypeFile(typeFile)) {
 			return dataTypeLib.getDerivedDataTypes().get(TypeEntry.getTypeNameFromFile(typeFile));
@@ -189,9 +194,7 @@ public final class TypeLibrary {
 		return Collections.emptyMap();
 	}
 
-	/**
-	 * Instantiates a new fB type library.
-	 */
+	/** Instantiates a new fB type library. */
 	TypeLibrary(final IProject project) {
 		this.project = project;
 		if (project != null && project.exists()) {
@@ -230,7 +233,7 @@ public final class TypeLibrary {
 	}
 
 	private static TypeEntry createErrorTypeEntry(final FBType fbType) {
-		if(fbType instanceof SubAppType) {
+		if (fbType instanceof SubAppType) {
 			return new ErrorSubAppTypeEntryImpl();
 		}
 		return new ErrorFBTypeEntryImpl();
