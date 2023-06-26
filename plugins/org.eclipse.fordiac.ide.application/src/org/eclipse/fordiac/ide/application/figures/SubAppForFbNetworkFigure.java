@@ -151,6 +151,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure.add(expandedInputFigure, createInputLayoutData(), -1);
 		expandedInputFigure.add(getEventInputs(), createInputLayoutData(), -1);
 		expandedInputFigure.add(getDataInputs(), createInputLayoutData(), -1);
+		expandedInputFigure.add(getVarInOutInputs(), createInputLayoutData(), -1);
 		expandedInputFigure.add(getSockets(), createInputLayoutData(), -1);
 		expandedInputFigure.add(getErrorMarkerInput(), createInputLayoutData(), -1);
 	}
@@ -169,6 +170,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure.add(expandedOutputFigure, createOutputLayoutData(), -1);
 		expandedOutputFigure.add(getEventOutputs(), createOutputLayoutData(), -1);
 		expandedOutputFigure.add(getDataOutputs(), createOutputLayoutData(), -1);
+		expandedOutputFigure.add(getVarInOutOutputs(), createOutputLayoutData(), -1);
 		expandedOutputFigure.add(getPlugs(), createOutputLayoutData(), -1);
 		expandedOutputFigure.add(getErrorMarkerOutput(), createOutputLayoutData(), -1);
 	}

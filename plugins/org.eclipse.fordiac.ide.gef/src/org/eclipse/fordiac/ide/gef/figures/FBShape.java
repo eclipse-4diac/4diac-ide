@@ -80,11 +80,15 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	/** The data inputs. */
 	private final Figure dataInputs = new Figure();
 
+	private final Figure varInOutInputs = new Figure();
+
 	/** The sockets. */
 	private final Figure sockets = new Figure();
 
 	/** The data outputs. */
 	private final Figure dataOutputs = new Figure();
+
+	private final Figure varInOutOutputs = new Figure();
 
 	/** The sockets. */
 	private final Figure errorMarkerInput = new Figure();
@@ -127,6 +131,10 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		return dataInputs;
 	}
 
+	public Figure getVarInOutInputs() {
+		return varInOutInputs;
+	}
+
 	public Figure getSockets() {
 		return sockets;
 	}
@@ -136,6 +144,10 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	 * @return the data outputs */
 	public Figure getDataOutputs() {
 		return dataOutputs;
+	}
+
+	public Figure getVarInOutOutputs() {
+		return varInOutOutputs;
 	}
 
 	public Figure getErrorMarkerInput() {
@@ -311,11 +323,8 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	}
 
 	private void setupTopIOs() {
-		eventInputs.setLayoutManager(new ToolbarLayout(false));
-
-		final ToolbarLayout topOutputsLayout = new ToolbarLayout(false);
-		topOutputsLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		eventOutputs.setLayoutManager(topOutputsLayout);
+		eventInputs.setLayoutManager(createInputContainerLayout());
+		eventOutputs.setLayoutManager(createOutputContainerLayout());
 		addTopIOs();
 	}
 
@@ -325,28 +334,36 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	}
 
 	private void setBottomIOs() {
+		dataInputs.setLayoutManager(createInputContainerLayout());
+		dataOutputs.setLayoutManager(createOutputContainerLayout());
 
-		dataInputs.setLayoutManager(new ToolbarLayout(false));
+		varInOutInputs.setLayoutManager(createInputContainerLayout());
+		varInOutOutputs.setLayoutManager(createOutputContainerLayout());
 
-		dataOutputs.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) dataOutputs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		sockets.setLayoutManager(createInputContainerLayout());
+		plugs.setLayoutManager(createOutputContainerLayout());
 
-		sockets.setLayoutManager(new ToolbarLayout(false));
-
-		plugs.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) plugs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-
-		errorMarkerInput.setLayoutManager(new ToolbarLayout(false));
-
-		errorMarkerOutput.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) errorMarkerOutput.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		errorMarkerInput.setLayoutManager(createInputContainerLayout());
+		errorMarkerOutput.setLayoutManager(createOutputContainerLayout());
 
 		addBottomIOs();
+	}
+
+	private static ToolbarLayout createInputContainerLayout() {
+		return new ToolbarLayout(false);
+	}
+
+	private static ToolbarLayout createOutputContainerLayout() {
+		final ToolbarLayout layout = new ToolbarLayout(false);
+		layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		return layout;
 	}
 
 	protected void addBottomIOs() {
 		bottom.add(dataInputs, createInputLayoutData(), -1);
 		bottom.add(dataOutputs, createOutputLayoutData(), -1);
+		bottom.add(varInOutInputs, createOutputLayoutData(), -1);
+		bottom.add(varInOutOutputs, createOutputLayoutData(), -1);
 		bottom.add(sockets, createInputLayoutData(), -1);
 		bottom.add(plugs, createOutputLayoutData(), -1);
 		bottom.add(errorMarkerInput, createInputLayoutData(), -1);
@@ -354,13 +371,11 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	}
 
 	protected static GridData createInputLayoutData() {
-		final GridData gridData = new GridData(SWT.BEGINNING, SWT.TOP, true, false);
-		return gridData;
+		return new GridData(SWT.BEGINNING, SWT.TOP, true, false);
 	}
 
 	protected static GridData createOutputLayoutData() {
-		final GridData gridData = new GridData(SWT.END, SWT.TOP, true, false);
-		return gridData;
+		return new GridData(SWT.END, SWT.TOP, true, false);
 	}
 
 	protected void setupTypeNameAndVersion(final FBType type, final Figure container) {
