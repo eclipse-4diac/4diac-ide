@@ -93,7 +93,17 @@
                     	<instanceof value="org.eclipse.core.resources.IProject" />
 					</or>
 				</parentExpression>
-			</commonSorter>                
+			</commonSorter>    
+			
+			<dropAssistant
+	          class="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDropAssistant"
+	          id="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDropAssistant">
+		       <possibleDropTargets>
+		          <or>
+		             <adapt type="java.lang.Object"/>
+		          </or>
+		       </possibleDropTargets>
+		    </dropAssistant>        
 		</navigatorContent>
 		<actionProvider
             	class="org.eclipse.fordiac.ide.hierarchymanager.ui.actions.OpenLeafActionProvider"
@@ -103,9 +113,8 @@
 	               <instanceof value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf"> </instanceof>               
 	            </or>
         	</enablement>
-  		</actionProvider>   		  
+  		</actionProvider>
    	</extension>
-
    	<extension point="org.eclipse.ui.perspectiveExtensions">  
 		<perspectiveExtension 
 				targetID="org.eclipse.fordiac.ide.SystemPerspective">
