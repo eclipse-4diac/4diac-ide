@@ -20,6 +20,7 @@
  *              - Changed TypeLibrary from palette model to TypeEntry POJO classes
  *  Martin Jobst - migrate system handling to typelib
  *               - add function FB type
+ *               - add global constants
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -62,6 +63,7 @@ public final class TypeLibrary {
 	private final Map<String, SegmentTypeEntry> segmentTypes = new HashMap<>();
 	private final Map<String, SubAppTypeEntry> subAppTypes = new HashMap<>();
 	private final Map<String, SystemEntry> systems = new HashMap<>();
+	private final Map<String, GlobalConstantsEntry> globalConstants = new HashMap<>();
 	private final Map<String, TypeEntry> errorTypes = new HashMap<>();
 
 	public Map<String, AdapterTypeEntry> getAdapterTypes() {
@@ -97,6 +99,10 @@ public final class TypeLibrary {
 		return systems;
 	}
 
+	public Map<String, GlobalConstantsEntry> getGlobalConstants() {
+		return globalConstants;
+	}
+
 	public List<CompositeFBType> getCompositeFBTypes() {
 		return getFbTypes().values().stream().filter(e -> e.getTypeEditable() instanceof CompositeFBType)
 				.map(e -> (CompositeFBType) e.getTypeEditable()).toList();
@@ -130,6 +136,10 @@ public final class TypeLibrary {
 		return getSystems().get(name);
 	}
 
+	public GlobalConstantsEntry getGlobalConstantsEntry(final String name) {
+		return getGlobalConstants().get(name);
+	}
+
 	public TypeEntry getFBOrSubAppType(final String typeName) {
 		final TypeEntry fb = getFBTypeEntry(typeName);
 		return fb != null ? fb : getSubAppTypeEntry(typeName);
@@ -154,6 +164,7 @@ public final class TypeLibrary {
 		getSegmentTypes().clear();
 		getSubAppTypes().clear();
 		getSystems().clear();
+		getGlobalConstants().clear();
 		dataTypeLib.getDerivedDataTypes().clear();
 		checkAdditions(project);
 	}
@@ -188,6 +199,8 @@ public final class TypeLibrary {
 				return getSubAppTypes();
 			case TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING:
 				return getSystems();
+			case TypeLibraryTags.GLOBAL_CONST_FILE_ENDING:
+				return getGlobalConstants();
 			default:
 				break;
 			}
@@ -280,6 +293,7 @@ public final class TypeLibrary {
 		checkDeletionsForTypeGroup(getSegmentTypes().values());
 		checkDeletionsForTypeGroup(getSubAppTypes().values());
 		checkDeletionsForTypeGroup(getSystems().values());
+		checkDeletionsForTypeGroup(getGlobalConstants().values());
 		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes().values());
 	}
 
@@ -344,6 +358,8 @@ public final class TypeLibrary {
 			getSubAppTypes().put(entry.getTypeName(), subAppEntry);
 		} else if (entry instanceof final SystemEntry sysEntry) {
 			getSystems().put(entry.getTypeName(), sysEntry);
+		} else if (entry instanceof final GlobalConstantsEntry globalConstEntry) {
+			getGlobalConstants().put(entry.getTypeName(), globalConstEntry);
 		} else {
 			FordiacLogHelper.logError("Unknown type entry to be added to library: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
@@ -364,6 +380,8 @@ public final class TypeLibrary {
 			getSubAppTypes().remove(entry.getTypeName());
 		} else if (entry instanceof SystemEntry) {
 			getSystems().remove(entry.getTypeName());
+		} else if (entry instanceof GlobalConstantsEntry) {
+			getGlobalConstants().remove(entry.getTypeName());
 		} else {
 			FordiacLogHelper.logError("Unknown type entry to be removed from library: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
