@@ -40,9 +40,7 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 		if (modelElement instanceof FBType && context instanceof FBTypeRootEditPart) {
 			return new FBTypeEditPart();
 		}
-		if (modelElement instanceof EventInputContainer || modelElement instanceof EventOutputContainer
-				|| modelElement instanceof VariableInputContainer || modelElement instanceof VariableOutputContainer
-				|| modelElement instanceof SocketContainer || modelElement instanceof PlugContainer) {
+		if (modelElement instanceof AbstractContainerElement) {
 			return new InterfaceContainerEditPart();
 		}
 
