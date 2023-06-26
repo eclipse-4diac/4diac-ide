@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -30,7 +31,7 @@ public class CreateVarInOutCommand extends CreateInterfaceElementCommand {
 	}
 
 	public CreateVarInOutCommand(final DataType dataType, final InterfaceList interfaceList, final int index) {
-		super(dataType, interfaceList, true, index);
+		super(dataType, getNameProposal(), interfaceList, true, index);
 	}
 
 	public CreateVarInOutCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
@@ -41,6 +42,10 @@ public class CreateVarInOutCommand extends CreateInterfaceElementCommand {
 	@Override
 	protected EList<? extends IInterfaceElement> getInterfaceListContainer() {
 		return getInterfaceList().getInOutVars();
+	}
+
+	protected static String getNameProposal() {
+		return FordiacKeywords.VARINOUT;
 	}
 
 }

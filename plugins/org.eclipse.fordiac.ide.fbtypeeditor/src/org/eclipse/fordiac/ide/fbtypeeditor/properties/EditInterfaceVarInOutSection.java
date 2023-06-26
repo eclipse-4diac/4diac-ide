@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -25,12 +26,15 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
+import org.eclipse.fordiac.ide.model.commands.create.CreateVarInOutCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
@@ -179,9 +183,10 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 		((VarDeclarationListProvider) inputProvider).setTypeLib(getDataTypeLib());
 	}
 
-	private CreationCommand newCreateCommand(final IInterfaceElement selection, final boolean isInput) {
-		return null;
+	private CreationCommand newCreateCommand(final IInterfaceElement ie, final boolean isInput) {
 
+		return new CreateVarInOutCommand(getLastUsedDataType(getType().getInterfaceList(), isInput, ie),
+				getType().getInterfaceList(), getInsertingIndex(ie, isInput));
 	}
 
 	private CreationCommand newInsertCommand(final IInterfaceElement selection, final boolean isInput,
@@ -229,6 +234,36 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 		final List<String> structuredTypes = dataTypeLib.getDataTypesSorted().stream()
 				.filter(StructuredType.class::isInstance).map(DataType::getName).collect(Collectors.toList());
 		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
+	}
+
+	protected static DataType getLastUsedDataType(final InterfaceList interfaceList, final boolean isInput,
+			final IInterfaceElement interfaceElement) {
+		if (null != interfaceElement) {
+			return interfaceElement.getType();
+		}
+		final EList<VarDeclaration> dataList = getVarInOutList(interfaceList);
+		if (!dataList.isEmpty()) {
+			return dataList.get(dataList.size() - 1).getType();
+		}
+		return IecTypes.ElementaryTypes.BOOL; // bool is default
+	}
+
+	protected int getInsertingIndex(final IInterfaceElement interfaceElement, final boolean isInput) {
+		if (null != interfaceElement) {
+			final InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
+			return getInsertingIndex(interfaceElement, getVarInOutList(interfaceList));
+		}
+		return -1;
+	}
+
+	@SuppressWarnings("static-method")
+	protected int getInsertingIndex(final IInterfaceElement interfaceElement,
+			final EList<? extends IInterfaceElement> interfaceList) {
+		return interfaceList.indexOf(interfaceElement) + 1;
+	}
+
+	private static EList<VarDeclaration> getVarInOutList(final InterfaceList interfaceList) {
+		return interfaceList.getInOutVars();
 	}
 
 }
