@@ -8,10 +8,7 @@ Require-Bundle: org.eclipse.ui.ide,
  org.eclipse.core.resources,
  org.eclipse.jface,
  org.eclipse.core.runtime,
- gitlab4j-api,
- org.eclipse.fordiac.ide.ui,
- org.glassfish.jersey.core.jersey-server,
- org.glassfish.jersey.inject.jersey-hk2
+ org.eclipse.fordiac.ide.ui
 Automatic-Module-Name: org.eclipse.fordiac.gitlab
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Eclipse 4diac

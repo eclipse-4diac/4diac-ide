@@ -28,8 +28,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
-import org.gitlab4j.api.models.Package;
-import org.gitlab4j.api.models.Project;
+import org.eclipse.fordiac.ide.gitlab.Project;
+import org.eclipse.fordiac.ide.gitlab.Package;
 
 public class GitLabListedLibsPage extends WizardPage {
 	

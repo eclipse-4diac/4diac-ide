@@ -31,13 +31,10 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.gitlab.Messages;
+import org.eclipse.fordiac.ide.gitlab.Project;
+import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.gitlab.wizard.GitLabImportWizardPage;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.gitlab4j.api.GitLabApi;
-import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.models.Package;
-import org.gitlab4j.api.models.Project;
 
 public class GitLabDownloadManager {
 	
@@ -46,7 +43,6 @@ public class GitLabDownloadManager {
 	private static final String API_VERSION = "api/v4/projects/";
 	private static final String PACKAGES = "/packages/";
 	private static final String PACKAGE_FILES = "/package_files";
-	private GitLabApi gitLabApi;
 	private HashMap<Project, List<Package>> projectAndPackageMap;
 	private HashMap<String, List<LeafNode>> packagesAndLeaves;
 
@@ -56,9 +52,7 @@ public class GitLabDownloadManager {
 		this.gitLabImportPage = gitLabImportPage;
 	}
 	
-	public GitLabApi getGitLabApi() {
-		return gitLabApi;
-	}
+	
 	
 	public Map<String, List<LeafNode>> getPackagesAndLeaves() {
 		return packagesAndLeaves;
@@ -69,30 +63,13 @@ public class GitLabDownloadManager {
 	}
 	
 	public void connectToGitLab(String url, String personalToken) {
-		gitLabApi = new GitLabApi(url, personalToken);
 		filterData();
 	}	
 	
 	private void filterData() {
-		try {
-			List<Package> packages;
-			projectAndPackageMap = new HashMap<>();
-			packagesAndLeaves = new HashMap<>();
-			for(Project p: gitLabApi.getProjectApi().getProjects()) {
-				packages = gitLabApi.getPackagesApi().getPackages(p.getId());
-				projectAndPackageMap.put(p, packages);
-				for(Package pack: packages) {
-					if (packagesAndLeaves.get(pack.getName()) == null) {
-						packagesAndLeaves.put(pack.getName(), new ArrayList<>());
-					}
-					packagesAndLeaves.get(pack.getName()).add(new LeafNode(p, pack, pack.getVersion()));
-				}
-			}
-		} catch (GitLabApiException e) {
-			e.printStackTrace();
-			FordiacLogHelper.logError("Problem with GitLab file download", e);
-		}
-		
+		List<Package> packages;
+		projectAndPackageMap = new HashMap<>();
+		packagesAndLeaves = new HashMap<>();
 	}
 	
 	private void createRootDir() throws IOException {

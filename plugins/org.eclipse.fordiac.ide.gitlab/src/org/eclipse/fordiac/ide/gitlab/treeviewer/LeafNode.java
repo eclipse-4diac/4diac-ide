@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gitlab.treeviewer;
 
-import org.gitlab4j.api.models.Package;
-import org.gitlab4j.api.models.Project;
+import org.eclipse.fordiac.ide.gitlab.Project;
+import org.eclipse.fordiac.ide.gitlab.Package;
 
 public class LeafNode {
 

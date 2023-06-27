@@ -21,8 +21,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.gitlab4j.api.models.Package;
-import org.gitlab4j.api.models.Project;
+import org.eclipse.fordiac.ide.gitlab.Project;
+import org.eclipse.fordiac.ide.gitlab.Package;
 
 public class GLTreeContentProvider implements ITreeContentProvider {
 
