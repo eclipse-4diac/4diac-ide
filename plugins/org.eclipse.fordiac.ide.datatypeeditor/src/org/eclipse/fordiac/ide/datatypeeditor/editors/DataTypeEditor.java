@@ -41,9 +41,10 @@ import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppPinCommand;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -93,7 +94,7 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class DataTypeEditor extends EditorPart implements CommandStackEventListener,
-ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListener {
+		ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListener {
 
 	private final CommandStack commandStack = new CommandStack();
 	private StructViewingComposite structComposite;
@@ -153,7 +154,8 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		removeListenerFromDataTypeObj();
 		super.dispose();
 		if (dirty && dataTypeEntry != null) {
-			// purge editable type from type entry after super.dispose() so that no notifiers will be called
+			// purge editable type from type entry after super.dispose() so that no
+			// notifiers will be called
 			dataTypeEntry.setTypeEditable(null);
 		}
 	}
@@ -207,70 +209,75 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	}
 
 	private void updateFB() {
-		updateStructManipulators();
-		updateTypes();
-		updateInstances();
+		Display.getDefault().asyncExec(() -> {
+			updateStructManipulators();
+			updateTypes();
+			updateInstances();
+		});
+
 	}
 
 	private void updateTypes() {
 		final InstanceSearch search = StructDataTypeSearch
 				.createStructInterfaceSearch((StructuredType) dataTypeEntry.getTypeEditable());
 		final Set<INamedElement> fbTypes = search.performTypeLibBlockSearch(dataTypeEntry.getTypeLibrary());
-		Display.getDefault().asyncExec(() -> {
-			fbTypes.stream().filter(SubAppType.class::isInstance).map(SubAppType.class::cast).forEach(sApp -> {
-				sApp.getInterfaceList().getAllInterfaceElements().stream()
-				.filter(i -> i.getTypeName().equals(dataTypeEntry.getTypeName()))
-				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(el -> {
-					el.setType(dataTypeEntry.getType());
-					if (el.getValue() != null && !el.getValue().getValue().equals("")) {
-						el.getValue().setValue("");
-					}
-				});
-				sApp.getTypeEntry().save();
-			});
+
+		fbTypes.stream().filter(SubAppType.class::isInstance).map(SubAppType.class::cast).forEach(sApp -> {
+			sApp.getInterfaceList().getAllInterfaceElements().stream()
+					.filter(i -> i.getTypeName().equals(dataTypeEntry.getTypeName()))
+					.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(el -> {
+						el.setType(dataTypeEntry.getType());
+						if (el.getValue() != null && !el.getValue().getValue().isBlank()) {
+							el.getValue().setValue("");
+						}
+					});
+			sApp.getTypeEntry().save();
 		});
+
 	}
 
 	private void updateInstances() {
-		structSaveDialog.getCollectedFBs().stream().filter(SubApp.class::isInstance).map(SubApp.class::cast)
-		.forEach(subApp -> {
-			if (subApp.isTyped()) {
-				final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
-				(new ChangeSubAppPinCommand(subApp, structuredType)).execute();
+		structSaveDialog.getCollectedFBs().stream().forEach(subApp -> {
+			if (subApp instanceof final SubApp s && !s.isTyped()) {
+				udpateUntypedSubapps(subApp);
 			} else {
-				subApp.getInterface().getAllInterfaceElements().stream()
-				.filter(i -> i.getTypeName().equals(dataTypeEntry.getTypeName()))
-				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
-				.forEach(el -> {
-					el.setType(dataTypeEntry.getType());
-					if (!el.getValue().getValue().equals("")) {
-						el.getValue().setValue("");
-					}
-				});
+				new UpdateFBTypeCommand(subApp, subApp.getTypeEntry()).execute();
 			}
 		});
 
+	}
+
+	private void udpateUntypedSubapps(final FBNetworkElement subApp) {
+		subApp.getInterface().getAllInterfaceElements().stream()
+				.filter(i -> i.getTypeName().equals(dataTypeEntry.getTypeName()))
+				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(el -> {
+					el.setType(dataTypeEntry.getType());
+					if (el.getValue() != null && !el.getValue().getValue().isBlank()) { // as a fallback we just reset
+																						// the current value
+						el.getValue().setValue("");
+					}
+				});
 	}
 
 	private void updateStructManipulators() {
 		structSaveDialog.getCollectedFBs().stream().filter(StructManipulator.class::isInstance)
-		.map(StructManipulator.class::cast).forEach(mux -> {
-			final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
-			final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(mux));
+				.map(StructManipulator.class::cast).forEach(mux -> {
+					final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
+					final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(mux));
 
-			if (rootContainer instanceof final AutomationSystem autoSys) {
-				autoSys.getCommandStack().execute(new ChangeStructCommand(mux, structuredType));
-			} else if (rootContainer instanceof final SubAppType subApp) {
-				final IFile file = subApp.getTypeEntry().getFile();
-				final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-						.findEditor(new FileEditorInput(file));
-				if (editor != null) {
-					HandlerHelper.getCommandStack(editor).execute(new ChangeStructCommand(mux, structuredType));
-				} else {
-					(new ChangeStructCommand(mux, structuredType)).execute();
-				}
-			}
-		});
+					if (rootContainer instanceof final AutomationSystem autoSys) {
+						autoSys.getCommandStack().execute(new ChangeStructCommand(mux, structuredType));
+					} else if (rootContainer instanceof final SubAppType subApp) {
+						final IFile file = subApp.getTypeEntry().getFile();
+						final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+								.findEditor(new FileEditorInput(file));
+						if (editor != null) {
+							HandlerHelper.getCommandStack(editor).execute(new ChangeStructCommand(mux, structuredType));
+						} else {
+							(new ChangeStructCommand(mux, structuredType)).execute();
+						}
+					}
+				});
 	}
 
 	private static void loadAllOpenEditors() {
@@ -464,7 +471,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 			addListenerToDataTypeObj();
 		} catch (final PartInitException e) {
 			FordiacLogHelper
-			.logError("Error during refreshing struct table after file change detection: " + e.toString(), e); //$NON-NLS-1$
+					.logError("Error during refreshing struct table after file change detection: " + e.toString(), e); //$NON-NLS-1$
 		}
 
 	}
