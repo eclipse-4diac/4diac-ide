@@ -191,8 +191,7 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 	}
 
 	private DeleteInterfaceCommand newDeleteCommand(final IInterfaceElement selection) {
-		return null;
-
+		return new DeleteInterfaceCommand(selection);
 	}
 
 	private ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection, final boolean moveUp) {
