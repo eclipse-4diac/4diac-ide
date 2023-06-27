@@ -204,7 +204,12 @@ final class STCoreUtil {
 			case LE,
 			case LT,
 			case RANGE:
-				true
+				(first instanceof AnyNumType && second instanceof AnyNumType) ||
+					(first instanceof AnyDurationType && second instanceof AnyDurationType) ||
+					(first instanceof AnyBitType && second instanceof AnyBitType) ||
+					(first instanceof DataType && second instanceof DataType &&
+						((first as DataType).isAssignableFrom(second as DataType) ||
+							(second as DataType).isAssignableFrom(first as DataType)))
 		}
 	}
 

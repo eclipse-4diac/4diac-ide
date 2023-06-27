@@ -857,7 +857,7 @@ class STFunctionValidatorTest {
 		    var2 : «rightType.name»;
 		    var3 : BOOL;
 		END_VAR
-		var3 := (var1 «operator.literal» var2) = var1;
+		var3 := (var1 «operator.literal» var2) = (var1 «operator.literal» var2);
 		END_FUNCTION'''.parse
 		if (STCoreUtil.isApplicableTo(operator, leftType, rightType))
 			result.assertNoErrors
