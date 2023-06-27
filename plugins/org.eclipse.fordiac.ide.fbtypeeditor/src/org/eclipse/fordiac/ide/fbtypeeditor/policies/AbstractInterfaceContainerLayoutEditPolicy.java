@@ -48,18 +48,22 @@ public abstract class AbstractInterfaceContainerLayoutEditPolicy extends FlowLay
 
 	@Override
 	protected Command createMoveChildCommand(final EditPart child, final EditPart after) {
-		if (null != child && child.getModel() instanceof IInterfaceElement) {
-			final IInterfaceElement childEl = (IInterfaceElement) child.getModel();
+		if (null != child && child.getModel() instanceof final IInterfaceElement childEl) {
 			IInterfaceElement afterEl = null;
 			if (null != after) {
 				afterEl = (IInterfaceElement) after.getModel();
 			}
 			if (canReorder(childEl, afterEl)) {
 				final int newIndex = createMoveChildCondition(after);
-				return new ChangeInterfaceOrderCommand(childEl, newIndex);
+				return createChangeInterfaceOrderCmd(childEl, newIndex);
 			}
 		}
 		return null;
+	}
+
+	@SuppressWarnings("static-method")  // allow children to overwrite and adapt
+	protected Command createChangeInterfaceOrderCmd(final IInterfaceElement childEl, final int newIndex) {
+		return new ChangeInterfaceOrderCommand(childEl, newIndex);
 	}
 
 }

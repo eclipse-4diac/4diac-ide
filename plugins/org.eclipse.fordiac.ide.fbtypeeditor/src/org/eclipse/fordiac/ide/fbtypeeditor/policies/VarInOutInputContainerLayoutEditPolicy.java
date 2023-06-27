@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2023 Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,7 @@
  *   Virendra Ashiwal - method createMoveChildCommand and condition canReorder
  *                      for Events/Variables and Adapter Interface(Socket and Plug)
  *                      moved to base class AbstractInterfaceContainerLayoutEditPolicy
+ *   Alois Zoitl - copied from VariableInputContainerLayoutEditPolicy
  ********************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.policies;
 
@@ -21,7 +23,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.create.CreateVarInOutCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -33,7 +35,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateRequest;
 
-public class VariableInputContainerLayoutEditPolicy extends AbstractInterfaceContainerLayoutEditPolicy {
+public class VarInOutInputContainerLayoutEditPolicy extends AbstractInterfaceContainerLayoutEditPolicy {
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
 
@@ -41,12 +43,12 @@ public class VariableInputContainerLayoutEditPolicy extends AbstractInterfaceCon
 
 			@Override
 			protected List<? extends IInterfaceElement> getInterfaceElementList() {
-				return getFBType().getInterfaceList().getInputVars();
+				return getFBType().getInterfaceList().getInOutVars();
 			}
 
 			@Override
 			protected Command getIECreateCommand(final DataType refElement, final int ref) {
-				return new CreateInterfaceElementCommand(refElement, getFBType().getInterfaceList(), true, ref);
+				return new CreateVarInOutCommand(refElement, getFBType().getInterfaceList(), ref);
 			}
 
 		};
@@ -54,11 +56,11 @@ public class VariableInputContainerLayoutEditPolicy extends AbstractInterfaceCon
 
 	@Override
 	protected boolean canReorder(final IInterfaceElement childEP, final IInterfaceElement afterEP) {
-		return isVarInput(childEP) && (null == afterEP || isVarInput(afterEP));
+		return isInOutVarInput(childEP) && (null == afterEP || isInOutVarInput(afterEP));
 	}
 
-	private static boolean isVarInput(final IInterfaceElement ie) {
-		return ie instanceof final VarDeclaration childVar && !childVar.isInOutVar() && ie.isIsInput();
+	private static boolean isInOutVarInput(final IInterfaceElement ie) {
+		return ie instanceof final VarDeclaration childVar && childVar.isInOutVar() && ie.isIsInput();
 	}
 
 	@Override
@@ -70,10 +72,11 @@ public class VariableInputContainerLayoutEditPolicy extends AbstractInterfaceCon
 			int index = -1;
 			final EditPart ref = getInsertionReference(request);
 			if (null != ref) {
-				index = type.getInterfaceList().getInputVars().indexOf(ref.getModel());
+				index = type.getInterfaceList().getInOutVars().indexOf(ref.getModel());
 			}
-			return new CreateInterfaceElementCommand(dt, type.getInterfaceList(), true, index);
+			return new CreateVarInOutCommand(dt, type.getInterfaceList(), index);
 		}
 		return null;
 	}
+
 }

@@ -27,6 +27,8 @@ import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventInputContainerLayoutEd
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventOutputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.PlugContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.SocketContainerLayoutEditPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.policies.VarInOutInputContainerLayoutEditPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.policies.VarInOutOutputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VariableInputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VariableOutputContainerLayoutEditPolicy;
 import org.eclipse.gef.EditPart;
@@ -35,7 +37,7 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 
-	public class InterfaceContainerFigure extends Figure {
+	public static class InterfaceContainerFigure extends Figure {
 		public InterfaceContainerFigure() {
 			final ToolbarLayout layout = new ToolbarLayout();
 			layout.setSpacing(0);
@@ -82,11 +84,17 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 		if (getModel() instanceof VariableInputContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VariableInputContainerLayoutEditPolicy());
 		}
+		if (getModel() instanceof VarInOutInputContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VarInOutInputContainerLayoutEditPolicy());
+		}
 		if (getModel() instanceof SocketContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new SocketContainerLayoutEditPolicy());
 		}
 		if (getModel() instanceof VariableOutputContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VariableOutputContainerLayoutEditPolicy());
+		}
+		if (getModel() instanceof VarInOutOutputContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VarInOutOutputContainerLayoutEditPolicy());
 		}
 		if (getModel() instanceof PlugContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new PlugContainerLayoutEditPolicy());
