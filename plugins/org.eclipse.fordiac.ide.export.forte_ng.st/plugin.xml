@@ -24,6 +24,9 @@
          <source
                type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
          </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody">
+         </source>
       </factory>
    </extension>
 

@@ -95,6 +95,7 @@ import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.S
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.findActualNodeFor
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
@@ -419,6 +420,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''func_«feature.name»'''
 
+	def protected dispatch CharSequence generateFeatureName(FunctionFBType feature) '''func_«feature.name»'''
+
 	def protected dispatch CharSequence generateFeatureName(STStandardFunction feature) '''func_«feature.name»'''
 
 	def protected dispatch CharSequence generateFeatureName(STMethod feature) '''method_«feature.name»'''
@@ -525,6 +528,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
 					name = feature.sourceName
 				]] + feature.parameterDependencies
+			FunctionFBType:
+				#[feature] + feature.parameterDependencies
 			ICallable:
 				feature.parameterDependencies
 			default:
