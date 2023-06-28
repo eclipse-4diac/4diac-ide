@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -184,23 +185,20 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 	}
 
 	private CreationCommand newCreateCommand(final IInterfaceElement ie, final boolean isInput) {
-
 		return new CreateVarInOutCommand(getLastUsedDataType(getType().getInterfaceList(), isInput, ie),
 				getType().getInterfaceList(), getInsertingIndex(ie, isInput));
 	}
 
-	private CreationCommand newInsertCommand(final IInterfaceElement selection, final boolean isInput,
-			final int index) {
-		return null;
-
+	private CreationCommand newInsertCommand(final IInterfaceElement ie, final boolean isInput, final int index) {
+		return new CreateVarInOutCommand(ie, getType().getInterfaceList(), index);
 	}
 
-	private DeleteInterfaceCommand newDeleteCommand(final IInterfaceElement selection) {
+	private static DeleteInterfaceCommand newDeleteCommand(final IInterfaceElement selection) {
 		return new DeleteInterfaceCommand(selection);
 	}
 
 	private ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection, final boolean moveUp) {
-		return null;
+		return new ChangeInterfaceOrderCommand(selection, moveUp);
 
 	}
 
@@ -211,20 +209,22 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
-		// TODO Auto-generated method stub
-
+		if (entry instanceof final VarDeclaration varDec && varDec.isInOutVar()) {
+			cmd.add(newInsertCommand(varDec, isInput, index));
+		}
 	}
 
 	@Override
 	public void removeEntry(final Object entry, final CompoundCommand cmd) {
-		// TODO Auto-generated method stub
-
+		if (entry instanceof final VarDeclaration varDec && varDec.isInOutVar()) {
+			cmd.add(newDeleteCommand((Event) entry));
+		}
 	}
 
 	@Override
 	public void executeCompoundCommand(final CompoundCommand cmd) {
-		// TODO Auto-generated method stub
-
+		executeCommand(cmd);
+		inputTable.refresh();
 	}
 
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
