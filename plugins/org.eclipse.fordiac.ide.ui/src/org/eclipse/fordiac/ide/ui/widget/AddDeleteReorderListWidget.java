@@ -39,7 +39,6 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 		final Composite container = createContainer(widgetFactory, parent);
 		container.setLayout(new FillLayout(SWT.VERTICAL));
 
-
 		createAddButton(widgetFactory, container);
 
 		upButton = widgetFactory.createButton(container, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
@@ -56,7 +55,6 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 		setButtonEnablement(false);
 	}
 
-
 	@Override
 	public void setButtonEnablement(final boolean enable) {
 		upButton.setEnabled(enable);
@@ -72,8 +70,9 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 		downButton.addListener(SWT.Selection, downListener);
 	}
 
-	public void bindToTableViewer(final TableViewer viewer, final CommandExecutor executor, final CreationCommandProvider addCommand,
-			final CommandProvider deleteCommand, final CommandProvider moveUpCommand, final CommandProvider moveDownCommand) {
+	public void bindToTableViewer(final TableViewer viewer, final CommandExecutor executor,
+			final CreationCommandProvider addCommand, final CommandProvider deleteCommand,
+			final CommandProvider moveUpCommand, final CommandProvider moveDownCommand) {
 		super.bindToTableViewer(viewer, executor, addCommand, deleteCommand);
 		addUpListener(getSelectionListener(viewer, executor, moveUpCommand));
 		addDownListener(getReverseSelectionListener(viewer, executor, moveDownCommand));
@@ -109,7 +108,9 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 					.getDataProvider();
 			final List<Object> rowObjects = new ArrayList<>();
 			for (final int row : rows) {
-				rowObjects.add(dataProvider.getRowObject(row));
+				if (row >= 0) {
+					rowObjects.add(dataProvider.getRowObject(row));
+				}
 			}
 			if (!rowObjects.isEmpty()) {
 				Collections.reverse(rowObjects);

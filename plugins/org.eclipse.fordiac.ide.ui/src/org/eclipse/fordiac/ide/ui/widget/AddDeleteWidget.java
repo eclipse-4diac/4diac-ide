@@ -105,8 +105,8 @@ public class AddDeleteWidget {
 	public void setButtonEnablement(final boolean enable) {
 		deleteButton.setEnabled(enable);
 		deleteButton
-		.setImage((enable) ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE)
-				: PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
+				.setImage((enable) ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE)
+						: PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
 
 	public void setCreateButtonEnablement(final boolean enable) {
@@ -207,7 +207,9 @@ public class AddDeleteWidget {
 
 			final List<Object> rowObjects = new ArrayList<>();
 			for (final int row : rows) {
-				rowObjects.add(dataProvider.getRowObject(row));
+				if (row >= 0) {
+					rowObjects.add(dataProvider.getRowObject(row));
+				}
 			}
 			if (!rowObjects.isEmpty()) {
 				executeCompoundCommandForList(table, rowObjects, executor, commandProvider);
@@ -262,7 +264,9 @@ public class AddDeleteWidget {
 					.getDataProvider();
 			final List<Object> rowObjects = new ArrayList<>();
 			for (final int row : rows) {
-				rowObjects.add(dataProvider.getRowObject(row));
+				if (row >= 0) {
+					rowObjects.add(dataProvider.getRowObject(row));
+				}
 			}
 			if (!rowObjects.isEmpty()) {
 				executeCompoundCommandForList(table, rowObjects, executor, commandProvider);
@@ -293,7 +297,7 @@ public class AddDeleteWidget {
 			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
 			if (selectionLayer != null) {
 				rows = selectionLayer.getFullySelectedRowPositions();
-				if (rows.length > 0) {
+				if (rows.length > 0 && rows[rows.length - 1] >= 0) {
 					final ListDataProvider<?> dataProvider = (ListDataProvider<?>) NatTableWidgetFactory
 							.getDataLayer(table).getDataProvider();
 					refObject = dataProvider.getRowObject(rows[rows.length - 1]);
