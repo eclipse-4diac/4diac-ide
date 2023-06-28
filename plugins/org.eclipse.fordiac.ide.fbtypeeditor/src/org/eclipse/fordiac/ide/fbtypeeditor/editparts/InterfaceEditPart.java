@@ -52,10 +52,6 @@ import org.eclipse.gef.RequestConstants;
 
 public class InterfaceEditPart extends AbstractInterfaceElementEditPart implements NodeEditPart {
 
-	public InterfaceEditPart() {
-		setConnectable(true);
-	}
-
 	public class InterfaceFigure extends Label implements InteractionStyleFigure {
 		public InterfaceFigure() {
 			setText(getINamedElement().getName());
@@ -199,9 +195,11 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		super.createEditPolicies();
 
 		// allow delete of a FB
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
+		if (isInterfaceEditable()) {
+			installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
 
-		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WithNodeEditPolicy());
+			installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WithNodeEditPolicy());
+		}
 	}
 
 	@Override

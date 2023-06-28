@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.policies.VarInOutInputContainerLayou
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VarInOutOutputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VariableInputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VariableOutputContainerLayoutEditPolicy;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -75,6 +76,10 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected void createEditPolicies() {
+		if (!isInterfaceEditable()) {
+			return;
+		}
+
 		if (getModel() instanceof EventInputContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new EventInputContainerLayoutEditPolicy());
 		}
@@ -128,5 +133,9 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 			dim.height = (int) (dim.height * 0.66);
 			getContentPane().setPreferredSize(dim);
 		}
+	}
+
+	public boolean isInterfaceEditable() {
+		return !(getModel().getFbType() instanceof FunctionFBType);
 	}
 }

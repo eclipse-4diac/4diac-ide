@@ -16,9 +16,11 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -70,5 +72,19 @@ abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEd
 
 	public boolean isAdapter() {
 		return getCastedModel() instanceof AdapterDeclaration;
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return isInterfaceEditable();
+	}
+
+	@Override
+	public boolean isDirectEditable() {
+		return isInterfaceEditable();
+	}
+
+	public boolean isInterfaceEditable() {
+		return !(EcoreUtil.getRootContainer(getCastedModel()) instanceof FunctionFBType);
 	}
 }

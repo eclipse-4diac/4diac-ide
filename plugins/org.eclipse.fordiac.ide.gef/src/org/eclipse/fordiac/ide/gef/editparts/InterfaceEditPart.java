@@ -70,7 +70,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
-implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
+		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private int mouseState;
 	private static int maxWidth = -1;
 
@@ -88,7 +88,6 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	};
 
 	protected InterfaceEditPart() {
-		setConnectable(true);
 		addPreferenceListener();
 	}
 
@@ -188,7 +187,6 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	public class InterfaceFigure extends SetableAlphaLabel {
 
 		public InterfaceFigure() {
-			super();
 			setOpaque(false);
 			setText(getLabelText());
 			setBorder(new ConnectorBorder(getModel()));
@@ -273,7 +271,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 
 		@Override
 		public Dimension getTextSize() {
-			//call super class to set TextSize
+			// call super class to set TextSize
 			super.getTextSize();
 			return getSubStringTextSize();
 		}
@@ -513,7 +511,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	private Adapter getSourcePinAdapter() {
-		if(sourcePinAdapter == null) {
+		if (sourcePinAdapter == null) {
 			sourcePinAdapter = createSourcePinAdapter();
 		}
 		return sourcePinAdapter;
@@ -532,7 +530,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	protected void updatePadding(final int yPosition) {
-		final IFigure paddingFigure = (IFigure) getFigure().getParent().getChildren().get(0);
+		final IFigure paddingFigure = getFigure().getParent().getChildren().get(0);
 		final int textHeight = ((InterfaceFigure) getFigure()).getTextBounds().height();
 		paddingFigure.setMinimumSize(new Dimension(-1, yPosition - textHeight));
 	}

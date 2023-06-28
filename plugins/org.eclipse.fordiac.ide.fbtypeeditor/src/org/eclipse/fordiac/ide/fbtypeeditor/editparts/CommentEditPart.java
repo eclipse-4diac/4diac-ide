@@ -63,22 +63,24 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart {
 		handle.setDragAllowed(false);
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, handle);
 
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
-			@Override
-			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					return new ChangeCommentCommand(getCastedModel(), (String) request.getCellEditor().getValue());
+		if (isDirectEditable()) {
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
+				@Override
+				protected Command getDirectEditCommand(final DirectEditRequest request) {
+					if (getHost() instanceof AbstractDirectEditableEditPart) {
+						return new ChangeCommentCommand(getCastedModel(), (String) request.getCellEditor().getValue());
+					}
+					return null;
 				}
-				return null;
-			}
 
-			@Override
-			protected void revertOldEditValue(final DirectEditRequest request) {
-				if (getHost() instanceof final AbstractDirectEditableEditPart viewEditPart) {
-					viewEditPart.getNameLabel().setText(viewEditPart.getINamedElement().getComment());
+				@Override
+				protected void revertOldEditValue(final DirectEditRequest request) {
+					if (getHost() instanceof final AbstractDirectEditableEditPart viewEditPart) {
+						viewEditPart.getNameLabel().setText(viewEditPart.getINamedElement().getComment());
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	@Override
