@@ -91,6 +91,11 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
+	public boolean isShowTableEditButtons() {
+		return false;
+	}
+
+	@Override
 	protected InterfaceList getInterface() {
 		return getType().getInterface();
 	}

@@ -20,8 +20,10 @@ package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
@@ -61,6 +63,10 @@ public class AdapterInterfaceElementSection extends AbstractDoubleColumnSection 
 			pinInfoBasicWidget.refresh();
 		}
 		commandStack = commandStackBuffer;
+	}
+
+	public boolean isEditable() {
+		return !(EcoreUtil.getRootContainer(getType()) instanceof FunctionFBType);
 	}
 
 	@Override
