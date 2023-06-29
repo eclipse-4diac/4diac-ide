@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH,
- *               2023 Johannes Kepler University, Linz
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH,
+ *                          Johannes Kepler University, Linz
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,19 +12,20 @@
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
  *   Prankur Agarwal - fixed the issues with pasting
+ *   Martin Jobst - check editable before pasting
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.ui.widget;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.providers.RowHeaderDataProvider;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.edit.command.EditUtils;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommand;
 import org.eclipse.nebula.widgets.nattable.grid.layer.GridLayer;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
@@ -65,8 +67,11 @@ public class PasteDataIntoTableAction implements IKeyAction {
 		final String[][] cellsContent = parseContent(contents);
 		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
 
-		final List<Rectangle> ranges = selectionLayer.getSelectionModel().getSelections().stream().distinct()
-				.collect(Collectors.toList());
+		if (!EditUtils.allCellsEditable(selectionLayer, natTable.getConfigRegistry())) {
+			return;
+		}
+
+		final List<Rectangle> ranges = selectionLayer.getSelectionModel().getSelections().stream().distinct().toList();
 
 		if (ranges.size() != 1) {
 			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "", //$NON-NLS-1$
@@ -90,27 +95,30 @@ public class PasteDataIntoTableAction implements IKeyAction {
 	}
 
 	private void pasteClipboardElementsContents(final NatTable natTable, final Object contents) {
-		if (contents instanceof Object[] && section != null) {
+		if (contents instanceof final Object[] contentsArray && section != null && section.isEditable()) {
 			final CompoundCommand cmpCommand = new CompoundCommand();
 			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
 			final RowHeaderDataProvider rowHeaderDataProvider = (RowHeaderDataProvider) (((DataLayer) ((GridLayer) natTable
 					.getUnderlyingLayerByPosition(0, 0)).getRowHeaderLayer().getUnderlyingLayerByPosition(0, 0))
-					.getDataProvider());
+							.getDataProvider());
 
 			if (selectionLayer == null) {
 				int i = 0;
-				for (final Object entry : (Object[]) contents) {
-					section.addEntry(entry, rowHeaderDataProvider.isInput(), i++, cmpCommand);
+				for (final Object entry : contentsArray) {
+					section.addEntry(entry, rowHeaderDataProvider.isInput(), i, cmpCommand);
+					i++;
 				}
 				section.executeCompoundCommand(cmpCommand);
 			} else {
 				final int[] rows = selectionLayer.getFullySelectedRowPositions();
-				final int[] selectedIndices = new int[((Object[]) contents).length];
+				final int[] selectedIndices = new int[contentsArray.length];
 				int index = rows.length != 0 ? rows[rows.length - 1] + 1 : natTable.getRowCount();
 				int i = 0;
-				for (final Object entry : (Object[]) contents) {
-					selectedIndices[i++] = index;
-					section.addEntry(entry, rowHeaderDataProvider.isInput(), index++, cmpCommand);
+				for (final Object entry : contentsArray) {
+					selectedIndices[i] = index;
+					i++;
+					section.addEntry(entry, rowHeaderDataProvider.isInput(), index, cmpCommand);
+					index++;
 				}
 				section.executeCompoundCommand(cmpCommand);
 				for (final int ind : selectedIndices) {
