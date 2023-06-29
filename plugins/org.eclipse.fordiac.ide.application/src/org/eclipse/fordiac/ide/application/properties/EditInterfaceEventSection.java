@@ -40,13 +40,12 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 	}
 
 	@Override
-	protected CreationCommand newInsertCommand(final IInterfaceElement interfaceElement,
-			final boolean isInput, final int index) {
+	protected CreationCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
+			final int index) {
 		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(interfaceElement,
 				isInput, getType().getInterface(), index);
 		return ResizingSubappInterfaceCreationCommand.wrapCreateCommand(cmd, getType());
 	}
-
 
 	@Override
 	protected SubApp getInputType(final Object input) {
@@ -69,14 +68,8 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 	}
 
 	@Override
-	public boolean isEditable() {
-		return true;
-	}
-
-	@Override
 	protected InterfaceList getInterface() {
 		return (getType() != null) ? getType().getInterface() : null;
 	}
-
 
 }

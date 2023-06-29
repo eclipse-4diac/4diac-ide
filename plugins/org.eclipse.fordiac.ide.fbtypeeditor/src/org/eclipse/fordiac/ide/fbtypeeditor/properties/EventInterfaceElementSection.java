@@ -116,10 +116,11 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 		commandStack = null;
 		if (null != getType()) {
 			withEventsViewer.setInput(getType());
+			withEventsViewer.getTable().setEnabled(isEditable());
 			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
 			getType().getWith().stream().filter(with -> (with.getVariables() != null))
-			.map(with -> withEventsViewer.testFindItem(with.getVariables()))
-			.filter(TableItem.class::isInstance).forEach(item -> ((TableItem) item).setChecked(true));
+					.map(with -> withEventsViewer.testFindItem(with.getVariables())).filter(TableItem.class::isInstance)
+					.forEach(item -> ((TableItem) item).setChecked(true));
 		}
 		commandStack = commandStackBuffer;
 	}

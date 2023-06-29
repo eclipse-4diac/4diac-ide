@@ -20,8 +20,10 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
@@ -57,12 +59,14 @@ public class WithEditPart extends AbstractConnectionEditPart {
 		// // Makes the connection show a feedback, when selected by the user.
 		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new ConnectionEndpointEditPolicy());
 		// // Allows the removal of the connection model element
-		installEditPolicy(EditPolicy.CONNECTION_ROLE, new ConnectionEditPolicy() {
-			@Override
-			protected Command getDeleteCommand(final GroupRequest request) {
-				return new DeleteWithCommand(getCastedModel());
-			}
-		});
+		if (isInterfaceEditable()) {
+			installEditPolicy(EditPolicy.CONNECTION_ROLE, new ConnectionEditPolicy() {
+				@Override
+				protected Command getDeleteCommand(final GroupRequest request) {
+					return new DeleteWithCommand(getCastedModel());
+				}
+			});
+		}
 	}
 
 	@Override
@@ -74,7 +78,7 @@ public class WithEditPart extends AbstractConnectionEditPart {
 
 	private void updateConnection(final PolylineConnection connection) {
 
-		final int withPos = InterfaceEditPart.calculateWithPos(getCastedModel(),isInput());
+		final int withPos = InterfaceEditPart.calculateWithPos(getCastedModel(), isInput());
 
 		final PolygonDecoration rectDec = new PolygonDecoration();
 		rectDec.setTemplate(createPointList(withPos, false));
@@ -103,12 +107,10 @@ public class WithEditPart extends AbstractConnectionEditPart {
 			} else {
 				addLeftAlignedLine(withPos, rect);
 			}
+		} else if (top) {
+			addLeftAlignedLine(withPos, rect);
 		} else {
-			if (top) {
-				addLeftAlignedLine(withPos, rect);
-			} else {
-				addRightAlignedLine(withPos, rect);
-			}
+			addRightAlignedLine(withPos, rect);
 		}
 		rect.addPoint(0, -WITH_BOX_SIZE);
 		return rect;
@@ -134,7 +136,7 @@ public class WithEditPart extends AbstractConnectionEditPart {
 		}
 	}
 
-	public WithEditPart() {
-		super();
+	public boolean isInterfaceEditable() {
+		return !(EcoreUtil.getRootContainer(getCastedModel()) instanceof FunctionFBType);
 	}
 }

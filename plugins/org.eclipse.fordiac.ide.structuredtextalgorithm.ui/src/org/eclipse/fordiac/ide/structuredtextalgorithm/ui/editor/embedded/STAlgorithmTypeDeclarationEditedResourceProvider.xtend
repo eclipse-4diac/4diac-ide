@@ -35,15 +35,17 @@ class STAlgorithmTypeDeclarationEditedResourceProvider implements IEditedResourc
 	override createResource() {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		resourceSet.loadOptions.putAll(#{
-			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
-			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE
+			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE
 		})
 		val resource = SERVICE_PROVIDER.get(XtextResource) as STAlgorithmResource
 		resource.URI = element?.eResource?.URI ?: SYNTHETIC_URI
 		resourceSet.resources.add(resource)
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		resource.entryPoint = parser.grammarAccess.STTypeDeclarationRule
-		resource.defaultLoadOptions.putAll(resourceSet.loadOptions)
+		resource.defaultLoadOptions.putAll(#{
+			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
+			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE
+		})
 		return resource
 	}
 }

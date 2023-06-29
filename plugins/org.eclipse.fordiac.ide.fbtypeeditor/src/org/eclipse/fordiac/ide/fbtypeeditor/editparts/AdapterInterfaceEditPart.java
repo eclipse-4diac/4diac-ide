@@ -106,9 +106,13 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy());
+		if (isDirectEditable()) {
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy());
+		}
 		// allow delete of a FB
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
+		if (isInterfaceEditable()) {
+			installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
+		}
 	}
 
 	@Override

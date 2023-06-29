@@ -20,6 +20,7 @@ import java.util.stream.Stream
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyCharType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
+import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.BoolType
@@ -46,6 +47,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -85,7 +87,6 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.WCharValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.WStringValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.WordValue.*
 import static extension org.junit.jupiter.api.Assertions.*
-import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 
 class StandardFunctionsTest {
 
@@ -94,6 +95,7 @@ class StandardFunctionsTest {
 	@BeforeAll
 	def static void setupXtext() {
 		new DataTypeLibrary
+		STFunctionStandaloneSetup.doSetup
 		STAlgorithmStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register
 	}

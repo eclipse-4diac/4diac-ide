@@ -28,14 +28,14 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 	}
 
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement,
+			final boolean isInput) {
 		return null;
 	}
 
 	@Override
 	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
-			final boolean isInput,
-			final int index) {
+			final boolean isInput, final int index) {
 		return null;
 	}
 
@@ -56,6 +56,11 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 
 	@Override
 	public boolean isEditable() {
+		return false;
+	}
+
+	@Override
+	public boolean isShowTableEditButtons() {
 		return false;
 	}
 

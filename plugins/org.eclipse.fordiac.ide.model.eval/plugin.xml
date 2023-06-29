@@ -12,6 +12,9 @@
          <source
                type="org.eclipse.fordiac.ide.model.libraryElement.BasicFBType">
          </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType">
+         </source>
       </factory>
    </extension>
 </plugin>

@@ -33,25 +33,32 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
 import org.eclipse.xtext.ParserRule
 import org.eclipse.xtext.parser.IParseResult
 import org.eclipse.xtext.parser.IParser
+import org.eclipse.xtext.resource.IResourceFactory
 import org.eclipse.xtext.resource.IResourceServiceProvider
+import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.resource.XtextResourceSet
+import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.eclipse.xtext.validation.Issue
 
 import static extension org.eclipse.fordiac.ide.structuredtextcore.util.STCoreParseUtil.*
 import static extension org.eclipse.xtext.EcoreUtil2.*
 
 class StructuredTextParseUtil {
-	static final URI SYNTHETIC_URI = URI.createURI("__synthetic.stalg")
-	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.
-		getResourceServiceProvider(SYNTHETIC_URI)
+	static final URI SYNTHETIC_URI_FBT = URI.createURI("__synthetic.stalg")
+	static final IResourceServiceProvider SERVICE_PROVIDER_FBT = IResourceServiceProvider.Registry.INSTANCE.
+		getResourceServiceProvider(SYNTHETIC_URI_FBT)
+
+	static final URI SYNTHETIC_URI_FCT = URI.createURI("__synthetic.stfunc")
+	static final IResourceServiceProvider SERVICE_PROVIDER_FCT = IResourceServiceProvider.Registry.INSTANCE.
+		getResourceServiceProvider(SYNTHETIC_URI_FCT)
 
 	private new() {
 	}
 
 	def static org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm parse(STAlgorithm algorithm,
 		List<String> errors, List<String> warnings, List<String> infos) {
-		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
-		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
+		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
+		extension val partitioner = SERVICE_PROVIDER_FBT.get(STAlgorithmPartitioner)
 		switch (root : algorithm.eContainer) {
 			BaseFBType:
 				(root.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, root.name, root, errors, warnings,
@@ -67,8 +74,8 @@ class StructuredTextParseUtil {
 
 	def static org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod parse(STMethod method,
 		List<String> errors, List<String> warnings, List<String> infos) {
-		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
-		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
+		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
+		extension val partitioner = SERVICE_PROVIDER_FBT.get(STAlgorithmPartitioner)
 		switch (root : method.eContainer) {
 			BaseFBType:
 				(root.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, root.name, root, errors, warnings,
@@ -84,21 +91,21 @@ class StructuredTextParseUtil {
 
 	def static STAlgorithmSource parse(BaseFBType fbType, List<String> errors, List<String> warnings,
 		List<String> infos) {
-		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
-		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
+		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
+		extension val partitioner = SERVICE_PROVIDER_FBT.get(STAlgorithmPartitioner)
 		fbType.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, fbType.name, fbType, errors, warnings, infos)?.
 			rootASTElement as STAlgorithmSource
 	}
 
 	def static void validate(String expression, URI uri, INamedElement expectedType, LibraryElement type,
 		Collection<? extends EObject> additionalContent, List<Issue> issues) {
-		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
+		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		expression.parse(parser.grammarAccess.STInitializerExpressionSourceRule, uri, expectedType, type,
 			additionalContent, issues)
 	}
 
 	def static void validateType(VarDeclaration decl, List<Issue> issues) {
-		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
+		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, decl?.eResource?.URI, null,
 			decl.getContainerOfType(LibraryElement), null, issues)
 	}
@@ -111,7 +118,7 @@ class StructuredTextParseUtil {
 	def static STExpressionSource parse(String expression, INamedElement expectedType, LibraryElement type,
 		Collection<? extends EObject> additionalContent, List<String> errors, List<String> warnings,
 		List<String> infos) {
-		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
+		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		expression.parse(parser.grammarAccess.STExpressionSourceRule, type?.eResource?.URI, expectedType, type,
 			additionalContent, errors, warnings, infos)?.rootASTElement as STExpressionSource
 	}
@@ -119,14 +126,14 @@ class StructuredTextParseUtil {
 	def static STInitializerExpressionSource parse(String expression, URI uri, INamedElement expectedType,
 		LibraryElement type, Collection<? extends EObject> additionalContent, List<String> errors,
 		List<String> warnings, List<String> infos) {
-		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
+		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		expression.parse(parser.grammarAccess.STInitializerExpressionSourceRule, uri, expectedType, type,
 			additionalContent, errors, warnings, infos)?.rootASTElement as STInitializerExpressionSource
 	}
 
 	def static STTypeDeclaration parseType(VarDeclaration decl, List<String> errors, List<String> warnings,
 		List<String> infos) {
-		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
+		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, decl?.eResource?.URI, null, decl.name,
 			decl.getContainerOfType(LibraryElement), null, errors, warnings, infos)?.rootASTElement as STTypeDeclaration
 	}
@@ -154,12 +161,18 @@ class StructuredTextParseUtil {
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, INamedElement expectedType,
 		LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues) {
-		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
+		val resourceSet = SERVICE_PROVIDER_FBT.get(ResourceSet) as XtextResourceSet
+		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("fbt", SERVICE_PROVIDER_FBT.get(IResourceFactory))
+		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("fct", SERVICE_PROVIDER_FCT.get(IResourceFactory))
 		resourceSet.loadOptions.putAll(#{
-			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
 			STCoreUtil.OPTION_EXPECTED_TYPE -> expectedType
 		})
-		SERVICE_PROVIDER.parse(resourceSet, text, entryPoint, type, additionalContent, issues,
-			uri ?: SYNTHETIC_URI)
+		SERVICE_PROVIDER_FBT.parse(resourceSet, text, entryPoint, type, additionalContent, issues,
+			uri ?: SYNTHETIC_URI_FBT, #{
+				XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
+				ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE,
+				STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
+				STCoreUtil.OPTION_EXPECTED_TYPE -> expectedType
+			})
 	}
 }

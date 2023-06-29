@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,17 +10,20 @@
  *
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
+ *   Martin Jobst - lock editing for function FBs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.widgets;
 
 import java.util.function.Consumer;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.editors.TypeDeclarationEditor;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -122,7 +126,9 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	}
 
 	protected void checkFieldEnablements() {
-		if(type instanceof VarDeclaration) {
+		nameText.setEditable(isEditable());
+		commentText.setEditable(isEditable());
+		if (type instanceof VarDeclaration) {
 			typeSelectionWidget.setEditable(false);
 			typeSelectionWidget.getControl().setVisible(false);
 			GridDataFactory.swtDefaults().exclude(true).applyTo(typeSelectionWidget.getControl());
@@ -139,13 +145,14 @@ public class PinInfoBasicWidget implements CommandExecutor {
 		}
 	}
 
+	protected boolean isEditable() {
+		return !(EcoreUtil.getRootContainer(getType()) instanceof FunctionFBType);
+	}
+
 	protected boolean isTypeChangeable() {
-		if (type != null) {
-			// currently we have only one event type therefore we don't want it be
-			// changeable
-			return !(type instanceof Event) && hasNoConnections();
-		}
-		return false;
+		// currently we have only one event type therefore we don't want it be
+		// changeable
+		return isEditable() && !(type instanceof Event) && hasNoConnections();
 	}
 
 	public IInterfaceElement getType() {

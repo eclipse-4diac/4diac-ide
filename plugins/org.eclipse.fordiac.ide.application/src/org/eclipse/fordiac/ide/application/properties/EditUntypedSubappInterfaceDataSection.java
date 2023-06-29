@@ -42,7 +42,6 @@ import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
@@ -72,15 +71,11 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 
 	@Override
 	public void setupInputTable(final Group inputsGroup) {
-		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
-		if (isEditable()) {
-			rule = IEditableRule.ALWAYS_EDITABLE;
-		}
 		inputProvider = new VarDeclarationListProvider(new VarDeclarationWithVarConfigColumnAccessor(this));
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new VarDeclarationWithVarConfigColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this,
-				true);
+				new VarDeclarationWithVarConfigColumnProvider(), getSectionEditableRule(),
+				new DataTypeSelectionButton(typeSelection), this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
@@ -136,11 +131,6 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 	@Override
 	protected SubApp getType() {
 		return (SubApp) type;
-	}
-
-	@Override
-	public boolean isEditable() {
-		return true;
 	}
 
 	@Override
