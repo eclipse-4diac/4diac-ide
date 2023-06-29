@@ -54,12 +54,12 @@ final class CallableAnnotations {
 	}
 
 	static EList<INamedElement> getOutputParameters(final FBType type) {
-		return ECollections.unmodifiableEList(type.getInterfaceList().getOutputVars());
+		return ECollections.unmodifiableEList(
+				type.getInterfaceList().getOutputVars().stream().filter(v -> !v.getName().isEmpty()).toList());
 	}
 
-	@SuppressWarnings("unused")
 	static EList<INamedElement> getInOutParameters(final FBType type) {
-		return ECollections.emptyEList(); // FB types may not have in/out parameters
+		return ECollections.unmodifiableEList(type.getInterfaceList().getInOutVars());
 	}
 
 	static DataType getReturnType(final FBType type) {
