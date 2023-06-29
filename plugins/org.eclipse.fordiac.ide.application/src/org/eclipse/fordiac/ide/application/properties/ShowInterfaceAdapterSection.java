@@ -41,14 +41,14 @@ public class ShowInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	}
 
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement,
+			final boolean isInput) {
 		return null;
 	}
 
 	@Override
 	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
-			final boolean isInput,
-			final int index) {
+			final boolean isInput, final int index) {
 		return null;
 	}
 
@@ -73,9 +73,13 @@ public class ShowInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	}
 
 	@Override
+	public boolean isShowTableEditButtons() {
+		return false;
+	}
+
+	@Override
 	protected InterfaceList getInterface() {
 		return getType().getInterface();
 	}
-
 
 }

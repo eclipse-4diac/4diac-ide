@@ -119,9 +119,10 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 			if (getType().eContainer().eContainer() instanceof FBType) {
 				eventComposite.setVisible(true);
 				withEventsViewer.setInput(getType());
+				withEventsViewer.getTable().setEnabled(isEditable());
 				Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
 				getType().getWiths().stream().map(with -> withEventsViewer.testFindItem(with.eContainer()))
-				.filter(TableItem.class::isInstance).forEach(item -> ((TableItem) item).setChecked(true));
+						.filter(TableItem.class::isInstance).forEach(item -> ((TableItem) item).setChecked(true));
 			} else {
 				eventComposite.setVisible(false);
 			}

@@ -24,7 +24,7 @@ import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 
 public abstract class AbstractHierarchyHandler extends AbstractHandler {
 
-	protected static void executeOperation(final AbstractChangeHierarchyOperation cmd) {
+	public static void executeOperation(final AbstractChangeHierarchyOperation cmd) {
 		final IWorkbench workbench = PlatformUI.getWorkbench();
 		final IOperationHistory operationHistory = workbench.getOperationSupport().getOperationHistory();
 		final IUndoContext undoContext = workbench.getOperationSupport().getUndoContext();

@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.model.typelibrary.testmocks.DataTypeEntryMock
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
@@ -49,6 +50,7 @@ class FunctionsTest {
 	@BeforeAll
 	def static void setupXtext() {
 		typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null)
+		STFunctionStandaloneSetup.doSetup
 		STAlgorithmStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register
 	}
@@ -168,7 +170,7 @@ class FunctionsTest {
 			SampleFunctions.inferReturnTypeFromDataTypes("VARARGS", ElementaryTypes.INT, ElementaryTypes.INT,
 				ElementaryTypes.INT))
 		// parameter types
-		emptyList.assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("VARARGS"))
+		#[ElementaryTypes.INT].assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("VARARGS"))
 		#[ElementaryTypes.INT].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS", ElementaryTypes.INT))
 		#[ElementaryTypes.INT, ElementaryTypes.INT].assertIterableEquals(
@@ -206,7 +208,7 @@ class FunctionsTest {
 			SampleFunctions.inferReturnTypeFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT, ElementaryTypes.INT,
 				ElementaryTypes.SINT))
 		// parameter types
-		emptyList.assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC"))
+		#[GenericTypes.ANY_MAGNITUDE].assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC"))
 		#[ElementaryTypes.LINT].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT))
 		#[ElementaryTypes.LINT, ElementaryTypes.LINT].assertIterableEquals(

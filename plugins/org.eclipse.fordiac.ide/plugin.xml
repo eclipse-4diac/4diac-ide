@@ -11,20 +11,37 @@
             name="%perspective.name">
       </perspective>
    </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="org.eclipse.fordiac.ide.typemanagement.perspective">
-         <perspectiveShortcut
-               id="org.eclipse.fordiac.ide.SystemPerspective">
-         </perspectiveShortcut>
-      </perspectiveExtension>
-      <perspectiveExtension
-            targetID="org.eclipse.debug.ui.DebugPerspective">
-         <perspectiveShortcut
-               id="org.eclipse.fordiac.ide.SystemPerspective">
-         </perspectiveShortcut>
-      </perspectiveExtension>
+	<extension 
+			point="org.eclipse.ui.perspectiveExtensions">
+      	<perspectiveExtension
+        		targetID="org.eclipse.fordiac.ide.typemanagement.perspective">
+			<perspectiveShortcut
+	        	id="org.eclipse.fordiac.ide.SystemPerspective">
+	        </perspectiveShortcut>
+      	</perspectiveExtension>
+      	<perspectiveExtension
+            	targetID="org.eclipse.debug.ui.DebugPerspective">
+         	<perspectiveShortcut
+				id="org.eclipse.fordiac.ide.SystemPerspective">
+			</perspectiveShortcut>
+		</perspectiveExtension>
+		<perspectiveExtension
+        		editorOnboardingImage="$nl$/icons/sys_onboarding.png"
+				editorOnboardingText="Develop your IEC 61499 solutions here"
+				targetID="org.eclipse.fordiac.ide.SystemPerspective">
+			<editorOnboardingCommand
+            	id="org.eclipse.ui.window.quickAccess">
+         	</editorOnboardingCommand>
+         	<editorOnboardingCommand
+            	id="org.eclipse.ui.window.showKeyAssist">
+         	</editorOnboardingCommand>
+         	<editorOnboardingCommand
+            	id="org.eclipse.ui.newWizard">
+         	</editorOnboardingCommand>
+         	<editorOnboardingCommand
+            	id="org.eclipse.fordiac.ide.typemanagement.openType">
+         	</editorOnboardingCommand>
+		</perspectiveExtension>
    </extension>
    <extension
          id="product"

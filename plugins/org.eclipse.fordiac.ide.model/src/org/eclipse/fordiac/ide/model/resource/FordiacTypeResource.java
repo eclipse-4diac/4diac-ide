@@ -16,6 +16,7 @@
  *    - adapted for emf compare
  *  Martin Jobst
  *    - gracefully handle exceptions during load or save
+ *    - add function FB type
  *  Fabio Gandolfi
  *    - load types via inputstream
  ********************************************************************************/
@@ -39,6 +40,7 @@ import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
+import org.eclipse.fordiac.ide.model.dataimport.FCTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
@@ -113,6 +115,8 @@ public class FordiacTypeResource extends ResourceImpl {
 			return new SystemImporter(inputStream, typeLib);
 		case TypeLibraryTags.FB_TYPE_FILE_ENDING:
 			return new FBTImporter(inputStream, typeLib);
+		case TypeLibraryTags.FC_TYPE_FILE_ENDING:
+			return new FCTImporter(inputStream, typeLib);
 		case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING:
 			return new ADPImporter(inputStream, typeLib);
 		case TypeLibraryTags.DATA_TYPE_FILE_ENDING:

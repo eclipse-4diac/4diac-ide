@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -37,6 +38,7 @@ import static extension org.junit.jupiter.api.Assertions.*
 class ValueTest {
 	@BeforeAll
 	def static void setupXtext() {
+		STFunctionStandaloneSetup.doSetup
 		STAlgorithmStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register
 	}

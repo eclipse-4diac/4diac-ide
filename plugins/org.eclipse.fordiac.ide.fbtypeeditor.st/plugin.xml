@@ -8,5 +8,10 @@
             sortIndex="60"
             type="base">
       </editor>
+      <editor
+            class="org.eclipse.fordiac.ide.fbtypeeditor.st.StructuredTextFunctionFBTypeExecutableExtensionFactory:org.eclipse.fordiac.ide.fbtypeeditor.st.StructuredTextFBTypeEditor"
+            sortIndex="60"
+            type="function">
+      </editor>
    </extension>
 </plugin>

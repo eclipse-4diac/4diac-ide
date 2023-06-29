@@ -168,6 +168,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	public static final String TOP_LAYER = "TOPLAYER"; //$NON-NLS-1$
 
 	public ZoomScalableFreeformRootEditPart(final IWorkbenchPartSite site, final ActionRegistry actionRegistry) {
+		super(false);
 		configureZoomManger();
 		setupZoomActions(site, actionRegistry);
 	}
@@ -211,28 +212,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 
 	@Override
 	protected ScalableFreeformLayeredPane createScaledLayers() {
-		final ScalableFreeformLayeredPane pane = new ScalableFreeformLayeredPane() {
-			@Override
-			protected void paintClientArea(final Graphics graphics) {
-				// adjusted super paint client area without using the scaled graphics
-				// see https://bugs.eclipse.org/bugs/show_bug.cgi?id=470334 for details
-				// this fixes some text drawing issues on different scales
-				if (getChildren().isEmpty()) {
-					return;
-				}
-				final boolean optimizeClip = (getBorder() == null) || getBorder().isOpaque();
-				if (!optimizeClip) {
-					graphics.clipRect(getBounds().getShrinked(getInsets()));
-				}
-				graphics.scale(getScale());
-				graphics.pushState();
-				paintChildren(graphics);
-				graphics.popState();
-			}
-		};
-		pane.add(createGridLayer(), GRID_LAYER);
-		pane.add(getPrintableLayers(), PRINTABLE_LAYERS);
-		pane.add(new FeedbackLayer(), SCALED_FEEDBACK_LAYER);
+		final ScalableFreeformLayeredPane pane = super.createScaledLayers();
 		pane.add(new FreeformLayer(), HANDLE_LAYER);
 		pane.add(new FeedbackLayer(), FEEDBACK_LAYER);
 		return pane;

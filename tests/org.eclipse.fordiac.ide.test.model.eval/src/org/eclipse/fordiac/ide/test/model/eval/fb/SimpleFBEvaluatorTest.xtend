@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.eval.fb.SimpleFBEvaluator
 import org.eclipse.fordiac.ide.model.eval.value.StructValue
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -632,7 +633,7 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	@Test
 	def void testSimpleWithLegacyArray() {
 		val inputVarDecl = newVarDeclaration("DI1", ElementaryTypes.INT, true, "[1,2,3,4,5,6]")
-		inputVarDecl.arraySize = "6"
+		ArraySizeHelper.setArraySize(inputVarDecl, "6")
 		val inputVar = newVariable(inputVarDecl)
 		val outputVarDecl = newVarDeclaration("DO1", ElementaryTypes.INT, false)
 		21.toIntValue.assertEquals(#[
@@ -645,7 +646,7 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	@Test
 	def void testSimpleWithSimpleArray() {
 		val inputVarDecl = newVarDeclaration("DI1", ElementaryTypes.INT, true, "[1,2,3,4,5,6]")
-		inputVarDecl.arraySize = "0..5"
+		ArraySizeHelper.setArraySize(inputVarDecl, "0..5")
 		val inputVar = newVariable(inputVarDecl)
 		val outputVarDecl = newVarDeclaration("DO1", ElementaryTypes.INT, false)
 		21.toIntValue.assertEquals(#[
@@ -658,7 +659,7 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	@Test
 	def void testSimpleWithComplexArray() {
 		val inputVarDecl = newVarDeclaration("DI1", ElementaryTypes.INT, true, "[1,2,3,4,5,6]")
-		inputVarDecl.arraySize = "0..21-17+2"
+		ArraySizeHelper.setArraySize(inputVarDecl, "0..21-17+2")
 		val inputVar = newVariable(inputVarDecl)
 		val outputVarDecl = newVarDeclaration("DO1", ElementaryTypes.INT, false)
 		21.toIntValue.assertEquals(#[

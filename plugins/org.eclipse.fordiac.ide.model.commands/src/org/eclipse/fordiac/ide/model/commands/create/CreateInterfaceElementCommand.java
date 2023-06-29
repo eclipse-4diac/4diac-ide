@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -44,13 +45,11 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 
 	private AdapterCreateCommand adapterCreateCmd;
 
-	private EList<? extends IInterfaceElement> interfaceElementList;
 	private final InterfaceList targetInterfaceList;
 
 	/** constructor for copying an interface element */
 	public CreateInterfaceElementCommand(final IInterfaceElement copySrc, final boolean isInput,
-			final InterfaceList targetInterfaceList,
-			final int index) {
+			final InterfaceList targetInterfaceList, final int index) {
 		this(copySrc.getType(), copySrc.getName(), targetInterfaceList, isInput, index);
 		newInterfaceElement = EcoreUtil.copy(copySrc);
 	}
@@ -110,27 +109,28 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 		return (null != newInterfaceElement) && (null != newInterfaceElement.getType());
 	}
 
-	private void selectInterface(final InterfaceList interfaceList) {
+	protected EList<? extends IInterfaceElement> getInterfaceListContainer() {
 		if (isInput) {
 			if (dataType instanceof EventType) {
-				this.interfaceElementList = interfaceList.getEventInputs();
-			} else if (dataType instanceof AdapterType) {
-				this.interfaceElementList = interfaceList.getSockets();
-			} else {
-				this.interfaceElementList = interfaceList.getInputVars();
+				return targetInterfaceList.getEventInputs();
 			}
-		} else if (dataType instanceof EventType) {
-			this.interfaceElementList = interfaceList.getEventOutputs();
-		} else if (dataType instanceof AdapterType) {
-			this.interfaceElementList = interfaceList.getPlugs();
-		} else {
-			this.interfaceElementList = interfaceList.getOutputVars();
+			if (dataType instanceof AdapterType) {
+				return targetInterfaceList.getSockets();
+			}
+			return targetInterfaceList.getInputVars();
 		}
+
+		if (dataType instanceof EventType) {
+			return targetInterfaceList.getEventOutputs();
+		}
+		if (dataType instanceof AdapterType) {
+			return targetInterfaceList.getPlugs();
+		}
+		return targetInterfaceList.getOutputVars();
 	}
 
 	@Override
 	public void execute() {
-		selectInterface(targetInterfaceList);
 		if (newInterfaceElement == null) {
 			createNewInterfaceElement();
 		} else {
@@ -155,7 +155,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 			newInterfaceElement = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
 		} else {
 			final VarDeclaration varDeclaration = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-			varDeclaration.setArraySize(arraySize);
+			ArraySizeHelper.setArraySize(varDeclaration, arraySize);
 			if (isInput) {
 				varDeclaration.setValue(LibraryElementFactory.eINSTANCE.createValue());
 				varDeclaration.getValue().setValue(value);
@@ -177,7 +177,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 
 	@Override
 	public void undo() {
-		interfaceElementList.remove(newInterfaceElement);
+		getInterfaceListContainer().remove(newInterfaceElement);
 		if ((null != adapterCreateCmd) && adapterCreateCmd.canExecute()) {
 			adapterCreateCmd.undo();
 		}
@@ -185,7 +185,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 
 	private void insertElement() {
 		@SuppressWarnings("unchecked")
-		final EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaceElementList;
+		final EList<IInterfaceElement> temp = (EList<IInterfaceElement>) getInterfaceListContainer();
 		final int insertionPos = index == -1 ? temp.size() : index;
 		if (insertionPos > temp.size()) {
 			temp.add(newInterfaceElement);
@@ -203,8 +203,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 	}
 
 	private boolean shouldAdapterFBBeCreated() {
-		return (dataType instanceof AdapterType)
-				&& (targetInterfaceList.eContainer() instanceof CompositeFBType)
+		return (dataType instanceof AdapterType) && (targetInterfaceList.eContainer() instanceof CompositeFBType)
 				&& !(targetInterfaceList.eContainer() instanceof SubAppType);
 	}
 
@@ -213,16 +212,8 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 		return newInterfaceElement;
 	}
 
-	// for use in subclasses that can have mapped elements (i.e., untyped subapps)
-	protected CreateInterfaceElementCommand createMirroredInterfaceElement() {
-		// if the subapp is mapped we need to created the interface element also in the
-		// opposite entry
-		final CreateInterfaceElementCommand mirroredCreateCmd = new CreateInterfaceElementCommand(newInterfaceElement,
-				newInterfaceElement.isIsInput(), newInterfaceElement.getFBNetworkElement().getOpposite().getInterface(),
-				index);
-		mirroredCreateCmd.execute();
-		// Set the same name as the one we have also on the mirrored
-		mirroredCreateCmd.getCreatedElement().setName(getCreatedElement().getName());
-		return mirroredCreateCmd;
+	protected int getIndex() {
+		return index;
 	}
+
 }

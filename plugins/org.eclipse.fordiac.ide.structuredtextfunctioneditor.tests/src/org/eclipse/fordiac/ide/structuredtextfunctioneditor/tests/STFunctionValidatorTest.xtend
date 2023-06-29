@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022,2023 Primetals Technologies Austria GmbH
- *               2022 - 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@
  *       - validation for reserved identifiers
  *       - validation for calls
  *       - validation for truncated string literals
+ *       - linking diagnostics
  *   Martin Melik Merkumians
  * 		- validation for duplicate names on FUNCTIONs
  *      - validation of return types
@@ -34,6 +35,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation.STFunctionValidator
+import org.eclipse.xtext.diagnostics.Diagnostic
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
 import org.eclipse.xtext.testing.util.ParseHelper
@@ -688,7 +690,8 @@ class STFunctionValidatorTest {
 		
 		FUNCTION hubert
 		emil(17, 4, 21);
-		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.VALUE_NOT_ASSIGNABLE)
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.VALUE_NOT_ASSIGNABLE)
 	}
 
 	@Test
@@ -706,7 +709,8 @@ class STFunctionValidatorTest {
 		
 		FUNCTION hubert
 		emil(A := 17, B := 4, X := 21);
-		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.VALUE_NOT_ASSIGNABLE)
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.VALUE_NOT_ASSIGNABLE)
 	}
 
 	@Test
@@ -1023,9 +1027,8 @@ class STFunctionValidatorTest {
 				arrayTest : ARRAY [«argument» .. 65535] OF REAL;
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STBinaryExpression,
-			STCoreValidator.
-				INDEX_RANGE_TYPE_INVALID, '''Type «argumentTypeName» is not valid for defining ranges. Ranges must be of type ANY_INT''')
+		'''.parse.assertError(STCorePackage.eINSTANCE.STBinaryExpression, STCoreValidator.
+			INDEX_RANGE_TYPE_INVALID, '''Type «argumentTypeName» is not valid for defining ranges. Ranges must be of type ANY_INT''')
 	}
 
 	def static Stream<Arguments> validTypesForMaxLengthSpecifier() {
@@ -1171,7 +1174,7 @@ class STFunctionValidatorTest {
 		'''.parse.assertWarning(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
 			"Inputs shall not be be assigned. This will be elevated to an error in the future")
 	}
-	
+
 	@Test
 	def void testWriteOnConstantVarTempIsNotAllowed() {
 		'''
@@ -1184,7 +1187,7 @@ class STFunctionValidatorTest {
 		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
 			"Constants cannot be assigned.")
 	}
-	
+
 	@Test
 	def void testWriteOnConstantVarIsNotAllowed() { // same as VAR_TEMP in a function
 		'''
@@ -1196,5 +1199,145 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
 			"Constants cannot be assigned.")
+	}
+
+	@Test
+	def void testUnnecessaryConversions() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				INT_VAR: INT;
+				DINT_VAR: DINT;
+			END_VAR
+			DINT_VAR := INT_TO_SINT(INT_VAR);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.UNNECESSARY_CONVERSION,
+			"Unnecessary conversion from INT to SINT")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				DINT_VAR: DINT;
+				LINT_VAR: LINT;
+			END_VAR
+			DINT_VAR := LINT_TO_INT(LINT_VAR);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.UNNECESSARY_NARROW_CONVERSION, "Unnecessary narrow conversion to INT")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				INT_VAR: INT;
+				DINT_VAR: DINT;
+			END_VAR
+			INT_VAR := LINT_TO_INT(DINT_VAR);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.UNNECESSARY_WIDE_CONVERSION, "Unnecessary wide conversion from LINT")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				USINT_VAR: USINT;
+			END_VAR
+			USINT_VAR := INT_TO_USINT(INT#1024);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.UNNECESSARY_LITERAL_CONVERSION, "Unnecessary conversion of literal to USINT")
+	}
+
+	@Test
+	def void testDataTypeLinkingDiagnostic() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				in1 : FLOAT;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, Diagnostic.LINKING_DIAGNOSTIC,
+			"The data type FLOAT is undefined")
+	}
+
+	@Test
+	def void testReturnTypeLinkingDiagnostic() {
+		'''
+			FUNCTION test : FLOAT
+			END_FUNCTION
+		'''.parse.assertError(STFunctionPackage.eINSTANCE.STFunction, Diagnostic.LINKING_DIAGNOSTIC,
+			"The data type FLOAT is undefined")
+	}
+
+	@Test
+	def void testVariableLinkingDiagnostic() {
+		'''
+			FUNCTION test
+			XY := 0;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, Diagnostic.LINKING_DIAGNOSTIC,
+			"The variable XY is undefined")
+	}
+
+	@Test
+	def void testCallableLinkingDiagnostic() {
+		'''
+			FUNCTION test
+			XY(0);
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, Diagnostic.LINKING_DIAGNOSTIC,
+			"The callable XY(SINT) is undefined")
+	}
+
+	@Test
+	def void testParameterLinkingDiagnostic() {
+		'''
+			FUNCTION test
+			test2(IN2 := 0);
+			END_FUNCTION
+			
+			FUNCTION test2
+			VAR_INPUT
+				IN1: DINT;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STCallNamedInputArgument, Diagnostic.LINKING_DIAGNOSTIC,
+			"The parameter IN2 is undefined for the callable test2")
+	}
+
+	@Test
+	def void testNonConstantExpressionInVariableDeclaration() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				in1 : INT;
+				in2 : INT := in1;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.NON_CONSTANT_DECLARATION)
+		'''
+			FUNCTION test
+			VAR_TEMP CONSTANT
+				in1 : INT;
+				in2 : INT := in1;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testMaybeNotInitialized() {
+		'''
+			FUNCTION test
+			VAR_TEMP CONSTANT
+				in2 : INT := in1;
+				in1 : INT;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.MAYBE_NOT_INITIALIZED)
+		'''
+			FUNCTION test
+			VAR_TEMP CONSTANT
+				in1 : INT;
+				in2 : INT := in1;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertNoErrors
 	}
 }

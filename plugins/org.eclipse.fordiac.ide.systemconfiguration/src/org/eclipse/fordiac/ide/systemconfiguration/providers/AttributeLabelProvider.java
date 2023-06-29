@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2022 Johannes Kepler University Linz
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Bianca Wiesmayr - initial API and implementation and/or initial documentation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.providers;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -13,16 +25,16 @@ public class AttributeLabelProvider extends LabelProvider implements ITableLabel
 
 	@Override
 	public String getColumnText(final Object element, final int columnIndex) {
-		if (element instanceof Attribute) {
+		if (element instanceof final Attribute attr) {
 			switch (columnIndex) {
 			case 0:
-				return ((Attribute) element).getName();
+				return attr.getName();
 			case 1:
-				return ((Attribute) element).getType().getName();
+				return attr.getType().getName();
 			case 2:
-				return ((Attribute) element).getValue();
+				return attr.getValue();
 			case 3:
-				return ((Attribute) element).getComment() != null ? ((Attribute) element).getComment() : ""; //$NON-NLS-1$
+				return attr.getComment() != null ? ((Attribute) element).getComment() : ""; //$NON-NLS-1$
 			default:
 				break;
 			}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,13 +14,22 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.util
 
 import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.common.util.EList
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 
-class STAlgorithmReconciler {
+class STAlgorithmReconciler implements STCoreReconciler {
+
+	override reconcile(FBType dest, EList<? extends ICallable> source) {
+		if (dest instanceof BaseFBType) {
+			dest.callables.reconcile(source)
+		}
+	}
 
 	def void reconcile(EList<ICallable> dest, EList<? extends ICallable> source) {
 		// check duplicates in source or dest (very bad)

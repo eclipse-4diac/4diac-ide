@@ -16,10 +16,9 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 import java.util.List;
 
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.TextUtilities;
+import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -28,24 +27,23 @@ import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventInputContainerLayoutEd
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventOutputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.PlugContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.SocketContainerLayoutEditPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.policies.VarInOutInputContainerLayoutEditPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.policies.VarInOutOutputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VariableInputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VariableOutputContainerLayoutEditPolicy;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 
-	public class InterfaceContainerFigure extends Figure {
+	public static class InterfaceContainerFigure extends Figure {
 		public InterfaceContainerFigure() {
-			final FlowLayout layout = new FlowLayout();
-			layout.setMajorSpacing(0);
-			layout.setMinorSpacing(0);
+			final ToolbarLayout layout = new ToolbarLayout();
+			layout.setSpacing(0);
 			layout.setHorizontal(false);
 			layout.setStretchMinorAxis(true);
-			if (getModel() instanceof VariableInputContainer || getModel() instanceof SocketContainer) {
-				layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-			}
 			setLayoutManager(layout);
 			setPreferredSize(30, 10);
 		}
@@ -78,6 +76,10 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected void createEditPolicies() {
+		if (!isInterfaceEditable()) {
+			return;
+		}
+
 		if (getModel() instanceof EventInputContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new EventInputContainerLayoutEditPolicy());
 		}
@@ -87,11 +89,17 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 		if (getModel() instanceof VariableInputContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VariableInputContainerLayoutEditPolicy());
 		}
+		if (getModel() instanceof VarInOutInputContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VarInOutInputContainerLayoutEditPolicy());
+		}
 		if (getModel() instanceof SocketContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new SocketContainerLayoutEditPolicy());
 		}
 		if (getModel() instanceof VariableOutputContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VariableOutputContainerLayoutEditPolicy());
+		}
+		if (getModel() instanceof VarInOutOutputContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VarInOutOutputContainerLayoutEditPolicy());
 		}
 		if (getModel() instanceof PlugContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new PlugContainerLayoutEditPolicy());
@@ -125,5 +133,9 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 			dim.height = (int) (dim.height * 0.66);
 			getContentPane().setPreferredSize(dim);
 		}
+	}
+
+	public boolean isInterfaceEditable() {
+		return !(getModel().getFbType() instanceof FunctionFBType);
 	}
 }

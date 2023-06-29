@@ -68,11 +68,6 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	/** necessary that the gradient pattern can be scaled accordingly */
 	private DiagramFontChangeListener fontChangeListener;
 
-	public SegmentEditPart() {
-		super();
-		setConnectable(true);
-	}
-
 	@Override
 	public void activate() {
 		super.activate();

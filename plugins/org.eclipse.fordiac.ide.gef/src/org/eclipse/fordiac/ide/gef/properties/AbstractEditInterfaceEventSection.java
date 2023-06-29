@@ -33,14 +33,12 @@ import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection<Event> {
-
 
 	@Override
 	protected String[] fillTypeCombo() {
@@ -78,8 +76,7 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
-		if (entry instanceof Event) {
-			final Event entry2 = (Event) entry;
+		if (entry instanceof final Event entry2) {
 			cmd.add(newInsertCommand(entry2, isInput, index));
 		}
 	}
@@ -116,26 +113,18 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 
 	@Override
 	public void setupOutputTable(final Group outputsGroup) {
-		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
-		if (isEditable()) {
-			rule = IEditableRule.ALWAYS_EDITABLE;
-		}
 		outputProvider = new EventListProvider(this);
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
-		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, false);
+		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, new EventColumnProvider(),
+				getSectionEditableRule(), new DataTypeSelectionButton(typeSelection), this, false);
 	}
 
 	@Override
 	public void setupInputTable(final Group inputsGroup) {
-		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
-		if (isEditable()) {
-			rule = IEditableRule.ALWAYS_EDITABLE;
-		}
 		inputProvider = new EventListProvider(this);
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
-		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, true);
+		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, new EventColumnProvider(),
+				getSectionEditableRule(), new DataTypeSelectionButton(typeSelection), this, true);
 	}
 
 	@Override

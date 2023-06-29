@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2014, 2017 fortiss GmbH
+ * Copyright (c) 2013, 2023 fortiss GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,37 +11,31 @@
  * Contributors:
  *   Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *     - introduce common superclass
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.actions;
 
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.gef.ui.actions.WorkbenchPartAction;
 import org.eclipse.ui.IWorkbenchPart;
 
-public class CreateSocketAction extends WorkbenchPartAction {
+public class CreateSocketAction extends CreateInterfaceElementAction {
 	private static final String ID_PREFIX = "SOCKET_"; //$NON-NLS-1$
-	private final FBType fbType;
 	private final AdapterTypeEntry entry;
 
 	public CreateSocketAction(final IWorkbenchPart part, final FBType fbType, final AdapterTypeEntry entry) {
-		super(part);
+		super(part, fbType);
 		setId(getID(entry));
 		setText(entry.getTypeName());
-		this.fbType = fbType;
 		this.entry = entry;
-	}
-
-	@Override
-	protected boolean calculateEnabled() {
-		return (null != fbType);
 	}
 
 	@Override
 	public void run() {
 		final CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(entry.getType(),
-				fbType.getInterfaceList(), true, -1);
+				getFbType().getInterfaceList(), true, -1);
 		execute(cmd);
 	}
 

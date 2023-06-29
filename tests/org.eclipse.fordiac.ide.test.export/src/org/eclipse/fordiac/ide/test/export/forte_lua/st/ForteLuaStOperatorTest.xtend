@@ -15,13 +15,14 @@
 import org.eclipse.fordiac.ide.export.forte_lua.st.StructuredTextSupportFactory
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
+import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup
 import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeBase
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertEquals
-import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
@@ -32,6 +33,7 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 	@BeforeAll
 	def static void setup() {
 		new DataTypeLibrary()
+		STFunctionStandaloneSetup.doSetup()
 		STAlgorithmStandaloneSetup.doSetup()
 		StructuredTextSupportFactory.register()
 	}

@@ -80,11 +80,15 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	/** The data inputs. */
 	private final Figure dataInputs = new Figure();
 
+	private final Figure varInOutInputs = new Figure();
+
 	/** The sockets. */
 	private final Figure sockets = new Figure();
 
 	/** The data outputs. */
 	private final Figure dataOutputs = new Figure();
+
+	private final Figure varInOutOutputs = new Figure();
 
 	/** The sockets. */
 	private final Figure errorMarkerInput = new Figure();
@@ -99,10 +103,6 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 
 	private static int maxWidth = -1;
 
-	private Figure bottomInputArea;
-
-	private Figure bottomOutputArea;
-
 	public FBShape(final FBType fbType) {
 		configureMainFigure();
 		createFBFigureShape(fbType);
@@ -110,44 +110,44 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		setBorder(new FBShapeShadowBorder());
 	}
 
-	/**
-	 * Gets the event inputs.
+	/** Gets the event inputs.
 	 *
-	 * @return the event inputs
-	 */
+	 * @return the event inputs */
 	public Figure getEventInputs() {
 		return eventInputs;
 	}
 
-	/**
-	 * Gets the event outputs.
+	/** Gets the event outputs.
 	 *
-	 * @return the event outputs
-	 */
+	 * @return the event outputs */
 	public Figure getEventOutputs() {
 		return eventOutputs;
 	}
 
-	/**
-	 * Gets the data inputs.
+	/** Gets the data inputs.
 	 *
-	 * @return the data inputs
-	 */
+	 * @return the data inputs */
 	public Figure getDataInputs() {
 		return dataInputs;
+	}
+
+	public Figure getVarInOutInputs() {
+		return varInOutInputs;
 	}
 
 	public Figure getSockets() {
 		return sockets;
 	}
 
-	/**
-	 * Gets the data outputs.
+	/** Gets the data outputs.
 	 *
-	 * @return the data outputs
-	 */
+	 * @return the data outputs */
 	public Figure getDataOutputs() {
 		return dataOutputs;
+	}
+
+	public Figure getVarInOutOutputs() {
+		return varInOutOutputs;
 	}
 
 	public Figure getErrorMarkerInput() {
@@ -186,14 +186,6 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		return fbFigureContainer;
 	}
 
-	protected Figure getBottomInputArea() {
-		return bottomInputArea;
-	}
-
-	protected Figure getBottomOutputArea() {
-		return bottomOutputArea;
-	}
-
 	private static int getMaxWidth() {
 		if (-1 == maxWidth) {
 			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
@@ -228,7 +220,6 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	private void setTypeLabelFont() {
 		typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
 	}
-
 
 	private void configureMainFigure() {
 		setOpaque(false);
@@ -293,18 +284,18 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	}
 
 	protected static GridData createTopBottomLayoutData() {
-		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL
-				| GridData.GRAB_VERTICAL);
+		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		gridData.verticalAlignment = SWT.TOP;
 		return gridData;
 	}
 
-	protected static GridLayout createTopBottomLayout() {
-		final GridLayout topLayout = new GridLayout(3, false);
+	private static GridLayout createTopBottomLayout() {
+		final GridLayout topLayout = new GridLayout(2, false);
 		topLayout.marginHeight = 1;
 		topLayout.marginWidth = 0;
 		topLayout.verticalSpacing = 0;
-		topLayout.horizontalSpacing = 0;
+		topLayout.horizontalSpacing = INPUT_OUTPUT_INTERLEAVE;
 		return topLayout;
 	}
 
@@ -332,60 +323,62 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	}
 
 	private void setupTopIOs() {
-		eventInputs.setLayoutManager(new ToolbarLayout(false));
-
-		final ToolbarLayout topOutputsLayout = new ToolbarLayout(false);
-		topOutputsLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		eventOutputs.setLayoutManager(topOutputsLayout);
+		eventInputs.setLayoutManager(createInputContainerLayout());
+		eventOutputs.setLayoutManager(createOutputContainerLayout());
 		addTopIOs();
 	}
 
 	protected void addTopIOs() {
-		top.add(eventInputs, createTopBottomLayoutData(), -1);
-		top.add(eventOutputs, createTopBottomOutputLayoutData(), -1);
+		top.add(eventInputs, createInputLayoutData(), -1);
+		top.add(eventOutputs, createOutputLayoutData(), -1);
 	}
 
 	private void setBottomIOs() {
-		bottomInputArea = new Figure();
-		bottomInputArea.setLayoutManager(new ToolbarLayout(false));
+		dataInputs.setLayoutManager(createInputContainerLayout());
+		dataOutputs.setLayoutManager(createOutputContainerLayout());
 
-		dataInputs.setLayoutManager(new ToolbarLayout(false));
-		bottomInputArea.add(dataInputs);
+		varInOutInputs.setLayoutManager(createInputContainerLayout());
+		varInOutOutputs.setLayoutManager(createOutputContainerLayout());
 
-		sockets.setLayoutManager(new ToolbarLayout(false));
-		bottomInputArea.add(sockets);
+		sockets.setLayoutManager(createInputContainerLayout());
+		plugs.setLayoutManager(createOutputContainerLayout());
 
-		errorMarkerInput.setLayoutManager(new ToolbarLayout(false));
-		bottomInputArea.add(errorMarkerInput);
-
-		bottomOutputArea = new Figure();
-		bottomOutputArea.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) bottomOutputArea.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-
-		dataOutputs.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) dataOutputs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		bottomOutputArea.add(dataOutputs);
-
-		plugs.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) plugs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		bottomOutputArea.add(plugs);
-
-		errorMarkerOutput.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) errorMarkerOutput.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		bottomOutputArea.add(errorMarkerOutput);
+		errorMarkerInput.setLayoutManager(createInputContainerLayout());
+		errorMarkerOutput.setLayoutManager(createOutputContainerLayout());
 
 		addBottomIOs();
 	}
 
-	protected void addBottomIOs() {
-		bottom.add(bottomInputArea, createTopBottomLayoutData(), -1);
-		bottom.add(bottomOutputArea, createTopBottomOutputLayoutData(), -1);
+	private static ToolbarLayout createInputContainerLayout() {
+		final ToolbarLayout toolbarLayout = new ToolbarLayout(false);
+		toolbarLayout.setStretchMinorAxis(true);
+		return toolbarLayout;
 	}
 
-	protected static GridData createTopBottomOutputLayoutData() {
-		final GridData outputsLayoutData = createTopBottomLayoutData();
-		outputsLayoutData.horizontalIndent = INPUT_OUTPUT_INTERLEAVE;
-		return outputsLayoutData;
+	private static ToolbarLayout createOutputContainerLayout() {
+		final ToolbarLayout layout = new ToolbarLayout(false);
+		layout.setStretchMinorAxis(true);
+		layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		return layout;
+	}
+
+	protected void addBottomIOs() {
+		bottom.add(dataInputs, createInputLayoutData(), -1);
+		bottom.add(dataOutputs, createOutputLayoutData(), -1);
+		bottom.add(varInOutInputs, createInputLayoutData(), -1);
+		bottom.add(varInOutOutputs, createOutputLayoutData(), -1);
+		bottom.add(sockets, createInputLayoutData(), -1);
+		bottom.add(plugs, createOutputLayoutData(), -1);
+		bottom.add(errorMarkerInput, createInputLayoutData(), -1);
+		bottom.add(errorMarkerOutput, createOutputLayoutData(), -1);
+	}
+
+	protected static GridData createInputLayoutData() {
+		return new GridData(SWT.BEGINNING, SWT.TOP, true, false);
+	}
+
+	protected static GridData createOutputLayoutData() {
+		return new GridData(SWT.END, SWT.TOP, true, false);
 	}
 
 	protected void setupTypeNameAndVersion(final FBType type, final Figure container) {

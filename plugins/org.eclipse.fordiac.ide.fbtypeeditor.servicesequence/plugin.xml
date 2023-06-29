@@ -6,7 +6,7 @@
       <editor
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceSequenceEditor"
             sortIndex="66"
-            type="ForAllTypes">
+            type="ForAllNonFunctionFBTypes">
       </editor>
    </extension>
    <extension
@@ -343,6 +343,8 @@
             			<or>
             				<instanceof
                        			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+                       		<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
             			</or>
             		</iterate>
             	</with>

@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.validation;
 
 import static org.eclipse.fordiac.ide.model.FordiacKeywords.ANY_ADAPTER;
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
 
 import java.text.MessageFormat;
 
@@ -159,7 +160,7 @@ public final class LinkConstraints {
 
 	private static DataType getFullDataType(final IInterfaceElement element) {
 		if (element instanceof final VarDeclaration varDeclaration && varDeclaration.isArray()) {
-			return TypeDeclarationParser.parseTypeDeclaration(varDeclaration.getType(), varDeclaration.getArraySize());
+			return TypeDeclarationParser.parseTypeDeclaration(varDeclaration.getType(), getArraySize(varDeclaration));
 		}
 		return element.getType();
 	}

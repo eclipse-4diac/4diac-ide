@@ -28,8 +28,7 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 	private ResizeGroupOrSubappCommand resizeCmd = null;
 
 	public CreateSubAppInterfaceElementCommand(final IInterfaceElement copySrc, final boolean isInput,
-			final InterfaceList targetInterfaceList,
-			final int index) {
+			final InterfaceList targetInterfaceList, final int index) {
 		super(copySrc, isInput, targetInterfaceList, index);
 	}
 
@@ -44,8 +43,8 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 	}
 
 	public CreateSubAppInterfaceElementCommand(final DataType dataType, final String name,
-			final InterfaceList interfaceList,
-			final boolean isInput, final String arraySize, final String value, final int index) {
+			final InterfaceList interfaceList, final boolean isInput, final String arraySize, final String value,
+			final int index) {
 		super(dataType, name, interfaceList, isInput, arraySize, value, index);
 	}
 
@@ -69,10 +68,9 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 			if (graphicalViewer != null && getInterfaceList().eContainer() instanceof SubApp) {
 				final Object subAppforFBNetowrkEditPart = graphicalViewer.getEditPartRegistry()
 						.get((getInterfaceList().eContainer()));
-				if (subAppforFBNetowrkEditPart instanceof SubAppForFBNetworkEditPart
-						&& ((SubAppForFBNetworkEditPart) subAppforFBNetowrkEditPart).getContentEP() != null) {
-					resizeCmd = new ResizeGroupOrSubappCommand(
-							((SubAppForFBNetworkEditPart) subAppforFBNetowrkEditPart).getContentEP());
+				if (subAppforFBNetowrkEditPart instanceof final SubAppForFBNetworkEditPart subAppEP
+						&& subAppEP.getContentEP() != null) {
+					resizeCmd = new ResizeGroupOrSubappCommand(subAppEP.getContentEP());
 					resizeCmd.execute();
 				}
 			}
@@ -99,6 +97,18 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 		if (null != mirroredElement) {
 			mirroredElement.undo();
 		}
+	}
+
+	protected CreateInterfaceElementCommand createMirroredInterfaceElement() {
+		// if the subapp is mapped we need to created the interface element also in the
+		// opposite entry
+		final CreateInterfaceElementCommand mirroredCreateCmd = new CreateInterfaceElementCommand(getCreatedElement(),
+				getCreatedElement().isIsInput(), getCreatedElement().getFBNetworkElement().getOpposite().getInterface(),
+				getIndex());
+		mirroredCreateCmd.execute();
+		// Set the same name as the one we have also on the mirrored
+		mirroredCreateCmd.getCreatedElement().setName(getCreatedElement().getName());
+		return mirroredCreateCmd;
 	}
 
 }

@@ -126,7 +126,7 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 
 	def protected Iterable<INamedElement> getReferencedNonLocalVariables(STFeatureExpression expression) {
 		switch (feature:expression.feature) {
-			ICallable: feature.getAllContentsOfType(STFeatureExpression).flatMap[referencedNonLocalVariables]
+			ICallable case feature.eResource == expression.eResource: feature.getAllContentsOfType(STFeatureExpression).flatMap[referencedNonLocalVariables]
 			VarDeclaration: #[feature]
 			STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock: #[feature]
 			default: emptyList

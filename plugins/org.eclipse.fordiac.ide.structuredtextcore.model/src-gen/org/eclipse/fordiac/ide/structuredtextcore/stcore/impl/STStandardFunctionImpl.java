@@ -19,6 +19,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -51,7 +52,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getInputParameters <em>Input Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getOutputParameters <em>Output Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getInOutParameters <em>In Out Parameters</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#isVarargs <em>Varargs</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getOnlySupportedBy <em>Only Supported By</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getJavaMethod <em>Java Method</em>}</li>
  * </ul>
  *
  * @generated
@@ -176,6 +179,26 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	protected EList<INamedElement> inOutParameters;
 
 	/**
+	 * The default value of the '{@link #isVarargs() <em>Varargs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVarargs()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean VARARGS_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isVarargs() <em>Varargs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVarargs()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean varargs = VARARGS_EDEFAULT;
+
+	/**
 	 * The cached value of the '{@link #getOnlySupportedBy() <em>Only Supported By</em>}' attribute list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getOnlySupportedBy()
@@ -183,6 +206,26 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	 * @ordered
 	 */
 	protected EList<String> onlySupportedBy;
+
+	/**
+	 * The default value of the '{@link #getJavaMethod() <em>Java Method</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getJavaMethod()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Method JAVA_METHOD_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getJavaMethod() <em>Java Method</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getJavaMethod()
+	 * @generated
+	 * @ordered
+	 */
+	protected Method javaMethod = JAVA_METHOD_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -361,6 +404,29 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isVarargs() {
+		return varargs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setVarargs(boolean newVarargs) {
+		boolean oldVarargs = varargs;
+		varargs = newVarargs;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STANDARD_FUNCTION__VARARGS, oldVarargs, varargs));
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -370,6 +436,29 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 			onlySupportedBy = new EDataTypeUniqueEList<String>(String.class, this, STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY);
 		}
 		return onlySupportedBy;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Method getJavaMethod() {
+		return javaMethod;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setJavaMethod(Method newJavaMethod) {
+		Method oldJavaMethod = javaMethod;
+		javaMethod = newJavaMethod;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STANDARD_FUNCTION__JAVA_METHOD, oldJavaMethod, javaMethod));
 	}
 
 	/**
@@ -424,8 +513,12 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return getOutputParameters();
 			case STCorePackage.ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS:
 				return getInOutParameters();
+			case STCorePackage.ST_STANDARD_FUNCTION__VARARGS:
+				return isVarargs();
 			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
 				return getOnlySupportedBy();
+			case STCorePackage.ST_STANDARD_FUNCTION__JAVA_METHOD:
+				return getJavaMethod();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -466,9 +559,15 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				getInOutParameters().clear();
 				getInOutParameters().addAll((Collection<? extends INamedElement>)newValue);
 				return;
+			case STCorePackage.ST_STANDARD_FUNCTION__VARARGS:
+				setVarargs((Boolean)newValue);
+				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
 				getOnlySupportedBy().clear();
 				getOnlySupportedBy().addAll((Collection<? extends String>)newValue);
+				return;
+			case STCorePackage.ST_STANDARD_FUNCTION__JAVA_METHOD:
+				setJavaMethod((Method)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -507,8 +606,14 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 			case STCorePackage.ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS:
 				getInOutParameters().clear();
 				return;
+			case STCorePackage.ST_STANDARD_FUNCTION__VARARGS:
+				setVarargs(VARARGS_EDEFAULT);
+				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
 				getOnlySupportedBy().clear();
+				return;
+			case STCorePackage.ST_STANDARD_FUNCTION__JAVA_METHOD:
+				setJavaMethod(JAVA_METHOD_EDEFAULT);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -539,8 +644,12 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return outputParameters != null && !outputParameters.isEmpty();
 			case STCorePackage.ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS:
 				return inOutParameters != null && !inOutParameters.isEmpty();
+			case STCorePackage.ST_STANDARD_FUNCTION__VARARGS:
+				return varargs != VARARGS_EDEFAULT;
 			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
 				return onlySupportedBy != null && !onlySupportedBy.isEmpty();
+			case STCorePackage.ST_STANDARD_FUNCTION__JAVA_METHOD:
+				return JAVA_METHOD_EDEFAULT == null ? javaMethod != null : !JAVA_METHOD_EDEFAULT.equals(javaMethod);
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -563,8 +672,12 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 		result.append(returnValueComment);
 		result.append(", signature: "); //$NON-NLS-1$
 		result.append(signature);
+		result.append(", varargs: "); //$NON-NLS-1$
+		result.append(varargs);
 		result.append(", onlySupportedBy: "); //$NON-NLS-1$
 		result.append(onlySupportedBy);
+		result.append(", javaMethod: "); //$NON-NLS-1$
+		result.append(javaMethod);
 		result.append(')');
 		return result.toString();
 	}

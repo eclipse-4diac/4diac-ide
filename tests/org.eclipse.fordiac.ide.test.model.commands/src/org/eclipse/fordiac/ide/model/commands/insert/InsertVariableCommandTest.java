@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.insert;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -79,7 +81,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 		/* can not check the name because if it is already taken a unique one will be generated */
 		t.test(newVar.getType().getName(), oldVar.getType().getName());
 		t.test(newVar.getComment(), oldVar.getComment());
-		t.test(newVar.getArraySize(), oldVar.getArraySize());
+		t.test(getArraySize(newVar), getArraySize(oldVar));
 	}
 
 	// empty list

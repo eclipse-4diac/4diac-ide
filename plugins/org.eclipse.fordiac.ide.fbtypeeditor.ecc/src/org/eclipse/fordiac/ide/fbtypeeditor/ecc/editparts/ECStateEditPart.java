@@ -75,10 +75,6 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	};
 
-	public ECStateEditPart() {
-		setConnectable(true);
-	}
-
 	private void refreshStateTooltip() {
 		getFigure().getToolTip().setECState(this.getModel());
 
@@ -228,7 +224,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (event.getProperty().equals(PreferenceConstants.P_ECC_STATE_TEXT_COLOR)) {
 			getNameLabel().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
 			getFigure().getLine()
-			.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
+					.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
 		}
 	};
 

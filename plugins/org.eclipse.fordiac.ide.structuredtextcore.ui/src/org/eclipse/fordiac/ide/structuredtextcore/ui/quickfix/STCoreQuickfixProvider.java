@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2021, 2022 Primetals Technologies Austria GmbH
- *               2022 Martin Erich Jobst
+ * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,11 +13,14 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *       - adapt non-compatible type quickfix
+ *       - externalize strings and cleanup
+ *       - add unnecessary conversion quickfixes
  *   Ulzii Jargalsaikhan
  *   	 - add quick fixes for missing variables
  */
 package org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix;
 
+import java.text.MessageFormat;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EObject;
@@ -26,10 +29,13 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
 import org.eclipse.xtext.EcoreUtil2;
@@ -56,11 +62,13 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 	@Fix(STCoreValidator.TRAILING_UNDERSCORE_IN_IDENTIFIER_ERROR)
 	public static void fixTrailingUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, "Remove trailing '_' from identifier",
-				"Remove trailing underscore from name: " + issue.getData()[0], null, (IModification) context -> {
+		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveTrailingUnderscoreLabel,
+				MessageFormat.format(Messages.STCoreQuickfixProvider_RemoveTrailingUnderscoreDescription,
+						(Object[]) issue.getData()),
+				null, (IModification) context -> {
 					final IXtextDocument xtextDocument = context.getXtextDocument();
 					if (xtextDocument != null) {
-						xtextDocument.replace(issue.getOffset(), issue.getLength(),
+						xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(),
 								issue.getData()[0].substring(0, issue.getData()[0].length() - 1));
 					}
 				});
@@ -68,11 +76,13 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 	@Fix(STCoreValidator.CONSECUTIVE_UNDERSCORE_IN_IDENTIFIER_ERROR)
 	public static void fixConsecutiveUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, "Replace consecutive undersocres with one underscore from identifier",
-				"Remove consecutive underscore from name: " + issue.getData()[0], null, (IModification) context -> {
+		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveConsecutiveUnderscoresLabel,
+				MessageFormat.format(Messages.STCoreQuickfixProvider_RemoveConsecutiveUnderscoresDescription,
+						(Object[]) issue.getData()),
+				null, (IModification) context -> {
 					final IXtextDocument xtextDocument = context.getXtextDocument();
 					if (xtextDocument != null) {
-						xtextDocument.replace(issue.getOffset(), issue.getLength(),
+						xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(),
 								issue.getData()[0].replaceAll("_(_)+", "_")); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				});
@@ -84,9 +94,9 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		final boolean castPossible = StreamSupport.stream(standardFunctionProvider.get().spliterator(), true)
 				.anyMatch(func -> func.getName().equals(castName));
 		if (castPossible) {
-			acceptor.accept(issue, "Add explicit typecast",
-					"Add typecast from " + issue.getData()[0] + " to " + issue.getData()[1], null,
-					(IModification) context -> {
+			acceptor.accept(issue, Messages.STCoreQuickfixProvider_AddExplicitTypecastLabel, MessageFormat
+					.format(Messages.STCoreQuickfixProvider_AddExplicitTypecastDescription, (Object[]) issue.getData()),
+					null, (IModification) context -> {
 						final IXtextDocument xtextDocument = context.getXtextDocument();
 						if (xtextDocument != null) {
 							final String original = xtextDocument.get(issue.getOffset().intValue(),
@@ -102,13 +112,65 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 	@Fix(STCoreValidator.WRONG_NAME_CASE)
 	public static void fixVariableNameCasing(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, "Change variable name case as declared",
-				"Changes " + issue.getData()[0] + "to " + issue.getData()[1], null, (IModification) context -> {
+		acceptor.accept(issue, Messages.STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredLabel,
+				MessageFormat.format(Messages.STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredDescription,
+						(Object[]) issue.getData()),
+				null, (IModification) context -> {
 					final IXtextDocument xtextDocument = context.getXtextDocument();
 					if (xtextDocument != null) {
-						xtextDocument.replace(issue.getOffset(), issue.getLength(), issue.getData()[1]);
+						xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(),
+								issue.getData()[1]);
 					}
 				});
+	}
+
+	@Fix(STCoreValidator.UNNECESSARY_CONVERSION)
+	public static void fixUnnecessaryConversion(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveUnnecessaryConversionLabel,
+				MessageFormat.format(Messages.STCoreQuickfixProvider_RemoveUnnecessaryConversionDescription,
+						(Object[]) issue.getData()),
+				null, (final EObject element, final IModificationContext context) -> {
+					if (element instanceof final STFeatureExpression featureExpression
+							&& featureExpression.eContainer() != null && featureExpression.eContainingFeature() != null
+							&& featureExpression.getParameters().size() == 1) {
+						final STExpression argument = featureExpression.getParameters().get(0).getArgument();
+						featureExpression.eContainer().eSet(featureExpression.eContainingFeature(), argument);
+					}
+				});
+	}
+
+	@Fix(STCoreValidator.UNNECESSARY_NARROW_CONVERSION)
+	@Fix(STCoreValidator.UNNECESSARY_WIDE_CONVERSION)
+	public void fixUnnecessaryNarrowOrWideConversion(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		final String castName = issue.getData()[1] + "_TO_" + issue.getData()[2]; //$NON-NLS-1$
+		final boolean castPossible = StreamSupport.stream(standardFunctionProvider.get().spliterator(), true)
+				.anyMatch(func -> func.getName().equals(castName));
+		if (castPossible) {
+			acceptor.accept(issue, Messages.STCoreQuickfixProvider_ChangeConversionLabel,
+					MessageFormat.format(Messages.STCoreQuickfixProvider_ChangeConversionDescription, castName), null,
+					(IModification) context -> {
+						final IXtextDocument xtextDocument = context.getXtextDocument();
+						if (xtextDocument != null) {
+							xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(), castName);
+						}
+					});
+		}
+	}
+
+	@Fix(STCoreValidator.UNNECESSARY_LITERAL_CONVERSION)
+	public static void fixUnnecessaryLiteralConversion(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		if (issue.getData()[2] != null) {
+			acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveUnnecessaryLiteralConversionLabel,
+					MessageFormat.format(Messages.STCoreQuickfixProvider_RemoveUnnecessaryLiteralConversionDescription,
+							issue.getData()[2]),
+					null, (IModification) context -> {
+						final IXtextDocument xtextDocument = context.getXtextDocument();
+						if (xtextDocument != null) {
+							xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(),
+									issue.getData()[2]);
+						}
+					});
+		}
 	}
 
 	@Fix(Diagnostic.LINKING_DIAGNOSTIC)
@@ -118,20 +180,21 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		final IXtextDocument xtextDocument = modificationContext.getXtextDocument();
 		if (xtextDocument != null) {
 			final var resolvedElement = xtextDocument.readOnly((final XtextResource resource) -> (offsetHelper
-					.resolveContainedElementAt(resource, issue.getOffset())));
+					.resolveContainedElementAt(resource, issue.getOffset().intValue())));
 			if (EcoreUtil2.getContainerOfType(resolvedElement, STFunction.class) != null
 					|| EcoreUtil2.getContainerOfType(resolvedElement, STMethod.class) != null) {
-				acceptor.accept(issue, "Create missing INPUT variable", "Create missing INPUT variable", null,
+				acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingInputVariable,
+						Messages.STCoreQuickfixProvider_CreateMissingInputVariable, null,
 						(final EObject element, final IModificationContext context) -> {
 							final IXtextDocument document = context.getXtextDocument();
-							if (document != null && element.eContainer() instanceof STAssignmentStatement) {
-
-								final STAssignmentStatement assignment = (STAssignmentStatement) element.eContainer();
+							if (document != null
+									&& element.eContainer() instanceof final STAssignmentStatement assignment) {
 								final var factory = STCoreFactory.eINSTANCE;
 								final var type = assignment.getRight().getResultType();
 								final var varDeclaration = factory.createSTVarDeclaration();
 								varDeclaration.setType(type);
-								varDeclaration.setName(document.get(issue.getOffset(), issue.getLength()));
+								varDeclaration.setName(
+										document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
 								final EObject container = EcoreUtil2.getContainerOfType(element,
 										STFunction.class) != null
 										? EcoreUtil2.getContainerOfType(element, STFunction.class)
@@ -141,10 +204,10 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 								if (inputBlocks.isEmpty()) {
 									final var block = factory.createSTVarInputDeclarationBlock();
 									block.getVarDeclarations().add(varDeclaration);
-									if (container instanceof STFunction) {
-										((STFunction) container).getVarDeclarations().add(block);
-									} else if (container instanceof STMethod) {
-										((STMethod) container).getBody().getVarDeclarations().add(block);
+									if (container instanceof final STFunction function) {
+										function.getVarDeclarations().add(block);
+									} else if (container instanceof final STMethod method) {
+										method.getBody().getVarDeclarations().add(block);
 									}
 								} else {
 									inputBlocks.get(inputBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
@@ -152,18 +215,19 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 							}
 						});
-				acceptor.accept(issue, "Create missing OUTPUT variable", "Create missing OUTPUT variable", null,
+				acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingOutputVariable,
+						Messages.STCoreQuickfixProvider_CreateMissingOutputVariable, null,
 						(final EObject element, final IModificationContext context) -> {
 
 							final IXtextDocument document = context.getXtextDocument();
-							if (document != null && element.eContainer() instanceof STAssignmentStatement) {
-
-								final STAssignmentStatement assignment = (STAssignmentStatement) element.eContainer();
+							if (document != null
+									&& element.eContainer() instanceof final STAssignmentStatement assignment) {
 								final var factory = STCoreFactory.eINSTANCE;
 								final var type = assignment.getRight().getResultType();
 								final var varDeclaration = factory.createSTVarDeclaration();
 								varDeclaration.setType(type);
-								varDeclaration.setName(document.get(issue.getOffset(), issue.getLength()));
+								varDeclaration.setName(
+										document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
 								final EObject container = EcoreUtil2.getContainerOfType(element,
 										STFunction.class) != null
 										? EcoreUtil2.getContainerOfType(element, STFunction.class)
@@ -173,10 +237,10 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 								if (outputBlocks.isEmpty()) {
 									final var block = factory.createSTVarOutputDeclarationBlock();
 									block.getVarDeclarations().add(varDeclaration);
-									if (container instanceof STFunction) {
-										((STFunction) container).getVarDeclarations().add(block);
-									} else if (container instanceof STMethod) {
-										((STMethod) container).getBody().getVarDeclarations().add(block);
+									if (container instanceof final STFunction function) {
+										function.getVarDeclarations().add(block);
+									} else if (container instanceof final STMethod method) {
+										method.getBody().getVarDeclarations().add(block);
 									}
 								} else {
 									outputBlocks.get(outputBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
@@ -184,18 +248,18 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 							}
 						});
-				acceptor.accept(issue, "Create missing IN_OUT variable", "Create missing IN_OUT variable", null,
+				acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingInOutVariable,
+						Messages.STCoreQuickfixProvider_CreateMissingInOutVariable, null,
 						(final EObject element, final IModificationContext context) -> {
-
 							final IXtextDocument document = context.getXtextDocument();
-							if (document != null && element.eContainer() instanceof STAssignmentStatement) {
-
-								final STAssignmentStatement assignment = (STAssignmentStatement) element.eContainer();
+							if (document != null
+									&& element.eContainer() instanceof final STAssignmentStatement assignment) {
 								final var factory = STCoreFactory.eINSTANCE;
 								final var type = assignment.getRight().getResultType();
 								final var varDeclaration = factory.createSTVarDeclaration();
 								varDeclaration.setType(type);
-								varDeclaration.setName(document.get(issue.getOffset(), issue.getLength()));
+								varDeclaration.setName(
+										document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
 								final EObject container = EcoreUtil2.getContainerOfType(element,
 										STFunction.class) != null
 										? EcoreUtil2.getContainerOfType(element, STFunction.class)
@@ -205,10 +269,10 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 								if (inOutBlocks.isEmpty()) {
 									final var block = factory.createSTVarInOutDeclarationBlock();
 									block.getVarDeclarations().add(varDeclaration);
-									if (container instanceof STFunction) {
-										((STFunction) container).getVarDeclarations().add(block);
-									} else if (container instanceof STMethod) {
-										((STMethod) container).getBody().getVarDeclarations().add(block);
+									if (container instanceof final STFunction function) {
+										function.getVarDeclarations().add(block);
+									} else if (container instanceof final STMethod method) {
+										method.getBody().getVarDeclarations().add(block);
 									}
 								} else {
 									inOutBlocks.get(inOutBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
@@ -216,18 +280,18 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 							}
 						});
 			}
-			acceptor.accept(issue, "Create missing TEMP variable", "Create missing TEMP variable", null,
+			acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingTempVariable,
+					Messages.STCoreQuickfixProvider_CreateMissingTempVariable, null,
 					(final EObject element, final IModificationContext context) -> {
-
 						final IXtextDocument document = context.getXtextDocument();
-						if (document != null && element.eContainer() instanceof STAssignmentStatement) {
-
-							final STAssignmentStatement assignment = (STAssignmentStatement) element.eContainer();
+						if (document != null
+								&& element.eContainer() instanceof final STAssignmentStatement assignment) {
 							final var factory = STCoreFactory.eINSTANCE;
 							final var type = assignment.getRight().getResultType();
 							final var varDeclaration = factory.createSTVarDeclaration();
 							varDeclaration.setType(type);
-							varDeclaration.setName(document.get(issue.getOffset(), issue.getLength()));
+							varDeclaration
+							.setName(document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
 							EObject container = EcoreUtil2.getContainerOfType(element, STFunction.class);
 							if (container == null) {
 								container = EcoreUtil2.getContainerOfType(element, STAlgorithm.class);
@@ -240,12 +304,12 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 							if (tempBlocks.isEmpty()) {
 								final var block = factory.createSTVarTempDeclarationBlock();
 								block.getVarDeclarations().add(varDeclaration);
-								if (container instanceof STFunction) {
-									((STFunction) container).getVarDeclarations().add(block);
-								} else if (container instanceof STAlgorithm) {
-									((STAlgorithm) container).getBody().getVarTempDeclarations().add(block);
-								} else if (container instanceof STMethod) {
-									((STMethod) container).getBody().getVarDeclarations().add(block);
+								if (container instanceof final STFunction function) {
+									function.getVarDeclarations().add(block);
+								} else if (container instanceof final STAlgorithm algorithm) {
+									algorithm.getBody().getVarTempDeclarations().add(block);
+								} else if (container instanceof final STMethod method) {
+									method.getBody().getVarDeclarations().add(block);
 								}
 							} else {
 								tempBlocks.get(tempBlocks.size() - 1).getVarDeclarations().add(varDeclaration);

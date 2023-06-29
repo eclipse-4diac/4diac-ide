@@ -12,24 +12,29 @@
  */
 package org.eclipse.fordiac.ide.model.eval.st.variable
 
+import org.eclipse.fordiac.ide.model.eval.st.ConstantExpressionEvaluator
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.st.ConstantExpressionEvaluator.evaluate
-import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType
 
 final class STVariableOperations {
 	private new() {
 	}
 
 	def static Variable<?> newVariable(STVarDeclaration decl) {
-		newVariable(decl.name, decl.featureType).evaluate(decl.defaultValue)
+		newVariable(decl.name, decl.evaluateResultType).evaluate(decl.defaultValue)
 	}
 
 	def static Variable<?> newVariable(STVarDeclaration decl, Value value) {
-		newVariable(decl.name, decl.featureType, value)
+		newVariable(decl.name, decl.evaluateResultType, value)
+	}
+	
+	def static INamedElement evaluateResultType(STVarDeclaration decl) {
+		ConstantExpressionEvaluator.evaluateResultType(decl)
 	}
 }

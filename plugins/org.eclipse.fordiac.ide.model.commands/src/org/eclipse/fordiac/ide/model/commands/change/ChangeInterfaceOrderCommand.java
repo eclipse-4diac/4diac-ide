@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class ChangeInterfaceOrderCommand extends AbstractChangeListElementOrderCommand<IInterfaceElement> {
 
@@ -38,8 +39,7 @@ public class ChangeInterfaceOrderCommand extends AbstractChangeListElementOrderC
 	}
 
 	private static EList<? extends IInterfaceElement> getInterfaceList(final IInterfaceElement selection) {
-		if ((null != selection) && (selection.eContainer() instanceof InterfaceList)) {
-			final InterfaceList interfaceList = (InterfaceList) selection.eContainer();
+		if ((null != selection) && (selection.eContainer() instanceof final InterfaceList interfaceList)) {
 			if (selection.isIsInput()) {
 				return getInputList(selection, interfaceList);
 			}
@@ -66,6 +66,9 @@ public class ChangeInterfaceOrderCommand extends AbstractChangeListElementOrderC
 		}
 		if (selection instanceof AdapterDeclaration) {
 			return interfaceList.getSockets();
+		}
+		if (selection instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
+			return interfaceList.getInOutVars();
 		}
 		return interfaceList.getInputVars();
 	}

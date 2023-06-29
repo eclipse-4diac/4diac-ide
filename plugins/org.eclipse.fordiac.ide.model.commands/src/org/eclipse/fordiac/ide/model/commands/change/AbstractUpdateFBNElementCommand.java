@@ -112,8 +112,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		createNewFB();
 		checkGroup(oldElement, newElement); // needs to be done before anything is changed on the old element Bug
 		// 579570
-
-		network.getNetworkElements().add(newElement);
+		if (network != null) {
+			network.getNetworkElements().add(newElement);
+		}
 
 		handleErrorMarker();
 
@@ -127,7 +128,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		handleConnections();
 		reconnCmds.execute();
 
-		network.getNetworkElements().remove(oldElement);
+		if (network != null) {
+			network.getNetworkElements().remove(oldElement);
+		}
 
 		newElement.setName(oldElement.getName());
 
@@ -341,9 +344,20 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		for (final VarDeclaration input : oldElement.getInterface().getInputVars()) {
 			deleteMarkersCmds.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(
 					FordiacMarkerHelper.findMarkers(input.getValue(), FordiacErrorMarker.INITIAL_VALUE_MARKER)));
+			deleteMarkersCmds.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(
+					FordiacMarkerHelper.findMarkers(input.getArraySize(), FordiacErrorMarker.TYPE_DECLARATION_MARKER)));
 		}
 
 		for (final VarDeclaration input : newElement.getInterface().getInputVars()) {
+			if (input.isArray()) {
+				final String errorMessage = VariableOperations.validateType(input);
+				input.getArraySize().setErrorMessage(errorMessage);
+				if (!errorMessage.isBlank()) {
+					createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(ErrorMarkerBuilder
+							.createErrorMarkerBuilder(errorMessage).setType(FordiacErrorMarker.TYPE_DECLARATION_MARKER)
+							.setTarget(input.getArraySize())));
+				}
+			}
 			if (hasValue(input.getValue())) {
 				final String errorMessage = VariableOperations.validateValue(input);
 				input.getValue().setErrorMessage(errorMessage);

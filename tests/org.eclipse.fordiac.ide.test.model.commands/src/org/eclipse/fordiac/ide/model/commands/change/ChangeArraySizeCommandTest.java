@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class ChangeArraySizeCommandTest extends ValueCommandTestBase {
 	}
 
 	private static void verifyState(final State state, final TestFunction t, final String newSize) {
-		t.test(state.getVar().getArraySize(), newSize);
+		t.test(getArraySize(state.getVar()), newSize);
 		t.test(state.getVar().isArray(), !(newSize.isBlank()));
 	}
 

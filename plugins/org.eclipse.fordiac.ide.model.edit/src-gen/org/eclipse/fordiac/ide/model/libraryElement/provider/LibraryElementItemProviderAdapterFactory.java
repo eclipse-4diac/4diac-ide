@@ -164,6 +164,29 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ArraySize} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ArraySizeItemProvider arraySizeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ArraySize}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createArraySizeAdapter() {
+		if (arraySizeItemProvider == null) {
+			arraySizeItemProvider = new ArraySizeItemProvider(this);
+		}
+
+		return arraySizeItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -506,6 +529,29 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 		}
 
 		return fbTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FunctionFBTypeItemProvider functionFBTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFunctionFBTypeAdapter() {
+		if (functionFBTypeItemProvider == null) {
+			functionFBTypeItemProvider = new FunctionFBTypeItemProvider(this);
+		}
+
+		return functionFBTypeItemProvider;
 	}
 
 	/**
@@ -862,6 +908,52 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 		}
 
 		return stAlgorithmItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.STFunction} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected STFunctionItemProvider stFunctionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.STFunction}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSTFunctionAdapter() {
+		if (stFunctionItemProvider == null) {
+			stFunctionItemProvider = new STFunctionItemProvider(this);
+		}
+
+		return stFunctionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected STFunctionBodyItemProvider stFunctionBodyItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSTFunctionBodyAdapter() {
+		if (stFunctionBodyItemProvider == null) {
+			stFunctionBodyItemProvider = new STFunctionBodyItemProvider(this);
+		}
+
+		return stFunctionBodyItemProvider;
 	}
 
 	/**

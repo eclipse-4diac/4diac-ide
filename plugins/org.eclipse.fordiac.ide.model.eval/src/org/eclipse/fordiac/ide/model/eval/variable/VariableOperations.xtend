@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.eval.value.Value
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -108,6 +109,22 @@ final class VariableOperations {
 		}
 	}
 
+	def static String validateType(VarDeclaration decl) {
+		if (decl.array) {
+			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				try {
+					evaluator.evaluateResultType
+					""
+				} catch (Exception e) {
+					e.message;
+				}
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+		} else
+			""
+	}
+
 	def static String validateValue(VarDeclaration decl, String initialValue) {
 		decl.withValue(initialValue).validateValue
 	}
@@ -146,7 +163,7 @@ final class VariableOperations {
 		val copy = LibraryElementFactory.eINSTANCE.createVarDeclaration => [
 			name = decl.name
 			type = decl.type
-			arraySize = decl.arraySize
+			ArraySizeHelper.setArraySize(it, ArraySizeHelper.getArraySize(decl))
 			value = LibraryElementFactory.eINSTANCE.createValue => [value = valueString]
 		]
 		if (decl.eResource !== null) {

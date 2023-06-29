@@ -51,6 +51,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression
@@ -60,6 +61,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
+import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 
 final package class ExpressionAnnotations {
@@ -148,6 +150,8 @@ final package class ExpressionAnnotations {
 			AdapterDeclaration,
 			FB:
 				feature.featureType
+			STStandardFunction:
+				feature.javaMethod.inferReturnTypeFromDataTypes(expr.parameters.map[resultType].filter(DataType).toList)
 			ICallable:
 				feature.returnType
 		}
@@ -327,7 +331,7 @@ final package class ExpressionAnnotations {
 	def package static Map<INamedElement, STCallArgument> computeMappedInputArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
-			val parameters = feature.inputParameters
+			val parameters = feature.computeInputParameters(arguments)
 			if (arguments.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
 				parameters.toInvertedMap [ parameter |
 					arguments.get(parameters.indexOf(parameter))
@@ -345,7 +349,7 @@ final package class ExpressionAnnotations {
 	def package static Map<INamedElement, STCallArgument> computeMappedOutputArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
-			val parameters = feature.outputParameters
+			val parameters = feature.computeOutputParameters(arguments)
 			if (arguments.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
 				val inputCount = feature.inputParameters.size
 				val inOutCount = feature.inOutParameters.size
@@ -365,7 +369,7 @@ final package class ExpressionAnnotations {
 	def package static Map<INamedElement, STCallArgument> computeMappedInOutArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
-			val parameters = feature.inOutParameters
+			val parameters = feature.computeInOutParameters(arguments)
 			if (arguments.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
 				val inputCount = feature.inputParameters.size
 				parameters.toInvertedMap [ parameter |

@@ -19,6 +19,7 @@
  *   Daniel Lindhuber - added copy/paste and the context menu
  *   				  - made typedropdown methods overrideable
  *   Martin Jobst - add initial value cell editor support
+ *                - lock editing for function FBs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -31,9 +32,11 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -47,10 +50,13 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -59,13 +65,15 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> extends AbstractSection
-implements I4diacNatTableUtil {
+		implements I4diacNatTableUtil {
 
 	protected ListDataProvider<T> inputProvider;
 	protected NatTable inputTable;
+	private AddDeleteReorderListWidget inputButtons;
 
 	protected ListDataProvider<T> outputProvider;
 	protected NatTable outputTable;
+	private AddDeleteReorderListWidget outputButtons;
 
 	protected Map<String, List<String>> typeSelection = new HashMap<>();
 
@@ -105,17 +113,18 @@ implements I4diacNatTableUtil {
 		outputsGroup.setLayout(new GridLayout(2, false));
 		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final AddDeleteReorderListWidget inputButtons = new AddDeleteReorderListWidget();
-		final AddDeleteReorderListWidget outputButtons = new AddDeleteReorderListWidget();
+		inputButtons = new AddDeleteReorderListWidget();
+		outputButtons = new AddDeleteReorderListWidget();
 
-		if (isEditable()) {
+		if (isShowTableEditButtons()) {
 			inputButtons.createControls(inputsGroup, getWidgetFactory());
 			outputButtons.createControls(outputsGroup, getWidgetFactory());
 		}
+
 		setupInputTable(inputsGroup);
 		setupOutputTable(outputsGroup);
 
-		if (isEditable()) {
+		if (isShowTableEditButtons()) {
 			configureButtonList(inputButtons, inputTable, true);
 			configureButtonList(outputButtons, outputTable, false);
 		}
@@ -157,6 +166,10 @@ implements I4diacNatTableUtil {
 
 	protected void setTableInput() {
 		setTableInput(getInterface());
+		if (isShowTableEditButtons()) {
+			inputButtons.setCreateButtonEnablement(isEditable());
+			outputButtons.setCreateButtonEnablement(isEditable());
+		}
 		if (isEditable()) {
 			initTypeSelection(getDataTypeLib());
 		}
@@ -200,12 +213,12 @@ implements I4diacNatTableUtil {
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
 		final List<String> elementaryTypes = new ArrayList<>();
 		dataTypeLib.getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
-		.forEach(type -> elementaryTypes.add(type.getName()));
+				.forEach(type -> elementaryTypes.add(type.getName()));
 		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
 
 		final List<String> structuredTypes = new ArrayList<>();
 		dataTypeLib.getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
-		.forEach(type -> structuredTypes.add(type.getName()));
+				.forEach(type -> structuredTypes.add(type.getName()));
 		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
 
@@ -241,4 +254,30 @@ implements I4diacNatTableUtil {
 
 	protected abstract InterfaceList getInterface();
 
+	@Override
+	public boolean isEditable() {
+		return !(EcoreUtil.getRootContainer(getType()) instanceof FunctionFBType);
+	}
+
+	@SuppressWarnings("static-method") // should be overridden by subclasses
+	public boolean isShowTableEditButtons() {
+		return true;
+	}
+
+	protected IEditableRule getSectionEditableRule() {
+		return sectionEditableRule;
+	}
+
+	private final IEditableRule sectionEditableRule = new IEditableRule() {
+
+		@Override
+		public boolean isEditable(final int columnIndex, final int rowIndex) {
+			return AbstractEditInterfaceSection.this.isEditable();
+		}
+
+		@Override
+		public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
+			return AbstractEditInterfaceSection.this.isEditable();
+		}
+	};
 }

@@ -18,6 +18,7 @@
 
 package org.eclipse.fordiac.ide.test.model.eval.variable;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -50,6 +52,7 @@ class ValueValidatorTest {
 	@SuppressWarnings("unused")
 	static void setupXtext() {
 		new DataTypeLibrary();
+		STFunctionStandaloneSetup.doSetup();
 		STAlgorithmStandaloneSetup.doSetup();
 		StructuredTextEvaluatorFactory.register();
 	}
@@ -263,7 +266,7 @@ class ValueValidatorTest {
 		final var varDeclaration = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDeclaration.setName("ArrayTest"); //$NON-NLS-1$
 		varDeclaration.setType(dataType);
-		varDeclaration.setArraySize("10");
+		setArraySize(varDeclaration, "10"); //$NON-NLS-1$
 
 		final String resultString = VariableOperations.validateValue(varDeclaration, value);
 		assertEquals(expectedResult, resultString);

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
- * 				 2020 Johannes Kepler University Linz
+ * Copyright (c) 2011, 2023 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -54,22 +54,25 @@ public class VariableInputContainerLayoutEditPolicy extends AbstractInterfaceCon
 
 	@Override
 	protected boolean canReorder(final IInterfaceElement childEP, final IInterfaceElement afterEP) {
-		return childEP instanceof VarDeclaration && childEP.isIsInput()
-				&& (null == afterEP || (afterEP instanceof VarDeclaration && afterEP.isIsInput()));
+		return isVarInput(childEP) && (null == afterEP || isVarInput(afterEP));
+	}
+
+	private static boolean isVarInput(final IInterfaceElement ie) {
+		return ie instanceof final VarDeclaration childVar && !childVar.isInOutVar() && ie.isIsInput();
 	}
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
 		final Object childClass = request.getNewObjectType();
 		final FBType type = getFBType();
-		if (childClass instanceof DataType && null != type && !(childClass instanceof EventType)
+		if (childClass instanceof final DataType dt && null != type && !(childClass instanceof EventType)
 				&& !(childClass instanceof AdapterType)) {
 			int index = -1;
 			final EditPart ref = getInsertionReference(request);
 			if (null != ref) {
 				index = type.getInterfaceList().getInputVars().indexOf(ref.getModel());
 			}
-			return new CreateInterfaceElementCommand((DataType) childClass, type.getInterfaceList(), true, index);
+			return new CreateInterfaceElementCommand(dt, type.getInterfaceList(), true, index);
 		}
 		return null;
 	}

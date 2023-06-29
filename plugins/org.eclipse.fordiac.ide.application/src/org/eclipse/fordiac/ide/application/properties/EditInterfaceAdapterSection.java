@@ -41,8 +41,8 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	}
 
 	@Override
-	protected CreationCommand newInsertCommand(final IInterfaceElement interfaceElement,
-			final boolean isInput, final int index) {
+	protected CreationCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
+			final int index) {
 		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(interfaceElement,
 				isInput, getType().getInterface(), index);
 		return ResizingSubappInterfaceCreationCommand.wrapCreateCommand(cmd, getType());
@@ -79,11 +79,6 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	@Override
 	protected SubApp getType() {
 		return (SubApp) type;
-	}
-
-	@Override
-	public boolean isEditable() {
-		return true;
 	}
 
 	@Override

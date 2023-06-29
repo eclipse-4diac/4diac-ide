@@ -68,10 +68,7 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 					super.notifyChanged(notification);
 					final int type = notification.getEventType();
 					switch (type) {
-					case Notification.ADD:
-					case Notification.ADD_MANY:
-					case Notification.REMOVE:
-					case Notification.REMOVE_MANY:
+					case Notification.ADD, Notification.ADD_MANY, Notification.REMOVE, Notification.REMOVE_MANY:
 						Display.getDefault().asyncExec(FBTypeRootEditPart.this::refreshChildren);
 						break;
 					case Notification.SET:

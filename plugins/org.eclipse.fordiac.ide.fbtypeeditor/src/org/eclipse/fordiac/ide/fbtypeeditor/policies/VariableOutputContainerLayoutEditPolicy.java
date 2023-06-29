@@ -53,22 +53,25 @@ public class VariableOutputContainerLayoutEditPolicy extends AbstractInterfaceCo
 
 	@Override
 	protected boolean canReorder(final IInterfaceElement childEP, final IInterfaceElement afterEP) {
-		return childEP instanceof VarDeclaration && !childEP.isIsInput()
-				&& (null == afterEP || (afterEP instanceof VarDeclaration && !afterEP.isIsInput()));
+		return isVarOutput(childEP) && (null == afterEP || isVarOutput(afterEP));
+	}
+
+	private static boolean isVarOutput(final IInterfaceElement ie) {
+		return ie instanceof final VarDeclaration childVar && !childVar.isInOutVar() && !ie.isIsInput();
 	}
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
 		final Object childClass = request.getNewObjectType();
 		final FBType type = getFBType();
-		if (childClass instanceof DataType && null != type && !(childClass instanceof EventType)
+		if (childClass instanceof final DataType dt && null != type && !(childClass instanceof EventType)
 				&& !(childClass instanceof AdapterType)) {
 			int index = -1;
 			final EditPart ref = getInsertionReference(request);
 			if (null != ref) {
 				index = type.getInterfaceList().getOutputVars().indexOf(ref.getModel());
 			}
-			return new CreateInterfaceElementCommand((DataType) childClass, type.getInterfaceList(), false, index);
+			return new CreateInterfaceElementCommand(dt, type.getInterfaceList(), false, index);
 		}
 		return null;
 	}

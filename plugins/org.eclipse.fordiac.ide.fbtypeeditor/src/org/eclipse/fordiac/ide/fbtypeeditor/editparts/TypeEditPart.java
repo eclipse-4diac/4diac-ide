@@ -21,6 +21,9 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
@@ -60,7 +63,6 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	private DiagramFontChangeListener fontChangeListener;
 
 	public TypeEditPart(final TypeLibrary typeLib) {
-		super();
 		this.typeLib = typeLib;
 	}
 
@@ -76,6 +78,17 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
 	}
 
+	@Override
+	protected Adapter createAdapter() {
+		return new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				refresh();
+			}
+		};
+	}
+
 	private IPropertyChangeListener getFontChangeListener() {
 		if (null == fontChangeListener) {
 			fontChangeListener = new DiagramFontChangeListener(getFigure());
@@ -85,7 +98,6 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
 	private static class TypeFigure extends Label implements IFontUpdateListener {
 		public TypeFigure() {
-			super();
 			setTypeLabelFonts();
 		}
 
@@ -135,7 +147,8 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 		final Display display = Display.getCurrent();
 		if (null != display) {
 			if (getINamedElement() instanceof final VarDeclaration varDecl
-					&& varDecl.getType() instanceof ErrorMarkerDataType) {
+					&& (varDecl.getType() instanceof ErrorMarkerDataType
+							|| (varDecl.isArray() && varDecl.getArraySize().hasError()))) {
 				typeFigure.setOpaque(true);
 				typeFigure.setBackgroundColor(display.getSystemColor(SWT.COLOR_RED));
 			} else {
@@ -150,35 +163,36 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
 	@Override
 	protected void createEditPolicies() {
-
 		final ModifiedNonResizeableEditPolicy handle = new ModifiedNonResizeableEditPolicy();
 		handle.setDragAllowed(false);
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, handle);
 
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
-			@Override
-			protected void showCurrentEditValue(final DirectEditRequest request) {
-				// nothing to do
-			}
-
-			@Override
-			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					final Object value = request.getCellEditor().getValue();
-					if (value instanceof final Integer intValue) {
-						final int index = intValue.intValue();
-						if (request.getCellEditor().getControl() instanceof final CCombo combo && index >= 0
-								&& index < combo.getItemCount()) {
-							final String typeName = combo.getItem(index);
-							return ChangeDataTypeCommand.forTypeName(getCastedModel(), typeName);
-						}
-					} else if (value instanceof final String stringValue) {
-						return ChangeDataTypeCommand.forTypeDeclaration(getCastedModel(), stringValue);
-					}
+		if (isDirectEditable()) {
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
+				@Override
+				protected void showCurrentEditValue(final DirectEditRequest request) {
+					// nothing to do
 				}
-				return null;
-			}
-		});
+
+				@Override
+				protected Command getDirectEditCommand(final DirectEditRequest request) {
+					if (getHost() instanceof AbstractDirectEditableEditPart) {
+						final Object value = request.getCellEditor().getValue();
+						if (value instanceof final Integer intValue) {
+							final int index = intValue.intValue();
+							if (request.getCellEditor().getControl() instanceof final CCombo combo && index >= 0
+									&& index < combo.getItemCount()) {
+								final String typeName = combo.getItem(index);
+								return ChangeDataTypeCommand.forTypeName(getCastedModel(), typeName);
+							}
+						} else if (value instanceof final String stringValue) {
+							return ChangeDataTypeCommand.forTypeDeclaration(getCastedModel(), stringValue);
+						}
+					}
+					return null;
+				}
+			});
+		}
 	}
 
 	@Override
@@ -189,14 +203,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 			// transform doubleclick to direct edit
 			request.setType(RequestConstants.REQ_DIRECT_EDIT);
 		}
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
-			// allow direct edit only for VarDeclarations and AdapterDeclarations
-			if ((getCastedModel() instanceof VarDeclaration) || (getCastedModel() instanceof AdapterDeclaration)) {
-				super.performRequest(request);
-			}
-		} else {
-			super.performRequest(request);
-		}
+		super.performRequest(request);
 	}
 
 	@Override
@@ -234,5 +241,12 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	@Override
 	public INamedElement getINamedElement() {
 		return getCastedModel();
+	}
+
+	@Override
+	public boolean isDirectEditable() {
+		// allow direct edit only for VarDeclarations and AdapterDeclarations
+		return super.isDirectEditable()
+				&& (getCastedModel() instanceof VarDeclaration || getCastedModel() instanceof AdapterDeclaration);
 	}
 }

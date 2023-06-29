@@ -23,15 +23,8 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.ui.IEditorPart;
 
-/**
- * The Class CompositeInternalInterfaceEditPart.
- */
+/** The Class CompositeInternalInterfaceEditPart. */
 public class CompositeInternalInterfaceEditPartRO extends InterfaceEditPart {
-
-	public CompositeInternalInterfaceEditPartRO() {
-		super();
-		setConnectable(false);
-	}
 
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
@@ -71,4 +64,8 @@ public class CompositeInternalInterfaceEditPartRO extends InterfaceEditPart {
 		HandlerHelper.selectElement(getModel(), viewer);
 	}
 
+	@Override
+	public boolean isConnectable() {
+		return false;
+	}
 }

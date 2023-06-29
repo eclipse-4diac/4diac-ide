@@ -14,15 +14,34 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui;
 
 import org.eclipse.osgi.util.NLS;
 
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
-public class Messages extends NLS {
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
+	public static String STCoreQuickfixProvider_AddExplicitTypecastDescription;
+	public static String STCoreQuickfixProvider_AddExplicitTypecastLabel;
+	public static String STCoreQuickfixProvider_ChangeConversionDescription;
+	public static String STCoreQuickfixProvider_ChangeConversionLabel;
+	public static String STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredDescription;
+	public static String STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredLabel;
+	public static String STCoreQuickfixProvider_CreateMissingInOutVariable;
+	public static String STCoreQuickfixProvider_CreateMissingInputVariable;
+	public static String STCoreQuickfixProvider_CreateMissingOutputVariable;
+	public static String STCoreQuickfixProvider_CreateMissingTempVariable;
+	public static String STCoreQuickfixProvider_RemoveConsecutiveUnderscoresDescription;
+	public static String STCoreQuickfixProvider_RemoveConsecutiveUnderscoresLabel;
+	public static String STCoreQuickfixProvider_RemoveTrailingUnderscoreDescription;
+	public static String STCoreQuickfixProvider_RemoveTrailingUnderscoreLabel;
+	public static String STCoreQuickfixProvider_RemoveUnnecessaryConversionDescription;
+	public static String STCoreQuickfixProvider_RemoveUnnecessaryConversionLabel;
+	public static String STCoreQuickfixProvider_RemoveUnnecessaryLiteralConversionDescription;
+	public static String STCoreQuickfixProvider_RemoveUnnecessaryLiteralConversionLabel;
 	public static String STCoreCodeMiningPreferencePage_EnableCodeMinings;
 	public static String STCoreCodeMiningPreferencePage_EnableLiteralTypeCodeMinings;
 	public static String STCoreCodeMiningPreferencePage_EnableReferencedVariablesCodeMinings;
 	public static String STCoreContentAssistPreferencePage_ContentAssist;
 	public static String STCoreContentAssistPreferencePage_AutoActivationTriggers;
 	public static String STCoreContentAssistPreferencePage_ChangedSettingsEffect;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

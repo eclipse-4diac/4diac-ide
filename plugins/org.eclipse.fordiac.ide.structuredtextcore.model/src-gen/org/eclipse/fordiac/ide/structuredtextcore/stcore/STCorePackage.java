@@ -1904,13 +1904,31 @@ public interface STCorePackage extends EPackage {
 	int ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Varargs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_STANDARD_FUNCTION__VARARGS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 6;
+
+	/**
 	 * The feature id for the '<em><b>Only Supported By</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 6;
+	int ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Java Method</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_STANDARD_FUNCTION__JAVA_METHOD = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>ST Standard Function</em>' class.
@@ -1919,7 +1937,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_STANDARD_FUNCTION_FEATURE_COUNT = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 7;
+	int ST_STANDARD_FUNCTION_FEATURE_COUNT = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 9;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCommentImpl <em>ST Comment</em>}' class.
@@ -2215,6 +2233,16 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	int ST_STRING = 63;
+
+	/**
+	 * The meta object id for the '<em>ST Java Method</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.lang.reflect.Method
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTJavaMethod()
+	 * @generated
+	 */
+	int ST_JAVA_METHOD = 64;
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource <em>ST Source</em>}'.
@@ -3632,6 +3660,17 @@ public interface STCorePackage extends EPackage {
 	EReference getSTStandardFunction_InOutParameters();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#isVarargs <em>Varargs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Varargs</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#isVarargs()
+	 * @see #getSTStandardFunction()
+	 * @generated
+	 */
+	EAttribute getSTStandardFunction_Varargs();
+
+	/**
 	 * Returns the meta object for the attribute list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getOnlySupportedBy <em>Only Supported By</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3641,6 +3680,17 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSTStandardFunction_OnlySupportedBy();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getJavaMethod <em>Java Method</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Java Method</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getJavaMethod()
+	 * @see #getSTStandardFunction()
+	 * @generated
+	 */
+	EAttribute getSTStandardFunction_JavaMethod();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STComment <em>ST Comment</em>}'.
@@ -3894,6 +3944,17 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	EDataType getSTString();
+
+	/**
+	 * Returns the meta object for data type '{@link java.lang.reflect.Method <em>ST Java Method</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>ST Java Method</em>'.
+	 * @see java.lang.reflect.Method
+	 * @model instanceClass="java.lang.reflect.Method" serializeable="false"
+	 * @generated
+	 */
+	EDataType getSTJavaMethod();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -5078,12 +5139,28 @@ public interface STCorePackage extends EPackage {
 		EReference ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS = eINSTANCE.getSTStandardFunction_InOutParameters();
 
 		/**
+		 * The meta object literal for the '<em><b>Varargs</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ST_STANDARD_FUNCTION__VARARGS = eINSTANCE.getSTStandardFunction_Varargs();
+
+		/**
 		 * The meta object literal for the '<em><b>Only Supported By</b></em>' attribute list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY = eINSTANCE.getSTStandardFunction_OnlySupportedBy();
+
+		/**
+		 * The meta object literal for the '<em><b>Java Method</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ST_STANDARD_FUNCTION__JAVA_METHOD = eINSTANCE.getSTStandardFunction_JavaMethod();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCommentImpl <em>ST Comment</em>}' class.
@@ -5308,6 +5385,16 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EDataType ST_STRING = eINSTANCE.getSTString();
+
+		/**
+		 * The meta object literal for the '<em>ST Java Method</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.lang.reflect.Method
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTJavaMethod()
+		 * @generated
+		 */
+		EDataType ST_JAVA_METHOD = eINSTANCE.getSTJavaMethod();
 
 	}
 

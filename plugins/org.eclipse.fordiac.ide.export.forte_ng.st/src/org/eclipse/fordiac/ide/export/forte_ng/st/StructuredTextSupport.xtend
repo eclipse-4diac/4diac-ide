@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.WcharType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
+import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -94,6 +95,7 @@ import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.S
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.findActualNodeFor
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
@@ -418,6 +420,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''func_«feature.name»'''
 
+	def protected dispatch CharSequence generateFeatureName(FunctionFBType feature) '''func_«feature.name»'''
+
 	def protected dispatch CharSequence generateFeatureName(STStandardFunction feature) '''func_«feature.name»'''
 
 	def protected dispatch CharSequence generateFeatureName(STMethod feature) '''method_«feature.name»'''
@@ -439,10 +443,11 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected CharSequence generateFeatureTypeName(STVarDeclaration variable, boolean output) {
+		val type = STVariableOperations.evaluateResultType(variable)
 		if (output)
-			variable.featureType.generateTypeNameAsParameter
+			type.generateTypeNameAsParameter
 		else
-			variable.featureType.generateTypeName
+			type.generateTypeName
 	}
 
 	def protected CharSequence generateTypeDefaultValue(INamedElement type) {
@@ -523,6 +528,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
 					name = feature.sourceName
 				]] + feature.parameterDependencies
+			FunctionFBType:
+				#[feature] + feature.parameterDependencies
 			ICallable:
 				feature.parameterDependencies
 			default:

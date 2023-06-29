@@ -70,8 +70,6 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	private DiagramFontChangeListener fontChangeListener;
 
 	DeviceEditPart() {
-		super();
-		setConnectable(true);
 	}
 
 	@Override
@@ -247,7 +245,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			createInstanceNameLabel(this);
 
 			deviceRectangle
-			.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+					.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 			final ToolbarLayout bottomLayout = new ToolbarLayout();
 			bottomLayout.setStretchMinorAxis(true);
 			deviceRectangle.setLayoutManager(bottomLayout);

@@ -76,6 +76,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		addVarList(interfaceList.getOutputVars(), LibraryElementTags.OUTPUT_VARS_ELEMENT);
 		createAdapterList(interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT);
 		createAdapterList(interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT);
+		addVarList(interfaceList.getInOutVars(), LibraryElementTags.INOUT_VARS_ELEMENT);
 		addEndElement();
 	}
 
@@ -120,7 +121,8 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	 * @param varList     the list of vars to create the entries for
 	 * @param elementName the name of the xml element holding the var list
 	 * @throws XMLStreamException */
-	protected void addVarList(final List<VarDeclaration> varList, final String elementName) throws XMLStreamException {
+	protected void addVarList(final List<? extends VarDeclaration> varList, final String elementName)
+			throws XMLStreamException {
 		if (!varList.isEmpty()) {
 			addStartElement(elementName);
 			for (final VarDeclaration varDecl : varList) {
@@ -282,7 +284,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		addEmptyStartElement(primNodeName);
 		getWriter().writeAttribute(LibraryElementTags.INTERFACE_ATTRIBUTE,
 				((null != prim.getInterface()) && (null != prim.getInterface().getName()))
-				? prim.getInterface().getName()
+						? prim.getInterface().getName()
 						: ""); //$NON-NLS-1$
 		getWriter().writeAttribute(LibraryElementTags.EVENT_ELEMENT, (null != prim.getEvent()) ? prim.getEvent() : ""); //$NON-NLS-1$
 		if ((null != prim.getParameters()) && (!prim.getParameters().equals(" "))) { //$NON-NLS-1$
