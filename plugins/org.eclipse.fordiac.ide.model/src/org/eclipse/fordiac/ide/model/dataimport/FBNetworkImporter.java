@@ -120,11 +120,9 @@ class FBNetworkImporter extends CommonElementImporter {
 	private void moveElementsToGroup() {
 		getFbNetwork().getNetworkElements().stream().forEach(el -> {
 			final Attribute groupAttr = el.getAttribute(LibraryElementTags.GROUP_NAME);
-			if (groupAttr != null) {
-				if (fbNetworkElementMap.get(groupAttr.getValue()) instanceof final Group group) {
-					el.setGroup(group);
-					el.deleteAttribute(LibraryElementTags.GROUP_NAME);
-				}
+			if ((groupAttr != null) && (fbNetworkElementMap.get(groupAttr.getValue()) instanceof final Group group)) {
+				el.setGroup(group);
+				el.deleteAttribute(LibraryElementTags.GROUP_NAME);
 			}
 		});
 	}
@@ -493,7 +491,8 @@ class FBNetworkImporter extends CommonElementImporter {
 			}
 			// we don't have an any_adapter return generic adapter, may not be reparable
 			return LibraryElementFactory.eINSTANCE.createAdapterType();
-		} else if (connection instanceof DataConnection) {
+		}
+		if (connection instanceof DataConnection) {
 			return IecTypes.GenericTypes.ANY;
 		}
 		return null;
@@ -594,7 +593,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		if (path == null) {
 			return null;
 		}
-		final String[] split = path.split("\\."); //$NON-NLS-1$
+		final String[] split = path.split("\\.", -1); //$NON-NLS-1$
 
 		if (1 == split.length) {
 			if (isInput) {
