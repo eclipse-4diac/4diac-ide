@@ -42,5 +42,4 @@ public class Project {
 		this.path = path;
 	}
 	
-	
 }

@@ -67,9 +67,20 @@ public class GitLabDownloadManager {
 	}	
 	
 	private void filterData() {
-		List<Package> packages;
 		projectAndPackageMap = new HashMap<>();
 		packagesAndLeaves = new HashMap<>();
+		try {
+			URL url = new URL(buildConnectionURL());
+
+			HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+			httpConn.setRequestMethod(Messages.GET);
+			httpConn.setRequestProperty(Messages.Private_Token, gitLabImportPage.getToken());
+
+			InputStream responseStream = httpConn.getInputStream();
+			getProjects(responseStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void createRootDir() throws IOException {
@@ -128,6 +139,25 @@ public class GitLabDownloadManager {
 	private String buildPackageFileURL(Package p, Project project) {
 		return gitLabImportPage.getUrl() + API_VERSION + project.getId() +  
 				PACKAGES + p.getId() + PACKAGE_FILES;
+	}
+	
+	private String buildConnectionURL() {
+		return gitLabImportPage.getUrl() + API_VERSION;
+	}
+	
+	private void getProjects(InputStream responseStream) throws IOException {
+		String response = "";
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
+	        response = reader.readLine();
+	    }
+		String regex = "(?<projectID>[\\w\\s-]*),(?:\\\"|\\')?(?:description)(?:\\\"|\\')?(?:\\:\\s*)(?:[\\w\\s-]*|\\\"\\\"|\\\"[\\w\\s-]*\\\"),(?:\\\"|\\')?(?:name)(?:\\\"|\\')(?:\\:\\s*)(?:\\\"|\\')?(?<projectName>[\\w\\s-]*)(?:\\\"|\\')?(?:,\\\"name_with_namespace\\\")";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(response);
+		Project project = null;
+		while(m.find()) {
+			project = new Project(Long.valueOf(m.group("projectID")), m.group("projectName"));
+			projectAndPackageMap.put(project, new ArrayList<>());
+		}
 	}
 	
 	private List<String> parseResponse(InputStream responseStream) throws IOException {
