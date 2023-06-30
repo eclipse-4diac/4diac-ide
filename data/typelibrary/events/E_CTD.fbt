@@ -27,7 +27,7 @@
     </InputVars>
     <OutputVars>
       <VarDeclaration Comment="CV &lt;= 0" Name="Q" Type="BOOL"/>
-      <VarDeclaration Comment="" Name="CV" Type="UINT"/>
+      <VarDeclaration Comment="Counter Value" Name="CV" Type="UINT"/>
     </OutputVars>
   </InterfaceList>
   <BasicFB>

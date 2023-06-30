@@ -5,12 +5,12 @@
   <VersionInfo Author="Alois Zoitl" Date="2017-09-20" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
   <InterfaceList>
     <EventInputs>
-      <Event Comment="" Name="EI" Type="Event">
+      <Event Comment=" Event input" Name="EI" Type="Event">
         <With Var="PERMIT"/>
       </Event>
     </EventInputs>
     <EventOutputs>
-      <Event Comment="" Name="EO" Type="Event"/>
+      <Event Comment="Event output" Name="EO" Type="Event"/>
     </EventOutputs>
     <InputVars>
       <VarDeclaration Comment="" Name="PERMIT" Type="BOOL"/>

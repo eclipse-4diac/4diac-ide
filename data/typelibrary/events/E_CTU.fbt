@@ -31,10 +31,10 @@
   <BasicFB>
     <ECC>
       <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
-      <ECState Comment="" Name="CU" x="1570.0" y="165.0">
+      <ECState Comment="Count Up" Name="CU" x="1570.0" y="165.0">
         <ECAction Algorithm="CU" Output="CUO"/>
       </ECState>
-      <ECState Comment="" Name="R" x="900.0" y="1000.0">
+      <ECState Comment="Reset" Name="R" x="900.0" y="1000.0">
         <ECAction Algorithm="R" Output="RO"/>
       </ECState>
       <ECTransition Comment="" Condition="CU[CV &lt; 65535]" Destination="CU" Source="START" x="970.0" y="210.0"/>

@@ -5,11 +5,11 @@
   <VersionInfo Author="Alois Zoitl" Date="2017" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
   <InterfaceList>
     <EventInputs>
-      <Event Comment="" Name="EI" Type="Event"/>
+      <Event Comment="Input event" Name="EI" Type="Event"/>
     </EventInputs>
     <EventOutputs>
-      <Event Comment="" Name="EO1" Type="Event"/>
-      <Event Comment="" Name="EO2" Type="Event"/>
+      <Event Comment="First output event" Name="EO1" Type="Event"/>
+      <Event Comment="Second output event" Name="EO2" Type="Event"/>
     </EventOutputs>
     <InputVars/>
     <OutputVars/>
@@ -17,7 +17,7 @@
   <BasicFB>
     <ECC>
       <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
-      <ECState Comment="&quot;&quot;" Name="State" x="1755.0" y="280.0">
+      <ECState Comment="Output events" Name="State" x="1755.0" y="280.0">
         <ECAction Output="EO1"/>
         <ECAction Output="EO2"/>
       </ECState>

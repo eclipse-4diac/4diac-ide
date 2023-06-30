@@ -5,25 +5,25 @@
   <VersionInfo Author="Alois Zoitl" Date="2017-09-21" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
   <InterfaceList>
     <EventInputs>
-      <Event Comment="" Name="EI0" Type="Event">
+      <Event Comment="Input event, selected when G=0" Name="EI0" Type="Event">
         <With Var="G"/>
       </Event>
-      <Event Comment="" Name="EI1" Type="Event">
+      <Event Comment="Input event, selected when G=1" Name="EI1" Type="Event">
         <With Var="G"/>
       </Event>
     </EventInputs>
     <EventOutputs>
-      <Event Comment="" Name="EO" Type="Event"/>
+      <Event Comment="Output Event" Name="EO" Type="Event"/>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="" Name="G" Type="BOOL"/>
+      <VarDeclaration Comment=" Select EI0 when G=0, EI1 when G=1" Name="G" Type="BOOL"/>
     </InputVars>
     <OutputVars/>
   </InterfaceList>
   <BasicFB>
     <ECC>
       <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
-      <ECState Comment="" Name="EO" x="580.0" y="965.0">
+      <ECState Comment="Issue Output Event" Name="EO" x="580.0" y="965.0">
         <ECAction Output="EO"/>
       </ECState>
       <ECTransition Comment="" Condition="1" Destination="START" Source="EO" x="685.0" y="750.0"/>
