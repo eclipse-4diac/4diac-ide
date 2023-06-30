@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.ExportFilter;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.resource.GlobalConstantsResourceSetInitializer;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceSetInitializer;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
@@ -37,6 +38,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreComme
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.resource.STFunctionResourceSetInitializer;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportFactory;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValues;
@@ -68,6 +70,8 @@ public class XMIExportFilter extends ExportFilter {
 
 		final XtextResourceSet resourceSet = new XtextResourceSet();
 		new STAlgorithmResourceSetInitializer().initialize(resourceSet, typeFile.getProject());
+		new STFunctionResourceSetInitializer().initialize(resourceSet, typeFile.getProject());
+		new GlobalConstantsResourceSetInitializer().initialize(resourceSet, typeFile.getProject());
 		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
 
 		final Resource resource = resourceSet.getResource(sourceUri, true);
