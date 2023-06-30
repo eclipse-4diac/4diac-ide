@@ -15,10 +15,19 @@
 package org.eclipse.fordiac.ide.globalconstantseditor.ui;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocument;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocumentProvider;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.reconciler.GlobalConstantsDocumentReconcileStrategy;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.resource.GlobalConstantsResourceForIEditorInputFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuickAssistProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration;
@@ -27,29 +36,58 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.resource.containers.IAllContainersState;
+import org.eclipse.xtext.ui.editor.XtextEditor;
+import org.eclipse.xtext.ui.editor.XtextSourceViewer;
+import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities;
+import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
+import org.eclipse.xtext.ui.editor.model.IResourceForEditorInputFactory;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
+import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider;
+import org.eclipse.xtext.ui.editor.occurrences.IOccurrenceComputer;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
+import org.eclipse.xtext.ui.editor.quickfix.ISimilarityMatcher;
+import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor;
+import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
+import org.eclipse.xtext.ui.shared.Access;
 
 import com.google.inject.Binder;
+import com.google.inject.Provider;
 import com.google.inject.name.Names;
 
-/**
- * Use this class to register components to be used within the Eclipse IDE.
- */
-@SuppressWarnings("restriction")
+/** Use this class to register components to be used within the Eclipse IDE. */
+@SuppressWarnings({ "restriction", "static-method" })
 public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 
 	public GlobalConstantsUiModule(final AbstractUIPlugin plugin) {
 		super(plugin);
 	}
 
+	@Override
+	public Provider<? extends IAllContainersState> provideIAllContainersState() {
+		return Access.getWorkspaceProjectsState();
+	}
+
 	public Class<? extends XtextDocument> bindXtextDocument() {
 		return GlobalConstantsDocument.class;
+	}
+
+	public Class<? extends XtextDocumentProvider> bindXtextDocumentProvider() {
+		return GlobalConstantsDocumentProvider.class;
+	}
+
+	@Override
+	public Class<? extends IResourceForEditorInputFactory> bindIResourceForEditorInputFactory() {
+		return GlobalConstantsResourceForIEditorInputFactory.class;
+	}
+
+	public Class<? extends XtextDocumentReconcileStrategy> bindXtextDocumentReconcileStrategy() {
+		return GlobalConstantsDocumentReconcileStrategy.class;
 	}
 
 	public Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {
@@ -58,10 +96,6 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 
 	public Class<? extends IEObjectHoverDocumentationProvider> bindIEObjectHoverDocumentationProvider() {
 		return STCoreHoverDocumentationProvider.class;
-	}
-
-	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
-		return STCoreCommentDocumentationProvider.class;
 	}
 
 	public void configureIEObjectDocumentationProvider(final Binder binder) {
@@ -90,4 +124,41 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 		return STCoreAntlrTokenToAttributeIdMapper.class;
 	}
 
+	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
+		return STCoreCommentDocumentationProvider.class;
+	}
+
+	public Class<? extends ISimilarityMatcher> bindISimilarityMatcher() {
+		return CaseInsensitiveSimilarityMatcher.class;
+	}
+
+	public Class<? extends IOccurrenceComputer> bindIOccurrenceComputer() {
+		return STCoreOccurrenceComputer.class;
+	}
+
+	public Class<? extends IContentProposalPriorities> bindIContentProposalPriorities() {
+		return STCoreContentProposalPriorities.class;
+	}
+
+	public Class<? extends XtextQuickAssistProcessor> bindXtextQuickAssistProcessor() {
+		return STCoreQuickAssistProcessor.class;
+	}
+
+	public Class<? extends XtextSourceViewer.Factory> bindXtextSourceViewer$Factory() {
+		return STCoreSourceViewerFactory.class;
+	}
+
+	public void configureKeyBindingScope(final Binder binder) {
+		binder.bindConstant().annotatedWith(Names.named(XtextEditor.KEY_BINDING_SCOPE))
+				.to("org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"); //$NON-NLS-1$
+	}
+
+	public void configureContentAssist(final Binder binder) {
+		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("contentAssistInitializer")) //$NON-NLS-1$
+				.to(STCoreContentAssistPreferences.Initializer.class);
+		binder.bind(String.class)
+				.annotatedWith(com.google.inject.name.Names
+						.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS))
+				.toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider.class);
+	}
 }
