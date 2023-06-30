@@ -37,7 +37,7 @@ final class VariableOperations {
 			StructuredType: new StructVariable(name, type)
 			AnyType: new ElementaryVariable(name, type)
 			FBType: new FBVariable(name, type)
-			default: throw new UnsupportedOperationException('''Cannot instanciate variable «name» of type «type.name»''')
+			default: throw new UnsupportedOperationException('''Cannot instanciate variable '«name ?: "null"»' of type «type?.name ?: "null"»''')
 		}
 	}
 
@@ -47,7 +47,7 @@ final class VariableOperations {
 			StructuredType: new StructVariable(name, type, value)
 			AnyType: new ElementaryVariable(name, type, value)
 			FBType: new FBVariable(name, type, value)
-			default: throw new UnsupportedOperationException('''Cannot instanciate variable «name» of type «type.name»''')
+			default: throw new UnsupportedOperationException('''Cannot instanciate variable '«name ?: "null"»' of type «type?.name ?: "null"»''')
 		}
 	}
 
@@ -57,7 +57,7 @@ final class VariableOperations {
 			StructuredType: new StructVariable(name, type, value)
 			AnyType: new ElementaryVariable(name, type, value)
 			FBType: new FBVariable(name, type, value)
-			default: throw new UnsupportedOperationException('''Cannot instanciate variable «name» of type «type.name»''')
+			default: throw new UnsupportedOperationException('''Cannot instanciate variable '«name ?: "null"»' of type «type?.name ?: "null"»''')
 		}
 	}
 

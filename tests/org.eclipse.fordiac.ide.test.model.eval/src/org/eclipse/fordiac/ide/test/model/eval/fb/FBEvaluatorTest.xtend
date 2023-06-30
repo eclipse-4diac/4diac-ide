@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.test.model.eval.fb
 import java.util.Collection
 import java.util.Queue
 import java.util.concurrent.ArrayBlockingQueue
+import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorEventQueue
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorFactory
@@ -40,6 +41,7 @@ class FBEvaluatorTest {
 	@BeforeAll
 	def static void setupXtext() {
 		typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null)
+		GlobalConstantsStandaloneSetup.doSetup
 		STFunctionStandaloneSetup.doSetup
 		STAlgorithmStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register

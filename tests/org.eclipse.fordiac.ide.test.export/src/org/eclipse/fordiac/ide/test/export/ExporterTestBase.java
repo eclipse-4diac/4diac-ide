@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.export.forte_ng.st.StructuredTextSupportFactory;
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil;
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport;
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory;
+import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -111,6 +112,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	@BeforeAll
 	public static void setup() {
 		new DataTypeLibrary();
+		GlobalConstantsStandaloneSetup.doSetup();
 		STFunctionStandaloneSetup.doSetup();
 		STAlgorithmStandaloneSetup.doSetup();
 		OtherAlgorithmSupportFactory.register();

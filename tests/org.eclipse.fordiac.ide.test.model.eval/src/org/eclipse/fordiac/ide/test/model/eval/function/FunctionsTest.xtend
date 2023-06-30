@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.test.model.eval.function
 
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
+import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
@@ -50,6 +51,7 @@ class FunctionsTest {
 	@BeforeAll
 	def static void setupXtext() {
 		typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null)
+		GlobalConstantsStandaloneSetup.doSetup
 		STFunctionStandaloneSetup.doSetup
 		STAlgorithmStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register
