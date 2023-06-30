@@ -52,8 +52,6 @@ public class GitLabDownloadManager {
 		this.gitLabImportPage = gitLabImportPage;
 	}
 	
-	
-	
 	public Map<String, List<LeafNode>> getPackagesAndLeaves() {
 		return packagesAndLeaves;
 	}
@@ -62,7 +60,7 @@ public class GitLabDownloadManager {
 		return projectAndPackageMap;
 	}
 	
-	public void connectToGitLab(String url, String personalToken) {
+	public void connectToGitLab(String personalToken) {
 		filterData();
 	}	
 	
@@ -78,6 +76,11 @@ public class GitLabDownloadManager {
 
 			InputStream responseStream = httpConn.getInputStream();
 			getProjects(responseStream);
+			responseStream.close();
+			httpConn.disconnect();
+			for(Project project: projectAndPackageMap.keySet()) {
+				getPackages(project);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -145,6 +148,11 @@ public class GitLabDownloadManager {
 		return gitLabImportPage.getUrl() + API_VERSION;
 	}
 	
+	private String buildPackagesForProjectURL(Project project) {
+		return gitLabImportPage.getUrl() + API_VERSION + project.getId() +  
+				PACKAGES;
+	}
+	
 	private void getProjects(InputStream responseStream) throws IOException {
 		String response = "";
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
@@ -158,6 +166,31 @@ public class GitLabDownloadManager {
 			project = new Project(Long.valueOf(m.group("projectID")), m.group("projectName"));
 			projectAndPackageMap.put(project, new ArrayList<>());
 		}
+	}
+	
+	private void getPackages(Project project) throws IOException {
+		URL url = new URL(buildPackagesForProjectURL(project));
+
+		HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+		httpConn.setRequestMethod(Messages.GET);
+		httpConn.setRequestProperty(Messages.Private_Token, gitLabImportPage.getToken());
+
+		InputStream responseStream = httpConn.getInputStream();
+		
+		String response = "";
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
+	        response = reader.readLine();
+	    }
+		
+		String regex = "(?<packageID>[\\w\\s-]*),(?:\\\"|\\')(?:name)(?:\\\"|\\')?:(?:\\\"|\\')(?<packageName>[\\w\\s-]*)\",\"version\":\"(?<packageVersion>[\\w\\s-.]*)\",\"package_type\":\"(?<packageType>[\\w\\s-]*)";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(response);
+		while(m.find()) {
+			projectAndPackageMap.get(project).add(new Package(Long.valueOf(m.group("packageID")), m.group("packageName"), m.group("packageVersion"), m.group("packageType")));
+		}
+		
+		responseStream.close();
+		httpConn.disconnect();
 	}
 	
 	private List<String> parseResponse(InputStream responseStream) throws IOException {

@@ -13,12 +13,20 @@
 package org.eclipse.fordiac.ide.gitlab;
 
 public class Package {
+	
 	private Long id;
     private String name;
     private String version;
-    private PackageType packageType;
+    private String packageType;
+    
+    public Package(Long id, String name, String version, String packageType) {
+		this.id = id;
+		this.name = name;
+		this.version = version;
+		this.packageType = packageType;
+	}
 
-    public Long getId() {
+	public Long getId() {
         return id;
     }
 
@@ -42,11 +50,11 @@ public class Package {
         this.version = version;
     }
 
-    public PackageType getPackageType() {
+    public String getPackageType() {
         return packageType;
     }
 
-    public void setPackageType(PackageType packageType) {
+    public void setPackageType(String packageType) {
         this.packageType = packageType;
     }
 }

@@ -73,8 +73,9 @@ public class GLTreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public boolean hasChildren(Object element) {
-		return (element instanceof Project && !projectsAndPackages.get(element).isEmpty()) || 
-				(element instanceof Package pack && !packagesAndLeaves.get(pack.getName()).isEmpty());
+//		return (element instanceof Project && !projectsAndPackages.get(element).isEmpty()) || 
+//				(element instanceof Package pack && !packagesAndLeaves.get(pack.getName()).isEmpty());
+		return true;
 	}
 	
 	// Needed to filter the packages based on names instead their equals()
