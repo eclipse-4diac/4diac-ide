@@ -30,6 +30,7 @@ import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.Activator;
+import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -260,6 +261,17 @@ public class FBNetworkConnection extends HideableConnection {
 			builder.append(ie.getName());
 		}
 		return builder;
+	}
+
+	@SuppressWarnings("unchecked")
+	int getMaxFanOutLabelWidth() {
+		final InterfaceEditPart source = (InterfaceEditPart) connEP.getSource();
+		return ((List<ConnectionEditPart>) source.getSourceConnections())
+				.stream()
+				.filter(conn -> !conn.getModel().isVisible())
+				.map(ep -> ep.getFigure().getSourceDecoration().getLabel().getBounds().width)
+				.max(Integer::compare)
+				.orElse(0);
 	}
 
 	private static class ConLabelToolTip extends Figure {

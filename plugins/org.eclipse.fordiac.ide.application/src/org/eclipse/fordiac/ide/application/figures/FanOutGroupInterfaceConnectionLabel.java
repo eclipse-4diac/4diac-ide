@@ -83,19 +83,22 @@ public class FanOutGroupInterfaceConnectionLabel extends GroupInterfaceConnectio
 		}
 
 		private void drawLine(final Graphics g, final Direction direction) {
-			final int labelHeight = getLabel().getBounds().height();
 			final Point rightBounds = getBounds().getRight();
+			final int labelHeight = getLabel().getBounds().height;
+			final int labelWidth = getLabel().getBounds().width;
+			final int maxLabelWidth = connFigure.getMaxFanOutLabelWidth();
+			final int diff = maxLabelWidth - labelWidth;
 
 			int x1, y1, x2, y2;
 			switch (direction) {
 			case UP:
-				x1 = rightBounds.x - labelHeight;
+				x1 = rightBounds.x - labelHeight - diff;
 				y1 = rightBounds.y;
 				x2 = x1;
 				y2 = rightBounds.y - labelHeight;
 				break;
 			case DOWN:
-				x1 = rightBounds.x - labelHeight;
+				x1 = rightBounds.x - labelHeight - diff;
 				y1 = rightBounds.y;
 				x2 = x1;
 				y2 = rightBounds.y + labelHeight;
@@ -103,7 +106,7 @@ public class FanOutGroupInterfaceConnectionLabel extends GroupInterfaceConnectio
 			case LEFT:
 				x1 = rightBounds.x;
 				y1 = rightBounds.y;
-				x2 = rightBounds.x - labelHeight;
+				x2 = rightBounds.x - labelHeight - diff;
 				y2 = rightBounds.y;
 				break;
 			case RIGHT:

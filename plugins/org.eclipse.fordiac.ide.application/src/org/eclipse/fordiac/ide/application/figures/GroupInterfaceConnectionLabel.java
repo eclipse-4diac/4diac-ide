@@ -115,9 +115,12 @@ public class GroupInterfaceConnectionLabel extends FBNetworkConnectionLabel {
 			private void drawFanOutConnector(final HideableConnection connFigure, final Graphics g,
 					final Rectangle bounds) {
 				if (isSrcLabel() && FBNetworkConnection.getHiddenConnections(connFigure.getModel().getSource().getOutputConnections()).size() > 1) {
-					final int labelHeight = getLabel().getBounds().height();
 					final Point right = bounds.getRight();
-					g.drawLine(right.x - labelHeight, right.y, right.x - labelHeight, right.y + labelHeight);
+					final int labelHeight = getLabel().getBounds().height();
+					final int labelWidth = getLabel().getBounds().width;
+					final int maxLabelWidth = ((FBNetworkConnection) connFigure).getMaxFanOutLabelWidth();
+					final int diff = maxLabelWidth - labelWidth;
+					g.drawLine(right.x - labelHeight - diff, right.y, right.x - labelHeight - diff, right.y + labelHeight);
 				}
 			}
 		};
