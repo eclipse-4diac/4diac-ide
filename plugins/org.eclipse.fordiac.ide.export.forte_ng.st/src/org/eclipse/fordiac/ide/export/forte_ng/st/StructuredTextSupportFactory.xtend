@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.export.forte_ng.st
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod
@@ -32,6 +33,8 @@ class StructuredTextSupportFactory implements ILanguageSupportFactory {
 			new STFunctionSupport(source)
 		} else if (source instanceof ECTransition) {
 			new ECTransitionSupport(source)
+		} else if (source instanceof GlobalConstants) {
+			new VarGlobalConstantsSupport(source)
 		} else if (source instanceof STGlobalConstsSource) {
 			new VarGlobalConstantsSupport(source)
 		} else if (source instanceof VarDeclaration) {
@@ -47,6 +50,7 @@ class StructuredTextSupportFactory implements ILanguageSupportFactory {
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", ECTransition, factory)
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STMethod, factory)
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STFunctionSource, factory)
+		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", GlobalConstants, factory)
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STGlobalConstsSource, factory)
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", VarDeclaration, factory)
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STFunctionBody, factory)

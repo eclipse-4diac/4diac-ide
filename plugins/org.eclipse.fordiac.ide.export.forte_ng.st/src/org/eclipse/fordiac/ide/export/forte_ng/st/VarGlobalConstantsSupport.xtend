@@ -17,14 +17,30 @@ package org.eclipse.fordiac.ide.export.forte_ng.st
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
-import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource
+
+import static extension org.eclipse.fordiac.ide.globalconstantseditor.util.GlobalConstantsParseUtil.parse
 
 @FinalFieldsConstructor
 class VarGlobalConstantsSupport extends StructuredTextSupport {
-	final STGlobalConstsSource source
+	final GlobalConstants globalConstants
+	STGlobalConstsSource source
+	
+	new(STGlobalConstsSource source) {
+		this(null as GlobalConstants)
+		this.source = source
+	}
+	
+	override prepare(Map<?, ?> options) {
+		if (source === null && errors.empty) {
+			source = globalConstants.parse(errors, warnings, infos)
+		}
+		return source !== null
+	}
 
 	override generate(Map<?, ?> options) throws ExportException {
 		prepare(options)
@@ -81,9 +97,4 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 		else
 			source.containedDependencies
 	}
-
-	override prepare(Map<?, ?> options) {
-		return true
-	}
-
 }
