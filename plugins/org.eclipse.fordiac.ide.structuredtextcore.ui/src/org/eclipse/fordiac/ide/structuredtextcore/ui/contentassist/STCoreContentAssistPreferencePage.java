@@ -33,6 +33,7 @@ public class STCoreContentAssistPreferencePage extends AbstractPreferencePage {
 		GridLayoutFactory.swtDefaults().applyTo(contentAssistGroup);
 
 		final Composite contentAssistComposite = new Composite(contentAssistGroup, SWT.NONE);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(contentAssistComposite);
 		addField(new StringFieldEditor(STCoreContentAssistPreferences.COMPLETION_AUTO_ACTIVATION_CHARS,
 				Messages.STCoreContentAssistPreferencePage_AutoActivationTriggers, contentAssistComposite));
 		contentAssistGroup.pack();
