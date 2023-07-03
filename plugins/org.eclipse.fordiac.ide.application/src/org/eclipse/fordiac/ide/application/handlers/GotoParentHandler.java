@@ -39,25 +39,27 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class GotoParentHandler extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		final FBNetworkElement element = editor.getAdapter(FBNetworkElement.class);
+		if (editor != null) {
+			final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
+			final FBNetworkElement element = editor.getAdapter(FBNetworkElement.class);
 
-		if (null != element) {
-			// get parent (can be application, subapp, cfbinstance, cfbtype, subapptype)
-			final EObject model = element.eContainer().eContainer();
-			final IEditorPart newEditor = openEditor(model);
+			if (null != element) {
+				// get parent (can be application, subapp, cfbinstance, cfbtype, subapptype)
+				final EObject model = element.eContainer().eContainer();
+				final IEditorPart newEditor = openEditor(model);
 
-			if (null != newEditor) {
-				handleSelection(newEditor, element, selection);
+				if (null != newEditor) {
+					handleSelection(newEditor, element, selection);
+				}
 			}
 		}
 		return Status.OK_STATUS;
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_EDITOR_NAME);
 		if (null != editor) {
@@ -66,7 +68,8 @@ public class GotoParentHandler extends AbstractHandler {
 		}
 	}
 
-	private static void handleSelection(IEditorPart newEditor, FBNetworkElement element, ISelection selection) {
+	private static void handleSelection(final IEditorPart newEditor, final FBNetworkElement element,
+			final ISelection selection) {
 		final IInterfaceElement selIElement = getSelectedSubappInterfaceElement(selection, element);
 
 		if (null != selIElement) {
@@ -77,7 +80,8 @@ public class GotoParentHandler extends AbstractHandler {
 	}
 
 	/** check if the current selection is a single subapp interface element of our fbnetwork element */
-	private static IInterfaceElement getSelectedSubappInterfaceElement(ISelection selection, FBNetworkElement element) {
+	private static IInterfaceElement getSelectedSubappInterfaceElement(final ISelection selection,
+			final FBNetworkElement element) {
 		if ((selection instanceof StructuredSelection) && (((StructuredSelection) selection).size() == 1)) {
 			// only one element is selected
 			final Object selObj = ((StructuredSelection) selection).getFirstElement();
