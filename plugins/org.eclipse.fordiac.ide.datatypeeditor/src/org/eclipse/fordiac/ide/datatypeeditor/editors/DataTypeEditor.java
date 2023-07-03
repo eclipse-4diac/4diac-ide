@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -222,8 +223,8 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 				.createStructInterfaceSearch((StructuredType) dataTypeEntry.getTypeEditable());
 		final Set<INamedElement> fbTypes = search.performTypeLibBlockSearch(dataTypeEntry.getTypeLibrary());
 
-		fbTypes.stream().filter(SubAppType.class::isInstance).map(SubAppType.class::cast).forEach(sApp -> {
-			sApp.getInterfaceList().getAllInterfaceElements().stream()
+		fbTypes.stream().filter(FBType.class::isInstance).map(FBType.class::cast).forEach(fbType -> {
+			fbType.getInterfaceList().getAllInterfaceElements().stream()
 					.filter(i -> i.getTypeName().equals(dataTypeEntry.getTypeName()))
 					.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(el -> {
 						el.setType(dataTypeEntry.getType());
@@ -231,7 +232,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 							el.getValue().setValue("");
 						}
 					});
-			sApp.getTypeEntry().save();
+			fbType.getTypeEntry().save();
 		});
 
 	}

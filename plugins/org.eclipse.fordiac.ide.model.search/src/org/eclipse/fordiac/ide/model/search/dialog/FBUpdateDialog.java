@@ -22,9 +22,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.search.Messages;
 import org.eclipse.fordiac.ide.model.search.ModelSearchResultPage;
+import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructManipulatorSearch;
-import org.eclipse.fordiac.ide.model.search.types.SubAppSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -92,7 +92,7 @@ public class FBUpdateDialog extends MessageDialog {
 		searchResArea.setLayout(new GridLayout(1, true));
 		searchResArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final Set<INamedElement> result = performSearch(new SubAppSearch(dataTypeEntry),
+		final Set<INamedElement> result = performSearch(new FBInstanceSearch(dataTypeEntry),
 				new StructManipulatorSearch(dataTypeEntry));
 		if (result.isEmpty()) {
 			// No results - display just the info
@@ -135,12 +135,16 @@ public class FBUpdateDialog extends MessageDialog {
 		this.labelType = new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof final SubApp subapp) {
-					return subapp.isTyped() ? "Typed SubApp" : "Untyped SubApp";  //$NON-NLS-1$//$NON-NLS-2$
-				} else if (element instanceof final IInterfaceElement interfaceElem) {
+				if (element instanceof final SubApp subapp && subapp.isTyped()) {
+					return "Untyped SubApp"; //$NON-NLS-1$
+				}
+				if (element instanceof final IInterfaceElement interfaceElem) {
 					return interfaceElem.getTypeName();
-				} else if (element instanceof final StructManipulator manipulator) {
+				}
+				if (element instanceof final StructManipulator manipulator) {
 					return manipulator.getTypeName();
+				} else if (element instanceof final FBNetworkElement e) {
+					return e.getTypeName();
 				}
 				return super.getText(element);
 			}
@@ -148,7 +152,7 @@ public class FBUpdateDialog extends MessageDialog {
 	}
 
 	public void refresh() {
-		viewer.setInput(performSearch(new SubAppSearch(dataTypeEntry), new StructManipulatorSearch(dataTypeEntry)));
+		viewer.setInput(performSearch(new FBInstanceSearch(dataTypeEntry), new StructManipulatorSearch(dataTypeEntry)));
 	}
 
 	protected Set<INamedElement> performStructSearch() {
@@ -157,7 +161,7 @@ public class FBUpdateDialog extends MessageDialog {
 	}
 
 	protected Set<INamedElement> performSubAppSearch() {
-		final InstanceSearch subAppSearch = new SubAppSearch(dataTypeEntry);
+		final InstanceSearch subAppSearch = new FBInstanceSearch(dataTypeEntry);
 		return subAppSearch.performCompleteSearch();
 	}
 
