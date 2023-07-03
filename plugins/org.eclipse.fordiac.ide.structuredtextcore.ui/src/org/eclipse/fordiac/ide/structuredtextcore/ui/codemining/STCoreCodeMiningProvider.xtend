@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.codemining
 
 import com.google.inject.Inject
+import java.util.Set
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
@@ -112,7 +113,7 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 	def dispatch void createCodeMinings(STFeatureExpression expression, IDocument document,
 		IAcceptor<? super ICodeMining> acceptor) throws BadLocationException {
 		if (isEnableReferencedVariablesCodeMinings && expression.call) {
-			val referencedVariables = expression.referencedNonLocalVariables.toSet
+			val referencedVariables = expression.findReferencedNonLocalVariables
 			if (!referencedVariables.empty) {
 				val node = NodeModelUtils.findActualNodeFor(expression)
 				if (node !== null) {
@@ -124,12 +125,25 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 		}
 	}
 
-	def protected Iterable<INamedElement> getReferencedNonLocalVariables(STFeatureExpression expression) {
+	def protected Set<INamedElement> findReferencedNonLocalVariables(STFeatureExpression expression) {
+		val visitedCallables = newHashSet
+		val referencedVariables = newHashSet
+		expression.findReferencedNonLocalVariables(visitedCallables, referencedVariables)
+		referencedVariables
+	}
+
+	def protected void findReferencedNonLocalVariables(STFeatureExpression expression, Set<ICallable> visitedCallables,
+		Set<INamedElement> result) {
 		switch (feature:expression.feature) {
-			ICallable case feature.eResource == expression.eResource: feature.getAllContentsOfType(STFeatureExpression).flatMap[referencedNonLocalVariables]
-			VarDeclaration: #[feature]
-			STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock: #[feature]
-			default: emptyList
+			VarDeclaration,
+			STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock:
+				result += feature
+			ICallable case expression.call && feature.eResource == expression.eResource:
+				if (visitedCallables += feature) {
+					feature.getAllContentsOfType(STFeatureExpression).forEach [
+						findReferencedNonLocalVariables(visitedCallables, result)
+					]
+				}
 		}
 	}
 }
