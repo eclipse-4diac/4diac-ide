@@ -71,12 +71,10 @@ public class TrimHandler extends AbstractHandler {
 	}
 
 	private static IContainerEditPart getContainerEditPart(final ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structSel = (IStructuredSelection) selection;
+		if (selection instanceof final IStructuredSelection structSel) {
 			if (structSel.size() == 1) {
 				final Object firstElement = structSel.getFirstElement();
-				if (firstElement instanceof IContainerEditPart) {
-					final IContainerEditPart containerEP = (IContainerEditPart) firstElement;
+				if (firstElement instanceof final IContainerEditPart containerEP) {
 					if (!(containerEP.getModel() instanceof SubApp)) {
 						return containerEP;
 					}
@@ -93,12 +91,11 @@ public class TrimHandler extends AbstractHandler {
 		return null;
 	}
 
-	private static int adjustCommentWidth(final int commentWidth, final List<Object> children) {
+	private static int adjustCommentWidth(final int commentWidth, final List<? extends EditPart> children) {
 		final int widestInput = children.stream().filter(Objects::nonNull)
 				.filter(UntypedSubAppInterfaceElementEditPart.class::isInstance)
 				.map(UntypedSubAppInterfaceElementEditPart.class::cast).filter(InterfaceEditPart::isInput)
-				.map(GraphicalEditPart.class::cast).mapToInt(e -> e.getFigure().getBounds().width()).max()
-				.orElse(0);
+				.map(GraphicalEditPart.class::cast).mapToInt(e -> e.getFigure().getBounds().width()).max().orElse(0);
 		final int widestOutput = children.stream().filter(Objects::nonNull)
 				.filter(UntypedSubAppInterfaceElementEditPart.class::isInstance)
 				.map(UntypedSubAppInterfaceElementEditPart.class::cast)
