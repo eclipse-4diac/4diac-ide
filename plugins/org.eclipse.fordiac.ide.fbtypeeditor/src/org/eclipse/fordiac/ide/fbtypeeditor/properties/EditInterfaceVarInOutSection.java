@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ *                    Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,15 +10,16 @@
  *
  * Contributors:
  *   Fabio Gandolfi - initial API and implementation and/or initial documentation
+ *   Martin Jobst - lock editing for function FBs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -34,6 +36,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -46,11 +49,13 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -58,11 +63,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends AbstractSection
-		implements I4diacNatTableUtil {
+public class EditInterfaceVarInOutSection extends AbstractSection implements I4diacNatTableUtil {
 
 	private ListDataProvider<VarDeclaration> inputProvider;
 	private NatTable inputTable;
+	private AddDeleteReorderListWidget inputButtons;
 
 	protected Map<String, List<String>> typeSelection = new HashMap<>();
 
@@ -78,35 +83,31 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 		inputsGroup.setLayout(new GridLayout(2, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final AddDeleteReorderListWidget inputButtons = new AddDeleteReorderListWidget();
+		inputButtons = new AddDeleteReorderListWidget();
 
-		if (isEditable()) {
+		if (isShowTableEditButtons()) {
 			inputButtons.createControls(inputsGroup, getWidgetFactory());
 		}
 		setupInputTable(inputsGroup);
 
-		if (isEditable()) {
-			configureButtonList(inputButtons, inputTable, true);
+		if (isShowTableEditButtons()) {
+			configureButtonList(inputButtons, inputTable);
 		}
 	}
 
 	public void setupInputTable(final Group inputsGroup) {
-		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
-		if (isEditable()) {
-			rule = IEditableRule.ALWAYS_EDITABLE;
-		}
 		inputProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, true);
+				new VarDeclarationColumnProvider(), getSectionEditableRule(),
+				new DataTypeSelectionButton(typeSelection), this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.configure();
 	}
 
-	protected void configureButtonList(final AddDeleteReorderListWidget buttons, final NatTable table,
-			final boolean inputs) {
-		buttons.bindToTableViewer(table, this, ref -> newCreateCommand((IInterfaceElement) ref, inputs),
+	protected void configureButtonList(final AddDeleteReorderListWidget buttons, final NatTable table) {
+		buttons.bindToTableViewer(table, this, ref -> newCreateCommand((IInterfaceElement) ref),
 				ref -> newDeleteCommand((IInterfaceElement) ref), ref -> newOrderCommand((IInterfaceElement) ref, true),
 				ref -> newOrderCommand((IInterfaceElement) ref, false));
 	}
@@ -157,7 +158,7 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 
 	@Override
 	protected void setInputCode() {
-		// TODO Auto-generated method stub
+		// not needed
 	}
 
 	@Override
@@ -171,9 +172,13 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 		inputTable.refresh();
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void setTableInput() {
 		((FordiacInterfaceListProvider<VarDeclaration>) inputProvider)
 				.setInput(getType().getInterfaceList().getInOutVars());
+		if (isShowTableEditButtons()) {
+			inputButtons.setCreateButtonEnablement(isEditable());
+		}
 		if (isEditable()) {
 			initTypeSelection(getDataTypeLib());
 		}
@@ -184,12 +189,12 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 		((VarDeclarationListProvider) inputProvider).setTypeLib(getDataTypeLib());
 	}
 
-	private CreationCommand newCreateCommand(final IInterfaceElement ie, final boolean isInput) {
-		return new CreateVarInOutCommand(getLastUsedDataType(getType().getInterfaceList(), isInput, ie),
-				getType().getInterfaceList(), getInsertingIndex(ie, isInput));
+	private CreationCommand newCreateCommand(final IInterfaceElement ie) {
+		return new CreateVarInOutCommand(getLastUsedDataType(getType().getInterfaceList(), ie),
+				getType().getInterfaceList(), getInsertingIndex(ie));
 	}
 
-	private CreationCommand newInsertCommand(final IInterfaceElement ie, final boolean isInput, final int index) {
+	private CreationCommand newInsertCommand(final IInterfaceElement ie, final int index) {
 		return new CreateVarInOutCommand(ie, getType().getInterfaceList(), index);
 	}
 
@@ -197,20 +202,15 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 		return new DeleteInterfaceCommand(selection);
 	}
 
-	private ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection, final boolean moveUp) {
+	private static ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection,
+			final boolean moveUp) {
 		return new ChangeInterfaceOrderCommand(selection, moveUp);
-
-	}
-
-	@Override
-	public boolean isEditable() {
-		return true;
 	}
 
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof final VarDeclaration varDec && varDec.isInOutVar()) {
-			cmd.add(newInsertCommand(varDec, isInput, index));
+			cmd.add(newInsertCommand(varDec, index));
 		}
 	}
 
@@ -229,14 +229,14 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
 		final List<String> elementaryTypes = dataTypeLib.getDataTypesSorted().stream()
-				.filter(type -> !(type instanceof StructuredType)).map(DataType::getName).collect(Collectors.toList());
+				.filter(type -> !(type instanceof StructuredType)).map(DataType::getName).toList();
 		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
 		final List<String> structuredTypes = dataTypeLib.getDataTypesSorted().stream()
-				.filter(StructuredType.class::isInstance).map(DataType::getName).collect(Collectors.toList());
+				.filter(StructuredType.class::isInstance).map(DataType::getName).toList();
 		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
 
-	protected static DataType getLastUsedDataType(final InterfaceList interfaceList, final boolean isInput,
+	protected static DataType getLastUsedDataType(final InterfaceList interfaceList,
 			final IInterfaceElement interfaceElement) {
 		if (null != interfaceElement) {
 			return interfaceElement.getType();
@@ -248,7 +248,7 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 		return IecTypes.ElementaryTypes.BOOL; // bool is default
 	}
 
-	protected int getInsertingIndex(final IInterfaceElement interfaceElement, final boolean isInput) {
+	protected int getInsertingIndex(final IInterfaceElement interfaceElement) {
 		if (null != interfaceElement) {
 			final InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
 			return getInsertingIndex(interfaceElement, getVarInOutList(interfaceList));
@@ -266,4 +266,30 @@ public class EditInterfaceVarInOutSection<T extends IInterfaceElement> extends A
 		return interfaceList.getInOutVars();
 	}
 
+	@Override
+	public boolean isEditable() {
+		return !(EcoreUtil.getRootContainer(getType()) instanceof FunctionFBType);
+	}
+
+	@SuppressWarnings("static-method") // should be overridden by subclasses
+	public boolean isShowTableEditButtons() {
+		return true;
+	}
+
+	protected IEditableRule getSectionEditableRule() {
+		return sectionEditableRule;
+	}
+
+	private final IEditableRule sectionEditableRule = new IEditableRule() {
+
+		@Override
+		public boolean isEditable(final int columnIndex, final int rowIndex) {
+			return EditInterfaceVarInOutSection.this.isEditable();
+		}
+
+		@Override
+		public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
+			return EditInterfaceVarInOutSection.this.isEditable();
+		}
+	};
 }
