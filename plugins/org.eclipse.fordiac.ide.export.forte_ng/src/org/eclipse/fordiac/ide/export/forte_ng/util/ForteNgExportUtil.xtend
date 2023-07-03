@@ -12,6 +12,7 @@
  */
 package org.eclipse.fordiac.ide.export.forte_ng.util
 
+import java.util.regex.Pattern
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType
@@ -43,7 +44,8 @@ final class ForteNgExportUtil {
 
 	def static CharSequence generateName(VarDeclaration variable) {
 		switch (root : variable.rootContainer) {
-			BaseFBType case root.internalConstVars.contains(variable): '''«VARIABLE_EXPORT_PREFIX»const_«variable.name»'''
+			BaseFBType case root.internalConstVars.contains(
+				variable): '''«VARIABLE_EXPORT_PREFIX»const_«variable.name»'''
 			AdapterType: '''«VARIABLE_EXPORT_PREFIX»«variable.name»()'''
 			default: '''«VARIABLE_EXPORT_PREFIX»«variable.name»'''
 		}
@@ -97,6 +99,12 @@ final class ForteNgExportUtil {
 			WstringType: "WSTRING"
 			default: type.name
 		}
+	}
+
+	static final Pattern END_COMMENT_PATTERN = Pattern.compile("\\*/")
+
+	def static CharSequence escapeMultilineCommentString(CharSequence string) {
+		END_COMMENT_PATTERN.matcher(string).replaceAll("* /")
 	}
 
 	private new() {
