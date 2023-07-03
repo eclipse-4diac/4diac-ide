@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import java.util.ConcurrentModificationException;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -27,41 +25,67 @@ class OutMappedInOutVarsEList extends EObjectContainmentEList<VarDeclaration> {
 
 	@Override
 	protected void didSet(final int index, final VarDeclaration newObject, final VarDeclaration oldObject) {
-		checkConcurrentModification(index, oldObject);
-		getInterfaceList().getOutMappedInOutVars().set(index, OutMappedInOutVarAdapter.adapt(newObject));
+		updateInOutVarReference(index, newObject);
 	}
 
 	@Override
 	protected void didAdd(final int index, final VarDeclaration newObject) {
-		getInterfaceList().getOutMappedInOutVars().add(index, OutMappedInOutVarAdapter.adapt(newObject));
+		updateInOutVarReference(index, newObject);
 	}
 
 	@Override
 	protected void didRemove(final int index, final VarDeclaration oldObject) {
-		checkConcurrentModification(index, oldObject);
-		getInterfaceList().getOutMappedInOutVars().remove(index);
+		removeInOutVarReference(index, oldObject);
 	}
 
 	@Override
 	protected void didClear(final int size, final Object[] oldObjects) {
 		if (oldObjects != null) {
 			for (int i = 0; i < size; ++i) {
-				checkConcurrentModification(i, (VarDeclaration) oldObjects[i]);
+				removeInOutVarReference(i, (VarDeclaration) oldObjects[i]);
 			}
 		}
-		getInterfaceList().getOutMappedInOutVars().clear();
 	}
 
 	@Override
 	protected void didMove(final int index, final VarDeclaration movedObject, final int oldIndex) {
-		checkConcurrentModification(oldIndex, movedObject);
-		getInterfaceList().getOutMappedInOutVars().move(index, oldIndex);
+		updateInOutVarReference(index, movedObject);
 	}
 
-	protected void checkConcurrentModification(final int index, final VarDeclaration varDeclaration) {
-		if (index >= getInterfaceList().getOutMappedInOutVars().size() || OutMappedInOutVarAdapter
-				.find(varDeclaration) != getInterfaceList().getOutMappedInOutVars().get(index)) {
-			throw new ConcurrentModificationException("Direct change to outMappedInOutVars"); //$NON-NLS-1$
+	protected void updateInOutVarReference(final int index, final VarDeclaration varDeclaration) {
+		// get corresponding inOutVar (must be present already)
+		if (index >= getInterfaceList().getInOutVars().size()) {
+			throw new IllegalStateException("No corresponding inOutVar found for outMappedInOutVar"); //$NON-NLS-1$
+		}
+		final VarDeclaration inOutVar = getInterfaceList().getInOutVars().get(index);
+		// get adapter (must be present if inOutVar is in an interface list)
+		final OutMappedInOutVarAdapter adapter = OutMappedInOutVarAdapter.findAdapter(inOutVar);
+		if (adapter == null) {
+			throw new IllegalStateException("No OutMappedInOutVarAdapter found on corresponding inOutVar"); //$NON-NLS-1$
+		}
+		// update reference (should point to varDeclaration already, unless this is a direct change)
+		if (adapter.getOutMappedInOutVar() == null) {
+			adapter.setOutMappedInOutVar(varDeclaration);
+		} else if (adapter.getOutMappedInOutVar() != varDeclaration) {
+			throw new IllegalStateException("Different outMappedInOutVar referenced in corresponding inOutVar"); //$NON-NLS-1$
+		}
+	}
+
+	protected void removeInOutVarReference(final int index, final VarDeclaration varDeclaration) {
+		// get corresponding inOutVar (may be already gone or a different one if moved)
+		if (index >= getInterfaceList().getInOutVars().size()) {
+			return; // already gone
+		}
+		final VarDeclaration inOutVar = getInterfaceList().getInOutVars().get(index);
+		// get adapter (must be present if inOutVar is in an interface list)
+		final OutMappedInOutVarAdapter adapter = OutMappedInOutVarAdapter.findAdapter(inOutVar);
+		if (adapter == null) {
+			throw new IllegalStateException("No OutMappedInOutVarAdapter found on corresponding inOutVar"); //$NON-NLS-1$
+		}
+		// remove reference if still pointing to the old outMappedInOutVar
+		// (should only happen if this is a direct change)
+		if (adapter.getOutMappedInOutVar() == varDeclaration) {
+			adapter.setOutMappedInOutVar(null);
 		}
 	}
 
