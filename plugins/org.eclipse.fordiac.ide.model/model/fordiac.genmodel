@@ -444,6 +444,10 @@
           body="return getInputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getVisibleOutputVars"
           body="return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInOutVarOpposite"
+          body="return InterfaceListAnnotations.getInOutVarOpposite(this, inOutVar);">
+        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInOutVarOpposite/inOutVar"/>
+      </genOperations>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//IVarElement">
       <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//IVarElement/varDeclarations"/>

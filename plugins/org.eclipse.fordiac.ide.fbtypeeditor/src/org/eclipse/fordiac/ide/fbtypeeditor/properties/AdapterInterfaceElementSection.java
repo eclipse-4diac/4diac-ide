@@ -76,11 +76,15 @@ public class AdapterInterfaceElementSection extends AbstractDoubleColumnSection 
 
 	@Override
 	protected void setInputInit() {
-		if (pinInfoBasicWidget != null) {
-			pinInfoBasicWidget.initialize(getType(), this::executeCommand);
-			pinInfoBasicWidget.getTypeSelectionWidget().initialize(getType(), getTypeSelectionContentProvider());
-		}
+		setupPinInfoWidget(getType());
 
+	}
+
+	protected void setupPinInfoWidget(final IInterfaceElement ie) {
+		if (pinInfoBasicWidget != null) {
+			pinInfoBasicWidget.initialize(ie, this::executeCommand);
+			pinInfoBasicWidget.getTypeSelectionWidget().initialize(ie, getTypeSelectionContentProvider());
+		}
 	}
 
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {

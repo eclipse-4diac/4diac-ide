@@ -121,4 +121,15 @@ final class InterfaceListAnnotations {
 		throw new UnsupportedOperationException("Helper class should not be instantiated!"); //$NON-NLS-1$
 	}
 
+	public static VarDeclaration getInOutVarOpposite(final InterfaceList il, final VarDeclaration inOutVar) {
+		if (inOutVar.isInOutVar()) {
+			if (inOutVar.isIsInput()) {
+				return il.getOutMappedInOutVars().get(il.getInOutVars().indexOf(inOutVar));
+			}
+			return il.getInOutVars().get(il.getOutMappedInOutVars().indexOf(inOutVar));
+		}
+		// if no inout var return the given var as backup
+		return inOutVar;
+	}
+
 }
