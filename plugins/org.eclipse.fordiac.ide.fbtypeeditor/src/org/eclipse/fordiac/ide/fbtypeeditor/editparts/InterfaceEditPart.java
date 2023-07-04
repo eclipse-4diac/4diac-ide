@@ -153,6 +153,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	@Override
 	public void activate() {
 		super.activate();
+		checkAssociatedCommentType();
 		// tell the root edipart that we are here and that it should add the type comment children
 		refreshTypeRoot();
 	}
@@ -288,6 +289,21 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	@Override
 	public INamedElement getINamedElement() {
 		return getCastedModel();
+	}
+
+	private void checkAssociatedCommentType() {
+		final CommentTypeEditPart ep = findAssociatedCommentTypeEP();
+		if (ep != null && ep.getReferencedInterface() == null) {
+			// the associated comment type editpart was created before us
+			ep.setupReferencedEP();
+		}
+	}
+
+	private CommentTypeEditPart findAssociatedCommentTypeEP() {
+		return (CommentTypeEditPart) getViewer().getEditPartRegistry().values().stream()
+				.filter(CommentTypeEditPart.class::isInstance)
+				.filter(c -> this.getModel().equals(((CommentTypeEditPart) c).getInterfaceElement())).findAny()
+				.orElse(null);
 	}
 
 }
