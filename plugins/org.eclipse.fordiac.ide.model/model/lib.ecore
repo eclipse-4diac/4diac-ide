@@ -1195,7 +1195,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="inOutVars" upperBound="-1"
         eType="#//VarDeclaration" containment="true" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outMappedInOutVars" upperBound="-1"
-        eType="#//VarDeclaration" changeable="false" containment="true" resolveProxies="false">
+        eType="#//VarDeclaration" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/fordiac/ide/model/MetaData">
         <details key="synthetic" value="true"/>
       </eAnnotations>

@@ -22,16 +22,20 @@ import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
+import org.eclipse.fordiac.ide.model.dataimport.FCTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FunctionFBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
@@ -71,10 +75,14 @@ public class TypeFromTemplateCreator {
 	@SuppressWarnings("static-method")  // allow subclasses to override
 	protected void performTypeSpecificSetup(final LibraryElement type) {
 		// hook for subclasses to perform any type specific setup, e.g., saveassubapptype -> setup interface and network
-		if (type instanceof AdapterType) {
+		if (type instanceof final AdapterType adpType) {
 			// for adapter types we need to also set the name for the adapterfbtype entry
-			final AdapterType adpType = (AdapterType) type;
 			adpType.getAdapterFBType().setName(type.getName());
+		}
+		if ((type instanceof final FunctionFBType functionFBType)
+				&& (functionFBType.getBody() instanceof final TextFunctionBody body)) {
+			// for function types we need to also set the name inside the body
+			body.setText(body.getText().replace("Function", functionFBType.getName())); //$NON-NLS-1$
 		}
 	}
 
@@ -86,15 +94,25 @@ public class TypeFromTemplateCreator {
 					return Files.newInputStream(typeTemplate.toPath());
 				}
 			};
-		} else if (entry instanceof DataTypeEntry) {
+		}
+		if (entry instanceof DataTypeEntry) {
 			return new DataTypeImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {
 					return Files.newInputStream(typeTemplate.toPath());
 				}
 			};
-		} else if (entry instanceof DeviceTypeEntry) {
+		}
+		if (entry instanceof DeviceTypeEntry) {
 			return new DEVImporter(entry.getFile()) {
+				@Override
+				protected InputStream getInputStream() throws IOException {
+					return Files.newInputStream(typeTemplate.toPath());
+				}
+			};
+		}
+		if (entry instanceof FunctionFBTypeEntry) {
+			return new FCTImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {
 					return Files.newInputStream(typeTemplate.toPath());

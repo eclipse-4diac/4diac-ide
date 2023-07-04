@@ -28,8 +28,12 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.HideConnectionCommand;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -102,7 +106,7 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 				addHideCommand(commands, conEP.getModel(), !isVisible);
 			} else if (obj instanceof final AbstractFBNElementEditPart fbEP) {
 				fbEP.getModel().getInterface().getAllInterfaceElements()
-				.forEach(pin -> togglePinConnections(commands, pin, isVisible));
+						.forEach(pin -> togglePinConnections(commands, pin, isVisible));
 			} else if (obj instanceof final InterfaceEditPart iep) {
 				togglePinConnections(commands, iep.getModel(), isVisible);
 			}
@@ -164,8 +168,11 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 
 	private static boolean hasConnection(final Object ep) {
 		if (ep instanceof final AbstractFBNElementEditPart fbEP) {
+			if (isInViewer(fbEP.getModel())) {
+				return false;
+			}
 			for (final IInterfaceElement ie : fbEP.getModel().getInterface().getAllInterfaceElements()) {
-				if(hasConnection(ie)) {
+				if (hasConnection(ie)) {
 					return true;
 				}
 			}
@@ -174,12 +181,29 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 	}
 
 	private static boolean hasConnection(final IInterfaceElement ie) {
-		return (ie.isIsInput() && !ie.getInputConnections().isEmpty() ||
-				!ie.isIsInput() && !ie.getOutputConnections().isEmpty());
+		if (ie.getFBNetworkElement() != null && isInViewer(ie.getFBNetworkElement())) {
+			return false;
+		}
+		return (ie.isIsInput() && !ie.getInputConnections().isEmpty()
+				|| !ie.isIsInput() && !ie.getOutputConnections().isEmpty());
 	}
 
 	private static boolean isConnection(final Object ep) {
-		return ep instanceof final ConnectionEditPart cep && cep.getFigure() != null;
+		return ep instanceof final ConnectionEditPart cep && cep.getFigure() != null && !isInViewer(cep.getModel());
+	}
+
+	private static boolean isInViewer(final Connection model) {
+		if (model.getFBNetwork().eContainer() instanceof final FBNetworkElement fbnEl) {
+			return isInViewer(fbnEl);
+		}
+		return false;
+	}
+
+	private static boolean isInViewer(final FBNetworkElement fbnEl) {
+		if (((fbnEl instanceof final SubApp subApp) && (subApp.isTyped())) || (fbnEl instanceof CFBInstance)) {
+			return true;
+		}
+		return FBNetworkElementHelper.isContainedInTypedInstance(fbnEl);
 	}
 
 	@Override
@@ -192,7 +216,7 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 				setElementText(element, isVisible, viewer.getSelectedEditParts().size() == 1
 						&& viewer.getSelectedEditParts().get(0) instanceof ConnectionEditPart);
 			}
-	}
+		}
 	}
 
 	private static void setElementText(final UIElement element, final boolean isVisible, final boolean isSingular) {

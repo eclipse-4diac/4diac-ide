@@ -36,7 +36,7 @@ import org.eclipse.xtext.validation.Issue
 
 import static extension org.eclipse.emf.common.util.URI.createPlatformResourceURI
 
-class STCoreParseUtil {
+final class STCoreParseUtil {
 
 	def static parse(IResourceServiceProvider serviceProvider, XtextResourceSet resourceSet, String text,
 		ParserRule entryPoint, LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues,

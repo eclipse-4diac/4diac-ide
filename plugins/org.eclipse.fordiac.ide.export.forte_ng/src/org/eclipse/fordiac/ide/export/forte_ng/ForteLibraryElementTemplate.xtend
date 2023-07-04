@@ -23,6 +23,7 @@ import java.util.Map
 import java.util.Set
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -30,7 +31,6 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.xtext.EcoreUtil2.*
-import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 
 abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends ForteNgExportTemplate {
 
@@ -54,11 +54,11 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
 		 ***
 		 *** Name: «type.name»
-		 *** Description: «type.comment»
+		 *** Description: «type.comment.escapeMultilineCommentString»
 		 *** Version:
-		«FOR info : type.versionInfo»
-			***     «info.version»: «info.date»/«info.author» - «info.organization» - «info.remarks»
-		«ENDFOR»
+		 «FOR info : type.versionInfo»
+		 	***     «info.version.escapeMultilineCommentString»: «info.date.escapeMultilineCommentString»/«info.author.escapeMultilineCommentString» - «info.organization.escapeMultilineCommentString» - «info.remarks.escapeMultilineCommentString»
+		 «ENDFOR»
 		 *************************************************************************/
 	'''
 

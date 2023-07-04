@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
@@ -97,11 +98,13 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 	protected class STCoreProposalCreator extends DefaultProposalCreator {
 
 		private final ContentAssistContext contentAssistContext;
+		private final IQualifiedNameConverter qualifiedNameConverter;
 
 		public STCoreProposalCreator(final ContentAssistContext contentAssistContext, final String ruleName,
 				final IQualifiedNameConverter qualifiedNameConverter) {
 			super(contentAssistContext, ruleName, qualifiedNameConverter);
 			this.contentAssistContext = contentAssistContext;
+			this.qualifiedNameConverter = qualifiedNameConverter;
 		}
 
 		@Override
@@ -109,11 +112,14 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 			final ICompletionProposal result = super.apply(candidate);
 			if (result instanceof final STCoreConfigurableCompletionProposal configurableResult
 					&& isCallableDescription(candidate)
-					&& candidate.getEObjectOrProxy() instanceof final ICallable callable) {
+					&& EcoreUtil.resolve(candidate.getEObjectOrProxy(),
+							contentAssistContext.getResource()) instanceof final ICallable callable) {
 				final String nameProposal = configurableResult.getReplacementString();
 				final int replacementOffset = configurableResult.getReplacementOffset();
 				final STCoreProposalString proposal = getCallableParameterProposal(callable, nameProposal);
 				configurableResult.setReplacementString(proposal.toString());
+				configurableResult.setDisplayString(getStyledDisplayString(callable,
+						qualifiedNameConverter.toString(candidate.getQualifiedName()), callable.getName()));
 				if (proposal.getRegions().isEmpty()) {
 					configurableResult.setCursorPosition(proposal.length());
 					configurableResult.setSelectionStart(replacementOffset + proposal.length() - 1);

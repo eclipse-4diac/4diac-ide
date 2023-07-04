@@ -61,7 +61,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -76,13 +75,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 class FBNetworkImporter extends CommonElementImporter {
 
@@ -124,11 +120,9 @@ class FBNetworkImporter extends CommonElementImporter {
 	private void moveElementsToGroup() {
 		getFbNetwork().getNetworkElements().stream().forEach(el -> {
 			final Attribute groupAttr = el.getAttribute(LibraryElementTags.GROUP_NAME);
-			if (groupAttr != null) {
-				if (fbNetworkElementMap.get(groupAttr.getValue()) instanceof final Group group) {
-					el.setGroup(group);
-					el.deleteAttribute(LibraryElementTags.GROUP_NAME);
-				}
+			if ((groupAttr != null) && (fbNetworkElementMap.get(groupAttr.getValue()) instanceof final Group group)) {
+				el.setGroup(group);
+				el.deleteAttribute(LibraryElementTags.GROUP_NAME);
 			}
 		});
 	}
@@ -176,7 +170,8 @@ class FBNetworkImporter extends CommonElementImporter {
 			group.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(height));
 		}
 
-		// add FB to FBnetwork so that parameter parsing can create error markers correctly.
+		// add FB to FBnetwork so that parameter parsing can create error markers
+		// correctly.
 		fbNetwork.getNetworkElements().add(group);
 		fbNetworkElementMap.put(group.getName(), group);
 		proceedToEndElementNamed(LibraryElementTags.GROUP_ELEMENT);
@@ -217,7 +212,8 @@ class FBNetworkImporter extends CommonElementImporter {
 		readNameCommentAttributes(fb);
 		getXandY(fb);
 
-		// add FB to FBnetwork so that parameter parsing can create error markers correctly.
+		// add FB to FBnetwork so that parameter parsing can create error markers
+		// correctly.
 		fbNetwork.getNetworkElements().add(fb);
 		fbNetworkElementMap.put(fb.getName(), fb);
 
@@ -239,7 +235,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		final FBTypeEntry entry = getTypeEntry(typeFbElement);
 
 		if (null == entry) {
-			return createTypeErrorMarkerFB(typeFbElement, getTypeLibrary(),
+			return FordiacMarkerHelper.createTypeErrorMarkerFB(typeFbElement, getTypeLibrary(),
 					LibraryElementFactory.eINSTANCE.createFBType());
 		}
 		final FBType type = entry.getType();
@@ -260,14 +256,14 @@ class FBNetworkImporter extends CommonElementImporter {
 	protected <T extends Connection> void parseConnectionList(final EClass conType, final EList<T> connectionlist,
 			final String parentNodeName) throws XMLStreamException, TypeImportException {
 		processChildren(parentNodeName, name -> {
-			final T connection = parseConnection(conType);
-			if (null != connection) {
+			T connection = parseConnection(conType);
+
+			if (connection != null) {
 				connectionlist.add(connection);
 			}
 			proceedToEndElementNamed(LibraryElementTags.CONNECTION_ELEMENT);
 			return true;
 		});
-
 		checkAndHandleMultipleInputConnections(connectionlist);
 	}
 
@@ -330,6 +326,16 @@ class FBNetworkImporter extends CommonElementImporter {
 		}
 		parseConnectionRouting(connection);
 		parseAttributes(connection);
+
+		if (builder.isEmptyConnection()) {
+			// if 4diac should be capable of seeing the error marker in the FBNetworkEditor
+			// then error marker blocks need to be created at this location
+			ErrorMarkerBuilder createErrorMarkerBuilder = ErrorMarkerBuilder
+					.createErrorMarkerBuilder("Connection parse error at line: " + getLineNumber());
+			createErrorMarkerBuilder.setLineNumber(getLineNumber());
+			errorMarkerBuilders.add(createErrorMarkerBuilder);
+			return null;
+		}
 
 		return connection;
 	}
@@ -418,7 +424,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	}
 
 	protected void handleMissingConnectionSource(final Connection connection, final ConnectionBuilder builder) {
-		final FBNetworkElement sourceFB = createErrorMarkerFB(builder.getSourceFbName());
+		final FBNetworkElement sourceFB = FordiacMarkerHelper.createErrorMarkerFB(builder.getSourceFbName());
 		builder.setSrcInterfaceList(sourceFB.getInterface());
 		getFbNetwork().getNetworkElements().add(sourceFB);
 		sourceFB.setName(NameRepository.createUniqueName(sourceFB, sourceFB.getName()));
@@ -440,7 +446,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	protected void handleMissingConnectionDestination(final Connection connection, final ConnectionBuilder builder) {
 		// check if there is already one
-		final FBNetworkElement destinationFb = createErrorMarkerFB(builder.getDestFbName());
+		final FBNetworkElement destinationFb = FordiacMarkerHelper.createErrorMarkerFB(builder.getDestFbName());
 		builder.setDestInterfaceList(destinationFb.getInterface());
 		getFbNetwork().getNetworkElements().add(destinationFb);
 		destinationFb.setName(NameRepository.createUniqueName(destinationFb, destinationFb.getName()));
@@ -485,31 +491,13 @@ class FBNetworkImporter extends CommonElementImporter {
 			}
 			// we don't have an any_adapter return generic adapter, may not be reparable
 			return LibraryElementFactory.eINSTANCE.createAdapterType();
-		} else if (connection instanceof DataConnection) {
+		}
+		if (connection instanceof DataConnection) {
 			return IecTypes.GenericTypes.ANY;
 		}
 		return null;
 	}
 
-	protected static ErrorMarkerFBNElement createErrorMarkerFB(final String name) {
-		final ErrorMarkerFBNElement createErrorMarkerFBNElement = LibraryElementFactory.eINSTANCE
-				.createErrorMarkerFBNElement();
-		createErrorMarkerFBNElement.setName(name);
-		createErrorMarkerFBNElement.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		final Position position = LibraryElementFactory.eINSTANCE.createPosition();
-		position.setX(0);
-		position.setY(0);
-		createErrorMarkerFBNElement.setPosition(position);
-		return createErrorMarkerFBNElement;
-	}
-
-	protected static FBNetworkElement createTypeErrorMarkerFB(final String typeFbElement, final TypeLibrary typeLibrary,
-			final FBType fbType) {
-		final ErrorMarkerFBNElement errorFb = createErrorMarkerFB(typeFbElement);
-		final TypeEntry entry = typeLibrary.createErrorTypeEntry(typeFbElement, fbType);
-		errorFb.setTypeEntry(entry);
-		return errorFb;
-	}
 
 	private void createConnectionErrorMarkerBuilder(final String message, final String sourceIdentifier,
 			final String destinationIdentifier, final EObject target) {
@@ -605,7 +593,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		if (path == null) {
 			return null;
 		}
-		final String[] split = path.split("\\."); //$NON-NLS-1$
+		final String[] split = path.split("\\.", -1); //$NON-NLS-1$
 
 		if (1 == split.length) {
 			if (isInput) {
@@ -631,8 +619,10 @@ class FBNetworkImporter extends CommonElementImporter {
 		return null;
 	}
 
-	/** Check if the element that contains the fbnetwork has an interface element with the given name. this is needed
-	 * for subapps, cfbs, devices and resources */
+	/**
+	 * Check if the element that contains the fbnetwork has an interface element
+	 * with the given name. this is needed for subapps, cfbs, devices and resources
+	 */
 	protected IInterfaceElement getContainingInterfaceElement(final String interfaceElement, final EClass conType,
 			final boolean isInput) {
 		return getInterfaceElement(interfaceList, interfaceElement, conType, !isInput); // for connections to the
@@ -718,10 +708,12 @@ class FBNetworkImporter extends CommonElementImporter {
 		return variable;
 	}
 
-	/** returns an valid dx, dy integer value
+	/**
+	 * returns an valid dx, dy integer value
 	 *
 	 * @param value
-	 * @return if value is valid the converted int of that otherwise 0 */
+	 * @return if value is valid the converted int of that otherwise 0
+	 */
 	private static int parseConnectionValue(final String value) {
 		try {
 			return CoordinateConverter.INSTANCE.convertFrom1499XML(value);

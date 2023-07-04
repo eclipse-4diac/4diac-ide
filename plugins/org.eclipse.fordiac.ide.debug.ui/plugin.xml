@@ -71,6 +71,40 @@
             </enablement>
          </contextualLaunch>
       </shortcut>
+      <shortcut
+            class="org.eclipse.fordiac.ide.debug.ui.function.FunctionFBLaunchShortcut"
+            icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/function.png"
+            id="org.eclipse.fordiac.ide.debug.ui.functionFBShortcut"
+            label="Evaluate Function FB"
+            modes="run, debug">
+         <contextualLaunch>
+            <contextLabel
+                  label="Run Function FB"
+                  mode="run">
+            </contextLabel>
+            <contextLabel
+                  label="Debug Function FB"
+                  mode="debug">
+            </contextLabel>
+            <enablement>
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IResource">
+                        <test
+                              property="org.eclipse.fordiac.ide.typemanagement.fbType"
+                              value="FunctionFBType">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </enablement>
+         </contextualLaunch>
+      </shortcut>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
@@ -98,6 +132,18 @@
                perspective="org.eclipse.debug.ui.DebugPerspective">
          </launchMode>
       </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.eclipse.fordiac.ide.debug.ui.function.FunctionFBLaunchConfigurationTabGroup"
+            id="org.eclipse.fordiac.ide.debug.ui.functionFBLaunchConfigurationTabGroup"
+            type="org.eclipse.fordiac.ide.debug.functionFBLaunch">
+         <launchMode
+               mode="run">
+         </launchMode>
+         <launchMode
+               mode="debug"
+               perspective="org.eclipse.debug.ui.DebugPerspective">
+         </launchMode>
+      </launchConfigurationTabGroup>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
@@ -110,6 +156,11 @@
             configTypeID="org.eclipse.fordiac.ide.debug.basicFBLaunch"
             icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_basic.png"
             id="org.eclipse.fordiac.ide.debug.ui.launchConfigurationTypeImage.basicFBLaunch">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.fordiac.ide.debug.functionFBLaunch"
+            icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/function.png"
+            id="org.eclipse.fordiac.ide.debug.ui.launchConfigurationTypeImage.functionFBLaunch">
       </launchConfigurationTypeImage>
    </extension>
    <extension

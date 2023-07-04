@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                          Johannes Kepler University Linz
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,33 +17,45 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.actions.CopyPasteData;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -58,11 +71,14 @@ public class PasteCommand extends Command {
 	private final Map<FBNetworkElement, FBNetworkElement> copiedElements = new HashMap<>();
 
 	private final CompoundCommand connCreateCmds = new CompoundCommand();
+	private final CompoundCommand createMarkersCmds = new CompoundCommand();
+	private final CompoundCommand updateTypeCmds = new CompoundCommand();
 
 	private int xDelta;
 	private int yDelta;
-	private boolean calcualteDelta = false;
+	private boolean calculateDelta = false;
 	private Point pasteRefPos;
+	private final TypeLibrary dstTypeLib;
 
 	/** Instantiates a new paste command.
 	 *
@@ -73,8 +89,8 @@ public class PasteCommand extends Command {
 		this.copyPasteData = copyPasteData;
 		this.dstFBNetwork = destination;
 		this.pasteRefPos = pasteRefPos;
-		calcualteDelta = true;
-
+		calculateDelta = true;
+		dstTypeLib = checkTypeLib(copyPasteData.srcNetwork(), destination);
 	}
 
 	public PasteCommand(final CopyPasteData copyPasteData, final FBNetwork destination, final int copyDeltaX,
@@ -83,6 +99,7 @@ public class PasteCommand extends Command {
 		this.dstFBNetwork = destination;
 		xDelta = copyDeltaX;
 		yDelta = copyDeltaY;
+		dstTypeLib = checkTypeLib(copyPasteData.srcNetwork(), destination);
 	}
 
 	@Override
@@ -99,6 +116,13 @@ public class PasteCommand extends Command {
 			copyPasteData.elements().forEach(this::copyAndCreateFB);
 			copyConnections();
 			ElementSelector.selectViewObjects(copiedElements.values());
+
+			if (dstTypeLib != null) {
+				createUpdateTypeAndErrorMarkerCommands();
+			}
+			createMarkersCmds.execute();
+			updateTypeCmds.execute();
+
 			if (!ErrorMessenger.unpauseMessages().isEmpty()) {
 				ErrorMessenger.popUpErrorMessage(Messages.PasteRecreateNotPossible, ErrorMessenger.USE_DEFAULT_TIMEOUT);
 			}
@@ -107,6 +131,8 @@ public class PasteCommand extends Command {
 
 	@Override
 	public void undo() {
+		updateTypeCmds.undo();
+		createMarkersCmds.undo();
 		connCreateCmds.undo();
 		dstFBNetwork.getNetworkElements().removeAll(copiedElements.values());
 	}
@@ -115,6 +141,8 @@ public class PasteCommand extends Command {
 	public void redo() {
 		dstFBNetwork.getNetworkElements().addAll(copiedElements.values());
 		connCreateCmds.redo();
+		createMarkersCmds.redo();
+		updateTypeCmds.redo();
 		ElementSelector.selectViewObjects(copiedElements.values());
 	}
 
@@ -135,7 +163,7 @@ public class PasteCommand extends Command {
 			y = Math.min(y, outermostPos.getY());
 		}
 
-		if (calcualteDelta) {
+		if (calculateDelta) {
 			if (null != pasteRefPos) {
 				xDelta = pasteRefPos.x - x;
 				yDelta = pasteRefPos.y - y;
@@ -182,15 +210,7 @@ public class PasteCommand extends Command {
 	}
 
 	private FBNetworkElement createElementCopyFB(final FBNetworkElement element, final boolean isNested) {
-		final FBNetworkElement copiedElement = EcoreUtil.copy(element);
-		// clear the connection references
-		for (final IInterfaceElement ie : copiedElement.getInterface().getAllInterfaceElements()) {
-			if (ie.isIsInput()) {
-				ie.getInputConnections().clear();
-			} else {
-				ie.getOutputConnections().clear();
-			}
-		}
+		final FBNetworkElement copiedElement = createCopiedElement(element);
 
 		if (!isNested) {
 			copiedElement.setPosition(calculatePastePos(element));
@@ -209,6 +229,32 @@ public class PasteCommand extends Command {
 			}
 		}
 
+		return copiedElement;
+	}
+
+	private FBNetworkElement createCopiedElement(final FBNetworkElement element) {
+		FBNetworkElement copiedElement = EcoreUtil.copy(element);
+		if (dstTypeLib != null && element.getTypeEntry() != null) {
+			// we are copying between projects and it is a typed FBNetworkElement
+			final TypeEntry dstTypeEntry = dstTypeLib.getFBOrSubAppType(element.getTypeName());
+			if (dstTypeEntry != null) {
+				// the target project has the type
+				copiedElement.setTypeEntry(dstTypeEntry);
+			} else {
+				copiedElement = FordiacMarkerHelper.createTypeErrorMarkerFB(copiedElement.getName(), dstTypeLib,
+						(FBType) element.getTypeEntry().getType());
+				copiedElement.setInterface(InterfaceListCopier.copy(element.getInterface()));
+			}
+		} else {
+			// clear the connection references
+			for (final IInterfaceElement ie : copiedElement.getInterface().getAllInterfaceElements()) {
+				if (ie.isIsInput()) {
+					ie.getInputConnections().clear();
+				} else {
+					ie.getOutputConnections().clear();
+				}
+			}
+		}
 		return copiedElement;
 	}
 
@@ -321,6 +367,32 @@ public class PasteCommand extends Command {
 
 	public Collection<FBNetworkElement> getCopiedFBs() {
 		return copiedElements.values();
+	}
+
+	private static TypeLibrary checkTypeLib(final FBNetwork srcNetwork, final FBNetwork destNetwork) {
+		final EObject srcRoot = EcoreUtil.getRootContainer(srcNetwork);
+		final EObject dstRoot = EcoreUtil.getRootContainer(destNetwork);
+
+		if (srcRoot instanceof final LibraryElement srcLibEl && dstRoot instanceof final LibraryElement dstLibEl
+				&& !srcLibEl.getTypeLibrary().getProject().equals(dstLibEl.getTypeLibrary().getProject())) {
+			// we copy between projects
+			return dstLibEl.getTypeLibrary();
+		}
+		return null;
+	}
+
+	private void createUpdateTypeAndErrorMarkerCommands() {
+		copiedElements.values().forEach(fbnEl -> {
+			if (fbnEl instanceof ErrorMarkerFBNElement) {
+				final ErrorMarkerBuilder builder = ErrorMarkerBuilder.createErrorMarkerBuilder(MessageFormat
+						.format("Type ({0}) could not be loaded for FB: {1}", fbnEl.getTypeName(), fbnEl.getName())) //$NON-NLS-1$
+						.setTarget(fbnEl);
+				createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(builder));
+			} else if (fbnEl.getTypeEntry() != null) {
+				// we only need to update the type if we have a type entry
+				updateTypeCmds.add(new UpdateFBTypeCommand(fbnEl));
+			}
+		});
 	}
 
 }

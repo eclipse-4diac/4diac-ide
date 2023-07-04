@@ -46,6 +46,10 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		}
 	}
 
+	public UpdateFBTypeCommand(final FBNetworkElement fbnElement) {
+		this(fbnElement, null);
+	}
+
 	@Override
 	public boolean canExecute() {
 		if ((null == entry) || (null == oldElement) || (null == network)) {

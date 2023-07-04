@@ -250,7 +250,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	@Override
 	public EList<VarDeclaration> getInOutVars() {
 		if (inOutVars == null) {
-			inOutVars = new OutMappedInOutVarsEList(this, LibraryElementPackage.INTERFACE_LIST__IN_OUT_VARS);
+			inOutVars = new InOutVarsEList(this, LibraryElementPackage.INTERFACE_LIST__IN_OUT_VARS);
 		}
 		return inOutVars;
 	}
@@ -358,15 +358,14 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated not */
 	@Override
 	public EList<VarDeclaration> getOutMappedInOutVars() {
 		if (outMappedInOutVars == null) {
-			outMappedInOutVars = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS);
+			outMappedInOutVars = new OutMappedInOutVarsEList(this,
+					LibraryElementPackage.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS);
 		}
 		return outMappedInOutVars;
 	}
@@ -470,6 +469,10 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				getInOutVars().clear();
 				getInOutVars().addAll((Collection<? extends VarDeclaration>)newValue);
 				return;
+			case LibraryElementPackage.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS:
+				getOutMappedInOutVars().clear();
+				getOutMappedInOutVars().addAll((Collection<? extends VarDeclaration>)newValue);
+				return;
 			case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
 				getErrorMarker().clear();
 				getErrorMarker().addAll((Collection<? extends ErrorMarkerInterface>)newValue);
@@ -508,6 +511,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return;
 			case LibraryElementPackage.INTERFACE_LIST__IN_OUT_VARS:
 				getInOutVars().clear();
+				return;
+			case LibraryElementPackage.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS:
+				getOutMappedInOutVars().clear();
 				return;
 			case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
 				getErrorMarker().clear();
