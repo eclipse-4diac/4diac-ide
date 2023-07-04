@@ -60,7 +60,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class EditInterfaceVarInOutSection extends AbstractSection implements I4diacNatTableUtil {
@@ -79,7 +78,7 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 	}
 
 	private void createInputEdit(final Composite parent) {
-		final Group inputsGroup = getWidgetFactory().createGroup(parent, "Inputs"); //$NON-NLS-1$
+		final Composite inputsGroup = getWidgetFactory().createComposite(parent);
 		inputsGroup.setLayout(new GridLayout(2, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -95,12 +94,11 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 		}
 	}
 
-	public void setupInputTable(final Group inputsGroup) {
+	public void setupInputTable(final Composite parent) {
 		inputProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
-		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new VarDeclarationColumnProvider(), getSectionEditableRule(),
-				new DataTypeSelectionButton(typeSelection), this, true);
+		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),
+				getSectionEditableRule(), new DataTypeSelectionButton(typeSelection), this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.configure();

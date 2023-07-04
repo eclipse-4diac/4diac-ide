@@ -54,7 +54,7 @@
                afterTab="property.tab.algorithms"
                category="ecc"
                id="property.tab.ivars"
-               label="Variables">
+               label="Var Internals">
          </propertyTab>
          <propertyTab
                afterTab="property.tab.ivars"
