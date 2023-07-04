@@ -23,10 +23,12 @@ import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType;
 import org.eclipse.fordiac.ide.model.data.AnyNumType;
 import org.eclipse.fordiac.ide.model.data.AnyRealType;
+import org.eclipse.fordiac.ide.model.data.AnySCharsType;
 import org.eclipse.fordiac.ide.model.data.AnySignedType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType;
+import org.eclipse.fordiac.ide.model.data.AnyWCharsType;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.BoolType;
 import org.eclipse.fordiac.ide.model.data.ByteType;
@@ -86,8 +88,7 @@ final class DataTypeAnnotations {
 		if (type == other) {
 			return true;
 		}
-		if (other instanceof ArrayType) {
-			final ArrayType otherArray = (ArrayType) other;
+		if (other instanceof final ArrayType otherArray) {
 			// arrays are assignable if the base type is assignable and they have the same amount of dimensions
 			return type.getBaseType().isAssignableFrom(otherArray.getBaseType())
 					&& type.getSubranges().size() == otherArray.getSubranges().size();
@@ -138,6 +139,14 @@ final class DataTypeAnnotations {
 	}
 
 	static boolean isAssignableFrom(final AnyCharsType type, final DataType other) {
+		return type == other || type.eClass().isSuperTypeOf(other.eClass());
+	}
+
+	static boolean isAssignableFrom(final AnySCharsType type, final DataType other) {
+		return type == other || type.eClass().isSuperTypeOf(other.eClass());
+	}
+
+	static boolean isAssignableFrom(final AnyWCharsType type, final DataType other) {
 		return type == other || type.eClass().isSuperTypeOf(other.eClass());
 	}
 
@@ -308,8 +317,7 @@ final class DataTypeAnnotations {
 		if (type == other) {
 			return true;
 		}
-		if (other instanceof SubrangeType) {
-			final SubrangeType otherSubrange = (SubrangeType) other;
+		if (other instanceof final SubrangeType otherSubrange) {
 			// subranges are assignable if the base type is assignable and they have a subrange that fits
 			return type.getBaseType().isAssignableFrom(otherSubrange.getBaseType())
 					&& (!type.getSubrange().isSetLowerLimit()

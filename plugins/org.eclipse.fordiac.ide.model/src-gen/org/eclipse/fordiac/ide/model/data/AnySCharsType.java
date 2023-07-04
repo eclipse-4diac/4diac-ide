@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,15 +19,15 @@ package org.eclipse.fordiac.ide.model.data;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Wchar Type</b></em>'.
+ * A representation of the model object '<em><b>Any SChars Type</b></em>'.
  * <!-- end-user-doc -->
  *
  *
- * @see org.eclipse.fordiac.ide.model.data.DataPackage#getWcharType()
+ * @see org.eclipse.fordiac.ide.model.data.DataPackage#getAnySCharsType()
  * @model
  * @generated
  */
-public interface WcharType extends AnyCharType, AnyWCharsType {
+public interface AnySCharsType extends AnyCharsType {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -36,4 +36,4 @@ public interface WcharType extends AnyCharType, AnyWCharsType {
 	 */
 	boolean isAssignableFrom(DataType other);
 
-} // WcharType
+} // AnySCharsType

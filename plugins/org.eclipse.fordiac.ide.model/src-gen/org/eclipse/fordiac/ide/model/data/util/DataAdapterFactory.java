@@ -249,6 +249,14 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 				return createAnyCharsTypeAdapter();
 			}
 			@Override
+			public Adapter caseAnySCharsType(AnySCharsType object) {
+				return createAnySCharsTypeAdapter();
+			}
+			@Override
+			public Adapter caseAnyWCharsType(AnyWCharsType object) {
+				return createAnyWCharsTypeAdapter();
+			}
+			@Override
 			public Adapter caseAnyStringType(AnyStringType object) {
 				return createAnyStringTypeAdapter();
 			}
@@ -899,6 +907,34 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAnyCharsTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.AnySCharsType <em>Any SChars Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.data.AnySCharsType
+	 * @generated
+	 */
+	public Adapter createAnySCharsTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.AnyWCharsType <em>Any WChars Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.data.AnyWCharsType
+	 * @generated
+	 */
+	public Adapter createAnyWCharsTypeAdapter() {
 		return null;
 	}
 

@@ -38,10 +38,12 @@ import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType;
 import org.eclipse.fordiac.ide.model.data.AnyNumType;
 import org.eclipse.fordiac.ide.model.data.AnyRealType;
+import org.eclipse.fordiac.ide.model.data.AnySCharsType;
 import org.eclipse.fordiac.ide.model.data.AnySignedType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType;
+import org.eclipse.fordiac.ide.model.data.AnyWCharsType;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.data.BoolType;
@@ -382,6 +384,20 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	private EClass anyCharsTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass anySCharsTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass anyWCharsTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1086,6 +1102,26 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getAnySCharsType() {
+		return anySCharsTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getAnyWCharsType() {
+		return anyWCharsTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getAnyStringType() {
 		return anyStringTypeEClass;
 	}
@@ -1353,6 +1389,10 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 		anyCharsTypeEClass = createEClass(ANY_CHARS_TYPE);
 
+		anySCharsTypeEClass = createEClass(ANY_SCHARS_TYPE);
+
+		anyWCharsTypeEClass = createEClass(ANY_WCHARS_TYPE);
+
 		anyStringTypeEClass = createEClass(ANY_STRING_TYPE);
 		createEAttribute(anyStringTypeEClass, ANY_STRING_TYPE__MAX_LENGTH);
 
@@ -1455,12 +1495,18 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		dwordTypeEClass.getESuperTypes().add(this.getAnyBitType());
 		lwordTypeEClass.getESuperTypes().add(this.getAnyBitType());
 		anyCharsTypeEClass.getESuperTypes().add(this.getAnyElementaryType());
+		anySCharsTypeEClass.getESuperTypes().add(this.getAnyCharsType());
+		anyWCharsTypeEClass.getESuperTypes().add(this.getAnyCharsType());
 		anyStringTypeEClass.getESuperTypes().add(this.getAnyCharsType());
 		stringTypeEClass.getESuperTypes().add(this.getAnyStringType());
+		stringTypeEClass.getESuperTypes().add(this.getAnySCharsType());
 		wstringTypeEClass.getESuperTypes().add(this.getAnyStringType());
+		wstringTypeEClass.getESuperTypes().add(this.getAnyWCharsType());
 		anyCharTypeEClass.getESuperTypes().add(this.getAnyCharsType());
 		charTypeEClass.getESuperTypes().add(this.getAnyCharType());
+		charTypeEClass.getESuperTypes().add(this.getAnySCharsType());
 		wcharTypeEClass.getESuperTypes().add(this.getAnyCharType());
+		wcharTypeEClass.getESuperTypes().add(this.getAnyWCharsType());
 		anyDateTypeEClass.getESuperTypes().add(this.getAnyElementaryType());
 		dateAndTimeTypeEClass.getESuperTypes().add(this.getAnyDateType());
 		ldtTypeEClass.getESuperTypes().add(this.getAnyDateType());
@@ -1691,6 +1737,16 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		initEClass(anyCharsTypeEClass, AnyCharsType.class, "AnyCharsType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		op = addEOperation(anyCharsTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(anySCharsTypeEClass, AnySCharsType.class, "AnySCharsType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		op = addEOperation(anySCharsTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(anyWCharsTypeEClass, AnyWCharsType.class, "AnyWCharsType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		op = addEOperation(anyWCharsTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(anyStringTypeEClass, AnyStringType.class, "AnyStringType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

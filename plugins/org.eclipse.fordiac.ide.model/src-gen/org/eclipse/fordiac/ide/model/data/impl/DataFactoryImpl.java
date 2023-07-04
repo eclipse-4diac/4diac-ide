@@ -111,6 +111,8 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 			case DataPackage.DWORD_TYPE: return createDwordType();
 			case DataPackage.LWORD_TYPE: return createLwordType();
 			case DataPackage.ANY_CHARS_TYPE: return createAnyCharsType();
+			case DataPackage.ANY_SCHARS_TYPE: return createAnySCharsType();
+			case DataPackage.ANY_WCHARS_TYPE: return createAnyWCharsType();
 			case DataPackage.ANY_STRING_TYPE: return createAnyStringType();
 			case DataPackage.STRING_TYPE: return createStringType();
 			case DataPackage.WSTRING_TYPE: return createWstringType();
@@ -597,6 +599,28 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	public AnyCharsType createAnyCharsType() {
 		AnyCharsTypeImpl anyCharsType = new AnyCharsTypeImpl();
 		return anyCharsType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AnySCharsType createAnySCharsType() {
+		AnySCharsTypeImpl anySCharsType = new AnySCharsTypeImpl();
+		return anySCharsType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AnyWCharsType createAnyWCharsType() {
+		AnyWCharsTypeImpl anyWCharsType = new AnyWCharsTypeImpl();
+		return anyWCharsType;
 	}
 
 	/**

@@ -83,6 +83,10 @@ public final class FordiacKeywords {
 	public static final String ANY_CHAR = "ANY_CHAR"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE_CLASS)
 	public static final String ANY_CHARS = "ANY_CHARS"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.DATATYPE_CLASS)
+	public static final String ANY_SCHARS = "ANY_SCHARS"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.DATATYPE_CLASS)
+	public static final String ANY_WCHARS = "ANY_WCHARS"; //$NON-NLS-1$
 
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String DINT = "DINT"; //$NON-NLS-1$

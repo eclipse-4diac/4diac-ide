@@ -27,7 +27,7 @@ package org.eclipse.fordiac.ide.model.data;
  * @model
  * @generated
  */
-public interface CharType extends AnyCharType {
+public interface CharType extends AnyCharType, AnySCharsType {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

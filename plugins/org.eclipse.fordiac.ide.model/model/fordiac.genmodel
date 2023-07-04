@@ -915,6 +915,18 @@
         <genParameters ecoreParameter="data.ecore#//AnyCharsType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnySCharsType">
+      <genOperations ecoreOperation="data.ecore#//AnySCharsType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnySCharsType/isAssignableFrom/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//AnyWCharsType">
+      <genOperations ecoreOperation="data.ecore#//AnyWCharsType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyWCharsType/isAssignableFrom/other"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyStringType">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//AnyStringType/maxLength"/>
       <genOperations ecoreOperation="data.ecore#//AnyStringType/isAssignableFrom"

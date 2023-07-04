@@ -569,6 +569,30 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case DataPackage.ANY_SCHARS_TYPE: {
+				AnySCharsType anySCharsType = (AnySCharsType)theEObject;
+				T result = caseAnySCharsType(anySCharsType);
+				if (result == null) result = caseAnyCharsType(anySCharsType);
+				if (result == null) result = caseAnyElementaryType(anySCharsType);
+				if (result == null) result = caseAnyType(anySCharsType);
+				if (result == null) result = caseDataType(anySCharsType);
+				if (result == null) result = caseLibraryElement(anySCharsType);
+				if (result == null) result = caseINamedElement(anySCharsType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case DataPackage.ANY_WCHARS_TYPE: {
+				AnyWCharsType anyWCharsType = (AnyWCharsType)theEObject;
+				T result = caseAnyWCharsType(anyWCharsType);
+				if (result == null) result = caseAnyCharsType(anyWCharsType);
+				if (result == null) result = caseAnyElementaryType(anyWCharsType);
+				if (result == null) result = caseAnyType(anyWCharsType);
+				if (result == null) result = caseDataType(anyWCharsType);
+				if (result == null) result = caseLibraryElement(anyWCharsType);
+				if (result == null) result = caseINamedElement(anyWCharsType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case DataPackage.ANY_STRING_TYPE: {
 				AnyStringType anyStringType = (AnyStringType)theEObject;
 				T result = caseAnyStringType(anyStringType);
@@ -585,6 +609,7 @@ public class DataSwitch<T> extends Switch<T> {
 				StringType stringType = (StringType)theEObject;
 				T result = caseStringType(stringType);
 				if (result == null) result = caseAnyStringType(stringType);
+				if (result == null) result = caseAnySCharsType(stringType);
 				if (result == null) result = caseAnyCharsType(stringType);
 				if (result == null) result = caseAnyElementaryType(stringType);
 				if (result == null) result = caseAnyType(stringType);
@@ -598,6 +623,7 @@ public class DataSwitch<T> extends Switch<T> {
 				WstringType wstringType = (WstringType)theEObject;
 				T result = caseWstringType(wstringType);
 				if (result == null) result = caseAnyStringType(wstringType);
+				if (result == null) result = caseAnyWCharsType(wstringType);
 				if (result == null) result = caseAnyCharsType(wstringType);
 				if (result == null) result = caseAnyElementaryType(wstringType);
 				if (result == null) result = caseAnyType(wstringType);
@@ -623,6 +649,7 @@ public class DataSwitch<T> extends Switch<T> {
 				CharType charType = (CharType)theEObject;
 				T result = caseCharType(charType);
 				if (result == null) result = caseAnyCharType(charType);
+				if (result == null) result = caseAnySCharsType(charType);
 				if (result == null) result = caseAnyCharsType(charType);
 				if (result == null) result = caseAnyElementaryType(charType);
 				if (result == null) result = caseAnyType(charType);
@@ -636,6 +663,7 @@ public class DataSwitch<T> extends Switch<T> {
 				WcharType wcharType = (WcharType)theEObject;
 				T result = caseWcharType(wcharType);
 				if (result == null) result = caseAnyCharType(wcharType);
+				if (result == null) result = caseAnyWCharsType(wcharType);
 				if (result == null) result = caseAnyCharsType(wcharType);
 				if (result == null) result = caseAnyElementaryType(wcharType);
 				if (result == null) result = caseAnyType(wcharType);
@@ -1344,6 +1372,36 @@ public class DataSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAnyCharsType(AnyCharsType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Any SChars Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Any SChars Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAnySCharsType(AnySCharsType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Any WChars Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Any WChars Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAnyWCharsType(AnyWCharsType object) {
 		return null;
 	}
 
