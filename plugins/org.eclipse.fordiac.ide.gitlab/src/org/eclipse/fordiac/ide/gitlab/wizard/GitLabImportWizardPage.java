@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gitlab.wizard;
 
+import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloadManager;
 import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
 import org.eclipse.jface.widgets.WidgetFactory;
@@ -36,7 +37,7 @@ public class GitLabImportWizardPage extends WizardPage {
 	public GitLabImportWizardPage(final String pageName) {
 		super(pageName);
 		setTitle(pageName);
-		setDescription("Import files from GitLab into the workspace"); //$NON-NLS-1$
+		setDescription(Messages.GitLab_Import);
 	}
 
 	public GitLabDownloadManager getDownloadManager() {
@@ -61,7 +62,7 @@ public class GitLabImportWizardPage extends WizardPage {
 
 	private void connect() {
 		downloadManager = new GitLabDownloadManager(this);
-		downloadManager.connectToGitLab();
+		downloadManager.fetchProjectsAndPackages();
 
 	}
 
@@ -77,17 +78,17 @@ public class GitLabImportWizardPage extends WizardPage {
 		container.setLayout(layout);
 		layout.numColumns = 2;
 
-		createLabel("URL:");
+		createLabel(Messages.URL);
 		url = new Text(container, SWT.BORDER | SWT.SINGLE);
 		url.setText(PreferenceConstants.getURL());
 		url.setFocus();
 
-		createLabel("Token:");
+		createLabel(Messages.Token);
 		token = new Text(container, SWT.PASSWORD | SWT.BORDER | SWT.SINGLE);
 		token.setText(PreferenceConstants.getToken());
 
 		// We could also bind connecting to pressing enter instead of having a button
-		connectionButton = WidgetFactory.button(NONE).text("Connect").create(container);
+		connectionButton = WidgetFactory.button(NONE).text(Messages.Connect).create(container);
 		connectionButton.addMouseListener(new MouseListener() {
 
 			@Override

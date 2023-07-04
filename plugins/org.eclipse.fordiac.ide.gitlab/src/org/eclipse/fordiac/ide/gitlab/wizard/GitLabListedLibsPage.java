@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.GLTreeContentProvider;
@@ -38,7 +39,7 @@ public class GitLabListedLibsPage extends WizardPage {
 	protected GitLabListedLibsPage(final String pageName) {
 		super(pageName);
 		setTitle(pageName);
-		setDescription("Available packages in GitLab");
+		setDescription(Messages.GitLab_Available_Packages);
 	}
 
 	@Override
@@ -58,9 +59,7 @@ public class GitLabListedLibsPage extends WizardPage {
 
 		createColumns(treeViewer);
 
-		treeViewer.addCheckStateListener(event -> {
-			setPageComplete(isComplete());
-		});
+		treeViewer.addCheckStateListener(event -> setPageComplete(isComplete()));
 		treeViewer.expandAll();
 		// required to avoid an error in the system
 		setControl(container);
@@ -71,7 +70,7 @@ public class GitLabListedLibsPage extends WizardPage {
 		// Projects and packages column
 		final TreeViewerColumn viewerColumn = new TreeViewerColumn(viewer, SWT.NONE);
 		viewerColumn.getColumn().setWidth(500);
-		viewerColumn.getColumn().setText("Packages and projects");
+		viewerColumn.getColumn().setText(Messages.GitLab_Packages_And_Projects);
 		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -80,10 +79,11 @@ public class GitLabListedLibsPage extends WizardPage {
 				}
 				if (element instanceof final Package pack) {
 					return pack.getName();
-				} else if (element instanceof final LeafNode leafNode) {
+				}
+				if (element instanceof final LeafNode leafNode) {
 					return leafNode.getVersion();
 				}
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 		});
 	}
