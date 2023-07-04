@@ -21,6 +21,7 @@ Require-Bundle: org.eclipse.xtext,
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.fordiac.ide.structuredtextcore,
  org.eclipse.fordiac.ide.structuredtextcore.converter,
+ org.eclipse.fordiac.ide.structuredtextcore.documentation,
  org.eclipse.fordiac.ide.structuredtextcore.formatting2,
  org.eclipse.fordiac.ide.structuredtextcore.generator,
  org.eclipse.fordiac.ide.structuredtextcore.naming,

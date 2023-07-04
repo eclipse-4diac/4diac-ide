@@ -11,7 +11,7 @@
  *   Ulzii Jargalsaikhan
  *       - initial API and implementation and/or initial documentation
  */
-package org.eclipse.fordiac.ide.structuredtextcore.ui.hovering;
+package org.eclipse.fordiac.ide.structuredtextcore.documentation;
 
 import java.util.Collections;
 import java.util.List;

@@ -14,11 +14,12 @@
 package org.eclipse.fordiac.ide.globalconstantseditor;
 
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters;
+import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider;
 import org.eclipse.xtext.conversion.IValueConverterService;
+import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 
-/**
- * Use this class to register components to be used at runtime / without the Equinox extension registry.
- */
+/** Use this class to register components to be used at runtime / without the Equinox extension registry. */
+@SuppressWarnings("static-method")
 public class GlobalConstantsRuntimeModule extends AbstractGlobalConstantsRuntimeModule {
 
 	@Override
@@ -26,4 +27,7 @@ public class GlobalConstantsRuntimeModule extends AbstractGlobalConstantsRuntime
 		return STCoreValueConverters.class;
 	}
 
+	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
+		return STCoreCommentDocumentationProvider.class;
+	}
 }
