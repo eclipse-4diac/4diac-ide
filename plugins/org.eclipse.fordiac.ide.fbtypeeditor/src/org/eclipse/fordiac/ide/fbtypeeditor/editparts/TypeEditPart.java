@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -178,21 +179,29 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 				protected Command getDirectEditCommand(final DirectEditRequest request) {
 					if (getHost() instanceof AbstractDirectEditableEditPart) {
 						final Object value = request.getCellEditor().getValue();
+						final IInterfaceElement targetElement = getTargetInterfaceElement();
 						if (value instanceof final Integer intValue) {
 							final int index = intValue.intValue();
 							if (request.getCellEditor().getControl() instanceof final CCombo combo && index >= 0
 									&& index < combo.getItemCount()) {
 								final String typeName = combo.getItem(index);
-								return ChangeDataTypeCommand.forTypeName(getCastedModel(), typeName);
+								return ChangeDataTypeCommand.forTypeName(targetElement, typeName);
 							}
 						} else if (value instanceof final String stringValue) {
-							return ChangeDataTypeCommand.forTypeDeclaration(getCastedModel(), stringValue);
+							return ChangeDataTypeCommand.forTypeDeclaration(targetElement, stringValue);
 						}
 					}
 					return null;
 				}
 			});
 		}
+	}
+
+	protected IInterfaceElement getTargetInterfaceElement() {
+		if (getCastedModel() instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && !varDecl.isIsInput()) {
+			return ((InterfaceList) varDecl.eContainer()).getInOutVarOpposite(varDecl);
+		}
+		return getCastedModel();
 	}
 
 	@Override

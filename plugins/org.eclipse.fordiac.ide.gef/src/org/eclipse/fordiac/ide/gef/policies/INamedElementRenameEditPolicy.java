@@ -25,8 +25,7 @@ public class INamedElementRenameEditPolicy extends DirectEditPolicy {
 
 	@Override
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
-		if (getHost() instanceof AbstractDirectEditableEditPart) {
-			final AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
+		if (getHost() instanceof final AbstractDirectEditableEditPart viewEditPart) {
 			return new ChangeNameCommand(viewEditPart.getINamedElement(), (String) request.getCellEditor().getValue());
 		}
 		return null;
@@ -35,16 +34,14 @@ public class INamedElementRenameEditPolicy extends DirectEditPolicy {
 	@Override
 	protected void showCurrentEditValue(final DirectEditRequest request) {
 		final String value = (String) request.getCellEditor().getValue();
-		if (getHost() instanceof AbstractDirectEditableEditPart) {
-			final AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
+		if (getHost() instanceof final AbstractDirectEditableEditPart viewEditPart) {
 			viewEditPart.getNameLabel().setText(value);
 		}
 	}
 
 	@Override
 	protected void revertOldEditValue(final DirectEditRequest request) {
-		if (getHost() instanceof AbstractDirectEditableEditPart) {
-			final AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
+		if (getHost() instanceof final AbstractDirectEditableEditPart viewEditPart) {
 			viewEditPart.getNameLabel().setText(viewEditPart.getINamedElement().getName());
 		}
 	}

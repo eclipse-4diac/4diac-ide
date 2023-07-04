@@ -206,6 +206,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 
 			installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WithNodeEditPolicy());
 		}
+
 	}
 
 	@Override
