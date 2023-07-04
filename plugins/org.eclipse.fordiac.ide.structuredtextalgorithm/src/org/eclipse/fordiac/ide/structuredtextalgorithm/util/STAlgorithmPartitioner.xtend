@@ -25,10 +25,10 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGramm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
-import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
-import org.eclipse.xtext.nodemodel.ICompositeNode
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner
+import org.eclipse.xtext.documentation.IEObjectDocumentationProvider
 import org.eclipse.xtext.resource.XtextResource
 
 import static extension org.eclipse.emf.common.util.ECollections.*
@@ -39,6 +39,9 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 
 	@Inject
 	extension STAlgorithmGrammarAccess grammarAccess
+	
+	@Inject
+	extension IEObjectDocumentationProvider documentationProvider
 
 	override String combine(FBType fbType) {
 		if(fbType instanceof BaseFBType) fbType.combine else ""
@@ -114,7 +117,7 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 		}
 		LibraryElementFactory.eINSTANCE.createSTAlgorithm => [
 			name = algorithm.name ?: LOST_AND_FOUND_NAME
-			comment = node.extractComments
+			comment = algorithm.documentation
 			text = node.text
 		]
 	}
@@ -126,7 +129,7 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 		}
 		LibraryElementFactory.eINSTANCE.createSTMethod => [
 			name = method.name ?: LOST_AND_FOUND_NAME
-			comment = node.extractComments
+			comment = method.documentation
 			inputParameters.addAll(method.inputParameters.filter(STVarDeclaration).map[convertParameter(true)])
 			outputParameters.addAll(method.outputParameters.filter(STVarDeclaration).map[convertParameter(false)])
 			inOutParameters.addAll(method.inOutParameters.filter(STVarDeclaration).map[convertParameter(false)])
@@ -151,10 +154,6 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 
 	def protected String extractArraySize(STVarDeclaration declaration) {
 		declaration.findNodesForFeature(STCorePackage.eINSTANCE.STVarDeclaration_Ranges).map[text].join(",")
-	}
-
-	def protected extractComments(ICompositeNode node) {
-		node.rootNode.text.substring(node.totalOffset, node.offset).trim
 	}
 
 	def protected handleDuplicates(EList<ICallable> result) {

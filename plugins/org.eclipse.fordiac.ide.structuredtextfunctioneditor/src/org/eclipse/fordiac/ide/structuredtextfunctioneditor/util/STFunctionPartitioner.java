@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.services.STFunctionGrammarAccess;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
+import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
@@ -45,6 +46,9 @@ public class STFunctionPartitioner implements STCorePartitioner {
 
 	@Inject
 	private STFunctionGrammarAccess grammarAccess;
+
+	@Inject
+	private IEObjectDocumentationProvider documentationProvider;
 
 	@Override
 	public String combine(final FBType fbType) {
@@ -104,16 +108,16 @@ public class STFunctionPartitioner implements STCorePartitioner {
 		if (node != null && function.getName() != null) {
 			final var result = LibraryElementFactory.eINSTANCE.createSTFunction();
 			result.setName(function.getName());
-			result.setComment(extractComments(node));
+			result.setComment(documentationProvider.getDocumentation(function));
 			function.getInputParameters().stream().map(STVarDeclaration.class::cast)
-			.filter(STFunctionPartitioner::isValidParameter).map(STFunctionPartitioner::convertInputParameter)
-			.forEachOrdered(result.getInputParameters()::add);
+					.filter(STFunctionPartitioner::isValidParameter).map(STFunctionPartitioner::convertInputParameter)
+					.forEachOrdered(result.getInputParameters()::add);
 			function.getOutputParameters().stream().map(STVarDeclaration.class::cast)
-			.filter(STFunctionPartitioner::isValidParameter).map(STFunctionPartitioner::convertOutputParameter)
-			.forEachOrdered(result.getOutputParameters()::add);
+					.filter(STFunctionPartitioner::isValidParameter).map(STFunctionPartitioner::convertOutputParameter)
+					.forEachOrdered(result.getOutputParameters()::add);
 			function.getInOutParameters().stream().map(STVarDeclaration.class::cast)
-			.filter(STFunctionPartitioner::isValidParameter).map(STFunctionPartitioner::convertInOutParameter)
-			.forEachOrdered(result.getInOutParameters()::add);
+					.filter(STFunctionPartitioner::isValidParameter).map(STFunctionPartitioner::convertInOutParameter)
+					.forEachOrdered(result.getInOutParameters()::add);
 			result.setReturnType(function.getReturnType());
 			result.setText(node.getText());
 			return result;
@@ -154,10 +158,6 @@ public class STFunctionPartitioner implements STCorePartitioner {
 	protected static String extractArraySize(final STVarDeclaration declaration) {
 		return NodeModelUtils.findNodesForFeature(declaration, STCorePackage.eINSTANCE.getSTVarDeclaration_Ranges())
 				.stream().map(INode::getText).collect(Collectors.joining(",")); //$NON-NLS-1$
-	}
-
-	protected static String extractComments(final ICompositeNode node) {
-		return node.getRootNode().getText().substring(node.getTotalOffset(), node.getOffset()).trim();
 	}
 
 	protected static void handleDuplicates(final EList<ICallable> result) {
