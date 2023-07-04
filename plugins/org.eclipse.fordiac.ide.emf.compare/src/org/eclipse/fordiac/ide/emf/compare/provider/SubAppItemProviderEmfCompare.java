@@ -13,7 +13,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.emf.compare.provider;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.SubAppItemProviderForSystem;
@@ -36,6 +40,20 @@ public class SubAppItemProviderEmfCompare extends SubAppItemProviderForSystem {
 			subAppNetwork.eAdapters().add(getSubAppNetworkItemProvider());
 		}
 		return subAppNetwork;
+	}
+
+	@Override
+	public Object getParent(final Object object) {
+		final EObject cont = ((SubApp) object).eContainer();
+		if (cont != null) {
+			return cont;
+		}
+		return super.getParent(object);
+	}
+
+	@Override
+	public Collection<?> getChildren(final Object object) {
+		return Collections.singletonList(((SubApp) object).getSubAppNetwork());
 	}
 
 }

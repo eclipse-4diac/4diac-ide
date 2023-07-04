@@ -18,8 +18,8 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
 
-class FBNetworkItemProviderForSystem extends FBNetworkItemProvider {
-	FBNetworkItemProviderForSystem(final AdapterFactory adapterFactory) {
+public class FBNetworkItemProviderForSystem extends FBNetworkItemProvider {
+	protected FBNetworkItemProviderForSystem(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 

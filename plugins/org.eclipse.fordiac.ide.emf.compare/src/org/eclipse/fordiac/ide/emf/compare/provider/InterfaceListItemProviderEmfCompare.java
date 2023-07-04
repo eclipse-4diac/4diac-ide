@@ -8,34 +8,36 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Fabio Gandolfi
- *     - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.emf.compare.provider;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.systemmanagement.ui.providers.CFBInstanceItemProviderForSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.provider.InterfaceListItemProvider;
 
-public class CFBInstanceItemProviderEmfCompare extends CFBInstanceItemProviderForSystem {
+public class InterfaceListItemProviderEmfCompare extends InterfaceListItemProvider {
 
-	public CFBInstanceItemProviderEmfCompare(final AdapterFactory adapterFactory) {
+	public InterfaceListItemProviderEmfCompare(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
 	@Override
-	protected FBNetwork getFBNetwork(final Object object) {
-		return null;
-	}
-
-	@Override
 	public Object getParent(final Object object) {
-		final EObject cont = ((CFBInstance) object).eContainer();
-		if (cont != null) {
+		final EObject cont = ((InterfaceList) object).eContainer();
+		if (cont instanceof FB) {
 			return cont;
 		}
 		return super.getParent(object);
 	}
+
+	@Override
+	public Collection<?> getChildren(final Object object) {
+		return ((InterfaceList) object).getAllInterfaceElements();
+	}
+
 }
