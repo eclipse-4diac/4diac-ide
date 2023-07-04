@@ -230,13 +230,13 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	public void highlightTransitions(final boolean highlight) {
 		for (final Object obj : getSourceConnections()) {
-			if (obj instanceof ECTransitionEditPart) {
-				((ECTransitionEditPart) obj).highlight(highlight);
+			if (obj instanceof final ECTransitionEditPart ectEP) {
+				ectEP.highlight(highlight);
 			}
 		}
 		for (final Object obj : getTargetConnections()) {
-			if (obj instanceof ECTransitionEditPart) {
-				((ECTransitionEditPart) obj).highlight(highlight);
+			if (obj instanceof final ECTransitionEditPart ectEP) {
+				ectEP.highlight(highlight);
 			}
 		}
 	}
@@ -244,5 +244,10 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	@Override
 	public ECStateFigure getFigure() {
 		return (ECStateFigure) super.getFigure();
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return true;
 	}
 }

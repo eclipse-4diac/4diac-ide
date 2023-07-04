@@ -249,4 +249,10 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 		return super.isDirectEditable()
 				&& (getCastedModel() instanceof VarDeclaration || getCastedModel() instanceof AdapterDeclaration);
 	}
+
+	@Override
+	public boolean isConnectable() {
+		return false;
+	}
+
 }

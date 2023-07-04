@@ -117,6 +117,11 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		}
 	}
 
+	@Override
+	public boolean isConnectable() {
+		return true;
+	}
+
 	protected String getLabelText() {
 		final String altText = getAlternativePinLabelText();
 		return (!altText.isBlank()) ? altText : getModel().getName();
@@ -295,8 +300,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	private static void checkConnection(final int width, final ConnectionEditPart cep) {
-		if (cep.getFigure() instanceof PolylineConnection) {
-			((PolylineConnection) cep.getFigure()).setLineWidth(width);
+		if (cep.getFigure() instanceof final PolylineConnection plc) {
+			plc.setLineWidth(width);
 		}
 	}
 
@@ -461,19 +466,19 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		final Value value = getValue();
 		if (value != null) {
 			final Object temp = getViewer().getEditPartRegistry().get(value);
-			if (temp instanceof ValueEditPart) {
-				return (ValueEditPart) temp;
+			if (temp instanceof final ValueEditPart vep) {
+				return vep;
 			}
 		}
 		return null;
 	}
 
 	private Value getValue() {
-		if (getModel() instanceof VarDeclaration) {
-			return ((VarDeclaration) getModel()).getValue();
+		if (getModel() instanceof final VarDeclaration varDecl) {
+			return varDecl.getValue();
 		}
-		if (getModel() instanceof ErrorMarkerInterface) {
-			return ((ErrorMarkerInterface) getModel()).getValue();
+		if (getModel() instanceof final ErrorMarkerInterface emi) {
+			return emi.getValue();
 		}
 		return null;
 	}

@@ -129,4 +129,9 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 		};
 	}
 
+	@Override
+	public boolean isConnectable() {
+		return true;
+	}
+
 }

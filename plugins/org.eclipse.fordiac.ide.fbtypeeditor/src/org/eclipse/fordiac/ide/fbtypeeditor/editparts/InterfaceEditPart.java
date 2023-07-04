@@ -157,6 +157,11 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		refreshTypeRoot();
 	}
 
+	@Override
+	public boolean isConnectable() {
+		return true;
+	}
+
 	private void refreshTypeRoot() {
 		final FBTypeRootEditPart typeRootEP = getFBTypeRootEP();
 		if (typeRootEP != null) {
@@ -168,8 +173,8 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 
 	private FBTypeRootEditPart getFBTypeRootEP() {
 		for (final Object part : getRoot().getChildren()) {
-			if (part instanceof FBTypeRootEditPart) {
-				return (FBTypeRootEditPart) part;
+			if (part instanceof final FBTypeRootEditPart fbtRootEP) {
+				return fbtRootEP;
 			}
 		}
 		return null;

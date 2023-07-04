@@ -109,4 +109,9 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart {
 	public void refreshName() {
 		getNameLabel().setText(getCastedModel().getComment());
 	}
+
+	@Override
+	public boolean isConnectable() {
+		return false;
+	}
 }

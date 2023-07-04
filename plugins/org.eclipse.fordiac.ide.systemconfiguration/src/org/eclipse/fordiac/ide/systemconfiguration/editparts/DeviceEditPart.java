@@ -201,6 +201,11 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		setColor(figure, fordiacColor);
 	}
 
+	@Override
+	public boolean isConnectable() {
+		return true;
+	}
+
 	private final class DeviceConnectionAnchor extends ChopboxAnchor {
 		DeviceConnectionAnchor(final IFigure owner) {
 			super(owner);
