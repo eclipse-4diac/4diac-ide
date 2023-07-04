@@ -27,103 +27,100 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class GitLabImportWizardPage extends WizardPage {
-	
+
 	private Text url;
 	private Text token;
 	private Composite container;
 	private GitLabDownloadManager downloadManager;
 
-	public GitLabImportWizardPage(String pageName) {
+	public GitLabImportWizardPage(final String pageName) {
 		super(pageName);
-		setTitle(pageName); 
-		setDescription("Import files from GitLab into the workspace"); //NON-NLS-1
+		setTitle(pageName);
+		setDescription("Import files from GitLab into the workspace"); //$NON-NLS-1$
 	}
-	
+
 	public GitLabDownloadManager getDownloadManager() {
 		return downloadManager;
 	}
 
 	public String getUrl() {
 		return url.getText();
-		}
+	}
 
 	public String getToken() {
 		return token.getText();
 	}
-	
+
 	@Override
-	public void setPageComplete(boolean complete) {
+	public void setPageComplete(final boolean complete) {
 		super.setPageComplete(complete);
-		if(complete && validateFields()) {
+		if (complete && validateFields()) {
 			connect();
 		}
 	}
-	
+
 	private void connect() {
 		downloadManager = new GitLabDownloadManager(this);
-    	downloadManager.connectToGitLab(getToken());
-    	
+		downloadManager.connectToGitLab();
+
 	}
-	
+
 	private boolean validateFields() {
 		return !url.getText().isEmpty() && !token.getText().isEmpty();
 	}
-	
-    @Override
-    public void createControl(Composite parent) {
-     Button connectionButton;
-    	container = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout();
-        container.setLayout(layout);
-        layout.numColumns = 2;
-        
-        createLabel("URL:");
-        url  = new Text(container, SWT.BORDER | SWT.SINGLE);
-        url.setText(PreferenceConstants.getURL());
-        url.setFocus();
-        
-        createLabel("Token:");
-        token = new Text(container, SWT.PASSWORD | SWT.BORDER | SWT.SINGLE);
-        token.setText(PreferenceConstants.getToken());
-        
-        
-        // We could also bind connecting to pressing enter instead of having a button
-        connectionButton = WidgetFactory.button(NONE).text("Connect").create(container);
-        connectionButton.addMouseListener(new MouseListener() {
-			
+
+	@Override
+	public void createControl(final Composite parent) {
+		Button connectionButton;
+		container = new Composite(parent, SWT.NONE);
+		final GridLayout layout = new GridLayout();
+		container.setLayout(layout);
+		layout.numColumns = 2;
+
+		createLabel("URL:");
+		url = new Text(container, SWT.BORDER | SWT.SINGLE);
+		url.setText(PreferenceConstants.getURL());
+		url.setFocus();
+
+		createLabel("Token:");
+		token = new Text(container, SWT.PASSWORD | SWT.BORDER | SWT.SINGLE);
+		token.setText(PreferenceConstants.getToken());
+
+		// We could also bind connecting to pressing enter instead of having a button
+		connectionButton = WidgetFactory.button(NONE).text("Connect").create(container);
+		connectionButton.addMouseListener(new MouseListener() {
+
 			@Override
-			public void mouseUp(MouseEvent e) {
+			public void mouseUp(final MouseEvent e) {
 				// Nothing for now
-				
+
 			}
-			
+
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseDown(final MouseEvent e) {
 				setPageComplete(true);
 			}
 
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {
+			public void mouseDoubleClick(final MouseEvent e) {
 				// Nothing for now
-				
+
 			}
 		});
-        
-        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-        url.setLayoutData(gd);
-        token.setLayoutData(gd);
-        // required to avoid an error in the system
-        setControl(container);
-        // Cannot be complete before we connect to GitLab
-        setPageComplete(false);
-    }
-    
 
-    
-    private Label createLabel(String labelText) {
-    	Label label = new Label(container, SWT.NONE);
-        label.setText(labelText);
-    	return label;
-    }
-    
+		final GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		url.setLayoutData(gd);
+		token.setLayoutData(gd);
+		// required to avoid an error in the system
+		setControl(container);
+		// Cannot be complete before we connect to GitLab
+		setPageComplete(false);
+	}
+
+	private Label createLabel(final String labelText) {
+		final Label label = new Label(container, SWT.NONE);
+		label.setText(labelText);
+		return label;
+	}
+
 }
