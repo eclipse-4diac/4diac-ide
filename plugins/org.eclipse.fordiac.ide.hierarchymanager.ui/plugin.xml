@@ -100,7 +100,7 @@
 	          id="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDropAssistant">
 		       <possibleDropTargets>
 		          <or>
-		             <adapt type="java.lang.Object"/>
+		             <adapt type="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node"/>
 		          </or>
 		       </possibleDropTargets>
 		    </dropAssistant>        
@@ -113,7 +113,7 @@
 	               <instanceof value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf"> </instanceof>               
 	            </or>
         	</enablement>
-  		</actionProvider>
+  		</actionProvider>  
    	</extension>
    	<extension point="org.eclipse.ui.perspectiveExtensions">  
 		<perspectiveExtension 
