@@ -12,13 +12,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search.dialog;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -70,12 +74,11 @@ public class FBUpdateDialog extends MessageDialog {
 
 	private static final int NUMBER_OF_COLLUMNS = 1;
 	private static final int TABLE_COL_WIDTH = 150;
-	private static final int CHECK_BOX_COL_WIDTH = 30;
+	private static final int CHECK_BOX_COL_WIDTH = 60;
 	private boolean selectAll = true;
 
 	private final Set<Object> collectedElements;
-	// private TableViewer viewer;
-	private TreeViewer treeViewer;
+	private static TreeViewer treeViewer;
 	private final Map<String, Set<INamedElement>> children = new HashMap<>();
 	private ColumnLabelProvider labelElement;
 	private ColumnLabelProvider labelPath;
@@ -113,9 +116,6 @@ public class FBUpdateDialog extends MessageDialog {
 			configureTableViewer(treeViewer);
 			treeViewer.setInput(result.toArray());
 			GridLayoutFactory.fillDefaults().generateLayout(searchResArea);
-			// viewer = createTableViewer(searchResArea);
-			//
-			// viewer.setInput(result.toArray());
 		}
 		return parent;
 	}
@@ -127,16 +127,18 @@ public class FBUpdateDialog extends MessageDialog {
 				.createStructInterfaceSearch((StructuredType) dataTypeEntry.getTypeEditable());
 		// add types to input
 		inputElements.addAll(search.performTypeLibBlockSearch(dataTypeEntry.getTypeLibrary()).stream()
-				.filter(SubAppType.class::isInstance).toList());
+				.filter(FBType.class::isInstance).toList());
 		// initiate map with types
 		inputElements.stream().forEach(st -> children.put(st.getName(), new HashSet<>()));
 		// add typed subapp instances as children
-		performSearch(new FBInstanceSearch(dataTypeEntry)).stream().forEach(s -> {
-			if (s instanceof final SubApp subApp && !subApp.isTyped()) {
-				inputElements.add(s);
-			}
-			children.get(((FBNetworkElement) s).getTypeName()).add(s);
-		});
+		performSearch(new FBInstanceSearch(dataTypeEntry)).stream().filter(FBNetworkElement.class::isInstance)
+				.map(FBNetworkElement.class::cast).forEach(s -> {
+					if (s instanceof StructManipulator || (s instanceof final SubApp subApp && !subApp.isTyped())) {
+						inputElements.add(s);
+					} else {
+						children.get(s.getTypeName()).add(s);
+					}
+				});
 		// add structmanipulators and untyped subapps to input
 		inputElements.addAll(performSearch(new StructManipulatorSearch(dataTypeEntry)));
 		return inputElements;
@@ -168,8 +170,8 @@ public class FBUpdateDialog extends MessageDialog {
 		this.labelType = new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof final SubApp subapp && subapp.isTyped()) {
-					return "Untyped SubApp"; //$NON-NLS-1$
+				if (element instanceof final SubApp subapp) {
+					return subapp.isTyped() ? "Typed SubApp" : "Untyped SubApp";  //$NON-NLS-1$//$NON-NLS-2$
 				}
 				if (element instanceof final IInterfaceElement interfaceElem) {
 					return interfaceElem.getTypeName();
@@ -177,27 +179,16 @@ public class FBUpdateDialog extends MessageDialog {
 				if (element instanceof final StructManipulator manipulator) {
 					return manipulator.getTypeName();
 				}
-				if (element instanceof final FBNetworkElement e) {
-					return e.getTypeName();
-				}
 				if (element instanceof final SubAppType) {
 					return "SubAppType";
 				}
-				return super.getText(element);
+				return element.getClass().getSimpleName();
+
 			}
 		};
 	}
 
 	public void refresh() {
-
-		final Set<INamedElement> input = performSearch(new FBInstanceSearch(dataTypeEntry),
-				new StructManipulatorSearch(dataTypeEntry));
-		final InstanceSearch search = StructDataTypeSearch
-				.createStructInterfaceSearch((StructuredType) dataTypeEntry.getTypeEditable());
-		input.addAll(search.performTypeLibBlockSearch(dataTypeEntry.getTypeLibrary()).stream()
-				.filter(SubAppType.class::isInstance).toList());
-		treeViewer.setInput(input);
-
 	}
 
 	protected Set<INamedElement> performStructSearch() {
@@ -239,7 +230,7 @@ public class FBUpdateDialog extends MessageDialog {
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof final SubAppType type) {
+				if (parentElement instanceof final FBType type) {
 					return children.get(type.getName()).toArray();
 				}
 				return new Object[0];
@@ -247,15 +238,18 @@ public class FBUpdateDialog extends MessageDialog {
 
 			@Override
 			public Object getParent(final Object element) {
-				if (element instanceof final SubApp subApp && subApp.isTyped()) {
-					return subApp.getType();
+				if (element instanceof final SubApp subApp && !subApp.isTyped()) {
+					return null;
+				}
+				if (element instanceof final FBNetworkElement elem) {
+					return elem.getType();
 				}
 				return null;
 			}
 
 			@Override
 			public boolean hasChildren(final Object element) {
-				if (element instanceof final SubAppType type) {
+				if (element instanceof final FBType type) {
 					return !children.get(type.getName()).isEmpty();
 				}
 				return false;
@@ -272,12 +266,11 @@ public class FBUpdateDialog extends MessageDialog {
 		table.addListener(SWT.Selection, event -> {
 			if (event.detail == SWT.CHECK) {
 				final TreeItem tableItem = (TreeItem) event.item;
-				if (tableItem.getData() instanceof final FBNetworkElement fb) {
-					if (tableItem.getChecked()) {
-						collectedElements.add(fb);
-					} else {
-						collectedElements.remove(tableItem.getData());
-					}
+				// if it's a type just add or remove it
+				if (tableItem.getData() instanceof FBType) {
+					clickTypeItem(tableItem);
+				} else if (tableItem.getData() instanceof FBNetworkElement) {
+					clickFBNetworkItem(tableItem);
 				}
 			}
 		});
@@ -296,6 +289,9 @@ public class FBUpdateDialog extends MessageDialog {
 				colCheckBox.getColumn().setImage(FordiacImage.ICON_EXPAND_ALL.getImage());
 			}
 			selectAll = !selectAll;
+		});
+		colCheckBox.getColumn().addListener(SWT.Expand, event -> {
+			colCheckBox.getColumn().pack();
 		});
 
 		colCheckBox.setLabelProvider(new ColumnLabelProvider() {
@@ -369,9 +365,42 @@ public class FBUpdateDialog extends MessageDialog {
 
 	}
 
+	private void clickTypeItem(final TreeItem item) {
+		if (item.getChecked()) {
+			collectedElements.add(item.getData());
+			if (!item.getExpanded()) {
+				item.setExpanded(true);
+				treeViewer.refresh();
+			}
+			Arrays.asList(item.getItems()).stream().forEach(e -> {
+				e.setChecked(true);
+				collectedElements.add(e.getData());
+			});
+		} else {
+			collectedElements.remove(item.getData());
+			Arrays.asList(item.getItems()).stream().forEach(e -> {
+				e.setChecked(false);
+				collectedElements.remove(e.getData());
+			});
+		}
+	}
+
+	private void clickFBNetworkItem(final TreeItem item) {
+		final TreeItem parent = item.getParentItem();
+		if (item.getChecked()) {
+			if (parent != null) {
+				parent.setChecked(true);
+				collectedElements.add(parent.getData());
+			}
+			collectedElements.add(item.getData());
+		} else {
+			collectedElements.remove(item.getData());
+		}
+	}
+
 	private static TableLayout createTableLayout() {
 		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(CHECK_BOX_COL_WIDTH));
+		layout.addColumnData(new ColumnPixelData(CHECK_BOX_COL_WIDTH, true));
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
@@ -379,16 +408,32 @@ public class FBUpdateDialog extends MessageDialog {
 	}
 
 	void changeSelectionState(final Tree table, final boolean state) {
-		for (final TreeItem tableItem : table.getItems()) {
+		final List<TreeItem> allItemList = new ArrayList<>();
+		getAllItems(allItemList, Arrays.asList(table.getItems()));
+		for (final TreeItem tableItem : allItemList) {
 			tableItem.setChecked(state);
-			if (tableItem.getData() instanceof final FBNetworkElement fb) {
+			if (tableItem.getData() instanceof FBNetworkElement || tableItem.getData() instanceof FBType) {
 				if (state) {
-					collectedElements.add(fb);
+					collectedElements.add(tableItem.getData());
 				} else {
 					collectedElements.remove(tableItem.getData());
 				}
 			}
 		}
+	}
+
+	private static void getAllItems(final List<TreeItem> allItemList, final List<TreeItem> roots) {
+		if (roots.isEmpty()) {
+			return;
+		}
+		allItemList.addAll(roots);
+		roots.stream().forEach(r -> {
+			if (!r.getExpanded()) {
+				r.setExpanded(true);
+				treeViewer.refresh();
+			}
+			getAllItems(allItemList, Arrays.asList(r.getItems()));
+		});
 	}
 
 	@Override
