@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.AbstractHierarchyHandler;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.CreateLeafOperation;
+import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.MoveNodeOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -59,8 +60,10 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 		if (aTarget == null || aDropTargetEvent.data == null) {
 			return Status.CANCEL_STATUS;
 		}
+		final boolean isNodeDrop = aDropTargetEvent.data instanceof final TreeSelection selection
+				&& selection.getFirstElement() instanceof Node;
 
-		if (getTargetProject() != getSourceProject(
+		if (!isNodeDrop && getTargetProject() != getSourceProject(
 				(SubApp) (((TreeSelection) aDropTargetEvent.data).getFirstElement()))) {
 			return Status.CANCEL_STATUS;
 		}
@@ -69,21 +72,26 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 			return Status.CANCEL_STATUS;
 		}
 		Level parent = null;
-		final boolean isNodeDrop = aDropTargetEvent.data instanceof final TreeSelection selection
-				&& selection.getFirstElement() instanceof Node;
-		if (!isNodeDrop) {
-			if (aTarget instanceof final Level targetLevel) {
-				parent = targetLevel;
-			} else if (aTarget instanceof final Leaf targetLeaf) {
-				parent = (Level) targetLeaf.eContainer();
-			}
-			if (parent != null) {
+		if (aTarget instanceof final Level targetLevel) {
+			parent = targetLevel;
+		} else if (aTarget instanceof final Leaf targetLeaf) {
+			parent = (Level) targetLeaf.eContainer();
+		}
+
+		if (parent != null) {
+			if (!isNodeDrop) {
 				final CreateLeafOperation operation = new CreateLeafOperation(parent,
 						(SubApp) (((TreeSelection) aDropTargetEvent.data).getFirstElement()));
 				AbstractHierarchyHandler.executeOperation(operation);
 
 				return Status.OK_STATUS;
 			}
+
+			final MoveNodeOperation operation = new MoveNodeOperation(parent,
+					(Node) (((TreeSelection) aDropTargetEvent.data).getFirstElement()));
+			AbstractHierarchyHandler.executeOperation(operation);
+
+			return Status.OK_STATUS;
 		}
 
 		return Status.CANCEL_STATUS;
@@ -102,7 +110,7 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 				.getCommonNavigator()).getCurrentProject();
 	}
 
-	private IProject getSourceProject(final SubApp subapp) {
+	private static IProject getSourceProject(final SubApp subapp) {
 		final EObject rootContainer = EcoreUtil.getRootContainer(subapp);
 		if (rootContainer instanceof final LibraryElement libEl) {
 			return libEl.getTypeEntry().getFile().getProject();
