@@ -14,13 +14,27 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteVarInOutCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
+import org.eclipse.gef.requests.GroupRequest;
 
 public class VarInOutEditPart extends InterfaceEditPart {
+
+	private static class DeleteVarInOutEditPolicy extends ComponentEditPolicy {
+
+		@Override
+		protected Command getDeleteCommand(final GroupRequest request) {
+			if (getHost().getModel() instanceof final VarDeclaration varDecl) {
+				return new DeleteVarInOutCommand(varDecl);
+			}
+			return super.getDeleteCommand(request);
+		}
+	}
 
 	@Override
 	protected void createEditPolicies() {
@@ -39,6 +53,10 @@ public class VarInOutEditPart extends InterfaceEditPart {
 					return null;
 				}
 			});
+		}
+
+		if (isInterfaceEditable()) {
+			installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteVarInOutEditPolicy());
 		}
 	}
 

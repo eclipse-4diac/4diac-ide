@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateVarInOutCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteVarInOutCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
@@ -197,7 +198,7 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 	}
 
 	private static DeleteInterfaceCommand newDeleteCommand(final IInterfaceElement selection) {
-		return new DeleteInterfaceCommand(selection);
+		return new DeleteVarInOutCommand((VarDeclaration) selection);
 	}
 
 	private static ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection,
