@@ -69,18 +69,21 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 			return Status.CANCEL_STATUS;
 		}
 		Level parent = null;
-		if (aTarget instanceof final Level targetLevel) {
-			parent = targetLevel;
-		} else if (aTarget instanceof final Leaf targetLeaf) {
-			parent = (Level) targetLeaf.eContainer();
-		}
-		if (parent != null) {
-			final CreateLeafOperation operation = new CreateLeafOperation(parent,
-					(SubApp) (((TreeSelection) aDropTargetEvent.data).getFirstElement()));
-			AbstractHierarchyHandler.executeOperation(operation);
+		final boolean isNodeDrop = aDropTargetEvent.data instanceof final TreeSelection selection
+				&& selection.getFirstElement() instanceof Node;
+		if (!isNodeDrop) {
+			if (aTarget instanceof final Level targetLevel) {
+				parent = targetLevel;
+			} else if (aTarget instanceof final Leaf targetLeaf) {
+				parent = (Level) targetLeaf.eContainer();
+			}
+			if (parent != null) {
+				final CreateLeafOperation operation = new CreateLeafOperation(parent,
+						(SubApp) (((TreeSelection) aDropTargetEvent.data).getFirstElement()));
+				AbstractHierarchyHandler.executeOperation(operation);
 
-			return Status.OK_STATUS;
-
+				return Status.OK_STATUS;
+			}
 		}
 
 		return Status.CANCEL_STATUS;
@@ -89,8 +92,9 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 
 	@Override
 	public boolean isSupportedType(final TransferData aTransferType) {
-		return getCurrentEvent().data instanceof final TreeSelection selection
-				&& selection.getFirstElement() instanceof SubApp && super.isSupportedType(aTransferType);
+		return (getCurrentEvent().data instanceof final TreeSelection selection
+				&& (selection.getFirstElement() instanceof Node || selection.getFirstElement() instanceof SubApp))
+				&& super.isSupportedType(aTransferType);
 	}
 
 	private IProject getTargetProject() {
@@ -98,7 +102,7 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 				.getCommonNavigator()).getCurrentProject();
 	}
 
-	private static IProject getSourceProject(final SubApp subapp) {
+	private IProject getSourceProject(final SubApp subapp) {
 		final EObject rootContainer = EcoreUtil.getRootContainer(subapp);
 		if (rootContainer instanceof final LibraryElement libEl) {
 			return libEl.getTypeEntry().getFile().getProject();
