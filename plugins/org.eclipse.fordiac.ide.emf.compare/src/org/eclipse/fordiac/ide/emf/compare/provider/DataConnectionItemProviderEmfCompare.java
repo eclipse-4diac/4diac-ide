@@ -8,7 +8,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Fabio Gandolfi - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi
+ *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.emf.compare.provider;
 
@@ -17,19 +18,19 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.provider.EventConnectionItemProvider;
+import org.eclipse.fordiac.ide.model.libraryElement.provider.DataConnectionItemProvider;
 
-public class EventConnectionItemProviderEmfCompare extends EventConnectionItemProvider {
+public class DataConnectionItemProviderEmfCompare extends DataConnectionItemProvider {
 
-	public EventConnectionItemProviderEmfCompare(final AdapterFactory adapterFactory) {
+	public DataConnectionItemProviderEmfCompare(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
 	@Override
 	public Object getParent(final Object object) {
-		final EObject cont = ((EventConnection) object).eContainer();
+		final EObject cont = ((DataConnection) object).eContainer();
 		if (cont instanceof final FBNetwork fbNetwork) {
 			return fbNetwork;
 		}
@@ -38,18 +39,9 @@ public class EventConnectionItemProviderEmfCompare extends EventConnectionItemPr
 
 	@Override
 	public Collection<?> getChildren(final Object object) {
-		// final Collection<Object> children = new ArrayList<>();
-		// children.add(((EventConnection) object).getSource());
-		// children.add(((EventConnection) object).getDestination());
-		// return children;
-
 		final Collection<Object> children = new ArrayList<>();
-		children.add(((EventConnection) object).getRoutingData());
+		children.add(((DataConnection) object).getRoutingData());
 		return children;
-
-		// return Collections.EMPTY_LIST;
-
-		// return super.getChildren(object);
 	}
 
 }

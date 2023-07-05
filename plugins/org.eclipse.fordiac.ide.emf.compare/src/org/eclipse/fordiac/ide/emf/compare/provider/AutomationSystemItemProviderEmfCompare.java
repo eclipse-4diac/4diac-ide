@@ -67,6 +67,22 @@ public class AutomationSystemItemProviderEmfCompare extends AutomationSystemProv
 	}
 
 	@Override
+	public Adapter createDataConnectionAdapter() {
+		if (dataConnectionItemProvider == null) {
+			dataConnectionItemProvider = new DataConnectionItemProviderEmfCompare(this);
+		}
+		return dataConnectionItemProvider;
+	}
+
+	@Override
+	public Adapter createAdapterConnectionAdapter() {
+		if (adapterConnectionItemProvider == null) {
+			adapterConnectionItemProvider = new AdapterConnectionItemProviderEmfCompare(this);
+		}
+		return adapterConnectionItemProvider;
+	}
+
+	@Override
 	public Adapter createInterfaceListAdapter() {
 		return new InterfaceListItemProviderEmfCompare(this);
 	}
@@ -85,5 +101,42 @@ public class AutomationSystemItemProviderEmfCompare extends AutomationSystemProv
 			groupItemProvider = new GroupItemProviderEmfCompare(this);
 		}
 		return groupItemProvider;
+	}
+
+	@Override
+	public Adapter createEventAdapter() {
+		if (eventItemProvider == null) {
+			eventItemProvider = new EventItemProviderEmfCompare(this);
+		}
+		return eventItemProvider;
+	}
+
+	@Override
+	public Adapter createVarDeclarationAdapter() {
+		if (varDeclarationItemProvider == null) {
+			varDeclarationItemProvider = new VarDeclarationItemProviderEmfCompare(this);
+		}
+		return varDeclarationItemProvider;
+	}
+
+	@Override
+	public Adapter createAdapterDeclarationAdapter() {
+		if (adapterDeclarationItemProvider == null) {
+			adapterDeclarationItemProvider = new AdapterDeclarationItemProviderEmfCompare(this);
+		}
+		return adapterDeclarationItemProvider;
+	}
+
+	@Override
+	public Adapter createWithAdapter() {
+		if (withItemProvider == null) {
+			withItemProvider = new WithItemProviderEmfCompare(this);
+		}
+		return withItemProvider;
+	}
+
+	@Override
+	public Adapter createValueAdapter() {
+		return super.createValueAdapter();
 	}
 }
