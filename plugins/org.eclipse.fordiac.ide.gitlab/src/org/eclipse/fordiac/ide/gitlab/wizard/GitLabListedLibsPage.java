@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.fordiac.ide.gitlab.Messages;
+import org.eclipse.fordiac.ide.gitlab.Package;
+import org.eclipse.fordiac.ide.gitlab.Project;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.GLTreeContentProvider;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -28,100 +31,98 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
-import org.gitlab4j.api.models.Package;
-import org.gitlab4j.api.models.Project;
 
 public class GitLabListedLibsPage extends WizardPage {
-	
+
 	private ContainerCheckedTreeViewer treeViewer;
 
-	protected GitLabListedLibsPage(String pageName) {
+	protected GitLabListedLibsPage(final String pageName) {
 		super(pageName);
 		setTitle(pageName);
-		setDescription("Available packages in GitLab");
+		setDescription(Messages.GitLab_Available_Packages);
 	}
 
 	@Override
-	public void createControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-	    container.setLayoutData(gd);
-	    
-        GridLayout layout = new GridLayout(1, true);
-        container.setLayout(layout);
-        
-        treeViewer = new ContainerCheckedTreeViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-        
-        treeViewer.getTree().setHeaderVisible(true);
-        treeViewer.getTree().setLinesVisible(true);
-        treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-       
-        createColumns(treeViewer);
-        
-        treeViewer.addCheckStateListener(event -> {
-        	setPageComplete(isComplete());
-        });
-        treeViewer.expandAll();
-        // required to avoid an error in the system
-        setControl(container);
-        setPageComplete(false);
+	public void createControl(final Composite parent) {
+		final Composite container = new Composite(parent, SWT.NONE);
+		final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		container.setLayoutData(gd);
+
+		final GridLayout layout = new GridLayout(1, true);
+		container.setLayout(layout);
+
+		treeViewer = new ContainerCheckedTreeViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+
+		treeViewer.getTree().setHeaderVisible(true);
+		treeViewer.getTree().setLinesVisible(true);
+		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		createColumns(treeViewer);
+
+		treeViewer.addCheckStateListener(event -> setPageComplete(isComplete()));
+		treeViewer.expandAll();
+		// required to avoid an error in the system
+		setControl(container);
+		setPageComplete(false);
 	}
-	
-	private void createColumns(TreeViewer viewer) {
+
+	private static void createColumns(final TreeViewer viewer) {
 		// Projects and packages column
-		TreeViewerColumn viewerColumn = new TreeViewerColumn(viewer, SWT.NONE);
-        viewerColumn.getColumn().setWidth(500);
-        viewerColumn.getColumn().setText("Packages and projects");
-        viewerColumn.setLabelProvider(new ColumnLabelProvider() {
-        	@Override
-        	public String getText(Object element) {
-        		if (element instanceof Project project) {
-        			return project.getName();
-        		} else if (element instanceof Package pack) {
-        			return pack.getName();
-        		} else if (element instanceof LeafNode leafNode) {
-        			return leafNode.getVersion();
-        		}
-        		return "";
-        	}
-        });
+		final TreeViewerColumn viewerColumn = new TreeViewerColumn(viewer, SWT.NONE);
+		viewerColumn.getColumn().setWidth(500);
+		viewerColumn.getColumn().setText(Messages.GitLab_Packages_And_Projects);
+		viewerColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof final Project project) {
+					return project.getName();
+				}
+				if (element instanceof final Package pack) {
+					return pack.getName();
+				}
+				if (element instanceof final LeafNode leafNode) {
+					return leafNode.getVersion();
+				}
+				return ""; //$NON-NLS-1$
+			}
+		});
 	}
-	
+
 	// If there is something selected, we can click finish
 	private boolean isComplete() {
 		return treeViewer.getCheckedElements().length != 0;
 	}
-	
+
 	@Override
-	public void setVisible(boolean visible) {
+	public void setVisible(final boolean visible) {
 		super.setVisible(visible);
-		// Setting the input here insures that we have already connected to GitLab and that the packages are indeed available
-		treeViewer.setContentProvider(new GLTreeContentProvider(((GitLabImportWizardPage)getPreviousPage())
-				.getDownloadManager().getPackagesAndLeaves()));
+		// Setting the input here insures that we have already connected to GitLab and
+		// that the packages are indeed available
+		treeViewer.setContentProvider(new GLTreeContentProvider(
+				((GitLabImportWizardPage) getPreviousPage()).getDownloadManager().getPackagesAndLeaves()));
 		treeViewer.setInput(getProjectAndPackagesMap());
 	}
-	
+
 	public boolean finish() {
 		try {
-			for (Object o: treeViewer.getCheckedElements()) {
-				if (o instanceof LeafNode leafNode) {
+			for (final Object o : treeViewer.getCheckedElements()) {
+				if (o instanceof final LeafNode leafNode) {
 					((GitLabImportWizardPage) getPreviousPage()).getDownloadManager()
-					.packageDownloader(leafNode.getProject(), leafNode.getPackage());
+							.packageDownloader(leafNode.getProject(), leafNode.getPackage());
 				}
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 			return false;
 		}
 		return true;
 	}
 
-
 	private Map<Project, List<Package>> getProjectAndPackagesMap() {
 		if (getPreviousPage() instanceof GitLabImportWizardPage && getPreviousPage().isPageComplete()) {
-				return ((GitLabImportWizardPage)getPreviousPage()).getDownloadManager().getProjectsAndPackages();
+			return ((GitLabImportWizardPage) getPreviousPage()).getDownloadManager().getProjectsAndPackages();
 		}
-		return new HashMap<>(); 
+		return new HashMap<>();
 	}
 
 }

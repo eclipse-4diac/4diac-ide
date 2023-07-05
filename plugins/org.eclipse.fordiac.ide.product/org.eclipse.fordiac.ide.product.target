@@ -61,27 +61,5 @@
 			<unit id="org.eclipse.gef.sdk.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.gef.source.feature.group" version="0.0.0"/>
 		</location>
-		<location includeDependencyDepth="infinite" includeDependencyScopes="compile,provided,runtime,test,system,import" includeSource="true" missingManifest="generate" type="Maven">
-			<dependencies>
-				<dependency>
-					<groupId>org.gitlab4j</groupId>
-					<artifactId>gitlab4j-api</artifactId>
-					<version>5.0.1</version>
-					<type>jar</type>
-				</dependency>
-				<dependency>
-					<groupId>org.glassfish.jersey.core</groupId>
-					<artifactId>jersey-server</artifactId>
-					<version>2.39.1</version>
-					<type>jar</type>
-				</dependency>
-				<dependency>
-					<groupId>org.glassfish.jersey.inject</groupId>
-					<artifactId>jersey-hk2</artifactId>
-					<version>2.39.1</version>
-					<type>jar</type>
-				</dependency>
-			</dependencies>
-		</location>
 	</locations>
 </target>
