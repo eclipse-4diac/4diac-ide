@@ -509,24 +509,30 @@
             class="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.deleteFBType"
             name="Delete FB Type Handler">
-         <enablement>
-         	<and>
-         		<instanceof 
-                     value="org.eclipse.core.resources.IFile">
-               </instanceof>
-               <test
-               		 forcePluginActivation="true"	
-                     property="org.eclipse.core.resources.extension"
-                     value="fbt">
-               </test>
-               <test
-               		 forcePluginActivation="true"	
-                     property="org.eclipse.core.resources.extension"
-                     value="fct">
-               </test>
-            </and>   
-         </enablement>
-               
+     	<enablement>
+     		<and>
+     			<instanceof 
+                 	value="org.eclipse.core.resources.IFile">
+               	</instanceof>
+               	<or>
+           			<test
+       		 			forcePluginActivation="true"	
+                    	property="org.eclipse.core.resources.extension"
+                     	value="fbt">
+           			</test>
+               		<test
+               		 	forcePluginActivation="true"	
+                    	property="org.eclipse.core.resources.extension"
+                     	value="fct">
+               		</test>
+               		<test
+               		 	forcePluginActivation="true"	
+                     	property="org.eclipse.core.resources.extension"
+                     	value="dtp">
+               		</test>
+           		</or>
+        	</and>   
+     	</enablement> 
       </deleteParticipant>
    </extension>
     <extension
