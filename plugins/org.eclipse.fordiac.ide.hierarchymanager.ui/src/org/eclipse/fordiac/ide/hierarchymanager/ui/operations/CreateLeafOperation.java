@@ -40,11 +40,21 @@ public class CreateLeafOperation extends AbstractChangeHierarchyOperation {
 	@Override
 	public IStatus execute(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		newLeaf = HierarchyFactory.eINSTANCE.createLeaf();
-		newLeaf.setRef(subapp.getQualifiedName());
+		newLeaf.setRef(getSubAppHierName());
 		newLeaf.setContainerFileName(getFileName());
 		parent.getChildren().add(newLeaf);
 		saveHierarchy(parent, monitor);
 		return Status.OK_STATUS;
+	}
+
+	public String getSubAppHierName() {
+		final String qualifiedName = subapp.getQualifiedName();
+		final int firstDot = qualifiedName.indexOf('.');
+		if (firstDot != -1) {
+			// strip system name
+			return qualifiedName.substring(firstDot + 1);
+		}
+		return qualifiedName;
 	}
 
 	@Override
