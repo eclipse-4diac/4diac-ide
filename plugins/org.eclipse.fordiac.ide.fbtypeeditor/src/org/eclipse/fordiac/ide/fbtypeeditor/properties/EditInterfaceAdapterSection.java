@@ -27,7 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement,
+			final boolean isInput) {
 		final AdapterType last = getLastUsedAdapterType(getType().getInterfaceList(), interfaceElement, isInput);
 		final int pos = getInsertingIndex(interfaceElement, isInput);
 		return new CreateInterfaceElementCommand(last, getCreationName(interfaceElement), getType().getInterfaceList(),
@@ -36,8 +37,7 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 
 	@Override
 	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
-			final boolean isInput,
-			final int index) {
+			final boolean isInput, final int index) {
 		return new CreateInterfaceElementCommand(interfaceElement, isInput, getType().getInterfaceList(), index);
 	}
 
@@ -59,11 +59,6 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	@Override
 	protected FBType getType() {
 		return (FBType) type;
-	}
-
-	@Override
-	public boolean isEditable() {
-		return true;
 	}
 
 	@Override

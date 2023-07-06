@@ -20,8 +20,10 @@ package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
@@ -63,6 +65,10 @@ public class AdapterInterfaceElementSection extends AbstractDoubleColumnSection 
 		commandStack = commandStackBuffer;
 	}
 
+	public boolean isEditable() {
+		return !(EcoreUtil.getRootContainer(getType()) instanceof FunctionFBType);
+	}
+
 	@Override
 	protected IInterfaceElement getType() {
 		return (IInterfaceElement) type;
@@ -70,11 +76,15 @@ public class AdapterInterfaceElementSection extends AbstractDoubleColumnSection 
 
 	@Override
 	protected void setInputInit() {
-		if (pinInfoBasicWidget != null) {
-			pinInfoBasicWidget.initialize(getType(), this::executeCommand);
-			pinInfoBasicWidget.getTypeSelectionWidget().initialize(getType(), getTypeSelectionContentProvider());
-		}
+		setupPinInfoWidget(getType());
 
+	}
+
+	protected void setupPinInfoWidget(final IInterfaceElement ie) {
+		if (pinInfoBasicWidget != null) {
+			pinInfoBasicWidget.initialize(ie, this::executeCommand);
+			pinInfoBasicWidget.getTypeSelectionWidget().initialize(ie, getTypeSelectionContentProvider());
+		}
 	}
 
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {

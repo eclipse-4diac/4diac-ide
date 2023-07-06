@@ -234,6 +234,8 @@ public abstract class CommonElementImporter {
 	protected void restorePersistedErrorMessages() {
 		FordiacMarkerHelper.findAllMarkers(file, element, FordiacErrorMarker.INITIAL_VALUE_MARKER,
 				CommonElementImporter::restorePersistedErrorMessage);
+		FordiacMarkerHelper.findAllMarkers(file, element, FordiacErrorMarker.TYPE_DECLARATION_MARKER,
+				CommonElementImporter::restorePersistedErrorMessage);
 	}
 
 	protected static void restorePersistedErrorMessage(final EObject target, final IMarker marker) {

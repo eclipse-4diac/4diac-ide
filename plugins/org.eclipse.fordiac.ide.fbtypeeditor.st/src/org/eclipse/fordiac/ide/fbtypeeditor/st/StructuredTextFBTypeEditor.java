@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,9 +15,9 @@ package org.eclipse.fordiac.ide.fbtypeeditor.st;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeXtextEditor;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocument;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentFBTypeUpdater;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmMapper;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.FBTypeXtextDocument;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.FBTypeXtextDocumentUpdater;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.ui.IEditorInput;
@@ -29,28 +29,28 @@ import com.google.inject.Inject;
 public class StructuredTextFBTypeEditor extends FBTypeXtextEditor {
 
 	@Inject
-	private STAlgorithmMapper algorithmMapper;
+	private STCoreMapper algorithmMapper;
 
 	@Inject
 	private ILocationInFileProvider locationProvider;
 
 	@Inject
-	private STAlgorithmDocumentFBTypeUpdater fbTypeUpdater;
+	private FBTypeXtextDocumentUpdater fbTypeUpdater;
 
 	@Override
 	protected void installFBTypeUpdater() {
-		if (getDocument() instanceof STAlgorithmDocument) {
-			fbTypeUpdater.install((STAlgorithmDocument) getDocument());
+		if (getDocument() instanceof final FBTypeXtextDocument fbTypeXtextDocument) {
+			fbTypeUpdater.install(fbTypeXtextDocument);
 		}
 	}
-	
+
 	@Override
 	protected void removeFBTypeUpdater() {
 		fbTypeUpdater.uninstall();
 	}
-	
+
 	@Override
-	protected void doSetInput(IEditorInput input) throws CoreException {
+	protected void doSetInput(final IEditorInput input) throws CoreException {
 		super.doSetInput(input);
 		setPartName(FordiacMessages.Algorithm);
 		setTitleImage(FordiacImage.ICON_ALGORITHM.getImage());
@@ -78,6 +78,6 @@ public class StructuredTextFBTypeEditor extends FBTypeXtextEditor {
 
 	@Override
 	public String getEditorId() {
-		return "org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"; //$NON-NLS-1$
+		return getLanguageName();
 	}
 }

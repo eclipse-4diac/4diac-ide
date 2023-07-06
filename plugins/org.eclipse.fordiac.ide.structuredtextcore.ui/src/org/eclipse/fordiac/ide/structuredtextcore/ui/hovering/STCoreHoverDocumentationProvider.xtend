@@ -87,7 +87,7 @@ class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider
 		«IF !object.inputParameters.isEmpty»
 			<p>INPUTS: 
 			«FOR in : object.inputParameters»
-				<div style="text-indent:10px;"><b>«in.name» : «(in as STVarDeclaration).type.name» «IF !in.comment.blank»  («in.comment») «ENDIF»</b> «IF !in.documentation.nullOrEmpty» - «in.documentation»«ENDIF»</div>
+				<div style="text-indent:10px;"><b>«in.name» : «(in as STVarDeclaration).type.name»«IF object.varargs && in == object.inputParameters.last» ...«ENDIF» «IF !in.comment.blank»  («in.comment») «ENDIF»</b> «IF !in.documentation.nullOrEmpty» - «in.documentation»«ENDIF»</div>
 			«ENDFOR»
 			</p>
 		«ENDIF»	

@@ -133,6 +133,8 @@ public class DeleteFBNetworkElementCommand extends Command {
 			if ((varIn.getValue() != null) && (varIn.getValue().hasError())) {
 				deleteMarkersCmds.add(FordiacMarkerCommandHelper
 						.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(varIn.getValue())));
+				deleteMarkersCmds.add(FordiacMarkerCommandHelper
+						.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(varIn.getArraySize())));
 			}
 		}
 		for (final ErrorMarkerInterface errorMarkerInterf : element.getInterface().getErrorMarker()) {

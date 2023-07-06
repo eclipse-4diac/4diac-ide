@@ -18,6 +18,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
+import java.lang.reflect.Method;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -40,7 +41,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getInputParameters <em>Input Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getOutputParameters <em>Output Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getInOutParameters <em>In Out Parameters</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#isVarargs <em>Varargs</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getOnlySupportedBy <em>Only Supported By</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getJavaMethod <em>Java Method</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTStandardFunction()
@@ -151,6 +154,28 @@ public interface STStandardFunction extends ICallable {
 	EList<INamedElement> getInOutParameters();
 
 	/**
+	 * Returns the value of the '<em><b>Varargs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Varargs</em>' attribute.
+	 * @see #setVarargs(boolean)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTStandardFunction_Varargs()
+	 * @model
+	 * @generated
+	 */
+	boolean isVarargs();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#isVarargs <em>Varargs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Varargs</em>' attribute.
+	 * @see #isVarargs()
+	 * @generated
+	 */
+	void setVarargs(boolean value);
+
+	/**
 	 * Returns the value of the '<em><b>Only Supported By</b></em>' attribute list.
 	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
@@ -161,6 +186,28 @@ public interface STStandardFunction extends ICallable {
 	 * @generated
 	 */
 	EList<String> getOnlySupportedBy();
+
+	/**
+	 * Returns the value of the '<em><b>Java Method</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Java Method</em>' attribute.
+	 * @see #setJavaMethod(Method)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTStandardFunction_JavaMethod()
+	 * @model dataType="org.eclipse.fordiac.ide.structuredtextcore.stcore.STJavaMethod" transient="true"
+	 * @generated
+	 */
+	Method getJavaMethod();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getJavaMethod <em>Java Method</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Java Method</em>' attribute.
+	 * @see #getJavaMethod()
+	 * @generated
+	 */
+	void setJavaMethod(Method value);
 
 	
 

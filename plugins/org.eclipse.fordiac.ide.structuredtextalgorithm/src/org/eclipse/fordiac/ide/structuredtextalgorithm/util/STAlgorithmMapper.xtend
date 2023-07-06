@@ -19,8 +19,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper
 
-class STAlgorithmMapper {
+class STAlgorithmMapper implements STCoreMapper {
 
 	def dispatch EObject fromModel(Resource resource, Object element) {
 		if(resource.allContents.contains(element)) element as EObject else null

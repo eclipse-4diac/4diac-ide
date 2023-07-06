@@ -16,6 +16,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -32,23 +36,25 @@ import org.eclipse.gef.commands.CompoundCommand;
 
 public class DeleteInterfaceCommand extends Command {
 	private final IInterfaceElement interfaceElement;
-	private CompoundCommand cmds;
-	private InterfaceList parent;
+	private final InterfaceList parent;
+	private final List<? extends IInterfaceElement> targetList;
+	private final CompoundCommand cmds = new CompoundCommand();
 	private int oldIndex;
 	private final CompoundCommand deleteMarkersCmds = new CompoundCommand();
 
 	public DeleteInterfaceCommand(final IInterfaceElement interfaceElement) {
 		this.interfaceElement = interfaceElement;
+		parent = (InterfaceList) interfaceElement.eContainer();
+		targetList = getTargetList(this.interfaceElement);  // this has to be the adjust this.interfaceElement
 	}
 
 	@Override
 	public void execute() {
-		parent = (InterfaceList) interfaceElement.eContainer();
-		cmds = new CompoundCommand();
-		handleWiths();
-		handleSubAppConnections();
-		if ((interfaceElement instanceof AdapterDeclaration) && (parent.eContainer() instanceof CompositeFBType)) {
-			cmds.add(new DeleteFBNetworkElementCommand(((AdapterDeclaration) interfaceElement).getAdapterNetworkFB()));
+		handleWiths(interfaceElement);
+		handleSubAppConnections(interfaceElement);
+		if ((interfaceElement instanceof final AdapterDeclaration adp)
+				&& (parent.eContainer() instanceof CompositeFBType)) {
+			cmds.add(new DeleteFBNetworkElementCommand(adp.getAdapterNetworkFB()));
 		}
 		deleteMarkersCmds.add(
 				FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(interfaceElement)));
@@ -61,27 +67,9 @@ public class DeleteInterfaceCommand extends Command {
 
 	@Override
 	public void undo() {
-		if (interfaceElement.isIsInput()) {
-			if (interfaceElement instanceof Event) {
-				parent.getEventInputs().add(oldIndex, (Event) interfaceElement);
-			} else if (interfaceElement instanceof AdapterDeclaration) {
-				parent.getSockets().add(oldIndex, (AdapterDeclaration) interfaceElement);
-			} else if (interfaceElement instanceof VarDeclaration) {
-				parent.getInputVars().add(oldIndex, (VarDeclaration) interfaceElement);
-			} else if (interfaceElement instanceof ErrorMarkerInterface) {
-				parent.getErrorMarker().add(oldIndex, (ErrorMarkerInterface) interfaceElement);
-			}
-		} else {
-			if (interfaceElement instanceof Event) {
-				parent.getEventOutputs().add(oldIndex, (Event) interfaceElement);
-			} else if (interfaceElement instanceof AdapterDeclaration) {
-				parent.getPlugs().add(oldIndex, (AdapterDeclaration) interfaceElement);
-			} else if (interfaceElement instanceof VarDeclaration) {
-				parent.getOutputVars().add(oldIndex, (VarDeclaration) interfaceElement);
-			} else if (interfaceElement instanceof ErrorMarkerInterface) {
-				parent.getErrorMarker().add(oldIndex, (ErrorMarkerInterface) interfaceElement);
-			}
-		}
+		@SuppressWarnings("unchecked")
+		final EList<IInterfaceElement> temp = (EList<IInterfaceElement>) targetList;
+		temp.add(oldIndex, interfaceElement);
 		if (cmds.canUndo()) {
 			cmds.undo();
 		}
@@ -91,62 +79,32 @@ public class DeleteInterfaceCommand extends Command {
 	@Override
 	public void redo() {
 		deleteMarkersCmds.redo();
-		performDeletion();
+		targetList.remove(oldIndex);
 		if (cmds.canRedo()) {
 			cmds.redo();
 		}
 	}
 
 	private void performDeletion() {
-		if (interfaceElement.isIsInput()) {
-			if (interfaceElement instanceof Event) {
-				oldIndex = parent.getEventInputs().indexOf(interfaceElement);
-				parent.getEventInputs().remove(interfaceElement);
-			} else if (interfaceElement instanceof AdapterDeclaration) {
-				oldIndex = parent.getSockets().indexOf(interfaceElement);
-				parent.getSockets().remove(interfaceElement);
-			} else if (interfaceElement instanceof VarDeclaration) {
-				oldIndex = parent.getInputVars().indexOf(interfaceElement);
-				parent.getInputVars().remove(interfaceElement);
-			} else if (interfaceElement instanceof ErrorMarkerInterface) {
-				oldIndex = parent.getErrorMarker().indexOf(interfaceElement);
-				parent.getErrorMarker().remove(interfaceElement);
-			}
-
-		} else {
-			if (interfaceElement instanceof Event) {
-				oldIndex = parent.getEventOutputs().indexOf(interfaceElement);
-				parent.getEventOutputs().remove(interfaceElement);
-			} else if (interfaceElement instanceof AdapterDeclaration) {
-				oldIndex = parent.getPlugs().indexOf(interfaceElement);
-				parent.getPlugs().remove(interfaceElement);
-			} else if (interfaceElement instanceof VarDeclaration) {
-				oldIndex = parent.getOutputVars().indexOf(interfaceElement);
-				parent.getOutputVars().remove(interfaceElement);
-			} else if (interfaceElement instanceof ErrorMarkerInterface) {
-				oldIndex = parent.getErrorMarker().indexOf(interfaceElement);
-				parent.getErrorMarker().remove(interfaceElement);
-			}
-		}
+		oldIndex = targetList.indexOf(interfaceElement);
+		targetList.remove(oldIndex);
 	}
 
-	private void handleSubAppConnections() {
-		for (final Connection con : interfaceElement.getInputConnections()) {
+	protected void handleSubAppConnections(final IInterfaceElement ie) {
+		for (final Connection con : ie.getInputConnections()) {
 			cmds.add(new DeleteConnectionCommand(con));
 		}
-		for (final Connection con : interfaceElement.getOutputConnections()) {
+		for (final Connection con : ie.getOutputConnections()) {
 			cmds.add(new DeleteConnectionCommand(con));
 		}
 	}
 
-	private void handleWiths() {
-		if (interfaceElement instanceof VarDeclaration) {
-			final VarDeclaration varDecl = (VarDeclaration) interfaceElement;
+	protected void handleWiths(final IInterfaceElement ie) {
+		if (ie instanceof final VarDeclaration varDecl) {
 			for (final With with : varDecl.getWiths()) {
 				cmds.add(new DeleteWithCommand(with));
 			}
-		} else if (interfaceElement instanceof Event) {
-			final Event event = (Event) interfaceElement;
+		} else if (ie instanceof final Event event) {
 			for (final With with : event.getWith()) {
 				cmds.add(new DeleteWithCommand(with));
 			}
@@ -155,5 +113,45 @@ public class DeleteInterfaceCommand extends Command {
 
 	public InterfaceList getParent() {
 		return parent;
+	}
+
+	public IInterfaceElement getInterfaceElement() {
+		return interfaceElement;
+	}
+
+	private static List<? extends IInterfaceElement> getTargetList(final IInterfaceElement ie) {
+		final InterfaceList il = (InterfaceList) ie.eContainer();
+
+		if (ie instanceof ErrorMarkerInterface) {
+			return il.getErrorMarker();
+		}
+
+		if (ie.isIsInput()) {
+			if (ie instanceof Event) {
+				return il.getEventInputs();
+			}
+			if (ie instanceof AdapterDeclaration) {
+				return il.getSockets();
+			}
+			if (ie instanceof final VarDeclaration varDecl) {
+				if (varDecl.isInOutVar()) {
+					return il.getInOutVars();
+				}
+				return il.getInputVars();
+			}
+
+		} else {
+			if (ie instanceof Event) {
+				return il.getEventOutputs();
+			}
+
+			if (ie instanceof AdapterDeclaration) {
+				return il.getPlugs();
+			}
+			if (ie instanceof VarDeclaration) {
+				return il.getOutputVars();
+			}
+		}
+		return Collections.emptyList();
 	}
 }

@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -72,6 +73,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
@@ -97,6 +99,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
@@ -170,6 +174,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.ADAPTER_FB_TYPE: return createAdapterFBType();
 			case LibraryElementPackage.ADAPTER_TYPE: return createAdapterType();
 			case LibraryElementPackage.APPLICATION: return createApplication();
+			case LibraryElementPackage.ARRAY_SIZE: return createArraySize();
 			case LibraryElementPackage.ATTRIBUTE: return createAttribute();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
 			case LibraryElementPackage.BASE_FB_TYPE: return createBaseFBType();
@@ -205,6 +210,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.FB_NETWORK: return createFBNetwork();
 			case LibraryElementPackage.FB_NETWORK_ELEMENT: return createFBNetworkElement();
 			case LibraryElementPackage.FB_TYPE: return createFBType();
+			case LibraryElementPackage.FUNCTION_FB_TYPE: return createFunctionFBType();
 			case LibraryElementPackage.GROUP: return createGroup();
 			case LibraryElementPackage.HIDDEN_ELEMENT: return createHiddenElement();
 			case LibraryElementPackage.IDENTIFICATION: return createIdentification();
@@ -235,6 +241,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.SERVICE_INTERFACE_FB_TYPE: return createServiceInterfaceFBType();
 			case LibraryElementPackage.SIMPLE_FB_TYPE: return createSimpleFBType();
 			case LibraryElementPackage.ST_ALGORITHM: return createSTAlgorithm();
+			case LibraryElementPackage.ST_FUNCTION: return createSTFunction();
+			case LibraryElementPackage.ST_FUNCTION_BODY: return createSTFunctionBody();
 			case LibraryElementPackage.ST_METHOD: return createSTMethod();
 			case LibraryElementPackage.SUB_APP: return createSubApp();
 			case LibraryElementPackage.SUB_APP_TYPE: return createSubAppType();
@@ -371,6 +379,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public Application createApplication() {
 		ApplicationImpl application = new ApplicationImpl();
 		return application;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ArraySize createArraySize() {
+		ArraySizeImpl arraySize = new ArraySizeImpl();
+		return arraySize;
 	}
 
 	/**
@@ -764,6 +783,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public FunctionFBType createFunctionFBType() {
+		FunctionFBTypeImpl functionFBType = new FunctionFBTypeImpl();
+		return functionFBType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Group createGroup() {
 		GroupImpl group = new GroupImpl();
 		return group;
@@ -1086,6 +1116,28 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public STAlgorithm createSTAlgorithm() {
 		STAlgorithmImpl stAlgorithm = new STAlgorithmImpl();
 		return stAlgorithm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STFunction createSTFunction() {
+		STFunctionImpl stFunction = new STFunctionImpl();
+		return stFunction;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STFunctionBody createSTFunctionBody() {
+		STFunctionBodyImpl stFunctionBody = new STFunctionBodyImpl();
+		return stFunctionBody;
 	}
 
 	/**

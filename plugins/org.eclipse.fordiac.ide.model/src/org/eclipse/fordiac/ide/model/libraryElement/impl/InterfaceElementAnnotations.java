@@ -12,7 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
+
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class InterfaceElementAnnotations {
@@ -24,7 +27,7 @@ public final class InterfaceElementAnnotations {
 	public static String getFullTypeName(final VarDeclaration element) {
 		final String typeName = element.getTypeName();
 		if (element.isArray() && typeName != null && !typeName.isBlank()) {
-			final String arraySize = element.getArraySize();
+			final String arraySize = getArraySize(element);
 			if (!arraySize.contains("..")) { //$NON-NLS-1$
 				try {
 					return "ARRAY [0.." + (Integer.parseInt(arraySize) - 1) + "] OF " + typeName; //$NON-NLS-1$ //$NON-NLS-2$
@@ -35,6 +38,12 @@ public final class InterfaceElementAnnotations {
 			return "ARRAY [" + arraySize + "] OF " + typeName; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return typeName;
+	}
+
+	public static boolean isInOutVar(final VarDeclaration varDecl) {
+		return LibraryElementPackage.eINSTANCE.getInterfaceList_InOutVars().equals(varDecl.eContainingFeature())
+				|| LibraryElementPackage.eINSTANCE.getInterfaceList_OutMappedInOutVars()
+						.equals(varDecl.eContainingFeature());
 	}
 
 	private InterfaceElementAnnotations() {

@@ -14,6 +14,8 @@
      - initial API and implementation and/or initial documentation
    Bianca Wiesmayr
      - adapting, restructuring and extending the installation tutorial
+   Fabio Gandolfi
+   	 - added mingw installation via MSYS2
 -->
 
 <html lang="en">
@@ -26,6 +28,13 @@
 <body>
 <h1 id="topOfPage">Setting up MinGW-w64</h1>
 
+<h2>Install latest MinGW-w64 via MSYS2</h2>
+<p>Since the original mingGW installer from underneath is not always working this is the best possibility to install the latest version of MingGW-64.
+
+Download <a href="https://www.msys2.org/" target="_blank">the latest MSYS2 Installer</a> and follow the steps in the wizard. 
+After installing MSYS2, open the "MSYS2 MINGW64" terminal and download the Mingw-w64 toolchain with help of the package manager:
+<div class="code"><span class="inlineCode">pacman -S --needed base-devel mingw-w64-x86_64-toolchain</div></p>
+
 <h2>Install MinGW-w64</h2>
 <p><a href="http://www.mingw-w64.org/" target="_blank">MinGW-w64</a> comprises development tools for compiling and debugging. 
 Download the Mingw-w64 Installer from <a href="https://sourceforge.net/projects/mingw-w64/files/" target="_blank">here</a> and follow the steps in the wizard. 
@@ -35,12 +44,13 @@ We recommend to create a folder mingw-w64 on your system drive (e.g., C:\mingw).
 Install a current version and specify <span class="button4diac">win32</span> as thread when requested.
 Additionally, choose the architecture <span class="button4diac">x86_64</span>.</p>
 
+<h2>Set PATH variable</h2>
 <p>After installing, you need to edit the PATH variable. 
 You can access the System Control Center by pressing <span class="button4diac">Windows Key + Pause</span>. 
 In the System window, click <span class="button4diac">Advanced System Settings &rarr; Advanced (tab) &rarr; Environment Variables</span>. 
 For Windows 10, a quick access is to enter "Edit the system environment variables" in the Start Search of Windows and click the button "Environment Variables".
-Change the PATH variable (double-click on it or Select and <span class="button4diac">Edit</span>), and add the path where your MinGW-w64 has been installed to e.g., <span class="folderLocation">C:\mingw\mingw64\bin</span>. 
-This folder should contain a number of .exe-files that you can see in your Explorer.</p> 
+Change the PATH variable (double-click on it or Select and <span class="button4diac">Edit</span>), and add the path where your MinGW-w64 has been installed to e.g., <span class="folderLocation">C:\mingw\mingw64\bin</span> 
+or <span class="folderLocation">C:\msys64\mingw64\bin</span>. This folder should contain a number of .exe-files that you can see in your Explorer.</p> 
 
 <h2>Test MinGW-w64</h2>
 <p>Open the command prompt of Windows either via the Program Menu or type <span class="button4diac">cmd</span> in the Start Search of Windows. 

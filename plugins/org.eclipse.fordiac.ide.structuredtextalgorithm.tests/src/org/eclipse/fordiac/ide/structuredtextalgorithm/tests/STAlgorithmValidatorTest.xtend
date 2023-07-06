@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies GmbH
+ * Copyright (c) 2022, 2023 Primetals Technologies GmbH
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *       - linking diagnostics
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.tests
 
@@ -18,6 +21,9 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.validation.STAlgorithmValidator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator
+import org.eclipse.xtext.diagnostics.Diagnostic
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
 import org.eclipse.xtext.testing.util.ParseHelper
@@ -25,8 +31,6 @@ import org.eclipse.xtext.testing.validation.ValidationTestHelper
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
-import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator
 
 @ExtendWith(InjectionExtension)
 @InjectWith(STAlgorithmInjectorProvider)
@@ -107,7 +111,7 @@ class STAlgorithmValidatorTest {
 		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.DUPLICATE_VARIABLE_NAME,
 			"Variable with duplicate name bol1")
 	}
-	
+
 	@Test
 	def void testDuplicateVariableNameIsForbiddenInAlgorithm() {
 		'''
@@ -121,5 +125,13 @@ class STAlgorithmValidatorTest {
 		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.DUPLICATE_VARIABLE_NAME,
 			"Variable with duplicate name bol1")
 	}
-	
+
+	@Test
+	def void testReturnTypeLinkingDiagnostic() {
+		'''
+			METHOD test : FLOAT
+			END_FUNCTION
+		'''.parse.assertError(STAlgorithmPackage.eINSTANCE.STMethod, Diagnostic.LINKING_DIAGNOSTIC,
+			"The data type FLOAT is undefined")
+	}
 }

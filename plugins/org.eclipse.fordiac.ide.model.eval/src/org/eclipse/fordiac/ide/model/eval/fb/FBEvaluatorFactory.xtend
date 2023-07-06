@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 
 class FBEvaluatorFactory implements EvaluatorFactory {
 	override createEvaluator(Object source, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
@@ -24,6 +25,8 @@ class FBEvaluatorFactory implements EvaluatorFactory {
 			new SimpleFBEvaluator(source, context, variables, parent)
 		} else if (source instanceof BasicFBType) {
 			new BasicFBEvaluator(source, context, variables, parent)
+		} else if (source instanceof FunctionFBType) {
+			new FunctionFBEvaluator(source, context, variables, parent)
 		}
 	}
 
@@ -31,5 +34,6 @@ class FBEvaluatorFactory implements EvaluatorFactory {
 		val factory = new FBEvaluatorFactory
 		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, SimpleFBType, factory)
 		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, BasicFBType, factory)
+		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, FunctionFBType, factory)
 	}
 }

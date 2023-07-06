@@ -174,21 +174,12 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private boolean isSubFbtAdpDuplicate(final TypeLibrary lib, final String fileExtension) {
-		Map<String, ? extends TypeEntry> map = null;
-
-		switch (fileExtension) {
-		case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING:
-			map = lib.getSubAppTypes();
-			break;
-		case TypeLibraryTags.FB_TYPE_FILE_ENDING:
-			map = lib.getFbTypes();
-			break;
-		case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING:
-			map = lib.getAdapterTypes();
-			break;
-		default:
-			break;
-		}
+		final Map<String, ? extends TypeEntry> map = switch (fileExtension) {
+		case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING -> lib.getSubAppTypes();
+		case TypeLibraryTags.FB_TYPE_FILE_ENDING, TypeLibraryTags.FC_TYPE_FILE_ENDING -> lib.getFbTypes();
+		case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING -> lib.getAdapterTypes();
+		default -> null;
+		};
 		return (null != map) && (map.containsKey(super.getFileName()));
 	}
 
@@ -288,6 +279,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	@SuppressWarnings("static-method") // this method is need to allow sub-classes to override it with specific filters
 	protected FileFilter createTemplatesFileFilter() {
 		return pathname -> pathname.getName().toUpperCase().endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)
+				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT)
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING_WITH_DOT)
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT)
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);

@@ -15,6 +15,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize;
+
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -31,8 +34,7 @@ public class ChangeArraySizeCommand extends AbstractChangeInterfaceElementComman
 
 	public static ChangeArraySizeCommand forArraySize(final VarDeclaration variable, final String newArraySize) {
 		final ChangeArraySizeCommand result = new ChangeArraySizeCommand(variable, newArraySize);
-		if (variable != null && variable.getFBNetworkElement() instanceof final SubApp subApp
-				&& subApp.isMapped()) {
+		if (variable != null && variable.getFBNetworkElement() instanceof final SubApp subApp && subApp.isMapped()) {
 			result.getAdditionalCommands().add(new ChangeArraySizeCommand(
 					subApp.getOpposite().getInterface().getVariable(variable.getName()), newArraySize));
 		}
@@ -47,20 +49,20 @@ public class ChangeArraySizeCommand extends AbstractChangeInterfaceElementComman
 	@Override
 	protected void doExecute() {
 		final VarDeclaration variable = getInterfaceElement();
-		oldArraySize = variable.getArraySize();
-		setArraySize(newArraySize);
+		oldArraySize = getArraySize(variable);
+		setArraySize(variable, newArraySize);
 		additionalCommands.execute();
 	}
 
 	@Override
 	protected void doUndo() {
 		additionalCommands.undo();
-		setArraySize(oldArraySize);
+		setArraySize(getInterfaceElement(), oldArraySize);
 	}
 
 	@Override
 	protected void doRedo() {
-		setArraySize(newArraySize);
+		setArraySize(getInterfaceElement(), newArraySize);
 		additionalCommands.redo();
 	}
 
@@ -71,9 +73,5 @@ public class ChangeArraySizeCommand extends AbstractChangeInterfaceElementComman
 
 	public CompoundCommand getAdditionalCommands() {
 		return additionalCommands;
-	}
-
-	private void setArraySize(final String arraySize) {
-		getInterfaceElement().setArraySize(arraySize);
 	}
 }

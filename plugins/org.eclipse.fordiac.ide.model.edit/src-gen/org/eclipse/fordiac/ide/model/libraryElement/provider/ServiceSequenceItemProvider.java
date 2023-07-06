@@ -38,6 +38,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -189,6 +190,7 @@ public class ServiceSequenceItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(LibraryElementPackage.Literals.SERVICE_SEQUENCE__SERVICE_TRANSACTION);
+			childrenFeatures.add(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER);
 		}
 		return childrenFeatures;
 	}
@@ -249,6 +251,7 @@ public class ServiceSequenceItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION:
+			case LibraryElementPackage.SERVICE_SEQUENCE__EVENT_MANAGER:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:
@@ -272,6 +275,724 @@ public class ServiceSequenceItemProvider
 			(createChildParameter
 				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__SERVICE_TRANSACTION,
 				 LibraryElementFactory.eINSTANCE.createServiceTransaction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createConfigurableObject()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createAdapterConnection()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createTypedConfigureableObject()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createFBNetworkElement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createFB()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createAdapterFB()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createLibraryElement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createCompilableType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createFBType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createAdapterFBType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createAdapterType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createApplication()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createErrorMarkerRef()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createArraySize()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createAttribute()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createAttributeDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createBaseFBType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createBasicFBType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createAutomationSystem()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createCFBInstance()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createColor()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createColorizableElement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createComment()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createCommunicationChannel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createMappingTarget()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createCommunicationMappingTarget()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createCompiler()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createCompilerInfo()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createCompositeFBType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createConnectionRoutingData()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createDataConnection()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createDemultiplexer()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createDevice()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createDeviceType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createECAction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createECC()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createECState()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createPositionableElement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createECTransition()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createErrorMarkerDataType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createErrorMarkerInterface()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createEventConnection()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createFBNetwork()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createFunctionFBType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createGroup()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createHiddenElement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createIdentification()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createPrimitive()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createInputPrimitive()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createInterfaceList()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createLink()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createMapping()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createMultiplexer()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createOtherAlgorithm()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createOtherMethod()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createOutputPrimitive()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createResource()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createResourceTypeName()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createResourceType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createResourceTypeFB()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createSegment()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createSegmentType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createService()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createServiceSequence()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createServiceTransaction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createServiceInterface()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createServiceInterfaceFBType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createSimpleFBType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createSTAlgorithm()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createSTFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createSTFunctionBody()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createSTMethod()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createSubApp()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createSubAppType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createSystemConfiguration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createValue()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createVersionInfo()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createWith()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyDerivedType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createArrayType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createValueType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createDerivedType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createDirectlyDerivedType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createEnumeratedType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createEnumeratedValue()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createStructuredType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createSubrange()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createSubrangeType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createElementaryType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createEventType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyElementaryType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyMagnitudeType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyNumType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyRealType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createRealType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createLrealType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyIntType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyUnsignedType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createUsintType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createUintType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createUdintType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createUlintType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnySignedType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createSintType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createIntType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createDintType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createLintType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyDurationType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createTimeType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createLtimeType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyBitType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createBoolType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createByteType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createWordType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createDwordType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createLwordType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyCharsType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnySCharsType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyWCharsType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyStringType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createStringType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createWstringType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyCharType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createCharType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createWcharType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createAnyDateType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createDateAndTimeType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createLdtType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createDateType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createTimeOfDayType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createLtodType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createLdateType()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == LibraryElementPackage.Literals.SERVICE_SEQUENCE__SERVICE_TRANSACTION ||
+			childFeature == LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2", //$NON-NLS-1$
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 	/**

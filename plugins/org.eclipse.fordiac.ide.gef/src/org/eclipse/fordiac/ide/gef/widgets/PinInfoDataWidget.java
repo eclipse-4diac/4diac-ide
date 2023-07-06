@@ -96,5 +96,6 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 	protected void checkFieldEnablements() {
 		super.checkFieldEnablements();
 		initialValueEditor.setEditable(isTypeChangeable());
+		varConfigCheckBox.setEnabled(isEditable());
 	}
 }

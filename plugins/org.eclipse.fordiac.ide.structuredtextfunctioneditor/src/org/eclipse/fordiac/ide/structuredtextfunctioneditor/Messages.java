@@ -19,6 +19,8 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextfunctioneditor.messages"; //$NON-NLS-1$
 	public static String STFunctionValidator_Duplicate_Function_Name;
+	public static String STFunctionValidator_FunctionNameMismatch;
+	public static String STFunctionValidator_MultipleFunctions;
 
 	static {
 		// initialize resource bundle

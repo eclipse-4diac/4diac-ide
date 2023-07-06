@@ -78,6 +78,9 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
 			return getImageForFBTypeFile(element);
 		}
+		if (TypeLibraryTags.FC_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
+			return FordiacImage.ICON_FUNCTION.getImageDescriptor();
+		}
 		return null;
 	}
 
@@ -176,6 +179,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		String text = null;
 		if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
 				|| TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
+				|| TypeLibraryTags.FC_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
 				|| TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
 			text = TypeEntry.getTypeNameFromFile(element);
 		}
@@ -192,7 +196,8 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	private static String getDescriptionForFBFile(final IFile fbtFile) {
 		FBType type = null;
-		if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(fbtFile.getFileExtension())) {
+		if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(fbtFile.getFileExtension())
+				|| TypeLibraryTags.FC_TYPE_FILE_ENDING.equalsIgnoreCase(fbtFile.getFileExtension())) {
 			type = getFBTypeFromFile(fbtFile);
 		} else if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(fbtFile.getFileExtension())) {
 			type = getAdapterTypeForFile(fbtFile);

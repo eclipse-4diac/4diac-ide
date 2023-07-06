@@ -68,11 +68,6 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	/** necessary that the gradient pattern can be scaled accordingly */
 	private DiagramFontChangeListener fontChangeListener;
 
-	public SegmentEditPart() {
-		super();
-		setConnectable(true);
-	}
-
 	@Override
 	public void activate() {
 		super.activate();
@@ -164,8 +159,8 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			@Override
 			public Command getCommand(final Request request) {
 				final Object type = request.getType();
-				if (REQ_ALIGN.equals(type) && (request instanceof AlignmentRequest)) {
-					return getAlignCommand((AlignmentRequest) request);
+				if (REQ_ALIGN.equals(type) && (request instanceof final AlignmentRequest aReq)) {
+					return getAlignCommand(aReq);
 				}
 				return null;
 			}
@@ -191,6 +186,11 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		refreshPosition();
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return true;
 	}
 
 	protected void refreshPosition() {

@@ -23,7 +23,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.structuredtextalgorithm.ui,
- org.eclipse.fordiac.ide.structuredtextcore.ui
+ org.eclipse.fordiac.ide.structuredtextcore.ui,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.st;singleton:=true
 Bundle-ActivationPolicy: lazy

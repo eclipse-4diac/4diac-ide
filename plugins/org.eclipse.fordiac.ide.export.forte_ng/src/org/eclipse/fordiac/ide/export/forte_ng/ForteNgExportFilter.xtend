@@ -26,6 +26,8 @@ import org.eclipse.fordiac.ide.export.forte_ng.basic.BasicFBImplTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.cmake.CMakeListsTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.composite.CompositeFBHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.composite.CompositeFBImplTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.function.FunctionFBHeaderTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.function.FunctionFBImplTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.language.LanguageHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.language.LanguageImplTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.service.ServiceInterfaceFBHeaderTemplate
@@ -40,6 +42,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker
@@ -61,6 +64,11 @@ class ForteNgExportFilter extends TemplateExportFilter {
 				#{
 					new SimpleFBHeaderTemplate(source, '''«name».h''', Paths.get("")),
 					new SimpleFBImplTemplate(source, '''«name».cpp''', Paths.get(""))
+				}
+			FunctionFBType:
+				#{
+					new FunctionFBHeaderTemplate(source, '''«name».h''', Paths.get("")),
+					new FunctionFBImplTemplate(source, '''«name».cpp''', Paths.get(""))
 				}
 			CompositeFBType:
 				#{

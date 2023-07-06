@@ -420,6 +420,10 @@
          <viewer
                viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
          </viewer>
+      <dragAssistant
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemExplorerDragAssistant"
+            viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
+      </dragAssistant>
       </extension>
       <extension
          point="org.eclipse.ui.navigator.navigatorContent">

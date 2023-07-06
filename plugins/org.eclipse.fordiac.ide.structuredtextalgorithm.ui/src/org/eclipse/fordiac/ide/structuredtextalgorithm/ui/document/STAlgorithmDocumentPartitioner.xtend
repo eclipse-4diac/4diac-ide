@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,14 +16,15 @@ import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmPartitioner
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.ui.editor.model.XtextDocument
 
 import static org.eclipse.emf.common.util.ECollections.*
 
-class STAlgorithmDocumentPartitioner extends STAlgorithmPartitioner {
+class STAlgorithmDocumentPartitioner extends STAlgorithmPartitioner implements STCoreDocumentPartitioner {
 
-	def EList<ICallable> partition(XtextDocument document) {
+	override EList<ICallable> partition(XtextDocument document) {
 		try {
 			document.readOnly [ resource |
 				if (resource.modificationStamp != document.modificationStamp) {

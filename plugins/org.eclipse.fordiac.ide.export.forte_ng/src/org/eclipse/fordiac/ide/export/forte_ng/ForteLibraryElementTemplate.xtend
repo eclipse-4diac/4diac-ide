@@ -23,6 +23,7 @@ import java.util.Map
 import java.util.Set
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -53,11 +54,11 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
 		 ***
 		 *** Name: «type.name»
-		 *** Description: «type.comment»
+		 *** Description: «type.comment.escapeMultilineCommentString»
 		 *** Version:
-		«FOR info : type.versionInfo»
-			***     «info.version»: «info.date»/«info.author» - «info.organization» - «info.remarks»
-		«ENDFOR»
+		 «FOR info : type.versionInfo»
+		 	***     «info.version.escapeMultilineCommentString»: «info.date.escapeMultilineCommentString»/«info.author.escapeMultilineCommentString» - «info.organization.escapeMultilineCommentString» - «info.remarks.escapeMultilineCommentString»
+		 «ENDFOR»
 		 *************************************************************************/
 	'''
 
@@ -131,7 +132,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 
 	def protected getFORTETypeList(List<? extends VarDeclaration> elements) {
 		elements.map [
-			val arraySize = try { arraySizeAsInt } catch (Exception e) { 0 }
+			val arraySize = try { Integer.parseInt(ArraySizeHelper.getArraySize(it)) } catch (NumberFormatException e) { 0 }
 			'''«IF it.array»«"ARRAY".FORTEStringId», «arraySize», «ENDIF»«it.type.generateTypeNamePlain.FORTEStringId»'''
 		].join(", ")
 	}

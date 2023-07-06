@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2016, 2017 fortiss GmbH
+ * Copyright (c) 2014, 2023 fortiss GmbH, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,13 +10,12 @@
  * Contributors:
  *   Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - added var in out support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.contentprovider;
 
 import java.util.ArrayList;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -26,17 +25,15 @@ public class VarContentProvider implements IStructuredContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
 		final ArrayList<VarDeclaration> vars = new ArrayList<>();
-		if (inputElement instanceof IInterfaceElement) {
-			final IInterfaceElement ielem = (IInterfaceElement) inputElement;
+		if (inputElement instanceof final IInterfaceElement ielem) {
 			final FBType fbtype = (FBType) ielem.eContainer().eContainer();
-			// filter adapter elements as the are not allowed to be connected by with
-			final EList<VarDeclaration> sourceVarList = (ielem.isIsInput()) ? fbtype.getInterfaceList().getInputVars()
-					: fbtype.getInterfaceList().getOutputVars();
 
-			for (final VarDeclaration variable : sourceVarList) {
-				if (!(variable.getType() instanceof AdapterType)) {
-					vars.add(variable);
-				}
+			if (ielem.isIsInput()) {
+				vars.addAll(fbtype.getInterfaceList().getInputVars());
+				vars.addAll(fbtype.getInterfaceList().getInOutVars());
+			} else {
+				vars.addAll(fbtype.getInterfaceList().getOutputVars());
+				vars.addAll(fbtype.getInterfaceList().getOutMappedInOutVars());
 			}
 		}
 		return vars.toArray();

@@ -217,7 +217,6 @@ United States, other countries, or both.\n
       <import plugin="org.eclipse.ui.forms"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="org.eclipse.core.net"/>
-      <import plugin="gitlab4j-api"/>
       <import plugin="org.apache.commons.lang" version="2.6.0" match="compatible"/>
       <import plugin="com.google.guava"/>
       <import plugin="org.eclipse.osgi"/>
@@ -453,13 +452,6 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.apache.lucene.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.lucene.analyzers-common"
          download-size="0"
          install-size="0"
          version="0.0.0"

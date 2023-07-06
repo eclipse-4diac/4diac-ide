@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.globalconstantseditor.ui;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocument;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
@@ -24,7 +23,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrT
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
@@ -38,9 +36,7 @@ import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
 import com.google.inject.Binder;
 import com.google.inject.name.Names;
 
-/**
- * Use this class to register components to be used within the Eclipse IDE.
- */
+/** Use this class to register components to be used within the Eclipse IDE. */
 @SuppressWarnings("restriction")
 public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 
@@ -58,10 +54,6 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 
 	public Class<? extends IEObjectHoverDocumentationProvider> bindIEObjectHoverDocumentationProvider() {
 		return STCoreHoverDocumentationProvider.class;
-	}
-
-	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
-		return STCoreCommentDocumentationProvider.class;
 	}
 
 	public void configureIEObjectDocumentationProvider(final Binder binder) {

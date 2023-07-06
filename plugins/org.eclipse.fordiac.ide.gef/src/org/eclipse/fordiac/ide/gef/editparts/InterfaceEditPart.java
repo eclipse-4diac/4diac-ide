@@ -70,7 +70,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
-implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
+		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private int mouseState;
 	private static int maxWidth = -1;
 
@@ -88,7 +88,6 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	};
 
 	protected InterfaceEditPart() {
-		setConnectable(true);
 		addPreferenceListener();
 	}
 
@@ -116,6 +115,11 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		if (getReferencedValueEditPart() != null) {
 			getReferencedValueEditPart().refreshValue();
 		}
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return true;
 	}
 
 	protected String getLabelText() {
@@ -188,7 +192,6 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	public class InterfaceFigure extends SetableAlphaLabel {
 
 		public InterfaceFigure() {
-			super();
 			setOpaque(false);
 			setText(getLabelText());
 			setBorder(new ConnectorBorder(getModel()));
@@ -273,7 +276,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 
 		@Override
 		public Dimension getTextSize() {
-			//call super class to set TextSize
+			// call super class to set TextSize
 			super.getTextSize();
 			return getSubStringTextSize();
 		}
@@ -297,8 +300,8 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	private static void checkConnection(final int width, final ConnectionEditPart cep) {
-		if (cep.getFigure() instanceof PolylineConnection) {
-			((PolylineConnection) cep.getFigure()).setLineWidth(width);
+		if (cep.getFigure() instanceof final PolylineConnection plc) {
+			plc.setLineWidth(width);
 		}
 	}
 
@@ -463,19 +466,19 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		final Value value = getValue();
 		if (value != null) {
 			final Object temp = getViewer().getEditPartRegistry().get(value);
-			if (temp instanceof ValueEditPart) {
-				return (ValueEditPart) temp;
+			if (temp instanceof final ValueEditPart vep) {
+				return vep;
 			}
 		}
 		return null;
 	}
 
 	private Value getValue() {
-		if (getModel() instanceof VarDeclaration) {
-			return ((VarDeclaration) getModel()).getValue();
+		if (getModel() instanceof final VarDeclaration varDecl) {
+			return varDecl.getValue();
 		}
-		if (getModel() instanceof ErrorMarkerInterface) {
-			return ((ErrorMarkerInterface) getModel()).getValue();
+		if (getModel() instanceof final ErrorMarkerInterface emi) {
+			return emi.getValue();
 		}
 		return null;
 	}
@@ -513,7 +516,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	private Adapter getSourcePinAdapter() {
-		if(sourcePinAdapter == null) {
+		if (sourcePinAdapter == null) {
 			sourcePinAdapter = createSourcePinAdapter();
 		}
 		return sourcePinAdapter;
@@ -532,7 +535,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	protected void updatePadding(final int yPosition) {
-		final IFigure paddingFigure = (IFigure) getFigure().getParent().getChildren().get(0);
+		final IFigure paddingFigure = getFigure().getParent().getChildren().get(0);
 		final int textHeight = ((InterfaceFigure) getFigure()).getTextBounds().height();
 		paddingFigure.setMinimumSize(new Dimension(-1, yPosition - textHeight));
 	}

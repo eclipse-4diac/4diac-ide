@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2017 fortiss GmbH
+ * Copyright (c) 2014, 2023 fortiss GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *     - introduce common superclass
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.actions;
 
@@ -22,30 +25,18 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizardPage;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewTypeWizard;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.ui.actions.WorkbenchPartAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchPart;
 
-public abstract class CreateFromNewAdapterAction extends WorkbenchPartAction {
-	private final FBType fbType;
+public abstract class CreateFromNewAdapterAction extends CreateInterfaceElementAction {
 	private TypeEntry typeEntry;
 
-	protected FBType getFbType() {
-		return fbType;
-	}
-
 	CreateFromNewAdapterAction(final IWorkbenchPart part, final FBType fbType) {
-		super(part);
+		super(part, fbType);
 		setText(Messages.CreateFromNewAdapterAction_NewAdapter);
-		this.fbType = fbType;
-	}
-
-	@Override
-	protected boolean calculateEnabled() {
-		return (null != fbType);
 	}
 
 	@Override

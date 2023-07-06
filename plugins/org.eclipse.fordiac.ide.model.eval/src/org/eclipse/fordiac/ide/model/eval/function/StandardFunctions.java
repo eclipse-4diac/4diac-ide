@@ -219,7 +219,7 @@ public interface StandardFunctions extends Functions {
 
 	@SuppressWarnings("unchecked")
 	@Comment("Calculates result of logical AND operation.")
-	static <T extends AnyValue> T AND(final T... values) {
+	static <T extends AnyBitValue> T AND(final T... values) {
 		return Stream.of(values).reduce((a, b) -> (T) ValueOperations.bitwiseAnd(a, b)).orElseThrow();
 	}
 

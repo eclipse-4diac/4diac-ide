@@ -1427,7 +1427,7 @@ final class ValueOperations {
 		}
 	}
 
-	def static DataType dataType(Class<? extends Value> type) {
+	def static DataType dataType(Class<?> type) {
 		switch (type) {
 			case LRealValue: ElementaryTypes.LREAL
 			case RealValue: ElementaryTypes.REAL
@@ -1466,9 +1466,13 @@ final class ValueOperations {
 			case AnyBitValue: GenericTypes.ANY_BIT
 			case AnyCharValue: GenericTypes.ANY_CHAR
 			case AnyStringValue: GenericTypes.ANY_STRING
+			case AnySCharsValue: GenericTypes.ANY_SCHARS
+			case AnyWCharsValue: GenericTypes.ANY_WCHARS
 			case AnyCharsValue: GenericTypes.ANY_CHARS
 			case AnyDateValue: GenericTypes.ANY_DATE
 			case AnyElementaryValue: GenericTypes.ANY_ELEMENTARY
+			case ArrayValue: GenericTypes.ANY_DERIVED
+			case StructValue: GenericTypes.ANY_STRUCT
 			case AnyDerivedValue: GenericTypes.ANY_DERIVED
 			case AnyValue: GenericTypes.ANY
 			default: null

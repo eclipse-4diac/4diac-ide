@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -119,9 +120,10 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 			if (getType().eContainer().eContainer() instanceof FBType) {
 				eventComposite.setVisible(true);
 				withEventsViewer.setInput(getType());
+				withEventsViewer.getTable().setEnabled(isEditable());
 				Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
 				getType().getWiths().stream().map(with -> withEventsViewer.testFindItem(with.eContainer()))
-				.filter(TableItem.class::isInstance).forEach(item -> ((TableItem) item).setChecked(true));
+						.filter(TableItem.class::isInstance).forEach(item -> ((TableItem) item).setChecked(true));
 			} else {
 				eventComposite.setVisible(false);
 			}
@@ -131,8 +133,13 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 
 	@Override
 	protected void setInputInit() {
-		super.setInputInit();
 		if (getType() != null) {
+			if (getType().isInOutVar() && !getType().isIsInput()) {
+				setupPinInfoWidget(((InterfaceList) getType().eContainer()).getInOutVarOpposite(getType()));
+			} else {
+				setupPinInfoWidget(getType());
+			}
+
 			eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
 		}
 		if (null == commandStack) { // disable all fields

@@ -192,10 +192,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, TIME))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = T#0s''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
+		assertEquals('''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), CIEC_TIME(0))'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 	
@@ -204,10 +204,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, TIME))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, LINT))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = T#0s''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
+		assertEquals('''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), CIEC_TIME(0))'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 
@@ -348,10 +348,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						}
 						
 						
-						void FORTE_functionblock::readInputData(TEventID paEIID) {
+						void FORTE_functionblock::readInputData(TEventID) {
 						}
 						
-						void FORTE_functionblock::writeOutputData(TEventID paEIID) {
+						void FORTE_functionblock::writeOutputData(TEventID) {
 						}
 						
 						CIEC_ANY *FORTE_functionblock::getDI(size_t) {

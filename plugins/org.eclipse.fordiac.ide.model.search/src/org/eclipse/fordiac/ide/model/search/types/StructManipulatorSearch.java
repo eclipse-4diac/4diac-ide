@@ -35,9 +35,7 @@ public class StructManipulatorSearch extends InstanceSearch {
 
 		@Override
 		public boolean apply(final INamedElement searchCandiate) {
-
-			if(searchCandiate instanceof StructManipulator) {
-				final StructManipulator sm = (StructManipulator)searchCandiate;
+			if (searchCandiate instanceof final StructManipulator sm) {
 				return sm.getStructType().getName()
 						.equalsIgnoreCase(entry.getTypeName());
 			}

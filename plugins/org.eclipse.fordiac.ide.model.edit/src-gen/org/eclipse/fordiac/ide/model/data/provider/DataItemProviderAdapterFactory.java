@@ -830,6 +830,52 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 		return anyCharsTypeItemProvider;
 	}
 
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnySCharsType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AnySCharsTypeItemProvider anySCharsTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnySCharsType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAnySCharsTypeAdapter() {
+		if (anySCharsTypeItemProvider == null) {
+			anySCharsTypeItemProvider = new AnySCharsTypeItemProvider(this);
+		}
+
+		return anySCharsTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyWCharsType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AnyWCharsTypeItemProvider anyWCharsTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyWCharsType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAnyWCharsTypeAdapter() {
+		if (anyWCharsTypeItemProvider == null) {
+			anyWCharsTypeItemProvider = new AnyWCharsTypeItemProvider(this);
+		}
+
+		return anyWCharsTypeItemProvider;
+	}
+
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyStringType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *

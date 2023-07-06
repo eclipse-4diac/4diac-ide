@@ -31,8 +31,8 @@ import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.st.STAlgorithmEvaluator
-import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue
 import org.eclipse.fordiac.ide.model.eval.st.ScopedExpressionEvaluator
+import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
@@ -51,6 +51,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -96,6 +97,7 @@ class StructuredTextEvaluatorTest {
 	@BeforeAll
 	def static void setupXtext() {
 		new DataTypeLibrary
+		STFunctionStandaloneSetup.doSetup
 		STAlgorithmStandaloneSetup.doSetup
 	}
 

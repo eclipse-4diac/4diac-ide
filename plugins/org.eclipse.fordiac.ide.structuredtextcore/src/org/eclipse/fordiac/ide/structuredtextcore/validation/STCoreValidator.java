@@ -30,11 +30,13 @@
 package org.eclipse.fordiac.ide.structuredtextcore.validation;
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType;
+import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isCallableVarargs;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isNumericValueValid;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isStringValueValid;
 
 import java.math.BigInteger;
 import java.text.MessageFormat;
+import java.util.regex.Pattern;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EObject;
@@ -47,6 +49,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -63,8 +66,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpre
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
@@ -135,7 +136,6 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			+ "bitAccessExpressionNotOfTypeAnyInt"; //$NON-NLS-1$
 	public static final String DUPLICATE_VARIABLE_NAME = ISSUE_CODE_PREFIX + "duplicateVariableName"; //$NON-NLS-1$
 	public static final String INDEX_RANGE_TYPE_INVALID = ISSUE_CODE_PREFIX + "indexRangeTypeInvalid"; //$NON-NLS-1$
-	public static final String INDEX_RANGE_NOT_A_LITERAL = ISSUE_CODE_PREFIX + "indexRangeNotALiteral"; //$NON-NLS-1$
 	public static final String MAX_LENGTH_NOT_ALLOWED = ISSUE_CODE_PREFIX + "maxLengthNotAllowed"; //$NON-NLS-1$
 	public static final String MAX_LENGTH_TYPE_INVALID = ISSUE_CODE_PREFIX + "maxLengthTypeInvalid"; //$NON-NLS-1$
 	public static final String TOO_MANY_INDICES_GIVEN = ISSUE_CODE_PREFIX + "tooManyIndicesGiven"; //$NON-NLS-1$
@@ -147,6 +147,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String RETURNED_TYPE_IS_VOID = ISSUE_CODE_PREFIX + "returnedTypeIsVoid"; //$NON-NLS-1$
 	public static final String LITERAL_REQUIRES_TYPE_SPECIFIER = ISSUE_CODE_PREFIX + "literalRequiresTypeSpecifier"; //$NON-NLS-1$
 	public static final String INSUFFICIENT_ARRAY_DIMENSIONS = ISSUE_CODE_PREFIX + "insufficientArrayDimensions"; //$NON-NLS-1$
+	public static final String UNNECESSARY_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryConversion"; //$NON-NLS-1$
+	public static final String UNNECESSARY_WIDE_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryWideConversion"; //$NON-NLS-1$
+	public static final String UNNECESSARY_NARROW_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryNarrowConversion"; //$NON-NLS-1$
+	public static final String UNNECESSARY_LITERAL_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryLiteralConversion"; //$NON-NLS-1$
+	public static final String NON_CONSTANT_DECLARATION = ISSUE_CODE_PREFIX + "nonConstantInInitializer"; //$NON-NLS-1$
+	public static final String MAYBE_NOT_INITIALIZED = ISSUE_CODE_PREFIX + "maybeNotInitialized"; //$NON-NLS-1$
+
+	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
 
 	private void checkRangeOnValidity(final STBinaryExpression subRangeExpression) {
 		final DataType leftType = (DataType) subRangeExpression.getLeft().getResultType();
@@ -156,20 +164,12 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					leftType.getName());
 			// Currently we can only process literals
 		}
-		if (leftType instanceof AnyIntType && !(subRangeExpression.getLeft() instanceof STNumericLiteral)) {
-			error(Messages.STCoreValidator_IndexRangeNotALiteral, subRangeExpression,
-					STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_NOT_A_LITERAL, leftType.getName());
-		}
 		final DataType rightType = (DataType) subRangeExpression.getRight().getResultType();
 		if (!(rightType instanceof AnyIntType)) {
 			error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, rightType.getName()),
 					subRangeExpression, STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_TYPE_INVALID,
 					rightType.getName());
 			// Currently we can only process literals
-		}
-		if (rightType instanceof AnyIntType && !(subRangeExpression.getRight() instanceof STNumericLiteral)) {
-			error(Messages.STCoreValidator_IndexRangeNotALiteral, subRangeExpression,
-					STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_NOT_A_LITERAL, leftType.getName());
 		}
 	}
 
@@ -397,6 +397,94 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	@Check
+	public void checkUnnecessaryConversion(final STFeatureExpression featureExpression) {
+		final INamedElement feature = featureExpression.getFeature();
+		if (feature instanceof final STStandardFunction standardFunction
+				&& CONVERSION_FUNCTION_PATTERN.matcher(feature.getName()).matches()
+				&& standardFunction.getInputParameters().size() == 1 && featureExpression.getParameters().size() == 1) {
+			final STCallArgument argument = featureExpression.getParameters().get(0);
+			final INamedElement argumentType = argument.getResultType();
+			final INamedElement expectedArgumentType = STCoreUtil.getExpectedType(argument.getArgument());
+			final INamedElement returnType = featureExpression.getResultType();
+			final INamedElement expectedReturnType = STCoreUtil.getExpectedType(featureExpression);
+
+			if (argumentType instanceof final DataType argumentDataType
+					&& expectedArgumentType instanceof final DataType expectedArgumentDataType
+					&& returnType instanceof final DataType returnDataType
+					&& expectedReturnType instanceof final DataType expectedReturnDataType) {
+				if (expectedReturnDataType.isAssignableFrom(argumentDataType)) {
+					warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryConversion,
+							expectedArgumentDataType.getName(), returnDataType.getName()),
+							STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, UNNECESSARY_CONVERSION,
+							expectedArgumentDataType.getName(), returnDataType.getName());
+				} else if (!expectedArgumentDataType.eClass().equals(argumentDataType.eClass())
+						&& expectedArgumentDataType.isAssignableFrom(argumentDataType)) {
+					warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryWideConversion,
+							expectedArgumentDataType.getName()), STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+							UNNECESSARY_WIDE_CONVERSION, expectedArgumentDataType.getName(), argumentDataType.getName(),
+							expectedReturnDataType.getName());
+				} else if (!expectedReturnDataType.eClass().equals(returnDataType.eClass())
+						&& expectedReturnDataType.isAssignableFrom(returnDataType)) {
+					warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryNarrowConversion,
+							returnDataType.getName()), STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+							UNNECESSARY_NARROW_CONVERSION, returnDataType.getName(), argumentDataType.getName(),
+							expectedReturnDataType.getName());
+				} else if (argument.getArgument() instanceof final STNumericLiteral numericLiteral) {
+					try {
+						final String value = ValueOperations
+								.castValue(ValueOperations.wrapValue(numericLiteral.getValue(), argumentType),
+										expectedReturnDataType)
+								.toString();
+						warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryLiteralConversion,
+								returnDataType.getName()), null, UNNECESSARY_LITERAL_CONVERSION,
+								returnDataType.getName(), expectedReturnDataType.getName(), value);
+					} catch (final ClassCastException e) {
+						// ignore (conversion is actually necessary)
+					}
+				} else if (argument.getArgument() instanceof final STStringLiteral stringLiteral) {
+					try {
+						final String value = ValueOperations
+								.castValue(ValueOperations.wrapValue(stringLiteral.getValue(), argumentType),
+										expectedReturnDataType)
+								.toString();
+						warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryLiteralConversion,
+								returnDataType.getName()), null, UNNECESSARY_LITERAL_CONVERSION,
+								returnDataType.getName(), expectedReturnDataType.getName(), value);
+					} catch (final ClassCastException e) {
+						// ignore (conversion is actually necessary)
+					}
+				}
+			}
+		}
+	}
+
+	@Check
+	public void checkVariableReference(final STFeatureExpression featureExpression) {
+		final STVarDeclaration declaration = EcoreUtil2.getContainerOfType(featureExpression, STVarDeclaration.class);
+		if (declaration != null
+				&& featureExpression.getFeature() instanceof final STVarDeclaration referencedVariable) {
+			if (referencedVariable.eContainer() instanceof final STVarDeclarationBlock referencedVariableBlock
+					&& !referencedVariableBlock.isConstant()) {
+				error(Messages.STCoreValidator_NonConstantExpressionInVariableDeclaration,
+						STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, NON_CONSTANT_DECLARATION);
+			} else if (STCoreUtil.getVariableScope(declaration) == STCoreUtil.getVariableScope(referencedVariable)) {
+				final INode declarationNode = NodeModelUtils.getNode(declaration);
+				final INode referencedVariableNode = NodeModelUtils.getNode(referencedVariable);
+				if (declarationNode != null && referencedVariableNode != null
+						&& declarationNode.getOffset() < referencedVariableNode.getOffset()) {
+					if (EcoreUtil2.getContainerOfType(featureExpression, ICallable.class) != null) { // local variable
+						error(Messages.STCoreValidator_VariableMaybeNotInitialized,
+								STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, MAYBE_NOT_INITIALIZED);
+					} else {
+						warning(Messages.STCoreValidator_VariableMaybeNotInitialized,
+								STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, MAYBE_NOT_INITIALIZED);
+					}
+				}
+			}
+		}
+	}
+
+	@Check
 	public void checkAssignmentTypeCompatibility(final STAssignmentStatement statement) {
 		final var leftType = statement.getLeft().getResultType();
 		final var rightType = statement.getRight().getResultType();
@@ -503,55 +591,19 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			// check argument count matches parameter count for non-formal call
 			final int parameterCount = callable.getInputParameters().size() + callable.getInOutParameters().size()
 					+ callable.getOutputParameters().size();
-			if (expression.getParameters().size() != parameterCount) {
+			if (expression.getParameters().size() != parameterCount
+					&& !(isCallableVarargs(callable) && expression.getParameters().size() >= parameterCount)) {
 				error(MessageFormat.format(Messages.STCoreValidator_Wrong_Number_Of_Arguments, callable.getName(),
 						Integer.toString(parameterCount), Integer.toString(expression.getParameters().size())),
 						expression, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, WRONG_NUMBER_OF_ARGUMENTS);
 				return;
 			}
-			// check non-formal argument kind
-			boolean error = false;
-			for (int index = callable.getInputParameters().size(); index < expression.getParameters().size(); ++index) {
-				final STCallUnnamedArgument arg = (STCallUnnamedArgument) expression.getParameters().get(index);
-				if (isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
-					error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
-							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, VALUE_NOT_ASSIGNABLE);
-					error = true;
-				}
-			}
-			if (error) {
-				return;
-			}
-		} else if (!expression.getParameters().isEmpty()) {
-			// check no formal arguments for standard functions
-			if (callable instanceof STStandardFunction) {
-				error(MessageFormat.format(
-						Messages.STCoreValidator_Attempting_To_Call_Standard_Function_With_Formal_Arguments,
-						callable.getName()), expression, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
-						STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS);
-				return;
-			}
-			// check formal argument kind
-			boolean error = false;
-			for (int index = 0; index < expression.getParameters().size(); ++index) {
-				final STCallArgument elem = expression.getParameters().get(index);
-				if (elem instanceof final STCallNamedInputArgument arg) {
-					if (callable.getInOutParameters().contains(arg.getParameter())
-							&& isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
-						error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
-								STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, VALUE_NOT_ASSIGNABLE);
-						error = true;
-					}
-				} else if (elem instanceof final STCallNamedOutputArgument arg
-						&& isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
-					error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
-							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, VALUE_NOT_ASSIGNABLE);
-					error = true;
-				}
-			}
-			if (error) {
-				return;
-			}
+		} else if (callable instanceof STStandardFunction && !expression.getParameters().isEmpty()) {
+			error(MessageFormat.format(
+					Messages.STCoreValidator_Attempting_To_Call_Standard_Function_With_Formal_Arguments,
+					callable.getName()), expression, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+					STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS);
+			return;
 		}
 
 		// check argument type
@@ -567,6 +619,11 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				checkTypeCompatibility(arg.getResultType(), getFeatureType(param),
 						STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
 						expression.getParameters().indexOf(arg));
+				if (isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
+					error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
+							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
+							expression.getParameters().indexOf(arg), VALUE_NOT_ASSIGNABLE);
+				}
 			}
 		});
 		expression.getMappedInOutArguments().forEach((param, arg) -> {
@@ -574,6 +631,11 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				checkTypeStrictCompatibility(arg.getResultType(), getFeatureType(param),
 						STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
 						expression.getParameters().indexOf(arg));
+				if (isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
+					error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
+							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
+							expression.getParameters().indexOf(arg), VALUE_NOT_ASSIGNABLE);
+				}
 			}
 		});
 	}
@@ -618,7 +680,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					NumericValueConverter.INSTANCE.toString(expression.getValue())),
 					STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE, INVALID_NUMERIC_LITERAL);
 		} else if (expectedType instanceof final DataType expectedDataType
-				&& IecTypes.GenericTypes.isAnyType(expectedDataType) && expression.getType() == null) {
+				&& IecTypes.GenericTypes.isAnyType(expectedDataType) && expression.getType() == null
+				&& !(expression.eContainer() instanceof STCallArgument)) {
 			error(MessageFormat.format(Messages.STCoreValidator_Literal_Requires_Type_Specifier,
 					expectedDataType.getName()), STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE,
 					LITERAL_REQUIRES_TYPE_SPECIFIER);
@@ -639,7 +702,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					stringValueConverter.toString(expression.getValue())),
 					STCorePackage.Literals.ST_STRING_LITERAL__VALUE, INVALID_STRING_LITERAL);
 		} else if (expectedType instanceof final DataType expectedDataType
-				&& IecTypes.GenericTypes.isAnyType(expectedDataType) && expression.getType() == null) {
+				&& IecTypes.GenericTypes.isAnyType(expectedDataType) && expression.getType() == null
+				&& !(expression.eContainer() instanceof STCallArgument)) {
 			error(MessageFormat.format(Messages.STCoreValidator_Literal_Requires_Type_Specifier,
 					expectedDataType.getName()), STCorePackage.Literals.ST_STRING_LITERAL__VALUE,
 					LITERAL_REQUIRES_TYPE_SPECIFIER);

@@ -2751,6 +2751,134 @@ public interface DataPackage extends EPackage {
 	int ANY_CHARS_TYPE_FEATURE_COUNT = ANY_ELEMENTARY_TYPE_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnySCharsTypeImpl <em>Any SChars Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.data.impl.AnySCharsTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnySCharsType()
+	 * @generated
+	 */
+	int ANY_SCHARS_TYPE = 41;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_SCHARS_TYPE__NAME = ANY_CHARS_TYPE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_SCHARS_TYPE__COMMENT = ANY_CHARS_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_SCHARS_TYPE__VERSION_INFO = ANY_CHARS_TYPE__VERSION_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_SCHARS_TYPE__IDENTIFICATION = ANY_CHARS_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_SCHARS_TYPE__TYPE_ENTRY = ANY_CHARS_TYPE__TYPE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any SChars Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_SCHARS_TYPE_FEATURE_COUNT = ANY_CHARS_TYPE_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyWCharsTypeImpl <em>Any WChars Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyWCharsTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyWCharsType()
+	 * @generated
+	 */
+	int ANY_WCHARS_TYPE = 42;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_WCHARS_TYPE__NAME = ANY_CHARS_TYPE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_WCHARS_TYPE__COMMENT = ANY_CHARS_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_WCHARS_TYPE__VERSION_INFO = ANY_CHARS_TYPE__VERSION_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_WCHARS_TYPE__IDENTIFICATION = ANY_CHARS_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_WCHARS_TYPE__TYPE_ENTRY = ANY_CHARS_TYPE__TYPE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Any WChars Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_WCHARS_TYPE_FEATURE_COUNT = ANY_CHARS_TYPE_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyStringTypeImpl <em>Any String Type</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2758,7 +2886,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyStringType()
 	 * @generated
 	 */
-	int ANY_STRING_TYPE = 41;
+	int ANY_STRING_TYPE = 43;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2831,7 +2959,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getStringType()
 	 * @generated
 	 */
-	int STRING_TYPE = 42;
+	int STRING_TYPE = 44;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2904,7 +3032,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getWstringType()
 	 * @generated
 	 */
-	int WSTRING_TYPE = 43;
+	int WSTRING_TYPE = 45;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2977,7 +3105,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyCharType()
 	 * @generated
 	 */
-	int ANY_CHAR_TYPE = 44;
+	int ANY_CHAR_TYPE = 46;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3041,7 +3169,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getCharType()
 	 * @generated
 	 */
-	int CHAR_TYPE = 45;
+	int CHAR_TYPE = 47;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3105,7 +3233,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getWcharType()
 	 * @generated
 	 */
-	int WCHAR_TYPE = 46;
+	int WCHAR_TYPE = 48;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3169,7 +3297,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyDateType()
 	 * @generated
 	 */
-	int ANY_DATE_TYPE = 47;
+	int ANY_DATE_TYPE = 49;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3233,7 +3361,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDateAndTimeType()
 	 * @generated
 	 */
-	int DATE_AND_TIME_TYPE = 48;
+	int DATE_AND_TIME_TYPE = 50;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3297,7 +3425,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLdtType()
 	 * @generated
 	 */
-	int LDT_TYPE = 49;
+	int LDT_TYPE = 51;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3361,7 +3489,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDateType()
 	 * @generated
 	 */
-	int DATE_TYPE = 50;
+	int DATE_TYPE = 52;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3425,7 +3553,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getTimeOfDayType()
 	 * @generated
 	 */
-	int TIME_OF_DAY_TYPE = 51;
+	int TIME_OF_DAY_TYPE = 53;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3489,7 +3617,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLtodType()
 	 * @generated
 	 */
-	int LTOD_TYPE = 52;
+	int LTOD_TYPE = 54;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3553,7 +3681,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLdateType()
 	 * @generated
 	 */
-	int LDATE_TYPE = 53;
+	int LDATE_TYPE = 55;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3617,7 +3745,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getBaseType1()
 	 * @generated
 	 */
-	int BASE_TYPE1 = 54;
+	int BASE_TYPE1 = 56;
 
 
 	/**
@@ -4161,6 +4289,26 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getAnyCharsType();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnySCharsType <em>Any SChars Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Any SChars Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.data.AnySCharsType
+	 * @generated
+	 */
+	EClass getAnySCharsType();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyWCharsType <em>Any WChars Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Any WChars Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.data.AnyWCharsType
+	 * @generated
+	 */
+	EClass getAnyWCharsType();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyStringType <em>Any String Type</em>}'.
@@ -4840,6 +4988,26 @@ public interface DataPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ANY_CHARS_TYPE = eINSTANCE.getAnyCharsType();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnySCharsTypeImpl <em>Any SChars Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.data.impl.AnySCharsTypeImpl
+		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnySCharsType()
+		 * @generated
+		 */
+		EClass ANY_SCHARS_TYPE = eINSTANCE.getAnySCharsType();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyWCharsTypeImpl <em>Any WChars Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyWCharsTypeImpl
+		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyWCharsType()
+		 * @generated
+		 */
+		EClass ANY_WCHARS_TYPE = eINSTANCE.getAnyWCharsType();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyStringTypeImpl <em>Any String Type</em>}' class.

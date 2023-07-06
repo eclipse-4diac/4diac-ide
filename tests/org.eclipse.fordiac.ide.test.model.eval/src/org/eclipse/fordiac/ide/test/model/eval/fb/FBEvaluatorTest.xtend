@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.junit.jupiter.api.BeforeAll
@@ -39,6 +40,7 @@ class FBEvaluatorTest {
 	@BeforeAll
 	def static void setupXtext() {
 		typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null)
+		STFunctionStandaloneSetup.doSetup
 		STAlgorithmStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register
 		FBEvaluatorFactory.register

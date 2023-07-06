@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Hesam Rezaee
  *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *       - distinguish variable scope
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring
@@ -30,7 +33,9 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 	public static final String FUNCTIONS_ID = STCoreHighlightingStyles.FUNCTIONS_ID;
 
 	// Semantic highlighting Styles
-	public static final String STATIC_VAR_ID = STCoreHighlightingStyles.STATIC_VAR_ID;
+	public static final String GLOBAL_CONST_ID = STCoreHighlightingStyles.GLOBAL_CONST_ID;
+	public static final String MEMBER_VARIABLE_ID = STCoreHighlightingStyles.MEMBER_VARIABLE_ID;
+	public static final String LOCAL_VARIABLE_ID = STCoreHighlightingStyles.LOCAL_VARIABLE_ID;
 	public static final String CALL_FUNCTION_ID = STCoreHighlightingStyles.CALL_FUNCTION_ID;
 	public static final String CALL_FUNCTION_BLOCK_ID = STCoreHighlightingStyles.CALL_FUNCTION_BLOCK_ID;
 	public static final String CALL_METHOD_ID = STCoreHighlightingStyles.CALL_METHOD_ID;
@@ -62,7 +67,9 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_BLOCK_ID, "Function Block calls",
 			callFunctionBlockTextStyle());
 		acceptor.acceptDefaultHighlighting(CALL_METHOD_ID, "Method calls", callMethodTextStyle());
-		acceptor.acceptDefaultHighlighting(STATIC_VAR_ID, "Variables", staticVarTextStyle());
+		acceptor.acceptDefaultHighlighting(GLOBAL_CONST_ID, "Global Constants", globalConstTextStyle);
+		acceptor.acceptDefaultHighlighting(MEMBER_VARIABLE_ID, "Member Variables", memberVarTextStyle);
+		acceptor.acceptDefaultHighlighting(LOCAL_VARIABLE_ID, "Local Variables", localVarTextStyle);
 		acceptor.acceptDefaultHighlighting(RETURN_FUNCTION_ID, "Function return values", returnFunctionTextStyle());
 		acceptor.acceptDefaultHighlighting(RETURN_METHOD_ID, "Method return values", returnMethodTextStyle());
 		acceptor.acceptDefaultHighlighting(FUNCTIONS_NAME_ID, "Function Name", functionNameTextStyle());
@@ -152,12 +159,6 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		return textStyle;
 	}
 
-	def outputFunctionTextStyle() {
-		var textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(0, 0, 0));
-		return textStyle;
-	}
-
 	def returnFunctionTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
@@ -170,7 +171,20 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		return textStyle;
 	}
 
-	def staticVarTextStyle() {
+	def globalConstTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(141, 218, 248));
+		textStyle.style = SWT.BOLD.bitwiseOr(SWT.ITALIC);
+		return textStyle;
+	}
+
+	def memberVarTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(102, 225, 248));
+		return textStyle;
+	}
+
+	def localVarTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;

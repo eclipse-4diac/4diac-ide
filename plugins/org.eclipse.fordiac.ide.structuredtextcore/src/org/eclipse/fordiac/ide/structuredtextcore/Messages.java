@@ -19,6 +19,14 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextcore.messages"; //$NON-NLS-1$
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedCallable;
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedCallableForType;
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedDataType;
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedParameter;
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedParameterForCallable;
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedVariable;
+	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedVariableForType;
+	public static String STCoreLinkingDiagnosticMessageProvider_UnknownType;
 	public static String STCoreValidator_Consecutive_Underscores_In_Identifier;
 	public static String STCoreValidator_Identifier_Is_Reserved;
 	public static String STCoreValidator_Implicit_Conversion_In_Literal;
@@ -35,6 +43,10 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_Wrong_Name_Case;
 	public static String STCoreValidator_Wrong_Number_Of_Arguments;
 	public static String STCoreValidator_UnaryOperator_Not_Applicable;
+	public static String STCoreValidator_UnnecessaryConversion;
+	public static String STCoreValidator_UnnecessaryLiteralConversion;
+	public static String STCoreValidator_UnnecessaryNarrowConversion;
+	public static String STCoreValidator_UnnecessaryWideConversion;
 	public static String STCoreValidator_Unqualified_FB_Call_On_FB_With_Input_Event_Size_Not_One;
 	public static String STCoreValidator_NameNotVisible;
 	public static String STCoreValidator_CallableHasNoReturnType;
@@ -44,8 +56,8 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_BitAccessExpressionNotOfTypeAnyInt;
 	public static String STCoreValidator_Duplicate_Variable_Name;
 	public static String STCoreValidator_IndexRangeTypeInvalid;
-	public static String STCoreValidator_IndexRangeNotALiteral;
 	public static String STCoreValidator_NonAnyStringNotMaxLengthSettingNotAllowed;
+	public static String STCoreValidator_NonConstantExpressionInVariableDeclaration;
 	public static String STCoreValidator_MaxLengthTypeInvalid;
 	public static String STCoreValidator_TooManyIndicesGiven;
 	public static String STCoreValidator_IndexAccessTypeInvalid;
@@ -61,6 +73,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_InputsCannotBeAssigned;
 	public static String STCoreValidator_InsufficientArrayDimensions;
 	public static String STCoreValidator_CallsCannotBeAssignedTo;
+	public static String STCoreValidator_VariableMaybeNotInitialized;
 
 	static {
 		// initialize resource bundle

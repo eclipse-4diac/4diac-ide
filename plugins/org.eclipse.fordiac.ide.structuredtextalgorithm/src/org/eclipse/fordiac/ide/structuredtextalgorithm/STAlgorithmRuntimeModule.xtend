@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,9 +17,21 @@ import com.google.inject.name.Names
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResourceDescriptionStrategy
 import org.eclipse.fordiac.ide.structuredtextalgorithm.scoping.STAlgorithmImportedNamespaceAwareLocalScopeProvider
+import org.eclipse.fordiac.ide.structuredtextalgorithm.scoping.STAlgorithmLinkingDiagnosticMessageProvider
+import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmMapper
+import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmPartitioner
+import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmReconciler
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters
+import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider
+import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameProvider
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler
 import org.eclipse.xtext.Constants
+import org.eclipse.xtext.documentation.IEObjectDocumentationProvider
+import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider
+import org.eclipse.xtext.naming.IQualifiedNameProvider
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater
 import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy
 import org.eclipse.xtext.scoping.IScopeProvider
@@ -54,5 +66,29 @@ class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 
 	def Class<? extends IDefaultResourceDescriptionStrategy> bindIDefaultResourceDescriptionStrategy() {
 		return STAlgorithmResourceDescriptionStrategy
+	}
+
+	def Class<? extends ILinkingDiagnosticMessageProvider> bindILinkingDiagnosticMessageProvider() {
+		return STAlgorithmLinkingDiagnosticMessageProvider;
+	}
+
+	override Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
+		return STCoreQualifiedNameProvider
+	}
+
+	def Class<? extends STCorePartitioner> bindSTCorePartitioner() {
+		return STAlgorithmPartitioner
+	}
+
+	def Class<? extends STCoreReconciler> bindSTCoreReconciler() {
+		return STAlgorithmReconciler
+	}
+
+	def Class<? extends STCoreMapper> bindSTCoreMapper() {
+		return STAlgorithmMapper
+	}
+
+	def Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
+		return STCoreCommentDocumentationProvider;
 	}
 }

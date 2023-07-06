@@ -1,7 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
-import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -49,19 +61,20 @@ public class RenameTypeRefactoring extends Refactoring {
 	}
 
 	@Override
-	public RefactoringStatus checkFinalConditions(final IProgressMonitor monitor) throws CoreException, OperationCanceledException {
-		final RefactoringStatus status= new RefactoringStatus();
+	public RefactoringStatus checkFinalConditions(final IProgressMonitor monitor)
+			throws CoreException, OperationCanceledException {
+		final RefactoringStatus status = new RefactoringStatus();
 
 		return status;
 	}
 
 	@Override
-	public RefactoringStatus checkInitialConditions(final IProgressMonitor monitor) throws CoreException, OperationCanceledException {
-		final RefactoringStatus status= new RefactoringStatus();
+	public RefactoringStatus checkInitialConditions(final IProgressMonitor monitor)
+			throws CoreException, OperationCanceledException {
+		final RefactoringStatus status = new RefactoringStatus();
 		try {
 			monitor.beginTask("Checking preconditions...", 1); //$NON-NLS-1$
 			checkEditor(status, typeEntry, getOldName());
-
 
 		} finally {
 			monitor.done();
@@ -104,11 +117,10 @@ public class RenameTypeRefactoring extends Refactoring {
 				return null;
 			}
 
-			InstanceSearch search = StructDataTypeSearch.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable());
+			InstanceSearch search = StructDataTypeSearch
+					.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable());
 
-			final List<INamedElement> allTypesWithStruct = search
-					.searchStructuredTypes(typeEntry.getTypeLibrary());
-
+			final Set<INamedElement> allTypesWithStruct = search.searchStructuredTypes(typeEntry.getTypeLibrary());
 
 			final CompositeChange parentChange = new CompositeChange(
 					"Rename Type from " + typeEntry.getTypeName() + " to : " + getNewName()); //$NON-NLS-1$ //$NON-NLS-2$
@@ -116,7 +128,6 @@ public class RenameTypeRefactoring extends Refactoring {
 			parentChange.add(new RenameTypeChange(typeEntry, getNewName() + ".dtp")); //$NON-NLS-1$
 
 			final CompositeChange change = new CompositeChange("Affected Struct that contain struct as member"); //$NON-NLS-1$
-
 
 			for (final INamedElement element : allTypesWithStruct) {
 				final StructuredTypeMemberChange structChange = new StructuredTypeMemberChange((StructuredType) element,
@@ -129,11 +140,10 @@ public class RenameTypeRefactoring extends Refactoring {
 
 			final CompositeChange fbTypeChanges = new CompositeChange("Fb Types:");
 			search = StructDataTypeSearch.createStructInterfaceSearch((StructuredType) typeEntry.getTypeEditable());
-			List<INamedElement> fbTypes = search.performTypeLibBlockSearch(typeEntry.getTypeLibrary());
-			System.out.println(fbTypes.size());
+			final Set<INamedElement> fbTypes = search.performTypeLibBlockSearch(typeEntry.getTypeLibrary());
 			fbTypes.forEach(fb -> fbTypeChanges.add(new InterfaceDataTypeChange((FBType) fb, typeEntry, oldName, newName)));
 			parentChange.add(fbTypeChanges);
-			
+
 			return parentChange;
 
 		} finally {
@@ -141,10 +151,7 @@ public class RenameTypeRefactoring extends Refactoring {
 		}
 	}
 
-
 	public RefactoringStatus setAndValidateTypeName(final String name) {
-
-
 
 		final RefactoringStatus result = new RefactoringStatus();
 

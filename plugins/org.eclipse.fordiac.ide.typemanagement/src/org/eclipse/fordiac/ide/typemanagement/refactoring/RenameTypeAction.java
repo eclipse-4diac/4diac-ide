@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import org.eclipse.core.resources.IFile;
@@ -13,8 +25,6 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 public class RenameTypeAction implements IWorkbenchWindowActionDelegate {
-
-
 
 	private TypeEntry typeEntry;
 	private IWorkbenchWindow fWindow;
@@ -32,14 +42,12 @@ public class RenameTypeAction implements IWorkbenchWindowActionDelegate {
 	@Override
 	public void run(final IAction action) {
 		final RenameTypeRefactoring refactoring = new RenameTypeRefactoring(typeEntry, typeEntry.getTypeName());
-		run(new RenameTypeRefactoringWizard(refactoring, 0), fWindow.getShell(),
-				"Rename Type"); //$NON-NLS-1$
+		run(new RenameTypeRefactoringWizard(refactoring, 0), fWindow.getShell(), "Rename Type"); //$NON-NLS-1$
 	}
-
 
 	public void run(final RefactoringWizard wizard, final Shell parent, final String dialogTitle) {
 		try {
-			final RefactoringWizardOpenOperation operation= new RefactoringWizardOpenOperation(wizard);
+			final RefactoringWizardOpenOperation operation = new RefactoringWizardOpenOperation(wizard);
 			operation.run(parent, dialogTitle);
 		} catch (final InterruptedException exception) {
 
@@ -49,8 +57,7 @@ public class RenameTypeAction implements IWorkbenchWindowActionDelegate {
 	@Override
 	public void selectionChanged(final IAction action, final ISelection selection) {
 		typeEntry = null;
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection extended = (IStructuredSelection) selection;
+		if (selection instanceof final IStructuredSelection extended) {
 			final Object[] elements = extended.toArray();
 			if (elements.length == 1 && elements[0] instanceof IFile) {
 				typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) elements[0]);

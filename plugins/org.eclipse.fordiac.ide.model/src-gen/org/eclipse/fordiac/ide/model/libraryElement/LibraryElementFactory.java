@@ -90,6 +90,15 @@ public interface LibraryElementFactory extends EFactory {
 	Application createApplication();
 
 	/**
+	 * Returns a new object of class '<em>Array Size</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Array Size</em>'.
+	 * @generated
+	 */
+	ArraySize createArraySize();
+
+	/**
 	 * Returns a new object of class '<em>Attribute</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -405,6 +414,15 @@ public interface LibraryElementFactory extends EFactory {
 	FBType createFBType();
 
 	/**
+	 * Returns a new object of class '<em>Function FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Function FB Type</em>'.
+	 * @generated
+	 */
+	FunctionFBType createFunctionFBType();
+
+	/**
 	 * Returns a new object of class '<em>Group</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -673,6 +691,24 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	STAlgorithm createSTAlgorithm();
+
+	/**
+	 * Returns a new object of class '<em>ST Function</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Function</em>'.
+	 * @generated
+	 */
+	STFunction createSTFunction();
+
+	/**
+	 * Returns a new object of class '<em>ST Function Body</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Function Body</em>'.
+	 * @generated
+	 */
+	STFunctionBody createSTFunctionBody();
 
 	/**
 	 * Returns a new object of class '<em>ST Method</em>'.

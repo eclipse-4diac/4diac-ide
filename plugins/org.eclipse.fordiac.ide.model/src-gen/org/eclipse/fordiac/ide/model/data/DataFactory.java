@@ -396,6 +396,24 @@ public interface DataFactory extends EFactory {
 	AnyCharsType createAnyCharsType();
 
 	/**
+	 * Returns a new object of class '<em>Any SChars Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Any SChars Type</em>'.
+	 * @generated
+	 */
+	AnySCharsType createAnySCharsType();
+
+	/**
+	 * Returns a new object of class '<em>Any WChars Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Any WChars Type</em>'.
+	 * @generated
+	 */
+	AnyWCharsType createAnyWCharsType();
+
+	/**
 	 * Returns a new object of class '<em>Any String Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

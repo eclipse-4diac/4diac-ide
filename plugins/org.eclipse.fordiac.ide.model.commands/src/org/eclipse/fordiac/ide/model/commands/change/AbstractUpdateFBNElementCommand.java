@@ -112,8 +112,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		createNewFB();
 		checkGroup(oldElement, newElement); // needs to be done before anything is changed on the old element Bug
 		// 579570
-
-		network.getNetworkElements().add(newElement);
+		if (network != null) {
+			network.getNetworkElements().add(newElement);
+		}
 
 		handleErrorMarker();
 
@@ -127,7 +128,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		handleConnections();
 		reconnCmds.execute();
 
-		network.getNetworkElements().remove(oldElement);
+		if (network != null) {
+			network.getNetworkElements().remove(oldElement);
+		}
 
 		newElement.setName(oldElement.getName());
 
@@ -245,8 +248,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 						oldInterface.getFullTypeName(), interfaceElement.getFullTypeName());
 
 				final List<ErrorMarkerBuilder> errorMarkerBuilders = new ArrayList<>();
-				interfaceElement = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(newElement,
-						oldInterface, errorMessage, errorMarkerBuilders);
+				interfaceElement = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(
+						newElement.getInterface(), oldInterface, errorMessage, errorMarkerBuilders);
 				errorMarkerBuilders.stream().map(FordiacMarkerCommandHelper::newCreateMarkersCommand)
 				.forEachOrdered(createMarkersCmds::add);
 			}
@@ -341,16 +344,27 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		for (final VarDeclaration input : oldElement.getInterface().getInputVars()) {
 			deleteMarkersCmds.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(
 					FordiacMarkerHelper.findMarkers(input.getValue(), FordiacErrorMarker.INITIAL_VALUE_MARKER)));
+			deleteMarkersCmds.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(
+					FordiacMarkerHelper.findMarkers(input.getArraySize(), FordiacErrorMarker.TYPE_DECLARATION_MARKER)));
 		}
 
 		for (final VarDeclaration input : newElement.getInterface().getInputVars()) {
+			if (input.isArray()) {
+				final String errorMessage = VariableOperations.validateType(input);
+				input.getArraySize().setErrorMessage(errorMessage);
+				if (!errorMessage.isBlank()) {
+					createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(ErrorMarkerBuilder
+							.createErrorMarkerBuilder(errorMessage).setType(FordiacErrorMarker.TYPE_DECLARATION_MARKER)
+							.setTarget(input.getArraySize())));
+				}
+			}
 			if (hasValue(input.getValue())) {
 				final String errorMessage = VariableOperations.validateValue(input);
 				input.getValue().setErrorMessage(errorMessage);
 				if (!errorMessage.isBlank()) {
 					createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(
 							ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
-									.setType(FordiacErrorMarker.INITIAL_VALUE_MARKER).setTarget(input.getValue())));
+							.setType(FordiacErrorMarker.INITIAL_VALUE_MARKER).setTarget(input.getValue())));
 				}
 			}
 		}
@@ -427,7 +441,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			final FBNetworkElement element) {
 		final List<ErrorMarkerBuilder> errorMarkerBuilders = new ArrayList<>();
 		final ErrorMarkerInterface errorMarkerInterface = FordiacErrorMarkerInterfaceHelper
-				.createErrorMarkerInterfaceElement(element, oldInterface,
+				.createErrorMarkerInterfaceElement(element.getInterface(), oldInterface,
 						MessageFormat.format(Messages.UpdateFBTypeCommand_Pin_not_found, oldInterface.getName()),
 						errorMarkerBuilders);
 		errorMarkerBuilders.stream().map(FordiacMarkerCommandHelper::newCreateMarkersCommand)
@@ -467,11 +481,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 					source.getFullTypeName(), destination.getFullTypeName());
 			final List<ErrorMarkerBuilder> errorMarkerBuilders = new ArrayList<>();
 			if (connection.getDestinationElement() == oldElement) {
-				destination = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(newElement,
-						destination, errorMessage, errorMarkerBuilders);
+				destination = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(
+						newElement.getInterface(), destination, errorMessage, errorMarkerBuilders);
 			} else {
-				source = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(newElement, source,
-						errorMessage, errorMarkerBuilders);
+				source = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(newElement.getInterface(),
+						source, errorMessage, errorMarkerBuilders);
 			}
 			errorMarkerBuilders.stream().map(FordiacMarkerCommandHelper::newCreateMarkersCommand)
 			.forEachOrdered(createMarkersCmds::add);

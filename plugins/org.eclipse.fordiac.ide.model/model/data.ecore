@@ -443,6 +443,22 @@
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnySCharsType" eSuperTypes="#//AnyCharsType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnyWCharsType" eSuperTypes="#//AnyCharsType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyStringType" eSuperTypes="#//AnyCharsType">
     <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -453,7 +469,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxLength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         unsettable="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="StringType" eSuperTypes="#//AnyStringType">
+  <eClassifiers xsi:type="ecore:EClass" name="StringType" eSuperTypes="#//AnyStringType #//AnySCharsType">
     <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
@@ -461,7 +477,7 @@
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="WstringType" eSuperTypes="#//AnyStringType">
+  <eClassifiers xsi:type="ecore:EClass" name="WstringType" eSuperTypes="#//AnyStringType #//AnyWCharsType">
     <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
@@ -477,7 +493,7 @@
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CharType" eSuperTypes="#//AnyCharType">
+  <eClassifiers xsi:type="ecore:EClass" name="CharType" eSuperTypes="#//AnyCharType #//AnySCharsType">
     <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
@@ -485,7 +501,7 @@
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="WcharType" eSuperTypes="#//AnyCharType">
+  <eClassifiers xsi:type="ecore:EClass" name="WcharType" eSuperTypes="#//AnyCharType #//AnyWCharsType">
     <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>

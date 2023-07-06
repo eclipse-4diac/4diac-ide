@@ -51,15 +51,11 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 		}
 	};
 
-	/**
-	 * The Class CommentTypeContainerFigure for handling the layout of one comment
-	 * and type label of an fb interface.
-	 */
+	/** The Class CommentTypeContainerFigure for handling the layout of one comment and type label of an fb
+	 * interface. */
 	private static class CommentTypeContainerFigure extends Figure {
 
-		/**
-		 * Instantiates a new variable output container figure.
-		 */
+		/** Instantiates a new variable output container figure. */
 		public CommentTypeContainerFigure() {
 			final GridLayout layout = new GridLayout(3, false);
 			layout.horizontalSpacing = 0;
@@ -74,9 +70,13 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 	public void activate() {
 		super.activate();
 		getModel().getReferencedElement().eAdapters().add(contentAdapter);
+		setupReferencedEP();
+	}
+
+	public void setupReferencedEP() {
 		final Object part = getViewer().getEditPartRegistry().get(getInterfaceElement());
-		if (part instanceof InterfaceEditPart) {
-			referencedInterface = (InterfaceEditPart) part;
+		if (part instanceof final InterfaceEditPart iep) {
+			referencedInterface = iep;
 			referencedInterface.getFigure().addAncestorListener(new AncestorListener() {
 
 				@Override
@@ -115,6 +115,10 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 		refreshPosition();
 	}
 
+	public InterfaceEditPart getReferencedInterface() {
+		return referencedInterface;
+	}
+
 	private void refreshPosition() {
 		if (null != getParent() && null != getInterfaceElement().eContainer()) {
 			Rectangle bounds = null;
@@ -123,7 +127,6 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}
-
 
 	private Point calculatePos() {
 		if (null != referencedInterface) {
@@ -143,9 +146,8 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private static int getNrEvWITH(final EList<Event> eList) {
-		return (int)eList.stream().filter(ev -> !ev.getWith().isEmpty()).count();
+		return (int) eList.stream().filter(ev -> !ev.getWith().isEmpty()).count();
 	}
-
 
 	private int getFigureWidth() {
 		return getFigure().getPreferredSize().width;
@@ -156,7 +158,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 		return (CommentTypeField) super.getModel();
 	}
 
-	private IInterfaceElement getInterfaceElement() {
+	public IInterfaceElement getInterfaceElement() {
 		return getModel().getReferencedElement();
 	}
 

@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -66,6 +67,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Function;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
@@ -94,6 +98,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
@@ -108,6 +114,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
+import org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedElement;
@@ -240,6 +248,13 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseApplication(application);
 				if (result == null) result = caseINamedElement(application);
 				if (result == null) result = caseConfigurableObject(application);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ARRAY_SIZE: {
+				ArraySize arraySize = (ArraySize)theEObject;
+				T result = caseArraySize(arraySize);
+				if (result == null) result = caseErrorMarkerRef(arraySize);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -582,6 +597,32 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.FUNCTION: {
+				Function function = (Function)theEObject;
+				T result = caseFunction(function);
+				if (result == null) result = caseICallable(function);
+				if (result == null) result = caseINamedElement(function);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.FUNCTION_BODY: {
+				FunctionBody functionBody = (FunctionBody)theEObject;
+				T result = caseFunctionBody(functionBody);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.FUNCTION_FB_TYPE: {
+				FunctionFBType functionFBType = (FunctionFBType)theEObject;
+				T result = caseFunctionFBType(functionFBType);
+				if (result == null) result = caseFBType(functionFBType);
+				if (result == null) result = caseCompilableType(functionFBType);
+				if (result == null) result = caseICallable(functionFBType);
+				if (result == null) result = caseLibraryElement(functionFBType);
+				if (result == null) result = caseConfigurableObject(functionFBType);
+				if (result == null) result = caseINamedElement(functionFBType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.GROUP: {
 				Group group = (Group)theEObject;
 				T result = caseGroup(group);
@@ -877,6 +918,24 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.ST_FUNCTION: {
+				STFunction stFunction = (STFunction)theEObject;
+				T result = caseSTFunction(stFunction);
+				if (result == null) result = caseTextFunction(stFunction);
+				if (result == null) result = caseFunction(stFunction);
+				if (result == null) result = caseICallable(stFunction);
+				if (result == null) result = caseINamedElement(stFunction);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ST_FUNCTION_BODY: {
+				STFunctionBody stFunctionBody = (STFunctionBody)theEObject;
+				T result = caseSTFunctionBody(stFunctionBody);
+				if (result == null) result = caseTextFunctionBody(stFunctionBody);
+				if (result == null) result = caseFunctionBody(stFunctionBody);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.ST_METHOD: {
 				STMethod stMethod = (STMethod)theEObject;
 				T result = caseSTMethod(stMethod);
@@ -936,6 +995,22 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseAlgorithm(textAlgorithm);
 				if (result == null) result = caseICallable(textAlgorithm);
 				if (result == null) result = caseINamedElement(textAlgorithm);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.TEXT_FUNCTION: {
+				TextFunction textFunction = (TextFunction)theEObject;
+				T result = caseTextFunction(textFunction);
+				if (result == null) result = caseFunction(textFunction);
+				if (result == null) result = caseICallable(textFunction);
+				if (result == null) result = caseINamedElement(textFunction);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.TEXT_FUNCTION_BODY: {
+				TextFunctionBody textFunctionBody = (TextFunctionBody)theEObject;
+				T result = caseTextFunctionBody(textFunctionBody);
+				if (result == null) result = caseFunctionBody(textFunctionBody);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1097,6 +1172,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseApplication(Application object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Array Size</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Array Size</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseArraySize(ArraySize object) {
 		return null;
 	}
 
@@ -1656,6 +1746,51 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Function</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Function</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFunction(Function object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Function Body</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Function Body</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFunctionBody(FunctionBody object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Function FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Function FB Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFunctionFBType(FunctionFBType object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Group</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -2181,6 +2316,36 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Function</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Function</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTFunction(STFunction object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Function Body</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Function Body</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTFunctionBody(STFunctionBody object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>ST Method</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -2267,6 +2432,36 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTextAlgorithm(TextAlgorithm object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Text Function</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Text Function</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTextFunction(TextFunction object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Text Function Body</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Text Function Body</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTextFunctionBody(TextFunctionBody object) {
 		return null;
 	}
 

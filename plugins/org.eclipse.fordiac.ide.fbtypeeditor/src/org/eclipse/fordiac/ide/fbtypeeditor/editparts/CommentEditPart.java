@@ -23,6 +23,8 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -63,22 +65,22 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart {
 		handle.setDragAllowed(false);
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, handle);
 
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
-			@Override
-			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					return new ChangeCommentCommand(getCastedModel(), (String) request.getCellEditor().getValue());
+		if (isDirectEditable()) {
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
+				@Override
+				protected Command getDirectEditCommand(final DirectEditRequest request) {
+					return new ChangeCommentCommand(getTargetInterfaceElement(),
+							(String) request.getCellEditor().getValue());
 				}
-				return null;
-			}
 
-			@Override
-			protected void revertOldEditValue(final DirectEditRequest request) {
-				if (getHost() instanceof final AbstractDirectEditableEditPart viewEditPart) {
-					viewEditPart.getNameLabel().setText(viewEditPart.getINamedElement().getComment());
+				@Override
+				protected void revertOldEditValue(final DirectEditRequest request) {
+					if (getHost() instanceof final AbstractDirectEditableEditPart viewEditPart) {
+						viewEditPart.getNameLabel().setText(viewEditPart.getINamedElement().getComment());
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	@Override
@@ -106,5 +108,17 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart {
 	@Override
 	public void refreshName() {
 		getNameLabel().setText(getCastedModel().getComment());
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return false;
+	}
+
+	protected IInterfaceElement getTargetInterfaceElement() {
+		if (getCastedModel() instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && !varDecl.isIsInput()) {
+			return ((InterfaceList) varDecl.eContainer()).getInOutVarOpposite(varDecl);
+		}
+		return getCastedModel();
 	}
 }

@@ -23,6 +23,8 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize;
+
 import java.io.InputStream;
 import java.text.MessageFormat;
 
@@ -62,28 +64,25 @@ public abstract class TypeImporter extends CommonElementImporter {
 	 * @throws XMLStreamException */
 	protected VarDeclaration parseVarDeclaration() throws TypeImportException, XMLStreamException {
 		final VarDeclaration v = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-
 		readNameCommentAttributes(v);
 
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (null != typeName) {
-			final DataType dataType = getDataTypeLibrary().getType(typeName);
-			v.setType(dataType);
-
-			if (dataType instanceof ErrorMarkerDataType) {
-				errorMarkerBuilders.add(ErrorMarkerBuilder
-						.createErrorMarkerBuilder(
-								MessageFormat.format(Messages.TypeImporter_TypeMissing, typeName, v.getName()))
-						.setTarget(v));
-			}
-
-		} else {
+		if (null == typeName) {
 			throw new TypeImportException(Messages.Import_ERROR_InputVariableTypeNotDefined);
+		}
+		final DataType dataType = getDataTypeLibrary().getType(typeName);
+		v.setType(dataType);
+
+		if (dataType instanceof ErrorMarkerDataType) {
+			errorMarkerBuilders.add(ErrorMarkerBuilder
+					.createErrorMarkerBuilder(
+							MessageFormat.format(Messages.TypeImporter_TypeMissing, typeName, v.getName()))
+					.setTarget(v));
 		}
 
 		final String arraySize = getAttributeValue(LibraryElementTags.ARRAYSIZE_ATTRIBUTE);
 		if (null != arraySize) {
-			v.setArraySize(arraySize);
+			setArraySize(v, arraySize);
 		}
 
 		final String initialValue = getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE);
@@ -103,7 +102,6 @@ public abstract class TypeImporter extends CommonElementImporter {
 		});
 
 		proceedToEndElementNamed(LibraryElementTags.VAR_DECLARATION_ELEMENT);
-
 		return v;
 	}
 }

@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * Copyright (c) 2011, 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 			Johannes Kepler University,
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added diagram font preference
  *               - extracted common FB shape for interface and fbn editors
+ *               - added containers for in out vars, cleaned container code
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
@@ -41,12 +43,7 @@ import org.eclipse.swt.widgets.Display;
 public class FBTypeEditPart extends AbstractConnectableEditPart {
 
 	private ControlListener controlListener;
-	private EventInputContainer eic;
-	private EventOutputContainer eoc;
-	private VariableInputContainer vic;
-	private SocketContainer socketcont;
-	private VariableOutputContainer voc;
-	private PlugContainer plugcont;
+	final List<AbstractContainerElement> containerChildren = new ArrayList<>(6);
 	private DiagramFontChangeListener fontChangeListener;
 
 	private final Adapter adapter = new EContentAdapter() {
@@ -101,10 +98,6 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		return (FBType) super.getModel();
 	}
 
-	public FBTypeEditPart() {
-		super();
-	}
-
 	@Override
 	protected IFigure createFigure() {
 		return new FBTypeFigure(getModel());
@@ -116,39 +109,14 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	}
 
 	@Override
-	protected List<Object> getModelChildren() {
-		if (null == eic) {
-			eic = new EventInputContainer(getModel());
-		}
-		if (null == eoc) {
-			eoc = new EventOutputContainer(getModel());
-		}
-		if (null == vic) {
-			vic = new VariableInputContainer(getModel());
-		}
-		if (null == socketcont) {
-			socketcont = new SocketContainer(getModel());
-		}
-		if (null == voc) {
-			voc = new VariableOutputContainer(getModel());
-		}
-		if (null == plugcont) {
-			plugcont = new PlugContainer(getModel());
-		}
-		final ArrayList<Object> temp = new ArrayList<>(6);
-		temp.add(eic);
-		temp.add(eoc);
-		temp.add(vic);
-		if (!(getModel() instanceof AdapterFBType)) {
-			// adaptertypes cannot have sockets
-			temp.add(socketcont);
-		}
-		temp.add(voc);
-		if (!(getModel() instanceof AdapterFBType)) {
-			// adaptertypes cannot have plugs
-			temp.add(plugcont);
-		}
-		return temp;
+	public void setModel(final Object model) {
+		super.setModel(model);
+		createChildrenContainer();
+	}
+
+	@Override
+	protected List getModelChildren() {
+		return containerChildren;
 	}
 
 	@Override
@@ -180,8 +148,14 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		if (childEditPart.getModel() instanceof VariableInputContainer) {
 			return getFigure().getDataInputs();
 		}
+		if (childEditPart.getModel() instanceof VarInOutInputContainer) {
+			return getFigure().getVarInOutInputs();
+		}
 		if (childEditPart.getModel() instanceof VariableOutputContainer) {
 			return getFigure().getDataOutputs();
+		}
+		if (childEditPart.getModel() instanceof VarInOutOutputContainer) {
+			return getFigure().getVarInOutOutputs();
 		}
 		if (childEditPart.getModel() instanceof SocketContainer) {
 			return getFigure().getSockets();
@@ -209,6 +183,21 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	public void refresh() {
 		super.refresh();
 		getFigure().getTypeLabel().setText(getModel().getName());
+	}
+
+	private void createChildrenContainer() {
+		containerChildren.add(new EventInputContainer(getModel()));
+		containerChildren.add(new EventOutputContainer(getModel()));
+		containerChildren.add(new VariableInputContainer(getModel()));
+		containerChildren.add(new VarInOutInputContainer(getModel()));
+		containerChildren.add(new VariableOutputContainer(getModel()));
+		containerChildren.add(new VarInOutOutputContainer(getModel()));
+
+		// adapter types cannot have plugs or sockets
+		if (!(getModel() instanceof AdapterFBType)) {
+			containerChildren.add(new SocketContainer(getModel()));
+			containerChildren.add(new PlugContainer(getModel()));
+		}
 	}
 
 }

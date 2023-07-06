@@ -19,5 +19,6 @@ Require-Bundle: com.google.guava,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
- org.eclipse.fordiac.ide.structuredtextalgorithm.ui
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ui,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui
 Export-Package: org.eclipse.fordiac.ide.export.xmi

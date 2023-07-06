@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 Johannes Kepler University
+ * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,17 +13,15 @@
  *     - initial API and implementation and/or initial documentation
  *   Monika Wenger - extracted the model helper methods into this annotations class
  *   Monika Wenger - introduced IEC 61499 attribute support into the model
- *   Alois Zoitl - reworked model helper functions for better mapping and sub-app support
- *   Hesam Rezaee - add variable configuration for global constants
+ *   Alois Zoitl   - reworked model helper functions for better mapping and sub-app support
+ *   Hesam Rezaee  - add variable configuration for global constants
+ *   Alois Zoitl   - extracted the helper methods for interface lists
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
@@ -162,30 +160,26 @@ public final class Annotations {
 
 		if (s == path) {
 			sourceIsInterface = false;
-		} else {
-			if (s instanceof Demultiplexer) {
-				final var connections = s.getInterface().getInputVars().get(0).getInputConnections();
-				sourceIsInterface = !connections.isEmpty() && isInterfaceConnection(connections.get(0), s);
-			} else if (s instanceof Multiplexer) {
-				sourceIsInterface = s.getInterface().getInputVars().stream()
-						.anyMatch(v -> !v.getInputConnections().isEmpty())
-						&& s.getInterface().getInputVars().stream()
-						.allMatch(v -> v.getInputConnections().stream().allMatch(co -> isInterfaceConnection(co, s)));
-			}
+		} else if (s instanceof Demultiplexer) {
+			final var connections = s.getInterface().getInputVars().get(0).getInputConnections();
+			sourceIsInterface = !connections.isEmpty() && isInterfaceConnection(connections.get(0), s);
+		} else if (s instanceof Multiplexer) {
+			sourceIsInterface = s.getInterface().getInputVars().stream()
+					.anyMatch(v -> !v.getInputConnections().isEmpty())
+					&& s.getInterface().getInputVars().stream().allMatch(
+							v -> v.getInputConnections().stream().allMatch(co -> isInterfaceConnection(co, s)));
 		}
 
 		if (d == path) {
 			destinationIsInterface = false;
-		} else {
-			if (d instanceof Demultiplexer) {
-				destinationIsInterface = d.getInterface().getOutputVars().stream()
-						.anyMatch(v -> !v.getOutputConnections().isEmpty())
-						&& d.getInterface().getOutputVars().stream()
-						.allMatch(v -> v.getOutputConnections().stream().allMatch(co -> isInterfaceConnection(co, d)));
-			} else if (d instanceof Multiplexer) {
-				final var connections = d.getInterface().getOutputVars().get(0).getOutputConnections();
-				destinationIsInterface = !connections.isEmpty() && isInterfaceConnection(connections.get(0), d);
-			}
+		} else if (d instanceof Demultiplexer) {
+			destinationIsInterface = d.getInterface().getOutputVars().stream()
+					.anyMatch(v -> !v.getOutputConnections().isEmpty())
+					&& d.getInterface().getOutputVars().stream().allMatch(
+							v -> v.getOutputConnections().stream().allMatch(co -> isInterfaceConnection(co, d)));
+		} else if (d instanceof Multiplexer) {
+			final var connections = d.getInterface().getOutputVars().get(0).getOutputConnections();
+			destinationIsInterface = !connections.isEmpty() && isInterfaceConnection(connections.get(0), d);
 		}
 
 		return (sourceIsInterface || destinationIsInterface);
@@ -194,7 +188,8 @@ public final class Annotations {
 	public static void checkifConnectionBroken(final Connection c) {
 		if (!c.isResourceConnection()) {
 			final Resource sourceRes = (null != c.getSourceElement()) ? c.getSourceElement().getResource() : null;
-			final Resource destinationRes = (null != c.getDestinationElement()) ? c.getDestinationElement().getResource()
+			final Resource destinationRes = (null != c.getDestinationElement())
+					? c.getDestinationElement().getResource()
 					: null;
 			c.setBrokenConnection(((null != sourceRes) && (!sourceRes.equals(destinationRes)))
 					|| ((null != destinationRes) && (!destinationRes.equals(sourceRes))));
@@ -245,7 +240,7 @@ public final class Annotations {
 		return retVal;
 	}
 
-	private static String getTransitionEventName(final Event event) {
+	public static String getTransitionEventName(final Event event) {
 		if (event.getFBNetworkElement() instanceof AdapterFB) {
 			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
 		}
@@ -253,84 +248,6 @@ public final class Annotations {
 	}
 
 	// *** SubApp ***//
-
-	// *** InterfaceList ***
-	public static EList<IInterfaceElement> getAllInterfaceElements(final InterfaceList il) {
-		final EList<IInterfaceElement> retVal = new BasicEList<>();
-		retVal.addAll(il.getEventInputs());
-		retVal.addAll(il.getInputVars());
-		retVal.addAll(il.getSockets());
-		retVal.addAll(il.getEventOutputs());
-		retVal.addAll(il.getOutputVars());
-		retVal.addAll(il.getPlugs());
-		retVal.addAll(il.getErrorMarker());
-		return retVal;
-	}
-
-	public static Event getEvent(final InterfaceList il, final String name) {
-		for (final Event event : il.getEventInputs()) {
-			if (getTransitionEventName(event).equals(name)) {
-				return event;
-			}
-		}
-		for (final Event event : il.getEventOutputs()) {
-			if (getTransitionEventName(event).equals(name)) {
-				return event;
-			}
-		}
-		return null;
-	}
-
-	public static VarDeclaration getVariable(final InterfaceList il, final String name) {
-		for (final VarDeclaration inVar : il.getInputVars()) {
-			if (inVar.getName().equals(name)) {
-				return inVar;
-			}
-		}
-		for (final VarDeclaration outVar : il.getOutputVars()) {
-			if (outVar.getName().equals(name)) {
-				return outVar;
-			}
-		}
-		return null;
-	}
-
-	public static IInterfaceElement getInterfaceElement(final InterfaceList il, final String name) {
-		IInterfaceElement element = il.getEvent(name);
-		if (element == null) {
-			element = il.getVariable(name);
-		}
-		if (element == null) {
-			element = il.getAdapter(name);
-		}
-
-		if (element == null) {
-			element = il.getErrorMarker().stream().filter(e -> e.getName().equals(name)).findAny()
-					.orElse(null);
-		}
-
-		return element;
-	}
-
-	public static FBNetworkElement getFBNetworkElement(final InterfaceList il) {
-		// an FB should mostly in an FBNetworkElement otherwise it is in CFB interface
-		// this is at the same time also a null check
-		return (il.eContainer() instanceof FBNetworkElement) ? (FBNetworkElement) il.eContainer() : null;
-	}
-
-	public static AdapterDeclaration getAdapter(final InterfaceList il, final String name) {
-		for (final AdapterDeclaration adapt : il.getPlugs()) {
-			if (adapt.getName().equals(name)) {
-				return adapt;
-			}
-		}
-		for (final AdapterDeclaration adapt : il.getSockets()) {
-			if (adapt.getName().equals(name)) {
-				return adapt;
-			}
-		}
-		return null;
-	}
 
 	// *** Mapping ***//
 	public static AutomationSystem getAutomationSystem(final Mapping m) {
@@ -352,25 +269,25 @@ public final class Annotations {
 	}
 
 	public static void addConnectionWithIndex(final FBNetwork fbn, final Connection connection, final int index) {
-		if (connection instanceof EventConnection) {
+		if (connection instanceof final EventConnection evCon) {
 			if (index != -1) {
-				fbn.getEventConnections().add(index, (EventConnection) connection);
+				fbn.getEventConnections().add(index, evCon);
 			} else {
-				fbn.getEventConnections().add((EventConnection) connection);
+				fbn.getEventConnections().add(evCon);
 			}
 		}
-		if (connection instanceof DataConnection) {
+		if (connection instanceof final DataConnection dataCon) {
 			if (index != -1) {
-				fbn.getDataConnections().add(index, (DataConnection) connection);
+				fbn.getDataConnections().add(index, dataCon);
 			} else {
-				fbn.getDataConnections().add((DataConnection) connection);
+				fbn.getDataConnections().add(dataCon);
 			}
 		}
-		if (connection instanceof AdapterConnection) {
+		if (connection instanceof final AdapterConnection adpCon) {
 			if (index != -1) {
-				fbn.getAdapterConnections().add(index, (AdapterConnection) connection);
+				fbn.getAdapterConnections().add(index, adpCon);
 			} else {
-				fbn.getAdapterConnections().add((AdapterConnection) connection);
+				fbn.getAdapterConnections().add(adpCon);
 			}
 		}
 	}
@@ -417,15 +334,16 @@ public final class Annotations {
 	}
 
 	public static AutomationSystem getAutomationSystem(final FBNetwork fbn) {
-		final EObject system = EcoreUtil.getRootContainer(fbn);
-		return system instanceof AutomationSystem ? (AutomationSystem) system : null;
+		final EObject root = EcoreUtil.getRootContainer(fbn);
+		return root instanceof final AutomationSystem system ? system : null;
 	}
 
 	public static Application getApplication(final FBNetwork fbn) {
 		if (fbn.isApplicationNetwork()) {
 			// no null check is need as this is already done in isApplicationNetwork
 			return (Application) fbn.eContainer();
-		} else if (fbn.isSubApplicationNetwork() && (null != ((SubApp) fbn.eContainer()).getFbNetwork())) {
+		}
+		if (fbn.isSubApplicationNetwork() && (null != ((SubApp) fbn.eContainer()).getFbNetwork())) {
 			return ((SubApp) fbn.eContainer()).getFbNetwork().getApplication();
 		}
 		return null;
@@ -433,8 +351,8 @@ public final class Annotations {
 
 	public static FB getFBNamed(final FBNetwork fbn, final String name) {
 		for (final FBNetworkElement element : fbn.getNetworkElements()) {
-			if ((element instanceof FB) && (element.getName().equals(name))) {
-				return (FB) element;
+			if ((element instanceof final FB fb) && (element.getName().equals(name))) {
+				return fb;
 			}
 		}
 		return null;
@@ -442,8 +360,8 @@ public final class Annotations {
 
 	public static SubApp getSubAppNamed(final FBNetwork fbn, final String name) {
 		for (final FBNetworkElement element : fbn.getNetworkElements()) {
-			if ((element instanceof SubApp) && element.getName().equals(name)) {
-				return (SubApp) element;
+			if ((element instanceof final SubApp subApp) && element.getName().equals(name)) {
+				return subApp;
 			}
 		}
 		return null;
@@ -477,7 +395,8 @@ public final class Annotations {
 
 	// *** VarDeclaration ***//
 	public static boolean isArray(final VarDeclaration vd) {
-		return vd.getArraySize() != null && !vd.getArraySize().isBlank();
+		return vd.getArraySize() != null && vd.getArraySize().getValue() != null
+				&& !vd.getArraySize().getValue().isBlank();
 	}
 
 	public static void setVarConfig(final VarDeclarationImpl varDeclarationImpl, final boolean config) {
@@ -490,7 +409,7 @@ public final class Annotations {
 
 	public static boolean isVarConfig(final VarDeclaration vd) {
 		final String configurationAttribute = vd.getAttributeValue(LibraryElementTags.VAR_CONFIG);
-		return "true".equals(configurationAttribute);
+		return "true".equals(configurationAttribute); //$NON-NLS-1$
 	}
 
 	// *** ConfigurableObject ***//
@@ -517,7 +436,7 @@ public final class Annotations {
 	public static boolean deleteAttribute(final ConfigurableObject object, final String attributeName) {
 		if ((object != null) && (attributeName != null)) {
 			final List<Attribute> toDelete = object.getAttributes().stream()
-					.filter(attr -> attributeName.equals(attr.getName())).collect(Collectors.toList());
+					.filter(attr -> attributeName.equals(attr.getName())).toList();
 			if (toDelete.isEmpty()) {
 				return false;
 			}
@@ -576,8 +495,7 @@ public final class Annotations {
 
 	// *** IInterfaceElement ***//
 	public static FBNetworkElement getFBNetworkElement(final IInterfaceElement iie) {
-		return (iie.eContainer() instanceof InterfaceList) ? ((InterfaceList) iie.eContainer()).getFBNetworkElement()
-				: null;
+		return (iie.eContainer() instanceof final InterfaceList il) ? il.getFBNetworkElement() : null;
 	}
 
 	// *** SystemConfiguration ***//
@@ -634,11 +552,11 @@ public final class Annotations {
 
 	public static FBType getType(final AdapterFB afb) {
 		FBType retVal = null;
-		if ((afb.getTypeEntry() instanceof AdapterTypeEntry) && (null != afb.getAdapterDecl())) {
+		if ((afb.getTypeEntry() instanceof final AdapterTypeEntry adpTypeEntry) && (null != afb.getAdapterDecl())) {
 			if (afb.isPlug()) {
-				retVal = ((AdapterTypeEntry) afb.getTypeEntry()).getType().getPlugType();
+				retVal = adpTypeEntry.getType().getPlugType();
 			} else {
-				retVal = ((AdapterTypeEntry) afb.getTypeEntry()).getType().getSocketType();
+				retVal = adpTypeEntry.getType().getSocketType();
 			}
 		}
 		return retVal;
@@ -651,7 +569,5 @@ public final class Annotations {
 	private Annotations() {
 		throw new UnsupportedOperationException("The utility class Annotations should not be instatiated"); //$NON-NLS-1$
 	}
-
-
 
 }

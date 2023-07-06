@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 final class CallableAnnotations {
 
@@ -53,29 +54,29 @@ final class CallableAnnotations {
 	}
 
 	static EList<INamedElement> getOutputParameters(final FBType type) {
-		return ECollections.unmodifiableEList(type.getInterfaceList().getOutputVars());
+		return ECollections.unmodifiableEList(
+				type.getInterfaceList().getOutputVars().stream().filter(v -> !v.getName().isEmpty()).toList());
 	}
 
-	@SuppressWarnings("unused")
 	static EList<INamedElement> getInOutParameters(final FBType type) {
-		return ECollections.emptyEList(); // FB types may not have in/out parameters
+		return ECollections.unmodifiableEList(type.getInterfaceList().getInOutVars());
 	}
 
-	@SuppressWarnings("unused")
 	static DataType getReturnType(final FBType type) {
-		return null; // FB types may not have a return type
+		return type.getInterfaceList().getOutputVars().stream().filter(v -> v.getName().isEmpty()).findAny()
+				.map(VarDeclaration::getType).orElse(null);
 	}
 
 	static EList<INamedElement> getInputParameters(final Event event) {
-		if (event.eContainer() instanceof InterfaceList) {
-			return ECollections.unmodifiableEList(((InterfaceList) event.eContainer()).getInputVars());
+		if (event.eContainer() instanceof final InterfaceList interfaceList) {
+			return ECollections.unmodifiableEList(interfaceList.getInputVars());
 		}
 		return ECollections.emptyEList();
 	}
 
 	static EList<INamedElement> getOutputParameters(final Event event) {
-		if (event.eContainer() instanceof InterfaceList) {
-			return ECollections.unmodifiableEList(((InterfaceList) event.eContainer()).getOutputVars());
+		if (event.eContainer() instanceof final InterfaceList interfaceList) {
+			return ECollections.unmodifiableEList(interfaceList.getOutputVars());
 		}
 		return ECollections.emptyEList();
 	}

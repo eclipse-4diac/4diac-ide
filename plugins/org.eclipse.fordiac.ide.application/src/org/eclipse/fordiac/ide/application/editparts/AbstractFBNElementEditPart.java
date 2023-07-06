@@ -22,7 +22,6 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.FigureCanvas;
@@ -55,6 +54,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
@@ -102,7 +102,6 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	private DiagramFontChangeListener fontChangeListener;
 
 	protected AbstractFBNElementEditPart() {
-		super();
 	}
 
 	private Adapter interfaceAdapter;
@@ -121,11 +120,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
 				switch (notification.getEventType()) {
-				case Notification.ADD:
-				case Notification.ADD_MANY:
-				case Notification.MOVE:
-				case Notification.REMOVE:
-				case Notification.REMOVE_MANY:
+				case Notification.ADD, Notification.ADD_MANY, Notification.MOVE, Notification.REMOVE, Notification.REMOVE_MANY:
 					refreshChildren();
 					// this ensure that parameters are correctly updated when pins are added or removed (e.g.,
 					// errormarkerpins are deleted)
@@ -325,6 +320,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			return getFigure().getSockets();
 		}
 		if (interfaceEditPart.isVariable()) {
+			if (((VarDeclaration) interfaceEditPart.getModel()).isInOutVar()) {
+				return getFigure().getVarInOutInputs();
+			}
 			return getFigure().getDataInputs();
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
@@ -341,6 +339,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			return getFigure().getPlugs();
 		}
 		if (interfaceEditPart.isVariable()) {
+			if (((VarDeclaration) interfaceEditPart.getModel()).isInOutVar()) {
+				return getFigure().getVarInOutOutputs();
+			}
 			return getFigure().getDataOutputs();
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
@@ -367,6 +368,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			return interfaceList.getSockets().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart.isVariable()) {
+			if (((VarDeclaration) interfaceEditPart.getModel()).isInOutVar()) {
+				return interfaceList.getInOutVars().indexOf(interfaceEditPart.getModel());
+			}
 			return interfaceList.getVisibleInputVars().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
@@ -385,6 +389,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			return interfaceList.getPlugs().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart.isVariable()) {
+			if (((VarDeclaration) interfaceEditPart.getModel()).isInOutVar()) {
+				return interfaceList.getOutMappedInOutVars().indexOf(interfaceEditPart.getModel());
+			}
 			return interfaceList.getVisibleOutputVars().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
@@ -415,10 +422,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final List<Object> elements = new ArrayList<>();
 		elements.add(getInstanceName());
 		elements.addAll(getModel().getInterface().getAllInterfaceElements());
-		elements.removeAll(getModel().getInterface().getInputVars().stream().filter(it -> !it.isVisible())
-				.collect(Collectors.toList()));
-		elements.removeAll(getModel().getInterface().getOutputVars().stream().filter(it -> !it.isVisible())
-				.collect(Collectors.toList()));
+		elements.removeAll(getModel().getInterface().getInputVars().stream().filter(it -> !it.isVisible()).toList());
+		elements.removeAll(getModel().getInterface().getOutputVars().stream().filter(it -> !it.isVisible()).toList());
 		return elements;
 	}
 
@@ -449,9 +454,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				selectPropertySheet();
 			}
 			// forward direct edit request to instance name
-			final List<EditPart> children = getChildren();
-			children.stream().filter(InstanceNameEditPart.class::isInstance)
-			.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
+			getChildren().stream().filter(InstanceNameEditPart.class::isInstance)
+					.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
 		}
 		super.performRequest(request);

@@ -22,6 +22,7 @@ package org.eclipse.fordiac.ide.gef.preferences;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
@@ -36,9 +37,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
-/**
- * The Class DiagramPreferences.
- */
+/** The Class DiagramPreferences. */
 public class DiagramPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	/** The Constant CORNER_DIM. */
@@ -68,20 +67,15 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	private boolean changesOnLabelSize = false;
 
-	/**
-	 * Instantiates a new diagram preferences.
-	 */
+	/** Instantiates a new diagram preferences. */
 	public DiagramPreferences() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see
-	 * org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
-	 */
+	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors() */
 	@Override
 	public void createFieldEditors() {
 
@@ -119,22 +113,18 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	@Override
 	public void propertyChange(final PropertyChangeEvent event) {
-		if (event.getSource().getClass().equals(IntegerFieldEditor.class) && matchPreferenceName(event)) {
-
+		if (event.getSource() instanceof FieldEditor && matchPreferenceName(event)) {
 			changesOnLabelSize = true;
-
 		}
 	}
 
 	private static boolean matchPreferenceName(final PropertyChangeEvent event) {
-		return IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
-				.equalsIgnoreCase(MAX_PIN_LABEL_SIZE)
-				|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
-				.equalsIgnoreCase(MAX_TYPE_LABEL_SIZE)
-				|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
-				.equalsIgnoreCase(MAX_VALUE_LABEL_SIZE)
-				|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
-				.equalsIgnoreCase(MAX_HIDDEN_CONNECTION_LABEL_SIZE);
+		final String sourcePrefName = ((FieldEditor) event.getSource()).getPreferenceName();
+		return sourcePrefName.equalsIgnoreCase(MAX_PIN_LABEL_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(MAX_TYPE_LABEL_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(MAX_VALUE_LABEL_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(MAX_HIDDEN_CONNECTION_LABEL_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(PIN_LABEL_STYLE);
 	}
 
 	@Override
@@ -232,8 +222,8 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	private void createGroupInterfacePins() {
 		addField(new RadioGroupFieldEditor(PIN_LABEL_STYLE, Messages.DiagramPreferences_PinLabelText, 1,
 				new String[][] { { Messages.DiagramPreferences_ShowPinName, PIN_LABEL_STYLE_PIN_NAME },
-			{ Messages.DiagramPreferences_ShowPinComment, PIN_LABEL_STYLE_PIN_COMMENT },
-			{ Messages.DiagramPreferences_ShowConnectedOutputPinName, PIN_LABEL_STYLE_SRC_PIN_NAME } },
+						{ Messages.DiagramPreferences_ShowPinComment, PIN_LABEL_STYLE_PIN_COMMENT },
+						{ Messages.DiagramPreferences_ShowConnectedOutputPinName, PIN_LABEL_STYLE_SRC_PIN_NAME } },
 				getFieldEditorParent(), true));
 	}
 

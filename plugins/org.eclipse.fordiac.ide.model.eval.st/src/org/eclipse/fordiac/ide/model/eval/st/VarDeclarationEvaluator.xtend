@@ -15,16 +15,12 @@ package org.eclipse.fordiac.ide.model.eval.st
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
-import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.eval.variable.VariableEvaluator
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration
 
@@ -141,15 +137,6 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator implements Variabl
 			)
 		else
 			type
-	}
-
-	def protected Subrange evaluateSubrange(STExpression expr) {
-		switch (expr) {
-			STBinaryExpression case expr.op === STBinaryOperator.RANGE:
-				newSubrange(expr.left.evaluateExpression.asInteger, expr.right.evaluateExpression.asInteger)
-			default:
-				newSubrange(0, expr.evaluateExpression.asInteger)
-		}
 	}
 
 	override getSourceElement() { varDeclaration }

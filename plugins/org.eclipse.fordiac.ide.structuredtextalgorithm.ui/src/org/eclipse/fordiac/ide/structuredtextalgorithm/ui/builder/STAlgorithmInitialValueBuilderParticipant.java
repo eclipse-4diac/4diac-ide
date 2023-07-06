@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -83,6 +84,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				if (target instanceof SystemConfiguration) {
 					allContents.prune();
 				} else if (target instanceof final VarDeclaration varDeclaration) {
+					validateType(varDeclaration, delta, monitor);
 					validateValue(varDeclaration, delta, monitor);
 				}
 			}
@@ -98,6 +100,29 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		final IFile file = getFile(delta.getOld().getURI());
 		if (file != null && file.exists()) {
 			file.deleteMarkers(FordiacErrorMarker.INITIAL_VALUE_MARKER, true, IResource.DEPTH_INFINITE);
+			file.deleteMarkers(FordiacErrorMarker.TYPE_DECLARATION_MARKER, true, IResource.DEPTH_INFINITE);
+		}
+	}
+
+	protected void validateType(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
+			final IProgressMonitor monitor) throws CoreException {
+		final List<Issue> issues = new ArrayList<>();
+		if (varDeclaration.isArray()) {
+			StructuredTextParseUtil.validateType(varDeclaration, issues);
+		}
+		if (monitor.isCanceled()) {
+			throw new OperationCanceledException();
+		}
+		final ArraySize canonicalArraySize = getCanonicalObject(varDeclaration.getArraySize());
+		if (canonicalArraySize != null) {
+			updateErrorMessage(canonicalArraySize, issues);
+			if (!issues.isEmpty()) {
+				final IFile file = getFile(delta.getUri());
+				if (file != null && file.exists()) {
+					createMarkers(file, canonicalArraySize, FordiacErrorMarker.TYPE_DECLARATION_MARKER, issues,
+							monitor);
+				}
+			}
 		}
 	}
 
@@ -105,9 +130,6 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(varDeclaration);
 		final List<Issue> issues = new ArrayList<>();
-		if (varDeclaration.isArray()) {
-			StructuredTextParseUtil.validateType(varDeclaration, issues);
-		}
 		if (!value.isBlank()) { // do not parse value if blank
 			StructuredTextParseUtil.validate(value, delta.getUri(), STCoreUtil.getFeatureType(varDeclaration), null,
 					null, issues);
@@ -122,7 +144,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			if (!issues.isEmpty()) {
 				final IFile file = getFile(delta.getUri());
 				if (file != null && file.exists()) {
-					createMarkers(file, canonicalValue, issues, monitor);
+					createMarkers(file, canonicalValue, FordiacErrorMarker.INITIAL_VALUE_MARKER, issues, monitor);
 				}
 			}
 		}
@@ -169,19 +191,20 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		}
 	}
 
-	protected void createMarkers(final IFile file, final EObject object, final List<Issue> issues,
+	protected void createMarkers(final IFile file, final EObject object, final String type, final List<Issue> issues,
 			final IProgressMonitor monitor) throws CoreException {
 		for (final Issue issue : issues) {
 			if (monitor.isCanceled()) {
 				throw new OperationCanceledException();
 			}
-			createMarker(file, object, issue);
+			createMarker(file, object, type, issue);
 		}
 	}
 
 	@SuppressWarnings("static-method")
-	protected void createMarker(final IFile file, final EObject object, final Issue issue) throws CoreException {
-		ErrorMarkerBuilder.createErrorMarkerBuilder(issue.getMessage()).setType(FordiacErrorMarker.INITIAL_VALUE_MARKER)
+	protected void createMarker(final IFile file, final EObject object, final String type, final Issue issue)
+			throws CoreException {
+		ErrorMarkerBuilder.createErrorMarkerBuilder(issue.getMessage()).setType(type)
 		.setSeverity(getMarkerSeverity(issue)).setTarget(object).createMarker(file);
 	}
 

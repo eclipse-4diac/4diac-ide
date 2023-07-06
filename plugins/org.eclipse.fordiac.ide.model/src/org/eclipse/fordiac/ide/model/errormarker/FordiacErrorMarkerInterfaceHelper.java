@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -30,26 +29,26 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class FordiacErrorMarkerInterfaceHelper {
-	public static ErrorMarkerInterface createErrorMarkerInterfaceElement(final FBNetworkElement newElement,
+	public static ErrorMarkerInterface createErrorMarkerInterfaceElement(final InterfaceList il,
 			final IInterfaceElement oldInterface, final String errorMessage,
 			final List<ErrorMarkerBuilder> errorMarkerBuilders) {
-		final boolean markerExists = newElement.getInterface().getErrorMarker().stream().anyMatch(
+		final boolean markerExists = il.getErrorMarker().stream().anyMatch(
 				e -> e.getName().equals(oldInterface.getName()) && (e.isIsInput() == oldInterface.isIsInput()));
 
 		final ErrorMarkerInterface interfaceElement = createErrorMarkerInterface(oldInterface.getType(),
-				oldInterface.getName(), oldInterface.isIsInput(), newElement.getInterface(), errorMessage);
+				oldInterface.getName(), oldInterface.isIsInput(), il, errorMessage);
 
-		if (oldInterface instanceof VarDeclaration && ((VarDeclaration) oldInterface).getValue() != null
-				&& !((VarDeclaration) oldInterface).getValue().getValue().isBlank()) {
+		if (oldInterface instanceof final VarDeclaration oldVarDecl && oldVarDecl.getValue() != null
+				&& !oldVarDecl.getValue().getValue().isBlank()) {
 			final Value value = LibraryElementFactory.eINSTANCE.createValue();
-			value.setValue(((VarDeclaration) oldInterface).getValue().getValue());
-			value.setErrorMessage(((VarDeclaration) oldInterface).getValue().getErrorMessage());
+			value.setValue(oldVarDecl.getValue().getValue());
+			value.setErrorMessage(oldVarDecl.getValue().getErrorMessage());
 			interfaceElement.setValue(value);
 		}
 
 		if (!markerExists && errorMarkerBuilders != null) {
 			errorMarkerBuilders
-					.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(interfaceElement));
+			.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(interfaceElement));
 		}
 		return interfaceElement;
 	}

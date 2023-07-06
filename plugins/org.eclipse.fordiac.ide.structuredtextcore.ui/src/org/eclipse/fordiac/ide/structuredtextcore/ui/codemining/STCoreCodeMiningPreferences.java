@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,11 +23,13 @@ public class STCoreCodeMiningPreferences {
 		public void initialize(final IPreferenceStoreAccess access) {
 			access.getWritablePreferenceStore().setDefault(ENABLE_CODE_MININGS, true);
 			access.getWritablePreferenceStore().setDefault(ENABLE_LITERAL_TYPE_CODE_MININGS, true);
+			access.getWritablePreferenceStore().setDefault(ENABLE_REFERENCED_VARIABLES_CODE_MININGS, false);
 		}
 	}
 
 	public static final String ENABLE_CODE_MININGS = "enableCodeMinings"; //$NON-NLS-1$
 	public static final String ENABLE_LITERAL_TYPE_CODE_MININGS = "enableLiteralTypeCodeMinings"; //$NON-NLS-1$
+	public static final String ENABLE_REFERENCED_VARIABLES_CODE_MININGS = "enableReferencedVariablesCodeMinings"; //$NON-NLS-1$
 
 	@Inject
 	private IPreferenceStoreAccess preferenceStoreAccess;
@@ -40,12 +42,21 @@ public class STCoreCodeMiningPreferences {
 		return preferenceStoreAccess.getPreferenceStore().getBoolean(ENABLE_LITERAL_TYPE_CODE_MININGS);
 	}
 
-	public void setSaveAllBeforeRefactoring(final boolean isEnableCodeMinings) {
+	public boolean isEnableReferencedVariablesCodeMinings() {
+		return preferenceStoreAccess.getPreferenceStore().getBoolean(ENABLE_REFERENCED_VARIABLES_CODE_MININGS);
+	}
+
+	public void setEnableCodeMinings(final boolean isEnableCodeMinings) {
 		preferenceStoreAccess.getWritablePreferenceStore().setValue(ENABLE_CODE_MININGS, isEnableCodeMinings);
 	}
 
-	public void setUseInlineRefactoring(final boolean isEnableLiteralTypeCodeMinings) {
+	public void setEnableLiteralTypeCodeMinings(final boolean isEnableLiteralTypeCodeMinings) {
 		preferenceStoreAccess.getWritablePreferenceStore().setValue(ENABLE_LITERAL_TYPE_CODE_MININGS,
 				isEnableLiteralTypeCodeMinings);
+	}
+
+	public void setEnableReferencedVariablesCodeMinings(final boolean isEnableReferencedVariablesCodeMinings) {
+		preferenceStoreAccess.getWritablePreferenceStore().setValue(ENABLE_REFERENCED_VARIABLES_CODE_MININGS,
+				isEnableReferencedVariablesCodeMinings);
 	}
 }

@@ -12,7 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
-import org.eclipse.fordiac.ide.model.eval.value.AnyCharsValue
+import org.eclipse.fordiac.ide.model.data.AnyWCharsType
 
 interface AnyWCharsValue extends AnyCharsValue {
+	override AnyWCharsType getType()
 }

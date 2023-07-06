@@ -27,7 +27,7 @@ package org.eclipse.fordiac.ide.model.data;
  * @model
  * @generated
  */
-public interface StringType extends AnyStringType {
+public interface StringType extends AnyStringType, AnySCharsType {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

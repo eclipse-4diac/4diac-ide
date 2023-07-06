@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,12 +11,15 @@
  * Contributors:
  *   Hesam Rezaee
  *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *       - distinguish variable scope
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring
 
 import com.google.inject.Inject
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
@@ -72,7 +76,7 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 		IHighlightedPositionAcceptor acceptor, CancelIndicator cancelIndicator) {
 		for (ILeafNode n : NodeModelUtils.findActualNodeFor(varDeclaration).getLeafNodes()) {
 			if (n.grammarElement == ga.STVarDeclarationAccess.nameIDTerminalRuleCall_1_0) {
-				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.STATIC_VAR_ID);
+				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.LOCAL_VARIABLE_ID);
 			}
 			if ((n.grammarElement?.eContainer == ga.STAnyTypeRule.alternatives)) {
 				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.DATA_TYPE_ID);
@@ -85,9 +89,9 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 	def protected dispatch boolean highlightElement(STFeatureExpression featuresExpression,
 		IHighlightedPositionAcceptor acceptor, CancelIndicator cancelIndicator) {
 
-		val style = switch (featuresExpression.feature) {
+		val style = switch (feature : featuresExpression.feature) {
 			VarDeclaration:
-				STCoreHighlightingStyles.STATIC_VAR_ID
+				STCoreHighlightingStyles.MEMBER_VARIABLE_ID
 			FB:
 				STCoreHighlightingStyles.CALL_FUNCTION_BLOCK_ID
 			STMethod case (featuresExpression.call):
@@ -100,8 +104,10 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 				STCoreHighlightingStyles.CALL_FUNCTION_ID
 			STFunction case !featuresExpression.call:
 				STCoreHighlightingStyles.RETURN_FUNCTION_ID
+			STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock:
+				STCoreHighlightingStyles.GLOBAL_CONST_ID
 			STVarDeclaration:
-				STCoreHighlightingStyles.STATIC_VAR_ID
+				STCoreHighlightingStyles.LOCAL_VARIABLE_ID
 		}
 
 		for (ILeafNode n : NodeModelUtils.findActualNodeFor(featuresExpression).getLeafNodes()) {

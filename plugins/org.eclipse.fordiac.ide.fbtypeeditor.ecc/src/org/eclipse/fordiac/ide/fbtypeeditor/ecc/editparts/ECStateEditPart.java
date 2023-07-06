@@ -75,10 +75,6 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	};
 
-	public ECStateEditPart() {
-		setConnectable(true);
-	}
-
 	private void refreshStateTooltip() {
 		getFigure().getToolTip().setECState(this.getModel());
 
@@ -228,19 +224,19 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (event.getProperty().equals(PreferenceConstants.P_ECC_STATE_TEXT_COLOR)) {
 			getNameLabel().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
 			getFigure().getLine()
-			.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
+					.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
 		}
 	};
 
 	public void highlightTransitions(final boolean highlight) {
 		for (final Object obj : getSourceConnections()) {
-			if (obj instanceof ECTransitionEditPart) {
-				((ECTransitionEditPart) obj).highlight(highlight);
+			if (obj instanceof final ECTransitionEditPart ectEP) {
+				ectEP.highlight(highlight);
 			}
 		}
 		for (final Object obj : getTargetConnections()) {
-			if (obj instanceof ECTransitionEditPart) {
-				((ECTransitionEditPart) obj).highlight(highlight);
+			if (obj instanceof final ECTransitionEditPart ectEP) {
+				ectEP.highlight(highlight);
 			}
 		}
 	}
@@ -248,5 +244,10 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	@Override
 	public ECStateFigure getFigure() {
 		return (ECStateFigure) super.getFigure();
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return true;
 	}
 }

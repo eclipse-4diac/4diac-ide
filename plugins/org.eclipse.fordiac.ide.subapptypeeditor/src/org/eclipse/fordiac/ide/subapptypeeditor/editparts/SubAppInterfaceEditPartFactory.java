@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2106, 2017 fortiss GmbH
+ * Copyright (c) 2014, 2023 fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,13 +8,14 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.subapptypeeditor.editparts;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.VarInOutEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -22,17 +23,28 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class SubAppInterfaceEditPartFactory extends FBInterfaceEditPartFactory {
 
-	public SubAppInterfaceEditPartFactory(GraphicalEditor editor, TypeLibrary typeLib) {
+	public SubAppInterfaceEditPartFactory(final GraphicalEditor editor, final TypeLibrary typeLib) {
 		super(editor, typeLib);
 	}
 
 	@Override
-	protected EditPart createInterfaceEditPart() {
+	protected EditPart createInterfaceEditPart(final VarDeclaration varDecl) {
+		if (varDecl.isInOutVar()) {
+			return new VarInOutEditPart() {
+				@Override
+				protected void createEditPolicies() {
+					super.createEditPolicies();
+					// supapplications don't have a with construct therefore remove connection
+					// handles
+					removeEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE);
+				}
+			};
+		}
+
 		return new InterfaceEditPart() {
 			@Override
 			protected void createEditPolicies() {
 				super.createEditPolicies();
-
 				// supapplications don't have a with construct therefore remove connection
 				// handles
 				removeEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE);

@@ -13,6 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.insert;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -38,7 +41,7 @@ public class InsertVariableCommand extends Command {
 		varDecl = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDecl.setType(type.getType());
 		varDecl.setComment(type.getComment());
-		varDecl.setArraySize(type.getArraySize());
+		setArraySize(varDecl, getArraySize(type));
 		final Value value = LibraryElementFactory.eINSTANCE.createValue();
 		final Value typeValue = type.getValue();
 		value.setValue((typeValue == null) ? "" : typeValue.getValue()); //$NON-NLS-1$

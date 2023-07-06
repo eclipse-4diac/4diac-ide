@@ -138,7 +138,8 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		final VarDeclaration rowItem = provider.getRowObject(rowPosition);
 		switch (columnPosition) {
 		case I4diacNatTableUtil.TYPE:
-			if (rowItem.getType() instanceof ErrorMarkerDataType) {
+			if (rowItem.getType() instanceof ErrorMarkerDataType
+					|| (rowItem.isArray() && rowItem.getArraySize().hasError())) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 			}
 			configLabels.addLabel(TypeDeclarationEditorConfiguration.TYPE_DECLARATION_CELL);

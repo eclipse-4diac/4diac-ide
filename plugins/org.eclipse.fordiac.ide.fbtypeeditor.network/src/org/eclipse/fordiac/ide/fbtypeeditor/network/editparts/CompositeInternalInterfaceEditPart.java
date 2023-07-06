@@ -38,11 +38,6 @@ import org.eclipse.gef.tools.DirectEditManager;
 
 public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfaceEditPartRO {
 
-	public CompositeInternalInterfaceEditPart() {
-		super();
-		setConnectable(true);
-	}
-
 	private DirectEditManager manager;
 
 	@Override
@@ -132,6 +127,11 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 				super.notifyChanged(notification);
 			}
 		};
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return true;
 	}
 
 }

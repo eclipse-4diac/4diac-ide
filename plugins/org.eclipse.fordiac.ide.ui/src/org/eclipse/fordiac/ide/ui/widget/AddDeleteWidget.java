@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2023 Johannes Kepler University Linz
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Alois Zoitl - initial implementation
  * Bianca Wiesmayr - enhanced add functionality
  * Daniel Lindhuber - added separate delete listener
+ * Martin Jobst - check editable when enabling buttons
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
@@ -25,6 +27,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.edit.command.EditUtils;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -105,8 +108,8 @@ public class AddDeleteWidget {
 	public void setButtonEnablement(final boolean enable) {
 		deleteButton.setEnabled(enable);
 		deleteButton
-		.setImage((enable) ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE)
-				: PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
+				.setImage((enable) ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE)
+						: PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
 
 	public void setCreateButtonEnablement(final boolean enable) {
@@ -171,8 +174,10 @@ public class AddDeleteWidget {
 		addCreateListener(createListener);
 		addDeleteListener(deleteListener);
 		table.addListener(SWT.Selection, event -> {
-			final int[] rows = NatTableWidgetFactory.getSelectionLayer(table).getFullySelectedRowPositions();
-			setButtonEnablement(rows.length > 0);
+			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
+			final int[] rows = selectionLayer.getFullySelectedRowPositions();
+			setButtonEnablement(
+					rows.length > 0 && EditUtils.allCellsEditable(selectionLayer, table.getConfigRegistry()));
 		});
 
 		table.addKeyListener(new KeyAdapter() {
@@ -207,7 +212,9 @@ public class AddDeleteWidget {
 
 			final List<Object> rowObjects = new ArrayList<>();
 			for (final int row : rows) {
-				rowObjects.add(dataProvider.getRowObject(row));
+				if (row >= 0) {
+					rowObjects.add(dataProvider.getRowObject(row));
+				}
 			}
 			if (!rowObjects.isEmpty()) {
 				executeCompoundCommandForList(table, rowObjects, executor, commandProvider);
@@ -262,7 +269,9 @@ public class AddDeleteWidget {
 					.getDataProvider();
 			final List<Object> rowObjects = new ArrayList<>();
 			for (final int row : rows) {
-				rowObjects.add(dataProvider.getRowObject(row));
+				if (row >= 0) {
+					rowObjects.add(dataProvider.getRowObject(row));
+				}
 			}
 			if (!rowObjects.isEmpty()) {
 				executeCompoundCommandForList(table, rowObjects, executor, commandProvider);
@@ -293,7 +302,7 @@ public class AddDeleteWidget {
 			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
 			if (selectionLayer != null) {
 				rows = selectionLayer.getFullySelectedRowPositions();
-				if (rows.length > 0) {
+				if (rows.length > 0 && rows[rows.length - 1] >= 0) {
 					final ListDataProvider<?> dataProvider = (ListDataProvider<?>) NatTableWidgetFactory
 							.getDataLayer(table).getDataProvider();
 					refObject = dataProvider.getRowObject(rows[rows.length - 1]);

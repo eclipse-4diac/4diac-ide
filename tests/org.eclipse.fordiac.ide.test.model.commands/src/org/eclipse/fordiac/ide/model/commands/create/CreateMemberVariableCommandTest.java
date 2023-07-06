@@ -14,6 +14,8 @@
 
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -92,7 +94,7 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 		t.test(inserted.getName(), defaultVarName);
 
 		t.test(inserted.getTypeName(), FordiacKeywords.BOOL);
-		t.test(inserted.getArraySize() == null);
+		t.test(getArraySize(inserted), ""); //$NON-NLS-1$
 		t.test(inserted.getValue().getValue(), ""); //$NON-NLS-1$
 		t.test(inserted.getComment(), ""); //$NON-NLS-1$
 	}

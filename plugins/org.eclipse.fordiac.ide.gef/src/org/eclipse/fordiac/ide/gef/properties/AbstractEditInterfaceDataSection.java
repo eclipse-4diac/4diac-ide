@@ -42,7 +42,6 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
@@ -108,7 +107,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		final VarDeclaration rowItem = provider.getRowObject(rowPosition);
 		switch (columnPosition) {
 		case I4diacNatTableUtil.TYPE:
-			if (rowItem.getType() instanceof ErrorMarkerDataType) {
+			if (rowItem.getType() instanceof ErrorMarkerDataType
+					|| (rowItem.isArray() && rowItem.getArraySize().hasError())) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 			}
 			if (isEditable()) {
@@ -141,30 +141,23 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	public void setupOutputTable(final Group outputsGroup) {
-		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
-		if (isEditable()) {
-			rule = IEditableRule.ALWAYS_EDITABLE;
-		}
 		outputProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, false);
+				new VarDeclarationColumnProvider(), getSectionEditableRule(), new DataTypeSelectionButton(typeSelection),
+				this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.configure();
 	}
 
-
 	@Override
 	public void setupInputTable(final Group inputsGroup) {
-		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
-		if (isEditable()) {
-			rule = IEditableRule.ALWAYS_EDITABLE;
-		}
 		inputProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, true);
+				new VarDeclarationColumnProvider(), getSectionEditableRule(), new DataTypeSelectionButton(typeSelection),
+				this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.configure();

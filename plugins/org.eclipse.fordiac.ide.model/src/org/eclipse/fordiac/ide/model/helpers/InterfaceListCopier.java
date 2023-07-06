@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize;
+
 import java.util.Collection;
 
 import org.eclipse.emf.common.util.EList;
@@ -27,13 +30,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 public final class InterfaceListCopier {
 
-	/**
-	 * Create a new copy of the source interface list
+	/** Create a new copy of the source interface list
 	 *
 	 * @param src        source interface list
 	 * @param copyValues flag indicating if initial values should be copied or not
-	 * @return
-	 */
+	 * @return */
 	public static InterfaceList copy(final InterfaceList src, final boolean copyValues, final boolean copyComments) {
 		final InterfaceList copy = LibraryElementFactory.eINSTANCE.createInterfaceList();
 
@@ -42,10 +43,12 @@ public final class InterfaceListCopier {
 		copyVarList(copy.getInputVars(), src.getInputVars(), copyValues, copyComments);
 		copyVarList(copy.getOutputVars(), src.getOutputVars(), copyValues, copyComments);
 
-		copyEventList(copy.getEventInputs(), copy.getInputVars(), src.getEventInputs(), src.getInputVars(),
-				copyComments);
-		copyEventList(copy.getEventOutputs(), copy.getOutputVars(), src.getEventOutputs(), src.getOutputVars(),
-				copyComments);
+		copyVarList(copy.getInOutVars(), src.getInOutVars(), copyValues, copyComments);
+
+		copyEventList(copy.getEventInputs(), copy.getInputVars(), copy.getInOutVars(), src.getEventInputs(),
+				src.getInputVars(), src.getInOutVars(), copyComments);
+		copyEventList(copy.getEventOutputs(), copy.getOutputVars(), copy.getOutMappedInOutVars(), src.getEventOutputs(),
+				src.getOutputVars(), src.getOutMappedInOutVars(), copyComments);
 
 		copyAdapterList(copy.getPlugs(), src.getPlugs(), copyComments);
 		copyAdapterList(copy.getSockets(), src.getSockets(), copyComments);
@@ -97,7 +100,7 @@ public final class InterfaceListCopier {
 	public static VarDeclaration copyVar(final VarDeclaration variable, final boolean copyValues,
 			final boolean copyComments) {
 		final VarDeclaration copy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		copy.setArraySize(variable.getArraySize());
+		setArraySize(copy, getArraySize(variable));
 		copy.setVarConfig(variable.isVarConfig());
 
 		copyInterfaceElement(variable, copy, copyComments);
@@ -122,19 +125,20 @@ public final class InterfaceListCopier {
 		dst.setType(src.getType());
 	}
 
-	/**
-	 * copy a list of events with the associated with constructs
+	/** copy a list of events with the associated with constructs
 	 *
-	 * @param destEvents the list of the copied events
-	 * @param copyVars   the list of the data points for the new withs
-	 * @param srcEvents  the source event list
-	 * @param srcVars    the source vars used in the withs
-	 */
+	 * @param destEvents    the list of the copied events
+	 * @param copyVars      the list of the data points for the new withs
+	 * @param copyInOutVars
+	 * @param srcEvents     the source event list
+	 * @param srcVars       the source vars used in the withs
+	 * @param srcVarInOuts */
 	private static void copyEventList(final EList<Event> destEvents, final EList<VarDeclaration> copyVars,
-			final EList<Event> srcEvents, final EList<VarDeclaration> srcVars, final boolean copyComments) {
+			final EList<VarDeclaration> copyInOutVars, final EList<Event> srcEvents,
+			final EList<VarDeclaration> srcVars, final EList<VarDeclaration> srcVarInOuts, final boolean copyComments) {
 		srcEvents.forEach(srcEvent -> {
 			final Event copy = copyEvent(srcEvent, copyComments);
-			copyWiths(copy, srcEvent, copyVars, srcVars);
+			copyWiths(copy, srcEvent, copyVars, copyInOutVars, srcVars, srcVarInOuts);
 			destEvents.add(copy);
 		});
 
@@ -150,12 +154,23 @@ public final class InterfaceListCopier {
 	}
 
 	private static void copyWiths(final Event copy, final Event srcEvent, final EList<VarDeclaration> copyVars,
-			final EList<VarDeclaration> srcVars) {
+			final EList<VarDeclaration> copyInOutVars, final EList<VarDeclaration> srcVars,
+			final EList<VarDeclaration> srcVarInOuts) {
 		for (final With with : srcEvent.getWith()) {
 			final With withCopy = LibraryElementFactory.eINSTANCE.createWith();
-			withCopy.setVariables(copyVars.get(srcVars.indexOf(with.getVariables())));
+			withCopy.setVariables(getCopiedVar(copyVars, copyInOutVars, srcVars, srcVarInOuts, with));
 			copy.getWith().add(withCopy);
 		}
+	}
+
+	private static VarDeclaration getCopiedVar(final EList<VarDeclaration> copyVars,
+			final EList<VarDeclaration> copyInOutVars, final EList<VarDeclaration> srcVars,
+			final EList<VarDeclaration> srcVarInOuts, final With with) {
+		final VarDeclaration withVar = with.getVariables();
+		if (withVar.isInOutVar()) {
+			return copyInOutVars.get(srcVarInOuts.indexOf(withVar));
+		}
+		return copyVars.get(srcVars.indexOf(withVar));
 	}
 
 	private static void copyAdapterList(final EList<AdapterDeclaration> destAdapters,

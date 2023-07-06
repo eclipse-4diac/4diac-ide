@@ -52,14 +52,8 @@ import org.eclipse.gef.RequestConstants;
 
 public class InterfaceEditPart extends AbstractInterfaceElementEditPart implements NodeEditPart {
 
-	public InterfaceEditPart() {
-		super();
-		setConnectable(true);
-	}
-
 	public class InterfaceFigure extends Label implements InteractionStyleFigure {
 		public InterfaceFigure() {
-			super();
 			setText(getINamedElement().getName());
 			setBorder(new ConnectorBorder(getCastedModel()));
 			setOpaque(false);
@@ -99,7 +93,12 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	@Override
 	protected IFigure createFigure() {
 		final IFigure fig = new InterfaceFigure();
-		fig.addAncestorListener(new AncestorListener() {
+		fig.addAncestorListener(createAncestorListener());
+		return fig;
+	}
+
+	protected AncestorListener createAncestorListener() {
+		return new AncestorListener() {
 			@Override
 			public void ancestorRemoved(final IFigure ancestor) {
 				// nothing to do here
@@ -115,8 +114,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 				refreshVisuals();
 			}
 
-		});
-		return fig;
+		};
 	}
 
 	@Override
@@ -155,8 +153,14 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	@Override
 	public void activate() {
 		super.activate();
+		checkAssociatedCommentType();
 		// tell the root edipart that we are here and that it should add the type comment children
 		refreshTypeRoot();
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return true;
 	}
 
 	private void refreshTypeRoot() {
@@ -164,14 +168,14 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		if (typeRootEP != null) {
 			typeRootEP.refresh();
 			typeRootEP.getChildren().stream().filter(CommentTypeEditPart.class::isInstance)
-			.forEach(ep -> ((CommentTypeEditPart) ep).refreshVisuals());
+					.forEach(ep -> ((CommentTypeEditPart) ep).refreshVisuals());
 		}
 	}
 
 	private FBTypeRootEditPart getFBTypeRootEP() {
 		for (final Object part : getRoot().getChildren()) {
-			if (part instanceof FBTypeRootEditPart) {
-				return (FBTypeRootEditPart) part;
+			if (part instanceof final FBTypeRootEditPart fbtRootEP) {
+				return fbtRootEP;
 			}
 		}
 		return null;
@@ -197,9 +201,12 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		super.createEditPolicies();
 
 		// allow delete of a FB
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
+		if (isInterfaceEditable()) {
+			installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
 
-		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WithNodeEditPolicy());
+			installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WithNodeEditPolicy());
+		}
+
 	}
 
 	@Override
@@ -238,12 +245,11 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		return new OutputWithAnchor(getFigure(), pos, this);
 	}
 
-
 	public static int calculateWithPos(final With with, final boolean isInput) {
 		final Event event = (Event) with.eContainer();
 		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
 		if (null != interfaceList) {
-			return getnumEventwith( isInput?interfaceList.getEventInputs():interfaceList.getEventOutputs(), event);
+			return getnumEventwith(isInput ? interfaceList.getEventInputs() : interfaceList.getEventOutputs(), event);
 		}
 		return 0;
 	}
@@ -284,6 +290,21 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	@Override
 	public INamedElement getINamedElement() {
 		return getCastedModel();
+	}
+
+	private void checkAssociatedCommentType() {
+		final CommentTypeEditPart ep = findAssociatedCommentTypeEP();
+		if (ep != null && ep.getReferencedInterface() == null) {
+			// the associated comment type editpart was created before us
+			ep.setupReferencedEP();
+		}
+	}
+
+	private CommentTypeEditPart findAssociatedCommentTypeEP() {
+		return (CommentTypeEditPart) getViewer().getEditPartRegistry().values().stream()
+				.filter(CommentTypeEditPart.class::isInstance)
+				.filter(c -> this.getModel().equals(((CommentTypeEditPart) c).getInterfaceElement())).findAny()
+				.orElse(null);
 	}
 
 }
