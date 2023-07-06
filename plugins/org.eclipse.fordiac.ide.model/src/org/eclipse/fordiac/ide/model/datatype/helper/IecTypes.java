@@ -193,6 +193,8 @@ public final class IecTypes {
 		public static final AnyBitType ANY_BIT = DataFactory.eINSTANCE.createAnyBitType();
 
 		public static final AnyCharsType ANY_CHARS = DataFactory.eINSTANCE.createAnyCharsType();
+		public static final AnyCharsType ANY_SCHARS = DataFactory.eINSTANCE.createAnySCharsType();
+		public static final AnyCharsType ANY_WCHARS = DataFactory.eINSTANCE.createAnyWCharsType();
 		public static final AnyStringType ANY_STRING = DataFactory.eINSTANCE.createAnyStringType();
 		public static final AnyCharType ANY_CHAR = DataFactory.eINSTANCE.createAnyCharType();
 
@@ -218,6 +220,8 @@ public final class IecTypes {
 			ANY_BIT.setName(FordiacKeywords.ANY_BIT);
 
 			ANY_CHARS.setName(FordiacKeywords.ANY_CHARS);
+			ANY_SCHARS.setName(FordiacKeywords.ANY_SCHARS);
+			ANY_WCHARS.setName(FordiacKeywords.ANY_WCHARS);
 			ANY_STRING.setName(FordiacKeywords.ANY_STRING);
 			ANY_CHAR.setName(FordiacKeywords.ANY_CHAR);
 			ANY_DATE.setName(FordiacKeywords.ANY_DATE);
@@ -227,12 +231,14 @@ public final class IecTypes {
 		}
 
 		public static boolean isAnyType(final DataType type) {
-			return getAllGenericTypes().stream().anyMatch(datatype -> datatype == type);
+			return ALL_GENERIC_TYPES.contains(type) || HIDDEN_GENERIC_TYPES.contains(type);
 		}
 
 		private static final List<DataType> ALL_GENERIC_TYPES = List.of(ANY, ANY_ELEMENTARY, ANY_DERIVED, ANY_MAGNITUDE,
 				ANY_NUM, ANY_REAL, ANY_INT, ANY_UNSIGNED, ANY_SIGNED, ANY_DURATION, ANY_BIT, ANY_CHARS, ANY_STRING,
 				ANY_CHAR, ANY_DATE, ANY_STRUCT);
+
+		private static final List<DataType> HIDDEN_GENERIC_TYPES = List.of(ANY_SCHARS, ANY_WCHARS);
 
 		public static List<DataType> getAllGenericTypes() {
 			return ALL_GENERIC_TYPES;
@@ -240,6 +246,7 @@ public final class IecTypes {
 
 		static {
 			ALL_GENERIC_TYPES.forEach(IecTypes::addTypeToResource);
+			HIDDEN_GENERIC_TYPES.forEach(IecTypes::addTypeToResource);
 		}
 
 		private GenericTypes() {

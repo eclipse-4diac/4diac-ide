@@ -71,7 +71,7 @@ class STStandardFunctionProvider {
 		return (functions.map [
 			try {
 				findMethodFromDataTypes(name, argumentTypes)
-			} catch (NoSuchMethodException e) {
+			} catch (NoSuchMethodException | IllegalStateException e) {
 				null
 			}
 		] + functions.flatMap[findMethods(name)]).filterNull.toSet.map[toStandardFunction].toList

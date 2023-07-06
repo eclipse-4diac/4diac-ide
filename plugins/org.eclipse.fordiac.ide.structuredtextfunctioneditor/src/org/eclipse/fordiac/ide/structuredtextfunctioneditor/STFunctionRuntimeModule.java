@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor;
 
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters;
+import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
@@ -30,6 +31,7 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionParti
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionReconciler;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.conversion.IValueConverterService;
+import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
@@ -38,10 +40,7 @@ import org.eclipse.xtext.resource.XtextResource;
 import com.google.inject.Binder;
 import com.google.inject.name.Names;
 
-/**
- * Use this class to register components to be used at runtime / without the
- * Equinox extension registry.
- */
+/** Use this class to register components to be used at runtime / without the Equinox extension registry. */
 @SuppressWarnings("static-method")
 public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
 
@@ -85,5 +84,9 @@ public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
 
 	public Class<? extends STCoreMapper> bindSTCoreMapper() {
 		return STFunctionMapper.class;
+	}
+
+	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
+		return STCoreCommentDocumentationProvider.class;
 	}
 }

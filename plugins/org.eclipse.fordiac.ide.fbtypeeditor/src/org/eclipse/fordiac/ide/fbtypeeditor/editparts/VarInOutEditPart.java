@@ -12,9 +12,56 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
+import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteVarInOutCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editpolicies.ComponentEditPolicy;
+import org.eclipse.gef.requests.DirectEditRequest;
+import org.eclipse.gef.requests.GroupRequest;
+
 public class VarInOutEditPart extends InterfaceEditPart {
 
-	// this is currently a place holder class, will be extended with at least an own direct edit policy for correctly
-	// editing varinout names
+	private static class DeleteVarInOutEditPolicy extends ComponentEditPolicy {
 
+		@Override
+		protected Command getDeleteCommand(final GroupRequest request) {
+			if (getHost().getModel() instanceof final VarDeclaration varDecl) {
+				return new DeleteVarInOutCommand(varDecl);
+			}
+			return super.getDeleteCommand(request);
+		}
+	}
+
+	@Override
+	protected void createEditPolicies() {
+		super.createEditPolicies();
+		if (isDirectEditable() && !getModel().isIsInput()) {
+			// add own direct edit policy for output side
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
+				@Override
+				protected Command getDirectEditCommand(final DirectEditRequest request) {
+					if (getHost() instanceof final VarInOutEditPart viewEditPart) {
+						final VarDeclaration varDecl = viewEditPart.getModel();
+						return new ChangeNameCommand(
+								((InterfaceList) varDecl.eContainer()).getInOutVarOpposite(varDecl),
+								(String) request.getCellEditor().getValue());
+					}
+					return null;
+				}
+			});
+		}
+
+		if (isInterfaceEditable()) {
+			installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteVarInOutEditPolicy());
+		}
+	}
+
+	@Override
+	public VarDeclaration getModel() {
+		return (VarDeclaration) super.getModel();
+	}
 }

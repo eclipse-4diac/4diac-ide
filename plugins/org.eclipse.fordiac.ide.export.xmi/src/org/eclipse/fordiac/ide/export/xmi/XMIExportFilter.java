@@ -113,10 +113,10 @@ public class XMIExportFilter extends ExportFilter {
 	protected XMIExportInitialValues createInitialValues(final Resource resource) {
 		final var result = XMIExportFactory.eINSTANCE.createXMIExportInitialValues();
 		StreamSupport
-		.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllProperContents(resource, true), 0), false)
-		.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
-		.filter(XMIExportFilter::hasInitialValue).map(this::createInitialValue).flatMap(Optional::stream)
-		.forEachOrdered(result.getInitialValues()::add);
+				.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllProperContents(resource, true), 0), false)
+				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
+				.filter(XMIExportFilter::hasInitialValue).map(this::createInitialValue).flatMap(Optional::stream)
+				.forEachOrdered(result.getInitialValues()::add);
 		return result;
 	}
 

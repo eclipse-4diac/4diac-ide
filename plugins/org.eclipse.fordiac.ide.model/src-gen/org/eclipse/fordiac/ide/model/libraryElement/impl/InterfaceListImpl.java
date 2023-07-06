@@ -358,6 +358,16 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VarDeclaration getInOutVarOpposite(final VarDeclaration inOutVar) {
+		return InterfaceListAnnotations.getInOutVarOpposite(this, inOutVar);
+	}
+
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated not */

@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreURIEditorOpene
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuickAssistProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDocumentReconcileStrategy;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
@@ -40,7 +39,6 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFuncti
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocumentPartitioner;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
@@ -69,9 +67,7 @@ import com.google.inject.Binder;
 import com.google.inject.Provider;
 import com.google.inject.name.Names;
 
-/**
- * Use this class to register components to be used within the Eclipse IDE.
- */
+/** Use this class to register components to be used within the Eclipse IDE. */
 @SuppressWarnings({ "restriction", "static-method" })
 public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
@@ -124,7 +120,7 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public void configureCodeMinings(final Binder binder) {
 		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("codeMiningInitializer")) //$NON-NLS-1$
-		.to(STCoreCodeMiningPreferences.Initializer.class);
+				.to(STCoreCodeMiningPreferences.Initializer.class);
 	}
 
 	public Class<? extends IHighlightingConfiguration> bindIHighlightingConfiguration() {
@@ -137,10 +133,6 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public Class<? extends DefaultAntlrTokenToAttributeIdMapper> bindDefaultAntlrTokenToAttributeIdMapper() {
 		return STCoreAntlrTokenToAttributeIdMapper.class;
-	}
-
-	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
-		return STCoreCommentDocumentationProvider.class;
 	}
 
 	public Class<? extends ISimilarityMatcher> bindISimilarityMatcher() {
@@ -172,15 +164,15 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public void configureKeyBindingScope(final Binder binder) {
 		binder.bindConstant().annotatedWith(Names.named(XtextEditor.KEY_BINDING_SCOPE))
-		.to("org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"); //$NON-NLS-1$
+				.to("org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"); //$NON-NLS-1$
 	}
 
 	public void configureContentAssist(final Binder binder) {
 		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("contentAssistInitializer")) //$NON-NLS-1$
-		.to(STCoreContentAssistPreferences.Initializer.class);
+				.to(STCoreContentAssistPreferences.Initializer.class);
 		binder.bind(String.class)
-		.annotatedWith(com.google.inject.name.Names
-				.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS))
-		.toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider.class);
+				.annotatedWith(com.google.inject.name.Names
+						.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS))
+				.toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider.class);
 	}
 }

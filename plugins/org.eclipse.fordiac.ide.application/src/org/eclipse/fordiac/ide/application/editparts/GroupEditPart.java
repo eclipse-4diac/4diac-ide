@@ -186,13 +186,13 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 	@Override
 	public void performRequest(final Request request) {
 		if (((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
-				|| (request.getType() == RequestConstants.REQ_OPEN)) && (request instanceof SelectionRequest)) {
+				|| (request.getType() == RequestConstants.REQ_OPEN))
+				&& (request instanceof final SelectionRequest selReq)) {
 			// if it is direct edit request and inside of the content area forward request
 			// to there so we are creating
 			// fbs inside
 			final GroupContentEditPart groupContentEP = getGroupContentEP();
-			if ((groupContentEP != null)
-					&& isGroupContentTargetingRequest((SelectionRequest) request, groupContentEP)) {
+			if ((groupContentEP != null) && isGroupContentTargetingRequest(selReq, groupContentEP)) {
 				groupContentEP.performRequest(request);
 				return;
 			}
@@ -245,10 +245,9 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 
 	@Override
 	public DragTracker getDragTracker(final Request request) {
-		if (request instanceof SelectionRequest) {
+		if (request instanceof final SelectionRequest selReq) {
 			final GroupContentEditPart groupContentEP = getGroupContentEP();
-			if ((groupContentEP != null)
-					&& isGroupContentTargetingRequest((SelectionRequest) request, groupContentEP)) {
+			if ((groupContentEP != null) && isGroupContentTargetingRequest(selReq, groupContentEP)) {
 				return groupContentEP.getDragTracker(request);
 			}
 		}
@@ -265,8 +264,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 
 	@Override
 	public GraphicalEditPart getContentEP() {
-		return (GraphicalEditPart) getChildren().stream().filter(GroupContentEditPart.class::isInstance).findAny()
-				.orElse(null);
+		return getChildren().stream().filter(GroupContentEditPart.class::isInstance).findAny().orElse(null);
 	}
 
 	private Dimension getGroupSize() {

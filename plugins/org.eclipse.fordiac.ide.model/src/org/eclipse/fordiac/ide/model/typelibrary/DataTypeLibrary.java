@@ -63,7 +63,6 @@ public final class DataTypeLibrary {
 		ElementaryTypes.getAllElementaryType().forEach(this::addToTypeMap);
 	}
 
-
 	private void initGenericTypes() {
 		GenericTypes.getAllGenericTypes().forEach(this::addToTypeMap);
 	}
@@ -96,13 +95,11 @@ public final class DataTypeLibrary {
 		return dataTypes;
 	}
 
-	/**
-	 * get type
+	/** get type
 	 *
 	 * @param name the name
 	 *
-	 * @return the type or ErrorMarker
-	 */
+	 * @return the type or ErrorMarker */
 	public DataType getType(final String name) {
 		if (null == name) {
 			return typeMap.get("ANY"); //$NON-NLS-1$

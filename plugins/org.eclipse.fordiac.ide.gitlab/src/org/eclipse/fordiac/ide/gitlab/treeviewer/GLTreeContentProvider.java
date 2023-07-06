@@ -20,21 +20,21 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.eclipse.fordiac.ide.gitlab.Package;
+import org.eclipse.fordiac.ide.gitlab.Project;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.gitlab4j.api.models.Package;
-import org.gitlab4j.api.models.Project;
 
 public class GLTreeContentProvider implements ITreeContentProvider {
 
 	private Map<Project, List<Package>> projectsAndPackages;
-	private Map<String, List<LeafNode>> packagesAndLeaves;
-	
-	public GLTreeContentProvider(Map<String, List<LeafNode>> packagesAndLeaves) {
+	private final Map<String, List<LeafNode>> packagesAndLeaves;
+
+	public GLTreeContentProvider(final Map<String, List<LeafNode>> packagesAndLeaves) {
 		this.packagesAndLeaves = packagesAndLeaves;
 	}
 
 	@Override
-	public Object[] getElements(Object inputElement) {
+	public Object[] getElements(final Object inputElement) {
 		if (inputElement instanceof HashMap) {
 			projectsAndPackages = (HashMap<Project, List<Package>>) inputElement;
 			return projectsAndPackages.keySet().toArray();
@@ -43,44 +43,44 @@ public class GLTreeContentProvider implements ITreeContentProvider {
 	}
 
 	@Override
-	public Object[] getChildren(Object parentElement) {
+	public Object[] getChildren(final Object parentElement) {
 		if (parentElement instanceof Project) {
-			return ((HashMap<Project, List<Package>>) projectsAndPackages).get(parentElement)
-					.stream()
-					.filter(distinctByPackageName(Package::getName))
-					.toArray();
-		} else if (parentElement instanceof Package pack) {
+			return ((HashMap<Project, List<Package>>) projectsAndPackages).get(parentElement).stream()
+					.filter(distinctByPackageName(Package::getName)).toArray();
+		}
+		if (parentElement instanceof final Package pack) {
 			return packagesAndLeaves.get(pack.getName()).toArray();
 		}
-		return new String[0] ;
- 	}
+		return new String[0];
+	}
 
 	@Override
-	public Object getParent(Object element) {
+	public Object getParent(final Object element) {
 		if (element instanceof Package) {
-			Object[] parent = new Object[1]; // To surpass the final/effectively final issue
+			final Object[] parent = new Object[1]; // To surpass the final/effectively final issue
 			projectsAndPackages.forEach((key, value) -> {
-				if(value.contains(element)) {
+				if (value.contains(element)) {
 					parent[0] = key;
 				}
 			});
 			return parent[0];
-		} else if (element instanceof LeafNode leafNode) {
+		}
+		if (element instanceof final LeafNode leafNode) {
 			return leafNode.getPackage();
 		}
 		return null;
 	}
 
 	@Override
-	public boolean hasChildren(Object element) {
-		return (element instanceof Project && !projectsAndPackages.get(element).isEmpty()) || 
-				(element instanceof Package pack && !packagesAndLeaves.get(pack.getName()).isEmpty());
+	public boolean hasChildren(final Object element) {
+		return (element instanceof Project && !projectsAndPackages.get(element).isEmpty())
+				|| (element instanceof final Package pack && !packagesAndLeaves.get(pack.getName()).isEmpty());
 	}
-	
+
 	// Needed to filter the packages based on names instead their equals()
-	private static <T> Predicate<T> distinctByPackageName(Function<? super T, ?> nameExtractor) {
-	    Set<Object> seen = ConcurrentHashMap.newKeySet();
-	    return t -> seen.add(nameExtractor.apply(t));
+	private static <T> Predicate<T> distinctByPackageName(final Function<? super T, ?> nameExtractor) {
+		final Set<Object> seen = ConcurrentHashMap.newKeySet();
+		return t -> seen.add(nameExtractor.apply(t));
 	}
 
 }

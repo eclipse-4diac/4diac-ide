@@ -1054,7 +1054,7 @@ public class FBTImporter extends TypeImporter {
 		if (varDecl != null && varDecl.isInOutVar() && !ev.isIsInput()) {
 			// we need to get the mirrored var in out
 			final InterfaceList il = (InterfaceList) varDecl.eContainer();
-			return il.getOutMappedInOutVars().get(il.getInOutVars().indexOf(varDecl));
+			return il.getInOutVarOpposite(varDecl);
 		}
 		return varDecl;
 	}

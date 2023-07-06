@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.gef.commands.Command;
 
 public class DeleteWithCommand extends Command {
-	private With with;
+	private final With with;
 	private VarDeclaration oldVarDecl;
 	private Event event;
 
@@ -45,4 +45,5 @@ public class DeleteWithCommand extends Command {
 		with.setVariables(null);
 		event.getWith().remove(with);
 	}
+
 }

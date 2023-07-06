@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContent
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuickAssistProcessor;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
@@ -33,7 +32,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrT
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
@@ -122,10 +120,6 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 
 	public Class<? extends DefaultAntlrTokenToAttributeIdMapper> bindDefaultAntlrTokenToAttributeIdMapper() {
 		return STCoreAntlrTokenToAttributeIdMapper.class;
-	}
-
-	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
-		return STCoreCommentDocumentationProvider.class;
 	}
 
 	public Class<? extends ISimilarityMatcher> bindISimilarityMatcher() {

@@ -21,6 +21,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.CommandStack;
@@ -31,10 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-/**
- * Properties tab which shows the FB type information of the selected FB
- *
- */
+/** Properties tab which shows the FB type information of the selected FB */
 public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 
 	private TypeInfoWidget typeInfo;
@@ -92,6 +90,7 @@ public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 		if (null != type) {
 			fbTypeNameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+			commentText.setEditable(!(getType() instanceof FunctionFBType));
 			typeInfo.refresh();
 		}
 		commandStack = commandStackBuffer;

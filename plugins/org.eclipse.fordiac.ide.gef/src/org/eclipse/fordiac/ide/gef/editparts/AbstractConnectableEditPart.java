@@ -27,7 +27,7 @@ public abstract class AbstractConnectableEditPart extends AbstractGraphicalEditP
 
 	@SuppressWarnings("static-method") // allow subclasses to override
 	public boolean isConnectable() {
-		return true;
+		return false;
 	}
 
 	private ConnectionMovementHighlightEditPolicy cmPolicy;

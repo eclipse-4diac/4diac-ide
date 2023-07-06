@@ -15,11 +15,13 @@ package org.eclipse.fordiac.ide.globalconstantseditor;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.resource.GlobalConstantsResource;
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters;
+import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STCoreLinkingDiagnosticMessageProvider;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.conversion.IValueConverterService;
+import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
@@ -61,5 +63,9 @@ public class GlobalConstantsRuntimeModule extends AbstractGlobalConstantsRuntime
 
 	public Class<? extends ILinkingDiagnosticMessageProvider> bindILinkingDiagnosticMessageProvider() {
 		return STCoreLinkingDiagnosticMessageProvider.class;
+	}
+
+	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
+		return STCoreCommentDocumentationProvider.class;
 	}
 }

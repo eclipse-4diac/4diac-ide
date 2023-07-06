@@ -38,21 +38,20 @@ public class DeleteInterfaceCommand extends Command {
 	private final IInterfaceElement interfaceElement;
 	private final InterfaceList parent;
 	private final List<? extends IInterfaceElement> targetList;
-	private CompoundCommand cmds;
+	private final CompoundCommand cmds = new CompoundCommand();
 	private int oldIndex;
 	private final CompoundCommand deleteMarkersCmds = new CompoundCommand();
 
 	public DeleteInterfaceCommand(final IInterfaceElement interfaceElement) {
-		this.interfaceElement = getInterfaceElement(interfaceElement);
+		this.interfaceElement = interfaceElement;
 		parent = (InterfaceList) interfaceElement.eContainer();
 		targetList = getTargetList(this.interfaceElement);  // this has to be the adjust this.interfaceElement
 	}
 
 	@Override
 	public void execute() {
-		cmds = new CompoundCommand();
-		handleWiths();
-		handleSubAppConnections();
+		handleWiths(interfaceElement);
+		handleSubAppConnections(interfaceElement);
 		if ((interfaceElement instanceof final AdapterDeclaration adp)
 				&& (parent.eContainer() instanceof CompositeFBType)) {
 			cmds.add(new DeleteFBNetworkElementCommand(adp.getAdapterNetworkFB()));
@@ -91,21 +90,21 @@ public class DeleteInterfaceCommand extends Command {
 		targetList.remove(oldIndex);
 	}
 
-	private void handleSubAppConnections() {
-		for (final Connection con : interfaceElement.getInputConnections()) {
+	protected void handleSubAppConnections(final IInterfaceElement ie) {
+		for (final Connection con : ie.getInputConnections()) {
 			cmds.add(new DeleteConnectionCommand(con));
 		}
-		for (final Connection con : interfaceElement.getOutputConnections()) {
+		for (final Connection con : ie.getOutputConnections()) {
 			cmds.add(new DeleteConnectionCommand(con));
 		}
 	}
 
-	private void handleWiths() {
-		if (interfaceElement instanceof final VarDeclaration varDecl) {
+	protected void handleWiths(final IInterfaceElement ie) {
+		if (ie instanceof final VarDeclaration varDecl) {
 			for (final With with : varDecl.getWiths()) {
 				cmds.add(new DeleteWithCommand(with));
 			}
-		} else if (interfaceElement instanceof final Event event) {
+		} else if (ie instanceof final Event event) {
 			for (final With with : event.getWith()) {
 				cmds.add(new DeleteWithCommand(with));
 			}
@@ -116,12 +115,8 @@ public class DeleteInterfaceCommand extends Command {
 		return parent;
 	}
 
-	private static IInterfaceElement getInterfaceElement(final IInterfaceElement ie) {
-		if (ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && !ie.isIsInput()) {
-			final InterfaceList il = (InterfaceList) ie.eContainer();
-			return il.getInOutVars().get(il.getOutMappedInOutVars().indexOf(ie));
-		}
-		return ie;
+	public IInterfaceElement getInterfaceElement() {
+		return interfaceElement;
 	}
 
 	private static List<? extends IInterfaceElement> getTargetList(final IInterfaceElement ie) {
