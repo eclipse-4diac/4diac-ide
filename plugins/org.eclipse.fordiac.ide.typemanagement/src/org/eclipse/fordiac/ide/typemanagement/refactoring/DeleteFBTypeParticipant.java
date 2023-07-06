@@ -10,6 +10,7 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber - safe type deletion
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
@@ -25,6 +26,7 @@ import org.eclipse.core.resources.mapping.IResourceChangeDescriptionFactory;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -132,6 +134,9 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 			pm.beginTask("Creating change...", 1); //$NON-NLS-1$
 			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 
+			if (typeEntry.getType() instanceof final StructuredType struct) {
+				return new SafeStructDeletionChange(struct);
+			}
 			if (typeEntry.getType() instanceof final FBType type) {
 				return new SafeFBTypeDeletionChange(type);
 			}

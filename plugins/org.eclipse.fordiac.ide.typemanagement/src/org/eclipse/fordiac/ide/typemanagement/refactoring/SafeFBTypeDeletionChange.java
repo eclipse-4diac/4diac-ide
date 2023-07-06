@@ -27,8 +27,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.swt.widgets.Display;
@@ -36,11 +38,12 @@ import org.eclipse.swt.widgets.Display;
 public class SafeFBTypeDeletionChange extends CompositeChange {
 
 	public SafeFBTypeDeletionChange(final FBType type) {
-		super("Delete FB type"); //$NON-NLS-1$
-		createUpdateChanges(this, type);
+		super(Messages.DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle);
+		addUpdateChanges(this, type, true);
 	}
 
-	private static void createUpdateChanges(final CompositeChange change, final FBType type) {
+	public static void addUpdateChanges(final CompositeChange change, final FBType type,
+			final boolean deleteInternalFBs) {
 		// @formatter:off
 		final InstanceSearch search = new InstanceSearch((final INamedElement searchCandiate) ->
 			searchCandiate instanceof final FBNetworkElement fb
@@ -61,12 +64,12 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 			.map(UpdateFBTypeInstanceChange::new)
 			.forEach(change::add);
 
-		// internal fbs
-		search.performInternalFBSearch(type.getTypeLibrary()).stream()
-			.filter(FB.class::isInstance) // TODO does this need to be filtered?
-			.map(FB.class::cast)
-			.map(fb -> new UpdateInternalFBChange((BaseFBType) fb.eContainer(), fb))
-			.forEach(change::add);
+		if (deleteInternalFBs) {
+			search.performInternalFBSearch(type.getTypeLibrary()).stream()
+				.map(FB.class::cast)
+				.map(fb -> new DeleteInternalFBChange((BaseFBType) fb.eContainer(), fb))
+				.forEach(change::add);
+		}
 		// @formatter:on
 	}
 
@@ -81,35 +84,38 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 			// if contained inside a fbtype's network, update the containing type
 			final FBType rootType = FBNetworkHelper.getRootType(fb);
 			if (rootType != null) {
-				SafeFBTypeDeletionChange.createUpdateChanges(this, rootType);
+				SafeFBTypeDeletionChange.addUpdateChanges(this, rootType, false);
 			}
 		}
 
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
-			final UpdateFBTypeCommand cmd = new UpdateFBTypeCommand(fb, fb.getTypeEntry());
-			Display.getDefault().execute(cmd::execute);
+			final Command cmd = new UpdateFBTypeCommand(fb, fb.getTypeEntry());
+			Display.getDefault().syncExec(cmd::execute);
 			return super.perform(pm);
 		}
 
 	}
 
-	private static class UpdateInternalFBChange extends CompositeChange {
+	private static class DeleteInternalFBChange extends CompositeChange {
 
 		final BaseFBType baseFb;
 		final FB internalFb;
 
-		public UpdateInternalFBChange(final BaseFBType baseFb, final FB internalFb) {
+		public DeleteInternalFBChange(final BaseFBType baseFb, final FB internalFb) {
 			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateInternalFB,
 					internalFb.getQualifiedName()));
 			this.baseFb = baseFb;
 			this.internalFb = internalFb;
-			SafeFBTypeDeletionChange.createUpdateChanges(this, baseFb);
+			SafeFBTypeDeletionChange.addUpdateChanges(this, baseFb, false);
 		}
 
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
-			new DeleteInternalFBCommand((BaseFBType) baseFb.getTypeEntry().getTypeEditable(), internalFb).execute();
+			final TypeEntry typeEntry = baseFb.getTypeEntry();
+			final Command cmd = new DeleteInternalFBCommand((BaseFBType) typeEntry.getTypeEditable(), internalFb);
+			cmd.execute();
+			typeEntry.save();
 			return super.perform(pm);
 		}
 
