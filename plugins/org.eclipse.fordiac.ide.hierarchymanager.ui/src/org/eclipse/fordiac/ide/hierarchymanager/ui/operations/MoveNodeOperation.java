@@ -29,11 +29,13 @@ public class MoveNodeOperation extends AbstractChangeHierarchyOperation {
 	private EObject parent;
 	private final EObject newParent;
 	private int index;
+	private final int targetIndex;
 
-	public MoveNodeOperation(final EObject newParent, final Node node) {
+	public MoveNodeOperation(final EObject newParent, final Node node, final int targetIndex) {
 		super("Move Node");
 		this.node = node;
 		this.newParent = newParent;
+		this.targetIndex = targetIndex;
 	}
 
 	@Override
@@ -85,9 +87,17 @@ public class MoveNodeOperation extends AbstractChangeHierarchyOperation {
 
 	private void addToNewParent() {
 		if (newParent instanceof final Level level) {
-			level.getChildren().add(node);
+			if (targetIndex == -1) {
+				level.getChildren().add(node);
+			} else {
+				level.getChildren().add(targetIndex, node);
+			}
 		} else if (newParent instanceof final RootLevel rootLevel) {
-			rootLevel.getLevels().get(index).getChildren().add(node);
+			if (targetIndex == -1) {
+				rootLevel.getLevels().get(index).getChildren().add(node);
+			} else {
+				rootLevel.getLevels().get(index).getChildren().add(targetIndex, node);
+			}
 		}
 	}
 

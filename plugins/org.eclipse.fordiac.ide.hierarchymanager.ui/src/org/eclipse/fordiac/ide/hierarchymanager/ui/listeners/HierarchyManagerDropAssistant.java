@@ -72,6 +72,7 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 			return Status.CANCEL_STATUS;
 		}
 		Level parent = null;
+		int targetIndex = -1;
 		if (aTarget instanceof final Level targetLevel) {
 			parent = targetLevel;
 		} else if (aTarget instanceof final Leaf targetLeaf) {
@@ -87,8 +88,12 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 				return Status.OK_STATUS;
 			}
 
-			final MoveNodeOperation operation = new MoveNodeOperation(parent,
-					(Node) (((TreeSelection) aDropTargetEvent.data).getFirstElement()));
+			final Node node = (Node) (((TreeSelection) aDropTargetEvent.data).getFirstElement());
+			if (aTarget instanceof final Leaf targetLeaf && node instanceof final Leaf leafNode) {
+				targetIndex = ((Level) targetLeaf.eContainer()).getChildren().indexOf(targetLeaf);
+			}
+
+			final MoveNodeOperation operation = new MoveNodeOperation(parent, node, targetIndex);
 			AbstractHierarchyHandler.executeOperation(operation);
 
 			return Status.OK_STATUS;
