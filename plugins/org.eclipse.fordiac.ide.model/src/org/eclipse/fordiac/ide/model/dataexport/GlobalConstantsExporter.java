@@ -53,7 +53,7 @@ public class GlobalConstantsExporter extends AbstractTypeExporter {
 	private void addOriginalSource(final OriginalSource source) throws XMLStreamException {
 		addStartElement(LibraryElementTags.ORIGINAL_SOURCE_ELEMENT);
 		writeOriginalSourceText(source.getText());
-		addEndElement();
+		addInlineEndElement();
 	}
 
 	private void writeOriginalSourceText(final String text) throws XMLStreamException {
