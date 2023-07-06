@@ -75,6 +75,9 @@ class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 			if (interfaceList.outputVars.contains(object)) {
 				return '''OUTPUT '''
 			}
+			if (interfaceList.inOutVars.contains(object)) {
+				return '''IN_OUT '''
+			}
 		}
 		if (object.eContainer instanceof BaseFBType) {
 			var baseFbType = object.eContainer as BaseFBType
