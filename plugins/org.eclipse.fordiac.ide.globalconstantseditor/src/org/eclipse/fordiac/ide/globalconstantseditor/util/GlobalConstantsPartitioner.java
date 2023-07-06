@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
-import org.eclipse.xtext.nodemodel.ICompositeNode;
+import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.XtextResource;
@@ -39,6 +39,9 @@ import com.google.inject.Inject;
 public class GlobalConstantsPartitioner {
 	@Inject
 	private GlobalConstantsGrammarAccess grammarAccess;
+
+	@Inject
+	private IEObjectDocumentationProvider documentationProvider;
 
 	public String combine(final GlobalConstants globalConstants) {
 		if (globalConstants.getSource() != null && globalConstants.getSource().getText() != null) {
@@ -88,7 +91,10 @@ public class GlobalConstantsPartitioner {
 		if (node != null && decl.getName() != null) {
 			final var result = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			result.setName(decl.getName());
-			result.setComment(extractComments(node));
+			final String comment = documentationProvider.getDocumentation(decl);
+			if (comment != null) {
+				result.setComment(comment);
+			}
 			result.setType((DataType) decl.getType());
 			if (decl.isArray()) {
 				ArraySizeHelper.setArraySize(result, extractArraySize(decl));
@@ -101,10 +107,6 @@ public class GlobalConstantsPartitioner {
 			return result;
 		}
 		return null;
-	}
-
-	protected static String extractComments(final ICompositeNode node) {
-		return node.getRootNode().getText().substring(node.getTotalOffset(), node.getOffset()).trim();
 	}
 
 	protected static String extractArraySize(final STVarDeclaration declaration) {
