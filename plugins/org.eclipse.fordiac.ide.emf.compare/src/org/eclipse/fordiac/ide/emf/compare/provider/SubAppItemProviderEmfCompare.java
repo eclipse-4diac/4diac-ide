@@ -13,8 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.emf.compare.provider;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
@@ -53,7 +53,12 @@ public class SubAppItemProviderEmfCompare extends SubAppItemProviderForSystem {
 
 	@Override
 	public Collection<?> getChildren(final Object object) {
-		return Collections.singletonList(((SubApp) object).getSubAppNetwork());
+		final Collection<Object> children = new ArrayList<>();
+		children.add(((SubApp) object).getSubAppNetwork());
+		if (!((SubApp) object).getInterface().getAllInterfaceElements().isEmpty()) {
+			children.add(((SubApp) object).getInterface());
+		}
+		return children;
 	}
 
 }

@@ -37,30 +37,6 @@ public class FBItemProviderEmfCompare extends FBItemProvider {
 
 	@Override
 	public Collection<?> getChildren(final Object object) {
-
 		return Collections.singletonList(((FB) object).getInterface());
-
-		// final Collection<Object> children = new ArrayList<>();
-		// children.addAll(((FB) object).getInterface());
-		// return children;
-		// return ((FB) object).getInterface().getAllInterfaceElements();
 	}
-
-	// EMF BOOK SEITE 343
-	// @Override
-	// protected Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
-	// if (childrenFeatures == null) {
-	// super.getChildrenFeatures(object);
-	// childrenFeatures.add(LibraryElementPackage.Literals.FB_TYPE__INTERFACE_LIST);
-	// childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS);
-	// childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__SOCKETS);
-	// childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS);
-	// childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_OUTPUTS);
-	// childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS);
-	// childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS);
-	// childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS);
-	// childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS);
-	// }
-	// return childrenFeatures;
-	// }
 }

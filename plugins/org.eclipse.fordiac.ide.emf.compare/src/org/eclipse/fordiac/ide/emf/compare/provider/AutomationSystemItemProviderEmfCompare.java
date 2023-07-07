@@ -134,9 +134,4 @@ public class AutomationSystemItemProviderEmfCompare extends AutomationSystemProv
 		}
 		return withItemProvider;
 	}
-
-	@Override
-	public Adapter createValueAdapter() {
-		return super.createValueAdapter();
-	}
 }

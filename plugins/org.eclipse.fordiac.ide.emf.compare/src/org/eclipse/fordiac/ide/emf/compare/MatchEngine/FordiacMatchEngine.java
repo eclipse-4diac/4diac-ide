@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -73,23 +74,30 @@ public class FordiacMatchEngine extends DefaultMatchEngine {
 
 		if (input instanceof final Value val) {
 			if (val.getParentIE().getFBNetworkElement() != null) {
-				return val.getParentIE().getFBNetworkElement().getName() + "." + val.getParentIE().getName() + ".Value"; //$NON-NLS-1$ //$NON-NLS-2$
+				return val.getParentIE().getFBNetworkElement().getName() + "." + val.getParentIE().getName() //$NON-NLS-1$
+						+ ".Value";  //$NON-NLS-1$
 			}
 			return val.getParentIE().getName() + ".Value"; //$NON-NLS-1$
 		}
 
 		if ((input instanceof final With with) && (with.eContainer() instanceof final IInterfaceElement ie)) {
 			if (ie.getFBNetworkElement() != null) {
-				return ie.getFBNetworkElement().getName() + "." + ie.getName() + ".WITH" + "." //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						+ with.getVariables().getName();
+				return ie.getFBNetworkElement().getName() + "." + ie.getName() + ".WITH." //$NON-NLS-1$ //$NON-NLS-2$
+						+ with.getVariables().getName();// + "#" + with.hashCode();
 			}
 			return ie.getName() + ".WITH." + with.getVariables().getName(); //$NON-NLS-1$
 		}
 
 		if ((input instanceof Event || input instanceof VarDeclaration || input instanceof AdapterDeclaration)
 				&& (((IInterfaceElement) input).getFBNetworkElement() != null)) {
-			return ((IInterfaceElement) input).getFBNetworkElement().getName() + "." //$NON-NLS-1$
+			// return ((IInterfaceElement) input).getFBNetworkElement().getName() + "."
+			// + ((IInterfaceElement) input).getName();
+			return ((IInterfaceElement) input).getFBNetworkElement().getName() + ".InterfaceList."
 					+ ((IInterfaceElement) input).getName();
+		}
+
+		if (input instanceof final InterfaceList interfaceList) {
+			return interfaceList.getFBNetworkElement().getName() + ".InterfaceList";
 		}
 
 		return new DefaultIDFunction().apply(input);

@@ -16,7 +16,6 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.InterfaceListItemProvider;
 
@@ -29,7 +28,7 @@ public class InterfaceListItemProviderEmfCompare extends InterfaceListItemProvid
 	@Override
 	public Object getParent(final Object object) {
 		final EObject cont = ((InterfaceList) object).eContainer();
-		if (cont instanceof FB) {
+		if (cont != null) {
 			return cont;
 		}
 		return super.getParent(object);

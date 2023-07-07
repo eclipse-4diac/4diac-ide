@@ -38,18 +38,9 @@ public class EventConnectionItemProviderEmfCompare extends EventConnectionItemPr
 
 	@Override
 	public Collection<?> getChildren(final Object object) {
-		// final Collection<Object> children = new ArrayList<>();
-		// children.add(((EventConnection) object).getSource());
-		// children.add(((EventConnection) object).getDestination());
-		// return children;
-
 		final Collection<Object> children = new ArrayList<>();
 		children.add(((EventConnection) object).getRoutingData());
 		return children;
-
-		// return Collections.EMPTY_LIST;
-
-		// return super.getChildren(object);
 	}
 
 }

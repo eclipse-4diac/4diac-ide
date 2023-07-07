@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   
+ *
  *******************************************************************************/
 
 /*******************************************************************************
@@ -31,10 +31,10 @@
  *
  */
 
-
 package org.eclipse.fordiac.ide.emf.compare.MatchEngine;
 
 import static org.eclipse.emf.compare.EMFCompare.DIAGNOSTIC_SOURCE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -85,42 +85,30 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 	/** A diagnostic to be used for reporting on the matches. */
 	private BasicDiagnostic diagnostic;
 
-	/**
-	 * Creates an ID based matcher without any delegate.
-	 */
+	/** Creates an ID based matcher without any delegate. */
 	public FordiacIdentifierEObjectMatcher() {
 		this(null, new DefaultIDFunction());
 	}
 
-	/**
-	 * Creates an ID based matcher with the given delegate when no ID can be found.
+	/** Creates an ID based matcher with the given delegate when no ID can be found.
 	 *
-	 * @param delegateWhenNoID
-	 *            the matcher to delegate to when no ID is found.
-	 */
+	 * @param delegateWhenNoID the matcher to delegate to when no ID is found. */
 	public FordiacIdentifierEObjectMatcher(final IEObjectMatcher delegateWhenNoID) {
 		this(delegateWhenNoID, new DefaultIDFunction());
 	}
 
-	/**
-	 * Creates an ID based matcher computing the ID with the given function.
+	/** Creates an ID based matcher computing the ID with the given function.
 	 *
-	 * @param idComputation
-	 *            the function used to compute the ID.
-	 */
+	 * @param idComputation the function used to compute the ID. */
 	public FordiacIdentifierEObjectMatcher(final Function<EObject, String> idComputation) {
 		this(null, idComputation);
 	}
 
-	/**
-	 * Create an ID based matcher with a delegate which is going to be called when no ID is found for a given
-	 * EObject. It is computing the ID with the given function
+	/** Create an ID based matcher with a delegate which is going to be called when no ID is found for a given EObject.
+	 * It is computing the ID with the given function
 	 *
-	 * @param delegateWhenNoID
-	 *            the delegate matcher to use when no ID is found.
-	 * @param idComputation
-	 *            the function used to compute the ID.
-	 */
+	 * @param delegateWhenNoID the delegate matcher to use when no ID is found.
+	 * @param idComputation    the function used to compute the ID. */
 	public FordiacIdentifierEObjectMatcher(final IEObjectMatcher delegateWhenNoID,
 			final Function<EObject, String> idComputation) {
 		this.delegate = Optional.ofNullable(delegateWhenNoID);
@@ -148,7 +136,6 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 
 		addDiagnostic(comparison);
 		comparison.getMatches().addAll(matches);
-
 
 		if (!leftEObjectsNoID.isEmpty() || !rightEObjectsNoID.isEmpty() || !originEObjectsNoID.isEmpty()) {
 			if (delegate.isPresent()) {
@@ -258,7 +245,7 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 	 *
 	 * @param eObject The {@link EObject} for which's resource the string representation of its URI is determined.
 	 * @return A String representation of the given {@code eObject}'s resource URI. */
-	private String getUriString(final EObject eObject) {
+	private static String getUriString(final EObject eObject) {
 		String uriString = null;
 		final Resource resource = eObject.eResource();
 		if (resource != null && resource.getURI() != null) {
@@ -358,9 +345,8 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 		private Map<K, V> getMap(final boolean switcher) {
 			if (switcher) {
 				return falseMap;
-			} else {
-				return trueMap;
 			}
+			return trueMap;
 		}
 	}
 
@@ -463,7 +449,12 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 					}
 					final boolean isAlreadyContained = idProxyMap.put(left.eIsProxy(), identifier, match);
 					if (isAlreadyContained) {
-						reportDuplicateID(Side.LEFT, left);
+						if (match.getLeft().hashCode() == idProxyMap.get(left.eIsProxy(), identifier).getLeft()
+								.hashCode()) {
+							reportDuplicateID(Side.LEFT, left);
+						} else {
+							System.out.println("Something wrong with; " + match.getLeft().toString());
+						}
 					}
 					leftEObjectsToMatch.put(left, match);
 				} else {
