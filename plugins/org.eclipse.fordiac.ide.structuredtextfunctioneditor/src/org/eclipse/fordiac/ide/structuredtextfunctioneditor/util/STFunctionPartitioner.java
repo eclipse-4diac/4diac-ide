@@ -108,7 +108,10 @@ public class STFunctionPartitioner implements STCorePartitioner {
 		if (node != null && function.getName() != null) {
 			final var result = LibraryElementFactory.eINSTANCE.createSTFunction();
 			result.setName(function.getName());
-			result.setComment(documentationProvider.getDocumentation(function));
+			final String comment = documentationProvider.getDocumentation(function);
+			if (comment != null) {
+				result.setComment(comment);
+			}
 			function.getInputParameters().stream().map(STVarDeclaration.class::cast)
 					.filter(STFunctionPartitioner::isValidParameter).map(STFunctionPartitioner::convertInputParameter)
 					.forEachOrdered(result.getInputParameters()::add);
