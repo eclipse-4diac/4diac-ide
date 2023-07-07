@@ -117,7 +117,7 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 		}
 		LibraryElementFactory.eINSTANCE.createSTAlgorithm => [
 			name = algorithm.name ?: LOST_AND_FOUND_NAME
-			comment = algorithm.documentation
+			comment = algorithm.documentation ?: ""
 			text = node.text
 		]
 	}
@@ -129,7 +129,7 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 		}
 		LibraryElementFactory.eINSTANCE.createSTMethod => [
 			name = method.name ?: LOST_AND_FOUND_NAME
-			comment = method.documentation
+			comment = method.documentation ?: ""
 			inputParameters.addAll(method.inputParameters.filter(STVarDeclaration).map[convertParameter(true)])
 			outputParameters.addAll(method.outputParameters.filter(STVarDeclaration).map[convertParameter(false)])
 			inOutParameters.addAll(method.inOutParameters.filter(STVarDeclaration).map[convertParameter(false)])
@@ -144,6 +144,7 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 		}
 		LibraryElementFactory.eINSTANCE.createVarDeclaration => [
 			name = declaration.name
+			comment = declaration.documentation ?: ""
 			type = declaration.type as DataType
 			if (declaration.array) {
 				ArraySizeHelper.setArraySize(it, declaration.extractArraySize)

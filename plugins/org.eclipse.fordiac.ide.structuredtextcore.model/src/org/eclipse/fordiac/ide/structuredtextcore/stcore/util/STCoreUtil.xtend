@@ -290,11 +290,11 @@ final class STCoreUtil {
 			STUnaryExpression case op.logical:
 				expectedType.equivalentAnyBitType
 			STBinaryExpression case op.arithmetic || op.range:
-				expectedType.equivalentAnyNumType ?: //
-				(expression === left ? right?.declaredResultType : left.declaredResultType).equivalentAnyNumType
+				(expression === left ? right?.declaredResultType : left.declaredResultType).equivalentAnyNumType ?:
+					expectedType.equivalentAnyNumType
 			STBinaryExpression case op.logical:
-				expectedType.equivalentAnyBitType ?: //
-				(expression === left ? right?.declaredResultType : left.declaredResultType).equivalentAnyBitType
+				(expression === left ? right?.declaredResultType : left.declaredResultType).equivalentAnyBitType ?:
+					expectedType.equivalentAnyBitType
 			STBinaryExpression case op.comparison:
 				expression === left ? right?.declaredResultType : left.declaredResultType
 			STAssignmentStatement:

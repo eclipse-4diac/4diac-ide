@@ -220,8 +220,8 @@ public final class IecTypes {
 			ANY_BIT.setName(FordiacKeywords.ANY_BIT);
 
 			ANY_CHARS.setName(FordiacKeywords.ANY_CHARS);
-			ANY_SCHARS.setName(FordiacKeywords.ANY_SCHARS);
-			ANY_WCHARS.setName(FordiacKeywords.ANY_WCHARS);
+			ANY_SCHARS.setName(FordiacKeywords.ANY_CHARS);
+			ANY_WCHARS.setName(FordiacKeywords.ANY_CHARS);
 			ANY_STRING.setName(FordiacKeywords.ANY_STRING);
 			ANY_CHAR.setName(FordiacKeywords.ANY_CHAR);
 			ANY_DATE.setName(FordiacKeywords.ANY_DATE);
