@@ -36,8 +36,10 @@ import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.WcharType
+import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
@@ -345,10 +347,11 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateExpression(STStringLiteral expr) {
 		val type = expr.resultType
-		'''«type.generateTypeName»''' + switch (type) {
-			AnyStringType: '''("«expr.value.toString.convertToJavaString»")'''
-			CharType: '''(«String.format("0x%02x",  expr.value.toString.getBytes(StandardCharsets.UTF_8).get(0))»)'''
-			WcharType: '''(u'«expr.value.toString.convertToJavaString»')'''
+		switch (type) {
+			StringType: '''"«expr.value.toString.convertToJavaString»"_STRING'''
+			WstringType: '''CIEC_WSTRING("«expr.value.toString.convertToJavaString»")'''
+			CharType: '''«String.format("0x%02x",  expr.value.toString.getBytes(StandardCharsets.UTF_8).get(0))»_CHAR'''
+			WcharType: '''CIEC_WCHAR(u'«expr.value.toString.convertToJavaString»')'''
 		}
 	}
 
