@@ -71,6 +71,8 @@ public class XMIExportFactoryImpl extends EFactoryImpl implements XMIExportFacto
 		switch (eClass.getClassifierID()) {
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUES: return createXMIExportInitialValues();
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE: return createXMIExportInitialValue();
+			case XMIExportPackage.XMI_EXPORT_TYPE_DECLARATIONS: return createXMIExportTypeDeclarations();
+			case XMIExportPackage.XMI_EXPORT_TYPE_DECLARATION: return createXMIExportTypeDeclaration();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -96,6 +98,28 @@ public class XMIExportFactoryImpl extends EFactoryImpl implements XMIExportFacto
 	public XMIExportInitialValue createXMIExportInitialValue() {
 		XMIExportInitialValueImpl xmiExportInitialValue = new XMIExportInitialValueImpl();
 		return xmiExportInitialValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public XMIExportTypeDeclarations createXMIExportTypeDeclarations() {
+		XMIExportTypeDeclarationsImpl xmiExportTypeDeclarations = new XMIExportTypeDeclarationsImpl();
+		return xmiExportTypeDeclarations;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public XMIExportTypeDeclaration createXMIExportTypeDeclaration() {
+		XMIExportTypeDeclarationImpl xmiExportTypeDeclaration = new XMIExportTypeDeclarationImpl();
+		return xmiExportTypeDeclaration;
 	}
 
 	/**

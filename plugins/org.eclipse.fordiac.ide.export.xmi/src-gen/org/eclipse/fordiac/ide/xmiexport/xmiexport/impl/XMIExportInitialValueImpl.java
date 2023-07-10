@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportPackage;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportInitialValueImpl#getVariable <em>Variable</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportInitialValueImpl#getExpression <em>Expression</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportInitialValueImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -65,6 +66,26 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 	 * @ordered
 	 */
 	protected STInitializerExpression expression;
+
+	/**
+	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String VALUE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected String value = VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -176,6 +197,29 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
+	public String getValue() {
+		return value;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setValue(String newValue) {
+		String oldValue = value;
+		value = newValue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__VALUE, oldValue, value));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__EXPRESSION:
@@ -198,6 +242,8 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 				return basicGetVariable();
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__EXPRESSION:
 				return getExpression();
+			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__VALUE:
+				return getValue();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -216,6 +262,9 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 				return;
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__EXPRESSION:
 				setExpression((STInitializerExpression)newValue);
+				return;
+			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__VALUE:
+				setValue((String)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -237,6 +286,9 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__EXPRESSION:
 				setExpression((STInitializerExpression)null);
 				return;
+			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__VALUE:
+				setValue(VALUE_EDEFAULT);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -255,9 +307,27 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 				return variable != null;
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__EXPRESSION:
 				return expression != null;
+			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__VALUE:
+				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (value: "); //$NON-NLS-1$
+		result.append(value);
+		result.append(')');
+		return result.toString();
 	}
 
 } //XMIExportInitialValueImpl

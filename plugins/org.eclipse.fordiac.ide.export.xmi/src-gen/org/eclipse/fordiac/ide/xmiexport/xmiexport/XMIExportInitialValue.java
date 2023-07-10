@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue#getVariable <em>Variable</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue#getExpression <em>Expression</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportPackage#getXMIExportInitialValue()
@@ -82,5 +83,27 @@ public interface XMIExportInitialValue extends EObject {
 	 * @generated
 	 */
 	void setExpression(STInitializerExpression value);
+
+	/**
+	 * Returns the value of the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Value</em>' attribute.
+	 * @see #setValue(String)
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportPackage#getXMIExportInitialValue_Value()
+	 * @model
+	 * @generated
+	 */
+	String getValue();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue#getValue <em>Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Value</em>' attribute.
+	 * @see #getValue()
+	 * @generated
+	 */
+	void setValue(String value);
 
 } // XMIExportInitialValue
