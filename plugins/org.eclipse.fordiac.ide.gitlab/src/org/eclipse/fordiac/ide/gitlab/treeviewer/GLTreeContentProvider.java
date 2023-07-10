@@ -46,10 +46,10 @@ public class GLTreeContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(final Object parentElement) {
 		if (parentElement instanceof Project) {
 			return ((HashMap<Project, List<Package>>) projectsAndPackages).get(parentElement).stream()
-					.filter(distinctByPackageName(Package::getName)).toArray();
+					.filter(distinctByPackageName(Package::name)).toArray();
 		}
 		if (parentElement instanceof final Package pack) {
-			return packagesAndLeaves.get(pack.getName()).toArray();
+			return packagesAndLeaves.get(pack.name()).toArray();
 		}
 		return new String[0];
 	}
@@ -74,7 +74,7 @@ public class GLTreeContentProvider implements ITreeContentProvider {
 	@Override
 	public boolean hasChildren(final Object element) {
 		return (element instanceof Project && !projectsAndPackages.get(element).isEmpty())
-				|| (element instanceof final Package pack && !packagesAndLeaves.get(pack.getName()).isEmpty());
+				|| (element instanceof final Package pack && !packagesAndLeaves.get(pack.name()).isEmpty());
 	}
 
 	// Needed to filter the packages based on names instead their equals()

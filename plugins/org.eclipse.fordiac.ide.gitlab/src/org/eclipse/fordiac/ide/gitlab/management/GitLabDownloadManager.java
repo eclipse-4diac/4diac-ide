@@ -87,7 +87,7 @@ public class GitLabDownloadManager {
 	}
 
 	private static void createPackageDir(final Package p) throws IOException {
-		final Path path = Paths.get(PATH, ROOT_DIRECTORY, p.getName() + "-" + p.getVersion()); //$NON-NLS-1$
+		final Path path = Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version()); //$NON-NLS-1$
 		if (!Files.exists(path)) {
 			Files.createDirectories(path);
 		}
@@ -107,8 +107,7 @@ public class GitLabDownloadManager {
 			try (InputStream responseStream = httpConn.getInputStream()) { // closed automatically
 				createRootDir();
 				createPackageDir(p);
-				Files.copy(responseStream,
-						Paths.get(PATH, ROOT_DIRECTORY, p.getName() + "-" + p.getVersion(), filename), //$NON-NLS-1$
+				Files.copy(responseStream, Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename), //$NON-NLS-1$
 						StandardCopyOption.REPLACE_EXISTING);
 			}
 			httpConn.disconnect();
@@ -125,12 +124,12 @@ public class GitLabDownloadManager {
 	}
 
 	private String buildDownloadURL(final Package p, final Object project, final String filename) {
-		return gitLabImportPage.getUrl() + API_VERSION + ((Project) project).getId() + PACKAGES + p.getPackageType()
-				+ "/" + p.getName() + "/" + p.getVersion() + "/" + filename;
+		return gitLabImportPage.getUrl() + API_VERSION + ((Project) project).id() + PACKAGES + p.packageType() + "/"
+				+ p.name() + "/" + p.version() + "/" + filename;
 	}
 
 	private String buildPackageFileURL(final Package p, final Project project) {
-		return gitLabImportPage.getUrl() + API_VERSION + project.getId() + PACKAGES + p.getId() + PACKAGE_FILES;
+		return gitLabImportPage.getUrl() + API_VERSION + project.id() + PACKAGES + p.id() + PACKAGE_FILES;
 	}
 
 	private String buildConnectionURL() {
@@ -138,7 +137,7 @@ public class GitLabDownloadManager {
 	}
 
 	private String buildPackagesForProjectURL(final Project project) {
-		return gitLabImportPage.getUrl() + API_VERSION + project.getId() + PACKAGES;
+		return gitLabImportPage.getUrl() + API_VERSION + project.id() + PACKAGES;
 	}
 
 	private void getProjects() throws IOException {
@@ -174,10 +173,10 @@ public class GitLabDownloadManager {
 				pack = new Package(Long.valueOf(m.group(PACKAGE_ID)), m.group(PACKAGE_NAME), m.group(PACKAGE_VERSION),
 						m.group(PACKAGE_TYPE));
 				projectAndPackageMap.get(project).add(pack);
-				if (!packagesAndLeaves.containsKey(pack.getName())) {
-					packagesAndLeaves.put(pack.getName(), new ArrayList<>());
+				if (!packagesAndLeaves.containsKey(pack.name())) {
+					packagesAndLeaves.put(pack.name(), new ArrayList<>());
 				}
-				packagesAndLeaves.get(pack.getName()).add(new LeafNode(project, pack, pack.getVersion()));
+				packagesAndLeaves.get(pack.name()).add(new LeafNode(project, pack, pack.version()));
 			}
 		} catch (final IOException e) {
 			httpConn.disconnect();

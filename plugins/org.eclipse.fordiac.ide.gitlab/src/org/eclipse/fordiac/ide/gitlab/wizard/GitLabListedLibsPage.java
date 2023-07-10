@@ -75,10 +75,10 @@ public class GitLabListedLibsPage extends WizardPage {
 			@Override
 			public String getText(final Object element) {
 				if (element instanceof final Project project) {
-					return project.getName();
+					return project.name();
 				}
 				if (element instanceof final Package pack) {
-					return pack.getName();
+					return pack.name();
 				}
 				if (element instanceof final LeafNode leafNode) {
 					return leafNode.getVersion();
