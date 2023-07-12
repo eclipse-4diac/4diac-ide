@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.st
 
 import java.util.List
 import java.util.Map
+import java.util.NoSuchElementException
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.DataFactory
@@ -43,6 +44,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
 import org.eclipse.fordiac.ide.model.eval.variable.WStringCharacterVariable
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -114,7 +116,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch Variable<?> findVariable(VarDeclaration variable) {
-		(context as FBVariable).value.members.get(variable.name)
+		(context as FBVariable)?.value?.members?.get(variable.name) ?: variable.evaluateFBConstantInitialization
 	}
 
 	def protected dispatch Variable<?> findVariable(AdapterDeclaration variable) {
@@ -146,6 +148,13 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		val variable = newVariable(decl.name, decl.evaluateType)
 		cachedGlobalConstants.put(variable.name, variable)
 		variable.evaluateInitializerExpression(decl.defaultValue)
+	}
+
+	def protected Variable<?> evaluateFBConstantInitialization(VarDeclaration decl) {
+		switch (container : decl.eContainer) {
+			BaseFBType case container.internalConstVars.contains(decl): newVariable(decl)
+			default: throw new NoSuchElementException('''Cannot find FB variable «decl.qualifiedName»''')
+		}
 	}
 
 	def protected INamedElement evaluateType(STVarDeclaration declaration) {

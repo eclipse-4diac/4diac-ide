@@ -670,6 +670,20 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	}
 
 	@Test
+	def void testSimpleWithConstantArray() {
+		val internalConstVarDecl = newVarDeclaration("MAXLEN", ElementaryTypes.DINT, false, "6");
+		val inputVarDecl = newVarDeclaration("DI1", ElementaryTypes.INT, true, "[1,2,3,4,5,6]")
+		ArraySizeHelper.setArraySize(inputVarDecl, "0..MAXLEN-1")
+		val outputVarDecl = newVarDeclaration("DO1", ElementaryTypes.INT, false)
+		21.toIntValue.assertEquals(#[
+			'''
+				DO1 := DI1[0] + DI1[1] + DI1[2] + DI1[3] + DI1[4] + DI1[5];
+			'''.newSTAlgorithm("REQ")
+		].evaluateSimpleFB("REQ", #[inputVarDecl, outputVarDecl], emptyList, #[internalConstVarDecl], emptyList).variables.
+			get("DO1").value)
+	}
+
+	@Test
 	def void testSimpleWithStruct() {
 		val structType = DataFactory.eINSTANCE.createStructuredType => [
 			name = "TestStruct"
@@ -745,6 +759,26 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 		fbType.internalFbs.addAll(internalFBs)
 		val queue = new TracingFBEvaluatorEventQueue(#[inputEvent])
 		val eval = new SimpleFBEvaluator(fbType, null, variables, null)
+		eval.eventQueue = queue
+		eval.evaluate
+		#[outputEvent].assertIterableEquals(queue.outputEvents)
+		return eval
+	}
+
+	def static evaluateSimpleFB(Iterable<? extends ICallable> callables, String inputEventName,
+		Iterable<VarDeclaration> variables, Iterable<VarDeclaration> internalVars,
+		Iterable<VarDeclaration> internalConstVars, Iterable<FB> internalFBs) {
+		val inputEvent = inputEventName.newEvent(true)
+		val outputEvent = "CNF".newEvent(false)
+		val fbType = LibraryElementFactory.eINSTANCE.createSimpleFBType
+		fbType.name = "Test"
+		fbType.interfaceList = newInterfaceList(#[inputEvent, outputEvent], variables)
+		fbType.callables.addAll(callables)
+		fbType.internalVars.addAll(internalVars)
+		fbType.internalConstVars.addAll(internalConstVars)
+		fbType.internalFbs.addAll(internalFBs)
+		val queue = new TracingFBEvaluatorEventQueue(#[inputEvent])
+		val eval = new SimpleFBEvaluator(fbType, null, emptyList, null)
 		eval.eventQueue = queue
 		eval.evaluate
 		#[outputEvent].assertIterableEquals(queue.outputEvents)
