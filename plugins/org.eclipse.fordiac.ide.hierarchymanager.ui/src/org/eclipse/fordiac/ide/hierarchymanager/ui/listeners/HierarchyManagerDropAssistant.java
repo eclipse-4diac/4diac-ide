@@ -60,8 +60,8 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 			return Status.CANCEL_STATUS;
 		}
 
-		if (getTargetProject() != getSourceProject(
-				(SubApp) (((TreeSelection) aDropTargetEvent.data).getFirstElement()))) {
+		if (((TreeSelection) aDropTargetEvent.data).getFirstElement() instanceof final SubApp subapp
+				&& getTargetProject() != getSourceProject(subapp)) {
 			return Status.CANCEL_STATUS;
 		}
 
