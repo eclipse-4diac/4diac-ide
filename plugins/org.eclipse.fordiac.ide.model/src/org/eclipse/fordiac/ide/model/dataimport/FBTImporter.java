@@ -483,20 +483,18 @@ public class FBTImporter extends TypeImporter {
 			if (XMLStreamConstants.START_ELEMENT == event) {
 
 				switch (getReader().getLocalName()) {
-				case LibraryElementTags.FBD_ELEMENT:
-					throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!");
+				case LibraryElementTags.FBD_ELEMENT, LibraryElementTags.LD_ELEMENT:
+					throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!"); //$NON-NLS-1$
 				case LibraryElementTags.ST_ELEMENT:
 					retVal = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 					parseST((STAlgorithm) retVal);
 					break;
-				case LibraryElementTags.LD_ELEMENT:
-					throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!");
 				case LibraryElementTags.OTHER_ELEMENT:
 					retVal = LibraryElementFactory.eINSTANCE.createOtherAlgorithm();
 					parseOtherAlg((OtherAlgorithm) retVal);
 					break;
 				default:
-					throw new XMLStreamException("Unexpected xml child (" + getReader().getLocalName() + ") found!"); //$NON-NLS-1$ //$NON-NLS-2$
+					throw unknownXMLChildException();
 				}
 
 			} else if (XMLStreamConstants.END_ELEMENT == event) {
@@ -573,31 +571,44 @@ public class FBTImporter extends TypeImporter {
 			if (XMLStreamConstants.START_ELEMENT == event) {
 
 				switch (getReader().getLocalName()) {
-				case LibraryElementTags.FBD_ELEMENT:
-					throw new TypeImportException("Method: Unsupported type (only ST and Other possible)!");
+				case LibraryElementTags.FBD_ELEMENT, LibraryElementTags.LD_ELEMENT:
+					throw new TypeImportException("Method: Unsupported type (only ST and Other possible)!"); //$NON-NLS-1$
 				case LibraryElementTags.ST_ELEMENT:
 					retVal = LibraryElementFactory.eINSTANCE.createSTMethod();
 					parseSTMethod((STMethod) retVal);
 					break;
-				case LibraryElementTags.LD_ELEMENT:
-					throw new TypeImportException("Method: Unsupported type (only ST and Other possible)!");
 				case LibraryElementTags.OTHER_ELEMENT:
 					retVal = LibraryElementFactory.eINSTANCE.createOtherMethod();
 					parseOtherMethod((OtherMethod) retVal);
 					break;
-				case LibraryElementTags.VAR_DECLARATION_ELEMENT:
-					if (retVal instanceof final TextMethod textMethod) {
-						final VarDeclaration declaration = parseVarDeclaration();
-						if (declaration.isIsInput()) {
-							textMethod.getInputParameters().add(declaration);
-						} else {
-							textMethod.getOutputParameters().add(declaration);
-						}
-						break;
+				case LibraryElementTags.INPUT_VARS_ELEMENT:
+					if (retVal == null) {
+						throw unknownXMLChildException();
 					}
-					//$FALL-THROUGH$
+					parseVariableList(LibraryElementTags.INPUT_VARS_ELEMENT, retVal.getInputParameters(), true);
+					break;
+				case LibraryElementTags.OUTPUT_VARS_ELEMENT:
+					if (retVal == null) {
+						throw unknownXMLChildException();
+					}
+					parseVariableList(LibraryElementTags.OUTPUT_VARS_ELEMENT, retVal.getOutputParameters(), false);
+					break;
+				case LibraryElementTags.INOUT_VARS_ELEMENT:
+					if (retVal == null) {
+						throw unknownXMLChildException();
+					}
+					parseVariableList(LibraryElementTags.INOUT_VARS_ELEMENT, retVal.getInOutParameters(), true);
+					break;
+				// legacy element (future parameters should be in one of the lists above)
+				case LibraryElementTags.VAR_DECLARATION_ELEMENT:
+					if (retVal == null) {
+						throw unknownXMLChildException();
+					}
+					final VarDeclaration declaration = parseVarDeclaration();
+					retVal.getInputParameters().add(declaration);
+					break;
 				default:
-					throw new XMLStreamException("Unexpected xml child (" + getReader().getLocalName() + ") found!"); //$NON-NLS-1$ //$NON-NLS-2$
+					throw unknownXMLChildException();
 				}
 
 			} else if (XMLStreamConstants.END_ELEMENT == event) {
@@ -614,10 +625,14 @@ public class FBTImporter extends TypeImporter {
 			retVal.setName(name);
 			retVal.setComment(comment);
 		}
-		if (retVal instanceof TextMethod) {
-			((TextMethod) retVal).setReturnType(type);
+		if (retVal instanceof final TextMethod textMethod) {
+			textMethod.setReturnType(type);
 		}
 		return retVal;
+	}
+
+	protected XMLStreamException unknownXMLChildException() {
+		return new XMLStreamException("Unexpected xml child (" + getReader().getLocalName() + ") found!"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/** Parses the other method.
@@ -938,8 +953,8 @@ public class FBTImporter extends TypeImporter {
 		return LibraryElementTags.EVENT_INPUTS_ELEMENT;
 	}
 
-	private void parseVariableList(final String nodeName, final EList<VarDeclaration> varList, final boolean input)
-			throws TypeImportException, XMLStreamException {
+	private void parseVariableList(final String nodeName, final EList<? super VarDeclaration> varList,
+			final boolean input) throws TypeImportException, XMLStreamException {
 		processChildren(nodeName, name -> {
 			if (name.equals(LibraryElementTags.VAR_DECLARATION_ELEMENT)) {
 				final VarDeclaration v = parseVarDeclaration();
