@@ -89,7 +89,7 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 			}
 
 			final Node node = (Node) (((TreeSelection) aDropTargetEvent.data).getFirstElement());
-			if (aTarget instanceof final Leaf targetLeaf && node instanceof final Leaf leafNode) {
+			if (aTarget instanceof final Leaf targetLeaf && (node instanceof Leaf || node instanceof Level)) {
 				targetIndex = ((Level) targetLeaf.eContainer()).getChildren().indexOf(targetLeaf);
 			}
 
