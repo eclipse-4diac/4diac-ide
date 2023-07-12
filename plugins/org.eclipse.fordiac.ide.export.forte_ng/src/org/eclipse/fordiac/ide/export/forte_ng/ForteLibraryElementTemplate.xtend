@@ -23,7 +23,6 @@ import java.util.Map
 import java.util.Set
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
-import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -124,17 +123,16 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_PARAM -> Boolean.TRUE})
 	}
 
-	def protected getFORTEStringId(String s) '''g_nStringId«s»'''
+	def CharSequence generateVariableTypeSpec(VarDeclaration decl) {
+		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_SPEC -> Boolean.TRUE})
+	}
 
 	def protected getFORTENameList(List<? extends INamedElement> elements) {
 		elements.map[name.FORTEStringId].join(", ")
 	}
 
 	def protected getFORTETypeList(List<? extends VarDeclaration> elements) {
-		elements.map [
-			val arraySize = try { Integer.parseInt(ArraySizeHelper.getArraySize(it)) } catch (NumberFormatException e) { 0 }
-			'''«IF it.array»«"ARRAY".FORTEStringId», «arraySize», «ENDIF»«it.type.generateTypeNamePlain.FORTEStringId»'''
-		].join(", ")
+		elements.map [generateVariableTypeSpec].join(", ")
 	}
 
 	override getErrors() {

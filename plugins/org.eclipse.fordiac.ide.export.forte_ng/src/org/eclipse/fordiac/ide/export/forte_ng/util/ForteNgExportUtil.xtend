@@ -84,6 +84,19 @@ final class ForteNgExportUtil {
 		}
 	}
 
+	def static CharSequence generateTypeSpec(INamedElement type) {
+		switch (type) {
+			ArrayType:
+				type.subranges.reverseView.fold(type.baseType.generateTypeNamePlain.FORTEStringId) [ result, subrange |
+					'''«type.generateTypeNamePlain.FORTEStringId», static_cast<CStringDictionary::TStringId>(«subrange.lowerLimit»), static_cast<CStringDictionary::TStringId>(«subrange.upperLimit»), «result»'''
+				].toString
+			DataType:
+				type.generateTypeNamePlain.FORTEStringId
+			default:
+				type.name
+		}
+	}
+
 	def static String generateTypeNamePlain(DataType type) {
 		switch (type) {
 			TimeType: "TIME"
@@ -100,6 +113,8 @@ final class ForteNgExportUtil {
 			default: type.name
 		}
 	}
+
+	def static CharSequence getFORTEStringId(String s) '''g_nStringId«s»'''
 
 	static final Pattern END_COMMENT_PATTERN = Pattern.compile("\\*/")
 

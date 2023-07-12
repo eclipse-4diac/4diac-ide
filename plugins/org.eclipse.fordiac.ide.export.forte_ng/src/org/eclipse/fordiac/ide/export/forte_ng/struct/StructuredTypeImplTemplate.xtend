@@ -18,6 +18,8 @@ package org.eclipse.fordiac.ide.export.forte_ng.struct
 import java.nio.file.Path
 import org.eclipse.fordiac.ide.model.data.StructuredType
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 class StructuredTypeImplTemplate extends StructBaseTemplate {
 
 	new(StructuredType type, String name, Path prefix) {

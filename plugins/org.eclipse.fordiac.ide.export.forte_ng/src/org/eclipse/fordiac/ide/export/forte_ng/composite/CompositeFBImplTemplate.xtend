@@ -30,6 +30,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	var fbs = new ArrayList<FBNetworkElement>
