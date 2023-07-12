@@ -39,7 +39,9 @@ public class GlobalConstantsExporter extends AbstractTypeExporter {
 	protected void createTypeSpecificXMLEntries() throws XMLStreamException {
 		addCompilerInfo(getType().getCompilerInfo());
 		addGlobalConstants(getType().getConstants());
-		addOriginalSource(getType().getSource());
+		if (getType().getSource() != null) {
+			addOriginalSource(getType().getSource());
+		}
 	}
 
 	private void addGlobalConstants(final Iterable<? extends VarDeclaration> vars) throws XMLStreamException {
