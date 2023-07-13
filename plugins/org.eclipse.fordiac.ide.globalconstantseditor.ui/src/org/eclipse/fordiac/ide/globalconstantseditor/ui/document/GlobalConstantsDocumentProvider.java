@@ -69,14 +69,16 @@ public class GlobalConstantsDocumentProvider extends XtextDocumentProvider {
 			if (typeEntry instanceof final GlobalConstantsEntry globalConstantsEntry) {
 				doSaveDocument(monitor, fileEditorInput, globalConstantsEntry.getTypeEditable(),
 						(XtextDocument) document);
-			}
-			if (getElementInfo(element) instanceof final FileInfo info) {
-				if (info.fModel instanceof final ResourceMarkerAnnotationModel model) {
-					model.updateMarkers(info.fDocument);
+				if (getElementInfo(element) instanceof final FileInfo info) {
+					if (info.fModel instanceof final ResourceMarkerAnnotationModel model) {
+						model.updateMarkers(info.fDocument);
+					}
+					info.fModificationStamp = computeModificationStamp(fileEditorInput.getFile());
 				}
-				info.fModificationStamp = computeModificationStamp(fileEditorInput.getFile());
+				return;
 			}
 		}
+		super.doSaveDocument(monitor, element, document, overwrite);
 	}
 
 	protected void doSaveDocument(final IProgressMonitor monitor, final IFileEditorInput fileEditorInput,

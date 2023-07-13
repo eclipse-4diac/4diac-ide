@@ -34,8 +34,11 @@ public class GlobalConstantsDocumentReconcileStrategy extends XtextDocumentRecon
 		}
 		if (resource instanceof final GlobalConstantsResource globalConstantsResource) {
 			final var globalConstants = globalConstantsResource.getGlobalConstants();
-			final var partition = partitioner.partition(resource);
-			Display.getDefault().asyncExec(() -> GlobalConstantsReconciler.reconcile(globalConstants, partition, null));
+			if (globalConstants != null) {
+				final var partition = partitioner.partition(resource);
+				Display.getDefault()
+						.asyncExec(() -> GlobalConstantsReconciler.reconcile(globalConstants, partition, null));
+			}
 		}
 	}
 }
