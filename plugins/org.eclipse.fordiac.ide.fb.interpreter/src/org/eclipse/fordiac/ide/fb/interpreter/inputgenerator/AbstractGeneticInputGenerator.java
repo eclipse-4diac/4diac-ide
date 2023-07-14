@@ -54,8 +54,8 @@ public abstract class AbstractGeneticInputGenerator {
 	protected static int countOutputEventOccurrences(final EList<Transaction> transactions) {
 		int count = 0;
 		for (final Transaction t : transactions) {
-			if (t instanceof FBTransaction) {
-				count += ((FBTransaction) t).getOutputEventOccurrences().size();
+			if (t instanceof final FBTransaction fbt) {
+				count += fbt.getOutputEventOccurrences().size();
 			}
 		}
 		return count;
@@ -102,19 +102,21 @@ public abstract class AbstractGeneticInputGenerator {
 		append.add(mutant);
 	}
 
-	// addEvent is only of use when no crossover is not used (crossover changes the size by more then one)
-	private void addEvent(final List<EventOccurrence> mutant) {
+	// addEvent is only of use when no crossover is not used (crossover changes the
+	// size by more then one)
+	protected void addEvent(final List<EventOccurrence> mutant) {
 		mutant.addAll(EventOccFactory.createFrom(InputGenerator.getRandomEventsSequence(type, 1), null));
 	}
 
-	// addEvent is only of use when no crossover is not used (crossover changes the size by more then one)
-	private static void removeEvent(final List<EventOccurrence> mutant) {
+	// addEvent is only of use when no crossover is not used (crossover changes the
+	// size by more then one)
+	protected static void removeEvent(final List<EventOccurrence> mutant) {
 		if (!mutant.isEmpty()) {
 			mutant.remove(mutant.size() - 1);
 		}
 	}
 
-	private void changeOrder(final List<EventOccurrence> mutant) {
+	protected void changeOrder(final List<EventOccurrence> mutant) {
 		if (mutant.size() >= 2) {
 			final int pos = random.nextInt(mutant.size() - 1);
 			final EventOccurrence temp = mutant.get(pos);
@@ -123,7 +125,7 @@ public abstract class AbstractGeneticInputGenerator {
 		}
 	}
 
-	private void replaceEvent(final List<EventOccurrence> mutant) {
+	protected void replaceEvent(final List<EventOccurrence> mutant) {
 		final int pos = random.nextInt(mutant.size());
 		final String name = mutant.get(pos).getEvent().getName();
 		mutant.remove(pos);
