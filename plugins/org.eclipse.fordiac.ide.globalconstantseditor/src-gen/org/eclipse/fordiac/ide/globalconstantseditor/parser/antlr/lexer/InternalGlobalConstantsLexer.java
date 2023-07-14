@@ -10,6 +10,20 @@ import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
 
+/*******************************************************************************
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Hesam Rezaee, Martin Jobst
+ *       - initial API and implementation and/or initial documentation
+ *******************************************************************************/
 @SuppressWarnings("all")
 public class InternalGlobalConstantsLexer extends Lexer {
     public static final int LWORD=81;
@@ -213,8 +227,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_FUNCTION_BLOCK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:14:20: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) '_' ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'O' | 'o' ) ( 'C' | 'c' ) ( 'K' | 'k' ) )
-            // InternalGlobalConstantsLexer.g:14:22: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) '_' ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'O' | 'o' ) ( 'C' | 'c' ) ( 'K' | 'k' )
+            // InternalGlobalConstantsLexer.g:25:20: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) '_' ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'O' | 'o' ) ( 'C' | 'c' ) ( 'K' | 'k' ) )
+            // InternalGlobalConstantsLexer.g:25:22: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) '_' ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'O' | 'o' ) ( 'C' | 'c' ) ( 'K' | 'k' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -378,8 +392,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_CONFIGURATION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:16:19: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'G' | 'g' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:16:21: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'G' | 'g' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:27:19: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'G' | 'g' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:27:21: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'G' | 'g' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -542,8 +556,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_TRANSITION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:18:16: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:18:18: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:29:16: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:29:18: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -679,8 +693,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = FUNCTION_BLOCK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:20:16: ( ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) '_' ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'O' | 'o' ) ( 'C' | 'c' ) ( 'K' | 'k' ) )
-            // InternalGlobalConstantsLexer.g:20:18: ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) '_' ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'O' | 'o' ) ( 'C' | 'c' ) ( 'K' | 'k' )
+            // InternalGlobalConstantsLexer.g:31:16: ( ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) '_' ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'O' | 'o' ) ( 'C' | 'c' ) ( 'K' | 'k' ) )
+            // InternalGlobalConstantsLexer.g:31:18: ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) '_' ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'O' | 'o' ) ( 'C' | 'c' ) ( 'K' | 'k' )
             {
             if ( input.LA(1)=='F'||input.LA(1)=='f' ) {
                 input.consume();
@@ -816,8 +830,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LDATE_AND_TIME;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:22:16: ( ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) '_' ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:22:18: ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) '_' ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:33:16: ( ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) '_' ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:33:18: ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) '_' ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -945,8 +959,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = CONFIGURATION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:24:15: ( ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'G' | 'g' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:24:17: ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'G' | 'g' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:35:15: ( ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'G' | 'g' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:35:17: ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'G' | 'g' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='C'||input.LA(1)=='c' ) {
                 input.consume();
@@ -1081,8 +1095,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = DATE_AND_TIME;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:26:15: ( ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) '_' ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:26:17: ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) '_' ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:37:15: ( ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) '_' ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:37:17: ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) '_' ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -1201,8 +1215,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_INTERFACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:28:15: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:28:17: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:39:15: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:39:17: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1329,8 +1343,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_NAMESPACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:30:15: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'P' | 'p' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:30:17: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'P' | 'p' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:41:15: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'P' | 'p' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:41:17: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'P' | 'p' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1457,8 +1471,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_FUNCTION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:32:14: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:32:16: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:43:14: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:43:16: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1576,8 +1590,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_RESOURCE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:34:14: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'C' | 'c' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:34:16: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'C' | 'c' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:45:14: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'C' | 'c' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:45:16: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'C' | 'c' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1695,8 +1709,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = INITIAL_STEP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:36:14: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'A' | 'a' ) ( 'L' | 'l' ) '_' ( 'S' | 's' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'P' | 'p' ) )
-            // InternalGlobalConstantsLexer.g:36:16: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'A' | 'a' ) ( 'L' | 'l' ) '_' ( 'S' | 's' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'P' | 'p' )
+            // InternalGlobalConstantsLexer.g:47:14: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'A' | 'a' ) ( 'L' | 'l' ) '_' ( 'S' | 's' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'P' | 'p' ) )
+            // InternalGlobalConstantsLexer.g:47:16: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'A' | 'a' ) ( 'L' | 'l' ) '_' ( 'S' | 's' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'P' | 'p' )
             {
             if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
                 input.consume();
@@ -1814,8 +1828,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LTIME_OF_DAY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:38:14: ( ( 'L' | 'l' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) '_' ( 'O' | 'o' ) ( 'F' | 'f' ) '_' ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'Y' | 'y' ) )
-            // InternalGlobalConstantsLexer.g:38:16: ( 'L' | 'l' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) '_' ( 'O' | 'o' ) ( 'F' | 'f' ) '_' ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'Y' | 'y' )
+            // InternalGlobalConstantsLexer.g:49:14: ( ( 'L' | 'l' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) '_' ( 'O' | 'o' ) ( 'F' | 'f' ) '_' ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'Y' | 'y' ) )
+            // InternalGlobalConstantsLexer.g:49:16: ( 'L' | 'l' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) '_' ( 'O' | 'o' ) ( 'F' | 'f' ) '_' ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'Y' | 'y' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -1925,8 +1939,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = VAR_EXTERNAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:40:14: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
-            // InternalGlobalConstantsLexer.g:40:16: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'L' | 'l' )
+            // InternalGlobalConstantsLexer.g:51:14: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
+            // InternalGlobalConstantsLexer.g:51:16: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -2044,8 +2058,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_PROGRAM;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:42:13: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'G' | 'g' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'M' | 'm' ) )
-            // InternalGlobalConstantsLexer.g:42:15: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'G' | 'g' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'M' | 'm' )
+            // InternalGlobalConstantsLexer.g:53:13: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'G' | 'g' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'M' | 'm' ) )
+            // InternalGlobalConstantsLexer.g:53:15: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'G' | 'g' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'M' | 'm' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -2154,8 +2168,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = TIME_OF_DAY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:44:13: ( ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) '_' ( 'O' | 'o' ) ( 'F' | 'f' ) '_' ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'Y' | 'y' ) )
-            // InternalGlobalConstantsLexer.g:44:15: ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) '_' ( 'O' | 'o' ) ( 'F' | 'f' ) '_' ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'Y' | 'y' )
+            // InternalGlobalConstantsLexer.g:55:13: ( ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) '_' ( 'O' | 'o' ) ( 'F' | 'f' ) '_' ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'Y' | 'y' ) )
+            // InternalGlobalConstantsLexer.g:55:15: ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) '_' ( 'O' | 'o' ) ( 'F' | 'f' ) '_' ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'Y' | 'y' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -2256,8 +2270,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_ACTION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:46:12: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:46:14: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:57:12: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:57:14: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -2357,8 +2371,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_METHOD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:48:12: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:48:14: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'O' | 'o' ) ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:59:12: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:59:14: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'O' | 'o' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -2458,8 +2472,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_REPEAT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:50:12: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:50:14: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:61:12: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:61:14: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -2559,8 +2573,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_STRUCT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:52:12: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'C' | 'c' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:52:14: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'C' | 'c' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:63:12: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'C' | 'c' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:63:14: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'C' | 'c' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -2660,8 +2674,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = IMPLEMENTS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:54:12: ( ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'P' | 'p' ) ( 'L' | 'l' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'S' | 's' ) )
-            // InternalGlobalConstantsLexer.g:54:14: ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'P' | 'p' ) ( 'L' | 'l' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'S' | 's' )
+            // InternalGlobalConstantsLexer.g:65:12: ( ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'P' | 'p' ) ( 'L' | 'l' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'S' | 's' ) )
+            // InternalGlobalConstantsLexer.g:65:14: ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'P' | 'p' ) ( 'L' | 'l' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'S' | 's' )
             {
             if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
                 input.consume();
@@ -2769,8 +2783,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = NON_RETAIN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:56:12: ( ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'N' | 'n' ) '_' ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'I' | 'i' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:56:14: ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'N' | 'n' ) '_' ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'I' | 'i' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:67:12: ( ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'N' | 'n' ) '_' ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'I' | 'i' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:67:14: ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'N' | 'n' ) '_' ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'I' | 'i' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='N'||input.LA(1)=='n' ) {
                 input.consume();
@@ -2870,8 +2884,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = READ_WRITE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:58:12: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'D' | 'd' ) '_' ( 'W' | 'w' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:58:14: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'D' | 'd' ) '_' ( 'W' | 'w' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:69:12: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'D' | 'd' ) '_' ( 'W' | 'w' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:69:14: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'D' | 'd' ) '_' ( 'W' | 'w' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -2971,8 +2985,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = TRANSITION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:60:12: ( ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:60:14: ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:71:12: ( ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:71:14: ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -3080,8 +3094,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = VAR_ACCESS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:62:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'C' | 'c' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'S' | 's' ) )
-            // InternalGlobalConstantsLexer.g:62:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'C' | 'c' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'S' | 's' )
+            // InternalGlobalConstantsLexer.g:73:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'C' | 'c' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'S' | 's' ) )
+            // InternalGlobalConstantsLexer.g:73:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'C' | 'c' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'S' | 's' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -3181,8 +3195,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = VAR_CONFIG;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:64:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'G' | 'g' ) )
-            // InternalGlobalConstantsLexer.g:64:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'G' | 'g' )
+            // InternalGlobalConstantsLexer.g:75:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'G' | 'g' ) )
+            // InternalGlobalConstantsLexer.g:75:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'G' | 'g' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -3282,8 +3296,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = VAR_GLOBAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:66:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'G' | 'g' ) ( 'L' | 'l' ) ( 'O' | 'o' ) ( 'B' | 'b' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
-            // InternalGlobalConstantsLexer.g:66:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'G' | 'g' ) ( 'L' | 'l' ) ( 'O' | 'o' ) ( 'B' | 'b' ) ( 'A' | 'a' ) ( 'L' | 'l' )
+            // InternalGlobalConstantsLexer.g:77:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'G' | 'g' ) ( 'L' | 'l' ) ( 'O' | 'o' ) ( 'B' | 'b' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
+            // InternalGlobalConstantsLexer.g:77:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'G' | 'g' ) ( 'L' | 'l' ) ( 'O' | 'o' ) ( 'B' | 'b' ) ( 'A' | 'a' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -3383,8 +3397,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = VAR_IN_OUT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:68:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:68:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:79:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:79:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -3476,8 +3490,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = VAR_OUTPUT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:70:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:70:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:81:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:81:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -3577,8 +3591,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_CLASS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:72:11: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'L' | 'l' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'S' | 's' ) )
-            // InternalGlobalConstantsLexer.g:72:13: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'L' | 'l' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'S' | 's' )
+            // InternalGlobalConstantsLexer.g:83:11: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'L' | 'l' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'S' | 's' ) )
+            // InternalGlobalConstantsLexer.g:83:13: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'L' | 'l' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'S' | 's' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -3669,8 +3683,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_WHILE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:74:11: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:74:13: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:85:11: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:85:13: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -3761,8 +3775,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = INTERFACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:76:11: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:76:13: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:87:11: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:87:13: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
                 input.consume();
@@ -3861,8 +3875,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = NAMESPACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:78:11: ( ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'P' | 'p' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:78:13: ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'P' | 'p' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:89:11: ( ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'P' | 'p' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:89:13: ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'P' | 'p' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='N'||input.LA(1)=='n' ) {
                 input.consume();
@@ -3961,8 +3975,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = PROTECTED;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:80:11: ( ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:80:13: ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:91:11: ( ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:91:13: ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='P'||input.LA(1)=='p' ) {
                 input.consume();
@@ -4061,8 +4075,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = READ_ONLY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:82:11: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'D' | 'd' ) '_' ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'L' | 'l' ) ( 'Y' | 'y' ) )
-            // InternalGlobalConstantsLexer.g:82:13: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'D' | 'd' ) '_' ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'L' | 'l' ) ( 'Y' | 'y' )
+            // InternalGlobalConstantsLexer.g:93:11: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'D' | 'd' ) '_' ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'L' | 'l' ) ( 'Y' | 'y' ) )
+            // InternalGlobalConstantsLexer.g:93:13: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'D' | 'd' ) '_' ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'L' | 'l' ) ( 'Y' | 'y' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -4153,8 +4167,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = VAR_INPUT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:84:11: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:84:13: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:95:11: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:95:13: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -4245,8 +4259,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = ABSTRACT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:86:10: ( ( 'A' | 'a' ) ( 'B' | 'b' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:86:12: ( 'A' | 'a' ) ( 'B' | 'b' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:97:10: ( ( 'A' | 'a' ) ( 'B' | 'b' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:97:12: ( 'A' | 'a' ) ( 'B' | 'b' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='A'||input.LA(1)=='a' ) {
                 input.consume();
@@ -4336,8 +4350,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = CONSTANT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:88:10: ( ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:88:12: ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:99:10: ( ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:99:12: ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='C'||input.LA(1)=='c' ) {
                 input.consume();
@@ -4427,8 +4441,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = CONTINUE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:90:10: ( ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:90:12: ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:101:10: ( ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:101:12: ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='C'||input.LA(1)=='c' ) {
                 input.consume();
@@ -4518,8 +4532,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_CASE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:92:10: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:92:12: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:103:10: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:103:12: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -4601,8 +4615,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_STEP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:94:10: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'S' | 's' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'P' | 'p' ) )
-            // InternalGlobalConstantsLexer.g:94:12: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'S' | 's' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'P' | 'p' )
+            // InternalGlobalConstantsLexer.g:105:10: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'S' | 's' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'P' | 'p' ) )
+            // InternalGlobalConstantsLexer.g:105:12: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'S' | 's' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'P' | 'p' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -4684,8 +4698,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_TYPE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:96:10: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'Y' | 'y' ) ( 'P' | 'p' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:96:12: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'Y' | 'y' ) ( 'P' | 'p' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:107:10: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'Y' | 'y' ) ( 'P' | 'p' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:107:12: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'T' | 't' ) ( 'Y' | 'y' ) ( 'P' | 'p' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -4767,8 +4781,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = FUNCTION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:98:10: ( ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:98:12: ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:109:10: ( ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:109:12: ( 'F' | 'f' ) ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='F'||input.LA(1)=='f' ) {
                 input.consume();
@@ -4858,8 +4872,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = INTERNAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:100:10: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
-            // InternalGlobalConstantsLexer.g:100:12: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'L' | 'l' )
+            // InternalGlobalConstantsLexer.g:111:10: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
+            // InternalGlobalConstantsLexer.g:111:12: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
                 input.consume();
@@ -4949,8 +4963,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = INTERVAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:102:10: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
-            // InternalGlobalConstantsLexer.g:102:12: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'L' | 'l' )
+            // InternalGlobalConstantsLexer.g:113:10: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
+            // InternalGlobalConstantsLexer.g:113:12: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
                 input.consume();
@@ -5040,8 +5054,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = OVERRIDE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:104:10: ( ( 'O' | 'o' ) ( 'V' | 'v' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'D' | 'd' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:104:12: ( 'O' | 'o' ) ( 'V' | 'v' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'D' | 'd' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:115:10: ( ( 'O' | 'o' ) ( 'V' | 'v' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'D' | 'd' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:115:12: ( 'O' | 'o' ) ( 'V' | 'v' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'D' | 'd' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='O'||input.LA(1)=='o' ) {
                 input.consume();
@@ -5131,8 +5145,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = PRIORITY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:106:10: ( ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'Y' | 'y' ) )
-            // InternalGlobalConstantsLexer.g:106:12: ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'Y' | 'y' )
+            // InternalGlobalConstantsLexer.g:117:10: ( ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'Y' | 'y' ) )
+            // InternalGlobalConstantsLexer.g:117:12: ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'Y' | 'y' )
             {
             if ( input.LA(1)=='P'||input.LA(1)=='p' ) {
                 input.consume();
@@ -5222,8 +5236,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RESOURCE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:108:10: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'C' | 'c' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:108:12: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'C' | 'c' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:119:10: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'C' | 'c' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:119:12: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'S' | 's' ) ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'C' | 'c' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -5313,8 +5327,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = VAR_TEMP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:110:10: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'T' | 't' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'P' | 'p' ) )
-            // InternalGlobalConstantsLexer.g:110:12: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'T' | 't' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'P' | 'p' )
+            // InternalGlobalConstantsLexer.g:121:10: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'T' | 't' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'P' | 'p' ) )
+            // InternalGlobalConstantsLexer.g:121:12: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'T' | 't' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'P' | 'p' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -5396,8 +5410,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_FOR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:112:9: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' ) )
-            // InternalGlobalConstantsLexer.g:112:11: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' )
+            // InternalGlobalConstantsLexer.g:123:9: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' ) )
+            // InternalGlobalConstantsLexer.g:123:11: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -5470,8 +5484,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_VAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:114:9: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
-            // InternalGlobalConstantsLexer.g:114:11: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' )
+            // InternalGlobalConstantsLexer.g:125:9: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
+            // InternalGlobalConstantsLexer.g:125:11: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -5544,8 +5558,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = EXTENDS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:116:9: ( ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) ( 'S' | 's' ) )
-            // InternalGlobalConstantsLexer.g:116:11: ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) ( 'S' | 's' )
+            // InternalGlobalConstantsLexer.g:127:9: ( ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) ( 'S' | 's' ) )
+            // InternalGlobalConstantsLexer.g:127:11: ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) ( 'S' | 's' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -5626,8 +5640,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = INTERAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:118:9: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
-            // InternalGlobalConstantsLexer.g:118:11: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'L' | 'l' )
+            // InternalGlobalConstantsLexer.g:129:9: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
+            // InternalGlobalConstantsLexer.g:129:11: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
                 input.consume();
@@ -5708,8 +5722,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = OVERLAP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:120:9: ( ( 'O' | 'o' ) ( 'V' | 'v' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'L' | 'l' ) ( 'A' | 'a' ) ( 'P' | 'p' ) )
-            // InternalGlobalConstantsLexer.g:120:11: ( 'O' | 'o' ) ( 'V' | 'v' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'L' | 'l' ) ( 'A' | 'a' ) ( 'P' | 'p' )
+            // InternalGlobalConstantsLexer.g:131:9: ( ( 'O' | 'o' ) ( 'V' | 'v' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'L' | 'l' ) ( 'A' | 'a' ) ( 'P' | 'p' ) )
+            // InternalGlobalConstantsLexer.g:131:11: ( 'O' | 'o' ) ( 'V' | 'v' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'L' | 'l' ) ( 'A' | 'a' ) ( 'P' | 'p' )
             {
             if ( input.LA(1)=='O'||input.LA(1)=='o' ) {
                 input.consume();
@@ -5790,8 +5804,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = PRIVATE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:122:9: ( ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:122:11: ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:133:9: ( ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:133:11: ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='P'||input.LA(1)=='p' ) {
                 input.consume();
@@ -5872,8 +5886,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = PROGRAM;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:124:9: ( ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'G' | 'g' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'M' | 'm' ) )
-            // InternalGlobalConstantsLexer.g:124:11: ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'G' | 'g' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'M' | 'm' )
+            // InternalGlobalConstantsLexer.g:135:9: ( ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'G' | 'g' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'M' | 'm' ) )
+            // InternalGlobalConstantsLexer.g:135:11: ( 'P' | 'p' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'G' | 'g' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'M' | 'm' )
             {
             if ( input.LA(1)=='P'||input.LA(1)=='p' ) {
                 input.consume();
@@ -5954,8 +5968,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = WSTRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:126:9: ( ( 'W' | 'w' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) )
-            // InternalGlobalConstantsLexer.g:126:11: ( 'W' | 'w' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' )
+            // InternalGlobalConstantsLexer.g:137:9: ( ( 'W' | 'w' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) )
+            // InternalGlobalConstantsLexer.g:137:11: ( 'W' | 'w' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' )
             {
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
                 input.consume();
@@ -6036,8 +6050,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = ACTION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:128:8: ( ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:128:10: ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:139:8: ( ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:139:10: ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='A'||input.LA(1)=='a' ) {
                 input.consume();
@@ -6109,8 +6123,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = END_IF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:130:8: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'I' | 'i' ) ( 'F' | 'f' ) )
-            // InternalGlobalConstantsLexer.g:130:10: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'I' | 'i' ) ( 'F' | 'f' )
+            // InternalGlobalConstantsLexer.g:141:8: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'I' | 'i' ) ( 'F' | 'f' ) )
+            // InternalGlobalConstantsLexer.g:141:10: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'I' | 'i' ) ( 'F' | 'f' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -6174,8 +6188,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = METHOD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:132:8: ( ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:132:10: ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'O' | 'o' ) ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:143:8: ( ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:143:10: ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'O' | 'o' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='M'||input.LA(1)=='m' ) {
                 input.consume();
@@ -6247,8 +6261,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = PUBLIC;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:134:8: ( ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'C' | 'c' ) )
-            // InternalGlobalConstantsLexer.g:134:10: ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'C' | 'c' )
+            // InternalGlobalConstantsLexer.g:145:8: ( ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'C' | 'c' ) )
+            // InternalGlobalConstantsLexer.g:145:10: ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'C' | 'c' )
             {
             if ( input.LA(1)=='P'||input.LA(1)=='p' ) {
                 input.consume();
@@ -6320,8 +6334,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = REF_TO;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:136:8: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'F' | 'f' ) '_' ( 'T' | 't' ) ( 'O' | 'o' ) )
-            // InternalGlobalConstantsLexer.g:136:10: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'F' | 'f' ) '_' ( 'T' | 't' ) ( 'O' | 'o' )
+            // InternalGlobalConstantsLexer.g:147:8: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'F' | 'f' ) '_' ( 'T' | 't' ) ( 'O' | 'o' ) )
+            // InternalGlobalConstantsLexer.g:147:10: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'F' | 'f' ) '_' ( 'T' | 't' ) ( 'O' | 'o' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -6385,8 +6399,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = REPEAT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:138:8: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:138:10: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:149:8: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:149:10: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -6458,8 +6472,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RETAIN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:140:8: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'I' | 'i' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:140:10: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'I' | 'i' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:151:8: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'I' | 'i' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:151:10: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'I' | 'i' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -6531,8 +6545,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RETURN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:142:8: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:142:10: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:153:8: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:153:10: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -6604,8 +6618,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = SINGLE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:144:8: ( ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) ( 'L' | 'l' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:144:10: ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) ( 'L' | 'l' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:155:8: ( ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) ( 'L' | 'l' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:155:10: ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) ( 'L' | 'l' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='S'||input.LA(1)=='s' ) {
                 input.consume();
@@ -6677,8 +6691,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:146:8: ( ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) )
-            // InternalGlobalConstantsLexer.g:146:10: ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' )
+            // InternalGlobalConstantsLexer.g:157:8: ( ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) )
+            // InternalGlobalConstantsLexer.g:157:10: ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' )
             {
             if ( input.LA(1)=='S'||input.LA(1)=='s' ) {
                 input.consume();
@@ -6750,8 +6764,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = STRUCT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:148:8: ( ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'C' | 'c' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:148:10: ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'C' | 'c' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:159:8: ( ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'C' | 'c' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:159:10: ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'C' | 'c' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='S'||input.LA(1)=='s' ) {
                 input.consume();
@@ -6823,8 +6837,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = ARRAY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:150:7: ( ( 'A' | 'a' ) ( 'R' | 'r' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'Y' | 'y' ) )
-            // InternalGlobalConstantsLexer.g:150:9: ( 'A' | 'a' ) ( 'R' | 'r' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'Y' | 'y' )
+            // InternalGlobalConstantsLexer.g:161:7: ( ( 'A' | 'a' ) ( 'R' | 'r' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'Y' | 'y' ) )
+            // InternalGlobalConstantsLexer.g:161:9: ( 'A' | 'a' ) ( 'R' | 'r' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'Y' | 'y' )
             {
             if ( input.LA(1)=='A'||input.LA(1)=='a' ) {
                 input.consume();
@@ -6887,8 +6901,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = CLASS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:152:7: ( ( 'C' | 'c' ) ( 'L' | 'l' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'S' | 's' ) )
-            // InternalGlobalConstantsLexer.g:152:9: ( 'C' | 'c' ) ( 'L' | 'l' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'S' | 's' )
+            // InternalGlobalConstantsLexer.g:163:7: ( ( 'C' | 'c' ) ( 'L' | 'l' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'S' | 's' ) )
+            // InternalGlobalConstantsLexer.g:163:9: ( 'C' | 'c' ) ( 'L' | 'l' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'S' | 's' )
             {
             if ( input.LA(1)=='C'||input.LA(1)=='c' ) {
                 input.consume();
@@ -6951,8 +6965,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = DWORD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:154:7: ( ( 'D' | 'd' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:154:9: ( 'D' | 'd' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:165:7: ( ( 'D' | 'd' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:165:9: ( 'D' | 'd' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -7015,8 +7029,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = ELSIF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:156:7: ( ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'F' | 'f' ) )
-            // InternalGlobalConstantsLexer.g:156:9: ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'F' | 'f' )
+            // InternalGlobalConstantsLexer.g:167:7: ( ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'F' | 'f' ) )
+            // InternalGlobalConstantsLexer.g:167:9: ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'F' | 'f' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -7079,8 +7093,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = FALSE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:158:7: ( ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:158:9: ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:169:7: ( ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:169:9: ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='F'||input.LA(1)=='f' ) {
                 input.consume();
@@ -7143,8 +7157,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = FINAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:160:7: ( ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
-            // InternalGlobalConstantsLexer.g:160:9: ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'L' | 'l' )
+            // InternalGlobalConstantsLexer.g:171:7: ( ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
+            // InternalGlobalConstantsLexer.g:171:9: ( 'F' | 'f' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'A' | 'a' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='F'||input.LA(1)=='f' ) {
                 input.consume();
@@ -7207,8 +7221,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LDATE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:162:7: ( ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:162:9: ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:173:7: ( ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:173:9: ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -7271,8 +7285,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LREAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:164:7: ( ( 'L' | 'l' ) ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
-            // InternalGlobalConstantsLexer.g:164:9: ( 'L' | 'l' ) ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' )
+            // InternalGlobalConstantsLexer.g:175:7: ( ( 'L' | 'l' ) ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
+            // InternalGlobalConstantsLexer.g:175:9: ( 'L' | 'l' ) ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -7335,8 +7349,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LTIME;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:166:7: ( ( 'L' | 'l' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:166:9: ( 'L' | 'l' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:177:7: ( ( 'L' | 'l' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:177:9: ( 'L' | 'l' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -7399,8 +7413,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LWORD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:168:7: ( ( 'L' | 'l' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:168:9: ( 'L' | 'l' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:179:7: ( ( 'L' | 'l' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:179:9: ( 'L' | 'l' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -7463,8 +7477,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = SUPER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:170:7: ( ( 'S' | 's' ) ( 'U' | 'u' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'R' | 'r' ) )
-            // InternalGlobalConstantsLexer.g:170:9: ( 'S' | 's' ) ( 'U' | 'u' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'R' | 'r' )
+            // InternalGlobalConstantsLexer.g:181:7: ( ( 'S' | 's' ) ( 'U' | 'u' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'R' | 'r' ) )
+            // InternalGlobalConstantsLexer.g:181:9: ( 'S' | 's' ) ( 'U' | 'u' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='S'||input.LA(1)=='s' ) {
                 input.consume();
@@ -7527,8 +7541,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = UDINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:172:7: ( ( 'U' | 'u' ) ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:172:9: ( 'U' | 'u' ) ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:183:7: ( ( 'U' | 'u' ) ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:183:9: ( 'U' | 'u' ) ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -7591,8 +7605,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = ULINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:174:7: ( ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:174:9: ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:185:7: ( ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:185:9: ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -7655,8 +7669,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = UNTIL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:176:7: ( ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'L' | 'l' ) )
-            // InternalGlobalConstantsLexer.g:176:9: ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'L' | 'l' )
+            // InternalGlobalConstantsLexer.g:187:7: ( ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'L' | 'l' ) )
+            // InternalGlobalConstantsLexer.g:187:9: ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -7719,8 +7733,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = USING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:178:7: ( ( 'U' | 'u' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) )
-            // InternalGlobalConstantsLexer.g:178:9: ( 'U' | 'u' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' )
+            // InternalGlobalConstantsLexer.g:189:7: ( ( 'U' | 'u' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) )
+            // InternalGlobalConstantsLexer.g:189:9: ( 'U' | 'u' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -7783,8 +7797,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = USINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:180:7: ( ( 'U' | 'u' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:180:9: ( 'U' | 'u' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:191:7: ( ( 'U' | 'u' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:191:9: ( 'U' | 'u' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -7847,8 +7861,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = WCHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:182:7: ( ( 'W' | 'w' ) ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
-            // InternalGlobalConstantsLexer.g:182:9: ( 'W' | 'w' ) ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' )
+            // InternalGlobalConstantsLexer.g:193:7: ( ( 'W' | 'w' ) ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
+            // InternalGlobalConstantsLexer.g:193:9: ( 'W' | 'w' ) ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
                 input.consume();
@@ -7911,8 +7925,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = WHILE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:184:7: ( ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:184:9: ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:195:7: ( ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:195:9: ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
                 input.consume();
@@ -7975,8 +7989,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = BOOL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:186:6: ( ( 'B' | 'b' ) ( 'O' | 'o' ) ( 'O' | 'o' ) ( 'L' | 'l' ) )
-            // InternalGlobalConstantsLexer.g:186:8: ( 'B' | 'b' ) ( 'O' | 'o' ) ( 'O' | 'o' ) ( 'L' | 'l' )
+            // InternalGlobalConstantsLexer.g:197:6: ( ( 'B' | 'b' ) ( 'O' | 'o' ) ( 'O' | 'o' ) ( 'L' | 'l' ) )
+            // InternalGlobalConstantsLexer.g:197:8: ( 'B' | 'b' ) ( 'O' | 'o' ) ( 'O' | 'o' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='B'||input.LA(1)=='b' ) {
                 input.consume();
@@ -8030,8 +8044,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = BYTE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:188:6: ( ( 'B' | 'b' ) ( 'Y' | 'y' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:188:8: ( 'B' | 'b' ) ( 'Y' | 'y' ) ( 'T' | 't' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:199:6: ( ( 'B' | 'b' ) ( 'Y' | 'y' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:199:8: ( 'B' | 'b' ) ( 'Y' | 'y' ) ( 'T' | 't' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='B'||input.LA(1)=='b' ) {
                 input.consume();
@@ -8085,8 +8099,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = CASE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:190:6: ( ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:190:8: ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:201:6: ( ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:201:8: ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='C'||input.LA(1)=='c' ) {
                 input.consume();
@@ -8140,8 +8154,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = CHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:192:6: ( ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
-            // InternalGlobalConstantsLexer.g:192:8: ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' )
+            // InternalGlobalConstantsLexer.g:203:6: ( ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
+            // InternalGlobalConstantsLexer.g:203:8: ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='C'||input.LA(1)=='c' ) {
                 input.consume();
@@ -8195,8 +8209,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = DATE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:194:6: ( ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:194:8: ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:205:6: ( ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:205:8: ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -8250,8 +8264,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = DINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:196:6: ( ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:196:8: ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:207:6: ( ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:207:8: ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -8305,8 +8319,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = ELSE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:198:6: ( ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:198:8: ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:209:6: ( ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:209:8: ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -8360,8 +8374,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = EXIT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:200:6: ( ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'I' | 'i' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:200:8: ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'I' | 'i' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:211:6: ( ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'I' | 'i' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:211:8: ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'I' | 'i' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -8415,8 +8429,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = FROM;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:202:6: ( ( 'F' | 'f' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'M' | 'm' ) )
-            // InternalGlobalConstantsLexer.g:202:8: ( 'F' | 'f' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'M' | 'm' )
+            // InternalGlobalConstantsLexer.g:213:6: ( ( 'F' | 'f' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'M' | 'm' ) )
+            // InternalGlobalConstantsLexer.g:213:8: ( 'F' | 'f' ) ( 'R' | 'r' ) ( 'O' | 'o' ) ( 'M' | 'm' )
             {
             if ( input.LA(1)=='F'||input.LA(1)=='f' ) {
                 input.consume();
@@ -8470,8 +8484,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:204:6: ( ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:204:8: ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:215:6: ( ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:215:8: ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -8525,8 +8539,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LTOD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:206:6: ( ( 'L' | 'l' ) ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:206:8: ( 'L' | 'l' ) ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:217:6: ( ( 'L' | 'l' ) ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:217:8: ( 'L' | 'l' ) ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -8580,8 +8594,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = NULL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:208:6: ( ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'L' | 'l' ) )
-            // InternalGlobalConstantsLexer.g:208:8: ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'L' | 'l' )
+            // InternalGlobalConstantsLexer.g:219:6: ( ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'L' | 'l' ) )
+            // InternalGlobalConstantsLexer.g:219:8: ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='N'||input.LA(1)=='n' ) {
                 input.consume();
@@ -8635,8 +8649,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = REAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:210:6: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
-            // InternalGlobalConstantsLexer.g:210:8: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' )
+            // InternalGlobalConstantsLexer.g:221:6: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
+            // InternalGlobalConstantsLexer.g:221:8: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -8690,8 +8704,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = SINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:212:6: ( ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:212:8: ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:223:6: ( ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:223:8: ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='S'||input.LA(1)=='s' ) {
                 input.consume();
@@ -8745,8 +8759,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = STEP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:214:6: ( ( 'S' | 's' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'P' | 'p' ) )
-            // InternalGlobalConstantsLexer.g:214:8: ( 'S' | 's' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'P' | 'p' )
+            // InternalGlobalConstantsLexer.g:225:6: ( ( 'S' | 's' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'P' | 'p' ) )
+            // InternalGlobalConstantsLexer.g:225:8: ( 'S' | 's' ) ( 'T' | 't' ) ( 'E' | 'e' ) ( 'P' | 'p' )
             {
             if ( input.LA(1)=='S'||input.LA(1)=='s' ) {
                 input.consume();
@@ -8800,8 +8814,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = TASK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:216:6: ( ( 'T' | 't' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'K' | 'k' ) )
-            // InternalGlobalConstantsLexer.g:216:8: ( 'T' | 't' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'K' | 'k' )
+            // InternalGlobalConstantsLexer.g:227:6: ( ( 'T' | 't' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'K' | 'k' ) )
+            // InternalGlobalConstantsLexer.g:227:8: ( 'T' | 't' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'K' | 'k' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -8855,8 +8869,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = THEN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:218:6: ( ( 'T' | 't' ) ( 'H' | 'h' ) ( 'E' | 'e' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:218:8: ( 'T' | 't' ) ( 'H' | 'h' ) ( 'E' | 'e' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:229:6: ( ( 'T' | 't' ) ( 'H' | 'h' ) ( 'E' | 'e' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:229:8: ( 'T' | 't' ) ( 'H' | 'h' ) ( 'E' | 'e' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -8910,8 +8924,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = THIS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:220:6: ( ( 'T' | 't' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'S' | 's' ) )
-            // InternalGlobalConstantsLexer.g:220:8: ( 'T' | 't' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'S' | 's' )
+            // InternalGlobalConstantsLexer.g:231:6: ( ( 'T' | 't' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'S' | 's' ) )
+            // InternalGlobalConstantsLexer.g:231:8: ( 'T' | 't' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'S' | 's' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -8965,8 +8979,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = TIME;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:222:6: ( ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:222:8: ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:233:6: ( ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:233:8: ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -9020,8 +9034,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = TRUE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:224:6: ( ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:224:8: ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:235:6: ( ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:235:8: ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -9075,8 +9089,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = TYPE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:226:6: ( ( 'T' | 't' ) ( 'Y' | 'y' ) ( 'P' | 'p' ) ( 'E' | 'e' ) )
-            // InternalGlobalConstantsLexer.g:226:8: ( 'T' | 't' ) ( 'Y' | 'y' ) ( 'P' | 'p' ) ( 'E' | 'e' )
+            // InternalGlobalConstantsLexer.g:237:6: ( ( 'T' | 't' ) ( 'Y' | 'y' ) ( 'P' | 'p' ) ( 'E' | 'e' ) )
+            // InternalGlobalConstantsLexer.g:237:8: ( 'T' | 't' ) ( 'Y' | 'y' ) ( 'P' | 'p' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -9130,8 +9144,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = UINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:228:6: ( ( 'U' | 'u' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:228:8: ( 'U' | 'u' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:239:6: ( ( 'U' | 'u' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:239:8: ( 'U' | 'u' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -9185,8 +9199,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = WITH;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:230:6: ( ( 'W' | 'w' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'H' | 'h' ) )
-            // InternalGlobalConstantsLexer.g:230:8: ( 'W' | 'w' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'H' | 'h' )
+            // InternalGlobalConstantsLexer.g:241:6: ( ( 'W' | 'w' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'H' | 'h' ) )
+            // InternalGlobalConstantsLexer.g:241:8: ( 'W' | 'w' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'H' | 'h' )
             {
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
                 input.consume();
@@ -9240,8 +9254,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = WORD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:232:6: ( ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:232:8: ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:243:6: ( ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:243:8: ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
                 input.consume();
@@ -9295,8 +9309,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = AND;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:234:5: ( ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:234:7: ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:245:5: ( ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:245:7: ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='A'||input.LA(1)=='a' ) {
                 input.consume();
@@ -9341,8 +9355,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = FOR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:236:5: ( ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' ) )
-            // InternalGlobalConstantsLexer.g:236:7: ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' )
+            // InternalGlobalConstantsLexer.g:247:5: ( ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' ) )
+            // InternalGlobalConstantsLexer.g:247:7: ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='F'||input.LA(1)=='f' ) {
                 input.consume();
@@ -9387,8 +9401,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:238:5: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:238:7: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:249:5: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:249:7: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
                 input.consume();
@@ -9433,8 +9447,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LDT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:240:5: ( ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:240:7: ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:251:5: ( ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:251:7: ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -9479,8 +9493,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = MOD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:242:5: ( ( 'M' | 'm' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:242:7: ( 'M' | 'm' ) ( 'O' | 'o' ) ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:253:5: ( ( 'M' | 'm' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:253:7: ( 'M' | 'm' ) ( 'O' | 'o' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='M'||input.LA(1)=='m' ) {
                 input.consume();
@@ -9525,8 +9539,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = NOT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:244:5: ( ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:244:7: ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:255:5: ( ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:255:7: ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='N'||input.LA(1)=='n' ) {
                 input.consume();
@@ -9571,8 +9585,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = REF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:246:5: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'F' | 'f' ) )
-            // InternalGlobalConstantsLexer.g:246:7: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'F' | 'f' )
+            // InternalGlobalConstantsLexer.g:257:5: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'F' | 'f' ) )
+            // InternalGlobalConstantsLexer.g:257:7: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'F' | 'f' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -9617,8 +9631,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = TOD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:248:5: ( ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:248:7: ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:259:5: ( ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:259:7: ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -9663,8 +9677,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = VAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:250:5: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
-            // InternalGlobalConstantsLexer.g:250:7: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' )
+            // InternalGlobalConstantsLexer.g:261:5: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
+            // InternalGlobalConstantsLexer.g:261:7: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -9709,8 +9723,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = XOR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:252:5: ( ( 'X' | 'x' ) ( 'O' | 'o' ) ( 'R' | 'r' ) )
-            // InternalGlobalConstantsLexer.g:252:7: ( 'X' | 'x' ) ( 'O' | 'o' ) ( 'R' | 'r' )
+            // InternalGlobalConstantsLexer.g:263:5: ( ( 'X' | 'x' ) ( 'O' | 'o' ) ( 'R' | 'r' ) )
+            // InternalGlobalConstantsLexer.g:263:7: ( 'X' | 'x' ) ( 'O' | 'o' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='X'||input.LA(1)=='x' ) {
                 input.consume();
@@ -9755,8 +9769,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = B;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:254:3: ( '%' ( 'B' | 'b' ) )
-            // InternalGlobalConstantsLexer.g:254:5: '%' ( 'B' | 'b' )
+            // InternalGlobalConstantsLexer.g:265:3: ( '%' ( 'B' | 'b' ) )
+            // InternalGlobalConstantsLexer.g:265:5: '%' ( 'B' | 'b' )
             {
             match('%'); 
             if ( input.LA(1)=='B'||input.LA(1)=='b' ) {
@@ -9784,8 +9798,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = D_1;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:256:5: ( '%' ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:256:7: '%' ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:267:5: ( '%' ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:267:7: '%' ( 'D' | 'd' )
             {
             match('%'); 
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
@@ -9813,8 +9827,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = L;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:258:3: ( '%' ( 'L' | 'l' ) )
-            // InternalGlobalConstantsLexer.g:258:5: '%' ( 'L' | 'l' )
+            // InternalGlobalConstantsLexer.g:269:3: ( '%' ( 'L' | 'l' ) )
+            // InternalGlobalConstantsLexer.g:269:5: '%' ( 'L' | 'l' )
             {
             match('%'); 
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
@@ -9842,8 +9856,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = W;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:260:3: ( '%' ( 'W' | 'w' ) )
-            // InternalGlobalConstantsLexer.g:260:5: '%' ( 'W' | 'w' )
+            // InternalGlobalConstantsLexer.g:271:3: ( '%' ( 'W' | 'w' ) )
+            // InternalGlobalConstantsLexer.g:271:5: '%' ( 'W' | 'w' )
             {
             match('%'); 
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
@@ -9871,8 +9885,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = X;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:262:3: ( '%' ( 'X' | 'x' ) )
-            // InternalGlobalConstantsLexer.g:262:5: '%' ( 'X' | 'x' )
+            // InternalGlobalConstantsLexer.g:273:3: ( '%' ( 'X' | 'x' ) )
+            // InternalGlobalConstantsLexer.g:273:5: '%' ( 'X' | 'x' )
             {
             match('%'); 
             if ( input.LA(1)=='X'||input.LA(1)=='x' ) {
@@ -9900,8 +9914,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = AsteriskAsterisk;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:264:18: ( '*' '*' )
-            // InternalGlobalConstantsLexer.g:264:20: '*' '*'
+            // InternalGlobalConstantsLexer.g:275:18: ( '*' '*' )
+            // InternalGlobalConstantsLexer.g:275:20: '*' '*'
             {
             match('*'); 
             match('*'); 
@@ -9921,8 +9935,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = FullStopFullStop;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:266:18: ( '.' '.' )
-            // InternalGlobalConstantsLexer.g:266:20: '.' '.'
+            // InternalGlobalConstantsLexer.g:277:18: ( '.' '.' )
+            // InternalGlobalConstantsLexer.g:277:20: '.' '.'
             {
             match('.'); 
             match('.'); 
@@ -9942,8 +9956,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = ColonEqualsSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:268:17: ( ':' '=' )
-            // InternalGlobalConstantsLexer.g:268:19: ':' '='
+            // InternalGlobalConstantsLexer.g:279:17: ( ':' '=' )
+            // InternalGlobalConstantsLexer.g:279:19: ':' '='
             {
             match(':'); 
             match('='); 
@@ -9963,8 +9977,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LessThanSignEqualsSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:270:24: ( '<' '=' )
-            // InternalGlobalConstantsLexer.g:270:26: '<' '='
+            // InternalGlobalConstantsLexer.g:281:24: ( '<' '=' )
+            // InternalGlobalConstantsLexer.g:281:26: '<' '='
             {
             match('<'); 
             match('='); 
@@ -9984,8 +9998,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LessThanSignGreaterThanSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:272:29: ( '<' '>' )
-            // InternalGlobalConstantsLexer.g:272:31: '<' '>'
+            // InternalGlobalConstantsLexer.g:283:29: ( '<' '>' )
+            // InternalGlobalConstantsLexer.g:283:31: '<' '>'
             {
             match('<'); 
             match('>'); 
@@ -10005,8 +10019,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = EqualsSignGreaterThanSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:274:27: ( '=' '>' )
-            // InternalGlobalConstantsLexer.g:274:29: '=' '>'
+            // InternalGlobalConstantsLexer.g:285:27: ( '=' '>' )
+            // InternalGlobalConstantsLexer.g:285:29: '=' '>'
             {
             match('='); 
             match('>'); 
@@ -10026,8 +10040,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = GreaterThanSignEqualsSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:276:27: ( '>' '=' )
-            // InternalGlobalConstantsLexer.g:276:29: '>' '='
+            // InternalGlobalConstantsLexer.g:287:27: ( '>' '=' )
+            // InternalGlobalConstantsLexer.g:287:29: '>' '='
             {
             match('>'); 
             match('='); 
@@ -10047,8 +10061,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = AT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:278:4: ( ( 'A' | 'a' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:278:6: ( 'A' | 'a' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:289:4: ( ( 'A' | 'a' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:289:6: ( 'A' | 'a' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='A'||input.LA(1)=='a' ) {
                 input.consume();
@@ -10084,8 +10098,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = BY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:280:4: ( ( 'B' | 'b' ) ( 'Y' | 'y' ) )
-            // InternalGlobalConstantsLexer.g:280:6: ( 'B' | 'b' ) ( 'Y' | 'y' )
+            // InternalGlobalConstantsLexer.g:291:4: ( ( 'B' | 'b' ) ( 'Y' | 'y' ) )
+            // InternalGlobalConstantsLexer.g:291:6: ( 'B' | 'b' ) ( 'Y' | 'y' )
             {
             if ( input.LA(1)=='B'||input.LA(1)=='b' ) {
                 input.consume();
@@ -10121,8 +10135,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = DO;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:282:4: ( ( 'D' | 'd' ) ( 'O' | 'o' ) )
-            // InternalGlobalConstantsLexer.g:282:6: ( 'D' | 'd' ) ( 'O' | 'o' )
+            // InternalGlobalConstantsLexer.g:293:4: ( ( 'D' | 'd' ) ( 'O' | 'o' ) )
+            // InternalGlobalConstantsLexer.g:293:6: ( 'D' | 'd' ) ( 'O' | 'o' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -10158,8 +10172,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = DT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:284:4: ( ( 'D' | 'd' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:284:6: ( 'D' | 'd' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:295:4: ( ( 'D' | 'd' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:295:6: ( 'D' | 'd' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -10195,8 +10209,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = IF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:286:4: ( ( 'I' | 'i' ) ( 'F' | 'f' ) )
-            // InternalGlobalConstantsLexer.g:286:6: ( 'I' | 'i' ) ( 'F' | 'f' )
+            // InternalGlobalConstantsLexer.g:297:4: ( ( 'I' | 'i' ) ( 'F' | 'f' ) )
+            // InternalGlobalConstantsLexer.g:297:6: ( 'I' | 'i' ) ( 'F' | 'f' )
             {
             if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
                 input.consume();
@@ -10232,8 +10246,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:288:4: ( ( 'L' | 'l' ) ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:288:6: ( 'L' | 'l' ) ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:299:4: ( ( 'L' | 'l' ) ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:299:6: ( 'L' | 'l' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -10269,8 +10283,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:290:4: ( ( 'L' | 'l' ) ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:290:6: ( 'L' | 'l' ) ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:301:4: ( ( 'L' | 'l' ) ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:301:6: ( 'L' | 'l' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -10306,8 +10320,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = OF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:292:4: ( ( 'O' | 'o' ) ( 'F' | 'f' ) )
-            // InternalGlobalConstantsLexer.g:292:6: ( 'O' | 'o' ) ( 'F' | 'f' )
+            // InternalGlobalConstantsLexer.g:303:4: ( ( 'O' | 'o' ) ( 'F' | 'f' ) )
+            // InternalGlobalConstantsLexer.g:303:6: ( 'O' | 'o' ) ( 'F' | 'f' )
             {
             if ( input.LA(1)=='O'||input.LA(1)=='o' ) {
                 input.consume();
@@ -10343,8 +10357,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = ON;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:294:4: ( ( 'O' | 'o' ) ( 'N' | 'n' ) )
-            // InternalGlobalConstantsLexer.g:294:6: ( 'O' | 'o' ) ( 'N' | 'n' )
+            // InternalGlobalConstantsLexer.g:305:4: ( ( 'O' | 'o' ) ( 'N' | 'n' ) )
+            // InternalGlobalConstantsLexer.g:305:6: ( 'O' | 'o' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='O'||input.LA(1)=='o' ) {
                 input.consume();
@@ -10380,8 +10394,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = OR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:296:4: ( ( 'O' | 'o' ) ( 'R' | 'r' ) )
-            // InternalGlobalConstantsLexer.g:296:6: ( 'O' | 'o' ) ( 'R' | 'r' )
+            // InternalGlobalConstantsLexer.g:307:4: ( ( 'O' | 'o' ) ( 'R' | 'r' ) )
+            // InternalGlobalConstantsLexer.g:307:6: ( 'O' | 'o' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='O'||input.LA(1)=='o' ) {
                 input.consume();
@@ -10417,8 +10431,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = TO;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:298:4: ( ( 'T' | 't' ) ( 'O' | 'o' ) )
-            // InternalGlobalConstantsLexer.g:298:6: ( 'T' | 't' ) ( 'O' | 'o' )
+            // InternalGlobalConstantsLexer.g:309:4: ( ( 'T' | 't' ) ( 'O' | 'o' ) )
+            // InternalGlobalConstantsLexer.g:309:6: ( 'T' | 't' ) ( 'O' | 'o' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -10454,8 +10468,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = NumberSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:300:12: ( '#' )
-            // InternalGlobalConstantsLexer.g:300:14: '#'
+            // InternalGlobalConstantsLexer.g:311:12: ( '#' )
+            // InternalGlobalConstantsLexer.g:311:14: '#'
             {
             match('#'); 
 
@@ -10474,8 +10488,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = Ampersand;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:302:11: ( '&' )
-            // InternalGlobalConstantsLexer.g:302:13: '&'
+            // InternalGlobalConstantsLexer.g:313:11: ( '&' )
+            // InternalGlobalConstantsLexer.g:313:13: '&'
             {
             match('&'); 
 
@@ -10494,8 +10508,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LeftParenthesis;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:304:17: ( '(' )
-            // InternalGlobalConstantsLexer.g:304:19: '('
+            // InternalGlobalConstantsLexer.g:315:17: ( '(' )
+            // InternalGlobalConstantsLexer.g:315:19: '('
             {
             match('('); 
 
@@ -10514,8 +10528,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RightParenthesis;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:306:18: ( ')' )
-            // InternalGlobalConstantsLexer.g:306:20: ')'
+            // InternalGlobalConstantsLexer.g:317:18: ( ')' )
+            // InternalGlobalConstantsLexer.g:317:20: ')'
             {
             match(')'); 
 
@@ -10534,8 +10548,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = Asterisk;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:308:10: ( '*' )
-            // InternalGlobalConstantsLexer.g:308:12: '*'
+            // InternalGlobalConstantsLexer.g:319:10: ( '*' )
+            // InternalGlobalConstantsLexer.g:319:12: '*'
             {
             match('*'); 
 
@@ -10554,8 +10568,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = PlusSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:310:10: ( '+' )
-            // InternalGlobalConstantsLexer.g:310:12: '+'
+            // InternalGlobalConstantsLexer.g:321:10: ( '+' )
+            // InternalGlobalConstantsLexer.g:321:12: '+'
             {
             match('+'); 
 
@@ -10574,8 +10588,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = Comma;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:312:7: ( ',' )
-            // InternalGlobalConstantsLexer.g:312:9: ','
+            // InternalGlobalConstantsLexer.g:323:7: ( ',' )
+            // InternalGlobalConstantsLexer.g:323:9: ','
             {
             match(','); 
 
@@ -10594,8 +10608,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = HyphenMinus;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:314:13: ( '-' )
-            // InternalGlobalConstantsLexer.g:314:15: '-'
+            // InternalGlobalConstantsLexer.g:325:13: ( '-' )
+            // InternalGlobalConstantsLexer.g:325:15: '-'
             {
             match('-'); 
 
@@ -10614,8 +10628,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = FullStop;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:316:10: ( '.' )
-            // InternalGlobalConstantsLexer.g:316:12: '.'
+            // InternalGlobalConstantsLexer.g:327:10: ( '.' )
+            // InternalGlobalConstantsLexer.g:327:12: '.'
             {
             match('.'); 
 
@@ -10634,8 +10648,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = Solidus;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:318:9: ( '/' )
-            // InternalGlobalConstantsLexer.g:318:11: '/'
+            // InternalGlobalConstantsLexer.g:329:9: ( '/' )
+            // InternalGlobalConstantsLexer.g:329:11: '/'
             {
             match('/'); 
 
@@ -10654,8 +10668,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = Colon;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:320:7: ( ':' )
-            // InternalGlobalConstantsLexer.g:320:9: ':'
+            // InternalGlobalConstantsLexer.g:331:7: ( ':' )
+            // InternalGlobalConstantsLexer.g:331:9: ':'
             {
             match(':'); 
 
@@ -10674,8 +10688,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = Semicolon;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:322:11: ( ';' )
-            // InternalGlobalConstantsLexer.g:322:13: ';'
+            // InternalGlobalConstantsLexer.g:333:11: ( ';' )
+            // InternalGlobalConstantsLexer.g:333:13: ';'
             {
             match(';'); 
 
@@ -10694,8 +10708,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LessThanSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:324:14: ( '<' )
-            // InternalGlobalConstantsLexer.g:324:16: '<'
+            // InternalGlobalConstantsLexer.g:335:14: ( '<' )
+            // InternalGlobalConstantsLexer.g:335:16: '<'
             {
             match('<'); 
 
@@ -10714,8 +10728,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = EqualsSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:326:12: ( '=' )
-            // InternalGlobalConstantsLexer.g:326:14: '='
+            // InternalGlobalConstantsLexer.g:337:12: ( '=' )
+            // InternalGlobalConstantsLexer.g:337:14: '='
             {
             match('='); 
 
@@ -10734,8 +10748,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = GreaterThanSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:328:17: ( '>' )
-            // InternalGlobalConstantsLexer.g:328:19: '>'
+            // InternalGlobalConstantsLexer.g:339:17: ( '>' )
+            // InternalGlobalConstantsLexer.g:339:19: '>'
             {
             match('>'); 
 
@@ -10754,8 +10768,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = D;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:330:3: ( ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:330:5: ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:341:3: ( ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:341:5: ( 'D' | 'd' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -10782,8 +10796,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = T;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:332:3: ( ( 'T' | 't' ) )
-            // InternalGlobalConstantsLexer.g:332:5: ( 'T' | 't' )
+            // InternalGlobalConstantsLexer.g:343:3: ( ( 'T' | 't' ) )
+            // InternalGlobalConstantsLexer.g:343:5: ( 'T' | 't' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -10810,8 +10824,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = LeftSquareBracket;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:334:19: ( '[' )
-            // InternalGlobalConstantsLexer.g:334:21: '['
+            // InternalGlobalConstantsLexer.g:345:19: ( '[' )
+            // InternalGlobalConstantsLexer.g:345:21: '['
             {
             match('['); 
 
@@ -10830,8 +10844,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RightSquareBracket;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:336:20: ( ']' )
-            // InternalGlobalConstantsLexer.g:336:22: ']'
+            // InternalGlobalConstantsLexer.g:347:20: ( ']' )
+            // InternalGlobalConstantsLexer.g:347:22: ']'
             {
             match(']'); 
 
@@ -10848,8 +10862,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
     // $ANTLR start "RULE_HEX_DIGIT"
     public final void mRULE_HEX_DIGIT() throws RecognitionException {
         try {
-            // InternalGlobalConstantsLexer.g:338:25: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' | '_' ) )
-            // InternalGlobalConstantsLexer.g:338:27: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' | '_' )
+            // InternalGlobalConstantsLexer.g:349:25: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' | '_' ) )
+            // InternalGlobalConstantsLexer.g:349:27: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' | '_' )
             {
             if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='F')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='f') ) {
                 input.consume();
@@ -10874,10 +10888,10 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RULE_NON_DECIMAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:340:18: ( ( '2#' | '8#' | '16#' ) ( RULE_HEX_DIGIT )+ )
-            // InternalGlobalConstantsLexer.g:340:20: ( '2#' | '8#' | '16#' ) ( RULE_HEX_DIGIT )+
+            // InternalGlobalConstantsLexer.g:351:18: ( ( '2#' | '8#' | '16#' ) ( RULE_HEX_DIGIT )+ )
+            // InternalGlobalConstantsLexer.g:351:20: ( '2#' | '8#' | '16#' ) ( RULE_HEX_DIGIT )+
             {
-            // InternalGlobalConstantsLexer.g:340:20: ( '2#' | '8#' | '16#' )
+            // InternalGlobalConstantsLexer.g:351:20: ( '2#' | '8#' | '16#' )
             int alt1=3;
             switch ( input.LA(1) ) {
             case '2':
@@ -10904,7 +10918,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
 
             switch (alt1) {
                 case 1 :
-                    // InternalGlobalConstantsLexer.g:340:21: '2#'
+                    // InternalGlobalConstantsLexer.g:351:21: '2#'
                     {
                     match("2#"); 
 
@@ -10912,7 +10926,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // InternalGlobalConstantsLexer.g:340:26: '8#'
+                    // InternalGlobalConstantsLexer.g:351:26: '8#'
                     {
                     match("8#"); 
 
@@ -10920,7 +10934,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // InternalGlobalConstantsLexer.g:340:31: '16#'
+                    // InternalGlobalConstantsLexer.g:351:31: '16#'
                     {
                     match("16#"); 
 
@@ -10930,7 +10944,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
 
             }
 
-            // InternalGlobalConstantsLexer.g:340:38: ( RULE_HEX_DIGIT )+
+            // InternalGlobalConstantsLexer.g:351:38: ( RULE_HEX_DIGIT )+
             int cnt2=0;
             loop2:
             do {
@@ -10944,7 +10958,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
 
                 switch (alt2) {
             	case 1 :
-            	    // InternalGlobalConstantsLexer.g:340:38: RULE_HEX_DIGIT
+            	    // InternalGlobalConstantsLexer.g:351:38: RULE_HEX_DIGIT
             	    {
             	    mRULE_HEX_DIGIT(); 
 
@@ -10976,11 +10990,11 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RULE_INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:342:10: ( '0' .. '9' ( '0' .. '9' | '_' )* )
-            // InternalGlobalConstantsLexer.g:342:12: '0' .. '9' ( '0' .. '9' | '_' )*
+            // InternalGlobalConstantsLexer.g:353:10: ( '0' .. '9' ( '0' .. '9' | '_' )* )
+            // InternalGlobalConstantsLexer.g:353:12: '0' .. '9' ( '0' .. '9' | '_' )*
             {
             matchRange('0','9'); 
-            // InternalGlobalConstantsLexer.g:342:21: ( '0' .. '9' | '_' )*
+            // InternalGlobalConstantsLexer.g:353:21: ( '0' .. '9' | '_' )*
             loop3:
             do {
                 int alt3=2;
@@ -11029,11 +11043,11 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RULE_DECIMAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:344:14: ( RULE_INT ( ( 'e' | 'E' ) ( '+' | '-' )? RULE_INT )? )
-            // InternalGlobalConstantsLexer.g:344:16: RULE_INT ( ( 'e' | 'E' ) ( '+' | '-' )? RULE_INT )?
+            // InternalGlobalConstantsLexer.g:355:14: ( RULE_INT ( ( 'e' | 'E' ) ( '+' | '-' )? RULE_INT )? )
+            // InternalGlobalConstantsLexer.g:355:16: RULE_INT ( ( 'e' | 'E' ) ( '+' | '-' )? RULE_INT )?
             {
             mRULE_INT(); 
-            // InternalGlobalConstantsLexer.g:344:25: ( ( 'e' | 'E' ) ( '+' | '-' )? RULE_INT )?
+            // InternalGlobalConstantsLexer.g:355:25: ( ( 'e' | 'E' ) ( '+' | '-' )? RULE_INT )?
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -11042,7 +11056,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
             }
             switch (alt5) {
                 case 1 :
-                    // InternalGlobalConstantsLexer.g:344:26: ( 'e' | 'E' ) ( '+' | '-' )? RULE_INT
+                    // InternalGlobalConstantsLexer.g:355:26: ( 'e' | 'E' ) ( '+' | '-' )? RULE_INT
                     {
                     if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                         input.consume();
@@ -11053,7 +11067,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
                         recover(mse);
                         throw mse;}
 
-                    // InternalGlobalConstantsLexer.g:344:36: ( '+' | '-' )?
+                    // InternalGlobalConstantsLexer.g:355:36: ( '+' | '-' )?
                     int alt4=2;
                     int LA4_0 = input.LA(1);
 
@@ -11102,10 +11116,10 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RULE_TIME_VALUE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:346:17: ( ( RULE_TIME_PART ( '_' )? )+ )
-            // InternalGlobalConstantsLexer.g:346:19: ( RULE_TIME_PART ( '_' )? )+
+            // InternalGlobalConstantsLexer.g:357:17: ( ( RULE_TIME_PART ( '_' )? )+ )
+            // InternalGlobalConstantsLexer.g:357:19: ( RULE_TIME_PART ( '_' )? )+
             {
-            // InternalGlobalConstantsLexer.g:346:19: ( RULE_TIME_PART ( '_' )? )+
+            // InternalGlobalConstantsLexer.g:357:19: ( RULE_TIME_PART ( '_' )? )+
             int cnt7=0;
             loop7:
             do {
@@ -11119,10 +11133,10 @@ public class InternalGlobalConstantsLexer extends Lexer {
 
                 switch (alt7) {
             	case 1 :
-            	    // InternalGlobalConstantsLexer.g:346:20: RULE_TIME_PART ( '_' )?
+            	    // InternalGlobalConstantsLexer.g:357:20: RULE_TIME_PART ( '_' )?
             	    {
             	    mRULE_TIME_PART(); 
-            	    // InternalGlobalConstantsLexer.g:346:35: ( '_' )?
+            	    // InternalGlobalConstantsLexer.g:357:35: ( '_' )?
             	    int alt6=2;
             	    int LA6_0 = input.LA(1);
 
@@ -11131,7 +11145,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
             	    }
             	    switch (alt6) {
             	        case 1 :
-            	            // InternalGlobalConstantsLexer.g:346:35: '_'
+            	            // InternalGlobalConstantsLexer.g:357:35: '_'
             	            {
             	            match('_'); 
 
@@ -11167,11 +11181,11 @@ public class InternalGlobalConstantsLexer extends Lexer {
     // $ANTLR start "RULE_TIME_PART"
     public final void mRULE_TIME_PART() throws RecognitionException {
         try {
-            // InternalGlobalConstantsLexer.g:348:25: ( RULE_INT ( RULE_TIME_DAYS | RULE_TIME_HOURS | RULE_TIME_MINUTES | RULE_TIME_SECONDS | RULE_TIME_MILLIS | RULE_TIME_MICROS | RULE_TIME_NANOS ) )
-            // InternalGlobalConstantsLexer.g:348:27: RULE_INT ( RULE_TIME_DAYS | RULE_TIME_HOURS | RULE_TIME_MINUTES | RULE_TIME_SECONDS | RULE_TIME_MILLIS | RULE_TIME_MICROS | RULE_TIME_NANOS )
+            // InternalGlobalConstantsLexer.g:359:25: ( RULE_INT ( RULE_TIME_DAYS | RULE_TIME_HOURS | RULE_TIME_MINUTES | RULE_TIME_SECONDS | RULE_TIME_MILLIS | RULE_TIME_MICROS | RULE_TIME_NANOS ) )
+            // InternalGlobalConstantsLexer.g:359:27: RULE_INT ( RULE_TIME_DAYS | RULE_TIME_HOURS | RULE_TIME_MINUTES | RULE_TIME_SECONDS | RULE_TIME_MILLIS | RULE_TIME_MICROS | RULE_TIME_NANOS )
             {
             mRULE_INT(); 
-            // InternalGlobalConstantsLexer.g:348:36: ( RULE_TIME_DAYS | RULE_TIME_HOURS | RULE_TIME_MINUTES | RULE_TIME_SECONDS | RULE_TIME_MILLIS | RULE_TIME_MICROS | RULE_TIME_NANOS )
+            // InternalGlobalConstantsLexer.g:359:36: ( RULE_TIME_DAYS | RULE_TIME_HOURS | RULE_TIME_MINUTES | RULE_TIME_SECONDS | RULE_TIME_MILLIS | RULE_TIME_MICROS | RULE_TIME_NANOS )
             int alt8=7;
             switch ( input.LA(1) ) {
             case 'D':
@@ -11225,49 +11239,49 @@ public class InternalGlobalConstantsLexer extends Lexer {
 
             switch (alt8) {
                 case 1 :
-                    // InternalGlobalConstantsLexer.g:348:37: RULE_TIME_DAYS
+                    // InternalGlobalConstantsLexer.g:359:37: RULE_TIME_DAYS
                     {
                     mRULE_TIME_DAYS(); 
 
                     }
                     break;
                 case 2 :
-                    // InternalGlobalConstantsLexer.g:348:52: RULE_TIME_HOURS
+                    // InternalGlobalConstantsLexer.g:359:52: RULE_TIME_HOURS
                     {
                     mRULE_TIME_HOURS(); 
 
                     }
                     break;
                 case 3 :
-                    // InternalGlobalConstantsLexer.g:348:68: RULE_TIME_MINUTES
+                    // InternalGlobalConstantsLexer.g:359:68: RULE_TIME_MINUTES
                     {
                     mRULE_TIME_MINUTES(); 
 
                     }
                     break;
                 case 4 :
-                    // InternalGlobalConstantsLexer.g:348:86: RULE_TIME_SECONDS
+                    // InternalGlobalConstantsLexer.g:359:86: RULE_TIME_SECONDS
                     {
                     mRULE_TIME_SECONDS(); 
 
                     }
                     break;
                 case 5 :
-                    // InternalGlobalConstantsLexer.g:348:104: RULE_TIME_MILLIS
+                    // InternalGlobalConstantsLexer.g:359:104: RULE_TIME_MILLIS
                     {
                     mRULE_TIME_MILLIS(); 
 
                     }
                     break;
                 case 6 :
-                    // InternalGlobalConstantsLexer.g:348:121: RULE_TIME_MICROS
+                    // InternalGlobalConstantsLexer.g:359:121: RULE_TIME_MICROS
                     {
                     mRULE_TIME_MICROS(); 
 
                     }
                     break;
                 case 7 :
-                    // InternalGlobalConstantsLexer.g:348:138: RULE_TIME_NANOS
+                    // InternalGlobalConstantsLexer.g:359:138: RULE_TIME_NANOS
                     {
                     mRULE_TIME_NANOS(); 
 
@@ -11288,8 +11302,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
     // $ANTLR start "RULE_TIME_DAYS"
     public final void mRULE_TIME_DAYS() throws RecognitionException {
         try {
-            // InternalGlobalConstantsLexer.g:350:25: ( ( 'D' | 'd' ) )
-            // InternalGlobalConstantsLexer.g:350:27: ( 'D' | 'd' )
+            // InternalGlobalConstantsLexer.g:361:25: ( ( 'D' | 'd' ) )
+            // InternalGlobalConstantsLexer.g:361:27: ( 'D' | 'd' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -11312,8 +11326,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
     // $ANTLR start "RULE_TIME_HOURS"
     public final void mRULE_TIME_HOURS() throws RecognitionException {
         try {
-            // InternalGlobalConstantsLexer.g:352:26: ( ( 'H' | 'h' ) )
-            // InternalGlobalConstantsLexer.g:352:28: ( 'H' | 'h' )
+            // InternalGlobalConstantsLexer.g:363:26: ( ( 'H' | 'h' ) )
+            // InternalGlobalConstantsLexer.g:363:28: ( 'H' | 'h' )
             {
             if ( input.LA(1)=='H'||input.LA(1)=='h' ) {
                 input.consume();
@@ -11336,8 +11350,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
     // $ANTLR start "RULE_TIME_MINUTES"
     public final void mRULE_TIME_MINUTES() throws RecognitionException {
         try {
-            // InternalGlobalConstantsLexer.g:354:28: ( ( 'M' | 'm' ) )
-            // InternalGlobalConstantsLexer.g:354:30: ( 'M' | 'm' )
+            // InternalGlobalConstantsLexer.g:365:28: ( ( 'M' | 'm' ) )
+            // InternalGlobalConstantsLexer.g:365:30: ( 'M' | 'm' )
             {
             if ( input.LA(1)=='M'||input.LA(1)=='m' ) {
                 input.consume();
@@ -11360,8 +11374,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
     // $ANTLR start "RULE_TIME_SECONDS"
     public final void mRULE_TIME_SECONDS() throws RecognitionException {
         try {
-            // InternalGlobalConstantsLexer.g:356:28: ( ( 'S' | 's' ) )
-            // InternalGlobalConstantsLexer.g:356:30: ( 'S' | 's' )
+            // InternalGlobalConstantsLexer.g:367:28: ( ( 'S' | 's' ) )
+            // InternalGlobalConstantsLexer.g:367:30: ( 'S' | 's' )
             {
             if ( input.LA(1)=='S'||input.LA(1)=='s' ) {
                 input.consume();
@@ -11384,8 +11398,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
     // $ANTLR start "RULE_TIME_MILLIS"
     public final void mRULE_TIME_MILLIS() throws RecognitionException {
         try {
-            // InternalGlobalConstantsLexer.g:358:27: ( ( 'M' | 'm' ) ( 'S' | 's' ) )
-            // InternalGlobalConstantsLexer.g:358:29: ( 'M' | 'm' ) ( 'S' | 's' )
+            // InternalGlobalConstantsLexer.g:369:27: ( ( 'M' | 'm' ) ( 'S' | 's' ) )
+            // InternalGlobalConstantsLexer.g:369:29: ( 'M' | 'm' ) ( 'S' | 's' )
             {
             if ( input.LA(1)=='M'||input.LA(1)=='m' ) {
                 input.consume();
@@ -11417,8 +11431,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
     // $ANTLR start "RULE_TIME_MICROS"
     public final void mRULE_TIME_MICROS() throws RecognitionException {
         try {
-            // InternalGlobalConstantsLexer.g:360:27: ( ( 'U' | 'u' ) ( 'S' | 's' ) )
-            // InternalGlobalConstantsLexer.g:360:29: ( 'U' | 'u' ) ( 'S' | 's' )
+            // InternalGlobalConstantsLexer.g:371:27: ( ( 'U' | 'u' ) ( 'S' | 's' ) )
+            // InternalGlobalConstantsLexer.g:371:29: ( 'U' | 'u' ) ( 'S' | 's' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -11450,8 +11464,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
     // $ANTLR start "RULE_TIME_NANOS"
     public final void mRULE_TIME_NANOS() throws RecognitionException {
         try {
-            // InternalGlobalConstantsLexer.g:362:26: ( ( 'N' | 'n' ) ( 'S' | 's' ) )
-            // InternalGlobalConstantsLexer.g:362:28: ( 'N' | 'n' ) ( 'S' | 's' )
+            // InternalGlobalConstantsLexer.g:373:26: ( ( 'N' | 'n' ) ( 'S' | 's' ) )
+            // InternalGlobalConstantsLexer.g:373:28: ( 'N' | 'n' ) ( 'S' | 's' )
             {
             if ( input.LA(1)=='N'||input.LA(1)=='n' ) {
                 input.consume();
@@ -11485,10 +11499,10 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RULE_ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:364:9: ( ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
-            // InternalGlobalConstantsLexer.g:364:11: ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // InternalGlobalConstantsLexer.g:375:9: ( ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
+            // InternalGlobalConstantsLexer.g:375:11: ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
-            // InternalGlobalConstantsLexer.g:364:11: ( '^' )?
+            // InternalGlobalConstantsLexer.g:375:11: ( '^' )?
             int alt9=2;
             int LA9_0 = input.LA(1);
 
@@ -11497,7 +11511,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
             }
             switch (alt9) {
                 case 1 :
-                    // InternalGlobalConstantsLexer.g:364:11: '^'
+                    // InternalGlobalConstantsLexer.g:375:11: '^'
                     {
                     match('^'); 
 
@@ -11515,7 +11529,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // InternalGlobalConstantsLexer.g:364:40: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // InternalGlobalConstantsLexer.g:375:40: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             loop10:
             do {
                 int alt10=2;
@@ -11564,10 +11578,10 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RULE_STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:366:13: ( ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' ) )
-            // InternalGlobalConstantsLexer.g:366:15: ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' )
+            // InternalGlobalConstantsLexer.g:377:13: ( ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' ) )
+            // InternalGlobalConstantsLexer.g:377:15: ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' )
             {
-            // InternalGlobalConstantsLexer.g:366:15: ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' )
+            // InternalGlobalConstantsLexer.g:377:15: ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' )
             int alt13=2;
             int LA13_0 = input.LA(1);
 
@@ -11585,10 +11599,10 @@ public class InternalGlobalConstantsLexer extends Lexer {
             }
             switch (alt13) {
                 case 1 :
-                    // InternalGlobalConstantsLexer.g:366:16: '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"'
+                    // InternalGlobalConstantsLexer.g:377:16: '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"'
                     {
                     match('\"'); 
-                    // InternalGlobalConstantsLexer.g:366:20: ( '$' . | ~ ( ( '$' | '\"' ) ) )*
+                    // InternalGlobalConstantsLexer.g:377:20: ( '$' . | ~ ( ( '$' | '\"' ) ) )*
                     loop11:
                     do {
                         int alt11=3;
@@ -11604,7 +11618,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
 
                         switch (alt11) {
                     	case 1 :
-                    	    // InternalGlobalConstantsLexer.g:366:21: '$' .
+                    	    // InternalGlobalConstantsLexer.g:377:21: '$' .
                     	    {
                     	    match('$'); 
                     	    matchAny(); 
@@ -11612,7 +11626,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // InternalGlobalConstantsLexer.g:366:27: ~ ( ( '$' | '\"' ) )
+                    	    // InternalGlobalConstantsLexer.g:377:27: ~ ( ( '$' | '\"' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||input.LA(1)=='#'||(input.LA(1)>='%' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -11637,10 +11651,10 @@ public class InternalGlobalConstantsLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // InternalGlobalConstantsLexer.g:366:46: '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\''
+                    // InternalGlobalConstantsLexer.g:377:46: '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\''
                     {
                     match('\''); 
-                    // InternalGlobalConstantsLexer.g:366:51: ( '$' . | ~ ( ( '$' | '\\'' ) ) )*
+                    // InternalGlobalConstantsLexer.g:377:51: ( '$' . | ~ ( ( '$' | '\\'' ) ) )*
                     loop12:
                     do {
                         int alt12=3;
@@ -11656,7 +11670,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
 
                         switch (alt12) {
                     	case 1 :
-                    	    // InternalGlobalConstantsLexer.g:366:52: '$' .
+                    	    // InternalGlobalConstantsLexer.g:377:52: '$' .
                     	    {
                     	    match('$'); 
                     	    matchAny(); 
@@ -11664,7 +11678,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // InternalGlobalConstantsLexer.g:366:58: ~ ( ( '$' | '\\'' ) )
+                    	    // InternalGlobalConstantsLexer.g:377:58: ~ ( ( '$' | '\\'' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='#')||(input.LA(1)>='%' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -11707,10 +11721,10 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RULE_ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:368:17: ( ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' ) )
-            // InternalGlobalConstantsLexer.g:368:19: ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' )
+            // InternalGlobalConstantsLexer.g:379:17: ( ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' ) )
+            // InternalGlobalConstantsLexer.g:379:19: ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' )
             {
-            // InternalGlobalConstantsLexer.g:368:19: ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' )
+            // InternalGlobalConstantsLexer.g:379:19: ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' )
             int alt16=2;
             int LA16_0 = input.LA(1);
 
@@ -11728,11 +11742,11 @@ public class InternalGlobalConstantsLexer extends Lexer {
             }
             switch (alt16) {
                 case 1 :
-                    // InternalGlobalConstantsLexer.g:368:20: '/*' ( options {greedy=false; } : . )* '*/'
+                    // InternalGlobalConstantsLexer.g:379:20: '/*' ( options {greedy=false; } : . )* '*/'
                     {
                     match("/*"); 
 
-                    // InternalGlobalConstantsLexer.g:368:25: ( options {greedy=false; } : . )*
+                    // InternalGlobalConstantsLexer.g:379:25: ( options {greedy=false; } : . )*
                     loop14:
                     do {
                         int alt14=2;
@@ -11757,7 +11771,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
 
                         switch (alt14) {
                     	case 1 :
-                    	    // InternalGlobalConstantsLexer.g:368:53: .
+                    	    // InternalGlobalConstantsLexer.g:379:53: .
                     	    {
                     	    matchAny(); 
 
@@ -11775,11 +11789,11 @@ public class InternalGlobalConstantsLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // InternalGlobalConstantsLexer.g:368:62: '(*' ( options {greedy=false; } : . )* '*)'
+                    // InternalGlobalConstantsLexer.g:379:62: '(*' ( options {greedy=false; } : . )* '*)'
                     {
                     match("(*"); 
 
-                    // InternalGlobalConstantsLexer.g:368:67: ( options {greedy=false; } : . )*
+                    // InternalGlobalConstantsLexer.g:379:67: ( options {greedy=false; } : . )*
                     loop15:
                     do {
                         int alt15=2;
@@ -11804,7 +11818,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
 
                         switch (alt15) {
                     	case 1 :
-                    	    // InternalGlobalConstantsLexer.g:368:95: .
+                    	    // InternalGlobalConstantsLexer.g:379:95: .
                     	    {
                     	    matchAny(); 
 
@@ -11840,12 +11854,12 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RULE_SL_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:370:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
-            // InternalGlobalConstantsLexer.g:370:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
+            // InternalGlobalConstantsLexer.g:381:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
+            // InternalGlobalConstantsLexer.g:381:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
             {
             match("//"); 
 
-            // InternalGlobalConstantsLexer.g:370:24: (~ ( ( '\\n' | '\\r' ) ) )*
+            // InternalGlobalConstantsLexer.g:381:24: (~ ( ( '\\n' | '\\r' ) ) )*
             loop17:
             do {
                 int alt17=2;
@@ -11858,7 +11872,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
 
                 switch (alt17) {
             	case 1 :
-            	    // InternalGlobalConstantsLexer.g:370:24: ~ ( ( '\\n' | '\\r' ) )
+            	    // InternalGlobalConstantsLexer.g:381:24: ~ ( ( '\\n' | '\\r' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -11878,7 +11892,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
                 }
             } while (true);
 
-            // InternalGlobalConstantsLexer.g:370:40: ( ( '\\r' )? '\\n' )?
+            // InternalGlobalConstantsLexer.g:381:40: ( ( '\\r' )? '\\n' )?
             int alt19=2;
             int LA19_0 = input.LA(1);
 
@@ -11887,9 +11901,9 @@ public class InternalGlobalConstantsLexer extends Lexer {
             }
             switch (alt19) {
                 case 1 :
-                    // InternalGlobalConstantsLexer.g:370:41: ( '\\r' )? '\\n'
+                    // InternalGlobalConstantsLexer.g:381:41: ( '\\r' )? '\\n'
                     {
-                    // InternalGlobalConstantsLexer.g:370:41: ( '\\r' )?
+                    // InternalGlobalConstantsLexer.g:381:41: ( '\\r' )?
                     int alt18=2;
                     int LA18_0 = input.LA(1);
 
@@ -11898,7 +11912,7 @@ public class InternalGlobalConstantsLexer extends Lexer {
                     }
                     switch (alt18) {
                         case 1 :
-                            // InternalGlobalConstantsLexer.g:370:41: '\\r'
+                            // InternalGlobalConstantsLexer.g:381:41: '\\r'
                             {
                             match('\r'); 
 
@@ -11930,10 +11944,10 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RULE_WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:372:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            // InternalGlobalConstantsLexer.g:372:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // InternalGlobalConstantsLexer.g:383:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            // InternalGlobalConstantsLexer.g:383:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             {
-            // InternalGlobalConstantsLexer.g:372:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // InternalGlobalConstantsLexer.g:383:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             int cnt20=0;
             loop20:
             do {
@@ -11987,8 +12001,8 @@ public class InternalGlobalConstantsLexer extends Lexer {
         try {
             int _type = RULE_ANY_OTHER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalGlobalConstantsLexer.g:374:16: ( . )
-            // InternalGlobalConstantsLexer.g:374:18: .
+            // InternalGlobalConstantsLexer.g:385:16: ( . )
+            // InternalGlobalConstantsLexer.g:385:18: .
             {
             matchAny(); 
 
