@@ -129,8 +129,8 @@ public abstract class AbstractValueRandom {
 		if (dataType instanceof LrealType) {
 			return nextLreal();
 		}
-		if (dataType instanceof StructuredType) {
-			return genStruct((StructuredType) dataType);
+		if (dataType instanceof final StructuredType structuredType) {
+			return genStruct(structuredType);
 		}
 		throw new UnsupportedOperationException();
 
