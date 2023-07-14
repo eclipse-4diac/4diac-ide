@@ -154,8 +154,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		if (selection instanceof StructuredSelection) {
-			final StructuredSelection structuredSelection = (StructuredSelection) selection;
+		if (selection instanceof final StructuredSelection structuredSelection) {
 			setBaseEnabled(structuredSelection.size() <= 1);
 		}
 	}
