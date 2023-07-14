@@ -183,11 +183,12 @@ public class STFunctionPartitioner implements STCorePartitioner {
 	protected static void handleLostAndFound(final STFunctionSource source, final EList<ICallable> result) {
 		final ICompositeNode rootNode = NodeModelUtils.getNode(source).getRootNode();
 		var lastOffset = 0;
-		for (final var element : source.getFunctions()) {
+		for (int index = 0; index < source.getFunctions().size(); index++) {
+			final var element = source.getFunctions().get(index);
 			final var node = NodeModelUtils.findActualNodeFor(element);
 			final int totalOffset = node.getTotalOffset();
 			if (totalOffset > lastOffset) {
-				handleLostAndFound(rootNode, result.size(), lastOffset, totalOffset, result);
+				handleLostAndFound(rootNode, index, lastOffset, totalOffset, result);
 			}
 			lastOffset = node.getTotalEndOffset();
 		}
@@ -205,7 +206,7 @@ public class STFunctionPartitioner implements STCorePartitioner {
 			final int end, final EList<ICallable> result) {
 		final String text = rootNode.getText().substring(start, end);
 		if (!text.trim().isEmpty()) {
-			result.add(newLostAndFound(text, index));
+			result.add(index, newLostAndFound(text, index));
 		}
 	}
 
