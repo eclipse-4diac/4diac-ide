@@ -13,8 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.api;
 
-import java.util.stream.Collectors;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
@@ -72,7 +70,7 @@ public final class RuntimeFactory {
 	private static FBRuntimeAbstract createFrom(final BasicFBType fb) {
 		// set the start state
 		final EList<ECState> stateList = fb.getECC().getECState();
-		final ECState startState = stateList.stream().filter(ECState::isStartState).collect(Collectors.toList()).get(0);
+		final ECState startState = stateList.stream().filter(ECState::isStartState).findAny().orElse(null);
 		return createFrom(fb, startState);
 	}
 
