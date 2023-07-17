@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
@@ -151,6 +152,11 @@ public class STFunctionPartitioner implements STCorePartitioner {
 		if (declaration.isArray()) {
 			ArraySizeHelper.setArraySize(result, extractArraySize(declaration));
 		}
+		if (declaration.getDefaultValue() != null) {
+			final Value value = LibraryElementFactory.eINSTANCE.createValue();
+			value.setValue(extractDefaultValue(declaration));
+			result.setValue(value);
+		}
 		result.setIsInput(input);
 	}
 
@@ -161,6 +167,12 @@ public class STFunctionPartitioner implements STCorePartitioner {
 	protected static String extractArraySize(final STVarDeclaration declaration) {
 		return NodeModelUtils.findNodesForFeature(declaration, STCorePackage.eINSTANCE.getSTVarDeclaration_Ranges())
 				.stream().map(INode::getText).collect(Collectors.joining(",")); //$NON-NLS-1$
+	}
+
+	protected static String extractDefaultValue(final STVarDeclaration declaration) {
+		return NodeModelUtils
+				.findNodesForFeature(declaration, STCorePackage.eINSTANCE.getSTVarDeclaration_DefaultValue()).stream()
+				.map(INode::getText).collect(Collectors.joining()).trim();
 	}
 
 	protected static void handleDuplicates(final EList<ICallable> result) {

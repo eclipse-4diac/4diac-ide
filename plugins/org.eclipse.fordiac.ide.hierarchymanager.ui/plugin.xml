@@ -94,7 +94,10 @@
 					</or>
 				</parentExpression>
 			</commonSorter>    
-			
+			  <dragAssistant
+		            class="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDragAssistant"
+		            viewerId="org.eclipse.fordiac.ide.hierarchymanager.view">
+		      </dragAssistant>
 			<dropAssistant
 	          class="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDropAssistant"
 	          id="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDropAssistant">
