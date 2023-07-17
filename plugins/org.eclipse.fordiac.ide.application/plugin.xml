@@ -368,6 +368,10 @@
              name="Follow Right Connection">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             id="org.eclipse.fordiac.ide.application.commands.createConnectionAtSubappInterface"
+             name="Create Connection to Subapp Interface">
+    </command>
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.HideDataConnections"
              id="org.eclipse.fordiac.ide.application.commands.hideDataConnections"
              name="Hide Data Connections">
@@ -563,6 +567,18 @@
           </iterate>
         </with>
       </activeWhen>
+    </handler>
+    <handler
+          class="org.eclipse.fordiac.ide.application.handlers.CreateConnectionAtSubappInterface"
+          commandId="org.eclipse.fordiac.ide.application.commands.createConnectionAtSubappInterface">
+        <activeWhen>
+          <and>
+            <with variable="activeEditor">
+              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+            </with>
+            <test property="org.eclipse.fordiac.ide.application.utilities.isFBInterfaceElementIsFreeAndPartOfSubapp" />
+          </and>
+        </activeWhen>
     </handler>
     <handler class="org.eclipse.fordiac.ide.application.handlers.FocusOnPredecessor"
              commandId="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor">
@@ -766,6 +782,12 @@
           contextId="org.eclipse.ui.contexts.window"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
           sequence="M1+M2+M">
+    </key>
+    <key
+          commandId="org.eclipse.fordiac.ide.application.commands.createConnectionAtSubappInterface"
+          contextId="org.eclipse.ui.contexts.window"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+R">
     </key>
   </extension>
   <extension point="org.eclipse.ui.menus">
@@ -1255,6 +1277,16 @@
           </and>
         </visibleWhen>
       </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.createConnectionAtSubappInterface" >
+        <visibleWhen checkEnabled="true">
+          <and>
+            <with variable="activeEditor">
+              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+            </with>
+            <test property="org.eclipse.fordiac.ide.application.utilities.isFBInterfaceElementIsFreeAndPartOfSubapp" />
+          </and>
+        </visibleWhen>
+      </command>
     </menuContribution>
     <menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=group.openWith">
       <command commandId="org.eclipse.fordiac.ide.application.commands.showInstance"
@@ -1525,6 +1557,12 @@
                     id="org.eclipse.fordiac.ide.application.utilities.isTransferableStructCommentTester"
                     namespace="org.eclipse.fordiac.ide.application.utilities"
                     properties="isTansferableStruct"
+                    type="java.lang.Object">
+    </propertyTester>
+    <propertyTester class="org.eclipse.fordiac.ide.application.utilities.FBInterfaceElementIsFreeAndPartOfSubapp"
+                    id="org.eclipse.fordiac.ide.application.utilities.fBInterfaceElementIsFreeAndPartOfSubapp"
+                    namespace="org.eclipse.fordiac.ide.application.utilities"
+                    properties="isFBInterfaceElementIsFreeAndPartOfSubapp"
                     type="java.lang.Object">
     </propertyTester>
   </extension>
