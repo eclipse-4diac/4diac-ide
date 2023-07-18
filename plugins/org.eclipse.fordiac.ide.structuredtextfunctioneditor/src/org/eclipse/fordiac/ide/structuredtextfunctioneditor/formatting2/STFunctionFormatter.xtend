@@ -62,9 +62,12 @@ class STFunctionFormatter extends STCoreFormatter {
 			append[setNewLines(1, 2, 2)]
 		]
 
-		for (stFunction : stFunctionSource.functions) {
-			stFunction.format
+		if(!stFunctionSource.name.nullOrEmpty) {
+			stFunctionSource.regionFor.keyword(STFunctionSourceAccess.PACKAGEKeyword_1_0).prepend[noSpace].append[oneSpace]
+			stFunctionSource.regionFor.keyword(STFunctionSourceAccess.semicolonKeyword_1_2).prepend[noSpace].append[newLines = 2]
 		}
+		stFunctionSource.imports.forEach[format]
+		stFunctionSource.functions.forEach[format]
 	}
 
 	def dispatch void format(STFunction stFunction, extension IFormattableDocument document) {
