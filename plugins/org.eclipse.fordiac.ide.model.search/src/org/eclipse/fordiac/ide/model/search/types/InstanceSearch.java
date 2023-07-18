@@ -53,6 +53,14 @@ public class InstanceSearch {
 
 	}
 
+	public static Set<INamedElement> performSearch(final InstanceSearch... searchers) {
+		final Set<INamedElement> results = new HashSet<>();
+		for (final InstanceSearch search : searchers) {
+			results.addAll(search.performCompleteSearch());
+		}
+		return results;
+	}
+
 	public Set<INamedElement> performApplicationSearch(final AutomationSystem sys) {
 		searchResult = new HashSet<>();
 		searchApplications(sys);

@@ -20,11 +20,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
@@ -63,9 +66,7 @@ public class RenameTypeRefactoring extends Refactoring {
 	@Override
 	public RefactoringStatus checkFinalConditions(final IProgressMonitor monitor)
 			throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = new RefactoringStatus();
-
-		return status;
+		return new RefactoringStatus();
 	}
 
 	@Override
@@ -120,35 +121,46 @@ public class RenameTypeRefactoring extends Refactoring {
 			InstanceSearch search = StructDataTypeSearch
 					.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable());
 
-			final Set<INamedElement> allTypesWithStruct = search.searchStructuredTypes(typeEntry.getTypeLibrary());
-
+			final Set<INamedElement> allFBWithStruct = InstanceSearch.performSearch(
+					StructDataTypeSearch.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable()),
+					StructDataTypeSearch.createStructInterfaceSearch((StructuredType) typeEntry.getTypeEditable()),
+					new FBInstanceSearch((DataTypeEntry) typeEntry.getTypeEditable().getTypeEntry()));
+			allFBWithStruct.addAll(search.searchStructuredTypes(typeEntry.getTypeLibrary()));
 			final CompositeChange parentChange = new CompositeChange(
 					"Rename Type from " + typeEntry.getTypeName() + " to : " + getNewName()); //$NON-NLS-1$ //$NON-NLS-2$
 
 			parentChange.add(new RenameTypeChange(typeEntry, getNewName() + ".dtp")); //$NON-NLS-1$
 
 			final CompositeChange change = new CompositeChange("Affected Struct that contain struct as member"); //$NON-NLS-1$
-
-			for (final INamedElement element : allTypesWithStruct) {
-				final StructuredTypeMemberChange structChange = new StructuredTypeMemberChange((StructuredType) element,
-						typeEntry, typeEntry.getTypeName(), getNewName());
-				change.add(structChange);
-			}
-			if (!allTypesWithStruct.isEmpty()) {
-				parentChange.add(change);
-			}
-
-			final CompositeChange fbTypeChanges = new CompositeChange("Fb Types:");
+			final CompositeChange fbTypeChanges = new CompositeChange("Fb Types:"); //$NON-NLS-1$
 			search = StructDataTypeSearch.createStructInterfaceSearch((StructuredType) typeEntry.getTypeEditable());
 			final Set<INamedElement> fbTypes = search.performTypeLibBlockSearch(typeEntry.getTypeLibrary());
-			fbTypes.forEach(fb -> fbTypeChanges.add(new InterfaceDataTypeChange((FBType) fb, typeEntry, oldName, newName)));
+			fbTypes.forEach(fb -> fbTypeChanges.add(new InterfaceDataTypeChange((FBType) fb, typeEntry, oldName)));
 			parentChange.add(fbTypeChanges);
+			allFBWithStruct.stream().map(this::createSubChange).forEach(change::add);
+			
+			if (!allFBWithStruct.isEmpty()) {
+				parentChange.add(change);
+			}
 
 			return parentChange;
 
 		} finally {
 			monitor.done();
 		}
+	}
+
+	private Change createSubChange(final INamedElement element) {
+		if (element instanceof final StructuredType stElement) {
+			return new StructuredTypeMemberChange(stElement, typeEntry, typeEntry.getTypeName(), getNewName());
+		}
+		if (element instanceof final FBType fbType) {
+			return new InterfaceDataTypeChange(fbType, typeEntry, oldName);
+		}
+		if (element instanceof final FBNetworkElement elem) {
+			return new UpdateInstancesChange(elem, (DataTypeEntry) typeEntry);
+		}
+		return null;
 	}
 
 	public RefactoringStatus setAndValidateTypeName(final String name) {
