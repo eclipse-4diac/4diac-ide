@@ -38,24 +38,60 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.STGlobalConstsSource");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Action cSTGlobalConstsSourceAction_0 = (Action)cGroup.eContents().get(0);
-		private final Assignment cElementsAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cElementsSTVarGlobalDeclarationBlockParserRuleCall_1_0 = (RuleCall)cElementsAssignment_1.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Keyword cPACKAGEKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
+		private final Assignment cNameAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cNameQualifiedNameParserRuleCall_1_1_0 = (RuleCall)cNameAssignment_1_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
+		private final Assignment cImportsAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cImportsSTImportParserRuleCall_2_0 = (RuleCall)cImportsAssignment_2.eContents().get(0);
+		private final Assignment cElementsAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0 = (RuleCall)cElementsAssignment_3.eContents().get(0);
 		
 		//STGlobalConstsSource returns stcore::STSource:
-		//    {STGlobalConstsSource} elements+=STVarGlobalDeclarationBlock*;
+		//    {STGlobalConstsSource}
+		//    ('PACKAGE' name=QualifiedName ';')? // package declaration (optional)
+		//    imports+=STImport* // imports (optional)
+		//    elements+=STVarGlobalDeclarationBlock*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{STGlobalConstsSource} elements+=STVarGlobalDeclarationBlock*
+		//{STGlobalConstsSource}
+		//('PACKAGE' name=QualifiedName ';')? // package declaration (optional)
+		//imports+=STImport* // imports (optional)
+		//elements+=STVarGlobalDeclarationBlock*
 		public Group getGroup() { return cGroup; }
 		
 		//{STGlobalConstsSource}
 		public Action getSTGlobalConstsSourceAction_0() { return cSTGlobalConstsSourceAction_0; }
 		
-		//elements+=STVarGlobalDeclarationBlock*
-		public Assignment getElementsAssignment_1() { return cElementsAssignment_1; }
+		//('PACKAGE' name=QualifiedName ';')?
+		public Group getGroup_1() { return cGroup_1; }
+		
+		//'PACKAGE'
+		public Keyword getPACKAGEKeyword_1_0() { return cPACKAGEKeyword_1_0; }
+		
+		//name=QualifiedName
+		public Assignment getNameAssignment_1_1() { return cNameAssignment_1_1; }
+		
+		//QualifiedName
+		public RuleCall getNameQualifiedNameParserRuleCall_1_1_0() { return cNameQualifiedNameParserRuleCall_1_1_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_1_2() { return cSemicolonKeyword_1_2; }
+		
+		//// package declaration (optional)
+		//   imports+=STImport*
+		public Assignment getImportsAssignment_2() { return cImportsAssignment_2; }
+		
+		//STImport
+		public RuleCall getImportsSTImportParserRuleCall_2_0() { return cImportsSTImportParserRuleCall_2_0; }
+		
+		//// imports (optional)
+		//   elements+=STVarGlobalDeclarationBlock*
+		public Assignment getElementsAssignment_3() { return cElementsAssignment_3; }
 		
 		//STVarGlobalDeclarationBlock
-		public RuleCall getElementsSTVarGlobalDeclarationBlockParserRuleCall_1_0() { return cElementsSTVarGlobalDeclarationBlockParserRuleCall_1_0; }
+		public RuleCall getElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0() { return cElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0; }
 	}
 	public class STVarGlobalDeclarationBlockElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.STVarGlobalDeclarationBlock");
@@ -148,7 +184,10 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 
 	
 	//STGlobalConstsSource returns stcore::STSource:
-	//    {STGlobalConstsSource} elements+=STVarGlobalDeclarationBlock*;
+	//    {STGlobalConstsSource}
+	//    ('PACKAGE' name=QualifiedName ';')? // package declaration (optional)
+	//    imports+=STImport* // imports (optional)
+	//    elements+=STVarGlobalDeclarationBlock*;
 	public STGlobalConstsSourceElements getSTGlobalConstsSourceAccess() {
 		return pSTGlobalConstsSource;
 	}
@@ -222,6 +261,16 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	}
 	
 	// // necessary to keep Xtext from skipping this rule
+	//STImport returns STImport:
+	//    'IMPORT' importedNamespace=QualifiedNameWithWildcard ';';
+	public STCoreGrammarAccess.STImportElements getSTImportAccess() {
+		return gaSTCore.getSTImportAccess();
+	}
+	
+	public ParserRule getSTImportRule() {
+		return getSTImportAccess().getRule();
+	}
+	
 	//STVarDeclarationBlock returns STVarPlainDeclarationBlock:
 	//    {STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
@@ -793,7 +842,7 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	}
 	
 	//STFeatureName:
-	//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
+	//    QualifiedName | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
 	public STCoreGrammarAccess.STFeatureNameElements getSTFeatureNameAccess() {
 		return gaSTCore.getSTFeatureNameAccess();
 	}
@@ -1061,13 +1110,23 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	}
 	
 	//QualifiedName:
-	//    ID ('.' ID)*;
+	//    ID ('::' ID)*;
 	public STCoreGrammarAccess.QualifiedNameElements getQualifiedNameAccess() {
 		return gaSTCore.getQualifiedNameAccess();
 	}
 	
 	public ParserRule getQualifiedNameRule() {
 		return getQualifiedNameAccess().getRule();
+	}
+	
+	//QualifiedNameWithWildcard:
+	//    QualifiedName '::*'?;
+	public STCoreGrammarAccess.QualifiedNameWithWildcardElements getQualifiedNameWithWildcardAccess() {
+		return gaSTCore.getQualifiedNameWithWildcardAccess();
+	}
+	
+	public ParserRule getQualifiedNameWithWildcardRule() {
+		return getQualifiedNameWithWildcardAccess().getRule();
 	}
 	
 	//Numeric returns ecore::EJavaObject:

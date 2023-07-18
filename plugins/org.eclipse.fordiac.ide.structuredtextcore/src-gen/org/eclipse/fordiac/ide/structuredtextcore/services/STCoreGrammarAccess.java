@@ -128,6 +128,34 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//STInitializerExpressionSource
 		public RuleCall getSTInitializerExpressionSourceParserRuleCall() { return cSTInitializerExpressionSourceParserRuleCall; }
 	}
+	public class STImportElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STImport");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cIMPORTKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cImportedNamespaceAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cImportedNamespaceQualifiedNameWithWildcardParserRuleCall_1_0 = (RuleCall)cImportedNamespaceAssignment_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		
+		// // necessary to keep Xtext from skipping this rule
+		//STImport returns STImport:
+		//    'IMPORT' importedNamespace=QualifiedNameWithWildcard ';';
+		@Override public ParserRule getRule() { return rule; }
+		
+		//'IMPORT' importedNamespace=QualifiedNameWithWildcard ';'
+		public Group getGroup() { return cGroup; }
+		
+		//'IMPORT'
+		public Keyword getIMPORTKeyword_0() { return cIMPORTKeyword_0; }
+		
+		//importedNamespace=QualifiedNameWithWildcard
+		public Assignment getImportedNamespaceAssignment_1() { return cImportedNamespaceAssignment_1; }
+		
+		//QualifiedNameWithWildcard
+		public RuleCall getImportedNamespaceQualifiedNameWithWildcardParserRuleCall_1_0() { return cImportedNamespaceQualifiedNameWithWildcardParserRuleCall_1_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_2() { return cSemicolonKeyword_2; }
+	}
 	public class STVarDeclarationBlockElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STVarDeclarationBlock");
 		private final Group cGroup = (Group)rule.eContents().get(1);
@@ -139,7 +167,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cVarDeclarationsSTVarDeclarationParserRuleCall_3_0 = (RuleCall)cVarDeclarationsAssignment_3.eContents().get(0);
 		private final Keyword cEND_VARKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
-		// // necessary to keep Xtext from skipping this rule
 		//STVarDeclarationBlock returns STVarPlainDeclarationBlock:
 		//    {STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
 		//    varDeclarations+=STVarDeclaration*
@@ -2262,7 +2289,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	public class STFeatureNameElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STFeatureName");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final RuleCall cQualifiedNameParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
 		private final Keyword cLTKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
 		private final Keyword cANDKeyword_2 = (Keyword)cAlternatives.eContents().get(2);
 		private final Keyword cORKeyword_3 = (Keyword)cAlternatives.eContents().get(3);
@@ -2273,14 +2300,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cLDKeyword_8 = (Keyword)cAlternatives.eContents().get(8);
 		
 		//STFeatureName:
-		//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
+		//    QualifiedName | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD'
+		//QualifiedName | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD'
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
-		//ID
-		public RuleCall getIDTerminalRuleCall_0() { return cIDTerminalRuleCall_0; }
+		//QualifiedName
+		public RuleCall getQualifiedNameParserRuleCall_0() { return cQualifiedNameParserRuleCall_0; }
 		
 		//'LT'
 		public Keyword getLTKeyword_1() { return cLTKeyword_1; }
@@ -3062,27 +3089,46 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
-		private final Keyword cFullStopKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
+		private final Keyword cColonColonKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
 		private final RuleCall cIDTerminalRuleCall_1_1 = (RuleCall)cGroup_1.eContents().get(1);
 		
 		//QualifiedName:
-		//    ID ('.' ID)*;
+		//    ID ('::' ID)*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//ID ('.' ID)*
+		//ID ('::' ID)*
 		public Group getGroup() { return cGroup; }
 		
 		//ID
 		public RuleCall getIDTerminalRuleCall_0() { return cIDTerminalRuleCall_0; }
 		
-		//('.' ID)*
+		//('::' ID)*
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//'.'
-		public Keyword getFullStopKeyword_1_0() { return cFullStopKeyword_1_0; }
+		//'::'
+		public Keyword getColonColonKeyword_1_0() { return cColonColonKeyword_1_0; }
 		
 		//ID
 		public RuleCall getIDTerminalRuleCall_1_1() { return cIDTerminalRuleCall_1_1; }
+	}
+	public class QualifiedNameWithWildcardElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.QualifiedNameWithWildcard");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cQualifiedNameParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Keyword cColonColonAsteriskKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		
+		//QualifiedNameWithWildcard:
+		//    QualifiedName '::*'?;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//QualifiedName '::*'?
+		public Group getGroup() { return cGroup; }
+		
+		//QualifiedName
+		public RuleCall getQualifiedNameParserRuleCall_0() { return cQualifiedNameParserRuleCall_0; }
+		
+		//'::*'?
+		public Keyword getColonColonAsteriskKeyword_1() { return cColonColonAsteriskKeyword_1; }
 	}
 	public class NumericElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.Numeric");
@@ -3964,6 +4010,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final STExpressionSource0Elements pSTExpressionSource0;
 	private final STInitializerExpressionSourceElements pSTInitializerExpressionSource;
 	private final STInitializerExpressionSource0Elements pSTInitializerExpressionSource0;
+	private final STImportElements pSTImport;
 	private final STVarDeclarationBlockElements pSTVarDeclarationBlock;
 	private final STVarTempDeclarationBlockElements pSTVarTempDeclarationBlock;
 	private final STVarInputDeclarationBlockElements pSTVarInputDeclarationBlock;
@@ -4043,6 +4090,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final STDateAndTimeTypeElements pSTDateAndTimeType;
 	private final STAnyCharsTypeElements pSTAnyCharsType;
 	private final QualifiedNameElements pQualifiedName;
+	private final QualifiedNameWithWildcardElements pQualifiedNameWithWildcard;
 	private final NumericElements pNumeric;
 	private final NumberElements pNumber;
 	private final TimeElements pTime;
@@ -4081,6 +4129,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pSTExpressionSource0 = new STExpressionSource0Elements();
 		this.pSTInitializerExpressionSource = new STInitializerExpressionSourceElements();
 		this.pSTInitializerExpressionSource0 = new STInitializerExpressionSource0Elements();
+		this.pSTImport = new STImportElements();
 		this.pSTVarDeclarationBlock = new STVarDeclarationBlockElements();
 		this.pSTVarTempDeclarationBlock = new STVarTempDeclarationBlockElements();
 		this.pSTVarInputDeclarationBlock = new STVarInputDeclarationBlockElements();
@@ -4160,6 +4209,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pSTDateAndTimeType = new STDateAndTimeTypeElements();
 		this.pSTAnyCharsType = new STAnyCharsTypeElements();
 		this.pQualifiedName = new QualifiedNameElements();
+		this.pQualifiedNameWithWildcard = new QualifiedNameWithWildcardElements();
 		this.pNumeric = new NumericElements();
 		this.pNumber = new NumberElements();
 		this.pTime = new TimeElements();
@@ -4264,6 +4314,16 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	// // necessary to keep Xtext from skipping this rule
+	//STImport returns STImport:
+	//    'IMPORT' importedNamespace=QualifiedNameWithWildcard ';';
+	public STImportElements getSTImportAccess() {
+		return pSTImport;
+	}
+	
+	public ParserRule getSTImportRule() {
+		return getSTImportAccess().getRule();
+	}
+	
 	//STVarDeclarationBlock returns STVarPlainDeclarationBlock:
 	//    {STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
@@ -4835,7 +4895,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STFeatureName:
-	//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
+	//    QualifiedName | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
 	public STFeatureNameElements getSTFeatureNameAccess() {
 		return pSTFeatureName;
 	}
@@ -5103,13 +5163,23 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//QualifiedName:
-	//    ID ('.' ID)*;
+	//    ID ('::' ID)*;
 	public QualifiedNameElements getQualifiedNameAccess() {
 		return pQualifiedName;
 	}
 	
 	public ParserRule getQualifiedNameRule() {
 		return getQualifiedNameAccess().getRule();
+	}
+	
+	//QualifiedNameWithWildcard:
+	//    QualifiedName '::*'?;
+	public QualifiedNameWithWildcardElements getQualifiedNameWithWildcardAccess() {
+		return pQualifiedNameWithWildcard;
+	}
+	
+	public ParserRule getQualifiedNameWithWildcardRule() {
+		return getQualifiedNameWithWildcardAccess().getRule();
 	}
 	
 	//Numeric returns ecore::EJavaObject:

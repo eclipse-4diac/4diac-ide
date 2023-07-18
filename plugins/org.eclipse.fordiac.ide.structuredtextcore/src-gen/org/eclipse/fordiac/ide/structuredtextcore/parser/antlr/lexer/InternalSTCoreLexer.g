@@ -140,6 +140,8 @@ ACTION : ('A'|'a')('C'|'c')('T'|'t')('I'|'i')('O'|'o')('N'|'n');
 
 END_IF : ('E'|'e')('N'|'n')('D'|'d')'_'('I'|'i')('F'|'f');
 
+IMPORT : ('I'|'i')('M'|'m')('P'|'p')('O'|'o')('R'|'r')('T'|'t');
+
 METHOD : ('M'|'m')('E'|'e')('T'|'t')('H'|'h')('O'|'o')('D'|'d');
 
 PUBLIC : ('P'|'p')('U'|'u')('B'|'b')('L'|'l')('I'|'i')('C'|'c');
@@ -242,6 +244,8 @@ WITH : ('W'|'w')('I'|'i')('T'|'t')('H'|'h');
 
 WORD : ('W'|'w')('O'|'o')('R'|'r')('D'|'d');
 
+ColonColonAsterisk : ':'':''*';
+
 AND : ('A'|'a')('N'|'n')('D'|'d');
 
 FOR : ('F'|'f')('O'|'o')('R'|'r');
@@ -275,6 +279,8 @@ X : '%'('X'|'x');
 AsteriskAsterisk : '*''*';
 
 FullStopFullStop : '.''.';
+
+ColonColon : ':'':';
 
 ColonEqualsSign : ':''=';
 

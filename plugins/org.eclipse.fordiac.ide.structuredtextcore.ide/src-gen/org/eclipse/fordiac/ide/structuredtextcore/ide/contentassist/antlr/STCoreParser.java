@@ -85,6 +85,7 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTCoreSourceAccess().getGroup(), "rule__STCoreSource__Group__0");
 			builder.put(grammarAccess.getSTExpressionSourceAccess().getGroup(), "rule__STExpressionSource__Group__0");
 			builder.put(grammarAccess.getSTInitializerExpressionSourceAccess().getGroup(), "rule__STInitializerExpressionSource__Group__0");
+			builder.put(grammarAccess.getSTImportAccess().getGroup(), "rule__STImport__Group__0");
 			builder.put(grammarAccess.getSTVarDeclarationBlockAccess().getGroup(), "rule__STVarDeclarationBlock__Group__0");
 			builder.put(grammarAccess.getSTVarTempDeclarationBlockAccess().getGroup(), "rule__STVarTempDeclarationBlock__Group__0");
 			builder.put(grammarAccess.getSTVarInputDeclarationBlockAccess().getGroup(), "rule__STVarInputDeclarationBlock__Group__0");
@@ -185,6 +186,7 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTStringLiteralAccess().getGroup_0(), "rule__STStringLiteral__Group_0__0");
 			builder.put(grammarAccess.getQualifiedNameAccess().getGroup(), "rule__QualifiedName__Group__0");
 			builder.put(grammarAccess.getQualifiedNameAccess().getGroup_1(), "rule__QualifiedName__Group_1__0");
+			builder.put(grammarAccess.getQualifiedNameWithWildcardAccess().getGroup(), "rule__QualifiedNameWithWildcard__Group__0");
 			builder.put(grammarAccess.getNumberAccess().getGroup(), "rule__Number__Group__0");
 			builder.put(grammarAccess.getNumberAccess().getGroup_2(), "rule__Number__Group_2__0");
 			builder.put(grammarAccess.getTimeAccess().getGroup(), "rule__Time__Group__0");
@@ -196,6 +198,7 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTCoreSourceAccess().getStatementsAssignment_1(), "rule__STCoreSource__StatementsAssignment_1");
 			builder.put(grammarAccess.getSTExpressionSourceAccess().getExpressionAssignment_1(), "rule__STExpressionSource__ExpressionAssignment_1");
 			builder.put(grammarAccess.getSTInitializerExpressionSourceAccess().getInitializerExpressionAssignment_1(), "rule__STInitializerExpressionSource__InitializerExpressionAssignment_1");
+			builder.put(grammarAccess.getSTImportAccess().getImportedNamespaceAssignment_1(), "rule__STImport__ImportedNamespaceAssignment_1");
 			builder.put(grammarAccess.getSTVarDeclarationBlockAccess().getConstantAssignment_2(), "rule__STVarDeclarationBlock__ConstantAssignment_2");
 			builder.put(grammarAccess.getSTVarDeclarationBlockAccess().getVarDeclarationsAssignment_3(), "rule__STVarDeclarationBlock__VarDeclarationsAssignment_3");
 			builder.put(grammarAccess.getSTVarTempDeclarationBlockAccess().getConstantAssignment_2(), "rule__STVarTempDeclarationBlock__ConstantAssignment_2");

@@ -433,6 +433,16 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	// // necessary to keep Xtext from skipping this rule
+	//STImport returns STImport:
+	//    'IMPORT' importedNamespace=QualifiedNameWithWildcard ';';
+	public STCoreGrammarAccess.STImportElements getSTImportAccess() {
+		return gaSTCore.getSTImportAccess();
+	}
+	
+	public ParserRule getSTImportRule() {
+		return getSTImportAccess().getRule();
+	}
+	
 	//STVarDeclarationBlock returns STVarPlainDeclarationBlock:
 	//    {STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
@@ -1004,7 +1014,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STFeatureName:
-	//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
+	//    QualifiedName | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
 	public STCoreGrammarAccess.STFeatureNameElements getSTFeatureNameAccess() {
 		return gaSTCore.getSTFeatureNameAccess();
 	}
@@ -1272,13 +1282,23 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//QualifiedName:
-	//    ID ('.' ID)*;
+	//    ID ('::' ID)*;
 	public STCoreGrammarAccess.QualifiedNameElements getQualifiedNameAccess() {
 		return gaSTCore.getQualifiedNameAccess();
 	}
 	
 	public ParserRule getQualifiedNameRule() {
 		return getQualifiedNameAccess().getRule();
+	}
+	
+	//QualifiedNameWithWildcard:
+	//    QualifiedName '::*'?;
+	public STCoreGrammarAccess.QualifiedNameWithWildcardElements getQualifiedNameWithWildcardAccess() {
+		return gaSTCore.getQualifiedNameWithWildcardAccess();
+	}
+	
+	public ParserRule getQualifiedNameWithWildcardRule() {
+		return getQualifiedNameWithWildcardAccess().getRule();
 	}
 	
 	//Numeric returns ecore::EJavaObject:

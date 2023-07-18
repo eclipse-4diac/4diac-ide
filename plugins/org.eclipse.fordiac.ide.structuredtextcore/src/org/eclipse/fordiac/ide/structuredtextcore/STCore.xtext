@@ -19,6 +19,7 @@
  *       - input/output variable blocks
  *       - (initializer) expression source
  *       - type declaration
+ *       - add imports and full-qualified access
  *******************************************************************************/
 grammar org.eclipse.fordiac.ide.structuredtextcore.STCore hidden(WS, ML_COMMENT, SL_COMMENT)
 
@@ -41,6 +42,9 @@ STInitializerExpressionSource returns STSource:
 
 STInitializerExpressionSource0 returns STSource:
 	STInitializerExpressionSource; // necessary to keep Xtext from skipping this rule
+
+STImport returns STImport:
+	'IMPORT' importedNamespace=QualifiedNameWithWildcard ';';
 
 STVarDeclarationBlock returns STVarPlainDeclarationBlock:
 	{STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
@@ -241,7 +245,7 @@ STFeatureExpression returns STExpression:
 	(',' parameters+=STCallArgument)*)? ')')?;
 
 STFeatureName:
-	ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
+	QualifiedName | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
 
 STBuiltinFeatureExpression returns STExpression:
 	{STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
@@ -334,7 +338,10 @@ STAnyCharsType:
 	'STRING' | 'WSTRING' | 'CHAR' | 'WCHAR';
 
 QualifiedName:
-	ID ('.' ID)*;
+	ID ('::' ID)*;
+
+QualifiedNameWithWildcard:
+	QualifiedName '::*'?;
 
 Numeric returns ecore::EJavaObject:
 	'TRUE' | 'FALSE' | Number | NON_DECIMAL;

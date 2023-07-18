@@ -14,8 +14,10 @@
 package org.eclipse.fordiac.ide.globalconstantseditor;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.resource.GlobalConstantsResource;
+import org.eclipse.fordiac.ide.globalconstantseditor.scoping.GlobalConstantsImportedNamespaceAwareLocalScopeProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters;
 import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STCoreLinkingDiagnosticMessageProvider;
@@ -23,9 +25,12 @@ import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider;
+import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.scoping.IScopeProvider;
+import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
 
 import com.google.inject.Binder;
 import com.google.inject.name.Names;
@@ -45,6 +50,12 @@ public class GlobalConstantsRuntimeModule extends AbstractGlobalConstantsRuntime
 	}
 
 	@Override
+	public void configureIScopeProviderDelegate(final Binder binder) {
+		binder.bind(IScopeProvider.class).annotatedWith(Names.named(AbstractDeclarativeScopeProvider.NAMED_DELEGATE))
+				.to(GlobalConstantsImportedNamespaceAwareLocalScopeProvider.class);
+	}
+
+	@Override
 	public void configureFileExtensions(final Binder binder) {
 		if (properties == null || properties.getProperty(Constants.FILE_EXTENSIONS) == null) {
 			binder.bind(String.class).annotatedWith(Names.named(Constants.FILE_EXTENSIONS))
@@ -55,6 +66,10 @@ public class GlobalConstantsRuntimeModule extends AbstractGlobalConstantsRuntime
 	@Override
 	public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
 		return STCoreQualifiedNameProvider.class;
+	}
+
+	public Class<? extends IQualifiedNameConverter> bindIQualifiedNameConverter() {
+		return STCoreQualifiedNameConverter.class;
 	}
 
 	public Class<? extends ICommentAssociater> bindICommentAssociater() {

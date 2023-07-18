@@ -40,24 +40,60 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.STFunctionSource");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Action cSTFunctionSourceAction_0 = (Action)cGroup.eContents().get(0);
-		private final Assignment cFunctionsAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cFunctionsSTFunctionParserRuleCall_1_0 = (RuleCall)cFunctionsAssignment_1.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Keyword cPACKAGEKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
+		private final Assignment cNameAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cNameQualifiedNameParserRuleCall_1_1_0 = (RuleCall)cNameAssignment_1_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
+		private final Assignment cImportsAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cImportsSTImportParserRuleCall_2_0 = (RuleCall)cImportsAssignment_2.eContents().get(0);
+		private final Assignment cFunctionsAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cFunctionsSTFunctionParserRuleCall_3_0 = (RuleCall)cFunctionsAssignment_3.eContents().get(0);
 		
 		//STFunctionSource returns stcore::STSource:
-		//    {STFunctionSource} functions+=STFunction*;
+		//    {STFunctionSource}
+		//    ('PACKAGE' name=QualifiedName ';')? // package declaration (optional)
+		//    imports+=STImport* // imports (optional)
+		//    functions+=STFunction*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{STFunctionSource} functions+=STFunction*
+		//{STFunctionSource}
+		//('PACKAGE' name=QualifiedName ';')? // package declaration (optional)
+		//imports+=STImport* // imports (optional)
+		//functions+=STFunction*
 		public Group getGroup() { return cGroup; }
 		
 		//{STFunctionSource}
 		public Action getSTFunctionSourceAction_0() { return cSTFunctionSourceAction_0; }
 		
-		//functions+=STFunction*
-		public Assignment getFunctionsAssignment_1() { return cFunctionsAssignment_1; }
+		//('PACKAGE' name=QualifiedName ';')?
+		public Group getGroup_1() { return cGroup_1; }
+		
+		//'PACKAGE'
+		public Keyword getPACKAGEKeyword_1_0() { return cPACKAGEKeyword_1_0; }
+		
+		//name=QualifiedName
+		public Assignment getNameAssignment_1_1() { return cNameAssignment_1_1; }
+		
+		//QualifiedName
+		public RuleCall getNameQualifiedNameParserRuleCall_1_1_0() { return cNameQualifiedNameParserRuleCall_1_1_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_1_2() { return cSemicolonKeyword_1_2; }
+		
+		//// package declaration (optional)
+		//   imports+=STImport*
+		public Assignment getImportsAssignment_2() { return cImportsAssignment_2; }
+		
+		//STImport
+		public RuleCall getImportsSTImportParserRuleCall_2_0() { return cImportsSTImportParserRuleCall_2_0; }
+		
+		//// imports (optional)
+		//   functions+=STFunction*
+		public Assignment getFunctionsAssignment_3() { return cFunctionsAssignment_3; }
 		
 		//STFunction
-		public RuleCall getFunctionsSTFunctionParserRuleCall_1_0() { return cFunctionsSTFunctionParserRuleCall_1_0; }
+		public RuleCall getFunctionsSTFunctionParserRuleCall_3_0() { return cFunctionsSTFunctionParserRuleCall_3_0; }
 	}
 	public class STFunctionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.STFunction");
@@ -204,7 +240,10 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 
 	
 	//STFunctionSource returns stcore::STSource:
-	//    {STFunctionSource} functions+=STFunction*;
+	//    {STFunctionSource}
+	//    ('PACKAGE' name=QualifiedName ';')? // package declaration (optional)
+	//    imports+=STImport* // imports (optional)
+	//    functions+=STFunction*;
 	public STFunctionSourceElements getSTFunctionSourceAccess() {
 		return pSTFunctionSource;
 	}
@@ -280,6 +319,16 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	// // necessary to keep Xtext from skipping this rule
+	//STImport returns STImport:
+	//    'IMPORT' importedNamespace=QualifiedNameWithWildcard ';';
+	public STCoreGrammarAccess.STImportElements getSTImportAccess() {
+		return gaSTCore.getSTImportAccess();
+	}
+	
+	public ParserRule getSTImportRule() {
+		return getSTImportAccess().getRule();
+	}
+	
 	//STVarDeclarationBlock returns STVarPlainDeclarationBlock:
 	//    {STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
 	//    varDeclarations+=STVarDeclaration*
@@ -851,7 +900,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STFeatureName:
-	//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
+	//    QualifiedName | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
 	public STCoreGrammarAccess.STFeatureNameElements getSTFeatureNameAccess() {
 		return gaSTCore.getSTFeatureNameAccess();
 	}
@@ -1119,13 +1168,23 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//QualifiedName:
-	//    ID ('.' ID)*;
+	//    ID ('::' ID)*;
 	public STCoreGrammarAccess.QualifiedNameElements getQualifiedNameAccess() {
 		return gaSTCore.getQualifiedNameAccess();
 	}
 	
 	public ParserRule getQualifiedNameRule() {
 		return getQualifiedNameAccess().getRule();
+	}
+	
+	//QualifiedNameWithWildcard:
+	//    QualifiedName '::*'?;
+	public STCoreGrammarAccess.QualifiedNameWithWildcardElements getQualifiedNameWithWildcardAccess() {
+		return gaSTCore.getQualifiedNameWithWildcardAccess();
+	}
+	
+	public ParserRule getQualifiedNameWithWildcardRule() {
+		return getQualifiedNameWithWildcardAccess().getRule();
 	}
 	
 	//Numeric returns ecore::EJavaObject:

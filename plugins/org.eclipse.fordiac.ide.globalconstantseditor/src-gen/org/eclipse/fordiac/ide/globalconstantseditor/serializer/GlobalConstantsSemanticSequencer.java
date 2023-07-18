@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
@@ -169,6 +170,9 @@ public class GlobalConstantsSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.ST_IF_STATEMENT:
 				sequence_STIfStatement(context, (STIfStatement) semanticObject); 
 				return; 
+			case STCorePackage.ST_IMPORT:
+				sequence_STImport(context, (STImport) semanticObject); 
+				return; 
 			case STCorePackage.ST_INITIALIZER_EXPRESSION_SOURCE:
 				sequence_STInitializerExpressionSource(context, (STInitializerExpressionSource) semanticObject); 
 				return; 
@@ -243,7 +247,7 @@ public class GlobalConstantsSemanticSequencer extends STCoreSemanticSequencer {
 	 *     STGlobalConstsSource returns STGlobalConstsSource
 	 *
 	 * Constraint:
-	 *     elements+=STVarGlobalDeclarationBlock*
+	 *     (name=QualifiedName? imports+=STImport* elements+=STVarGlobalDeclarationBlock*)
 	 * </pre>
 	 */
 	protected void sequence_STGlobalConstsSource(ISerializationContext context, STGlobalConstsSource semanticObject) {

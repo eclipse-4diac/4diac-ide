@@ -89,11 +89,59 @@ ruleSTFunctionSource returns [EObject current=null]
 			}
 		)
 		(
+			otherlv_1=PACKAGE
+			{
+				newLeafNode(otherlv_1, grammarAccess.getSTFunctionSourceAccess().getPACKAGEKeyword_1_0());
+			}
+			(
+				(
+					{
+						newCompositeNode(grammarAccess.getSTFunctionSourceAccess().getNameQualifiedNameParserRuleCall_1_1_0());
+					}
+					lv_name_2_0=ruleQualifiedName
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getSTFunctionSourceRule());
+						}
+						set(
+							$current,
+							"name",
+							lv_name_2_0,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.QualifiedName");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+			otherlv_3=Semicolon
+			{
+				newLeafNode(otherlv_3, grammarAccess.getSTFunctionSourceAccess().getSemicolonKeyword_1_2());
+			}
+		)?
+		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTFunctionSourceAccess().getFunctionsSTFunctionParserRuleCall_1_0());
+					newCompositeNode(grammarAccess.getSTFunctionSourceAccess().getImportsSTImportParserRuleCall_2_0());
 				}
-				lv_functions_1_0=ruleSTFunction
+				lv_imports_4_0=ruleSTImport
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTFunctionSourceRule());
+					}
+					add(
+						$current,
+						"imports",
+						lv_imports_4_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STImport");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)*
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTFunctionSourceAccess().getFunctionsSTFunctionParserRuleCall_3_0());
+				}
+				lv_functions_5_0=ruleSTFunction
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getSTFunctionSourceRule());
@@ -101,7 +149,7 @@ ruleSTFunctionSource returns [EObject current=null]
 					add(
 						$current,
 						"functions",
-						lv_functions_1_0,
+						lv_functions_5_0,
 						"org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.STFunction");
 					afterParserOrEnumRuleCall();
 				}
@@ -375,6 +423,52 @@ ruleSTInitializerExpressionSource returns [EObject current=null]
 				}
 			)
 		)?
+	)
+;
+
+// Entry rule entryRuleSTImport
+entryRuleSTImport returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTImportRule()); }
+	iv_ruleSTImport=ruleSTImport
+	{ $current=$iv_ruleSTImport.current; }
+	EOF;
+
+// Rule STImport
+ruleSTImport returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		otherlv_0=IMPORT
+		{
+			newLeafNode(otherlv_0, grammarAccess.getSTImportAccess().getIMPORTKeyword_0());
+		}
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTImportAccess().getImportedNamespaceQualifiedNameWithWildcardParserRuleCall_1_0());
+				}
+				lv_importedNamespace_1_0=ruleQualifiedNameWithWildcard
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTImportRule());
+					}
+					set(
+						$current,
+						"importedNamespace",
+						lv_importedNamespace_1_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.QualifiedNameWithWildcard");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		otherlv_2=Semicolon
+		{
+			newLeafNode(otherlv_2, grammarAccess.getSTImportAccess().getSemicolonKeyword_2());
+		}
 	)
 ;
 
@@ -3781,12 +3875,15 @@ ruleSTFeatureName returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleT
 	leaveRule();
 }:
 	(
-		this_ID_0=RULE_ID
 		{
-			$current.merge(this_ID_0);
+			newCompositeNode(grammarAccess.getSTFeatureNameAccess().getQualifiedNameParserRuleCall_0());
+		}
+		this_QualifiedName_0=ruleQualifiedName
+		{
+			$current.merge(this_QualifiedName_0);
 		}
 		{
-			newLeafNode(this_ID_0, grammarAccess.getSTFeatureNameAccess().getIDTerminalRuleCall_0());
+			afterParserOrEnumRuleCall();
 		}
 		    |
 		kw=LT
@@ -5064,6 +5161,82 @@ ruleSTAnyCharsType returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRule
 			$current.merge(kw);
 			newLeafNode(kw, grammarAccess.getSTAnyCharsTypeAccess().getWCHARKeyword_3());
 		}
+	)
+;
+
+// Entry rule entryRuleQualifiedName
+entryRuleQualifiedName returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getQualifiedNameRule()); }
+	iv_ruleQualifiedName=ruleQualifiedName
+	{ $current=$iv_ruleQualifiedName.current.getText(); }
+	EOF;
+
+// Rule QualifiedName
+ruleQualifiedName returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		this_ID_0=RULE_ID
+		{
+			$current.merge(this_ID_0);
+		}
+		{
+			newLeafNode(this_ID_0, grammarAccess.getQualifiedNameAccess().getIDTerminalRuleCall_0());
+		}
+		(
+			kw=ColonColon
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getQualifiedNameAccess().getColonColonKeyword_1_0());
+			}
+			this_ID_2=RULE_ID
+			{
+				$current.merge(this_ID_2);
+			}
+			{
+				newLeafNode(this_ID_2, grammarAccess.getQualifiedNameAccess().getIDTerminalRuleCall_1_1());
+			}
+		)*
+	)
+;
+
+// Entry rule entryRuleQualifiedNameWithWildcard
+entryRuleQualifiedNameWithWildcard returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getQualifiedNameWithWildcardRule()); }
+	iv_ruleQualifiedNameWithWildcard=ruleQualifiedNameWithWildcard
+	{ $current=$iv_ruleQualifiedNameWithWildcard.current.getText(); }
+	EOF;
+
+// Rule QualifiedNameWithWildcard
+ruleQualifiedNameWithWildcard returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		{
+			newCompositeNode(grammarAccess.getQualifiedNameWithWildcardAccess().getQualifiedNameParserRuleCall_0());
+		}
+		this_QualifiedName_0=ruleQualifiedName
+		{
+			$current.merge(this_QualifiedName_0);
+		}
+		{
+			afterParserOrEnumRuleCall();
+		}
+		(
+			kw=ColonColonAsterisk
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getQualifiedNameWithWildcardAccess().getColonColonAsteriskKeyword_1());
+			}
+		)?
 	)
 ;
 
