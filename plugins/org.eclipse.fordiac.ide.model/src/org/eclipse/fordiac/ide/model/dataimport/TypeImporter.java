@@ -26,7 +26,6 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize;
 
 import java.io.InputStream;
-import java.text.MessageFormat;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -73,11 +72,9 @@ public abstract class TypeImporter extends CommonElementImporter {
 		final DataType dataType = getDataTypeLibrary().getType(typeName);
 		v.setType(dataType);
 
-		if (dataType instanceof ErrorMarkerDataType) {
-			errorMarkerBuilders.add(ErrorMarkerBuilder
-					.createErrorMarkerBuilder(
-							MessageFormat.format(Messages.TypeImporter_TypeMissing, typeName, v.getName()))
-					.setTarget(v));
+		if (dataType instanceof final ErrorMarkerDataType errorMarkerDataType) {
+			errorMarkerBuilders.add(
+					ErrorMarkerBuilder.createErrorMarkerBuilder(errorMarkerDataType.getErrorMessage()).setTarget(v));
 		}
 
 		final String arraySize = getAttributeValue(LibraryElementTags.ARRAYSIZE_ATTRIBUTE);
