@@ -18,7 +18,7 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -27,18 +27,19 @@ public class FanOutGroupInterfaceConnectionLabel extends GroupInterfaceConnectio
 
 	private final EList<Connection> connListRef;
 
-	public FanOutGroupInterfaceConnectionLabel(final boolean srcLabel, final IFigure groupFigure, final FBNetworkConnection connFigure, final EList<Connection> connListRef) {
+	public FanOutGroupInterfaceConnectionLabel(final boolean srcLabel, final IFigure groupFigure,
+			final FBNetworkConnection connFigure, final EList<Connection> connListRef) {
 		super(srcLabel, groupFigure, connFigure);
 		connFigure.setBounds(connFigure.getBounds());
 		this.connListRef = connListRef;
 	}
 
 	private int getIndex() {
-		return FBNetworkConnection.getHiddenConnections(connListRef).indexOf(connFigure.getModel());
+		return getHiddenGroupBorderCrossingConnections(connListRef).indexOf(connFigure.getModel());
 	}
 
 	private boolean isLast() {
-		final List<Connection> hiddenConnections = FBNetworkConnection.getHiddenConnections(connListRef);
+		final List<Connection> hiddenConnections = getHiddenGroupBorderCrossingConnections(connListRef);
 		return hiddenConnections.indexOf(connFigure.getModel()) == hiddenConnections.size() - 1;
 	}
 
@@ -53,69 +54,49 @@ public class FanOutGroupInterfaceConnectionLabel extends GroupInterfaceConnectio
 		return new FanOutConnectorLineFigure();
 	}
 
-	private class FanOutConnectorLineFigure extends Figure {
-
-		private static enum Direction {
-			UP,
-			DOWN,
-			LEFT,
-			RIGHT
-		}
+	private class FanOutConnectorLineFigure extends GroupInterfaceConnectorFigure {
 
 		@Override
 		protected void paintFigure(final Graphics g) {
-			g.setLineWidth(connFigure.getLineWidth());
-			final Rectangle bounds = getBounds();
+			if (getIndex() == 0) {
+				// handles the case where the first interface element (which is a GroupInterfaceConnectionLabel)
+				// gets deleted and a FanOutGroupInterfaceConnectionLabel has to "take its place"
+				super.paintFigure(g);
+			} else {
+				g.setLineWidth(connFigure.getLineWidth());
 
-			drawLine(g, Direction.LEFT);
-			drawLine(g, Direction.UP);
-			if (!isLast()) {
-				drawLine(g, Direction.DOWN);
-			}
+				final PointList points = createPointList(g);
+				g.drawPolyline(points);
 
-			if (connFigure.isAdapterOrStructConnection()) {
-				g.setLineWidth(connFigure.getLineWidth() / HideableConnection.NORMAL_DOUBLE_LINE_WIDTH);
-				if (g.getAbsoluteScale() >= 1) {
-					g.setForegroundColor(connFigure.getLighterColor());
-					g.drawLine(bounds.getLeft(), bounds.getRight());
-				}
+				drawAdapterOrStructLine(g, points);
 			}
 		}
 
-		private void drawLine(final Graphics g, final Direction direction) {
+		private PointList createPointList(final Graphics g) {
 			final Point rightBounds = getBounds().getRight();
 			final int labelHeight = getLabel().getBounds().height;
 			final int labelWidth = getLabel().getBounds().width;
 			final int maxLabelWidth = connFigure.getMaxFanOutLabelWidth();
 			final int diff = maxLabelWidth - labelWidth;
 
-			int x1, y1, x2, y2;
-			switch (direction) {
-			case UP:
-				x1 = rightBounds.x - labelHeight - diff;
-				y1 = rightBounds.y;
-				x2 = x1;
-				y2 = rightBounds.y - labelHeight;
-				break;
-			case DOWN:
-				x1 = rightBounds.x - labelHeight - diff;
-				y1 = rightBounds.y;
-				x2 = x1;
-				y2 = rightBounds.y + labelHeight;
-				break;
-			case LEFT:
-				x1 = rightBounds.x;
-				y1 = rightBounds.y;
-				x2 = rightBounds.x - labelHeight - diff;
-				y2 = rightBounds.y;
-				break;
-			case RIGHT:
-				// not yet needed
-			default:
-				return;
+			final PointList points = new PointList();
+
+			final int rightX = rightBounds.x;
+			final int leftX = rightBounds.x - labelHeight - diff;
+
+			// left
+			points.addPoint(rightX, rightBounds.y);
+			points.addPoint(leftX, rightBounds.y);
+
+			// up
+			points.addPoint(leftX, rightBounds.y - labelHeight);
+
+			// down
+			if (!isLast()) {
+				points.addPoint(leftX, rightBounds.y + labelHeight);
 			}
 
-			g.drawLine(x1, y1, x2, y2);
+			return points;
 		}
 
 	}

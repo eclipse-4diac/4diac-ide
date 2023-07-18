@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
+import java.util.List;
+
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
@@ -19,8 +21,11 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 
 public class GroupInterfaceConnectionLabel extends FBNetworkConnectionLabel {
 
@@ -44,6 +49,15 @@ public class GroupInterfaceConnectionLabel extends FBNetworkConnectionLabel {
 
 	public void setGroupFigure(final IFigure groupFigure) {
 		this.groupFigure = groupFigure;
+	}
+
+	protected static List<Connection> getHiddenGroupBorderCrossingConnections(final EList<Connection> connections) {
+		// @formatter:off
+		return connections.stream()
+				.filter(con -> !con.isVisible())
+				.filter(con -> con.getDestinationElement().getGroup() == null)
+				.toList();
+		// @formatter:on
 	}
 
 	@Override
@@ -77,53 +91,77 @@ public class GroupInterfaceConnectionLabel extends FBNetworkConnectionLabel {
 		final Label label = getLabel();
 		final Dimension preferredSize = label.getTextBounds().getSize();
 		final Insets insets = getInsets();
-		preferredSize.expand(insets.getWidth() + 4, insets.getHeight());  // the +4 are for the margin border
+		preferredSize.expand(insets.getWidth() + 4, insets.getHeight()); // the +4 are for the margin border
 		return preferredSize;
 	}
 
-	@SuppressWarnings("static-method") // allow subclasses to provide their own connector line (e.g., fan-out and in)
+	// allow subclasses to provide their own connector line (e.g., fan-out and in)
 	protected Figure createConnectorLine(final HideableConnection connFigure) {
-		return new Figure() {
-			@Override
-			protected void paintFigure(final Graphics g) {
-				g.setLineWidth(connFigure.getLineWidth());
-				final Rectangle bounds = getBounds();
-				g.drawLine(bounds.getLeft(), bounds.getRight());
-				drawFanOutConnector(connFigure, g, bounds);
-				if (connFigure.isAdapterOrStructConnection()) {
-					g.setLineWidth(connFigure.getLineWidth() / HideableConnection.NORMAL_DOUBLE_LINE_WIDTH);
-					if (g.getAbsoluteScale() >= 1) {
-						g.setForegroundColor(connFigure.getLighterColor());
-						g.drawLine(bounds.getLeft(), bounds.getRight());
-					}
-				}
-			}
+		return new GroupInterfaceConnectorFigure();
+	}
 
-			/*
-			 * Draws the small part of the connection that is needed to connect the
-			 * first group interface label with the other fan out labels.
-			 *
-			 * ----------------------------------->
-			 *                       |   <- draws this
-			 *                       |
-			 *                       ------------->
-			 *                       |
-			 *                       |
-			 *                       ------------->
-			 *                       |
-			 */
-			private void drawFanOutConnector(final HideableConnection connFigure, final Graphics g,
-					final Rectangle bounds) {
-				if (isSrcLabel() && FBNetworkConnection.getHiddenConnections(connFigure.getModel().getSource().getOutputConnections()).size() > 1) {
-					final Point right = bounds.getRight();
-					final int labelHeight = getLabel().getBounds().height();
-					final int labelWidth = getLabel().getBounds().width;
-					final int maxLabelWidth = ((FBNetworkConnection) connFigure).getMaxFanOutLabelWidth();
-					final int diff = maxLabelWidth - labelWidth;
-					g.drawLine(right.x - labelHeight - diff, right.y, right.x - labelHeight - diff, right.y + labelHeight);
+	protected class GroupInterfaceConnectorFigure extends Figure {
+		@Override
+		protected void paintFigure(final Graphics g) {
+			g.setLineWidth(connFigure.getLineWidth());
+			final Rectangle bounds = getBounds();
+			final PointList points = new PointList();
+			points.addPoint(bounds.getLeft());
+			points.addPoint(bounds.getRight());
+
+			g.drawPolyline(points);
+			drawFanOutConnector(connFigure, g, bounds);
+			drawAdapterOrStructLine(g, points);
+		}
+
+		protected void drawAdapterOrStructLine(final Graphics g, final PointList points) {
+			if (connFigure.isAdapterOrStructConnection()) {
+				g.setLineWidth(connFigure.getLineWidth() / HideableConnection.NORMAL_DOUBLE_LINE_WIDTH);
+				if (g.getAbsoluteScale() >= 1) {
+					g.setForegroundColor(connFigure.getLighterColor());
+					g.drawPolyline(points);
 				}
 			}
-		};
+		}
+
+		/*
+		 * Draws the small part of the connection that is needed to connect the first
+		 * group interface label with the other fan out labels.
+		 *
+		 * -----------------------------------> | <- draws this
+		 * 					   					|
+		 *						 -------------> |
+		 * 										|
+		 * 						 -------------> |
+		 */
+		private void drawFanOutConnector(final HideableConnection connFigure, final Graphics g,
+				final Rectangle bounds) {
+			if (isFirstFanOutGroupInterface(connFigure)) {
+				final Point right = bounds.getRight();
+				final int labelHeight = getLabel().getBounds().height();
+				final int labelWidth = getLabel().getBounds().width;
+				final int maxLabelWidth = ((FBNetworkConnection) connFigure).getMaxFanOutLabelWidth();
+				final int diff = maxLabelWidth - labelWidth;
+
+				// @formatter:off
+				final int[] points = new int[] {
+						right.x - labelHeight - diff,	// x1
+						right.y,						// y1
+						right.x - labelHeight - diff,	// x2
+						right.y + labelHeight			// y2
+						};
+				// @formatter:on
+				g.drawPolyline(points);
+
+				drawAdapterOrStructLine(g, new PointList(points));
+			}
+		}
+
+		private boolean isFirstFanOutGroupInterface(final HideableConnection connFigure) {
+			return isSrcLabel()
+					&& getHiddenGroupBorderCrossingConnections(connFigure.getModel().getSource().getOutputConnections())
+							.size() > 1;
+		}
 	}
 
 }
