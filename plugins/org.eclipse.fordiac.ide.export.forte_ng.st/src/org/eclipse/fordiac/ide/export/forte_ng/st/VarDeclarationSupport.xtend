@@ -15,15 +15,16 @@ package org.eclipse.fordiac.ide.export.forte_ng.st
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
-import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
-import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import static extension org.eclipse.xtext.EcoreUtil2.*
 
 @FinalFieldsConstructor
 class VarDeclarationSupport extends StructuredTextSupport {
@@ -56,7 +57,7 @@ class VarDeclarationSupport extends StructuredTextSupport {
 			parseResult = (varDeclaration.value?.value ?: "").parse(
 				varDeclaration?.eResource?.URI,
 				resultType,
-				null,
+				varDeclaration?.getContainerOfType(LibraryElement),
 				null,
 				errors,
 				warnings,

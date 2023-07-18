@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseU
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.resource.IResourceDescription;
@@ -131,8 +132,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		final String value = getValue(varDeclaration);
 		final List<Issue> issues = new ArrayList<>();
 		if (!value.isBlank()) { // do not parse value if blank
-			StructuredTextParseUtil.validate(value, delta.getUri(), STCoreUtil.getFeatureType(varDeclaration), null,
-					null, issues);
+			StructuredTextParseUtil.validate(value, delta.getUri(), STCoreUtil.getFeatureType(varDeclaration),
+					EcoreUtil2.getContainerOfType(varDeclaration, LibraryElement.class), null, issues);
 		}
 		validateGenericValue(varDeclaration, value, issues);
 		if (monitor.isCanceled()) {
@@ -160,12 +161,10 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 							Messages.STAlgorithmInitialValueBuilderParticipant_MissingValueForGenericInstanceVariable,
 							Severity.WARNING));
 				}
-			} else {
-				if (!value.isBlank()) {
-					issues.add(createIssue(
-							Messages.STAlgorithmInitialValueBuilderParticipant_SpecifiedValueForGenericTypeVariable,
-							Severity.WARNING));
-				}
+			} else if (!value.isBlank()) {
+				issues.add(createIssue(
+						Messages.STAlgorithmInitialValueBuilderParticipant_SpecifiedValueForGenericTypeVariable,
+						Severity.WARNING));
 			}
 		}
 	}
@@ -205,7 +204,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	protected void createMarker(final IFile file, final EObject object, final String type, final Issue issue)
 			throws CoreException {
 		ErrorMarkerBuilder.createErrorMarkerBuilder(issue.getMessage()).setType(type)
-		.setSeverity(getMarkerSeverity(issue)).setTarget(object).createMarker(file);
+				.setSeverity(getMarkerSeverity(issue)).setTarget(object).createMarker(file);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -228,16 +227,12 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	}
 
 	protected static int getMarkerSeverity(final Issue issue) {
-		switch (issue.getSeverity()) {
-		case ERROR:
-			return IMarker.SEVERITY_ERROR;
-		case WARNING:
-			return IMarker.SEVERITY_WARNING;
-		case INFO:
-			return IMarker.SEVERITY_INFO;
-		default:
-			throw new IllegalArgumentException(String.valueOf(issue.getSeverity()));
-		}
+		return switch (issue.getSeverity()) {
+		case ERROR -> IMarker.SEVERITY_ERROR;
+		case WARNING -> IMarker.SEVERITY_WARNING;
+		case INFO -> IMarker.SEVERITY_INFO;
+		default -> throw new IllegalArgumentException(String.valueOf(issue.getSeverity()));
+		};
 	}
 
 	protected static String getValue(final VarDeclaration varDeclaration) {

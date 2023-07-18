@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorException
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.eval.variable.VariableEvaluator
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration
@@ -28,6 +29,7 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations
 import static extension org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
+import static extension org.eclipse.xtext.EcoreUtil2.*
 
 class VarDeclarationEvaluator extends StructuredTextEvaluator implements VariableEvaluator {
 	final VarDeclaration varDeclaration
@@ -77,7 +79,7 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator implements Variabl
 			parseResult = varDeclaration.initialValue.parse(
 				varDeclaration?.eResource?.URI,
 				resultType,
-				null,
+				varDeclaration?.getContainerOfType(LibraryElement),
 				null,
 				errors,
 				warnings,
