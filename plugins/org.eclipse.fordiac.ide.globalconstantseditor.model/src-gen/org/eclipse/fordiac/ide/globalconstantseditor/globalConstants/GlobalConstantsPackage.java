@@ -77,13 +77,31 @@ public interface GlobalConstantsPackage extends EPackage {
 	int ST_GLOBAL_CONSTS_SOURCE__COMMENTS = STCorePackage.ST_SOURCE__COMMENTS;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_GLOBAL_CONSTS_SOURCE__NAME = STCorePackage.ST_SOURCE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Imports</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_GLOBAL_CONSTS_SOURCE__IMPORTS = STCorePackage.ST_SOURCE_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_GLOBAL_CONSTS_SOURCE__ELEMENTS = STCorePackage.ST_SOURCE_FEATURE_COUNT + 0;
+	int ST_GLOBAL_CONSTS_SOURCE__ELEMENTS = STCorePackage.ST_SOURCE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>ST Global Consts Source</em>' class.
@@ -92,7 +110,7 @@ public interface GlobalConstantsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_GLOBAL_CONSTS_SOURCE_FEATURE_COUNT = STCorePackage.ST_SOURCE_FEATURE_COUNT + 1;
+	int ST_GLOBAL_CONSTS_SOURCE_FEATURE_COUNT = STCorePackage.ST_SOURCE_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STVarGlobalDeclarationBlockImpl <em>ST Var Global Declaration Block</em>}' class.
@@ -141,6 +159,28 @@ public interface GlobalConstantsPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSTGlobalConstsSource();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getName()
+	 * @see #getSTGlobalConstsSource()
+	 * @generated
+	 */
+	EAttribute getSTGlobalConstsSource_Name();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getImports <em>Imports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Imports</em>'.
+	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getImports()
+	 * @see #getSTGlobalConstsSource()
+	 * @generated
+	 */
+	EReference getSTGlobalConstsSource_Imports();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getElements <em>Elements</em>}'.
@@ -194,6 +234,22 @@ public interface GlobalConstantsPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ST_GLOBAL_CONSTS_SOURCE = eINSTANCE.getSTGlobalConstsSource();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ST_GLOBAL_CONSTS_SOURCE__NAME = eINSTANCE.getSTGlobalConstsSource_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Imports</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_GLOBAL_CONSTS_SOURCE__IMPORTS = eINSTANCE.getSTGlobalConstsSource_Imports();
 
 		/**
 		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.

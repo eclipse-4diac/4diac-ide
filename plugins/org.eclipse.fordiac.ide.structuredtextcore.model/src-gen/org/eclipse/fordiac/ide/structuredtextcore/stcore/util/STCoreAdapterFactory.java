@@ -93,6 +93,10 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTCoreSourceAdapter();
 			}
 			@Override
+			public Adapter caseSTImport(STImport object) {
+				return createSTImportAdapter();
+			}
+			@Override
 			public Adapter caseSTVarDeclarationBlock(STVarDeclarationBlock object) {
 				return createSTVarDeclarationBlockAdapter();
 			}
@@ -349,6 +353,20 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTCoreSourceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport <em>ST Import</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport
+	 * @generated
+	 */
+	public Adapter createSTImportAdapter() {
 		return null;
 	}
 

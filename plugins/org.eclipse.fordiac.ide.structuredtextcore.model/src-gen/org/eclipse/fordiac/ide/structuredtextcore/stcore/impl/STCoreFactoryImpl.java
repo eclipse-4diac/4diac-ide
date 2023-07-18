@@ -78,6 +78,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 		switch (eClass.getClassifierID()) {
 			case STCorePackage.ST_SOURCE: return createSTSource();
 			case STCorePackage.ST_CORE_SOURCE: return createSTCoreSource();
+			case STCorePackage.ST_IMPORT: return createSTImport();
 			case STCorePackage.ST_VAR_DECLARATION_BLOCK: return createSTVarDeclarationBlock();
 			case STCorePackage.ST_VAR_PLAIN_DECLARATION_BLOCK: return createSTVarPlainDeclarationBlock();
 			case STCorePackage.ST_VAR_INPUT_DECLARATION_BLOCK: return createSTVarInputDeclarationBlock();
@@ -224,6 +225,17 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	public STCoreSource createSTCoreSource() {
 		STCoreSourceImpl stCoreSource = new STCoreSourceImpl();
 		return stCoreSource;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STImport createSTImport() {
+		STImportImpl stImport = new STImportImpl();
+		return stImport;
 	}
 
 	/**
