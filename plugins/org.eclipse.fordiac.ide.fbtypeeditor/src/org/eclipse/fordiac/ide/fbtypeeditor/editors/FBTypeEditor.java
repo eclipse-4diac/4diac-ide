@@ -83,14 +83,16 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.osgi.framework.FrameworkUtil;
 
 public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelectionListener, CommandStackEventListener,
-ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INavigationLocationProvider {
+		ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INavigationLocationProvider {
 
 	private Collection<IFBTEditorPart> editors;
 	private TypeEntry typeEntry;
@@ -134,8 +136,8 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		for (final IConfigurationElement e : config) {
 			try {
 				final Object o = e.createExecutableExtension("class"); //$NON-NLS-1$
-				if (o instanceof IFBTValidation) {
-					((IFBTValidation) o).invokeValidation(fbType);
+				if (o instanceof final IFBTValidation fbtValidation) {
+					fbtValidation.invokeValidation(fbType);
 				}
 			} catch (final CoreException ex) {
 				FordiacLogHelper.logError(ex.getMessage(), ex);
@@ -144,9 +146,9 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 	}
 
 	protected boolean checkTypeSaveAble() {
-		if (fbType instanceof CompositeFBType) {
+		if (fbType instanceof final CompositeFBType cFBType) {
 			// only allow to save composite FBs if all contained FBs have types
-			for (final FBNetworkElement fb : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
+			for (final FBNetworkElement fb : cFBType.getFBNetwork().getNetworkElements()) {
 				if (null == fb.getTypeEntry()) {
 					MessageDialog.openInformation(getSite().getShell(),
 							Messages.FBTypeEditor_CompositeContainsFunctionBlockWithoutType,
@@ -163,20 +165,18 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		// TODO implement a save as new type method
 	}
 
-	/**
-	 * The <code>MultiPageEditorExample</code> implementation of this method checks
-	 * that the input is an instance of <code>FBTypeEditorInput</code>.
+	/** The <code>MultiPageEditorExample</code> implementation of this method checks that the input is an instance of
+	 * <code>FBTypeEditorInput</code>.
 	 *
 	 * @param site        the site
 	 * @param editorInput the editor input
 	 *
-	 * @throws PartInitException the part init exception
-	 */
+	 * @throws PartInitException the part init exception */
 	@Override
 	public void init(final IEditorSite site, final IEditorInput editorInput) throws PartInitException {
 
-		if (editorInput instanceof FileEditorInput) {
-			final IFile fbTypeFile = ((FileEditorInput) editorInput).getFile();
+		if (editorInput instanceof final FileEditorInput fileEI) {
+			final IFile fbTypeFile = fileEI.getFile();
 			if (!fbTypeFile.exists()) {
 				throw new PartInitException(
 						new Status(IStatus.ERROR, FrameworkUtil.getBundle(getClass()).getSymbolicName(),
@@ -184,8 +184,8 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			}
 
 			typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fbTypeFile);
-		} else if (editorInput instanceof FBTypeEditorInput) {
-			typeEntry = ((FBTypeEditorInput) editorInput).getTypeEntry();
+		} else if (editorInput instanceof final FBTypeEditorInput fbTypeEI) {
+			typeEntry = fbTypeEI.getTypeEntry();
 		}
 
 		if (null != typeEntry) {
@@ -205,10 +205,11 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 
 	@SuppressWarnings("static-method")  // allow children to override this method
 	protected FBType getFBType(final TypeEntry typeEntry) {
-		if (typeEntry instanceof FBTypeEntry) {
-			return ((FBTypeEntry) typeEntry).getTypeEditable();
-		} else if (typeEntry instanceof AdapterTypeEntry) {
-			return ((AdapterTypeEntry) typeEntry).getTypeEditable().getAdapterFBType();
+		if (typeEntry instanceof final FBTypeEntry fbtEntry) {
+			return fbtEntry.getTypeEditable();
+		}
+		if (typeEntry instanceof final AdapterTypeEntry adpTypeEntry) {
+			return adpTypeEntry.getTypeEditable().getAdapterFBType();
 		}
 		return null;
 	}
@@ -282,12 +283,12 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			for (final IConfigurationElement element : elements) {
 				try {
 					final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
-					if (obj instanceof IFBTEditorPart) {
+					if (obj instanceof final IFBTEditorPart fbtEditorPart) {
 						final String elementType = element.getAttribute("type"); //$NON-NLS-1$
 						final Integer sortIndex = Integer.valueOf(element.getAttribute("sortIndex")); //$NON-NLS-1$
 
 						if (checkTypeEditorType(fbType, elementType)) {
-							sortedEditorsMap.put(sortIndex, (IFBTEditorPart) obj);
+							sortedEditorsMap.put(sortIndex, fbtEditorPart);
 						}
 					}
 				} catch (final Exception e) {
@@ -298,13 +299,11 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		return sortedEditorsMap;
 	}
 
-	/**
-	 * Check if the given editor type is a valid editor for the given type
+	/** Check if the given editor type is a valid editor for the given type
 	 *
 	 * @param fbType     type to be edited in this type editor
 	 * @param editorType editor type string as defined the fBTEditorTabs.exsd
-	 * @return true if the editor should be shown otherwise false
-	 */
+	 * @return true if the editor should be shown otherwise false */
 	protected boolean checkTypeEditorType(final FBType fbType, final String editorType) {
 		return ((editorType.equals("ForAllTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllFBTypes")) || //$NON-NLS-1$
@@ -316,19 +315,17 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 				((fbType instanceof FunctionFBType) && editorType.equals("function")) || //$NON-NLS-1$
 				((fbType instanceof ServiceInterfaceFBType) && editorType.equals("serviceInterface")) || //$NON-NLS-1$
 				((fbType instanceof CompositeFBType) && editorType.equals("composite")) //$NON-NLS-1$
-				);
+		);
 	}
 
 	private FBTypeEditorInput getFBTypeEditorInput() {
 		return new FBTypeEditorInput(fbType, typeEntry);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui.
-	 * IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
-	 */
+	 * @see org.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui. IWorkbenchPart,
+	 * org.eclipse.jface.viewers.ISelection) */
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor())) {
@@ -360,7 +357,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		if (isEditorActive()) {
 			// we should only call super if the editor is active otherwise we may get disposed errors
 			T result = super.getAdapter(adapter);
-			if (result == null) {
+			if (result == null && shouldCheckAllEditors(adapter)) {
 				result = editors.stream().map(innerEditor -> Adapters.adapt(innerEditor, adapter))
 						.filter(Objects::nonNull).findFirst().orElse(null);
 			}
@@ -369,14 +366,18 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		return null;
 	}
 
+	private static <T> boolean shouldCheckAllEditors(final Class<T> adapter) {
+		return (adapter == ITextEditor.class) || (adapter == XtextEditor.class);
+	}
+
 	private boolean isEditorActive() {
 		final int index = getActivePage();
 		return index != -1 && !((CTabFolder) getContainer()).getItem(index).isDisposed();
 	}
 
 	public void handleContentOutlineSelection(final ISelection selection) {
-		if ((selection instanceof IStructuredSelection) && !selection.isEmpty()) {
-			final Object selectedElement = ((IStructuredSelection) selection).getFirstElement();
+		if ((selection instanceof final IStructuredSelection sel) && !selection.isEmpty()) {
+			final Object selectedElement = sel.getFirstElement();
 			int i = 0;
 			for (final IFBTEditorPart editorPart : editors) {
 				if (editorPart.outlineSelectionChanged(selectedElement)) {
@@ -427,11 +428,9 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			fbType = newFBType;
 			editors.stream().forEach(e -> e.reloadType(fbType));
 			final IEditorPart activeEditor = getActiveEditor();
-			if (activeEditor instanceof IFBTEditorPart) {
-				Display.getDefault()
-				.asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
-						activeEditor.getAdapter(GraphicalViewer.class),
-						((IFBTEditorPart) activeEditor).getSelectableEditPart()));
+			if (activeEditor instanceof final IFBTEditorPart fbtEditorPart) {
+				Display.getDefault().asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
+						activeEditor.getAdapter(GraphicalViewer.class), fbtEditorPart.getSelectableEditPart()));
 			}
 			getCommandStack().flush();
 			fbType.eAdapters().add(adapter);
