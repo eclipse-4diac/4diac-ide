@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
@@ -312,21 +311,11 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 	}
 
 	private void writeTextMethodParameters(final TextMethod method) throws XMLStreamException {
-		for (final INamedElement element : method.getInputParameters()) {
-			addParameter(element);
-		}
-		for (final INamedElement element : method.getOutputParameters()) {
-			addParameter(element);
-		}
-		for (final INamedElement element : method.getInOutParameters()) {
-			addParameter(element);
-		}
+		addVarList(method.getInputParameters().stream().map(VarDeclaration.class::cast).toList(),
+				LibraryElementTags.INPUT_VARS_ELEMENT);
+		addVarList(method.getOutputParameters().stream().map(VarDeclaration.class::cast).toList(),
+				LibraryElementTags.OUTPUT_VARS_ELEMENT);
+		addVarList(method.getInOutParameters().stream().map(VarDeclaration.class::cast).toList(),
+				LibraryElementTags.INOUT_VARS_ELEMENT);
 	}
-
-	private void addParameter(final INamedElement element) throws XMLStreamException {
-		if (element instanceof final VarDeclaration varDecl) {
-			addVarDeclaration(varDecl);
-		}
-	}
-
 }

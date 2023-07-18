@@ -44,6 +44,7 @@ public abstract class AbstractExportLibElements extends AbstractFBTask {
 	private static final String SIMPLEFB_XML_ATTRIBUTE = "SimpleFB"; //$NON-NLS-1$
 	private static final String BASICFB_XML_ATTRIBUTE = "BasicFB"; //$NON-NLS-1$
 	private static final String COMPOSITEFB_XML_ATTRIBUTE = "FBNetwork"; //$NON-NLS-1$
+	private static final String FUNCTIONBODY_XML_ATTRIBUTE = "FunctionBody"; //$NON-NLS-1$
 
 	private final DocumentBuilder builder = getDocumentBuilder();
 	private final Transformer transformer = getTransformer();
@@ -62,13 +63,13 @@ public abstract class AbstractExportLibElements extends AbstractFBTask {
 	protected boolean isFilteredFiletype(final File file) {
 		final var allowedFiletypes = Stream.of(//
 				TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT,//
-				TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT);
+				TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT,//
+				TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT);
 		return matchesFileExtension(file, allowedFiletypes);
 	}
 
 	@Override
-	protected void exportFile(final File folder, final IFile file)
-			throws BuildException {
+	protected void exportFile(final File folder, final IFile file) throws BuildException {
 		log(file.toString());
 
 		Document document;
@@ -102,6 +103,12 @@ public abstract class AbstractExportLibElements extends AbstractFBTask {
 		}
 
 		algo = doc.getElementsByTagName(COMPOSITEFB_XML_ATTRIBUTE);
+		for (int i = 0; i < algo.getLength(); i++) {
+			final Node parent = algo.item(i).getParentNode();
+			parent.removeChild(algo.item(i));
+		}
+
+		algo = doc.getElementsByTagName(FUNCTIONBODY_XML_ATTRIBUTE);
 		for (int i = 0; i < algo.getLength(); i++) {
 			final Node parent = algo.item(i).getParentNode();
 			parent.removeChild(algo.item(i));
