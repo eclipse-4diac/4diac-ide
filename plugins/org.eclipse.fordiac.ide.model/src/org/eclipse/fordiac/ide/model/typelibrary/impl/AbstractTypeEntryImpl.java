@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import java.io.InputStream;
+import java.lang.ref.SoftReference;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -74,7 +75,7 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 
 	private long lastModificationTimestamp = IResource.NULL_STAMP;
 
-	protected LibraryElement type;
+	private SoftReference<LibraryElement> typeRef;
 	private LibraryElement typeEditable;
 
 	private TypeLibrary typeLibray;
@@ -111,22 +112,26 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	@Override
 	public synchronized LibraryElement getType() {
 		if (getFile() != null) {
-			if (type == null) {
-				reloadType();
-			} else if (isFileContentChanged()) {
-				// reset editable type to force a fresh copy the next time the editable type is accessed
-				// also needs to happen before the reload, since SystemEntry delegates to setType,
-				// which would otherwise reset the freshly reloaded type
-				setTypeEditable(null);
-				reloadType();
+			if (typeRef != null) {
+				final LibraryElement type = typeRef.get();
+				if (type != null && !isFileContentChanged()) {
+					return type;
+				}
 			}
+			return reloadType();
 		}
-		return type;
+		return null;
 	}
 
-	private void reloadType() {
+	private LibraryElement reloadType() {
+		// reset editable type to force a fresh copy the next time the editable type is accessed
+		// also needs to happen before the reload, since SystemEntry delegates to setType,
+		// which would otherwise reset the freshly reloaded type
+		setTypeEditable(null);
 		lastModificationTimestamp = getFile().getModificationStamp();
-		setType(loadType());
+		final LibraryElement loadType = loadType();
+		setType(loadType);
+		return loadType;
 	}
 
 	private boolean isFileContentChanged() {
@@ -136,15 +141,17 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 
 	@Override
 	public synchronized void setType(final LibraryElement newType) {
-		final LibraryElement oldType = type;
-		type = newType;
+		final LibraryElement oldType = (typeRef != null) ? typeRef.get() : null;
 		if (newType != null) {
 			encloseInResource(newType);
 			newType.setTypeEntry(this);
+			typeRef = new SoftReference<>(newType);
+		} else {
+			typeRef = null;
 		}
 		if (eNotificationRequired()) {
 			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_FEATURE, oldType,
-					type));
+					newType));
 		}
 	}
 
@@ -153,14 +160,14 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 			final IPath path = getFile().getFullPath();
 			if (path != null) {
 				new FordiacTypeResource(URI.createPlatformResourceURI(path.toString(), true)).getContents()
-				.add(newType);
+						.add(newType);
 			}
 		}
 	}
 
 	@Override
 	public synchronized LibraryElement getTypeEditable() {
-		if ((getFile() != null) && (typeEditable == null  || isFileContentChanged() )) {
+		if ((getFile() != null) && (typeEditable == null || isFileContentChanged())) {
 			// if the editable type is null load it from the file and set a copy
 			setTypeEditable(EcoreUtil.copy(getType()));
 		}
@@ -177,7 +184,7 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 		}
 		if (eNotificationRequired()) {
 			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE,
-					oldTypeEditable, type));
+					oldTypeEditable, newTypeEditable));
 		}
 	}
 
@@ -309,8 +316,7 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	private static void checkAndCreateFolderHierarchy(final IFile file, final IProgressMonitor monitor)
 			throws CoreException {
 		final IContainer container = file.getParent();
-		if (!container.exists() && container instanceof IFolder) {
-			final IFolder folder = ((IFolder) container);
+		if (!container.exists() && container instanceof final IFolder folder) {
 			folder.create(true, true, monitor);
 			folder.refreshLocal(IResource.DEPTH_ZERO, monitor);
 		}

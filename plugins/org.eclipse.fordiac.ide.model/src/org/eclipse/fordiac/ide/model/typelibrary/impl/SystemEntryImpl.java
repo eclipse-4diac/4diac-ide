@@ -44,8 +44,8 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 	@Override
 	public synchronized AutomationSystem getType() {
 		final LibraryElement type = super.getType();
-		if(type instanceof AutomationSystem){
-			return (AutomationSystem)type;
+		if (type instanceof final AutomationSystem as) {
+			return as;
 		}
 		return null;
 	}
@@ -54,9 +54,9 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 	public synchronized void setType(final LibraryElement newType) {
 		if (newType instanceof AutomationSystem) {
 			super.setType(newType);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
+			if (null != newType) {
 				FordiacLogHelper.logError("tried to set no AutomationSystem as type entry for SystemEntry");//$NON-NLS-1$
 			}
 		}
