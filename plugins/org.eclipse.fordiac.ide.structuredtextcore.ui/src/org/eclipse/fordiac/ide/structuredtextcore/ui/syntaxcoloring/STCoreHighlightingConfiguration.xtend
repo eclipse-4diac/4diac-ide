@@ -180,7 +180,7 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 
 	def memberVarTextStyle() {
 		var textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(102, 225, 248));
+		textStyle.setColor(new RGB(128, 64, 64));
 		return textStyle;
 	}
 
