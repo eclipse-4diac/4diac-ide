@@ -114,13 +114,13 @@ public class STFunctionPartitioner implements STCorePartitioner {
 				result.setComment(comment);
 			}
 			function.getInputParameters().stream().map(STVarDeclaration.class::cast)
-					.filter(STFunctionPartitioner::isValidParameter).map(STFunctionPartitioner::convertInputParameter)
+					.filter(STFunctionPartitioner::isValidParameter).map(this::convertInputParameter)
 					.forEachOrdered(result.getInputParameters()::add);
 			function.getOutputParameters().stream().map(STVarDeclaration.class::cast)
-					.filter(STFunctionPartitioner::isValidParameter).map(STFunctionPartitioner::convertOutputParameter)
+					.filter(STFunctionPartitioner::isValidParameter).map(this::convertOutputParameter)
 					.forEachOrdered(result.getOutputParameters()::add);
 			function.getInOutParameters().stream().map(STVarDeclaration.class::cast)
-					.filter(STFunctionPartitioner::isValidParameter).map(STFunctionPartitioner::convertInOutParameter)
+					.filter(STFunctionPartitioner::isValidParameter).map(this::convertInOutParameter)
 					.forEachOrdered(result.getInOutParameters()::add);
 			result.setReturnType(function.getReturnType());
 			result.setText(node.getText());
@@ -129,25 +129,29 @@ public class STFunctionPartitioner implements STCorePartitioner {
 		return null;
 	}
 
-	protected static VarDeclaration convertInputParameter(final STVarDeclaration declaration) {
+	protected VarDeclaration convertInputParameter(final STVarDeclaration declaration) {
 		final var result = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		convertParameter(result, declaration, true);
 		return result;
 	}
 
-	protected static VarDeclaration convertOutputParameter(final STVarDeclaration declaration) {
+	protected VarDeclaration convertOutputParameter(final STVarDeclaration declaration) {
 		final var result = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		convertParameter(result, declaration, false);
 		return result;
 	}
 
-	protected static VarDeclaration convertInOutParameter(final STVarDeclaration declaration) {
+	protected VarDeclaration convertInOutParameter(final STVarDeclaration declaration) {
 		return convertInputParameter(declaration);
 	}
 
-	protected static void convertParameter(final VarDeclaration result, final STVarDeclaration declaration,
+	protected void convertParameter(final VarDeclaration result, final STVarDeclaration declaration,
 			final boolean input) {
 		result.setName(declaration.getName());
+		final String comment = documentationProvider.getDocumentation(declaration);
+		if (comment != null) {
+			result.setComment(comment);
+		}
 		result.setType((DataType) declaration.getType());
 		if (declaration.isArray()) {
 			ArraySizeHelper.setArraySize(result, extractArraySize(declaration));
