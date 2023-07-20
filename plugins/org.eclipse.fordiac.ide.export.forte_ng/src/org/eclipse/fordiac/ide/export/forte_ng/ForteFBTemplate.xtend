@@ -327,6 +327,23 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«type.interfaceList.outputVars.generateConnectionAccessorsDefinition("getDOConUnchecked", "CDataConnection *")»
 	'''
 
+	def protected generateSetInitialValuesDeclaration(Iterable<VarDeclaration> variables) '''
+		«IF !variables.empty»
+			void setInitialValues() override;
+		«ENDIF»
+	'''
+
+	def protected generateSetInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
+		«IF !variables.empty»
+			void «className»::setInitialValues() {
+			  «FOR variable : variables»
+			  	«variable.generateName» = «variable.generateVariableDefaultValue»;
+			  «ENDFOR»
+			}
+			
+		«ENDIF»
+	'''
+
 	def protected generateConnectionVariableDeclarations(List<VarDeclaration> variables) '''
 		«FOR variable : variables»
 			«variable.generateVariableTypeName» «variable.generateNameAsConnectionVariable»;

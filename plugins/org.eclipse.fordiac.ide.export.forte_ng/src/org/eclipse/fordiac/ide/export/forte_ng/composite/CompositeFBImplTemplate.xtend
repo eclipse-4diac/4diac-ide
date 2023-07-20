@@ -58,6 +58,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 			»«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«generateConnectionInitializer» {
 		};
 		
+		«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
 		«generateFBNetwork»
 		
 		«generateInterfaceDefinitions»
