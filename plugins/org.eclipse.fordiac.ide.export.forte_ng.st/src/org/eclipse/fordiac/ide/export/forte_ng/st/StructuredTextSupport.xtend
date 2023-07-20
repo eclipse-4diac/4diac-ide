@@ -456,7 +456,10 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected CharSequence generateTypeDefaultValue(INamedElement type) {
 		switch (type) {
 			DataType case GenericTypes.isAnyType(type): '''«type.generateTypeName»()'''
-			AnyStringType: '''«type.generateTypeName»("")'''
+			StringType: '''""_STRING'''
+			WstringType: '''CIEC_WSTRING("")'''
+			CharType: ''''\0'_CHAR'''
+			WcharType: '''CIEC_WCHAR(u'\0')'''
 			AnyElementaryType: '''«type.generateTypeName»(0)'''
 			ArrayType: '''«type.generateTypeName»{}'''
 			StructuredType: '''«type.generateTypeName»()'''
