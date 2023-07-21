@@ -27,6 +27,7 @@ package org.eclipse.fordiac.ide.export.forte_ng
 import java.nio.file.Path
 import java.util.List
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
@@ -443,7 +444,11 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		  «ENDFOR»
 		  receiveInputEvent(«event.generateEventID», nullptr);
 		  «FOR variable : event.outputParameters.filter(VarDeclaration)»
-		  	«variable.generateNameAsParameter» = «variable.generateName»;
+		  	«IF GenericTypes.isAnyType(variable.type)»
+		  		«variable.generateNameAsParameter».setValue(«variable.generateName».unwrap());
+		  	«ELSE»
+		  		«variable.generateNameAsParameter» = «variable.generateName»;
+		  	«ENDIF»
 		  «ENDFOR»
 		}
 	'''

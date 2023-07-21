@@ -75,12 +75,14 @@ final class ForteNgExportUtil {
 
 	def static CharSequence generateTypeNameAsParameter(INamedElement type) {
 		switch (type) {
+			AdapterType: '''FORTE_«type.generateTypeNamePlain»'''
 			ArrayType:
 				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
 					'''CIEC_ARRAY_COMMON<«result»>'''
 				].toString
+			DataType: '''CIEC_«type.generateTypeNamePlain»'''
 			default:
-				type.generateTypeName
+				type.name
 		}
 	}
 
