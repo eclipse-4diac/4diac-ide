@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.gitlab.wizard.GitLabImportWizardPage;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class GitLabDownloadManager {
 
@@ -75,7 +76,7 @@ public class GitLabDownloadManager {
 				getPackages(project);
 			}
 		} catch (final IOException e) {
-			e.printStackTrace();
+			FordiacLogHelper.logError("Problem with GitLab import", e); //$NON-NLS-1$
 		}
 	}
 
@@ -180,6 +181,7 @@ public class GitLabDownloadManager {
 			}
 		} catch (final IOException e) {
 			httpConn.disconnect();
+			FordiacLogHelper.logError("Problem with GitLab import", e);
 			return;
 		}
 		httpConn.disconnect();
