@@ -121,13 +121,40 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 	}
 
 	@Override
+	protected void refreshSourceConnections() {
+		getContentEP().getChildren().forEach(ep -> {
+			if (ep instanceof final AbstractFBNElementEditPart fbEp) {
+				fbEp.getChildren().forEach(pinEp -> {
+					if (pinEp instanceof InterfaceEditPartForFBNetwork) {
+						pinEp.getSourceConnections().forEach(conn -> ((EditPart) conn).refresh());
+					}
+				});
+			}
+		});
+	}
+
+	@Override
+	protected void refreshTargetConnections() {
+		getContentEP().getChildren().forEach(ep -> {
+			if (ep instanceof final AbstractFBNElementEditPart fbEp) {
+				fbEp.getChildren().forEach(pinEp -> {
+					if (pinEp instanceof InterfaceEditPartForFBNetwork) {
+						pinEp.getTargetConnections().forEach(conn -> ((EditPart) conn).refresh());
+					}
+				});
+			}
+		});
+	}
+
+	@Override
 	protected Adapter createContentAdapter() {
 		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
 				final Object feature = notification.getFeature();
-				if (LibraryElementPackage.eINSTANCE.getGroup_GroupElements().equals(feature)) {
+				if (LibraryElementPackage.eINSTANCE.getGroup_GroupElements().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) { // Tooltip stuff
 					// group elements changed tell the parent that fbs may now be at different
 					// places
 					getParent().refresh();
