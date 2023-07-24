@@ -656,7 +656,10 @@
             lightweight="true"
             state="false">
             <enablement>
-                <objectClass name="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+            	<or>
+                	<objectClass name="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+                	<objectClass name="org.eclipse.fordiac.ide.model.libraryElement.Application" />
+               	</or>
             </enablement>
             <description>
                Show instance comment beside typed fbnetwork elements.
