@@ -1,5 +1,3 @@
-package org.eclipse.fordiac.ide.fb.interpreter.compare;
-
 /*******************************************************************************
  * Copyright (c) 2023 Johannes Kepler University Linz and others
  *
@@ -13,6 +11,8 @@ package org.eclipse.fordiac.ide.fb.interpreter.compare;
  *  Antonio Garmendia, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
+package org.eclipse.fordiac.ide.fb.interpreter.compare;
+
 import org.eclipse.emf.compare.Comparison;
 import org.eclipse.emf.compare.EMFCompare;
 import org.eclipse.emf.compare.diff.DefaultDiffEngine;
@@ -23,14 +23,16 @@ import org.eclipse.emf.compare.match.DefaultComparisonFactory;
 import org.eclipse.emf.compare.match.DefaultEqualityHelperFactory;
 import org.eclipse.emf.compare.match.IComparisonFactory;
 import org.eclipse.emf.compare.match.IMatchEngine;
+import org.eclipse.emf.compare.match.eobject.IEObjectMatcher;
 import org.eclipse.emf.compare.match.impl.MatchEngineFactoryImpl;
 import org.eclipse.emf.compare.rcp.EMFCompareRCPPlugin;
 import org.eclipse.emf.compare.scope.DefaultComparisonScope;
 import org.eclipse.emf.compare.scope.IComparisonScope;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.compare.match.eobject.IEObjectMatcher;
 
-public class EventManagerComparisonUtils {
+public final class EventManagerComparisonUtils {
+
+	private static final int DEFAULT_RANKING = 20;
 
 	private EventManagerComparisonUtils() {
 		throw new AssertionError("This class cannot be inherited"); //$NON-NLS-1$
@@ -40,21 +42,20 @@ public class EventManagerComparisonUtils {
 		// Default diff processor
 		final IDiffProcessor diffProcessor = new DiffBuilder();
 		final IDiffEngine diffEngine = new DefaultDiffEngine(diffProcessor);
-		
+
 		final IComparisonScope scope = new DefaultComparisonScope(left, right, null);
 		final IMatchEngine.Factory.Registry registry = EMFCompareRCPPlugin.getDefault().getMatchEngineFactoryRegistry();
 		registry.clear();
 		// Custom Matcher
 		final IEObjectMatcher fordiacForteIntepreterMatcher = new FordiacForteInterpreterMatcher();
 		final IComparisonFactory comparisonFactory = new DefaultComparisonFactory(new DefaultEqualityHelperFactory());
-		
+
 		@SuppressWarnings("deprecation")
-		final MatchEngineFactoryImpl matchEngineFactory = new MatchEngineFactoryImpl(fordiacForteIntepreterMatcher,comparisonFactory);
-		matchEngineFactory.setRanking(20);
+		final MatchEngineFactoryImpl matchEngineFactory = new MatchEngineFactoryImpl(fordiacForteIntepreterMatcher,
+				comparisonFactory);
+		matchEngineFactory.setRanking(DEFAULT_RANKING);
 		registry.add(matchEngineFactory);
-		return EMFCompare.builder()
-				.setMatchEngineFactoryRegistry(registry)
-				.setDiffEngine(diffEngine).build()
+		return EMFCompare.builder().setMatchEngineFactoryRegistry(registry).setDiffEngine(diffEngine).build()
 				.compare(scope);
 	}
 
