@@ -71,6 +71,9 @@ public final class RuntimeFactory {
 		// set the start state
 		final EList<ECState> stateList = fb.getECC().getECState();
 		final ECState startState = stateList.stream().filter(ECState::isStartState).findAny().orElse(null);
+		if (startState == null) {
+			throw new IllegalArgumentException("The FB has no StartState"); //$NON-NLS-1$
+		}
 		return createFrom(fb, startState);
 	}
 
