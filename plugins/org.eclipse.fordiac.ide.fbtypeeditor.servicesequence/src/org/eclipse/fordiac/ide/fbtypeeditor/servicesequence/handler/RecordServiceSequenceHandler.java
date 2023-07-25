@@ -136,7 +136,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
 		}
 		seq.setComment(
-				"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), fbType));
+				"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), fbType)); //$NON-NLS-1$
 		seq.setEventManager(eventManager);
 		ServiceSequenceSaveAndLoadHelper.saveServiceSequence(fbType, seq);
 	}
@@ -169,11 +169,11 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	}
 
 	private static ServiceSequence getSequence(final Object selected) {
-		if (selected instanceof ServiceSequenceEditPart) {
-			return ((ServiceSequenceEditPart) selected).getModel();
+		if (selected instanceof final ServiceSequenceEditPart selectedSSEP) {
+			return selectedSSEP.getModel();
 		}
-		if (selected instanceof ServiceSequence) {
-			return (ServiceSequence) selected;
+		if (selected instanceof final ServiceSequence selectedSS) {
+			return selectedSS;
 		}
 		return null;
 	}
@@ -241,10 +241,9 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			inputStartStateCombo = ComboBoxWidgetFactory.createCombo(group);
 			inputStartStateCombo.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
 			final FBType fbtype = serviceSequence.getService().getFBType();
-			if (fbtype instanceof BasicFBType) {
+			if (fbtype instanceof final BasicFBType bfbType) {
 				final String[] startnames = Stream
-						.concat(((BasicFBType) fbtype).getECC().getECState().stream().map(ECState::getName),
-								Stream.of("")) //$NON-NLS-1$
+						.concat(bfbType.getECC().getECState().stream().map(ECState::getName), Stream.of("")) //$NON-NLS-1$
 						.toArray(String[]::new);
 				inputStartStateCombo.setItems(startnames);
 				inputStartStateCombo.select(0);
