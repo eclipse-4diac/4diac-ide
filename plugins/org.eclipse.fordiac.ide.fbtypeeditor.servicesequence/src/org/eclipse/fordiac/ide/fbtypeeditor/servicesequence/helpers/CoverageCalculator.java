@@ -29,10 +29,10 @@ public class CoverageCalculator {
 		if (fbType instanceof final BasicFBType bfb) {
 			final EccTraceHelper eccTraceHelper = new EccTraceHelper(transactions, bfb.getECC());
 
-			return eccTraceHelper.getAllStatesOfSequence().size() / (float) eccTraceHelper.getAllPossibleStates().size();
-		} else {
-			return -1;
+			return eccTraceHelper.getAllStatesOfSequenceUnique().size()
+					/ (float) eccTraceHelper.getAllPossibleStates().size();
 		}
+		return -1;
 	}
 
 	public static float calculateNodeCoverageOfSuiteBy(final HashMap<String, Integer> visitedStates) {

@@ -38,17 +38,24 @@ public class EccTraceHelper {
 
 	public List<ECState> getAllStatesOfSequence() {
 		final List<ECState> states = new ArrayList<>();
-		if (getStartState() != null) {
-			// TODO : IS THE START STATE NEEDED to save?
-			// states.add(getStartState());
-			for (final Transaction transac : transactions) {
-				if (getEccTrace((FBTransaction)transac) != null) {
-					for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
-						// TODO: IS IT NEEDED TO CHECK FO NO DUPLICATES?
-						// if (states.stream().filter(s -> s.getName().equals(transi.getDestination().getName()))
-						// .findAny().isEmpty()) {
+		for (final Transaction transac : transactions) {
+			if (getEccTrace((FBTransaction) transac) != null) {
+				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
+					states.add(transi.getDestination());
+				}
+			}
+		}
+		return states;
+	}
+
+	public List<ECState> getAllStatesOfSequenceUnique() {
+		final List<ECState> states = new ArrayList<>();
+		for (final Transaction transac : transactions) {
+			if (getEccTrace((FBTransaction) transac) != null) {
+				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
+					if (states.stream().filter(s -> s.getName().equals(transi.getDestination().getName())).findAny()
+							.isEmpty()) {
 						states.add(transi.getDestination());
-						// }
 					}
 				}
 			}
@@ -130,7 +137,7 @@ public class EccTraceHelper {
 
 	public List<ECState> getAllPossibleEndStates() {
 		final List<ECState> allPossibleStates = getAllPossibleStates();
-		for(final ECState state : allPossibleStates) {
+		for (final ECState state : allPossibleStates) {
 			for (final ECTransition trans : state.getOutTransitions()) {
 				if (trans.getConditionEvent() == null && trans.getConditionExpression().equals("1")) {
 					allPossibleStates.remove(state);
@@ -160,6 +167,5 @@ public class EccTraceHelper {
 		}
 		return allPossiblePaths;
 	}
-
 
 }
