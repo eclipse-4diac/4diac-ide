@@ -212,8 +212,20 @@ public class FBNetworkConnection extends HideableConnection {
 	private String generateIEString(final IInterfaceElement ie) {
 		final StringBuilder builder = generateFullIEString(ie);
 		if (builder.length() > maxWidth) {
-			builder.delete(0, builder.length() - maxWidth);
-			builder.insert(0, "\u2026"); //$NON-NLS-1$
+			switch (pinLabelStyle) {
+			case DiagramPreferences.PIN_LABEL_STYLE_PIN_COMMENT: {
+				builder.delete(maxWidth, builder.length()); // start inclusive, end exclusive
+				builder.insert(maxWidth, "\u2026"); //$NON-NLS-1$
+				break;
+			}
+			case DiagramPreferences.PIN_LABEL_STYLE_PIN_NAME, DiagramPreferences.PIN_LABEL_STYLE_SRC_PIN_NAME: {
+				builder.delete(0, builder.length() - maxWidth);
+				builder.insert(0, "\u2026"); //$NON-NLS-1$
+				break;
+			}
+			default:
+				break;
+			}
 		}
 		return builder.toString();
 	}
