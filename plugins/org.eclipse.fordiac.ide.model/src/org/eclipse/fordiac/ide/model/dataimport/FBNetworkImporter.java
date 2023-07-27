@@ -169,6 +169,10 @@ class FBNetworkImporter extends CommonElementImporter {
 		if (height != null) {
 			group.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(height));
 		}
+		final String locked = getAttributeValue(LibraryElementTags.LOCKED_ATTRIBUTE);
+		if (locked != null) {
+			group.setLocked(Boolean.parseBoolean(locked));
+		}
 
 		// add FB to FBnetwork so that parameter parsing can create error markers
 		// correctly.
@@ -256,7 +260,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	protected <T extends Connection> void parseConnectionList(final EClass conType, final EList<T> connectionlist,
 			final String parentNodeName) throws XMLStreamException, TypeImportException {
 		processChildren(parentNodeName, name -> {
-			T connection = parseConnection(conType);
+			final T connection = parseConnection(conType);
 
 			if (connection != null) {
 				connectionlist.add(connection);
@@ -330,7 +334,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		if (builder.isEmptyConnection()) {
 			// if 4diac should be capable of seeing the error marker in the FBNetworkEditor
 			// then error marker blocks need to be created at this location
-			ErrorMarkerBuilder createErrorMarkerBuilder = ErrorMarkerBuilder
+			final ErrorMarkerBuilder createErrorMarkerBuilder = ErrorMarkerBuilder
 					.createErrorMarkerBuilder("Connection parse error at line: " + getLineNumber());
 			createErrorMarkerBuilder.setLineNumber(getLineNumber());
 			errorMarkerBuilders.add(createErrorMarkerBuilder);
@@ -497,7 +501,6 @@ class FBNetworkImporter extends CommonElementImporter {
 		}
 		return null;
 	}
-
 
 	private void createConnectionErrorMarkerBuilder(final String message, final String sourceIdentifier,
 			final String destinationIdentifier, final EObject target) {

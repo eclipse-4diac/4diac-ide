@@ -52,6 +52,7 @@ public final class LibraryElementTags {
 	public static final String Y_ATTRIBUTE = "y"; //$NON-NLS-1$
 	public static final String WIDTH_ATTRIBUTE = "width"; //$NON-NLS-1$
 	public static final String HEIGHT_ATTRIBUTE = "height"; //$NON-NLS-1$
+	public static final String LOCKED_ATTRIBUTE = "locked"; //$NON-NLS-1$
 
 	public static final String CONNECTION_ELEMENT = "Connection"; //$NON-NLS-1$
 	public static final String ELEMENT_VISIBLE = "Visible"; //$NON-NLS-1$

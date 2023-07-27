@@ -376,6 +376,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Group/groupElements"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/width"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/height"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/locked"/>
       <genOperations ecoreOperation="lib.ecore#//Group/getInterface" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.EMPTY_INTERFACE_LIST;"/>
       <genOperations ecoreOperation="lib.ecore#//Comment/getInterface" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.EMPTY_INTERFACE_LIST;"/>
     </genClasses>

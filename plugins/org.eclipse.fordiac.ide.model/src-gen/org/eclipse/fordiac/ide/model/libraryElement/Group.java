@@ -30,6 +30,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Group#getGroupElements <em>Group Elements</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Group#getWidth <em>Width</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Group#getHeight <em>Height</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Group#isLocked <em>Locked</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getGroup()
@@ -97,6 +98,29 @@ public interface Group extends FBNetworkElement {
 	 * @generated
 	 */
 	void setHeight(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Locked</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Locked</em>' attribute.
+	 * @see #setLocked(boolean)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getGroup_Locked()
+	 * @model default="false" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated
+	 */
+	boolean isLocked();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Group#isLocked <em>Locked</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Locked</em>' attribute.
+	 * @see #isLocked()
+	 * @generated
+	 */
+	void setLocked(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->
