@@ -29,6 +29,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.validation;
 
+import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getAccessMode;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isCallableVarargs;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isNumericValueValid;
@@ -41,6 +42,7 @@ import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
@@ -87,6 +89,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.AccessMode;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.diagnostics.Severity;
@@ -153,6 +156,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String UNNECESSARY_LITERAL_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryLiteralConversion"; //$NON-NLS-1$
 	public static final String NON_CONSTANT_DECLARATION = ISSUE_CODE_PREFIX + "nonConstantInInitializer"; //$NON-NLS-1$
 	public static final String MAYBE_NOT_INITIALIZED = ISSUE_CODE_PREFIX + "maybeNotInitialized"; //$NON-NLS-1$
+	public static final String FOR_CONTROL_VARIABLE_MODIFICATION = ISSUE_CODE_PREFIX + "forControlVariableModification"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
 
@@ -542,6 +546,20 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		if (stmt.getBy() != null) {
 			checkTypeCompatibility(GenericTypes.ANY_NUM, stmt.getBy().getResultType(),
 					STCorePackage.Literals.ST_FOR_STATEMENT__BY);
+		}
+	}
+
+	@Check
+	public void checkForControlVariableModification(final STFeatureExpression expression) {
+		if (getAccessMode(expression) == AccessMode.WRITE // written to feature
+				&& StreamSupport.stream(EcoreUtil2.getAllContainers(expression).spliterator(), false) // all containers
+						.filter(STForStatement.class::isInstance).map(STForStatement.class::cast) // that are FOR loops
+						.map(STForStatement::getVariable) // where the variable
+						.filter(variable -> !EcoreUtil.isAncestor(variable, expression)) // is not an ancestor of us
+						.map(STCoreUtil::getFeaturePath) // where the path of features
+						.anyMatch(path -> path.contains(expression.getFeature()))) { // contains our feature
+			error(Messages.STCoreValidator_AttemptingToModifyControlVariable, expression,
+					STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, FOR_CONTROL_VARIABLE_MODIFICATION);
 		}
 	}
 

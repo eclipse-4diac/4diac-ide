@@ -387,10 +387,11 @@ class STFunctionValidatorTest {
 			FUNCTION hubert
 			VAR
 				int1 : STRING;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := 4 TO 17 DO
-				int1 := 17;
+				int2 := 17;
 			END_FOR;
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.FOR_VARIABLE_NOT_INTEGRAL_TYPE)
@@ -398,10 +399,11 @@ class STFunctionValidatorTest {
 			FUNCTION hubert
 			VAR
 				int1 : INT;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := LINT#4 TO 17 DO
-				int1 := 17;
+				int2 := 17;
 			END_FOR;
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
@@ -409,10 +411,11 @@ class STFunctionValidatorTest {
 			FUNCTION hubert
 			VAR
 				int1 : INT;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := 4 TO LINT#17 DO
-				int1 := 17;
+				int2 := 17;
 			END_FOR;
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
@@ -420,10 +423,11 @@ class STFunctionValidatorTest {
 			FUNCTION hubert
 			VAR
 				int1 : INT;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := 4 TO 17 BY LINT#2 DO
-				int1 := 17;
+				int2 := 17;
 			END_FOR;
 			END_FUNCTION
 		'''.parse.assertNoErrors
@@ -431,10 +435,11 @@ class STFunctionValidatorTest {
 			FUNCTION hubert
 			VAR
 				int1 : INT;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := 4 TO 17 BY "2" DO
-				int1 := 17;
+				int2 := 17;
 			END_FOR;
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
@@ -468,6 +473,61 @@ class STFunctionValidatorTest {
 			END_FOR;
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE)
+	}
+
+	@Test
+	def void testInvalidForVariableModification() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				int2 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertNoErrors
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				int1 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				FOR int2 := 4 TO 17 DO
+					int1 := 17;
+				END_FOR;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				FOR int1 := 4 TO 17 DO
+					int2 := 17;
+				END_FOR;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
 	}
 
 	@Test

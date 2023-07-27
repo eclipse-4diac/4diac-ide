@@ -35,6 +35,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_Argument_Not_Assignable;
 	public static String STCoreValidator_Assignment_Invalid_Left_Side;
 	public static String STCoreValidator_Attempting_To_Call_Standard_Function_With_Formal_Arguments;
+	public static String STCoreValidator_AttemptingToModifyControlVariable;
 	public static String STCoreValidator_Feature_Not_Callable;
 	public static String STCoreValidator_For_Variable_Not_Integral_Type;
 	public static String STCoreValidator_Mixing_Formal_And_NonFormal;

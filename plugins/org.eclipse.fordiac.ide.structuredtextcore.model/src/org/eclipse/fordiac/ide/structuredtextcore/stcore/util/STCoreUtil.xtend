@@ -233,6 +233,15 @@ final class STCoreUtil {
 			default: AccessMode.NONE
 		}
 	}
+	
+	def static List<INamedElement> getFeaturePath(STExpression expression) {
+		switch (expression) {
+			STFeatureExpression: #[expression.feature]
+			STMemberAccessExpression: (expression.receiver.featurePath + expression.member.featurePath).toList
+			STArrayAccessExpression: expression.receiver.featurePath
+			default: emptyList
+		}
+	}	
 
 	def static boolean isNumericValueValid(DataType type, Object value) {
 		switch (value) {

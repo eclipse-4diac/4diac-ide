@@ -112,11 +112,12 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 		VAR_TEMP
 			«VARIABLE_NAME»: INT;
 			«VARIABLE2_NAME»: INT;
+			«VARIABLE3_NAME»: INT;
 		END_VAR
 		FOR «VARIABLE_NAME»:=1 TO 5 DO
 			«VARIABLE2_NAME» := 0;
-			FOR «VARIABLE_NAME»:=6 TO 10 DO
-				«VARIABLE2_NAME» := 1;
+			FOR «VARIABLE2_NAME»:=6 TO 10 DO
+				«VARIABLE3_NAME» := 1;
 			END_FOR;
 		END_FOR;'''))
 
@@ -128,11 +129,12 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 		assertEquals('''
 			CIEC_INT st_lv_variable = 0_INT;
 			CIEC_INT st_lv_variable2 = 0_INT;
+			CIEC_INT st_lv_variable3 = 0_INT;
 			
 			for (auto st_lv_synthetic_0 : ST_FOR_ITER<CIEC_INT>(st_lv_variable, 1_INT, 5_INT)) {
 			  st_lv_variable2 = 0_INT;
-			  for (auto st_lv_synthetic_1 : ST_FOR_ITER<CIEC_INT>(st_lv_variable, 6_INT, 10_INT)) {
-			    st_lv_variable2 = 1_INT;
+			  for (auto st_lv_synthetic_1 : ST_FOR_ITER<CIEC_INT>(st_lv_variable2, 6_INT, 10_INT)) {
+			    st_lv_variable3 = 1_INT;
 			  }
 			}
 		'''.toString(), generatedCode.toString())

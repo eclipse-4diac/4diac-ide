@@ -73,6 +73,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 
 	protected static final String VARIABLE_NAME = "variable"; //$NON-NLS-1$
 	protected static final String VARIABLE2_NAME = "variable2"; //$NON-NLS-1$
+	protected static final String VARIABLE3_NAME = "variable3"; //$NON-NLS-1$
 
 	protected static final String EVENT_INPUT_NAME = "EI1"; //$NON-NLS-1$
 	protected static final String EVENT_OUTPUT_NAME = "EO1"; //$NON-NLS-1$
@@ -292,7 +293,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 		assertTrue(errors.isEmpty(),
 				(MessageFormat.format("No error messages expected. First error message received: {0}.", //$NON-NLS-1$
 						(!errors.isEmpty() ? errors.get(0) : "")) //$NON-NLS-1$
-						));
+				));
 	}
 
 	/** check if an error-list is not empty and raise an assertion if empty
@@ -376,20 +377,14 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @param type name of the datatype
 	 * @return number of bits in the representation */
 	static int getSize(final String type) {
-		switch (type) {
-		case FordiacKeywords.LWORD:
-			return SIZE_LWORD;
-		case FordiacKeywords.DWORD:
-			return SIZE_DWORD;
-		case FordiacKeywords.WORD:
-			return SIZE_WORD;
-		case FordiacKeywords.BYTE:
-			return SIZE_BYTE;
-		case FordiacKeywords.BOOL:
-			return SIZE_BOOL;
-		default:
-			return 0;
-		}
+		return switch (type) {
+		case FordiacKeywords.LWORD -> SIZE_LWORD;
+		case FordiacKeywords.DWORD -> SIZE_DWORD;
+		case FordiacKeywords.WORD -> SIZE_WORD;
+		case FordiacKeywords.BYTE -> SIZE_BYTE;
+		case FordiacKeywords.BOOL -> SIZE_BOOL;
+		default -> 0;
+		};
 	}
 
 	/** compute the number of elements of a datatype with defined bit representation can fit inside another datatype
