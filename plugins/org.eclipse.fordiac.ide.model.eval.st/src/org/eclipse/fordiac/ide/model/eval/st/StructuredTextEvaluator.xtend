@@ -265,7 +265,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch void evaluateStatement(STForStatement stmt) {
-		val variable = stmt.variable.findVariable
+		val variable = stmt.variable.evaluateVariable
 		// from
 		variable.value = stmt.from.trap.evaluateExpression
 		// to

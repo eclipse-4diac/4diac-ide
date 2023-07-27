@@ -441,6 +441,36 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
+	def void testInvalidForVariable() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertNoErrors
+		'''
+			FUNCTION hubert
+			FOR 4 := 4 TO 17 DO
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE)
+		'''
+			FUNCTION hubert
+			VAR CONSTANT
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE)
+	}
+
+	@Test
 	def void testInvalidCaseConditionType() {
 		'''
 			FUNCTION hubert

@@ -2060,13 +2060,19 @@ ruleSTForStatement returns [EObject current=null]
 		(
 			(
 				{
-					if ($current==null) {
-						$current = createModelElement(grammarAccess.getSTForStatementRule());
-					}
+					newCompositeNode(grammarAccess.getSTForStatementAccess().getVariableSTExpressionParserRuleCall_1_0());
 				}
-				otherlv_1=RULE_ID
+				lv_variable_1_0=ruleSTExpression
 				{
-					newLeafNode(otherlv_1, grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationCrossReference_1_0());
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTForStatementRule());
+					}
+					set(
+						$current,
+						"variable",
+						lv_variable_1_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+					afterParserOrEnumRuleCall();
 				}
 			)
 		)

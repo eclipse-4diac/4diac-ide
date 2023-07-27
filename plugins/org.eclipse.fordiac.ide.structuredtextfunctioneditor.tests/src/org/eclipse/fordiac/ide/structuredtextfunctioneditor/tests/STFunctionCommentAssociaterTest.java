@@ -34,6 +34,7 @@ import com.google.inject.Inject;
 
 @ExtendWith(InjectionExtension.class)
 @InjectWith(STFunctionInjectorProvider.class)
+@SuppressWarnings("nls")
 class STFunctionCommentAssociaterTest {
 
 	private static final Pattern SL_COMMENT_PATTERN = Pattern.compile("// (\\w+) (.*)\\R"); //$NON-NLS-1$
@@ -272,31 +273,32 @@ class STFunctionCommentAssociaterTest {
 
 	@Test
 	void complexML() throws Exception {
-		final STFunctionSource source = parseHelper.parse("""
-				FUNCTION /* INNER FUNCTION */ test
-				VAR_TEMP
-					X: /* INNER X */ DINT;
-					Y: /* INNER Y */ DINT;
-				END_VAR /* AFTER VAR_TEMP */
-				/* BEFORE IF */
-				IF /* BEFORE X */ X /* AFTER X */ < /* BEFORE 0 */ 0 /* AFTER 0 */ THEN /* BEFORE Y */
-					Y := 17;
-				ELSIF /* BEFORE X */ X /* AFTER X */ > /* BEFORE 0 */ 0 /* AFTER 0 */ THEN /* BEFORE Y */
-					Y := 4;
-				ELSE /* BEFORE Y */
-					Y := 21;
-				END_IF; /* AFTER IF */
+		final STFunctionSource source = parseHelper
+				.parse("""
+						FUNCTION /* INNER FUNCTION */ test
+						VAR_TEMP
+							X: /* INNER X */ DINT;
+							Y: /* INNER Y */ DINT;
+						END_VAR /* AFTER VAR_TEMP */
+						/* BEFORE IF */
+						IF /* BEFORE X */ X /* AFTER X */ < /* BEFORE 0 */ 0 /* AFTER 0 */ THEN /* BEFORE Y */
+							Y := 17;
+						ELSIF /* BEFORE X */ X /* AFTER X */ > /* BEFORE 0 */ 0 /* AFTER 0 */ THEN /* BEFORE Y */
+							Y := 4;
+						ELSE /* BEFORE Y */
+							Y := 21;
+						END_IF; /* AFTER IF */
 
-				/* BEFORE FOR */
-				FOR /* INNER FOR */ X /* INNER FOR */ := /* BEFORE 0 */ 0 /* AFTER 0 */ TO /* BEFORE 42 */ 42 /* AFTER 42 */ DO /* BEFORE Y */
-					Y := Y * 2; /* AFTER Y := */
-				END_FOR; /* AFTER FOR */
+						/* BEFORE FOR */
+						FOR /* BEFORE X */ X /* AFTER X */ := /* BEFORE 0 */ 0 /* AFTER 0 */ TO /* BEFORE 42 */ 42 /* AFTER 42 */ DO /* BEFORE Y */
+							Y := Y * 2; /* AFTER Y := */
+						END_FOR; /* AFTER FOR */
 
-				/* BEFORE X */
-				/* BEFORE X */ X /* AFTER X */ := /* BEFORE 17 */ 17 /* AFTER 17 */; /* AFTER X := */
-				/* AFTER X := */
-				END_FUNCTION
-				""");
+						/* BEFORE X */
+						/* BEFORE X */ X /* AFTER X */ := /* BEFORE 17 */ 17 /* AFTER 17 */; /* AFTER X := */
+						/* AFTER X := */
+						END_FUNCTION
+						""");
 		assertNoErrors(source);
 		assertComments(source);
 	}

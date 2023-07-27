@@ -8591,11 +8591,11 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
                 {
                 int LA10_3 = input.LA(2);
 
-                if ( (LA10_3==EOF||LA10_3==END_REPEAT||LA10_3==THEN||LA10_3==AND||LA10_3==MOD||LA10_3==XOR||(LA10_3>=AsteriskAsterisk && LA10_3<=FullStopFullStop)||(LA10_3>=ColonEqualsSign && LA10_3<=LessThanSignGreaterThanSign)||LA10_3==GreaterThanSignEqualsSign||(LA10_3>=BY && LA10_3<=DO)||LA10_3==OF||(LA10_3>=OR && LA10_3<=TO)||(LA10_3>=Ampersand && LA10_3<=GreaterThanSign)||(LA10_3>=LeftSquareBracket && LA10_3<=RightSquareBracket)) ) {
-                    alt10=2;
-                }
-                else if ( (LA10_3==NumberSign) ) {
+                if ( (LA10_3==NumberSign) ) {
                     alt10=4;
+                }
+                else if ( (LA10_3==EOF||LA10_3==END_REPEAT||LA10_3==THEN||LA10_3==AND||LA10_3==MOD||LA10_3==XOR||(LA10_3>=AsteriskAsterisk && LA10_3<=FullStopFullStop)||(LA10_3>=ColonEqualsSign && LA10_3<=LessThanSignGreaterThanSign)||LA10_3==GreaterThanSignEqualsSign||(LA10_3>=BY && LA10_3<=DO)||LA10_3==OF||(LA10_3>=OR && LA10_3<=TO)||(LA10_3>=Ampersand && LA10_3<=GreaterThanSign)||(LA10_3>=LeftSquareBracket && LA10_3<=RightSquareBracket)) ) {
+                    alt10=2;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return ;}
@@ -8610,11 +8610,11 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
                 {
                 int LA10_4 = input.LA(2);
 
-                if ( (LA10_4==NumberSign) ) {
-                    alt10=4;
-                }
-                else if ( (LA10_4==EOF||LA10_4==END_REPEAT||LA10_4==THEN||LA10_4==AND||LA10_4==MOD||LA10_4==XOR||(LA10_4>=AsteriskAsterisk && LA10_4<=FullStopFullStop)||(LA10_4>=ColonEqualsSign && LA10_4<=LessThanSignGreaterThanSign)||LA10_4==GreaterThanSignEqualsSign||(LA10_4>=BY && LA10_4<=DO)||LA10_4==OF||(LA10_4>=OR && LA10_4<=TO)||(LA10_4>=Ampersand && LA10_4<=GreaterThanSign)||(LA10_4>=LeftSquareBracket && LA10_4<=RightSquareBracket)) ) {
+                if ( (LA10_4==EOF||LA10_4==END_REPEAT||LA10_4==THEN||LA10_4==AND||LA10_4==MOD||LA10_4==XOR||(LA10_4>=AsteriskAsterisk && LA10_4<=FullStopFullStop)||(LA10_4>=ColonEqualsSign && LA10_4<=LessThanSignGreaterThanSign)||LA10_4==GreaterThanSignEqualsSign||(LA10_4>=BY && LA10_4<=DO)||LA10_4==OF||(LA10_4>=OR && LA10_4<=TO)||(LA10_4>=Ampersand && LA10_4<=GreaterThanSign)||(LA10_4>=LeftSquareBracket && LA10_4<=RightSquareBracket)) ) {
                     alt10=2;
+                }
+                else if ( (LA10_4==NumberSign) ) {
+                    alt10=4;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return ;}
@@ -24618,7 +24618,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
             // InternalGlobalConstantsParser.g:7211:1: ( rule__STForStatement__Group__0__Impl rule__STForStatement__Group__1 )
             // InternalGlobalConstantsParser.g:7212:2: rule__STForStatement__Group__0__Impl rule__STForStatement__Group__1
             {
-            pushFollow(FOLLOW_6);
+            pushFollow(FOLLOW_11);
             rule__STForStatement__Group__0__Impl();
 
             state._fsp--;
@@ -42655,36 +42655,28 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STForStatement__VariableAssignment_1"
-    // InternalGlobalConstantsParser.g:12978:1: rule__STForStatement__VariableAssignment_1 : ( ( RULE_ID ) ) ;
+    // InternalGlobalConstantsParser.g:12978:1: rule__STForStatement__VariableAssignment_1 : ( ruleSTExpression ) ;
     public final void rule__STForStatement__VariableAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:12982:1: ( ( ( RULE_ID ) ) )
-            // InternalGlobalConstantsParser.g:12983:2: ( ( RULE_ID ) )
+            // InternalGlobalConstantsParser.g:12982:1: ( ( ruleSTExpression ) )
+            // InternalGlobalConstantsParser.g:12983:2: ( ruleSTExpression )
             {
-            // InternalGlobalConstantsParser.g:12983:2: ( ( RULE_ID ) )
-            // InternalGlobalConstantsParser.g:12984:3: ( RULE_ID )
-            {
-            if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationCrossReference_1_0()); 
-            }
-            // InternalGlobalConstantsParser.g:12985:3: ( RULE_ID )
-            // InternalGlobalConstantsParser.g:12986:4: RULE_ID
+            // InternalGlobalConstantsParser.g:12983:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:12984:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationIDTerminalRuleCall_1_0_1()); 
+               before(grammarAccess.getSTForStatementAccess().getVariableSTExpressionParserRuleCall_1_0()); 
             }
-            match(input,RULE_ID,FOLLOW_2); if (state.failed) return ;
-            if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationIDTerminalRuleCall_1_0_1()); 
-            }
+            pushFollow(FOLLOW_2);
+            ruleSTExpression();
 
-            }
-
+            state._fsp--;
+            if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationCrossReference_1_0()); 
+               after(grammarAccess.getSTForStatementAccess().getVariableSTExpressionParserRuleCall_1_0()); 
             }
 
             }
@@ -42708,17 +42700,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STForStatement__FromAssignment_3"
-    // InternalGlobalConstantsParser.g:12997:1: rule__STForStatement__FromAssignment_3 : ( ruleSTExpression ) ;
+    // InternalGlobalConstantsParser.g:12993:1: rule__STForStatement__FromAssignment_3 : ( ruleSTExpression ) ;
     public final void rule__STForStatement__FromAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13001:1: ( ( ruleSTExpression ) )
-            // InternalGlobalConstantsParser.g:13002:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:12997:1: ( ( ruleSTExpression ) )
+            // InternalGlobalConstantsParser.g:12998:2: ( ruleSTExpression )
             {
-            // InternalGlobalConstantsParser.g:13002:2: ( ruleSTExpression )
-            // InternalGlobalConstantsParser.g:13003:3: ruleSTExpression
+            // InternalGlobalConstantsParser.g:12998:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:12999:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTForStatementAccess().getFromSTExpressionParserRuleCall_3_0()); 
@@ -42753,17 +42745,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STForStatement__ToAssignment_5"
-    // InternalGlobalConstantsParser.g:13012:1: rule__STForStatement__ToAssignment_5 : ( ruleSTExpression ) ;
+    // InternalGlobalConstantsParser.g:13008:1: rule__STForStatement__ToAssignment_5 : ( ruleSTExpression ) ;
     public final void rule__STForStatement__ToAssignment_5() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13016:1: ( ( ruleSTExpression ) )
-            // InternalGlobalConstantsParser.g:13017:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13012:1: ( ( ruleSTExpression ) )
+            // InternalGlobalConstantsParser.g:13013:2: ( ruleSTExpression )
             {
-            // InternalGlobalConstantsParser.g:13017:2: ( ruleSTExpression )
-            // InternalGlobalConstantsParser.g:13018:3: ruleSTExpression
+            // InternalGlobalConstantsParser.g:13013:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13014:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTForStatementAccess().getToSTExpressionParserRuleCall_5_0()); 
@@ -42798,17 +42790,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STForStatement__ByAssignment_6_1"
-    // InternalGlobalConstantsParser.g:13027:1: rule__STForStatement__ByAssignment_6_1 : ( ruleSTExpression ) ;
+    // InternalGlobalConstantsParser.g:13023:1: rule__STForStatement__ByAssignment_6_1 : ( ruleSTExpression ) ;
     public final void rule__STForStatement__ByAssignment_6_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13031:1: ( ( ruleSTExpression ) )
-            // InternalGlobalConstantsParser.g:13032:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13027:1: ( ( ruleSTExpression ) )
+            // InternalGlobalConstantsParser.g:13028:2: ( ruleSTExpression )
             {
-            // InternalGlobalConstantsParser.g:13032:2: ( ruleSTExpression )
-            // InternalGlobalConstantsParser.g:13033:3: ruleSTExpression
+            // InternalGlobalConstantsParser.g:13028:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13029:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTForStatementAccess().getBySTExpressionParserRuleCall_6_1_0()); 
@@ -42843,17 +42835,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STForStatement__StatementsAssignment_8"
-    // InternalGlobalConstantsParser.g:13042:1: rule__STForStatement__StatementsAssignment_8 : ( ruleSTStatement ) ;
+    // InternalGlobalConstantsParser.g:13038:1: rule__STForStatement__StatementsAssignment_8 : ( ruleSTStatement ) ;
     public final void rule__STForStatement__StatementsAssignment_8() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13046:1: ( ( ruleSTStatement ) )
-            // InternalGlobalConstantsParser.g:13047:2: ( ruleSTStatement )
+            // InternalGlobalConstantsParser.g:13042:1: ( ( ruleSTStatement ) )
+            // InternalGlobalConstantsParser.g:13043:2: ( ruleSTStatement )
             {
-            // InternalGlobalConstantsParser.g:13047:2: ( ruleSTStatement )
-            // InternalGlobalConstantsParser.g:13048:3: ruleSTStatement
+            // InternalGlobalConstantsParser.g:13043:2: ( ruleSTStatement )
+            // InternalGlobalConstantsParser.g:13044:3: ruleSTStatement
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTForStatementAccess().getStatementsSTStatementParserRuleCall_8_0()); 
@@ -42888,17 +42880,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STWhileStatement__ConditionAssignment_1"
-    // InternalGlobalConstantsParser.g:13057:1: rule__STWhileStatement__ConditionAssignment_1 : ( ruleSTExpression ) ;
+    // InternalGlobalConstantsParser.g:13053:1: rule__STWhileStatement__ConditionAssignment_1 : ( ruleSTExpression ) ;
     public final void rule__STWhileStatement__ConditionAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13061:1: ( ( ruleSTExpression ) )
-            // InternalGlobalConstantsParser.g:13062:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13057:1: ( ( ruleSTExpression ) )
+            // InternalGlobalConstantsParser.g:13058:2: ( ruleSTExpression )
             {
-            // InternalGlobalConstantsParser.g:13062:2: ( ruleSTExpression )
-            // InternalGlobalConstantsParser.g:13063:3: ruleSTExpression
+            // InternalGlobalConstantsParser.g:13058:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13059:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTWhileStatementAccess().getConditionSTExpressionParserRuleCall_1_0()); 
@@ -42933,17 +42925,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STWhileStatement__StatementsAssignment_3"
-    // InternalGlobalConstantsParser.g:13072:1: rule__STWhileStatement__StatementsAssignment_3 : ( ruleSTStatement ) ;
+    // InternalGlobalConstantsParser.g:13068:1: rule__STWhileStatement__StatementsAssignment_3 : ( ruleSTStatement ) ;
     public final void rule__STWhileStatement__StatementsAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13076:1: ( ( ruleSTStatement ) )
-            // InternalGlobalConstantsParser.g:13077:2: ( ruleSTStatement )
+            // InternalGlobalConstantsParser.g:13072:1: ( ( ruleSTStatement ) )
+            // InternalGlobalConstantsParser.g:13073:2: ( ruleSTStatement )
             {
-            // InternalGlobalConstantsParser.g:13077:2: ( ruleSTStatement )
-            // InternalGlobalConstantsParser.g:13078:3: ruleSTStatement
+            // InternalGlobalConstantsParser.g:13073:2: ( ruleSTStatement )
+            // InternalGlobalConstantsParser.g:13074:3: ruleSTStatement
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTWhileStatementAccess().getStatementsSTStatementParserRuleCall_3_0()); 
@@ -42978,17 +42970,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STRepeatStatement__StatementsAssignment_1"
-    // InternalGlobalConstantsParser.g:13087:1: rule__STRepeatStatement__StatementsAssignment_1 : ( ruleSTStatement ) ;
+    // InternalGlobalConstantsParser.g:13083:1: rule__STRepeatStatement__StatementsAssignment_1 : ( ruleSTStatement ) ;
     public final void rule__STRepeatStatement__StatementsAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13091:1: ( ( ruleSTStatement ) )
-            // InternalGlobalConstantsParser.g:13092:2: ( ruleSTStatement )
+            // InternalGlobalConstantsParser.g:13087:1: ( ( ruleSTStatement ) )
+            // InternalGlobalConstantsParser.g:13088:2: ( ruleSTStatement )
             {
-            // InternalGlobalConstantsParser.g:13092:2: ( ruleSTStatement )
-            // InternalGlobalConstantsParser.g:13093:3: ruleSTStatement
+            // InternalGlobalConstantsParser.g:13088:2: ( ruleSTStatement )
+            // InternalGlobalConstantsParser.g:13089:3: ruleSTStatement
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTRepeatStatementAccess().getStatementsSTStatementParserRuleCall_1_0()); 
@@ -43023,17 +43015,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STRepeatStatement__ConditionAssignment_3"
-    // InternalGlobalConstantsParser.g:13102:1: rule__STRepeatStatement__ConditionAssignment_3 : ( ruleSTExpression ) ;
+    // InternalGlobalConstantsParser.g:13098:1: rule__STRepeatStatement__ConditionAssignment_3 : ( ruleSTExpression ) ;
     public final void rule__STRepeatStatement__ConditionAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13106:1: ( ( ruleSTExpression ) )
-            // InternalGlobalConstantsParser.g:13107:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13102:1: ( ( ruleSTExpression ) )
+            // InternalGlobalConstantsParser.g:13103:2: ( ruleSTExpression )
             {
-            // InternalGlobalConstantsParser.g:13107:2: ( ruleSTExpression )
-            // InternalGlobalConstantsParser.g:13108:3: ruleSTExpression
+            // InternalGlobalConstantsParser.g:13103:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13104:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTRepeatStatementAccess().getConditionSTExpressionParserRuleCall_3_0()); 
@@ -43068,17 +43060,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STSubrangeExpression__OpAssignment_1_0_1"
-    // InternalGlobalConstantsParser.g:13117:1: rule__STSubrangeExpression__OpAssignment_1_0_1 : ( ruleSubrangeOperator ) ;
+    // InternalGlobalConstantsParser.g:13113:1: rule__STSubrangeExpression__OpAssignment_1_0_1 : ( ruleSubrangeOperator ) ;
     public final void rule__STSubrangeExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13121:1: ( ( ruleSubrangeOperator ) )
-            // InternalGlobalConstantsParser.g:13122:2: ( ruleSubrangeOperator )
+            // InternalGlobalConstantsParser.g:13117:1: ( ( ruleSubrangeOperator ) )
+            // InternalGlobalConstantsParser.g:13118:2: ( ruleSubrangeOperator )
             {
-            // InternalGlobalConstantsParser.g:13122:2: ( ruleSubrangeOperator )
-            // InternalGlobalConstantsParser.g:13123:3: ruleSubrangeOperator
+            // InternalGlobalConstantsParser.g:13118:2: ( ruleSubrangeOperator )
+            // InternalGlobalConstantsParser.g:13119:3: ruleSubrangeOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTSubrangeExpressionAccess().getOpSubrangeOperatorEnumRuleCall_1_0_1_0()); 
@@ -43113,17 +43105,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STSubrangeExpression__RightAssignment_1_1"
-    // InternalGlobalConstantsParser.g:13132:1: rule__STSubrangeExpression__RightAssignment_1_1 : ( ruleSTOrExpression ) ;
+    // InternalGlobalConstantsParser.g:13128:1: rule__STSubrangeExpression__RightAssignment_1_1 : ( ruleSTOrExpression ) ;
     public final void rule__STSubrangeExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13136:1: ( ( ruleSTOrExpression ) )
-            // InternalGlobalConstantsParser.g:13137:2: ( ruleSTOrExpression )
+            // InternalGlobalConstantsParser.g:13132:1: ( ( ruleSTOrExpression ) )
+            // InternalGlobalConstantsParser.g:13133:2: ( ruleSTOrExpression )
             {
-            // InternalGlobalConstantsParser.g:13137:2: ( ruleSTOrExpression )
-            // InternalGlobalConstantsParser.g:13138:3: ruleSTOrExpression
+            // InternalGlobalConstantsParser.g:13133:2: ( ruleSTOrExpression )
+            // InternalGlobalConstantsParser.g:13134:3: ruleSTOrExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTSubrangeExpressionAccess().getRightSTOrExpressionParserRuleCall_1_1_0()); 
@@ -43158,17 +43150,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STOrExpression__OpAssignment_1_0_1"
-    // InternalGlobalConstantsParser.g:13147:1: rule__STOrExpression__OpAssignment_1_0_1 : ( ruleOrOperator ) ;
+    // InternalGlobalConstantsParser.g:13143:1: rule__STOrExpression__OpAssignment_1_0_1 : ( ruleOrOperator ) ;
     public final void rule__STOrExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13151:1: ( ( ruleOrOperator ) )
-            // InternalGlobalConstantsParser.g:13152:2: ( ruleOrOperator )
+            // InternalGlobalConstantsParser.g:13147:1: ( ( ruleOrOperator ) )
+            // InternalGlobalConstantsParser.g:13148:2: ( ruleOrOperator )
             {
-            // InternalGlobalConstantsParser.g:13152:2: ( ruleOrOperator )
-            // InternalGlobalConstantsParser.g:13153:3: ruleOrOperator
+            // InternalGlobalConstantsParser.g:13148:2: ( ruleOrOperator )
+            // InternalGlobalConstantsParser.g:13149:3: ruleOrOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTOrExpressionAccess().getOpOrOperatorEnumRuleCall_1_0_1_0()); 
@@ -43203,17 +43195,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STOrExpression__RightAssignment_1_1"
-    // InternalGlobalConstantsParser.g:13162:1: rule__STOrExpression__RightAssignment_1_1 : ( ruleSTXorExpression ) ;
+    // InternalGlobalConstantsParser.g:13158:1: rule__STOrExpression__RightAssignment_1_1 : ( ruleSTXorExpression ) ;
     public final void rule__STOrExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13166:1: ( ( ruleSTXorExpression ) )
-            // InternalGlobalConstantsParser.g:13167:2: ( ruleSTXorExpression )
+            // InternalGlobalConstantsParser.g:13162:1: ( ( ruleSTXorExpression ) )
+            // InternalGlobalConstantsParser.g:13163:2: ( ruleSTXorExpression )
             {
-            // InternalGlobalConstantsParser.g:13167:2: ( ruleSTXorExpression )
-            // InternalGlobalConstantsParser.g:13168:3: ruleSTXorExpression
+            // InternalGlobalConstantsParser.g:13163:2: ( ruleSTXorExpression )
+            // InternalGlobalConstantsParser.g:13164:3: ruleSTXorExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTOrExpressionAccess().getRightSTXorExpressionParserRuleCall_1_1_0()); 
@@ -43248,17 +43240,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STXorExpression__OpAssignment_1_0_1"
-    // InternalGlobalConstantsParser.g:13177:1: rule__STXorExpression__OpAssignment_1_0_1 : ( ruleXorOperator ) ;
+    // InternalGlobalConstantsParser.g:13173:1: rule__STXorExpression__OpAssignment_1_0_1 : ( ruleXorOperator ) ;
     public final void rule__STXorExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13181:1: ( ( ruleXorOperator ) )
-            // InternalGlobalConstantsParser.g:13182:2: ( ruleXorOperator )
+            // InternalGlobalConstantsParser.g:13177:1: ( ( ruleXorOperator ) )
+            // InternalGlobalConstantsParser.g:13178:2: ( ruleXorOperator )
             {
-            // InternalGlobalConstantsParser.g:13182:2: ( ruleXorOperator )
-            // InternalGlobalConstantsParser.g:13183:3: ruleXorOperator
+            // InternalGlobalConstantsParser.g:13178:2: ( ruleXorOperator )
+            // InternalGlobalConstantsParser.g:13179:3: ruleXorOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTXorExpressionAccess().getOpXorOperatorEnumRuleCall_1_0_1_0()); 
@@ -43293,17 +43285,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STXorExpression__RightAssignment_1_1"
-    // InternalGlobalConstantsParser.g:13192:1: rule__STXorExpression__RightAssignment_1_1 : ( ruleSTAndExpression ) ;
+    // InternalGlobalConstantsParser.g:13188:1: rule__STXorExpression__RightAssignment_1_1 : ( ruleSTAndExpression ) ;
     public final void rule__STXorExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13196:1: ( ( ruleSTAndExpression ) )
-            // InternalGlobalConstantsParser.g:13197:2: ( ruleSTAndExpression )
+            // InternalGlobalConstantsParser.g:13192:1: ( ( ruleSTAndExpression ) )
+            // InternalGlobalConstantsParser.g:13193:2: ( ruleSTAndExpression )
             {
-            // InternalGlobalConstantsParser.g:13197:2: ( ruleSTAndExpression )
-            // InternalGlobalConstantsParser.g:13198:3: ruleSTAndExpression
+            // InternalGlobalConstantsParser.g:13193:2: ( ruleSTAndExpression )
+            // InternalGlobalConstantsParser.g:13194:3: ruleSTAndExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTXorExpressionAccess().getRightSTAndExpressionParserRuleCall_1_1_0()); 
@@ -43338,17 +43330,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STAndExpression__OpAssignment_1_0_1"
-    // InternalGlobalConstantsParser.g:13207:1: rule__STAndExpression__OpAssignment_1_0_1 : ( ruleAndOperator ) ;
+    // InternalGlobalConstantsParser.g:13203:1: rule__STAndExpression__OpAssignment_1_0_1 : ( ruleAndOperator ) ;
     public final void rule__STAndExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13211:1: ( ( ruleAndOperator ) )
-            // InternalGlobalConstantsParser.g:13212:2: ( ruleAndOperator )
+            // InternalGlobalConstantsParser.g:13207:1: ( ( ruleAndOperator ) )
+            // InternalGlobalConstantsParser.g:13208:2: ( ruleAndOperator )
             {
-            // InternalGlobalConstantsParser.g:13212:2: ( ruleAndOperator )
-            // InternalGlobalConstantsParser.g:13213:3: ruleAndOperator
+            // InternalGlobalConstantsParser.g:13208:2: ( ruleAndOperator )
+            // InternalGlobalConstantsParser.g:13209:3: ruleAndOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAndExpressionAccess().getOpAndOperatorEnumRuleCall_1_0_1_0()); 
@@ -43383,17 +43375,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STAndExpression__RightAssignment_1_1"
-    // InternalGlobalConstantsParser.g:13222:1: rule__STAndExpression__RightAssignment_1_1 : ( ruleSTEqualityExpression ) ;
+    // InternalGlobalConstantsParser.g:13218:1: rule__STAndExpression__RightAssignment_1_1 : ( ruleSTEqualityExpression ) ;
     public final void rule__STAndExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13226:1: ( ( ruleSTEqualityExpression ) )
-            // InternalGlobalConstantsParser.g:13227:2: ( ruleSTEqualityExpression )
+            // InternalGlobalConstantsParser.g:13222:1: ( ( ruleSTEqualityExpression ) )
+            // InternalGlobalConstantsParser.g:13223:2: ( ruleSTEqualityExpression )
             {
-            // InternalGlobalConstantsParser.g:13227:2: ( ruleSTEqualityExpression )
-            // InternalGlobalConstantsParser.g:13228:3: ruleSTEqualityExpression
+            // InternalGlobalConstantsParser.g:13223:2: ( ruleSTEqualityExpression )
+            // InternalGlobalConstantsParser.g:13224:3: ruleSTEqualityExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAndExpressionAccess().getRightSTEqualityExpressionParserRuleCall_1_1_0()); 
@@ -43428,17 +43420,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STEqualityExpression__OpAssignment_1_0_1"
-    // InternalGlobalConstantsParser.g:13237:1: rule__STEqualityExpression__OpAssignment_1_0_1 : ( ruleEqualityOperator ) ;
+    // InternalGlobalConstantsParser.g:13233:1: rule__STEqualityExpression__OpAssignment_1_0_1 : ( ruleEqualityOperator ) ;
     public final void rule__STEqualityExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13241:1: ( ( ruleEqualityOperator ) )
-            // InternalGlobalConstantsParser.g:13242:2: ( ruleEqualityOperator )
+            // InternalGlobalConstantsParser.g:13237:1: ( ( ruleEqualityOperator ) )
+            // InternalGlobalConstantsParser.g:13238:2: ( ruleEqualityOperator )
             {
-            // InternalGlobalConstantsParser.g:13242:2: ( ruleEqualityOperator )
-            // InternalGlobalConstantsParser.g:13243:3: ruleEqualityOperator
+            // InternalGlobalConstantsParser.g:13238:2: ( ruleEqualityOperator )
+            // InternalGlobalConstantsParser.g:13239:3: ruleEqualityOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTEqualityExpressionAccess().getOpEqualityOperatorEnumRuleCall_1_0_1_0()); 
@@ -43473,17 +43465,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STEqualityExpression__RightAssignment_1_1"
-    // InternalGlobalConstantsParser.g:13252:1: rule__STEqualityExpression__RightAssignment_1_1 : ( ruleSTComparisonExpression ) ;
+    // InternalGlobalConstantsParser.g:13248:1: rule__STEqualityExpression__RightAssignment_1_1 : ( ruleSTComparisonExpression ) ;
     public final void rule__STEqualityExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13256:1: ( ( ruleSTComparisonExpression ) )
-            // InternalGlobalConstantsParser.g:13257:2: ( ruleSTComparisonExpression )
+            // InternalGlobalConstantsParser.g:13252:1: ( ( ruleSTComparisonExpression ) )
+            // InternalGlobalConstantsParser.g:13253:2: ( ruleSTComparisonExpression )
             {
-            // InternalGlobalConstantsParser.g:13257:2: ( ruleSTComparisonExpression )
-            // InternalGlobalConstantsParser.g:13258:3: ruleSTComparisonExpression
+            // InternalGlobalConstantsParser.g:13253:2: ( ruleSTComparisonExpression )
+            // InternalGlobalConstantsParser.g:13254:3: ruleSTComparisonExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTEqualityExpressionAccess().getRightSTComparisonExpressionParserRuleCall_1_1_0()); 
@@ -43518,17 +43510,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STComparisonExpression__OpAssignment_1_0_1"
-    // InternalGlobalConstantsParser.g:13267:1: rule__STComparisonExpression__OpAssignment_1_0_1 : ( ruleCompareOperator ) ;
+    // InternalGlobalConstantsParser.g:13263:1: rule__STComparisonExpression__OpAssignment_1_0_1 : ( ruleCompareOperator ) ;
     public final void rule__STComparisonExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13271:1: ( ( ruleCompareOperator ) )
-            // InternalGlobalConstantsParser.g:13272:2: ( ruleCompareOperator )
+            // InternalGlobalConstantsParser.g:13267:1: ( ( ruleCompareOperator ) )
+            // InternalGlobalConstantsParser.g:13268:2: ( ruleCompareOperator )
             {
-            // InternalGlobalConstantsParser.g:13272:2: ( ruleCompareOperator )
-            // InternalGlobalConstantsParser.g:13273:3: ruleCompareOperator
+            // InternalGlobalConstantsParser.g:13268:2: ( ruleCompareOperator )
+            // InternalGlobalConstantsParser.g:13269:3: ruleCompareOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTComparisonExpressionAccess().getOpCompareOperatorEnumRuleCall_1_0_1_0()); 
@@ -43563,17 +43555,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STComparisonExpression__RightAssignment_1_1"
-    // InternalGlobalConstantsParser.g:13282:1: rule__STComparisonExpression__RightAssignment_1_1 : ( ruleSTAddSubExpression ) ;
+    // InternalGlobalConstantsParser.g:13278:1: rule__STComparisonExpression__RightAssignment_1_1 : ( ruleSTAddSubExpression ) ;
     public final void rule__STComparisonExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13286:1: ( ( ruleSTAddSubExpression ) )
-            // InternalGlobalConstantsParser.g:13287:2: ( ruleSTAddSubExpression )
+            // InternalGlobalConstantsParser.g:13282:1: ( ( ruleSTAddSubExpression ) )
+            // InternalGlobalConstantsParser.g:13283:2: ( ruleSTAddSubExpression )
             {
-            // InternalGlobalConstantsParser.g:13287:2: ( ruleSTAddSubExpression )
-            // InternalGlobalConstantsParser.g:13288:3: ruleSTAddSubExpression
+            // InternalGlobalConstantsParser.g:13283:2: ( ruleSTAddSubExpression )
+            // InternalGlobalConstantsParser.g:13284:3: ruleSTAddSubExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTComparisonExpressionAccess().getRightSTAddSubExpressionParserRuleCall_1_1_0()); 
@@ -43608,17 +43600,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STAddSubExpression__OpAssignment_1_0_1"
-    // InternalGlobalConstantsParser.g:13297:1: rule__STAddSubExpression__OpAssignment_1_0_1 : ( ruleAddSubOperator ) ;
+    // InternalGlobalConstantsParser.g:13293:1: rule__STAddSubExpression__OpAssignment_1_0_1 : ( ruleAddSubOperator ) ;
     public final void rule__STAddSubExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13301:1: ( ( ruleAddSubOperator ) )
-            // InternalGlobalConstantsParser.g:13302:2: ( ruleAddSubOperator )
+            // InternalGlobalConstantsParser.g:13297:1: ( ( ruleAddSubOperator ) )
+            // InternalGlobalConstantsParser.g:13298:2: ( ruleAddSubOperator )
             {
-            // InternalGlobalConstantsParser.g:13302:2: ( ruleAddSubOperator )
-            // InternalGlobalConstantsParser.g:13303:3: ruleAddSubOperator
+            // InternalGlobalConstantsParser.g:13298:2: ( ruleAddSubOperator )
+            // InternalGlobalConstantsParser.g:13299:3: ruleAddSubOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAddSubExpressionAccess().getOpAddSubOperatorEnumRuleCall_1_0_1_0()); 
@@ -43653,17 +43645,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STAddSubExpression__RightAssignment_1_1"
-    // InternalGlobalConstantsParser.g:13312:1: rule__STAddSubExpression__RightAssignment_1_1 : ( ruleSTMulDivModExpression ) ;
+    // InternalGlobalConstantsParser.g:13308:1: rule__STAddSubExpression__RightAssignment_1_1 : ( ruleSTMulDivModExpression ) ;
     public final void rule__STAddSubExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13316:1: ( ( ruleSTMulDivModExpression ) )
-            // InternalGlobalConstantsParser.g:13317:2: ( ruleSTMulDivModExpression )
+            // InternalGlobalConstantsParser.g:13312:1: ( ( ruleSTMulDivModExpression ) )
+            // InternalGlobalConstantsParser.g:13313:2: ( ruleSTMulDivModExpression )
             {
-            // InternalGlobalConstantsParser.g:13317:2: ( ruleSTMulDivModExpression )
-            // InternalGlobalConstantsParser.g:13318:3: ruleSTMulDivModExpression
+            // InternalGlobalConstantsParser.g:13313:2: ( ruleSTMulDivModExpression )
+            // InternalGlobalConstantsParser.g:13314:3: ruleSTMulDivModExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAddSubExpressionAccess().getRightSTMulDivModExpressionParserRuleCall_1_1_0()); 
@@ -43698,17 +43690,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STMulDivModExpression__OpAssignment_1_0_1"
-    // InternalGlobalConstantsParser.g:13327:1: rule__STMulDivModExpression__OpAssignment_1_0_1 : ( ruleMulDivModOperator ) ;
+    // InternalGlobalConstantsParser.g:13323:1: rule__STMulDivModExpression__OpAssignment_1_0_1 : ( ruleMulDivModOperator ) ;
     public final void rule__STMulDivModExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13331:1: ( ( ruleMulDivModOperator ) )
-            // InternalGlobalConstantsParser.g:13332:2: ( ruleMulDivModOperator )
+            // InternalGlobalConstantsParser.g:13327:1: ( ( ruleMulDivModOperator ) )
+            // InternalGlobalConstantsParser.g:13328:2: ( ruleMulDivModOperator )
             {
-            // InternalGlobalConstantsParser.g:13332:2: ( ruleMulDivModOperator )
-            // InternalGlobalConstantsParser.g:13333:3: ruleMulDivModOperator
+            // InternalGlobalConstantsParser.g:13328:2: ( ruleMulDivModOperator )
+            // InternalGlobalConstantsParser.g:13329:3: ruleMulDivModOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMulDivModExpressionAccess().getOpMulDivModOperatorEnumRuleCall_1_0_1_0()); 
@@ -43743,17 +43735,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STMulDivModExpression__RightAssignment_1_1"
-    // InternalGlobalConstantsParser.g:13342:1: rule__STMulDivModExpression__RightAssignment_1_1 : ( ruleSTPowerExpression ) ;
+    // InternalGlobalConstantsParser.g:13338:1: rule__STMulDivModExpression__RightAssignment_1_1 : ( ruleSTPowerExpression ) ;
     public final void rule__STMulDivModExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13346:1: ( ( ruleSTPowerExpression ) )
-            // InternalGlobalConstantsParser.g:13347:2: ( ruleSTPowerExpression )
+            // InternalGlobalConstantsParser.g:13342:1: ( ( ruleSTPowerExpression ) )
+            // InternalGlobalConstantsParser.g:13343:2: ( ruleSTPowerExpression )
             {
-            // InternalGlobalConstantsParser.g:13347:2: ( ruleSTPowerExpression )
-            // InternalGlobalConstantsParser.g:13348:3: ruleSTPowerExpression
+            // InternalGlobalConstantsParser.g:13343:2: ( ruleSTPowerExpression )
+            // InternalGlobalConstantsParser.g:13344:3: ruleSTPowerExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMulDivModExpressionAccess().getRightSTPowerExpressionParserRuleCall_1_1_0()); 
@@ -43788,17 +43780,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STPowerExpression__OpAssignment_1_0_1"
-    // InternalGlobalConstantsParser.g:13357:1: rule__STPowerExpression__OpAssignment_1_0_1 : ( rulePowerOperator ) ;
+    // InternalGlobalConstantsParser.g:13353:1: rule__STPowerExpression__OpAssignment_1_0_1 : ( rulePowerOperator ) ;
     public final void rule__STPowerExpression__OpAssignment_1_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13361:1: ( ( rulePowerOperator ) )
-            // InternalGlobalConstantsParser.g:13362:2: ( rulePowerOperator )
+            // InternalGlobalConstantsParser.g:13357:1: ( ( rulePowerOperator ) )
+            // InternalGlobalConstantsParser.g:13358:2: ( rulePowerOperator )
             {
-            // InternalGlobalConstantsParser.g:13362:2: ( rulePowerOperator )
-            // InternalGlobalConstantsParser.g:13363:3: rulePowerOperator
+            // InternalGlobalConstantsParser.g:13358:2: ( rulePowerOperator )
+            // InternalGlobalConstantsParser.g:13359:3: rulePowerOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPowerExpressionAccess().getOpPowerOperatorEnumRuleCall_1_0_1_0()); 
@@ -43833,17 +43825,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STPowerExpression__RightAssignment_1_1"
-    // InternalGlobalConstantsParser.g:13372:1: rule__STPowerExpression__RightAssignment_1_1 : ( ruleSTUnaryExpression ) ;
+    // InternalGlobalConstantsParser.g:13368:1: rule__STPowerExpression__RightAssignment_1_1 : ( ruleSTUnaryExpression ) ;
     public final void rule__STPowerExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13376:1: ( ( ruleSTUnaryExpression ) )
-            // InternalGlobalConstantsParser.g:13377:2: ( ruleSTUnaryExpression )
+            // InternalGlobalConstantsParser.g:13372:1: ( ( ruleSTUnaryExpression ) )
+            // InternalGlobalConstantsParser.g:13373:2: ( ruleSTUnaryExpression )
             {
-            // InternalGlobalConstantsParser.g:13377:2: ( ruleSTUnaryExpression )
-            // InternalGlobalConstantsParser.g:13378:3: ruleSTUnaryExpression
+            // InternalGlobalConstantsParser.g:13373:2: ( ruleSTUnaryExpression )
+            // InternalGlobalConstantsParser.g:13374:3: ruleSTUnaryExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTPowerExpressionAccess().getRightSTUnaryExpressionParserRuleCall_1_1_0()); 
@@ -43878,17 +43870,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STUnaryExpression__OpAssignment_1_1"
-    // InternalGlobalConstantsParser.g:13387:1: rule__STUnaryExpression__OpAssignment_1_1 : ( ruleUnaryOperator ) ;
+    // InternalGlobalConstantsParser.g:13383:1: rule__STUnaryExpression__OpAssignment_1_1 : ( ruleUnaryOperator ) ;
     public final void rule__STUnaryExpression__OpAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13391:1: ( ( ruleUnaryOperator ) )
-            // InternalGlobalConstantsParser.g:13392:2: ( ruleUnaryOperator )
+            // InternalGlobalConstantsParser.g:13387:1: ( ( ruleUnaryOperator ) )
+            // InternalGlobalConstantsParser.g:13388:2: ( ruleUnaryOperator )
             {
-            // InternalGlobalConstantsParser.g:13392:2: ( ruleUnaryOperator )
-            // InternalGlobalConstantsParser.g:13393:3: ruleUnaryOperator
+            // InternalGlobalConstantsParser.g:13388:2: ( ruleUnaryOperator )
+            // InternalGlobalConstantsParser.g:13389:3: ruleUnaryOperator
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTUnaryExpressionAccess().getOpUnaryOperatorEnumRuleCall_1_1_0()); 
@@ -43923,17 +43915,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STUnaryExpression__ExpressionAssignment_1_2"
-    // InternalGlobalConstantsParser.g:13402:1: rule__STUnaryExpression__ExpressionAssignment_1_2 : ( ruleSTUnaryExpression ) ;
+    // InternalGlobalConstantsParser.g:13398:1: rule__STUnaryExpression__ExpressionAssignment_1_2 : ( ruleSTUnaryExpression ) ;
     public final void rule__STUnaryExpression__ExpressionAssignment_1_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13406:1: ( ( ruleSTUnaryExpression ) )
-            // InternalGlobalConstantsParser.g:13407:2: ( ruleSTUnaryExpression )
+            // InternalGlobalConstantsParser.g:13402:1: ( ( ruleSTUnaryExpression ) )
+            // InternalGlobalConstantsParser.g:13403:2: ( ruleSTUnaryExpression )
             {
-            // InternalGlobalConstantsParser.g:13407:2: ( ruleSTUnaryExpression )
-            // InternalGlobalConstantsParser.g:13408:3: ruleSTUnaryExpression
+            // InternalGlobalConstantsParser.g:13403:2: ( ruleSTUnaryExpression )
+            // InternalGlobalConstantsParser.g:13404:3: ruleSTUnaryExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTUnaryExpressionAccess().getExpressionSTUnaryExpressionParserRuleCall_1_2_0()); 
@@ -43968,23 +43960,23 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STAccessExpression__MemberAssignment_1_0_2"
-    // InternalGlobalConstantsParser.g:13417:1: rule__STAccessExpression__MemberAssignment_1_0_2 : ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) ) ;
+    // InternalGlobalConstantsParser.g:13413:1: rule__STAccessExpression__MemberAssignment_1_0_2 : ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) ) ;
     public final void rule__STAccessExpression__MemberAssignment_1_0_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13421:1: ( ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) ) )
-            // InternalGlobalConstantsParser.g:13422:2: ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) )
+            // InternalGlobalConstantsParser.g:13417:1: ( ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) ) )
+            // InternalGlobalConstantsParser.g:13418:2: ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) )
             {
-            // InternalGlobalConstantsParser.g:13422:2: ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) )
-            // InternalGlobalConstantsParser.g:13423:3: ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 )
+            // InternalGlobalConstantsParser.g:13418:2: ( ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 ) )
+            // InternalGlobalConstantsParser.g:13419:3: ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getMemberAlternatives_1_0_2_0()); 
             }
-            // InternalGlobalConstantsParser.g:13424:3: ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 )
-            // InternalGlobalConstantsParser.g:13424:4: rule__STAccessExpression__MemberAlternatives_1_0_2_0
+            // InternalGlobalConstantsParser.g:13420:3: ( rule__STAccessExpression__MemberAlternatives_1_0_2_0 )
+            // InternalGlobalConstantsParser.g:13420:4: rule__STAccessExpression__MemberAlternatives_1_0_2_0
             {
             pushFollow(FOLLOW_2);
             rule__STAccessExpression__MemberAlternatives_1_0_2_0();
@@ -44019,17 +44011,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STAccessExpression__IndexAssignment_1_1_2"
-    // InternalGlobalConstantsParser.g:13432:1: rule__STAccessExpression__IndexAssignment_1_1_2 : ( ruleSTExpression ) ;
+    // InternalGlobalConstantsParser.g:13428:1: rule__STAccessExpression__IndexAssignment_1_1_2 : ( ruleSTExpression ) ;
     public final void rule__STAccessExpression__IndexAssignment_1_1_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13436:1: ( ( ruleSTExpression ) )
-            // InternalGlobalConstantsParser.g:13437:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13432:1: ( ( ruleSTExpression ) )
+            // InternalGlobalConstantsParser.g:13433:2: ( ruleSTExpression )
             {
-            // InternalGlobalConstantsParser.g:13437:2: ( ruleSTExpression )
-            // InternalGlobalConstantsParser.g:13438:3: ruleSTExpression
+            // InternalGlobalConstantsParser.g:13433:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13434:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getIndexSTExpressionParserRuleCall_1_1_2_0()); 
@@ -44064,17 +44056,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STAccessExpression__IndexAssignment_1_1_3_1"
-    // InternalGlobalConstantsParser.g:13447:1: rule__STAccessExpression__IndexAssignment_1_1_3_1 : ( ruleSTExpression ) ;
+    // InternalGlobalConstantsParser.g:13443:1: rule__STAccessExpression__IndexAssignment_1_1_3_1 : ( ruleSTExpression ) ;
     public final void rule__STAccessExpression__IndexAssignment_1_1_3_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13451:1: ( ( ruleSTExpression ) )
-            // InternalGlobalConstantsParser.g:13452:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13447:1: ( ( ruleSTExpression ) )
+            // InternalGlobalConstantsParser.g:13448:2: ( ruleSTExpression )
             {
-            // InternalGlobalConstantsParser.g:13452:2: ( ruleSTExpression )
-            // InternalGlobalConstantsParser.g:13453:3: ruleSTExpression
+            // InternalGlobalConstantsParser.g:13448:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13449:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTAccessExpressionAccess().getIndexSTExpressionParserRuleCall_1_1_3_1_0()); 
@@ -44109,23 +44101,23 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STFeatureExpression__FeatureAssignment_1"
-    // InternalGlobalConstantsParser.g:13462:1: rule__STFeatureExpression__FeatureAssignment_1 : ( ( ruleSTFeatureName ) ) ;
+    // InternalGlobalConstantsParser.g:13458:1: rule__STFeatureExpression__FeatureAssignment_1 : ( ( ruleSTFeatureName ) ) ;
     public final void rule__STFeatureExpression__FeatureAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13466:1: ( ( ( ruleSTFeatureName ) ) )
-            // InternalGlobalConstantsParser.g:13467:2: ( ( ruleSTFeatureName ) )
+            // InternalGlobalConstantsParser.g:13462:1: ( ( ( ruleSTFeatureName ) ) )
+            // InternalGlobalConstantsParser.g:13463:2: ( ( ruleSTFeatureName ) )
             {
-            // InternalGlobalConstantsParser.g:13467:2: ( ( ruleSTFeatureName ) )
-            // InternalGlobalConstantsParser.g:13468:3: ( ruleSTFeatureName )
+            // InternalGlobalConstantsParser.g:13463:2: ( ( ruleSTFeatureName ) )
+            // InternalGlobalConstantsParser.g:13464:3: ( ruleSTFeatureName )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getFeatureINamedElementCrossReference_1_0()); 
             }
-            // InternalGlobalConstantsParser.g:13469:3: ( ruleSTFeatureName )
-            // InternalGlobalConstantsParser.g:13470:4: ruleSTFeatureName
+            // InternalGlobalConstantsParser.g:13465:3: ( ruleSTFeatureName )
+            // InternalGlobalConstantsParser.g:13466:4: ruleSTFeatureName
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getFeatureINamedElementSTFeatureNameParserRuleCall_1_0_1()); 
@@ -44166,23 +44158,23 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STFeatureExpression__CallAssignment_2_0"
-    // InternalGlobalConstantsParser.g:13481:1: rule__STFeatureExpression__CallAssignment_2_0 : ( ( LeftParenthesis ) ) ;
+    // InternalGlobalConstantsParser.g:13477:1: rule__STFeatureExpression__CallAssignment_2_0 : ( ( LeftParenthesis ) ) ;
     public final void rule__STFeatureExpression__CallAssignment_2_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13485:1: ( ( ( LeftParenthesis ) ) )
-            // InternalGlobalConstantsParser.g:13486:2: ( ( LeftParenthesis ) )
+            // InternalGlobalConstantsParser.g:13481:1: ( ( ( LeftParenthesis ) ) )
+            // InternalGlobalConstantsParser.g:13482:2: ( ( LeftParenthesis ) )
             {
-            // InternalGlobalConstantsParser.g:13486:2: ( ( LeftParenthesis ) )
-            // InternalGlobalConstantsParser.g:13487:3: ( LeftParenthesis )
+            // InternalGlobalConstantsParser.g:13482:2: ( ( LeftParenthesis ) )
+            // InternalGlobalConstantsParser.g:13483:3: ( LeftParenthesis )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getCallLeftParenthesisKeyword_2_0_0()); 
             }
-            // InternalGlobalConstantsParser.g:13488:3: ( LeftParenthesis )
-            // InternalGlobalConstantsParser.g:13489:4: LeftParenthesis
+            // InternalGlobalConstantsParser.g:13484:3: ( LeftParenthesis )
+            // InternalGlobalConstantsParser.g:13485:4: LeftParenthesis
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getCallLeftParenthesisKeyword_2_0_0()); 
@@ -44219,17 +44211,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STFeatureExpression__ParametersAssignment_2_1_0"
-    // InternalGlobalConstantsParser.g:13500:1: rule__STFeatureExpression__ParametersAssignment_2_1_0 : ( ruleSTCallArgument ) ;
+    // InternalGlobalConstantsParser.g:13496:1: rule__STFeatureExpression__ParametersAssignment_2_1_0 : ( ruleSTCallArgument ) ;
     public final void rule__STFeatureExpression__ParametersAssignment_2_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13504:1: ( ( ruleSTCallArgument ) )
-            // InternalGlobalConstantsParser.g:13505:2: ( ruleSTCallArgument )
+            // InternalGlobalConstantsParser.g:13500:1: ( ( ruleSTCallArgument ) )
+            // InternalGlobalConstantsParser.g:13501:2: ( ruleSTCallArgument )
             {
-            // InternalGlobalConstantsParser.g:13505:2: ( ruleSTCallArgument )
-            // InternalGlobalConstantsParser.g:13506:3: ruleSTCallArgument
+            // InternalGlobalConstantsParser.g:13501:2: ( ruleSTCallArgument )
+            // InternalGlobalConstantsParser.g:13502:3: ruleSTCallArgument
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getParametersSTCallArgumentParserRuleCall_2_1_0_0()); 
@@ -44264,17 +44256,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STFeatureExpression__ParametersAssignment_2_1_1_1"
-    // InternalGlobalConstantsParser.g:13515:1: rule__STFeatureExpression__ParametersAssignment_2_1_1_1 : ( ruleSTCallArgument ) ;
+    // InternalGlobalConstantsParser.g:13511:1: rule__STFeatureExpression__ParametersAssignment_2_1_1_1 : ( ruleSTCallArgument ) ;
     public final void rule__STFeatureExpression__ParametersAssignment_2_1_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13519:1: ( ( ruleSTCallArgument ) )
-            // InternalGlobalConstantsParser.g:13520:2: ( ruleSTCallArgument )
+            // InternalGlobalConstantsParser.g:13515:1: ( ( ruleSTCallArgument ) )
+            // InternalGlobalConstantsParser.g:13516:2: ( ruleSTCallArgument )
             {
-            // InternalGlobalConstantsParser.g:13520:2: ( ruleSTCallArgument )
-            // InternalGlobalConstantsParser.g:13521:3: ruleSTCallArgument
+            // InternalGlobalConstantsParser.g:13516:2: ( ruleSTCallArgument )
+            // InternalGlobalConstantsParser.g:13517:3: ruleSTCallArgument
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTFeatureExpressionAccess().getParametersSTCallArgumentParserRuleCall_2_1_1_1_0()); 
@@ -44309,17 +44301,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STBuiltinFeatureExpression__FeatureAssignment_1"
-    // InternalGlobalConstantsParser.g:13530:1: rule__STBuiltinFeatureExpression__FeatureAssignment_1 : ( ruleSTBuiltinFeature ) ;
+    // InternalGlobalConstantsParser.g:13526:1: rule__STBuiltinFeatureExpression__FeatureAssignment_1 : ( ruleSTBuiltinFeature ) ;
     public final void rule__STBuiltinFeatureExpression__FeatureAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13534:1: ( ( ruleSTBuiltinFeature ) )
-            // InternalGlobalConstantsParser.g:13535:2: ( ruleSTBuiltinFeature )
+            // InternalGlobalConstantsParser.g:13530:1: ( ( ruleSTBuiltinFeature ) )
+            // InternalGlobalConstantsParser.g:13531:2: ( ruleSTBuiltinFeature )
             {
-            // InternalGlobalConstantsParser.g:13535:2: ( ruleSTBuiltinFeature )
-            // InternalGlobalConstantsParser.g:13536:3: ruleSTBuiltinFeature
+            // InternalGlobalConstantsParser.g:13531:2: ( ruleSTBuiltinFeature )
+            // InternalGlobalConstantsParser.g:13532:3: ruleSTBuiltinFeature
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTBuiltinFeatureExpressionAccess().getFeatureSTBuiltinFeatureEnumRuleCall_1_0()); 
@@ -44354,23 +44346,23 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STBuiltinFeatureExpression__CallAssignment_2_0"
-    // InternalGlobalConstantsParser.g:13545:1: rule__STBuiltinFeatureExpression__CallAssignment_2_0 : ( ( LeftParenthesis ) ) ;
+    // InternalGlobalConstantsParser.g:13541:1: rule__STBuiltinFeatureExpression__CallAssignment_2_0 : ( ( LeftParenthesis ) ) ;
     public final void rule__STBuiltinFeatureExpression__CallAssignment_2_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13549:1: ( ( ( LeftParenthesis ) ) )
-            // InternalGlobalConstantsParser.g:13550:2: ( ( LeftParenthesis ) )
+            // InternalGlobalConstantsParser.g:13545:1: ( ( ( LeftParenthesis ) ) )
+            // InternalGlobalConstantsParser.g:13546:2: ( ( LeftParenthesis ) )
             {
-            // InternalGlobalConstantsParser.g:13550:2: ( ( LeftParenthesis ) )
-            // InternalGlobalConstantsParser.g:13551:3: ( LeftParenthesis )
+            // InternalGlobalConstantsParser.g:13546:2: ( ( LeftParenthesis ) )
+            // InternalGlobalConstantsParser.g:13547:3: ( LeftParenthesis )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTBuiltinFeatureExpressionAccess().getCallLeftParenthesisKeyword_2_0_0()); 
             }
-            // InternalGlobalConstantsParser.g:13552:3: ( LeftParenthesis )
-            // InternalGlobalConstantsParser.g:13553:4: LeftParenthesis
+            // InternalGlobalConstantsParser.g:13548:3: ( LeftParenthesis )
+            // InternalGlobalConstantsParser.g:13549:4: LeftParenthesis
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTBuiltinFeatureExpressionAccess().getCallLeftParenthesisKeyword_2_0_0()); 
@@ -44407,17 +44399,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STBuiltinFeatureExpression__ParametersAssignment_2_1_0"
-    // InternalGlobalConstantsParser.g:13564:1: rule__STBuiltinFeatureExpression__ParametersAssignment_2_1_0 : ( ruleSTCallArgument ) ;
+    // InternalGlobalConstantsParser.g:13560:1: rule__STBuiltinFeatureExpression__ParametersAssignment_2_1_0 : ( ruleSTCallArgument ) ;
     public final void rule__STBuiltinFeatureExpression__ParametersAssignment_2_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13568:1: ( ( ruleSTCallArgument ) )
-            // InternalGlobalConstantsParser.g:13569:2: ( ruleSTCallArgument )
+            // InternalGlobalConstantsParser.g:13564:1: ( ( ruleSTCallArgument ) )
+            // InternalGlobalConstantsParser.g:13565:2: ( ruleSTCallArgument )
             {
-            // InternalGlobalConstantsParser.g:13569:2: ( ruleSTCallArgument )
-            // InternalGlobalConstantsParser.g:13570:3: ruleSTCallArgument
+            // InternalGlobalConstantsParser.g:13565:2: ( ruleSTCallArgument )
+            // InternalGlobalConstantsParser.g:13566:3: ruleSTCallArgument
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTBuiltinFeatureExpressionAccess().getParametersSTCallArgumentParserRuleCall_2_1_0_0()); 
@@ -44452,17 +44444,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STBuiltinFeatureExpression__ParametersAssignment_2_1_1_1"
-    // InternalGlobalConstantsParser.g:13579:1: rule__STBuiltinFeatureExpression__ParametersAssignment_2_1_1_1 : ( ruleSTCallArgument ) ;
+    // InternalGlobalConstantsParser.g:13575:1: rule__STBuiltinFeatureExpression__ParametersAssignment_2_1_1_1 : ( ruleSTCallArgument ) ;
     public final void rule__STBuiltinFeatureExpression__ParametersAssignment_2_1_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13583:1: ( ( ruleSTCallArgument ) )
-            // InternalGlobalConstantsParser.g:13584:2: ( ruleSTCallArgument )
+            // InternalGlobalConstantsParser.g:13579:1: ( ( ruleSTCallArgument ) )
+            // InternalGlobalConstantsParser.g:13580:2: ( ruleSTCallArgument )
             {
-            // InternalGlobalConstantsParser.g:13584:2: ( ruleSTCallArgument )
-            // InternalGlobalConstantsParser.g:13585:3: ruleSTCallArgument
+            // InternalGlobalConstantsParser.g:13580:2: ( ruleSTCallArgument )
+            // InternalGlobalConstantsParser.g:13581:3: ruleSTCallArgument
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTBuiltinFeatureExpressionAccess().getParametersSTCallArgumentParserRuleCall_2_1_1_1_0()); 
@@ -44497,17 +44489,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STMultibitPartialExpression__SpecifierAssignment_1"
-    // InternalGlobalConstantsParser.g:13594:1: rule__STMultibitPartialExpression__SpecifierAssignment_1 : ( ruleSTMultiBitAccessSpecifier ) ;
+    // InternalGlobalConstantsParser.g:13590:1: rule__STMultibitPartialExpression__SpecifierAssignment_1 : ( ruleSTMultiBitAccessSpecifier ) ;
     public final void rule__STMultibitPartialExpression__SpecifierAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13598:1: ( ( ruleSTMultiBitAccessSpecifier ) )
-            // InternalGlobalConstantsParser.g:13599:2: ( ruleSTMultiBitAccessSpecifier )
+            // InternalGlobalConstantsParser.g:13594:1: ( ( ruleSTMultiBitAccessSpecifier ) )
+            // InternalGlobalConstantsParser.g:13595:2: ( ruleSTMultiBitAccessSpecifier )
             {
-            // InternalGlobalConstantsParser.g:13599:2: ( ruleSTMultiBitAccessSpecifier )
-            // InternalGlobalConstantsParser.g:13600:3: ruleSTMultiBitAccessSpecifier
+            // InternalGlobalConstantsParser.g:13595:2: ( ruleSTMultiBitAccessSpecifier )
+            // InternalGlobalConstantsParser.g:13596:3: ruleSTMultiBitAccessSpecifier
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMultibitPartialExpressionAccess().getSpecifierSTMultiBitAccessSpecifierEnumRuleCall_1_0()); 
@@ -44542,17 +44534,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STMultibitPartialExpression__IndexAssignment_2_0"
-    // InternalGlobalConstantsParser.g:13609:1: rule__STMultibitPartialExpression__IndexAssignment_2_0 : ( RULE_INT ) ;
+    // InternalGlobalConstantsParser.g:13605:1: rule__STMultibitPartialExpression__IndexAssignment_2_0 : ( RULE_INT ) ;
     public final void rule__STMultibitPartialExpression__IndexAssignment_2_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13613:1: ( ( RULE_INT ) )
-            // InternalGlobalConstantsParser.g:13614:2: ( RULE_INT )
+            // InternalGlobalConstantsParser.g:13609:1: ( ( RULE_INT ) )
+            // InternalGlobalConstantsParser.g:13610:2: ( RULE_INT )
             {
-            // InternalGlobalConstantsParser.g:13614:2: ( RULE_INT )
-            // InternalGlobalConstantsParser.g:13615:3: RULE_INT
+            // InternalGlobalConstantsParser.g:13610:2: ( RULE_INT )
+            // InternalGlobalConstantsParser.g:13611:3: RULE_INT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMultibitPartialExpressionAccess().getIndexINTTerminalRuleCall_2_0_0()); 
@@ -44583,17 +44575,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STMultibitPartialExpression__ExpressionAssignment_2_1_1"
-    // InternalGlobalConstantsParser.g:13624:1: rule__STMultibitPartialExpression__ExpressionAssignment_2_1_1 : ( ruleSTExpression ) ;
+    // InternalGlobalConstantsParser.g:13620:1: rule__STMultibitPartialExpression__ExpressionAssignment_2_1_1 : ( ruleSTExpression ) ;
     public final void rule__STMultibitPartialExpression__ExpressionAssignment_2_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13628:1: ( ( ruleSTExpression ) )
-            // InternalGlobalConstantsParser.g:13629:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13624:1: ( ( ruleSTExpression ) )
+            // InternalGlobalConstantsParser.g:13625:2: ( ruleSTExpression )
             {
-            // InternalGlobalConstantsParser.g:13629:2: ( ruleSTExpression )
-            // InternalGlobalConstantsParser.g:13630:3: ruleSTExpression
+            // InternalGlobalConstantsParser.g:13625:2: ( ruleSTExpression )
+            // InternalGlobalConstantsParser.g:13626:3: ruleSTExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTMultibitPartialExpressionAccess().getExpressionSTExpressionParserRuleCall_2_1_1_0()); 
@@ -44628,23 +44620,23 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STNumericLiteral__TypeAssignment_0_0"
-    // InternalGlobalConstantsParser.g:13639:1: rule__STNumericLiteral__TypeAssignment_0_0 : ( ( ruleSTNumericLiteralType ) ) ;
+    // InternalGlobalConstantsParser.g:13635:1: rule__STNumericLiteral__TypeAssignment_0_0 : ( ( ruleSTNumericLiteralType ) ) ;
     public final void rule__STNumericLiteral__TypeAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13643:1: ( ( ( ruleSTNumericLiteralType ) ) )
-            // InternalGlobalConstantsParser.g:13644:2: ( ( ruleSTNumericLiteralType ) )
+            // InternalGlobalConstantsParser.g:13639:1: ( ( ( ruleSTNumericLiteralType ) ) )
+            // InternalGlobalConstantsParser.g:13640:2: ( ( ruleSTNumericLiteralType ) )
             {
-            // InternalGlobalConstantsParser.g:13644:2: ( ( ruleSTNumericLiteralType ) )
-            // InternalGlobalConstantsParser.g:13645:3: ( ruleSTNumericLiteralType )
+            // InternalGlobalConstantsParser.g:13640:2: ( ( ruleSTNumericLiteralType ) )
+            // InternalGlobalConstantsParser.g:13641:3: ( ruleSTNumericLiteralType )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTNumericLiteralAccess().getTypeDataTypeCrossReference_0_0_0()); 
             }
-            // InternalGlobalConstantsParser.g:13646:3: ( ruleSTNumericLiteralType )
-            // InternalGlobalConstantsParser.g:13647:4: ruleSTNumericLiteralType
+            // InternalGlobalConstantsParser.g:13642:3: ( ruleSTNumericLiteralType )
+            // InternalGlobalConstantsParser.g:13643:4: ruleSTNumericLiteralType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTNumericLiteralAccess().getTypeDataTypeSTNumericLiteralTypeParserRuleCall_0_0_0_1()); 
@@ -44685,17 +44677,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STNumericLiteral__ValueAssignment_1"
-    // InternalGlobalConstantsParser.g:13658:1: rule__STNumericLiteral__ValueAssignment_1 : ( ruleNumeric ) ;
+    // InternalGlobalConstantsParser.g:13654:1: rule__STNumericLiteral__ValueAssignment_1 : ( ruleNumeric ) ;
     public final void rule__STNumericLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13662:1: ( ( ruleNumeric ) )
-            // InternalGlobalConstantsParser.g:13663:2: ( ruleNumeric )
+            // InternalGlobalConstantsParser.g:13658:1: ( ( ruleNumeric ) )
+            // InternalGlobalConstantsParser.g:13659:2: ( ruleNumeric )
             {
-            // InternalGlobalConstantsParser.g:13663:2: ( ruleNumeric )
-            // InternalGlobalConstantsParser.g:13664:3: ruleNumeric
+            // InternalGlobalConstantsParser.g:13659:2: ( ruleNumeric )
+            // InternalGlobalConstantsParser.g:13660:3: ruleNumeric
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTNumericLiteralAccess().getValueNumericParserRuleCall_1_0()); 
@@ -44730,23 +44722,23 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STDateLiteral__TypeAssignment_0"
-    // InternalGlobalConstantsParser.g:13673:1: rule__STDateLiteral__TypeAssignment_0 : ( ( ruleSTDateLiteralType ) ) ;
+    // InternalGlobalConstantsParser.g:13669:1: rule__STDateLiteral__TypeAssignment_0 : ( ( ruleSTDateLiteralType ) ) ;
     public final void rule__STDateLiteral__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13677:1: ( ( ( ruleSTDateLiteralType ) ) )
-            // InternalGlobalConstantsParser.g:13678:2: ( ( ruleSTDateLiteralType ) )
+            // InternalGlobalConstantsParser.g:13673:1: ( ( ( ruleSTDateLiteralType ) ) )
+            // InternalGlobalConstantsParser.g:13674:2: ( ( ruleSTDateLiteralType ) )
             {
-            // InternalGlobalConstantsParser.g:13678:2: ( ( ruleSTDateLiteralType ) )
-            // InternalGlobalConstantsParser.g:13679:3: ( ruleSTDateLiteralType )
+            // InternalGlobalConstantsParser.g:13674:2: ( ( ruleSTDateLiteralType ) )
+            // InternalGlobalConstantsParser.g:13675:3: ( ruleSTDateLiteralType )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateLiteralAccess().getTypeDataTypeCrossReference_0_0()); 
             }
-            // InternalGlobalConstantsParser.g:13680:3: ( ruleSTDateLiteralType )
-            // InternalGlobalConstantsParser.g:13681:4: ruleSTDateLiteralType
+            // InternalGlobalConstantsParser.g:13676:3: ( ruleSTDateLiteralType )
+            // InternalGlobalConstantsParser.g:13677:4: ruleSTDateLiteralType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateLiteralAccess().getTypeDataTypeSTDateLiteralTypeParserRuleCall_0_0_1()); 
@@ -44787,17 +44779,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STDateLiteral__ValueAssignment_2"
-    // InternalGlobalConstantsParser.g:13692:1: rule__STDateLiteral__ValueAssignment_2 : ( ruleDate ) ;
+    // InternalGlobalConstantsParser.g:13688:1: rule__STDateLiteral__ValueAssignment_2 : ( ruleDate ) ;
     public final void rule__STDateLiteral__ValueAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13696:1: ( ( ruleDate ) )
-            // InternalGlobalConstantsParser.g:13697:2: ( ruleDate )
+            // InternalGlobalConstantsParser.g:13692:1: ( ( ruleDate ) )
+            // InternalGlobalConstantsParser.g:13693:2: ( ruleDate )
             {
-            // InternalGlobalConstantsParser.g:13697:2: ( ruleDate )
-            // InternalGlobalConstantsParser.g:13698:3: ruleDate
+            // InternalGlobalConstantsParser.g:13693:2: ( ruleDate )
+            // InternalGlobalConstantsParser.g:13694:3: ruleDate
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateLiteralAccess().getValueDateParserRuleCall_2_0()); 
@@ -44832,23 +44824,23 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STTimeLiteral__TypeAssignment_0"
-    // InternalGlobalConstantsParser.g:13707:1: rule__STTimeLiteral__TypeAssignment_0 : ( ( ruleSTTimeLiteralType ) ) ;
+    // InternalGlobalConstantsParser.g:13703:1: rule__STTimeLiteral__TypeAssignment_0 : ( ( ruleSTTimeLiteralType ) ) ;
     public final void rule__STTimeLiteral__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13711:1: ( ( ( ruleSTTimeLiteralType ) ) )
-            // InternalGlobalConstantsParser.g:13712:2: ( ( ruleSTTimeLiteralType ) )
+            // InternalGlobalConstantsParser.g:13707:1: ( ( ( ruleSTTimeLiteralType ) ) )
+            // InternalGlobalConstantsParser.g:13708:2: ( ( ruleSTTimeLiteralType ) )
             {
-            // InternalGlobalConstantsParser.g:13712:2: ( ( ruleSTTimeLiteralType ) )
-            // InternalGlobalConstantsParser.g:13713:3: ( ruleSTTimeLiteralType )
+            // InternalGlobalConstantsParser.g:13708:2: ( ( ruleSTTimeLiteralType ) )
+            // InternalGlobalConstantsParser.g:13709:3: ( ruleSTTimeLiteralType )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeLiteralAccess().getTypeDataTypeCrossReference_0_0()); 
             }
-            // InternalGlobalConstantsParser.g:13714:3: ( ruleSTTimeLiteralType )
-            // InternalGlobalConstantsParser.g:13715:4: ruleSTTimeLiteralType
+            // InternalGlobalConstantsParser.g:13710:3: ( ruleSTTimeLiteralType )
+            // InternalGlobalConstantsParser.g:13711:4: ruleSTTimeLiteralType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeLiteralAccess().getTypeDataTypeSTTimeLiteralTypeParserRuleCall_0_0_1()); 
@@ -44889,17 +44881,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STTimeLiteral__ValueAssignment_2"
-    // InternalGlobalConstantsParser.g:13726:1: rule__STTimeLiteral__ValueAssignment_2 : ( ruleTime ) ;
+    // InternalGlobalConstantsParser.g:13722:1: rule__STTimeLiteral__ValueAssignment_2 : ( ruleTime ) ;
     public final void rule__STTimeLiteral__ValueAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13730:1: ( ( ruleTime ) )
-            // InternalGlobalConstantsParser.g:13731:2: ( ruleTime )
+            // InternalGlobalConstantsParser.g:13726:1: ( ( ruleTime ) )
+            // InternalGlobalConstantsParser.g:13727:2: ( ruleTime )
             {
-            // InternalGlobalConstantsParser.g:13731:2: ( ruleTime )
-            // InternalGlobalConstantsParser.g:13732:3: ruleTime
+            // InternalGlobalConstantsParser.g:13727:2: ( ruleTime )
+            // InternalGlobalConstantsParser.g:13728:3: ruleTime
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeLiteralAccess().getValueTimeParserRuleCall_2_0()); 
@@ -44934,23 +44926,23 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STTimeOfDayLiteral__TypeAssignment_0"
-    // InternalGlobalConstantsParser.g:13741:1: rule__STTimeOfDayLiteral__TypeAssignment_0 : ( ( ruleSTTimeOfDayType ) ) ;
+    // InternalGlobalConstantsParser.g:13737:1: rule__STTimeOfDayLiteral__TypeAssignment_0 : ( ( ruleSTTimeOfDayType ) ) ;
     public final void rule__STTimeOfDayLiteral__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13745:1: ( ( ( ruleSTTimeOfDayType ) ) )
-            // InternalGlobalConstantsParser.g:13746:2: ( ( ruleSTTimeOfDayType ) )
+            // InternalGlobalConstantsParser.g:13741:1: ( ( ( ruleSTTimeOfDayType ) ) )
+            // InternalGlobalConstantsParser.g:13742:2: ( ( ruleSTTimeOfDayType ) )
             {
-            // InternalGlobalConstantsParser.g:13746:2: ( ( ruleSTTimeOfDayType ) )
-            // InternalGlobalConstantsParser.g:13747:3: ( ruleSTTimeOfDayType )
+            // InternalGlobalConstantsParser.g:13742:2: ( ( ruleSTTimeOfDayType ) )
+            // InternalGlobalConstantsParser.g:13743:3: ( ruleSTTimeOfDayType )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeOfDayLiteralAccess().getTypeDataTypeCrossReference_0_0()); 
             }
-            // InternalGlobalConstantsParser.g:13748:3: ( ruleSTTimeOfDayType )
-            // InternalGlobalConstantsParser.g:13749:4: ruleSTTimeOfDayType
+            // InternalGlobalConstantsParser.g:13744:3: ( ruleSTTimeOfDayType )
+            // InternalGlobalConstantsParser.g:13745:4: ruleSTTimeOfDayType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeOfDayLiteralAccess().getTypeDataTypeSTTimeOfDayTypeParserRuleCall_0_0_1()); 
@@ -44991,17 +44983,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STTimeOfDayLiteral__ValueAssignment_2"
-    // InternalGlobalConstantsParser.g:13760:1: rule__STTimeOfDayLiteral__ValueAssignment_2 : ( ruleTimeOfDay ) ;
+    // InternalGlobalConstantsParser.g:13756:1: rule__STTimeOfDayLiteral__ValueAssignment_2 : ( ruleTimeOfDay ) ;
     public final void rule__STTimeOfDayLiteral__ValueAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13764:1: ( ( ruleTimeOfDay ) )
-            // InternalGlobalConstantsParser.g:13765:2: ( ruleTimeOfDay )
+            // InternalGlobalConstantsParser.g:13760:1: ( ( ruleTimeOfDay ) )
+            // InternalGlobalConstantsParser.g:13761:2: ( ruleTimeOfDay )
             {
-            // InternalGlobalConstantsParser.g:13765:2: ( ruleTimeOfDay )
-            // InternalGlobalConstantsParser.g:13766:3: ruleTimeOfDay
+            // InternalGlobalConstantsParser.g:13761:2: ( ruleTimeOfDay )
+            // InternalGlobalConstantsParser.g:13762:3: ruleTimeOfDay
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTTimeOfDayLiteralAccess().getValueTimeOfDayParserRuleCall_2_0()); 
@@ -45036,23 +45028,23 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__TypeAssignment_0"
-    // InternalGlobalConstantsParser.g:13775:1: rule__STDateAndTimeLiteral__TypeAssignment_0 : ( ( ruleSTDateAndTimeType ) ) ;
+    // InternalGlobalConstantsParser.g:13771:1: rule__STDateAndTimeLiteral__TypeAssignment_0 : ( ( ruleSTDateAndTimeType ) ) ;
     public final void rule__STDateAndTimeLiteral__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13779:1: ( ( ( ruleSTDateAndTimeType ) ) )
-            // InternalGlobalConstantsParser.g:13780:2: ( ( ruleSTDateAndTimeType ) )
+            // InternalGlobalConstantsParser.g:13775:1: ( ( ( ruleSTDateAndTimeType ) ) )
+            // InternalGlobalConstantsParser.g:13776:2: ( ( ruleSTDateAndTimeType ) )
             {
-            // InternalGlobalConstantsParser.g:13780:2: ( ( ruleSTDateAndTimeType ) )
-            // InternalGlobalConstantsParser.g:13781:3: ( ruleSTDateAndTimeType )
+            // InternalGlobalConstantsParser.g:13776:2: ( ( ruleSTDateAndTimeType ) )
+            // InternalGlobalConstantsParser.g:13777:3: ( ruleSTDateAndTimeType )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateAndTimeLiteralAccess().getTypeDataTypeCrossReference_0_0()); 
             }
-            // InternalGlobalConstantsParser.g:13782:3: ( ruleSTDateAndTimeType )
-            // InternalGlobalConstantsParser.g:13783:4: ruleSTDateAndTimeType
+            // InternalGlobalConstantsParser.g:13778:3: ( ruleSTDateAndTimeType )
+            // InternalGlobalConstantsParser.g:13779:4: ruleSTDateAndTimeType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateAndTimeLiteralAccess().getTypeDataTypeSTDateAndTimeTypeParserRuleCall_0_0_1()); 
@@ -45093,17 +45085,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STDateAndTimeLiteral__ValueAssignment_2"
-    // InternalGlobalConstantsParser.g:13794:1: rule__STDateAndTimeLiteral__ValueAssignment_2 : ( ruleDateAndTime ) ;
+    // InternalGlobalConstantsParser.g:13790:1: rule__STDateAndTimeLiteral__ValueAssignment_2 : ( ruleDateAndTime ) ;
     public final void rule__STDateAndTimeLiteral__ValueAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13798:1: ( ( ruleDateAndTime ) )
-            // InternalGlobalConstantsParser.g:13799:2: ( ruleDateAndTime )
+            // InternalGlobalConstantsParser.g:13794:1: ( ( ruleDateAndTime ) )
+            // InternalGlobalConstantsParser.g:13795:2: ( ruleDateAndTime )
             {
-            // InternalGlobalConstantsParser.g:13799:2: ( ruleDateAndTime )
-            // InternalGlobalConstantsParser.g:13800:3: ruleDateAndTime
+            // InternalGlobalConstantsParser.g:13795:2: ( ruleDateAndTime )
+            // InternalGlobalConstantsParser.g:13796:3: ruleDateAndTime
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTDateAndTimeLiteralAccess().getValueDateAndTimeParserRuleCall_2_0()); 
@@ -45138,23 +45130,23 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STStringLiteral__TypeAssignment_0_0"
-    // InternalGlobalConstantsParser.g:13809:1: rule__STStringLiteral__TypeAssignment_0_0 : ( ( ruleSTAnyCharsType ) ) ;
+    // InternalGlobalConstantsParser.g:13805:1: rule__STStringLiteral__TypeAssignment_0_0 : ( ( ruleSTAnyCharsType ) ) ;
     public final void rule__STStringLiteral__TypeAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13813:1: ( ( ( ruleSTAnyCharsType ) ) )
-            // InternalGlobalConstantsParser.g:13814:2: ( ( ruleSTAnyCharsType ) )
+            // InternalGlobalConstantsParser.g:13809:1: ( ( ( ruleSTAnyCharsType ) ) )
+            // InternalGlobalConstantsParser.g:13810:2: ( ( ruleSTAnyCharsType ) )
             {
-            // InternalGlobalConstantsParser.g:13814:2: ( ( ruleSTAnyCharsType ) )
-            // InternalGlobalConstantsParser.g:13815:3: ( ruleSTAnyCharsType )
+            // InternalGlobalConstantsParser.g:13810:2: ( ( ruleSTAnyCharsType ) )
+            // InternalGlobalConstantsParser.g:13811:3: ( ruleSTAnyCharsType )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTStringLiteralAccess().getTypeDataTypeCrossReference_0_0_0()); 
             }
-            // InternalGlobalConstantsParser.g:13816:3: ( ruleSTAnyCharsType )
-            // InternalGlobalConstantsParser.g:13817:4: ruleSTAnyCharsType
+            // InternalGlobalConstantsParser.g:13812:3: ( ruleSTAnyCharsType )
+            // InternalGlobalConstantsParser.g:13813:4: ruleSTAnyCharsType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTStringLiteralAccess().getTypeDataTypeSTAnyCharsTypeParserRuleCall_0_0_0_1()); 
@@ -45195,17 +45187,17 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
 
 
     // $ANTLR start "rule__STStringLiteral__ValueAssignment_1"
-    // InternalGlobalConstantsParser.g:13828:1: rule__STStringLiteral__ValueAssignment_1 : ( RULE_STRING ) ;
+    // InternalGlobalConstantsParser.g:13824:1: rule__STStringLiteral__ValueAssignment_1 : ( RULE_STRING ) ;
     public final void rule__STStringLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalGlobalConstantsParser.g:13832:1: ( ( RULE_STRING ) )
-            // InternalGlobalConstantsParser.g:13833:2: ( RULE_STRING )
+            // InternalGlobalConstantsParser.g:13828:1: ( ( RULE_STRING ) )
+            // InternalGlobalConstantsParser.g:13829:2: ( RULE_STRING )
             {
-            // InternalGlobalConstantsParser.g:13833:2: ( RULE_STRING )
-            // InternalGlobalConstantsParser.g:13834:3: RULE_STRING
+            // InternalGlobalConstantsParser.g:13829:2: ( RULE_STRING )
+            // InternalGlobalConstantsParser.g:13830:3: RULE_STRING
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getSTStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0()); 

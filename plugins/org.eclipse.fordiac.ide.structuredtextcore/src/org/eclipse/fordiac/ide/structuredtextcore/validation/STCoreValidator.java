@@ -177,7 +177,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
 		if (varDeclaration.isArray()) {
 			varDeclaration.getRanges().stream().filter(STBinaryExpression.class::isInstance)
-			.map(STBinaryExpression.class::cast).forEach(this::checkRangeOnValidity);
+					.map(STBinaryExpression.class::cast).forEach(this::checkRangeOnValidity);
 		}
 	}
 
@@ -208,15 +208,15 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			if (indexExpressions.size() > 1) {
 				// too many indices for a string
 				error(MessageFormat.format(Messages.STCoreValidator_TooManyIndicesGivenForStringAccess,
-						indexExpressions.size()), accessExpression,
+						Integer.valueOf(indexExpressions.size())), accessExpression,
 						STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, TOO_MANY_INDICES_GIVEN);
 			} else if (indexExpressions.size() == 1 && indexExpressions.get(0) instanceof STNumericLiteral) {
 				final var maxLength = anyStringType.getMaxLength();
 				final var index = (BigInteger) ((STNumericLiteral) indexExpressions.get(0)).getValue();
 				if (anyStringType.isSetMaxLength() && index.compareTo(BigInteger.valueOf(maxLength)) > 0) {
-					warning(MessageFormat.format(Messages.STCoreValidator_StringIndexOutOfBounds, index, maxLength),
-							accessExpression, STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX,
-							STRING_INDEX_OUT_OF_BOUNDS);
+					warning(MessageFormat.format(Messages.STCoreValidator_StringIndexOutOfBounds, index,
+							Integer.valueOf(maxLength)), accessExpression,
+							STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, STRING_INDEX_OUT_OF_BOUNDS);
 				}
 				if (index.compareTo(BigInteger.ONE) < 0) {
 					// Index is invalid, as less than 1
@@ -233,7 +233,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public void checkArrayAccessDimensions(final STArrayAccessExpression accessExpression) {
 		final var feature = accessExpression.getReceiver() instanceof final STFeatureExpression featureExpression
 				? featureExpression.getFeature()
-						: null;
+				: null;
 		if (feature instanceof final STVarDeclaration varDeclaration) {
 			if (varDeclaration.isArray()) {
 				final var indexExpressions = accessExpression.getIndex();
@@ -243,7 +243,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				if (indexExpressions.size() > declaredArrayDimensions) {
 					for (int i = 0; i < indexExpressions.size() - declaredArrayDimensions; i++) {
 						error(MessageFormat.format(Messages.STCoreValidator_TooManyIndicesGiven,
-								accessExpression.getIndex().size(), declaredArrayDimensions), accessExpression,
+								Integer.valueOf(accessExpression.getIndex().size()),
+								Integer.valueOf(declaredArrayDimensions)), accessExpression,
 								STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, declaredArrayDimensions + i,
 								TOO_MANY_INDICES_GIVEN);
 					}
@@ -334,38 +335,22 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkValidLHS(final STAssignmentStatement statement) {
-		final var assignability = isAssignable(statement.getLeft());
-		switch (assignability.getSeverity()) {
-		case ERROR:
-			error(assignability.getMessage(), statement, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT,
-					assignability.getCode());
-			break;
-		case WARNING:
-			warning(assignability.getMessage(), statement, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT,
-					assignability.getCode());
-			break;
-		case INFO:
-			info(assignability.getMessage(), statement, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT,
-					assignability.getCode());
-			break;
-		default:
-			break;
-		}
+		accept(isAssignable(statement.getLeft()), statement, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT);
 	}
 
-	private boolean isValidCall(final STExpression expression) {
+	private static boolean isValidCall(final STExpression expression) {
 		return expression instanceof final STFeatureExpression featureExpression && featureExpression.isCall()
 				&& ((STFeatureExpression) expression).getFeature() instanceof ICallable;
 	}
 
-	private boolean isInCallStatementOnly(final STFeatureExpression expression) {
+	private static boolean isInCallStatementOnly(final STFeatureExpression expression) {
 		if (expression.eContainer() instanceof STMemberAccessExpression) {
 			return expression.eContainer().eContainer() instanceof STCallStatement;
 		}
 		return expression.eContainer() instanceof STCallStatement;
 	}
 
-	private boolean hasReturnType(final ICallable callable) {
+	private static boolean hasReturnType(final ICallable callable) {
 		return callable.getReturnType() != null;
 	}
 
@@ -542,7 +527,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkForTypes(final STForStatement stmt) {
-		final var type = getFeatureType(stmt.getVariable());
+		accept(isAssignable(stmt.getVariable()), stmt, STCorePackage.Literals.ST_FOR_STATEMENT__VARIABLE);
+		final var type = stmt.getVariable().getResultType();
 		if (!(type instanceof AnyIntType)) {
 			error(MessageFormat.format(Messages.STCoreValidator_For_Variable_Not_Integral_Type, type.getName()), stmt,
 					STCorePackage.Literals.ST_FOR_STATEMENT__VARIABLE, FOR_VARIABLE_NOT_INTEGRAL_TYPE);
@@ -916,7 +902,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	private enum IsAssignableResult {
-		ASSIGNABLE(null, null, null),
+		ASSIGNABLE(Severity.IGNORE, null, null),
 		NOT_ASSIGNABLE(Severity.ERROR, VALUE_NOT_ASSIGNABLE, Messages.STCoreValidator_Assignment_Invalid_Left_Side),
 		CALL_NOT_ASSIGNABLE(Severity.ERROR, VALUE_NOT_ASSIGNABLE, Messages.STCoreValidator_CallsCannotBeAssignedTo),
 		CONST_NOT_ASSIGNABLE(Severity.ERROR, VALUE_NOT_ASSIGNABLE, Messages.STCoreValidator_ConstantsCannotBeAssigned),
@@ -940,8 +926,25 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			return message;
 		}
 
-		final Severity severity;
-		final String code;
+		private final Severity severity;
+		private final String code;
 		private final String message;
+	}
+
+	protected void accept(final IsAssignableResult assignability, final EObject source,
+			final EStructuralFeature feature, final String... issueData) {
+		switch (assignability.getSeverity()) {
+		case ERROR:
+			error(assignability.getMessage(), source, feature, assignability.getCode(), issueData);
+			break;
+		case WARNING:
+			warning(assignability.getMessage(), source, feature, assignability.getCode(), issueData);
+			break;
+		case INFO:
+			info(assignability.getMessage(), source, feature, assignability.getCode(), issueData);
+			break;
+		default:
+			break;
+		}
 	}
 }

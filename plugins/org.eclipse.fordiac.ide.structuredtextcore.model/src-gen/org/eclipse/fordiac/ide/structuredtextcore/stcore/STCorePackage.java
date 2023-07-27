@@ -946,7 +946,7 @@ public interface STCorePackage extends EPackage {
 	int ST_FOR_STATEMENT = 25;
 
 	/**
-	 * The feature id for the '<em><b>Variable</b></em>' reference.
+	 * The feature id for the '<em><b>Variable</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2852,10 +2852,10 @@ public interface STCorePackage extends EPackage {
 	EClass getSTForStatement();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement#getVariable <em>Variable</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement#getVariable <em>Variable</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Variable</em>'.
+	 * @return the meta object for the containment reference '<em>Variable</em>'.
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement#getVariable()
 	 * @see #getSTForStatement()
 	 * @generated
@@ -4520,7 +4520,7 @@ public interface STCorePackage extends EPackage {
 		EClass ST_FOR_STATEMENT = eINSTANCE.getSTForStatement();
 
 		/**
-		 * The meta object literal for the '<em><b>Variable</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Variable</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

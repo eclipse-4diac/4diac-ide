@@ -772,7 +772,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STForStatement returns STForStatement
 	 *
 	 * Constraint:
-	 *     (variable=[STVarDeclaration|ID] from=STExpression to=STExpression by=STExpression? statements+=STStatement*)
+	 *     (variable=STExpression from=STExpression to=STExpression by=STExpression? statements+=STStatement*)
 	 * </pre>
 	 */
 	protected void sequence_STForStatement(ISerializationContext context, STForStatement semanticObject) {

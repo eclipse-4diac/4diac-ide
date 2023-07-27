@@ -14053,13 +14053,9 @@ rule__STForStatement__VariableAssignment_1
 	}
 :
 	(
-		{ before(grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationCrossReference_1_0()); }
-		(
-			{ before(grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationIDTerminalRuleCall_1_0_1()); }
-			RULE_ID
-			{ after(grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationIDTerminalRuleCall_1_0_1()); }
-		)
-		{ after(grammarAccess.getSTForStatementAccess().getVariableSTVarDeclarationCrossReference_1_0()); }
+		{ before(grammarAccess.getSTForStatementAccess().getVariableSTExpressionParserRuleCall_1_0()); }
+		ruleSTExpression
+		{ after(grammarAccess.getSTForStatementAccess().getVariableSTExpressionParserRuleCall_1_0()); }
 	)
 ;
 finally {

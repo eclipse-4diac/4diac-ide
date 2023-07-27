@@ -217,6 +217,7 @@ final class STCoreUtil {
 		switch (container : expression.eContainer) {
 			STCallStatement: AccessMode.NONE
 			STAssignmentStatement case container.left == expression: AccessMode.WRITE
+			STForStatement case container.variable == expression: AccessMode.WRITE
 			STMemberAccessExpression case container.member == expression: container.accessMode
 			STArrayAccessExpression case container.receiver == expression: container.accessMode
 			STCallArgument: container.accessMode
@@ -304,7 +305,7 @@ final class STCoreUtil {
 			STRepeatStatement:
 				ElementaryTypes.BOOL
 			STForStatement:
-				variable.type
+				expression === variable ? GenericTypes.ANY_INT : variable.resultType
 			STCaseCases:
 				statement.selector.declaredResultType
 			STInitializerExpression:

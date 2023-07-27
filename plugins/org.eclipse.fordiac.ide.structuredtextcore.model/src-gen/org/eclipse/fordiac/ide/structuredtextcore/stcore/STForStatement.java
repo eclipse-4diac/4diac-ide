@@ -40,26 +40,26 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface STForStatement extends STStatement {
 	/**
-	 * Returns the value of the '<em><b>Variable</b></em>' reference.
+	 * Returns the value of the '<em><b>Variable</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Variable</em>' reference.
-	 * @see #setVariable(STVarDeclaration)
+	 * @return the value of the '<em>Variable</em>' containment reference.
+	 * @see #setVariable(STExpression)
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTForStatement_Variable()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
-	STVarDeclaration getVariable();
+	STExpression getVariable();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement#getVariable <em>Variable</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement#getVariable <em>Variable</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Variable</em>' reference.
+	 * @param value the new value of the '<em>Variable</em>' containment reference.
 	 * @see #getVariable()
 	 * @generated
 	 */
-	void setVariable(STVarDeclaration value);
+	void setVariable(STExpression value);
 
 	/**
 	 * Returns the value of the '<em><b>From</b></em>' containment reference.

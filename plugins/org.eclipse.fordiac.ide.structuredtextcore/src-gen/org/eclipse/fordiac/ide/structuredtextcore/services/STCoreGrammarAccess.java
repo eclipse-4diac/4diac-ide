@@ -1469,8 +1469,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cFORKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Assignment cVariableAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final CrossReference cVariableSTVarDeclarationCrossReference_1_0 = (CrossReference)cVariableAssignment_1.eContents().get(0);
-		private final RuleCall cVariableSTVarDeclarationIDTerminalRuleCall_1_0_1 = (RuleCall)cVariableSTVarDeclarationCrossReference_1_0.eContents().get(1);
+		private final RuleCall cVariableSTExpressionParserRuleCall_1_0 = (RuleCall)cVariableAssignment_1.eContents().get(0);
 		private final Keyword cColonEqualsSignKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		private final Assignment cFromAssignment_3 = (Assignment)cGroup.eContents().get(3);
 		private final RuleCall cFromSTExpressionParserRuleCall_3_0 = (RuleCall)cFromAssignment_3.eContents().get(0);
@@ -1487,12 +1486,12 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cEND_FORKeyword_9 = (Keyword)cGroup.eContents().get(9);
 		
 		//STForStatement:
-		//    'FOR' variable=[STVarDeclaration] ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
+		//    'FOR' variable=STExpression ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
 		//    statements+=STStatement*
 		//    'END_FOR';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'FOR' variable=[STVarDeclaration] ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
+		//'FOR' variable=STExpression ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
 		//statements+=STStatement*
 		//'END_FOR'
 		public Group getGroup() { return cGroup; }
@@ -1500,14 +1499,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'FOR'
 		public Keyword getFORKeyword_0() { return cFORKeyword_0; }
 		
-		//variable=[STVarDeclaration]
+		//variable=STExpression
 		public Assignment getVariableAssignment_1() { return cVariableAssignment_1; }
 		
-		//[STVarDeclaration]
-		public CrossReference getVariableSTVarDeclarationCrossReference_1_0() { return cVariableSTVarDeclarationCrossReference_1_0; }
-		
-		//ID
-		public RuleCall getVariableSTVarDeclarationIDTerminalRuleCall_1_0_1() { return cVariableSTVarDeclarationIDTerminalRuleCall_1_0_1; }
+		//STExpression
+		public RuleCall getVariableSTExpressionParserRuleCall_1_0() { return cVariableSTExpressionParserRuleCall_1_0; }
 		
 		//':='
 		public Keyword getColonEqualsSignKeyword_2() { return cColonEqualsSignKeyword_2; }
@@ -4615,7 +4611,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STForStatement:
-	//    'FOR' variable=[STVarDeclaration] ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
+	//    'FOR' variable=STExpression ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
 	//    statements+=STStatement*
 	//    'END_FOR';
 	public STForStatementElements getSTForStatementAccess() {

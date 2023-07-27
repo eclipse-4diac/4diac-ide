@@ -562,7 +562,7 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	}
 	
 	//STForStatement:
-	//    'FOR' variable=[STVarDeclaration] ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
+	//    'FOR' variable=STExpression ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
 	//    statements+=STStatement*
 	//    'END_FOR';
 	public STCoreGrammarAccess.STForStatementElements getSTForStatementAccess() {
