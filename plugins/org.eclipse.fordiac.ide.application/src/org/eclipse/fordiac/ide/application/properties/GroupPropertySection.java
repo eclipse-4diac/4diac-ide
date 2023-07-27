@@ -36,6 +36,8 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class GroupPropertySection extends AbstractDoubleColumnSection {
 
+	private static final int MAX_INPUT_LENGTH = 5;
+
 	private Text nameText;
 	private Text commentText;
 	private Text heightText;
@@ -110,6 +112,7 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 	private void createHeightEntry(final Composite parent) {
 		getWidgetFactory().createCLabel(parent, FordiacMessages.Height + ":"); //$NON-NLS-1$
 		heightText = createGroupText(parent, true);
+		heightText.setTextLimit(MAX_INPUT_LENGTH);
 		heightText.addVerifyListener(GroupPropertySection::ensureTextContainsOnlyDigits);
 		heightText.addModifyListener(e -> {
 			if (getType() != null) {
@@ -129,6 +132,7 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 	private void createWidthEntry(final Composite parent) {
 		getWidgetFactory().createCLabel(parent, FordiacMessages.Width + ":"); //$NON-NLS-1$
 		widthText = createGroupText(parent, true);
+		widthText.setTextLimit(MAX_INPUT_LENGTH);
 		widthText.addVerifyListener(GroupPropertySection::ensureTextContainsOnlyDigits);
 		widthText.addModifyListener(e -> {
 			if (getType() != null) {
