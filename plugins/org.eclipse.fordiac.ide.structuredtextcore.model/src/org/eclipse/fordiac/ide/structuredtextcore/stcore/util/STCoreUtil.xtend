@@ -97,6 +97,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpr
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
@@ -233,7 +235,7 @@ final class STCoreUtil {
 			default: AccessMode.NONE
 		}
 	}
-	
+
 	def static List<INamedElement> getFeaturePath(STExpression expression) {
 		switch (expression) {
 			STFeatureExpression: #[expression.feature]
@@ -241,7 +243,12 @@ final class STCoreUtil {
 			STArrayAccessExpression: expression.receiver.featurePath
 			default: emptyList
 		}
-	}	
+	}
+
+	def static boolean isTemporary(INamedElement feature) {
+		feature.eContainer instanceof STVarPlainDeclarationBlock ||
+			feature.eContainer instanceof STVarTempDeclarationBlock
+	}
 
 	def static boolean isNumericValueValid(DataType type, Object value) {
 		switch (value) {

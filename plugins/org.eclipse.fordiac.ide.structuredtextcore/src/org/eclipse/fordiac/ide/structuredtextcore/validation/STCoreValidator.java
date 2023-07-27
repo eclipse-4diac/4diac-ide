@@ -30,6 +30,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.validation;
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getAccessMode;
+import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeaturePath;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isCallableVarargs;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isNumericValueValid;
@@ -37,6 +38,8 @@ import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.
 
 import java.math.BigInteger;
 import java.text.MessageFormat;
+import java.util.List;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.StreamSupport;
 
@@ -157,6 +160,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String NON_CONSTANT_DECLARATION = ISSUE_CODE_PREFIX + "nonConstantInInitializer"; //$NON-NLS-1$
 	public static final String MAYBE_NOT_INITIALIZED = ISSUE_CODE_PREFIX + "maybeNotInitialized"; //$NON-NLS-1$
 	public static final String FOR_CONTROL_VARIABLE_MODIFICATION = ISSUE_CODE_PREFIX + "forControlVariableModification"; //$NON-NLS-1$
+	public static final String FOR_CONTROL_VARIABLE_NON_TEMPORARY = ISSUE_CODE_PREFIX
+			+ "forControlVariableNonTemporary"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
 
@@ -547,6 +552,16 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			checkTypeCompatibility(GenericTypes.ANY_NUM, stmt.getBy().getResultType(),
 					STCorePackage.Literals.ST_FOR_STATEMENT__BY);
 		}
+	}
+
+	@Check
+	public void checkForControlVariable(final STForStatement stmt) {
+		final List<INamedElement> featurePath = getFeaturePath(stmt.getVariable());
+		featurePath.stream().filter(Predicate.not(STCoreUtil::isTemporary)).findFirst()
+				.ifPresent(variable -> warning(
+						MessageFormat.format(Messages.STCoreValidator_UsingNonTemporaryAsControlVariable,
+								variable.getName()),
+						stmt, STCorePackage.Literals.ST_FOR_STATEMENT__VARIABLE, FOR_CONTROL_VARIABLE_NON_TEMPORARY));
 	}
 
 	@Check

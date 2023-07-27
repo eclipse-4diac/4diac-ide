@@ -476,6 +476,30 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
+	def void testInvalidForVariableNonTemporary() {
+		'''
+			FUNCTION hubert
+			VAR_TEMP
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertNoIssues
+		'''
+			FUNCTION hubert
+			VAR_OUTPUT
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.FOR_CONTROL_VARIABLE_NON_TEMPORARY)
+	}
+
+	@Test
 	def void testInvalidForVariableModification() {
 		'''
 			FUNCTION hubert
