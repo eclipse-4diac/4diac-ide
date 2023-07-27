@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupSizeLockCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -26,7 +27,9 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -37,6 +40,7 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 	private Text commentText;
 	private Text heightText;
 	private Text widthText;
+	private Button lockCheckbox;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -46,9 +50,11 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		createNameEntry(fbInfoContainer);
 		createCommentEntry(fbInfoContainer);
 
-		final Composite sizeContainer = createSizeGroup(getRightComposite());
-		createHeightEntry(sizeContainer);
-		createWidthEntry(sizeContainer);
+		final Composite sizeGroup = createSizeGroup(getRightComposite());
+		final Composite hwGroup = createHeightAndWidthGroup(sizeGroup);
+		createHeightEntry(hwGroup);
+		createWidthEntry(hwGroup);
+		createLockGroupCheckbox(sizeGroup);
 	}
 
 	@Override
@@ -60,6 +66,7 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			heightText.setText(Integer.toString(getType().getHeight()));
 			widthText.setText(Integer.toString(getType().getWidth()));
+			lockCheckbox.setSelection(getType().isLocked());
 			commandStack = commandStackBuffer;
 		}
 	}
@@ -76,9 +83,18 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		group.setText(FordiacMessages.Size);
 		getWidgetFactory().adapt(group);
 
-		GridLayoutFactory.fillDefaults().numColumns(4).applyTo(group);
+		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(group);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(group);
 		return group;
+	}
+
+	private Composite createHeightAndWidthGroup(final Composite parent) {
+		final var composite = new Composite(parent, SWT.SHADOW_NONE);
+		getWidgetFactory().adapt(composite);
+
+		GridLayoutFactory.fillDefaults().numColumns(4).applyTo(composite);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, false).applyTo(composite);
+		return composite;
 	}
 
 	private void createNameEntry(final Composite fbInfoGroup) {
@@ -127,6 +143,17 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 				addContentAdapter();
 			}
 		});
+	}
+
+	private void createLockGroupCheckbox(final Composite parent) {
+		lockCheckbox = getWidgetFactory().createButton(parent, FordiacMessages.LockGroupSize, SWT.CHECK);
+		lockCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+			if (getType() != null) {
+				removeContentAdapter();
+				executeCommand(new ChangeGroupSizeLockCommand(getType(), lockCheckbox.getSelection()));
+				addContentAdapter();
+			}
+		}));
 	}
 
 	private static void ensureTextContainsOnlyDigits(final VerifyEvent e) {

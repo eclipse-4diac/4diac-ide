@@ -71,11 +71,13 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 			cmdToExecuteBefore = null;
 		}
 
-		GraphicalEditPart parent = getTargetContainerEP();
-		while (parent != null) {
-			addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent, fbnetworkElements));
-			parent = findNestedGraphicalEditPart(parent);
-			this.fbnetworkElements = null;
+		if (!isLockedGroup()) {
+			GraphicalEditPart parent = getTargetContainerEP();
+			while (parent != null) {
+				addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent, fbnetworkElements));
+				parent = findNestedGraphicalEditPart(parent);
+				this.fbnetworkElements = null;
+			}
 		}
 	}
 
@@ -119,6 +121,10 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 	public boolean canRedo() {
 		return (cmdToExecuteBefore != null && cmdToExecuteBefore.canRedo())
 				|| !changeContainerBoundsCommandList.isEmpty();
+	}
+
+	private boolean isLockedGroup() {
+		return graphicalEditPart instanceof final GroupContentEditPart group && group.getModel().getGroup().isLocked();
 	}
 
 	private GraphicalEditPart getTargetContainerEP() {
@@ -201,11 +207,11 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 	private static void addValueBounds(final Rectangle fbBounds, final FBNetworkElement fbe,
 			final Map<Object, Object> editPartRegistry) {
 		fbe.getInterface().getInputVars().stream().filter(Objects::nonNull)
-		.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
-		.forEach(ep -> {
-			final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds().getCopy();
-			fbBounds.union(pin);
-		});
+				.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
+				.forEach(ep -> {
+					final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds().getCopy();
+					fbBounds.union(pin);
+				});
 	}
 
 }

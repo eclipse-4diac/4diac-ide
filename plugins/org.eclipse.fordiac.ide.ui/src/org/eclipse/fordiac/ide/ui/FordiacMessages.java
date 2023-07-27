@@ -57,6 +57,7 @@ public final class FordiacMessages extends NLS {
 	public static String InstanceInfo;  // NOSONAR
 	public static String Interface;  // NOSONAR
 	public static String Language;  // NOSONAR
+	public static String LockGroupSize; // NOSONAR
 	public static String NA;  // NOSONAR
 	public static String ND;  // NOSONAR
 	public static String Name;  // NOSONAR
