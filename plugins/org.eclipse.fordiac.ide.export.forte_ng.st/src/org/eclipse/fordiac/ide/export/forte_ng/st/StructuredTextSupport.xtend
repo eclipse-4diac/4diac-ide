@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.data.AnyElementaryType
-import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
@@ -45,6 +44,7 @@ import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
@@ -97,7 +97,6 @@ import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.S
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.findActualNodeFor
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
-import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
@@ -363,32 +362,32 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateExpression(STNumericLiteral expr) //
-	'''«expr.resultType.generateTypeName»(«expr.value»)'''
+	'''«expr.value»_«expr.resultType.generateTypeNamePlain»'''
 
 	def protected dispatch CharSequence generateExpression(STStringLiteral expr) {
 		val type = expr.resultType
 		switch (type) {
 			StringType: '''"«expr.value.toString.convertToJavaString»"_STRING'''
-			WstringType: '''CIEC_WSTRING("«expr.value.toString.convertToJavaString»")'''
+			WstringType: '''u"«expr.value.toString.convertToJavaString»"_WSTRING'''
 			CharType: '''«String.format("0x%02x",  expr.value.toString.getBytes(StandardCharsets.UTF_8).get(0))»_CHAR'''
-			WcharType: '''CIEC_WCHAR(u'«expr.value.toString.convertToJavaString»')'''
+			WcharType: '''u'«expr.value.toString.convertToJavaString»'_WCHAR'''
 		}
 	}
 
 	def protected dispatch CharSequence generateExpression(STDateLiteral expr) {
-		'''«expr.resultType.generateTypeName»(«expr.value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L»)'''
+		'''«expr.value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L»_«expr.resultType.generateTypeNamePlain»'''
 	}
 
 	def protected dispatch CharSequence generateExpression(STTimeLiteral expr) {
-		'''«expr.resultType.generateTypeName»(«expr.value.toNanos»)'''
+		'''«expr.value.toNanos»_«expr.resultType.generateTypeNamePlain»'''
 	}
 
 	def protected dispatch CharSequence generateExpression(STTimeOfDayLiteral expr) {
-		'''«expr.resultType.generateTypeName»(«expr.value.toNanoOfDay»)'''
+		'''«expr.value.toNanoOfDay»_«expr.resultType.generateTypeNamePlain»'''
 	}
 
 	def protected dispatch CharSequence generateExpression(STDateAndTimeLiteral expr) {
-		'''«expr.resultType.generateTypeName»(«LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(expr.value, ChronoUnit.NANOS)»)'''
+		'''«LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(expr.value, ChronoUnit.NANOS)»_«expr.resultType.generateTypeNamePlain»'''
 	}
 
 	def protected dispatch CharSequence generateTemplateExpression(STBinaryExpression expr) {
@@ -477,10 +476,10 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		switch (type) {
 			DataType case GenericTypes.isAnyType(type): '''«type.generateTypeName»()'''
 			StringType: '''""_STRING'''
-			WstringType: '''CIEC_WSTRING("")'''
+			WstringType: '''u""_WSTRING'''
 			CharType: ''''\0'_CHAR'''
-			WcharType: '''CIEC_WCHAR(u'\0')'''
-			AnyElementaryType: '''«type.generateTypeName»(0)'''
+			WcharType: '''u'\0'_WCHAR'''
+			AnyElementaryType: '''0_«type.generateTypeNamePlain»'''
 			ArrayType: '''«type.generateTypeName»{}'''
 			StructuredType: '''«type.generateTypeName»()'''
 			default:

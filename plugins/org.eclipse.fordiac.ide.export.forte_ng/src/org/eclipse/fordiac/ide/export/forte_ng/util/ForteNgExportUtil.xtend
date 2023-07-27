@@ -99,7 +99,7 @@ final class ForteNgExportUtil {
 		}
 	}
 
-	def static String generateTypeNamePlain(DataType type) {
+	def static String generateTypeNamePlain(INamedElement type) {
 		switch (type) {
 			TimeType: "TIME"
 			LtimeType: "LTIME"

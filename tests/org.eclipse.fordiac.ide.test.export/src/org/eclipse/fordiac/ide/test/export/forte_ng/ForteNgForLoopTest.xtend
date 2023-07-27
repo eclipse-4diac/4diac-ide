@@ -39,11 +39,11 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode);
 
 		assertEquals('''
-			CIEC_INT st_lv_variable = CIEC_INT(0);
-			CIEC_INT st_lv_variable2 = CIEC_INT(0);
+			CIEC_INT st_lv_variable = 0_INT;
+			CIEC_INT st_lv_variable2 = 0_INT;
 			
-			for (auto st_lv_synthetic_0 : ST_FOR_ITER<CIEC_INT>(st_lv_variable, CIEC_INT(1), CIEC_INT(5))) {
-			  st_lv_variable2 = CIEC_INT(0);
+			for (auto st_lv_synthetic_0 : ST_FOR_ITER<CIEC_INT>(st_lv_variable, 1_INT, 5_INT)) {
+			  st_lv_variable2 = 0_INT;
 			}
 		'''.toString(), generatedCode.toString())
 	}
@@ -65,11 +65,11 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode);
 
 		assertEquals('''
-			CIEC_INT st_lv_variable = CIEC_INT(0);
-			CIEC_INT st_lv_variable2 = CIEC_INT(0);
+			CIEC_INT st_lv_variable = 0_INT;
+			CIEC_INT st_lv_variable2 = 0_INT;
 			
-			for (auto st_lv_synthetic_0 : ST_FOR_ITER<CIEC_INT, CIEC_INT>(st_lv_variable, CIEC_INT(1), CIEC_INT(5), CIEC_INT(2))) {
-			  st_lv_variable2 = CIEC_INT(0);
+			for (auto st_lv_synthetic_0 : ST_FOR_ITER<CIEC_INT, CIEC_INT>(st_lv_variable, 1_INT, 5_INT, 2_INT)) {
+			  st_lv_variable2 = 0_INT;
 			}
 		'''.toString(), generatedCode.toString())
 	}
@@ -94,14 +94,14 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode);
 
 		assertEquals('''
-			CIEC_INT st_lv_variable = CIEC_INT(0);
-			CIEC_INT st_lv_variable2 = CIEC_INT(0);
+			CIEC_INT st_lv_variable = 0_INT;
+			CIEC_INT st_lv_variable2 = 0_INT;
 			
-			for (auto st_lv_synthetic_0 : ST_FOR_ITER<CIEC_INT>(st_lv_variable, CIEC_INT(1), CIEC_INT(5))) {
-			  st_lv_variable2 = CIEC_INT(0);
+			for (auto st_lv_synthetic_0 : ST_FOR_ITER<CIEC_INT>(st_lv_variable, 1_INT, 5_INT)) {
+			  st_lv_variable2 = 0_INT;
 			}
-			for (auto st_lv_synthetic_1 : ST_FOR_ITER<CIEC_INT>(st_lv_variable, CIEC_INT(6), CIEC_INT(10))) {
-			  st_lv_variable2 = CIEC_INT(1);
+			for (auto st_lv_synthetic_1 : ST_FOR_ITER<CIEC_INT>(st_lv_variable, 6_INT, 10_INT)) {
+			  st_lv_variable2 = 1_INT;
 			}
 		'''.toString(), generatedCode.toString())
 	}
@@ -126,13 +126,13 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode);
 
 		assertEquals('''
-			CIEC_INT st_lv_variable = CIEC_INT(0);
-			CIEC_INT st_lv_variable2 = CIEC_INT(0);
+			CIEC_INT st_lv_variable = 0_INT;
+			CIEC_INT st_lv_variable2 = 0_INT;
 			
-			for (auto st_lv_synthetic_0 : ST_FOR_ITER<CIEC_INT>(st_lv_variable, CIEC_INT(1), CIEC_INT(5))) {
-			  st_lv_variable2 = CIEC_INT(0);
-			  for (auto st_lv_synthetic_1 : ST_FOR_ITER<CIEC_INT>(st_lv_variable, CIEC_INT(6), CIEC_INT(10))) {
-			    st_lv_variable2 = CIEC_INT(1);
+			for (auto st_lv_synthetic_0 : ST_FOR_ITER<CIEC_INT>(st_lv_variable, 1_INT, 5_INT)) {
+			  st_lv_variable2 = 0_INT;
+			  for (auto st_lv_synthetic_1 : ST_FOR_ITER<CIEC_INT>(st_lv_variable, 6_INT, 10_INT)) {
+			    st_lv_variable2 = 1_INT;
 			  }
 			}
 		'''.toString(), generatedCode.toString())
