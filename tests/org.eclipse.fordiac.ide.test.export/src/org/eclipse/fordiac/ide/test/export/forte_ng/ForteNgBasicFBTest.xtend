@@ -85,9 +85,12 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						
 						  CIEC_ANY *getDI(size_t) override;
 						  CIEC_ANY *getDO(size_t) override;
+						  CIEC_ANY *getDIO(size_t) override;
 						  CEventConnection *getEOConUnchecked(TPortId) override;
 						  CDataConnection **getDIConUnchecked(TPortId) override;
 						  CDataConnection *getDOConUnchecked(TPortId) override;
+						  CInOutDataConnection **getDIOInConUnchecked(TPortId) override;
+						  CInOutDataConnection *getDIOOutConUnchecked(TPortId) override;
 						};
 						
 						
@@ -132,6 +135,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						  0, nullptr, nullptr, nullptr,
 						  0, nullptr, nullptr,
 						  0, nullptr, nullptr,
+						  0, nullptr,
 						  0, nullptr
 						};
 						
@@ -178,6 +182,10 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						  return nullptr;
 						}
 						
+						CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getDIO(size_t) {
+						  return nullptr;
+						}
+						
 						CEventConnection *«EXPORTED_FUNCTIONBLOCK_NAME»::getEOConUnchecked(TPortId) {
 						  return nullptr;
 						}
@@ -187,6 +195,14 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						}
 						
 						CDataConnection *«EXPORTED_FUNCTIONBLOCK_NAME»::getDOConUnchecked(TPortId) {
+						  return nullptr;
+						}
+						
+						CInOutDataConnection **«EXPORTED_FUNCTIONBLOCK_NAME»::getDIOInConUnchecked(TPortId) {
+						  return nullptr;
+						}
+						
+						CInOutDataConnection *«EXPORTED_FUNCTIONBLOCK_NAME»::getDIOOutConUnchecked(TPortId) {
 						  return nullptr;
 						}
 						
