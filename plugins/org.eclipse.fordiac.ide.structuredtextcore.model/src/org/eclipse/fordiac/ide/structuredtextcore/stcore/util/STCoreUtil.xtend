@@ -97,6 +97,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpr
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
@@ -217,6 +219,7 @@ final class STCoreUtil {
 		switch (container : expression.eContainer) {
 			STCallStatement: AccessMode.NONE
 			STAssignmentStatement case container.left == expression: AccessMode.WRITE
+			STForStatement case container.variable == expression: AccessMode.WRITE
 			STMemberAccessExpression case container.member == expression: container.accessMode
 			STArrayAccessExpression case container.receiver == expression: container.accessMode
 			STCallArgument: container.accessMode
@@ -231,6 +234,20 @@ final class STCoreUtil {
 			STFeatureExpression case container.mappedInOutArguments.containsValue(argument): AccessMode.READ_WRITE
 			default: AccessMode.NONE
 		}
+	}
+
+	def static List<INamedElement> getFeaturePath(STExpression expression) {
+		switch (expression) {
+			STFeatureExpression: #[expression.feature]
+			STMemberAccessExpression: (expression.receiver.featurePath + expression.member.featurePath).toList
+			STArrayAccessExpression: expression.receiver.featurePath
+			default: emptyList
+		}
+	}
+
+	def static boolean isTemporary(INamedElement feature) {
+		feature.eContainer instanceof STVarPlainDeclarationBlock ||
+			feature.eContainer instanceof STVarTempDeclarationBlock
 	}
 
 	def static boolean isNumericValueValid(DataType type, Object value) {
@@ -304,7 +321,7 @@ final class STCoreUtil {
 			STRepeatStatement:
 				ElementaryTypes.BOOL
 			STForStatement:
-				variable.type
+				expression === variable ? GenericTypes.ANY_INT : variable.resultType
 			STCaseCases:
 				statement.selector.declaredResultType
 			STInitializerExpression:

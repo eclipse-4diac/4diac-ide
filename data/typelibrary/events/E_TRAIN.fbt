@@ -22,7 +22,7 @@
       <VarDeclaration Comment="Number of events to generate" Name="N" Type="UINT"/>
     </InputVars>
     <OutputVars>
-      <VarDeclaration Comment="count of the current event" Name="CV" Type="UINT"/>
+      <VarDeclaration Comment="count of the current event: EO index (0..N-1)" Name="CV" Type="UINT"/>
     </OutputVars>
   </InterfaceList>
   <FBNetwork>

@@ -52,6 +52,10 @@ class StructuredTextParseUtil {
 	static final IResourceServiceProvider SERVICE_PROVIDER_FCT = IResourceServiceProvider.Registry.INSTANCE.
 		getResourceServiceProvider(SYNTHETIC_URI_FCT)
 
+	static final URI SYNTHETIC_URI_GCF = URI.createURI("__synthetic.globalconsts")
+	static final IResourceServiceProvider SERVICE_PROVIDER_GCF = IResourceServiceProvider.Registry.INSTANCE.
+		getResourceServiceProvider(SYNTHETIC_URI_GCF)
+
 	private new() {
 	}
 
@@ -164,6 +168,7 @@ class StructuredTextParseUtil {
 		val resourceSet = SERVICE_PROVIDER_FBT.get(ResourceSet) as XtextResourceSet
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("fbt", SERVICE_PROVIDER_FBT.get(IResourceFactory))
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("fct", SERVICE_PROVIDER_FCT.get(IResourceFactory))
+		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("gcf", SERVICE_PROVIDER_GCF.get(IResourceFactory))
 		resourceSet.loadOptions.putAll(#{
 			STCoreUtil.OPTION_EXPECTED_TYPE -> expectedType
 		})

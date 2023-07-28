@@ -423,6 +423,15 @@ public interface LibraryElementFactory extends EFactory {
 	FunctionFBType createFunctionFBType();
 
 	/**
+	 * Returns a new object of class '<em>Global Constants</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Global Constants</em>'.
+	 * @generated
+	 */
+	GlobalConstants createGlobalConstants();
+
+	/**
 	 * Returns a new object of class '<em>Group</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -520,6 +529,15 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	Multiplexer createMultiplexer();
+
+	/**
+	 * Returns a new object of class '<em>Original Source</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Original Source</em>'.
+	 * @generated
+	 */
+	OriginalSource createOriginalSource();
 
 	/**
 	 * Returns a new object of class '<em>Other Algorithm</em>'.

@@ -111,7 +111,7 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 		}
 
 		for (ILeafNode n : NodeModelUtils.findActualNodeFor(featuresExpression).getLeafNodes()) {
-			if (n.grammarElement?.eContainer == ga.STFeatureNameRule.alternatives) {
+			if (!n.hidden) {
 				acceptor.addPosition(n.getOffset(), n.getLength(), style)
 			}
 		}

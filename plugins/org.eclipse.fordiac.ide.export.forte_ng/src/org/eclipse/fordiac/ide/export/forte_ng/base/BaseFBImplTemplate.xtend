@@ -67,6 +67,7 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 			»«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«generateConnectionInitializer» {
 		}
 		
+		«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
 		«IF !type.internalFbs.isEmpty»
 			«generateChangeFBExecutionState»
 			

@@ -96,6 +96,12 @@ public class STCoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case STCorePackage.ST_IMPORT: {
+				STImport stImport = (STImport)theEObject;
+				T result = caseSTImport(stImport);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case STCorePackage.ST_VAR_DECLARATION_BLOCK: {
 				STVarDeclarationBlock stVarDeclarationBlock = (STVarDeclarationBlock)theEObject;
 				T result = caseSTVarDeclarationBlock(stVarDeclarationBlock);
@@ -473,6 +479,21 @@ public class STCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTCoreSource(STCoreSource object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Import</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Import</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTImport(STImport object) {
 		return null;
 	}
 

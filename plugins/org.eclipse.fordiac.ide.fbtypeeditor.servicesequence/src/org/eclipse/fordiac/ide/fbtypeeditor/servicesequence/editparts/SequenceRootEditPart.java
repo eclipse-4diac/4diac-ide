@@ -25,6 +25,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.SequenceFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.ServiceFigure;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.ServiceSequenceSaveAndLoadHelper;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.ChangeInterfaceNameEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.policies.TransactionLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
@@ -156,7 +157,9 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof ServiceSequenceEditPart) {
+		if (childEditPart instanceof ServiceSequenceEditPart
+				&& childEditPart.getModel() instanceof final ServiceSequence seq) {
+			ServiceSequenceSaveAndLoadHelper.removeServiceSequenceFromFile(getFBType(), seq);
 			final SequenceFigure child = (SequenceFigure) ((GraphicalEditPart) childEditPart).getFigure();
 			final ServiceFigure thisFigure = (ServiceFigure) getFigure();
 			thisFigure.getServiceSequenceContainer().remove(child);

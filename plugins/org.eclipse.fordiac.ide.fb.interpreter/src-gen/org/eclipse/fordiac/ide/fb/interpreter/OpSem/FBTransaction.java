@@ -43,13 +43,13 @@ public interface FBTransaction extends Transaction {
 	 * @generated */
 	EList<EventOccurrence> getOutputEventOccurrences();
 
-	/** Returns the value of the '<em><b>Input Variables</b></em>' reference list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/** Returns the value of the '<em><b>Input Variables</b></em>' containment reference list. The list contents are of
+	 * type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @return the value of the '<em>Input Variables</em>' reference list.
+	 * @return the value of the '<em>Input Variables</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBTransaction_InputVariables()
-	 * @model
+	 * @model containment="true" resolveProxies="true"
 	 * @generated */
 	EList<VarDeclaration> getInputVariables();
 

@@ -111,6 +111,7 @@ public class AddElementsToSubAppCommand extends Command {
 		setUniqueName.undo();
 		removeFromOtherGroups.undo();
 		unmappingCmds.undo();
+		elementsToAdd.forEach(FBNetworkElement::checkConnections);
 	}
 
 	private void processElementsToAdd() {
@@ -258,8 +259,7 @@ public class AddElementsToSubAppCommand extends Command {
 		// find a pin with matching source in the subapp
 		final Optional<IInterfaceElement> reusablePin = targetSubApp.getInterface().getAllInterfaceElements().stream()
 				.filter(pin -> pin.getInputConnections().size() == 1)
-				.filter(pin -> pin.getInputConnections().get(0).getSource().equals(source))
-				.findFirst();
+				.filter(pin -> pin.getInputConnections().get(0).getSource().equals(source)).findFirst();
 
 		final IInterfaceElement subAppIE;
 		// flag indicating if a pin is new and therefore both inside and outside connections need to be created
@@ -275,14 +275,15 @@ public class AddElementsToSubAppCommand extends Command {
 	}
 
 	private IInterfaceElement createInterfaceElement(final IInterfaceElement ie, final String srcName) {
-		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(ie.getType(),
-				srcName, targetSubApp.getInterface(), ie.isIsInput(), -1);
+		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(ie.getType(), srcName,
+				targetSubApp.getInterface(), ie.isIsInput(), -1);
 		cmd.execute();
 		changedSubAppIEs.add(cmd);
 		return cmd.getCreatedElement();
 	}
 
-	private void createConnModificationCommands(final Connection con, final IInterfaceElement subAppIE, final boolean isNewPin) {
+	private void createConnModificationCommands(final Connection con, final IInterfaceElement subAppIE,
+			final boolean isNewPin) {
 		modifiedConns.add(new DeleteConnectionCommand(con));
 		if (isNewPin) {
 			createSubAppPinConnection(targetSubApp.getFbNetwork(), subAppIE, con, false);
@@ -294,7 +295,8 @@ public class AddElementsToSubAppCommand extends Command {
 		}
 	}
 
-	private void createSubAppPinConnection(final FBNetwork network, final IInterfaceElement ie, final Connection con, final boolean isInsideSubApp) {
+	private void createSubAppPinConnection(final FBNetwork network, final IInterfaceElement ie, final Connection con,
+			final boolean isInsideSubApp) {
 		final AbstractConnectionCreateCommand cmd = getCreateConnectionCommand(network, ie);
 		if (ie.isIsInput()) {
 			cmd.setSource(isInsideSubApp ? ie : con.getSource());
@@ -319,7 +321,6 @@ public class AddElementsToSubAppCommand extends Command {
 		return cmd;
 	}
 
-
 	private void collectElementsToRemoveFromGroup() {
 		final Map<Group, List<FBNetworkElement>> groupMap = new HashMap<>();
 		// collect all entries that are in a group and store them by group
@@ -328,7 +329,6 @@ public class AddElementsToSubAppCommand extends Command {
 			entry.add(el);
 		});
 		// for each entry in the map create one RemoveFromGroupCommand
-		groupMap.forEach(
-				(group, list) -> removeFromOtherGroups.add(new RemoveElementsFromGroup(list)));
+		groupMap.forEach((group, list) -> removeFromOtherGroups.add(new RemoveElementsFromGroup(list)));
 	}
 }

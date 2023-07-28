@@ -30,17 +30,23 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.ExportFilter;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.resource.GlobalConstantsResourceSetInitializer;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceSetInitializer;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.resource.STFunctionResourceSetInitializer;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportFactory;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValues;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclarations;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xtext.resource.XtextResource;
@@ -70,6 +76,7 @@ public class XMIExportFilter extends ExportFilter {
 		final XtextResourceSet resourceSet = new XtextResourceSet();
 		new STAlgorithmResourceSetInitializer().initialize(resourceSet, typeFile.getProject());
 		new STFunctionResourceSetInitializer().initialize(resourceSet, typeFile.getProject());
+		new GlobalConstantsResourceSetInitializer().initialize(resourceSet, typeFile.getProject());
 		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
 
 		final Resource resource = resourceSet.getResource(sourceUri, true);
@@ -84,6 +91,7 @@ public class XMIExportFilter extends ExportFilter {
 			}
 		}
 		resource.getContents().add(createInitialValues(resource));
+		resource.getContents().add(createTypeDeclarations(resource));
 
 		final ResourceSetImpl xmiResourceSet = new ResourceSetImpl();
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().putIfAbsent(XMI_EXTENSION,
@@ -111,10 +119,10 @@ public class XMIExportFilter extends ExportFilter {
 	protected XMIExportInitialValues createInitialValues(final Resource resource) {
 		final var result = XMIExportFactory.eINSTANCE.createXMIExportInitialValues();
 		StreamSupport
-		.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllProperContents(resource, true), 0), false)
-		.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
-		.filter(XMIExportFilter::hasInitialValue).map(this::createInitialValue).flatMap(Optional::stream)
-		.forEachOrdered(result.getInitialValues()::add);
+				.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllProperContents(resource, true), 0), false)
+				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
+				.filter(XMIExportFilter::hasInitialValue).map(this::createInitialValue).flatMap(Optional::stream)
+				.forEachOrdered(result.getInitialValues()::add);
 		return result;
 	}
 
@@ -126,6 +134,7 @@ public class XMIExportFilter extends ExportFilter {
 		final var result = XMIExportFactory.eINSTANCE.createXMIExportInitialValue();
 		result.setVariable(varDeclaration);
 		result.setExpression(source.getInitializerExpression());
+		result.setValue(evaluateInitialValue(varDeclaration));
 		return Optional.of(result);
 	}
 
@@ -134,8 +143,54 @@ public class XMIExportFilter extends ExportFilter {
 				STCoreUtil.getFeatureType(varDeclaration), null, null, getErrors(), getWarnings(), getInfos());
 	}
 
+	protected String evaluateInitialValue(final VarDeclaration varDeclaration) {
+		try {
+			return VariableOperations.newVariable(varDeclaration).toString();
+		} catch (final Exception e) {
+			getErrors().add(MessageFormat.format(Messages.XMIExportFilter_InitialValueError,
+					varDeclaration.getQualifiedName(), e.getMessage()));
+			return null;
+		}
+	}
+
 	protected static boolean hasInitialValue(final VarDeclaration varDeclaration) {
 		return varDeclaration.getValue() != null && varDeclaration.getValue().getValue() != null
 				&& !varDeclaration.getValue().getValue().isBlank();
+	}
+
+	protected XMIExportTypeDeclarations createTypeDeclarations(final Resource resource) {
+		final var result = XMIExportFactory.eINSTANCE.createXMIExportTypeDeclarations();
+		StreamSupport
+				.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllProperContents(resource, true), 0), false)
+				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
+				.filter(VarDeclaration::isArray).map(this::createTypeDeclaration).flatMap(Optional::stream)
+				.forEachOrdered(result.getTypeDeclarations()::add);
+		return result;
+	}
+
+	protected Optional<XMIExportTypeDeclaration> createTypeDeclaration(final VarDeclaration varDeclaration) {
+		final var source = parseTypeDeclaration(varDeclaration);
+		if (source == null || source.getType() == null) {
+			return Optional.empty();
+		}
+		final var result = XMIExportFactory.eINSTANCE.createXMIExportTypeDeclaration();
+		result.setVariable(varDeclaration);
+		result.setTypeDeclaration(source);
+		result.setResultType(EcoreUtil.copy(evaluateResultType(varDeclaration)));
+		return Optional.of(result);
+	}
+
+	protected STTypeDeclaration parseTypeDeclaration(final VarDeclaration varDeclaration) {
+		return StructuredTextParseUtil.parseType(varDeclaration, getErrors(), getWarnings(), getInfos());
+	}
+
+	protected INamedElement evaluateResultType(final VarDeclaration varDeclaration) {
+		try {
+			return VariableOperations.evaluateResultType(varDeclaration);
+		} catch (final Exception e) {
+			getErrors().add(MessageFormat.format(Messages.XMIExportFilter_ResultTypeError,
+					varDeclaration.getQualifiedName(), e.getMessage()));
+			return null;
+		}
 	}
 }

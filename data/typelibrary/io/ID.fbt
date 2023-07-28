@@ -23,6 +23,11 @@
         <With Var="STATUS"/>
         <With Var="IN"/>
       </Event>
+      <Event Comment="" Name="IND" Type="Event">
+        <With Var="QO"/>
+        <With Var="STATUS"/>
+        <With Var="IN"/>
+      </Event>
     </EventOutputs>
     <InputVars>
       <VarDeclaration Comment="Event Input Qualifier" Name="QI" Type="BOOL"/>

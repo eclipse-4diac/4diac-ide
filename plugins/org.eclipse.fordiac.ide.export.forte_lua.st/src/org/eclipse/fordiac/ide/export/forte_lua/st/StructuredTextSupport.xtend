@@ -221,7 +221,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		loopStack.push("loop_" + loopIndex);
 		loopIndex++;
 		'''
-			for «stmt.variable.generateFeatureName(false)» = «stmt.from.generateExpression», «stmt.to.generateExpression», «IF stmt.by !== null»«stmt.by.generateExpression»«ELSE»1«ENDIF» do
+			for «stmt.variable.generateExpression» = «stmt.from.generateExpression», «stmt.to.generateExpression», «IF stmt.by !== null»«stmt.by.generateExpression»«ELSE»1«ENDIF» do
 			  «stmt.statements.generateStatementList»
 			  ::«loopStack.pop()»::
 			end

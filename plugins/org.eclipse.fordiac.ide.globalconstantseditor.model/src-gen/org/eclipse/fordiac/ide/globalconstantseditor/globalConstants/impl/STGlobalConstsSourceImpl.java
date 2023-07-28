@@ -5,6 +5,7 @@ package org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -12,6 +13,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -19,6 +21,7 @@ import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConst
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STSourceImpl;
 
 /**
@@ -29,12 +32,41 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STSourceImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STGlobalConstsSourceImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STGlobalConstsSourceImpl#getImports <em>Imports</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STGlobalConstsSourceImpl#getElements <em>Elements</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalConstsSource {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
+	/**
+	 * The cached value of the '{@link #getImports() <em>Imports</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getImports()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<STImport> imports;
 	/**
 	 * The cached value of the '{@link #getElements() <em>Elements</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -70,6 +102,42 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 	 * @generated
 	 */
 	@Override
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<STImport> getImports() {
+		if (imports == null) {
+			imports = new EObjectContainmentEList<STImport>(STImport.class, this, GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__IMPORTS);
+		}
+		return imports;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<STVarGlobalDeclarationBlock> getElements() {
 		if (elements == null) {
 			elements = new EObjectContainmentEList<STVarGlobalDeclarationBlock>(STVarGlobalDeclarationBlock.class, this, GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS);
@@ -85,10 +153,13 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__IMPORTS:
+				return ((InternalEList<?>)getImports()).basicRemove(otherEnd, msgs);
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
 				return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -99,10 +170,15 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__NAME:
+				return getName();
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__IMPORTS:
+				return getImports();
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
 				return getElements();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -114,12 +190,21 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__NAME:
+				setName((String)newValue);
+				return;
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__IMPORTS:
+				getImports().clear();
+				getImports().addAll((Collection<? extends STImport>)newValue);
+				return;
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
 				getElements().clear();
 				getElements().addAll((Collection<? extends STVarGlobalDeclarationBlock>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -130,11 +215,19 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__IMPORTS:
+				getImports().clear();
+				return;
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
 				getElements().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -145,10 +238,31 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__IMPORTS:
+				return imports != null && !imports.isEmpty();
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
 				return elements != null && !elements.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: ");
+		result.append(name);
+		result.append(')');
+		return result.toString();
 	}
 
 } //STGlobalConstsSourceImpl

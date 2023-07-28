@@ -74,6 +74,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
@@ -88,6 +89,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -211,6 +213,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.FB_NETWORK_ELEMENT: return createFBNetworkElement();
 			case LibraryElementPackage.FB_TYPE: return createFBType();
 			case LibraryElementPackage.FUNCTION_FB_TYPE: return createFunctionFBType();
+			case LibraryElementPackage.GLOBAL_CONSTANTS: return createGlobalConstants();
 			case LibraryElementPackage.GROUP: return createGroup();
 			case LibraryElementPackage.HIDDEN_ELEMENT: return createHiddenElement();
 			case LibraryElementPackage.IDENTIFICATION: return createIdentification();
@@ -222,6 +225,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.MAPPING: return createMapping();
 			case LibraryElementPackage.MAPPING_TARGET: return createMappingTarget();
 			case LibraryElementPackage.MULTIPLEXER: return createMultiplexer();
+			case LibraryElementPackage.ORIGINAL_SOURCE: return createOriginalSource();
 			case LibraryElementPackage.OTHER_ALGORITHM: return createOtherAlgorithm();
 			case LibraryElementPackage.OTHER_METHOD: return createOtherMethod();
 			case LibraryElementPackage.OUTPUT_PRIMITIVE: return createOutputPrimitive();
@@ -794,6 +798,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public GlobalConstants createGlobalConstants() {
+		GlobalConstantsImpl globalConstants = new GlobalConstantsImpl();
+		return globalConstants;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Group createGroup() {
 		GroupImpl group = new GroupImpl();
 		return group;
@@ -907,6 +922,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public Multiplexer createMultiplexer() {
 		MultiplexerImpl multiplexer = new MultiplexerImpl();
 		return multiplexer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public OriginalSource createOriginalSource() {
+		OriginalSourceImpl originalSource = new OriginalSourceImpl();
+		return originalSource;
 	}
 
 	/**

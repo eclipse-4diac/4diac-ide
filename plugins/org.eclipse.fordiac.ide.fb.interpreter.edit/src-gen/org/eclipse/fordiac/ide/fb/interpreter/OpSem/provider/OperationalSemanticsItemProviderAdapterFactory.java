@@ -263,6 +263,26 @@ public class OperationalSemanticsItemProviderAdapterFactory extends OperationalS
 		return eccTraceItemProvider;
 	}
 
+	/** This keeps track of the one adapter used for all
+	 * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace} instances. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @generated */
+	protected TransitionTraceItemProvider transitionTraceItemProvider;
+
+	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace}. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public Adapter createTransitionTraceAdapter() {
+		if (transitionTraceItemProvider == null) {
+			transitionTraceItemProvider = new TransitionTraceItemProvider(this);
+		}
+
+		return transitionTraceItemProvider;
+	}
+
 	/** This returns the root adapter factory that contains this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
@@ -361,6 +381,12 @@ public class OperationalSemanticsItemProviderAdapterFactory extends OperationalS
 			connectionToValueMapItemProvider.dispose();
 		if (runtimeMapItemProvider != null)
 			runtimeMapItemProvider.dispose();
+		if (traceItemProvider != null)
+			traceItemProvider.dispose();
+		if (eccTraceItemProvider != null)
+			eccTraceItemProvider.dispose();
+		if (transitionTraceItemProvider != null)
+			transitionTraceItemProvider.dispose();
 	}
 
 }

@@ -17,25 +17,34 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
+import org.eclipse.fordiac.ide.model.data.AnyStringType;
+import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class DataTypeLibrary {
+
+	private static final Pattern STRING_MAX_LENGTH_PATTERN = Pattern.compile("(W?STRING)\\[(\\d+)\\]"); //$NON-NLS-1$
 
 	private final Map<String, DataType> typeMap = new HashMap<>();
 	private final Map<String, DataTypeEntry> derivedTypes = new HashMap<>();
@@ -77,8 +86,8 @@ public final class DataTypeLibrary {
 	public List<DataType> getDataTypes() {
 		final List<DataType> dataTypes = new ArrayList<>(typeMap.size() + derivedTypes.size());
 		dataTypes.addAll(typeMap.values());
-		dataTypes.addAll(derivedTypes.values().stream().map(DataTypeEntry::getType).filter(Objects::nonNull)
-				.collect(Collectors.toList()));
+		derivedTypes.values().stream().map(DataTypeEntry::getType).filter(Objects::nonNull)
+				.forEachOrdered(dataTypes::add);
 		return dataTypes;
 	}
 
@@ -105,17 +114,21 @@ public final class DataTypeLibrary {
 			return typeMap.get("ANY"); //$NON-NLS-1$
 		}
 		DataType type = typeMap.get(name);
-
-		if (null == type) {
-			type = getDerivedType(name);
-			if (null == type) {
-				FordiacLogHelper.logInfo("Missing Datatype: " + name); //$NON-NLS-1$
-				type = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
-				type.setName(name);
-				typeMap.put(name, type);
-			}
+		if (type != null) {
+			return type;
 		}
-		return type;
+
+		type = getDerivedType(name);
+		if (type != null) {
+			return type;
+		}
+
+		type = createParametricType(name);
+		if (type != null) {
+			return type;
+		}
+
+		return createErrorMarkerType(name, MessageFormat.format(Messages.DataTypeLibrary_MissingDatatype, name));
 	}
 
 	public DataType getTypeIfExists(final String name) {
@@ -148,10 +161,42 @@ public final class DataTypeLibrary {
 		return null;
 	}
 
+	private DataType createParametricType(final String name) {
+		final Matcher matcher = STRING_MAX_LENGTH_PATTERN.matcher(name);
+		if (matcher.matches()) {
+			try {
+				final String plainTypeName = matcher.group(1);
+				final String maxLengthString = matcher.group(2);
+				final DataType plainType = typeMap.get(plainTypeName);
+				if (plainType instanceof AnyStringType) {
+					final int maxLength = Integer.parseUnsignedInt(maxLengthString);
+					final AnyStringType type = (AnyStringType) DataFactory.eINSTANCE.create(plainType.eClass());
+					type.setName(name);
+					type.setMaxLength(maxLength);
+					typeMap.put(name, type);
+					return type;
+				}
+			} catch (final NumberFormatException e) {
+				return createErrorMarkerType(name,
+						MessageFormat.format(Messages.DataTypeLibrary_InvalidMaxLengthInStringType, name));
+			}
+		}
+		return null;
+	}
+
+	private ErrorMarkerDataType createErrorMarkerType(final String name, final String message) {
+		FordiacLogHelper.logInfo(message);
+		final ErrorMarkerDataType type = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
+		type.setName(name);
+		type.setErrorMessage(message);
+		typeMap.put(name, type);
+		return type;
+	}
+
 	public StructuredType getStructuredType(final String name) {
 		final DataType derivedType = getDerivedType(name);
-		if (derivedType instanceof StructuredType) {
-			return (StructuredType) derivedType;
+		if (derivedType instanceof final StructuredType structuredType) {
+			return structuredType;
 		}
 		return (StructuredType) typeMap.get(FordiacKeywords.ANY_STRUCT);
 

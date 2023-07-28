@@ -20,6 +20,8 @@ import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 class AdapterFBImplTemplate extends ForteFBTemplate<AdapterFBType> {
 
 	new(AdapterFBType type, String name, Path prefix) {

@@ -5,7 +5,7 @@
   <VersionInfo Author="Alois Zoitl" Date="2017-09-22" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
   <InterfaceList>
     <EventInputs>
-      <Event Comment="" Name="EI" Type="Event">
+      <Event Comment="Event to demultiplex" Name="EI" Type="Event">
         <With Var="K"/>
       </Event>
     </EventInputs>
@@ -16,7 +16,7 @@
       <Event Comment="" Name="EO3" Type="Event"/>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="" Name="K" Type="UINT"/>
+      <VarDeclaration Comment="Event index" Name="K" Type="UINT"/>
     </InputVars>
     <OutputVars/>
   </InterfaceList>

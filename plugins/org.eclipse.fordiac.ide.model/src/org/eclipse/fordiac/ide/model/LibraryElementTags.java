@@ -13,6 +13,7 @@
  *    - initial API and implementation and/or initial documentation
  *  Martin Jobst
  *    - add function FB type
+ *    - add global constants
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
@@ -176,6 +177,9 @@ public final class LibraryElementTags {
 	public static final String DEMUX_VISIBLE_CHILDREN = "VisibleChildren"; //$NON-NLS-1$
 	public static final String VARIABLE_SEPARATOR = ","; //$NON-NLS-1$
 	public static final String ASN1_TAG = "ASN1Tag"; //$NON-NLS-1$
+
+	public static final String GLOBAL_CONSTANTS_ELEMENT = "GlobalConstants"; //$NON-NLS-1$
+	public static final String ORIGINAL_SOURCE_ELEMENT = "OriginalSource"; //$NON-NLS-1$
 
 	private LibraryElementTags() {
 		throw new UnsupportedOperationException("Class should not be instantiated!"); //$NON-NLS-1$

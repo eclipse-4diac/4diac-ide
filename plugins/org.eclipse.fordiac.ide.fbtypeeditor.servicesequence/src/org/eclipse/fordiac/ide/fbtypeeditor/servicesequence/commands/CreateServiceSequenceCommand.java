@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
@@ -23,17 +24,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 
 public class CreateServiceSequenceCommand extends AbstractCreateElementCommand<ServiceSequence> {
 	private final FBType fbType;
+	private ServiceSequence sequence;
 	private boolean emptyService;
 
 	private static final String LEFT_INTERFACE_NAME = "left interface"; //$NON-NLS-1$
 	private static final String RIGHT_INTERFACE_NAME = "right interface"; //$NON-NLS-1$
-	private static final String DEFAULT_SEQUENCE_NAME = "Service Sequence"; //$NON-NLS-1$
+	private static final String DEFAULT_SEQUENCE_NAME = "ServiceSequence"; //$NON-NLS-1$
 	private ServiceInterface leftInterface;
 	private ServiceInterface rightInterface;
 
 	public CreateServiceSequenceCommand(final Service service) {
 		super(service.getServiceSequence());
 		fbType = service.getFBType();
+
 	}
 
 	public CreateServiceSequenceCommand(final Service service, final ServiceSequence refElement) {
@@ -43,9 +46,8 @@ public class CreateServiceSequenceCommand extends AbstractCreateElementCommand<S
 
 	@Override
 	protected ServiceSequence createNewElement() {
-		final ServiceSequence seq = LibraryElementFactory.eINSTANCE.createServiceSequence();
-		seq.setName(DEFAULT_SEQUENCE_NAME);
-		return seq;
+		sequence = LibraryElementFactory.eINSTANCE.createServiceSequence();
+		return sequence;
 	}
 
 	private void createEmptyServiceModel() {
@@ -69,6 +71,7 @@ public class CreateServiceSequenceCommand extends AbstractCreateElementCommand<S
 	public void execute() {
 		createEmptyServiceModel();
 		super.execute();
+		sequence.setName(NameRepository.createUniqueName(sequence, DEFAULT_SEQUENCE_NAME));
 	}
 
 	@Override

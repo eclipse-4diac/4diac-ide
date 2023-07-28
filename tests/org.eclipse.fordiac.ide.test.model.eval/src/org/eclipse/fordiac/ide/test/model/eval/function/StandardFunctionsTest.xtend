@@ -17,6 +17,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.stream.Stream
+import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyCharType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
@@ -95,6 +96,7 @@ class StandardFunctionsTest {
 	@BeforeAll
 	def static void setupXtext() {
 		new DataTypeLibrary
+		GlobalConstantsStandaloneSetup.doSetup
 		STFunctionStandaloneSetup.doSetup
 		STAlgorithmStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register

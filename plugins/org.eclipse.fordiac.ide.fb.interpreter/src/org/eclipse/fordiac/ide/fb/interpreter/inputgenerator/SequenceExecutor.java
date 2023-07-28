@@ -33,9 +33,10 @@ public final class SequenceExecutor {
 		return executeRandomSequence(inputfb, count, false);
 	}
 
-	public static EList<Transaction> executeRandomSequence(final FBType inputfb, final int count, final boolean needRandomData) {
+	public static EList<Transaction> executeRandomSequence(final FBType inputfb, final int count,
+			final boolean needRandomData) {
 		final List<Event> events = InputGenerator.getRandomEventsSequence(inputfb, count);
-		if (!events.isEmpty()) {
+		if (events.isEmpty()) {
 			return ECollections.emptyEList();
 		}
 		final List<FBTransaction> trans = TransactionFactory.createFrom(events, RuntimeFactory.createFrom(inputfb),

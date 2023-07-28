@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import java.text.MessageFormat;
 import java.util.stream.Stream;
 
+import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
@@ -52,6 +53,7 @@ class ValueValidatorTest {
 	@SuppressWarnings("unused")
 	static void setupXtext() {
 		new DataTypeLibrary();
+		GlobalConstantsStandaloneSetup.doSetup();
 		STFunctionStandaloneSetup.doSetup();
 		STAlgorithmStandaloneSetup.doSetup();
 		StructuredTextEvaluatorFactory.register();
@@ -256,7 +258,7 @@ class ValueValidatorTest {
 				Arguments.of("[\"Sepp\", \"Hubert\" ]", IecTypes.ElementaryTypes.WSTRING, NO_ERROR), //$NON-NLS-1$
 				Arguments.of("[\"Sepp\",\",\"]", IecTypes.ElementaryTypes.WSTRING, NO_ERROR), //$NON-NLS-1$
 				Arguments.of("[\",\",\",\"]", IecTypes.ElementaryTypes.WSTRING, NO_ERROR) //$NON-NLS-1$
-				);
+		);
 	}
 
 	@DisplayName("Validator tests for valid CHAR array literals")

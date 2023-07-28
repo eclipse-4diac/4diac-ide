@@ -72,6 +72,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Function;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
@@ -89,6 +90,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -375,6 +377,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createFunctionFBTypeAdapter();
 			}
 			@Override
+			public Adapter caseGlobalConstants(GlobalConstants object) {
+				return createGlobalConstantsAdapter();
+			}
+			@Override
 			public Adapter caseGroup(Group object) {
 				return createGroupAdapter();
 			}
@@ -437,6 +443,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseMultiplexer(Multiplexer object) {
 				return createMultiplexerAdapter();
+			}
+			@Override
+			public Adapter caseOriginalSource(OriginalSource object) {
+				return createOriginalSourceAdapter();
 			}
 			@Override
 			public Adapter caseOtherAlgorithm(OtherAlgorithm object) {
@@ -1279,6 +1289,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants <em>Global Constants</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
+	 * @generated
+	 */
+	public Adapter createGlobalConstantsAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Group <em>Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -1499,6 +1523,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMultiplexerAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.OriginalSource <em>Original Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.OriginalSource
+	 * @generated
+	 */
+	public Adapter createOriginalSourceAdapter() {
 		return null;
 	}
 

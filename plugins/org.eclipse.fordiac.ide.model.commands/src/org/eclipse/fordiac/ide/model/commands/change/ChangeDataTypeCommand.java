@@ -18,12 +18,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
@@ -106,12 +104,9 @@ public class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand
 			getErrorMarkerUpdateCmds().add(FordiacMarkerCommandHelper
 					.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(getInterfaceElement())));
 		}
-		if (dataType instanceof ErrorMarkerDataType) {
-			getErrorMarkerUpdateCmds()
-			.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(ErrorMarkerBuilder
-					.createErrorMarkerBuilder(MessageFormat.format(Messages.ChangeDataTypeCommand_TypeMissing,
-							dataType.getName(), getInterfaceElement().getName()))
-					.setTarget(getInterfaceElement())));
+		if (dataType instanceof final ErrorMarkerDataType errorMarkerDataType) {
+			getErrorMarkerUpdateCmds().add(FordiacMarkerCommandHelper.newCreateMarkersCommand(ErrorMarkerBuilder
+					.createErrorMarkerBuilder(errorMarkerDataType.getErrorMessage()).setTarget(getInterfaceElement())));
 		}
 		additionalCommands.execute();
 	}

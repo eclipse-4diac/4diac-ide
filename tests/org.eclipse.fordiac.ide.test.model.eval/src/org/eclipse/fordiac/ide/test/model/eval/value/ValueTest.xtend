@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.test.model.eval.value
 
 import java.time.LocalDate
 import java.util.stream.Stream
+import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup
 import org.eclipse.fordiac.ide.model.data.AnyCharType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.DateType
@@ -38,6 +39,7 @@ import static extension org.junit.jupiter.api.Assertions.*
 class ValueTest {
 	@BeforeAll
 	def static void setupXtext() {
+		GlobalConstantsStandaloneSetup.doSetup
 		STFunctionStandaloneSetup.doSetup
 		STAlgorithmStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register

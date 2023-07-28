@@ -19,14 +19,20 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public class CoverageCalculator {
 
-	public static float calculateCoverageOfSequence(final List<Transaction> transactions) {
+	public static float calculateCoverageOfSequence(final List<Transaction> transactions, final FBType fbType) {
 
-		final EccTraceHelper eccTraceHelper = new EccTraceHelper(transactions);
+		if (fbType instanceof final BasicFBType bfb) {
+			final EccTraceHelper eccTraceHelper = new EccTraceHelper(transactions, bfb.getECC());
 
-		return eccTraceHelper.getAllStatesOfSequence().size() / (float) eccTraceHelper.getAllPossibleStates().size();
+			return eccTraceHelper.getAllStatesOfSequenceUnique().size()
+					/ (float) eccTraceHelper.getAllPossibleStates().size();
+		}
+		return -1;
 	}
 
 	public static float calculateNodeCoverageOfSuiteBy(final HashMap<String, Integer> visitedStates) {

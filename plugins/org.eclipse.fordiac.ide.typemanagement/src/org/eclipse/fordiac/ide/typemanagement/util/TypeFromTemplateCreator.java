@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FCTImporter;
+import org.eclipse.fordiac.ide.model.dataimport.GlobalConstantsImporter;
 import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FunctionFBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
@@ -118,29 +120,41 @@ public class TypeFromTemplateCreator {
 					return Files.newInputStream(typeTemplate.toPath());
 				}
 			};
-		} else if (entry instanceof FBTypeEntry) {
+		}
+		if (entry instanceof FBTypeEntry) {
 			return new FBTImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {
 					return Files.newInputStream(typeTemplate.toPath());
 				}
 			};
-		} else if (entry instanceof ResourceTypeEntry) {
+		}
+		if (entry instanceof ResourceTypeEntry) {
 			return new RESImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {
 					return Files.newInputStream(typeTemplate.toPath());
 				}
 			};
-		} else if (entry instanceof SegmentTypeEntry) {
+		}
+		if (entry instanceof SegmentTypeEntry) {
 			return new SEGImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {
 					return Files.newInputStream(typeTemplate.toPath());
 				}
 			};
-		} else if (entry instanceof SubAppTypeEntry) {
+		}
+		if (entry instanceof SubAppTypeEntry) {
 			return new SubAppTImporter(entry.getFile()) {
+				@Override
+				protected InputStream getInputStream() throws IOException {
+					return Files.newInputStream(typeTemplate.toPath());
+				}
+			};
+		}
+		if (entry instanceof GlobalConstantsEntry) {
+			return new GlobalConstantsImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {
 					return Files.newInputStream(typeTemplate.toPath());

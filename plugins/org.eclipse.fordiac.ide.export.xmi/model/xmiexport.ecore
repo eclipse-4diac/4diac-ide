@@ -10,5 +10,17 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="ecore:EClass ../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.ecore#//STInitializerExpression"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XMIExportTypeDeclarations">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeDeclarations" upperBound="-1"
+        eType="#//XMIExportTypeDeclaration" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XMIExportTypeDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeDeclaration" eType="ecore:EClass ../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.ecore#//STTypeDeclaration"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"
+        containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

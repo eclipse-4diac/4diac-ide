@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventOccFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.IRunFBTypeVisitor;
 import org.eclipse.fordiac.ide.fb.interpreter.api.LambdaVisitor;
@@ -83,7 +84,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		if (this.eventOccurrence.getFbRuntime() instanceof final FBNetworkRuntime fbNetworkRuntime) {
 			final FBNetwork fbNetwork = fbNetworkRuntime.getFbnetwork();
 			fbNetwork.getNetworkElements()
-					.forEach(networkElement -> nameToFBNetwork.put(networkElement.getName(), networkElement));
+			.forEach(networkElement -> nameToFBNetwork.put(networkElement.getName(), networkElement));
 		}
 	}
 
@@ -110,14 +111,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// Active State
 		final var eCState = basicFBTypeRuntime.getActiveState();
 		if (eCState == null) {
-			basicFBTypeRuntime.setActiveState(eCC.getStart());
+			basicFBTypeRuntime.setActiveState(eCC.getStart().getName());
 		}
 		// apply event and evaluate transitions
 		var firedTransition = evaluateOutTransitions(basicFBTypeRuntime);
 		addToTrace(firedTransition, basicFBTypeRuntime.eContainer().eContainer());
 		while (firedTransition != null) {
 			isConsumed(this.eventOccurrence);
-			basicFBTypeRuntime.setActiveState(firedTransition.getDestination());// fire transition
+			basicFBTypeRuntime.setActiveState(firedTransition.getDestination().getName());// fire transition
 			outputEvents.addAll(performEntryAction(basicFBTypeRuntime));
 			firedTransition = evaluateOutTransitions(basicFBTypeRuntime);
 			addToTrace(firedTransition, basicFBTypeRuntime.eContainer().eContainer());
@@ -128,13 +129,21 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	private static void addToTrace(final ECTransition firedTransition, final EObject transaction) {
 		if (transaction instanceof final FBTransaction fbTransaction
 				&& fbTransaction.getTrace() instanceof final EccTrace eccTrace && (firedTransition != null)) {
-			eccTrace.getTransitions().add(firedTransition);
+			final TransitionTrace trace = OperationalSemanticsFactory.eINSTANCE.createTransitionTrace();
+			if (firedTransition.getConditionEvent() != null) {
+				trace.setCondEvent(firedTransition.getConditionEvent().getName());
+			}
+			trace.setCondExpression(firedTransition.getConditionExpression());
+			trace.setSourceState(firedTransition.getSource().getName());
+			trace.setDestinationState(firedTransition.getDestination().getName());
+			eccTrace.getTransitionTraces().add(trace);
 		}
 	}
 
 	private static EList<EventOccurrence> performEntryAction(final BasicFBTypeRuntime basicFBTypeRuntime) {
 		final var outputEvents = new BasicEList<EventOccurrence>();
-		for (final ECAction action : basicFBTypeRuntime.getActiveState().getECAction()) {
+		for (final ECAction action : basicFBTypeRuntime.getActiveState(basicFBTypeRuntime.getActiveState())
+				.getECAction()) {
 			if (action.getAlgorithm() != null) {
 				processAlgorithmWithEvaluator(basicFBTypeRuntime.getBasicfbtype(), action.getAlgorithm());
 			}
@@ -255,7 +264,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	}
 
 	private ECTransition evaluateOutTransitions(final BasicFBTypeRuntime basicFBTypeRuntime) {
-		final var outTransitions = basicFBTypeRuntime.getActiveState().getOutTransitions();
+		final var outTransitions = basicFBTypeRuntime.getActiveState(basicFBTypeRuntime.getActiveState())
+				.getOutTransitions();
 		for (final ECTransition outTransition : outTransitions) {
 			if (transitionCanFire(outTransition, basicFBTypeRuntime)) {
 				return outTransition;

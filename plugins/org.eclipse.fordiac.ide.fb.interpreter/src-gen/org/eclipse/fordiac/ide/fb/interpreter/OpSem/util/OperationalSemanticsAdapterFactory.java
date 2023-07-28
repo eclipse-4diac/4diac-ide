@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -133,6 +134,11 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseEccTrace(EccTrace object) {
 			return createEccTraceAdapter();
+		}
+
+		@Override
+		public Adapter caseTransitionTrace(TransitionTrace object) {
+			return createTransitionTraceAdapter();
 		}
 
 		@Override
@@ -289,6 +295,18 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace
 	 * @generated */
 	public Adapter createEccTraceAdapter() {
+		return null;
+	}
+
+	/** Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace <em>Transition Trace</em>}'. <!--
+	 * begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful to
+	 * ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace
+	 * @generated */
+	public Adapter createTransitionTraceAdapter() {
 		return null;
 	}
 

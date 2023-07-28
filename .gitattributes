@@ -1,0 +1,91 @@
+*               text=auto
+
+# plain text files
+*.md            text
+*.txt           text
+
+# sources
+*.java          text diff=java
+*.xtend         text diff=java
+*.xtext         text
+*.mwe2          text
+
+# scripts
+*.sh            text diff=bash
+
+# configuration
+.classpath      text
+.project        text
+.options        text
+
+*.MF            text
+*.META-INF      text
+*.prefs         text
+*.product       text
+*.target        text
+*.launch        text
+*.mappings      text
+
+# model files
+*.ecore         text
+*.genmodel      text
+*.xsd           text
+*.exsd          text
+*.aird          text
+*.e4xmi         text
+*.odesign       text
+
+# resources
+*.properties    text
+*.inf           text
+*.ini           text
+*.ocl           text
+
+*.xml           text
+
+*.css           text diff=css
+*.html          text diff=html
+*.js            text
+
+*.aml           text
+
+# generated files
+*.g             text
+*.tokens        text
+*.ISetup        text
+*.xml_gen       text
+
+# 4diac files
+*.adp           text
+*.dev           text
+*.dtp           text
+*.fbt           text
+*.fct           text
+*.res           text
+*.seg           text
+*.sub           text
+*.sys           text
+
+*.opsem         text
+
+# binary files
+*.class         binary
+*.jar           binary
+*.dll           binary
+*.so            binary
+*._trace        binary
+*.xtendbin      binary
+*.xtextbin      binary
+
+# binary resources
+*.odg           binary
+*.xcf           binary
+*.png           binary
+*.PNG           binary
+*.gif           binary
+*.icns          binary
+*.ico           binary
+*.xpm           binary
+*.jpg           binary
+*.bmp           binary
+

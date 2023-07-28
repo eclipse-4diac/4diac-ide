@@ -15,4 +15,5 @@ Import-Package: org.eclipse.fordiac.ide.export.forte_lua,
 Require-Bundle: org.eclipse.fordiac.ide.export.forte_ng.st,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor,
+ org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.fordiac.ide.export.forte_lua.st

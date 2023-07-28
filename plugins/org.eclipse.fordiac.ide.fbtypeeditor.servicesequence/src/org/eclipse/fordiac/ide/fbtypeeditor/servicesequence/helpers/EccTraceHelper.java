@@ -22,31 +22,40 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 
 public class EccTraceHelper {
 
-	List<Transaction> transactions;
+	private final List<Transaction> transactions;
+	private final ECC ecc;
 
-	public EccTraceHelper(final List<Transaction> transactions) {
-		super();
+	public EccTraceHelper(final List<Transaction> transactions, final ECC ecc) {
 		this.transactions = transactions;
+		this.ecc = ecc;
 	}
 
 	public List<ECState> getAllStatesOfSequence() {
 		final List<ECState> states = new ArrayList<>();
-		if (getStartState() != null) {
-			// TODO : IS THE START STATE NEEDED to save?
-			// states.add(getStartState());
-			for (final Transaction transac : transactions) {
-				if (getEccTrace((FBTransaction)transac) != null) {
-					for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions()) {
-						// TODO: IS IT NEEDED TO CHECK FO NO DUPLICATES?
-						// if (states.stream().filter(s -> s.getName().equals(transi.getDestination().getName()))
-						// .findAny().isEmpty()) {
+		for (final Transaction transac : transactions) {
+			if (getEccTrace((FBTransaction) transac) != null) {
+				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
+					states.add(transi.getDestination());
+				}
+			}
+		}
+		return states;
+	}
+
+	public List<ECState> getAllStatesOfSequenceUnique() {
+		final List<ECState> states = new ArrayList<>();
+		for (final Transaction transac : transactions) {
+			if (getEccTrace((FBTransaction) transac) != null) {
+				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
+					if (states.stream().filter(s -> s.getName().equals(transi.getDestination().getName())).findAny()
+							.isEmpty()) {
 						states.add(transi.getDestination());
-						// }
 					}
 				}
 			}
@@ -59,7 +68,7 @@ public class EccTraceHelper {
 
 		for (final Transaction transac : transactions) {
 			if (getEccTrace((FBTransaction) transac) != null) {
-				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions()) {
+				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
 					final ArrayList<String> path = new ArrayList<>();
 					path.add(transi.getSource().getName());
 					path.add(transi.getDestination().getName());
@@ -73,8 +82,8 @@ public class EccTraceHelper {
 
 	public ECState getStartState() {
 		if (!transactions.isEmpty() && getEccTrace((FBTransaction) transactions.get(0)) != null
-				&& !getEccTrace((FBTransaction) transactions.get(0)).getTransitions().isEmpty()) {
-			return getEccTrace((FBTransaction) transactions.get(0)).getTransitions().get(0).getSource();
+				&& !getEccTrace((FBTransaction) transactions.get(0)).getTransitions(ecc).isEmpty()) {
+			return getEccTrace((FBTransaction) transactions.get(0)).getTransitions(ecc).get(0).getSource();
 		}
 		return null;
 	}
@@ -83,7 +92,7 @@ public class EccTraceHelper {
 		final List<ECAction> actions = new ArrayList<>();
 		for (final Transaction transac : transactions) {
 			if (getEccTrace((FBTransaction) transac) != null) {
-				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions()) {
+				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
 					actions.addAll(transi.getDestination().getECAction());
 				}
 			}
@@ -95,7 +104,7 @@ public class EccTraceHelper {
 		final List<Algorithm> algos = new ArrayList<>();
 		for (final Transaction transac : transactions) {
 			if (getEccTrace((FBTransaction) transac) != null) {
-				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions()) {
+				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
 					transi.getDestination().getECAction().forEach(ac -> algos.add(ac.getAlgorithm()));
 				}
 			}
@@ -114,8 +123,8 @@ public class EccTraceHelper {
 		if (!transactions.isEmpty()) {
 			for (final Transaction trans : transactions) {
 				if (getEccTrace((FBTransaction) trans) != null
-						&& !getEccTrace((FBTransaction) trans).getTransitions().isEmpty()) {
-					for (final ECTransition transi : getEccTrace((FBTransaction) trans).getTransitions()) {
+						&& !getEccTrace((FBTransaction) trans).getTransitions(ecc).isEmpty()) {
+					for (final ECTransition transi : getEccTrace((FBTransaction) trans).getTransitions(ecc)) {
 						if (transi.getECC() != null && transi.getECC().getECState() != null) {
 							return transi.getECC().getECState();
 						}
@@ -128,7 +137,7 @@ public class EccTraceHelper {
 
 	public List<ECState> getAllPossibleEndStates() {
 		final List<ECState> allPossibleStates = getAllPossibleStates();
-		for(final ECState state : allPossibleStates) {
+		for (final ECState state : allPossibleStates) {
 			for (final ECTransition trans : state.getOutTransitions()) {
 				if (trans.getConditionEvent() == null && trans.getConditionExpression().equals("1")) {
 					allPossibleStates.remove(state);
@@ -158,6 +167,5 @@ public class EccTraceHelper {
 		}
 		return allPossiblePaths;
 	}
-
 
 }

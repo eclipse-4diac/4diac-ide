@@ -46,6 +46,7 @@ class FunctionFBImplTemplate extends ForteFBTemplate<FunctionFBType> {
 			»«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«generateConnectionInitializer» {
 		}
 		
+		«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
 		«generateInterfaceDefinitions»
 		«generateExecuteEvent»
 		

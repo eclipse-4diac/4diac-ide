@@ -15,6 +15,7 @@
  */
 package org.eclipse.fordiac.ide.xmiexport.xmiexport;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -124,14 +125,97 @@ public interface XMIExportPackage extends EPackage {
 	int XMI_EXPORT_INITIAL_VALUE__EXPRESSION = 1;
 
 	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_INITIAL_VALUE__VALUE = 2;
+
+	/**
 	 * The number of structural features of the '<em>Initial Value</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int XMI_EXPORT_INITIAL_VALUE_FEATURE_COUNT = 2;
+	int XMI_EXPORT_INITIAL_VALUE_FEATURE_COUNT = 3;
 
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportTypeDeclarationsImpl <em>Type Declarations</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportTypeDeclarationsImpl
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportTypeDeclarations()
+	 * @generated
+	 */
+	int XMI_EXPORT_TYPE_DECLARATIONS = 2;
+
+	/**
+	 * The feature id for the '<em><b>Type Declarations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_TYPE_DECLARATIONS__TYPE_DECLARATIONS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Type Declarations</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_TYPE_DECLARATIONS_FEATURE_COUNT = 1;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportTypeDeclarationImpl <em>Type Declaration</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportTypeDeclarationImpl
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportTypeDeclaration()
+	 * @generated
+	 */
+	int XMI_EXPORT_TYPE_DECLARATION = 3;
+
+	/**
+	 * The feature id for the '<em><b>Variable</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_TYPE_DECLARATION__VARIABLE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Type Declaration</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_TYPE_DECLARATION__TYPE_DECLARATION = 1;
+
+	/**
+	 * The feature id for the '<em><b>Result Type</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_TYPE_DECLARATION__RESULT_TYPE = 2;
+
+	/**
+	 * The number of structural features of the '<em>Type Declaration</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_TYPE_DECLARATION_FEATURE_COUNT = 3;
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValues <em>Initial Values</em>}'.
@@ -185,6 +269,81 @@ public interface XMIExportPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getXMIExportInitialValue_Expression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue#getValue()
+	 * @see #getXMIExportInitialValue()
+	 * @generated
+	 */
+	EAttribute getXMIExportInitialValue_Value();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclarations <em>Type Declarations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Type Declarations</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclarations
+	 * @generated
+	 */
+	EClass getXMIExportTypeDeclarations();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclarations#getTypeDeclarations <em>Type Declarations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Type Declarations</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclarations#getTypeDeclarations()
+	 * @see #getXMIExportTypeDeclarations()
+	 * @generated
+	 */
+	EReference getXMIExportTypeDeclarations_TypeDeclarations();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration <em>Type Declaration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Type Declaration</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration
+	 * @generated
+	 */
+	EClass getXMIExportTypeDeclaration();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration#getVariable <em>Variable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Variable</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration#getVariable()
+	 * @see #getXMIExportTypeDeclaration()
+	 * @generated
+	 */
+	EReference getXMIExportTypeDeclaration_Variable();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration#getTypeDeclaration <em>Type Declaration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Type Declaration</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration#getTypeDeclaration()
+	 * @see #getXMIExportTypeDeclaration()
+	 * @generated
+	 */
+	EReference getXMIExportTypeDeclaration_TypeDeclaration();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration#getResultType <em>Result Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Result Type</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration#getResultType()
+	 * @see #getXMIExportTypeDeclaration()
+	 * @generated
+	 */
+	EReference getXMIExportTypeDeclaration_ResultType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -251,6 +410,66 @@ public interface XMIExportPackage extends EPackage {
 		 * @generated
 		 */
 		EReference XMI_EXPORT_INITIAL_VALUE__EXPRESSION = eINSTANCE.getXMIExportInitialValue_Expression();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute XMI_EXPORT_INITIAL_VALUE__VALUE = eINSTANCE.getXMIExportInitialValue_Value();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportTypeDeclarationsImpl <em>Type Declarations</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportTypeDeclarationsImpl
+		 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportTypeDeclarations()
+		 * @generated
+		 */
+		EClass XMI_EXPORT_TYPE_DECLARATIONS = eINSTANCE.getXMIExportTypeDeclarations();
+
+		/**
+		 * The meta object literal for the '<em><b>Type Declarations</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference XMI_EXPORT_TYPE_DECLARATIONS__TYPE_DECLARATIONS = eINSTANCE.getXMIExportTypeDeclarations_TypeDeclarations();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportTypeDeclarationImpl <em>Type Declaration</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportTypeDeclarationImpl
+		 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportTypeDeclaration()
+		 * @generated
+		 */
+		EClass XMI_EXPORT_TYPE_DECLARATION = eINSTANCE.getXMIExportTypeDeclaration();
+
+		/**
+		 * The meta object literal for the '<em><b>Variable</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference XMI_EXPORT_TYPE_DECLARATION__VARIABLE = eINSTANCE.getXMIExportTypeDeclaration_Variable();
+
+		/**
+		 * The meta object literal for the '<em><b>Type Declaration</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference XMI_EXPORT_TYPE_DECLARATION__TYPE_DECLARATION = eINSTANCE.getXMIExportTypeDeclaration_TypeDeclaration();
+
+		/**
+		 * The meta object literal for the '<em><b>Result Type</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference XMI_EXPORT_TYPE_DECLARATION__RESULT_TYPE = eINSTANCE.getXMIExportTypeDeclaration_ResultType();
 
 	}
 

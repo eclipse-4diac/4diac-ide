@@ -144,13 +144,13 @@ public final class NameRepository {
 		}
 		if (element instanceof IInterfaceElement && FordiacKeywords.isReservedKeyword(nameProposal)) {
 			ErrorMessenger
-			.popUpErrorMessage(MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, nameProposal));
+					.popUpErrorMessage(MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, nameProposal));
 			return false;
 		}
 
 		if (getRefNames(element).parallelStream().anyMatch(name -> name.equalsIgnoreCase(nameProposal))) {
 			ErrorMessenger
-			.popUpErrorMessage(MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal));
+					.popUpErrorMessage(MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal));
 			return false;
 		}
 
