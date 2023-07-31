@@ -67,6 +67,7 @@ final class ForteNgExportUtil {
 					val fixed = subrange.setLowerLimit && subrange.setUpperLimit
 					'''«IF fixed»CIEC_ARRAY_FIXED«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«result»«IF fixed», «subrange.lowerLimit», «subrange.upperLimit»«ENDIF»>'''
 				].toString
+			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
 			DataType: '''CIEC_«type.generateTypeNamePlain»«IF GenericTypes.isAnyType(type)»_VARIANT«ENDIF»'''
 			default:
 				type.name
@@ -80,6 +81,7 @@ final class ForteNgExportUtil {
 				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
 					'''CIEC_ARRAY_COMMON<«result»>'''
 				].toString
+			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
 			DataType: '''CIEC_«type.generateTypeNamePlain»'''
 			default:
 				type.name
