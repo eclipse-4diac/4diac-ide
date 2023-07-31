@@ -150,7 +150,8 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 	}
 
 	private void createLockGroupCheckbox(final Composite parent) {
-		lockCheckbox = getWidgetFactory().createButton(parent, FordiacMessages.LockGroupSize, SWT.CHECK);
+		lockCheckbox = getWidgetFactory().createButton(parent, FordiacMessages.Group_LABEL_LockSize, SWT.CHECK);
+		lockCheckbox.setToolTipText(FordiacMessages.Group_TOOLTIP_DisableAutoResize);
 		lockCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
 			if (getType() != null) {
 				removeContentAdapter();

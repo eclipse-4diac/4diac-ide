@@ -21,6 +21,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
+import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
@@ -124,7 +125,8 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 	}
 
 	private boolean isLockedGroup() {
-		return graphicalEditPart instanceof final GroupContentEditPart group && group.getModel().getGroup().isLocked();
+		return (graphicalEditPart instanceof final GroupContentEditPart groupContent && groupContent.getModel().getGroup().isLocked())
+				|| (graphicalEditPart instanceof final GroupEditPart group && group.getModel().isLocked());
 	}
 
 	private GraphicalEditPart getTargetContainerEP() {

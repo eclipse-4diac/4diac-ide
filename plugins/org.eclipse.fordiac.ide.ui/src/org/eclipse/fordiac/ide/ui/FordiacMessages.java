@@ -57,7 +57,6 @@ public final class FordiacMessages extends NLS {
 	public static String InstanceInfo;  // NOSONAR
 	public static String Interface;  // NOSONAR
 	public static String Language;  // NOSONAR
-	public static String LockGroupSize; // NOSONAR
 	public static String NA;  // NOSONAR
 	public static String ND;  // NOSONAR
 	public static String Name;  // NOSONAR
@@ -114,6 +113,9 @@ public final class FordiacMessages extends NLS {
 	public static String TableCopyPaste_TEXT_Paste;  // NOSONAR
 	public static String TableCopyPaste_TEXT_Cut;  // NOSONAR
 	public static String NatTable_TEXT_Paste;  // NOSONAR
+	
+	public static String Group_LABEL_LockSize;  // NOSONAR
+	public static String Group_TOOLTIP_DisableAutoResize;  // NOSONAR
 
 	static {
 		// initialize resource bundle
