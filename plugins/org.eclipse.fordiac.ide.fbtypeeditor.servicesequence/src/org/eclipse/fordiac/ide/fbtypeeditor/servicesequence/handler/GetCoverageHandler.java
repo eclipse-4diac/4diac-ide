@@ -51,13 +51,6 @@ public class GetCoverageHandler extends AbstractHandler {
 							checkForExistingEventManager(seq, serviceSeqEP.getFBType());
 							setCoverageData((EventManager) seq.getEventManager(), serviceEP.getModel());
 						}
-
-						if (service instanceof final ServiceSequenceEditPart serviceEP
-								&& serviceEP.getModel() instanceof final ServiceSequence seq) {
-
-							checkForExistingEventManager(seq, serviceSeqEP.getFBType());
-							setCoverageData((EventManager) seq.getEventManager(), serviceEP.getModel());
-						}
 					}
 				} else if (((EditPart) sel) instanceof final ServiceSequenceEditPart serviceEP
 						&& serviceEP.getModel() instanceof final ServiceSequence seq
