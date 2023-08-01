@@ -954,6 +954,7 @@
       <command commandId="org.eclipse.fordiac.ide.application.defineFbInterfaceConstraint" >
           <visibleWhen checkEnabled="true">
           <with variable="selection">
+          <or>
             <count value="2"/>
             <iterate>
               <or>
@@ -963,6 +964,16 @@
                 </instanceof>
               </or>
             </iterate>
+            <count value="1"/>
+            <iterate>
+              <or>
+                <instanceof value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
+                </instanceof>
+                <instanceof value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart">
+                </instanceof>
+              </or>
+            </iterate>
+            </or>
           </with>
         </visibleWhen>
        </command>

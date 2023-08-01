@@ -58,6 +58,50 @@ public final class Messages extends NLS {
 
 	public static String CutEditPartsAction_Text;
 
+	public static String DefineFbInterfaceConstraintHandler_ErrorMessage;
+
+	public static String DefineFbInterfaceConstraintHandler_ErrorTitle;
+
+	public static String DefineFbInterfaceConstraintHandler_Info;
+
+	public static String DefineFbInterfaceConstraintHandler_Title;
+
+	public static String DefineFBReactionOnePinDialog_Button;
+
+	public static String DefineFBReactionOnePinDialog_DefineConstraint;
+
+	public static String DefineFBReactionOnePinDialog_Error;
+
+	public static String DefineFBReactionOnePinDialog_Event;
+
+	public static String DefineFBReactionOnePinDialog_Every;
+
+	public static String DefineFBReactionOnePinDialog_Info;
+
+	public static String DefineFBReactionOnePinDialog_Occurs;
+
+	public static String DefineFBReactionOnePinDialog_Offset;
+
+	public static String DefineFBReactionOnePinDialog_PleaseFill;
+
+	public static String DefineFBReactionOnePinDialog_Reaction;
+
+	public static String DefineFBReactionOnePinDialog_SpecifyOffset;
+
+	public static String DefineFBReactionOnePinDialog_Title;
+
+	public static String DefineFBReactionOnePinDialog_Within;
+
+	public static String DefineFBReactionTwoPinDialog_Button;
+
+	public static String DefineFBReactionTwoPinDialog_Info;
+
+	public static String DefineFBReactionTwoPinDialog_OccursWithin;
+
+	public static String DefineFBReactionTwoPinDialog_Reaction;
+
+	public static String DefineFBReactionTwoPinDialog_Title;
+
 	public static String ErrorMarkerFBNEditPart_ErrorMarker;
 
 	public static String ErrorMarkerFBNEditPart_OldType;
@@ -122,9 +166,7 @@ public final class Messages extends NLS {
 
 	public static String OpenApplicationEditorAction_Name;
 
-	/**
-	 * The Open sub application editor action_ erro r_ open subapplication editor.
-	 */
+	/** The Open sub application editor action_ erro r_ open subapplication editor. */
 	public static String OpenSubApplicationEditorAction_ERROR_OpenSubapplicationEditor;
 
 	public static String OpenSubApplicationEditorAction_Name;
@@ -199,6 +241,14 @@ public final class Messages extends NLS {
 	public static String Untyped;
 
 	public static String UpdateFBTypeAction_Text;
+
+	public static String UpdateReactionCommand_Constraint;
+
+	public static String UpdateReactionCommand_Contract;
+
+	public static String UpdateReactionCommand_Guarantee;
+
+	public static String UpdateReactionCommand_Occures;
 
 	public static String PasteRecreateNotPossible;
 
