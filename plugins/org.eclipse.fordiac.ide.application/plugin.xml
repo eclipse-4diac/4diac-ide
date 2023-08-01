@@ -715,7 +715,7 @@
              commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct">
       <activeWhen>
         <reference definitionId="org.eclipse.fordiac.ide.application.InterfaceElementSelection" />
-      </activeWhen>u
+      </activeWhen>
     </handler>
     <handler class="org.eclipse.fordiac.ide.application.handlers.GoToHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.showInstance">
@@ -787,7 +787,7 @@
           commandId="org.eclipse.fordiac.ide.application.commands.createConnectionAtSubappInterface"
           contextId="org.eclipse.ui.contexts.window"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-          sequence="M1+R">
+          sequence="M1+M2+F">
     </key>
   </extension>
   <extension point="org.eclipse.ui.menus">
