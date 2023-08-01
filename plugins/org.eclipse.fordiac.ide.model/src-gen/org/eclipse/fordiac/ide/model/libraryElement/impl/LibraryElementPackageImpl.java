@@ -4501,6 +4501,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		basicFBTypeEClass.getESuperTypes().add(this.getBaseFBType());
 		automationSystemEClass.getESuperTypes().add(this.getLibraryElement());
 		automationSystemEClass.getESuperTypes().add(this.getConfigurableObject());
+		automationSystemEClass.getESuperTypes().add(this.getCompilableType());
 		cfbInstanceEClass.getESuperTypes().add(this.getFB());
 		commentEClass.getESuperTypes().add(this.getFBNetworkElement());
 		communicationChannelEClass.getESuperTypes().add(this.getFB());

@@ -304,9 +304,10 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.AUTOMATION_SYSTEM: {
 				AutomationSystem automationSystem = (AutomationSystem)theEObject;
 				T result = caseAutomationSystem(automationSystem);
+				if (result == null) result = caseCompilableType(automationSystem);
 				if (result == null) result = caseLibraryElement(automationSystem);
-				if (result == null) result = caseConfigurableObject(automationSystem);
 				if (result == null) result = caseINamedElement(automationSystem);
+				if (result == null) result = caseConfigurableObject(automationSystem);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

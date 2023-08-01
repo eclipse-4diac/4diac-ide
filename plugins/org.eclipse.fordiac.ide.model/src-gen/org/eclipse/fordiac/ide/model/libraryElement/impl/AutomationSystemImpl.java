@@ -34,6 +34,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -51,6 +53,7 @@ import org.eclipse.gef.commands.CommandStack;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getAttributes <em>Attributes</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getCompilerInfo <em>Compiler Info</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getApplication <em>Application</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getMapping <em>Mapping</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getSystemConfiguration <em>System Configuration</em>}</li>
@@ -69,6 +72,16 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @ordered
 	 */
 	protected EList<Attribute> attributes;
+
+	/**
+	 * The cached value of the '{@link #getCompilerInfo() <em>Compiler Info</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCompilerInfo()
+	 * @generated
+	 * @ordered
+	 */
+	protected CompilerInfo compilerInfo;
 
 	/**
 	 * The cached value of the '{@link #getApplication() <em>Application</em>}' containment reference list.
@@ -150,6 +163,74 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES);
 		}
 		return attributes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CompilerInfo getCompilerInfo() {
+		if (compilerInfo != null && compilerInfo.eIsProxy()) {
+			InternalEObject oldCompilerInfo = (InternalEObject)compilerInfo;
+			compilerInfo = (CompilerInfo)eResolveProxy(oldCompilerInfo);
+			if (compilerInfo != oldCompilerInfo) {
+				InternalEObject newCompilerInfo = (InternalEObject)compilerInfo;
+				NotificationChain msgs = oldCompilerInfo.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO, null, null);
+				if (newCompilerInfo.eInternalContainer() == null) {
+					msgs = newCompilerInfo.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO, oldCompilerInfo, compilerInfo));
+			}
+		}
+		return compilerInfo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CompilerInfo basicGetCompilerInfo() {
+		return compilerInfo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCompilerInfo(CompilerInfo newCompilerInfo, NotificationChain msgs) {
+		CompilerInfo oldCompilerInfo = compilerInfo;
+		compilerInfo = newCompilerInfo;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO, oldCompilerInfo, newCompilerInfo);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCompilerInfo(CompilerInfo newCompilerInfo) {
+		if (newCompilerInfo != compilerInfo) {
+			NotificationChain msgs = null;
+			if (compilerInfo != null)
+				msgs = ((InternalEObject)compilerInfo).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO, null, msgs);
+			if (newCompilerInfo != null)
+				msgs = ((InternalEObject)newCompilerInfo).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO, null, msgs);
+			msgs = basicSetCompilerInfo(newCompilerInfo, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO, newCompilerInfo, newCompilerInfo));
 	}
 
 	/**
@@ -339,6 +420,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 		switch (featureID) {
 			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
 				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO:
+				return basicSetCompilerInfo(null, msgs);
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				return ((InternalEList<?>)getApplication()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
@@ -360,6 +443,9 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 		switch (featureID) {
 			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
 				return getAttributes();
+			case LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO:
+				if (resolve) return getCompilerInfo();
+				return basicGetCompilerInfo();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				return getApplication();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
@@ -386,6 +472,9 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
 				getAttributes().clear();
 				getAttributes().addAll((Collection<? extends Attribute>)newValue);
+				return;
+			case LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO:
+				setCompilerInfo((CompilerInfo)newValue);
 				return;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				getApplication().clear();
@@ -418,6 +507,9 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
 				getAttributes().clear();
 				return;
+			case LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO:
+				setCompilerInfo((CompilerInfo)null);
+				return;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				getApplication().clear();
 				return;
@@ -446,6 +538,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 		switch (featureID) {
 			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
 				return attributes != null && !attributes.isEmpty();
+			case LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO:
+				return compilerInfo != null;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				return application != null && !application.isEmpty();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
@@ -472,6 +566,12 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 				default: return -1;
 			}
 		}
+		if (baseClass == CompilableType.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO: return LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -485,6 +585,12 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 		if (baseClass == ConfigurableObject.class) {
 			switch (baseFeatureID) {
 				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		if (baseClass == CompilableType.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.COMPILABLE_TYPE__COMPILER_INFO: return LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO;
 				default: return -1;
 			}
 		}

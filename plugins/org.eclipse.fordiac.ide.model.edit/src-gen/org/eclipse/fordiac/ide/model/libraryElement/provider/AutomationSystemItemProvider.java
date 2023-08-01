@@ -103,6 +103,7 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
+			childrenFeatures.add(LibraryElementPackage.Literals.COMPILABLE_TYPE__COMPILER_INFO);
 			childrenFeatures.add(LibraryElementPackage.Literals.AUTOMATION_SYSTEM__APPLICATION);
 			childrenFeatures.add(LibraryElementPackage.Literals.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION);
 		}
@@ -163,6 +164,7 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
+			case LibraryElementPackage.AUTOMATION_SYSTEM__COMPILER_INFO:
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -183,6 +185,11 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.COMPILABLE_TYPE__COMPILER_INFO,
+				 LibraryElementFactory.eINSTANCE.createCompilerInfo()));
 
 		newChildDescriptors.add
 			(createChildParameter
