@@ -111,31 +111,31 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 
 	@Override
 	public synchronized LibraryElement getType() {
-		if (getFile() != null) {
-			if (typeRef != null) {
-				final LibraryElement type = typeRef.get();
-				if (type != null && !isFileContentChanged()) {
-					return type;
-				}
+		if (typeRef != null) {
+			final LibraryElement type = typeRef.get();
+			if (type != null && !isFileContentChanged()) {
+				return type;
 			}
-			return reloadType();
 		}
-		return null;
+		return reloadType();
 	}
 
 	private LibraryElement reloadType() {
 		// reset editable type to force a fresh copy the next time the editable type is accessed
 		// also needs to happen before the reload, since SystemEntry delegates to setType,
 		// which would otherwise reset the freshly reloaded type
-		setTypeEditable(null);
-		lastModificationTimestamp = getFile().getModificationStamp();
-		final LibraryElement loadType = loadType();
-		setType(loadType);
-		return loadType;
+		if (getFile() != null) {
+			setTypeEditable(null);
+			lastModificationTimestamp = getFile().getModificationStamp();
+			final LibraryElement loadType = loadType();
+			setType(loadType);
+			return loadType;
+		}
+		return null;
 	}
 
 	private boolean isFileContentChanged() {
-		return getFile().getModificationStamp() != IResource.NULL_STAMP
+		return getFile() != null && getFile().getModificationStamp() != IResource.NULL_STAMP
 				&& getFile().getModificationStamp() != lastModificationTimestamp;
 	}
 

@@ -62,6 +62,7 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 			LtodType: "forte_ltime_of_day.h"
 			DateAndTimeType: "forte_date_and_time.h"
 			LdtType: "forte_ldate_and_time.h"
+			StringType case type.isSetMaxLength: "forte_string_fixed.h"
 			StringType: "forte_string.h"
 			WstringType: "forte_wstring.h"
 			case GenericTypes.isAnyType(type): '''forte_«type.name.toLowerCase»_variant.h'''

@@ -162,6 +162,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String FOR_CONTROL_VARIABLE_MODIFICATION = ISSUE_CODE_PREFIX + "forControlVariableModification"; //$NON-NLS-1$
 	public static final String FOR_CONTROL_VARIABLE_NON_TEMPORARY = ISSUE_CODE_PREFIX
 			+ "forControlVariableNonTemporary"; //$NON-NLS-1$
+	public static final String FOR_CONTROL_VARIABLE_UNDEFINED = ISSUE_CODE_PREFIX + "forControlVariableUndefined"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
 

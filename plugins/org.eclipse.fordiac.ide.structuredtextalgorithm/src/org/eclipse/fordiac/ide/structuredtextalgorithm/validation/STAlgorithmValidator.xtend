@@ -24,12 +24,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.Messages
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSourceElement
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreControlFlowValidator
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.resource.IContainer
@@ -57,6 +60,20 @@ class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 	public static final String NO_ALGORITHM_FOR_INPUT_EVENT = ISSUE_CODE_PREFIX + "noAlgorithmForInputEvent"
 	public static final String NO_INPUT_EVENT_FOR_ALGORITHM = ISSUE_CODE_PREFIX + "noInputEventForAlgorithm"
 	public static final String VARIABLE_NAME_IN_USE_ON_INTERFACE = ISSUE_CODE_PREFIX + "variableNameInUseOnInterface"
+
+	@Check
+	def void checkControlFlow(STAlgorithmBody body) {
+		extension val controlFlowValidator = new STCoreControlFlowValidator(this)
+		body.varTempDeclarations.validateVariableBlocks
+		body.statements.validateStatements
+	}
+
+	@Check
+	def void checkControlFlow(STMethodBody body) {
+		extension val controlFlowValidator = new STCoreControlFlowValidator(this)
+		body.varDeclarations.validateVariableBlocks
+		body.statements.validateStatements
+	}
 
 	@Check
 	def checkUniquenessOfVariableNamesInAFunctionBlock(STVarDeclaration varDeclaration) {

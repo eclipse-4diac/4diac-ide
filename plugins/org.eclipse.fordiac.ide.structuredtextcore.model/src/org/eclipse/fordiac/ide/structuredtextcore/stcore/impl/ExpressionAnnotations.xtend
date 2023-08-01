@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyDateType
 import org.eclipse.fordiac.ide.model.data.AnyDurationType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
+import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.LtimeType
@@ -183,6 +184,14 @@ final package class ExpressionAnnotations {
 		getDeclaredResultType(expr) ?: switch (result : expr.expectedType) {
 			DataType case result.isNumericValueValid(expr.value):
 				result
+			AnyUnsignedType:
+				switch (it : expr.value) {
+					BigInteger case checkRangeUnsigned(0xff#bi): ElementaryTypes.USINT
+					BigInteger case checkRangeUnsigned(0xffff#bi): ElementaryTypes.UINT
+					BigInteger case checkRangeUnsigned(0xffffffff#bi): ElementaryTypes.UDINT
+					BigInteger case checkRangeUnsigned(0xffffffffffffffff#bi): ElementaryTypes.ULINT
+					default: null
+				}
 			AnyBitType:
 				switch (it : expr.value) {
 					BigInteger case checkRangeUnsigned(0xff#bi): ElementaryTypes.BYTE
