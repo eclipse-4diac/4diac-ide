@@ -78,6 +78,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
@@ -217,6 +218,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.GROUP: return createGroup();
 			case LibraryElementPackage.HIDDEN_ELEMENT: return createHiddenElement();
 			case LibraryElementPackage.IDENTIFICATION: return createIdentification();
+			case LibraryElementPackage.IMPORT: return createImport();
 			case LibraryElementPackage.INPUT_PRIMITIVE: return createInputPrimitive();
 			case LibraryElementPackage.INTERFACE_LIST: return createInterfaceList();
 			case LibraryElementPackage.LIBRARY_ELEMENT: return createLibraryElement();
@@ -834,6 +836,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public Identification createIdentification() {
 		IdentificationImpl identification = new IdentificationImpl();
 		return identification;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Import createImport() {
+		ImportImpl import_ = new ImportImpl();
+		return import_;
 	}
 
 	/**

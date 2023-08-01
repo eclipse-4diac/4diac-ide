@@ -93,6 +93,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
@@ -532,6 +533,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass iInterfaceElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass importEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1620,6 +1628,26 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EAttribute getCompilerInfo_PackageName() {
+		return (EAttribute)compilerInfoEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCompilerInfo_Imports() {
+		return (EReference)compilerInfoEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCompositeFBType() {
 		return compositeFBTypeEClass;
 	}
@@ -2622,6 +2650,26 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EReference getIInterfaceElement_Type() {
 		return (EReference)iInterfaceElementEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getImport() {
+		return importEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getImport_ImportedNamespace() {
+		return (EAttribute)importEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -4127,6 +4175,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(compilerInfoEClass, COMPILER_INFO__COMPILER);
 		createEAttribute(compilerInfoEClass, COMPILER_INFO__CLASSDEF);
 		createEAttribute(compilerInfoEClass, COMPILER_INFO__HEADER);
+		createEAttribute(compilerInfoEClass, COMPILER_INFO__PACKAGE_NAME);
+		createEReference(compilerInfoEClass, COMPILER_INFO__IMPORTS);
 
 		compositeFBTypeEClass = createEClass(COMPOSITE_FB_TYPE);
 		createEReference(compositeFBTypeEClass, COMPOSITE_FB_TYPE__FB_NETWORK);
@@ -4259,6 +4309,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__INPUT_CONNECTIONS);
 		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS);
 		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__TYPE);
+
+		importEClass = createEClass(IMPORT);
+		createEAttribute(importEClass, IMPORT__IMPORTED_NAMESPACE);
 
 		iNamedElementEClass = createEClass(INAMED_ELEMENT);
 		createEAttribute(iNamedElementEClass, INAMED_ELEMENT__NAME);
@@ -4722,6 +4775,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getCompilerInfo_Compiler(), this.getCompiler(), null, "compiler", null, 0, -1, CompilerInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getCompilerInfo_Classdef(), theXMLTypePackage.getString(), "classdef", "", 0, 1, CompilerInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 		initEAttribute(getCompilerInfo_Header(), theXMLTypePackage.getString(), "header", "", 0, 1, CompilerInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getCompilerInfo_PackageName(), theXMLTypePackage.getString(), "packageName", null, 0, 1, CompilerInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getCompilerInfo_Imports(), this.getImport(), null, "imports", null, 0, -1, CompilerInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(compositeFBTypeEClass, CompositeFBType.class, "CompositeFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getCompositeFBType_FBNetwork(), this.getFBNetwork(), null, "fBNetwork", null, 0, 1, CompositeFBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -5032,6 +5087,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(iInterfaceElementEClass, ecorePackage.getEString(), "getTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(iInterfaceElementEClass, ecorePackage.getEString(), "getFullTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(importEClass, Import.class, "Import", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getImport_ImportedNamespace(), theXMLTypePackage.getString(), "importedNamespace", null, 0, 1, Import.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(iNamedElementEClass, INamedElement.class, "INamedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getINamedElement_Name(), theXMLTypePackage.getString(), "name", "", 1, 1, INamedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
@@ -5510,6 +5568,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 			   "name", "header" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
+		  (getCompilerInfo_PackageName(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "packageName" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
 		  (getCompositeFBType_FBNetwork(),
 		   source,
 		   new String[] {
@@ -5713,6 +5778,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   new String[] {
 			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
 			   "name", "Type" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getImport_ImportedNamespace(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "declaration" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
 		  (getInterfaceList_Plugs(),

@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
@@ -46,6 +47,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl#getCompiler <em>Compiler</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl#getClassdef <em>Classdef</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl#getHeader <em>Header</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl#getPackageName <em>Package Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoImpl#getImports <em>Imports</em>}</li>
  * </ul>
  *
  * @generated
@@ -100,6 +103,36 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * @ordered
 	 */
 	protected String header = HEADER_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPackageName() <em>Package Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPackageName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PACKAGE_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPackageName() <em>Package Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPackageName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String packageName = PACKAGE_NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getImports() <em>Imports</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getImports()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Import> imports;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -185,10 +218,48 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	 * @generated
 	 */
 	@Override
+	public String getPackageName() {
+		return packageName;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPackageName(String newPackageName) {
+		String oldPackageName = packageName;
+		packageName = newPackageName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMPILER_INFO__PACKAGE_NAME, oldPackageName, packageName));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<Import> getImports() {
+		if (imports == null) {
+			imports = new EObjectContainmentEList.Resolving<Import>(Import.class, this, LibraryElementPackage.COMPILER_INFO__IMPORTS);
+		}
+		return imports;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.COMPILER_INFO__COMPILER:
 				return ((InternalEList<?>)getCompiler()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.COMPILER_INFO__IMPORTS:
+				return ((InternalEList<?>)getImports()).basicRemove(otherEnd, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -208,6 +279,10 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 				return getClassdef();
 			case LibraryElementPackage.COMPILER_INFO__HEADER:
 				return getHeader();
+			case LibraryElementPackage.COMPILER_INFO__PACKAGE_NAME:
+				return getPackageName();
+			case LibraryElementPackage.COMPILER_INFO__IMPORTS:
+				return getImports();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -232,6 +307,13 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 			case LibraryElementPackage.COMPILER_INFO__HEADER:
 				setHeader((String)newValue);
 				return;
+			case LibraryElementPackage.COMPILER_INFO__PACKAGE_NAME:
+				setPackageName((String)newValue);
+				return;
+			case LibraryElementPackage.COMPILER_INFO__IMPORTS:
+				getImports().clear();
+				getImports().addAll((Collection<? extends Import>)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -255,6 +337,12 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 			case LibraryElementPackage.COMPILER_INFO__HEADER:
 				setHeader(HEADER_EDEFAULT);
 				return;
+			case LibraryElementPackage.COMPILER_INFO__PACKAGE_NAME:
+				setPackageName(PACKAGE_NAME_EDEFAULT);
+				return;
+			case LibraryElementPackage.COMPILER_INFO__IMPORTS:
+				getImports().clear();
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -275,6 +363,10 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 				return CLASSDEF_EDEFAULT == null ? classdef != null : !CLASSDEF_EDEFAULT.equals(classdef);
 			case LibraryElementPackage.COMPILER_INFO__HEADER:
 				return HEADER_EDEFAULT == null ? header != null : !HEADER_EDEFAULT.equals(header);
+			case LibraryElementPackage.COMPILER_INFO__PACKAGE_NAME:
+				return PACKAGE_NAME_EDEFAULT == null ? packageName != null : !PACKAGE_NAME_EDEFAULT.equals(packageName);
+			case LibraryElementPackage.COMPILER_INFO__IMPORTS:
+				return imports != null && !imports.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -294,6 +386,8 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 		result.append(classdef);
 		result.append(", header: "); //$NON-NLS-1$
 		result.append(header);
+		result.append(", packageName: "); //$NON-NLS-1$
+		result.append(packageName);
 		result.append(')');
 		return result.toString();
 	}

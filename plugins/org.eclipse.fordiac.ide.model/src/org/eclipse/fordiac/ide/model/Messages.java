@@ -20,6 +20,8 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.messages"; //$NON-NLS-1$
 
+	public static String CommonElementImporter_ERROR_DeclarationNotSet;
+
 	/** The Common element importer_ erro r_ missing_ organization. */
 	public static String CommonElementImporter_ERROR_Missing_Organization;
 
