@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
@@ -23,14 +24,29 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class GlobalConstantsReconciler {
 
-	public static void reconcile(final GlobalConstants dest, final Optional<EList<VarDeclaration>> source,
+	public static void reconcile(final GlobalConstants dest, final Optional<GlobalConstantsPartition> source,
+			final String originalSource) {
+		if (dest != null && source.isPresent()) {
+			reconcile(dest, source.get(), originalSource);
+		}
+	}
+
+	public static void reconcile(final GlobalConstants dest, final GlobalConstantsPartition source,
 			final String originalSource) {
 		// check duplicates in source (very bad)
-		if (source.filter(GlobalConstantsReconciler::checkDuplicates).isPresent()) {
+		if (checkDuplicates(source.constants())) {
 			return; // don't even try to attempt this or risk screwing dest up
 		}
+		// update package & imports
+		CompilerInfo compilerInfo = dest.getCompilerInfo();
+		if (compilerInfo == null) {
+			compilerInfo = LibraryElementFactory.eINSTANCE.createCompilerInfo();
+			dest.setCompilerInfo(compilerInfo);
+		}
+		compilerInfo.setPackageName(source.packageName());
+		ECollections.setEList(compilerInfo.getImports(), source.imports());
 		// update constants
-		source.ifPresent(constants -> ECollections.setEList(dest.getConstants(), constants));
+		ECollections.setEList(dest.getConstants(), source.constants());
 		// update original source
 		if (originalSource != null) {
 			OriginalSource destOriginalSource = dest.getSource();

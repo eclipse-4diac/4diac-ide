@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.util
 
 import com.google.inject.Inject
 import java.io.ByteArrayOutputStream
+import java.util.Optional
+import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
@@ -27,6 +29,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSo
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider
 import org.eclipse.xtext.resource.XtextResource
@@ -69,7 +72,7 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 
 	def dispatch String toSTText(org.eclipse.fordiac.ide.model.libraryElement.STMethod method) { method.text }
 
-	override EList<ICallable> partition(XtextResource resource) {
+	override Optional<STCorePartition> partition(XtextResource resource) {
 		if(resource.entryPoint !== null && resource.entryPoint !== STAlgorithmSourceRule) {
 			return null;
 		}
@@ -81,33 +84,33 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 		}
 	}
 
-	def protected EList<ICallable> getEmergencyPartition(XtextResource resource) {
+	def protected Optional<STCorePartition> getEmergencyPartition(XtextResource resource) {
 		val stream = new ByteArrayOutputStream
 		resource.save(stream, emptyMap)
 		val text = new String(stream.toByteArray, resource.encoding)
 		if (text.nullOrEmpty) {
 			throw new IllegalStateException("Cannot serialize contents from resource")
 		}
-		newBasicEList(text.newLostAndFound(0))
+		Optional.of(new STCorePartition(null, ECollections.emptyEList, newBasicEList(text.newLostAndFound(0))))
 	}
 
-	def EList<ICallable> partition(STAlgorithmSource source) {
+	def Optional<STCorePartition> partition(STAlgorithmSource source) {
 		try {
 			val result = source.elements.map[convertSourceElement].filterNull.<ICallable>newBasicEList
 			source.handleLostAndFound(result) // salvage unclaimed content
 			result.handleDuplicates // handle duplicate names
-			result
+			Optional.of(new STCorePartition(null, ECollections.emptyEList, result))
 		} catch (Exception e) {
 			source.emergencyPartition // try to salvage what we can
 		}
 	}
 
-	def protected EList<ICallable> getEmergencyPartition(STAlgorithmSource source) {
+	def protected Optional<STCorePartition> getEmergencyPartition(STAlgorithmSource source) {
 		val text = source.node?.rootNode?.text
 		if (text.nullOrEmpty) {
 			throw new IllegalStateException("Cannot get text from root node")
 		}
-		newBasicEList(text.newLostAndFound(0))
+		Optional.of(new STCorePartition(null, ECollections.emptyEList, newBasicEList(text.newLostAndFound(0))))
 	}
 
 	def protected dispatch convertSourceElement(STAlgorithm algorithm) {

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.util
 
+import java.util.Optional
 import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -19,15 +20,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 
 class STAlgorithmReconciler implements STCoreReconciler {
 
-	override reconcile(FBType dest, EList<? extends ICallable> source) {
+	override reconcile(FBType dest, Optional<? extends STCorePartition> source) {
 		if (dest instanceof BaseFBType) {
-			dest.callables.reconcile(source)
+			if (source.isPresent) {
+				dest.callables.reconcile(source.get.callables)
+			}
 		}
 	}
 

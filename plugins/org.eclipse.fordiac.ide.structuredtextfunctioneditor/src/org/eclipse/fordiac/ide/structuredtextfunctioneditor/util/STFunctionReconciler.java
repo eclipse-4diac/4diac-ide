@@ -13,11 +13,13 @@
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.util;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -29,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
 
 public class STFunctionReconciler implements STCoreReconciler {
@@ -36,24 +39,32 @@ public class STFunctionReconciler implements STCoreReconciler {
 	private static final String DEFAULT_OUTPUT_EVENT_NAME = "CNF"; //$NON-NLS-1$
 
 	@Override
-	public void reconcile(final FBType dest, final EList<? extends ICallable> source) {
-		if (dest instanceof final FunctionFBType functionFbType) {
-			reconcile(functionFbType, source);
+	public void reconcile(final FBType dest, final Optional<? extends STCorePartition> source) {
+		if (dest instanceof final FunctionFBType functionFbType && source.isPresent()) {
+			reconcile(functionFbType, source.get());
 		}
 	}
 
-	protected static void reconcile(final FunctionFBType dest, final EList<? extends ICallable> source) {
+	protected static void reconcile(final FunctionFBType dest, final STCorePartition source) {
 		// check duplicates in source (very bad)
-		if (checkDuplicates(source)) {
+		if (checkDuplicates(source.getCallables())) {
 			return; // don't even try to attempt this or risk screwing dest up
 		}
 		// initialize
 		dest.setComment(""); //$NON-NLS-1$
 		dest.setBody(LibraryElementFactory.eINSTANCE.createSTFunctionBody());
+		// update package & imports
+		CompilerInfo compilerInfo = dest.getCompilerInfo();
+		if (compilerInfo == null) {
+			compilerInfo = LibraryElementFactory.eINSTANCE.createCompilerInfo();
+			dest.setCompilerInfo(compilerInfo);
+		}
+		compilerInfo.setPackageName(source.getPackageName());
+		ECollections.setEList(compilerInfo.getImports(), source.getImports());
 		// merge body
-		source.forEach(callable -> merge(dest, callable));
+		source.getCallables().forEach(callable -> merge(dest, callable));
 		// reconcile interface
-		if (!source.isEmpty() && source.get(0) instanceof final STFunction function) {
+		if (!source.getCallables().isEmpty() && source.getCallables().get(0) instanceof final STFunction function) {
 			reconcileInterface(dest.getInterfaceList(), function);
 		}
 	}

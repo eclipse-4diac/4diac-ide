@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.util;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -23,12 +24,15 @@ import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.services.STFunctionGrammarAccess;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
@@ -68,7 +72,7 @@ public class STFunctionPartitioner implements STCorePartitioner {
 	}
 
 	@Override
-	public EList<ICallable> partition(final XtextResource resource) {
+	public Optional<STCorePartition> partition(final XtextResource resource) {
 		if (resource.getEntryPoint() != null && resource.getEntryPoint() != grammarAccess.getSTFunctionSourceRule()) {
 			return null; // needs null to indicate an invalid partition (in contrast to an empty collection)
 		}
@@ -80,28 +84,39 @@ public class STFunctionPartitioner implements STCorePartitioner {
 	}
 
 	@SuppressWarnings("static-method") // overridable
-	protected EList<ICallable> emergencyPartition(final XtextResource resource) {
-		return ECollections.newBasicEList(newLostAndFound(getResourceText(resource), 0));
+	protected Optional<STCorePartition> emergencyPartition(final XtextResource resource) {
+		return Optional.of(new STCorePartition(null, ECollections.emptyEList(),
+				ECollections.newBasicEList(newLostAndFound(getResourceText(resource), 0))));
 	}
 
-	protected EList<ICallable> partition(final STFunctionSource source) {
+	protected Optional<STCorePartition> partition(final STFunctionSource source) {
 		try {
-			final var result = source.getFunctions().stream().map(this::convertSourceElement).filter(Objects::nonNull)
+			final var imports = source.getImports().stream().map(this::convertSourceElement).filter(Objects::nonNull)
+					.collect(Collectors.<Import, EList<Import>>toCollection(ECollections::newBasicEList));
+			final var callables = source.getFunctions().stream().map(this::convertSourceElement)
+					.filter(Objects::nonNull)
 					.collect(Collectors.<ICallable, EList<ICallable>>toCollection(ECollections::newBasicEList));
-			handleLostAndFound(source, result);
-			return result;
+			handleLostAndFound(source, callables);
+			return Optional.of(new STCorePartition(source.getName(), imports, callables));
 		} catch (final Exception e) {
 			return emergencyPartition(source); // try to salvage what we can
 		}
 	}
 
 	@SuppressWarnings("static-method") // overridable
-	protected EList<ICallable> emergencyPartition(final STFunctionSource source) {
+	protected Optional<STCorePartition> emergencyPartition(final STFunctionSource source) {
 		final String text = NodeModelUtils.getNode(source).getRootNode().getText();
 		if (text == null) {
 			throw new IllegalStateException("Cannot get text from root node"); //$NON-NLS-1$
 		}
-		return ECollections.newBasicEList(newLostAndFound(text, 0));
+		return Optional.of(new STCorePartition(null, ECollections.emptyEList(),
+				ECollections.newBasicEList(newLostAndFound(text, 0))));
+	}
+
+	protected Import convertSourceElement(final STImport decl) {
+		final var result = LibraryElementFactory.eINSTANCE.createImport();
+		result.setImportedNamespace(decl.getImportedNamespace());
+		return result;
 	}
 
 	protected org.eclipse.fordiac.ide.model.libraryElement.STFunction convertSourceElement(final STFunction function) {
