@@ -33,10 +33,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -622,10 +622,8 @@ class FBNetworkImporter extends CommonElementImporter {
 		return null;
 	}
 
-	/**
-	 * Check if the element that contains the fbnetwork has an interface element
-	 * with the given name. this is needed for subapps, cfbs, devices and resources
-	 */
+	/** Check if the element that contains the fbnetwork has an interface element with the given name. this is needed
+	 * for subapps, cfbs, devices and resources */
 	protected IInterfaceElement getContainingInterfaceElement(final String interfaceElement, final EClass conType,
 			final boolean isInput) {
 		return getInterfaceElement(interfaceList, interfaceElement, conType, !isInput); // for connections to the
@@ -635,39 +633,34 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	private static IInterfaceElement getInterfaceElement(final InterfaceList il, final String interfaceElement,
 			final EClass conType, final boolean isInput) {
-		final EList<? extends IInterfaceElement> ieList = getInterfaceElementList(il, conType, isInput);
-		for (final IInterfaceElement ie : ieList) {
-			if (ie.getName().equals(interfaceElement)) {
-				return ie;
-			}
-		}
-		return null;
+		final Stream<? extends IInterfaceElement> ies = getInterfaceElementList(il, conType, isInput);
+		return ies.filter(ie -> ie.getName().equals(interfaceElement)).findAny().orElse(null);
 	}
 
-	private static EList<? extends IInterfaceElement> getInterfaceElementList(final InterfaceList il,
+	private static Stream<? extends IInterfaceElement> getInterfaceElementList(final InterfaceList il,
 			final EClass conType, final boolean isInput) {
 		if (isInput) {
 			if (LibraryElementPackage.eINSTANCE.getEventConnection() == conType) {
-				return il.getEventInputs();
+				return il.getEventInputs().stream();
 			}
 			if (LibraryElementPackage.eINSTANCE.getDataConnection() == conType) {
-				return il.getInputVars();
+				return Stream.concat(il.getInputVars().stream(), il.getInOutVars().stream());
 			}
 			if (LibraryElementPackage.eINSTANCE.getAdapterConnection().equals(conType)) {
-				return il.getSockets();
+				return il.getSockets().stream();
 			}
 		} else {
 			if (LibraryElementPackage.eINSTANCE.getEventConnection() == conType) {
-				return il.getEventOutputs();
+				return il.getEventOutputs().stream();
 			}
 			if (LibraryElementPackage.eINSTANCE.getDataConnection() == conType) {
-				return il.getOutputVars();
+				return Stream.concat(il.getOutputVars().stream(), il.getOutMappedInOutVars().stream());
 			}
 			if (LibraryElementPackage.eINSTANCE.getAdapterConnection().equals(conType)) {
-				return il.getPlugs();
+				return il.getPlugs().stream();
 			}
 		}
-		return ECollections.emptyEList();
+		return Stream.empty();
 	}
 
 	protected FBNetworkElement findFBNetworkElement(final String fbName) {
@@ -711,12 +704,10 @@ class FBNetworkImporter extends CommonElementImporter {
 		return variable;
 	}
 
-	/**
-	 * returns an valid dx, dy integer value
+	/** returns an valid dx, dy integer value
 	 *
 	 * @param value
-	 * @return if value is valid the converted int of that otherwise 0
-	 */
+	 * @return if value is valid the converted int of that otherwise 0 */
 	private static int parseConnectionValue(final String value) {
 		try {
 			return CoordinateConverter.INSTANCE.convertFrom1499XML(value);
