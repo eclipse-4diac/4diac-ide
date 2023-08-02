@@ -21,10 +21,10 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -56,8 +56,8 @@ public class STFunctionPartitioner implements STCorePartitioner {
 	private IEObjectDocumentationProvider documentationProvider;
 
 	@Override
-	public String combine(final FBType fbType) {
-		if (fbType instanceof final FunctionFBType functionFbType) {
+	public String combine(final LibraryElement libraryElement) {
+		if (libraryElement instanceof final FunctionFBType functionFbType) {
 			return combine(functionFbType);
 		}
 		return ""; //$NON-NLS-1$
@@ -72,9 +72,9 @@ public class STFunctionPartitioner implements STCorePartitioner {
 	}
 
 	@Override
-	public Optional<STCorePartition> partition(final XtextResource resource) {
+	public Optional<? extends STCorePartition> partition(final XtextResource resource) {
 		if (resource.getEntryPoint() != null && resource.getEntryPoint() != grammarAccess.getSTFunctionSourceRule()) {
-			return null; // needs null to indicate an invalid partition (in contrast to an empty collection)
+			return Optional.empty();
 		}
 		final var source = resource.getContents().get(0);
 		if (source instanceof final STFunctionSource functionSource) {
@@ -84,32 +84,35 @@ public class STFunctionPartitioner implements STCorePartitioner {
 	}
 
 	@SuppressWarnings("static-method") // overridable
-	protected Optional<STCorePartition> emergencyPartition(final XtextResource resource) {
-		return Optional.of(new STCorePartition(null, ECollections.emptyEList(),
-				ECollections.newBasicEList(newLostAndFound(getResourceText(resource), 0))));
+	protected Optional<? extends STCorePartition> emergencyPartition(final XtextResource resource) {
+		final String text = getResourceText(resource);
+		return Optional.of(new STFunctionPartition(null, ECollections.emptyEList(), text,
+				ECollections.newBasicEList(newLostAndFound(text, 0))));
 	}
 
-	protected Optional<STCorePartition> partition(final STFunctionSource source) {
+	protected Optional<? extends STCorePartition> partition(final STFunctionSource source) {
 		try {
+			final var node = NodeModelUtils.findActualNodeFor(source);
+			final var text = node != null ? node.getText() : null;
 			final var imports = source.getImports().stream().map(this::convertSourceElement).filter(Objects::nonNull)
 					.collect(Collectors.<Import, EList<Import>>toCollection(ECollections::newBasicEList));
 			final var callables = source.getFunctions().stream().map(this::convertSourceElement)
 					.filter(Objects::nonNull)
 					.collect(Collectors.<ICallable, EList<ICallable>>toCollection(ECollections::newBasicEList));
 			handleLostAndFound(source, callables);
-			return Optional.of(new STCorePartition(source.getName(), imports, callables));
+			return Optional.of(new STFunctionPartition(source.getName(), imports, text, callables));
 		} catch (final Exception e) {
 			return emergencyPartition(source); // try to salvage what we can
 		}
 	}
 
 	@SuppressWarnings("static-method") // overridable
-	protected Optional<STCorePartition> emergencyPartition(final STFunctionSource source) {
+	protected Optional<? extends STCorePartition> emergencyPartition(final STFunctionSource source) {
 		final String text = NodeModelUtils.getNode(source).getRootNode().getText();
 		if (text == null) {
 			throw new IllegalStateException("Cannot get text from root node"); //$NON-NLS-1$
 		}
-		return Optional.of(new STCorePartition(null, ECollections.emptyEList(),
+		return Optional.of(new STFunctionPartition(null, ECollections.emptyEList(), text,
 				ECollections.newBasicEList(newLostAndFound(text, 0))));
 	}
 

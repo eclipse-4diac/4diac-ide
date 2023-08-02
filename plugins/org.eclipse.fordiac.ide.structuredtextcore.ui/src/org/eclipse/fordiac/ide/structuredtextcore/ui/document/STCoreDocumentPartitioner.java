@@ -20,5 +20,5 @@ import org.eclipse.xtext.ui.editor.model.XtextDocument;
 
 public interface STCoreDocumentPartitioner extends STCorePartitioner {
 
-	Optional<STCorePartition> partition(XtextDocument document);
+	Optional<? extends STCorePartition> partition(XtextDocument document);
 }

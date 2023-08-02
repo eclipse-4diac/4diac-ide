@@ -51,7 +51,7 @@ class STAlgorithmConditionEditedResourceProvider implements IEditedResourceProvi
 		resourceSet.resources.add(resource)
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		resource.entryPoint = parser.grammarAccess.STExpressionSourceRule
-		resource.fbType = fbType
+		resource.libraryElement = fbType
 		resource.additionalContent.addAll(additionalContent)
 		resource.defaultLoadOptions.putAll(#{
 			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,

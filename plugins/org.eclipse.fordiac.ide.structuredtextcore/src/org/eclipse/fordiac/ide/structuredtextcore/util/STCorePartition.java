@@ -16,19 +16,18 @@ import java.util.Objects;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 
 public class STCorePartition {
 
 	private final String packageName;
 	private final EList<Import> imports;
-	private final EList<ICallable> callables;
+	private final String originalSource;
 
-	public STCorePartition(final String packageName, final EList<Import> imports, final EList<ICallable> callables) {
+	public STCorePartition(final String packageName, final EList<Import> imports, final String originalSource) {
 		this.packageName = packageName;
 		this.imports = Objects.requireNonNullElseGet(imports, ECollections::emptyEList);
-		this.callables = Objects.requireNonNullElseGet(callables, ECollections::emptyEList);
+		this.originalSource = originalSource;
 	}
 
 	public String getPackageName() {
@@ -39,13 +38,12 @@ public class STCorePartition {
 		return imports;
 	}
 
-	public EList<ICallable> getCallables() {
-		return callables;
+	public String getOriginalSource() {
+		return originalSource;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("STCorePartition [packageName=%s, imports=%s, callables=%s]", packageName, imports, //$NON-NLS-1$
-				callables);
+		return String.format("STCorePartition [packageName=%s, imports=%s]", packageName, imports); //$NON-NLS-1$
 	}
 }

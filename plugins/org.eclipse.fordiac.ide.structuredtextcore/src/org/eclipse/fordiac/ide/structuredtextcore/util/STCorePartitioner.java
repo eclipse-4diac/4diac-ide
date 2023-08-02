@@ -14,11 +14,11 @@ package org.eclipse.fordiac.ide.structuredtextcore.util;
 
 import java.util.Optional;
 
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.xtext.resource.XtextResource;
 
 public interface STCorePartitioner {
-	String combine(FBType fbType);
+	String combine(LibraryElement libraryElement);
 
-	Optional<STCorePartition> partition(XtextResource resource);
+	Optional<? extends STCorePartition> partition(XtextResource resource);
 }

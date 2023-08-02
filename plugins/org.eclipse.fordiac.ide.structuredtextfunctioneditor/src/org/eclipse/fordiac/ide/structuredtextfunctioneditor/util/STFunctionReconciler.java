@@ -21,10 +21,10 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
@@ -39,13 +39,14 @@ public class STFunctionReconciler implements STCoreReconciler {
 	private static final String DEFAULT_OUTPUT_EVENT_NAME = "CNF"; //$NON-NLS-1$
 
 	@Override
-	public void reconcile(final FBType dest, final Optional<? extends STCorePartition> source) {
-		if (dest instanceof final FunctionFBType functionFbType && source.isPresent()) {
-			reconcile(functionFbType, source.get());
+	public void reconcile(final LibraryElement dest, final Optional<? extends STCorePartition> source) {
+		if (dest instanceof final FunctionFBType functionFbType && source.isPresent()
+				&& source.get() instanceof final STFunctionPartition stFunctionPartition) {
+			reconcile(functionFbType, stFunctionPartition);
 		}
 	}
 
-	protected static void reconcile(final FunctionFBType dest, final STCorePartition source) {
+	protected static void reconcile(final FunctionFBType dest, final STFunctionPartition source) {
 		// check duplicates in source (very bad)
 		if (checkDuplicates(source.getCallables())) {
 			return; // don't even try to attempt this or risk screwing dest up
@@ -64,7 +65,13 @@ public class STFunctionReconciler implements STCoreReconciler {
 		// merge body
 		source.getCallables().forEach(callable -> merge(dest, callable));
 		// reconcile interface
-		if (!source.getCallables().isEmpty() && source.getCallables().get(0) instanceof final STFunction function) {
+		reconcileInterface(dest, source);
+	}
+
+	protected static void reconcileInterface(final FunctionFBType dest, final STFunctionPartition source) {
+		if (!source.getCallables().isEmpty()
+				&& source.getCallables().stream().filter(callable -> dest.getName().equals(callable.getName()))
+						.findFirst().orElse(source.getCallables().get(0)) instanceof final STFunction function) {
 			reconcileInterface(dest.getInterfaceList(), function);
 		}
 	}

@@ -10,18 +10,24 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.globalconstantseditor.ui.document;
+package org.eclipse.fordiac.ide.structuredtextcore.ui.document;
 
-import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocument;
-import org.eclipse.xtext.ui.editor.model.DocumentTokenSource;
-import org.eclipse.xtext.ui.editor.model.edit.ITextEditComposer;
+import org.eclipse.xtext.Constants;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
-public class GlobalConstantsDocument extends LibraryElementXtextDocument {
+/** @deprecated Use {@link LibraryElementXtextDocumentUpdater} directly */
+@Deprecated(forRemoval = true)
+public class FBTypeXtextDocumentUpdater extends LibraryElementXtextDocumentUpdater {
 
 	@Inject
-	public GlobalConstantsDocument(final DocumentTokenSource tokenSource, final ITextEditComposer composer) {
-		super(tokenSource, composer);
+	public FBTypeXtextDocumentUpdater(@Named(Constants.LANGUAGE_NAME) final String name) {
+		super(name);
+	}
+
+	@Override
+	public FBTypeXtextDocument getDocument() {
+		return (FBTypeXtextDocument) super.getDocument();
 	}
 }

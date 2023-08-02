@@ -14,9 +14,9 @@ package org.eclipse.fordiac.ide.structuredtextcore.util;
 
 import java.util.Optional;
 
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public interface STCoreReconciler {
 
-	void reconcile(FBType dest, Optional<? extends STCorePartition> source);
+	void reconcile(LibraryElement dest, Optional<? extends STCorePartition> source);
 }

@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionPartition;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionPartitioner;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
@@ -25,7 +26,7 @@ import org.eclipse.xtext.ui.editor.model.XtextDocument;
 public class STFunctionDocumentPartitioner extends STFunctionPartitioner implements STCoreDocumentPartitioner {
 
 	@Override
-	public Optional<STCorePartition> partition(final XtextDocument document) {
+	public Optional<? extends STCorePartition> partition(final XtextDocument document) {
 		try {
 			return document.readOnly(resource -> {
 				if (resource.getModificationStamp() != document.getModificationStamp()) {
@@ -39,18 +40,18 @@ public class STFunctionDocumentPartitioner extends STFunctionPartitioner impleme
 	}
 
 	@SuppressWarnings("static-method") // overridable
-	protected Optional<STCorePartition> emergencyPartition(final XtextDocument document) {
-		return Optional.of(new STCorePartition(null, ECollections.emptyEList(),
+	protected Optional<? extends STCorePartition> emergencyPartition(final XtextDocument document) {
+		return Optional.of(new STFunctionPartition(null, ECollections.emptyEList(), document.get(),
 				ECollections.newBasicEList(newLostAndFound(document.get(), 0))));
 	}
 
 	@Override
-	protected Optional<STCorePartition> emergencyPartition(final XtextResource resource) {
+	protected Optional<? extends STCorePartition> emergencyPartition(final XtextResource resource) {
 		throw new UnsupportedOperationException(); // always get it from the document instead
 	}
 
 	@Override
-	protected Optional<STCorePartition> emergencyPartition(final STFunctionSource source) {
+	protected Optional<? extends STCorePartition> emergencyPartition(final STFunctionSource source) {
 		throw new UnsupportedOperationException(); // always get it from the document instead
 	}
 }

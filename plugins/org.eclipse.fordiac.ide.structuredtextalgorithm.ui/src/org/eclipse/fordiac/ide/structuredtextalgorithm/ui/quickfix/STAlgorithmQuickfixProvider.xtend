@@ -73,10 +73,10 @@ class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 			if (container instanceof STAlgorithmSource) {
 				val resource = container.eResource
 				if (resource instanceof STAlgorithmResource) {
-					val fbType = resource.fbType
-					if (fbType instanceof SimpleFBType) {
+					val libraryElement = resource.libraryElement
+					if (libraryElement instanceof SimpleFBType) {
 						container.elements.removeIf [ sourceElement |
-							sourceElement instanceof STAlgorithm && !fbType.interfaceList.eventInputs.exists [ event |
+							sourceElement instanceof STAlgorithm && !libraryElement.interfaceList.eventInputs.exists [ event |
 								event.name == sourceElement.name
 							]
 						]
@@ -108,12 +108,12 @@ class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 			]
 
 			val resource = varContainer.eResource
-			val BaseFBType fbType = (resource instanceof STAlgorithmResource)
-					? (resource as STAlgorithmResource).fbType as BaseFBType
+			val libraryElement = resource instanceof STAlgorithmResource
+					? resource.libraryElement
 					: null // As we are in an Algorithm editor, we are always in a BaseFBType (Simple or Basic)
-			if (fbType !== null) {
-				val iList = fbType.interfaceList
-				val fbVarCandidates = Iterables.concat(iList.inputVars, iList.outputVars, fbType.internalVars)
+			if (libraryElement instanceof BaseFBType) {
+				val iList = libraryElement.interfaceList
+				val fbVarCandidates = Iterables.concat(iList.inputVars, iList.outputVars, libraryElement.internalVars)
 				fbVarCandidates.filter[similarityMatcher.isSimilar(issueString, it.name)].forEach [
 					val name = it.name
 					acceptor.accept(issue, "Change to existing variable " + "\'" + name + "\'",

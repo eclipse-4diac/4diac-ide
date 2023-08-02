@@ -20,8 +20,8 @@ import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
-import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
@@ -46,8 +46,8 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 	@Inject
 	extension IEObjectDocumentationProvider documentationProvider
 
-	override String combine(FBType fbType) {
-		if(fbType instanceof BaseFBType) fbType.combine else ""
+	override String combine(LibraryElement libraryElement) {
+		if(libraryElement instanceof BaseFBType) libraryElement.combine else ""
 	}
 
 	def String combine(BaseFBType fbType) {
@@ -72,9 +72,9 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 
 	def dispatch String toSTText(org.eclipse.fordiac.ide.model.libraryElement.STMethod method) { method.text }
 
-	override Optional<STCorePartition> partition(XtextResource resource) {
+	override Optional<? extends STCorePartition> partition(XtextResource resource) {
 		if(resource.entryPoint !== null && resource.entryPoint !== STAlgorithmSourceRule) {
-			return null;
+			return Optional.empty;
 		}
 		val source = resource.contents.get(0)
 		if (source instanceof STAlgorithmSource) {
@@ -84,33 +84,33 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 		}
 	}
 
-	def protected Optional<STCorePartition> getEmergencyPartition(XtextResource resource) {
+	def protected Optional<? extends STCorePartition> getEmergencyPartition(XtextResource resource) {
 		val stream = new ByteArrayOutputStream
 		resource.save(stream, emptyMap)
 		val text = new String(stream.toByteArray, resource.encoding)
 		if (text.nullOrEmpty) {
 			throw new IllegalStateException("Cannot serialize contents from resource")
 		}
-		Optional.of(new STCorePartition(null, ECollections.emptyEList, newBasicEList(text.newLostAndFound(0))))
+		Optional.of(new STAlgorithmPartition(null, ECollections.emptyEList, text, newBasicEList(text.newLostAndFound(0))))
 	}
 
-	def Optional<STCorePartition> partition(STAlgorithmSource source) {
+	def Optional<? extends STCorePartition> partition(STAlgorithmSource source) {
 		try {
 			val result = source.elements.map[convertSourceElement].filterNull.<ICallable>newBasicEList
 			source.handleLostAndFound(result) // salvage unclaimed content
 			result.handleDuplicates // handle duplicate names
-			Optional.of(new STCorePartition(null, ECollections.emptyEList, result))
+			Optional.of(new STAlgorithmPartition(null, ECollections.emptyEList, source.node?.text, result))
 		} catch (Exception e) {
 			source.emergencyPartition // try to salvage what we can
 		}
 	}
 
-	def protected Optional<STCorePartition> getEmergencyPartition(STAlgorithmSource source) {
+	def protected Optional<? extends STCorePartition> getEmergencyPartition(STAlgorithmSource source) {
 		val text = source.node?.rootNode?.text
 		if (text.nullOrEmpty) {
 			throw new IllegalStateException("Cannot get text from root node")
 		}
-		Optional.of(new STCorePartition(null, ECollections.emptyEList, newBasicEList(text.newLostAndFound(0))))
+		Optional.of(new STAlgorithmPartition(null, ECollections.emptyEList, text, newBasicEList(text.newLostAndFound(0))))
 	}
 
 	def protected dispatch convertSourceElement(STAlgorithm algorithm) {

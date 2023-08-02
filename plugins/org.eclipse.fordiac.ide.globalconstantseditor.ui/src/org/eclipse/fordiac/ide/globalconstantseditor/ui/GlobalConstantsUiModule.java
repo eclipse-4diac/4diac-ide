@@ -15,19 +15,21 @@
 package org.eclipse.fordiac.ide.globalconstantseditor.ui;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocument;
-import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocumentProvider;
-import org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.reconciler.GlobalConstantsDocumentReconcileStrategy;
-import org.eclipse.fordiac.ide.globalconstantseditor.ui.resource.GlobalConstantsResourceForIEditorInputFactory;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuickAssistProcessor;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDocumentReconcileStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceForIEditorInputFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator;
@@ -76,16 +78,20 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 	}
 
 	public Class<? extends XtextDocumentProvider> bindXtextDocumentProvider() {
-		return GlobalConstantsDocumentProvider.class;
+		return STCoreDocumentProvider.class;
+	}
+
+	public Class<? extends STCoreDocumentPartitioner> bindSTCoreDocumentPartitioner() {
+		return GlobalConstantsDocumentPartitioner.class;
 	}
 
 	@Override
 	public Class<? extends IResourceForEditorInputFactory> bindIResourceForEditorInputFactory() {
-		return GlobalConstantsResourceForIEditorInputFactory.class;
+		return STCoreResourceForIEditorInputFactory.class;
 	}
 
 	public Class<? extends XtextDocumentReconcileStrategy> bindXtextDocumentReconcileStrategy() {
-		return GlobalConstantsDocumentReconcileStrategy.class;
+		return STCoreDocumentReconcileStrategy.class;
 	}
 
 	public Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {

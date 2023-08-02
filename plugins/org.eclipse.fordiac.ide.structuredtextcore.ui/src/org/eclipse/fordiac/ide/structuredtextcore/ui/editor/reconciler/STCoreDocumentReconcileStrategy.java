@@ -10,21 +10,25 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.reconciler;
+package org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.fordiac.ide.globalconstantseditor.resource.GlobalConstantsResource;
-import org.eclipse.fordiac.ide.globalconstantseditor.util.GlobalConstantsPartitioner;
-import org.eclipse.fordiac.ide.globalconstantseditor.util.GlobalConstantsReconciler;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy;
 
 import com.google.inject.Inject;
 
-public class GlobalConstantsDocumentReconcileStrategy extends XtextDocumentReconcileStrategy {
+public class STCoreDocumentReconcileStrategy extends XtextDocumentReconcileStrategy {
 	@Inject
-	private GlobalConstantsPartitioner partitioner;
+	private STCorePartitioner partitioner;
+
+	@Inject
+	private STCoreReconciler reconciler;
 
 	@Override
 	protected void postParse(final XtextResource resource, final IProgressMonitor monitor) {
@@ -32,13 +36,15 @@ public class GlobalConstantsDocumentReconcileStrategy extends XtextDocumentRecon
 		if (monitor.isCanceled()) {
 			return;
 		}
-		if (resource instanceof final GlobalConstantsResource globalConstantsResource) {
-			final var globalConstants = globalConstantsResource.getGlobalConstants();
-			if (globalConstants != null) {
+		if (resource instanceof final STCoreResource stCoreResource) {
+			final LibraryElement libraryElement = stCoreResource.getLibraryElement();
+			if (libraryElement != null) {
 				final var partition = partitioner.partition(resource);
-				Display.getDefault()
-						.asyncExec(() -> GlobalConstantsReconciler.reconcile(globalConstants, partition, null));
+				if (partition.isPresent()) {
+					Display.getDefault().asyncExec(() -> reconciler.reconcile(libraryElement, partition));
+				}
 			}
 		}
 	}
+
 }

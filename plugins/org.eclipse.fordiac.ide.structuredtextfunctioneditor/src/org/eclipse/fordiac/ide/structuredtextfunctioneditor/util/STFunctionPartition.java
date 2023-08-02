@@ -10,26 +10,23 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.globalconstantseditor.util;
+package org.eclipse.fordiac.ide.structuredtextfunctioneditor.util;
 
-import java.util.Objects;
-
-import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 
-public class GlobalConstantsPartition extends STCorePartition {
-	private final EList<VarDeclaration> constants;
+public class STFunctionPartition extends STCorePartition {
+	private final EList<ICallable> callables;
 
-	public GlobalConstantsPartition(final String packageName, final EList<Import> imports, final String originalSource,
-			final EList<VarDeclaration> constants) {
+	public STFunctionPartition(final String packageName, final EList<Import> imports, final String originalSource,
+			final EList<ICallable> callables) {
 		super(packageName, imports, originalSource);
-		this.constants = Objects.requireNonNullElseGet(constants, ECollections::emptyEList);
+		this.callables = callables;
 	}
 
-	public EList<VarDeclaration> getConstants() {
-		return constants;
+	public EList<ICallable> getCallables() {
+		return callables;
 	}
 }
