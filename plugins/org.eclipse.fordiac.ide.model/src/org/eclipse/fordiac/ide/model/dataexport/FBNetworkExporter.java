@@ -125,6 +125,7 @@ class FBNetworkExporter extends CommonElementExporter {
 				CoordinateConverter.INSTANCE.convertTo1499XML(group.getWidth()));
 		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE,
 				CoordinateConverter.INSTANCE.convertTo1499XML(group.getHeight()));
+		getWriter().writeAttribute(LibraryElementTags.LOCKED_ATTRIBUTE, Boolean.toString(group.isLocked()));
 	}
 
 	private void addFBNetworkElementChildren(final FBNetworkElement fbnElement) throws XMLStreamException {
@@ -153,7 +154,6 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 	}
 
-
 	private void addSubappHeightAndWidthAttributes(final SubApp subApp) throws XMLStreamException {
 		if (subApp.getWidth() != 0) {
 			addAttributeElement(LibraryElementTags.WIDTH_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL.getName(),
@@ -171,12 +171,11 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {
 		if (!(fbnElement.getType() instanceof AdapterFBType)) {
-			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB))
-			{
+			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB)) {
 				return LibraryElementTags.FB_ELEMENT;
 			}
 
-			if(fbnElement instanceof ErrorMarkerFBNElement) {
+			if (fbnElement instanceof ErrorMarkerFBNElement) {
 				if (fbnElement.getTypeEntry() instanceof SubAppTypeEntryImpl) {
 					return LibraryElementTags.SUBAPP_ELEMENT;
 				}
@@ -250,7 +249,8 @@ class FBNetworkExporter extends CommonElementExporter {
 		return !((fbNetworkElement instanceof ErrorMarkerFBNElement) && (fbNetworkElement.getTypeEntry() == null));
 	}
 
-	private static String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement, final FBNetwork fbNetwork) {
+	private static String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement,
+			final FBNetwork fbNetwork) {
 		String retVal = ""; //$NON-NLS-1$
 		if ((null != interfaceElement.getFBNetworkElement())
 				&& (interfaceElement.getFBNetworkElement().getFbNetwork() == fbNetwork)) {
@@ -308,11 +308,12 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addPinVarConfigurationAttribute(final FBNetworkElement fbnElement) throws XMLStreamException {
-		for (final VarDeclaration inVar :  fbnElement.getInterface().getInputVars()) {
+		for (final VarDeclaration inVar : fbnElement.getInterface().getInputVars()) {
 			if (inVar.isVarConfig()) {
 				final Attribute varconfigurationAttribute = inVar.getAttribute(LibraryElementTags.VAR_CONFIG);
 				if (varconfigurationAttribute != null) {
-					addAttributeElement(varconfigurationAttribute.getName(), varconfigurationAttribute.getType().getName(),
+					addAttributeElement(varconfigurationAttribute.getName(),
+							varconfigurationAttribute.getType().getName(),
 							inVar.getName() + ":" + varconfigurationAttribute.getValue(), //$NON-NLS-1$
 							varconfigurationAttribute.getComment());
 				}

@@ -696,12 +696,15 @@
           <count value="1" />
           <iterate operator="and"
                    ifEmpty="false">
-            <or>
-              <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
-              </instanceof>
-              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
-              </instanceof>
-            </or>
+            <and>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
+              		</instanceof>
+              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+              		</instanceof>
+            	</or>
+            	<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
+            </and>
           </iterate>
         </with>
       </activeWhen>
@@ -840,6 +843,9 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent" />
+        <visibleWhen checkEnabled="false">
+	      <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
+        </visibleWhen>
       <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"/>
@@ -848,10 +854,13 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct"
                label="Extract Struct">
-        <visibleWhen checkEnabled="true">
-          <with variable="activeEditor">
-            <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
-          </with>
+        <visibleWhen checkEnabled="false">
+          <and>
+	        <with variable="activeEditor">
+	          <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
+	        </with>
+	        <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
+	      </and>
         </visibleWhen>
       </command>
       <command
@@ -881,8 +890,11 @@
                label="Extract Struct"
                style="push">
         <visibleWhen checkEnabled="true">
-          <reference definitionId="org.eclipse.fordiac.ide.application.InterfaceElementSelection">
-          </reference>
+          <and>
+            <reference definitionId="org.eclipse.fordiac.ide.application.InterfaceElementSelection">
+            </reference>
+            <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
+          </and>
         </visibleWhen>
       </command>
     </menuContribution>
@@ -890,14 +902,23 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
                label="New subapplication"
                tooltip="Create a new subapplication">
+        <visibleWhen checkEnabled="true">
+          <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
+        </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
                label="Group"
                tooltip="Create a new group">
+        <visibleWhen checkEnabled="true">
+          <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
+        </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
                label="Comment"
                tooltip="Create a new comment">
+        <visibleWhen checkEnabled="true">
+          <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
+        </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
                label="Ungroup"
@@ -921,8 +942,14 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
                label="Toggle Connection Visibility">
+        <visibleWhen checkEnabled="false">
+          <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
+        </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.trim" >
+        <visibleWhen checkEnabled="false">
+          <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
+        </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.defineFbInterfaceConstraint" >
           <visibleWhen checkEnabled="true">
@@ -1099,7 +1126,10 @@
           <with variable="selection">
             <count value="1" />
             <iterate ifEmpty="false">
-            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Group" />
+            	<and>
+            		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Group" />
+            		<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
+            	</and>
             </iterate>
           </with>
         </visibleWhen>
@@ -1109,17 +1139,22 @@
           <with variable="selection">
             <count value="1" />
             <iterate ifEmpty="false">
-            	<or>
-            		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Group" />
-            		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.SubApp" />
-        		</or>
+            	<and>
+	            	<or>
+	            		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Group" />
+	            		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.SubApp" />
+	        		</or>
+	        		<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
+	        	</and>
             </iterate>
           </with>
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
                label="Toggle Connection Visibility">
-        <visibleWhen checkEnabled="true"></visibleWhen>
+        <visibleWhen checkEnabled="false">
+        	<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
+        </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp">
         <visibleWhen checkEnabled="true">
@@ -1163,6 +1198,7 @@
           			<and>
         				<adapt type="org.eclipse.fordiac.ide.model.libraryElement.SubApp"/>
         				<test property="org.eclipse.fordiac.ide.application.utilities.isSubAppNestedInGroup" />
+        				<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
         			</and>
     			</iterate>
      	   </with>
@@ -1176,7 +1212,10 @@
            <with variable="selection">
             	<count value="1" />
           		<iterate ifEmpty="false">
-            		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Group"/>
+          			<and>
+            			<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Group"/>
+            			<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
+            		</and>
          	   </iterate>
      	   </with>
 		</visibleWhen>		
@@ -1340,10 +1379,13 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType">
         <visibleWhen checkEnabled="true">
-          <or>
-            <reference definitionId="org.eclipse.fordiac.ide.application.SubAppSelection" />
-            <reference definitionId="org.eclipse.fordiac.ide.application.InsideInstanceViewer" />
-          </or>
+        	<and>
+	          <or>
+	            <reference definitionId="org.eclipse.fordiac.ide.application.SubAppSelection" />
+	            <reference definitionId="org.eclipse.fordiac.ide.application.InsideInstanceViewer" />
+	          </or>
+	          <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
+	        </and>
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp">
@@ -1563,6 +1605,12 @@
                     id="org.eclipse.fordiac.ide.application.utilities.fBInterfaceElementIsFreeAndPartOfSubapp"
                     namespace="org.eclipse.fordiac.ide.application.utilities"
                     properties="isFBInterfaceElementIsFreeAndPartOfSubapp"
+                    type="java.lang.Object">
+    </propertyTester>
+    <propertyTester class="org.eclipse.fordiac.ide.application.utilities.IsNoReadOnlyEditorTester"
+                    id="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditorTester"
+                    namespace="org.eclipse.fordiac.ide.application.utilities"
+                    properties="isNoReadOnlyEditor"
                     type="java.lang.Object">
     </propertyTester>
   </extension>
