@@ -18,6 +18,11 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestCase;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestEccGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestState;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestSuite;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -28,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
@@ -35,30 +41,26 @@ import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.xtext.common.services.Ecore2XtextTerminalConverters;
 
 public class TestFbGenerator {
 	private final FBType sourceType;
-	private final Service service;
 	private BasicFBType destinationType;
 	private TypeEntry destinationEntry;
+	private TestSuite testSuite;
 
 	public TestFbGenerator(final FBType type) {
 		this.sourceType = type;
-		this.service = type.getService();
+		testSuite = TestSuite.createTestSuite(type);
 	}
 
 	public BasicFBType generateTestFb() {
-		destinationType = createDestinationType();
-		createOutputFile();
-		createTestCases();
-
+		createDestinationType();
+		createFBInOutputs();
 		return destinationType;
-	}
-
-	private void createOutputFile() {
-		destinationEntry = null;
 	}
 
 	private BasicFBType createDestinationType() {
@@ -78,6 +80,9 @@ public class TestFbGenerator {
 
 		destinationType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		destinationType.setName(sourceType.getName() + "_TEST"); //$NON-NLS-1$
+		
+		
+		destinationType.setService(LibraryElementFactory.eINSTANCE.createService());
 
 		final IProject project = sourceType.getTypeLibrary().getProject();
 		final IFolder folder = project.getFolder("Type Library"); //$NON-NLS-1$
@@ -88,22 +93,34 @@ public class TestFbGenerator {
 
 		return destinationType;
 	}
+	
+	private void createFBInOutputs() {
 
-	private void createTestCases() {
-		for (final ServiceSequence seq : service.getServiceSequence()) {
-			createTestCase(seq);
+		int caseCount = 0;
+		for (TestCase testCase : testSuite.getTestCases()) {
+			createInOutputEvents(testCase, caseCount);
+			caseCount++;
 		}
+		createDataOutputs();
 	}
 
-	private void createTestCase(final ServiceSequence testCase) {
+	private void createInOutputEvents(final TestCase testCase, int caseCount) {
 		final Event input = createFbInputEvent(testCase);
 		final List<Event> outputs = createFbOutputEvents(input.getName());
-		createDataInputs();
-		createDataOutputs();
-		addEccPath(testCase, input.getName(), input, outputs);
-	}
+		
+		final Event resultEvent = LibraryElementFactory.eINSTANCE.createEvent();
+		resultEvent.setIsInput(false);
+		destinationType.getInterfaceList().getEventOutputs().add(resultEvent);
+		resultEvent.setName("RESULT"); //$NON-NLS-1$
+		resultEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
+		resultEvent.setComment("Test sequence complete"); //$NON-NLS-1$
+		outputs.add(resultEvent);
 
-	private Event createFbInputEvent(final ServiceSequence testCase) {
+		addEccPath(testCase, caseCount, input, outputs );
+	}
+	
+	
+	private Event createFbInputEvent(final TestCase testCase) {
 		final Event startEvent = LibraryElementFactory.eINSTANCE.createEvent();
 		startEvent.setIsInput(true);
 		startEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
@@ -137,81 +154,87 @@ public class TestFbGenerator {
 		return created;
 	}
 
-	private void createDataInputs() {
-		// TODO Auto-generated method stub
-
-	}
-
 	private void createDataOutputs() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private Algorithm createAlgorithm(final ServiceSequence testCase, final String testCaseName) {
-		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-		destinationType.getCallables().add(alg);
-		alg.setName(NameRepository.createUniqueName(alg, testCaseName));
-
-		final StringBuilder text = new StringBuilder();
-		text.append("ALGORITHM " + testCaseName + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		for (final ServiceTransaction t : testCase.getServiceTransaction()) {
-			// add input primitive parameters as statements
-			if (t.getInputPrimitive().getParameters() != null) {
-				text.append(t.getInputPrimitive().getParameters());
-				text.append(";"); //$NON-NLS-1$
-			}
-
-			// add output primitive parameters as statements
-			for (final OutputPrimitive o : t.getOutputPrimitive()) {
-				if (o.getParameters() != null) {
-					text.append(o.getParameters());
-					text.append(";"); //$NON-NLS-1$
-				}
-			}
+		destinationType.getInterfaceList().getOutputVars().addAll(EcoreUtil.copyAll(sourceType.getInterfaceList().getInputVars()));
+		destinationType.getInterfaceList().getOutputVars().addAll(EcoreUtil.copyAll(sourceType.getInterfaceList().getOutputVars()));
+		for (VarDeclaration varDecl : destinationType.getInterfaceList().getOutputVars()) {
+			varDecl.setIsInput(false);
 		}
-		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
-		text.append('\0');
-
-		alg.setText(text.toString());
-		return alg;
 	}
+	
 
-	private void addEccPath(final ServiceSequence testCase, final String testCaseName, final Event input,
-			final List<Event> outputs) {
+//	private Algorithm createAlgorithm(final ServiceSequence testCase, final String testCaseName) {
+//		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
+//		destinationType.getCallables().add(alg);
+//		alg.setName(NameRepository.createUniqueName(alg, testCaseName));
+//
+//		final StringBuilder text = new StringBuilder();
+//		text.append("ALGORITHM " + testCaseName + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+//		for (final ServiceTransaction t : testCase.getServiceTransaction()) {
+//			// add input primitive parameters as statements
+//			if (t.getInputPrimitive().getParameters() != null) {
+//				text.append(t.getInputPrimitive().getParameters());
+//				text.append(";"); //$NON-NLS-1$
+//			}
+//
+//			// add output primitive parameters as statements
+//			for (final OutputPrimitive o : t.getOutputPrimitive()) {
+//				if (o.getParameters() != null) {
+//					text.append(o.getParameters());
+//					text.append(";"); //$NON-NLS-1$
+//				}
+//			}
+//		}
+//		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
+//		text.append('\0');
+//
+//		alg.setText(text.toString());
+//		return alg;
+//	}
+//
+	
+	
+	private void addEccPath(final TestCase testCase,int caseCount, final Event input, final List<Event> outputs) {
+		
 		final ECC ecc = destinationType.getECC();
+		TestEccGenerator eccGenerator = new TestEccGenerator(ecc, caseCount);
+		
+		int stateCnt = 1;
+		for (TestState testState : testCase.getTestStates()) {
+			eccGenerator.createState(testCase.getName(), stateCnt);
+			eccGenerator.createTransition(input, stateCnt);
+			stateCnt++;
+		}
+		
+		
+		
+		
+		
+		
+		//final ECAction action = LibraryElementFactory.eINSTANCE.createECAction();
+		//action.setAlgorithm(createAlgorithm(testCase, testCaseName));
+		//action.setOutput(outputs.get(0));
 
-		final ECState state = LibraryElementFactory.eINSTANCE.createECState();
-		ecc.getECState().add(state);
-		state.setName(NameRepository.createUniqueName(state, testCaseName + "_S1")); //$NON-NLS-1$
-		final Position pS = LibraryElementFactory.eINSTANCE.createPosition();
-		pS.setX(200 * ecc.getECState().size());
-		pS.setY(200 * ecc.getECState().size());
-		state.setPosition(pS);
-
-		final ECAction action = LibraryElementFactory.eINSTANCE.createECAction();
-		action.setAlgorithm(createAlgorithm(testCase, testCaseName));
-		action.setOutput(outputs.get(0));
-
-		final ECTransition transition = LibraryElementFactory.eINSTANCE.createECTransition();
-		transition.setConditionEvent(input);
-		transition.setSource(ecc.getStart());
-		transition.setDestination(state);
-		ecc.getECTransition().add(transition);
-		final Position pT1 = LibraryElementFactory.eINSTANCE.createPosition();
-		pT1.setX(100 * ecc.getECState().size());
-		pT1.setY(100 * ecc.getECState().size());
-		transition.setPosition(pT1);
-
-		final ECTransition transitionBack = LibraryElementFactory.eINSTANCE.createECTransition();
-		transitionBack.setConditionEvent(null);
-		transitionBack.setConditionExpression("1"); //$NON-NLS-1$
-		transitionBack.setSource(state);
-		transitionBack.setDestination(ecc.getStart());
-		ecc.getECTransition().add(transitionBack);
-		final Position pT2 = LibraryElementFactory.eINSTANCE.createPosition();
-		pT2.setX(100 * ecc.getECState().size());
-		pT2.setY(100 * ecc.getECState().size());
-		transitionBack.setPosition(pT2);
+//		final ECTransition transition = LibraryElementFactory.eINSTANCE.createECTransition();
+//		transition.setConditionEvent(input);
+//		transition.setSource(ecc.getStart());
+//		transition.setDestination(state);
+//		ecc.getECTransition().add(transition);
+//		final Position pT1 = LibraryElementFactory.eINSTANCE.createPosition();
+//		pT1.setX(100 * ecc.getECState().size());
+//		pT1.setY(100 * ecc.getECState().size());
+//		transition.setPosition(pT1);
+//
+//		final ECTransition transitionBack = LibraryElementFactory.eINSTANCE.createECTransition();
+//		transitionBack.setConditionEvent(null);
+//		transitionBack.setConditionExpression("1"); //$NON-NLS-1$
+//		transitionBack.setSource(state);
+//		transitionBack.setDestination(ecc.getStart());
+//		ecc.getECTransition().add(transitionBack);
+//		final Position pT2 = LibraryElementFactory.eINSTANCE.createPosition();
+//		pT2.setX(100 * ecc.getECState().size());
+//		pT2.setY(100 * ecc.getECState().size());
+//		transitionBack.setPosition(pT2);
 
 		// TODO support test sequences with multiple events
 	}

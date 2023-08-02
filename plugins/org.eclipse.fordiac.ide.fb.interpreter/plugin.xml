@@ -29,7 +29,7 @@
             commandId="org.eclipse.fordiac.ide.fb.interpreter.recordExecutionTrace">
       </handler>
       <handler
-            class="org.eclipse.fordiac.ide.fb.interpreter.handler.CreateRuntimeTestFunctionBlock"
+            class="org.eclipse.fordiac.ide.fb.interpreter.handler.CreateRuntimeTestFunctionBlockHandler"
             commandId="org.eclipse.fordiac.ide.fb.interpreter.createTestFb">
       </handler>
    </extension>
