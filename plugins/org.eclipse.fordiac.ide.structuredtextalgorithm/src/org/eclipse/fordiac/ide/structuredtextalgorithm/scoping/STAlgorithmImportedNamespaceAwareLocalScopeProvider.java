@@ -15,8 +15,12 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.scoping;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
+import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.scoping.impl.ImportNormalizer;
 import org.eclipse.xtext.scoping.impl.ImportedNamespaceAwareLocalScopeProvider;
 
@@ -30,13 +34,36 @@ public class STAlgorithmImportedNamespaceAwareLocalScopeProvider extends Importe
 			final var resource = context.eResource();
 			if (resource instanceof final LibraryElementXtextResource libraryElementXtextResource) {
 				final LibraryElement libraryElement = libraryElementXtextResource.getLibraryElement();
-				if ((libraryElement != null) && (libraryElement.getName() != null)) {
-					final var fbTypeName = getQualifiedNameConverter().toQualifiedName(libraryElement.getName());
-					result.add(doCreateImportNormalizer(fbTypeName, true, ignoreCase));
+				if (libraryElement != null) {
+					if (libraryElement.getName() != null) {
+						final var fbTypeName = getQualifiedNameProvider().getFullyQualifiedName(libraryElement);
+						result.add(doCreateImportNormalizer(fbTypeName, true, ignoreCase));
+					}
+					final CompilerInfo compilerInfo = getCompilerInfo(libraryElement);
+					if (compilerInfo != null) {
+						if (compilerInfo.getPackageName() != null) {
+							final QualifiedName name = getQualifiedNameConverter()
+									.toQualifiedName(compilerInfo.getPackageName());
+							if (name != null && !name.isEmpty()) {
+								result.add(doCreateImportNormalizer(name, true, ignoreCase));
+							}
+						}
+						result.addAll(super.internalGetImportedNamespaceResolvers(compilerInfo, ignoreCase));
+					}
 				}
 			}
 		}
 		return result;
+	}
+
+	protected static CompilerInfo getCompilerInfo(final LibraryElement libraryElement) {
+		if (libraryElement instanceof final CompilableType compilableType) {
+			return compilableType.getCompilerInfo();
+		}
+		if (libraryElement instanceof final AnyDerivedType anyDerivedType) {
+			return anyDerivedType.getCompilerInfo();
+		}
+		return null;
 	}
 
 	@Override

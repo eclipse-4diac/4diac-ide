@@ -21,7 +21,7 @@ public class STFunctionQualifiedNameProvider extends STCoreQualifiedNameProvider
 
 	protected QualifiedName qualifiedName(final STFunctionSource source) {
 		if (source.eResource() instanceof final STFunctionResource resource && resource.getLibraryElement() != null) {
-			return getConverter().toQualifiedName(resource.getLibraryElement().getQualifiedName());
+			return getFullyQualifiedName(resource.getLibraryElement());
 		}
 		return null;
 	}
