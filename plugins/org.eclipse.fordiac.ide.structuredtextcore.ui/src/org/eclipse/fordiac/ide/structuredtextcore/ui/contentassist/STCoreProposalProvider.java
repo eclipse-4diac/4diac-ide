@@ -66,7 +66,8 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 		return description.getName().getSegmentCount() == 1
 				|| (STCorePackage.eINSTANCE.getSTVarDeclaration().equals(description.getEClass())
 						&& EcoreUtil.resolve(description.getEObjectOrProxy(), context.getResource())
-								.eContainer() instanceof STVarGlobalDeclarationBlock);
+								.eContainer() instanceof STVarGlobalDeclarationBlock)
+				|| LibraryElementPackage.eINSTANCE.getLibraryElement().isSuperTypeOf(description.getEClass());
 	}
 
 	@Override
