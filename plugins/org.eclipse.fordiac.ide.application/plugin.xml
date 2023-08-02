@@ -474,7 +474,7 @@
     <command
           categoryId="org.eclipse.fordiac.ide.commands.category"
           id="org.eclipse.fordiac.ide.application.defineFbInterfaceConstraint"
-          name="Define Constraint for FB Interface Pins">
+          name="Define Contract for FB Interface Pins">
     </command>
 
   </extension>

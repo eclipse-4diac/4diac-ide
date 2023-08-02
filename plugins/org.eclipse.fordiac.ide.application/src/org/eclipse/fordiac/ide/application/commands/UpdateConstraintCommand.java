@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.application.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
@@ -51,7 +52,10 @@ public class UpdateConstraintCommand extends Command {
 
 			final SubApp subapp = createNewSubapp();
 			final StringBuilder comment = new StringBuilder();
-
+			final String oldcomment = subapp.getComment();
+			if (oldcomment.indexOf("ASSUMPTION ") == 0) { //$NON-NLS-1$
+				comment.append(oldcomment + "\n"); //$NON-NLS-1$
+			}
 			comment.append("ASSUMPTION " + eventPins.get(0).getName()); //$NON-NLS-1$
 			comment.append(" occurs " + state + " ");   //$NON-NLS-1$//$NON-NLS-2$
 			comment.append(time + "ms "); //$NON-NLS-1$
@@ -109,7 +113,7 @@ public class UpdateConstraintCommand extends Command {
 			subappcmd.execute();
 		}
 		final SubApp subapp = subappcmd.getElement();
-		cncmd = new ChangeNameCommand(subapp, "_CONTRACT_" + fb.getName()); //$NON-NLS-1$
+		cncmd = new ChangeNameCommand(subapp, NameRepository.createUniqueName(subapp, "_CONTRACT_" + fb.getName())); //$NON-NLS-1$
 		if (cncmd.canExecute()) {
 			cncmd.execute();
 		}

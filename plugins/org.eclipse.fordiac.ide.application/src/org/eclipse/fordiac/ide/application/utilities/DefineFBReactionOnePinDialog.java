@@ -80,7 +80,7 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 
 		final Group group = new Group(dialogArea, SWT.FILL);
 
-		group.setText("Define constraint:"); //$NON-NLS-1$
+		group.setText(Messages.DefineFBReactionOnePinDialog_DefineAssumption);
 		group.setLayout(new GridLayout(NUM_COLUMNS, false));
 		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -110,7 +110,7 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 		label.setText(" ms"); //$NON-NLS-1$
 
 		final Label labelOffset = new Label(group, SWT.None);
-		labelOffset.setText("Specify offset"); //$NON-NLS-1$
+		labelOffset.setText(Messages.DefineFBReactionOnePinDialog_SpecifyOffset);
 		labelOffset.setVisible(false);
 
 		final Label labelOff = new Label(group, SWT.None);
@@ -158,14 +158,15 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 		}
 		inputTimeText = inputTime.getText();
 		state = inputOffsetCombo.getItem(inputOffsetCombo.getSelectionIndex());
-		String[] s = { "0", "0" }; //$NON-NLS-1$ //$NON-NLS-2$
-		if (!inputTimeText.isBlank() && inputTimeText.charAt(0) == '[') {
-			String str = inputTimeText;
-			str = str.replaceAll("\\D", " "); //$NON-NLS-1$ //$NON-NLS-2$
-			s = str.split(" "); //$NON-NLS-1$
+		final String[] strInputTime = DefineContractUtils.getTimeIntervalFromString(inputTimeText);
+		String[] strOffset = { "0", "0" };  //$NON-NLS-1$//$NON-NLS-2$
+		if (offset.isVisible()) {
+			strOffset = DefineContractUtils.getTimeIntervalFromString(offsetText);
 		}
 		if (inputTimeText.isBlank() || (offset.isVisible() && offset.getText().isBlank())
-				|| (Integer.parseInt(s[1]) > Integer.parseInt(s[2]))) {
+				|| (strInputTime.length == 2 && (Integer.parseInt(strInputTime[0]) > Integer.parseInt(strInputTime[1])))
+				|| (offset.isVisible() && strOffset.length == 2
+						&& (Integer.parseInt(strOffset[0]) > Integer.parseInt(strOffset[1])))) {
 			MessageDialog.openError(this.getShell(), Messages.DefineFBReactionOnePinDialog_Error,
 					Messages.DefineFBReactionOnePinDialog_PleaseFill);
 		} else {

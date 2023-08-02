@@ -60,13 +60,23 @@ public final class Messages extends NLS {
 
 	public static String DefineFbInterfaceConstraintHandler_ErrorMessage;
 
+	public static String DefineFbInterfaceConstraintHandler_Error;
+
+	public static String DefineFbInterfaceConstraintHandler_ErrorText;
+
 	public static String DefineFbInterfaceConstraintHandler_ErrorTitle;
 
 	public static String DefineFbInterfaceConstraintHandler_Info;
 
+	public static String DefineFbInterfaceConstraintHandler_InfoErrorGuarantee;
+
+	public static String DefineFbInterfaceConstraintHandler_ThreePinErrorMessage;
+
 	public static String DefineFbInterfaceConstraintHandler_Title;
 
 	public static String DefineFBReactionOnePinDialog_Button;
+
+	public static String DefineFBReactionOnePinDialog_DefineAssumption;
 
 	public static String DefineFBReactionOnePinDialog_DefineConstraint;
 
@@ -91,6 +101,8 @@ public final class Messages extends NLS {
 	public static String DefineFBReactionOnePinDialog_Title;
 
 	public static String DefineFBReactionOnePinDialog_Within;
+
+	public static String DefineFBReactionThreePinDialog_DefineGuarantee;
 
 	public static String DefineFBReactionTwoPinDialog_Button;
 
@@ -241,14 +253,6 @@ public final class Messages extends NLS {
 	public static String Untyped;
 
 	public static String UpdateFBTypeAction_Text;
-
-	public static String UpdateReactionCommand_Constraint;
-
-	public static String UpdateReactionCommand_Contract;
-
-	public static String UpdateReactionCommand_Guarantee;
-
-	public static String UpdateReactionCommand_Occures;
 
 	public static String PasteRecreateNotPossible;
 

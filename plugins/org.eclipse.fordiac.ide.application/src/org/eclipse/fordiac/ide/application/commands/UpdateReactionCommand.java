@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.application.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
@@ -35,11 +36,19 @@ public class UpdateReactionCommand extends Command {
 	private ChangeNameCommand cncmd;
 	private final String time;
 	private List<Event> eventPins = new ArrayList<>();
+	private final Event event;
 
 	public UpdateReactionCommand(final List<Event> eventPins, final String time) {
 		this.eventPins = eventPins;
 		this.time = time;
+		this.event = null;
 
+	}
+
+	public UpdateReactionCommand(final Event event, final List<Event> outputEvents, final String time) {
+		this.eventPins = outputEvents;
+		this.time = time;
+		this.event = event;
 	}
 
 	@Override
@@ -48,13 +57,18 @@ public class UpdateReactionCommand extends Command {
 
 			final SubApp subapp = createNewSubapp();
 			final StringBuilder comment = new StringBuilder();
-			if (eventPins.size() == 2) {
+			final String oldcomment = subapp.getComment();
+			if (oldcomment.indexOf("ASSUMPTION ") == 0) { //$NON-NLS-1$
+				comment.append(oldcomment + "\n"); //$NON-NLS-1$
+			}
+			if (event == null) {
 				comment.append("GUARANTEE Reaction(" + eventPins.get(PIN_FROM).getName() + ","   //$NON-NLS-1$//$NON-NLS-2$
 						+ eventPins.get(PIN_TO).getName() + ")");  //$NON-NLS-1$
 			} else {
-				comment.append("Constraint on Pin " + eventPins.get(PIN_FROM).getName()); //$NON-NLS-1$
+				comment.append("GUARANTEE Whenever event " + event.getName() + " occurs, then events(" //$NON-NLS-1$ //$NON-NLS-2$
+						+ eventPins.get(PIN_FROM).getName() + "," + eventPins.get(PIN_TO).getTypeName() + ") occur"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
-			comment.append(" occurs within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
+			comment.append(" within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
 
 			cccmd = new ChangeCommentCommand(subapp, comment.toString());
 			if (cccmd.canExecute()) {
@@ -107,7 +121,7 @@ public class UpdateReactionCommand extends Command {
 			subappcmd.execute();
 		}
 		final SubApp subapp = subappcmd.getElement();
-		cncmd = new ChangeNameCommand(subapp, "_CONTRACT_" + fb.getName()); //$NON-NLS-1$
+		cncmd = new ChangeNameCommand(subapp, NameRepository.createUniqueName(subapp, "_CONTRACT_" + fb.getName())); //$NON-NLS-1$
 		if (cncmd.canExecute()) {
 			cncmd.execute();
 		}

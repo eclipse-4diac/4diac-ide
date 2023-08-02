@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.UpdateConstraintCommand;
 import org.eclipse.fordiac.ide.application.commands.UpdateReactionCommand;
 import org.eclipse.fordiac.ide.application.utilities.DefineFBReactionOnePinDialog;
+import org.eclipse.fordiac.ide.application.utilities.DefineFBReactionThreePinDialog;
 import org.eclipse.fordiac.ide.application.utilities.DefineFBReactionTwoPinDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.gef.EditPart;
@@ -43,9 +44,28 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
 		final List<Event> eventPins = getSelectedPins(event);
-
-		if (eventPins.size() == 2) {
-			makeTwoPInReaction(event, eventPins);
+		if (eventPins.size() == 3) {
+			final List<Event> inputEvent = eventPins.stream().filter(Event::isIsInput).toList();
+			final List<Event> outputEvents = eventPins.stream().filter(e -> !e.isIsInput()).toList();
+			if (inputEvent.size() == 1 && outputEvents.size() == 2) {
+				final DefineFBReactionThreePinDialog dialog = new DefineFBReactionThreePinDialog(
+						HandlerUtil.getActiveShell(event), inputEvent.get(0), outputEvents);
+				String time = ""; //$NON-NLS-1$
+				if (dialog.open() != CANCEL) {
+					time = dialog.getTime();
+					final UpdateReactionCommand urcmd = new UpdateReactionCommand(inputEvent.get(0), outputEvents,
+							time);
+					if (urcmd.canExecute()) {
+						urcmd.execute();
+					}
+				}
+			} else {
+				MessageDialog.openError(HandlerUtil.getActiveShell(event),
+						Messages.DefineFbInterfaceConstraintHandler_Title,
+						Messages.DefineFbInterfaceConstraintHandler_ThreePinErrorMessage);
+			}
+		} else if (eventPins.size() == 2) {
+			makeTwoPinReaction(event, eventPins);
 
 		} else if (eventPins.size() == 1) {
 			makeOnePinConstraint(event, eventPins);
@@ -62,43 +82,57 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 
 	}
 
-	private static void makeTwoPInReaction(final ExecutionEvent event, final List<Event> eventPins) {
-		if (eventPins.get(PIN_TO).isIsInput()) {
-			eventPins.add(PIN_FROM, eventPins.get(PIN_TO));
-			eventPins.remove(2);
+	private static void makeTwoPinReaction(final ExecutionEvent event, final List<Event> eventPins) {
+		if (eventPins.get(PIN_FROM).isIsInput() && eventPins.get(PIN_TO).isIsInput()
+				|| (!eventPins.get(PIN_FROM).isIsInput() && !eventPins.get(PIN_TO).isIsInput())) {
+			MessageDialog.openError(HandlerUtil.getActiveShell(event),
+					Messages.DefineFbInterfaceConstraintHandler_Title,
+					Messages.DefineFbInterfaceConstraintHandler_InfoErrorGuarantee);
+		} else {
+			if (eventPins.get(1).isIsInput()) {
+				eventPins.add(0, eventPins.get(1));
+				eventPins.remove(2);
 
-		}
-		final DefineFBReactionTwoPinDialog dialog = new DefineFBReactionTwoPinDialog(HandlerUtil.getActiveShell(event),
-				eventPins.get(0), eventPins.get(1));
+			}
+			final DefineFBReactionTwoPinDialog dialog = new DefineFBReactionTwoPinDialog(
+					HandlerUtil.getActiveShell(event), eventPins.get(PIN_FROM), eventPins.get(PIN_TO));
 
-		String time = ""; //$NON-NLS-1$
-		if (dialog.open() != CANCEL) {
-			time = dialog.getTime();
-		}
-		final UpdateReactionCommand urcmd = new UpdateReactionCommand(eventPins, time);
-		if (urcmd.canExecute()) {
-			urcmd.execute();
+			String time = ""; //$NON-NLS-1$
+			if (dialog.open() != CANCEL) {
+				time = dialog.getTime();
+			}
+			final UpdateReactionCommand urcmd = new UpdateReactionCommand(eventPins, time);
+			if (urcmd.canExecute()) {
+				urcmd.execute();
+			}
 		}
 	}
 
 	private static void makeOnePinConstraint(final ExecutionEvent event, final List<Event> eventPins) {
-		final DefineFBReactionOnePinDialog dialog = new DefineFBReactionOnePinDialog(HandlerUtil.getActiveShell(event),
-				eventPins.get(0));
-		String time = ""; //$NON-NLS-1$
-		String offsetText = null;
-		String state = ""; //$NON-NLS-1$
-		if (dialog.open() != CANCEL) {
+		if (eventPins.get(0).isIsInput()) {
+			final DefineFBReactionOnePinDialog dialog = new DefineFBReactionOnePinDialog(
+					HandlerUtil.getActiveShell(event), eventPins.get(0));
+			String time = ""; //$NON-NLS-1$
+			String offsetText = null;
+			String state = ""; //$NON-NLS-1$
+			if (dialog.open() != CANCEL) {
 
-			time = dialog.getTime();
-			state = dialog.getState();
-			if (dialog.hasOffset()) {
-				offsetText = dialog.getOffsetText();
+				time = dialog.getTime();
+				state = dialog.getState();
+				if (dialog.hasOffset()) {
+					offsetText = dialog.getOffsetText();
+				}
 			}
+			final UpdateConstraintCommand uccmd = new UpdateConstraintCommand(eventPins, time, offsetText, state);
+			if (uccmd.canExecute()) {
+				uccmd.execute();
+			}
+		} else {
+			MessageDialog.openError(HandlerUtil.getActiveShell(event),
+					Messages.DefineFbInterfaceConstraintHandler_Error,
+					Messages.DefineFbInterfaceConstraintHandler_ErrorText);
 		}
-		final UpdateConstraintCommand uccmd = new UpdateConstraintCommand(eventPins, time, offsetText, state);
-		if (uccmd.canExecute()) {
-			uccmd.execute();
-		}
+
 	}
 
 	private static List<Event> getSelectedPins(final ExecutionEvent event) {
@@ -113,7 +147,6 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 				pins.add(eventPin);
 			}
 		}
-
 		final boolean sameFb = pins.stream().filter(ev -> ev.getFBNetworkElement() != null)
 				.allMatch(ev -> ev.getFBNetworkElement().equals(pins.get(0).getFBNetworkElement()));
 		if (sameFb) {
