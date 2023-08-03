@@ -62,7 +62,7 @@ class STMethodSupport extends StructuredTextSupport {
 	'''
 
 	def private CharSequence generateStructuredTextMethodDeclaration(STMethod method, boolean header) //
-	'''«method.returnType?.generateTypeName ?: "void"» «IF !header»FORTE_«FBType?.name»::«ENDIF»method_«method.name»(«method.generateStructuredTextMethodParameters»)'''
+	'''«method.returnType?.generateTypeName ?: "void"» «IF !header»«FBType.generateTypeName»::«ENDIF»method_«method.name»(«method.generateStructuredTextMethodParameters»)'''
 
 	def private CharSequence generateStructuredTextMethodParameters(STMethod method) //
 	'''«FOR param : method.structuredTextMethodParameters SEPARATOR ", "»«param.key.generateFeatureTypeName(param.value)» «IF param.value»&«ENDIF»«param.key.generateFeatureName»«ENDFOR»'''

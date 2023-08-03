@@ -34,7 +34,6 @@ import org.eclipse.fordiac.ide.export.forte_ng.service.ServiceInterfaceFBHeaderT
 import org.eclipse.fordiac.ide.export.forte_ng.service.ServiceInterfaceFBImplTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBImplTemplate
-import org.eclipse.fordiac.ide.export.forte_ng.struct.StructBaseTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.struct.StructuredTypeHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.struct.StructuredTypeImplTemplate
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
@@ -43,9 +42,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker
+
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
 class ForteNgExportFilter extends TemplateExportFilter {
 
@@ -58,45 +60,55 @@ class ForteNgExportFilter extends TemplateExportFilter {
 		switch (source) {
 			BasicFBType:
 				#{
-					new BasicFBHeaderTemplate(source, '''«name».h''', Paths.get("")),
-					new BasicFBImplTemplate(source, '''«name».cpp''', Paths.get(""))
+					new BasicFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
+					new BasicFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
 				}
 			SimpleFBType:
 				#{
-					new SimpleFBHeaderTemplate(source, '''«name».h''', Paths.get("")),
-					new SimpleFBImplTemplate(source, '''«name».cpp''', Paths.get(""))
+					new SimpleFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
+					new SimpleFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
 				}
 			FunctionFBType:
 				#{
-					new FunctionFBHeaderTemplate(source, '''«name».h''', Paths.get("")),
-					new FunctionFBImplTemplate(source, '''«name».cpp''', Paths.get(""))
+					new FunctionFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
+					new FunctionFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
 				}
 			CompositeFBType:
 				#{
-					new CompositeFBHeaderTemplate(source, '''«name».h''', Paths.get("")),
-					new CompositeFBImplTemplate(source, '''«name».cpp''', Paths.get(""))
+					new CompositeFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
+					new CompositeFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
 				}
 			AdapterType:
 				#{
-					new AdapterFBHeaderTemplate(source.adapterFBType, '''«name».h''', Paths.get("")),
-					new AdapterFBImplTemplate(source.adapterFBType, '''«name».cpp''', Paths.get(""))
+					new AdapterFBHeaderTemplate(source.adapterFBType, source.generateTypeInclude, Paths.get(source.generateTypePath)),
+					new AdapterFBImplTemplate(source.adapterFBType, source.generateTypeSource, Paths.get(source.generateTypePath))
 				}
 			ServiceInterfaceFBType:
 				#{
-					new ServiceInterfaceFBHeaderTemplate(source, '''«name».h''', Paths.get("")),
-					new ServiceInterfaceFBImplTemplate(source, '''«name».cpp''', Paths.get(""))
+					new ServiceInterfaceFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
+					new ServiceInterfaceFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
 				}
 			StructuredType:
 				#{
-					new StructuredTypeHeaderTemplate(source, '''«StructBaseTemplate.structuredTypeFileName(source)».h''',
-						Paths.get("")),
-					new StructuredTypeImplTemplate(source, '''«StructBaseTemplate.structuredTypeFileName(source)».cpp''',
-						Paths.get(""))
+					new StructuredTypeHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
+					new StructuredTypeImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
 				}
 			CMakeListsMarker:
 				#{
 					new CMakeListsTemplate('''CMakeLists.txt''', Paths.get(""))
 				}
+			INamedElement: {
+				val languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", source)
+				if (languageSupport !== null) {
+					#{
+						new LanguageHeaderTemplate(languageSupport, source.generateTypeInclude, Paths.get(source.generateTypePath)),
+						new LanguageImplTemplate(languageSupport, source.generateTypeSource, Paths.get(source.generateTypePath))
+					}
+				} else {
+					errors.add('''Unknown source type «source.eClass.name»''')
+					emptySet
+				}
+			}
 			default: {
 				val languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", source)
 				if (languageSupport !== null) {

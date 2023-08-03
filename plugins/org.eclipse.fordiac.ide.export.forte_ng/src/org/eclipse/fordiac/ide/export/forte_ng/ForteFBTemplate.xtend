@@ -67,9 +67,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateImplIncludes() '''
-		#include "«type.name».h"
+		#include "«fileBasename».h"
 		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-		#include "«type.name»_gen.cpp"
+		#include "«fileBasename»_gen.cpp"
 		#endif
 		
 		#include "criticalregion.h"
@@ -94,7 +94,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateFBDefinition() '''
-		DEFINE_FIRMWARE_FB(«FBClassName», «type.name.FORTEStringId»)
+		DEFINE_FIRMWARE_FB(«FBClassName», «type.generateTypeSpec»)
 		
 	'''
 
@@ -255,7 +255,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateReadInputDataDefinition() '''
-		void FORTE_«type.name»::readInputData(TEventID«IF type.interfaceList.eventInputs.exists[!with.empty]» paEIID«ENDIF») {
+		void «FBClassName»::readInputData(TEventID«IF type.interfaceList.eventInputs.exists[!with.empty]» paEIID«ENDIF») {
 		  «generateReadInputDataBody»
 		}
 	'''
@@ -293,7 +293,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateWriteOutputDataDefinition() '''
-		void FORTE_«type.name»::writeOutputData(TEventID«IF type.interfaceList.eventOutputs.exists[!with.empty]» paEIID«ENDIF») {
+		void «FBClassName»::writeOutputData(TEventID«IF type.interfaceList.eventOutputs.exists[!with.empty]» paEIID«ENDIF») {
 		  «generateWriteOutputDataBody»
 		}
 	'''
@@ -467,8 +467,8 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateInternalFBAccessors(FB fb, int index) '''
-		FORTE_«fb.type.name» &fb_«fb.name»() {
-		  return *static_cast<FORTE_«fb.type.name»*>(mInternalFBs[«index»]);
+		«fb.type.generateTypeName» &fb_«fb.name»() {
+		  return *static_cast<«fb.type.generateTypeName»*>(mInternalFBs[«index»]);
 		};
 	'''
 
@@ -511,7 +511,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		(event.inputParameters + event.outputParameters).filter(VarDeclaration)
 	}
 
-	def protected getFBClassName() '''FORTE_«type.name»'''
+	def protected getFBClassName() { className }
 
 	def generateInternalFbDefinition() '''
 		static const SCFB_FBInstanceData scmInternalFBDefinitions[];
@@ -519,7 +519,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def generateInternalFbDeclarations(BaseFBType type) '''
 		const SCFB_FBInstanceData «FBClassName»::scmInternalFBDefinitions[] = {
-		  «FOR elem : type.internalFbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.name.FORTEStringId»}«ENDFOR»
+		  «FOR elem : type.internalFbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.generateTypeSpec»}«ENDFOR»
 		};
 	'''
 }

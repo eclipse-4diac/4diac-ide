@@ -19,6 +19,8 @@ import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.model.data.StructuredType
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 
 
@@ -34,7 +36,7 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 		«generateHeaderIncludes»
 		
 		class «className» final : public CIEC_STRUCT {
-		  DECLARE_FIRMWARE_DATATYPE(«type.name»)
+		  DECLARE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain»)
 		
 		  public:
 		    «className»();

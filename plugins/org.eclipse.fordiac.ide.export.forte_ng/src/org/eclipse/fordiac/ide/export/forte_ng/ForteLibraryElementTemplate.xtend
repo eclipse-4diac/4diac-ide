@@ -44,7 +44,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		]
 	}
 
-	def protected getClassName() '''FORTE_«type.name»'''
+	def protected getClassName() { type.generateTypeName }
 
 	def protected generateHeader() '''
 		/*************************************************************************
@@ -76,7 +76,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 
 	def protected generateVariableDefinitions(List<VarDeclaration> variables, boolean const) '''
 		«FOR variable : variables»
-			«IF const»const «ENDIF»«variable.generateVariableTypeName» FORTE_«type.name»::«variable.generateName» = «variable.generateVariableDefaultValue»;
+			«IF const»const «ENDIF»«variable.generateVariableTypeName» «className»::«variable.generateName» = «variable.generateVariableDefaultValue»;
 		«ENDFOR»
 	'''
 
