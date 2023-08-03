@@ -55,7 +55,8 @@ public class GroupInterfaceConnectionLabel extends FBNetworkConnectionLabel {
 		// @formatter:off
 		return connections.stream()
 				.filter(con -> !con.isVisible())
-				.filter(con -> con.getDestinationElement().getGroup() == null)
+				.filter(con -> con.getDestinationElement().getGroup() == null
+								|| con.getSourceElement().getGroup() != con.getDestinationElement().getGroup())
 				.toList();
 		// @formatter:on
 	}
