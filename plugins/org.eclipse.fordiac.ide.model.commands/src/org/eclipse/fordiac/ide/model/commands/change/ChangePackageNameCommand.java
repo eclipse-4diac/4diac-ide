@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2014 fortiss GmbH
+ * Copyright (c) 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl, Monika Wenger
+ *   Fabio Gandolfi
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
@@ -16,16 +16,16 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import org.eclipse.fordiac.ide.model.commands.internal.ChangeCompilerInfoCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
-/** The Class ChangeCompilerInfoClassdef. */
-public class ChangeCompilerInfoClassdefCommand extends ChangeCompilerInfoCommand {
+/** The Class ChangeCompilerInfoHeader. */
+public class ChangePackageNameCommand extends ChangeCompilerInfoCommand {
 	/** The new ApplicationDomain value. */
-	private final String newClassdef;
+	private final String newName;
 	/** The old ApplicationDomain value. */
-	private String oldClassdef;
+	private String oldName;
 
-	public ChangeCompilerInfoClassdefCommand(final FBType type, final String newClassdef) {
+	public ChangePackageNameCommand(final FBType type, final String newName) {
 		super(type);
-		this.newClassdef = (null == newClassdef) ? "" : newClassdef; //$NON-NLS-1$
+		this.newName = newName;
 	}
 
 	/* (non-Javadoc)
@@ -33,8 +33,8 @@ public class ChangeCompilerInfoClassdefCommand extends ChangeCompilerInfoCommand
 	 * @see org.eclipse.gef.commands.Command#execute() */
 	@Override
 	public void execute() {
-		oldClassdef = getCompilerInfo().getClassdef();
-		redo();
+		oldName = getCompilerInfo().getPackageName();
+		getCompilerInfo().setPackageName(newName);
 	}
 
 	/* (non-Javadoc)
@@ -42,7 +42,7 @@ public class ChangeCompilerInfoClassdefCommand extends ChangeCompilerInfoCommand
 	 * @see org.eclipse.gef.commands.Command#undo() */
 	@Override
 	public void undo() {
-		getCompilerInfo().setClassdef(oldClassdef);
+		getCompilerInfo().setPackageName(oldName);
 	}
 
 	/* (non-Javadoc)
@@ -50,6 +50,6 @@ public class ChangeCompilerInfoClassdefCommand extends ChangeCompilerInfoCommand
 	 * @see org.eclipse.gef.commands.Command#redo() */
 	@Override
 	public void redo() {
-		getCompilerInfo().setClassdef(newClassdef);
+		getCompilerInfo().setPackageName(newName);
 	}
 }
