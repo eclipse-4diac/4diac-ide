@@ -24,6 +24,8 @@ import org.eclipse.fordiac.ide.application.editors.InstanceCommentDEManager;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
@@ -42,8 +44,8 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 			if (getHost() instanceof InstanceCommentEditPart) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ChangeCommentCommand(
-							((InstanceCommentEditPart) getHost()).getModel().getRefElement(), str);
+					return new ChangeCommentCommand(((InstanceCommentEditPart) getHost()).getModel().getRefElement(),
+							str);
 				}
 			}
 			return null;
@@ -117,7 +119,9 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		if (!getModel().getRefElement().isContainedInTypedInstance()
+		if ((getModel().getRefElement() instanceof Application
+				|| (getModel().getRefElement() instanceof FBNetworkElement
+						&& !((FBNetworkElement) (getModel().getRefElement())).isContainedInTypedInstance()))
 				&& ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 						|| (request.getType() == RequestConstants.REQ_OPEN))) {
 			performDirectEdit();

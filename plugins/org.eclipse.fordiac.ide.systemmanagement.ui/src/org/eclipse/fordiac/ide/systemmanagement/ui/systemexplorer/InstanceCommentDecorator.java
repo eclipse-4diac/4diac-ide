@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,9 +9,11 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi - added Application
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -42,16 +44,22 @@ public class InstanceCommentDecorator implements ILightweightLabelDecorator {
 
 	@Override
 	public void decorate(final Object element, final IDecoration decoration) {
-		if (element instanceof FBNetworkElement) {
-			final String comment = ((FBNetworkElement) element).getComment();
-			if (null != comment && !comment.isBlank()) {
-				decoration.addSuffix(" [" + checkComment(comment) + "]"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
+		String comment = null;
+		if (element instanceof final FBNetworkElement fbNetworkElement) {
+			comment = fbNetworkElement.getComment();
+		}
+
+		if (element instanceof final Application app) {
+			comment = app.getComment();
+		}
+
+		if (null != comment && !comment.isBlank()) {
+			decoration.addSuffix(" [" + checkComment(comment) + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	private static String checkComment(final String comment) {
-		final int i = comment.indexOf('\n');
+		final int i = comment.indexOf(System.getProperty("line.separator")); //$NON-NLS-1$
 		if (i != -1) {
 			// we have a multi-line comment only return first line
 			return comment.substring(0, i) + "..."; //$NON-NLS-1$
