@@ -117,6 +117,13 @@ public class TestEccGenerator {
 		//state.getECAction().add(createAction(testCase, output, stateCount));
 	}
 	
+	public ECAction createAction(Event event) {
+		final ECAction action = LibraryElementFactory.eINSTANCE.createECAction();
+		//action.setAlgorithm(createAlgorithm(testCase, testCase.getName()));
+		action.setOutput(event);
+		return action;
+	}
+	
 	public void createState(TestCase testCase, int stateCount, Event output) {
 		final ECState state = LibraryElementFactory.eINSTANCE.createECState();
 		ecc.getECState().add(state);
@@ -134,6 +141,34 @@ public class TestEccGenerator {
 		action.setAlgorithm(createAlgorithm(testCase, testCase.getName()));
 		action.setOutput(event);
 		return action;
+	}
+	
+	public Algorithm createAlgorithm(String name) {
+		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
+		alg.setName(name);
+	
+		final StringBuilder text = new StringBuilder();
+		text.append("ALGORITHM " + name + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+//		for (final TestState t : testCase.getTestStates()) {
+//			// add input primitive parameters as statements
+//			if (t.getTestTrigger().getParameters() != null) {
+//				text.append(t.getTestTrigger().getParameters());
+//				text.append(";"); //$NON-NLS-1$
+//			}
+	
+			// add output primitive parameters as statements
+//			for (final OutputPrimitive o : t.getOutputPrimitive()) {
+//				if (o.getParameters() != null) {
+//					text.append(o.getParameters());
+//					text.append(";"); //$NON-NLS-1$
+//				}
+//			}
+		// }
+		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
+		text.append('\n');
+	
+		alg.setText(text.toString());
+		return alg;
 	}
 	
 	public Algorithm createAlgorithm(TestCase testCase, String string) {

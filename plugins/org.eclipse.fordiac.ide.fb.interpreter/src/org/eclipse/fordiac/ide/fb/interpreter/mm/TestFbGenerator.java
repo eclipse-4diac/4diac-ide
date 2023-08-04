@@ -161,6 +161,24 @@ public class TestFbGenerator extends AbstractFBGenerator {
 		return sourceType;
 	}
 
+	@Override
+	protected List<VarDeclaration> createInputDataList() {
+		List<VarDeclaration> list = new ArrayList<VarDeclaration>();
+		
+		return list;
+	}
+
+	@Override
+	protected List<VarDeclaration> createOutputDataList() {
+		List<VarDeclaration> list = new ArrayList<VarDeclaration>();
+		list.addAll(EcoreUtil.copyAll(sourceType.getInterfaceList().getInputVars()));
+		list.addAll(EcoreUtil.copyAll(sourceType.getInterfaceList().getOutputVars()));
+		for (VarDeclaration varDecl : list) {
+			varDecl.setIsInput(false);
+		}
+		return list;
+	}
+
 		
 //	final Event completionEvent = LibraryElementFactory.eINSTANCE.createEvent();
 //	completionEvent.setIsInput(false);

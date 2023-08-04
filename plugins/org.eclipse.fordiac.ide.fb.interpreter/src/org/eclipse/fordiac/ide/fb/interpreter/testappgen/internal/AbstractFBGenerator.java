@@ -14,11 +14,13 @@
 
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -26,6 +28,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public abstract class AbstractFBGenerator {
@@ -72,17 +76,44 @@ public abstract class AbstractFBGenerator {
 		entry.setType(destinationFB);
 		
 		addEvents();
+		addDataPins();
+		createMiths();
 		generateECC();
 	}
 	
+	private void createMiths() {		
+		for (Event input : destinationFB.getInterfaceList().getEventInputs()) {
+			for (VarDeclaration var : destinationFB.getInterfaceList().getInputVars()) {
+				With w = LibraryElementFactory.eINSTANCE.createWith();
+				w.setVariables(var);
+				input.getWith().add(w);
+			}
+		}
+		
+		for (Event output : destinationFB.getInterfaceList().getEventOutputs()) {
+			for (VarDeclaration var : destinationFB.getInterfaceList().getOutputVars()) {
+				With w = LibraryElementFactory.eINSTANCE.createWith();
+				w.setVariables(var);
+				output.getWith().add(w);
+			}
+		}
+	}
+
 	protected abstract List<Event> createInputEventList();
 	protected abstract List<Event> createOutputEventList();
+	protected abstract List<VarDeclaration> createInputDataList();
+	protected abstract List<VarDeclaration> createOutputDataList();
 
 	protected void addEvents() {
 		
 		destinationFB.getInterfaceList().getEventInputs().addAll(createInputEventList());
 		destinationFB.getInterfaceList().getEventOutputs().addAll(createOutputEventList());
 		
+	}
+	
+	protected void addDataPins() {
+		destinationFB.getInterfaceList().getInputVars().addAll(createInputDataList());
+		destinationFB.getInterfaceList().getOutputVars().addAll(createOutputDataList());
 	}
 	
 	protected abstract void generateECC();
