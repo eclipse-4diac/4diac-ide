@@ -62,7 +62,6 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 	private boolean visible = true;
 
 	protected AbstractConnectionCreateCommand(final FBNetwork parent) {
-		super();
 		// initialize values
 		this.parent = parent;
 		this.performMappingCheck = true;
@@ -125,7 +124,8 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 		connection.setRoutingData(routingData);
 
 		parent.addConnection(connection);
-		// visible needs to be setup after the connection is added to correctly update ui
+		// visible needs to be setup after the connection is added to correctly update
+		// ui
 		connection.setVisible(visible);
 
 		if (performMappingCheck) {
@@ -183,13 +183,23 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 			final FBNetworkElement opDestination = destination.getFBNetworkElement().getOpposite();
 
 			if (opSource != null && opDestination != null) {
-				final IInterfaceElement opSrcIE = opSource.getInterfaceElement(source.getName());
-				final IInterfaceElement opDstIE = opDestination.getInterfaceElement(destination.getName());
+				IInterfaceElement opSrcIE = opSource.getInterfaceElement(source.getName());
+				if (opSrcIE instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
+						&& varDeclaration.isIsInput()) {
+					opSrcIE = opSource.getInterface().getInOutVarOpposite(varDeclaration);
+				}
+
+				IInterfaceElement opDstIE = opDestination.getInterfaceElement(destination.getName());
+				if (opDstIE instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
+						&& !varDeclaration.isIsInput()) {
+					opDstIE = opDestination.getInterface().getInOutVarOpposite(varDeclaration);
+				}
 
 				if (requiresOppositeConnection(opSource, opDestination, opSrcIE, opDstIE)) {
 					final AbstractConnectionCreateCommand cmd = createMirroredConnectionCommand(
 							opSource.getFbNetwork());
-					// as this is the command for the mirrored connection we don't want again to check
+					// as this is the command for the mirrored connection we don't want again to
+					// check
 					cmd.setPerformMappingCheck(false);
 					cmd.setSource(opSrcIE);
 					cmd.setDestination(opDstIE);
@@ -213,7 +223,8 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 
 		if (opSource == opDestination && opSource instanceof SubApp
 				&& ((SubApp) getSource().getFBNetworkElement()).getSubAppNetwork() == getParent()) {
-			// we have a connection inside of the subapp, currently we don't need to create this connection in the
+			// we have a connection inside of the subapp, currently we don't need to create
+			// this connection in the
 			// resource
 			return false;
 		}
@@ -230,9 +241,12 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 	 */
 	protected abstract AbstractConnectionCreateCommand createMirroredConnectionCommand(FBNetwork fbNetwork);
 
-	/** Perform any connection type (i.e. event, data, or adapter con) specific checks
+	/**
+	 * Perform any connection type (i.e. event, data, or adapter con) specific
+	 * checks
 	 *
-	 * @return true if the two pins can be connected false otherwise */
+	 * @return true if the two pins can be connected false otherwise
+	 */
 	protected abstract boolean canExecuteConType();
 
 	public void setPerformMappingCheck(final boolean performMappingCheck) {
@@ -249,7 +263,8 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 	public static AbstractConnectionCreateCommand createCommand(final IInterfaceElement ie, final FBNetwork network) {
 		if (ie instanceof Event) {
 			return new EventConnectionCreateCommand(network);
-		} else if (ie instanceof VarDeclaration) {
+		}
+		if (ie instanceof VarDeclaration) {
 			if (ie.getType() instanceof StructuredType) {
 				return new StructDataConnectionCreateCommand(network);
 			}
