@@ -18,6 +18,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.fb.interpreter.Messages;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.TestFbGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.MatchFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestSuite;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -39,11 +41,15 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 			return Status.CANCEL_STATUS;
 		}
 
-		// convert the serviceuences one by one
-		final TestFbGenerator gen = new TestFbGenerator(type);
-		final FBType testtype = gen.generateTestFb();
-
+		// convert the service sequences one by one
+		TestSuite testSuite = new TestSuite(type.getService().getServiceSequence());
+		
+		final FBType testtype = new TestFbGenerator(type, testSuite).generateTestFb();
 		testtype.getTypeEntry().save();
+		
+		final FBType matchtype = new MatchFBGenerator(type, testSuite).generateMatchFB();
+		matchtype.getTypeEntry().save();
+		
 		// OpenListenerManager.openEditor(testtype);
 
 		return Status.OK_STATUS;

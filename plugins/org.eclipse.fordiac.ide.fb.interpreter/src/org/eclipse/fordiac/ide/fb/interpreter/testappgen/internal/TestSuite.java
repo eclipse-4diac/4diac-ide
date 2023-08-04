@@ -37,7 +37,7 @@ public class TestSuite {
 	
 	public TestSuite(List<ServiceSequence> sequences) {
 		for (ServiceSequence serviceSequence : sequences) {
-			testCases.add(new TestCase(serviceSequence));
+			testCases.add(TestCase.createTestCase(serviceSequence));
 		}
 	}
 	

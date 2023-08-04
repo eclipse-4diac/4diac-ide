@@ -13,7 +13,11 @@
 
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
 public class TestState {
@@ -34,5 +38,11 @@ public class TestState {
 	
 	public InputPrimitive getTestTrigger() {
 		return dataSource.getInputPrimitive();
+	}
+	
+	public List<OutputPrimitive> getTestOutputs() {
+		List<OutputPrimitive> list = new ArrayList<OutputPrimitive>();
+		list.addAll(dataSource.getOutputPrimitive());
+		return list;
 	}
 }
