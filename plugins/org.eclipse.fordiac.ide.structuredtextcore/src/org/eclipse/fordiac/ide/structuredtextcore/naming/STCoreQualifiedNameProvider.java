@@ -13,10 +13,9 @@
 package org.eclipse.fordiac.ide.structuredtextcore.naming;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.emf.FordiacMetaData;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.xtext.naming.DefaultDeclarativeQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
 
@@ -30,15 +29,7 @@ public class STCoreQualifiedNameProvider extends DefaultDeclarativeQualifiedName
 		return super.computeFullyQualifiedName(obj);
 	}
 
-	protected QualifiedName qualifiedName(final CompilableType type) {
-		final CompilerInfo compilerInfo = type.getCompilerInfo();
-		if (compilerInfo != null && compilerInfo.getPackageName() != null) {
-			return getConverter().toQualifiedName(compilerInfo.getPackageName()).append(type.getName());
-		}
-		return null;
-	}
-
-	protected QualifiedName qualifiedName(final AnyDerivedType type) {
+	protected QualifiedName qualifiedName(final LibraryElement type) {
 		final CompilerInfo compilerInfo = type.getCompilerInfo();
 		if (compilerInfo != null && compilerInfo.getPackageName() != null) {
 			return getConverter().toQualifiedName(compilerInfo.getPackageName()).append(type.getName());

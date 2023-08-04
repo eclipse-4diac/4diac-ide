@@ -50,7 +50,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -189,7 +188,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.COMMENT: return createComment();
 			case LibraryElementPackage.COMMUNICATION_CHANNEL: return createCommunicationChannel();
 			case LibraryElementPackage.COMMUNICATION_MAPPING_TARGET: return createCommunicationMappingTarget();
-			case LibraryElementPackage.COMPILABLE_TYPE: return createCompilableType();
 			case LibraryElementPackage.COMPILER: return createCompiler();
 			case LibraryElementPackage.COMPILER_INFO: return createCompilerInfo();
 			case LibraryElementPackage.COMPOSITE_FB_TYPE: return createCompositeFBType();
@@ -517,17 +515,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public CommunicationMappingTarget createCommunicationMappingTarget() {
 		CommunicationMappingTargetImpl communicationMappingTarget = new CommunicationMappingTargetImpl();
 		return communicationMappingTarget;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public CompilableType createCompilableType() {
-		CompilableTypeImpl compilableType = new CompilableTypeImpl();
-		return compilableType;
 	}
 
 	/**

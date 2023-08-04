@@ -15,8 +15,6 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.scoping;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
@@ -39,7 +37,7 @@ public class STAlgorithmImportedNamespaceAwareLocalScopeProvider extends Importe
 						final var fbTypeName = getQualifiedNameProvider().getFullyQualifiedName(libraryElement);
 						result.add(doCreateImportNormalizer(fbTypeName, true, ignoreCase));
 					}
-					final CompilerInfo compilerInfo = getCompilerInfo(libraryElement);
+					final CompilerInfo compilerInfo = libraryElement.getCompilerInfo();
 					if (compilerInfo != null) {
 						if (compilerInfo.getPackageName() != null) {
 							final QualifiedName name = getQualifiedNameConverter()
@@ -54,16 +52,6 @@ public class STAlgorithmImportedNamespaceAwareLocalScopeProvider extends Importe
 			}
 		}
 		return result;
-	}
-
-	protected static CompilerInfo getCompilerInfo(final LibraryElement libraryElement) {
-		if (libraryElement instanceof final CompilableType compilableType) {
-			return compilableType.getCompilerInfo();
-		}
-		if (libraryElement instanceof final AnyDerivedType anyDerivedType) {
-			return anyDerivedType.getCompilerInfo();
-		}
-		return null;
 	}
 
 	@Override

@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCompilerVendorCommand
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCompilerVersionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewCompilerCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteCompilerCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -90,29 +89,21 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			switch (property) {
-			case COMPILER_LANGUAGE:
-				return getLanguageIndex(((Compiler) element).getLanguage().getName());
-			case COMPILER_PRODUCT:
-				return ((Compiler) element).getProduct();
-			case COMPILER_VENDOR:
-				return ((Compiler) element).getVendor();
-			default:
-				return ((Compiler) element).getVersion();
-			}
+			return switch (property) {
+			case COMPILER_LANGUAGE -> getLanguageIndex(((Compiler) element).getLanguage().getName());
+			case COMPILER_PRODUCT -> ((Compiler) element).getProduct();
+			case COMPILER_VENDOR -> ((Compiler) element).getVendor();
+			default -> ((Compiler) element).getVersion();
+			};
 		}
 
 		private Object getLanguageIndex(final String language) {
-			switch (language) {
-			case LANGUAGE_JAVA:
-				return Integer.valueOf(LANGUAGE_JAVA_INDEX);
-			case LANGUAGE_CPP:
-				return Integer.valueOf(LANGUAGE_CPP_INDEX);
-			case LANGUAGE_C:
-				return Integer.valueOf(LANGUAGE_C_INDEX);
-			default:
-				return Integer.valueOf(LANGUAGE_OTHER_INDEX);
-			}
+			return switch (language) {
+			case LANGUAGE_JAVA -> Integer.valueOf(LANGUAGE_JAVA_INDEX);
+			case LANGUAGE_CPP -> Integer.valueOf(LANGUAGE_CPP_INDEX);
+			case LANGUAGE_C -> Integer.valueOf(LANGUAGE_C_INDEX);
+			default -> Integer.valueOf(LANGUAGE_OTHER_INDEX);
+			};
 		}
 
 		@Override
@@ -200,8 +191,8 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		compilerViewer.setContentProvider(new CompilerContentProvider());
 		compilerViewer.setLabelProvider(new CompilerLabelProvider());
 		compilerViewer
-		.setCellEditors(new CellEditor[] { ComboBoxWidgetFactory.createComboBoxCellEditor(table, VALUE_SET),
-				new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) });
+				.setCellEditors(new CellEditor[] { ComboBoxWidgetFactory.createComboBoxCellEditor(table, VALUE_SET),
+						new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) });
 		compilerViewer.setColumnProperties(
 				new String[] { COMPILER_LANGUAGE, COMPILER_VENDOR, COMPILER_PRODUCT, COMPILER_VERSION });
 
@@ -239,21 +230,14 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	}
 
 	@Override
-	protected CompilableType getType() {
-		return (CompilableType) super.getType();
-	}
-
-	@Override
 	public void refresh() {
 		super.refresh();
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if ((getType() != null) && (null != getType().getCompilerInfo())) {
 			final CompilerInfo compilerInfo = getType().getCompilerInfo();
-			headerText.setText(null != compilerInfo.getHeader() ? compilerInfo.getHeader()
-					: ""); //$NON-NLS-1$
-			classdefText.setText(null != compilerInfo.getClassdef() ? compilerInfo.getClassdef()
-					: ""); //$NON-NLS-1$
+			headerText.setText(null != compilerInfo.getHeader() ? compilerInfo.getHeader() : ""); //$NON-NLS-1$
+			classdefText.setText(null != compilerInfo.getClassdef() ? compilerInfo.getClassdef() : ""); //$NON-NLS-1$
 			compilerViewer.setInput(type);
 		}
 		commandStack = commandStackBuffer;

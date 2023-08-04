@@ -119,6 +119,15 @@ public interface DataPackage extends EPackage {
 	int DATA_TYPE__IDENTIFICATION = LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_TYPE__COMPILER_INFO = LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -181,6 +190,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_TYPE__COMPILER_INFO = DATA_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -247,6 +265,15 @@ public interface DataPackage extends EPackage {
 	int ANY_DERIVED_TYPE__IDENTIFICATION = ANY_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_DERIVED_TYPE__COMPILER_INFO = ANY_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -256,22 +283,13 @@ public interface DataPackage extends EPackage {
 	int ANY_DERIVED_TYPE__TYPE_ENTRY = ANY_TYPE__TYPE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANY_DERIVED_TYPE__COMPILER_INFO = ANY_TYPE_FEATURE_COUNT + 0;
-
-	/**
 	 * The number of structural features of the '<em>Any Derived Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_DERIVED_TYPE_FEATURE_COUNT = ANY_TYPE_FEATURE_COUNT + 1;
+	int ANY_DERIVED_TYPE_FEATURE_COUNT = ANY_TYPE_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl <em>Array Type</em>}' class.
@@ -320,15 +338,6 @@ public interface DataPackage extends EPackage {
 	int ARRAY_TYPE__IDENTIFICATION = ANY_DERIVED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ARRAY_TYPE__TYPE_ENTRY = ANY_DERIVED_TYPE__TYPE_ENTRY;
-
-	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -336,6 +345,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ARRAY_TYPE__COMPILER_INFO = ANY_DERIVED_TYPE__COMPILER_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARRAY_TYPE__TYPE_ENTRY = ANY_DERIVED_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The feature id for the '<em><b>Subranges</b></em>' containment reference list.
@@ -420,6 +438,15 @@ public interface DataPackage extends EPackage {
 	int VALUE_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_TYPE__COMPILER_INFO = DATA_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -482,6 +509,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int DERIVED_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DERIVED_TYPE__COMPILER_INFO = VALUE_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -557,6 +593,15 @@ public interface DataPackage extends EPackage {
 	int DIRECTLY_DERIVED_TYPE__IDENTIFICATION = DERIVED_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTLY_DERIVED_TYPE__COMPILER_INFO = DERIVED_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -628,6 +673,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ENUMERATED_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENUMERATED_TYPE__COMPILER_INFO = VALUE_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -740,15 +794,6 @@ public interface DataPackage extends EPackage {
 	int STRUCTURED_TYPE__IDENTIFICATION = ANY_DERIVED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int STRUCTURED_TYPE__TYPE_ENTRY = ANY_DERIVED_TYPE__TYPE_ENTRY;
-
-	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -756,6 +801,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int STRUCTURED_TYPE__COMPILER_INFO = ANY_DERIVED_TYPE__COMPILER_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRUCTURED_TYPE__TYPE_ENTRY = ANY_DERIVED_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The feature id for the '<em><b>Member Variables</b></em>' containment reference list.
@@ -859,6 +913,15 @@ public interface DataPackage extends EPackage {
 	int SUBRANGE_TYPE__IDENTIFICATION = DERIVED_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBRANGE_TYPE__COMPILER_INFO = DERIVED_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -941,6 +1004,15 @@ public interface DataPackage extends EPackage {
 	int ELEMENTARY_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ELEMENTARY_TYPE__COMPILER_INFO = VALUE_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1003,6 +1075,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int EVENT_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_TYPE__COMPILER_INFO = DATA_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -1069,6 +1150,15 @@ public interface DataPackage extends EPackage {
 	int ANY_ELEMENTARY_TYPE__IDENTIFICATION = ANY_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_ELEMENTARY_TYPE__COMPILER_INFO = ANY_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1131,6 +1221,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_MAGNITUDE_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_MAGNITUDE_TYPE__COMPILER_INFO = ANY_ELEMENTARY_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -1197,6 +1296,15 @@ public interface DataPackage extends EPackage {
 	int ANY_NUM_TYPE__IDENTIFICATION = ANY_MAGNITUDE_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_NUM_TYPE__COMPILER_INFO = ANY_MAGNITUDE_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1259,6 +1367,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_REAL_TYPE__IDENTIFICATION = ANY_NUM_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_REAL_TYPE__COMPILER_INFO = ANY_NUM_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -1325,6 +1442,15 @@ public interface DataPackage extends EPackage {
 	int REAL_TYPE__IDENTIFICATION = ANY_REAL_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REAL_TYPE__COMPILER_INFO = ANY_REAL_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1387,6 +1513,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int LREAL_TYPE__IDENTIFICATION = ANY_REAL_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LREAL_TYPE__COMPILER_INFO = ANY_REAL_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -1453,6 +1588,15 @@ public interface DataPackage extends EPackage {
 	int ANY_INT_TYPE__IDENTIFICATION = ANY_NUM_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_INT_TYPE__COMPILER_INFO = ANY_NUM_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1515,6 +1659,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_UNSIGNED_TYPE__IDENTIFICATION = ANY_INT_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_UNSIGNED_TYPE__COMPILER_INFO = ANY_INT_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -1581,6 +1734,15 @@ public interface DataPackage extends EPackage {
 	int USINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USINT_TYPE__COMPILER_INFO = ANY_UNSIGNED_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1643,6 +1805,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int UINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UINT_TYPE__COMPILER_INFO = ANY_UNSIGNED_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -1709,6 +1880,15 @@ public interface DataPackage extends EPackage {
 	int UDINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UDINT_TYPE__COMPILER_INFO = ANY_UNSIGNED_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1771,6 +1951,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ULINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ULINT_TYPE__COMPILER_INFO = ANY_UNSIGNED_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -1837,6 +2026,15 @@ public interface DataPackage extends EPackage {
 	int ANY_SIGNED_TYPE__IDENTIFICATION = ANY_INT_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_SIGNED_TYPE__COMPILER_INFO = ANY_INT_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1899,6 +2097,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int SINT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SINT_TYPE__COMPILER_INFO = ANY_SIGNED_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -1965,6 +2172,15 @@ public interface DataPackage extends EPackage {
 	int INT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INT_TYPE__COMPILER_INFO = ANY_SIGNED_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2027,6 +2243,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int DINT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DINT_TYPE__COMPILER_INFO = ANY_SIGNED_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -2093,6 +2318,15 @@ public interface DataPackage extends EPackage {
 	int LINT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINT_TYPE__COMPILER_INFO = ANY_SIGNED_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2155,6 +2389,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_DURATION_TYPE__IDENTIFICATION = ANY_MAGNITUDE_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_DURATION_TYPE__COMPILER_INFO = ANY_MAGNITUDE_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -2221,6 +2464,15 @@ public interface DataPackage extends EPackage {
 	int TIME_TYPE__IDENTIFICATION = ANY_DURATION_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TIME_TYPE__COMPILER_INFO = ANY_DURATION_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2283,6 +2535,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int LTIME_TYPE__IDENTIFICATION = ANY_DURATION_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LTIME_TYPE__COMPILER_INFO = ANY_DURATION_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -2349,6 +2610,15 @@ public interface DataPackage extends EPackage {
 	int ANY_BIT_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_BIT_TYPE__COMPILER_INFO = ANY_ELEMENTARY_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2411,6 +2681,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int BOOL_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOL_TYPE__COMPILER_INFO = ANY_BIT_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -2477,6 +2756,15 @@ public interface DataPackage extends EPackage {
 	int BYTE_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BYTE_TYPE__COMPILER_INFO = ANY_BIT_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2539,6 +2827,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int WORD_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORD_TYPE__COMPILER_INFO = ANY_BIT_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -2605,6 +2902,15 @@ public interface DataPackage extends EPackage {
 	int DWORD_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DWORD_TYPE__COMPILER_INFO = ANY_BIT_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2667,6 +2973,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int LWORD_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LWORD_TYPE__COMPILER_INFO = ANY_BIT_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -2733,6 +3048,15 @@ public interface DataPackage extends EPackage {
 	int ANY_CHARS_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_CHARS_TYPE__COMPILER_INFO = ANY_ELEMENTARY_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2795,6 +3119,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_SCHARS_TYPE__IDENTIFICATION = ANY_CHARS_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_SCHARS_TYPE__COMPILER_INFO = ANY_CHARS_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -2861,6 +3194,15 @@ public interface DataPackage extends EPackage {
 	int ANY_WCHARS_TYPE__IDENTIFICATION = ANY_CHARS_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_WCHARS_TYPE__COMPILER_INFO = ANY_CHARS_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2923,6 +3265,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_STRING_TYPE__IDENTIFICATION = ANY_CHARS_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_STRING_TYPE__COMPILER_INFO = ANY_CHARS_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -2998,6 +3349,15 @@ public interface DataPackage extends EPackage {
 	int STRING_TYPE__IDENTIFICATION = ANY_STRING_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_TYPE__COMPILER_INFO = ANY_STRING_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3069,6 +3429,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int WSTRING_TYPE__IDENTIFICATION = ANY_STRING_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WSTRING_TYPE__COMPILER_INFO = ANY_STRING_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -3144,6 +3513,15 @@ public interface DataPackage extends EPackage {
 	int ANY_CHAR_TYPE__IDENTIFICATION = ANY_CHARS_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_CHAR_TYPE__COMPILER_INFO = ANY_CHARS_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3206,6 +3584,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHAR_TYPE__IDENTIFICATION = ANY_CHAR_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHAR_TYPE__COMPILER_INFO = ANY_CHAR_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -3272,6 +3659,15 @@ public interface DataPackage extends EPackage {
 	int WCHAR_TYPE__IDENTIFICATION = ANY_CHAR_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WCHAR_TYPE__COMPILER_INFO = ANY_CHAR_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3334,6 +3730,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_DATE_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_DATE_TYPE__COMPILER_INFO = ANY_ELEMENTARY_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -3400,6 +3805,15 @@ public interface DataPackage extends EPackage {
 	int DATE_AND_TIME_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_AND_TIME_TYPE__COMPILER_INFO = ANY_DATE_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3462,6 +3876,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int LDT_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LDT_TYPE__COMPILER_INFO = ANY_DATE_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -3528,6 +3951,15 @@ public interface DataPackage extends EPackage {
 	int DATE_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_TYPE__COMPILER_INFO = ANY_DATE_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3590,6 +4022,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int TIME_OF_DAY_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TIME_OF_DAY_TYPE__COMPILER_INFO = ANY_DATE_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -3656,6 +4097,15 @@ public interface DataPackage extends EPackage {
 	int LTOD_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LTOD_TYPE__COMPILER_INFO = ANY_DATE_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3720,6 +4170,15 @@ public interface DataPackage extends EPackage {
 	int LDATE_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
 	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LDATE_TYPE__COMPILER_INFO = ANY_DATE_TYPE__COMPILER_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3757,17 +4216,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getAnyDerivedType();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.data.AnyDerivedType#getCompilerInfo <em>Compiler Info</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Compiler Info</em>'.
-	 * @see org.eclipse.fordiac.ide.model.data.AnyDerivedType#getCompilerInfo()
-	 * @see #getAnyDerivedType()
-	 * @generated
-	 */
-	EReference getAnyDerivedType_CompilerInfo();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.ArrayType <em>Array Type</em>}'.
@@ -4492,14 +4940,6 @@ public interface DataPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ANY_DERIVED_TYPE = eINSTANCE.getAnyDerivedType();
-
-		/**
-		 * The meta object literal for the '<em><b>Compiler Info</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ANY_DERIVED_TYPE__COMPILER_INFO = eINSTANCE.getAnyDerivedType_CompilerInfo();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl <em>Array Type</em>}' class.

@@ -131,9 +131,6 @@
     <genClasses ecoreClass="lib.ecore#//CommunicationMappingTarget">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//CommunicationMappingTarget/mappedElements"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//CompilableType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilableType/compilerInfo"/>
-    </genClasses>
     <genClasses ecoreClass="lib.ecore#//Compiler">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Compiler/language"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Compiler/product"/>
@@ -465,6 +462,7 @@
     <genClasses ecoreClass="lib.ecore#//LibraryElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/versionInfo"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/identification"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/compilerInfo"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LibraryElement/typeEntry"/>
       <genOperations ecoreOperation="lib.ecore#//LibraryElement/getTypeLibrary" body="if (null != getTypeEntry()) {&#xA;&#x9;return getTypeEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
     </genClasses>
@@ -702,7 +700,6 @@
       <genEnumLiterals ecoreEnumLiteral="data.ecore#//BaseType1/ANY"/>
     </genEnums>
     <genClasses ecoreClass="data.ecore#//AnyDerivedType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//AnyDerivedType/compilerInfo"/>
       <genOperations ecoreOperation="data.ecore#//AnyDerivedType/isAssignableFrom"
           body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//AnyDerivedType/isAssignableFrom/other"/>

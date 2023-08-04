@@ -68,6 +68,7 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 			addGroupElementsPropertyDescriptor(object);
 			addWidthPropertyDescriptor(object);
 			addHeightPropertyDescriptor(object);
+			addLockedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -139,6 +140,28 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Locked feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLockedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Group_locked_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Group_locked_feature", "_UI_Group_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.GROUP__LOCKED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Group.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -187,6 +210,7 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 		switch (notification.getFeatureID(Group.class)) {
 			case LibraryElementPackage.GROUP__WIDTH:
 			case LibraryElementPackage.GROUP__HEIGHT:
+			case LibraryElementPackage.GROUP__LOCKED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			default:

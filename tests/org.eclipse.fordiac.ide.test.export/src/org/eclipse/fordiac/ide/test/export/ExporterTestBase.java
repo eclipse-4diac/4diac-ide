@@ -44,7 +44,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -212,7 +211,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @param fb reference to the function block
 	 *
 	 * @return the generated code or null on error */
-	public List<FileObject> generateFunctionBlock(final CompilableType fb) {
+	public List<FileObject> generateFunctionBlock(final LibraryElement fb) {
 		final Set<IExportTemplate> templates = (new ForteNgExportFilter() {
 			Set<IExportTemplate> getTemplateSet(final LibraryElement type) {
 				return getTemplates(type.getName(), type);

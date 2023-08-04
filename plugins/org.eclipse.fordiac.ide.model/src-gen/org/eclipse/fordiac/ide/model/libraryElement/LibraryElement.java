@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getVersionInfo <em>Version Info</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getIdentification <em>Identification</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getCompilerInfo <em>Compiler Info</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getTypeEntry <em>Type Entry</em>}</li>
  * </ul>
  *
@@ -73,6 +74,28 @@ public interface LibraryElement extends INamedElement {
 	 * @generated
 	 */
 	void setIdentification(Identification value);
+
+	/**
+	 * Returns the value of the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Compiler Info</em>' containment reference.
+	 * @see #setCompilerInfo(CompilerInfo)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLibraryElement_CompilerInfo()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	CompilerInfo getCompilerInfo();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getCompilerInfo <em>Compiler Info</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Compiler Info</em>' containment reference.
+	 * @see #getCompilerInfo()
+	 * @generated
+	 */
+	void setCompilerInfo(CompilerInfo value);
 
 	/**
 	 * Returns the value of the '<em><b>Type Entry</b></em>' attribute.

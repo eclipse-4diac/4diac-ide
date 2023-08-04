@@ -319,11 +319,6 @@ public class ServiceSequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
-				 LibraryElementFactory.eINSTANCE.createCompilableType()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
 				 LibraryElementFactory.eINSTANCE.createFBType()));
 
 		newChildDescriptors.add

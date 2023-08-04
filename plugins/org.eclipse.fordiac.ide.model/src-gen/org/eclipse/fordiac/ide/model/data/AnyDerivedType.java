@@ -16,47 +16,17 @@
  */
 package org.eclipse.fordiac.ide.model.data;
 
-import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Any Derived Type</b></em>'.
  * <!-- end-user-doc -->
  *
- * <p>
- * The following features are supported:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.AnyDerivedType#getCompilerInfo <em>Compiler Info</em>}</li>
- * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getAnyDerivedType()
  * @model
  * @generated
  */
 public interface AnyDerivedType extends AnyType {
-	/**
-	 * Returns the value of the '<em><b>Compiler Info</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Compiler Info</em>' containment reference.
-	 * @see #setCompilerInfo(CompilerInfo)
-	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getAnyDerivedType_CompilerInfo()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	CompilerInfo getCompilerInfo();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.AnyDerivedType#getCompilerInfo <em>Compiler Info</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Compiler Info</em>' containment reference.
-	 * @see #getCompilerInfo()
-	 * @generated
-	 */
-	void setCompilerInfo(CompilerInfo value);
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

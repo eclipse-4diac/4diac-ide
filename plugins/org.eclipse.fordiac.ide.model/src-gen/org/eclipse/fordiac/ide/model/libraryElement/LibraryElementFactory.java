@@ -198,15 +198,6 @@ public interface LibraryElementFactory extends EFactory {
 	CommunicationMappingTarget createCommunicationMappingTarget();
 
 	/**
-	 * Returns a new object of class '<em>Compilable Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Compilable Type</em>'.
-	 * @generated
-	 */
-	CompilableType createCompilableType();
-
-	/**
 	 * Returns a new object of class '<em>Compiler</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

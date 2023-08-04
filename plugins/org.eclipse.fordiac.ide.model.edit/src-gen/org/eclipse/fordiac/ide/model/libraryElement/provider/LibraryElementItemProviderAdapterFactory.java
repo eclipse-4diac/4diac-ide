@@ -1164,29 +1164,6 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CompilableTypeItemProvider compilableTypeItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.CompilableType}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCompilableTypeAdapter() {
-		if (compilableTypeItemProvider == null) {
-			compilableTypeItemProvider = new CompilableTypeItemProvider(this);
-		}
-
-		return compilableTypeItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -209,7 +209,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AutomationSystem" eSuperTypes="#//LibraryElement #//ConfigurableObject #//CompilableType">
+  <eClassifiers xsi:type="ecore:EClass" name="AutomationSystem" eSuperTypes="#//LibraryElement #//ConfigurableObject">
     <eOperations name="getDeviceNamed" lowerBound="1" eType="#//Device">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);"/>
@@ -298,10 +298,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="CommunicationMappingTarget" eSuperTypes="#//MappingTarget">
     <eStructuralFeatures xsi:type="ecore:EReference" name="mappedElements" upperBound="-1"
         eType="#//CommunicationChannel" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CompilableType" eSuperTypes="#//LibraryElement #//ConfigurableObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="compilerInfo" eType="#//CompilerInfo"
-        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Compiler">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" lowerBound="1"
@@ -544,7 +540,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="inConnections" upperBound="-1"
         eType="#//Link" eOpposite="#//Link/device"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DeviceType" eSuperTypes="#//CompilableType">
+  <eClassifiers xsi:type="ecore:EClass" name="DeviceType" eSuperTypes="#//LibraryElement #//ConfigurableObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclaration" upperBound="-1"
         eType="#//VarDeclaration" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -925,7 +921,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="group" eType="#//Group"
         eOpposite="#//Group/groupElements"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FBType" eSuperTypes="#//CompilableType #//ICallable">
+  <eClassifiers xsi:type="ecore:EClass" name="FBType" eSuperTypes="#//LibraryElement #//ConfigurableObject #//ICallable">
     <eOperations name="getInputParameters" upperBound="-1" eType="#//INamedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
@@ -980,7 +976,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//FunctionBody"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="GlobalConstants" eSuperTypes="#//CompilableType">
+  <eClassifiers xsi:type="ecore:EClass" name="GlobalConstants" eSuperTypes="#//LibraryElement #//ConfigurableObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="constants" upperBound="-1"
         eType="#//VarDeclaration" containment="true" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//OriginalSource"
@@ -1261,6 +1257,8 @@
         eType="#//VersionInfo" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="identification" eType="#//Identification"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compilerInfo" eType="#//CompilerInfo"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeEntry" eType="#//TypeEntry"
         transient="true"/>
   </eClassifiers>
@@ -1417,7 +1415,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ResourceType" eSuperTypes="#//CompilableType">
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceType" eSuperTypes="#//LibraryElement #//ConfigurableObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclaration" upperBound="-1"
         eType="#//VarDeclaration" containment="true" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fBNetwork" lowerBound="1"
@@ -1459,7 +1457,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="communication" eType="#//CommunicationConfiguration"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SegmentType" eSuperTypes="#//CompilableType">
+  <eClassifiers xsi:type="ecore:EClass" name="SegmentType" eSuperTypes="#//LibraryElement #//ConfigurableObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclaration" upperBound="-1"
         eType="#//VarDeclaration" containment="true"/>
   </eClassifiers>

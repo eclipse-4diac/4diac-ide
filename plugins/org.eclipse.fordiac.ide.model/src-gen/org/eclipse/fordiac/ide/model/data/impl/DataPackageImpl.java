@@ -582,16 +582,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getAnyDerivedType_CompilerInfo() {
-		return (EReference)anyDerivedTypeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getArrayType() {
 		return arrayTypeEClass;
 	}
@@ -1296,7 +1286,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 		// Create classes and their features
 		anyDerivedTypeEClass = createEClass(ANY_DERIVED_TYPE);
-		createEReference(anyDerivedTypeEClass, ANY_DERIVED_TYPE__COMPILER_INFO);
 
 		arrayTypeEClass = createEClass(ARRAY_TYPE);
 		createEReference(arrayTypeEClass, ARRAY_TYPE__SUBRANGES);
@@ -1448,8 +1437,8 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
 		XMLTypePackage theXMLTypePackage = (XMLTypePackage)EPackage.Registry.INSTANCE.getEPackage(XMLTypePackage.eNS_URI);
+		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -1517,7 +1506,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(anyDerivedTypeEClass, AnyDerivedType.class, "AnyDerivedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getAnyDerivedType_CompilerInfo(), theLibraryElementPackage.getCompilerInfo(), null, "compilerInfo", null, 0, 1, AnyDerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		EOperation op = addEOperation(anyDerivedTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
