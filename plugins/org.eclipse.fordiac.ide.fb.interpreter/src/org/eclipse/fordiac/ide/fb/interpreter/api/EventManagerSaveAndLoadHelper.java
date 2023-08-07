@@ -10,7 +10,7 @@
  * Contributors:
  *   Fabio Gandolfi - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers;
+package org.eclipse.fordiac.ide.fb.interpreter.api;
 
 import java.io.IOException;
 import java.util.Collections;
