@@ -91,9 +91,9 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 
 	def protected generateSendEvent(Event event) {
 		if (event.FBNetworkElement instanceof AdapterFB) {
-			return '''sendAdapterEvent(scm_n«event.FBNetworkElement.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«event.name»ID);'''
+			return '''sendAdapterEvent(scm_n«event.FBNetworkElement.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«event.name»ID, paECET);'''
 		}
-		'''sendOutputEvent(scm_nEvent«event.name»ID);'''
+		'''sendOutputEvent(scm_nEvent«event.name»ID, paECET);'''
 	}
 
 	def private getAdapterDeclaration(Event event) {

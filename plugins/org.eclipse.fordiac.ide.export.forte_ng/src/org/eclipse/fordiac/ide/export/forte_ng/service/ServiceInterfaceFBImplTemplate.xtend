@@ -45,7 +45,7 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBT
 	'''
 
 	def protected generateExecuteEvent() '''
-		void «FBClassName»::executeEvent(TEventID paEIID) {
+		void «FBClassName»::executeEvent(TEventID paEIID, CEventChainExecutionThread * paECET) {
 		  switch(paEIID) {
 		    «FOR event : type.interfaceList.eventInputs»
 		    	case scm_nEvent«event.name»ID:

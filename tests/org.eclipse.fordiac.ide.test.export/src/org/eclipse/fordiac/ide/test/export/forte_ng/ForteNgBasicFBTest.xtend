@@ -73,9 +73,9 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						  void «EXPORTED_ALGORITHM_NAME»(void);
 						  static const TForteInt16 scm_nStateINIT = 0;
 						  
-						  void enterStateINIT(void);
+						  void enterStateINIT(CEventChainExecutionThread * paECET);
 						
-						  void executeEvent(TEventID paEIID) override;
+						  void executeEvent(TEventID paEIID, CEventChainExecutionThread * paECET) override;
 						
 						  void readInputData(TEventID paEIID) override;
 						  void writeOutputData(TEventID paEIID) override;
@@ -143,7 +143,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						    CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr) {
 						}
 						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID){
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread * paECET) {
 						  do {
 						    switch(m_nECCState) {
 						      case scm_nStateINIT:
@@ -157,7 +157,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						  } while(true);
 						}
 						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::enterStateINIT(void) {
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::enterStateINIT(CEventChainExecutionThread * paECET) {
 						  m_nECCState = scm_nStateINIT;
 						}
 

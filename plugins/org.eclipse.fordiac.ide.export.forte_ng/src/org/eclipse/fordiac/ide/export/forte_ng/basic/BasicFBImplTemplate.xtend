@@ -53,7 +53,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	'''
 
 	def protected generateState(ECState state) '''
-		void «FBClassName»::enterState«state.name»(void) {
+		void «FBClassName»::enterState«state.name»(CEventChainExecutionThread * paECET) {
 		  m_nECCState = «state.generateStateName»;
 		  «FOR action : state.ECAction»
 		  	«IF action.algorithm !== null»
@@ -67,13 +67,13 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	'''
 
 	override generateExecuteEvent() '''
-		void «FBClassName»::executeEvent(TEventID paEIID){
+		void «FBClassName»::executeEvent(TEventID paEIID, CEventChainExecutionThread * paECET) {
 		  do {
 		    switch(m_nECCState) {
 		      «FOR state : type.ECC.ECState»
 		      	case «state.generateStateName»:
 		      	  «FOR transition : state.outTransitions SEPARATOR "\nelse"»
-		      	  	if(«transition.generateTransitionCondition») enterState«transition.destination.name»();
+		      	  	if(«transition.generateTransitionCondition») enterState«transition.destination.name»(paECET);
 		      	  «ENDFOR»
 		      	  «IF !state.outTransitions.empty»else «ENDIF»return; //no transition cleared
 		      	  «IF !state.outTransitions.empty»break;«ENDIF»

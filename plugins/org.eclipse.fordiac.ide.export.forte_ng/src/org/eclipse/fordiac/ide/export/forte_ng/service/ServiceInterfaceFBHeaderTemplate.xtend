@@ -38,7 +38,7 @@ class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate<ServiceInterfaceF
 		
 		  «generateFBInterfaceSpecDeclaration»
 		
-		  void executeEvent(TEventID paEIID);
+		  void executeEvent(TEventID paEIID, CEventChainExecutionThread * paECET) override;
 		
 		  «generateReadInputDataDeclaration»
 		  «generateWriteOutputDataDeclaration»

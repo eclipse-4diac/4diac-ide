@@ -33,7 +33,7 @@ class SimpleFBImplTemplate extends BaseFBImplTemplate<SimpleFBType> {
 	}
 	
 	override generateExecuteEvent() '''
-		void «FBClassName»::executeEvent(TEventID paEIID){
+		void «FBClassName»::executeEvent(TEventID paEIID, CEventChainExecutionThread * paECET) {
 		  switch(paEIID) {
 		    «FOR event : type.interfaceList.eventInputs»
 		    	case «event.generateEventID»:
