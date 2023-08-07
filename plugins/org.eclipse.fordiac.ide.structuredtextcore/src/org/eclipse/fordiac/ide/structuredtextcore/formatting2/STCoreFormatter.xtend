@@ -87,10 +87,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 	/** Formats the STImport */
 	def dispatch void format(STImport stImport, extension IFormattableDocument document) {
 		stImport.regionFor.keyword(STImportAccess.IMPORTKeyword_0).prepend[noIndentation].append[oneSpace]
-		stImport.regionFor.keyword(STImportAccess.semicolonKeyword_2).prepend[noSpace].append [
-			lowPriority
-			setNewLines(1, 1, 2)
-		]
+		stImport.regionFor.keyword(STImportAccess.semicolonKeyword_2).prepend[noSpace]
 	}
 
 	/** Formats the STVarDeclarationBlocks */

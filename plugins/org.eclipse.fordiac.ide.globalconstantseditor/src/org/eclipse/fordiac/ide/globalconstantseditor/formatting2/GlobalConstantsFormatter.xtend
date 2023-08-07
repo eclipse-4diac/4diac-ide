@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
- *
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Hesam Rezaee
  *       - initial API and implementation and/or initial documentation
@@ -29,7 +29,7 @@ import org.eclipse.xtext.RuleCall
 import org.eclipse.xtext.formatting2.IFormattableDocument
 
 class GlobalConstantsFormatter extends STCoreFormatter {
-	
+
 	@Inject extension GlobalConstantsGrammarAccess
 
 	def dispatch void format(STGlobalConstsSource stGlobalConstsSource, extension IFormattableDocument document) {
@@ -64,19 +64,26 @@ class GlobalConstantsFormatter extends STCoreFormatter {
 			append[setNewLines(1, 2, 2)]
 		]
 
-		if(!stGlobalConstsSource.name.nullOrEmpty) {
-			stGlobalConstsSource.regionFor.keyword(STGlobalConstsSourceAccess.PACKAGEKeyword_1_0).prepend[noSpace].append[oneSpace]
-			stGlobalConstsSource.regionFor.keyword(STGlobalConstsSourceAccess.semicolonKeyword_1_2).prepend[noSpace].append[newLines = 2]
+		if (!stGlobalConstsSource.name.nullOrEmpty) {
+			stGlobalConstsSource.regionFor.keyword(STGlobalConstsSourceAccess.PACKAGEKeyword_1_0).prepend[noSpace].
+				append[oneSpace]
+			stGlobalConstsSource.regionFor.keyword(STGlobalConstsSourceAccess.semicolonKeyword_1_2).prepend[noSpace].
+				append[newLines = 2]
 		}
-		stGlobalConstsSource.imports.forEach[format]
-		stGlobalConstsSource.elements.forEach[format]
-	}
-	
-	def dispatch void format(STVarGlobalDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
-		varDeclarationBlock.regionFor.keyword(STVarGlobalDeclarationBlockAccess.VAR_GLOBALKeyword_1).prepend [
-			highPriority
-			setNewLines(2, 2, 2)
+		stGlobalConstsSource.imports.forEach [
+			format
+			if (it == stGlobalConstsSource.imports.last)
+				regionFor.keyword(STImportAccess.semicolonKeyword_2).append[setNewLines(2, 2, 2)]
+			else
+				regionFor.keyword(STImportAccess.semicolonKeyword_2).append[setNewLines(1, 1, 2)]
 		]
+		stGlobalConstsSource.elements.forEach [
+			format
+			regionFor.keyword(STVarGlobalDeclarationBlockAccess.END_VARKeyword_4).append[newLines = 2]
+		]
+	}
+
+	def dispatch void format(STVarGlobalDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarGlobalDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
 				oneSpace
