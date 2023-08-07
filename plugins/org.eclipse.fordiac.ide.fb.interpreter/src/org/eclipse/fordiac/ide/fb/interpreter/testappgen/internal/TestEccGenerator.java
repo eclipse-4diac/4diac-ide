@@ -32,55 +32,13 @@ public class TestEccGenerator {
 		this.caseCount = caseCount;
 	}
 	
-	public void createTransition(Event input, int stateCount) {
-		final ECTransition transition = LibraryElementFactory.eINSTANCE.createECTransition();
-		transition.setConditionEvent(input);
-		if(stateCount <= 1 ) {
-			transition.setSource(ecc.getStart());
-			transition.setDestination(ecc.getECState().get(stateCount+caseCount));
-			
-		} else {
-			transition.setSource(ecc.getECState().get(stateCount+caseCount-1));
-			transition.setDestination(ecc.getECState().get(stateCount+caseCount));
-		}
-		
-		ecc.getECTransition().add(transition);
-		
-		final Position pT1 = LibraryElementFactory.eINSTANCE.createPosition();
-		if(stateCount > 1) {
-			pT1.setX(300*stateCount);
-		} else {
-			pT1.setX(100*stateCount);
-		}
-		pT1.setY(90*caseCount);
-		transition.setPosition(pT1);
-	}
-	
-	public void createTransitionBack(Event input, int stateCount) {
-		final ECTransition transition = LibraryElementFactory.eINSTANCE.createECTransition();
-		transition.setConditionEvent(input);
-
-		transition.setSource(ecc.getECState().get(stateCount+caseCount+1));
-		transition.setDestination(ecc.getStart());
-			
-
-		
-		ecc.getECTransition().add(transition);
-		
-		final Position pT1 = LibraryElementFactory.eINSTANCE.createPosition();
-		if(stateCount > 1) {
-			pT1.setX(300*stateCount);
-		} else {
-			pT1.setX(100*stateCount);
-		}
-		pT1.setY(90*caseCount);
-		transition.setPosition(pT1);
-	}
 	
 	public void createTransitionFromTo(ECState from, ECState to, Event input, int stateCount) {
 		final ECTransition transition = LibraryElementFactory.eINSTANCE.createECTransition();
-		transition.setConditionEvent(input);
-		transition.setConditionExpression("");
+		if(input != null) {
+			transition.setConditionEvent(input);
+			transition.setConditionExpression("");			
+		}
 		transition.setSource(from);
 		transition.setDestination(to);
 			
@@ -120,7 +78,9 @@ public class TestEccGenerator {
 	public ECAction createAction(Event event) {
 		final ECAction action = LibraryElementFactory.eINSTANCE.createECAction();
 		//action.setAlgorithm(createAlgorithm(testCase, testCase.getName()));
-		action.setOutput(event);
+		if(event != null) {
+			action.setOutput(event);
+		}
 		return action;
 	}
 	
@@ -143,7 +103,7 @@ public class TestEccGenerator {
 		return action;
 	}
 	
-	public Algorithm createAlgorithm(String name) {
+	public Algorithm createAlgorithm(String name) { //String expected, String received
 		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		alg.setName(name);
 	
@@ -164,6 +124,10 @@ public class TestEccGenerator {
 //				}
 //			}
 		// }
+		//text.append("if" + expected + " = " + received + "then\n");
+//		text.append("else");
+//		text.append("end_if;");
+		
 		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
 		text.append('\n');
 	
@@ -203,38 +167,10 @@ public class TestEccGenerator {
 		return ecc;
 	}
 	
-	public void increaseStateCount() {
+	public void increaseCaseCount() {
 		caseCount++;
 	}
-	
-//	private Algorithm createAlgorithm(final ServiceSequence testCase, final String testCaseName) {
-//	final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-//	destinationType.getCallables().add(alg);
-//	alg.setName(NameRepository.createUniqueName(alg, testCaseName));
-//
-//	final StringBuilder text = new StringBuilder();
-//	text.append("ALGORITHM " + testCaseName + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-//	for (final ServiceTransaction t : testCase.getServiceTransaction()) {
-//		// add input primitive parameters as statements
-//		if (t.getInputPrimitive().getParameters() != null) {
-//			text.append(t.getInputPrimitive().getParameters());
-//			text.append(";"); //$NON-NLS-1$
-//		}
-//
-//		// add output primitive parameters as statements
-//		for (final OutputPrimitive o : t.getOutputPrimitive()) {
-//			if (o.getParameters() != null) {
-//				text.append(o.getParameters());
-//				text.append(";"); //$NON-NLS-1$
-//			}
-//		}
-//	}
-//	text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
-//	text.append('\0');
-//
-//	alg.setText(text.toString());
-//	return alg;
-//}
-//
-
+	public int getCaseCount() {
+		return caseCount;
+	}
 }
