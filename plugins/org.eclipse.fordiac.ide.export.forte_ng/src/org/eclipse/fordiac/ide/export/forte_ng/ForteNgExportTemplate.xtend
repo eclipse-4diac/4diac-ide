@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
+import org.eclipse.fordiac.ide.model.data.ArrayType
 
 abstract class ForteNgExportTemplate extends ExportTemplate {
 
@@ -52,7 +53,7 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 		#include "forte_array_variable.h"
 	'''
 
-	def protected generateTypeInclude(DataType type) {
+	def protected CharSequence generateTypeInclude(DataType type) {
 		switch (type) {
 			TimeType: "forte_time.h"
 			LtimeType: "forte_ltime.h"
@@ -65,6 +66,7 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 			StringType case type.isSetMaxLength: "forte_string_fixed.h"
 			StringType: "forte_string.h"
 			WstringType: "forte_wstring.h"
+			ArrayType: type.baseType.generateTypeInclude
 			case GenericTypes.isAnyType(type): '''forte_«type.name.toLowerCase»_variant.h'''
 			default: '''forte_«type.name.toLowerCase».h'''
 		}
