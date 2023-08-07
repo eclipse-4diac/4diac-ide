@@ -38,10 +38,12 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		«className»::«className»() :
 		    CIEC_STRUCT()«type.memberVariables.generateVariableInitializer» {
 		}
+		«IF !type.memberVariables.empty»
 		
 		«className»::«className»(«generateConstructorParameters») :
 		    CIEC_STRUCT()«type.memberVariables.generateVariableInitializerFromParameters» {
 		}
+		«ENDIF»
 		
 		CStringDictionary::TStringId «className»::getStructTypeNameID() const {
 		  return «type.name.FORTEStringId»;
