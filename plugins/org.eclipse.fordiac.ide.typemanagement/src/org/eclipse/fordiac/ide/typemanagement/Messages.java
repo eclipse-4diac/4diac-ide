@@ -24,6 +24,8 @@ public final class Messages extends NLS {
 
 	public static String DeleteFBTypeParticipant_Name;
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
+	public static String DeleteFBTypeParticipant_Change_UpdateInstance;
+	public static String DeleteFBTypeParticipant_Change_UpdateInternalFB;
 	public static String DirsWithArchives;
 	public static String DirsWithUnzippedTypeLibs;
 	public static String ExtractedLibraryImportWizard;

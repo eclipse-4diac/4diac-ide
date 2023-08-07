@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -43,9 +44,15 @@ import org.eclipse.ltk.core.refactoring.participants.ResourceChangeChecker;
 
 public class DeleteFBTypeParticipant extends DeleteParticipant {
 
+	IFile file = null;
+
 	@Override
 	protected boolean initialize(final Object element) {
-		return (element instanceof IFile);
+		if (element instanceof IFile) {
+			this.file = (IFile) element;
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -65,19 +72,16 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 
 	private static RefactoringStatus verifyAffectedChildren(final IResourceDelta[] affectedChildren) {
 		for (final IResourceDelta resourceDelta : affectedChildren) {
-			if (resourceDelta.getResource() instanceof IFile) {
-				final TypeLibrary typelib = TypeLibraryManager.INSTANCE
-						.getTypeLibrary(resourceDelta.getResource().getProject());
-
-				final String typeNameToDelete = TypeEntry.getTypeNameFromFile((IFile) resourceDelta.getResource());
-				final List<String> typeNames = checkTypeContainment(typelib, typeNameToDelete);
-
-				if (!typeNames.isEmpty()) {
-					return RefactoringStatus.createWarningStatus(MessageFormat.format(
-							Messages.DeleteFBTypeParticipant_TypeInUseWarning, typeNameToDelete, typeNames.toString()));
-				}
-			} else {
+			if (!(resourceDelta.getResource() instanceof IFile)) {
 				return verifyAffectedChildren(resourceDelta.getAffectedChildren());
+			}
+			final TypeLibrary typelib = TypeLibraryManager.INSTANCE
+					.getTypeLibrary(resourceDelta.getResource().getProject());
+			final String typeNameToDelete = TypeEntry.getTypeNameFromFile((IFile) resourceDelta.getResource());
+			final List<String> typeNames = checkTypeContainment(typelib, typeNameToDelete);
+			if (!typeNames.isEmpty()) {
+				return RefactoringStatus.createWarningStatus(MessageFormat.format(
+						Messages.DeleteFBTypeParticipant_TypeInUseWarning, typeNameToDelete, typeNames.toString()));
 			}
 		}
 		return new RefactoringStatus();
@@ -124,7 +128,18 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		return null;
+		try {
+			pm.beginTask("Creating change...", 1); //$NON-NLS-1$
+			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+
+			if (typeEntry.getType() instanceof final FBType type) {
+				return new SafeFBTypeDeletionChange(type);
+			}
+
+			return null;
+		} finally {
+			pm.done();
+		}
 	}
 
 }
