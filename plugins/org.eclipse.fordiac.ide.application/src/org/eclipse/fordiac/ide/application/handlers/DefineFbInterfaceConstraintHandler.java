@@ -23,8 +23,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.commands.UpdateConstraintCommand;
-import org.eclipse.fordiac.ide.application.commands.UpdateReactionCommand;
+import org.eclipse.fordiac.ide.application.commands.UpdateContractCommand;
 import org.eclipse.fordiac.ide.application.utilities.DefineFBReactionOnePinDialog;
 import org.eclipse.fordiac.ide.application.utilities.DefineFBReactionThreePinDialog;
 import org.eclipse.fordiac.ide.application.utilities.DefineFBReactionTwoPinDialog;
@@ -45,25 +44,7 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 
 		final List<Event> eventPins = getSelectedPins(event);
 		if (eventPins.size() == 3) {
-			final List<Event> inputEvent = eventPins.stream().filter(Event::isIsInput).toList();
-			final List<Event> outputEvents = eventPins.stream().filter(e -> !e.isIsInput()).toList();
-			if (inputEvent.size() == 1 && outputEvents.size() == 2) {
-				final DefineFBReactionThreePinDialog dialog = new DefineFBReactionThreePinDialog(
-						HandlerUtil.getActiveShell(event), inputEvent.get(0), outputEvents);
-				String time = ""; //$NON-NLS-1$
-				if (dialog.open() != CANCEL) {
-					time = dialog.getTime();
-					final UpdateReactionCommand urcmd = new UpdateReactionCommand(inputEvent.get(0), outputEvents,
-							time);
-					if (urcmd.canExecute()) {
-						urcmd.execute();
-					}
-				}
-			} else {
-				MessageDialog.openError(HandlerUtil.getActiveShell(event),
-						Messages.DefineFbInterfaceConstraintHandler_Title,
-						Messages.DefineFbInterfaceConstraintHandler_ThreePinErrorMessage);
-			}
+			makeThreePinReaction(event, eventPins);
 		} else if (eventPins.size() == 2) {
 			makeTwoPinReaction(event, eventPins);
 
@@ -80,6 +61,28 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 		eventPins.clear();
 		return Status.OK_STATUS;
 
+	}
+
+	private static void makeThreePinReaction(final ExecutionEvent event, final List<Event> eventPins) {
+		final List<Event> inputEvent = eventPins.stream().filter(Event::isIsInput).toList();
+		final List<Event> outputEvents = eventPins.stream().filter(e -> !e.isIsInput()).toList();
+		if (inputEvent.size() == 1 && outputEvents.size() == 2) {
+			final DefineFBReactionThreePinDialog dialog = new DefineFBReactionThreePinDialog(
+					HandlerUtil.getActiveShell(event), inputEvent.get(0), outputEvents);
+			String time = ""; //$NON-NLS-1$
+			if (dialog.open() != CANCEL) {
+				time = dialog.getTime();
+				final UpdateContractCommand uccmd = UpdateContractCommand.createContractGuarantee(inputEvent.get(0),
+						outputEvents, time);
+				if (uccmd.canExecute()) {
+					uccmd.execute();
+				}
+			}
+		} else {
+			MessageDialog.openError(HandlerUtil.getActiveShell(event),
+					Messages.DefineFbInterfaceConstraintHandler_Title,
+					Messages.DefineFbInterfaceConstraintHandler_ThreePinErrorMessage);
+		}
 	}
 
 	private static void makeTwoPinReaction(final ExecutionEvent event, final List<Event> eventPins) {
@@ -100,10 +103,11 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 			String time = ""; //$NON-NLS-1$
 			if (dialog.open() != CANCEL) {
 				time = dialog.getTime();
-			}
-			final UpdateReactionCommand urcmd = new UpdateReactionCommand(eventPins, time);
-			if (urcmd.canExecute()) {
-				urcmd.execute();
+
+				final UpdateContractCommand uccmd = UpdateContractCommand.createContractReaction(eventPins, time);
+				if (uccmd.canExecute()) {
+					uccmd.execute();
+				}
 			}
 		}
 	}
@@ -122,10 +126,12 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 				if (dialog.hasOffset()) {
 					offsetText = dialog.getOffsetText();
 				}
-			}
-			final UpdateConstraintCommand uccmd = new UpdateConstraintCommand(eventPins, time, offsetText, state);
-			if (uccmd.canExecute()) {
-				uccmd.execute();
+
+				final UpdateContractCommand uccmd = UpdateContractCommand.createContractAssumption(eventPins, time,
+						offsetText, state);
+				if (uccmd.canExecute()) {
+					uccmd.execute();
+				}
 			}
 		} else {
 			MessageDialog.openError(HandlerUtil.getActiveShell(event),

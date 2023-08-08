@@ -96,7 +96,7 @@ public final class Messages extends NLS {
 
 	public static String DefineFBReactionOnePinDialog_Reaction;
 
-	public static String DefineFBReactionOnePinDialog_SpecifyOffset;
+	public static String DefineFBReactionOnePinDialog_OffsetDialog;
 
 	public static String DefineFBReactionOnePinDialog_Title;
 

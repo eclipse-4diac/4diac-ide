@@ -27,23 +27,48 @@ import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 
-public class UpdateConstraintCommand extends Command {
+public class UpdateContractCommand extends Command {
 
 	private ChangeCommentCommand cccmd;
 	private NewSubAppCommand subappcmd;
 	private ToggleSubAppRepresentationCommand toggle;
 	private ChangeNameCommand cncmd;
-	private final String time;
-	private final String offset;
-	private final String state;
-	private List<Event> eventPins = new ArrayList<>();
+	private final String comment;
+	private final FBNetworkElement fbNetworkElement;
 
-	public UpdateConstraintCommand(final List<Event> eventPins, final String time, final String offset,
-			final String state) {
-		this.eventPins = eventPins;
-		this.time = time;
-		this.offset = offset;
-		this.state = state;
+	public UpdateContractCommand(final FBNetworkElement fbNetworkElement, final String comment) {
+		this.comment = comment;
+		this.fbNetworkElement = fbNetworkElement;
+	}
+
+	public static UpdateContractCommand createContractAssumption(final List<Event> eventPins, final String time,
+			final String offset, final String state) {
+		final StringBuilder comment = new StringBuilder();
+		comment.append("ASSUMPTION " + eventPins.get(0).getName()); //$NON-NLS-1$
+		comment.append(" occurs " + state + " ");   //$NON-NLS-1$//$NON-NLS-2$
+		comment.append(time + "ms "); //$NON-NLS-1$
+		if (offset != null) {
+			comment.append("with " + offset + "ms" + " offset");   //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		}
+
+		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(), comment.toString());
+	}
+
+	public static UpdateContractCommand createContractReaction(final List<Event> eventPins, final String time) {
+		final StringBuilder comment = new StringBuilder();
+		comment.append("GUARANTEE Reaction(" + eventPins.get(0).getName() + ","   //$NON-NLS-1$//$NON-NLS-2$
+				+ eventPins.get(1).getName() + ")");  //$NON-NLS-1$
+		comment.append(" within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
+		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(), comment.toString());
+	}
+
+	public static UpdateContractCommand createContractGuarantee(final Event event, final List<Event> outputEvents,
+			final String time) {
+		final StringBuilder comment = new StringBuilder();
+		comment.append("GUARANTEE Whenever event " + event.getName() + " occurs, then events(" //$NON-NLS-1$ //$NON-NLS-2$
+				+ outputEvents.get(0).getName() + "," + outputEvents.get(1).getTypeName() + ") occur"); //$NON-NLS-1$ //$NON-NLS-2$
+		comment.append(" within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
+		return new UpdateContractCommand(outputEvents.get(0).getFBNetworkElement(), comment.toString());
 	}
 
 	@Override
@@ -51,18 +76,13 @@ public class UpdateConstraintCommand extends Command {
 		if (cccmd == null) {
 
 			final SubApp subapp = createNewSubapp();
-			final StringBuilder comment = new StringBuilder();
+			final StringBuilder finalcomment = new StringBuilder();
 			final String oldcomment = subapp.getComment();
 			if (oldcomment.indexOf("ASSUMPTION ") == 0) { //$NON-NLS-1$
-				comment.append(oldcomment + "\n"); //$NON-NLS-1$
+				finalcomment.append(oldcomment + "\n"); //$NON-NLS-1$
 			}
-			comment.append("ASSUMPTION " + eventPins.get(0).getName()); //$NON-NLS-1$
-			comment.append(" occurs " + state + " ");   //$NON-NLS-1$//$NON-NLS-2$
-			comment.append(time + "ms "); //$NON-NLS-1$
-			if (offset != null) {
-				comment.append("with " + offset + "ms" + " offset");   //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-			}
-			cccmd = new ChangeCommentCommand(subapp, comment.toString());
+			finalcomment.append(this.comment);
+			cccmd = new ChangeCommentCommand(subapp, finalcomment.toString());
 			if (cccmd.canExecute()) {
 				cccmd.execute();
 			}
@@ -93,9 +113,8 @@ public class UpdateConstraintCommand extends Command {
 	}
 
 	private SubApp createNewSubapp() {
-		final FBNetworkElement fb = eventPins.get(0).getFBNetworkElement();
-		if (fb.isNestedInSubApp()) {
-			final SubApp subapp = (SubApp) fb.eContainer().eContainer();
+		if (fbNetworkElement.isNestedInSubApp()) {
+			final SubApp subapp = (SubApp) fbNetworkElement.eContainer().eContainer();
 			if (!subapp.isUnfolded()) {
 				toggle = new ToggleSubAppRepresentationCommand(subapp);
 				if (toggle.canExecute()) {
@@ -104,16 +123,17 @@ public class UpdateConstraintCommand extends Command {
 			}
 			return subapp;
 		}
-		final FBNetwork network = fb.getFbNetwork();
-		final Position pos = fb.getPosition();
+		final FBNetwork network = fbNetworkElement.getFbNetwork();
+		final Position pos = fbNetworkElement.getPosition();
 		final List<FBNetworkElement> list = new ArrayList<>();
-		list.add(fb);
+		list.add(fbNetworkElement);
 		subappcmd = new NewSubAppCommand(network, list, pos.getX(), pos.getY());
 		if (subappcmd.canExecute()) {
 			subappcmd.execute();
 		}
 		final SubApp subapp = subappcmd.getElement();
-		cncmd = new ChangeNameCommand(subapp, NameRepository.createUniqueName(subapp, "_CONTRACT_" + fb.getName())); //$NON-NLS-1$
+		cncmd = new ChangeNameCommand(subapp,
+				NameRepository.createUniqueName(subapp, "_CONTRACT_" + fbNetworkElement.getName())); //$NON-NLS-1$
 		if (cncmd.canExecute()) {
 			cncmd.execute();
 		}
