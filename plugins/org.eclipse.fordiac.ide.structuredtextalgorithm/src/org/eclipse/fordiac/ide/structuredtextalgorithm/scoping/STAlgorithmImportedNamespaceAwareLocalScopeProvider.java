@@ -39,9 +39,9 @@ public class STAlgorithmImportedNamespaceAwareLocalScopeProvider extends Importe
 					}
 					final CompilerInfo compilerInfo = libraryElement.getCompilerInfo();
 					if (compilerInfo != null) {
-						if (compilerInfo.getPackageName() != null) {
-							final QualifiedName name = getQualifiedNameConverter()
-									.toQualifiedName(compilerInfo.getPackageName());
+						final String packageName = compilerInfo.getPackageName();
+						if (packageName != null && !packageName.isEmpty()) {
+							final QualifiedName name = getQualifiedNameConverter().toQualifiedName(packageName);
 							if (name != null && !name.isEmpty()) {
 								result.add(doCreateImportNormalizer(name, true, ignoreCase));
 							}

@@ -31,7 +31,7 @@ public class STCoreQualifiedNameProvider extends DefaultDeclarativeQualifiedName
 
 	protected QualifiedName qualifiedName(final LibraryElement type) {
 		final CompilerInfo compilerInfo = type.getCompilerInfo();
-		if (compilerInfo != null && compilerInfo.getPackageName() != null) {
+		if (compilerInfo != null && compilerInfo.getPackageName() != null && !compilerInfo.getPackageName().isEmpty()) {
 			return getConverter().toQualifiedName(compilerInfo.getPackageName()).append(type.getName());
 		}
 		return null;
