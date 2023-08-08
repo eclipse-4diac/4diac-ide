@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.deployment.iec61499.handlers.EthernetDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -116,6 +117,15 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 				// part
 				return fb.getTypeName() + "_1" + ((StructManipulator) fb).getStructType().getName(); //$NON-NLS-1$
 			}
+			if (fb.getType() != null) {
+				final CompilerInfo compilerInfo = fb.getType().getCompilerInfo();
+				if (compilerInfo != null) {
+					final String packageName = compilerInfo.getPackageName();
+					if (packageName != null && !packageName.isEmpty()) {
+						return packageName.replace(':', '_') + "__" + fb.getType().getName(); //$NON-NLS-1$
+					}
+				}
+			}
 			return fb.getTypeName();
 		}
 		return null;
@@ -174,8 +184,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fbData,
 			final VarDeclaration varDecl) throws DeploymentException {
 		final String encodedValue = encodeXMLChars(value);
-		final String request = generateWriteParamRequest(fbData.getPrefix() + fbData.getFb().getName(), varDecl.getName(),
-				encodedValue);
+		final String request = generateWriteParamRequest(fbData.getPrefix() + fbData.getFb().getName(),
+				varDecl.getName(), encodedValue);
 		try {
 			sendREQ(resource.getName(), request);
 		} catch (final IOException e) {
@@ -190,23 +200,22 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 			throws DeploymentException {
 		final IInterfaceElement source = connData.getSource();
 		final IInterfaceElement destination = connData.getDestination();
-		if (null != source && null != destination && null != source.getFBNetworkElement()
-				&& null != destination.getFBNetworkElement()) {
-			final FBNetworkElement sourceFB = source.getFBNetworkElement();
-			final FBNetworkElement destFB = destination.getFBNetworkElement();
-			final String request = MessageFormat.format(CREATE_CONNECTION, getNextId(),
-					connData.getSourcePrefix() + sourceFB.getName() + "." + source.getName(), //$NON-NLS-1$
-					connData.getDestinationPrefix() + destFB.getName() + "." + destination.getName()); //$NON-NLS-1$
-
-			try {
-				sendREQ(resource.getName(), request);
-			} catch (final IOException e) {
-				// TODO model refactoring - add here more information on what connection had the
-				// issue
-				throw new DeploymentException(Messages.DeploymentExecutor_CreateConnectionFailed, e);
-			}
-		} else {
+		if ((null == source) || (null == destination) || (null == source.getFBNetworkElement())
+				|| (null == destination.getFBNetworkElement())) {
 			throw new DeploymentException(Messages.DeploymentExecutor_CreateConnectionFailed);
+		}
+		final FBNetworkElement sourceFB = source.getFBNetworkElement();
+		final FBNetworkElement destFB = destination.getFBNetworkElement();
+		final String request = MessageFormat.format(CREATE_CONNECTION, getNextId(),
+				connData.getSourcePrefix() + sourceFB.getName() + "." + source.getName(), //$NON-NLS-1$
+				connData.getDestinationPrefix() + destFB.getName() + "." + destination.getName()); //$NON-NLS-1$
+
+		try {
+			sendREQ(resource.getName(), request);
+		} catch (final IOException e) {
+			// TODO model refactoring - add here more information on what connection had the
+			// issue
+			throw new DeploymentException(Messages.DeploymentExecutor_CreateConnectionFailed, e);
 		}
 	}
 
@@ -235,7 +244,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	}
 
 	@Override
-	public void writeDeviceParameter(final Device device, final String parameter, final String value) throws DeploymentException {
+	public void writeDeviceParameter(final Device device, final String parameter, final String value)
+			throws DeploymentException {
 		final String encodedValue = encodeXMLChars(value);
 		final String request = MessageFormat.format(getWriteParameterMessage(), Integer.valueOf(id), encodedValue,
 				parameter);
@@ -265,7 +275,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	}
 
 	@Override
-	public void deleteConnection(final Resource res, final ConnectionDeploymentData conData) throws DeploymentException {
+	public void deleteConnection(final Resource res, final ConnectionDeploymentData conData)
+			throws DeploymentException {
 		// do nothing
 	}
 
@@ -277,7 +288,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public void startFB(final Resource res, final FBDeploymentData fbData) throws DeploymentException {
 		final String fullFbInstanceName = fbData.getPrefix() + fbData.getFb().getName();
-		final String request = MessageFormat.format(START_FB, getNextId(), fullFbInstanceName, fbData.getFb().getTypeName());
+		final String request = MessageFormat.format(START_FB, getNextId(), fullFbInstanceName,
+				fbData.getFb().getTypeName());
 		try {
 			sendREQ(res.getName(), request);
 		} catch (final IOException e) {
@@ -424,7 +436,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void clearForce(final MonitoringBaseElement element) throws DeploymentException {
-		final String request = MessageFormat.format(FORCE_VALUE, getNextId(), "*", element.getQualifiedString(), "false"); //$NON-NLS-1$ //$NON-NLS-2$
+		final String request = MessageFormat.format(FORCE_VALUE, getNextId(), "*", element.getQualifiedString(), //$NON-NLS-1$
+				"false");  //$NON-NLS-1$
 		try {
 			sendREQ(element.getResourceString(), request);
 		} catch (final IOException e) {
