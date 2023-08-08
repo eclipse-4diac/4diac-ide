@@ -134,6 +134,9 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
 				getConnectionFigure().updateConLabels();
 			}
+			if (LibraryElementPackage.eINSTANCE.getFBNetworkElement_Group().equals(feature)) {
+				getFigure().handleVisibilityChange(getFigure().isHidden()); // triggers new label creation
+			}
 		}
 	}
 
