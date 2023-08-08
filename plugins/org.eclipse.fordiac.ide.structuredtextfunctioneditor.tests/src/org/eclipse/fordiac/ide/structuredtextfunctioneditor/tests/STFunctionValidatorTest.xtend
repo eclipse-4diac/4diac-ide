@@ -1242,6 +1242,17 @@ class STFunctionValidatorTest {
 		'''.parse.assertNoErrors
 	}
 
+	@Test
+	def void testInvalidRangeExpression() {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [2] OF REAL;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.INDEX_RANGE_EXPRESSION_INVALID)
+	}
+
 	def static Stream<Arguments> invalidArrayRangeOrMaxLengthArgument() {
 		return Stream.of(Arguments.of("REAL#1.0", "REAL"), Arguments.of("LREAL#1.0", "LREAL"),
 			Arguments.of("\"3\"", "WCHAR"), Arguments.of("'5'", "CHAR"), Arguments.of("WSTRING#\"4\"", "WSTRING"),
