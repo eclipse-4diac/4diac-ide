@@ -20,16 +20,17 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public abstract class AbstractFBGenerator {
@@ -72,7 +73,7 @@ public abstract class AbstractFBGenerator {
 		final IFolder folder = project.getFolder("Type Library"); //$NON-NLS-1$
 		final IFile destfile = folder.getFile(getTypeName() + ".fbt");  //$NON-NLS-1$
 		
-		TypeEntry entry  = getSourceFB().getTypeLibrary().createTypeEntry(destfile);
+		entry  = getSourceFB().getTypeLibrary().createTypeEntry(destfile);
 		entry.setType(destinationFB);
 		
 		addEvents();
@@ -83,17 +84,17 @@ public abstract class AbstractFBGenerator {
 	
 	private void createMiths() {		
 		for (Event input : destinationFB.getInterfaceList().getEventInputs()) {
-			for (VarDeclaration var : destinationFB.getInterfaceList().getInputVars()) {
+			for (VarDeclaration varD : destinationFB.getInterfaceList().getInputVars()) {
 				With w = LibraryElementFactory.eINSTANCE.createWith();
-				w.setVariables(var);
+				w.setVariables(varD);
 				input.getWith().add(w);
 			}
 		}
 		
 		for (Event output : destinationFB.getInterfaceList().getEventOutputs()) {
-			for (VarDeclaration var : destinationFB.getInterfaceList().getOutputVars()) {
+			for (VarDeclaration varD : destinationFB.getInterfaceList().getOutputVars()) {
 				With w = LibraryElementFactory.eINSTANCE.createWith();
-				w.setVariables(var);
+				w.setVariables(varD);
 				output.getWith().add(w);
 			}
 		}
@@ -117,6 +118,53 @@ public abstract class AbstractFBGenerator {
 	}
 	
 	protected abstract void generateECC();
-	protected abstract String getTypeName(); //{testFB.getName() + "_MATCH";}
+	protected abstract String getTypeName();
 	protected abstract FBType getSourceFB();
+	
+	protected List<Event> getExpectedEvents(boolean isInput){
+		List<Event> list = new ArrayList<>();
+		for (TestCase testCase : testSuite.getTestCases()) {
+			for(TestState testState : testCase.getTestStates()) {
+				if(testState.getTestOutputs().size() == 1) {
+					if(!containsEvent(list, testState.getTestOutputs().get(0).getEvent() + "_expected")){						
+						list.add(createEvent(testState.getTestOutputs().get(0).getEvent() + "_expected", isInput));
+					}
+				}
+				else if (testState.getTestOutputs().size() > 1) {
+					String name = createEventName(testState.getTestOutputs());
+					if(!containsEvent(list, name)) {
+						list.add(createEvent(name, isInput));
+					}
+				}
+			}
+		}
+		return list;
+	}
+	
+	private String createEventName(List<OutputPrimitive> testOutputs) {
+		StringBuilder sb = new StringBuilder();
+		for (OutputPrimitive outP : testOutputs) {
+			sb.append(outP.getEvent() + "_");
+		}
+		sb.append("expected");
+		return sb.toString();
+	}
+
+	protected Event createEvent(String name, boolean isInput) {
+		Event newEv = LibraryElementFactory.eINSTANCE.createEvent();
+		newEv.setIsInput(isInput);
+		newEv.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
+		newEv.setName(name);
+		return newEv;
+	}
+	
+	private boolean containsEvent(List<Event> list, String name) {
+		boolean retBool = false;
+		for(Event ev : list) {	
+			if(ev.getName().equals(name)) {
+				retBool = true;
+			}
+		}
+		return retBool;
+	}
 }

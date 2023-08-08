@@ -16,28 +16,20 @@ package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
 public class TestCase {
 	private String name;
-	private TestSuite container;
 	private ServiceSequence dataSource;
-	private List<TestState> testStates = new ArrayList<TestState>();
+	private List<TestState> testStates = new ArrayList<>();
 	
 	public TestCase(ServiceSequence dataSource) { //, TestSuite testSuite
 		if (dataSource == null) {
 			throw new IllegalArgumentException("TestCase must not be null.");
 		}
 		this.dataSource = dataSource;
-		
-//		boolean isValid = NameRepository.isValidName(dataSource, name);
-//		if (!isValid) {
-//			NameRepository.createUniqueName(dataSource, "TestCase1");
-//		}
 		name = dataSource.getName();
-		//this.container = testSuite;
 	}
 
 	public static TestCase createTestCase(ServiceSequence serviceSequence) {
@@ -54,5 +46,9 @@ public class TestCase {
 	
 	public List<TestState> getTestStates(){
 		return testStates;
+	}
+	
+	public ServiceSequence getdataSource() {
+		return dataSource;
 	}
 }

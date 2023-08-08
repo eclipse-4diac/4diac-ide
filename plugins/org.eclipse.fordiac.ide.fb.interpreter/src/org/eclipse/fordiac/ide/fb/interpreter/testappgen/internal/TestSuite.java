@@ -14,18 +14,15 @@
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 
 public class TestSuite {
 	private Service dataSource;
-	private List<TestCase> testCases = new ArrayList<TestCase>();
+	private List<TestCase> testCases = new ArrayList<>();
 	
 	TestSuite(FBType type) {
 		if (type.getService() == null || type.getService().getServiceSequence().isEmpty()) {
@@ -41,9 +38,8 @@ public class TestSuite {
 		}
 	}
 	
-	public TestCase getTestCaseByName(String name) {
-		return null;
-		
+	public Service getDataSource(){
+		return dataSource;
 	}
 	
 	public static TestSuite createTestSuite(FBType type) {

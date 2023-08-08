@@ -31,9 +31,8 @@ public class TestState {
 	}
 
 	public static TestState createTestState(ServiceTransaction serviceTransaction) {
-		TestState testState = new TestState(serviceTransaction);
-		
-		return testState; 
+
+		return new TestState(serviceTransaction);
 	}
 	
 	public InputPrimitive getTestTrigger() {
@@ -41,7 +40,7 @@ public class TestState {
 	}
 	
 	public List<OutputPrimitive> getTestOutputs() {
-		List<OutputPrimitive> list = new ArrayList<OutputPrimitive>();
+		List<OutputPrimitive> list = new ArrayList<>();
 		list.addAll(dataSource.getOutputPrimitive());
 		return list;
 	}

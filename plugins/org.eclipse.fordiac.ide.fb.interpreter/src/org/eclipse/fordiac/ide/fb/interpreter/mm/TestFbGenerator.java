@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestEccGenerat
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestState;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestSuite;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -41,7 +42,7 @@ public class TestFbGenerator extends AbstractFBGenerator {
 
 	@Override
 	protected List<Event> createInputEventList() {
-		List<Event> list = new ArrayList<Event>();
+		List<Event> list = new ArrayList<>();
 		for (TestCase testCase : testSuite.getTestCases()) {
 			Event event = LibraryElementFactory.eINSTANCE.createEvent();
 			event.setIsInput(true);
@@ -49,14 +50,18 @@ public class TestFbGenerator extends AbstractFBGenerator {
 			event.setName(testCase.getName() + "_TEST");
 			list.add(event);
 		}
-
+		Event lastCompleted = LibraryElementFactory.eINSTANCE.createEvent();
+        lastCompleted.setIsInput(true);
+        lastCompleted.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
+        lastCompleted.setName("tr_CMPLT");
+        list.add(lastCompleted);
 		inputEventList = list;
 		return list;
 	}
 
 	@Override
 	protected List<Event> createOutputEventList() {
-		List<Event> list = new ArrayList<Event>();
+		List<Event> list = new ArrayList<>();
 		for (Event event : sourceType.getInterfaceList().getEventInputs()) {
 			Event outEvent = LibraryElementFactory.eINSTANCE.createEvent();
 			outEvent.setIsInput(false);
@@ -64,7 +69,7 @@ public class TestFbGenerator extends AbstractFBGenerator {
 			outEvent.setType(event.getType());
 			list.add(outEvent);
 		}
-		
+		list.addAll(getExpectedEvents(false));
 		Event resultEvent = LibraryElementFactory.eINSTANCE.createEvent();
 		resultEvent.setIsInput(false);
 		resultEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
@@ -81,18 +86,26 @@ public class TestFbGenerator extends AbstractFBGenerator {
 		for (TestCase testCase : testSuite.getTestCases()) {
 			int stateCnt = 1;
 			for (TestState testState : testCase.getTestStates()) {
-				eccGen.createState(testCase, stateCnt, inputEventList.get(0));
+				eccGen.createState(testCase, stateCnt);
+				
+				Event ev = destinationFB.getInterfaceList().getEvent(testState.getTestTrigger().getEvent());
+				ECAction action = eccGen.createAction();
+				action.setOutput(ev);
+				
+				eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size()-1).getECAction().add(action);
+				
+				
 				if(stateCnt <= 1 ) {
 					eccGen.createTransitionFromTo(
 							eccGen.getEcc().getECState().get(0),
 							eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size()-1),
-							inputEventList.get(eccGen.getCaseCount()), stateCnt);
+							inputEventList.get(eccGen.getCaseCount()));
 
 				} else {
 					eccGen.createTransitionFromTo(
 							eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size()-2),
 							eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size()-1),
-							inputEventList.get(eccGen.getCaseCount()), stateCnt);
+							inputEventList.get(eccGen.getCaseCount()));
 				}
 				
 				stateCnt++;
@@ -100,7 +113,7 @@ public class TestFbGenerator extends AbstractFBGenerator {
 			eccGen.createTransitionFromTo(
 					eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size()-1),
 					eccGen.getEcc().getECState().get(0),
-					null, stateCnt);
+					null);
 			
 			eccGen.increaseCaseCount();
 		}
@@ -118,14 +131,13 @@ public class TestFbGenerator extends AbstractFBGenerator {
 
 	@Override
 	protected List<VarDeclaration> createInputDataList() {
-		List<VarDeclaration> list = new ArrayList<VarDeclaration>();
-		
-		return list;
+
+		return new ArrayList<>();
 	}
 
 	@Override
 	protected List<VarDeclaration> createOutputDataList() {
-		List<VarDeclaration> list = new ArrayList<VarDeclaration>();
+		List<VarDeclaration> list = new ArrayList<>();
 		list.addAll(EcoreUtil.copyAll(sourceType.getInterfaceList().getInputVars()));
 		list.addAll(EcoreUtil.copyAll(sourceType.getInterfaceList().getOutputVars()));
 		for (VarDeclaration varDecl : list) {
