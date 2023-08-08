@@ -358,7 +358,7 @@ public final class LinkConstraints {
 	}
 
 	private LinkConstraints() {
-		throw new UnsupportedOperationException(Messages.LinkConstraints_ClassLinconstraintsShouldNotBeCreated);
+		throw new UnsupportedOperationException(Messages.LinkConstraints_ClassLinkconstraintsShouldNotBeCreated);
 	}
 
 }

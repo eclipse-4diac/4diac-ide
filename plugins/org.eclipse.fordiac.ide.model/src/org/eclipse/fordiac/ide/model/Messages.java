@@ -259,7 +259,7 @@ public final class Messages extends NLS {
 	public static String ConnectionHelper_ErrorMarker_Dest_Missing;
 	public static String ConnectionHelper_pin_not_found;
 
-	public static String LinkConstraints_ClassLinconstraintsShouldNotBeCreated;
+	public static String LinkConstraints_ClassLinkconstraintsShouldNotBeCreated;
 	public static String LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct;
 	public static String LinkConstraints_STATUSMessage_hasAlreadyInputConnection;
 	public static String LinkConstraints_STATUSMessage_hasAlreadyOutputConnection;
