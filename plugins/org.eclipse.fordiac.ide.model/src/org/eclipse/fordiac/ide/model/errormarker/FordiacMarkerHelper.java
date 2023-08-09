@@ -79,6 +79,25 @@ public final class FordiacMarkerHelper {
 		return null;
 	}
 
+	public static String getTargetUriString(final IResource resource, final EObject object) {
+		final URI uri = getTargetUri(resource, object);
+		if (uri != null) {
+			return uri.toString();
+		}
+		return null;
+	}
+
+	public static Object[] getDiagnosticData(final EObject object) {
+		if (object == null) {
+			return new Object[0];
+		}
+		return new Object[] { object, // [0] object itself (per EMF convention)
+				getLocation(object), // [1] LOCATION
+				getTargetUriString(null, object), // [2] TARGET_URI
+				EcoreUtil.getURI(object.eClass()).toString() // [3] TARGET_TYPE
+		};
+	}
+
 	public static List<IMarker> findMarkers(final EObject target) {
 		return findMarkers(target, FordiacErrorMarker.IEC61499_MARKER);
 	}

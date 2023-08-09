@@ -43,5 +43,6 @@ Export-Package: org.eclipse.fordiac.ide.structuredtextcore.ui,
  org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix,
  org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring,
  org.eclipse.fordiac.ide.structuredtextcore.ui.resource,
- org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring
+ org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring,
+ org.eclipse.fordiac.ide.structuredtextcore.ui.validation
 Bundle-Activator: org.eclipse.fordiac.ide.structuredtextcore.ui.internal.StructuredtextcoreActivatorEx

@@ -179,6 +179,17 @@
 		</persistent>
 	</extension>
  <extension
+       id="validation"
+       name="4diac IDE Validation Problem"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.model.problem">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
+ </extension>
+ <extension
        id="initialValue"
        name="4diac IDE Initial Value Problem"
        point="org.eclipse.core.resources.markers">

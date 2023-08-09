@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceForI
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreResourceUIValidatorExtension;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
@@ -55,6 +56,7 @@ import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeId
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
 import org.eclipse.xtext.ui.shared.Access;
+import org.eclipse.xtext.ui.validation.IResourceUIValidatorExtension;
 
 import com.google.inject.Binder;
 import com.google.inject.Provider;
@@ -160,5 +162,9 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 				.annotatedWith(com.google.inject.name.Names
 						.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS))
 				.toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider.class);
+	}
+
+	public Class<? extends IResourceUIValidatorExtension> bindIResourceUIValidatorExtension() {
+		return STCoreResourceUIValidatorExtension.class;
 	}
 }
