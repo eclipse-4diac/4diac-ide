@@ -409,6 +409,10 @@
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getTypeName" body="DataType dataType = getType();&#xA;if(dataType != null){&#xA;&#x9;return dataType.getName();&#xA;}&#xA;return null;"/>
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getFullTypeName"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/validateName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.validateName(this, diagnostics, context) &amp;&amp; org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//IInterfaceElement/validateName/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//IInterfaceElement/validateName/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Import">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Import/importedNamespace"/>
@@ -417,6 +421,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/comment"/>
       <genOperations ecoreOperation="lib.ecore#//INamedElement/getQualifiedName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//INamedElement/validateName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.validateName(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//INamedElement/validateName/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//INamedElement/validateName/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//InputPrimitive"/>
     <genClasses provider="Stateful" ecoreClass="lib.ecore#//InterfaceList">

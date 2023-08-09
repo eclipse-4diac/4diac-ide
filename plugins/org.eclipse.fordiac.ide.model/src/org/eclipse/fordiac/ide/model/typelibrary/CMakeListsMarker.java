@@ -14,9 +14,11 @@
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
@@ -147,5 +149,10 @@ public class CMakeListsMarker implements INamedElement {
 	@Override
 	public void eNotify(final Notification notification) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return true;
 	}
 }

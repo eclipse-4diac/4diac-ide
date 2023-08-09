@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
+import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
@@ -39,6 +40,7 @@ import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 
 import org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl;
+import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.libraryElement.*;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -882,6 +884,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		// Initialize created meta-data
 		theLibraryElementPackage.initializePackageContents();
 		theDataPackage.initializePackageContents();
+
+		// Register package validator
+		EValidator.Registry.INSTANCE.put
+			(theLibraryElementPackage,
+			 new EValidator.Descriptor() {
+				 @Override
+				 public EValidator getEValidator() {
+					 return LibraryElementValidator.INSTANCE;
+				 }
+			 });
 
 		// Mark meta-data to indicate it can't be changed
 		theLibraryElementPackage.freeze();
@@ -4964,6 +4976,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(iInterfaceElementEClass, ecorePackage.getEString(), "getFullTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		op = addEOperation(iInterfaceElementEClass, ecorePackage.getEBoolean(), "validateName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		EGenericType g1 = createEGenericType(ecorePackage.getEMap());
+		EGenericType g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(importEClass, Import.class, "Import", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getImport_ImportedNamespace(), theXMLTypePackage.getString(), "importedNamespace", null, 0, 1, Import.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -4972,6 +4993,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEAttribute(getINamedElement_Comment(), theXMLTypePackage.getString(), "comment", "", 0, 1, INamedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		addEOperation(iNamedElementEClass, ecorePackage.getEString(), "getQualifiedName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(iNamedElementEClass, ecorePackage.getEBoolean(), "validateName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(inputPrimitiveEClass, InputPrimitive.class, "InputPrimitive", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
@@ -4987,8 +5017,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getInterfaceList_ErrorMarker(), this.getErrorMarkerInterface(), null, "errorMarker", null, 0, -1, InterfaceList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(interfaceListEClass, null, "getAllInterfaceElements", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		EGenericType g1 = createEGenericType(ecorePackage.getEEList());
-		EGenericType g2 = createEGenericType(this.getIInterfaceElement());
+		g1 = createEGenericType(ecorePackage.getEEList());
+		g2 = createEGenericType(this.getIInterfaceElement());
 		g1.getETypeArguments().add(g2);
 		initEOperation(op, g1);
 
@@ -5279,6 +5309,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		// Create annotations
 		// http:///org/eclipse/emf/ecore/util/ExtendedMetaData
 		createExtendedMetaDataAnnotations();
+		// http://www.eclipse.org/emf/2002/Ecore
+		createEcoreAnnotations();
 		// http:///org/eclipse/fordiac/ide/model/MetaData
 		createMetaDataAnnotations();
 	}
@@ -5881,6 +5913,28 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   new String[] {
 			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
 			   "name", "Version" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/Ecore</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createEcoreAnnotations() {
+		String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+		addAnnotation
+		  (iInterfaceElementEClass.getEOperations().get(3),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (iNamedElementEClass.getEOperations().get(1),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 	}
 

@@ -201,6 +201,10 @@ public final class Messages extends NLS {
 	/** The Import utils_ erro r_ parameter value not set. */
 	public static String ImportUtils_ERROR_ParameterValueNotSet;
 
+	public static String InterfaceElementAnnotations_DuplicateName;
+
+	public static String InterfaceElementAnnotations_MemberNameCollidesWithDataType;
+
 	public static String NameRepository_NameAlreadyExists;
 
 	public static String NameRepository_NameNotAValidIdentifier;
