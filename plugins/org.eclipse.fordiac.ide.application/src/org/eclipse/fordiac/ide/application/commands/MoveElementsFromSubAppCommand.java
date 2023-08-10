@@ -202,7 +202,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 		deleteConnectionsAndInterfaceElements.undo();
 		elements.forEach(this::undoRemoveElementFromSubapp);
 		unmappingCmds.undo();
-		// check for connections beiing displayed right (broken or not)
+		// check for connections being displayed right (broken or not)
 		elements.forEach(FBNetworkElement::checkConnections);
 	}
 
