@@ -36,18 +36,16 @@ public class OpenGroupEditorAction extends AbstractOpenSystemElementListener {
 	@Override
 	public void run(final IAction action) {
 		final EObject root = EcoreUtil.getRootContainer(group);
-		if (root instanceof AutomationSystem) {
-			openInSystemEditor(((AutomationSystem) root).getTypeEntry().getFile(), group);
+		if (root instanceof final AutomationSystem automationSystem) {
+			openInSystemEditor(automationSystem.getTypeEntry().getFile(), group);
 		}
 	}
 
 	@Override
 	public void selectionChanged(final IAction action, final ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structuredSel = (IStructuredSelection) selection;
-			if (structuredSel.getFirstElement() instanceof Group) {
-				group = (Group) structuredSel.getFirstElement();
-			}
+		if ((selection instanceof final IStructuredSelection structuredSel)
+				&& (structuredSel.getFirstElement() instanceof final Group firstElement)) {
+			group = firstElement;
 		}
 	}
 
