@@ -42,7 +42,7 @@ public class TestEccGenerator {
 		final ECTransition transition = LibraryElementFactory.eINSTANCE.createECTransition();
 		if (input != null) {
 			transition.setConditionEvent(input);
-			transition.setConditionExpression("");
+			transition.setConditionExpression(""); //$NON-NLS-1$
 		}
 		transition.setSource(from);
 		transition.setDestination(to);
@@ -71,7 +71,7 @@ public class TestEccGenerator {
 		state.setPosition(pS);
 	}
 
-	public ECAction createAction() {
+	public static ECAction createAction() {
 		return LibraryElementFactory.eINSTANCE.createECAction();
 	}
 
@@ -87,24 +87,24 @@ public class TestEccGenerator {
 
 		final StringBuilder text = new StringBuilder();
 
-		text.append("ALGORITHM " + name + "\n");
+		text.append("ALGORITHM " + name + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (final VarDeclaration varDecl : outputData) {
 			final String varName = varDecl.getName().substring(0, varDecl.getName().indexOf('_'));
-			text.append("if " + varName + "_expected = " + varName + "_received then\n");
-			text.append(varName + "_matchData := true;\n");
-			text.append("else\n");
-			text.append(varName + "_matchData := false;\n");
-			text.append("end_if;\n");
+			text.append("if " + varName + "_expected = " + varName + "_received then\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			text.append(varName + "_matchData := true;\n"); //$NON-NLS-1$
+			text.append("else\n"); //$NON-NLS-1$
+			text.append(varName + "_matchData := false;\n"); //$NON-NLS-1$
+			text.append("end_if;\n"); //$NON-NLS-1$
 		}
 		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
-		text.append("\n\n\n");
+		text.append("\n\n\n"); //$NON-NLS-1$
 
 		alg.setText(text.toString());
 		fb.getCallables().add(alg);
 		return alg;
 	}
 
-	public Algorithm createTestFbAlgortihm(final BasicFBType fb, final TestSuite testSuite, final String name) {
+	public static Algorithm createTestFbAlgortihm(final BasicFBType fb, final String name) {
 		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		alg.setName(name);
 		fb.getCallables().add(alg);

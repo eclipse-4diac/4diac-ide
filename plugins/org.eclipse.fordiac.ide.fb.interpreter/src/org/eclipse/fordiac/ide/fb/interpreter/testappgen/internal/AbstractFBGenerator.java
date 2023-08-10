@@ -19,6 +19,8 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -117,18 +119,15 @@ public abstract class AbstractFBGenerator {
 		final List<VarDeclaration> varIn = createInputDataList();
 		for (final VarDeclaration varD : varIn) {
 			varD.setValue(LibraryElementFactory.eINSTANCE.createValue());
-			varD.getValue().setValue("");
+			varD.getValue().setValue(""); //$NON-NLS-1$
 			destinationFB.getInterfaceList().getInputVars().add(varD);
 		}
 		final List<VarDeclaration> varOut = createOutputDataList();
 		for (final VarDeclaration varD : varOut) {
 			varD.setValue(LibraryElementFactory.eINSTANCE.createValue());
-			varD.getValue().setValue("");
+			varD.getValue().setValue(""); //$NON-NLS-1$
 			destinationFB.getInterfaceList().getOutputVars().add(varD);
 		}
-//		destinationFB.getInterfaceList().getInputVars().addAll(createInputDataList());
-//		destinationFB.getInterfaceList().getOutputVars().addAll(createOutputDataList());
-
 	}
 
 	protected abstract void generateECC();
@@ -152,41 +151,19 @@ public abstract class AbstractFBGenerator {
 				list.add(createEvent(name, isInput));
 			}
 		}
-
-//		for (final TestCase testCase : testSuite.getTestCases()) {
-//			if(testCase.getTestStates().size() == 1) {
-//				if (testCase.getTestStates().get(0).getTestOutputs().size() == 1) {
-//					if (!containsEvent(list, testCase.getTestStates().get(0).getTestOutputs().get(0).getEvent() + "_expected")) {
-//						list.add(createEvent(testCase.getTestStates().get(0).getTestOutputs().get(0).getEvent() + "_expected", isInput));
-//					}
-//				}
-//			}
-//			for (final TestState testState : testCase.getTestStates()) {
-//				if (testState.getTestOutputs().size() == 1) {
-//					if (!containsEvent(list, testState.getTestOutputs().get(0).getEvent() + "_expected")) {
-//						list.add(createEvent(testState.getTestOutputs().get(0).getEvent() + "_expected", isInput));
-//					}
-//				} else if (testState.getTestOutputs().size() > 1) {
-//					final String name = createEventName(testState.getTestOutputs());
-//					if (!containsEvent(list, name)) {
-//						list.add(createEvent(name, isInput));
-//					}
-//				}
-//			}
-//		}
 		return list;
 	}
 
-	private String createEventName(final List<OutputPrimitive> testOutputs) {
+	protected static String createEventName(final List<OutputPrimitive> testOutputs) {
 		final StringBuilder sb = new StringBuilder();
 		for (final OutputPrimitive outP : testOutputs) {
-			sb.append(outP.getEvent() + "_");
+			sb.append(outP.getEvent() + "_"); //$NON-NLS-1$
 		}
-		sb.append("expected");
+		sb.append("expected"); //$NON-NLS-1$
 		return sb.toString();
 	}
 
-	protected Event createEvent(final String name, final boolean isInput) {
+	protected static Event createEvent(final String name, final boolean isInput) {
 		final Event newEv = LibraryElementFactory.eINSTANCE.createEvent();
 		newEv.setIsInput(isInput);
 		newEv.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
@@ -194,7 +171,34 @@ public abstract class AbstractFBGenerator {
 		return newEv;
 	}
 
-	private boolean containsEvent(final List<Event> list, final String name) {
+	protected static Event createEvent(final String name, final DataType dataType, final boolean isInput) {
+		final Event newEv = LibraryElementFactory.eINSTANCE.createEvent();
+		newEv.setIsInput(isInput);
+		newEv.setType(dataType);
+		newEv.setName(name);
+		return newEv;
+	}
+
+	protected static VarDeclaration createVarDeclaration(final String name, final boolean isInput) {
+		final VarDeclaration varDecl = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		varDecl.setName(name);
+		varDecl.setIsInput(isInput);
+		varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
+		varDecl.getValue().setValue(""); //$NON-NLS-1$
+		return varDecl;
+	}
+
+	protected static VarDeclaration createVarDeclaration(final VarDeclaration varD, final String name,
+			final boolean isInput) {
+		final VarDeclaration varDecl = EcoreUtil.copy(varD);
+		varDecl.setName(name);
+		varDecl.setIsInput(isInput);
+		varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
+		varDecl.getValue().setValue(""); //$NON-NLS-1$
+		return varDecl;
+	}
+
+	protected static boolean containsEvent(final List<Event> list, final String name) {
 		boolean retBool = false;
 		for (final Event ev : list) {
 			if (ev.getName().equals(name)) {

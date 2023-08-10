@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.fb.interpreter.mm;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestCase;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestEccGenerator;
@@ -25,9 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 
 public class TestFbGenerator extends AbstractFBGenerator {
 
@@ -44,17 +41,9 @@ public class TestFbGenerator extends AbstractFBGenerator {
 	protected List<Event> createInputEventList() {
 		final List<Event> list = new ArrayList<>();
 		for (final TestCase testCase : testSuite.getTestCases()) {
-			final Event event = LibraryElementFactory.eINSTANCE.createEvent();
-			event.setIsInput(true);
-			event.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
-			event.setName(testCase.getName() + "_TEST");
-			list.add(event);
+			list.add(createEvent(testCase.getName() + "_TEST", true)); //$NON-NLS-1$
 		}
-		final Event lastCompleted = LibraryElementFactory.eINSTANCE.createEvent();
-		lastCompleted.setIsInput(true);
-		lastCompleted.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
-		lastCompleted.setName("tr_CMPLT");
-		list.add(lastCompleted);
+		list.add(createEvent("tr_CMPLT", true));//$NON-NLS-1$
 		inputEventList = list;
 		return list;
 	}
@@ -63,18 +52,10 @@ public class TestFbGenerator extends AbstractFBGenerator {
 	protected List<Event> createOutputEventList() {
 		final List<Event> list = new ArrayList<>();
 		for (final Event event : sourceType.getInterfaceList().getEventInputs()) {
-			final Event outEvent = LibraryElementFactory.eINSTANCE.createEvent();
-			outEvent.setIsInput(false);
-			outEvent.setName(event.getName());
-			outEvent.setType(event.getType());
-			list.add(outEvent);
+			list.add(createEvent(event.getName(), event.getType(), false));
 		}
 		list.addAll(getExpectedEvents(false));
-		final Event resultEvent = LibraryElementFactory.eINSTANCE.createEvent();
-		resultEvent.setIsInput(false);
-		resultEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
-		resultEvent.setName("RESULT");
-		list.add(resultEvent);
+		list.add(createEvent("RESULT", false));//$NON-NLS-1$
 
 		outputEventList = list;
 		return list;
@@ -89,7 +70,7 @@ public class TestFbGenerator extends AbstractFBGenerator {
 				eccGen.createState(testCase, stateCnt);
 
 				final Event ev = destinationFB.getInterfaceList().getEvent(testState.getTestTrigger().getEvent());
-				final ECAction action = eccGen.createAction();
+				final ECAction action = TestEccGenerator.createAction();
 				action.setOutput(ev);
 
 				eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1).getECAction().add(action);
@@ -117,7 +98,7 @@ public class TestFbGenerator extends AbstractFBGenerator {
 
 	@Override
 	protected String getTypeName() {
-		return sourceType.getName() + "_TEST";
+		return sourceType.getName() + "_TEST"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -134,30 +115,12 @@ public class TestFbGenerator extends AbstractFBGenerator {
 	@Override
 	protected List<VarDeclaration> createOutputDataList() {
 		final List<VarDeclaration> list = new ArrayList<>();
-//		list.addAll(EcoreUtil.copyAll(sourceType.getInterfaceList().getInputVars()));
-//		list.addAll(EcoreUtil.copyAll(sourceType.getInterfaceList().getOutputVars()));
-//		for (final VarDeclaration varDecl : list) {
-//			varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
-//			varDecl.getValue().setValue("");
-//			varDecl.setType(EcoreUtil.copy(varDeclaration.getType()));
-//			varDecl.setIsInput(false);
-//		}
+
 		for (final VarDeclaration varDecl : sourceType.getInterfaceList().getInputVars()) {
-			final VarDeclaration varD = EcoreUtil.copy(varDecl);
-			varD.setValue(LibraryElementFactory.eINSTANCE.createValue());
-			varD.getValue().setValue("");
-			varD.setType(EcoreUtil.copy(varDecl.getType()));
-			varD.setIsInput(false);
-			list.add(varD);
+			list.add(createVarDeclaration(varDecl, varDecl.getName(), false));
 		}
 		for (final VarDeclaration varDecl : sourceType.getInterfaceList().getOutputVars()) {
-			VarDeclaration varD = EcoreUtil.copy(varDecl);
-			varD = EcoreUtil.copy(varD);
-			varD.setValue(LibraryElementFactory.eINSTANCE.createValue());
-			varD.getValue().setValue("");
-			varD.setType(EcoreUtil.copy(varD.getType()));
-			varD.setIsInput(false);
-			list.add(varD);
+			list.add(createVarDeclaration(varDecl, varDecl.getName(), false));
 		}
 		return list;
 	}

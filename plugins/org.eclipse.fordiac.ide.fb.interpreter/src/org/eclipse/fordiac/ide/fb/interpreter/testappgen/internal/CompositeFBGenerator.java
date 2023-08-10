@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public class CompositeFBGenerator {
@@ -40,6 +39,9 @@ public class CompositeFBGenerator {
 	private final TestSuite testSuite;
 	private final FBType sourceType;
 	List<FBType> blocksToAdd;
+	private FB toTestFB;
+	private FB testFB;
+	private FB matchFB;
 
 	public CompositeFBGenerator(final FBType type, final TestSuite testSuite, final List<FBType> blocksToAdd) {
 		sourceType = type;
@@ -70,30 +72,29 @@ public class CompositeFBGenerator {
 			final FBNetworkElement el = LibraryElementFactory.eINSTANCE.createFB();
 			el.setTypeEntry(sourceType.getTypeLibrary().getFBTypeEntry(blocksToAdd.get(i).getName()));
 			final Position p0 = LibraryElementFactory.eINSTANCE.createPosition();
-			p0.setX(50);
-			p0.setY(50 + 250 * i);
+			p0.setX(50 + 250 * i);
+			p0.setY(50);
 			el.setPosition(p0);
 			el.setInterface(EcoreUtil.copy(el.getType().getInterfaceList()));
 			net.getNetworkElements().add(el);
-			// el.setName(NameRepository.createUniqueName(el, blocksToAdd.get(i).getName() +
-			// "1"));
 			el.setName(NameRepository.createUniqueName(el, "TESTAPPFB1")); //$NON-NLS-1$
 		}
 
 		compositeFB.setFBNetwork(net);
 
-		setValuesForFBToTest();
+		testFB = compositeFB.getFBNetwork().getFBNamed("TESTAPPFB1"); //$NON-NLS-1$
+		toTestFB = compositeFB.getFBNetwork().getFBNamed("TESTAPPFB2"); //$NON-NLS-1$
+		matchFB = compositeFB.getFBNetwork().getFBNamed("TESTAPPFB3"); //$NON-NLS-1$
 
+		setValuesForFBs();
 		createEvents();
 		createConnections();
 
 		return compositeFB;
 	}
 
-	private void setValuesForFBToTest() {
-
-		final FB toTestFB = compositeFB.getFBNetwork().getFBNamed("TESTAPPFB2"); //$NON-NLS-1$
-
+	private void setValuesForFBs() {
+		// toTestFB
 		for (final VarDeclaration varD : toTestFB.getInterface().getInputVars()) {
 			varD.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			varD.getValue().setValue(""); //$NON-NLS-1$
@@ -103,28 +104,49 @@ public class CompositeFBGenerator {
 			varD.getValue().setValue(""); //$NON-NLS-1$
 		}
 
+		// testFB
+		for (final VarDeclaration varD : testFB.getInterface().getInputVars()) {
+			varD.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			varD.getValue().setValue(""); //$NON-NLS-1$
+		}
+		for (final VarDeclaration varD : testFB.getInterface().getOutputVars()) {
+			varD.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			varD.getValue().setValue(""); //$NON-NLS-1$
+		}
+
+		// matchFB
+		for (final VarDeclaration varD : matchFB.getInterface().getInputVars()) {
+			varD.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			varD.getValue().setValue(""); //$NON-NLS-1$
+		}
+		for (final VarDeclaration varD : matchFB.getInterface().getOutputVars()) {
+			varD.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			varD.getValue().setValue(""); //$NON-NLS-1$
+		}
 	}
 
 	private void createConnections() {
 		createConnectionToTestFB();
 		createConnectionToBlockToTest();
 		createConnectionToMatchFB();
+		createConnectionToComposite();
+	}
+
+	private void createConnectionToComposite() {
+		compositeFB.getFBNetwork().getEventConnections()
+				.add(createEventConnection(matchFB.getInterface().getEventOutputs().get(0),
+						compositeFB.getInterfaceList().getEventOutputs().get(0)));
+		compositeFB.getFBNetwork().getEventConnections()
+				.add(createEventConnection(matchFB.getInterface().getEventOutputs().get(1),
+						compositeFB.getInterfaceList().getEventOutputs().get(1)));
 	}
 
 	private void createConnectionToMatchFB() {
-		final FB testFB = compositeFB.getFBNetwork().getFBNamed("TESTAPPFB1"); //$NON-NLS-1$
-		final FB toTestFB = compositeFB.getFBNetwork().getFBNamed("TESTAPPFB2"); //$NON-NLS-1$
-		final FB matchFB = compositeFB.getFBNetwork().getFBNamed("TESTAPPFB3"); //$NON-NLS-1$
-
 		// Input Events
 		for (final Event testEv : testFB.getInterface().getEventOutputs()) {
 			for (final Event matchEv : matchFB.getInterface().getEventInputs()) {
 				if (testEv.getName().equals(matchEv.getName())) {
-					final EventConnection evCon = LibraryElementFactory.eINSTANCE.createEventConnection();
-					evCon.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
-					evCon.setSource(testEv);
-					evCon.setDestination(matchEv);
-					compositeFB.getFBNetwork().getEventConnections().add(evCon);
+					compositeFB.getFBNetwork().getEventConnections().add(createEventConnection(testEv, matchEv));
 				}
 			}
 		}
@@ -132,11 +154,7 @@ public class CompositeFBGenerator {
 		for (final Event toTestEv : toTestFB.getInterface().getEventOutputs()) {
 			for (final Event matchEv : matchFB.getInterface().getEventInputs()) {
 				if (toTestEv.getName().equals(matchEv.getName())) {
-					final EventConnection evCon = LibraryElementFactory.eINSTANCE.createEventConnection();
-					evCon.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
-					evCon.setSource(toTestEv);
-					evCon.setDestination(matchEv);
-					compositeFB.getFBNetwork().getEventConnections().add(evCon);
+					compositeFB.getFBNetwork().getEventConnections().add(createEventConnection(toTestEv, matchEv));
 				}
 			}
 		}
@@ -145,11 +163,7 @@ public class CompositeFBGenerator {
 		for (final VarDeclaration testVa : testFB.getInterface().getOutputVars()) {
 			for (final VarDeclaration matchVa : matchFB.getInterface().getInputVars()) {
 				if ((testVa.getName() + "_expected").equals(matchVa.getName())) { //$NON-NLS-1$
-					final DataConnection evCon = LibraryElementFactory.eINSTANCE.createDataConnection();
-					evCon.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
-					evCon.setSource(testVa);
-					evCon.setDestination(matchVa);
-					compositeFB.getFBNetwork().getDataConnections().add(evCon);
+					compositeFB.getFBNetwork().getDataConnections().add(createDataConnection(testVa, matchVa));
 				}
 			}
 		}
@@ -157,81 +171,65 @@ public class CompositeFBGenerator {
 		for (final VarDeclaration toTestVa : toTestFB.getInterface().getOutputVars()) {
 			for (final VarDeclaration matchVa : matchFB.getInterface().getInputVars()) {
 				if ((toTestVa.getName() + "_received").equals(matchVa.getName())) { //$NON-NLS-1$
-					final DataConnection evCon = LibraryElementFactory.eINSTANCE.createDataConnection();
-					evCon.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
-					evCon.setSource(toTestVa);
-					evCon.setDestination(matchVa);
-					compositeFB.getFBNetwork().getDataConnections().add(evCon);
+					compositeFB.getFBNetwork().getDataConnections().add(createDataConnection(toTestVa, matchVa));
 				}
 			}
 		}
-//		final DataConnection evCon = LibraryElementFactory.eINSTANCE.createDataConnection();
-//		evCon.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
-//		evCon.setSource(testFB.getInterface().getOutputVars().get(2));
-//		evCon.setDestination(toTestFB.getInterface().getInputVars().get(1));
-//		compositeFB.getFBNetwork().getDataConnections().add(evCon);
-
 	}
 
 	private void createConnectionToBlockToTest() {
-		final FB testFB = compositeFB.getFBNetwork().getFBNamed("TESTAPPFB1"); //$NON-NLS-1$
-		final FB toTestFB = compositeFB.getFBNetwork().getFBNamed("TESTAPPFB2"); //$NON-NLS-1$
-
 		for (int i = 0; i < testFB.getInterface().getEventOutputs().size(); i++) {
 			if (testFB.getInterface().getEventOutputs().get(i).getName().contains("_expected")) { //$NON-NLS-1$
 				break;
 			}
-			final EventConnection evCon = LibraryElementFactory.eINSTANCE.createEventConnection();
-			evCon.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
-			evCon.setSource(testFB.getInterface().getEventOutputs().get(i));
-			evCon.setDestination(toTestFB.getInterface().getEventInputs().get(i));
-			compositeFB.getFBNetwork().getEventConnections().add(evCon);
+			compositeFB.getFBNetwork().getEventConnections().add(createEventConnection(
+					testFB.getInterface().getEventOutputs().get(i), toTestFB.getInterface().getEventInputs().get(i)));
 		}
 
 		for (int i = 0; i < toTestFB.getInterface().getInputVars().size(); i++) {
-			final DataConnection evCon = LibraryElementFactory.eINSTANCE.createDataConnection();
-			evCon.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
-
-			evCon.setSource(testFB.getInterface().getOutputVars().get(i));
-			evCon.setDestination(toTestFB.getInterface().getInputVars().get(i));
-			compositeFB.getFBNetwork().getDataConnections().add(evCon);
+			compositeFB.getFBNetwork().getDataConnections().add(createDataConnection(
+					testFB.getInterface().getOutputVars().get(i), toTestFB.getInterface().getInputVars().get(i)));
 		}
 
 	}
 
 	private void createConnectionToTestFB() {
 		for (int i = 0; i < compositeFB.getInterfaceList().getEventInputs().size(); i++) {
-			final EventConnection evCon = LibraryElementFactory.eINSTANCE.createEventConnection();
-			evCon.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
-			evCon.setSource(compositeFB.getInterfaceList().getEventInputs().get(i));
-			evCon.setDestination(
-					compositeFB.getFBNetwork().getFBNamed("TESTAPPFB1").getInterface().getEventInputs().get(i)); //$NON-NLS-1$
-			compositeFB.getFBNetwork().getEventConnections().add(evCon);
+			compositeFB.getFBNetwork().getEventConnections()
+					.add(createEventConnection(compositeFB.getInterfaceList().getEventInputs().get(i),
+							testFB.getInterface().getEventInputs().get(i)));
 		}
+		compositeFB.getFBNetwork().getEventConnections()
+				.add(createEventConnection(matchFB.getInterface().getEventOutputs().get(0),
+						testFB.getInterface().getEventInputs().get(testFB.getInterface().getEventInputs().size() - 1)));
 
-		final EventConnection sucCon = LibraryElementFactory.eINSTANCE.createEventConnection();
-		sucCon.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
-		sucCon.setSource(compositeFB.getFBNetwork().getFBNamed("TESTAPPFB3").getInterface().getEventOutputs().get(0)); //$NON-NLS-1$
-		sucCon.setDestination(compositeFB.getFBNetwork().getFBNamed("TESTAPPFB1").getInterface().getEventInputs() //$NON-NLS-1$
-				.get(compositeFB.getFBNetwork().getFBNamed("TESTAPPFB1").getInterface().getEventInputs().size() - 1)); //$NON-NLS-1$
-		compositeFB.getFBNetwork().getEventConnections().add(sucCon);
+		compositeFB.getFBNetwork().getEventConnections()
+				.add(createEventConnection(matchFB.getInterface().getEventOutputs().get(1),
+						testFB.getInterface().getEventInputs().get(testFB.getInterface().getEventInputs().size() - 1)));
+	}
 
-		final EventConnection errCon = LibraryElementFactory.eINSTANCE.createEventConnection();
-		errCon.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
-		errCon.setSource(compositeFB.getFBNetwork().getFBNamed("TESTAPPFB3").getInterface().getEventOutputs().get(1)); //$NON-NLS-1$
-		errCon.setDestination(compositeFB.getFBNetwork().getFBNamed("TESTAPPFB1").getInterface().getEventInputs() //$NON-NLS-1$
-				.get(compositeFB.getFBNetwork().getFBNamed("TESTAPPFB1").getInterface().getEventInputs().size() - 1)); //$NON-NLS-1$
-		compositeFB.getFBNetwork().getEventConnections().add(errCon);
+	private static EventConnection createEventConnection(final Event source, final Event dest) {
+		final EventConnection con = LibraryElementFactory.eINSTANCE.createEventConnection();
+		con.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
+		con.setSource(source);
+		con.setDestination(dest);
+		return con;
+	}
+
+	private static DataConnection createDataConnection(final VarDeclaration source, final VarDeclaration dest) {
+		final DataConnection con = LibraryElementFactory.eINSTANCE.createDataConnection();
+		con.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
+		con.setSource(source);
+		con.setDestination(dest);
+		return con;
 	}
 
 	private void createEvents() {
 		for (final TestCase testCase : testSuite.getTestCases()) {
-			final Event ev = LibraryElementFactory.eINSTANCE.createEvent();
-			ev.setName(testCase.getName() + "_TEST"); //$NON-NLS-1$
-			ev.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
-			ev.setIsInput(true);
-			compositeFB.getInterfaceList().getEventInputs().add(EcoreUtil.copy(ev));
+			compositeFB.getInterfaceList().getEventInputs()
+					.add(AbstractFBGenerator.createEvent(testCase.getName() + "_TEST", true)); //$NON-NLS-1$
 		}
-
+		compositeFB.getInterfaceList().getEventOutputs().add(AbstractFBGenerator.createEvent("SUCCESS", false)); //$NON-NLS-1$
+		compositeFB.getInterfaceList().getEventOutputs().add(AbstractFBGenerator.createEvent("ERROR", false)); //$NON-NLS-1$
 	}
 }
