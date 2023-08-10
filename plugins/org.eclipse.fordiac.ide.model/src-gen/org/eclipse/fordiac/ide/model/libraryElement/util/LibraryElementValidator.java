@@ -167,12 +167,20 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final String DIAGNOSTIC_SOURCE = "org.eclipse.fordiac.ide.model.libraryElement"; //$NON-NLS-1$
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Mapped Var In Outs Do Not Cross Resource Boundaries' of 'Connection'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int CONNECTION__VALIDATE_MAPPED_VAR_IN_OUTS_DO_NOT_CROSS_RESOURCE_BOUNDARIES = 1;
+
+	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'IInterface Element'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int IINTERFACE_ELEMENT__VALIDATE_NAME = 1;
+	public static final int IINTERFACE_ELEMENT__VALIDATE_NAME = 2;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'INamed Element'.
@@ -180,7 +188,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int INAMED_ELEMENT__VALIDATE_NAME = 2;
+	public static final int INAMED_ELEMENT__VALIDATE_NAME = 3;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -188,7 +196,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 2;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 3;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -460,7 +468,17 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateAdapterConnection(AdapterConnection adapterConnection, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(adapterConnection, diagnostics, context);
+		if (!validate_NoCircularContainment(adapterConnection, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(adapterConnection, diagnostics, context);
+		return result;
 	}
 
 	/**
@@ -836,7 +854,27 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateConnection(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(connection, diagnostics, context);
+		if (!validate_NoCircularContainment(connection, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(connection, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * Validates the validateMappedVarInOutsDoNotCrossResourceBoundaries constraint of '<em>Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return connection.validateMappedVarInOutsDoNotCrossResourceBoundaries(diagnostics, context);
 	}
 
 	/**
@@ -854,7 +892,17 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateDataConnection(DataConnection dataConnection, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(dataConnection, diagnostics, context);
+		if (!validate_NoCircularContainment(dataConnection, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(dataConnection, diagnostics, context);
+		return result;
 	}
 
 	/**
@@ -1051,7 +1099,17 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateEventConnection(EventConnection eventConnection, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(eventConnection, diagnostics, context);
+		if (!validate_NoCircularContainment(eventConnection, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(eventConnection, diagnostics, context);
+		return result;
 	}
 
 	/**

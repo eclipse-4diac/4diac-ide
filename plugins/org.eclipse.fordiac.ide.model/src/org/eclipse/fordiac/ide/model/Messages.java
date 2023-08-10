@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.model;
 import org.eclipse.osgi.util.NLS;
 
 /** The Class Messages. */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.messages"; //$NON-NLS-1$
 
@@ -272,6 +272,8 @@ public final class Messages extends NLS {
 	public static String ConnectingIncompatibleInterfaceTypes;
 
 	public static String UpdateFBTypeCommand_type_mismatch;
+
+	public static String ConnectionValidator_VarInOutConnectionCrossesResourceBoundaries;
 
 	static {
 		// initialize resource bundle

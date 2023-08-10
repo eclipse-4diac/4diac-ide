@@ -190,6 +190,11 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//Connection/isInterfaceConnection"
           body="return org.eclipse.fordiac.ide.model.Annotations.isInterfaceConnection(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Connection/validateMappedVarInOutsDoNotCrossResourceBoundaries"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateMappedVarInOutsDoNotCrossResourceBoundaries(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//Connection/validateMappedVarInOutsDoNotCrossResourceBoundaries/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//Connection/validateMappedVarInOutsDoNotCrossResourceBoundaries/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ConnectionRoutingData">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx1"/>
