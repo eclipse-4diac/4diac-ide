@@ -23,10 +23,11 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
+import org.eclipse.jdt.annotation.NonNull;
 
 public class ConnectionAnnotations {
 
-	public static boolean validateMappedVarInOutsDoNotCrossResourceBoundaries(final Connection connection,
+	public static boolean validateMappedVarInOutsDoNotCrossResourceBoundaries(@NonNull final Connection connection,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		final var source = connection.getSource();
 		final var destination = connection.getDestination();
