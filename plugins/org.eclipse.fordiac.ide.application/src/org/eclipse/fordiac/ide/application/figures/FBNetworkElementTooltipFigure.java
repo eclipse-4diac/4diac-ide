@@ -27,22 +27,17 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.figures.VerticalLineCompartmentFigure;
 import org.eclipse.fordiac.ide.model.annotations.MappingAnnotations;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 
-/**
- * The Class FBTooltipFigure.
- */
+/** The Class FBTooltipFigure. */
 public class FBNetworkElementTooltipFigure extends Figure {
 
-	/**
-	 * Instantiates a new fB tooltip figure.
+	/** Instantiates a new fB tooltip figure.
 	 *
-	 * @param fbView the fb view
-	 */
+	 * @param fbView the fb view */
 	public FBNetworkElementTooltipFigure(final FBNetworkElement element) {
 		setLayoutManager(new GridLayout());
 
@@ -68,10 +63,10 @@ public class FBNetworkElementTooltipFigure extends Figure {
 		final FBNetwork fbNetwork = (FBNetwork) element.eContainer();
 
 		final Application app = (null != fbNetwork) ? (fbNetwork.getApplication()) : null;
-		if (app != null && app.eContainer() instanceof org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem) {
+		if (app != null && app
+				.eContainer() instanceof final org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem automationSystem) {
 
-			final Label system = new Label(
-					Messages.FBTooltipFigure_LABEL_System + ((AutomationSystem) app.eContainer()).getName());
+			final Label system = new Label(Messages.FBTooltipFigure_LABEL_System + automationSystem.getName());
 			line.add(system);
 			line.setConstraint(system, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 		}
@@ -92,9 +87,7 @@ public class FBNetworkElementTooltipFigure extends Figure {
 		parent.add(line);
 		parent.setConstraint(line, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 
-
-		final Label mappingLabel = new Label(
-				MappingAnnotations.getHierarchicalName(element));
+		final Label mappingLabel = new Label(MappingAnnotations.getHierarchicalName(element));
 		line.add(mappingLabel);
 		line.setConstraint(mappingLabel, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 	}
