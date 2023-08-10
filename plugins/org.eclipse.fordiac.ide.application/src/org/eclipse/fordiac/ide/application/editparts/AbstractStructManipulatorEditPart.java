@@ -29,9 +29,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 
-public abstract class StructManipulatorEditPart extends AbstractFBNElementEditPart {
-	protected StructManipulatorEditPart() {
-		super();
+public abstract class AbstractStructManipulatorEditPart extends AbstractFBNElementEditPart {
+	protected AbstractStructManipulatorEditPart() {
 	}
 
 	@Override
@@ -59,8 +58,8 @@ public abstract class StructManipulatorEditPart extends AbstractFBNElementEditPa
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		if (childEditPart instanceof StructuredTypeEditPart) {
-			getFigure().getMiddle().add(((StructuredTypeEditPart) childEditPart).getFigure(),
+		if (childEditPart instanceof final StructuredTypeEditPart childStructuredEP) {
+			getFigure().getMiddle().add(childStructuredEP.getFigure(),
 					new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 		} else {
 			super.addChildVisual(childEditPart, index);
@@ -69,8 +68,8 @@ public abstract class StructManipulatorEditPart extends AbstractFBNElementEditPa
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof StructuredTypeEditPart) {
-			getFigure().getMiddle().remove(((StructuredTypeEditPart) childEditPart).getFigure());
+		if (childEditPart instanceof final StructuredTypeEditPart childStructuredEP) {
+			getFigure().getMiddle().remove(childStructuredEP.getFigure());
 		} else {
 			super.removeChildVisual(childEditPart);
 		}
@@ -82,15 +81,11 @@ public abstract class StructManipulatorEditPart extends AbstractFBNElementEditPa
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				switch (notification.getEventType()) {
-				case Notification.ADD:
-				case Notification.ADD_MANY:
-				case Notification.MOVE:
-				case Notification.REMOVE:
+				if (notification.getEventType() == Notification.ADD
+						|| notification.getEventType() == Notification.ADD_MANY
+						|| notification.getEventType() == Notification.MOVE
+						|| notification.getEventType() == Notification.REMOVE) {
 					refresh();
-					break;
-				default:
-					break;
 				}
 			}
 		};

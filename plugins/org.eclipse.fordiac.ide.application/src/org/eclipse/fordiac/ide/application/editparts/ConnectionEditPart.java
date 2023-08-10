@@ -106,13 +106,13 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 		private void handleVisibilityUpdate() {
 			getModel().getSource()
-			.eNotify(new ENotificationImpl((InternalEObject) getModel().getSource(), Notification.SET,
-					LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections(), getModel(),
-					getModel()));
+					.eNotify(new ENotificationImpl((InternalEObject) getModel().getSource(), Notification.SET,
+							LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections(), getModel(),
+							getModel()));
 			getModel().getDestination()
-			.eNotify(new ENotificationImpl((InternalEObject) getModel().getDestination(), Notification.SET,
-					LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections(), getModel(),
-					getModel()));
+					.eNotify(new ENotificationImpl((InternalEObject) getModel().getDestination(), Notification.SET,
+							LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections(), getModel(),
+							getModel()));
 			final FBNConnectionEndpointPolicy conEPPolicy = getConnectionEndPointPolicy();
 			if (conEPPolicy.isSelectionFeedbackShowing()) {
 				// redraw selection to update to new connection figure
@@ -121,6 +121,9 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			}
 		}
 
+		private void refreshComment() {
+			getFigure().setToolTip(new ConnectionTooltipFigure(getModel()));
+		}
 
 	}
 
@@ -140,7 +143,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	private static final float[] BROKEN_CONNECTION_DASH_PATTERN = new float[] { 5.0f, 5.0f };
 
 	public ConnectionEditPart() {
-		super();
+		// nothing to do here
 	}
 
 	@Override
@@ -326,10 +329,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		return contentAdapter;
 	}
 
-	private void refreshComment() {
-		getFigure().setToolTip(new ConnectionTooltipFigure(getModel()));
-	}
-
 	@Override
 	public void deactivate() {
 		if (isActive()) {
@@ -356,8 +355,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		final PolylineConnection connection = getFigure();
 		connection.setAlpha(value);
 		for (final Object fig : connection.getChildren()) {
-			if (fig instanceof Shape) {
-				((Shape) fig).setAlpha(value);
+			if (fig instanceof final Shape shape) {
+				shape.setAlpha(value);
 			}
 		}
 	}

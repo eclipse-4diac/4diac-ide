@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.StructInterfaceEditPart;
-import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractStructManipulatorEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget;
 import org.eclipse.fordiac.ide.model.AbstractStructTreeNode;
@@ -79,7 +79,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 	@Override
 	protected FBNetworkElement getInputType(final Object input) {
-		if (input instanceof final StructManipulatorEditPart structManEP) {
+		if (input instanceof final AbstractStructManipulatorEditPart structManEP) {
 			return structManEP.getModel();
 		}
 		if (input instanceof final StructManipulator structMan) {

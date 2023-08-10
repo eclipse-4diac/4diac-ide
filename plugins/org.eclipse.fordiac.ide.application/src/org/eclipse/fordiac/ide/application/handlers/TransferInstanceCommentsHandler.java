@@ -25,7 +25,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractStructManipulatorEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.TransferInstanceCommentsCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBEndpointFinder;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -59,7 +59,7 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection sel = HandlerUtil.getCurrentStructuredSelection(event);
-		final StructManipulatorEditPart struct = (StructManipulatorEditPart) sel.getFirstElement();
+		final AbstractStructManipulatorEditPart struct = (AbstractStructManipulatorEditPart) sel.getFirstElement();
 		selectedItem = struct.getModel();
 		final String[] labels = { Messages.TransferInstanceComments_TransferLabel, SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 

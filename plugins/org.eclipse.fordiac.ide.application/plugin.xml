@@ -678,7 +678,7 @@
           <count value="1" />
           <iterate operator="and"
                    ifEmpty="false">
-            <instanceof value="org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart">
+            <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractStructManipulatorEditPart">
             </instanceof>
           </iterate>
         </with>

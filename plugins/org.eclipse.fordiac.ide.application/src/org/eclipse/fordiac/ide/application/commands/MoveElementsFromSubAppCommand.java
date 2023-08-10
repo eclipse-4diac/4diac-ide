@@ -76,11 +76,8 @@ public class MoveElementsFromSubAppCommand extends Command {
 	}
 
 	private SubApp getSourceSubapp() {
-		if (!elements.isEmpty()) {
-			final FBNetworkElement fbel = this.elements.get(0).getOuterFBNetworkElement();
-			if (fbel instanceof SubApp) {
-				return (SubApp) fbel;
-			}
+		if (!elements.isEmpty() && (elements.get(0).getOuterFBNetworkElement() instanceof final SubApp fbel)) {
+			return fbel;
 		}
 		return null;
 	}
