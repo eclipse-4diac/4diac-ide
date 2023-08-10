@@ -11,7 +11,6 @@
  * Melanie Winter - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 
 import java.util.ArrayList;
@@ -34,20 +33,20 @@ import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public abstract class AbstractFBGenerator {
-	
-	protected BasicFBType destinationFB; 
+
+	protected BasicFBType destinationFB;
 	protected TestSuite testSuite;
 	protected TypeEntry entry;
 	protected FBType sourceType;
-	
+
 	protected List<Event> inputEventList;
 	protected List<Event> outputEventList;
-	
-	protected AbstractFBGenerator(FBType type, TestSuite testSuite) {
+
+	protected AbstractFBGenerator(final FBType type, final TestSuite testSuite) {
 		this.sourceType = type;
 		this.testSuite = testSuite;
 	}
-	
+
 	protected void createBasicFB() {
 		destinationFB = LibraryElementFactory.eINSTANCE.createBasicFBType();
 		destinationFB.setECC(LibraryElementFactory.eINSTANCE.createECC());
@@ -64,36 +63,35 @@ public abstract class AbstractFBGenerator {
 		id.setStandard("IEC 61499"); //$NON-NLS-1$
 
 		destinationFB.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		destinationFB.setName(getTypeName()); //$NON-NLS-1$
-		
-		
+		destinationFB.setName(getTypeName());
+
 		destinationFB.setService(LibraryElementFactory.eINSTANCE.createService());
 
 		final IProject project = getSourceFB().getTypeLibrary().getProject();
 		final IFolder folder = project.getFolder("Type Library"); //$NON-NLS-1$
-		final IFile destfile = folder.getFile(getTypeName() + ".fbt");  //$NON-NLS-1$
-		
-		entry  = getSourceFB().getTypeLibrary().createTypeEntry(destfile);
+		final IFile destfile = folder.getFile(getTypeName() + ".fbt"); //$NON-NLS-1$
+
+		entry = getSourceFB().getTypeLibrary().createTypeEntry(destfile);
 		entry.setType(destinationFB);
-		
+
 		addEvents();
 		addDataPins();
 		createMiths();
 		generateECC();
 	}
-	
-	private void createMiths() {		
-		for (Event input : destinationFB.getInterfaceList().getEventInputs()) {
-			for (VarDeclaration varD : destinationFB.getInterfaceList().getInputVars()) {
-				With w = LibraryElementFactory.eINSTANCE.createWith();
+
+	private void createMiths() {
+		for (final Event input : destinationFB.getInterfaceList().getEventInputs()) {
+			for (final VarDeclaration varD : destinationFB.getInterfaceList().getInputVars()) {
+				final With w = LibraryElementFactory.eINSTANCE.createWith();
 				w.setVariables(varD);
 				input.getWith().add(w);
 			}
 		}
-		
-		for (Event output : destinationFB.getInterfaceList().getEventOutputs()) {
-			for (VarDeclaration varD : destinationFB.getInterfaceList().getOutputVars()) {
-				With w = LibraryElementFactory.eINSTANCE.createWith();
+
+		for (final Event output : destinationFB.getInterfaceList().getEventOutputs()) {
+			for (final VarDeclaration varD : destinationFB.getInterfaceList().getOutputVars()) {
+				final With w = LibraryElementFactory.eINSTANCE.createWith();
 				w.setVariables(varD);
 				output.getWith().add(w);
 			}
@@ -101,67 +99,105 @@ public abstract class AbstractFBGenerator {
 	}
 
 	protected abstract List<Event> createInputEventList();
+
 	protected abstract List<Event> createOutputEventList();
+
 	protected abstract List<VarDeclaration> createInputDataList();
+
 	protected abstract List<VarDeclaration> createOutputDataList();
 
 	protected void addEvents() {
-		
+
 		destinationFB.getInterfaceList().getEventInputs().addAll(createInputEventList());
 		destinationFB.getInterfaceList().getEventOutputs().addAll(createOutputEventList());
-		
+
 	}
-	
+
 	protected void addDataPins() {
-		destinationFB.getInterfaceList().getInputVars().addAll(createInputDataList());
-		destinationFB.getInterfaceList().getOutputVars().addAll(createOutputDataList());
+		final List<VarDeclaration> varIn = createInputDataList();
+		for (final VarDeclaration varD : varIn) {
+			varD.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			varD.getValue().setValue("");
+			destinationFB.getInterfaceList().getInputVars().add(varD);
+		}
+		final List<VarDeclaration> varOut = createOutputDataList();
+		for (final VarDeclaration varD : varOut) {
+			varD.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			varD.getValue().setValue("");
+			destinationFB.getInterfaceList().getOutputVars().add(varD);
+		}
+//		destinationFB.getInterfaceList().getInputVars().addAll(createInputDataList());
+//		destinationFB.getInterfaceList().getOutputVars().addAll(createOutputDataList());
+
 	}
-	
+
 	protected abstract void generateECC();
+
 	protected abstract String getTypeName();
+
 	protected abstract FBType getSourceFB();
-	
-	protected List<Event> getExpectedEvents(boolean isInput){
-		List<Event> list = new ArrayList<>();
-		for (TestCase testCase : testSuite.getTestCases()) {
-			for(TestState testState : testCase.getTestStates()) {
-				if(testState.getTestOutputs().size() == 1) {
-					if(!containsEvent(list, testState.getTestOutputs().get(0).getEvent() + "_expected")){						
-						list.add(createEvent(testState.getTestOutputs().get(0).getEvent() + "_expected", isInput));
-					}
-				}
-				else if (testState.getTestOutputs().size() > 1) {
-					String name = createEventName(testState.getTestOutputs());
-					if(!containsEvent(list, name)) {
-						list.add(createEvent(name, isInput));
-					}
+
+	protected List<Event> getExpectedEvents(final boolean isInput) {
+		final List<Event> list = new ArrayList<>();
+		for (final TestCase testCase : testSuite.getTestCases()) {
+			final StringBuilder sb = new StringBuilder();
+			for (final TestState testState : testCase.getTestStates()) {
+				for (final OutputPrimitive prim : testState.getTestOutputs()) {
+					sb.append(prim.getEvent() + "_"); //$NON-NLS-1$
 				}
 			}
+			sb.append("expected"); //$NON-NLS-1$
+			final String name = sb.toString();
+			if (!containsEvent(list, name)) {
+				list.add(createEvent(name, isInput));
+			}
 		}
+
+//		for (final TestCase testCase : testSuite.getTestCases()) {
+//			if(testCase.getTestStates().size() == 1) {
+//				if (testCase.getTestStates().get(0).getTestOutputs().size() == 1) {
+//					if (!containsEvent(list, testCase.getTestStates().get(0).getTestOutputs().get(0).getEvent() + "_expected")) {
+//						list.add(createEvent(testCase.getTestStates().get(0).getTestOutputs().get(0).getEvent() + "_expected", isInput));
+//					}
+//				}
+//			}
+//			for (final TestState testState : testCase.getTestStates()) {
+//				if (testState.getTestOutputs().size() == 1) {
+//					if (!containsEvent(list, testState.getTestOutputs().get(0).getEvent() + "_expected")) {
+//						list.add(createEvent(testState.getTestOutputs().get(0).getEvent() + "_expected", isInput));
+//					}
+//				} else if (testState.getTestOutputs().size() > 1) {
+//					final String name = createEventName(testState.getTestOutputs());
+//					if (!containsEvent(list, name)) {
+//						list.add(createEvent(name, isInput));
+//					}
+//				}
+//			}
+//		}
 		return list;
 	}
-	
-	private String createEventName(List<OutputPrimitive> testOutputs) {
-		StringBuilder sb = new StringBuilder();
-		for (OutputPrimitive outP : testOutputs) {
+
+	private String createEventName(final List<OutputPrimitive> testOutputs) {
+		final StringBuilder sb = new StringBuilder();
+		for (final OutputPrimitive outP : testOutputs) {
 			sb.append(outP.getEvent() + "_");
 		}
 		sb.append("expected");
 		return sb.toString();
 	}
 
-	protected Event createEvent(String name, boolean isInput) {
-		Event newEv = LibraryElementFactory.eINSTANCE.createEvent();
+	protected Event createEvent(final String name, final boolean isInput) {
+		final Event newEv = LibraryElementFactory.eINSTANCE.createEvent();
 		newEv.setIsInput(isInput);
 		newEv.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 		newEv.setName(name);
 		return newEv;
 	}
-	
-	private boolean containsEvent(List<Event> list, String name) {
+
+	private boolean containsEvent(final List<Event> list, final String name) {
 		boolean retBool = false;
-		for(Event ev : list) {	
-			if(ev.getName().equals(name)) {
+		for (final Event ev : list) {
+			if (ev.getName().equals(name)) {
 				retBool = true;
 			}
 		}

@@ -40,7 +40,7 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 
 	@Override
 	protected String getTypeName() {
-		return sourceType.getName() + "_MATCH";
+		return sourceType.getName() + "_MATCH"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -52,10 +52,10 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 	protected void generateECC() {
 		final TestEccGenerator eccGen = new TestEccGenerator(destinationFB.getECC(), 0);
 		for (final Event event : destinationFB.getInterfaceList().getEventInputs()) {
-			if (event.getName().contains("expected")) {
-				final String[] splitName = event.getName().split("_");
+			if (event.getName().contains("expected")) { //$NON-NLS-1$
+				final String[] splitName = event.getName().split("_"); //$NON-NLS-1$
 				for (int i = 0; i < splitName.length - 1; i++) {
-					eccGen.createState(splitName[i] + "_wait", i);
+					eccGen.createState(splitName[i] + "_wait", i); //$NON-NLS-1$
 					if (i == 0) {
 						eccGen.createTransitionFromTo(eccGen.getEcc().getStart(), eccGen.getLast(), event);
 					} else {
@@ -63,7 +63,7 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 								getEvent(splitName[i - 1]));
 					}
 					eccGen.increaseCaseCount();
-					eccGen.createState("ERROR", i);
+					eccGen.createState("ERROR", i); //$NON-NLS-1$
 					createErrorTransitions(eccGen, splitName[i]);
 					eccGen.createTransitionFromTo(eccGen.getLast(), eccGen.getEcc().getStart(), null);
 					final ECAction errAct = eccGen.createAction();
@@ -205,13 +205,13 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 		final Event errorEvent = LibraryElementFactory.eINSTANCE.createEvent();
 		errorEvent.setIsInput(false);
 		errorEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
-		errorEvent.setName("ERROR");
+		errorEvent.setName("ERROR"); //$NON-NLS-1$
 		list.add(errorEvent);
 
 		final Event successEvent = LibraryElementFactory.eINSTANCE.createEvent();
 		successEvent.setIsInput(false);
 		successEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
-		successEvent.setName("SUCCESS");
+		successEvent.setName("SUCCESS"); //$NON-NLS-1$
 		list.add(successEvent);
 		outputEventList = list;
 		return list;
@@ -223,13 +223,18 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 		for (final VarDeclaration varDeclaration : sourceType.getInterfaceList().getOutputVars()) {
 
 			VarDeclaration varDecl = EcoreUtil.copy(varDeclaration);
-			varDecl.setName(varDeclaration.getName() + "_expected");
+			varDecl.setName(varDeclaration.getName() + "_expected"); //$NON-NLS-1$
 			varDecl.setIsInput(true);
+			varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			varDecl.getValue().setValue(""); //$NON-NLS-1$
 			list.add(varDecl);
 
 			varDecl = EcoreUtil.copy(varDeclaration);
-			varDecl.setName(varDeclaration.getName() + "_received");
+			varDecl.setName(varDeclaration.getName() + "_received"); //$NON-NLS-1$
+			varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			varDecl.getValue().setValue(""); //$NON-NLS-1$
 			varDecl.setIsInput(true);
+
 			list.add(varDecl);
 		}
 		return list;
@@ -240,10 +245,13 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 		final List<VarDeclaration> list = new ArrayList<>();
 		for (final VarDeclaration varDeclaration : sourceType.getInterfaceList().getOutputVars()) {
 			final VarDeclaration varDecl = EcoreUtil.copy(varDeclaration);
-			varDecl.setName(varDecl.getName() + "_matchData");
+			varDecl.setName(varDecl.getName() + "_matchData"); //$NON-NLS-1$
 			varDecl.setIsInput(false);
 			varDecl.setType(sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.BOOL));
-			varDecl.setComment("");
+			varDecl.setComment(""); //$NON-NLS-1$
+			varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			varDecl.getValue().setValue(""); //$NON-NLS-1$
+
 			list.add(varDecl);
 		}
 		return list;

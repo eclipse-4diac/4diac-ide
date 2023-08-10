@@ -47,19 +47,19 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 		}
 
 		// convert the service sequences one by one
-		TestSuite testSuite = new TestSuite(type.getService().getServiceSequence());
-		
+		final TestSuite testSuite = new TestSuite(type.getService().getServiceSequence());
+
 		final FBType testtype = new TestFbGenerator(type, testSuite).generateTestFb();
 		testtype.getTypeEntry().save();
-		
+
 		final FBType matchtype = new MatchFBGenerator(type, testSuite).generateMatchFB();
 		matchtype.getTypeEntry().save();
-		
-		List<FBType> list = new ArrayList<>();
+
+		final List<FBType> list = new ArrayList<>();
 		list.add(testtype);
 		list.add(type);
 		list.add(matchtype);
-		
+
 		final CompositeFBType compositeType = new CompositeFBGenerator(type, testSuite, list).generateCompositeFB();
 		compositeType.getTypeEntry().save();
 
