@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Paul Pavlicek
+ * Copyright (c) 2023 Paul Pavlicek
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,11 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.inputgenerator;
 
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.LrealType;
-import org.eclipse.fordiac.ide.model.data.RealType;
-
-public class ValueRandomGauss extends AbstractValueRandom {
+public class ValueRandomGauss extends BaseRandom {
 	private double mean;
 	private double stddev;
 
@@ -28,6 +24,7 @@ public class ValueRandomGauss extends AbstractValueRandom {
 		}
 		this.stddev = stddev;
 	}
+
 	public void setParameters(final double mean, final double stddev) {
 		this.mean = mean;
 		this.stddev = stddev;
@@ -80,6 +77,7 @@ public class ValueRandomGauss extends AbstractValueRandom {
 		this.stddev = stddev;
 		return nextUlint();
 	}
+
 	public String getLREAL(final double mean, final double stddev) {
 		this.mean = mean;
 		this.stddev = stddev;
@@ -122,6 +120,7 @@ public class ValueRandomGauss extends AbstractValueRandom {
 		final int value = (int) Math.round((random.nextGaussian() * stddev + mean));
 		return "DINT#" + value; //$NON-NLS-1$
 	}
+
 	@Override
 	public String nextLint() {
 		final long value = Math.round((random.nextGaussian() * stddev + mean));
@@ -169,6 +168,7 @@ public class ValueRandomGauss extends AbstractValueRandom {
 
 		return "ULINT#" + Long.toUnsignedString(value); //$NON-NLS-1$
 	}
+
 	@Override
 	public String nextLreal() {
 		return LREAL + (random.nextGaussian() * stddev + mean);
@@ -185,64 +185,5 @@ public class ValueRandomGauss extends AbstractValueRandom {
 		}
 		return LREAL + real;
 	}
-
-	@Override
-	public String getRandom(final DataType dataType) {
-		final String randInt = isInt(dataType);
-		if (!randInt.isBlank()) {
-			return randInt;
-		}
-		if (dataType instanceof RealType) {
-			return nextReal();
-		}
-		if (dataType instanceof LrealType) {
-			return nextLreal();
-		}
-		throw new UnsupportedOperationException();
-
-	}
-	@Override
-	public String nextBool() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextByte() {
-		throw new UnsupportedOperationException();
-	}
-
-
-
-
-
-
-	@Override
-	public String nextWord() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextDword() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextLword() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextChar() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextWchar() {
-		throw new UnsupportedOperationException();
-	}
-
-
-
-
 
 }

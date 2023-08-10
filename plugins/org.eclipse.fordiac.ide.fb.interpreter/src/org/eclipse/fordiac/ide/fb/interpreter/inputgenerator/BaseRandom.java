@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Paul Pavlicek
+ * Copyright (c) 2023 Paul Pavlicek
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -36,7 +36,7 @@ import org.eclipse.fordiac.ide.model.data.UsintType;
 import org.eclipse.fordiac.ide.model.data.WcharType;
 import org.eclipse.fordiac.ide.model.data.WordType;
 
-public abstract class AbstractValueRandom {
+public abstract class BaseRandom {
 	protected static final int MAX_DINT_POSITIVE = 31;
 	protected static final int MAX_LINT_POSITIVE = 63;
 	protected static final int MAX_BYTE = 256;
@@ -59,39 +59,76 @@ public abstract class AbstractValueRandom {
 
 	protected final LocalRandom random = new LocalRandom();
 
-	public abstract String nextBool();
+	protected BaseRandom() {
+	}
 
-	public abstract String nextByte();
+	public String nextBool() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextSint();
+	public String nextByte() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextUint();
+	public String nextSint() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextInteger();
+	public String nextUint() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextWord();
+	public String nextInteger() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextDword();
+	public String nextWord() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextLword();
+	public String nextDword() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextChar();
+	public String nextLword() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextWchar();
+	public String nextChar() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextDint();
+	public String nextWchar() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextLint();
+	public String nextDint() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextUsint();
+	public String nextLint() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextUdint();
+	public String nextUsint() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextUlint();
+	public String nextUdint() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextReal();
+	public String nextUlint() {
+		throw new UnsupportedOperationException();
+	}
 
-	public abstract String nextLreal();
+	public String nextReal() {
+		throw new UnsupportedOperationException();
+	}
+
+	public String nextLreal() {
+		throw new UnsupportedOperationException();
+	}
 
 	public void setSeed(final long seed) {
 		random.setSeed(seed);

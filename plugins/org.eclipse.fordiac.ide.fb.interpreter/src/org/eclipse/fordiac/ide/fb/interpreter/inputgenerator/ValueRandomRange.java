@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Paul Pavlicek
+ * Copyright (c) 2023 Paul Pavlicek
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,11 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.inputgenerator;
 
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.LrealType;
-import org.eclipse.fordiac.ide.model.data.RealType;
-
-public class ValueRandomRange extends AbstractValueRandom {
+public class ValueRandomRange extends BaseRandom {
 	private double max;
 	private double min;
 
@@ -32,29 +28,12 @@ public class ValueRandomRange extends AbstractValueRandom {
 	}
 
 	@Override
-	public String getRandom(final DataType dataType) {
-		final String randInt = isInt(dataType);
-		if (!randInt.isBlank()) {
-			return randInt;
-		}
-		if (dataType instanceof RealType) {
-			return nextReal();
-		}
-		if (dataType instanceof LrealType) {
-			return nextLreal();
-		}
-		throw new UnsupportedOperationException();
-
-	}
-
-
-	@Override
 	public String nextSint() {
 		final int value = (int) (random.nextDouble() * (max - min) + min);
 		if ((value < (MAX_BYTE / 2)) || (value > (MAX_BYTE / 2) - 1)) {
 			throw new IllegalArgumentException("min or max value is outside of the range of Sint"); //$NON-NLS-1$
 		}
-		return "SINT#" + value ;//$NON-NLS-1$
+		return "SINT#" + value;//$NON-NLS-1$
 
 	}
 
@@ -77,7 +56,6 @@ public class ValueRandomRange extends AbstractValueRandom {
 		}
 		return "INT#" + value; //$NON-NLS-1$
 	}
-
 
 	@Override
 	public String nextDint() {
@@ -131,38 +109,5 @@ public class ValueRandomRange extends AbstractValueRandom {
 	public String nextLreal() {
 		return LREAL + (random.nextDouble() * (max - min) + min);
 	}
-	@Override
-	public String nextBool() {
-		throw new UnsupportedOperationException();
-	}
 
-	@Override
-	public String nextByte() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextWord() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextDword() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextLword() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextChar() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextWchar() {
-		throw new UnsupportedOperationException();
-	}
 }
