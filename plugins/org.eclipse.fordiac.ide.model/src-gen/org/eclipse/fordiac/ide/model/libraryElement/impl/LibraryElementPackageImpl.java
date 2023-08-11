@@ -37,6 +37,8 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 
+import org.eclipse.fordiac.ide.model.buildpath.BuildpathPackage;
+import org.eclipse.fordiac.ide.model.buildpath.impl.BuildpathPackageImpl;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 
 import org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl;
@@ -876,14 +878,18 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
 		DataPackageImpl theDataPackage = (DataPackageImpl)(registeredPackage instanceof DataPackageImpl ? registeredPackage : DataPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(BuildpathPackage.eNS_URI);
+		BuildpathPackageImpl theBuildpathPackage = (BuildpathPackageImpl)(registeredPackage instanceof BuildpathPackageImpl ? registeredPackage : BuildpathPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theLibraryElementPackage.createPackageContents();
 		theDataPackage.createPackageContents();
+		theBuildpathPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theLibraryElementPackage.initializePackageContents();
 		theDataPackage.initializePackageContents();
+		theBuildpathPackage.initializePackageContents();
 
 		// Register package validator
 		EValidator.Registry.INSTANCE.put

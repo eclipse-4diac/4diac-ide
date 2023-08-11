@@ -7,6 +7,10 @@
     nonNLSMarkers="true" commentFormatting="true" importerID="org.eclipse.emf.importer.ecore"
     containmentProxies="true" complianceLevel="17.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.model.edit"
     language="" importOrganizing="true">
+  <genAnnotations source="http://www.eclipse.org/emf/2002/GenModel/importer/org.eclipse.xsd.ecore.importer">
+    <details key="sortAttributes" value="false"/>
+  </genAnnotations>
+  <foreignModel>buildpath.xsd</foreignModel>
   <genPackages prefix="LibraryElement" basePackage="org.eclipse.fordiac.ide.model"
       disposableProviderFactory="true" fileExtensions="" ecorePackage="lib.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="lib.ecore#//Language">
@@ -1018,6 +1022,38 @@
       <genOperations ecoreOperation="data.ecore#//LdateType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//LdateType/isAssignableFrom/other"/>
       </genOperations>
+    </genClasses>
+  </genPackages>
+  <genPackages prefix="Buildpath" basePackage="org.eclipse.fordiac.ide.model" resource="XML"
+      disposableProviderFactory="true" ecorePackage="buildpath.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="buildpath.ecore#//PatternType">
+      <genEnumLiterals ecoreEnumLiteral="buildpath.ecore#//PatternType/glob"/>
+      <genEnumLiterals ecoreEnumLiteral="buildpath.ecore#//PatternType/regex"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="buildpath.ecore#//PatternTypeObject"/>
+    <genClasses ecoreClass="buildpath.ecore#//Attribute">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute buildpath.ecore#//Attribute/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute buildpath.ecore#//Attribute/value"/>
+    </genClasses>
+    <genClasses ecoreClass="buildpath.ecore#//Buildpath">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference buildpath.ecore#//Buildpath/sourceFolders"/>
+    </genClasses>
+    <genClasses ecoreClass="buildpath.ecore#//DocumentRoot">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute buildpath.ecore#//DocumentRoot/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference buildpath.ecore#//DocumentRoot/xMLNSPrefixMap"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference buildpath.ecore#//DocumentRoot/xSISchemaLocation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference buildpath.ecore#//DocumentRoot/buildpath"/>
+    </genClasses>
+    <genClasses ecoreClass="buildpath.ecore#//Pattern">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute buildpath.ecore#//Pattern/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute buildpath.ecore#//Pattern/syntax"/>
+    </genClasses>
+    <genClasses ecoreClass="buildpath.ecore#//SourceFolder">
+      <genFeatures children="true" createChild="true" ecoreFeature="ecore:EReference buildpath.ecore#//SourceFolder/includes"/>
+      <genFeatures children="true" createChild="true" ecoreFeature="ecore:EReference buildpath.ecore#//SourceFolder/excludes"/>
+      <genFeatures children="true" createChild="true" ecoreFeature="ecore:EReference buildpath.ecore#//SourceFolder/attributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute buildpath.ecore#//SourceFolder/name"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference buildpath.ecore#//SourceFolder/buildpath"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

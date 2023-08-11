@@ -27,6 +27,8 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 
+import org.eclipse.fordiac.ide.model.buildpath.BuildpathPackage;
+import org.eclipse.fordiac.ide.model.buildpath.impl.BuildpathPackageImpl;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyCharType;
 import org.eclipse.fordiac.ide.model.data.AnyCharsType;
@@ -549,14 +551,18 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
 		LibraryElementPackageImpl theLibraryElementPackage = (LibraryElementPackageImpl)(registeredPackage instanceof LibraryElementPackageImpl ? registeredPackage : LibraryElementPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(BuildpathPackage.eNS_URI);
+		BuildpathPackageImpl theBuildpathPackage = (BuildpathPackageImpl)(registeredPackage instanceof BuildpathPackageImpl ? registeredPackage : BuildpathPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theDataPackage.createPackageContents();
 		theLibraryElementPackage.createPackageContents();
+		theBuildpathPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theDataPackage.initializePackageContents();
 		theLibraryElementPackage.initializePackageContents();
+		theBuildpathPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theDataPackage.freeze();
