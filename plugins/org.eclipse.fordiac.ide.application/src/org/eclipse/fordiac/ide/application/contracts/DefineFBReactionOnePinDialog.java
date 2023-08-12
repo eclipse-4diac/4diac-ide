@@ -11,9 +11,10 @@
  *   Paul Pavlicek
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.utilities;
+package org.eclipse.fordiac.ide.application.contracts;
 
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.utilities.IntervalVerifyListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.jface.dialogs.MessageDialog;

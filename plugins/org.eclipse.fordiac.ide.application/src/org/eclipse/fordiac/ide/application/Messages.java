@@ -53,6 +53,16 @@ public final class Messages extends NLS {
 
 	public static String CreateGroupPasteCommand;
 
+	public static String DefineFBDecisionTwoPinDialog_CreateGuarantee;
+
+	public static String DefineFBDecisionTwoPinDialog_CreateReaction;
+
+	public static String DefineFBDecisionTwoPinDialog_Error;
+
+	public static String DefineFBDecisionTwoPinDialog_ErrorInfo;
+
+	public static String DefineFBDecisionTwoPinDialog_Info;
+
 	public static String DefineFBReactionOnePinDialog_SpecifyOffset;
 
 	/** The Create sub app command_ label create sub app command. */

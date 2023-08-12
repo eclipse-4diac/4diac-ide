@@ -11,9 +11,12 @@
  *   Paul Pavlicek
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.utilities;
+package org.eclipse.fordiac.ide.application.contracts;
+
+import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.utilities.IntervalVerifyListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -28,19 +31,21 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class DefineFBReactionTwoPinDialog extends MessageDialog {
-	private static final int NUM_COLUMNS = 4;
+public class DefineFBReactionThreePinDialog extends MessageDialog {
+	private static final int NUM_COLUMNS = 3;
+	Event inputEvent;
+	List<Event> outputEvents;
 	private Text inputTime;
-	private final Event pinFrom;
-	private final Event pinTo;
 	private String inputTimeText;
 
-	public DefineFBReactionTwoPinDialog(final Shell parentShell, final Event pinFrom, final Event pinTo) {
-		super(parentShell, Messages.DefineFBReactionTwoPinDialog_Title, null,
-				Messages.DefineFBReactionTwoPinDialog_Info, MessageDialog.INFORMATION, 0,
-				Messages.DefineFBReactionTwoPinDialog_Button);
-		this.pinFrom = pinFrom;
-		this.pinTo = pinTo;
+	public DefineFBReactionThreePinDialog(final Shell parentShell, final Event inputEvent,
+			final List<Event> outputEvents) {
+		super(parentShell, Messages.DefineFBReactionOnePinDialog_Title, null,
+				Messages.DefineFBReactionOnePinDialog_Info, MessageDialog.INFORMATION, 0,
+				Messages.DefineFBReactionOnePinDialog_Button);
+		this.inputEvent = inputEvent;
+		this.outputEvents = outputEvents;
+
 	}
 
 	public String getTime() {
@@ -63,7 +68,8 @@ public class DefineFBReactionTwoPinDialog extends MessageDialog {
 
 		Label label = new Label(group, SWT.None);
 
-		label.setText("Reaction (" + pinFrom.getName() + " , " + pinTo.getName() + ")");   //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		label.setText("After " + inputEvent.getName() + " the events (" + outputEvents.get(0).getName() + " " //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+				+ outputEvents.get(0).getName() + ")"); //$NON-NLS-1$
 		label.setLayoutData(GridDataFactory.fillDefaults().span(NUM_COLUMNS, 1).grab(true, true).create());
 
 		label = new Label(group, SWT.None);
@@ -90,5 +96,4 @@ public class DefineFBReactionTwoPinDialog extends MessageDialog {
 			super.buttonPressed(buttonId);
 		}
 	}
-
 }

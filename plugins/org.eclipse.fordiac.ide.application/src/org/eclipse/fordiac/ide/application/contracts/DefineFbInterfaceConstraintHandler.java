@@ -12,7 +12,7 @@
  *  Paul Pavlicek
  *    - - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.handlers;
+package org.eclipse.fordiac.ide.application.contracts;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,10 +23,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.commands.UpdateContractCommand;
-import org.eclipse.fordiac.ide.application.utilities.DefineFBReactionOnePinDialog;
-import org.eclipse.fordiac.ide.application.utilities.DefineFBReactionThreePinDialog;
-import org.eclipse.fordiac.ide.application.utilities.DefineFBReactionTwoPinDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -35,6 +31,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 
+	private static final int MAX_NUMBER_PINS = 3;
 	private static final int PIN_TO = 1;
 	private static final int PIN_FROM = 0;
 	private static final int CANCEL = -1;
@@ -43,23 +40,62 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
 		final List<Event> eventPins = getSelectedPins(event);
-		if (eventPins.size() == 3) {
-			makeThreePinReaction(event, eventPins);
-		} else if (eventPins.size() == 2) {
-			makeTwoPinReaction(event, eventPins);
-
-		} else if (eventPins.size() == 1) {
-			makeOnePinConstraint(event, eventPins);
-
-		} else {
+		if (eventPins.isEmpty() || eventPins.size() > MAX_NUMBER_PINS) {
 			MessageDialog.openError(HandlerUtil.getActiveShell(event),
 					Messages.DefineFbInterfaceConstraintHandler_Title,
 					Messages.DefineFbInterfaceConstraintHandler_Info);
 			return Status.CANCEL_STATUS;
 		}
+		if (eventPins.size() == MAX_NUMBER_PINS) {
+			makeThreePinReaction(event, eventPins);
+		} else if (eventPins.size() == 2) {
+			final DefineFBDecisionTwoPinDialog dialog = new DefineFBDecisionTwoPinDialog(
+					HandlerUtil.getActiveShell(event));
+			boolean isReaction = true;
+			if (dialog.open() != CANCEL) {
+				isReaction = dialog.isReaction();
+
+			}
+			if (isReaction) {
+				makeTwoPinReaction(event, eventPins);
+			} else {
+				makeTwoPinGuarantee(event, eventPins);
+			}
+
+		} else {
+			makeOnePinConstraint(event, eventPins);
+		}
 
 		eventPins.clear();
 		return Status.OK_STATUS;
+
+	}
+
+	private static void makeTwoPinGuarantee(final ExecutionEvent event, final List<Event> eventPins) {
+		if (eventPins.get(PIN_FROM).isIsInput() && eventPins.get(PIN_TO).isIsInput()
+				|| (!eventPins.get(PIN_FROM).isIsInput() && !eventPins.get(PIN_TO).isIsInput())) {
+			MessageDialog.openError(HandlerUtil.getActiveShell(event),
+					Messages.DefineFbInterfaceConstraintHandler_Title,
+					Messages.DefineFbInterfaceConstraintHandler_InfoErrorGuarantee);
+		} else {
+			if (eventPins.get(1).isIsInput()) {
+				eventPins.add(0, eventPins.get(1));
+				eventPins.remove(2);
+
+			}
+			final DefineFBGuaranteeTwoPinDialog dialog = new DefineFBGuaranteeTwoPinDialog(
+					HandlerUtil.getActiveShell(event), eventPins.get(PIN_FROM), eventPins.get(PIN_TO));
+
+			String time = ""; //$NON-NLS-1$
+			if (dialog.open() != CANCEL) {
+				time = dialog.getTime();
+
+				final UpdateContractCommand uccmd = UpdateContractCommand.createContractReaction(eventPins, time, true);
+				if (uccmd.canExecute()) {
+					uccmd.execute();
+				}
+			}
+		}
 
 	}
 

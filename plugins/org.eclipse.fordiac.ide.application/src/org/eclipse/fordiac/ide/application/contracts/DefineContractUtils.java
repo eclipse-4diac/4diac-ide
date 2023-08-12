@@ -11,7 +11,7 @@
  *   Paul Pavlicek
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.utilities;
+package org.eclipse.fordiac.ide.application.contracts;
 
 import java.util.Arrays;
 

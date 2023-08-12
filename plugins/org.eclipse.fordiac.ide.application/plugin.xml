@@ -476,6 +476,11 @@
           id="org.eclipse.fordiac.ide.application.defineFbInterfaceConstraint"
           name="Define Contract for FB Interface Pins">
     </command>
+     <command
+           categoryId="org.eclipse.fordiac.ide.commands.category"
+           id="org.eclipse.fordiac.ide.application.evaluatecontract"
+           name="Evaluate Contract">
+     </command>
 
   </extension>
   <extension point="org.eclipse.ui.handlers">
@@ -730,8 +735,12 @@
              commandId="org.eclipse.fordiac.ide.application.commands.trim">
     </handler>
     <handler
-          class="org.eclipse.fordiac.ide.application.handlers.DefineFbInterfaceConstraintHandler"
+          class="org.eclipse.fordiac.ide.application.contracts.DefineFbInterfaceConstraintHandler"
           commandId="org.eclipse.fordiac.ide.application.defineFbInterfaceConstraint">
+    </handler>
+    <handler
+          class="org.eclipse.fordiac.ide.application.contracts.EvaluateContractHandler"
+          commandId="org.eclipse.fordiac.ide.application.evaluatecontract">
     </handler>
   </extension>
   <extension point="org.eclipse.ui.bindings">
@@ -977,6 +986,44 @@
           </with>
         </visibleWhen>
        </command>
+      <command
+            commandId="org.eclipse.fordiac.ide.application.evaluatecontract"
+            label="Evaluate Contracts ">
+         <visibleWhen
+               checkEnabled="true">
+            <with
+                  variable="selection">
+               <or>
+                  <count
+                        value="2">
+                  </count>
+                  <iterate>
+                     <or>
+                        <instanceof
+                              value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
+                        </instanceof>
+                        <instanceof
+                              value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart">
+                        </instanceof>
+                     </or>
+                  </iterate>
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <or>
+                        <instanceof
+                              value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
+                        </instanceof>
+                        <instanceof
+                              value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart">
+                        </instanceof>
+                     </or>
+                  </iterate>
+               </or>
+            </with>
+         </visibleWhen>
+      </command>
     </menuContribution>
     <menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
       <toolbar id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar">

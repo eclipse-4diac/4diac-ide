@@ -11,11 +11,12 @@
  *   Paul Pavlicek
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.commands;
+package org.eclipse.fordiac.ide.application.contracts;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -59,6 +60,15 @@ public class UpdateContractCommand extends Command {
 		comment.append("GUARANTEE Reaction(" + eventPins.get(0).getName() + ","   //$NON-NLS-1$//$NON-NLS-2$
 				+ eventPins.get(1).getName() + ")");  //$NON-NLS-1$
 		comment.append(" within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
+		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(), comment.toString());
+	}
+
+	public static UpdateContractCommand createContractReaction(final List<Event> eventPins, final String time,
+			final boolean dummy) {
+		final StringBuilder comment = new StringBuilder();
+		comment.append("GUARANTEE Whenever event " + eventPins.get(0).getName() + " occurs, then event "   //$NON-NLS-1$//$NON-NLS-2$
+				+ eventPins.get(1).getName());
+		comment.append(" occur within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
 		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(), comment.toString());
 	}
 
