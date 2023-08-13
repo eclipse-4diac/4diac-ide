@@ -48,10 +48,10 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterFBType> {
 	def generateFBInterfaceSpecSocket()
 	'''
 	const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpecSocket = {
-	  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventInputNames, «IF hasInputWith»scm_anEIWith«ELSE»nullptr«ENDIF», scm_anEIWithIndexes«ENDIF»,
-	  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventOutputNames, «IF hasOutputWith»scm_anEOWith«ELSE»nullptr«ENDIF», scm_anEOWithIndexes«ENDIF»,
-	  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scm_anDataInputNames, scm_anDataInputTypeIds«ENDIF»,
-	  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scm_anDataOutputNames, scm_anDataOutputTypeIds«ENDIF»,
+	  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scmEventInputNames, «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
+	  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
+	  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
+	  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scmDataOutputNames, scmDataOutputTypeIds«ENDIF»,
 	  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», nullptr
 	};
 	'''
@@ -59,10 +59,10 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterFBType> {
 	def generateFBInterfaceSpecPlug()
 	'''
 	const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpecPlug = {
-	  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventOutputNames, «IF hasOutputWith»scm_anEOWith«ELSE»nullptr«ENDIF», scm_anEOWithIndexes«ENDIF»,
-	  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventInputNames, «IF hasInputWith»scm_anEIWith«ELSE»nullptr«ENDIF», scm_anEIWithIndexes«ENDIF»,
-	  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scm_anDataOutputNames, scm_anDataOutputTypeIds«ENDIF»,
-	  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scm_anDataInputNames, scm_anDataInputTypeIds«ENDIF»,
+	  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
+	  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scmEventInputNames, «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
+	  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scmDataOutputNames, scmDataOutputTypeIds«ENDIF»,
+	  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
 	  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», nullptr
 	};
 	'''

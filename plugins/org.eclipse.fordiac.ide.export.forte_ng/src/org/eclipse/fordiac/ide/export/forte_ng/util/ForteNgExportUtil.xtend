@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.export.forte_ng.util
 import java.util.regex.Pattern
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.fordiac.ide.model.data.AnyDerivedType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType
@@ -153,6 +152,7 @@ final class ForteNgExportUtil {
 				"forte_string"
 			WstringType:
 				"forte_wstring"
+			AdapterType: type.name
 			DataType case GenericTypes.isAnyType(type): '''forte_«type.generateTypeNamePlain.toLowerCase»_variant'''
 			DataType: '''forte_«type.name.toLowerCase»'''
 			default:

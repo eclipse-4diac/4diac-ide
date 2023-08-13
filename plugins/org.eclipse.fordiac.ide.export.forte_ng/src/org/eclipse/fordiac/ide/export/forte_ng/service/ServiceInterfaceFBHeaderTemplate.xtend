@@ -45,7 +45,7 @@ class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate<ServiceInterfaceF
 		  «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
 		public:
-		  «FBClassName»(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);
+		  «FBClassName»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
 		
 		  «generateInterfaceDeclarations»
 		};

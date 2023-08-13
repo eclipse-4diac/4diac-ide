@@ -50,17 +50,11 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 		  «type.interfaceList.inputVars.generateAccessors("getDI", "getDO")»
 		  «type.interfaceList.outputVars.generateAccessors("getDO", "getDI")»
 		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
-		
 		  «type.interfaceList.eventInputs.generateEventAccessors»
 		  «type.interfaceList.eventOutputs.generateEventAccessors»
-		
-		private:
-		  FORTE_ADAPTER_DATA_ARRAY(«type.interfaceList.eventInputs.size», «type.interfaceList.eventOutputs.size», «type.interfaceList.inputVars.size», «type.interfaceList.outputVars.size», «type.interfaceList.sockets.size + type.interfaceList.plugs.size»);
-		
-		public:
-		  «FBClassName»(CStringDictionary::TStringId pa_anAdapterInstanceName, CResource *pa_poSrcRes, bool pa_bIsPlug) :
-		      «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpecSocket, pa_anAdapterInstanceName, &scm_stFBInterfaceSpecPlug, pa_bIsPlug, m_anFBConnData, m_anFBVarsData) {	
-		   };
+		  «FBClassName»(CStringDictionary::TStringId paAdapterInstanceName, CResource *paSrcRes, bool paIsPlug) :
+		      «baseClass»(paSrcRes, &scm_stFBInterfaceSpecSocket, paAdapterInstanceName, &scm_stFBInterfaceSpecPlug, paIsPlug) {	
+		  };
 		
 		  virtual ~«FBClassName»() = default;
 		};
@@ -104,7 +98,7 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 	def protected generateEventAccessors(List<Event> events) '''
 		«FOR event : events»
 			int «event.generateName»() {
-			  return m_nParentAdapterListEventID + scm_nEvent«event.name»ID;
+			  return m_nParentAdapterListEventID + scmEvent«event.name»ID;
 			}
 			
 		«ENDFOR»

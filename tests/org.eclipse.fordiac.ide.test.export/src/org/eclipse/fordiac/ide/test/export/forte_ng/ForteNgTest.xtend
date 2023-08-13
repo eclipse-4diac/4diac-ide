@@ -234,7 +234,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
 						 ***
 						 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
-						 *** Description: 
+						 *** Description:
 						 *** Version:
 						 *************************************************************************/
 						
@@ -254,10 +254,13 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						private:
 						
 						  static const SFBInterfaceSpec scm_stFBInterfaceSpec;
+						
 						  CIEC_ANY *getVarInternal(size_t) override;
+						
 						  void «EXPORTED_ALGORITHM_NAME»(void);
-						  static const TForteInt16 scm_nStateINIT = 0;
-						  
+						
+						  static const TForteInt16 scmStateINIT = 0;
+						
 						  void enterStateINIT(CEventChainExecutionThread *const paECET);
 						
 						  void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
@@ -266,7 +269,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						  void writeOutputData(TEventID paEIID) override;
 						
 						public:
-						  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);
+						  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
 						
 						  CIEC_ANY *getDI(size_t) override;
 						  CIEC_ANY *getDO(size_t) override;
@@ -277,7 +280,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						  CInOutDataConnection **getDIOInConUnchecked(TPortId) override;
 						  CInOutDataConnection *getDIOOutConUnchecked(TPortId) override;
 						};
-						
 						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
@@ -294,7 +296,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
 						 ***
 						 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
-						 *** Description: 
+						 *** Description:
 						 *** Version:
 						 *************************************************************************/
 						
@@ -322,14 +324,14 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						  0, nullptr
 						};
 						
-						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-						    CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr) {
+						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, CResource *const paSrcRes) :
+						    CBasicFB(paSrcRes, &scm_stFBInterfaceSpec, paInstanceNameId, nullptr) {
 						}
 						
 						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
 						  do {
 						    switch(m_nECCState) {
-						      case scm_nStateINIT:
+						      case scmStateINIT:
 						        return; //no transition cleared
 						      default:
 						        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 1.", m_nECCState.operator TForteUInt16 ());
@@ -341,16 +343,8 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						}
 						
 						void FORTE_functionblock::enterStateINIT(CEventChainExecutionThread *const paECET) {
-						  m_nECCState = scm_nStateINIT;
+						  m_nECCState = scmStateINIT;
 						}
-						
-						
-						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
-						  #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
-						  #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
-						  «ALGORITHM_TEXT»
-						}
-						
 						
 						void FORTE_functionblock::readInputData(TEventID) {
 						}
@@ -394,6 +388,11 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						  return nullptr;
 						}
 						
+						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
+						  #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
+						  #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
+						  «ALGORITHM_TEXT»
+						}
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
 					assertNoErrors(export.warnings)

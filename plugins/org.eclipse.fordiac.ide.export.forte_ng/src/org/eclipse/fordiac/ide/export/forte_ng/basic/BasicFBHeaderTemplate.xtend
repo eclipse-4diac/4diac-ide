@@ -39,11 +39,10 @@ class BasicFBHeaderTemplate extends BaseFBHeaderTemplate<BasicFBType> {
 	override generateClassInclude() '''#include "basicfb.h"'''
 
 	def protected generateStates() '''
-		«FOR state : type.ECC.ECState»
-			static const TForteInt16 scm_nState«state.name» = «type.ECC.ECState.indexOf(state)»;
+		«FOR state : type.ECC.ECState AFTER '\n'»
+			static const TForteInt16 scmState«state.name» = «type.ECC.ECState.indexOf(state)»;
 		«ENDFOR»
-
-		«FOR state : type.ECC.ECState»
+		«FOR state : type.ECC.ECState AFTER '\n'»
 			«state.generateState»
 		«ENDFOR»
 	'''

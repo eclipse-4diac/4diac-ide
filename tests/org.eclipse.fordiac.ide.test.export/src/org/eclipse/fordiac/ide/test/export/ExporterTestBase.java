@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportTemplate;
@@ -222,8 +223,13 @@ public abstract class ExporterTestBase<T extends FBType> {
 
 		for (final IExportTemplate template : templates) {
 			try {
-				result.add(new FileObject(template.getName(), template.generate(), template.getErrors(),
-						template.getWarnings(), template.getInfos()));
+				CharSequence content = template.generate();
+				if (content != null) {
+					content = content.toString().lines().map(String::stripTrailing)
+							.collect(Collectors.joining(System.lineSeparator()));
+				}
+				result.add(new FileObject(template.getName(), content, template.getErrors(), template.getWarnings(),
+						template.getInfos()));
 			} catch (final ExportException e) {
 				result.add(new FileObject(template.getName(), e.getMessage(), template.getErrors(),
 						template.getWarnings(), template.getInfos()));

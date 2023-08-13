@@ -115,7 +115,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 		event.generateEventID
 	}
 
-	def protected generateStateName(ECState state) '''scm_nState«state.name»'''
+	def protected generateStateName(ECState state) '''scmState«state.name»'''
 
 	override getErrors() {
 		(super.getErrors + transitionLanguageSupport.values.filterNull.flatMap [
