@@ -53,7 +53,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	'''
 
 	def protected generateState(ECState state) '''
-		void «FBClassName»::enterState«state.name»(CEventChainExecutionThread * paECET) {
+		void «FBClassName»::enterState«state.name»(CEventChainExecutionThread *const paECET) {
 		  m_nECCState = «state.generateStateName»;
 		  «FOR action : state.ECAction»
 		  	«IF action.algorithm !== null»
@@ -67,7 +67,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	'''
 
 	override generateExecuteEvent() '''
-		void «FBClassName»::executeEvent(TEventID paEIID, CEventChainExecutionThread * paECET) {
+		void «FBClassName»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
 		  do {
 		    switch(m_nECCState) {
 		      «FOR state : type.ECC.ECState»

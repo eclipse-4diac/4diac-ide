@@ -54,7 +54,7 @@ class FunctionFBImplTemplate extends ForteFBTemplate<FunctionFBType> {
 	'''
 
 	def protected CharSequence generateExecuteEvent() '''
-		void «FBClassName»::executeEvent(TEventID paEIID, CEventChainExecutionThread * paECET) {
+		void «FBClassName»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
 		  «generateBodyCall»
 		  «FOR event : type.interfaceList.eventOutputs»
 		  	«event.generateSendEvent»

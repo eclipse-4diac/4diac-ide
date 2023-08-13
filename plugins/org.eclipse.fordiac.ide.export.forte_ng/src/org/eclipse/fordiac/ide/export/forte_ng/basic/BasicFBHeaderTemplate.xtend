@@ -49,6 +49,6 @@ class BasicFBHeaderTemplate extends BaseFBHeaderTemplate<BasicFBType> {
 	'''
 
 	def protected CharSequence generateState(ECState state) '''
-		void enterState«state.name»(CEventChainExecutionThread * paECET);
+		void enterState«state.name»(CEventChainExecutionThread *const paECET);
 	'''
 }

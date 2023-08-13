@@ -45,7 +45,7 @@ class FunctionFBHeaderTemplate extends ForteFBTemplate<FunctionFBType> {
 		
 		  «generateFBInterfaceSpecDeclaration»
 		
-		  void executeEvent(TEventID paEIID, CEventChainExecutionThread * paECET) override;
+		  void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 		
 		  «generateReadInputDataDeclaration»
 		  «generateWriteOutputDataDeclaration»
