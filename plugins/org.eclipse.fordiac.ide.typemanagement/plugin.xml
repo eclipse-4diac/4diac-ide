@@ -686,4 +686,21 @@
   		pattern=".*/org.eclipse.fordiac.ide.typemanagement.wizards.ExtractedLibraryImportWizard">
 	</activityPatternBinding>
    </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="org.eclipse.fordiac.ide.typemanagement.properties.BuildPathPropertyPage"
+            id="org.eclipse.fordiac.ide.typemanagement.properties.buildPathPropertyPage"
+            name="4diac Build Path">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+               </test>
+            </adapt>
+         </enabledWhen>
+      </page>
+   </extension>
 </plugin>

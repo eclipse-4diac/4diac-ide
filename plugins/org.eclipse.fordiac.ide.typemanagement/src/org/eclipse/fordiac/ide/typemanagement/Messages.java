@@ -1,6 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
- *				 2020 Andrea Zoitl
+ * Copyright (c) 2017, 2023 fortiss GmbH
+ *                          Andrea Zoitl
+ *                          Martin Erich Jobst
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -12,6 +14,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Andrea Zoitl
  *     - Externalized all translatable strings
+ *   Martin Jobst
+ *     - add strings for Build Path property page
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.typemanagement;
@@ -21,6 +25,38 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.typemanagement.messages"; //$NON-NLS-1$
+
+	public static String BuildPathPropertyPage_AddExclude;
+
+	public static String BuildPathPropertyPage_AddExcludePattern;
+
+	public static String BuildPathPropertyPage_AddFolder;
+
+	public static String BuildPathPropertyPage_AddInclude;
+
+	public static String BuildPathPropertyPage_AddIncludePattern;
+
+	public static String BuildPathPropertyPage_AddSourceFolder;
+
+	public static String BuildPathPropertyPage_Edit;
+
+	public static String BuildPathPropertyPage_EditAttribute;
+
+	public static String BuildPathPropertyPage_EditPattern;
+
+	public static String BuildPathPropertyPage_EditSourceFolder;
+
+	public static String BuildPathPropertyPage_EmptyPatternError;
+
+	public static String BuildPathPropertyPage_EnterNewPattern;
+
+	public static String BuildPathPropertyPage_EnterNewValue;
+
+	public static String BuildPathPropertyPage_Remove;
+
+	public static String BuildPathPropertyPage_SaveError;
+
+	public static String BuildPathPropertyPage_Toggle;
 
 	public static String DeleteFBTypeParticipant_Name;
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
