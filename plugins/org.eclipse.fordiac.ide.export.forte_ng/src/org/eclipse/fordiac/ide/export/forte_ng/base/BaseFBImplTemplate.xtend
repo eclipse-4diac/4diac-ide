@@ -63,7 +63,7 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 			
 		«ENDIF»
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, CResource *const paSrcRes) :
-		    «baseClass»(paSrcRes, &scm_stFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»&scmInternalVars«ELSE»nullptr«ENDIF»)«// no newline
+		    «baseClass»(paSrcRes, &scmFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»&scmInternalVars«ELSE»nullptr«ENDIF»)«// no newline
 			»«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«generateConnectionInitializer» {
 		}
 		

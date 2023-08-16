@@ -56,7 +56,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		«generateFBInterfaceSpecDefinition»
 		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, CResource *const paSrcRes) :
-		    «baseClass»(paSrcRes, &scm_stFBInterfaceSpec, paInstanceNameId, &scmFBNData)«//no newline
+		    «baseClass»(paSrcRes, &scmFBInterfaceSpec, paInstanceNameId, &scmFBNData)«//no newline
 			»«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«generateConnectionInitializer» {
 		};
 		
@@ -221,7 +221,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
 		for (FBNetworkElement fb : fbs) {
 			for (VarDeclaration v : fb.getInterface.getInputVars.filter[it.value !== null && !it.value.value.isEmpty]) {
-				retVal.append('''  {«fb.fbId», g_nStringId«v.name», "«getParamValue(v)»"},
+				retVal.append('''  {«fb.fbId», «v.name.FORTEStringId», "«getParamValue(v)»"},
 				''')
 				numCompFBParams++
 			}

@@ -68,7 +68,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						
 						private:
 						
-						  static const SFBInterfaceSpec scm_stFBInterfaceSpec;
+						  static const SFBInterfaceSpec scmFBInterfaceSpec;
 						
 						  CIEC_ANY *getVarInternal(size_t) override;
 						
@@ -132,7 +132,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						
 						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringId«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»)
 						
-						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scm_stFBInterfaceSpec = {
+						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scmFBInterfaceSpec = {
 						  0, nullptr, nullptr, nullptr,
 						  0, nullptr, nullptr, nullptr,
 						  0, nullptr, nullptr,
@@ -142,25 +142,25 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						};
 						
 						«EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_FUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, CResource *const paSrcRes) :
-						    CBasicFB(paSrcRes, &scm_stFBInterfaceSpec, paInstanceNameId, nullptr) {
+						    CBasicFB(paSrcRes, &scmFBInterfaceSpec, paInstanceNameId, nullptr) {
 						}
 						
 						void «EXPORTED_FUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
 						  do {
-						    switch(m_nECCState) {
+						    switch(mECCState) {
 						      case scmStateINIT:
 						        return; //no transition cleared
 						      default:
-						        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 1.", m_nECCState.operator TForteUInt16 ());
-						        m_nECCState = 0; // 0 is always the initial state
+						        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 1.", mECCState.operator TForteUInt16 ());
+						        mECCState = 0; // 0 is always the initial state
 						        return;
 						    }
-						    paEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
+						    paEIID = cgInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
 						  } while(true);
 						}
 						
 						void «EXPORTED_FUNCTIONBLOCK_NAME»::enterStateINIT(CEventChainExecutionThread *const paECET) {
-						  m_nECCState = scmStateINIT;
+						  mECCState = scmStateINIT;
 						}
 						
 						void «EXPORTED_FUNCTIONBLOCK_NAME»::readInputData(TEventID) {

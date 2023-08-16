@@ -209,7 +209,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	}
 
 	def protected generateFBInterfaceSpecDeclaration() '''
-		static const SFBInterfaceSpec scm_stFBInterfaceSpec;
+		static const SFBInterfaceSpec scmFBInterfaceSpec;
 	'''
 
 	def protected hasInputWith() {
@@ -223,7 +223,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	// changes to this method require a recheck of the two methods generateFBInterfaceSpecSocket, generateFBInterfaceSpecPlug of AdapterFBImplTemplate
 	// as there this code is duplicated
 	def protected generateFBInterfaceSpecDefinition() '''
-		const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpec = {
+		const SFBInterfaceSpec «FBClassName»::scmFBInterfaceSpec = {
 		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scmEventInputNames, «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
 		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
 		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
@@ -454,7 +454,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def protected generateAccessors(List<AdapterDeclaration> adapters) '''
 		«FOR adapter : adapters»
 			«adapter.type.generateTypeName» &«adapter.generateName» {
-			  return *static_cast<«adapter.type.generateTypeName»*>(m_apoAdapters[«adapters.indexOf(adapter)»]);
+			  return *static_cast<«adapter.type.generateTypeName»*>(mAdapters[«adapters.indexOf(adapter)»]);
 			};
 			
 		«ENDFOR»

@@ -54,7 +54,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 
 	def protected generateState(ECState state) '''
 		void «FBClassName»::enterState«state.name»(CEventChainExecutionThread *const paECET) {
-		  m_nECCState = «state.generateStateName»;
+		  mECCState = «state.generateStateName»;
 		  «FOR action : state.ECAction»
 		  	«IF action.algorithm !== null»
 		  		alg_«action.algorithm.name»();
@@ -69,7 +69,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	override generateExecuteEvent() '''
 		void «FBClassName»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
 		  do {
-		    switch(m_nECCState) {
+		    switch(mECCState) {
 		      «FOR state : type.ECC.ECState»
 		      	case «state.generateStateName»:
 		      	  «FOR transition : state.outTransitions SEPARATOR "\nelse"»
@@ -79,11 +79,11 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 		      	  «IF !state.outTransitions.empty»break;«ENDIF»
 		      «ENDFOR»
 		      default:
-		        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: «type.ECC.ECState.size».", m_nECCState.operator TForteUInt16 ());
-		        m_nECCState = 0; // 0 is always the initial state
+		        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: «type.ECC.ECState.size».", mECCState.operator TForteUInt16 ());
+		        mECCState = 0; // 0 is always the initial state
 		        return;
 		    }
-		    paEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
+		    paEIID = cgInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
 		  } while(true);
 		}
 		
