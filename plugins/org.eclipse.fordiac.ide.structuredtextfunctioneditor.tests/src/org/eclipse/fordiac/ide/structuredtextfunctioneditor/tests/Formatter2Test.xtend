@@ -1089,6 +1089,33 @@ class Formatter2Test {
 	}
 
 	@Test
+	def void emptyMultiLineCommentTest2() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				/*
+				 */
+				IF int1 < int2 THEN
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				(*  *)
+				IF int1 < int2 THEN
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
 	def void splitOnSingleOperatorTest() {
 		assertFormatted[
 			toBeFormatted = '''

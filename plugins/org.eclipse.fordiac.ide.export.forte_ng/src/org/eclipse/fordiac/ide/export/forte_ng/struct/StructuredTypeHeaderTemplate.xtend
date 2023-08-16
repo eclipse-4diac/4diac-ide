@@ -40,10 +40,12 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 		
 		  public:
 		    «className»();
+		«IF !type.memberVariables.empty»
 		
 		    «className»(«generateConstructorParameters»);
 		
 		    «type.memberVariables.generateVariableDeclarations(false)»
+		«ENDIF»
 		    size_t getStructSize() const override {
 		      return «type.memberVariables.size»;
 		    }

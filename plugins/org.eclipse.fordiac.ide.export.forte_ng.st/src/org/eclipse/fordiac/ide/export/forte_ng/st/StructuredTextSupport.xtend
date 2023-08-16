@@ -511,7 +511,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected Iterable<INamedElement> getDependencies(EObject object) {
 		switch (object) {
 			STVarDeclaration:
-				#[object.type]
+				#[object.featureType]
 			STStructInitializerExpression:
 				// need dependencies of default values generated in initializer
 				object.mappedStructInitElements.entrySet.filter[value === null].flatMap[key.defaultDependencies]
@@ -520,13 +520,13 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			STStringLiteral:
 				#[object.resultType]
 			STDateLiteral:
-				#[object.type]
+				#[object.resultType]
 			STTimeLiteral:
-				#[object.type]
+				#[object.resultType]
 			STTimeOfDayLiteral:
-				#[object.type]
+				#[object.resultType]
 			STDateAndTimeLiteral:
-				#[object.type]
+				#[object.resultType]
 			STFeatureExpression: // feature expressions may refer to definitions contained in other sources
 				object.feature.featureDependencies + object.argumentDependencies
 			STFunction:
@@ -544,7 +544,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock:
 				#[feature]
 			STVarDeclaration:
-				#[feature.type]
+				#[feature.featureType]
 			STFunction:
 				#[feature] + feature.parameterDependencies
 			FunctionFBType:
@@ -568,7 +568,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				variableLanguageSupport.computeIfAbsent(feature)[new VarDeclarationSupport(it)].
 					getDependencies(emptyMap)
 			STVarDeclaration:
-				#[feature.type] + feature.containedDependencies
+				#[feature.featureType] + feature.containedDependencies
 			default:
 				emptySet
 		}

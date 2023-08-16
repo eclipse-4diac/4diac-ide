@@ -153,6 +153,7 @@ final class ForteNgExportUtil {
 			WstringType:
 				"forte_wstring"
 			AdapterType: type.name
+			ArrayType: type.baseType.generateTypeBasename
 			DataType case GenericTypes.isAnyType(type): '''forte_«type.generateTypeNamePlain.toLowerCase»_variant'''
 			DataType: '''forte_«type.name.toLowerCase»'''
 			default:

@@ -81,6 +81,11 @@ class TypeDeclarationParserTest {
 				TypeDeclarationParser.parseSimpleTypeDeclaration(ElementaryTypes.INT,
 						"0..FUNC(1, \"abc))(([{$\"$$$00\"), 4..17"));  //$NON-NLS-1$
 
+		assertTypeNameEquals("ARRAY [*] OF INT", //$NON-NLS-1$
+				TypeDeclarationParser.parseSimpleTypeDeclaration(ElementaryTypes.INT, "*"));  //$NON-NLS-1$
+		assertTypeNameEquals("ARRAY [*, *] OF INT", //$NON-NLS-1$
+				TypeDeclarationParser.parseSimpleTypeDeclaration(ElementaryTypes.INT, "*,*"));  //$NON-NLS-1$
+
 		assertNull(TypeDeclarationParser.parseSimpleTypeDeclaration(ElementaryTypes.INT, "(")); //$NON-NLS-1$
 		assertNull(TypeDeclarationParser.parseSimpleTypeDeclaration(ElementaryTypes.INT, ")")); //$NON-NLS-1$
 		assertNull(TypeDeclarationParser.parseSimpleTypeDeclaration(ElementaryTypes.INT, "(()))")); //$NON-NLS-1$

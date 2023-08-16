@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.AbstractHierarchyHandler;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.CreateLeafOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.MoveNodeOperation;
@@ -71,6 +72,7 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 		if (!this.isSupportedType(aDropAdapter.getCurrentTransfer())) {
 			return Status.CANCEL_STATUS;
 		}
+
 		Level parent = null;
 		int targetIndex = -1;
 		if (aTarget instanceof final Level targetLevel) {
@@ -89,6 +91,12 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 			}
 
 			final Node node = (Node) (((TreeSelection) aDropTargetEvent.data).getFirstElement());
+
+			// don't allow to drop a level on it's own leaves
+			if (node instanceof final Level level && checkIfChild(level, (EObject) aTarget)) {
+				return Status.CANCEL_STATUS;
+			}
+
 			if (aTarget instanceof final Leaf targetLeaf && (node instanceof Leaf || node instanceof Level)) {
 				targetIndex = ((Level) targetLeaf.eContainer()).getChildren().indexOf(targetLeaf);
 			}
@@ -121,5 +129,17 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 			return libEl.getTypeEntry().getFile().getProject();
 		}
 		return null;
+	}
+
+	private static boolean checkIfChild(final Level source, final EObject target) {
+		if (target instanceof RootLevel) {
+			return false;
+		}
+
+		if (target instanceof final Level level && source == level) {
+			return true;
+		}
+
+		return checkIfChild(source, target.eContainer());
 	}
 }

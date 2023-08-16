@@ -87,6 +87,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
@@ -142,6 +143,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			+ "bitAccessExpressionNotOfTypeAnyInt"; //$NON-NLS-1$
 	public static final String DUPLICATE_VARIABLE_NAME = ISSUE_CODE_PREFIX + "duplicateVariableName"; //$NON-NLS-1$
 	public static final String INDEX_RANGE_TYPE_INVALID = ISSUE_CODE_PREFIX + "indexRangeTypeInvalid"; //$NON-NLS-1$
+	public static final String INDEX_RANGE_EXPRESSION_INVALID = ISSUE_CODE_PREFIX + "indexRangeExpressionInvalid"; //$NON-NLS-1$
 	public static final String MAX_LENGTH_NOT_ALLOWED = ISSUE_CODE_PREFIX + "maxLengthNotAllowed"; //$NON-NLS-1$
 	public static final String MAX_LENGTH_TYPE_INVALID = ISSUE_CODE_PREFIX + "maxLengthTypeInvalid"; //$NON-NLS-1$
 	public static final String TOO_MANY_INDICES_GIVEN = ISSUE_CODE_PREFIX + "tooManyIndicesGiven"; //$NON-NLS-1$
@@ -166,28 +168,39 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
 
-	private void checkRangeOnValidity(final STBinaryExpression subRangeExpression) {
-		final DataType leftType = (DataType) subRangeExpression.getLeft().getResultType();
-		if (!(leftType instanceof AnyIntType)) {
-			error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, leftType.getName()),
-					subRangeExpression, STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_TYPE_INVALID,
-					leftType.getName());
-			// Currently we can only process literals
-		}
-		final DataType rightType = (DataType) subRangeExpression.getRight().getResultType();
-		if (!(rightType instanceof AnyIntType)) {
-			error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, rightType.getName()),
-					subRangeExpression, STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_TYPE_INVALID,
-					rightType.getName());
-			// Currently we can only process literals
+	private void checkRangeOnValidity(final STExpression expression) {
+		if (expression instanceof final STBinaryExpression subRangeExpression) {
+			final DataType leftType = (DataType) subRangeExpression.getLeft().getResultType();
+			if (!(leftType instanceof AnyIntType)) {
+				error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, leftType.getName()),
+						subRangeExpression, STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_TYPE_INVALID,
+						leftType.getName());
+				// Currently we can only process literals
+			}
+			final DataType rightType = (DataType) subRangeExpression.getRight().getResultType();
+			if (!(rightType instanceof AnyIntType)) {
+				error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, rightType.getName()),
+						subRangeExpression, STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT,
+						INDEX_RANGE_TYPE_INVALID, rightType.getName());
+				// Currently we can only process literals
+			}
+		} else {
+			error(Messages.STCoreValidator_IndexRangeExpressionInvalid, expression, null,
+					INDEX_RANGE_EXPRESSION_INVALID);
 		}
 	}
 
 	@Check
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
 		if (varDeclaration.isArray()) {
-			varDeclaration.getRanges().stream().filter(STBinaryExpression.class::isInstance)
-					.map(STBinaryExpression.class::cast).forEach(this::checkRangeOnValidity);
+			varDeclaration.getRanges().stream().forEach(this::checkRangeOnValidity);
+		}
+	}
+
+	@Check
+	public void checkIndexRangeValueType(final STTypeDeclaration typeDeclaration) {
+		if (typeDeclaration.isArray()) {
+			typeDeclaration.getRanges().stream().forEach(this::checkRangeOnValidity);
 		}
 	}
 
@@ -200,6 +213,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	@Check
+	public void checkIfMaxSizeOnVarDeclarationAllowed(final STTypeDeclaration typeDeclaration) {
+		if (typeDeclaration.getMaxLength() != null && !(typeDeclaration.getType() instanceof AnyStringType)) {
+			error(Messages.STCoreValidator_NonAnyStringNotMaxLengthSettingNotAllowed, typeDeclaration,
+					STCorePackage.Literals.ST_TYPE_DECLARATION__MAX_LENGTH, MAX_LENGTH_NOT_ALLOWED);
+		}
+	}
+
+	@Check
 	public void checkTypeofStringSizeValue(final STVarDeclaration varDeclaration) {
 		if (varDeclaration.getType() instanceof AnyStringType && varDeclaration.getMaxLength() != null
 				&& !(varDeclaration.getMaxLength().getResultType() instanceof AnyIntType)) {
@@ -207,6 +228,17 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					varDeclaration.getMaxLength().getResultType().getName()), varDeclaration,
 					STCorePackage.Literals.ST_VAR_DECLARATION__MAX_LENGTH, MAX_LENGTH_TYPE_INVALID,
 					varDeclaration.getMaxLength().getResultType().getName());
+		}
+	}
+
+	@Check
+	public void checkTypeofStringSizeValue(final STTypeDeclaration typeDeclaration) {
+		if (typeDeclaration.getType() instanceof AnyStringType && typeDeclaration.getMaxLength() != null
+				&& !(typeDeclaration.getMaxLength().getResultType() instanceof AnyIntType)) {
+			error(MessageFormat.format(Messages.STCoreValidator_MaxLengthTypeInvalid,
+					typeDeclaration.getMaxLength().getResultType().getName()), typeDeclaration,
+					STCorePackage.Literals.ST_TYPE_DECLARATION__MAX_LENGTH, MAX_LENGTH_TYPE_INVALID,
+					typeDeclaration.getMaxLength().getResultType().getName());
 		}
 	}
 

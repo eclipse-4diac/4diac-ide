@@ -76,7 +76,12 @@ public class FordiacTypeResource extends ResourceImpl {
 		try {
 			final CommonElementImporter importer = createImporterByFileExtensions(inputStream, typeFile);
 			importer.loadElement();
-			getContents().add(importer.getElement());
+			final LibraryElement element = importer.getElement();
+			final var typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile);
+			if (typeEntryForFile != null) {
+				element.setTypeEntry(typeEntryForFile);
+			}
+			getContents().add(element);
 		} catch (final Exception e) {
 			throw new IOWrappedException(e);
 		}

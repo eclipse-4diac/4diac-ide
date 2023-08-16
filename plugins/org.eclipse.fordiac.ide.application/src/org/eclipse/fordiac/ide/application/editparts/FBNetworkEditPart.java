@@ -143,7 +143,6 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 			final Rectangle newBounds = new Rectangle();
 			newBounds.setSize(super.calculatePreferredSize(figure, wHint, hHint));
 			newBounds.setLocation(getLocation());
-			newBounds.x -= commentContainer.getPreferredSize().width;
 			newBounds.y -= commentContainer.getPreferredSize().height;
 			if (newBounds.x > 0) {
 				newBounds.x = 0;
@@ -159,9 +158,6 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 			layer = (FreeformLayer) getLayer(LayerConstants.HANDLE_LAYER);
 			layer.validate();
 			newBounds.union(layer.getFreeformExtent());
-
-			// take the border into our calculation
-			newBounds.shrink(new Insets(5));
 
 			final Rectangle resultingBounds = calculateModuloExtent(newBounds);
 			// it is important to keep the width and height in the constraints to -1 otherwise it will never be

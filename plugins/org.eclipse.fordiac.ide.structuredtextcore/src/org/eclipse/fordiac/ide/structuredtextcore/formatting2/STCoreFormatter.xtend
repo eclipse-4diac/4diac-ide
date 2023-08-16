@@ -87,10 +87,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 	/** Formats the STImport */
 	def dispatch void format(STImport stImport, extension IFormattableDocument document) {
 		stImport.regionFor.keyword(STImportAccess.IMPORTKeyword_0).prepend[noIndentation].append[oneSpace]
-		stImport.regionFor.keyword(STImportAccess.semicolonKeyword_2).prepend[noSpace].append [
-			lowPriority
-			setNewLines(1, 1, 2)
-		]
+		stImport.regionFor.keyword(STImportAccess.semicolonKeyword_2).prepend[noSpace]
 	}
 
 	/** Formats the STVarDeclarationBlocks */
@@ -231,9 +228,8 @@ class STCoreFormatter extends AbstractFormatter2 {
 		interior(
 			ifStatement.regionFor.keyword("THEN").append[newLine],
 			ifStatement.elseifs?.isEmpty
-				? (ifStatement.^else !== null
-				? ifStatement.^else.regionFor.keyword("ELSE")
-				: ifStatement.regionFor.keyword("END_IF"))
+				? (ifStatement.^else !== null ? ifStatement.^else.regionFor.keyword("ELSE") : ifStatement.regionFor.
+				keyword("END_IF"))
 				: ifStatement.elseifs.get(0).regionFor.keyword("ELSIF"),
 			[indent]
 		)
@@ -471,9 +467,8 @@ class STCoreFormatter extends AbstractFormatter2 {
 			for (var i = 0; i < commas.length; i++) {
 				val current = commas.get(i)
 				val line = current.lineRegions.get(0)
-				val nextRelevant = i < commas.length - 1
-						? commas.get(i + 1)
-						: featureExpression.regionFor.keyword(STFeatureExpressionAccess.rightParenthesisKeyword_2_2)
+				val nextRelevant = i < commas.length - 1 ? commas.get(i + 1) : featureExpression.regionFor.keyword(
+						STFeatureExpressionAccess.rightParenthesisKeyword_2_2)
 				val l = (nextRelevant.offset + nextRelevant.length - line.offset)
 				if (line == nextRelevant.lineRegions.get(0)) {
 					val toAdd = current.offset - line.offset
@@ -557,8 +552,9 @@ class STCoreFormatter extends AbstractFormatter2 {
 					} else {
 						var lineCount = 0
 						if (region instanceof IHiddenRegionPart) {
-							lineCount = (region as IHiddenRegionPart).previousHiddenPart instanceof IComment ? region.
-								getLineCount() : region.getLineCount() - 1;
+							lineCount = (region as IHiddenRegionPart).previousHiddenPart instanceof IComment
+								? region.getLineCount()
+								: region.getLineCount() - 1;
 						} else
 							lineCount = region.getLineCount() - 1;
 						if (newLineMin !== null && newLineMin > lineCount)
@@ -653,12 +649,14 @@ class STCoreFormatter extends AbstractFormatter2 {
 				"}(?!\\S)[\r\n]*))");
 		val matcher = pattern.matcher(commentString.replace("$", "\\$"))
 
-		var replacement = (isML ? "(" : "") + matcher.replaceAll [ m |
+		var replacement = (isML ? "(* " : "") + matcher.replaceAll [ m |
 			var g = m.group(1) ?: m.group(2)
 			(isML ? spaceBeforeComment : "") + (isML ? " * " : "// ") + (
 				g
 			) + (g.indexOf(lineSeparator) === -1 ? lineSeparator : "")
 		].trim + (isML ? " *)" : lineSeparator);
+
+		replacement = replacement.replaceFirst("^\\(\\*\\s*\\* ", "(* ");
 
 		replacement = replacement.replaceAll(lineSeparator + "(?=" + lineSeparator + ")",
 			lineSeparator + spaceBeforeComment + " * ")
