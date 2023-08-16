@@ -32,6 +32,10 @@
             class="org.eclipse.fordiac.ide.fb.interpreter.handler.CreateRuntimeTestFunctionBlockHandler"
             commandId="org.eclipse.fordiac.ide.fb.interpreter.createTestFb">
       </handler>
+            <handler
+            class="org.eclipse.fordiac.ide.fb.interpreter.handler.CreateMonitorFBHandler"
+            commandId="org.eclipse.fordiac.ide.fb.interpreter.createMonitorFB">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -43,6 +47,10 @@
             id="org.eclipse.fordiac.ide.fb.interpreter.createTestFb"
             name="Create FB for Test Specification">
       </command>    
+            <command
+            id="org.eclipse.fordiac.ide.fb.interpreter.createMonitorFB"
+            name="Create monitor FB for Test Specification">
+      </command> 
    </extension>
    <extension
            point="org.eclipse.ui.menus">
@@ -74,6 +82,47 @@
             	</with>
             </visibleWhen>
        </command>
+       <command
+            commandId="org.eclipse.fordiac.ide.fb.interpreter.createMonitorFB"
+            label="Create monitor FB for Test Specification"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+                       	    <instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            				<instanceof
+                       				value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+	</menuContribution>
+	<menuContribution
+       locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
+		<command
+       commandId="org.eclipse.fordiac.ide.fb.interpreter.createMonitorFB"
+            label="Create monitor FB for Test Specification"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+                       	    <instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            				<instanceof
+                       				value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+		</command>
 	</menuContribution>
 </extension>
    <extension
@@ -89,7 +138,7 @@
             content-type=" org.eclipse.emf.compare.content.type"
             file-extensions="opsem">
       </file-association>
-   </extension>
+   </extension>2
    <extension
          point="org.eclipse.emf.compare.edit.adapterFactory">
       <factory

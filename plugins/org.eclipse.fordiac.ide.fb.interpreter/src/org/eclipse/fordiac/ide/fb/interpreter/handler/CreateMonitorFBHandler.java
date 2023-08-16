@@ -8,30 +8,29 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Bianca Wiesmayr - initial API and implementation and/or initial documentation
+ * Melanie Winter - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fb.interpreter.handler;
 
-import java.util.ArrayList;
-import java.util.List;
+package org.eclipse.fordiac.ide.fb.interpreter.handler;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.fb.interpreter.Messages;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.TestFbGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.CompositeFBGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.MatchFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.MonitorFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestCase;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestSuite;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
+public class CreateMonitorFBHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -45,24 +44,32 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 					Messages.RecordExecutionTraceHandler_Incorrect_Selection, "Please open a Service model");
 			return Status.CANCEL_STATUS;
 		}
+		final TestSuite testSuite = new TestSuite(type);
+		FBType testtype;
 
-		final TestSuite testSuite = new TestSuite(type.getService().getServiceSequence());
-		testSuite.getTestCases().removeIf(n -> (n.getdataSource().getServiceSequenceType().equals("FORBIDDEN")));
+		if (((EditPart) selection.getFirstElement() != null)
+				&& (((EditPart) selection.getFirstElement()).getModel() instanceof ServiceSequenceImpl)) {
+			final ServiceSequenceImpl s = (ServiceSequenceImpl) ((EditPart) selection.getFirstElement()).getModel();
+			TestCase testCase = null;
+			for (final TestCase testC : testSuite.getTestCases()) {
+				if (testC.getName().equals(s.getName())
+						&& testC.getdataSource().getServiceSequenceType().equals("FORBIDDEN")) { //$NON-NLS-1$
+					testCase = testC;
+				}
+			}
+			if (testCase != null) {
+				testtype = new MonitorFBGenerator(type, testSuite, testCase).generateTestFb();
+				testtype.getTypeEntry().save();
 
-		final FBType testtype = new TestFbGenerator(type, testSuite).generateTestFb();
-		testtype.getTypeEntry().save();
-
-		final FBType matchtype = new MatchFBGenerator(type, testSuite).generateMatchFB();
-		matchtype.getTypeEntry().save();
-
-		final List<FBType> list = new ArrayList<>();
-		list.add(testtype);
-		list.add(type);
-		list.add(matchtype);
-
-		final CompositeFBType compositeType = new CompositeFBGenerator(type, testSuite, list).generateCompositeFB();
-		compositeType.getTypeEntry().save();
-
+			}
+		} else if (selection instanceof StructuredSelection) {
+			for (final TestCase testCase : testSuite.getTestCases()) {
+				if (testCase.getdataSource().getServiceSequenceType().equals("FORBIDDEN")) { //$NON-NLS-1$
+					testtype = new MonitorFBGenerator(type, testSuite, testCase).generateTestFb();
+					testtype.getTypeEntry().save();
+				}
+			}
+		}
 		return Status.OK_STATUS;
 	}
 }

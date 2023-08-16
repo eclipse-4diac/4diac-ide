@@ -22,29 +22,32 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 
 public class TestSuite {
 	private Service dataSource;
-	private List<TestCase> testCases = new ArrayList<>();
-	
-	TestSuite(FBType type) {
+	private final List<TestCase> testCases = new ArrayList<>();
+
+	public TestSuite(final FBType type) {
 		if (type.getService() == null || type.getService().getServiceSequence().isEmpty()) {
 			throw new IllegalArgumentException("Test suites must be defined as service model");
 		}
 		dataSource = type.getService();
-		
+		for (final ServiceSequence serviceSequence : type.getService().getServiceSequence()) {
+			testCases.add(TestCase.createTestCase(serviceSequence));
+		}
+
 	}
-	
-	public TestSuite(List<ServiceSequence> sequences) {
-		for (ServiceSequence serviceSequence : sequences) {
+
+	public TestSuite(final List<ServiceSequence> sequences) {
+		for (final ServiceSequence serviceSequence : sequences) {
 			testCases.add(TestCase.createTestCase(serviceSequence));
 		}
 	}
-	
-	public Service getDataSource(){
+
+	public Service getDataSource() {
 		return dataSource;
 	}
-	
-	public static TestSuite createTestSuite(FBType type) {
-		TestSuite testSuite = new TestSuite(type);
-		for (ServiceSequence serviceSequence : type.getService().getServiceSequence()) {
+
+	public static TestSuite createTestSuite(final FBType type) {
+		final TestSuite testSuite = new TestSuite(type);
+		for (final ServiceSequence serviceSequence : type.getService().getServiceSequence()) {
 			testSuite.testCases.add(TestCase.createTestCase(serviceSequence));
 		}
 		return testSuite;

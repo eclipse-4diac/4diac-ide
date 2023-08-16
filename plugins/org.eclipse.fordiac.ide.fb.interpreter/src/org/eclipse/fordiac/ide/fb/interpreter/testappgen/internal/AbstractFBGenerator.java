@@ -40,9 +40,16 @@ public abstract class AbstractFBGenerator {
 	protected TestSuite testSuite;
 	protected TypeEntry entry;
 	protected FBType sourceType;
+	protected TestCase testCase;
 
 	protected List<Event> inputEventList;
 	protected List<Event> outputEventList;
+
+	protected AbstractFBGenerator(final FBType type, final TestSuite testSuite, final TestCase testCase) {
+		this.sourceType = type;
+		this.testCase = testCase;
+		this.testSuite = testSuite;
+	}
 
 	protected AbstractFBGenerator(final FBType type, final TestSuite testSuite) {
 		this.sourceType = type;
@@ -78,11 +85,11 @@ public abstract class AbstractFBGenerator {
 
 		addEvents();
 		addDataPins();
-		createMiths();
+		createWiths();
 		generateECC();
 	}
 
-	private void createMiths() {
+	private void createWiths() {
 		for (final Event input : destinationFB.getInterfaceList().getEventInputs()) {
 			for (final VarDeclaration varD : destinationFB.getInterfaceList().getInputVars()) {
 				final With w = LibraryElementFactory.eINSTANCE.createWith();

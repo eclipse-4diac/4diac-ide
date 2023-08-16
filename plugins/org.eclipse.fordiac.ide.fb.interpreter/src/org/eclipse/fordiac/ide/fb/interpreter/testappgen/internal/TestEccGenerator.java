@@ -142,6 +142,10 @@ public class TestEccGenerator {
 		caseCount--;
 	}
 
+	public void decreaseCaseCountBy(final int i) {
+		caseCount = caseCount - i;
+	}
+
 	public int getCaseCount() {
 		return caseCount;
 	}
