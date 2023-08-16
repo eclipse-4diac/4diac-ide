@@ -57,7 +57,7 @@ public class UpdateContractCommand extends Command {
 
 	public static UpdateContractCommand createContractReaction(final List<Event> eventPins, final String time) {
 		final StringBuilder comment = new StringBuilder();
-		comment.append("GUARANTEE Reaction(" + eventPins.get(0).getName() + ","   //$NON-NLS-1$//$NON-NLS-2$
+		comment.append("GUARANTEE Reaction (" + eventPins.get(0).getName() + ","   //$NON-NLS-1$//$NON-NLS-2$
 				+ eventPins.get(1).getName() + ")");  //$NON-NLS-1$
 		comment.append(" within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
 		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(), comment.toString());
@@ -75,8 +75,8 @@ public class UpdateContractCommand extends Command {
 	public static UpdateContractCommand createContractGuarantee(final Event event, final List<Event> outputEvents,
 			final String time) {
 		final StringBuilder comment = new StringBuilder();
-		comment.append("GUARANTEE Whenever event " + event.getName() + " occurs, then events(" //$NON-NLS-1$ //$NON-NLS-2$
-				+ outputEvents.get(0).getName() + "," + outputEvents.get(1).getTypeName() + ") occur"); //$NON-NLS-1$ //$NON-NLS-2$
+		comment.append("GUARANTEE Whenever event " + event.getName() + " occurs, then events (" //$NON-NLS-1$ //$NON-NLS-2$
+				+ outputEvents.get(0).getName() + "," + outputEvents.get(1).getName() + ") occur"); //$NON-NLS-1$ //$NON-NLS-2$
 		comment.append(" within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
 		return new UpdateContractCommand(outputEvents.get(0).getFBNetworkElement(), comment.toString());
 	}

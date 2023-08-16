@@ -107,8 +107,6 @@ public class EvaluateContractCommand extends Command {
 			times[0] = 0;
 		}
 		if (parts.length == 2) {
-			// final String[] first = parts[0].split("["); //$NON-NLS-1$
-			// final String[] second = parts[1].split("]"); //$NON-NLS-1$
 			final String first = parts[0].substring(1);
 			final String second = parts[1].substring(0, parts[1].length() - 1);
 			times[0] = Integer.parseInt(first);
@@ -125,7 +123,6 @@ public class EvaluateContractCommand extends Command {
 			times[0] = 0;
 		}
 		if (parts.length == 2) {
-			// final String[] first = parts[0].split("["); //$NON-NLS-1$ //TODO error here
 			final String first = parts[0].substring(1);
 			final String second = parts[1].substring(0, parts[1].length() - 1);
 			times[0] = Integer.parseInt(first);

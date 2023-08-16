@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.application.actions,
  org.eclipse.fordiac.ide.application.commands,
+ org.eclipse.fordiac.ide.application.contracts.model,
  org.eclipse.fordiac.ide.application.editors,
  org.eclipse.fordiac.ide.application.editparts,
  org.eclipse.fordiac.ide.application.figures,
