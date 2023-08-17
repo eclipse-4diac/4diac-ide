@@ -32,17 +32,19 @@ import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.data.AnyElementaryType
-import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.WcharType
+import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
@@ -95,7 +97,6 @@ import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.S
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.findActualNodeFor
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
-import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
@@ -162,8 +163,28 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		"" // nop
 	}
 
-	def protected dispatch CharSequence generateStatement(STAssignmentStatement stmt) //
-	'''«stmt.left.generateExpression» = «stmt.right.generateExpression»;'''
+	def protected dispatch CharSequence generateStatement(STAssignmentStatement stmt) {
+		if (stmt.right.isAnyVariableReference)
+			'''«stmt.left.generateExpression».setValue(«stmt.right.generateExpression».unwrap());'''
+		else
+			'''«stmt.left.generateExpression» = «stmt.right.generateExpression»;'''
+	}
+
+	def protected boolean isAnyVariableReference(STExpression expr) {
+		switch (expr) {
+			STFeatureExpression: expr.feature.isAnyTypeVariable
+			STMemberAccessExpression: expr.member.isAnyVariableReference
+			STArrayAccessExpression: expr.receiver.isAnyVariableReference
+			default: false
+		}
+	}
+
+	def protected boolean isAnyTypeVariable(INamedElement element) {
+		switch (element) {
+			VarDeclaration: GenericTypes.isAnyType(element.type)
+			default: false
+		}
+	}
 
 	def protected dispatch CharSequence generateStatement(STIfStatement stmt) '''
 		if («stmt.condition.generateExpression») {
@@ -204,7 +225,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch generateStatement(STForStatement stmt) '''
-		for (auto «generateUniqueVariableName» : ST_FOR_ITER<«stmt.variable.generateFeatureTypeName»«IF stmt.by !== null», «stmt.by.resultType.generateTypeName»«ENDIF»>(«stmt.variable.generateFeatureName», «stmt.from.generateExpression», «stmt.to.generateExpression»«IF stmt.by !== null», «stmt.by.generateExpression»«ENDIF»)) {
+		for (auto «generateUniqueVariableName» : ST_FOR_ITER<«stmt.variable.resultType.generateTypeName»«IF stmt.by !== null», «stmt.by.resultType.generateTypeName»«ENDIF»>(«stmt.variable.generateExpression», «stmt.from.generateExpression», «stmt.to.generateExpression»«IF stmt.by !== null», «stmt.by.generateExpression»«ENDIF»)) {
 		  «stmt.statements.generateStatementList»
 		}
 	'''
@@ -341,31 +362,32 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateExpression(STNumericLiteral expr) //
-	'''«expr.resultType.generateTypeName»(«expr.value»)'''
+	'''«expr.value»_«expr.resultType.generateTypeNamePlain»'''
 
 	def protected dispatch CharSequence generateExpression(STStringLiteral expr) {
 		val type = expr.resultType
-		'''«type.generateTypeName»''' + switch (type) {
-			AnyStringType: '''("«expr.value.toString.convertToJavaString»")'''
-			CharType: '''(«String.format("0x%02x",  expr.value.toString.getBytes(StandardCharsets.UTF_8).get(0))»)'''
-			WcharType: '''(u'«expr.value.toString.convertToJavaString»')'''
+		switch (type) {
+			StringType: '''"«expr.value.toString.convertToJavaString»"_STRING'''
+			WstringType: '''u"«expr.value.toString.convertToJavaString»"_WSTRING'''
+			CharType: '''«String.format("0x%02x",  expr.value.toString.getBytes(StandardCharsets.UTF_8).get(0))»_CHAR'''
+			WcharType: '''u'«expr.value.toString.convertToJavaString»'_WCHAR'''
 		}
 	}
 
 	def protected dispatch CharSequence generateExpression(STDateLiteral expr) {
-		'''«expr.resultType.generateTypeName»(«expr.value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L»)'''
+		'''«expr.value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L»_«expr.resultType.generateTypeNamePlain»'''
 	}
 
 	def protected dispatch CharSequence generateExpression(STTimeLiteral expr) {
-		'''«expr.resultType.generateTypeName»(«expr.value.toNanos»)'''
+		'''«expr.value.toNanos»_«expr.resultType.generateTypeNamePlain»'''
 	}
 
 	def protected dispatch CharSequence generateExpression(STTimeOfDayLiteral expr) {
-		'''«expr.resultType.generateTypeName»(«expr.value.toNanoOfDay»)'''
+		'''«expr.value.toNanoOfDay»_«expr.resultType.generateTypeNamePlain»'''
 	}
 
 	def protected dispatch CharSequence generateExpression(STDateAndTimeLiteral expr) {
-		'''«expr.resultType.generateTypeName»(«LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(expr.value, ChronoUnit.NANOS)»)'''
+		'''«LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(expr.value, ChronoUnit.NANOS)»_«expr.resultType.generateTypeNamePlain»'''
 	}
 
 	def protected dispatch CharSequence generateTemplateExpression(STBinaryExpression expr) {
@@ -453,8 +475,11 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected CharSequence generateTypeDefaultValue(INamedElement type) {
 		switch (type) {
 			DataType case GenericTypes.isAnyType(type): '''«type.generateTypeName»()'''
-			AnyStringType: '''«type.generateTypeName»("")'''
-			AnyElementaryType: '''«type.generateTypeName»(0)'''
+			StringType: '''""_STRING'''
+			WstringType: '''u""_WSTRING'''
+			CharType: ''''\0'_CHAR'''
+			WcharType: '''u'\0'_WCHAR'''
+			AnyElementaryType: '''0_«type.generateTypeNamePlain»'''
 			ArrayType: '''«type.generateTypeName»{}'''
 			StructuredType: '''«type.generateTypeName»()'''
 			default:
@@ -488,7 +513,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected Iterable<INamedElement> getDependencies(EObject object) {
 		switch (object) {
 			STVarDeclaration:
-				#[object.type]
+				#[object.featureType]
 			STStructInitializerExpression:
 				// need dependencies of default values generated in initializer
 				object.mappedStructInitElements.entrySet.filter[value === null].flatMap[key.defaultDependencies]
@@ -497,13 +522,13 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			STStringLiteral:
 				#[object.resultType]
 			STDateLiteral:
-				#[object.type]
+				#[object.resultType]
 			STTimeLiteral:
-				#[object.type]
+				#[object.resultType]
 			STTimeOfDayLiteral:
-				#[object.type]
+				#[object.resultType]
 			STDateAndTimeLiteral:
-				#[object.type]
+				#[object.resultType]
 			STFeatureExpression: // feature expressions may refer to definitions contained in other sources
 				object.feature.featureDependencies + object.argumentDependencies
 			STFunction:
@@ -523,7 +548,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 					name = feature.sourceName
 				]]
 			STVarDeclaration:
-				#[feature.type]
+				#[feature.featureType]
 			STFunction:
 				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
 					name = feature.sourceName
@@ -549,7 +574,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				variableLanguageSupport.computeIfAbsent(feature)[new VarDeclarationSupport(it)].
 					getDependencies(emptyMap)
 			STVarDeclaration:
-				#[feature.type] + feature.containedDependencies
+				#[feature.featureType] + feature.containedDependencies
 			default:
 				emptySet
 		}

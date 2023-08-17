@@ -5,6 +5,7 @@ package org.eclipse.fordiac.ide.globalconstantseditor.globalConstants;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 
 /**
@@ -16,6 +17,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getImports <em>Imports</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getElements <em>Elements</em>}</li>
  * </ul>
  *
@@ -24,6 +27,40 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
  * @generated
  */
 public interface STGlobalConstsSource extends STSource {
+	/**
+	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Name</em>' attribute.
+	 * @see #setName(String)
+	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage#getSTGlobalConstsSource_Name()
+	 * @model
+	 * @generated
+	 */
+	String getName();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * @see #getName()
+	 * @generated
+	 */
+	void setName(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Imports</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Imports</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage#getSTGlobalConstsSource_Imports()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<STImport> getImports();
+
 	/**
 	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock}.

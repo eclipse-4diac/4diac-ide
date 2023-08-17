@@ -21,6 +21,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
+import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
@@ -71,11 +72,13 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 			cmdToExecuteBefore = null;
 		}
 
-		GraphicalEditPart parent = getTargetContainerEP();
-		while (parent != null) {
-			addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent, fbnetworkElements));
-			parent = findNestedGraphicalEditPart(parent);
-			this.fbnetworkElements = null;
+		if (!isLockedGroup()) {
+			GraphicalEditPart parent = getTargetContainerEP();
+			while (parent != null) {
+				addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent, fbnetworkElements));
+				parent = findNestedGraphicalEditPart(parent);
+				this.fbnetworkElements = null;
+			}
 		}
 	}
 
@@ -119,6 +122,11 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 	public boolean canRedo() {
 		return (cmdToExecuteBefore != null && cmdToExecuteBefore.canRedo())
 				|| !changeContainerBoundsCommandList.isEmpty();
+	}
+
+	private boolean isLockedGroup() {
+		return (graphicalEditPart instanceof final GroupContentEditPart groupContent && groupContent.getModel().getGroup().isLocked())
+				|| (graphicalEditPart instanceof final GroupEditPart group && group.getModel().isLocked());
 	}
 
 	private GraphicalEditPart getTargetContainerEP() {
@@ -201,11 +209,11 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 	private static void addValueBounds(final Rectangle fbBounds, final FBNetworkElement fbe,
 			final Map<Object, Object> editPartRegistry) {
 		fbe.getInterface().getInputVars().stream().filter(Objects::nonNull)
-		.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
-		.forEach(ep -> {
-			final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds().getCopy();
-			fbBounds.union(pin);
-		});
+				.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
+				.forEach(ep -> {
+					final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds().getCopy();
+					fbBounds.union(pin);
+				});
 	}
 
 }

@@ -185,28 +185,29 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.1.1</version>
+				<version>3.3.0</version>
 				<configuration>
 					<logViolationsToConsole>true</logViolationsToConsole>
 					<consoleOutput>true</consoleOutput>
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
-					<includes>**\/*.java,**\/*.xtend</includes>
+					<includes>**\/*</includes>
 					<checkstyleRules>
 						<module name="Checker">
 							<property name="severity" value="error"/>
-							<property name="fileExtensions" value="java,xtend"/>
 							<module name="BeforeExecutionExclusionFileFilter">
 								<property name="fileNamePattern" value="-gen[\\/]"/>
 							</module>
-							<module name="BeforeExecutionExclusionFileFilter">
-								<property name="fileNamePattern" value="[\\/]model[\\/]xtext[\\/]"/>
-							</module>
-							<module name="BeforeExecutionExclusionFileFilter">
-								<property name="fileNamePattern" value="[\\/]model[\\/]structuredtext[\\/]"/>
+							<module name="SuppressionSingleFilter">
+								<property name="files" value="^.*\.(?!(?:java|xtend)$)[^.]*$"/>
+								<property name="checks" value="RegexpHeader"/>
 							</module>
 							<module name="RegexpHeader">
 								<property name="header" value="^(?!package)(?! \* SPDX.*$).*\n^ \* ?SPDX-License-Identifier: EPL-2\.0.*$" />
 								<property name="multiLines" value="1"/>
+							</module>
+							<module name="RegexpMultiline">
+								<property name="format" value="(?s:(\r\n|\r).*)"/>
+								<property name="message" value="Windows (CRLF) or Mac (CR) line endings detected, must use Unix (LF) line endings."/>
 							</module>
 						</module>
 					</checkstyleRules>

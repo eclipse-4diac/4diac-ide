@@ -72,6 +72,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private int mouseState;
+	private static int minWidth = -1;
 	private static int maxWidth = -1;
 
 	private Adapter contentAdapter = null;
@@ -89,6 +90,14 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	protected InterfaceEditPart() {
 		addPreferenceListener();
+	}
+
+	private static int getMinWidth() {
+		if (-1 == minWidth) {
+			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
+			return pf.getInt(DiagramPreferences.MIN_PIN_LABEL_SIZE);
+		}
+		return minWidth;
 	}
 
 	private static int getMaxWidth() {
@@ -242,6 +251,10 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 		@Override
 		public String getSubStringText() {
+			if (getLabelText().length() < getMinWidth()) {
+				final int diff = getMinWidth() - getLabelText().length();
+				return isInput() ? getLabelText() + " ".repeat(diff) : " ".repeat(diff) + getLabelText(); //$NON-NLS-1$ //$NON-NLS-2$
+			}
 			if (getLabelText().length() > getMaxWidth()) {
 				return getLabelText().substring(0, getMaxWidth()) + getTruncationString();
 			}

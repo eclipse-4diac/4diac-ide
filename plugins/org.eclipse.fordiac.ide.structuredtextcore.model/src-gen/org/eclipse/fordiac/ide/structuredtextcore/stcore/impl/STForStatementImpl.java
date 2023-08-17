@@ -56,14 +56,14 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
  */
 public class STForStatementImpl extends STStatementImpl implements STForStatement {
 	/**
-	 * The cached value of the '{@link #getVariable() <em>Variable</em>}' reference.
+	 * The cached value of the '{@link #getVariable() <em>Variable</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getVariable()
 	 * @generated
 	 * @ordered
 	 */
-	protected STVarDeclaration variable;
+	protected STExpression variable;
 
 	/**
 	 * The cached value of the '{@link #getFrom() <em>From</em>}' containment reference.
@@ -130,15 +130,7 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
 	 * @generated
 	 */
 	@Override
-	public STVarDeclaration getVariable() {
-		if (variable != null && variable.eIsProxy()) {
-			InternalEObject oldVariable = (InternalEObject)variable;
-			variable = (STVarDeclaration)eResolveProxy(oldVariable);
-			if (variable != oldVariable) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, STCorePackage.ST_FOR_STATEMENT__VARIABLE, oldVariable, variable));
-			}
-		}
+	public STExpression getVariable() {
 		return variable;
 	}
 
@@ -147,8 +139,14 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public STVarDeclaration basicGetVariable() {
-		return variable;
+	public NotificationChain basicSetVariable(STExpression newVariable, NotificationChain msgs) {
+		STExpression oldVariable = variable;
+		variable = newVariable;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_FOR_STATEMENT__VARIABLE, oldVariable, newVariable);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -157,11 +155,18 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
 	 * @generated
 	 */
 	@Override
-	public void setVariable(STVarDeclaration newVariable) {
-		STVarDeclaration oldVariable = variable;
-		variable = newVariable;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_FOR_STATEMENT__VARIABLE, oldVariable, variable));
+	public void setVariable(STExpression newVariable) {
+		if (newVariable != variable) {
+			NotificationChain msgs = null;
+			if (variable != null)
+				msgs = ((InternalEObject)variable).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_FOR_STATEMENT__VARIABLE, null, msgs);
+			if (newVariable != null)
+				msgs = ((InternalEObject)newVariable).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_FOR_STATEMENT__VARIABLE, null, msgs);
+			msgs = basicSetVariable(newVariable, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_FOR_STATEMENT__VARIABLE, newVariable, newVariable));
 	}
 
 	/**
@@ -320,6 +325,8 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case STCorePackage.ST_FOR_STATEMENT__VARIABLE:
+				return basicSetVariable(null, msgs);
 			case STCorePackage.ST_FOR_STATEMENT__FROM:
 				return basicSetFrom(null, msgs);
 			case STCorePackage.ST_FOR_STATEMENT__TO:
@@ -342,8 +349,7 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case STCorePackage.ST_FOR_STATEMENT__VARIABLE:
-				if (resolve) return getVariable();
-				return basicGetVariable();
+				return getVariable();
 			case STCorePackage.ST_FOR_STATEMENT__FROM:
 				return getFrom();
 			case STCorePackage.ST_FOR_STATEMENT__TO:
@@ -367,7 +373,7 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case STCorePackage.ST_FOR_STATEMENT__VARIABLE:
-				setVariable((STVarDeclaration)newValue);
+				setVariable((STExpression)newValue);
 				return;
 			case STCorePackage.ST_FOR_STATEMENT__FROM:
 				setFrom((STExpression)newValue);
@@ -397,7 +403,7 @@ public class STForStatementImpl extends STStatementImpl implements STForStatemen
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case STCorePackage.ST_FOR_STATEMENT__VARIABLE:
-				setVariable((STVarDeclaration)null);
+				setVariable((STExpression)null);
 				return;
 			case STCorePackage.ST_FOR_STATEMENT__FROM:
 				setFrom((STExpression)null);

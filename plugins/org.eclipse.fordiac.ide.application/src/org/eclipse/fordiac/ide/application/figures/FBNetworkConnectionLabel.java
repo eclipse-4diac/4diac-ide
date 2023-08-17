@@ -37,7 +37,6 @@ public class FBNetworkConnectionLabel extends Figure implements RotatableDecorat
 	private final boolean srcLabel;
 
 	public FBNetworkConnectionLabel(final boolean srcLabel) {
-		super();
 		this.srcLabel = srcLabel;
 		setLayoutManager(new ToolbarLayout(true));
 		final RoundedRectangle rect = createBaseShape();
@@ -53,6 +52,7 @@ public class FBNetworkConnectionLabel extends Figure implements RotatableDecorat
 		rect.setAntialias(1);
 		rect.setOutline(false);
 		rect.setCornerDimensions(new Dimension(10, 10));
+		rect.setAlpha(150);
 		return rect;
 	}
 
@@ -65,7 +65,7 @@ public class FBNetworkConnectionLabel extends Figure implements RotatableDecorat
 		label.setOpaque(false);
 		label.setForegroundColor(ColorConstants.white);
 		label.setFont(getLabelFont());
-		label.setBorder(new MarginBorder(0,2,0,2));
+		label.setBorder(new MarginBorder(0, 2, 0, 2));
 		return label;
 	}
 

@@ -171,11 +171,12 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 
 	def protected handleLostAndFound(STAlgorithmSource source, EList<ICallable> result) {
 		var lastOffset = 0;
-		for (element : source.elements) {
+		for(var index = 0; index < source.elements.size; index++) {
+			val element = source.elements.get(index)
 			val node = element.findActualNodeFor
 			val totalOffset = node.totalOffset
 			if (totalOffset > lastOffset) {
-				source.handleLostAndFound(result.size, lastOffset, totalOffset, result)
+				source.handleLostAndFound(index, lastOffset, totalOffset, result)
 			}
 			lastOffset = node.totalEndOffset
 		}
@@ -192,7 +193,7 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 		EList<ICallable> result) {
 		val text = source.node.rootNode.text.substring(start, end)
 		if (!text.trim.empty) {
-			result.add(text.newLostAndFound(index))
+			result.add(index, text.newLostAndFound(index))
 		}
 	}
 

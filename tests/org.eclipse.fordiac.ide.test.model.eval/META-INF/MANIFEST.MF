@@ -17,4 +17,5 @@ Require-Bundle: org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib.macro,
  org.eclipse.fordiac.ide.model.eval.st,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
- org.eclipse.fordiac.ide.structuredtextfunctioneditor
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor,
+ org.eclipse.fordiac.ide.globalconstantseditor

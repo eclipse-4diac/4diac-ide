@@ -59,6 +59,7 @@ import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
@@ -93,7 +94,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			}
 
 			if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(feature)) {
-				// the hidden property was changed inform source and destination so that all labels are updated
+				// the hidden property was changed inform source and destination so that all
+				// labels are updated
 				handleVisibilityUpdate();
 			}
 
@@ -106,13 +108,13 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 
 		private void handleVisibilityUpdate() {
 			getModel().getSource()
-			.eNotify(new ENotificationImpl((InternalEObject) getModel().getSource(), Notification.SET,
-					LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections(), getModel(),
-					getModel()));
+					.eNotify(new ENotificationImpl((InternalEObject) getModel().getSource(), Notification.SET,
+							LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections(), getModel(),
+							getModel()));
 			getModel().getDestination()
-			.eNotify(new ENotificationImpl((InternalEObject) getModel().getDestination(), Notification.SET,
-					LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections(), getModel(),
-					getModel()));
+					.eNotify(new ENotificationImpl((InternalEObject) getModel().getDestination(), Notification.SET,
+							LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections(), getModel(),
+							getModel()));
 			final FBNConnectionEndpointPolicy conEPPolicy = getConnectionEndPointPolicy();
 			if (conEPPolicy.isSelectionFeedbackShowing()) {
 				// redraw selection to update to new connection figure
@@ -120,7 +122,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 				conEPPolicy.showSelection();
 			}
 		}
-
 
 	}
 
@@ -131,16 +132,40 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
-				getConnectionFigure().updateConLabels();
+					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getFBNetworkElement_Group().equals(feature)) {
+				if ((getSource() instanceof final InterfaceEditPartForFBNetwork editPart
+						&& !editPart.getModel().isIsInput())) {
+					for (final Object o : editPart.getSourceConnections()) {
+						if (o instanceof final ConnectionEditPart connEditPart) {
+							connEditPart.getFigure().updateConLabels();
+						}
+					}
+				}
+				if ((getTargetEP() instanceof final InterfaceEditPartForFBNetwork editPart
+						&& editPart.getModel().isIsInput())) {
+					for (final Object o : editPart.getTargetConnections()) {
+						if (o instanceof final ConnectionEditPart connEditPart) {
+							connEditPart.getFigure().updateConLabels();
+						}
+					}
+				}
+			}
+			if (LibraryElementPackage.eINSTANCE.getFBNetworkElement_Group().equals(feature)) {
+				getFigure().handleVisibilityChange(getFigure().isHidden()); // triggers new label creation
 			}
 		}
+	}
+
+	private EditPart getTargetEP() {
+		// needed so that name is not shadowed in SrcDstAdapter! otherwise delivers
+		// target of adapter
+		return getTarget();
 	}
 
 	private static final float[] BROKEN_CONNECTION_DASH_PATTERN = new float[] { 5.0f, 5.0f };
 
 	public ConnectionEditPart() {
-		super();
 	}
 
 	@Override
@@ -189,7 +214,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	@Override
 	protected IFigure createFigure() {
 		final FBNetworkConnection connectionFigure = new FBNetworkConnection(this);
-		setConnectionColor(connectionFigure);  // needs to be done before setHidden
+		setConnectionColor(connectionFigure); // needs to be done before setHidden
 		connectionFigure.setHidden(!getModel().isVisible());
 
 		performConnTypeConfiguration(connectionFigure);
@@ -247,7 +272,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			final DataType dataType = refElement.getType();
 			// check if source is not of type for which we can determine the color
 			if (!isColoredDataype(dataType) && (refElement == getModel().getSource())) {
-				// if source is of a non defined color type the connection should be colored the other way
+				// if source is of a non defined color type the connection should be colored the
+				// other way
 				// take destination for determining the color
 				refElement = getModel().getDestination();
 			}

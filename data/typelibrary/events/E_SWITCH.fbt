@@ -5,26 +5,26 @@
   <VersionInfo Author="Alois Zoitl" Date="2017-09-21" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
   <InterfaceList>
     <EventInputs>
-      <Event Comment="" Name="EI" Type="Event">
+      <Event Comment="Event Input" Name="EI" Type="Event">
         <With Var="G"/>
       </Event>
     </EventInputs>
     <EventOutputs>
-      <Event Comment="" Name="EO0" Type="Event"/>
-      <Event Comment="" Name="EO1" Type="Event"/>
+      <Event Comment="Output, switched from EI when G=0" Name="EO0" Type="Event"/>
+      <Event Comment="Output, switched from EI when G=1" Name="EO1" Type="Event"/>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="" Name="G" Type="BOOL"/>
+      <VarDeclaration Comment="Switch EI to EI0 when G=0, to EI1 when G=1 " Name="G" Type="BOOL"/>
     </InputVars>
     <OutputVars/>
   </InterfaceList>
   <BasicFB>
     <ECC>
       <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
-      <ECState Comment="" Name="G0" x="1700.0" y="730.0">
+      <ECState Comment="Issue EO0 when EI arrives with G=0" Name="G0" x="1700.0" y="730.0">
         <ECAction Output="EO0"/>
       </ECState>
-      <ECState Comment="" Name="G1" x="320.0" y="1020.0">
+      <ECState Comment="Issue EO1 when EI arrives with G=1" Name="G1" x="320.0" y="1020.0">
         <ECAction Output="EO1"/>
       </ECState>
       <ECTransition Comment="" Condition="1" Destination="START" Source="G0" x="1255.0" y="660.0"/>

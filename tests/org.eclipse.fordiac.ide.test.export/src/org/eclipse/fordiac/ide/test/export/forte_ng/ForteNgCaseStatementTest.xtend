@@ -43,14 +43,14 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 		assertEquals('''
 			
 			if (auto st_lv_synthetic_0 = «EXPORTED_VARIABLE_NAME»; false) {
-			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(0))) {
-			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
-			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(1))) {
-			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
-			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(2))) {
-			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
-			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(255))) {
-			  «EXPORTED_VARIABLE_NAME» = CIEC_DINT(0);
+			} else if (func_EQ(st_lv_synthetic_0, 0_DINT)) {
+			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», 1_DINT);
+			} else if (func_EQ(st_lv_synthetic_0, 1_DINT)) {
+			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», 1_DINT);
+			} else if (func_EQ(st_lv_synthetic_0, 2_DINT)) {
+			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», 1_DINT);
+			} else if (func_EQ(st_lv_synthetic_0, 255_DINT)) {
+			  «EXPORTED_VARIABLE_NAME» = 0_DINT;
 			}
 		'''.toString(), generatedCode.toString())
 	}
@@ -71,10 +71,10 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 		assertEquals('''
 			
 			if (auto st_lv_synthetic_0 = «EXPORTED_VARIABLE_NAME»; false) {
-			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(0)) || func_EQ(st_lv_synthetic_0, CIEC_DINT(1)) || func_EQ(st_lv_synthetic_0, CIEC_DINT(2))) {
-			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
-			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(255))) {
-			  «EXPORTED_VARIABLE_NAME» = CIEC_DINT(0);
+			} else if (func_EQ(st_lv_synthetic_0, 0_DINT) || func_EQ(st_lv_synthetic_0, 1_DINT) || func_EQ(st_lv_synthetic_0, 2_DINT)) {
+			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», 1_DINT);
+			} else if (func_EQ(st_lv_synthetic_0, 255_DINT)) {
+			  «EXPORTED_VARIABLE_NAME» = 0_DINT;
 			}
 		'''.toString(), generatedCode.toString())
 	}
@@ -97,12 +97,12 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 		assertEquals('''
 			
 			if (auto st_lv_synthetic_0 = «EXPORTED_VARIABLE_NAME»; false) {
-			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(0))) {
-			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
-			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(255))) {
-			  «EXPORTED_VARIABLE_NAME» = CIEC_DINT(0);
+			} else if (func_EQ(st_lv_synthetic_0, 0_DINT)) {
+			  «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», 1_DINT);
+			} else if (func_EQ(st_lv_synthetic_0, 255_DINT)) {
+			  «EXPORTED_VARIABLE_NAME» = 0_DINT;
 			} else {
-			  «EXPORTED_VARIABLE_NAME» = CIEC_DINT(255);
+			  «EXPORTED_VARIABLE_NAME» = 255_DINT;
 			}
 		'''.toString(), generatedCode.toString())
 	}
@@ -130,17 +130,17 @@ class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 		assertEquals('''
 			
 			if (auto st_lv_synthetic_0 = «EXPORTED_VARIABLE_NAME»; false) {
-			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(0))) {
-			  if (func_LT(«EXPORTED_VARIABLE_NAME», CIEC_DINT(20))) {
-			    «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
+			} else if (func_EQ(st_lv_synthetic_0, 0_DINT)) {
+			  if (func_LT(«EXPORTED_VARIABLE_NAME», 20_DINT)) {
+			    «EXPORTED_VARIABLE_NAME» = func_ADD<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», 1_DINT);
 			  }
 			  else {
-			    «EXPORTED_VARIABLE_NAME» = func_SUB<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», CIEC_DINT(1));
+			    «EXPORTED_VARIABLE_NAME» = func_SUB<CIEC_DINT>(«EXPORTED_VARIABLE_NAME», 1_DINT);
 			  }
-			} else if (func_EQ(st_lv_synthetic_0, CIEC_DINT(255))) {
-			  «EXPORTED_VARIABLE_NAME» = CIEC_DINT(0);
+			} else if (func_EQ(st_lv_synthetic_0, 255_DINT)) {
+			  «EXPORTED_VARIABLE_NAME» = 0_DINT;
 			} else {
-			  «EXPORTED_VARIABLE_NAME» = CIEC_DINT(255);
+			  «EXPORTED_VARIABLE_NAME» = 255_DINT;
 			}
 		'''.toString(), generatedCode.toString())
 	}

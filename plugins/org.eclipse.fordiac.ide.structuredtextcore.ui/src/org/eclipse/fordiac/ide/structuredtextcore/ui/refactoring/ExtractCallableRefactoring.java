@@ -138,7 +138,8 @@ public class ExtractCallableRefactoring extends Refactoring {
 		final EObject semanticObject = STCoreRefactoringUtil.findSelectedSemanticObject(resourceCopy, trimmedSelection);
 		if (semanticObject instanceof STExpression) {
 			return List.of(semanticObject);
-		} else if (semanticObject != null) {
+		}
+		if (semanticObject != null) {
 			return STCoreRefactoringUtil.findSelectedChildSemanticObjectsOfType(semanticObject, trimmedSelection,
 					STStatement.class);
 		}
@@ -153,8 +154,7 @@ public class ExtractCallableRefactoring extends Refactoring {
 		final ITextRegion alignedSelectedRegion = STCoreRefactoringUtil.alignRegion(trimmedSelectedRegion, rootNode);
 		return selectedSemanticElements.stream().map(NodeModelUtils::findActualNodeFor).map(INode::getTextRegion)
 				.reduce(ITextRegion::merge).map(region -> region.merge(alignedSelectedRegion))
-				.map(region -> STCoreRefactoringUtil.trimRegion(region, rootNode))
-				.orElse(ITextRegion.EMPTY_REGION);
+				.map(region -> STCoreRefactoringUtil.trimRegion(region, rootNode)).orElse(ITextRegion.EMPTY_REGION);
 	}
 
 	protected Optional<String> calculateSelectedSemanticElementsText() {
@@ -299,9 +299,13 @@ public class ExtractCallableRefactoring extends Refactoring {
 		}
 		callExpression.append(getCallableName());
 		callExpression.append("("); //$NON-NLS-1$
-		callExpression.append(Stream
-				.concat(Stream.concat(inputParameters.stream(), outputParameters.stream()), inoutParameters.stream())
-				.map(STVarDeclaration::getName).collect(Collectors.joining(", "))); //$NON-NLS-1$
+		callExpression.append(Stream.concat(
+				// inputs & inouts
+				Stream.concat(inputParameters.stream(), inoutParameters.stream())
+						.map(parameter -> parameter.getName() + " := " + parameter.getName()), //$NON-NLS-1$
+				// outputs
+				outputParameters.stream().map(parameter -> parameter.getName() + " => " + parameter.getName()) //$NON-NLS-1$
+		).collect(Collectors.joining(", ")));  //$NON-NLS-1$
 		callExpression.append(")"); //$NON-NLS-1$
 		if (getSelectedSingleExpression().isEmpty()) {
 			callExpression.append(";"); //$NON-NLS-1$
@@ -336,8 +340,8 @@ public class ExtractCallableRefactoring extends Refactoring {
 		}
 		builder.append(System.lineSeparator());
 		generateCallableParameters("INPUT", inputParameters, builder); //$NON-NLS-1$
-		generateCallableParameters("OUTPUT", outputParameters, builder); //$NON-NLS-1$
 		generateCallableParameters("IN_OUT", inoutParameters, builder); //$NON-NLS-1$
+		generateCallableParameters("OUTPUT", outputParameters, builder); //$NON-NLS-1$
 	}
 
 	protected static void generateCallableParameters(final String type, final List<STVarDeclaration> parameters,
@@ -380,20 +384,20 @@ public class ExtractCallableRefactoring extends Refactoring {
 	protected String performSelectedSemanticElementsReplacements(final String text) {
 		final StringBuilder result = new StringBuilder(text);
 		getSelectedSemanticElementsReplacements().stream()
-		.sorted((a, b) -> Integer.compare(b.getOffset(), a.getOffset()))
-		.forEachOrdered(repl -> repl.applyTo(result));
+				.sorted((a, b) -> Integer.compare(b.getOffset(), a.getOffset()))
+				.forEachOrdered(repl -> repl.applyTo(result));
 		return result.toString();
 	}
 
 	protected List<ReplaceRegion> getSelectedSemanticElementsReplacements() {
 		final List<ReplaceRegion> result = new ArrayList<>();
 		selectedSemanticElements.stream()
-		.flatMap(elem -> EcoreUtil2.getAllContentsOfType(elem, STFeatureExpression.class).stream())
-		.filter(this::isReturnVariableReference).map(NodeModelUtils::findActualNodeFor)
-		.map(INode::getTextRegion)
-		.map(region -> new ReplaceRegion(region.getOffset() - selectedSemanticElementsRegion.getOffset(),
-				region.getLength(), callableName))
-		.forEachOrdered(result::add);
+				.flatMap(elem -> EcoreUtil2.getAllContentsOfType(elem, STFeatureExpression.class).stream())
+				.filter(this::isReturnVariableReference).map(NodeModelUtils::findActualNodeFor)
+				.map(INode::getTextRegion)
+				.map(region -> new ReplaceRegion(region.getOffset() - selectedSemanticElementsRegion.getOffset(),
+						region.getLength(), callableName))
+				.forEachOrdered(result::add);
 		return result;
 	}
 

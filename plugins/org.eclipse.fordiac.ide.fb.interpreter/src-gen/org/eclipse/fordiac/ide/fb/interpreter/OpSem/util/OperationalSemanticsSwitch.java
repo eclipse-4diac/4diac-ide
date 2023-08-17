@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -165,6 +166,13 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 			T result = caseEccTrace(eccTrace);
 			if (result == null)
 				result = caseTrace(eccTrace);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case OperationalSemanticsPackage.TRANSITION_TRACE: {
+			TransitionTrace transitionTrace = (TransitionTrace) theEObject;
+			T result = caseTransitionTrace(transitionTrace);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -311,6 +319,18 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated */
 	public T caseEccTrace(EccTrace object) {
+		return null;
+	}
+
+	/** Returns the result of interpreting the object as an instance of '<em>Transition Trace</em>'. <!-- begin-user-doc
+	 * --> This implementation returns null; returning a non-null result will terminate the switch. <!-- end-user-doc
+	 * -->
+	 *
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Transition Trace</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated */
+	public T caseTransitionTrace(TransitionTrace object) {
 		return null;
 	}
 

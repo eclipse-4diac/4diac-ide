@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -87,8 +86,8 @@ public final class InputGenerator {
 		if (event == null) {
 			throw new IllegalArgumentException();
 		}
-		final List<VarDeclaration> vars = (List<VarDeclaration>) EcoreUtil.copyAll(
-				event.getWith().stream().map(With::getVariables).filter(Objects::nonNull).collect(Collectors.toList()));
+		final List<VarDeclaration> vars = (List<VarDeclaration>) EcoreUtil
+				.copyAll(event.getWith().stream().map(With::getVariables).filter(Objects::nonNull).toList());
 		for (final VarDeclaration variable : vars) {
 			if (variable.getValue() == null) {
 				final Value v = LibraryElementFactory.eINSTANCE.createValue();

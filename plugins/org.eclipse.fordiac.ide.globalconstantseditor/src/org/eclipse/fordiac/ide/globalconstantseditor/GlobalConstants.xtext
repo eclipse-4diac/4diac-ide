@@ -13,6 +13,7 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *       - add ST source as top-level element
+ *       - add package declaration and imports
  *******************************************************************************/
 grammar org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants with org.eclipse.fordiac.ide.structuredtextcore.STCore
 
@@ -23,7 +24,10 @@ import "org.eclipse.fordiac.ide.model.libraryElement" as libraryElement
 import "http://www.eclipse.org/fordiac/ide/structuredtextcore/STCore" as stcore
 
 STGlobalConstsSource returns stcore::STSource:
-	{STGlobalConstsSource} elements+=STVarGlobalDeclarationBlock*;
+	{STGlobalConstsSource}
+	('PACKAGE' name=QualifiedName ';')? // package declaration (optional)
+	imports+=STImport* // imports (optional)
+	elements+=STVarGlobalDeclarationBlock*;
 
 STVarGlobalDeclarationBlock returns STVarGlobalDeclarationBlock:
 	{STVarGlobalDeclarationBlock}

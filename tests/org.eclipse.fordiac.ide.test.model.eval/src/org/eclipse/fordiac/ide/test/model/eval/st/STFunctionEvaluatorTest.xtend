@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.model.eval.st
 
+import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup
 import org.eclipse.fordiac.ide.model.eval.st.STFunctionEvaluator
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
@@ -28,6 +29,7 @@ class STFunctionEvaluatorTest {
 	@BeforeAll
 	def static void setupXtext() {
 		new DataTypeLibrary
+		GlobalConstantsStandaloneSetup.doSetup
 		STFunctionStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 AIT, fortiss GmbH, Johannes Kepler University,
+ * Copyright (c) 2013, 2023 AIT, fortiss GmbH, Johannes Kepler University,
  *                               Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
+import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
@@ -41,7 +42,6 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
  * subapp is marked as selected. */
 public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy {
 
-
 	@Override
 	protected Command getAddCommand(final Request request) {
 		if (isDragAndDropRequestForSubapp(request)) {
@@ -52,10 +52,22 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 			final CompoundCommand cmd = new CompoundCommand();
 			if (!moveFrom.isEmpty()) {
 				final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
-				final List<FBNetworkElement> fbEls = moveFrom.stream().map(ep -> (FBNetworkElement) ep.getModel())
+				final List<FBNetworkElement> fbWithoutGroup = moveFrom.stream()
+						.map(ep -> (FBNetworkElement) ep.getModel()).filter(ep -> !ep.isInGroup())
 						.collect(Collectors.toList());
-				cmd.add(new MoveElementsFromSubAppCommand(fbEls,
-						new org.eclipse.swt.graphics.Point(destination.x, destination.y)));
+				final List<FBNetworkElement> fbWithGroup = moveFrom.stream().map(ep -> (FBNetworkElement) ep.getModel())
+						.filter(FBNetworkElement::isInGroup).collect(Collectors.toList());
+
+				if (!fbWithoutGroup.isEmpty()) {
+					cmd.add(new MoveElementsFromSubAppCommand(fbWithoutGroup,
+							new org.eclipse.swt.graphics.Point(destination.x, destination.y)));
+				}
+
+				if (!fbWithGroup.isEmpty()) {
+					final Point subAppCoordinatesPoint = getScaledMoveDelta((ChangeBoundsRequest) request);
+					cmd.add(new RemoveElementsFromGroup(fbWithGroup,
+							new Point(subAppCoordinatesPoint.x, subAppCoordinatesPoint.y)));
+				}
 			}
 
 			if (!addTo.isEmpty()) {
@@ -65,7 +77,8 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 				translateToRelative(getHost(), topLeft);
 				topLeft.translate(-moveDelta.x, -moveDelta.y);
 				// needs a dummy (swt)point because swt and draw2d points are mixed
-				final org.eclipse.swt.graphics.Point dummyPoint = new org.eclipse.swt.graphics.Point(topLeft.x, topLeft.y);
+				final org.eclipse.swt.graphics.Point dummyPoint = new org.eclipse.swt.graphics.Point(topLeft.x,
+						topLeft.y);
 				cmd.add(new AddElementsToSubAppCommand(getParentModel(), editParts, dummyPoint));
 			}
 
@@ -92,6 +105,9 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 
 	private boolean isInChild(final FBNetworkElement fbne) {
 		final FBNetworkElement firstOuter = fbne.getOuterFBNetworkElement();
+		if (fbne.isInGroup() && firstOuter != null) {
+			return getParentModel().equals(firstOuter);
+		}
 		if (firstOuter != null) {
 			return getParentModel().equals(firstOuter.getOuterFBNetworkElement());
 		}

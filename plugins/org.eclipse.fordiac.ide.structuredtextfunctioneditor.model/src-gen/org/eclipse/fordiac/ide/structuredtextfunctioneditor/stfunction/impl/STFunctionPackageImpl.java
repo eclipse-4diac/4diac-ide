@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -136,8 +137,28 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
 	 * @generated
 	 */
 	@Override
+	public EAttribute getSTFunctionSource_Name() {
+		return (EAttribute)stFunctionSourceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTFunctionSource_Imports() {
+		return (EReference)stFunctionSourceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getSTFunctionSource_Functions() {
-		return (EReference)stFunctionSourceEClass.getEStructuralFeatures().get(0);
+		return (EReference)stFunctionSourceEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -210,6 +231,8 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
 
 		// Create classes and their features
 		stFunctionSourceEClass = createEClass(ST_FUNCTION_SOURCE);
+		createEAttribute(stFunctionSourceEClass, ST_FUNCTION_SOURCE__NAME);
+		createEReference(stFunctionSourceEClass, ST_FUNCTION_SOURCE__IMPORTS);
 		createEReference(stFunctionSourceEClass, ST_FUNCTION_SOURCE__FUNCTIONS);
 
 		stFunctionEClass = createEClass(ST_FUNCTION);
@@ -256,6 +279,8 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(stFunctionSourceEClass, STFunctionSource.class, "STFunctionSource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getSTFunctionSource_Name(), ecorePackage.getEString(), "name", null, 0, 1, STFunctionSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTFunctionSource_Imports(), theSTCorePackage.getSTImport(), null, "imports", null, 0, -1, STFunctionSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTFunctionSource_Functions(), this.getSTFunction(), null, "functions", null, 0, -1, STFunctionSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stFunctionEClass, STFunction.class, "STFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

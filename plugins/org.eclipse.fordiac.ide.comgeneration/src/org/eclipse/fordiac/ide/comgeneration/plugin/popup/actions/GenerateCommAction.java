@@ -30,6 +30,7 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class GenerateCommAction implements IObjectActionDelegate {
+	private static final int DEFAULT_START_PORT = 61550;
 	private Application selectedApplication = null;
 
 	public GenerateCommAction() {
@@ -47,7 +48,7 @@ public class GenerateCommAction implements IObjectActionDelegate {
 			final TypeLibrary typeLib = selectedApplication.getAutomationSystem().getTypeLibrary();
 			final MediaSpecificGeneratorFactory specificGeneratorFactory = new MediaSpecificGeneratorFactory();
 			final EthernetPubSubGenerator ethernetPubSubGenerator = new EthernetPubSubGenerator(typeLib);
-			ethernetPubSubGenerator.reset(61550);
+			ethernetPubSubGenerator.reset(DEFAULT_START_PORT);
 			specificGeneratorFactory.addGenerator(ethernetPubSubGenerator);
 			specificGeneratorFactory.addGenerator(new CanPubSubGenerator(typeLib));
 			final Analyzer analyzer = new Analyzer();
@@ -63,11 +64,10 @@ public class GenerateCommAction implements IObjectActionDelegate {
 	@Override
 	public void selectionChanged(final IAction action, final ISelection selection) {
 		selectedApplication = null;
-		if (selection instanceof StructuredSelection) {
-			final StructuredSelection structuredSelection = (StructuredSelection) selection;
+		if (selection instanceof final StructuredSelection structuredSelection) {
 			final Object selectedObject = structuredSelection.getFirstElement();
-			if (selectedObject instanceof Application) {
-				selectedApplication = (Application) selectedObject;
+			if (selectedObject instanceof final Application selectedApp) {
+				selectedApplication = selectedApp;
 			}
 		}
 	}

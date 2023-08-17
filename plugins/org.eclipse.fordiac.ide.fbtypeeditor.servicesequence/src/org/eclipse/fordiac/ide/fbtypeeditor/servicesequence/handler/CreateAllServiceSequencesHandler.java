@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServi
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.CoverageCalculator;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.Permutations;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.ServiceSequenceSaveAndLoadHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -48,7 +49,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 
-		final FBType fbtype = ((BasicFBType) ((EditPart) selection.getFirstElement()).getModel());
+		final BasicFBType fbtype = ((BasicFBType) ((EditPart) selection.getFirstElement()).getModel());
 
 		if ((selection.getFirstElement() instanceof SequenceRootEditPart) && (selection.toList().size() == 1)) {
 
@@ -56,13 +57,14 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 					((FBType) ((EditPart) selection.getFirstElement()).getModel()).getInterfaceList().getEventInputs()
 					.stream().toArray());
 
-			final EList<ECState> states = ((BasicFBType) fbtype).getECC().getECState();
+			final EList<ECState> states = fbtype.getECC().getECState();
 
 			final List<InputObject> combinations = getAllCombinationsWithStartStates(allCombinationsSimple, states);
 
 			RecordServiceSequenceHandler.setParameters(fbtype, new ArrayList<>());
 
 			final List<EventManager> eventManagers = createEventManagers(fbtype, combinations);
+			final ArrayList<ServiceSequence> serviceSequences = new ArrayList<>();
 
 			for (final EventManager eventManager : eventManagers) {
 				TransactionFactory.addTraceInfoTo(eventManager.getTransactions());
@@ -77,16 +79,16 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 				seq.setStartState(combinations.get(eventManagers.indexOf(eventManager)).getStartState().getName());
 
 				seq.setComment(
-						"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions())); //$NON-NLS-1$
+						"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), //$NON-NLS-1$
+								fbtype));
 				seq.setEventManager(eventManager);
+				serviceSequences.add(seq);
 
 				for (final Transaction transaction : eventManager.getTransactions()) {
-
 					ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbtype, (FBTransaction) transaction);
 				}
-
 			}
-
+			ServiceSequenceSaveAndLoadHelper.saveServiceSequences(fbtype, serviceSequences);
 		}
 		return null;
 	}
@@ -98,7 +100,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 		return Permutations.permute(events);
 	}
 
-	private List<InputObject> getAllCombinationsWithStartStates(final List<List<Object>> allCombinationsSimple,
+	private static List<InputObject> getAllCombinationsWithStartStates(final List<List<Object>> allCombinationsSimple,
 			final EList<ECState> states) {
 
 		final List<InputObject> combinations = new ArrayList<>();
@@ -114,7 +116,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 
 	}
 
-	private List<EventManager> createEventManagers(final FBType fbtype, final List<InputObject> combinations) {
+	private static List<EventManager> createEventManagers(final FBType fbtype, final List<InputObject> combinations) {
 		final List<EventManager> eventmanagers = new ArrayList<>();
 		for (final InputObject comb : combinations) {
 			final FBType typeCopy = EcoreUtil.copy(fbtype);

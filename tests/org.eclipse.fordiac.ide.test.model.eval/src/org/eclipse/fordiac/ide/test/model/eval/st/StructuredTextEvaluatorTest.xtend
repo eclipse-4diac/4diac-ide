@@ -22,6 +22,7 @@ import java.util.Queue
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
+import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
@@ -97,6 +98,7 @@ class StructuredTextEvaluatorTest {
 	@BeforeAll
 	def static void setupXtext() {
 		new DataTypeLibrary
+		GlobalConstantsStandaloneSetup.doSetup
 		STFunctionStandaloneSetup.doSetup
 		STAlgorithmStandaloneSetup.doSetup
 	}

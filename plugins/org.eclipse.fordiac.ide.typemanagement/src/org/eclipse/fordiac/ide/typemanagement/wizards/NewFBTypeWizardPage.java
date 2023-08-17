@@ -94,12 +94,12 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof TemplateInfo) {
+			if (element instanceof final TemplateInfo info) {
 				switch (columnIndex) {
 				case 0:
-					return ((TemplateInfo) element).templateName;
+					return info.templateName;
 				case 1:
-					return ((TemplateInfo) element).templateDescription;
+					return info.templateDescription;
 				default:
 					break;
 				}
@@ -170,6 +170,9 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		if (fileExtension.equals(TypeLibraryTags.DATA_TYPE_FILE_ENDING)) {
 			return isDtpDuplicate(lib);
 		}
+		if (fileExtension.equals(TypeLibraryTags.GLOBAL_CONST_FILE_ENDING)) {
+			return isGcfDuplicate(lib);
+		}
 		return isSubFbtAdpDuplicate(lib, fileExtension);
 	}
 
@@ -188,10 +191,15 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		return map.containsKey(super.getFileName());
 	}
 
+	private boolean isGcfDuplicate(final TypeLibrary lib) {
+		final Map<String, ?> map = lib.getGlobalConstants();
+		return map.containsKey(super.getFileName());
+	}
+
 	public File getTemplate() {
 		if (templateTableViewer.getSelection() instanceof StructuredSelection) {
 			final Object selection = templateTableViewer.getStructuredSelection().getFirstElement();
-			return (selection instanceof TemplateInfo) ? ((TemplateInfo) selection).templateFile : null;
+			return selection instanceof final TemplateInfo info ? info.templateFile : null;
 		}
 		return null;
 	}
@@ -282,6 +290,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT)
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING_WITH_DOT)
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT)
+				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.GLOBAL_CONST_FILE_ENDING_WITH_DOT)
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
 	}
 

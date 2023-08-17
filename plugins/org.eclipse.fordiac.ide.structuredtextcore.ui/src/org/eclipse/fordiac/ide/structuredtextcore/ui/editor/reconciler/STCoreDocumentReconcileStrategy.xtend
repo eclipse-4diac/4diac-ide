@@ -34,9 +34,11 @@ class STCoreDocumentReconcileStrategy extends XtextDocumentReconcileStrategy {
 		if(monitor.canceled) return;
 		if (resource instanceof STCoreResource) {
 			val fbType = resource.fbType
-			val partition = resource.partition
-			if(partition !== null) {
-				Display.^default.asyncExec[fbType.reconcile(partition)]
+			if (fbType !== null) {
+				val partition = resource.partition
+				if (partition !== null) {
+					Display.^default.asyncExec[fbType.reconcile(partition)]
+				}
 			}
 		}
 	}

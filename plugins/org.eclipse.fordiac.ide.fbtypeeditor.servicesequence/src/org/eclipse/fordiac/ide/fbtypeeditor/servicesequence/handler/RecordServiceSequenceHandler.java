@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServi
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.CoverageCalculator;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.ServiceSequenceSaveAndLoadHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -117,7 +118,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 
 	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames, final boolean isAppend,
 			final boolean isRandom, final FBType fbType, final int count, final String startState) {
-		List<Event> events;
+		final List<Event> events;
 		final FBType typeCopy = EcoreUtil.copy(fbType);
 		events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
 				.filter(Objects::nonNull).collect(Collectors.toList());
@@ -134,8 +135,10 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		for (final Transaction transaction : eventManager.getTransactions()) {
 			ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
 		}
-		seq.setComment("Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions()));
+		seq.setComment(
+				"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), fbType));
 		seq.setEventManager(eventManager);
+		ServiceSequenceSaveAndLoadHelper.saveServiceSequence(fbType, seq);
 	}
 
 	static void setParameters(final FBType fbType, final List<String> parameters) {
@@ -152,8 +155,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		if (selection instanceof StructuredSelection) {
-			final StructuredSelection structuredSelection = (StructuredSelection) selection;
+		if (selection instanceof final StructuredSelection structuredSelection) {
 			setBaseEnabled(structuredSelection.size() <= 1);
 		}
 	}

@@ -233,7 +233,12 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	public static String hierarchicalName(final Object element) {
 		if (element instanceof final FBNetworkElement fbne) {
-			return FBNetworkHelper.getFullHierarchicalName(fbne);
+			final FBType root = FBNetworkHelper.getRootType(fbne);
+			final StringBuilder sb = new StringBuilder();
+			if (root == null) {
+				sb.append(fbne.getFbNetwork().getApplication().getAutomationSystem().getName() + ".");
+			}
+			return sb.toString() + FBNetworkHelper.getFullHierarchicalName(fbne);
 		}
 		if (element instanceof final IInterfaceElement ie) {
 			final String FBName = FBNetworkHelper.getFullHierarchicalName(ie.getFBNetworkElement());

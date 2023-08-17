@@ -19,6 +19,9 @@
                type="org.eclipse.fordiac.ide.model.libraryElement.ECTransition">
          </source>
          <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants">
+         </source>
+         <source
                type="org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource">
          </source>
          <source

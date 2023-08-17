@@ -13,6 +13,7 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *       - add validators for function FB types
+ *       - add control-flow validator
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation;
 
@@ -20,6 +21,7 @@ import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreControlFlowValidator;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.Messages;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.resource.STFunctionResource;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
@@ -48,6 +50,13 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 	public static final String DUPLICATE_FUNCTION_NAME = ISSUE_CODE_PREFIX + "duplicateFunctionName"; //$NON-NLS-1$
 	public static final String FUNCTION_NAME_MISMATCH = ISSUE_CODE_PREFIX + "functionNameMismatch"; //$NON-NLS-1$
 	public static final String MULTIPLE_FUNCTIONS = ISSUE_CODE_PREFIX + "multipleFunctions"; //$NON-NLS-1$
+
+	@Check
+	public void checkControlFlow(final STFunction function) {
+		final STCoreControlFlowValidator controlFlowValidator = new STCoreControlFlowValidator(this);
+		controlFlowValidator.validateVariableBlocks(function.getVarDeclarations());
+		controlFlowValidator.validateStatements(function.getCode());
+	}
 
 	/** Check on duplicate names in self-defined functions. Standard functions are already checked in STCore */
 	@Check

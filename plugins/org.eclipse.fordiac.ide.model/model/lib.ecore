@@ -972,6 +972,14 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//FunctionBody"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GlobalConstants" eSuperTypes="#//CompilableType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constants" upperBound="-1"
+        eType="#//VarDeclaration" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//OriginalSource"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>
+    </eStructuralFeatures>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//FBNetworkElement">
     <eOperations name="getInterface" lowerBound="1" eType="#//InterfaceList">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -990,6 +998,8 @@
         defaultValueLiteral="200"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
         defaultValueLiteral="100"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locked" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="HiddenElement" eSuperTypes="#//ConfigurableObject">
     <eOperations name="setVisible">
@@ -1266,6 +1276,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="MappingTarget" eSuperTypes="#//INamedElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="Method" abstract="true" eSuperTypes="#//ICallable"/>
   <eClassifiers xsi:type="ecore:EClass" name="Multiplexer" eSuperTypes="#//StructManipulator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OriginalSource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OtherAlgorithm" eSuperTypes="#//TextAlgorithm">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">

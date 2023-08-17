@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmPartition
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmReconciler
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters
 import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider
+import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameConverter
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameProvider
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler
 import org.eclipse.xtext.Constants
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider
+import org.eclipse.xtext.naming.IQualifiedNameConverter
 import org.eclipse.xtext.naming.IQualifiedNameProvider
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater
 import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy
@@ -74,6 +76,10 @@ class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 
 	override Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
 		return STCoreQualifiedNameProvider
+	}
+
+	def Class<? extends IQualifiedNameConverter> bindIQualifiedNameConverter() {
+		return STCoreQualifiedNameConverter;
 	}
 
 	def Class<? extends STCorePartitioner> bindSTCorePartitioner() {

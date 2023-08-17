@@ -14,6 +14,7 @@
  *   Martin Jobst
  *       - exclude proposals based disallowing qualified names only
  *       - add proposal for callables
+ *       - enable proposals for global variables in packages
  */
 package org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist;
 
@@ -21,12 +22,14 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -44,6 +47,7 @@ import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 import org.eclipse.xtext.util.ITextRegion;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Streams;
 
 /** See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#content-assist on how to customize the
@@ -54,13 +58,21 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 	public void completeSTFeatureExpression_Feature(final EObject model, final Assignment assignment,
 			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
 		lookupCrossReference((CrossReference) assignment.getTerminal(), context, acceptor,
-				(final IEObjectDescription desc) -> desc.getName().getSegmentCount() == 1);
+				(Predicate<IEObjectDescription>) desc -> isVisible(desc, context));
+	}
+
+	@SuppressWarnings("static-method") // subclasses may override
+	protected boolean isVisible(final IEObjectDescription description, final ContentAssistContext context) {
+		return description.getName().getSegmentCount() == 1
+				|| (STCorePackage.eINSTANCE.getSTVarDeclaration().equals(description.getEClass())
+						&& EcoreUtil.resolve(description.getEObjectOrProxy(), context.getResource())
+								.eContainer() instanceof STVarGlobalDeclarationBlock);
 	}
 
 	@Override
 	protected StyledString getStyledDisplayString(final EObject element, final String qualifiedNameAsString,
 			final String shortName) {
-		if (element instanceof final ICallable callable) {
+		if (!element.eIsProxy() && element instanceof final ICallable callable) {
 			final StyledString result = new StyledString(shortName).append('(')
 					.append(Streams
 							.concat(callable.getInputParameters().stream(), callable.getInOutParameters().stream(),
@@ -111,8 +123,7 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 		public ICompletionProposal apply(final IEObjectDescription candidate) {
 			final ICompletionProposal result = super.apply(candidate);
 			if (result instanceof final STCoreConfigurableCompletionProposal configurableResult
-					&& isCallableDescription(candidate)
-					&& EcoreUtil.resolve(candidate.getEObjectOrProxy(),
+					&& isCallableDescription(candidate) && EcoreUtil.resolve(candidate.getEObjectOrProxy(),
 							contentAssistContext.getResource()) instanceof final ICallable callable) {
 				final String nameProposal = configurableResult.getReplacementString();
 				final int replacementOffset = configurableResult.getReplacementOffset();
@@ -163,9 +174,11 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 			if (callable.getInOutParameters().contains(parameter)
 					|| callable.getOutputParameters().contains(parameter)) {
 				return "VAR"; //$NON-NLS-1$
-			} else if (parameter instanceof final VarDeclaration varDeclaration) {
+			}
+			if (parameter instanceof final VarDeclaration varDeclaration) {
 				return getCallableParameterTypeDefaultValue(varDeclaration.getType());
-			} else if (parameter instanceof final STVarDeclaration stVarDeclaration) {
+			}
+			if (parameter instanceof final STVarDeclaration stVarDeclaration) {
 				return getCallableParameterTypeDefaultValue(stVarDeclaration.getType());
 			}
 			return ""; //$NON-NLS-1$

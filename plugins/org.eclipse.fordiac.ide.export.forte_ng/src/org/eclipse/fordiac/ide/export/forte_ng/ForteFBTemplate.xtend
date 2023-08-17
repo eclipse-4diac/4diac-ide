@@ -27,6 +27,7 @@ package org.eclipse.fordiac.ide.export.forte_ng
 import java.nio.file.Path
 import java.util.List
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
@@ -327,6 +328,23 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«type.interfaceList.outputVars.generateConnectionAccessorsDefinition("getDOConUnchecked", "CDataConnection *")»
 	'''
 
+	def protected generateSetInitialValuesDeclaration(Iterable<VarDeclaration> variables) '''
+		«IF !variables.empty»
+			void setInitialValues() override;
+		«ENDIF»
+	'''
+
+	def protected generateSetInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
+		«IF !variables.empty»
+			void «className»::setInitialValues() {
+			  «FOR variable : variables»
+			  	«variable.generateName» = «variable.generateVariableDefaultValue»;
+			  «ENDFOR»
+			}
+			
+		«ENDIF»
+	'''
+
 	def protected generateConnectionVariableDeclarations(List<VarDeclaration> variables) '''
 		«FOR variable : variables»
 			«variable.generateVariableTypeName» «variable.generateNameAsConnectionVariable»;
@@ -426,7 +444,11 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		  «ENDFOR»
 		  receiveInputEvent(«event.generateEventID», nullptr);
 		  «FOR variable : event.outputParameters.filter(VarDeclaration)»
-		  	«variable.generateNameAsParameter» = «variable.generateName»;
+		  	«IF GenericTypes.isAnyType(variable.type)»
+		  		«variable.generateNameAsParameter».setValue(«variable.generateName».unwrap());
+		  	«ELSE»
+		  		«variable.generateNameAsParameter» = «variable.generateName»;
+		  	«ENDIF»
 		  «ENDFOR»
 		}
 	'''

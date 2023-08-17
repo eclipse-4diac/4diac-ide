@@ -15,11 +15,17 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.TracingAnnotations;
+import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Ecc Trace</b></em>'. <!-- end-user-doc -->
@@ -27,18 +33,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EccTraceImpl#getTransitions <em>Transitions</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EccTraceImpl#getTransitionTraces <em>Transition
+ * Traces</em>}</li>
  * </ul>
  *
  * @generated */
 public class EccTraceImpl extends TraceImpl implements EccTrace {
-	/** The cached value of the '{@link #getTransitions() <em>Transitions</em>}' reference list. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/** The cached value of the '{@link #getTransitionTraces() <em>Transition Traces</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @see #getTransitions()
+	 * @see #getTransitionTraces()
 	 * @generated
 	 * @ordered */
-	protected EList<ECTransition> transitions;
+	protected EList<TransitionTrace> transitionTraces;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -59,12 +66,33 @@ public class EccTraceImpl extends TraceImpl implements EccTrace {
 	 *
 	 * @generated */
 	@Override
-	public EList<ECTransition> getTransitions() {
-		if (transitions == null) {
-			transitions = new EObjectResolvingEList<>(ECTransition.class, this,
-					OperationalSemanticsPackage.ECC_TRACE__TRANSITIONS);
+	public EList<TransitionTrace> getTransitionTraces() {
+		if (transitionTraces == null) {
+			transitionTraces = new EObjectContainmentEList.Resolving<>(TransitionTrace.class, this,
+					OperationalSemanticsPackage.ECC_TRACE__TRANSITION_TRACES);
 		}
-		return transitions;
+		return transitionTraces;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EList<ECTransition> getTransitions(final ECC ecc) {
+		return TracingAnnotations.getTransitions(ecc, this);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+		case OperationalSemanticsPackage.ECC_TRACE__TRANSITION_TRACES:
+			return ((InternalEList<?>) getTransitionTraces()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -73,8 +101,8 @@ public class EccTraceImpl extends TraceImpl implements EccTrace {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case OperationalSemanticsPackage.ECC_TRACE__TRANSITIONS:
-			return getTransitions();
+		case OperationalSemanticsPackage.ECC_TRACE__TRANSITION_TRACES:
+			return getTransitionTraces();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -87,9 +115,9 @@ public class EccTraceImpl extends TraceImpl implements EccTrace {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case OperationalSemanticsPackage.ECC_TRACE__TRANSITIONS:
-			getTransitions().clear();
-			getTransitions().addAll((Collection<? extends ECTransition>) newValue);
+		case OperationalSemanticsPackage.ECC_TRACE__TRANSITION_TRACES:
+			getTransitionTraces().clear();
+			getTransitionTraces().addAll((Collection<? extends TransitionTrace>) newValue);
 			return;
 		default:
 			super.eSet(featureID, newValue);
@@ -103,8 +131,8 @@ public class EccTraceImpl extends TraceImpl implements EccTrace {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case OperationalSemanticsPackage.ECC_TRACE__TRANSITIONS:
-			getTransitions().clear();
+		case OperationalSemanticsPackage.ECC_TRACE__TRANSITION_TRACES:
+			getTransitionTraces().clear();
 			return;
 		default:
 			super.eUnset(featureID);
@@ -118,8 +146,8 @@ public class EccTraceImpl extends TraceImpl implements EccTrace {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case OperationalSemanticsPackage.ECC_TRACE__TRANSITIONS:
-			return transitions != null && !transitions.isEmpty();
+		case OperationalSemanticsPackage.ECC_TRACE__TRANSITION_TRACES:
+			return transitionTraces != null && !transitionTraces.isEmpty();
 		default:
 			return super.eIsSet(featureID);
 		}

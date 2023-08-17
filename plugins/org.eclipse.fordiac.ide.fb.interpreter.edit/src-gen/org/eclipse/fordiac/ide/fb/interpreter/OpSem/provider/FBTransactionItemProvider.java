@@ -76,6 +76,7 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(OperationalSemanticsPackage.Literals.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES);
+			childrenFeatures.add(OperationalSemanticsPackage.Literals.FB_TRANSACTION__TRACE);
 		}
 		return childrenFeatures;
 	}
@@ -125,6 +126,7 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 
 		switch (notification.getFeatureID(FBTransaction.class)) {
 		case OperationalSemanticsPackage.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES:
+		case OperationalSemanticsPackage.FB_TRANSACTION__TRACE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		default:
@@ -144,6 +146,12 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 		newChildDescriptors
 				.add(createChildParameter(OperationalSemanticsPackage.Literals.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES,
 						OperationalSemanticsFactory.eINSTANCE.createEventOccurrence()));
+
+		newChildDescriptors.add(createChildParameter(OperationalSemanticsPackage.Literals.FB_TRANSACTION__TRACE,
+				OperationalSemanticsFactory.eINSTANCE.createTrace()));
+
+		newChildDescriptors.add(createChildParameter(OperationalSemanticsPackage.Literals.FB_TRANSACTION__TRACE,
+				OperationalSemanticsFactory.eINSTANCE.createEccTrace()));
 	}
 
 	/** This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}. <!-- begin-user-doc -->

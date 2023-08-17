@@ -51,10 +51,10 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 
 	private boolean allElementsInSameFBnetwork() {
 		for (final Object o : parts) {
-			if (o instanceof EditPart) {
-				final Object model = ((EditPart) o).getModel();
-				if ((model instanceof FBNetworkElement)
-						&& (((FBNetworkElement) model).getFbNetwork() != getFBNetwork())) {
+			if (o instanceof final EditPart editPart) {
+				final Object model = editPart.getModel();
+				if ((model instanceof final FBNetworkElement networkElement)
+						&& (networkElement.getFbNetwork() != getFBNetwork())) {
 					// an element is not in the target fbnetwork
 					return false;
 				}
@@ -94,8 +94,8 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	private void checkMapping(final List<?> selection) {
 		Resource res = null;
 		for (final Object ne : selection) {
-			if ((ne instanceof EditPart) && (((EditPart) ne).getModel() instanceof FBNetworkElement)) {
-				final FBNetworkElement element = (FBNetworkElement) ((EditPart) ne).getModel();
+			if ((ne instanceof final EditPart editPart)
+					&& (editPart.getModel() instanceof final FBNetworkElement element)) {
 				if (!element.isMapped()) {
 					return; // we have at least one unmapped element so we will not mapp the whole subapp
 				}

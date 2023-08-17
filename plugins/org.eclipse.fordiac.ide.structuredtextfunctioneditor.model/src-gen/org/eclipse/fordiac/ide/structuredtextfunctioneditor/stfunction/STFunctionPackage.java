@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -92,13 +93,31 @@ public interface STFunctionPackage extends EPackage {
 	int ST_FUNCTION_SOURCE__COMMENTS = STCorePackage.ST_SOURCE__COMMENTS;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_FUNCTION_SOURCE__NAME = STCorePackage.ST_SOURCE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Imports</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_FUNCTION_SOURCE__IMPORTS = STCorePackage.ST_SOURCE_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Functions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION_SOURCE__FUNCTIONS = STCorePackage.ST_SOURCE_FEATURE_COUNT + 0;
+	int ST_FUNCTION_SOURCE__FUNCTIONS = STCorePackage.ST_SOURCE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Source</em>' class.
@@ -107,7 +126,7 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_FUNCTION_SOURCE_FEATURE_COUNT = STCorePackage.ST_SOURCE_FEATURE_COUNT + 1;
+	int ST_FUNCTION_SOURCE_FEATURE_COUNT = STCorePackage.ST_SOURCE_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionImpl <em>ST Function</em>}' class.
@@ -183,6 +202,28 @@ public interface STFunctionPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSTFunctionSource();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource#getName()
+	 * @see #getSTFunctionSource()
+	 * @generated
+	 */
+	EAttribute getSTFunctionSource_Name();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource#getImports <em>Imports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Imports</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource#getImports()
+	 * @see #getSTFunctionSource()
+	 * @generated
+	 */
+	EReference getSTFunctionSource_Imports();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource#getFunctions <em>Functions</em>}'.
@@ -269,6 +310,22 @@ public interface STFunctionPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ST_FUNCTION_SOURCE = eINSTANCE.getSTFunctionSource();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ST_FUNCTION_SOURCE__NAME = eINSTANCE.getSTFunctionSource_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Imports</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_FUNCTION_SOURCE__IMPORTS = eINSTANCE.getSTFunctionSource_Imports();
 
 		/**
 		 * The meta object literal for the '<em><b>Functions</b></em>' containment reference list feature.

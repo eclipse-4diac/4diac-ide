@@ -24,7 +24,6 @@ public final class Messages extends NLS {
 	public static String UpdateFBTypeCommand_type_mismatch;
 	public static String AdapterConnectionNotAllowed;
 	public static String ChangeBackgroundcolorCommand_LABEL_ChangeColor;
-	public static String ChangeDataTypeCommand_TypeMissing;
 	public static String ChangeValueCommand_LABEL_ChangeValue;
 	public static String ChangeValueCommand_ConstantValuesNoAllowedOnAny;
 	public static String CreateSubAppInstanceCommand_CreateSubapplicationInstance;
@@ -42,7 +41,6 @@ public final class Messages extends NLS {
 	public static String UntypeSubappCommand_Label;
 
 	public static String UpdateFBTypeCommand_Pin_not_found;
-
 
 	static {
 		// initialize resource bundle

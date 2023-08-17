@@ -4,10 +4,10 @@
 	<extension
 		point="org.eclipse.ui.editors">
 		<editor
-			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsEditor"
 			contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
 			default="true"
-			extensions="globalconsts"
+			extensions="globalconsts,gcf"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
 			name="GlobalConstants Editor">
 		</editor>
@@ -226,6 +226,10 @@
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
 			uriExtension="globalconsts">
 		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="gcf">
+		</resourceServiceProvider>
 	</extension>
 	<!-- marker definitions for org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants -->
 	<extension
@@ -431,4 +435,56 @@
 			type="text">
 		</fileTypes>
 	</extension>
+ <extension
+       point="org.eclipse.xtext.ui.shared.sharedStateContributingModule">
+    <module
+          class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsSharedModule">
+    </module>
+ </extension>
+ <extension
+       point="org.eclipse.ui.preferencePages">
+    <page
+          category="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
+          class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferencePage"
+          id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.contentAssist"
+          name="Content Assist">
+       <keywordReference
+             id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants">
+       </keywordReference>
+    </page>
+ </extension>
+ <extension
+       point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+    <propertyContributor
+          contributorId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants">
+       <propertyCategory
+             category="GlobalConstants">
+       </propertyCategory>
+    </propertyContributor>
+ </extension>
+ <extension
+       point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+    <propertyTabs
+          contributorId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants">
+       <propertyTab
+             category="GlobalConstants"
+             id="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsTypeInfoTab"
+             label="TypeInfo">
+       </propertyTab>
+    </propertyTabs>
+ </extension>
+ <extension
+       point="org.eclipse.ui.views.properties.tabbed.propertySections">
+    <propertySections
+          contributorId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants">
+       <propertySection
+             class="org.eclipse.fordiac.ide.globalconstantseditor.ui.properties.GlobalConstantsTypeInfoSection"
+             id="org.eclipse.fordiac.ide.globalconstantseditor.ui.properties.GlobalConstantsTypeInfoSection"
+             tab="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsTypeInfoTab">
+          <input
+                type="org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsEditor">
+          </input>
+       </propertySection>
+    </propertySections>
+ </extension>
 </plugin>

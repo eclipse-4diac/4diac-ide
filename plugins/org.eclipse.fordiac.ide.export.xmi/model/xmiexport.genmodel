@@ -17,6 +17,15 @@
     <genClasses ecoreClass="xmiexport.ecore#//XMIExportInitialValue">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportInitialValue/variable"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportInitialValue/expression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute xmiexport.ecore#//XMIExportInitialValue/value"/>
+    </genClasses>
+    <genClasses ecoreClass="xmiexport.ecore#//XMIExportTypeDeclarations">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportTypeDeclarations/typeDeclarations"/>
+    </genClasses>
+    <genClasses ecoreClass="xmiexport.ecore#//XMIExportTypeDeclaration">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportTypeDeclaration/variable"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportTypeDeclaration/typeDeclaration"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportTypeDeclaration/resultType"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

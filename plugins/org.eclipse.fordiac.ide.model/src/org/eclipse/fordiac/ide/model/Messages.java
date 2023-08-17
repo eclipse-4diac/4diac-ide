@@ -15,9 +15,7 @@ package org.eclipse.fordiac.ide.model;
 
 import org.eclipse.osgi.util.NLS;
 
-/**
- * The Class Messages.
- */
+/** The Class Messages. */
 @SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.messages"; //$NON-NLS-1$
@@ -51,6 +49,10 @@ public final class Messages extends NLS {
 	public static String DataTypeExporter_UNSUPPORTED_DATA_TYPE;
 
 	public static String DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE;
+
+	public static String DataTypeLibrary_InvalidMaxLengthInStringType;
+
+	public static String DataTypeLibrary_MissingDatatype;
 
 	/** The device importer_ erro r_ resource name has to be set. */
 	public static String DEVImporter_ERROR_ResourceNameHasToBeSet;
@@ -225,8 +227,6 @@ public final class Messages extends NLS {
 
 	public static String FBNetworkImporter_ConnectionTypeMismatch;
 
-	public static String TypeImporter_TypeMissing;
-
 	public static String VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE;
 	public static String VALIDATOR_INVALID_BOOL_LITERAL;
 	public static String VALIDATOR_TypeNotSupported;
@@ -266,7 +266,6 @@ public final class Messages extends NLS {
 	public static String ConnectingIncompatibleInterfaceTypes;
 
 	public static String UpdateFBTypeCommand_type_mismatch;
-
 
 	static {
 		// initialize resource bundle

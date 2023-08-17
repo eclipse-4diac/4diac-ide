@@ -12,16 +12,16 @@
       <Event Comment="Stop table driven event generation" Name="STOP" Type="Event"/>
     </EventInputs>
     <EventOutputs>
-      <Event Comment="Generated events" Name="EO" Type="Event">
+      <Event Comment="Generated events: N events at periods DT, starting at DT[0] after START" Name="EO" Type="Event">
         <With Var="CV"/>
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration ArraySize="4" Comment="" Name="DT" Type="TIME"/>
-      <VarDeclaration Comment="" Name="N" Type="UINT"/>
+      <VarDeclaration ArraySize="4" Comment="Periods between events" Name="DT" Type="TIME"/>
+      <VarDeclaration Comment="Number of events to generate" Name="N" Type="UINT"/>
     </InputVars>
     <OutputVars>
-      <VarDeclaration Comment="" Name="CV" Type="UINT"/>
+      <VarDeclaration Comment="Current event index, 0..N-1" Name="CV" Type="UINT"/>
     </OutputVars>
   </InterfaceList>
   <FBNetwork>

@@ -19,42 +19,51 @@ import java.util.HashMap;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.EccTraceHelper;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.ServiceSequenceSaveAndLoadHelper;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view.GetCoverageDialog;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class GetCoverageHandler extends AbstractHandler {
-
 	HashMap<String, Integer> visitedStates = new HashMap<>();
-
 	HashMap<ArrayList<String>, Integer> visitedPaths = new HashMap<>();
-
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
-
-		if (!selection.isEmpty()){
+		if (!selection.isEmpty()) {
 			clearLists();
-
 			for (final Object sel : selection) {
 				if (((EditPart) sel) instanceof final SequenceRootEditPart serviceSeqEP) {
 					for (final Object service : serviceSeqEP.getChildren()) {
 						if (service instanceof final ServiceSequenceEditPart serviceEP
-								&& serviceEP.getModel()
-								.getEventManager() instanceof final EventManager evntMngr) {
-							setCoverageData(evntMngr);
+								&& serviceEP.getModel() instanceof final ServiceSequence seq) {
+
+							checkForExistingEventManager(seq, serviceSeqEP.getFBType());
+							setCoverageData((EventManager) seq.getEventManager(), serviceEP.getModel());
+						}
+
+						if (service instanceof final ServiceSequenceEditPart serviceEP
+								&& serviceEP.getModel() instanceof final ServiceSequence seq) {
+
+							checkForExistingEventManager(seq, serviceSeqEP.getFBType());
+							setCoverageData((EventManager) seq.getEventManager(), serviceEP.getModel());
 						}
 					}
-				}
-				else if (((EditPart) sel) instanceof final ServiceSequenceEditPart serviceSeqEP
-						&& serviceSeqEP.getModel().getEventManager() instanceof final EventManager evntMngr) {
-					setCoverageData(evntMngr);
+				} else if (((EditPart) sel) instanceof final ServiceSequenceEditPart serviceEP
+						&& serviceEP.getModel() instanceof final ServiceSequence seq
+						&& serviceEP.getParent() instanceof final SequenceRootEditPart serviceSeqEP) {
+					checkForExistingEventManager(seq, serviceSeqEP.getFBType());
+					setCoverageData((EventManager) seq.getEventManager(), serviceEP.getModel());
 				}
 			}
 		}
@@ -62,27 +71,30 @@ public class GetCoverageHandler extends AbstractHandler {
 				visitedPaths);
 		dialog.open();
 
-		return null;
+		return Status.OK_STATUS;
 	}
 
-	private void setCoverageData(final EventManager evntMngr) {
-		final EccTraceHelper eccTraceHelper = new EccTraceHelper(evntMngr.getTransactions());
-
+	private void setCoverageData(final EventManager evntMngr, final ServiceSequence seq) {
+		final EccTraceHelper eccTraceHelper = new EccTraceHelper(evntMngr.getTransactions(),
+				((BasicFBType) seq.getService().getFBType()).getECC());
 		if (visitedStates.isEmpty()) {
 			eccTraceHelper.getAllPossibleStates().forEach(s -> {
 				visitedStates.put(s.getName(), 0);
 			});
 		}
-
 		if (visitedPaths.isEmpty()) {
 			eccTraceHelper.getAllPossiblePaths().forEach(p -> {
 				visitedPaths.put(p, 0);
 			});
 		}
-
 		eccTraceHelper.getAllStatesOfSequence().forEach(s -> visitedStates.merge(s.getName(), 1, Integer::sum));
-
 		eccTraceHelper.getAllPathsOfSequence().forEach(p -> visitedPaths.merge(p, 1, Integer::sum));
+	}
+
+	private void checkForExistingEventManager(final ServiceSequence seq, final FBType fbType) {
+		if (seq.getEventManager() == null) {
+			seq.setEventManager(ServiceSequenceSaveAndLoadHelper.loadEventManagerFromServiceSequenceFile(fbType, seq));
+		}
 	}
 
 	private void clearLists() {

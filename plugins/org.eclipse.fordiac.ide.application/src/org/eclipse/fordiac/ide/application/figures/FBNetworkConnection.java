@@ -136,7 +136,8 @@ public class FBNetworkConnection extends HideableConnection {
 			if (outputConnections.indexOf(getModel()) == 0) {
 				label = new GroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()), this);
 			} else {
-				label = new FanOutGroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()), this, outputConnections);
+				label = new FanOutGroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()),
+						this, outputConnections);
 			}
 		} else {
 			label = new FBNetworkConnectionLabel(true);
@@ -195,7 +196,8 @@ public class FBNetworkConnection extends HideableConnection {
 		}
 	}
 
-	private String createLabelText(final IInterfaceElement ie, final EList<Connection> connections, final boolean isDestLabel) {
+	private String createLabelText(final IInterfaceElement ie, final EList<Connection> connections,
+			final boolean isDestLabel) {
 		final List<Connection> hiddenConnections = getHiddenConnections(connections);
 		if (!(isDestLabel && isFanOut()) && hiddenConnections.size() > 1) {
 			// we have more then one hidden connection so we show the number
@@ -210,40 +212,79 @@ public class FBNetworkConnection extends HideableConnection {
 	private String generateIEString(final IInterfaceElement ie) {
 		final StringBuilder builder = generateFullIEString(ie);
 		if (builder.length() > maxWidth) {
-			builder.delete(0, builder.length() - maxWidth);
-			builder.insert(0, "\u2026"); //$NON-NLS-1$
+			switch (pinLabelStyle) {
+			case DiagramPreferences.PIN_LABEL_STYLE_PIN_COMMENT: {
+				builder.delete(maxWidth, builder.length()); // start inclusive, end exclusive
+				builder.insert(maxWidth, "\u2026"); //$NON-NLS-1$
+				break;
+			}
+			case DiagramPreferences.PIN_LABEL_STYLE_PIN_NAME, DiagramPreferences.PIN_LABEL_STYLE_SRC_PIN_NAME: {
+				builder.delete(0, builder.length() - maxWidth);
+				builder.insert(0, "\u2026"); //$NON-NLS-1$
+				break;
+			}
+			default:
+				break;
+			}
 		}
 		return builder.toString();
 	}
 
 	private IFigure createSourceLabelToolTip(final EList<Connection> connections) {
 		final List<Connection> hiddenConnections = getHiddenConnections(connections);
-		if (hiddenConnections.size() > 1) {
+		if (!hiddenConnections.isEmpty()) {
 			final StringBuilder builder = new StringBuilder();
 			hiddenConnections.forEach(con -> {
 				if (con.getDestination() != null) {
-					builder.append(generateFullIEString(con.getDestination()));
-					builder.append('\n');
+					// < block instance name >.< pin name >
+					builder.append(con.getDestinationElement().getName() + "." + con.getDestination().getName()); //$NON-NLS-1$
+					builder.append(System.lineSeparator());
+
+					// < pin comment >
+					if (con.getDestination().getComment() != null && !con.getDestination().getComment().isEmpty()
+							&& !con.getDestination().getComment().isBlank()) {
+						builder.append(con.getDestination().getComment());
+						builder.append(System.lineSeparator());
+					}
+
+					// < name of the group, where the block of the connected pin is located >
+					if (con.getDestinationElement().isInGroup()) {
+						builder.append(con.getDestinationElement().getGroup().getName());
+						builder.append(System.lineSeparator());
+					}
 				}
+				builder.append(System.lineSeparator());
 			});
-			builder.deleteCharAt(builder.length() - 1);
-			return new ConLabelToolTip(builder.toString());
+			return new ConLabelToolTip(builder.toString().trim());
 		}
 		return null;
 	}
 
 	private IFigure createDstLabelToolTip(final EList<Connection> connections) {
 		final List<Connection> hiddenConnections = getHiddenConnections(connections);
-		if (hiddenConnections.size() > 1) {
+		if (!hiddenConnections.isEmpty()) {
 			final StringBuilder builder = new StringBuilder();
 			hiddenConnections.forEach(con -> {
 				if (con.getSource() != null) {
-					builder.append(generateFullIEString(con.getSource()));
-					builder.append('\n');
+					final IInterfaceElement ie = con.getSource();
+					if (ie.getFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
+						builder.append(ie.getFBNetworkElement().getName());
+						builder.append('.');
+					}
+					builder.append(ie.getName());
+					builder.append(System.lineSeparator());
+					if (ie.getComment() != null && !ie.getComment().isEmpty() && !ie.getComment().isBlank()) {
+						builder.append(ie.getComment());
+						builder.append(System.lineSeparator());
+					}
+					if (ie.getFBNetworkElement().isInGroup()) {
+						builder.append(ie.getFBNetworkElement().getGroup().getName());
+						builder.append(System.lineSeparator());
+					}
+					builder.append(System.lineSeparator());
 				}
 			});
-			builder.deleteCharAt(builder.length() - 1);
-			return new ConLabelToolTip(builder.toString());
+			return new ConLabelToolTip(builder.toString().trim());
 		}
 		return null;
 	}
@@ -266,11 +307,9 @@ public class FBNetworkConnection extends HideableConnection {
 	@SuppressWarnings("unchecked")
 	int getMaxFanOutLabelWidth() {
 		final InterfaceEditPart source = (InterfaceEditPart) connEP.getSource();
-		return ((List<ConnectionEditPart>) source.getSourceConnections())
-				.stream()
+		return ((List<ConnectionEditPart>) source.getSourceConnections()).stream()
 				.filter(conn -> !conn.getModel().isVisible())
-				.map(ep -> ep.getFigure().getSourceDecoration().getLabel().getBounds().width)
-				.max(Integer::compare)
+				.map(ep -> ep.getFigure().getSourceDecoration().getLabel().getBounds().width).max(Integer::compare)
 				.orElse(0);
 	}
 

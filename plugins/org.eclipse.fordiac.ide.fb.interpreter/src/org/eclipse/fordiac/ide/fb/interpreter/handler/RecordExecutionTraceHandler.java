@@ -73,7 +73,7 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 			try {
 				folder.create(false, false, null);
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage());
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 		final IFile file = folder.getFile(
@@ -86,7 +86,7 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 
 			openEditorForGeneratedFile(event, file);
 		} catch (final IOException e) {
-			FordiacLogHelper.logError(e.getMessage());
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
 		return Status.OK_STATUS;
@@ -98,7 +98,8 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 		try {
 			page.openEditor(new FileEditorInput(file), desc.getId());
 		} catch (final PartInitException e) {
-			FordiacLogHelper.logError(e.getMessage());
+
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 

@@ -70,6 +70,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression;
@@ -120,6 +121,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EClass stCoreSourceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stImportEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -665,6 +673,26 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	@Override
 	public EReference getSTCoreSource_Statements() {
 		return (EReference)stCoreSourceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTImport() {
+		return stImportEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSTImport_ImportedNamespace() {
+		return (EAttribute)stImportEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -2272,6 +2300,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stCoreSourceEClass = createEClass(ST_CORE_SOURCE);
 		createEReference(stCoreSourceEClass, ST_CORE_SOURCE__STATEMENTS);
 
+		stImportEClass = createEClass(ST_IMPORT);
+		createEAttribute(stImportEClass, ST_IMPORT__IMPORTED_NAMESPACE);
+
 		stVarDeclarationBlockEClass = createEClass(ST_VAR_DECLARATION_BLOCK);
 		createEAttribute(stVarDeclarationBlockEClass, ST_VAR_DECLARATION_BLOCK__CONSTANT);
 		createEReference(stVarDeclarationBlockEClass, ST_VAR_DECLARATION_BLOCK__VAR_DECLARATIONS);
@@ -2565,6 +2596,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEClass(stCoreSourceEClass, STCoreSource.class, "STCoreSource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTCoreSource_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STCoreSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
+		initEClass(stImportEClass, STImport.class, "STImport", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getSTImport_ImportedNamespace(), ecorePackage.getEString(), "importedNamespace", null, 0, 1, STImport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(stVarDeclarationBlockEClass, STVarDeclarationBlock.class, "STVarDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getSTVarDeclarationBlock_Constant(), ecorePackage.getEBoolean(), "constant", null, 0, 1, STVarDeclarationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTVarDeclarationBlock_VarDeclarations(), this.getSTVarDeclaration(), null, "varDeclarations", null, 0, -1, STVarDeclarationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -2668,7 +2702,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEReference(getSTElsePart_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STElsePart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stForStatementEClass, STForStatement.class, "STForStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getSTForStatement_Variable(), this.getSTVarDeclaration(), null, "variable", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTForStatement_Variable(), this.getSTExpression(), null, "variable", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTForStatement_From(), this.getSTExpression(), null, "from", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTForStatement_To(), this.getSTExpression(), null, "to", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTForStatement_By(), this.getSTExpression(), null, "by", null, 0, 1, STForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

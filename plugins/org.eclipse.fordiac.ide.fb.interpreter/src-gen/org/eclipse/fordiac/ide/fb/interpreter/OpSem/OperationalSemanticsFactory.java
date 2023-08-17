@@ -75,6 +75,12 @@ public interface OperationalSemanticsFactory extends EFactory {
 	 * @generated */
 	EccTrace createEccTrace();
 
+	/** Returns a new object of class '<em>Transition Trace</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return a new object of class '<em>Transition Trace</em>'.
+	 * @generated */
+	TransitionTrace createTransitionTrace();
+
 	/** Returns the package supported by this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @return the package supported by this factory.

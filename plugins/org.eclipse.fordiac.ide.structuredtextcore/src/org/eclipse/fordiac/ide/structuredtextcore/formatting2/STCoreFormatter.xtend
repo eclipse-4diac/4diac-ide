@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
@@ -81,6 +82,12 @@ class STCoreFormatter extends AbstractFormatter2 {
 		for (sTStatement : sTCoreSource.statements) {
 			sTStatement.format
 		}
+	}
+
+	/** Formats the STImport */
+	def dispatch void format(STImport stImport, extension IFormattableDocument document) {
+		stImport.regionFor.keyword(STImportAccess.IMPORTKeyword_0).prepend[noIndentation].append[oneSpace]
+		stImport.regionFor.keyword(STImportAccess.semicolonKeyword_2).prepend[noSpace]
 	}
 
 	/** Formats the STVarDeclarationBlocks */
@@ -642,12 +649,14 @@ class STCoreFormatter extends AbstractFormatter2 {
 				"}(?!\\S)[\r\n]*))");
 		val matcher = pattern.matcher(commentString.replace("$", "\\$"))
 
-		var replacement = (isML ? "(" : "") + matcher.replaceAll [ m |
+		var replacement = (isML ? "(* " : "") + matcher.replaceAll [ m |
 			var g = m.group(1) ?: m.group(2)
 			(isML ? spaceBeforeComment : "") + (isML ? " * " : "// ") + (
 				g
 			) + (g.indexOf(lineSeparator) === -1 ? lineSeparator : "")
 		].trim + (isML ? " *)" : lineSeparator);
+
+		replacement = replacement.replaceFirst("^\\(\\*\\s*\\* ", "(* ");
 
 		replacement = replacement.replaceAll(lineSeparator + "(?=" + lineSeparator + ")",
 			lineSeparator + spaceBeforeComment + " * ")

@@ -25,6 +25,7 @@ package org.eclipse.fordiac.ide.datatypeeditor.editors;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -45,15 +46,13 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.dialog.FBUpdateDialog;
-import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -218,12 +217,12 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	}
 
 	private void updateTypes() {
-		final InstanceSearch search = StructDataTypeSearch
-				.createStructInterfaceSearch((StructuredType) dataTypeEntry.getTypeEditable());
-		final Set<INamedElement> fbTypes = search.performTypeLibBlockSearch(dataTypeEntry.getTypeLibrary());
 
-		fbTypes.stream().filter(SubAppType.class::isInstance).map(SubAppType.class::cast).forEach(sApp -> {
-			sApp.getInterfaceList().getAllInterfaceElements().stream()
+		final Set<FBType> fbTypes = structSaveDialog.getCollectedFBs().stream().filter(FBType.class::isInstance)
+				.map(FBType.class::cast).collect(Collectors.toSet());
+
+		fbTypes.stream().forEach(fbType -> {
+			fbType.getInterfaceList().getAllInterfaceElements().stream()
 					.filter(i -> i.getTypeName().equals(dataTypeEntry.getTypeName()))
 					.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(el -> {
 						el.setType(dataTypeEntry.getType());
@@ -231,17 +230,20 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 							el.getValue().setValue("");
 						}
 					});
-			sApp.getTypeEntry().save();
+			fbType.getTypeEntry().save();
+
 		});
 
 	}
 
 	private void updateInstances() {
-		structSaveDialog.getCollectedFBs().stream().forEach(subApp -> {
-			if (subApp instanceof final SubApp s && !s.isTyped()) {
-				udpateUntypedSubapps(subApp);
-			} else {
-				new UpdateFBTypeCommand(subApp, subApp.getTypeEntry()).execute();
+		structSaveDialog.getCollectedFBs().stream().forEach(instance -> {
+			if (instance instanceof final FBNetworkElement s) {
+				if (s instanceof final SubApp subApp && !subApp.isTyped()) {
+					udpateUntypedSubapps(subApp);
+				} else {
+					new UpdateFBTypeCommand(s, s.getTypeEntry()).execute();
+				}
 			}
 		});
 
@@ -253,7 +255,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(el -> {
 					el.setType(dataTypeEntry.getType());
 					if (el.getValue() != null && !el.getValue().getValue().isBlank()) { // as a fallback we just reset
-																						// the current value
+																						 // the current value
 						el.getValue().setValue("");
 					}
 				});

@@ -8,19 +8,38 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.globalconstantseditor.ui; singleton
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.fordiac.ide.globalconstantseditor.ide,
+ org.eclipse.gef,
+ org.eclipse.ui.ide,
  org.eclipse.xtext.ui,
  org.eclipse.xtext.ui.shared,
  org.eclipse.xtext.ui.codetemplates.ui,
  org.eclipse.compare,
  org.eclipse.xtext.builder,
+ org.eclipse.ui.views.properties.tabbed,
  org.eclipse.fordiac.ide.structuredtextcore,
  org.eclipse.fordiac.ide.structuredtextcore.ui,
+ org.eclipse.fordiac.ide.structuredtextcore.ide,
+ org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.model,
- org.eclipse.fordiac.ide.structuredtextcore.ide
+ org.eclipse.fordiac.ide.model.commands,
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.ui,
+ org.eclipse.ui.editors
 Import-Package: org.apache.log4j,
+ org.eclipse.ui,
  org.eclipse.xtext.ui.codemining;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Export-Package: org.eclipse.fordiac.ide.globalconstantseditor.ui.contentassist,
+Export-Package: org.eclipse.fordiac.ide.globalconstantseditor.ui,
+ org.eclipse.fordiac.ide.globalconstantseditor.ui.codemining,
+ org.eclipse.fordiac.ide.globalconstantseditor.ui.contentassist,
+ org.eclipse.fordiac.ide.globalconstantseditor.ui.document,
+ org.eclipse.fordiac.ide.globalconstantseditor.ui.editor,
+ org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.reconciler,
+ org.eclipse.fordiac.ide.globalconstantseditor.ui.internal,
+ org.eclipse.fordiac.ide.globalconstantseditor.ui.labeling,
+ org.eclipse.fordiac.ide.globalconstantseditor.ui.outline,
+ org.eclipse.fordiac.ide.globalconstantseditor.ui.properties,
  org.eclipse.fordiac.ide.globalconstantseditor.ui.quickfix,
- org.eclipse.fordiac.ide.globalconstantseditor.ui.internal
+ org.eclipse.fordiac.ide.globalconstantseditor.ui.resource
 Bundle-Activator: org.eclipse.fordiac.ide.globalconstantseditor.ui.internal.GlobalconstantseditorActivator

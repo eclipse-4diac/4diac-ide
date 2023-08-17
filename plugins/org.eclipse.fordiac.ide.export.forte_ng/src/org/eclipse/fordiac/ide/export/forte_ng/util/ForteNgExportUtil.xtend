@@ -67,6 +67,7 @@ final class ForteNgExportUtil {
 					val fixed = subrange.setLowerLimit && subrange.setUpperLimit
 					'''«IF fixed»CIEC_ARRAY_FIXED«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«result»«IF fixed», «subrange.lowerLimit», «subrange.upperLimit»«ENDIF»>'''
 				].toString
+			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
 			DataType: '''CIEC_«type.generateTypeNamePlain»«IF GenericTypes.isAnyType(type)»_VARIANT«ENDIF»'''
 			default:
 				type.name
@@ -75,16 +76,32 @@ final class ForteNgExportUtil {
 
 	def static CharSequence generateTypeNameAsParameter(INamedElement type) {
 		switch (type) {
+			AdapterType: '''FORTE_«type.generateTypeNamePlain»'''
 			ArrayType:
 				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
 					'''CIEC_ARRAY_COMMON<«result»>'''
 				].toString
+			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
+			DataType: '''CIEC_«type.generateTypeNamePlain»'''
 			default:
-				type.generateTypeName
+				type.name
 		}
 	}
 
-	def static String generateTypeNamePlain(DataType type) {
+	def static CharSequence generateTypeSpec(INamedElement type) {
+		switch (type) {
+			ArrayType:
+				type.subranges.reverseView.fold(type.baseType.generateTypeNamePlain.FORTEStringId) [ result, subrange |
+					'''«type.generateTypeNamePlain.FORTEStringId», static_cast<CStringDictionary::TStringId>(«subrange.lowerLimit»), static_cast<CStringDictionary::TStringId>(«subrange.upperLimit»), «result»'''
+				].toString
+			DataType:
+				type.generateTypeNamePlain.FORTEStringId
+			default:
+				type.name
+		}
+	}
+
+	def static String generateTypeNamePlain(INamedElement type) {
 		switch (type) {
 			TimeType: "TIME"
 			LtimeType: "LTIME"
@@ -100,6 +117,8 @@ final class ForteNgExportUtil {
 			default: type.name
 		}
 	}
+
+	def static CharSequence getFORTEStringId(String s) '''g_nStringId«s»'''
 
 	static final Pattern END_COMMENT_PATTERN = Pattern.compile("\\*/")
 

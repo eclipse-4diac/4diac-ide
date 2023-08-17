@@ -16,8 +16,10 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
+	public static String XMIExportFilter_InitialValueError;
 	public static String XMIExportFilter_OverwriteDialogMessage;
 	public static String XMIExportFilter_OverwriteDialogTitle;
+	public static String XMIExportFilter_ResultTypeError;
 	public static String XMIExportFilter_UnknownFile;
 	static {
 		// initialize resource bundle

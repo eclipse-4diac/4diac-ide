@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
-<FBType Comment="Adds two REAL values" Name="FB_RANDOM">
+<FBType Comment="Generate a REAL Randomly" Name="FB_RANDOM">
   <Identification Classification="Mathematic" Function="RANDOM" Standard="61499-1" Type="Mathematical function"
   		Description="Copyright (c) 2012 Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
   <VersionInfo Author="Gerhard Ebenhofer" Date="2012-05-31" Organization="Profactor GmbH" Version="1.0"/>

@@ -17,6 +17,7 @@
  *  Martin Jobst
  *    - gracefully handle exceptions during load or save
  *    - add function FB type
+ *    - add global constants
  *  Fabio Gandolfi
  *    - load types via inputstream
  ********************************************************************************/
@@ -41,6 +42,7 @@ import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FCTImporter;
+import org.eclipse.fordiac.ide.model.dataimport.GlobalConstantsImporter;
 import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
@@ -74,7 +76,12 @@ public class FordiacTypeResource extends ResourceImpl {
 		try {
 			final CommonElementImporter importer = createImporterByFileExtensions(inputStream, typeFile);
 			importer.loadElement();
-			getContents().add(importer.getElement());
+			final LibraryElement element = importer.getElement();
+			final var typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile);
+			if (typeEntryForFile != null) {
+				element.setTypeEntry(typeEntryForFile);
+			}
+			getContents().add(element);
 		} catch (final Exception e) {
 			throw new IOWrappedException(e);
 		}
@@ -107,30 +114,20 @@ public class FordiacTypeResource extends ResourceImpl {
 	}
 
 	private static CommonElementImporter createImporterByFileExtensions(final InputStream inputStream,
-			final IFile typeFile)
-					throws IOException {
+			final IFile typeFile) throws IOException {
 		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(typeFile.getProject());
-		switch (typeFile.getFileExtension().toUpperCase()) {
-		case TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING:
-			return new SystemImporter(inputStream, typeLib);
-		case TypeLibraryTags.FB_TYPE_FILE_ENDING:
-			return new FBTImporter(inputStream, typeLib);
-		case TypeLibraryTags.FC_TYPE_FILE_ENDING:
-			return new FCTImporter(inputStream, typeLib);
-		case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING:
-			return new ADPImporter(inputStream, typeLib);
-		case TypeLibraryTags.DATA_TYPE_FILE_ENDING:
-			return new DataTypeImporter(inputStream, typeLib);
-		case TypeLibraryTags.DEVICE_TYPE_FILE_ENDING:
-			return new DEVImporter(inputStream, typeLib);
-		case TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING:
-			return new RESImporter(inputStream, typeLib);
-		case TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING:
-			return new SEGImporter(inputStream, typeLib);
-		case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING:
-			return new SubAppTImporter(inputStream, typeLib);
-		default:
-			throw new IOException("Could not load/import file: " + typeFile.toString()); //$NON-NLS-1$
-		}
+		return switch (typeFile.getFileExtension().toUpperCase()) {
+		case TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING -> new SystemImporter(inputStream, typeLib);
+		case TypeLibraryTags.FB_TYPE_FILE_ENDING -> new FBTImporter(inputStream, typeLib);
+		case TypeLibraryTags.FC_TYPE_FILE_ENDING -> new FCTImporter(inputStream, typeLib);
+		case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING -> new ADPImporter(inputStream, typeLib);
+		case TypeLibraryTags.DATA_TYPE_FILE_ENDING -> new DataTypeImporter(inputStream, typeLib);
+		case TypeLibraryTags.DEVICE_TYPE_FILE_ENDING -> new DEVImporter(inputStream, typeLib);
+		case TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING -> new RESImporter(inputStream, typeLib);
+		case TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING -> new SEGImporter(inputStream, typeLib);
+		case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING -> new SubAppTImporter(inputStream, typeLib);
+		case TypeLibraryTags.GLOBAL_CONST_FILE_ENDING -> new GlobalConstantsImporter(inputStream, typeLib);
+		default -> throw new IOException("Could not load/import file: " + typeFile.toString()); //$NON-NLS-1$
+		};
 	}
 }

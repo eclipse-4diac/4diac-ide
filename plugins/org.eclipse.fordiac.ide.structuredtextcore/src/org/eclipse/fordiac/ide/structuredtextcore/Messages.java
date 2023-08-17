@@ -19,6 +19,7 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextcore.messages"; //$NON-NLS-1$
+	public static String STCoreControlFlowValidator_VariableUndefinedAfterForLoop;
 	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedCallable;
 	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedCallableForType;
 	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedDataType;
@@ -35,6 +36,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_Argument_Not_Assignable;
 	public static String STCoreValidator_Assignment_Invalid_Left_Side;
 	public static String STCoreValidator_Attempting_To_Call_Standard_Function_With_Formal_Arguments;
+	public static String STCoreValidator_AttemptingToModifyControlVariable;
 	public static String STCoreValidator_Feature_Not_Callable;
 	public static String STCoreValidator_For_Variable_Not_Integral_Type;
 	public static String STCoreValidator_Mixing_Formal_And_NonFormal;
@@ -48,6 +50,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_UnnecessaryNarrowConversion;
 	public static String STCoreValidator_UnnecessaryWideConversion;
 	public static String STCoreValidator_Unqualified_FB_Call_On_FB_With_Input_Event_Size_Not_One;
+	public static String STCoreValidator_UsingNonTemporaryAsControlVariable;
 	public static String STCoreValidator_NameNotVisible;
 	public static String STCoreValidator_CallableHasNoReturnType;
 	public static String STCoreValidator_BitAccessOutOfRange;
@@ -55,6 +58,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_BitAccessInvalidForReciever;
 	public static String STCoreValidator_BitAccessExpressionNotOfTypeAnyInt;
 	public static String STCoreValidator_Duplicate_Variable_Name;
+	public static String STCoreValidator_IndexRangeExpressionInvalid;
 	public static String STCoreValidator_IndexRangeTypeInvalid;
 	public static String STCoreValidator_NonAnyStringNotMaxLengthSettingNotAllowed;
 	public static String STCoreValidator_NonConstantExpressionInVariableDeclaration;

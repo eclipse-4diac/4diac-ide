@@ -12,34 +12,5 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gitlab;
 
-public class Project {
-	
-	private Long id;
-	private String name;
-	private String path;
-	
-	public Project(Long id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	public String getName() {
-		return name;
-	}
-	public String getPath() {
-		return path;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public void setPath(String path) {
-		this.path = path;
-	}
-	
+public record Project(Long id, String name) {
 }

@@ -54,6 +54,15 @@ public interface STCoreFactory extends EFactory {
 	STCoreSource createSTCoreSource();
 
 	/**
+	 * Returns a new object of class '<em>ST Import</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Import</em>'.
+	 * @generated
+	 */
+	STImport createSTImport();
+
+	/**
 	 * Returns a new object of class '<em>ST Var Declaration Block</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

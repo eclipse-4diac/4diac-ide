@@ -21,11 +21,11 @@
 		</EventOutputs>
 		<InputVars>
 			<VarDeclaration Name="DT" Type="TIME" Comment="" ArraySize="4"/>
-			<VarDeclaration Name="N" Type="UINT" Comment=""/>
+			<VarDeclaration Name="N" Type="UINT" Comment="Actual number of time steps"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="DTO" Type="TIME" Comment=""/>
-			<VarDeclaration Name="CV" Type="UINT" Comment=""/>
+			<VarDeclaration Name="DTO" Type="TIME" Comment="Current delay interval"/>
+			<VarDeclaration Name="CV" Type="UINT" Comment="Current event index, 0..N-1"/>
 		</OutputVars>
 	</InterfaceList>
 	<BasicFB>

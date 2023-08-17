@@ -48,7 +48,8 @@ public final class FordiacMessages extends NLS {
 	public static String FBNetwork;  // NOSONAR
 	public static String Function;  // NOSONAR
 	public static String Header;  // NOSONAR
-	public static String Identification;  // NOSONAR
+	public static String Height;  // NOSONAR
+	public static String Identification; // NOSONAR
 	public static String InitialValue;  // NOSONAR
 	public static String Inputs;  // NOSONAR
 	public static String InstanceComment;  // NOSONAR
@@ -70,6 +71,7 @@ public final class FordiacMessages extends NLS {
 	public static String Resource;  // NOSONAR
 	public static String SelectType;  // NOSONAR
 	public static String Standard;  // NOSONAR
+	public static String Size;  // NOSONAR
 	public static String SystemName;  // NOSONAR
 	public static String Target;  // NOSONAR
 	public static String Type;  // NOSONAR
@@ -85,6 +87,7 @@ public final class FordiacMessages extends NLS {
 	public static String VersionInfo;  // NOSONAR
 	public static String Visible;  // NOSONAR
 	public static String VarConfig;  // NOSONAR
+	public static String Width;  // NOSONAR
 	public static String With;  // NOSONAR
 	public static String Constants;  // NOSONAR
 
@@ -110,6 +113,9 @@ public final class FordiacMessages extends NLS {
 	public static String TableCopyPaste_TEXT_Paste;  // NOSONAR
 	public static String TableCopyPaste_TEXT_Cut;  // NOSONAR
 	public static String NatTable_TEXT_Paste;  // NOSONAR
+	
+	public static String Group_LABEL_LockSize;  // NOSONAR
+	public static String Group_TOOLTIP_DisableAutoResize;  // NOSONAR
 
 	static {
 		// initialize resource bundle

@@ -22,7 +22,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
@@ -54,7 +53,7 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 	 * @ordered */
 	protected EList<EventOccurrence> outputEventOccurrences;
 
-	/** The cached value of the '{@link #getInputVariables() <em>Input Variables</em>}' reference list. <!--
+	/** The cached value of the '{@link #getInputVariables() <em>Input Variables</em>}' containment reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getInputVariables()
@@ -103,7 +102,7 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 	@Override
 	public EList<VarDeclaration> getInputVariables() {
 		if (inputVariables == null) {
-			inputVariables = new EObjectResolvingEList<>(VarDeclaration.class, this,
+			inputVariables = new EObjectContainmentEList.Resolving<>(VarDeclaration.class, this,
 					OperationalSemanticsPackage.FB_TRANSACTION__INPUT_VARIABLES);
 		}
 		return inputVariables;
@@ -196,6 +195,8 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 		switch (featureID) {
 		case OperationalSemanticsPackage.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES:
 			return ((InternalEList<?>) getOutputEventOccurrences()).basicRemove(otherEnd, msgs);
+		case OperationalSemanticsPackage.FB_TRANSACTION__INPUT_VARIABLES:
+			return ((InternalEList<?>) getInputVariables()).basicRemove(otherEnd, msgs);
 		case OperationalSemanticsPackage.FB_TRANSACTION__TRACE:
 			return basicSetTrace(null, msgs);
 		default:

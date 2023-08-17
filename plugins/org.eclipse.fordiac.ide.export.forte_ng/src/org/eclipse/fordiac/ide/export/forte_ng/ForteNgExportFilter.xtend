@@ -51,6 +51,7 @@ class ForteNgExportFilter extends TemplateExportFilter {
 
 	public static final String OPTION_TYPE = "type"
 	public static final String OPTION_TYPE_PARAM = "type_param"
+	public static final String OPTION_TYPE_SPEC = "type_spec"
 	public static final String OPTION_HEADER = "header"
 
 	override protected getTemplates(String name, EObject source) {

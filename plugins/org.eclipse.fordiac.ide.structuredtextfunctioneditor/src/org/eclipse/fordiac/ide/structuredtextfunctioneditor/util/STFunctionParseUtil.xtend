@@ -33,9 +33,13 @@ import org.eclipse.xtext.validation.Issue
 import static extension org.eclipse.fordiac.ide.structuredtextcore.util.STCoreParseUtil.*
 
 final class STFunctionParseUtil {
-	static final URI SYNTHETIC_URI = URI.createURI("__synthetic.stfunc")
-	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.
-		getResourceServiceProvider(SYNTHETIC_URI)
+	static final URI SYNTHETIC_URI_FCT = URI.createURI("__synthetic.stfunc")
+	static final IResourceServiceProvider SERVICE_PROVIDER_FCT = IResourceServiceProvider.Registry.INSTANCE.
+		getResourceServiceProvider(SYNTHETIC_URI_FCT)
+
+	static final URI SYNTHETIC_URI_GCF = URI.createURI("__synthetic.globalconsts")
+	static final IResourceServiceProvider SERVICE_PROVIDER_GCF = IResourceServiceProvider.Registry.INSTANCE.
+		getResourceServiceProvider(SYNTHETIC_URI_GCF)
 
 	private new() {
 	}
@@ -53,7 +57,7 @@ final class STFunctionParseUtil {
 
 	def static STFunctionSource parse(FunctionFBType fbType, List<String> errors, List<String> warnings,
 		List<String> infos) {
-		extension val partitioner = SERVICE_PROVIDER.get(STFunctionPartitioner)
+		extension val partitioner = SERVICE_PROVIDER_FCT.get(STFunctionPartitioner)
 		fbType.combine.parseInternal(fbType.eResource?.URI, fbType.name, fbType, errors, warnings, infos)?.
 			rootASTElement as STFunctionSource
 	}
@@ -64,7 +68,7 @@ final class STFunctionParseUtil {
 	}
 
 	def static STFunctionSource parse(URI uri, List<String> errors, List<String> warnings, List<String> infos) {
-		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
+		val resourceSet = SERVICE_PROVIDER_FCT.get(ResourceSet) as XtextResourceSet
 		resourceSet.loadOptions.putAll(#{
 			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
 			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
@@ -84,9 +88,10 @@ final class STFunctionParseUtil {
 	}
 
 	def private static IParseResult parseInternal(String text, URI uri, LibraryElement type, List<Issue> issues) {
-		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
-		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("fct", SERVICE_PROVIDER.get(IResourceFactory))
-		SERVICE_PROVIDER.parse(resourceSet, text, null, type, null, issues, uri ?: SYNTHETIC_URI, #{
+		val resourceSet = SERVICE_PROVIDER_FCT.get(ResourceSet) as XtextResourceSet
+		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("fct", SERVICE_PROVIDER_FCT.get(IResourceFactory))
+		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("gcf", SERVICE_PROVIDER_GCF.get(IResourceFactory))
+		SERVICE_PROVIDER_FCT.parse(resourceSet, text, null, type, null, issues, uri ?: SYNTHETIC_URI_FCT, #{
 			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
 			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE,
 			STCoreResource.OPTION_PLAIN_ST -> Boolean.TRUE

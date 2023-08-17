@@ -14,6 +14,8 @@
 package org.eclipse.fordiac.ide.emf.compare.provider;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.CFBInstanceItemProviderForSystem;
 
@@ -26,5 +28,14 @@ public class CFBInstanceItemProviderEmfCompare extends CFBInstanceItemProviderFo
 	@Override
 	protected FBNetwork getFBNetwork(final Object object) {
 		return null;
+	}
+
+	@Override
+	public Object getParent(final Object object) {
+		final EObject cont = ((CFBInstance) object).eContainer();
+		if (cont != null) {
+			return cont;
+		}
+		return super.getParent(object);
 	}
 }

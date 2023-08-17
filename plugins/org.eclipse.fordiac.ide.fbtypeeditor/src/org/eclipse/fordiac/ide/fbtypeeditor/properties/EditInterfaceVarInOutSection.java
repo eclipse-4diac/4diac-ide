@@ -129,12 +129,20 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 		final VarDeclaration rowItem = provider.getRowObject(rowPosition);
 		switch (columnPosition) {
 		case I4diacNatTableUtil.TYPE:
-			if (rowItem.getType() instanceof ErrorMarkerDataType) {
+			if (rowItem.getType() instanceof ErrorMarkerDataType
+					|| (rowItem.isArray() && rowItem.getArraySize().hasError())) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 			}
 			if (isEditable()) {
-
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+				configLabels.addLabel(TypeDeclarationEditorConfiguration.TYPE_DECLARATION_CELL);
+			}
+			break;
+		case I4diacNatTableUtil.INITIAL_VALUE:
+			if (isEditable()) {
+				if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
+					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+				}
+				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
 			}
 			break;
 		case I4diacNatTableUtil.NAME, I4diacNatTableUtil.COMMENT:

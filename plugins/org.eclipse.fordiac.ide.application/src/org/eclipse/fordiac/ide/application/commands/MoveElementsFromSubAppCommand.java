@@ -117,8 +117,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 	}
 
 	private void removeContainedGroupElementsFromSubapp(final FBNetworkElement el) {
-		if (el instanceof Group) {
-			final Group group = (Group) el;
+		if (el instanceof final Group group) {
 			group.getGroupElements().forEach(this::removeElementFromSubapp);
 		}
 	}
@@ -157,8 +156,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 	}
 
 	private void addGroupElements(final FBNetworkElement el) {
-		if (el instanceof Group) {
-			final Group group = (Group) el;
+		if (el instanceof final Group group) {
 			group.getGroupElements().forEach(this::addElementToDestination);
 		}
 	}
@@ -204,6 +202,8 @@ public class MoveElementsFromSubAppCommand extends Command {
 		deleteConnectionsAndInterfaceElements.undo();
 		elements.forEach(this::undoRemoveElementFromSubapp);
 		unmappingCmds.undo();
+		// check for connections beiing displayed right (broken or not)
+		elements.forEach(FBNetworkElement::checkConnections);
 	}
 
 	private void undoRemoveElementFromSubapp(final FBNetworkElement element) {

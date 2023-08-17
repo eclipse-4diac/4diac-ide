@@ -171,7 +171,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @ordered */
 	int BASIC_FB_TYPE_RUNTIME__BASICFBTYPE = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 0;
 
-	/** The feature id for the '<em><b>Active State</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Active State</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered */
@@ -296,8 +296,8 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @ordered */
 	int FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES = TRANSACTION_FEATURE_COUNT + 0;
 
-	/** The feature id for the '<em><b>Input Variables</b></em>' reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The feature id for the '<em><b>Input Variables</b></em>' containment reference list. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered */
@@ -400,7 +400,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 *
 	 * @generated
 	 * @ordered */
-	int ECC_TRACE__TRANSITIONS = TRACE_FEATURE_COUNT + 0;
+	int ECC_TRACE__TRANSITION_TRACES = TRACE_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Ecc Trace</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -408,6 +408,47 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int ECC_TRACE_FEATURE_COUNT = TRACE_FEATURE_COUNT + 1;
+
+	/** The meta object id for the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransitionTraceImpl
+	 * <em>Transition Trace</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransitionTraceImpl
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getTransitionTrace()
+	 * @generated */
+	int TRANSITION_TRACE = 12;
+
+	/** The feature id for the '<em><b>Source State</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int TRANSITION_TRACE__SOURCE_STATE = 0;
+
+	/** The feature id for the '<em><b>Destination State</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 *
+	 * @generated
+	 * @ordered */
+	int TRANSITION_TRACE__DESTINATION_STATE = 1;
+
+	/** The feature id for the '<em><b>Cond Event</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int TRANSITION_TRACE__COND_EVENT = 2;
+
+	/** The feature id for the '<em><b>Cond Expression</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 *
+	 * @generated
+	 * @ordered */
+	int TRANSITION_TRACE__COND_EXPRESSION = 3;
+
+	/** The number of structural features of the '<em>Transition Trace</em>' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int TRANSITION_TRACE_FEATURE_COUNT = 4;
 
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence <em>Event
 	 * Occurrence</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -541,15 +582,15 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated */
 	EReference getBasicFBTypeRuntime_Basicfbtype();
 
-	/** Returns the meta object for the reference
+	/** Returns the meta object for the attribute
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime#getActiveState <em>Active State</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the meta object for the reference '<em>Active State</em>'.
+	 * @return the meta object for the attribute '<em>Active State</em>'.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime#getActiveState()
 	 * @see #getBasicFBTypeRuntime()
 	 * @generated */
-	EReference getBasicFBTypeRuntime_ActiveState();
+	EAttribute getBasicFBTypeRuntime_ActiveState();
 
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime
 	 * <em>Simple FB Type Runtime</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -653,11 +694,11 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated */
 	EReference getFBTransaction_OutputEventOccurrences();
 
-	/** Returns the meta object for the reference list
+	/** Returns the meta object for the containment reference list
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getInputVariables <em>Input Variables</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the meta object for the reference list '<em>Input Variables</em>'.
+	 * @return the meta object for the containment reference list '<em>Input Variables</em>'.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getInputVariables()
 	 * @see #getFBTransaction()
 	 * @generated */
@@ -747,15 +788,63 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated */
 	EClass getEccTrace();
 
-	/** Returns the meta object for the reference list
-	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace#getTransitions <em>Transitions</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace#getTransitionTraces <em>Transition Traces</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the meta object for the reference list '<em>Transitions</em>'.
-	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace#getTransitions()
+	 * @return the meta object for the containment reference list '<em>Transition Traces</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace#getTransitionTraces()
 	 * @see #getEccTrace()
 	 * @generated */
-	EReference getEccTrace_Transitions();
+	EReference getEccTrace_TransitionTraces();
+
+	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace
+	 * <em>Transition Trace</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for class '<em>Transition Trace</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace
+	 * @generated */
+	EClass getTransitionTrace();
+
+	/** Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace#getSourceState <em>Source State</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the attribute '<em>Source State</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace#getSourceState()
+	 * @see #getTransitionTrace()
+	 * @generated */
+	EAttribute getTransitionTrace_SourceState();
+
+	/** Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace#getDestinationState <em>Destination
+	 * State</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the attribute '<em>Destination State</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace#getDestinationState()
+	 * @see #getTransitionTrace()
+	 * @generated */
+	EAttribute getTransitionTrace_DestinationState();
+
+	/** Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace#getCondEvent <em>Cond Event</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the attribute '<em>Cond Event</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace#getCondEvent()
+	 * @see #getTransitionTrace()
+	 * @generated */
+	EAttribute getTransitionTrace_CondEvent();
+
+	/** Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace#getCondExpression <em>Cond
+	 * Expression</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the attribute '<em>Cond Expression</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace#getCondExpression()
+	 * @see #getTransitionTrace()
+	 * @generated */
+	EAttribute getTransitionTrace_CondExpression();
 
 	/** Returns the factory that creates the instances of the model. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -869,11 +958,11 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated */
 		EReference BASIC_FB_TYPE_RUNTIME__BASICFBTYPE = eINSTANCE.getBasicFBTypeRuntime_Basicfbtype();
 
-		/** The meta object literal for the '<em><b>Active State</b></em>' reference feature. <!-- begin-user-doc -->
+		/** The meta object literal for the '<em><b>Active State</b></em>' attribute feature. <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 *
 		 * @generated */
-		EReference BASIC_FB_TYPE_RUNTIME__ACTIVE_STATE = eINSTANCE.getBasicFBTypeRuntime_ActiveState();
+		EAttribute BASIC_FB_TYPE_RUNTIME__ACTIVE_STATE = eINSTANCE.getBasicFBTypeRuntime_ActiveState();
 
 		/** The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.SimpleFBTypeRuntimeImpl <em>Simple FB Type
@@ -951,7 +1040,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated */
 		EReference FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES = eINSTANCE.getFBTransaction_OutputEventOccurrences();
 
-		/** The meta object literal for the '<em><b>Input Variables</b></em>' reference list feature. <!--
+		/** The meta object literal for the '<em><b>Input Variables</b></em>' containment reference list feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
 		 *
 		 * @generated */
@@ -1020,11 +1109,44 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated */
 		EClass ECC_TRACE = eINSTANCE.getEccTrace();
 
-		/** The meta object literal for the '<em><b>Transitions</b></em>' reference list feature. <!-- begin-user-doc
+		/** The meta object literal for the '<em><b>Transition Traces</b></em>' containment reference list feature. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated */
+		EReference ECC_TRACE__TRANSITION_TRACES = eINSTANCE.getEccTrace_TransitionTraces();
+
+		/** The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransitionTraceImpl <em>Transition Trace</em>}'
+		 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransitionTraceImpl
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getTransitionTrace()
+		 * @generated */
+		EClass TRANSITION_TRACE = eINSTANCE.getTransitionTrace();
+
+		/** The meta object literal for the '<em><b>Source State</b></em>' attribute feature. <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 *
+		 * @generated */
+		EAttribute TRANSITION_TRACE__SOURCE_STATE = eINSTANCE.getTransitionTrace_SourceState();
+
+		/** The meta object literal for the '<em><b>Destination State</b></em>' attribute feature. <!-- begin-user-doc
 		 * --> <!-- end-user-doc -->
 		 *
 		 * @generated */
-		EReference ECC_TRACE__TRANSITIONS = eINSTANCE.getEccTrace_Transitions();
+		EAttribute TRANSITION_TRACE__DESTINATION_STATE = eINSTANCE.getTransitionTrace_DestinationState();
+
+		/** The meta object literal for the '<em><b>Cond Event</b></em>' attribute feature. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
+		 *
+		 * @generated */
+		EAttribute TRANSITION_TRACE__COND_EVENT = eINSTANCE.getTransitionTrace_CondEvent();
+
+		/** The meta object literal for the '<em><b>Cond Expression</b></em>' attribute feature. <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 *
+		 * @generated */
+		EAttribute TRANSITION_TRACE__COND_EXPRESSION = eINSTANCE.getTransitionTrace_CondExpression();
 
 	}
 

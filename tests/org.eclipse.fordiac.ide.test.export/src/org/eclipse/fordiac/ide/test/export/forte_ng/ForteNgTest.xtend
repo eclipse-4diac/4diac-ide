@@ -52,7 +52,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode)
 		assertEquals('''
 			
-			«EXPORTED_VARIABLE_NAME» = CIEC_BOOL(1);
+			«EXPORTED_VARIABLE_NAME» = 1_BOOL;
 		'''.toString(), generatedCode.toString()) // $NON-NLS-1$
 	}
 
@@ -63,7 +63,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''SQRT(«VARIABLE_NAME») = 0''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_SQRT(«EXPORTED_VARIABLE_NAME»), CIEC_SINT(0))'''.toString(), generatedCode.toString()) // $NON-NLS-1$
+		assertEquals('''func_EQ(func_SQRT(«EXPORTED_VARIABLE_NAME»), 0_SINT)'''.toString(), generatedCode.toString()) // $NON-NLS-1$
 	}
 
 	@Test
@@ -74,7 +74,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» ** «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_EXPT<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
+		assertEquals('''func_EQ(func_EXPT<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 
@@ -89,7 +89,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode)
 		assertEquals('''
 			
-			«EXPORTED_VARIABLE_NAME» = CIEC_TIME(60000000000);
+			«EXPORTED_VARIABLE_NAME» = 60000000000_TIME;
 		'''.toString(), generatedCode.toString())
 	}
 
@@ -104,7 +104,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode)
 		assertEquals('''
 			
-			«EXPORTED_VARIABLE_NAME» = CIEC_DATE(839808000000000000);
+			«EXPORTED_VARIABLE_NAME» = 839808000000000000_DATE;
 		'''.toString(), generatedCode.toString())
 	}
 
@@ -119,7 +119,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode)
 		assertEquals('''
 			
-			«EXPORTED_VARIABLE_NAME» = CIEC_TIME_OF_DAY(22019000000000);
+			«EXPORTED_VARIABLE_NAME» = 22019000000000_TIME_OF_DAY;
 		'''.toString(), generatedCode.toString())
 	}
 
@@ -135,7 +135,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		assertNotNull(generatedCode)
 		assertEquals('''
 			
-			«EXPORTED_VARIABLE_NAME» = CIEC_DATE_AND_TIME(613922174770000000);
+			«EXPORTED_VARIABLE_NAME» = 613922174770000000_DATE_AND_TIME;
 		'''.toString(), generatedCode.toString())
 	}
 
@@ -147,7 +147,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» + «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_ADD<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
+		assertEquals('''func_EQ(func_ADD<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 
@@ -159,7 +159,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» - «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_SUB<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
+		assertEquals('''func_EQ(func_SUB<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 
@@ -171,7 +171,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» / «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_DIV<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
+		assertEquals('''func_EQ(func_DIV<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 
@@ -183,7 +183,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_MUL<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
+		assertEquals('''func_EQ(func_MUL<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 	
@@ -195,7 +195,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = T#0s''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), CIEC_TIME(0))'''.toString(), // $NON-NLS-1$
+		assertEquals('''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_TIME)'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 	
@@ -207,7 +207,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = T#0s''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), CIEC_TIME(0))'''.toString(), // $NON-NLS-1$
+		assertEquals('''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_TIME)'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 

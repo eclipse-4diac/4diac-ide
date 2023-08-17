@@ -387,10 +387,11 @@ class STFunctionValidatorTest {
 			FUNCTION hubert
 			VAR
 				int1 : STRING;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := 4 TO 17 DO
-				int1 := 17;
+				int2 := 17;
 			END_FOR;
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.FOR_VARIABLE_NOT_INTEGRAL_TYPE)
@@ -398,10 +399,11 @@ class STFunctionValidatorTest {
 			FUNCTION hubert
 			VAR
 				int1 : INT;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := LINT#4 TO 17 DO
-				int1 := 17;
+				int2 := 17;
 			END_FOR;
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
@@ -409,10 +411,11 @@ class STFunctionValidatorTest {
 			FUNCTION hubert
 			VAR
 				int1 : INT;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := 4 TO LINT#17 DO
-				int1 := 17;
+				int2 := 17;
 			END_FOR;
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
@@ -420,10 +423,93 @@ class STFunctionValidatorTest {
 			FUNCTION hubert
 			VAR
 				int1 : INT;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := 4 TO 17 BY LINT#2 DO
-				int1 := 17;
+				int2 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertNoErrors
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 BY "2" DO
+				int2 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	@Test
+	def void testInvalidForVariable() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertNoErrors
+		'''
+			FUNCTION hubert
+			FOR 4 := 4 TO 17 DO
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE)
+		'''
+			FUNCTION hubert
+			VAR CONSTANT
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE)
+	}
+
+	@Test
+	def void testInvalidForVariableNonTemporary() {
+		'''
+			FUNCTION hubert
+			VAR_TEMP
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertNoIssues
+		'''
+			FUNCTION hubert
+			VAR_OUTPUT
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.FOR_CONTROL_VARIABLE_NON_TEMPORARY)
+	}
+
+	@Test
+	def void testInvalidForVariableModification() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				int2 := 17;
 			END_FOR;
 			END_FUNCTION
 		'''.parse.assertNoErrors
@@ -433,11 +519,158 @@ class STFunctionValidatorTest {
 				int1 : INT;
 			END_VAR
 			
-			FOR int1 := 4 TO 17 BY "2" DO
+			FOR int1 := 4 TO 17 DO
 				int1 := 17;
 			END_FOR;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				FOR int2 := 4 TO 17 DO
+					int1 := 17;
+				END_FOR;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				FOR int1 := 4 TO 17 DO
+					int2 := 17;
+				END_FOR;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
+	}
+
+	@Test
+	def void testInvalidForVariableUndefined() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				int2 := 17;
+			END_FOR;
+			FOR int1 := 4 TO 17 DO // undefined but write access -> ok
+				int2 := 17;
+			END_FOR;
+			int1 := int2; // write access -> ok
+			int2 := int1 + 1; // was written -> ok
+			END_FUNCTION
+		'''.parse.assertNoIssues
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				int2 := 17;
+			END_FOR;
+			
+			IF int2 <> 0 THEN
+				int1 := int2 + 1; // write access -> ok
+			ELSE
+				int1 := int2 + 2; // write access -> ok
+			END_IF;
+			
+			int2 := int1 + 1; // read access, but was written in all IF clauses -> ok
+			END_FUNCTION
+		'''.parse.assertNoIssues
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				int1 := 17;
+			END_FOR;
+			int2 := int1; // read access -> warning
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				int1 := 17;
+			END_FOR;
+			
+			IF int2 <> 0 THEN
+				int1 := int2 + 1; // write access -> ok
+			END_IF;
+			
+			WHILE int2 <> 0 DO
+				int1 := int2 + 1; // write access -> ok
+			END_WHILE;
+			
+			REPEAT
+				int1 := int2 + 1; // write access -> ok
+			UNTIL int2 <> 0
+			END_REPEAT;
+			
+			int2 := int1; // read access and may not have been written if IF, WHILE, and REPEAT not taken -> warning
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				FOR int2 := 4 TO 17 DO
+				END_FOR;
+			END_FOR;
+			int1 := int2; // read access and undefined from inner FOR loop -> warning
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+			
+			WHILE int2 <> 0 DO // read access and may be undefined from inner FOR loop -> warning
+				FOR int2 := 4 TO 17 DO
+				END_FOR;
+			END_WHILE;
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+			
+			REPEAT
+				FOR int2 := 4 TO 17 DO
+				END_FOR;
+			UNTIL int2 <> 0 // read access and may be undefined from inner FOR loop -> warning
+			END_REPEAT;
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
 	}
 
 	@Test
@@ -1007,6 +1240,17 @@ class STFunctionValidatorTest {
 			END_VAR
 			END_FUNCTION
 		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidRangeExpression() {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [2] OF REAL;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.INDEX_RANGE_EXPRESSION_INVALID)
 	}
 
 	def static Stream<Arguments> invalidArrayRangeOrMaxLengthArgument() {

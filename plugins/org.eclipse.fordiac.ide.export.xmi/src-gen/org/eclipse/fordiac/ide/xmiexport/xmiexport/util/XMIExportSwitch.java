@@ -91,6 +91,18 @@ public class XMIExportSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case XMIExportPackage.XMI_EXPORT_TYPE_DECLARATIONS: {
+				XMIExportTypeDeclarations xmiExportTypeDeclarations = (XMIExportTypeDeclarations)theEObject;
+				T result = caseXMIExportTypeDeclarations(xmiExportTypeDeclarations);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case XMIExportPackage.XMI_EXPORT_TYPE_DECLARATION: {
+				XMIExportTypeDeclaration xmiExportTypeDeclaration = (XMIExportTypeDeclaration)theEObject;
+				T result = caseXMIExportTypeDeclaration(xmiExportTypeDeclaration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -122,6 +134,36 @@ public class XMIExportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseXMIExportInitialValue(XMIExportInitialValue object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Type Declarations</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Type Declarations</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseXMIExportTypeDeclarations(XMIExportTypeDeclarations object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Type Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Type Declaration</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseXMIExportTypeDeclaration(XMIExportTypeDeclaration object) {
 		return null;
 	}
 

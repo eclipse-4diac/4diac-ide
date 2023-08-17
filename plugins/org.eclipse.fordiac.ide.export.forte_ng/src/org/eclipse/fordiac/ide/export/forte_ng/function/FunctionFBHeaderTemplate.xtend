@@ -49,6 +49,7 @@ class FunctionFBHeaderTemplate extends ForteFBTemplate<FunctionFBType> {
 		
 		  «generateReadInputDataDeclaration»
 		  «generateWriteOutputDataDeclaration»
+		  «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
 		public:
 		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);

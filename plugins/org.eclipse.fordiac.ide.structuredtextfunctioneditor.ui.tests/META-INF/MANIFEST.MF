@@ -17,6 +17,7 @@ Require-Bundle: org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui,
  org.eclipse.xtext.xbase.junit,
  org.eclipse.core.runtime,
  org.eclipse.xtext.ui.testing,
- org.eclipse.ui.workbench;resolution:=optional
+ org.eclipse.ui.workbench;resolution:=optional,
+ org.eclipse.xtext.xbase.ui.testing
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.tests;x-internal=true
