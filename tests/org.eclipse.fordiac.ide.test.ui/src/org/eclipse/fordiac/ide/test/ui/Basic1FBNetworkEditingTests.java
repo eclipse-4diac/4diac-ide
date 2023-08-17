@@ -14,9 +14,10 @@ package org.eclipse.fordiac.ide.test.ui;
 
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
@@ -41,7 +42,6 @@ import org.junit.jupiter.api.Test;
 public class Basic1FBNetworkEditingTests {
 
 	private static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
-	private static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	private static final String NEW = "New"; //$NON-NLS-1$
 	private static final String FILE = "File"; //$NON-NLS-1$
 	private static final String OK = "OK"; //$NON-NLS-1$
@@ -60,6 +60,7 @@ public class Basic1FBNetworkEditingTests {
 	private static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
 	private static final String EVENTS_NODE = "events"; //$NON-NLS-1$
 	private static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
+	private static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	private static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
 	private static SWT4diacGefBot bot;
 
@@ -104,6 +105,28 @@ public class Basic1FBNetworkEditingTests {
 		final Point point = new Point(100, 100);
 		eCycleNode.dragAndDrop(canvas, point);
 		assertNotNull(editor.getEditPart(E_CYCLE_FB));
+	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void isAddedFbInProjectAppNode() {
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(300, 100));
+		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
+		systemExplorerView.show();
+		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
+		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
+		final SWTBotTree tree = new SWTBotTree(swtTree);
+		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
+		treeProjectItem.select();
+		treeProjectItem.expand();
+		final SWTBotTreeItem projectNode = treeProjectItem.getNode(PROJECT_NAME + " []"); //$NON-NLS-1$
+		projectNode.select();
+		projectNode.expand();
+		final SWTBotTreeItem appNode = projectNode.getNode(PROJECT_NAME + "App"); //$NON-NLS-1$
+		appNode.select();
+		appNode.expand();
+		assertNotNull(appNode.getNodes());
+		assertTrue(appNode.getNode(E_CYCLE_FB).isVisible());
 	}
 
 	@SuppressWarnings("static-method")
