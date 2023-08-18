@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.typelibrary.testmocks;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
@@ -26,7 +27,6 @@ public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubA
 	private IFile file;
 
 	public SubAppTypeEntryMock(final SubAppType subAppType, final TypeLibrary typelib, final IFile file) {
-		super();
 		this.subAppType = subAppType;
 		this.typelib = typelib;
 		this.file = file;
@@ -93,8 +93,17 @@ public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubA
 	}
 
 	@Override
+	public String getFullTypeName() {
+		return PackageNameHelper.getFullTypeName(getType());
+	}
+
+	@Override
 	public void save() {
 		// currently not needed in mock
 	}
 
+	@Override
+	public void refresh() {
+		// currently not needed in mock
+	}
 }

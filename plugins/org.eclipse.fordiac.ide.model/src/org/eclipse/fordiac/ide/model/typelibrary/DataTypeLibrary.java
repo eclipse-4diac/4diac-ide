@@ -20,10 +20,10 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -46,8 +46,8 @@ public final class DataTypeLibrary {
 
 	private static final Pattern STRING_MAX_LENGTH_PATTERN = Pattern.compile("(W?STRING)\\[(\\d+)\\]"); //$NON-NLS-1$
 
-	private final Map<String, DataType> typeMap = new HashMap<>();
-	private final Map<String, DataTypeEntry> derivedTypes = new HashMap<>();
+	private final Map<String, DataType> typeMap = new ConcurrentHashMap<>();
+	private final Map<String, DataTypeEntry> derivedTypes = new ConcurrentHashMap<>();
 
 	/** Instantiates a new data type library. */
 	public DataTypeLibrary() {
@@ -55,12 +55,12 @@ public final class DataTypeLibrary {
 		initGenericTypes();
 	}
 
-	public void addTypeEntry(final DataTypeEntry entry) {
-		derivedTypes.put(entry.getTypeName(), entry);
+	public boolean addTypeEntry(final DataTypeEntry entry) {
+		return derivedTypes.putIfAbsent(entry.getFullTypeName(), entry) == null;
 	}
 
 	public void removeTypeEntry(final DataTypeEntry entry) {
-		derivedTypes.remove(entry.getTypeName());
+		derivedTypes.remove(entry.getFullTypeName(), entry);
 	}
 
 	private void addToTypeMap(final DataType type) {

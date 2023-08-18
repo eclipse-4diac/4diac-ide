@@ -122,7 +122,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		final EObject rootContainer = EcoreUtil.getRootContainer(network);
 		if (rootContainer instanceof LibraryElement) {
 			final TypeLibrary typeLibrary = ((LibraryElement) rootContainer).getTypeLibrary();
-			final TypeEntry reloadedType = typeLibrary.find(entry.getTypeName());
+			final TypeEntry reloadedType = typeLibrary.find(entry.getFullTypeName());
 			if ((reloadedType != null) && (reloadedType.getFile() != null) && reloadedType.getFile().exists()) {
 				typeLibrary.removeErrorTypeEntry(entry);
 				entry = reloadedType;
