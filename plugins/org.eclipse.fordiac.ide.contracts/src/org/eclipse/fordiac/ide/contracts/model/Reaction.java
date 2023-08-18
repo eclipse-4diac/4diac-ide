@@ -11,7 +11,7 @@
  *   Paul Pavlicek
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.contracts.model;
+package org.eclipse.fordiac.ide.contracts.model;
 
 public class Reaction extends Guarantee {
 	private static final int POSITION_NO = 3;

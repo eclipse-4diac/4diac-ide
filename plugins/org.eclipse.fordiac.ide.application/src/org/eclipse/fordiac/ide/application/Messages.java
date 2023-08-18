@@ -53,78 +53,10 @@ public final class Messages extends NLS {
 
 	public static String CreateGroupPasteCommand;
 
-	public static String DefineFBDecisionTwoPinDialog_CreateGuarantee;
-
-	public static String DefineFBDecisionTwoPinDialog_CreateReaction;
-
-	public static String DefineFBDecisionTwoPinDialog_Error;
-
-	public static String DefineFBDecisionTwoPinDialog_ErrorInfo;
-
-	public static String DefineFBDecisionTwoPinDialog_Info;
-
-	public static String DefineFBReactionOnePinDialog_SpecifyOffset;
-
 	/** The Create sub app command_ label create sub app command. */
 	public static String CreateSubAppCommand_LABELCreateSubAppCommand;
 
 	public static String CutEditPartsAction_Text;
-
-	public static String DefineFbInterfaceConstraintHandler_ErrorMessage;
-
-	public static String DefineFbInterfaceConstraintHandler_Error;
-
-	public static String DefineFbInterfaceConstraintHandler_ErrorText;
-
-	public static String DefineFbInterfaceConstraintHandler_ErrorTitle;
-
-	public static String DefineFbInterfaceConstraintHandler_Info;
-
-	public static String DefineFbInterfaceConstraintHandler_InfoErrorGuarantee;
-
-	public static String DefineFbInterfaceConstraintHandler_ThreePinErrorMessage;
-
-	public static String DefineFbInterfaceConstraintHandler_Title;
-
-	public static String DefineFBReactionOnePinDialog_Button;
-
-	public static String DefineFBReactionOnePinDialog_DefineAssumption;
-
-	public static String DefineFBReactionOnePinDialog_DefineConstraint;
-
-	public static String DefineFBReactionOnePinDialog_Error;
-
-	public static String DefineFBReactionOnePinDialog_Event;
-
-	public static String DefineFBReactionOnePinDialog_Every;
-
-	public static String DefineFBReactionOnePinDialog_Info;
-
-	public static String DefineFBReactionOnePinDialog_Occurs;
-
-	public static String DefineFBReactionOnePinDialog_Offset;
-
-	public static String DefineFBReactionOnePinDialog_PleaseFill;
-
-	public static String DefineFBReactionOnePinDialog_Reaction;
-
-	public static String DefineFBReactionOnePinDialog_OffsetDialog;
-
-	public static String DefineFBReactionOnePinDialog_Title;
-
-	public static String DefineFBReactionOnePinDialog_Within;
-
-	public static String DefineFBReactionThreePinDialog_DefineGuarantee;
-
-	public static String DefineFBReactionTwoPinDialog_Button;
-
-	public static String DefineFBReactionTwoPinDialog_Info;
-
-	public static String DefineFBReactionTwoPinDialog_OccursWithin;
-
-	public static String DefineFBReactionTwoPinDialog_Reaction;
-
-	public static String DefineFBReactionTwoPinDialog_Title;
 
 	public static String ErrorMarkerFBNEditPart_ErrorMarker;
 

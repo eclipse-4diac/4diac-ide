@@ -7,17 +7,19 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Paul Pavlicek
+ * Contributors:
  *    - initial API and implementation and/or initial documentation
+ *  Paul Pavlicek
+ *    - - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.contracts;
+package org.eclipse.fordiac.ide.contracts;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.application.contracts.model.AssumptionWithOffset;
-import org.eclipse.fordiac.ide.application.contracts.model.Contract;
+import org.eclipse.fordiac.ide.contracts.model.AssumptionWithOffset;
+import org.eclipse.fordiac.ide.contracts.model.Contract;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;

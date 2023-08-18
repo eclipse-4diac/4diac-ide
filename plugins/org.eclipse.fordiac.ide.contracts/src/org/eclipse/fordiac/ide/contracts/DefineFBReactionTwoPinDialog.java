@@ -11,9 +11,8 @@
  *   Paul Pavlicek
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.contracts;
+package org.eclipse.fordiac.ide.contracts;
 
-import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.utilities.IntervalVerifyListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -29,14 +28,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class DefineFBGuaranteeTwoPinDialog extends MessageDialog {
+public class DefineFBReactionTwoPinDialog extends MessageDialog {
 	private static final int NUM_COLUMNS = 4;
 	private Text inputTime;
 	private final Event pinFrom;
 	private final Event pinTo;
 	private String inputTimeText;
 
-	public DefineFBGuaranteeTwoPinDialog(final Shell parentShell, final Event pinFrom, final Event pinTo) {
+	public DefineFBReactionTwoPinDialog(final Shell parentShell, final Event pinFrom, final Event pinTo) {
 		super(parentShell, Messages.DefineFBReactionTwoPinDialog_Title, null,
 				Messages.DefineFBReactionTwoPinDialog_Info, MessageDialog.INFORMATION, 0,
 				Messages.DefineFBReactionTwoPinDialog_Button);
@@ -64,7 +63,7 @@ public class DefineFBGuaranteeTwoPinDialog extends MessageDialog {
 
 		Label label = new Label(group, SWT.None);
 
-		label.setText("After " + pinFrom.getName() + " the event " + pinTo.getName()); //$NON-NLS-1$ //$NON-NLS-2$
+		label.setText("Reaction (" + pinFrom.getName() + " , " + pinTo.getName() + ")");   //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 		label.setLayoutData(GridDataFactory.fillDefaults().span(NUM_COLUMNS, 1).grab(true, true).create());
 
 		label = new Label(group, SWT.None);
@@ -91,4 +90,5 @@ public class DefineFBGuaranteeTwoPinDialog extends MessageDialog {
 			super.buttonPressed(buttonId);
 		}
 	}
+
 }

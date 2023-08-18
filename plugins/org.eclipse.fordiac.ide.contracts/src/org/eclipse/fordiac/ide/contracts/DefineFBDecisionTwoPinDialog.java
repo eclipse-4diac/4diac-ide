@@ -11,9 +11,8 @@
  *   Paul Pavlicek
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.contracts;
+package org.eclipse.fordiac.ide.contracts;
 
-import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -33,8 +32,8 @@ public class DefineFBDecisionTwoPinDialog extends MessageDialog {
 
 	public DefineFBDecisionTwoPinDialog(final Shell parentShell) {
 		super(parentShell, Messages.DefineFBReactionOnePinDialog_Title, null,
-				Messages.DefineFBDecisionTwoPinDialog_Info,
-				MessageDialog.INFORMATION, 0, Messages.DefineFBReactionOnePinDialog_Button);
+				Messages.DefineFBDecisionTwoPinDialog_Info, MessageDialog.INFORMATION, 0,
+				Messages.DefineFBReactionOnePinDialog_Button);
 	}
 
 	public boolean isReaction() {
@@ -93,7 +92,8 @@ public class DefineFBDecisionTwoPinDialog extends MessageDialog {
 	protected void buttonPressed(final int buttonId) {
 		isReaction = reactionCheckbox.getSelection();
 		if (reactionCheckbox.getSelection() == guaranteeCheckbox.getSelection()) {
-			MessageDialog.openError(this.getShell(), Messages.DefineFBDecisionTwoPinDialog_Error, Messages.DefineFBDecisionTwoPinDialog_ErrorInfo);
+			MessageDialog.openError(this.getShell(), Messages.DefineFBDecisionTwoPinDialog_Error,
+					Messages.DefineFBDecisionTwoPinDialog_ErrorInfo);
 		} else {
 			super.buttonPressed(buttonId);
 		}
