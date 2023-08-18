@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.export.forte_ng.util
 
 import java.util.regex.Pattern
+import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.fordiac.ide.model.data.ArrayType
@@ -35,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -201,6 +203,13 @@ final class ForteNgExportUtil {
 	}
 
 	def static CharSequence getFORTEStringId(String s) '''g_nStringId«s»'''
+	
+	def static int getInterfaceElementIndex(IInterfaceElement element) {
+		if (element.eContainer !== null && element.eContainingFeature.many) {
+			(element.eContainer.eGet(element.eContainingFeature) as EList<? extends IInterfaceElement>).indexOf(element)
+		} else
+			0
+	}
 
 	static final Pattern END_COMMENT_PATTERN = Pattern.compile("\\*/")
 

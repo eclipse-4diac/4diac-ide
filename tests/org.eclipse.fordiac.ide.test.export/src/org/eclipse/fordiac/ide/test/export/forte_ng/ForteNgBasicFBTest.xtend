@@ -164,9 +164,11 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						}
 						
 						void «EXPORTED_FUNCTIONBLOCK_NAME»::readInputData(TEventID) {
+						  // nothing to do
 						}
 						
 						void «EXPORTED_FUNCTIONBLOCK_NAME»::writeOutputData(TEventID) {
+						  // nothing to do
 						}
 						
 						CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getDI(size_t) {

@@ -33,10 +33,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.With
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 
 abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemplate<T> {
 
@@ -256,23 +257,18 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateReadInputDataDefinition() '''
 		void «FBClassName»::readInputData(«IF type.interfaceList.eventInputs.exists[!with.empty]»const TEventID paEIID«ELSE»TEventID«ENDIF») {
-		  «generateReadInputDataBody»
+		  «type.interfaceList.eventInputs.generateReadInputDataBody»
 		}
 	'''
 
-	def protected generateReadInputDataBody() '''
-		«IF type.interfaceList.eventInputs.exists[!with.empty]»
+	def protected generateReadInputDataBody(List<Event> events) '''
+		«IF events.exists[!with.empty]»
 			switch(paEIID) {
-			  «FOR event : type.interfaceList.eventInputs»
+			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
 			  	  RES_DATA_CON_CRITICAL_REGION();
-			  	  «FOR with : event.with»
-			  	  	«IF type.interfaceList.inputVars.contains(with.variables)»
-			  	  		«val index = type.interfaceList.inputVars.indexOf(with.variables)»readData(«index», «with.variables.generateName», «with.variables.generateNameAsConnection»);
-			  	  	«ENDIF»
-			  	  	«IF type.interfaceList.inOutVars.contains(with.variables)»
-			  	  		«val index = type.interfaceList.outMappedInOutVars.indexOf(with.variables.getInOutOpposite)»readData(«index», «with.variables.getInOutOpposite.generateName», &«with.variables.getInOutOpposite.generateNameAsConnection»);
-			  	  	«ENDIF»
+			  	  «FOR variable : event.with.map[withVariable]»
+			  	  	readData(«variable.interfaceElementIndex», «variable.generateName», «IF variable.inOutVar»&«ENDIF»«variable.generateNameAsConnection»);
 			  	  «ENDFOR»
 			  	  break;
 			  	}
@@ -280,13 +276,10 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			  default:
 			    break;
 			}
+		«ELSE»
+			// nothing to do
 		«ENDIF»
 	'''
-
-	def protected getInOutOpposite(VarDeclaration varDeclaration) {
-		val interfaceList = varDeclaration.eContainer as InterfaceList
-		return interfaceList.getInOutVarOpposite(varDeclaration)
-	}
 
 	def protected generateWriteOutputDataDeclaration() '''
 		void writeOutputData(TEventID paEIID) override;
@@ -294,23 +287,18 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateWriteOutputDataDefinition() '''
 		void «FBClassName»::writeOutputData(«IF type.interfaceList.eventOutputs.exists[!with.empty]»const TEventID paEIID«ELSE»TEventID«ENDIF») {
-		  «generateWriteOutputDataBody»
+		  «type.interfaceList.eventOutputs.generateWriteOutputDataBody»
 		}
 	'''
 
-	def protected generateWriteOutputDataBody() '''
-		«IF type.interfaceList.eventOutputs.exists[!with.empty]»
+	def protected generateWriteOutputDataBody(List<Event> events) '''
+		«IF events.exists[!with.empty]»
 			switch(paEIID) {
-			  «FOR event : type.interfaceList.eventOutputs»
+			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
 			  	  RES_DATA_CON_CRITICAL_REGION();
-			  	  «FOR with : event.with»
-			  	  	«IF type.interfaceList.outputVars.contains(with.variables)»
-			  	  		«val index = type.interfaceList.outputVars.indexOf(with.variables)»writeData(«index», «with.variables.generateName», «with.variables.generateNameAsConnection»);
-			  	  	«ENDIF»
-			  	  	«IF type.interfaceList.outMappedInOutVars.contains(with.variables)»
-			  	  		«val index = type.interfaceList.outMappedInOutVars.indexOf(with.variables)»writeData(«index», «with.variables.generateName», «with.variables.generateNameAsConnection»);
-			  	  	«ENDIF»
+			  	  «FOR variable : event.with.map[withVariable]»
+			  	  	writeData(«variable.interfaceElementIndex», «variable.generateName», «variable.generateNameAsConnection»);
 			  	  «ENDFOR»
 			  	  break;
 			  	}
@@ -318,8 +306,19 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			  default:
 			    break;
 			}
+		«ELSE»
+			// nothing to do
 		«ENDIF»
 	'''
+
+	def protected getWithVariable(With with) {
+		val varDeclaration = with.variables
+		if (varDeclaration.inOutVar && varDeclaration.isIsInput) {
+			val interfaceList = varDeclaration.eContainer as InterfaceList
+			interfaceList.getInOutVarOpposite(varDeclaration)
+		} else
+			varDeclaration
+	}
 
 	def protected generateInterfaceDeclarations() '''
 		«type.interfaceList.inputVars.generateVariableDeclarations(false)»
@@ -437,17 +436,16 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			
 		«ENDIF»
 	'''
-	
+
 	def protected CharSequence generateNameAsConnection(VarDeclaration varDeclaration) '''
 	«IF varDeclaration.inOutVar»conn_«varDeclaration.name»«IF varDeclaration.isIsInput»In«ELSE»Out«ENDIF»«ELSE»conn_«varDeclaration.name»«ENDIF»'''
 
 	def protected CharSequence generateNameAsConnection(INamedElement element) {
-		switch(element) {
+		switch (element) {
 			VarDeclaration: generateNameAsConnection(element)
 			default: '''conn_«element.name»'''
 		}
 	}
-
 
 	def protected CharSequence generateNameAsConnectionVariable(INamedElement element) '''var_conn_«element.name»'''
 
