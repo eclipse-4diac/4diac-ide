@@ -41,6 +41,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
+import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -55,6 +57,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 public final class TypeLibrary {
 
 	private IProject project;
+	private Buildpath buildpath;
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private final Map<String, AdapterTypeEntry> adapterTypes = new HashMap<>();
 	private final Map<String, DeviceTypeEntry> deviceTypes = new HashMap<>();
@@ -166,6 +169,7 @@ public final class TypeLibrary {
 		getSystems().clear();
 		getGlobalConstants().clear();
 		dataTypeLib.getDerivedDataTypes().clear();
+		buildpath = BuildpathUtil.loadBuildpath(project);
 		checkAdditions(project);
 	}
 
@@ -179,6 +183,10 @@ public final class TypeLibrary {
 
 	public IProject getProject() {
 		return project;
+	}
+
+	public Buildpath getBuildpath() {
+		return buildpath;
 	}
 
 	private Map<String, ? extends TypeEntry> getTypeList(final IFile typeFile) {
@@ -211,12 +219,16 @@ public final class TypeLibrary {
 	/** Instantiates a new fB type library. */
 	TypeLibrary(final IProject project) {
 		this.project = project;
-		if (project != null && project.exists()) {
+		if (project != null && project.isAccessible()) {
+			buildpath = BuildpathUtil.loadBuildpath(project);
 			checkAdditions(project);
 		}
 	}
 
 	public TypeEntry createTypeEntry(final IFile file) {
+		if (BuildpathUtil.findSourceFolder(buildpath, file).isEmpty()) {
+			return null;
+		}
 		final TypeEntry entry = TypeEntryFactory.INSTANCE.createTypeEntry(file);
 		if (null != entry) {
 			if (!FordiacKeywords.isReservedKeyword(entry.getTypeName())) {
@@ -281,6 +293,7 @@ public final class TypeLibrary {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
+		buildpath = BuildpathUtil.loadBuildpath(project);
 		checkDeletions();
 		checkAdditions(project);
 	}
@@ -297,8 +310,9 @@ public final class TypeLibrary {
 		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes().values());
 	}
 
-	private static void checkDeletionsForTypeGroup(final Collection<? extends TypeEntry> typeEntries) {
-		typeEntries.removeIf(e -> (!e.getFile().exists()));
+	private void checkDeletionsForTypeGroup(final Collection<? extends TypeEntry> typeEntries) {
+		typeEntries.removeIf(entry -> !entry.getFile().exists()
+				|| !BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent());
 	}
 
 	private void checkAdditions(final IContainer container) {
@@ -309,7 +323,7 @@ public final class TypeLibrary {
 				if (resource instanceof final IFolder folder) {
 					checkAdditions(folder);
 				}
-				if ((resource instanceof final IFile file) && (!containsType(file))) {
+				if (resource instanceof final IFile file && !containsType(file)) {
 					// only add new entry if it does not exist
 					createTypeEntry(file);
 				}
