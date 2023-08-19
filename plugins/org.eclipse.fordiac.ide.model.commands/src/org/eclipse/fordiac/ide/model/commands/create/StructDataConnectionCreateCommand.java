@@ -44,12 +44,22 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 	public void execute() {
 		final IInterfaceElement source = getSource();
 		final IInterfaceElement target = getDestination();
+
 		if (source.getType() instanceof final StructuredType sourceVar
 				&& target.getType() instanceof final StructuredType targetVar
 				&& !sourceVar.getName().equals(targetVar.getName())) {
-			changeStructCommand = new ChangeStructCommand((StructManipulator) target.getFBNetworkElement(), sourceVar);
-			changeStructCommand.execute();
-			super.setDestination(changeStructCommand.getNewMux().getInterfaceElement(getDestination().getName()));
+
+			if (AbstractConnectionCreateCommand.isStructManipulatorDefPin(source)) {
+				changeStructCommand = new ChangeStructCommand((StructManipulator) source.getFBNetworkElement(),
+						targetVar);
+				changeStructCommand.execute();
+				setSource(changeStructCommand.getNewMux().getInterfaceElement(getSource().getName()));
+			} else {
+				changeStructCommand = new ChangeStructCommand((StructManipulator) target.getFBNetworkElement(),
+						sourceVar);
+				changeStructCommand.execute();
+				setDestination(changeStructCommand.getNewMux().getInterfaceElement(getDestination().getName()));
+			}
 		}
 		super.execute();
 	}
@@ -95,7 +105,6 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 					.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, target.getName()));
 			return false;
 		}
-
 
 		return LinkConstraints.isWithConstraintOK(source) && LinkConstraints.isWithConstraintOK(target);
 	}
