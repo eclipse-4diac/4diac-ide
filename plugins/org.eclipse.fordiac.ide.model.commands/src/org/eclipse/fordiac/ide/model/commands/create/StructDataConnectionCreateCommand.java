@@ -9,7 +9,6 @@
  *
  * Contributors:
  *   Prankur Agarwal - initial API and implementation and/or initial documentation
- *   Dario Romano - add additional typecheck for execute check
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
@@ -97,8 +96,8 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 			return false;
 		}
 
-		return LinkConstraints.canExistDataConnection(source, target, parent, con)
-				&& LinkConstraints.isWithConstraintOK(source) && LinkConstraints.isWithConstraintOK(target);
+
+		return LinkConstraints.isWithConstraintOK(source) && LinkConstraints.isWithConstraintOK(target);
 	}
 
 }
