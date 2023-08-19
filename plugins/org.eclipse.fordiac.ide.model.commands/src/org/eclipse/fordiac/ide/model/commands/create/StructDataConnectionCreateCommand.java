@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 
@@ -33,11 +34,12 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 
 	@Override
 	protected boolean canExecuteConType() {
-		if (getSource().getType() instanceof StructuredType && getDestination().getType() instanceof StructuredType) {
+		if (isStructPin(getSource()) && isStructPin(getDestination())) {
+			// only when source and destination are structs this command shall be exectuable
 			return canExistDataConnection(getSource(), getDestination(), getParent(), null);
-		}
 
-		return super.canExecuteConType();
+		}
+		return false;
 	}
 
 	@Override
@@ -81,7 +83,7 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 	}
 
 	// a subset of the same function in the LinkConstraints
-	public static boolean canExistDataConnection(IInterfaceElement source, IInterfaceElement target,
+	private static boolean canExistDataConnection(IInterfaceElement source, IInterfaceElement target,
 			final FBNetwork parent, final Connection con) {
 
 		if (!LinkConstraints.isDataPin(source) || !LinkConstraints.isDataPin(target)) {
@@ -107,6 +109,11 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 		}
 
 		return LinkConstraints.isWithConstraintOK(source) && LinkConstraints.isWithConstraintOK(target);
+	}
+
+	private static boolean isStructPin(final IInterfaceElement pin) {
+		return pin instanceof final VarDeclaration varDecl && !varDecl.isArray()
+				&& varDecl.getType() instanceof StructuredType;
 	}
 
 }
