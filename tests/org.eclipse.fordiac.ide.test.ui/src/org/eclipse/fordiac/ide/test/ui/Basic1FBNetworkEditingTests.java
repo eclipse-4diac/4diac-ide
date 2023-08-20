@@ -19,17 +19,27 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Map;
+
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
+import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEclipseEditor;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+import org.eclipse.swtbot.swt.finder.waits.ICondition;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -62,6 +72,10 @@ public class Basic1FBNetworkEditingTests {
 	private static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
 	private static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	private static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
+	private static final String START = "START"; //$NON-NLS-1$
+	private static final String EO = "EO"; //$NON-NLS-1$
+	private static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
+	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
 	private static SWT4diacGefBot bot;
 
 	@BeforeAll
@@ -82,25 +96,31 @@ public class Basic1FBNetworkEditingTests {
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
+		assertNotNull(tree);
 		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
+		assertNotNull(treeProjectItem);
 		treeProjectItem.select();
 		treeProjectItem.expand();
 		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(TYPE_LIBRARY_NODE);
+		assertNotNull(typeLibraryNode);
 		typeLibraryNode.select();
 		typeLibraryNode.expand();
 		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(EVENTS_NODE);
+		assertNotNull(eventsNode);
 		eventsNode.select();
 		eventsNode.expand();
 		bot.waitUntil(treeItemHasNode(eventsNode, E_CYCLE_TREE_ITEM));
 		final SWTBotTreeItem eCycleNode = eventsNode.getNode(E_CYCLE_TREE_ITEM);
+		assertNotNull(eCycleNode);
 		eCycleNode.select();
 		eCycleNode.click();
 
 		// select application editor
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		assertNotNull(viewer);
 		final SWTBotGefFigureCanvas canvas = viewer.getCanvas();
-
 		assertNotNull(canvas);
 		final Point point = new Point(100, 100);
 		eCycleNode.dragAndDrop(canvas, point);
@@ -112,17 +132,23 @@ public class Basic1FBNetworkEditingTests {
 	public void isAddedFbInProjectAppNode() {
 		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(300, 100));
 		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
+		assertNotNull(systemExplorerView);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
+		assertNotNull(systemExplorerComposite);
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
+		assertNotNull(tree);
 		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
+		assertNotNull(treeProjectItem);
 		treeProjectItem.select();
 		treeProjectItem.expand();
 		final SWTBotTreeItem projectNode = treeProjectItem.getNode(PROJECT_NAME + " []"); //$NON-NLS-1$
+		assertNotNull(projectNode);
 		projectNode.select();
 		projectNode.expand();
 		final SWTBotTreeItem appNode = projectNode.getNode(PROJECT_NAME + "App"); //$NON-NLS-1$
+		assertNotNull(appNode);
 		appNode.select();
 		appNode.expand();
 		assertNotNull(appNode.getNodes());
@@ -134,9 +160,11 @@ public class Basic1FBNetworkEditingTests {
 	public void deleteExistingFB() {
 		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(300, 100));
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
 		assertNotNull(editor.getEditPart(E_CYCLE_FB));
 		editor.click(E_CYCLE_FB);
 		final SWTBotGefEditPart parent = editor.getEditPart(E_CYCLE_FB).parent();
+		assertNotNull(parent);
 		parent.click();
 		bot.menu(EDIT).menu(DELETE).click();
 		assertNull(editor.getEditPart(E_CYCLE_FB));
@@ -147,12 +175,110 @@ public class Basic1FBNetworkEditingTests {
 	public void moveFB() {
 		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 300));
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
 		assertNotNull(editor.getEditPart(E_CYCLE_FB));
 		editor.click(E_CYCLE_FB);
 		final SWTBotGefEditPart parent = editor.getEditPart(E_CYCLE_FB).parent();
+		assertNotNull(parent);
 		parent.click();
 		editor.drag(parent, 300, 300);
 		assertNotNull(editor.getEditPart(E_CYCLE_FB));
+	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void editDTofECycle() {
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 200));
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		editor.getEditPart(DEF_VAL);
+		editor.doubleClick(DEF_VAL);
+		final SWTBotEclipseEditor e = editor.toTextEditor();
+		assertNotNull(e);
+		e.setText(NEW_VAL);
+		e.save();
+		assertNotNull(editor.getEditPart(NEW_VAL));
+	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void directEditorDefaultValueTest() {
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		editor.getEditPart(DEF_VAL);
+		editor.doubleClick(DEF_VAL);
+		final SWTBotEclipseEditor e = editor.toTextEditor();
+		assertNotNull(e);
+		assertEquals(DEF_VAL, e.getText());
+		e.save();
+	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void directEditorNewValueTest() {
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		editor.getEditPart(DEF_VAL);
+		editor.doubleClick(DEF_VAL);
+		final SWTBotEclipseEditor e = editor.toTextEditor();
+		assertNotNull(e);
+		e.setText(NEW_VAL);
+		e.save();
+		editor.getEditPart(NEW_VAL);
+		editor.doubleClick(NEW_VAL);
+		assertEquals(NEW_VAL, editor.toTextEditor().getText());
+	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void createValidConnection() {
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 200));
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		assertNotNull(viewer);
+		// select input pin
+		editor.click(START);
+		final SWTBotGefEditPart ei = editor.getEditPart(START);
+		assertNotNull(ei);
+		final IFigure figure = ((GraphicalEditPart) ei.part()).getFigure();
+		assertNotNull(figure);
+		final Rectangle inputPinBounds = figure.getBounds().getCopy();
+		assertNotNull(inputPinBounds);
+		figure.translateToAbsolute(inputPinBounds);
+		// select output pin
+		editor.click(EO);
+		final SWTBotGefEditPart eo = editor.getEditPart(EO);
+		assertNotNull(eo);
+		final Rectangle outputPinBounds = ((GraphicalEditPart) eo.part()).getFigure().getBounds().getCopy();
+		assertNotNull(outputPinBounds);
+		figure.translateToAbsolute(outputPinBounds);
+		viewer.drag(EO, inputPinBounds.getCenter().x, inputPinBounds.getCenter().y);
+
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+
+		bot.waitUntil(new ICondition() {
+
+			@Override
+			public boolean test() throws Exception {
+				return editPartRegistry.values().stream().filter(v -> v instanceof ConnectionEditPart).count() == 1;
+			}
+
+			@Override
+			public void init(final SWTBot bot) {
+				// method must be implemented but empty since not needed
+			}
+
+			@Override
+			public String getFailureMessage() {
+				return "no ConnectionEditPart found";
+			}
+
+		}, 5000);
+
+		assertEquals(1, editPartRegistry.values().stream().filter(v -> v instanceof ConnectionEditPart).count());
 	}
 
 	private static void createProject() {
@@ -199,12 +325,15 @@ public class Basic1FBNetworkEditingTests {
 	@AfterEach
 	public void cleanEditorArea() {
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
-		editor.getSWTBotGefViewer();
-		editor.setFocus();
-		bot.menu(EDIT).menu(SELECT_ALL);
-		// not all Tests have a remaining FB
-		if (bot.menu(EDIT).menu(DELETE).isEnabled()) {
-			bot.menu(EDIT).menu(DELETE).click();
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		viewer.getCanvas().setFocus();
+
+		final SWTBotMenu editMenu = bot.menu(EDIT);
+		editMenu.menu(SELECT_ALL).click();
+		final SWTBotMenu deleteMenu = editMenu.menu(DELETE);
+		if (deleteMenu.isEnabled()) {
+			// not all Tests have a remaining FB
+			deleteMenu.click();
 		}
 	}
 

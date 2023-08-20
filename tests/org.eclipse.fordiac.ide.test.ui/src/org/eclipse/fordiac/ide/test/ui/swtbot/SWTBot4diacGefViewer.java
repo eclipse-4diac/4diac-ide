@@ -53,4 +53,8 @@ public class SWTBot4diacGefViewer extends SWTBotGefViewer {
 		return (SWTBot4diacFigureCanvas) super.getCanvas();
 	}
 
+	public GraphicalViewer getGraphicalViewer() {
+		return graphicalViewer;
+	}
+
 }
