@@ -55,13 +55,13 @@ public final class IdentifierVerifier {
 	 * @return Empty Optional if the identifier is valid, otherwise the error message is contained in the Optional */
 	public static Optional<String> verifyIdentifier(final String identifier, final Object context) {
 		if (identifier == null) {
-			return Optional.of(Messages.NameRepository_NameNotAValidIdentifier);
+			return Optional.of(MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, identifier));
 		}
 		if (identifier.length() < 1) {
 			return Optional.of(Messages.IdentifierVerifier_ERROR_IdentifierLengthZero);
 		}
 		if (!IDENTIFIER_PATTERN.matcher(identifier).matches()) {
-			return Optional.of(Messages.NameRepository_NameNotAValidIdentifier);
+			return Optional.of(MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, identifier));
 		}
 		if (!IDENTIFIER_PATTERN.matcher(identifier.substring(0, 1)).matches()) {
 			return Optional.of(Messages.IdentifierVerifier_ERROR_InvalidStartSymbol);
