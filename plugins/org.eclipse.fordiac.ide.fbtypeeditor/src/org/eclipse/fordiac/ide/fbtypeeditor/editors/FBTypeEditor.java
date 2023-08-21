@@ -125,6 +125,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			getCommandStack().markSaveLocation();
 			typeEntry.save();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
+			setPartName(typeEntry.getFullTypeName());
 		}
 	}
 
@@ -186,7 +187,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 					Messages.FBTypeEditor_TypeFileDoesnotExist));
 		}
 
-		setPartName(typeEntry.getTypeName());
+		setPartName(typeEntry.getFullTypeName());
 
 		fbType.eAdapters().add(adapter);
 
@@ -427,6 +428,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			}
 			getCommandStack().flush();
 			fbType.eAdapters().add(adapter);
+			setPartName(typeEntry.getFullTypeName());
 		}
 	}
 
