@@ -48,12 +48,14 @@ import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -241,22 +243,24 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 
 	@Override
 	public void performDirectEdit() {
-		if (getModel().isUnfolded()) {
-			// if unfolded edit comment
-			new TextDirectEditManager(this, new FigureCellEditorLocator(getCommentFigure())) {
-				@Override
-				protected CellEditor createCellEditorOn(final Composite composite) {
-					return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP);
-				}
+		if (EditorUtils.getCurrentActiveEditor().getAdapter(FBNetwork.class) != null) {
+			if (getModel().isUnfolded()) {
+				// if unfolded edit comment
+				new TextDirectEditManager(this, new FigureCellEditorLocator(getCommentFigure())) {
+					@Override
+					protected CellEditor createCellEditorOn(final Composite composite) {
+						return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP);
+					}
 
-				@Override
-				protected void initCellEditor() {
-					super.initCellEditor();
-					getCellEditor().setValue(getModel().getComment());
-				}
-			}.show();
-		} else {
-			super.performDirectEdit();
+					@Override
+					protected void initCellEditor() {
+						super.initCellEditor();
+						getCellEditor().setValue(getModel().getComment());
+					}
+				}.show();
+			} else {
+				super.performDirectEdit();
+			}
 		}
 	}
 
@@ -333,8 +337,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 
 	@Override
 	public GraphicalEditPart getContentEP() {
-		return (GraphicalEditPart) getChildren().stream().filter(UnfoldedSubappContentEditPart.class::isInstance)
-				.findAny().orElse(null);
+		return getChildren().stream().filter(UnfoldedSubappContentEditPart.class::isInstance).findAny().orElse(null);
 	}
 
 	@Override
