@@ -33,11 +33,11 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
@@ -196,9 +196,9 @@ public final class FordiacMarkerHelper {
 	}
 
 	public static FBNetworkElement createTypeErrorMarkerFB(final String typeFbElement, final TypeLibrary typeLibrary,
-			final FBType fbType) {
+			final EClass typeClass) {
 		final ErrorMarkerFBNElement errorFb = createErrorMarkerFB(typeFbElement);
-		final TypeEntry entry = typeLibrary.createErrorTypeEntry(typeFbElement, fbType);
+		final TypeEntry entry = typeLibrary.createErrorTypeEntry(typeFbElement, typeClass);
 		errorFb.setTypeEntry(entry);
 		return errorFb;
 	}

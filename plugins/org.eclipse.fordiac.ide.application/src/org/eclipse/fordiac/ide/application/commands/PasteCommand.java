@@ -45,7 +45,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -148,9 +147,10 @@ public class PasteCommand extends Command {
 
 	// remove elements, if they are already inside a selected top-level subapp.
 	private void removeDuplicateElements() {
-		copyPasteData.elements().removeIf(element -> copyPasteData.elements().stream()
-				.filter(SubApp.class::isInstance).map(SubApp.class::cast).filter(subapp -> !subapp.isTyped())
-				.anyMatch(subapp -> subapp.getSubAppNetwork().getNetworkElements().contains(element)));
+		copyPasteData.elements()
+				.removeIf(element -> copyPasteData.elements().stream().filter(SubApp.class::isInstance)
+						.map(SubApp.class::cast).filter(subapp -> !subapp.isTyped())
+						.anyMatch(subapp -> subapp.getSubAppNetwork().getNetworkElements().contains(element)));
 	}
 
 	private void updateDelta() {
@@ -242,7 +242,7 @@ public class PasteCommand extends Command {
 				copiedElement.setTypeEntry(dstTypeEntry);
 			} else {
 				copiedElement = FordiacMarkerHelper.createTypeErrorMarkerFB(copiedElement.getName(), dstTypeLib,
-						(FBType) element.getTypeEntry().getType());
+						element.getTypeEntry().getType().eClass());
 				copiedElement.setInterface(InterfaceListCopier.copy(element.getInterface()));
 			}
 		} else {
@@ -335,7 +335,7 @@ public class PasteCommand extends Command {
 			final Application destApp = destination.getFBNetworkElement().getFbNetwork().getApplication();
 			if ((sourceApp != null && destApp != null && sourceApp.equals(destApp))
 					|| (FBNetworkHelper.getRootType(source) != null && FBNetworkHelper.getRootType(destination) != null
-					&& FBNetworkHelper.getRootType(source).equals(FBNetworkHelper.getRootType(destination)))) {
+							&& FBNetworkHelper.getRootType(source).equals(FBNetworkHelper.getRootType(destination)))) {
 				return CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source,
 						destination);
 			}
@@ -347,7 +347,8 @@ public class PasteCommand extends Command {
 		if (null != copiedElement) {
 			// we have a copied connection target get the interface element from it
 			return copiedElement.getInterfaceElement(orig.getName());
-		} else if (dstFBNetwork.equals(copyPasteData.srcNetwork())
+		}
+		if (dstFBNetwork.equals(copyPasteData.srcNetwork())
 				|| (dstFBNetwork.isSubApplicationNetwork() || copyPasteData.srcNetwork().isSubApplicationNetwork())) {
 			// we have a connection target to an existing FBNElement, only retrieve the
 			// interface element if the target FBNetwrok is the same as the source. In this
@@ -384,9 +385,9 @@ public class PasteCommand extends Command {
 	private void createUpdateTypeAndErrorMarkerCommands() {
 		copiedElements.values().forEach(fbnEl -> {
 			if (fbnEl instanceof ErrorMarkerFBNElement) {
-				final ErrorMarkerBuilder builder = ErrorMarkerBuilder.createErrorMarkerBuilder(MessageFormat
-						.format("Type ({0}) could not be loaded for FB: {1}", fbnEl.getTypeName(), fbnEl.getName())) //$NON-NLS-1$
-						.setTarget(fbnEl);
+				final ErrorMarkerBuilder builder = ErrorMarkerBuilder
+						.createErrorMarkerBuilder(MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", //$NON-NLS-1$
+								fbnEl.getTypeName(), fbnEl.getName())).setTarget(fbnEl);
 				createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(builder));
 			} else if (fbnEl.getTypeEntry() != null) {
 				// we only need to update the type if we have a type entry

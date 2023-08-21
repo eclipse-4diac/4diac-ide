@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -39,6 +40,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
@@ -67,7 +69,7 @@ public final class TypeLibrary {
 	private final Map<String, SubAppTypeEntry> subAppTypes = new HashMap<>();
 	private final Map<String, SystemEntry> systems = new HashMap<>();
 	private final Map<String, GlobalConstantsEntry> globalConstants = new HashMap<>();
-	private final Map<String, TypeEntry> errorTypes = new HashMap<>();
+	private final Map<String, TypeEntry> errorTypes = new ConcurrentHashMap<>();
 
 	public Map<String, AdapterTypeEntry> getAdapterTypes() {
 		return adapterTypes;
@@ -241,21 +243,24 @@ public final class TypeLibrary {
 		return entry;
 	}
 
-	public TypeEntry createErrorTypeEntry(final String typeFbElement, final FBType fbType) {
-		final TypeEntry entry = createErrorTypeEntry(fbType);
-		entry.setType(fbType);
-		fbType.setName(typeFbElement);
-		fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		addErrorTypeEntry(entry);
-		return entry;
+	public TypeEntry createErrorTypeEntry(final String typeName, final EClass typeClass) {
+		return errorTypes.computeIfAbsent(typeName, name -> {
+			final FBType fbType = (FBType) LibraryElementFactory.eINSTANCE.create(typeClass);
+			fbType.setName(typeName);
+			fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
+			final TypeEntry entry = createErrorTypeEntry(fbType);
+			entry.setType(fbType);
+			entry.setTypeLibrary(this);
+			return entry;
+		});
 	}
 
-	public void addErrorTypeEntry(final TypeEntry entry) {
-		errorTypes.put(entry.getTypeName(), entry);
+	public boolean addErrorTypeEntry(final TypeEntry entry) {
+		return errorTypes.putIfAbsent(entry.getTypeName(), entry) == null;
 	}
 
 	public void removeErrorTypeEntry(final TypeEntry entry) {
-		errorTypes.remove(entry.getTypeName());
+		errorTypes.remove(entry.getTypeName(), entry);
 	}
 
 	private static TypeEntry createErrorTypeEntry(final FBType fbType) {

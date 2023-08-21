@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
@@ -94,7 +95,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		final SubAppTypeEntry subEntry = getTypeLibrary().getSubAppTypeEntry(type);
 		if (subEntry == null) {
 			return FordiacMarkerHelper.createTypeErrorMarkerFB(type, getTypeLibrary(),
-					LibraryElementFactory.eINSTANCE.createSubAppType());
+					LibraryElementPackage.eINSTANCE.getSubAppType());
 		}
 		subApp.setTypeEntry(subEntry);
 		subApp.setInterface(subEntry.getType().getInterfaceList().copy());
@@ -103,26 +104,29 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 	private void parseUntypedSubapp(final SubApp subApp) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.SUBAPP_ELEMENT, name -> {
-			switch (name) {
-			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT:
+			return switch (name) {
+			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT -> {
 				final SubAppTImporter interfaceImporter = new SubAppTImporter(this);
 				subApp.setInterface(
 						interfaceImporter.parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
-				return true;
-			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
+				yield true;
+			}
+			case LibraryElementTags.SUBAPPNETWORK_ELEMENT -> {
 				final SubAppNetworkImporter subAppImporter = new SubAppNetworkImporter(this, subApp.getInterface());
 				subApp.setSubAppNetwork(subAppImporter.getFbNetwork());
 				subAppImporter.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT);
-				return true;
-			case LibraryElementTags.PARAMETER_ELEMENT:
-				parseParameter(subApp);
-				return true;
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
-				parseUntypedSubappAttributes(subApp);
-				return true;
-			default:
-				return false;
+				yield true;
 			}
+			case LibraryElementTags.PARAMETER_ELEMENT -> {
+				parseParameter(subApp);
+				yield true;
+			}
+			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
+				parseUntypedSubappAttributes(subApp);
+				yield true;
+			}
+			default -> false;
+			};
 		});
 	}
 

@@ -240,7 +240,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		if (null == entry) {
 			return FordiacMarkerHelper.createTypeErrorMarkerFB(typeFbElement, getTypeLibrary(),
-					LibraryElementFactory.eINSTANCE.createFBType());
+					LibraryElementPackage.eINSTANCE.getFBType());
 		}
 		final FBType type = entry.getType();
 		if (type instanceof CompositeFBType) {

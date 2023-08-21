@@ -12,7 +12,9 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-public class ErrorSubAppTypeEntryImpl extends SubAppTypeEntryImpl {
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
+
+public class ErrorSubAppTypeEntryImpl extends SubAppTypeEntryImpl implements ErrorTypeEntry {
 
 	// error marker entries do not have a file and therefore we need to change getTypeName
 	@Override
