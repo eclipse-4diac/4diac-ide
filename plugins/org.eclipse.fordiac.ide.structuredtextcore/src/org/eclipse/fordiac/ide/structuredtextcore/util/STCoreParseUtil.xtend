@@ -19,6 +19,7 @@ import java.util.List
 import java.util.Map
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource
 import org.eclipse.xtext.ParserRule
@@ -58,8 +59,13 @@ final class STCoreParseUtil {
 		if(!additionalContent.nullOrEmpty) resource.additionalContent.addAll(additionalContent)
 		resource.load(new LazyStringInputStream(text), loadOptions ?: resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
-		issues.addAll(validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl))
+		issues.addAll(validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl).filter[relevantIssue])
 		return resource.parseResult
+	}
+	
+	def private static boolean isRelevantIssue(Issue issue) {
+		val fragment = issue.uriToProblem.fragment
+		return fragment == "/" || fragment.startsWith("//") || fragment.startsWith("/0") // only element (no index) or first element (zero index) in contents
 	}
 
 	def static IParseResult postProcess(String name, List<String> errors, List<String> warnings, List<String> infos,
