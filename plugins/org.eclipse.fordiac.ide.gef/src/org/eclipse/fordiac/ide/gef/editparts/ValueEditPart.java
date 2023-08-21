@@ -35,12 +35,14 @@ import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
@@ -54,6 +56,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
@@ -382,8 +385,12 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		// REQ_OPEN -> doubleclick
 
 		final FBNetworkElement fb = getModel().getParentIE().getFBNetworkElement();
-		if (!isTypedInstance(fb) && ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
-				|| (request.getType() == RequestConstants.REQ_OPEN))) {
+
+		final IEditorPart editor = EditorUtils.getCurrentActiveEditor();
+
+		if (!isTypedInstance(fb) && editor.getAdapter(FBNetwork.class) != null
+				&& ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
+						|| (request.getType() == RequestConstants.REQ_OPEN))) {
 			performDirectEdit();
 
 		} else {

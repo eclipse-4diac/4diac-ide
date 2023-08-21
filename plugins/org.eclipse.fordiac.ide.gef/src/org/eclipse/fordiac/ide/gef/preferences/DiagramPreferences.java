@@ -59,6 +59,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	public static final String MAX_VALUE_LABEL_SIZE = "MaxValueLabelSize"; //$NON-NLS-1$
 
+	public static final String MIN_PIN_LABEL_SIZE = "MinPinLabelSize"; //$NON-NLS-1$
 	public static final String MAX_PIN_LABEL_SIZE = "MaxPinLabelSize"; //$NON-NLS-1$
 
 	public static final String MAX_HIDDEN_CONNECTION_LABEL_SIZE = "MaxHiddenConnectionLabelSize"; //$NON-NLS-1$
@@ -120,7 +121,8 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	private static boolean matchPreferenceName(final PropertyChangeEvent event) {
 		final String sourcePrefName = ((FieldEditor) event.getSource()).getPreferenceName();
-		return sourcePrefName.equalsIgnoreCase(MAX_PIN_LABEL_SIZE)
+		return sourcePrefName.equalsIgnoreCase(MIN_PIN_LABEL_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(MAX_PIN_LABEL_SIZE)
 				|| sourcePrefName.equalsIgnoreCase(MAX_TYPE_LABEL_SIZE)
 				|| sourcePrefName.equalsIgnoreCase(MAX_VALUE_LABEL_SIZE)
 				|| sourcePrefName.equalsIgnoreCase(MAX_HIDDEN_CONNECTION_LABEL_SIZE)
@@ -168,10 +170,15 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		integerFieldEditorTypeLabel.setValidRange(0, 120);
 		addField(integerFieldEditorTypeLabel);
 
-		final IntegerFieldEditor integerFieldEditorPin = new IntegerFieldEditor(MAX_PIN_LABEL_SIZE,
+		final IntegerFieldEditor integerFieldEditorMinPin = new IntegerFieldEditor(MIN_PIN_LABEL_SIZE,
+				Messages.DiagramPreferences_MinimumPinLabelSize, labelSize);
+		integerFieldEditorMinPin.setValidRange(0, 60);
+		addField(integerFieldEditorMinPin);
+
+		final IntegerFieldEditor integerFieldEditorMaxPin = new IntegerFieldEditor(MAX_PIN_LABEL_SIZE,
 				Messages.DiagramPreferences_MaximumPinLabelSize, labelSize);
-		integerFieldEditorPin.setValidRange(0, 60);
-		addField(integerFieldEditorPin);
+		integerFieldEditorMaxPin.setValidRange(0, 60);
+		addField(integerFieldEditorMaxPin);
 
 		final IntegerFieldEditor integerFieldEditorConnection = new IntegerFieldEditor(MAX_HIDDEN_CONNECTION_LABEL_SIZE,
 				Messages.DiagramPreferences_MaximumHiddenConnectionLabelSize, labelSize);

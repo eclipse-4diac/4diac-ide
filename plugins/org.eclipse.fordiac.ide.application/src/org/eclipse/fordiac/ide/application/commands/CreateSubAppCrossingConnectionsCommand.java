@@ -109,7 +109,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 	public void execute() {
 		final IInterfaceElement left = buildPath(source, sourceNetworks, false);
 		final IInterfaceElement right = buildPath(destination, destinationNetworks, true);
-		createConnection(source, match, left, right);
+		createConnection(match, left, right);
 	}
 
 	private static boolean isSwapNeeded(final IInterfaceElement source, final IInterfaceElement destination,
@@ -191,9 +191,9 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 			final IInterfaceElement createdPin = createInterfaceElement(isRightPath, ie, subapp);
 
 			if (isRightPath) {
-				createConnection(ie, network, createdPin, ie);
+				createConnection(network, createdPin, ie);
 			} else {
-				createConnection(ie, network, ie, createdPin);
+				createConnection(network, ie, createdPin);
 			}
 
 			ie = createdPin;
@@ -233,9 +233,10 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 		return LinkConstraints.typeCheck(source, pin);
 	}
 
-	private void createConnection(final IInterfaceElement ie, final FBNetwork network,
-			final IInterfaceElement connSource, final IInterfaceElement connDestination) {
-		final AbstractConnectionCreateCommand connCmd = AbstractConnectionCreateCommand.createCommand(ie, network);
+	private void createConnection(final FBNetwork network, final IInterfaceElement connSource,
+			final IInterfaceElement connDestination) {
+		final AbstractConnectionCreateCommand connCmd = AbstractConnectionCreateCommand.createCommand(network,
+				connSource, connDestination);
 		connCmd.setSource(connSource);
 		connCmd.setDestination(connDestination);
 		if (connCmd.canExecute()) {

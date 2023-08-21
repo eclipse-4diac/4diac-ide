@@ -19,14 +19,15 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
@@ -48,13 +49,10 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 	/** The destination view. */
 	private IInterfaceElement destination;
 
-	/**
-	 * flag to indicate if during execution of this command a mirrored connection in
-	 * the opposite element (e.g., resrouce for app) should be created.
+	/** flag to indicate if during execution of this command a mirrored connection in the opposite element (e.g.,
+	 * resrouce for app) should be created.
 	 *
-	 * This flag is here so that the command can be reused also for creating the
-	 * mirrored connection.
-	 */
+	 * This flag is here so that the command can be reused also for creating the mirrored connection. */
 	private boolean performMappingCheck;
 
 	private AbstractConnectionCreateCommand mirroredConnection;
@@ -169,14 +167,10 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 
 	protected abstract Connection createConnectionElement();
 
-	/**
-	 * Check if the mapping of source and target require mirrored connection to be
-	 * created and setup a connection create command accordingly. The execute, undo,
-	 * and redo will be invoked by AbstractCreateCommand when required.
+	/** Check if the mapping of source and target require mirrored connection to be created and setup a connection
+	 * create command accordingly. The execute, undo, and redo will be invoked by AbstractCreateCommand when required.
 	 *
-	 * @return a connectioncreatecommand if a mirrord connection should be created,
-	 *         null otherwise
-	 */
+	 * @return a connectioncreatecommand if a mirrord connection should be created, null otherwise */
 	private AbstractConnectionCreateCommand checkAndCreateMirroredConnection() {
 		if (null != source.getFBNetworkElement() && null != destination.getFBNetworkElement()) {
 			final FBNetworkElement opSource = source.getFBNetworkElement().getOpposite();
@@ -232,21 +226,15 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 		return !LinkConstraints.duplicateConnection(opSrcIE, opDstIE);
 	}
 
-	/**
-	 * Create a connection command for creating a mirrored connection for the
-	 * connection type
+	/** Create a connection command for creating a mirrored connection for the connection type
 	 *
 	 * @param fbNetwork the fbn network for the mirrord connection
-	 * @return the command for the connection must not be null
-	 */
+	 * @return the command for the connection must not be null */
 	protected abstract AbstractConnectionCreateCommand createMirroredConnectionCommand(FBNetwork fbNetwork);
 
-	/**
-	 * Perform any connection type (i.e. event, data, or adapter con) specific
-	 * checks
+	/** Perform any connection type (i.e. event, data, or adapter con) specific checks
 	 *
-	 * @return true if the two pins can be connected false otherwise
-	 */
+	 * @return true if the two pins can be connected false otherwise */
 	protected abstract boolean canExecuteConType();
 
 	public void setPerformMappingCheck(final boolean performMappingCheck) {
@@ -260,14 +248,36 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 		}
 	}
 
-	public static AbstractConnectionCreateCommand createCommand(final IInterfaceElement ie, final FBNetwork network) {
+	public static AbstractConnectionCreateCommand createCommand(final FBNetwork network,
+			final IInterfaceElement connSrc, final IInterfaceElement connDest) {
+		if (isStructManipulatorDefPin(connSrc) && isStructManipulatorDefPin(connDest)) {
+			return new StructDataConnectionCreateCommand(network);
+		}
+		return createCommand(connSrc, network);
+	}
+
+	/** Check if the given pin is the struct defining pin of a struct manipulator.
+	 *
+	 * For a Demultiplexer it means that it is the single input. For a Multiplexer it means that it is the single
+	 * output.
+	 *
+	 * @param pin the pin to check
+	 * @return true if it is a struct defining pin of a struct manipulator. */
+	public static boolean isStructManipulatorDefPin(final IInterfaceElement pin) {
+		if (!(pin instanceof VarDeclaration)) {
+			return false;
+		}
+		final FBNetworkElement fbNE = pin.getFBNetworkElement();
+
+		return ((fbNE instanceof Demultiplexer && pin.isIsInput())
+				|| (fbNE instanceof Multiplexer && !pin.isIsInput()));
+	}
+
+	private static AbstractConnectionCreateCommand createCommand(final IInterfaceElement ie, final FBNetwork network) {
 		if (ie instanceof Event) {
 			return new EventConnectionCreateCommand(network);
 		}
 		if (ie instanceof VarDeclaration) {
-			if (ie.getType() instanceof StructuredType) {
-				return new StructDataConnectionCreateCommand(network);
-			}
 			return new DataConnectionCreateCommand(network);
 		}
 		return new AdapterConnectionCreateCommand(network);
