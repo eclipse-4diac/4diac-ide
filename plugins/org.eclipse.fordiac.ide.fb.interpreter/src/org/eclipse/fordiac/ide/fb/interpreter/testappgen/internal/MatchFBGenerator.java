@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -50,17 +51,34 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 		final TestEccGenerator eccGen = new TestEccGenerator(destinationFB.getECC(), 0);
 		for (final Event event : destinationFB.getInterfaceList().getEventInputs()) {
 			if (event.getName().contains("expected")) { //$NON-NLS-1$
+				if (event.getName().equals("expected")) {
+					eccGen.createState("S1", 0);
+					eccGen.createTransitionFromTo(eccGen.getEcc().getStart(), eccGen.getLast(),
+							getEventInput("expected"));
+					eccGen.createTransitionFromTo(eccGen.getLast(), eccGen.getEcc().getStart(), null);
+					final ECAction action = eccGen.createAction();
+					action.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(1));
+					eccGen.getLast().getECAction().add(action);
+				}
 				final String[] splitName = event.getName().split("_"); //$NON-NLS-1$
 				for (int i = 0; i < splitName.length - 1; i++) {
 					eccGen.createState(splitName[i] + "_wait", i); //$NON-NLS-1$
+					eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1)
+							.setName(NameRepository.createUniqueName(
+									eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1),
+									splitName[i] + "_WAIT_1"));
 					if (i == 0) {
 						eccGen.createTransitionFromTo(eccGen.getEcc().getStart(), eccGen.getLast(), event);
 					} else {
 						eccGen.createTransitionFromTo(eccGen.getNTimesLast(2), eccGen.getLast(),
-								getEvent(splitName[i - 1]));
+								getEventInput(splitName[i - 1]));
 					}
 					eccGen.increaseCaseCount();
 					eccGen.createState("ERROR", i); //$NON-NLS-1$
+					eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1)
+							.setName(NameRepository.createUniqueName(
+									eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1),
+									"ERROR_1"));
 					createErrorTransitions(eccGen, splitName[i]);
 					eccGen.createTransitionFromTo(eccGen.getLast(), eccGen.getEcc().getStart(), null);
 					final ECAction errAct = TestEccGenerator.createAction();
@@ -69,6 +87,10 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 					eccGen.decreaseCaseCount();
 					if (i == splitName.length - 2) {
 						eccGen.createState(event.getName() + "_match", i + 1); //$NON-NLS-1$
+						eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1)
+								.setName(NameRepository.createUniqueName(
+										eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1),
+										event.getName() + "_MATCH_1"));
 						final ECAction sucAct = TestEccGenerator.createAction();
 						sucAct.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(1));
 						eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1).getECAction()
@@ -77,7 +99,7 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 								destinationFB.getInterfaceList().getOutputVars(),
 								event.getName().substring(0, event.getName().lastIndexOf('_'))));
 						eccGen.createTransitionFromTo(eccGen.getNTimesLast(2), eccGen.getLast(),
-								getEvent(splitName[i]));
+								getEventInput(splitName[i]));
 						eccGen.createTransitionFromTo(eccGen.getLast(), eccGen.getEcc().getStart(), null);
 					}
 				}
@@ -95,7 +117,7 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 		}
 	}
 
-	private Event getEvent(final String name) {
+	private Event getEventInput(final String name) {
 		for (final Event ev : destinationFB.getInterfaceList().getEventInputs()) {
 			if (ev.getName().equals(name)) {
 				return ev;

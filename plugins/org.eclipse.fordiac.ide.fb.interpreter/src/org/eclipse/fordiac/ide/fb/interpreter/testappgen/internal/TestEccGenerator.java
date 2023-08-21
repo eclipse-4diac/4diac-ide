@@ -90,11 +90,11 @@ public class TestEccGenerator {
 		text.append("ALGORITHM " + name + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (final VarDeclaration varDecl : outputData) {
 			final String varName = varDecl.getName().substring(0, varDecl.getName().indexOf('_'));
-			text.append("if " + varName + "_expected = " + varName + "_received then\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			text.append("IF " + varName + "_expected = " + varName + "_received THEN\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			text.append(varName + "_matchData := true;\n"); //$NON-NLS-1$
-			text.append("else\n"); //$NON-NLS-1$
+			text.append("ELSE\n"); //$NON-NLS-1$
 			text.append(varName + "_matchData := false;\n"); //$NON-NLS-1$
-			text.append("end_if;\n"); //$NON-NLS-1$
+			text.append("END_IF;\n"); //$NON-NLS-1$
 		}
 		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
 		text.append("\n\n\n"); //$NON-NLS-1$

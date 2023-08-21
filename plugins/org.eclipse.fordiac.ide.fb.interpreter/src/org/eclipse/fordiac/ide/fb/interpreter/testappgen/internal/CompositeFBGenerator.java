@@ -61,7 +61,7 @@ public class CompositeFBGenerator {
 		compositeFB.setService(LibraryElementFactory.eINSTANCE.createService());
 
 		final IProject project = sourceType.getTypeLibrary().getProject();
-		final IFolder folder = project.getFolder("Type Library"); //$NON-NLS-1$
+		final IFolder folder = project.getFolder("Type Library/blocksForTestingTheTestblock/generatedBlocks"); //$NON-NLS-1$
 		final IFile destfile = folder.getFile(sourceType.getName() + "_COMPOSITE.fbt"); //$NON-NLS-1$
 
 		final TypeEntry entry = sourceType.getTypeLibrary().createTypeEntry(destfile);
@@ -179,7 +179,7 @@ public class CompositeFBGenerator {
 
 	private void createConnectionToBlockToTest() {
 		for (int i = 0; i < testFB.getInterface().getEventOutputs().size(); i++) {
-			if (testFB.getInterface().getEventOutputs().get(i).getName().contains("_expected")) { //$NON-NLS-1$
+			if (testFB.getInterface().getEventOutputs().get(i).getName().contains("expected")) { //$NON-NLS-1$
 				break;
 			}
 			compositeFB.getFBNetwork().getEventConnections().add(createEventConnection(
@@ -229,7 +229,7 @@ public class CompositeFBGenerator {
 			compositeFB.getInterfaceList().getEventInputs()
 					.add(AbstractFBGenerator.createEvent(testCase.getName() + "_TEST", true)); //$NON-NLS-1$
 		}
-		compositeFB.getInterfaceList().getEventOutputs().add(AbstractFBGenerator.createEvent("SUCCESS", false)); //$NON-NLS-1$
 		compositeFB.getInterfaceList().getEventOutputs().add(AbstractFBGenerator.createEvent("ERROR", false)); //$NON-NLS-1$
+		compositeFB.getInterfaceList().getEventOutputs().add(AbstractFBGenerator.createEvent("SUCCESS", false)); //$NON-NLS-1$
 	}
 }

@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class TestFbGenerator extends AbstractFBGenerator {
@@ -70,15 +71,19 @@ public class TestFbGenerator extends AbstractFBGenerator {
 				eccGen.createState(testCase, stateCnt);
 
 				final Event ev = destinationFB.getInterfaceList().getEvent(testState.getTestTrigger().getEvent());
-				final ECAction action = TestEccGenerator.createAction();
-				action.setOutput(ev);
+				final ECAction actToTest = TestEccGenerator.createAction();
+				actToTest.setOutput(ev);
 
-				eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1).getECAction().add(action);
+				eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1).getECAction().add(actToTest);
 
 				if (stateCnt <= 1) {
 					eccGen.createTransitionFromTo(eccGen.getEcc().getECState().get(0),
 							eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1),
 							inputEventList.get(eccGen.getCaseCount()));
+					final ECAction actToMatch = TestEccGenerator.createAction();
+					actToMatch.setOutput(getOutputEvent(testCase));
+					eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1).getECAction()
+							.add(actToMatch);
 
 				} else {
 					eccGen.createTransitionFromTo(
@@ -94,6 +99,21 @@ public class TestFbGenerator extends AbstractFBGenerator {
 
 			eccGen.increaseCaseCount();
 		}
+	}
+
+	private Event getOutputEvent(final TestCase testCase) {
+		final StringBuilder sb = new StringBuilder();
+
+		for (final TestState testState : testCase.getTestStates()) {
+			for (final OutputPrimitive outP : testState.getTestOutputs()) {
+				sb.append(outP.getEvent() + "_"); //$NON-NLS-1$
+			}
+		}
+		sb.append("expected"); //$NON-NLS-1$
+		final String name = sb.toString();
+
+		return destinationFB.getInterfaceList().getEventOutputs().stream().filter(e -> e.getName().equals(name))
+				.findAny().orElse(null);
 	}
 
 	@Override
@@ -122,6 +142,8 @@ public class TestFbGenerator extends AbstractFBGenerator {
 		for (final VarDeclaration varDecl : sourceType.getInterfaceList().getOutputVars()) {
 			list.add(createVarDeclaration(varDecl, varDecl.getName(), false));
 		}
+
 		return list;
 	}
+
 }
