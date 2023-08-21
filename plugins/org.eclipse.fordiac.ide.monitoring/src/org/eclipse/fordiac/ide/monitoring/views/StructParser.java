@@ -114,20 +114,12 @@ public final class StructParser {
 			throw new IllegalArgumentException("Error during struct parsing."); //$NON-NLS-1$
 		}
 
-		final WatchValueTreeNode node = new WatchValueTreeNode(
-				monitoringElement,
-				type,
-				name,
-				value,
-				variable,
-				parent
-				);
+		final WatchValueTreeNode node = new WatchValueTreeNode(monitoringElement, type, name, value, variable, parent);
 
 		if (isStructLiteral(value)) {
-			// recursive call
 			buildTree(node, (StructuredType) variable.getType(), value);
 		} else if (isArrayLiteral(value)) {
-			// possibility to parse array
+			buildTree(node, (StructuredType) variable.getType(), value);
 		}
 
 		parent.addChild(node);
@@ -138,16 +130,15 @@ public final class StructParser {
 		final MonitoringBaseElement monitoringElement = parent.getMonitoringBaseElement();
 
 		final VarDeclaration variable = null;
-		final String name = "[" + arrayIndex + "]";
+		final String name = "[" + arrayIndex + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 		final String value = frame;
 
 		final WatchValueTreeNode node = new WatchValueTreeNode(monitoringElement, type, name, value, variable, parent);
 
 		if (isStructLiteral(value)) {
-			// recursive call
 			buildTree(node, type, value);
 		} else if (isArrayLiteral(value)) {
-			// possibility to parse array
+			buildTree(node, type, value);
 		}
 
 		parent.addChild(node);
@@ -162,10 +153,8 @@ public final class StructParser {
 	}
 
 	private static boolean isDerivedTypeLiteral(final String value, final char opening, final char closing) {
-		return !value.isBlank() &&
-				value.length() >= 2 &&
-				value.charAt(0) == opening &&
-				value.charAt(value.length() - 1) == closing;
+		return !value.isBlank() && value.length() >= 2 && value.charAt(0) == opening
+				&& value.charAt(value.length() - 1) == closing;
 	}
 
 	private static VarDeclaration findVarDeclaration(final StructuredType structType, final String varName) {
@@ -219,7 +208,8 @@ public final class StructParser {
 		return element.getCurrentValue().startsWith("["); //$NON-NLS-1$
 	}
 
-	private static void toString(final WatchValueTreeNode startNode, final StringBuilder builder, final boolean isArray) {
+	private static void toString(final WatchValueTreeNode startNode, final StringBuilder builder,
+			final boolean isArray) {
 		if (startNode.isStructLeaf()) {
 			builder.append(startNode.getValue()); // also handles arrays inside of structs
 			return;
@@ -239,7 +229,7 @@ public final class StructParser {
 			builder.append(","); //$NON-NLS-1$
 		}
 		// remove last semicolon if necessary
-		if (builder.charAt(builder.length() - 1) == ',') { //$NON-NLS-1$
+		if (builder.charAt(builder.length() - 1) == ',') {
 			builder.setLength(builder.length() - 1);
 		}
 
