@@ -29,21 +29,20 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 	private final StructuredType structType;
 	private final MonitoringBaseElement monitoringBaseElement;
 
+	private boolean isArray;
+
 	public WatchValueTreeNode(final MonitoringBaseElement monitoringBaseElement) {
-		super();
 		this.structType = null;
 		this.monitoringBaseElement = monitoringBaseElement;
 	}
 
 	public WatchValueTreeNode(final MonitoringBaseElement monitoringBaseElement, final StructuredType structType) {
-		super();
 		this.structType = structType;
 		this.monitoringBaseElement = monitoringBaseElement;
 	}
 
 	public WatchValueTreeNode(final MonitoringBaseElement monitoringBaseElement, final StructuredType structType,
 			final String varName, final String value, final VarDeclaration variable, final WatchValueTreeNode parent) {
-		super();
 		this.structType = structType;
 		this.monitoringBaseElement = monitoringBaseElement;
 		this.varName = varName;
@@ -56,6 +55,7 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 		}
 		setVariable(variable);
 		setParent(parent);
+		updateIsArray(value);
 	}
 
 	@Override
@@ -74,8 +74,7 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 			final WatchValueTreeNode root) {
 		final DataType type = monitoringBaseElement.getPort().getInterfaceElement().getType();
 		WatchValueTreeNode node = null;
-		if (monitoringBaseElement instanceof MonitoringElement) {
-			final MonitoringElement monitoringElement = ((MonitoringElement) monitoringBaseElement);
+		if (monitoringBaseElement instanceof final MonitoringElement monitoringElement) {
 			if ((type instanceof StructuredType) && (type != IecTypes.GenericTypes.ANY_STRUCT)) {
 				node = createStructNode(monitoringBaseElement, type, root);
 			} else if (type != IecTypes.GenericTypes.ANY_STRUCT) {
@@ -134,12 +133,11 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 		getChildren().add(child);
 	}
 
-
 	public AbstractStructTreeNode addChild(final VarDeclaration memberVariable, final MonitoringBaseElement element,
 			final StructuredType type) {
 
-		final WatchValueTreeNode treeNode = new WatchValueTreeNode(element, type,
-				memberVariable.getName(), null, memberVariable, this);
+		final WatchValueTreeNode treeNode = new WatchValueTreeNode(element, type, memberVariable.getName(), null,
+				memberVariable, this);
 		getChildren().add(treeNode);
 
 		return treeNode;
@@ -165,11 +163,9 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 
 	public String getValue() {
 
-
 		if (!isStructNode() && monitoringBaseElement instanceof MonitoringElement) {
 			return ((MonitoringElement) monitoringBaseElement).getCurrentValue();
 		}
-
 
 		if (isStructRootNode() && monitoringBaseElement instanceof MonitoringElement) {
 			return ((MonitoringElement) monitoringBaseElement).getCurrentValue();
@@ -188,6 +184,7 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 
 	public void setValue(final String value) {
 		this.value = value;
+		updateIsArray(value);
 	}
 
 	public boolean isStructRootNode() {
@@ -200,6 +197,20 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 
 	public boolean isStructLeaf() {
 		return !hasChildren() && isStructNode();
+	}
+
+	public boolean isArray() {
+		return isArray;
+	}
+
+	// high level nodes are often initialised with null as value (as to not show any value in the watch tree)
+	// so we have to allow for the array flag to be manually set if needed (e.g. for hex decoration)
+	public void setIsArray(final boolean isArray) {
+		this.isArray = isArray;
+	}
+
+	private void updateIsArray(final String value) {
+		isArray = value != null ? value.startsWith("[") : false; //$NON-NLS-1$
 	}
 
 	public String getVarName() {

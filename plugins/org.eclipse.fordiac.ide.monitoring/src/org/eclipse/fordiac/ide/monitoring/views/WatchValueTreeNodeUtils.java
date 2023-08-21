@@ -16,19 +16,17 @@
 
 package org.eclipse.fordiac.ide.monitoring.views;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.AbstractStructTreeNode;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
-import org.eclipse.fordiac.ide.model.data.AnyRealType;
 import org.eclipse.fordiac.ide.model.data.BoolType;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.StringType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.data.WstringType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.model.value.StringValueConverter;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class WatchValueTreeNodeUtils {
@@ -37,6 +35,8 @@ public final class WatchValueTreeNodeUtils {
 	public static final String ASSIGN = ":="; //$NON-NLS-1$
 	public static final String CLAMP_OP = "("; //$NON-NLS-1$
 	public static final String CLAMP_CL = ")"; //$NON-NLS-1$
+	public static final String BRACK_OP = "["; //$NON-NLS-1$
+	public static final String BRACK_CL = "]"; //$NON-NLS-1$
 	public static final String DELIMITER = ","; //$NON-NLS-1$
 
 	/**
@@ -48,25 +48,40 @@ public final class WatchValueTreeNodeUtils {
 	 *         struct or not).
 	 */
 	public static String decorateHexValue(final String value, final DataType type, final MonitoringElement model) {
-		// we want to convert every AnyBit type besides bool
+		if (isArray(value) && isHexValue(type)) {
+			// only split array if type really needs decorating
+			return decorateArrayHex(value, type, model);
+		}
 		if (isHexDecorationNecessary(value, type)) {
 			return decorateHexNumber(value);
-		} else if (isStruct(type)) {
+		}
+		if (isStruct(type)) {
 			try {
-				final WatchValueTreeNode dbgStruct = StructParser.createStructFromString(value, (StructuredType) type,
-						model, new WatchValueTreeNode(model));
+				final var parent = new WatchValueTreeNode(model);
+				final var dbgStruct = StructParser.createStructFromString(value, (StructuredType) type, model, parent);
+				dbgStruct.setIsArray(isArray(value));
 				adaptAnyBitValues(dbgStruct.getChildren());
 				return buildTreeString(dbgStruct);
 			} catch (final Exception ex) {
-				// we have an issue in parsing or creating the struct value, log it and inform the user with a updated
-				// value
-				final String wrongStructValue = "Wrong Struct Value: " + value;
-				FordiacLogHelper.logWarning(wrongStructValue, ex);
-				return wrongStructValue;
+				FordiacLogHelper.logWarning("Wrong Struct Value: " + value, ex); //$NON-NLS-1$
+				return value; // return FORTE value
 			}
 		}
 
 		return value;
+	}
+
+	private static boolean isArray(final String value) {
+		return value.startsWith("["); //$NON-NLS-1$
+	}
+
+	private static String decorateArrayHex(final String value, final DataType type, final MonitoringElement model) {
+		// @formatter:off
+		return Arrays.stream(value.substring(1, value.length() - 1).split(",")) //$NON-NLS-1$
+			.map(val -> decorateHexValue(val, type, model))
+			.collect(Collectors.joining(",", "[", "]")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			.toString();
+		// @formatter:on
 	}
 
 	/**
@@ -112,44 +127,29 @@ public final class WatchValueTreeNodeUtils {
 		return convertIntegerToHexString(parseInt);
 	}
 
-	public static String decorateCellValue(final DataType type, final String value) {
-		if (type instanceof AnyRealType) {
-			// display integers as decimals
-			if (!value.contains(".")) { //$NON-NLS-1$
-				return value + ".0"; //$NON-NLS-1$
-			}
-		} else if (type instanceof WstringType) {
-			if (!value.startsWith("\"")) { //$NON-NLS-1$
-				return StringValueConverter.INSTANCE.toString(value, true);
-			}
-		} else if (type instanceof StringType) {
-			if (!value.startsWith("'")) { //$NON-NLS-1$
-				return StringValueConverter.INSTANCE.toString(value, false);
-			}
-		}
-		return value;
-	}
-
 	public static String buildTreeString(final WatchValueTreeNode dbgStruct) {
-		return buildSubTreeString(dbgStruct.getChildren());
+		final String open = dbgStruct.isArray() ? BRACK_OP : CLAMP_OP;
+		final String close = dbgStruct.isArray() ? BRACK_CL : CLAMP_CL;
+
+		// @formatter:off
+		return dbgStruct.getChildren().stream()
+			.map(WatchValueTreeNode.class::cast)
+			.map(WatchValueTreeNodeUtils::convertNodeToString)
+			.collect(Collectors.joining(DELIMITER, open, close));
+		// @formatter:on
 	}
 
-	private static String buildSubTreeString(final List<AbstractStructTreeNode> list) {
-		final StringBuilder sb = new StringBuilder(CLAMP_OP);
-		for (final AbstractStructTreeNode tn : list) {
-			final WatchValueTreeNode wtn = (WatchValueTreeNode) tn;
-			sb.append(wtn.getVarName());
-			sb.append(ASSIGN);
-			if (wtn.hasChildren()) {
-				sb.append(buildSubTreeString(wtn.getChildren()));
-			} else {
-				sb.append(wtn.getValue());
-			}
-			sb.append(DELIMITER);
+	private static String convertNodeToString(final WatchValueTreeNode node) {
+		final var builder = new StringBuilder();
+		final var parent = (WatchValueTreeNode) node.getParent();
+
+		if (!parent.isArray()) {
+			builder.append(node.getVarName());
+			builder.append(ASSIGN);
 		}
-		sb.deleteCharAt(sb.length() - 1); // remove last delimiter
-		sb.append(CLAMP_CL);
-		return sb.toString();
+
+		builder.append(node.hasChildren() ? buildTreeString(node) : node.getValue());
+		return builder.toString();
 	}
 
 	private static boolean isStruct(final DataType type) {
