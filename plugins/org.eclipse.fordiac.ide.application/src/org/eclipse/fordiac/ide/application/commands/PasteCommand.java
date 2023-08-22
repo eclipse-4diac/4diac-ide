@@ -236,7 +236,7 @@ public class PasteCommand extends Command {
 		FBNetworkElement copiedElement = EcoreUtil.copy(element);
 		if (dstTypeLib != null && element.getTypeEntry() != null) {
 			// we are copying between projects and it is a typed FBNetworkElement
-			final TypeEntry dstTypeEntry = dstTypeLib.getFBOrSubAppType(element.getTypeName());
+			final TypeEntry dstTypeEntry = dstTypeLib.getFBOrSubAppType(element.getTypeEntry().getFullTypeName());
 			if (dstTypeEntry != null) {
 				// the target project has the type
 				copiedElement.setTypeEntry(dstTypeEntry);
@@ -387,7 +387,8 @@ public class PasteCommand extends Command {
 			if (fbnEl instanceof ErrorMarkerFBNElement) {
 				final ErrorMarkerBuilder builder = ErrorMarkerBuilder
 						.createErrorMarkerBuilder(MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", //$NON-NLS-1$
-								fbnEl.getTypeName(), fbnEl.getName())).setTarget(fbnEl);
+								fbnEl.getTypeName(), fbnEl.getName()))
+						.setTarget(fbnEl);
 				createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(builder));
 			} else if (fbnEl.getTypeEntry() != null) {
 				// we only need to update the type if we have a type entry
