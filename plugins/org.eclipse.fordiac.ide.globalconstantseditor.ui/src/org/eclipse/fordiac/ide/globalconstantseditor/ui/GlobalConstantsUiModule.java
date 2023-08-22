@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvide
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceForIEditorInputFactory;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceUIServiceProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator;
@@ -55,6 +56,7 @@ import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
+import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
 import org.eclipse.xtext.ui.shared.Access;
 import org.eclipse.xtext.ui.validation.IResourceUIValidatorExtension;
 
@@ -162,6 +164,10 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 				.annotatedWith(com.google.inject.name.Names
 						.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS))
 				.toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider.class);
+	}
+
+	public Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {
+		return STCoreResourceUIServiceProvider.class;
 	}
 
 	public Class<? extends IResourceUIValidatorExtension> bindIResourceUIValidatorExtension() {

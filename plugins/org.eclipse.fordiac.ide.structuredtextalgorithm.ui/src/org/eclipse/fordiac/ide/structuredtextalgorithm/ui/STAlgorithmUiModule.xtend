@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSim
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallableRefactoring
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceForIEditorInputFactory
+import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceUIServiceProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator
@@ -69,6 +70,7 @@ import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy
 import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument
+import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider
 import org.eclipse.xtext.ui.shared.Access
 import org.eclipse.xtext.ui.validation.IResourceUIValidatorExtension
 
@@ -187,6 +189,10 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 		.to(STCoreContentAssistPreferences.Initializer);
 		binder.bind(String).annotatedWith(Names.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS)).
 			toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider);
+	}
+
+	def Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {
+		return STCoreResourceUIServiceProvider
 	}
 
 	def Class<? extends IResourceUIValidatorExtension> bindIResourceUIValidatorExtension() {
