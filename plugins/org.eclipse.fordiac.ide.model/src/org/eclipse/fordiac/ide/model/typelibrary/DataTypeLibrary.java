@@ -1,7 +1,8 @@
 /********************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2013, 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2020 Johannes Kepler Universiy Linz
- * 				 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *                          Johannes Kepler Universiy Linz
+ *                          Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,7 @@
  *    - initial API and implementation and/or initial documentation
  *  Alois Zoitl - Changed to a per project Type and Data TypeLibrary
  *  Martin Melik-Merkumians - Changes to reflect returned List instead of array
+ *  Martin Jobst - Separate error marker data types into a distinct map
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -48,6 +50,7 @@ public final class DataTypeLibrary {
 
 	private final Map<String, DataType> typeMap = new ConcurrentHashMap<>();
 	private final Map<String, DataTypeEntry> derivedTypes = new ConcurrentHashMap<>();
+	private final Map<String, ErrorMarkerDataType> errorTypes = new ConcurrentHashMap<>();
 
 	/** Instantiates a new data type library. */
 	public DataTypeLibrary() {
@@ -56,6 +59,7 @@ public final class DataTypeLibrary {
 	}
 
 	public boolean addTypeEntry(final DataTypeEntry entry) {
+		errorTypes.remove(entry.getFullTypeName()); // remove stale error marker data type
 		return derivedTypes.putIfAbsent(entry.getFullTypeName(), entry) == null;
 	}
 
@@ -184,13 +188,14 @@ public final class DataTypeLibrary {
 		return null;
 	}
 
-	private ErrorMarkerDataType createErrorMarkerType(final String name, final String message) {
-		FordiacLogHelper.logInfo(message);
-		final ErrorMarkerDataType type = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
-		type.setName(name);
-		type.setErrorMessage(message);
-		typeMap.put(name, type);
-		return type;
+	private ErrorMarkerDataType createErrorMarkerType(final String typeName, final String message) {
+		return errorTypes.computeIfAbsent(typeName, name -> {
+			FordiacLogHelper.logInfo(message);
+			final ErrorMarkerDataType type = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
+			type.setName(name);
+			type.setErrorMessage(message);
+			return type;
+		});
 	}
 
 	public StructuredType getStructuredType(final String name) {
