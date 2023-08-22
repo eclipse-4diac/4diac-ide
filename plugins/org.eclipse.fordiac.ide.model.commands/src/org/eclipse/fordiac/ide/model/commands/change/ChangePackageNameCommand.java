@@ -14,7 +14,7 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.commands.internal.ChangeCompilerInfoCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /** The Class ChangeCompilerInfoHeader. */
 public class ChangePackageNameCommand extends ChangeCompilerInfoCommand {
@@ -23,7 +23,7 @@ public class ChangePackageNameCommand extends ChangeCompilerInfoCommand {
 	/** The old ApplicationDomain value. */
 	private String oldName;
 
-	public ChangePackageNameCommand(final FBType type, final String newName) {
+	public ChangePackageNameCommand(final LibraryElement type, final String newName) {
 		super(type);
 		this.newName = newName;
 	}

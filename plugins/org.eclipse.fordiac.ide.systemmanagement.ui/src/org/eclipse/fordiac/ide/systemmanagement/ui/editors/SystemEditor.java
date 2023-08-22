@@ -26,7 +26,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
+import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -67,7 +67,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 
 public class SystemEditor extends EditorPart
-implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISelectionListener {
+		implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISelectionListener {
 
 	private static final ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 
@@ -75,7 +75,7 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 
 	private Form form;
 
-	private TypeInfoWidget typeInfo;
+	private PackageInfoWidget typeInfo;
 	private TreeViewer appTreeViewer;
 	private TreeViewer sysConfTreeViewer;
 
@@ -233,7 +233,7 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 		final Section infoSection = createExpandableSection(toolkit, sash, "System Information:");
 		infoSection.setLayout(new GridLayout());
 
-		typeInfo = new TypeInfoWidget(toolkit);
+		typeInfo = new PackageInfoWidget(toolkit);
 		final Composite composite = toolkit.createComposite(infoSection);
 		composite.setLayout(new GridLayout(2, true));
 		typeInfo.createControls(composite);
@@ -291,7 +291,8 @@ implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISele
 		sysConfSecComposite.setLayout(new GridLayout(2, false));
 		sysConfSection.setClient(sysConfSecComposite);
 
-		final Tree tree = toolkit.createTree(sysConfSecComposite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		final Tree tree = toolkit.createTree(sysConfSecComposite,
+				SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		sysConfTreeViewer = new TreeViewer(tree);

@@ -14,8 +14,8 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
@@ -26,9 +26,9 @@ public class AddNewImportCommand extends CreationCommand {
 	/** The new Compiler value. */
 	private Import importer;
 
-	private final FBType type;
+	private final LibraryElement type;
 
-	public AddNewImportCommand(final FBType type) {
+	public AddNewImportCommand(final LibraryElement type) {
 		this.type = type;
 		if (type.getCompilerInfo() == null) {
 			type.setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());

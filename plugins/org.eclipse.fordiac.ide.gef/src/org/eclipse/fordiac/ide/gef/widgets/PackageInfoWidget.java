@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangePackageNameCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteImportCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -78,8 +77,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false));
 		getWidgetFactory().createLabel(composite, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupText(composite, true);
-		nameText.addModifyListener(
-				e -> executeCommand(new ChangePackageNameCommand((FBType) getType(), nameText.getText())));
+		nameText.addModifyListener(e -> executeCommand(new ChangePackageNameCommand(getType(), nameText.getText())));
 
 		final Label importsLabel = new Label(packageGroup, SWT.NONE);
 		importsLabel.setText(FordiacMessages.Imports + ":"); //$NON-NLS-1$
@@ -100,8 +98,8 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		packageViewer.setCellEditors(new CellEditor[] { new TextCellEditor(table) });
 		packageViewer.setColumnProperties(new String[] { IMPORTED_NAMESPACE });
 
-		buttons.bindToTableViewer(packageViewer, this, ref -> new AddNewImportCommand((FBType) getType()),
-				ref -> new DeleteImportCommand(((FBType) getType()).getCompilerInfo(), (Import) ref));
+		buttons.bindToTableViewer(packageViewer, this, ref -> new AddNewImportCommand(getType()),
+				ref -> new DeleteImportCommand(getType().getCompilerInfo(), (Import) ref));
 
 		packageViewer.setCellModifier(new ImportsCellModifier());
 	}

@@ -13,15 +13,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.provider;
 
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 
 public class PackageContentProvider implements IStructuredContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
-		if (inputElement instanceof final FBType fbType && null != fbType.getCompilerInfo()
-				&& null != fbType.getCompilerInfo().getImports()) {
-			return fbType.getCompilerInfo().getImports().toArray();
+		if (inputElement instanceof final LibraryElement libElement && null != libElement.getCompilerInfo()
+				&& null != libElement.getCompilerInfo().getImports()) {
+			return libElement.getCompilerInfo().getImports().toArray();
 
 		}
 		return new Object[] {};
