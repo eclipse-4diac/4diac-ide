@@ -62,7 +62,7 @@ assertion framework with SWTBot. SWTBot can record and playback tests and integr
 make it easy to use in Continuous Integration.</p>
 
 <h3 id="Requirement">Requirement</h3>
-<p>All SWTBot related files can be found in the <b>4diac IDE source code</b> in the folder <i>org.eclipse.fordiac.ide.test.ui</i>.</p>
+<p>All SWTBot related files can be found in the <b>4diac IDE source code</b> in the folder <b>org.eclipse.fordiac.ide.test.ui</b>.</p>
 <p>In order to be able to perform advanced tests, the provided SWTBot classes were extended. For example, it became clear that this is not
 possible with the standard classes when dragging connections. By default, drag and drop works by selecting the 1st pin and then
 jumping to the 2nd pin and selecting it. 4diac IDE unfortunately doesn't work like that, mouse movement between selections is needed. 
@@ -74,10 +74,11 @@ classes SWT4diacGefBot, SWTBot4diacGefViewer, SWTBot4diacGefEditor SWTBot4diacFi
 All settings necessary to run the SWTBot test have been made and no further settings are required by the user.
 
 <h2 id="Structure">Test Set and Test Structure</h2>
-<p>The tests have been divided into topics to provide a better overview. These are currently <i>New System</i>, <i>Tests with 1 FB</i>, <i>Tests with
-2 FBs</i> and <i>Tests with multiple FBs</i>.<br/>
-In addition, an Excel file was created in which test ideas can be collected and the tests are documented for easy administration. 
-The Status column indicates whether the test has already been implemented. (The file is currently not publicly viewable).</p>
+<p>In order to get a test administration, the markdown file <b>SWTBotTestSetOf4diacIDE</b> was created under <b>/org.eclipse.fordiac.ide.test.ui</b> folder.</br>
+This file was created to document existing tests and to collect ideas for new tests. The column <i>status</i> shows whether the test has already 
+been implemented or is planned for the future.
+The test have been divided into topics to provide a better overview. These are currently <i>New System</i>, <i>Tests with 1 FB</i>, <i>Tests with
+2 FBs</i> and <i>Tests with multiple FBs</i>.</p>
 
 <h3 id="NewSystem">New System</h3>
 <p>One topic is the creation of a new 4diac project. In this group we test 
