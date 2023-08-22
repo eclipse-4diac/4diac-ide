@@ -207,9 +207,26 @@ public final class BuildpathUtil {
 
 	private static PathMatcher getPathMatcher(final Pattern pattern) {
 		return switch (pattern.getSyntax()) {
-		case GLOB -> FileSystems.getDefault().getPathMatcher(pattern.getSyntax() + ":{**/,}" + pattern.getValue()); //$NON-NLS-1$
+		case GLOB -> FileSystems.getDefault()
+				.getPathMatcher(pattern.getSyntax() + ":" + convertGlobPattern(pattern.getValue())); //$NON-NLS-1$
 		default -> FileSystems.getDefault().getPathMatcher(pattern.getSyntax() + ":" + pattern.getValue()); //$NON-NLS-1$
 		};
+	}
+
+	private static String convertGlobPattern(String pattern) {
+		// patterns starting with '/' match only in the top-level folder (anchor) (e.g., "/.git")
+		if (pattern.startsWith("/")) { //$NON-NLS-1$
+			pattern = pattern.substring(1);
+		} else { // otherwise, match in any sub-folder (e.g., "*.fbt")
+			pattern = "{**/,}" + pattern; //$NON-NLS-1$
+		}
+		// patterns ending with '/' match only folders (e.g., "bin/")
+		if (pattern.endsWith("/")) { //$NON-NLS-1$
+			pattern = pattern + "**"; //$NON-NLS-1$
+		} else { // otherwise, match any suffix (e.g., "*.fbt")
+			pattern = pattern + "{,/**}"; //$NON-NLS-1$
+		}
+		return pattern;
 	}
 
 	private static URI getBuildpathURI(final IProject project) {
