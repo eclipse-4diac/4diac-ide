@@ -165,6 +165,7 @@ public final class TypeLibrary {
 		getSystems().clear();
 		getGlobalConstants().clear();
 		dataTypeLib.getDerivedDataTypes().clear();
+		fileMap.clear();
 		buildpath = BuildpathUtil.loadBuildpath(project);
 		checkAdditions(project);
 	}
