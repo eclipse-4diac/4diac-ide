@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -73,6 +74,14 @@ public final class BuildpathAttributes {
 			result.setValue(field.getAnnotation(AttributeDefault.class).value());
 		}
 		return result;
+	}
+
+	public static Optional<Attribute> getAttribute(final List<Attribute> attributes, final String name) {
+		return attributes.stream().filter(attribute -> name.equals(attribute.getName())).findAny();
+	}
+
+	public static String getAttributeValue(final List<Attribute> attributes, final String name) {
+		return getAttribute(attributes, name).map(Attribute::getValue).orElseGet(() -> getAttributeDefault(name));
 	}
 
 	public static boolean hasDefaultValue(final Attribute attribute) {

@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.validation;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -35,10 +34,14 @@ public class STCoreResourceUIValidatorExtension extends DefaultResourceUIValidat
 	@Override
 	protected void createMarkers(final IFile file, final List<Issue> list, final IProgressMonitor monitor)
 			throws CoreException {
-		super.createMarkers(file, list.stream()
-				.filter(Predicate.not(STCoreResourceUIValidatorExtension::isModelValidationIssue)).toList(), monitor);
+		final boolean ignoreWarnings = ValidationUtil.isIgnoreWarnings(file);
+		super.createMarkers(file,
+				list.stream().filter(
+						issue -> ValidationUtil.shouldProcess(issue, ignoreWarnings) && !isModelValidationIssue(issue))
+						.toList(),
+				monitor);
 		for (final Issue issue : list) {
-			if (isModelValidationIssue(issue)) {
+			if (ValidationUtil.shouldProcess(issue, ignoreWarnings) && isModelValidationIssue(issue)) {
 				createMarker(file, FordiacErrorMarker.VALIDATION_MARKER, issue);
 			}
 		}
