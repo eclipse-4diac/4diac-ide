@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi - improvement for comparisons
  *******************************************************************************/
 package org.eclipse.fordiac.ide.emf.compare.MatchEngine;
 
@@ -75,7 +76,7 @@ public class FordiacMatchEngine extends DefaultMatchEngine {
 		if (input instanceof final Value val) {
 			if (val.getParentIE().getFBNetworkElement() != null) {
 				return val.getParentIE().getFBNetworkElement().getName() + "." + val.getParentIE().getName() //$NON-NLS-1$
-						+ ".Value";  //$NON-NLS-1$
+						+ ".Value"; //$NON-NLS-1$
 			}
 			return val.getParentIE().getName() + ".Value"; //$NON-NLS-1$
 		}
@@ -83,25 +84,23 @@ public class FordiacMatchEngine extends DefaultMatchEngine {
 		if ((input instanceof final With with) && (with.eContainer() instanceof final IInterfaceElement ie)) {
 			if (ie.getFBNetworkElement() != null) {
 				return ie.getFBNetworkElement().getName() + "." + ie.getName() + ".WITH." //$NON-NLS-1$ //$NON-NLS-2$
-						+ with.getVariables().getName();// + "#" + with.hashCode();
+						+ with.getVariables().getName();
 			}
 			return ie.getName() + ".WITH." + with.getVariables().getName(); //$NON-NLS-1$
 		}
 
 		if ((input instanceof Event || input instanceof VarDeclaration || input instanceof AdapterDeclaration)
 				&& (((IInterfaceElement) input).getFBNetworkElement() != null)) {
-			// return ((IInterfaceElement) input).getFBNetworkElement().getName() + "."
-			// + ((IInterfaceElement) input).getName();
-			return ((IInterfaceElement) input).getFBNetworkElement().getName() + ".InterfaceList."
+			return ((IInterfaceElement) input).getFBNetworkElement().getName() + ".InterfaceList." //$NON-NLS-1$
 					+ ((IInterfaceElement) input).getName();
 		}
 
 		if (input instanceof final InterfaceList interfaceList) {
-			if (interfaceList.getFBNetworkElement() != null) {
-				return interfaceList.getFBNetworkElement().getName() + ".InterfaceList";
+			if (interfaceList.getFBNetworkElement() != null && interfaceList.getFBNetworkElement().getName() != null) {
+				return interfaceList.getFBNetworkElement().getName() + ".InterfaceList"; //$NON-NLS-1$
 			}
 			if (interfaceList.eContainer() instanceof final FBType fb) {
-				return fb.getName() + ".InterfaceList";
+				return fb.getName() + ".InterfaceList"; //$NON-NLS-1$
 			}
 		}
 

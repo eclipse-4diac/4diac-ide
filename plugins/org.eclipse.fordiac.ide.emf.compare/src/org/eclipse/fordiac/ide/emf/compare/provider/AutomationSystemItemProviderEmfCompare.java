@@ -134,4 +134,66 @@ public class AutomationSystemItemProviderEmfCompare extends AutomationSystemProv
 		}
 		return withItemProvider;
 	}
+
+	@Override
+	public Adapter createGlobalConstantsAdapter() {
+		if (globalConstantsItemProvider == null) {
+			globalConstantsItemProvider = new GlobalConstantsItemProviderEmfCompare(this);
+		}
+		return globalConstantsItemProvider;
+	}
+
+	@Override
+	public Adapter createFunctionFBTypeAdapter() {
+		if (functionFBTypeItemProvider == null) {
+			functionFBTypeItemProvider = new FunctionFBTypeItemProviderEmfCompare(this);
+		}
+		return functionFBTypeItemProvider;
+	}
+
+	@Override
+	public Adapter createAdapterTypeAdapter() {
+		if (adapterTypeItemProvider == null) {
+			adapterTypeItemProvider = new AdapterTypeItemProviderEmfCompare(this);
+		}
+		return adapterTypeItemProvider;
+	}
+
+	@Override
+	public Adapter createAdapterFBTypeAdapter() {
+		if (adapterFBTypeItemProvider == null) {
+			adapterFBTypeItemProvider = new AdapterFBTypeItemProviderEmfCompare(this);
+		}
+		return adapterFBTypeItemProvider;
+	}
+
+	@Override
+	public Adapter createAdapterFBAdapter() {
+		return null;
+	}
+
+	@Override
+	public Adapter createLibraryElementAdapter() {
+		if (libraryElementItemProvider == null) {
+			libraryElementItemProvider = new LibraryElementItemProviderEmfCompare(this);
+		}
+		return libraryElementItemProvider;
+	}
+
+	@Override
+	public Adapter createVersionInfoAdapter() {
+		if (versionInfoItemProvider == null) {
+			versionInfoItemProvider = new VersionInfoItemProviderEmfCompare(this);
+		}
+		return versionInfoItemProvider;
+	}
+
+	@Override
+	public Adapter createIdentificationAdapter() {
+		if (identificationItemProvider == null) {
+			identificationItemProvider = new IdentificationItemProviderEmfCompare(this);
+		}
+		return identificationItemProvider;
+	}
+
 }
