@@ -1711,6 +1711,11 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getTypeLibrary(this);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getFullTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return (getTypeEntry() != null) ? getTypeEntry().getFullTypeName() : null;"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeEntry" eType="#//TypeEntry"
         transient="true"/>
   </eClassifiers>

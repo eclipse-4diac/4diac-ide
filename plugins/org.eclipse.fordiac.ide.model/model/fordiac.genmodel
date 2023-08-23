@@ -659,6 +659,8 @@
           body="return org.eclipse.fordiac.ide.model.Annotations.getType(this);"/>
       <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getTypeLibrary"
           body="return org.eclipse.fordiac.ide.model.Annotations.getTypeLibrary(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getFullTypeName"
+          body="return (getTypeEntry() != null) ? getTypeEntry().getFullTypeName() : null;"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//TypedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TypedElement/type"/>

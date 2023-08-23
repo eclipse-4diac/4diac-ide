@@ -287,6 +287,16 @@ public class TypedConfigureableObjectImpl extends EObjectImpl implements TypedCo
 	 * @generated
 	 */
 	@Override
+	public String getFullTypeName() {
+		return (getTypeEntry() != null) ? getTypeEntry().getFullTypeName() : null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
 		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
 	}
