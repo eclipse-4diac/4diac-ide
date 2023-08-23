@@ -1456,7 +1456,7 @@
   <extension point="org.eclipse.core.expressions.definitions">
     <definition id="org.eclipse.fordiac.ide.application.InterfaceElementSelection">
       <with variable="selection">
-        <iterate>
+        <iterate ifEmpty="false">
           <instanceof value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
           </instanceof>
         </iterate>
