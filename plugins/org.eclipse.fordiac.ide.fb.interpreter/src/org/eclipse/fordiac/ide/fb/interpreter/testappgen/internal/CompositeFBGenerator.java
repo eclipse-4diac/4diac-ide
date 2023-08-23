@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public class CompositeFBGenerator {
@@ -61,7 +63,7 @@ public class CompositeFBGenerator {
 		compositeFB.setService(LibraryElementFactory.eINSTANCE.createService());
 
 		final IProject project = sourceType.getTypeLibrary().getProject();
-		final IFolder folder = project.getFolder("Type Library/blocksForTestingTheTestblock/generatedBlocks"); //$NON-NLS-1$
+		final IFolder folder = project.getFolder("Type Library/blocksForTestingTheTestblockButBetterNamed"); //$NON-NLS-1$
 		final IFile destfile = folder.getFile(sourceType.getName() + "_COMPOSITE.fbt"); //$NON-NLS-1$
 
 		final TypeEntry entry = sourceType.getTypeLibrary().createTypeEntry(destfile);
@@ -88,9 +90,28 @@ public class CompositeFBGenerator {
 
 		setValuesForFBs();
 		createEvents();
+		createDataOutput();
 		createConnections();
+		createWiths();
 
 		return compositeFB;
+	}
+
+	private void createWiths() {
+		for (final Event output : compositeFB.getInterfaceList().getEventOutputs()) {
+			for (final VarDeclaration varD : compositeFB.getInterfaceList().getOutputVars()) {
+				final With w = LibraryElementFactory.eINSTANCE.createWith();
+				w.setVariables(varD);
+				output.getWith().add(w);
+			}
+		}
+
+	}
+
+	private void createDataOutput() {
+		InterfaceListCopier.copyVarList(compositeFB.getInterfaceList().getOutputVars(),
+				matchFB.getInterface().getOutputVars(), false);
+
 	}
 
 	private void setValuesForFBs() {
@@ -139,6 +160,12 @@ public class CompositeFBGenerator {
 		compositeFB.getFBNetwork().getEventConnections()
 				.add(createEventConnection(matchFB.getInterface().getEventOutputs().get(1),
 						compositeFB.getInterfaceList().getEventOutputs().get(1)));
+
+		for (int i = 0; i < compositeFB.getInterfaceList().getOutputVars().size(); i++) {
+			compositeFB.getFBNetwork().getDataConnections()
+					.add(createDataConnection(matchFB.getInterface().getOutputVars().get(i),
+							compositeFB.getInterfaceList().getOutputVars().get(i)));
+		}
 	}
 
 	private void createConnectionToMatchFB() {
@@ -162,7 +189,7 @@ public class CompositeFBGenerator {
 		// Input Data
 		for (final VarDeclaration testVa : testFB.getInterface().getOutputVars()) {
 			for (final VarDeclaration matchVa : matchFB.getInterface().getInputVars()) {
-				if ((testVa.getName() + "_expected").equals(matchVa.getName())) { //$NON-NLS-1$
+				if ((testVa.getName()).equals(matchVa.getName())) {
 					compositeFB.getFBNetwork().getDataConnections().add(createDataConnection(testVa, matchVa));
 				}
 			}
