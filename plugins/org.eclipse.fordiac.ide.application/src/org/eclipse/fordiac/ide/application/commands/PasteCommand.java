@@ -236,7 +236,7 @@ public class PasteCommand extends Command {
 		FBNetworkElement copiedElement = EcoreUtil.copy(element);
 		if (dstTypeLib != null && element.getTypeEntry() != null) {
 			// we are copying between projects and it is a typed FBNetworkElement
-			final TypeEntry dstTypeEntry = dstTypeLib.getFBOrSubAppType(element.getTypeEntry().getFullTypeName());
+			final TypeEntry dstTypeEntry = dstTypeLib.getFBOrSubAppType(element.getFullTypeName());
 			if (dstTypeEntry != null) {
 				// the target project has the type
 				copiedElement.setTypeEntry(dstTypeEntry);

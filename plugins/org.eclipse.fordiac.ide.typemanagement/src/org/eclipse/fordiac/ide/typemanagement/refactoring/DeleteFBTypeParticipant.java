@@ -50,8 +50,8 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 
 	@Override
 	protected boolean initialize(final Object element) {
-		if (element instanceof IFile) {
-			this.file = (IFile) element;
+		if (element instanceof final IFile targetFile) {
+			this.file = targetFile;
 			return true;
 		}
 		return false;
@@ -79,17 +79,18 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 			}
 			final TypeLibrary typelib = TypeLibraryManager.INSTANCE
 					.getTypeLibrary(resourceDelta.getResource().getProject());
-			final String typeNameToDelete = TypeEntry.getTypeNameFromFile((IFile) resourceDelta.getResource());
-			final List<String> typeNames = checkTypeContainment(typelib, typeNameToDelete);
+			final TypeEntry typeEntry = typelib.getTypeEntry((IFile) resourceDelta.getResource());
+			final List<String> typeNames = checkTypeContainment(typelib, typeEntry);
 			if (!typeNames.isEmpty()) {
-				return RefactoringStatus.createWarningStatus(MessageFormat.format(
-						Messages.DeleteFBTypeParticipant_TypeInUseWarning, typeNameToDelete, typeNames.toString()));
+				return RefactoringStatus
+						.createWarningStatus(MessageFormat.format(Messages.DeleteFBTypeParticipant_TypeInUseWarning,
+								typeEntry.getTypeName(), typeNames.toString()));
 			}
 		}
 		return new RefactoringStatus();
 	}
 
-	private static List<String> checkTypeContainment(final TypeLibrary typelib, final String searchTypeName) {
+	private static List<String> checkTypeContainment(final TypeLibrary typelib, final TypeEntry typeEntry) {
 		final List<String> retVal = new ArrayList<>();
 		final Stream<Entry<String, ? extends TypeEntry>> stream = Stream.concat(
 				Stream.concat(typelib.getFbTypes().entrySet().stream(), typelib.getSubAppTypes().entrySet().stream()),
@@ -97,8 +98,8 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 
 		stream.forEach(entry -> {
 			final FBNetwork network = getNetwork(entry);
-			if ((null != network) && (containsElementWithType(searchTypeName, network))) {
-				retVal.add(entry.getValue().getTypeName());
+			if ((null != network) && (containsElementWithType(typeEntry, network))) {
+				retVal.add(entry.getValue().getFullTypeName());
 			}
 		});
 
@@ -109,19 +110,19 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 		FBNetwork network = null;
 		final LibraryElement type = entry.getValue().getType();
 
-		if (type instanceof CompositeFBType) {
-			network = ((CompositeFBType) type).getFBNetwork();
-		} else if (type instanceof ResourceType) {
-			network = ((ResourceType) type).getFBNetwork();
-		} else if (type instanceof SubAppType) {
-			network = ((SubAppType) type).getFBNetwork();
+		if (type instanceof final CompositeFBType cfbType) {
+			network = cfbType.getFBNetwork();
+		} else if (type instanceof final ResourceType resType) {
+			network = resType.getFBNetwork();
+		} else if (type instanceof final SubAppType subAppType) {
+			network = subAppType.getFBNetwork();
 		}
 		return network;
 	}
 
-	private static boolean containsElementWithType(final String searchTypeName, final FBNetwork network) {
+	private static boolean containsElementWithType(final TypeEntry typeEntry, final FBNetwork network) {
 		for (final FBNetworkElement element : network.getNetworkElements()) {
-			if (searchTypeName.equals(element.getTypeName())) {
+			if (typeEntry.getFullTypeName().equals(element.getFullTypeName())) {
 				return true;
 			}
 		}

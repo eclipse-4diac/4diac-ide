@@ -47,8 +47,8 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 		// @formatter:off
 		final InstanceSearch search = new InstanceSearch((final INamedElement searchCandiate) ->
 			searchCandiate instanceof final FBNetworkElement fb
-					&& fb.getTypeName() != null
-					&& fb.getTypeName().equalsIgnoreCase(type.getName()));
+					&& fb.getFullTypeName() != null
+					&& fb.getFullTypeName().equalsIgnoreCase(type.getTypeEntry().getFullTypeName()));
 
 		// application instances
 		SystemManager.INSTANCE.getProjectSystems(type.getTypeLibrary().getProject()).stream()

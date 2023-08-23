@@ -62,7 +62,7 @@ public class ModelSearchQuery implements ISearchQuery {
 		performSearch(searchRootSystems);
 
 		Display.getDefault()
-		.asyncExec(() -> ((SearchView) NewSearchUI.getSearchResultView()).showSearchResult(getSearchResult()));
+				.asyncExec(() -> ((SearchView) NewSearchUI.getSearchResultView()).showSearchResult(getSearchResult()));
 
 		return Status.OK_STATUS;
 	}
@@ -110,11 +110,10 @@ public class ModelSearchQuery implements ISearchQuery {
 			if (matchEObject(fbnetworkElement)) {
 				searchResult.addResult(fbnetworkElement);
 			}
-			if (fbnetworkElement instanceof final SubApp subApp) {
-				// for typed subapps and subapps without content (i.e., mapped subapp) don't search further
-				if (!subApp.isTyped() && subApp.getSubAppNetwork() != null) {
-					searchFBNetwork(subApp.getSubAppNetwork());
-				}
+			// for typed subapps and subapps without content (i.e., mapped subapp) don't search further
+			if ((fbnetworkElement instanceof final SubApp subApp)
+					&& (!subApp.isTyped() && subApp.getSubAppNetwork() != null)) {
+				searchFBNetwork(subApp.getSubAppNetwork());
 			}
 			if (modelQuerySpec.isCheckedPinName() && fbnetworkElement.getInterface() != null) {
 				final List<EObject> matchingPins = fbnetworkElement.getInterface().getAllInterfaceElements().stream()
@@ -142,15 +141,15 @@ public class ModelSearchQuery implements ISearchQuery {
 
 	private void searchTypeLibrary(final AutomationSystem sys) {
 		final TypeLibrary lib = sys.getTypeLibrary();
-		searchTypeEntryList( lib.getFbTypes().values());
-		searchTypeEntryList( lib.getAdapterTypes().values());
-		searchTypeEntryList( lib.getDeviceTypes().values());
-		searchTypeEntryList( lib.getResourceTypes().values());
-		searchTypeEntryList( lib.getSegmentTypes().values());
-		searchTypeEntryList( lib.getSubAppTypes().values());
+		searchTypeEntryList(lib.getFbTypes().values());
+		searchTypeEntryList(lib.getAdapterTypes().values());
+		searchTypeEntryList(lib.getDeviceTypes().values());
+		searchTypeEntryList(lib.getResourceTypes().values());
+		searchTypeEntryList(lib.getSegmentTypes().values());
+		searchTypeEntryList(lib.getSubAppTypes().values());
 	}
 
-	private void searchTypeEntryList( final Collection<? extends TypeEntry> entries) {
+	private void searchTypeEntryList(final Collection<? extends TypeEntry> entries) {
 		final List<EObject> foundEntries = entries.stream().map(TypeEntry::getType).filter(Objects::nonNull)
 				.filter(this::matchEObject).collect(Collectors.toList());
 		searchResult.addResults(foundEntries);
@@ -172,12 +171,10 @@ public class ModelSearchQuery implements ISearchQuery {
 			}
 		}
 		if (modelQuerySpec.isCheckedType()) {
-			if (modelElement instanceof TypedConfigureableObject) {
-				final TypedConfigureableObject config = (TypedConfigureableObject) modelElement;
-				return compareStrings(config.getTypeName());
+			if (modelElement instanceof final TypedConfigureableObject config) {
+				return compareStrings(config.getFullTypeName());
 			}
-			if (modelElement instanceof LibraryElement) {
-				final LibraryElement namElem = (LibraryElement) modelElement;
+			if (modelElement instanceof final LibraryElement namElem) {
 				return compareStrings(namElem.getName());
 			}
 		}
