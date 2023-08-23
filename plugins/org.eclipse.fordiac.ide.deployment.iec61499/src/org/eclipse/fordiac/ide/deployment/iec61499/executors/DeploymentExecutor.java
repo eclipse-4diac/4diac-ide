@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -112,23 +113,28 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	private static String getValidType(final FBNetworkElement fb) {
 		if (fb != null && fb.getTypeEntry() != null) {
-			if (fb instanceof StructManipulator) {
+			if (fb instanceof final StructManipulator structMan) {
 				// the _1 is needed for 4diac FORTE to separate type name from configuration
 				// part
-				return fb.getTypeName() + "_1" + ((StructManipulator) fb).getStructType().getName(); //$NON-NLS-1$
+				return fb.getTypeName() + "_1" + getFullForteEncodedTypeName(structMan.getStructType()); //$NON-NLS-1$
 			}
 			if (fb.getType() != null) {
-				final CompilerInfo compilerInfo = fb.getType().getCompilerInfo();
-				if (compilerInfo != null) {
-					final String packageName = compilerInfo.getPackageName();
-					if (packageName != null && !packageName.isEmpty()) {
-						return packageName.replace(':', '_') + "__" + fb.getType().getName(); //$NON-NLS-1$
-					}
-				}
+				return getFullForteEncodedTypeName(fb.getType());
 			}
 			return fb.getTypeName();
 		}
 		return null;
+	}
+
+	private static String getFullForteEncodedTypeName(final LibraryElement libEl) {
+		final CompilerInfo compilerInfo = libEl.getCompilerInfo();
+		if (compilerInfo != null) {
+			final String packageName = compilerInfo.getPackageName();
+			if (packageName != null && !packageName.isEmpty()) {
+				return packageName.replace(':', '_') + "__" + libEl.getName(); //$NON-NLS-1$
+			}
+		}
+		return libEl.getName();
 	}
 
 	@Override
@@ -289,7 +295,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	public void startFB(final Resource res, final FBDeploymentData fbData) throws DeploymentException {
 		final String fullFbInstanceName = fbData.getPrefix() + fbData.getFb().getName();
 		final String request = MessageFormat.format(START_FB, getNextId(), fullFbInstanceName,
-				fbData.getFb().getTypeName());
+				fbData.getFb().getFullTypeName());
 		try {
 			sendREQ(res.getName(), request);
 		} catch (final IOException e) {
