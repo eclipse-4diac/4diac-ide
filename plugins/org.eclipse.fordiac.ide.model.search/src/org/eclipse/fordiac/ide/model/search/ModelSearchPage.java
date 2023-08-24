@@ -126,8 +126,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		labelFactory.text(Messages.Jokers).create(composite);
 
 		caseSensitive = WidgetFactory.button(SWT.CHECK).text(Messages.CaseSensitive).create(composite);
-		exactNameMatching = WidgetFactory.button(SWT.CHECK).text(Messages.ExactNameMatching)
-				.create(composite);
+		exactNameMatching = WidgetFactory.button(SWT.CHECK).text(Messages.ExactNameMatching).create(composite);
 
 		final Group radioButtonScope = new Group(composite, SWT.NONE);
 		radioButtonScope.setLayout(new RowLayout(SWT.VERTICAL));
@@ -165,7 +164,8 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		// Search string aka the name of it
 		final String searchString = query.getText();
 
-		// Check to see if at least one of the check boxes is ticked and if the search string exists
+		// Check to see if at least one of the check boxes is ticked and if the search
+		// string exists
 		final boolean optionSelected = isCheckedInstanceName || isCheckedPinName || isCheckedType || isCheckedComment;
 		if (!"".equals(searchString) && optionSelected) { //$NON-NLS-1$
 
@@ -199,7 +199,6 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 
 	@Override
 	public void setContainer(final ISearchPageContainer container) {
-		System.out.println("Set container!");
 		this.container = container;
 	}
 
