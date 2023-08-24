@@ -46,6 +46,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		  «generateReadInputDataDeclaration»
 		  «generateWriteOutputDataDeclaration»
+		  «generateReadInternal2InterfaceOutputDataDeclaration»
 		  «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
 		public:
@@ -62,6 +63,10 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		#include "cfb.h"
 		#include "typelib.h"
 		«super.generateHeaderIncludes»
+	'''
+	
+	def protected generateReadInternal2InterfaceOutputDataDeclaration() '''
+		void readInternal2InterfaceOutputData(TEventID paEOID) override;
 	'''
 
 	def protected generateFBNetwork() '''

@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.export.forte_ng.composite
 import java.nio.file.Path
 import java.util.ArrayList
 import java.util.HashSet
+import java.util.List
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
@@ -25,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Connection
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection
+import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
@@ -62,8 +64,34 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
 		«generateFBNetwork»
-		
+		«generateReadInternal2InterfaceOutputDataDefinition»
 		«generateInterfaceDefinitions»
+	'''
+
+	def protected generateReadInternal2InterfaceOutputDataDefinition() '''
+		void «FBClassName»::readInternal2InterfaceOutputData(«IF type.interfaceList.eventOutputs.exists[!with.empty]»const TEventID paEOID«ELSE»TEventID«ENDIF») {
+		  «type.interfaceList.eventOutputs.generateReadInternal2InterfaceOutputDataBody»
+		}
+	'''
+
+	def protected generateReadInternal2InterfaceOutputDataBody(List<Event> events) '''
+		«IF events.exists[!with.empty]»
+			switch(paEOID) {
+			  «FOR event : events.filter[!with.empty]»
+			  	case «event.generateEventID»: {
+			  	  RES_DATA_CON_CRITICAL_REGION();
+			  	  «FOR variable : event.with.map[withVariable]»
+			  	  	if(CDataConnection *conn = getIn2IfConUnchecked(«variable.interfaceElementIndex»); conn) { conn->readData(«variable.generateName»); }
+			  	  «ENDFOR»
+			  	  break;
+			  	}
+			  «ENDFOR»
+			  default:
+			    break;
+			}
+		«ELSE»
+			// nothing to do
+		«ENDIF»
 	'''
 
 	def protected generateFBNetwork() '''
