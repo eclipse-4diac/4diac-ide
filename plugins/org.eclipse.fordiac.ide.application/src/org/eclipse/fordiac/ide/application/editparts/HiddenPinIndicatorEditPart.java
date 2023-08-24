@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
@@ -85,8 +86,8 @@ public class HiddenPinIndicatorEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected IFigure createFigure() {
 		final FordiacTriangle triangle = new FordiacTriangle(((HiddenPinIndicator) super.getModel()).isInput());
-		triangle.setBorder(null);
-		triangle.setBounds(new Rectangle(0, 0, 8, 8));
+		triangle.setBorder(new MarginBorder(3));
+		triangle.setBounds(new Rectangle(0, 0, 15, 15));
 		triangle.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ANY_INT_CONNECTOR_COLOR));
 		triangle.setOutline(false);
 		return triangle;

@@ -264,15 +264,20 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	}
 
 	private void setPinIndicators() {
-		pinIndicatorInput.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) pinIndicatorInput.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		pinIndicatorInput.setLayoutManager(createPinIndicatorLayout());
 		errorMarkerInput.add(pinIndicatorInput);
-		
+
 		// use the error marker container for now as this will anyhow be changed later
 
-		pinIndicatorOutput.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) pinIndicatorOutput.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		pinIndicatorOutput.setLayoutManager(createPinIndicatorLayout());
 		errorMarkerOutput.add(pinIndicatorOutput);
+	}
+
+	private static ToolbarLayout createPinIndicatorLayout() {
+		final ToolbarLayout layout = new ToolbarLayout(false);
+		layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+
+		return layout;
 	}
 
 	protected void addBottom() {
@@ -386,6 +391,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		final ToolbarLayout layout = new ToolbarLayout(false);
 		layout.setStretchMinorAxis(true);
 		layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+
 		return layout;
 	}
 
