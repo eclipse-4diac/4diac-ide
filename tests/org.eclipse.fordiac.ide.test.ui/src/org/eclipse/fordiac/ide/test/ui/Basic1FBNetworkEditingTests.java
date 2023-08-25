@@ -75,6 +75,7 @@ public class Basic1FBNetworkEditingTests {
 	private static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	private static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
 	private static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
+	private static final String E_CTUD_TREE_ITEM = "E_CTUD [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
 	private static final String START = "START"; //$NON-NLS-1$
 	private static final String STOP = "STOP"; //$NON-NLS-1$
 	private static final String EO = "EO"; //$NON-NLS-1$
@@ -82,6 +83,8 @@ public class Basic1FBNetworkEditingTests {
 	private static final String EO2 = "EO2"; //$NON-NLS-1$
 	private static final String DT = "DT"; //$NON-NLS-1$
 	private static final String N = "N"; //$NON-NLS-1$
+	private static final String QU = "QU"; //$NON-NLS-1$
+	private static final String QD = "QD"; //$NON-NLS-1$
 	private static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
 	private static SWT4diacGefBot bot;
@@ -294,6 +297,15 @@ public class Basic1FBNetworkEditingTests {
 	public void createANotValidConnectionBetweenABlueTimeInputPinAndBlueUintInputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(DT, N);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void createANotValidConnectionBetweenABoolOutputPinAndBoolOutputPin() {
+		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(QU, QD);
 		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
 		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
