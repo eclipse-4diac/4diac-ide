@@ -87,7 +87,7 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	private long lastModificationTimestamp = IResource.NULL_STAMP;
 
 	private SoftReference<LibraryElement> typeRef;
-	private LibraryElement typeEditable;
+	private SoftReference<LibraryElement> typeEditableRef;
 
 	private TypeLibrary typeLibrary;
 
@@ -214,20 +214,27 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 
 	@Override
 	public synchronized LibraryElement getTypeEditable() {
-		if ((getFile() != null) && (typeEditable == null || isFileContentChanged())) {
-			// if the editable type is null load it from the file and set a copy
-			setTypeEditable(EcoreUtil.copy(getType()));
+		if (typeEditableRef != null) {
+			final LibraryElement typeEditable = typeEditableRef.get();
+			if (typeEditable != null && !isFileContentChanged()) {
+				return typeEditable;
+			}
 		}
-		return typeEditable;
+		// we need to get a fresh type editable in order to ensure consistency take a copy of the none editable type
+		final LibraryElement loadType = EcoreUtil.copy(getType());
+		setTypeEditable(loadType);
+		return loadType;
 	}
 
 	@Override
 	public synchronized void setTypeEditable(final LibraryElement newTypeEditable) {
-		final LibraryElement oldTypeEditable = typeEditable;
-		typeEditable = newTypeEditable;
+		final LibraryElement oldTypeEditable = (typeEditableRef != null) ? typeEditableRef.get() : null;
 		if (newTypeEditable != null) {
 			encloseInResource(newTypeEditable);
 			newTypeEditable.setTypeEntry(this);
+			typeEditableRef = new SoftReference<>(newTypeEditable);
+		} else {
+			typeEditableRef = null;
 		}
 		if (eNotificationRequired()) {
 			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE,
