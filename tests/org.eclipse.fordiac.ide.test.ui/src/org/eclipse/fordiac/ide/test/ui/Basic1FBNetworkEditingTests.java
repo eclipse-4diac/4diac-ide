@@ -17,6 +17,7 @@ import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
@@ -43,6 +44,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -72,7 +74,10 @@ public class Basic1FBNetworkEditingTests {
 	private static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
 	private static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	private static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
+	private static final String E_N_TABLE_FB = "E_N_TABLE"; //$NON-NLS-1$
+	private static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
 	private static final String START = "START"; //$NON-NLS-1$
+	private static final String STOP = "STOP"; //$NON-NLS-1$
 	private static final String EO = "EO"; //$NON-NLS-1$
 	private static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
@@ -259,26 +264,38 @@ public class Basic1FBNetworkEditingTests {
 
 		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
 
-		bot.waitUntil(new ICondition() {
-
-			@Override
-			public boolean test() throws Exception {
-				return editPartRegistry.values().stream().filter(v -> v instanceof ConnectionEditPart).count() == 1;
-			}
-
-			@Override
-			public void init(final SWTBot bot) {
-				// method must be implemented but empty since not needed
-			}
-
-			@Override
-			public String getFailureMessage() {
-				return "no ConnectionEditPart found";
-			}
-
-		}, 5000);
-
+		waitUntilCondition(editPartRegistry);
 		assertEquals(1, editPartRegistry.values().stream().filter(v -> v instanceof ConnectionEditPart).count());
+	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void createANotValidConnectionBetweenARedInputPinAndRedInputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		assertNotNull(viewer);
+		// select input pin
+		editor.click(START);
+		final SWTBotGefEditPart ei = editor.getEditPart(START);
+		assertNotNull(ei);
+		final IFigure figure = ((GraphicalEditPart) ei.part()).getFigure();
+		assertNotNull(figure);
+		final Rectangle inputPinBounds1 = figure.getBounds().getCopy();
+		assertNotNull(inputPinBounds1);
+		figure.translateToAbsolute(inputPinBounds1);
+		// select output pin
+		editor.click(STOP);
+		final SWTBotGefEditPart eo = editor.getEditPart(STOP);
+		assertNotNull(eo);
+		final Rectangle inputPinBounds2 = ((GraphicalEditPart) eo.part()).getFigure().getBounds().getCopy();
+		assertNotNull(inputPinBounds2);
+		figure.translateToAbsolute(inputPinBounds2);
+		viewer.drag(STOP, inputPinBounds1.getCenter().x, inputPinBounds1.getCenter().y);
+
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
 	private static void createProject() {
@@ -319,6 +336,27 @@ public class Basic1FBNetworkEditingTests {
 
 		assertNotNull(canvas);
 		eCycleNode.dragAndDrop(canvas, point);
+	}
+
+	private static void waitUntilCondition(final Map<?, ?> editPartRegistry) {
+		bot.waitUntil(new ICondition() {
+
+			@Override
+			public boolean test() throws Exception {
+				return editPartRegistry.values().stream().filter(v -> v instanceof ConnectionEditPart).count() == 1;
+			}
+
+			@Override
+			public void init(final SWTBot bot) {
+				// method must be implemented but empty since not needed
+			}
+
+			@Override
+			public String getFailureMessage() {
+				return "no ConnectionEditPart found";
+			}
+
+		}, 1000);
 	}
 
 	@SuppressWarnings("static-method")
