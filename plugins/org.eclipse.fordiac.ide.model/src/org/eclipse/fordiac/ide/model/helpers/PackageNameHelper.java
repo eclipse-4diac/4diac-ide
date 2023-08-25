@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -29,6 +31,13 @@ public final class PackageNameHelper {
 					return packageName;
 				}
 			}
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	public static String getContainerPackageName(final EObject object) {
+		if (EcoreUtil.getRootContainer(object) instanceof final LibraryElement libraryElement) {
+			return getPackageName(libraryElement);
 		}
 		return ""; //$NON-NLS-1$
 	}
