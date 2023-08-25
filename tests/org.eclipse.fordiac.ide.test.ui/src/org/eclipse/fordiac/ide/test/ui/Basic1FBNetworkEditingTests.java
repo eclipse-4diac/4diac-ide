@@ -74,11 +74,12 @@ public class Basic1FBNetworkEditingTests {
 	private static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
 	private static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	private static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
-	private static final String E_N_TABLE_FB = "E_N_TABLE"; //$NON-NLS-1$
 	private static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
 	private static final String START = "START"; //$NON-NLS-1$
 	private static final String STOP = "STOP"; //$NON-NLS-1$
 	private static final String EO = "EO"; //$NON-NLS-1$
+	private static final String EO0 = "EO0"; //$NON-NLS-1$
+	private static final String EO2 = "EO2"; //$NON-NLS-1$
 	private static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
 	private static SWT4diacGefBot bot;
@@ -272,13 +273,28 @@ public class Basic1FBNetworkEditingTests {
 	@Test
 	public void createANotValidConnectionBetweenARedInputPinAndRedInputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(START, STOP);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void createANotValidConnectionBetweenARedOutputPinAndRedOutputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(EO0, EO2);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+	}
+
+	private static SWTBot4diacGefViewer createConnection(final String pin1, final String pin2) {
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		assertNotNull(editor);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		assertNotNull(viewer);
 		// select input pin
-		editor.click(START);
-		final SWTBotGefEditPart ei = editor.getEditPart(START);
+		editor.click(pin1);
+		final SWTBotGefEditPart ei = editor.getEditPart(pin1);
 		assertNotNull(ei);
 		final IFigure figure = ((GraphicalEditPart) ei.part()).getFigure();
 		assertNotNull(figure);
@@ -286,16 +302,14 @@ public class Basic1FBNetworkEditingTests {
 		assertNotNull(inputPinBounds1);
 		figure.translateToAbsolute(inputPinBounds1);
 		// select output pin
-		editor.click(STOP);
-		final SWTBotGefEditPart eo = editor.getEditPart(STOP);
+		editor.click(pin2);
+		final SWTBotGefEditPart eo = editor.getEditPart(pin2);
 		assertNotNull(eo);
 		final Rectangle inputPinBounds2 = ((GraphicalEditPart) eo.part()).getFigure().getBounds().getCopy();
 		assertNotNull(inputPinBounds2);
 		figure.translateToAbsolute(inputPinBounds2);
-		viewer.drag(STOP, inputPinBounds1.getCenter().x, inputPinBounds1.getCenter().y);
-
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		viewer.drag(pin2, inputPinBounds1.getCenter().x, inputPinBounds1.getCenter().y);
+		return viewer;
 	}
 
 	private static void createProject() {
