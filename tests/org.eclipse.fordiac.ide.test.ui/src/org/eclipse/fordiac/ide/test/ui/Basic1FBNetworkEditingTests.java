@@ -244,7 +244,7 @@ public class Basic1FBNetworkEditingTests {
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void createValidConnection() {
+	public void createValidConnectionBetweenInputEventPinAndOutputEventPin() {
 		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 200));
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		assertNotNull(editor);
@@ -276,7 +276,7 @@ public class Basic1FBNetworkEditingTests {
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void createANotValidConnectionBetweenARedInputPinAndRedInputPin() {
+	public void createNotValidConnectionBetweenInputEventPinAndInputEventPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(START, STOP);
 		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
@@ -285,7 +285,7 @@ public class Basic1FBNetworkEditingTests {
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void createANotValidConnectionBetweenARedOutputPinAndRedOutputPin() {
+	public void createNotValidConnectionBetweenOutputEventPinAndOutputEventPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(EO0, EO2);
 		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
@@ -294,7 +294,7 @@ public class Basic1FBNetworkEditingTests {
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void createANotValidConnectionBetweenABlueTimeInputPinAndBlueUintInputPin() {
+	public void createNotValidConnectionBetweenTimeInputPinAndUintInputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(DT, N);
 		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
@@ -303,7 +303,7 @@ public class Basic1FBNetworkEditingTests {
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void createANotValidConnectionBetweenABoolOutputPinAndBoolOutputPin() {
+	public void createNotValidConnectionBetweenBoolOutputPinAndBoolOutputPin() {
 		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(QU, QD);
 		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
