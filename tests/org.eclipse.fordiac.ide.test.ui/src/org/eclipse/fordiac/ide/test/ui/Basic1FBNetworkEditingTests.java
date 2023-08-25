@@ -80,6 +80,8 @@ public class Basic1FBNetworkEditingTests {
 	private static final String EO = "EO"; //$NON-NLS-1$
 	private static final String EO0 = "EO0"; //$NON-NLS-1$
 	private static final String EO2 = "EO2"; //$NON-NLS-1$
+	private static final String DT = "DT"; //$NON-NLS-1$
+	private static final String N = "N"; //$NON-NLS-1$
 	private static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
 	private static SWT4diacGefBot bot;
@@ -283,6 +285,15 @@ public class Basic1FBNetworkEditingTests {
 	public void createANotValidConnectionBetweenARedOutputPinAndRedOutputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(EO0, EO2);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void createANotValidConnectionBetweenABlueTimeInputPinAndBlueUintInputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(DT, N);
 		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
 		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
