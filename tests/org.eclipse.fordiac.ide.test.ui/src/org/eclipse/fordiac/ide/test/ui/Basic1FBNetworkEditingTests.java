@@ -27,6 +27,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -89,15 +90,41 @@ public class Basic1FBNetworkEditingTests {
 	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
 	private static SWT4diacGefBot bot;
 
+	/**
+	 * Performs the necessary tasks to be able to perform the tests.
+	 *
+	 * The method creates the SWT4diacGefBot, starts 4diac IDE and closes the
+	 * welcome window. The Timeout is increase from default value of 5 Seconds to 10
+	 * Seconds. By calling the private method {@code createProject()} a new 4diac
+	 * IDE project is created to be able to perform the tests.
+	 */
 	@BeforeAll
 	public static void beforeAll() {
 		bot = new SWT4diacGefBot();
 		bot.viewByTitle("Welcome").close(); //$NON-NLS-1$
-		// increase timeout to 10 seconds
 		SWTBotPreferences.TIMEOUT = 10000;
 		createProject();
 	}
 
+	/**
+	 * Resets the workbench after
+	 */
+	@AfterClass
+	public static void afterClass() {
+		bot.resetWorkbench();
+	}
+
+	// End of region for test settings
+	// ----------------------------------------------------------------------------------------
+	// Region of test methods
+
+	/**
+	 * Drags and Drops a Function Block onto the canvas.
+	 *
+	 * The method selects the event FB E_CYCLE from the System Explorer hierarchy
+	 * tree and then drags it onto the canvas of the editing area. Afterwards it is
+	 * checked if the canvas is not empty.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void dragAndDrop1FB() {
@@ -138,6 +165,10 @@ public class Basic1FBNetworkEditingTests {
 		assertNotNull(editor.getEditPart(E_CYCLE_FB));
 	}
 
+	/**
+	 * Checks if the FB is dragged onto the canvas is also visible in the hierarchy
+	 * tree.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void isAddedFbInProjectAppNode() {
@@ -166,6 +197,9 @@ public class Basic1FBNetworkEditingTests {
 		assertTrue(appNode.getNode(E_CYCLE_FB).isVisible());
 	}
 
+	/**
+	 * Checks if the FB is no longer on the canvas after deletion.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void deleteExistingFB() {
@@ -181,6 +215,9 @@ public class Basic1FBNetworkEditingTests {
 		assertNull(editor.getEditPart(E_CYCLE_FB));
 	}
 
+	/**
+	 * Checks if the FB can be moved onto the canvas.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void moveFB() {
@@ -196,6 +233,12 @@ public class Basic1FBNetworkEditingTests {
 		assertNotNull(editor.getEditPart(E_CYCLE_FB));
 	}
 
+	/**
+	 * Checks if the value of the data input pin of type time can be edited.
+	 *
+	 * The method sets the default value of data input pin of type time of FB
+	 * E_CYCLE to a new value.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void editDTofECycle() {
@@ -211,6 +254,12 @@ public class Basic1FBNetworkEditingTests {
 		assertNotNull(editor.getEditPart(NEW_VAL));
 	}
 
+	/**
+	 * Checks if the default value of data input pin is displayed correctly.
+	 *
+	 * The method checks if the default value of data input pin of type time of FB
+	 * E_CYCLE is displayed correctly.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void directEditorDefaultValueTest() {
@@ -225,6 +274,12 @@ public class Basic1FBNetworkEditingTests {
 		e.save();
 	}
 
+	/**
+	 * Checks if the new value of data input is displayed correctly.
+	 *
+	 * The method checks if the new entered value of data input pin of type time of
+	 * FB E_CYCLE is displayed correctly.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void directEditorNewValueTest() {
@@ -242,6 +297,15 @@ public class Basic1FBNetworkEditingTests {
 		assertEquals(NEW_VAL, editor.toTextEditor().getText());
 	}
 
+	/**
+	 * Checks if a valid connection can be created.
+	 *
+	 * The method checks if its possible to create a valid connection between an
+	 * event input pin and a event output pin. It is also checked if the connection
+	 * can be found in the
+	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
+	 * registered EditParts}.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void createValidConnectionBetweenInputEventPinAndOutputEventPin() {
@@ -274,6 +338,16 @@ public class Basic1FBNetworkEditingTests {
 		assertEquals(1, editPartRegistry.values().stream().filter(v -> v instanceof ConnectionEditPart).count());
 	}
 
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and an event input
+	 * pin.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void createNotValidConnectionBetweenInputEventPinAndInputEventPin() {
@@ -283,6 +357,16 @@ public class Basic1FBNetworkEditingTests {
 		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event output pin and an event
+	 * output pin.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void createNotValidConnectionBetweenOutputEventPinAndOutputEventPin() {
@@ -292,6 +376,16 @@ public class Basic1FBNetworkEditingTests {
 		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between a data input pin of type time and a
+	 * data input pin of type unsigned integer.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void createNotValidConnectionBetweenTimeInputPinAndUintInputPin() {
@@ -301,6 +395,16 @@ public class Basic1FBNetworkEditingTests {
 		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between a data output pin of type boolean and
+	 * a data output pin of type boolean.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void createNotValidConnectionBetweenBoolOutputPinAndBoolOutputPin() {
@@ -310,6 +414,21 @@ public class Basic1FBNetworkEditingTests {
 		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
+	// End of region for test methods
+	// ----------------------------------------------------------------------------------------
+	// Region of utility methods
+
+	/**
+	 * Creates a connection between two pins.
+	 *
+	 * The method creates a connection between the two given pins, the order of the
+	 * pins is not important and returns a SWTBot4diacGefViewer. Whether a
+	 * connection could actually be created is not checked here.
+	 *
+	 * @param pin1 One of the two pins between a connection is (tried to) create.
+	 * @param pin2 One of the two pins between a connection is (tried to) create.
+	 * @return SWTBot4diacGefViewer
+	 */
 	private static SWTBot4diacGefViewer createConnection(final String pin1, final String pin2) {
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		assertNotNull(editor);
@@ -335,6 +454,12 @@ public class Basic1FBNetworkEditingTests {
 		return viewer;
 	}
 
+	/**
+	 * Creates a new 4diac IDE project
+	 *
+	 * The method creates a new 4diac IDE project with the static String of
+	 * PROJECT_NAME and is called from {@link #beforeAll() method beforeAll}.
+	 */
 	private static void createProject() {
 		bot.menu(FILE).menu(NEW).menu(FORDIAC_IDE_PROJECT).click();
 		final SWTBotShell shell = bot.shell(NEW_4DIAC_PROJECT);
@@ -346,6 +471,12 @@ public class Basic1FBNetworkEditingTests {
 		bot.waitUntil(shellCloses(shell));
 	}
 
+	/**
+	 * Drags and drops a FB onto the canvas with given name and position.
+	 *
+	 * @param fbName The name of the Function Block.
+	 * @param point  The Position of the FB on the canvas.
+	 */
 	private static void dragAndDropEventsFB(final String fbName, final Point point) {
 		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
@@ -375,6 +506,13 @@ public class Basic1FBNetworkEditingTests {
 		eCycleNode.dragAndDrop(canvas, point);
 	}
 
+	/**
+	 * Checks if there is a ConnectionEditPart is in the editPartRegistry
+	 *
+	 * @throws Exception When the attempted connection cannot be found in the map of
+	 *                   the {@link EditPartViewer#getEditPartRegistry
+	 *                   EditPartRegistry}.
+	 */
 	private static void waitUntilCondition(final Map<?, ?> editPartRegistry) {
 		bot.waitUntil(new ICondition() {
 
@@ -396,6 +534,9 @@ public class Basic1FBNetworkEditingTests {
 		}, 1000);
 	}
 
+	/**
+	 * Cleans the canvas from all objects.
+	 */
 	@SuppressWarnings("static-method")
 	@AfterEach
 	public void cleanEditorArea() {
@@ -412,6 +553,9 @@ public class Basic1FBNetworkEditingTests {
 		}
 	}
 
+	/**
+	 * Deletes 4diac IDE project.
+	 */
 	@AfterAll
 	public static void deleteProject() {
 		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
@@ -430,10 +574,5 @@ public class Basic1FBNetworkEditingTests {
 		bot.checkBox(DELETE_PROJECT_WARNING).select();
 		bot.button(OK).click();
 		bot.waitUntil(shellCloses(shell));
-	}
-
-	@AfterClass
-	public static void afterClass() {
-		bot.resetWorkbench();
 	}
 }
