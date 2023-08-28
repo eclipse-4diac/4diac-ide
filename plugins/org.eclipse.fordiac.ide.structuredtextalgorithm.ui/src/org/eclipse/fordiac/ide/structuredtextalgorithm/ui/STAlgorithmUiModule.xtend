@@ -23,6 +23,8 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDo
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorActions
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.hyperlinking.STAlgorithmHyperlinkHelper
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.ExtractMethodRefactoring
+import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreCleanupEditorCallback
+import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferences
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities
@@ -52,6 +54,7 @@ import org.eclipse.xtext.resource.IContainer
 import org.eclipse.xtext.resource.containers.StateBasedContainerManager
 import org.eclipse.xtext.ui.LanguageSpecific
 import org.eclipse.xtext.ui.editor.IURIEditorOpener
+import org.eclipse.xtext.ui.editor.IXtextEditorCallback
 import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.editor.XtextSourceViewer
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities
@@ -97,6 +100,13 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	def Class<? extends STCoreDocumentPartitioner> bindSTCoreDocumentPartitioner() {
 		return STAlgorithmDocumentPartitioner
+	}
+
+	def void configureSTCoreCleanupEditorCallback(Binder binder) {
+		binder.bind(IXtextEditorCallback).annotatedWith(Names.named("STCoreCleanupEditorCallback")).to(
+			STCoreCleanupEditorCallback);
+		binder.bind(IPreferenceStoreInitializer).annotatedWith(Names.named("saveActionsInitializer")) // $NON-NLS-1$
+		.to(STCoreSaveActionsPreferences.Initializer)
 	}
 
 	override bindIResourceForEditorInputFactory() {
