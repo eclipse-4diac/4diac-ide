@@ -134,6 +134,10 @@
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.NewServiceSequenceHandler"
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.newServiceSequence">
       </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.ExportServiceSequencesAsTestHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.exportServiceSequencesAsTest">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -156,7 +160,11 @@
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.getCoverage"
             name="get Coverage">
-      </command>        
+      </command>
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.exportServiceSequencesAsTest"
+            name="export Service Sequences as C++ Boost Test">
+      </command>       
    </extension>
    <extension
            point="org.eclipse.ui.menus">
@@ -345,6 +353,21 @@
                        			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
                        		<instanceof
                        			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.exportServiceSequencesAsTest"
+            label="export Service Sequences as C++ Boost Test"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
             			</or>
             		</iterate>
             	</with>
