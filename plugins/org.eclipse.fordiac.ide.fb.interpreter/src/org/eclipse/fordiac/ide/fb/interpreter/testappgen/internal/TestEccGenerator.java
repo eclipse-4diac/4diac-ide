@@ -104,10 +104,28 @@ public class TestEccGenerator {
 		return alg;
 	}
 
-	public static Algorithm createTestFbAlgortihm(final BasicFBType fb, final String name) {
+	public static Algorithm createTestFbAlgorithm(final BasicFBType fb, final String name) {
 		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		alg.setName(name);
 		fb.getCallables().add(alg);
+		return alg;
+	}
+
+	public static Algorithm createMuxFbAlgorithm(final BasicFBType fb, final int indexInput) {
+		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
+		final StringBuilder text = new StringBuilder();
+		alg.setName("A" + indexInput); //$NON-NLS-1$
+		text.append("ALGORITHM A" + indexInput + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		text.append(fb.getInterfaceList().getOutputVars().get(0).getName());
+		text.append(":="); //$NON-NLS-1$
+		text.append(fb.getInterfaceList().getInputVars().get(indexInput).getName());
+		text.append(";"); //$NON-NLS-1$
+		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
+		text.append("\n\n\n"); //$NON-NLS-1$
+
+		alg.setText(text.toString());
+		fb.getCallables().add(alg);
+
 		return alg;
 	}
 

@@ -73,13 +73,12 @@ public abstract class AbstractFBGenerator {
 
 		destinationFB.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		destinationFB.setName(getTypeName());
-
 		destinationFB.setService(LibraryElementFactory.eINSTANCE.createService());
 
 		final IProject project = getSourceFB().getTypeLibrary().getProject();
-		final IFolder folder = project.getFolder("Type Library/blocksForTestingTheTestblockButBetterNamed"); //$NON-NLS-1$
+		final String s = sourceType.getTypeEntry().getFile().getFullPath().toString();
+		final IFolder folder = project.getFolder(s.substring(project.getName().length() + 2, s.lastIndexOf('/')));
 		final IFile destfile = folder.getFile(getTypeName() + ".fbt"); //$NON-NLS-1$
-
 		entry = getSourceFB().getTypeLibrary().createTypeEntry(destfile);
 		entry.setType(destinationFB);
 

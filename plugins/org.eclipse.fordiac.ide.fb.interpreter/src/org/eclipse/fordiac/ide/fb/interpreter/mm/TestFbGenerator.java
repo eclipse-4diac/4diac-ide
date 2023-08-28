@@ -47,7 +47,6 @@ public class TestFbGenerator extends AbstractFBGenerator {
 		for (final TestCase testCase : testSuite.getTestCases()) {
 			list.add(createEvent(testCase.getName() + "_TEST", true)); //$NON-NLS-1$
 		}
-		list.add(createEvent("tr_CMPLT", true));//$NON-NLS-1$
 		inputEventList = list;
 		return list;
 	}
@@ -59,8 +58,6 @@ public class TestFbGenerator extends AbstractFBGenerator {
 			list.add(createEvent(event.getName(), event.getType(), false));
 		}
 		list.addAll(getExpectedEvents(false));
-		list.add(createEvent("RESULT", false));//$NON-NLS-1$
-
 		outputEventList = list;
 		return list;
 	}
@@ -77,7 +74,6 @@ public class TestFbGenerator extends AbstractFBGenerator {
 				final ECAction actToTest = TestEccGenerator.createAction();
 				actToTest.setOutput(ev);
 				actToTest.setAlgorithm(createValueSettingAlgorithm(testState, eccGen.getCaseCount()));
-
 				eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1).getECAction().add(actToTest);
 
 				if (stateCnt <= 1) {
@@ -105,24 +101,26 @@ public class TestFbGenerator extends AbstractFBGenerator {
 	}
 
 	private Algorithm createValueSettingAlgorithm(final TestState testState, final int caseCount) {
-
-		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-
 		boolean containsParameters = false;
-		alg.setName("A" + caseCount); //$NON-NLS-1$
-		// alg.setName(NameRepository.createUniqueName(alg, "A1"));
+		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
+		int nameCnt = 0;
+		if (!destinationFB.getAlgorithm().isEmpty()) {
+			nameCnt = Integer.parseInt(Character.toString(
+					destinationFB.getAlgorithm().get(destinationFB.getAlgorithm().size() - 1).getName().charAt(1)));
+			nameCnt++;
+		}
+		alg.setName("A" + nameCnt); //$NON-NLS-1$
 		final StringBuilder text = new StringBuilder();
 		text.append("ALGORITHM " + alg.getName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		if (!testState.getTestTrigger().getParameters().equals("")) { //$NON-NLS-1$
 			containsParameters = true;
-			text.append(testState.getTestTrigger().getParameters());
+			text.append(testState.getTestTrigger().getParameters().replace(";", ";\n")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		for (final OutputPrimitive outP : testState.getTestOutputs()) {
-			if (!outP.getParameters().equals("")) {
+			if (!outP.getParameters().equals("")) { //$NON-NLS-1$
 				containsParameters = true;
-				text.append(createDataPinName(outP.getParameters()));
-				text.append("\n"); //$NON-NLS-1$
+				text.append(createDataPinName(outP.getParameters().replace(";", ";\n"))); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 
@@ -135,6 +133,7 @@ public class TestFbGenerator extends AbstractFBGenerator {
 
 		alg.setText(text.toString());
 		destinationFB.getCallables().add(alg);
+
 		return alg;
 	}
 
@@ -190,9 +189,8 @@ public class TestFbGenerator extends AbstractFBGenerator {
 			list.add(createVarDeclaration(varDecl, varDecl.getName(), false));
 		}
 		for (final VarDeclaration varDecl : sourceType.getInterfaceList().getOutputVars()) {
-			list.add(createVarDeclaration(varDecl, varDecl.getName() + "_expected", false));
+			list.add(createVarDeclaration(varDecl, varDecl.getName() + "_expected", false)); //$NON-NLS-1$
 		}
-
 		return list;
 	}
 

@@ -51,12 +51,12 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 		final TestEccGenerator eccGen = new TestEccGenerator(destinationFB.getECC(), 0);
 		for (final Event event : destinationFB.getInterfaceList().getEventInputs()) {
 			if (event.getName().contains("expected")) { //$NON-NLS-1$
-				if (event.getName().equals("expected")) {
-					eccGen.createState("S1", 0);
+				if (event.getName().equals("expected")) { //$NON-NLS-1$
+					eccGen.createState("S1", 0); //$NON-NLS-1$
 					eccGen.createTransitionFromTo(eccGen.getEcc().getStart(), eccGen.getLast(),
-							getEventInput("expected"));
+							getEventInput("expected")); //$NON-NLS-1$
 					eccGen.createTransitionFromTo(eccGen.getLast(), eccGen.getEcc().getStart(), null);
-					final ECAction action = eccGen.createAction();
+					final ECAction action = TestEccGenerator.createAction();
 					action.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(1));
 					eccGen.getLast().getECAction().add(action);
 				}
@@ -66,7 +66,7 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 					eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1)
 							.setName(NameRepository.createUniqueName(
 									eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1),
-									splitName[i] + "_WAIT_1"));
+									splitName[i] + "_WAIT_1")); //$NON-NLS-1$
 					if (i == 0) {
 						eccGen.createTransitionFromTo(eccGen.getEcc().getStart(), eccGen.getLast(), event);
 					} else {
@@ -78,7 +78,7 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 					eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1)
 							.setName(NameRepository.createUniqueName(
 									eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1),
-									"ERROR_1"));
+									"ERROR_1")); //$NON-NLS-1$
 					createErrorTransitions(eccGen, splitName[i]);
 					eccGen.createTransitionFromTo(eccGen.getLast(), eccGen.getEcc().getStart(), null);
 					final ECAction errAct = TestEccGenerator.createAction();
@@ -90,7 +90,7 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 						eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1)
 								.setName(NameRepository.createUniqueName(
 										eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1),
-										event.getName() + "_MATCH_1"));
+										event.getName() + "_MATCH_1")); //$NON-NLS-1$
 						final ECAction sucAct = TestEccGenerator.createAction();
 						sucAct.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(1));
 						eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1).getECAction()
