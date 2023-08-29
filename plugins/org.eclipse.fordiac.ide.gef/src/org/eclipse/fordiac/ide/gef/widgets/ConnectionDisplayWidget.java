@@ -84,7 +84,7 @@ public class ConnectionDisplayWidget {
 		connectionSection = widgetFactory.createSection(parent,
 				ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
 		connectionSection.setText(Messages.InterfaceElementSection_ConnectionGroup);
-		connectionSection.setLayout(new GridLayout(2, false));
+		connectionSection.setLayout(new GridLayout(1, false));
 		connectionSection
 				.setLayoutData(GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).create());
 

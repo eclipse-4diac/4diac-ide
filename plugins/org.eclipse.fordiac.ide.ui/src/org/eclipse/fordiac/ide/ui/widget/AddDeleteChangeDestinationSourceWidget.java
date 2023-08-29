@@ -22,7 +22,6 @@ import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.edit.command.EditUtils;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Listener;
@@ -35,9 +34,7 @@ public class AddDeleteChangeDestinationSourceWidget extends AddDeleteWidget {
 
 	@Override
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
-
 		container = createContainer(widgetFactory, parent);
-		container.setLayout(new FillLayout(SWT.VERTICAL));
 
 		createAddButton(widgetFactory, container);
 
