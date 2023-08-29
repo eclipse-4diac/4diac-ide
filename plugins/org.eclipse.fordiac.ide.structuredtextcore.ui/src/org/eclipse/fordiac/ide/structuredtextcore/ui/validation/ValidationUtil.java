@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
 import org.eclipse.fordiac.ide.model.buildpath.BuildpathAttributes;
 import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.validation.Issue;
@@ -35,11 +36,12 @@ public final class ValidationUtil {
 	}
 
 	public static Optional<SourceFolder> findSourceFolder(final IFile file) {
-		return BuildpathUtil.findSourceFolder(getBuildpath(file), file);
+		return getBuildpath(file).flatMap(buildpath -> BuildpathUtil.findSourceFolder(buildpath, file));
 	}
 
-	public static Buildpath getBuildpath(final IFile file) {
-		return TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject()).getBuildpath();
+	public static Optional<Buildpath> getBuildpath(final IFile file) {
+		return Optional.ofNullable(file).map(IFile::getProject).map(TypeLibraryManager.INSTANCE::getTypeLibrary)
+				.map(TypeLibrary::getBuildpath);
 	}
 
 	private ValidationUtil() {

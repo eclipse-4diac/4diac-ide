@@ -87,6 +87,6 @@ public class STCoreResourceUIValidatorExtension extends DefaultResourceUIValidat
 	}
 
 	protected static boolean isModelValidationIssue(final Issue issue) {
-		return issue.getCode().startsWith(LibraryElementValidator.DIAGNOSTIC_SOURCE);
+		return issue.getCode() != null && issue.getCode().startsWith(LibraryElementValidator.DIAGNOSTIC_SOURCE);
 	}
 }
