@@ -364,8 +364,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 			final XMLResource xmlResource = new XMLResourceImpl();
 			xmlResource.load(source, respMapping.getLoadOptions());
 			for (final EObject object : xmlResource.getContents()) {
-				if (object instanceof Response) {
-					return (Response) object;
+				if (object instanceof final Response response) {
+					return response;
 				}
 			}
 		}
@@ -443,7 +443,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public void clearForce(final MonitoringBaseElement element) throws DeploymentException {
 		final String request = MessageFormat.format(FORCE_VALUE, getNextId(), "*", element.getQualifiedString(), //$NON-NLS-1$
-				"false");  //$NON-NLS-1$
+				"false"); //$NON-NLS-1$
 		try {
 			sendREQ(element.getResourceString(), request);
 		} catch (final IOException e) {
