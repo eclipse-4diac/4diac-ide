@@ -219,14 +219,6 @@ public final class TypeLibrary {
 		});
 	}
 
-	public boolean addErrorTypeEntry(final TypeEntry entry) {
-		return errorTypes.putIfAbsent(entry.getFullTypeName(), entry) == null;
-	}
-
-	public void removeErrorTypeEntry(final TypeEntry entry) {
-		errorTypes.remove(entry.getFullTypeName(), entry);
-	}
-
 	private static TypeEntry createErrorTypeEntry(final FBType fbType) {
 		if (fbType instanceof SubAppType) {
 			return new ErrorSubAppTypeEntryImpl();
@@ -246,16 +238,15 @@ public final class TypeLibrary {
 	}
 
 	public void addTypeEntryNameReference(final TypeEntry entry) {
-		final TypeEntry errorEntry = errorTypes.get(entry.getFullTypeName());
-		if (errorEntry != null) {
-			removeErrorTypeEntry(errorEntry);
-		}
 		if (entry instanceof final DataTypeEntry dtEntry) {
 			if (!dataTypeLib.addTypeEntry(dtEntry)) {
 				handleDuplicateTypeName(entry);
 			}
-		} else if (!addBlockTypeEntry(entry)) {
-			handleDuplicateTypeName(entry);
+		} else {
+			errorTypes.remove(entry.getFullTypeName());
+			if (!addBlockTypeEntry(entry)) {
+				handleDuplicateTypeName(entry);
+			}
 		}
 	}
 
