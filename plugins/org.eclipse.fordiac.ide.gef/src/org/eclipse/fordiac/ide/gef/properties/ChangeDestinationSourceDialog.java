@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -429,37 +430,32 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 	private void createNewConnectionCommand(final IInterfaceElement pinSelection) {
 
 		AbstractConnectionCreateCommand createCommand = null;
-		Command deleteCommand = null;
-		IInterfaceElement dest = null;
 
-		if (pinSelection instanceof final VarDeclaration varDec) {
-			dest = varDec;
-			createCommand = new DataConnectionCreateCommand(ie.getFBNetworkElement().getFbNetwork());
+		if (pinSelection instanceof VarDeclaration) {
+			createCommand = new DataConnectionCreateCommand(connection.getFBNetwork());
 		}
 
-		if (pinSelection instanceof final Event eventPin) {
-			dest = eventPin;
-			createCommand = new EventConnectionCreateCommand(ie.getFBNetworkElement().getFbNetwork());
+		if (pinSelection instanceof Event) {
+			createCommand = new EventConnectionCreateCommand(connection.getFBNetwork());
 		}
 
-		if (pinSelection instanceof final AdapterDeclaration adapter) {
-			dest = adapter;
-			createCommand = new AdapterConnectionCreateCommand(ie.getFBNetworkElement().getFbNetwork());
+		if (pinSelection instanceof AdapterDeclaration) {
+			createCommand = new AdapterConnectionCreateCommand(connection.getFBNetwork());
 		}
 
-		deleteCommand = new DeleteConnectionCommand(connection);
+		final CompoundCommand cmd = new CompoundCommand();
+		cmd.add(new DeleteConnectionCommand(connection));
 
-		if (createCommand != null && deleteCommand != null && deleteCommand.canExecute() && dest != null
-				&& commandStack != null) {
+		if (createCommand != null && cmd.canExecute() && commandStack != null) {
 			if (ie.isIsInput()) {
-				createCommand.setSource(dest);
+				createCommand.setSource(pinSelection);
 				createCommand.setDestination(ie);
 			} else {
-				createCommand.setDestination(dest);
+				createCommand.setDestination(pinSelection);
 				createCommand.setSource(ie);
 			}
-			commandStack.execute(createCommand);
-			commandStack.execute(deleteCommand);
+			cmd.add(createCommand);
+			commandStack.execute(cmd);
 		}
 	}
 
