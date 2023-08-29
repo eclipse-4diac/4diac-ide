@@ -233,22 +233,20 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				handleProjectAdd(delta);
 			} else if (0 != delta.getAffectedChildren(IResourceDelta.REMOVED).length) {
 				handleProjectRemove(delta);
+				return false;
 			}
-			return false;
 		} else if (delta.getResource().getType() == IResource.PROJECT) {
-			return checkForErrorMarkerChanges(delta);
+			checkForErrorMarkerChanges(delta);
 		}
 		return true;
 	}
 
-	public boolean checkForErrorMarkerChanges(final IResourceDelta delta) {
+	public void checkForErrorMarkerChanges(final IResourceDelta delta) {
 		for (final IResourceDelta d : delta.getAffectedChildren()) {
 			if (IResourceDelta.MARKERS == (d.getFlags() & IResourceDelta.MARKERS)) {
 				systemManager.notifyListeners();
-				return false;
 			}
 		}
-		return true;
 	}
 
 	private void refreshTypeEntry(final IResourceDelta delta) {
