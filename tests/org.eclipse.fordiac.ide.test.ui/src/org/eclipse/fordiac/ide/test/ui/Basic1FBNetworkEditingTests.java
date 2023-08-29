@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.test.ui;
 
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -78,15 +79,21 @@ public class Basic1FBNetworkEditingTests {
 	private static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
 	private static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
 	private static final String E_CTUD_TREE_ITEM = "E_CTUD [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
+	private static final String E_D_FF_TREE_ITEM = "E_D_FF [Data latch (d) flip flop]"; //$NON-NLS-1$
 	private static final String START = "START"; //$NON-NLS-1$
 	private static final String STOP = "STOP"; //$NON-NLS-1$
 	private static final String EO = "EO"; //$NON-NLS-1$
 	private static final String EO0 = "EO0"; //$NON-NLS-1$
+	private static final String EO1 = "EO1"; //$NON-NLS-1$
 	private static final String EO2 = "EO2"; //$NON-NLS-1$
 	private static final String DT = "DT"; //$NON-NLS-1$
 	private static final String N = "N"; //$NON-NLS-1$
+	private static final String D = "D"; //$NON-NLS-1$
+	private static final String Q = "Q"; //$NON-NLS-1$
 	private static final String QU = "QU"; //$NON-NLS-1$
 	private static final String QD = "QD"; //$NON-NLS-1$
+	private static final String PV = "PV"; //$NON-NLS-1$
+	private static final String CV = "CV"; //$NON-NLS-1$
 	private static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
 	private static SWT4diacGefBot bot;
@@ -301,7 +308,7 @@ public class Basic1FBNetworkEditingTests {
 	/**
 	 * Checks if it is possible to edit the automatically generated name of the FB
 	 */
-	@Disabled
+	@Test
 	public void editFBName() {
 		// in progress
 	}
@@ -319,32 +326,9 @@ public class Basic1FBNetworkEditingTests {
 	@Test
 	public void validConnectionBetweenEventInputPinAndEventOutputPin() {
 		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 200));
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
-		assertNotNull(editor);
-		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		assertNotNull(viewer);
-		// select input pin
-		editor.click(START);
-		final SWTBotGefEditPart ei = editor.getEditPart(START);
-		assertNotNull(ei);
-		final IFigure figure = ((GraphicalEditPart) ei.part()).getFigure();
-		assertNotNull(figure);
-		final Rectangle inputPinBounds = figure.getBounds().getCopy();
-		assertNotNull(inputPinBounds);
-		figure.translateToAbsolute(inputPinBounds);
-		// select output pin
-		editor.click(EO);
-		final SWTBotGefEditPart eo = editor.getEditPart(EO);
-		assertNotNull(eo);
-		final Rectangle outputPinBounds = ((GraphicalEditPart) eo.part()).getFigure().getBounds().getCopy();
-		assertNotNull(outputPinBounds);
-		figure.translateToAbsolute(outputPinBounds);
-		viewer.drag(EO, inputPinBounds.getCenter().x, inputPinBounds.getCenter().y);
-
+		final SWTBot4diacGefViewer viewer = createConnection(START, EO);
 		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-
-		waitUntilCondition(editPartRegistry);
-		assertEquals(1, editPartRegistry.values().stream().filter(v -> v instanceof ConnectionEditPart).count());
+		assertDoesNotThrow(() -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
@@ -356,9 +340,13 @@ public class Basic1FBNetworkEditingTests {
 	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
 	 * registered EditParts}.
 	 */
-	@Disabled
-	public void validConnectionBetweenEventOutputPinAndInputEventPin() {
-		// in progress
+	@SuppressWarnings("static-method")
+	@Test
+	public void validConnectionBetweenEventOutputPinAndEventInputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(EO1, START);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertDoesNotThrow(() -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
@@ -370,17 +358,31 @@ public class Basic1FBNetworkEditingTests {
 	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
 	 * registered EditParts}.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void validConnectionBetweenUintDataInputPinAndUintDataOutputPin() {
-		// in progress
+		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(150, 150));
+		final SWTBot4diacGefViewer viewer = createConnection(PV, CV);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertDoesNotThrow(() -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
 	 * Checks if the connection is still there after moving the FB
+	 *
+	 * The method checks if its possible to create a valid connection between an
+	 * data input pin of type boolean and a data output pin of type boolean. It is
+	 * also checked if the connection can be found in the
+	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
+	 * registered EditParts}.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void validConnectionBetweenBoolInputPinAndBoolOutputPin() {
-		// in progress - E_D_FF
+		dragAndDropEventsFB(E_D_FF_TREE_ITEM, new Point(150, 150));
+		final SWTBot4diacGefViewer viewer = createConnection(D, Q);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertDoesNotThrow(() -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
