@@ -215,8 +215,8 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 		final List<IInterfaceElement> varDec = new ArrayList<>();
 		for (final InterfaceList ieList : ieLists) {
 			if (inputSwap(input, ieList)) {
-				varDec.addAll(ieList.getOutputVars().stream().filter(newIE -> LinkConstraints.typeCheck(ie, newIE))
-						.filter(newIE -> newIE.getOutputConnections().isEmpty()).toList());
+				varDec.addAll(
+						ieList.getOutputVars().stream().filter(newIE -> LinkConstraints.typeCheck(ie, newIE)).toList());
 			} else {
 
 				varDec.addAll(ieList.getInputVars().stream().filter(newIE -> LinkConstraints.typeCheck(ie, newIE))
@@ -231,11 +231,9 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 		final List<IInterfaceElement> event = new ArrayList<>();
 		for (final InterfaceList ieList : ieLists) {
 			if (inputSwap(input, ieList)) {
-				event.addAll(ieList.getEventOutputs().stream().filter(newIE -> newIE.getOutputConnections().isEmpty())
-						.toList());
+				event.addAll(ieList.getEventOutputs().stream().toList());
 			} else {
-				event.addAll(ieList.getEventInputs().stream().filter(newIE -> newIE.getInputConnections().isEmpty())
-						.toList());
+				event.addAll(ieList.getEventInputs().stream().toList());
 			}
 		}
 		return event;
