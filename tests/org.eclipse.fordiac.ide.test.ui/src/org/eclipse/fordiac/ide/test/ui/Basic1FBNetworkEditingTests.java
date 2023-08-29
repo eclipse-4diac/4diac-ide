@@ -50,6 +50,7 @@ import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class Basic1FBNetworkEditingTests {
@@ -298,6 +299,14 @@ public class Basic1FBNetworkEditingTests {
 	}
 
 	/**
+	 * Checks if it is possible to edit the automatically generated name of the FB
+	 */
+	@Disabled
+	public void editFBName() {
+		// in progress
+	}
+
+	/**
 	 * Checks if a valid connection can be created.
 	 *
 	 * The method checks if its possible to create a valid connection between an
@@ -308,7 +317,7 @@ public class Basic1FBNetworkEditingTests {
 	 */
 	@SuppressWarnings("static-method")
 	@Test
-	public void createValidConnectionBetweenInputEventPinAndOutputEventPin() {
+	public void validConnectionBetweenEventInputPinAndEventOutputPin() {
 		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 200));
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		assertNotNull(editor);
@@ -339,6 +348,50 @@ public class Basic1FBNetworkEditingTests {
 	}
 
 	/**
+	 * Checks if a valid connection can be created.
+	 *
+	 * The method checks if its possible to create a valid connection between an
+	 * event output pin and a event input pin. It is also checked if the connection
+	 * can be found in the
+	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
+	 * registered EditParts}.
+	 */
+	@Disabled
+	public void validConnectionBetweenEventOutputPinAndInputEventPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if a valid connection can be created.
+	 *
+	 * The method checks if its possible to create a valid connection between an
+	 * data input pin of type unsigned integer and a data output pin of type
+	 * unsigned integer. It is also checked if the connection can be found in the
+	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
+	 * registered EditParts}.
+	 */
+	@Disabled
+	public void validConnectionBetweenUintDataInputPinAndUintDataOutputPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if the connection is still there after moving the FB
+	 */
+	@Disabled
+	public void validConnectionBetweenBoolInputPinAndBoolOutputPin() {
+		// in progress - E_D_FF
+	}
+
+	/**
+	 * Checks if the connection is still there after moving the FB
+	 */
+	@Disabled
+	public void connectionCanBeFoundAfterMovingFB() {
+		// in progress
+	}
+
+	/**
 	 * Checks if an invalid connection can be created.
 	 *
 	 * Attempts to create a connection between an event input pin and an event input
@@ -350,7 +403,7 @@ public class Basic1FBNetworkEditingTests {
 	 */
 	@SuppressWarnings("static-method")
 	@Test
-	public void createNotValidConnectionBetweenInputEventPinAndInputEventPin() {
+	public void invalidConnectionBetweenEventInputPinAndEventInputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(START, STOP);
 		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
@@ -359,21 +412,58 @@ public class Basic1FBNetworkEditingTests {
 
 	/**
 	 * Checks if an invalid connection can be created.
-	 *
-	 * Attempts to create a connection between an event output pin and an event
-	 * output pin.
-	 *
-	 * @throws TimeoutException When the attempted connection cannot be found in the
-	 *                          map of the {@link EditPartViewer#getEditPartRegistry
-	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
-	@Test
-	public void createNotValidConnectionBetweenOutputEventPinAndOutputEventPin() {
-		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(EO0, EO2);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+	@Disabled
+	public void invalidConnectionBetweenEventInputPinAndUintInputPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenEventInputPinAndTimeInputPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenEventInputPinAndBoolInputPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenEventInputPinAndUintOutputPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenEventInputPinAndTimeOutputPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenEventInputPinAndBoolOutputPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenTimeInputPinAndTimeOutputPin() {
+		// in progress - E_TABLE_CTRL
 	}
 
 	/**
@@ -388,11 +478,86 @@ public class Basic1FBNetworkEditingTests {
 	 */
 	@SuppressWarnings("static-method")
 	@Test
-	public void createNotValidConnectionBetweenTimeInputPinAndUintInputPin() {
+	public void invalidConnectionBetweenTimeInputPinAndUintInputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(DT, N);
 		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
 		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenUintInputPinAndBoolOutputPin() {
+		// in progress - E_CTD
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenEventOutputPinAndUintInputPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenEventOutputPinAndTimeInputPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenEventOutputPinAndBoolInputPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event output pin and an event
+	 * output pin.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventOutputPinAndEventOutputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(EO0, EO2);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenEventOutputPinAndUintOutputPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenEventOutputPinAndTimeOutputPin() {
+		// in progress
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 */
+	@Disabled
+	public void invalidConnectionBetweenEventOutputPinAndBoolOutputPin() {
+		// in progress
 	}
 
 	/**
@@ -407,11 +572,60 @@ public class Basic1FBNetworkEditingTests {
 	 */
 	@SuppressWarnings("static-method")
 	@Test
-	public void createNotValidConnectionBetweenBoolOutputPinAndBoolOutputPin() {
+	public void invalidConnectionBetweenBoolOutputPinAndBoolOutputPin() {
 		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(QU, QD);
 		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
 		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+	}
+
+	/**
+	 * Checks if it is possible to double click on FB and new Tab (breadcrumb)
+	 * appears
+	 */
+	@Disabled
+	public void compositeInstanceViewerAppearsAfterDoubleClickOnFB() {
+		// in progress
+	}
+
+	/**
+	 * Checks if it is possible to move FB in CompositeInstanceViewer
+	 */
+	@Disabled
+	public void compositeInstanceViewerMoveFB() {
+		// in progress
+	}
+
+	/**
+	 * Checks if it is possible to delete FB in CompositeInstanceViewer
+	 */
+	@Disabled
+	public void compositeInstanceViewerDeleteFB() {
+		// in progress
+	}
+
+	/**
+	 * Checks if it is possible to edit name of FB in CompositeInstanceViewer
+	 */
+	@Disabled
+	public void compositeInstanceViewerEditingOfFB() {
+		// in progress
+	}
+
+	/**
+	 * Checks if it is possible to add connections in CompositeInstanceViewer
+	 */
+	@Disabled
+	public void compositeInstanceViewerConnectionCanBeAdded() {
+		// in progress
+	}
+
+	/**
+	 * Checks if it is possible to add another FB in CompositeInstanceViewer
+	 */
+	@Disabled
+	public void compositeInstanceViewerAddAnotherFB() {
+		// in progress
 	}
 
 	// End of region for test methods
