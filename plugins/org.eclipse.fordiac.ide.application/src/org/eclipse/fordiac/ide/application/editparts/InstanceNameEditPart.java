@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
@@ -77,6 +78,12 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 	};
 
 	void refreshValue() {
+		if (getModel().hasErrorMarker()) {
+			getFigure().setBackgroundColor(ColorConstants.red);
+			getFigure().setOpaque(true);
+		} else {
+			getFigure().setOpaque(false);
+		}
 		getFigure().setText(getModel().getInstanceName());
 	}
 
@@ -90,7 +97,6 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 	public InstanceNameFigure getFigure() {
 		return (InstanceNameFigure) super.getFigure();
 	}
-
 
 	@Override
 	protected void createEditPolicies() {
