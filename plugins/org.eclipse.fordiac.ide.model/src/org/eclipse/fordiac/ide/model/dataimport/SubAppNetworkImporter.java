@@ -75,7 +75,11 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			}
 		}
 
-		fbNetworkElementMap.put(subApp.getName(), subApp);
+		if (fbNetworkElementMap.get(subApp.getName()) != null) {
+			super.handleNameCollision(subApp);
+		} else {
+			fbNetworkElementMap.put(subApp.getName(), subApp);
+		}
 
 		if ((null == subApp.getTypeEntry() && type != null) || (subApp instanceof ErrorMarkerRef)) {
 			final String errorMessage = MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", //$NON-NLS-1$
@@ -103,31 +107,28 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 	}
 
 	private void parseUntypedSubapp(final SubApp subApp) throws TypeImportException, XMLStreamException {
-		processChildren(LibraryElementTags.SUBAPP_ELEMENT, name -> {
-			return switch (name) {
-			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT -> {
-				final SubAppTImporter interfaceImporter = new SubAppTImporter(this);
-				subApp.setInterface(
-						interfaceImporter.parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
-				yield true;
-			}
-			case LibraryElementTags.SUBAPPNETWORK_ELEMENT -> {
-				final SubAppNetworkImporter subAppImporter = new SubAppNetworkImporter(this, subApp.getInterface());
-				subApp.setSubAppNetwork(subAppImporter.getFbNetwork());
-				subAppImporter.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT);
-				yield true;
-			}
-			case LibraryElementTags.PARAMETER_ELEMENT -> {
-				parseParameter(subApp);
-				yield true;
-			}
-			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
-				parseUntypedSubappAttributes(subApp);
-				yield true;
-			}
-			default -> false;
-			};
-		});
+		processChildren(LibraryElementTags.SUBAPP_ELEMENT, name -> (switch (name) {
+		case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT -> {
+			final SubAppTImporter interfaceImporter = new SubAppTImporter(this);
+			subApp.setInterface(interfaceImporter.parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
+			yield true;
+		}
+		case LibraryElementTags.SUBAPPNETWORK_ELEMENT -> {
+			final SubAppNetworkImporter subAppImporter = new SubAppNetworkImporter(this, subApp.getInterface());
+			subApp.setSubAppNetwork(subAppImporter.getFbNetwork());
+			subAppImporter.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT);
+			yield true;
+		}
+		case LibraryElementTags.PARAMETER_ELEMENT -> {
+			parseParameter(subApp);
+			yield true;
+		}
+		case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
+			parseUntypedSubappAttributes(subApp);
+			yield true;
+		}
+		default -> false;
+		}));
 	}
 
 	private void parseUntypedSubappAttributes(final SubApp subApp) throws XMLStreamException {

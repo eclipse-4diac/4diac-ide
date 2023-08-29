@@ -604,13 +604,22 @@ public interface LibraryElementPackage extends EPackage {
 	int FB_NETWORK_ELEMENT__POSITION = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FB_NETWORK_ELEMENT__ERROR_MESSAGE = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FB_NETWORK_ELEMENT__INTERFACE = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 1;
+	int FB_NETWORK_ELEMENT__INTERFACE = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Mapping</b></em>' reference.
@@ -619,7 +628,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FB_NETWORK_ELEMENT__MAPPING = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
+	int FB_NETWORK_ELEMENT__MAPPING = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Group</b></em>' reference.
@@ -628,7 +637,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FB_NETWORK_ELEMENT__GROUP = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
+	int FB_NETWORK_ELEMENT__GROUP = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>FB Network Element</em>' class.
@@ -637,7 +646,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FB_NETWORK_ELEMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 4;
+	int FB_NETWORK_ELEMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl <em>FB</em>}' class.
@@ -693,6 +702,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB__POSITION = FB_NETWORK_ELEMENT__POSITION;
+
+	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FB__ERROR_MESSAGE = FB_NETWORK_ELEMENT__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -784,6 +802,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_FB__POSITION = FB__POSITION;
+
+	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTER_FB__ERROR_MESSAGE = FB__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -2247,6 +2274,15 @@ public interface LibraryElementPackage extends EPackage {
 	int CFB_INSTANCE__POSITION = FB__POSITION;
 
 	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CFB_INSTANCE__ERROR_MESSAGE = FB__ERROR_MESSAGE;
+
+	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2391,6 +2427,15 @@ public interface LibraryElementPackage extends EPackage {
 	int COMMENT__POSITION = FB_NETWORK_ELEMENT__POSITION;
 
 	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMENT__ERROR_MESSAGE = FB_NETWORK_ELEMENT__ERROR_MESSAGE;
+
+	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2488,6 +2533,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMMUNICATION_CHANNEL__POSITION = FB__POSITION;
+
+	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMUNICATION_CHANNEL__ERROR_MESSAGE = FB__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -2967,6 +3021,15 @@ public interface LibraryElementPackage extends EPackage {
 	int STRUCT_MANIPULATOR__POSITION = FB__POSITION;
 
 	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRUCT_MANIPULATOR__ERROR_MESSAGE = FB__ERROR_MESSAGE;
+
+	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3055,6 +3118,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int DEMULTIPLEXER__POSITION = STRUCT_MANIPULATOR__POSITION;
+
+	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__ERROR_MESSAGE = STRUCT_MANIPULATOR__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -3687,6 +3759,15 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_FBN_ELEMENT__POSITION = FB_NETWORK_ELEMENT__POSITION;
 
 	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE = FB_NETWORK_ELEMENT__ERROR_MESSAGE;
+
+	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3714,22 +3795,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_FBN_ELEMENT__GROUP = FB_NETWORK_ELEMENT__GROUP;
 
 	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Repaired Element</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
+	int ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Error Marker FBN Element</em>' class.
@@ -3738,7 +3810,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_FBN_ELEMENT_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 2;
+	int ERROR_MARKER_FBN_ELEMENT_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4445,6 +4517,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int GROUP__POSITION = FB_NETWORK_ELEMENT__POSITION;
+
+	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP__ERROR_MESSAGE = FB_NETWORK_ELEMENT__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -5247,6 +5328,15 @@ public interface LibraryElementPackage extends EPackage {
 	int MULTIPLEXER__POSITION = STRUCT_MANIPULATOR__POSITION;
 
 	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__ERROR_MESSAGE = STRUCT_MANIPULATOR__ERROR_MESSAGE;
+
+	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5976,6 +6066,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int RESOURCE_TYPE_FB__POSITION = FB__POSITION;
+
+	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_TYPE_FB__ERROR_MESSAGE = FB__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -7071,6 +7170,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SUB_APP__POSITION = FB_NETWORK_ELEMENT__POSITION;
+
+	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_APP__ERROR_MESSAGE = FB_NETWORK_ELEMENT__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.

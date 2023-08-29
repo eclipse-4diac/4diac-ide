@@ -4481,6 +4481,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		fbEClass.getESuperTypes().add(this.getICallable());
 		fbNetworkElementEClass.getESuperTypes().add(this.getTypedConfigureableObject());
 		fbNetworkElementEClass.getESuperTypes().add(this.getPositionableElement());
+		fbNetworkElementEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		fbTypeEClass.getESuperTypes().add(this.getLibraryElement());
 		fbTypeEClass.getESuperTypes().add(this.getConfigurableObject());
 		fbTypeEClass.getESuperTypes().add(this.getICallable());

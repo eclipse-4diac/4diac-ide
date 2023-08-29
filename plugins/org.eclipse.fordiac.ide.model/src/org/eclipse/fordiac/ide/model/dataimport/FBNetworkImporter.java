@@ -177,7 +177,11 @@ class FBNetworkImporter extends CommonElementImporter {
 		// add FB to FBnetwork so that parameter parsing can create error markers
 		// correctly.
 		fbNetwork.getNetworkElements().add(group);
-		fbNetworkElementMap.put(group.getName(), group);
+		if (fbNetworkElementMap.get(group.getName()) != null) {
+			handleNameCollision(group);
+		} else {
+			fbNetworkElementMap.put(group.getName(), group);
+		}
 		proceedToEndElementNamed(LibraryElementTags.GROUP_ELEMENT);
 	}
 
@@ -219,7 +223,11 @@ class FBNetworkImporter extends CommonElementImporter {
 		// add FB to FBnetwork so that parameter parsing can create error markers
 		// correctly.
 		fbNetwork.getNetworkElements().add(fb);
-		fbNetworkElementMap.put(fb.getName(), fb);
+		if (fbNetworkElementMap.get(fb.getName()) != null) {
+			handleNameCollision(fb);
+		} else {
+			fbNetworkElementMap.put(fb.getName(), fb);
+		}
 
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 
@@ -255,6 +263,13 @@ class FBNetworkImporter extends CommonElementImporter {
 		fb.setInterface(type.getInterfaceList().copy());
 		fb.setTypeEntry(entry);
 		return fb;
+	}
+
+	protected void handleNameCollision(final FBNetworkElement fbne) {
+		final String errorMessage = MessageFormat.format(Messages.FBNetworkImporter_NameCollision, fbne.getName());
+		errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(fbne)
+				.setLineNumber(getLineNumber()));
+		fbne.setErrorMessage(errorMessage);
 	}
 
 	protected <T extends Connection> void parseConnectionList(final EClass conType, final EList<T> connectionlist,

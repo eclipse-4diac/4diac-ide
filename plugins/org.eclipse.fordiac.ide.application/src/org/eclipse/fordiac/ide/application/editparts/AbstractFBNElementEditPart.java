@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
@@ -305,12 +306,21 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			getTargetFigure(interfaceEditPart).add(child, getInterfaceElementIndex(interfaceEditPart));
 		} else if (childEditPart instanceof HiddenPinIndicatorEditPart) {
 			addPinIndicatorFigure((HiddenPinIndicatorEditPart) childEditPart, child);
+		} else if (childEditPart instanceof final InstanceNameEditPart instanceNameEditPart) {
+			if (instanceNameEditPart.getModel().hasErrorMarker()) {
+				child.setBackgroundColor(ColorConstants.red);
+				child.setOpaque(true);
+			} else {
+				child.setOpaque(false);
+			}
+			getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
 		} else {
 			getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
 		}
 	}
 
-	private void addPinIndicatorFigure(final HiddenPinIndicatorEditPart indicatorEditPart, final IFigure indicatorFigure) {
+	private void addPinIndicatorFigure(final HiddenPinIndicatorEditPart indicatorEditPart,
+			final IFigure indicatorFigure) {
 		if (((HiddenPinIndicator) indicatorEditPart.getModel()).isInput()) {
 			getFigure().getPinIndicatorInput().add(indicatorFigure);
 		} else {
@@ -432,7 +442,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		}
 	}
 
-	private void removePinIndicatorFigure(final HiddenPinIndicatorEditPart indicatorEditPart, final IFigure indicatorFigure) {
+	private void removePinIndicatorFigure(final HiddenPinIndicatorEditPart indicatorEditPart,
+			final IFigure indicatorFigure) {
 		if (((HiddenPinIndicator) indicatorEditPart.getModel()).isInput()) {
 			getFigure().getPinIndicatorInput().remove(indicatorFigure);
 		} else {
