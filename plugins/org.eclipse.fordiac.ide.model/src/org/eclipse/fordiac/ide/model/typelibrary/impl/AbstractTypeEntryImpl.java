@@ -387,19 +387,21 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 
 	private void loadTypeNameFromFile() {
 		if (getFile() != null) {
-			try (Scanner scanner = new Scanner(getFile().getContents())) {
-				if (scanner.findWithinHorizon(TYPE_NAME_PATTERN, 0) != null) {
-					setTypeName(scanner.match().group(1));
-					if (scanner.findWithinHorizon(TYPE_PACKAGE_NAME_PATTERN, 0) != null) {
-						final String packageName = scanner.match().group(1);
-						setFullTypeName(packageName + "::" + typeName); //$NON-NLS-1$
-					} else {
-						setFullTypeName(typeName);
+			if (getFile().exists()) {
+				try (Scanner scanner = new Scanner(getFile().getContents())) {
+					if (scanner.findWithinHorizon(TYPE_NAME_PATTERN, 0) != null) {
+						setTypeName(scanner.match().group(1));
+						if (scanner.findWithinHorizon(TYPE_PACKAGE_NAME_PATTERN, 0) != null) {
+							final String packageName = scanner.match().group(1);
+							setFullTypeName(packageName + "::" + typeName); //$NON-NLS-1$
+						} else {
+							setFullTypeName(typeName);
+						}
+						return;
 					}
-					return;
+				} catch (final Exception e) {
+					FordiacLogHelper.logWarning(e.getMessage(), e);
 				}
-			} catch (final Exception e) {
-				FordiacLogHelper.logWarning(e.getMessage(), e);
 			}
 			setTypeName(TypeEntry.getTypeNameFromFile(getFile()));
 		} else {
