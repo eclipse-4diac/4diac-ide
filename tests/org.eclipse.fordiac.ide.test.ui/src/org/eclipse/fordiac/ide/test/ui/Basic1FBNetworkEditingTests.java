@@ -82,19 +82,20 @@ public class Basic1FBNetworkEditingTests {
 	private static final String E_D_FF_TREE_ITEM = "E_D_FF [Data latch (d) flip flop]"; //$NON-NLS-1$
 	private static final String START = "START"; //$NON-NLS-1$
 	private static final String STOP = "STOP"; //$NON-NLS-1$
+	private static final String D = "D"; //$NON-NLS-1$
+	private static final String N = "N"; //$NON-NLS-1$
+	private static final String Q = "Q"; //$NON-NLS-1$
+	private static final String CD = "CD"; //$NON-NLS-1$
+	private static final String CV = "CV"; //$NON-NLS-1$
+	private static final String DT = "DT"; //$NON-NLS-1$
 	private static final String EO = "EO"; //$NON-NLS-1$
+	private static final String PV = "PV"; //$NON-NLS-1$
+	private static final String QD = "QD"; //$NON-NLS-1$
+	private static final String QU = "QU"; //$NON-NLS-1$
+	private static final String CLK = "CLK"; //$NON-NLS-1$
 	private static final String EO0 = "EO0"; //$NON-NLS-1$
 	private static final String EO1 = "EO1"; //$NON-NLS-1$
 	private static final String EO2 = "EO2"; //$NON-NLS-1$
-	private static final String DT = "DT"; //$NON-NLS-1$
-	private static final String N = "N"; //$NON-NLS-1$
-	private static final String D = "D"; //$NON-NLS-1$
-	private static final String Q = "Q"; //$NON-NLS-1$
-	private static final String QU = "QU"; //$NON-NLS-1$
-	private static final String QD = "QD"; //$NON-NLS-1$
-	private static final String PV = "PV"; //$NON-NLS-1$
-	private static final String CV = "CV"; //$NON-NLS-1$
-	private static final String CLK = "CLK"; //$NON-NLS-1$
 	private static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
 	private static SWT4diacGefBot bot;
@@ -472,10 +473,21 @@ public class Basic1FBNetworkEditingTests {
 
 	/**
 	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and a data output
+	 * pin of type unsigned integer.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void invalidConnectionBetweenEventInputPinAndUintOutputPin() {
-		// in progress
+		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 150));
+		final SWTBot4diacGefViewer viewer = createConnection(CD, CV);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
@@ -488,10 +500,21 @@ public class Basic1FBNetworkEditingTests {
 
 	/**
 	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and a data output
+	 * pin of type boolean.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void invalidConnectionBetweenEventInputPinAndBoolOutputPin() {
-		// in progress
+		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 150));
+		final SWTBot4diacGefViewer viewer = createConnection(CD, QU);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
