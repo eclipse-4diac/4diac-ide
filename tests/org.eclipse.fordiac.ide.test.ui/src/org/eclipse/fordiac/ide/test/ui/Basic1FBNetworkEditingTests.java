@@ -414,18 +414,40 @@ public class Basic1FBNetworkEditingTests {
 
 	/**
 	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and a data input
+	 * pin of type unsigned integer.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void invalidConnectionBetweenEventInputPinAndUintInputPin() {
-		// in progress
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(150, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(START, N);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
 	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and a data input
+	 * pin of type time.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void invalidConnectionBetweenEventInputPinAndTimeInputPin() {
-		// in progress
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(150, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(START, DT);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
@@ -723,10 +745,12 @@ public class Basic1FBNetworkEditingTests {
 	}
 
 	/**
-	 * Checks if there is a ConnectionEditPart is in the editPartRegistry
+	 * Checks if there is a ConnectionEditPart in the editPartRegistry. Throws an
+	 * exception if no such part can be found after 1 second.
 	 *
-	 * @throws Exception When the attempted connection cannot be found in the map of
-	 *                   the {@link EditPartViewer#getEditPartRegistry
+	 * @param editPartRegistry Map with all registered editParts
+	 * @throws Exception When no ConnectionEditPart can be found in the map of the
+	 *                   {@link EditPartViewer#getEditPartRegistry
 	 *                   EditPartRegistry}.
 	 */
 	private static void waitUntilCondition(final Map<?, ?> editPartRegistry) {
