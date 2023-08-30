@@ -75,11 +75,12 @@ public class Basic1FBNetworkEditingTests {
 	private static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
 	private static final String EVENTS_NODE = "events"; //$NON-NLS-1$
 	private static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
+	private static final String E_CTUD_TREE_ITEM = "E_CTUD [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
 	private static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	private static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
-	private static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
-	private static final String E_CTUD_TREE_ITEM = "E_CTUD [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
 	private static final String E_D_FF_TREE_ITEM = "E_D_FF [Data latch (d) flip flop]"; //$NON-NLS-1$
+	private static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
+	private static final String E_TABLE_CTRL_TREE_ITEM = "E_TABLE_CTRL [Support function block for E_TABLE]";
 	private static final String START = "START"; //$NON-NLS-1$
 	private static final String STOP = "STOP"; //$NON-NLS-1$
 	private static final String D = "D"; //$NON-NLS-1$
@@ -96,6 +97,8 @@ public class Basic1FBNetworkEditingTests {
 	private static final String EO0 = "EO0"; //$NON-NLS-1$
 	private static final String EO1 = "EO1"; //$NON-NLS-1$
 	private static final String EO2 = "EO2"; //$NON-NLS-1$
+	private static final String DTO = "DTO"; //$NON-NLS-1$
+	private static final String INIT = "INIT"; //$NON-NLS-1$
 	private static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
 	private static SWT4diacGefBot bot;
@@ -492,10 +495,21 @@ public class Basic1FBNetworkEditingTests {
 
 	/**
 	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and a data output
+	 * pin of type time.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void invalidConnectionBetweenEventInputPinAndTimeOutputPin() {
-		// in progress
+		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(INIT, DTO);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
@@ -519,10 +533,21 @@ public class Basic1FBNetworkEditingTests {
 
 	/**
 	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between a data input pin of type time and a
+	 * data output pin of type time.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void invalidConnectionBetweenTimeInputPinAndTimeOutputPin() {
-		// in progress - E_TABLE_CTRL
+		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(DT, DTO);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
@@ -546,10 +571,21 @@ public class Basic1FBNetworkEditingTests {
 
 	/**
 	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between a data input pin of type unsigned
+	 * integer and a data input pin of type boolean.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void invalidConnectionBetweenUintInputPinAndBoolOutputPin() {
-		// in progress - E_CTD
+		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(PV, QU);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
