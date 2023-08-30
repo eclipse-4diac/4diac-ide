@@ -76,6 +76,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
@@ -86,6 +87,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpres
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
@@ -165,6 +167,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String FOR_CONTROL_VARIABLE_NON_TEMPORARY = ISSUE_CODE_PREFIX
 			+ "forControlVariableNonTemporary"; //$NON-NLS-1$
 	public static final String FOR_CONTROL_VARIABLE_UNDEFINED = ISSUE_CODE_PREFIX + "forControlVariableUndefined"; //$NON-NLS-1$
+	public static final String EXIT_NOT_IN_LOOP = ISSUE_CODE_PREFIX + "exitNotInLoop"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
 
@@ -817,8 +820,23 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 	}
 
-	/* Here we already know that we have a MultibitPartialExpression. This function checks bound on static access
-	 * (without "()") */
+	@Check
+	public void checkExitIsInLoop(final STExit exitStatement) {
+		if (StreamSupport.stream(EcoreUtil2.getAllContainers(exitStatement).spliterator(), false)
+				.filter(STStatement.class::isInstance).map(STStatement.class::cast).noneMatch(this::isLoopStatement)) {
+			error(Messages.STCoreValidator_ExitNeedsToBeInsideALoop, null, EXIT_NOT_IN_LOOP);
+		}
+	}
+
+	private boolean isLoopStatement(final STStatement statement) {
+		return statement instanceof STForStatement || statement instanceof STWhileStatement
+				|| statement instanceof STRepeatStatement;
+	}
+
+	/*
+	 * Here we already know that we have a MultibitPartialExpression. This function
+	 * checks bound on static access (without "()")
+	 */
 	private void checkMultibitPartialExpression(final STMultibitPartialExpression expression,
 			final DataType accessorType, final DataType receiverType) {
 		if (receiverType instanceof AnyBitType) {

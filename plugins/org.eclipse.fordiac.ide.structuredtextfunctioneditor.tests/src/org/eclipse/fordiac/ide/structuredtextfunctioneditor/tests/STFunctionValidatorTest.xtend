@@ -496,7 +496,8 @@ class STFunctionValidatorTest {
 			FOR int1 := 4 TO 17 DO
 			END_FOR;
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.FOR_CONTROL_VARIABLE_NON_TEMPORARY)
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STForStatement,
+			STCoreValidator.FOR_CONTROL_VARIABLE_NON_TEMPORARY)
 	}
 
 	@Test
@@ -523,7 +524,8 @@ class STFunctionValidatorTest {
 				int1 := 17;
 			END_FOR;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
 		'''
 			FUNCTION hubert
 			VAR
@@ -537,7 +539,8 @@ class STFunctionValidatorTest {
 				END_FOR;
 			END_FOR;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
 		'''
 			FUNCTION hubert
 			VAR
@@ -551,7 +554,8 @@ class STFunctionValidatorTest {
 				END_FOR;
 			END_FOR;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
 	}
 
 	@Test
@@ -604,7 +608,8 @@ class STFunctionValidatorTest {
 			END_FOR;
 			int2 := int1; // read access -> warning
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
 		'''
 			FUNCTION hubert
 			VAR
@@ -630,7 +635,8 @@ class STFunctionValidatorTest {
 			
 			int2 := int1; // read access and may not have been written if IF, WHILE, and REPEAT not taken -> warning
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
 		'''
 			FUNCTION hubert
 			VAR
@@ -644,7 +650,8 @@ class STFunctionValidatorTest {
 			END_FOR;
 			int1 := int2; // read access and undefined from inner FOR loop -> warning
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
 		'''
 			FUNCTION hubert
 			VAR
@@ -656,7 +663,8 @@ class STFunctionValidatorTest {
 				FOR int2 := 4 TO 17 DO
 				END_FOR;
 			END_WHILE;
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
 		'''
 			FUNCTION hubert
 			VAR
@@ -670,7 +678,8 @@ class STFunctionValidatorTest {
 			UNTIL int2 <> 0 // read access and may be undefined from inner FOR loop -> warning
 			END_REPEAT;
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
 	}
 
 	@Test
@@ -1584,4 +1593,60 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertNoErrors
 	}
+
+	@Test
+	def void testExitInForIsOk() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				I : INT;
+			END_VAR
+			
+			FOR I := 0 TO 10 DO
+				EXIT;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testExitInWhileIsOk() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				I : INT;
+			END_VAR
+			
+			WHILE I < 0 DO
+				EXIT;
+			END_WHILE;
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testExitInRepeatIsOk() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				I : INT;
+			END_VAR
+			
+			REPEAT
+				EXIT;
+			UNTIL I < 0
+			END_REPEAT;
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+	
+	@Test
+	def void testExitNotInALoopIsAnError() {
+		'''
+			FUNCTION test
+			EXIT;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STExit, STCoreValidator.EXIT_NOT_IN_LOOP, "The EXIT keyword is only valid inside a loop statement (FOR/WHILE/REPEAT)")
+	}
+	
 }
