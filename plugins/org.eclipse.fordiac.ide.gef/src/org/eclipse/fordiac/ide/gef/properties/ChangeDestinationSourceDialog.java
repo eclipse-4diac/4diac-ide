@@ -216,11 +216,12 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 		final List<IInterfaceElement> varDec = new ArrayList<>();
 		for (final InterfaceList ieList : ieLists) {
 			if (inputSwap(input, ieList)) {
-				varDec.addAll(
-						ieList.getOutputVars().stream().filter(newIE -> LinkConstraints.typeCheck(ie, newIE)).toList());
+				varDec.addAll(ieList.getOutputVars().stream().filter(newIE -> newIE != ieToChange)
+						.filter(newIE -> LinkConstraints.typeCheck(ie, newIE)).toList());
 			} else {
 
-				varDec.addAll(ieList.getInputVars().stream().filter(newIE -> LinkConstraints.typeCheck(ie, newIE))
+				varDec.addAll(ieList.getInputVars().stream().filter(newIE -> newIE != ieToChange)
+						.filter(newIE -> LinkConstraints.typeCheck(ie, newIE))
 						.filter(newIE -> newIE.getInputConnections().isEmpty()).toList());
 			}
 		}
@@ -232,9 +233,9 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 		final List<IInterfaceElement> event = new ArrayList<>();
 		for (final InterfaceList ieList : ieLists) {
 			if (inputSwap(input, ieList)) {
-				event.addAll(ieList.getEventOutputs().stream().toList());
+				event.addAll(ieList.getEventOutputs().stream().filter(newIE -> newIE != ieToChange).toList());
 			} else {
-				event.addAll(ieList.getEventInputs().stream().toList());
+				event.addAll(ieList.getEventInputs().stream().filter(newIE -> newIE != ieToChange).toList());
 			}
 		}
 		return event;
@@ -246,11 +247,11 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 		for (final InterfaceList ieList : ieLists) {
 
 			if (inputSwap(input, ieList)) {
-				adapter.addAll(
-						ieList.getPlugs().stream().filter(newIE -> newIE.getOutputConnections().isEmpty()).toList());
+				adapter.addAll(ieList.getPlugs().stream().filter(newIE -> newIE != ieToChange)
+						.filter(newIE -> newIE.getOutputConnections().isEmpty()).toList());
 			} else {
-				adapter.addAll(
-						ieList.getSockets().stream().filter(newIE -> newIE.getInputConnections().isEmpty()).toList());
+				adapter.addAll(ieList.getSockets().stream().filter(newIE -> newIE != ieToChange)
+						.filter(newIE -> newIE.getInputConnections().isEmpty()).toList());
 			}
 		}
 		return adapter;
