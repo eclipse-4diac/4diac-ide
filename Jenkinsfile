@@ -14,8 +14,8 @@
 pipeline {
 	options {
 		timeout(time: 60, unit: 'MINUTES')
-		buildDiscarder(logRotator(numToKeepStr:'3'))
-		disableConcurrentBuilds(abortPrevious: true)
+		buildDiscarder(logRotator(numToKeepStr:'10'))
+		disableConcurrentBuilds()
 	}
 	agent {
 		label "centos-8"

@@ -20,8 +20,8 @@ import org.eclipse.xtext.naming.QualifiedName;
 public class STFunctionQualifiedNameProvider extends STCoreQualifiedNameProvider {
 
 	protected QualifiedName qualifiedName(final STFunctionSource source) {
-		if (source.eResource() instanceof final STFunctionResource resource && resource.getFbType() != null) {
-			return getConverter().toQualifiedName(resource.getFbType().getQualifiedName());
+		if (source.eResource() instanceof final STFunctionResource resource && resource.getLibraryElement() != null) {
+			return getFullyQualifiedName(resource.getLibraryElement());
 		}
 		return null;
 	}

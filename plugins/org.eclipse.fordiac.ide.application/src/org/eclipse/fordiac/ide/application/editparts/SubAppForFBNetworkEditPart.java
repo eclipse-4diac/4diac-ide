@@ -81,13 +81,10 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			switch (notification.getEventType()) {
-			case Notification.ADD:
-			case Notification.ADD_MANY:
-			case Notification.MOVE:
+			case Notification.ADD, Notification.ADD_MANY, Notification.MOVE:
 				handleAddMove(notification);
 				break;
-			case Notification.REMOVE:
-			case Notification.REMOVE_MANY:
+			case Notification.REMOVE, Notification.REMOVE_MANY:
 				handleRemove(notification);
 				break;
 			case Notification.SET:
@@ -144,8 +141,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 
 		private void refreshInterfaceEditParts() {
 			getChildren().forEach(ep -> {
-				if (ep instanceof InterfaceEditPart) {
-					((InterfaceEditPart) ep).refresh();
+				if (ep instanceof final InterfaceEditPart iEP) {
+					iEP.refresh();
 				}
 			});
 		}
@@ -194,7 +191,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	}
 
 	public SubAppForFBNetworkEditPart() {
-		super();
+		// nothing to do here
 	}
 
 	@Override
@@ -305,8 +302,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		if (childEditPart instanceof UnfoldedSubappContentEditPart) {
-			final IFigure contentFigure = ((UnfoldedSubappContentEditPart) childEditPart).getFigure();
+		if (childEditPart instanceof final UnfoldedSubappContentEditPart unfoldedSubappContentEP) {
+			final IFigure contentFigure = unfoldedSubappContentEP.getFigure();
 			final GridData contentGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 					| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 			getFigure().getExpandedContentArea().add(contentFigure, contentGridData, -1);
@@ -317,10 +314,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof UnfoldedSubappContentEditPart) {
+		if (childEditPart instanceof final UnfoldedSubappContentEditPart unfoldedSubappContentEP) {
 			if (getFigure().getExpandedContentArea() != null) {
-				getFigure().getExpandedContentArea()
-				.remove(((UnfoldedSubappContentEditPart) childEditPart).getFigure());
+				getFigure().getExpandedContentArea().remove(unfoldedSubappContentEP.getFigure());
 			}
 		} else {
 			super.removeChildVisual(childEditPart);

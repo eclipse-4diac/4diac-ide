@@ -16,14 +16,10 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import org.eclipse.fordiac.ide.model.commands.internal.ChangeCompilerInfoCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
-/**
- * The Class ChangeCompilerInfoHeader.
- */
+/** The Class ChangeCompilerInfoHeader. */
 public class ChangeCompilerInfoHeaderCommand extends ChangeCompilerInfoCommand {
-
 	/** The new ApplicationDomain value. */
 	private final String newHeader;
-
 	/** The old ApplicationDomain value. */
 	private String oldHeader;
 
@@ -32,35 +28,28 @@ public class ChangeCompilerInfoHeaderCommand extends ChangeCompilerInfoCommand {
 		this.newHeader = (null == newHeader) ? "" : newHeader; //$NON-NLS-1$
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
+	 * @see org.eclipse.gef.commands.Command#execute() */
 	@Override
 	public void execute() {
 		oldHeader = getCompilerInfo().getHeader();
 		redo();
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
+	 * @see org.eclipse.gef.commands.Command#undo() */
 	@Override
 	public void undo() {
 		getCompilerInfo().setHeader(oldHeader);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
+	 * @see org.eclipse.gef.commands.Command#redo() */
 	@Override
 	public void redo() {
 		getCompilerInfo().setHeader(newHeader);
 	}
-
 }

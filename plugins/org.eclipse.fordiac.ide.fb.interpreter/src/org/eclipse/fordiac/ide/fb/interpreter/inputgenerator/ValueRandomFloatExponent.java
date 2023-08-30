@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Paul Pavlicek
+ * Copyright (c) 2023 Paul Pavlicek
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,23 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.inputgenerator;
 
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.LrealType;
-import org.eclipse.fordiac.ide.model.data.RealType;
-
-public class ValueRandomFloatExponent extends AbstractValueRandom {
-
-	@Override
-	public String getRandom(final DataType dataType) {
-		if (dataType instanceof RealType) {
-			return nextReal();
-		}
-		if (dataType instanceof LrealType) {
-			return nextLreal();
-		}
-		throw new UnsupportedOperationException();
-
-	}
+public class ValueRandomFloatExponent extends BaseRandom {
 
 	@Override
 	public String nextReal() {
@@ -59,80 +43,4 @@ public class ValueRandomFloatExponent extends AbstractValueRandom {
 		return LREAL + random.nextFloat() / (Math.pow(EXP, random.nextInt(MAXEXP_DOUBLE))) * -1;
 	}
 
-	@Override
-	public String nextBool() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextByte() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextSint() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextUint() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextInteger() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextWord() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextDword() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextLword() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextChar() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextWchar() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextDint() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextLint() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextUsint() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextUdint() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String nextUlint() {
-		throw new UnsupportedOperationException();
-	}
-
 }
-

@@ -47,7 +47,7 @@ public class AddDeleteWidget {
 	private static final int EDIT_COLUMN = 0;
 	private Button createButton;
 	private Button deleteButton;
-	private Composite container;
+	protected Composite container;
 
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
 		container = createContainer(widgetFactory, parent);
@@ -92,7 +92,7 @@ public class AddDeleteWidget {
 	protected void createAddButton(final FormToolkit widgetFactory, final Composite container) {
 		createButton = widgetFactory.createButton(container, "", SWT.PUSH); //$NON-NLS-1$
 		createButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-		createButton.setToolTipText("Create element");
+		createButton.setToolTipText("Create element"); //$NON-NLS-1$
 		createButton.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 	}
 
@@ -318,7 +318,7 @@ public class AddDeleteWidget {
 		};
 	}
 
-	private static Object getReferencedElement(final TableViewer viewer) {
+	protected static Object getReferencedElement(final TableViewer viewer) {
 		if (!viewer.getStructuredSelection().isEmpty()) {
 			return viewer.getStructuredSelection().toList().get(viewer.getStructuredSelection().size() - 1);
 		}

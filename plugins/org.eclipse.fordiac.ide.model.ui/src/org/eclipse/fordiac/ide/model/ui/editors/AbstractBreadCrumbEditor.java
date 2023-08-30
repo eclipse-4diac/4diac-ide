@@ -37,10 +37,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -67,7 +64,6 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.IPersistableEditor;
-import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -75,9 +71,8 @@ import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 
-public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEditor
-implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker,
-INavigationLocationProvider, IPersistableEditor {
+public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEditor implements CommandStackEventListener,
+		ITabbedPropertySheetPageContributor, IGotoMarker, INavigationLocationProvider, IPersistableEditor {
 
 	private static final String TAG_BREADCRUMB_HIERACHY = "FORDIAC_BREADCRUMB_HIERACHY"; //$NON-NLS-1$
 	private static final String TAG_GRAPHICAL_VIEWER_ZOOM = "FORDIAC_GRAPHICAL_VIEWER_ZOOM"; //$NON-NLS-1$
@@ -91,7 +86,6 @@ INavigationLocationProvider, IPersistableEditor {
 	private IMemento memento;
 	// the last used (automatically triggered) connection layout command
 	private Command layoutCommand;
-
 
 	public BreadcrumbWidget getBreadcrumb() {
 		return breadcrumb;
@@ -153,8 +147,8 @@ INavigationLocationProvider, IPersistableEditor {
 
 	protected IEditorPart getNavigationLocationProvider() {
 		// if the breadcrumb editor is embedded into an other editor part this should help
-		if (getSite().getPart() instanceof IEditorPart) {
-			return (IEditorPart) getSite().getPart();
+		if (getSite().getPart() instanceof final IEditorPart editorPart) {
+			return editorPart;
 		}
 		return this;
 	}
@@ -235,19 +229,17 @@ INavigationLocationProvider, IPersistableEditor {
 				} else if (layoutCommand != null && event.getDetail() == CommandStack.POST_REDO) {
 					layoutCommand.redo();
 				}
-			} else if (event.isPreChangeEvent()) {
-				if (layoutCommand != null && event.getDetail() == CommandStack.PRE_UNDO) {
-					layoutCommand.undo();
-				}
+			} else if (event.isPreChangeEvent()
+					&& (layoutCommand != null && event.getDetail() == CommandStack.PRE_UNDO)) {
+				layoutCommand.undo();
 			}
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private boolean isTagged(final CommandStackEvent event) {
+	private static boolean isTagged(final CommandStackEvent event) {
 		return event.getCommand() instanceof ConnectionLayoutTagger
-				|| (event.getCommand() instanceof CompoundCommand
-						&& ((CompoundCommand) event.getCommand()).getCommands().stream().anyMatch(ConnectionLayoutTagger.class::isInstance));
+				|| (event.getCommand() instanceof final CompoundCommand compoundCommand
+						&& compoundCommand.getCommands().stream().anyMatch(ConnectionLayoutTagger.class::isInstance));
 	}
 
 	@Override
@@ -257,7 +249,6 @@ INavigationLocationProvider, IPersistableEditor {
 		}
 		super.dispose();
 	}
-
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
@@ -270,47 +261,33 @@ INavigationLocationProvider, IPersistableEditor {
 	}
 
 	protected void gotoElement(final EObject element) {
-		if (element instanceof FBNetworkElement) {
-			gotoElement((FBNetworkElement) element);
-		} else if (element instanceof ErrorMarkerInterface) {
-			gotoElement((ErrorMarkerInterface) element);
-		} else if (element instanceof Connection) {
-			gotoElement((Connection) element);
-		} else if (element instanceof Value) {
-			gotoElement((Value) element);
+		final EObject toView = getFBNetworkContainer(element);
+		if (toView != null) {
+			getBreadcrumb().setInput(toView);
+			selectElement(element);
 		}
 	}
 
-	protected void gotoElement(final FBNetworkElement element) {
-		final EObject toView = element.eContainer().eContainer();
-		getBreadcrumb().setInput(toView);
+	protected void selectElement(final EObject element) {
+		if (element instanceof final Connection conn) {
+			// first select source or destination to move the viewport
+			if (conn.getSourceElement() != null) {
+				HandlerHelper.selectElement(conn.getSourceElement(), this);
+			} else if (conn.getDestinationElement() != null) {
+				HandlerHelper.selectElement(conn.getDestinationElement(), this);
+			}
+		}
 		HandlerHelper.selectElement(element, this);
 	}
 
-	protected void gotoElement(final ErrorMarkerInterface errorRef) {
-		final FBNetworkElement parent = errorRef.getFBNetworkElement();
-		selectErrorRef(errorRef, parent);
-	}
-
-	protected void gotoElement(final Connection conn) {
-		if (conn.getSourceElement() != null) {
-			HandlerHelper.selectElement(conn.getSourceElement(), this);
-		} else if (conn.getDestinationElement() != null) {
-			HandlerHelper.selectElement(conn.getDestinationElement(), this);
+	static EObject getFBNetworkContainer(EObject object) {
+		while (object != null) {
+			object = object.eContainer();
+			if (object instanceof final FBNetwork element) {
+				return element.eContainer();
+			}
 		}
-		HandlerHelper.selectElement(conn, this);
-	}
-
-	protected void gotoElement(final Value value) {
-		selectErrorRef(value, value.getParentIE().getFBNetworkElement());
-	}
-
-	private void selectErrorRef(final ErrorMarkerRef errorRef, final FBNetworkElement parent) {
-		if (null != parent) {
-			final EObject toView = parent.eContainer().eContainer();
-			getBreadcrumb().setInput(toView);
-			HandlerHelper.selectElement(errorRef, getActiveEditor());
-		}
+		return null;
 	}
 
 	@Override
@@ -341,12 +318,10 @@ INavigationLocationProvider, IPersistableEditor {
 	protected static void saveGraphicalViewerState(final GraphicalViewer viewer, final IMemento memento) {
 		if (viewer.getRootEditPart() instanceof ScalableFreeformRootEditPart) {
 			memento.putFloat(TAG_GRAPHICAL_VIEWER_ZOOM,
-					(float)
-					((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getZoomManager().getZoom());
+					(float) ((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getZoomManager().getZoom());
 		}
 
-		if (viewer.getControl() instanceof FigureCanvas) {
-			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+		if (viewer.getControl() instanceof final FigureCanvas canvas) {
 			final Point location = canvas.getViewport().getViewLocation();
 			memento.putInteger(TAG_GRAPHICAL_VIEWER_HOR_SCROLL, location.x);
 			memento.putInteger(TAG_GRAPHICAL_VIEWER_VER_SCROLL, location.y);
@@ -360,15 +335,14 @@ INavigationLocationProvider, IPersistableEditor {
 	}
 
 	private static void restoreGraphicalViewerState(final GraphicalViewer viewer, final IMemento memento) {
-		if (viewer.getRootEditPart() instanceof ScalableFreeformRootEditPart) {
+		if (viewer.getRootEditPart() instanceof final ScalableFreeformRootEditPart scalableFreeformRootEditPart) {
 			final Float zoom = memento.getFloat(TAG_GRAPHICAL_VIEWER_ZOOM);
 			if (null != zoom) {
-				((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getZoomManager().setZoom(zoom.doubleValue());
+				scalableFreeformRootEditPart.getZoomManager().setZoom(zoom.doubleValue());
 			}
 		}
 
-		if (viewer.getControl() instanceof FigureCanvas) {
-			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+		if (viewer.getControl() instanceof final FigureCanvas canvas) {
 			final Integer xLocation = memento.getInteger(TAG_GRAPHICAL_VIEWER_HOR_SCROLL);
 			final Integer yLocation = memento.getInteger(TAG_GRAPHICAL_VIEWER_VER_SCROLL);
 			if ((null != xLocation) && (yLocation != null)) {
@@ -383,8 +357,8 @@ INavigationLocationProvider, IPersistableEditor {
 
 	}
 
-	private boolean isConnectionLayoutPreferenceTicked() {
-		return InstanceScope.INSTANCE.getNode("org.eclipse.fordiac.ide.gef").getBoolean("ConnectionAutoLayout", false);
+	private static boolean isConnectionLayoutPreferenceTicked() {
+		return InstanceScope.INSTANCE.getNode("org.eclipse.fordiac.ide.gef").getBoolean("ConnectionAutoLayout", false); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static Command createConnectionLayoutCommand() {
@@ -394,14 +368,13 @@ INavigationLocationProvider, IPersistableEditor {
 			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.connectionLayout", mule); //$NON-NLS-1$
 			return (Command) mule.data;
 		} catch (final Exception ex) {
-			throw new RuntimeException("Could not execute layout command"); //$NON-NLS-1$
+			throw new IllegalStateException("Could not execute layout command", ex); //$NON-NLS-1$
 		}
 	}
 
 	private static IHandlerService getHandlerService() {
-		final IWorkbenchPartSite site = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getSite();
-		final IHandlerService handlerService = site.getService(IHandlerService.class);
-		return handlerService;
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getSite()
+				.getService(IHandlerService.class);
 	}
 
 	protected void showReloadErrorMessage(final String path, final String whatEditor) {

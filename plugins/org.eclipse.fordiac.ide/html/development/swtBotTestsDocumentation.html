@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2023 Andrea Zoitl
+  
+ This program and the accompanying materials are made available under the
+ terms of the Eclipse Public License 2.0 which is available at
+ http://www.eclipse.org/legal/epl-2.0.
+
+ SPDX-License-Identifier: EPL-2.0
+ 
+ Contributors:
+   Andrea Zoitl - initial API and implementation and/or initial documentation
+-->
+
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title>SWTBot Tests Documentation</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+
+<body>
+SWTBot Tests Documentation
+<ul>
+	<li><a href="#ImprovementThroughAutomatedTesting">Eclipse 4diac IDE User Interface Quality Improvement Through Automated Testing</a>
+		<ul>
+			<li><a href="#WhatIsEclipseSWTBot">What is Eclipse SWTBot</a>
+			<li><a href="#Requirement">Requirement</a>
+			<li><a href="#Settings">Settings to run SWTBot tests</a>
+		</ul>
+	<li><a href="#Structure">Test Set and Test Structure</a>
+			<ul>
+			<li><a href="#NewSystem">New System</a>
+			<li><a href="#TestsWith1FB">Tests with 1 FB</a>
+			<li><a href="#TestsWith2FBs">Tests with 2 FBs</a>
+			<li><a href="#TestsWithMultipleFBs">Tests with multiple FBs</a>
+		</ul>
+	<li><a href="#Execute">Execute SWTBot tests</a>
+	<li><a href="#CreateNewTests">Create a new test class or test method</a>
+		<ul>
+			<li><a href="#SettingsBeforeAll">Settings that have to be executed in @BeforeAll</a>
+		</ul>
+	<li><a href="#ResultsEvaluation">Results and Evaluation of the tests</a>
+</ul>
+
+
+
+<h1 id="topOfPage">SWTBot Tests Documentation</h1>
+
+<h2 id="ImprovementThroughAutomatedTesting">Eclipse 4diac IDE User Interface Quality Improvement Through Automated Testing</h2>
+<p>Often open source projects have only a few contributors. These try to bring in all new ideas and improvements. However, this leaves
+little time for testing, which means that the quality of the software suffers. Since Eclipse 4diac, testing is also still done manually,
+which on the one hand is inefficient and on the other hand is often not done completely due to time constraints. For this reason, an
+automated test set for the 4diac IDE user interface would be a good improvement.</p>
+
+<h3 id="WhatIsEclipseSWTBot">What is Eclipse SWTBot</h3>
+<p>from <a href="https://wiki.eclipse.org/SWTBot">https://wiki.eclipse.org/SWTBot</a>:<br/>
+Eclipse SWTBot™ is a Java based UI/functional testing tool for testing SWT and Eclipse based applications. SWTBot provides APIs that are simple
+to read and write. The APIs also hide the complexities involved with SWT and Eclipse. This makes it suitable for UI/functional testing by
+everyone, not just Eclipse developers. SWTBot also provides its own set of assertions that are useful for SWT. You can also use your own
+assertion framework with SWTBot. SWTBot can record and playback tests and integrates with Eclipse, and build technologies (Tycho, Ant) to
+make it easy to use in Continuous Integration.</p>
+
+<h3 id="Requirement">Requirement</h3>
+<p>All SWTBot related files can be found in the <b>4diac IDE source code</b> in the folder <b>org.eclipse.fordiac.ide.test.ui</b>.</p>
+<p>In order to be able to perform advanced tests, the provided SWTBot classes were extended. For example, it became clear that this is not
+possible with the standard classes when dragging connections. By default, drag and drop works by selecting the 1st pin and then
+jumping to the 2nd pin and selecting it. 4diac IDE unfortunately doesn't work like that, mouse movement between selections is needed. 
+</p>
+<p>Therefore 4 extension classes were created, which can be found in the 4diac IDE source folder <i>org.eclipse.fordiac.ide.test.ui.swtbot</i>. They are the
+classes SWT4diacGefBot, SWTBot4diacGefViewer, SWTBot4diacGefEditor SWTBot4diacFigureCanvas.</p>
+
+<h3 id="Settings">Settings to run SWTBot tests</h3>
+All settings necessary to run the SWTBot test have been made and no further settings are required by the user.
+
+<h2 id="Structure">Test Set and Test Structure</h2>
+<p>In order to get a test administration, the markdown file <b>SWTBotTestSetOf4diacIDE</b> was created under <b>/org.eclipse.fordiac.ide.test.ui</b> folder.</br>
+This file was created to document existing tests and to collect ideas for new tests. The column <i>status</i> shows whether the test has already 
+been implemented or is planned for the future.
+The test have been divided into topics to provide a better overview. These are currently <i>New System</i>, <i>Tests with 1 FB</i>, <i>Tests with
+2 FBs</i> and <i>Tests with multiple FBs</i>.</p>
+
+<h3 id="NewSystem">New System</h3>
+<p>One topic is the creation of a new 4diac project. In this group we test 
+	<ul>
+		<li>if the menu is displayed correctly</li>
+		<li>if a new 4diac IDE project can be created</li>
+		<li>if a project can be deleted</li>
+		<li>if it is not possible to create a new project with an existing name</li>
+		<li>if a project that has been deleted should no longer be displayed in the hierarchy tree of the System Explorer</li>
+	</ul>
+These are the currently existing tests, more can follow in this group.
+</p>
+
+<h3 id="TestsWith1FB">Tests with 1 FB</h3>
+<p>
+	<ul>
+		<li>if it possible to drag&drop a FB into the editing area</li>
+		<li>if an existing FB can be deleted</li>
+		<li>if an FB can be moved on the canvas</li>
+		<li>if a connection can be created on a FB between an input and output pin</li>
+		<li>...</li>
+	</ul>
+The list for the tests of a FB is too long to be listed here.
+</p>
+
+<h3 id="TestsWith2FBs">Tests with 2 FBs</h3>
+<p>tba</p>
+
+<h3 id="TestsWithMultipleFBs">Tests with multiple FBs</h3>
+<p>tba</p>
+
+<h2 id="Execute">Execute SWTBot tests</h2>
+<p>To run all tests of a class in the folder <i>org.eclipse.fordiac.ide.test.ui</i>, <b>right click on the class &rarr; Run As &rarr; SWTBot Test.</b></p>
+<p><img src="../../html/development/img/SWTBot/ClassRunAsSWTBotTest.png" width="800"; height=auto, alt="execute all SWTBot tests of a class"/>
+<p>To execute a single test method <b>select the method and right click &rarr; Run As &rarr; SWTBot Test.</b></p>
+<p><img src="../../html/development/img/SWTBot/RunAsSWTBotTest.png" width="800"; height=auto, alt="execute a single test method"/>
+
+<h2 id="CreateNewTests">Create a new test class or test method</h2>
+<p>After a new class is added it is necessary to change the run configurations from Eclipse Platform to
+Eclipse 4diac to run the tests. The fastest way to do this is to<br/>
+<span class="menu4diac">right click on the class in the System Explorer &rarr; Run As &rarr; Run Configurations...</span>
+<p><img src="../../html/development/img/SWTBot/RunConfigurationSelection.png" width="800"; height=auto, alt="select Run Configuration for class" />
+
+<p>In the window that appears, click on the <b>Main tab</b> and select to the right of <b>Run a project</b> the option <b>org.eclipse.fordiac.ide.product</b>.</p>
+<p><img src="../../html/development/img/SWTBot/RunConfigurationMain.png" width="800"; height=auto, alt="select Run Configuration for method"/></p>
+<p>In order to be able to run the tests individually, it is necessary to make the same setting with the
+individual test methods as well.</br>
+However, it was noticed that sometimes the first 1-2 test runs do not go through
+despite these settings because the settings are reset to Eclipse platform. In this case, repeat the above steps.</p>
+
+<p>The annotations for the tests are the same as in Junit5. The introduction to JUnit 5 can be read the introduction <a href="https://junit.org/junit5/docs/current/user-guide/">here</a></p>
+
+<h3 id="SettingsBeforeAll">Settings that have to be executed in @BeforeAll</h3>
+<p>The test classes Basic1FBNetworkEditingTests and future test classes are structured in
+such a way that 4diac IDE is started first. The beforeAll() method with the @BeforeAll annotation creates the bot and it closes the
+welcome window that appears when 4diac starts. This closing is important, otherwise the tests cannot be executed.</p>
+<p>Settings such as timeout and playback speed are also set here.</p> 
+<p><img src="../../html/development/img/SWTBot/BeforeAll.png" width="450"; height=auto, alt="@BeforeAll settings"/></p>
+
+
+<h2 id="ResultsEvaluation">Results and Evaluation of the tests</h2>
+<p>Starting the tests will bring up a new tab called JUnit. This provides information about which test was successful and which test failed. </br>
+The example below shows that all but one of the tests have passed successfully. This means that the expected result has occurred. However, one test was unsuccessful.
+This test is interesting because it probably found an error in the program. A closer look at what went wrong is now necessary.</p>
+
+<p>When creating a test, special care must be taken to ensure that the desired event is queried. This is the only way to rule out incorrect results due to incorrect tests.</br>
+In our case, the test is correct, we found an error, the FB is actually not displayed in the hierarchy tree. Investigations revealed that the bug has already been reported, so no further action is necessary in this case.</p>
+<p><img src="../../html/development/img/SWTBot/TestResults.png" width="800"; height=auto, alt="Test results"/></p>
+
+<p> <a href="../../html/startHere/startHere.html">Start Here page</a></p>
+<p class="goToTop">Or <a href="#topOfPage">Go to top</a></p>
+
+</body>
+</html>

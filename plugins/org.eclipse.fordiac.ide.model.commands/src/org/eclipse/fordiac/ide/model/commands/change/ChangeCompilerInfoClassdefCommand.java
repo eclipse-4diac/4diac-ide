@@ -16,14 +16,10 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import org.eclipse.fordiac.ide.model.commands.internal.ChangeCompilerInfoCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
-/**
- * The Class ChangeCompilerInfoClassdef.
- */
+/** The Class ChangeCompilerInfoClassdef. */
 public class ChangeCompilerInfoClassdefCommand extends ChangeCompilerInfoCommand {
-
 	/** The new ApplicationDomain value. */
 	private final String newClassdef;
-
 	/** The old ApplicationDomain value. */
 	private String oldClassdef;
 
@@ -32,35 +28,28 @@ public class ChangeCompilerInfoClassdefCommand extends ChangeCompilerInfoCommand
 		this.newClassdef = (null == newClassdef) ? "" : newClassdef; //$NON-NLS-1$
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
+	 * @see org.eclipse.gef.commands.Command#execute() */
 	@Override
 	public void execute() {
 		oldClassdef = getCompilerInfo().getClassdef();
 		redo();
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
+	 * @see org.eclipse.gef.commands.Command#undo() */
 	@Override
 	public void undo() {
 		getCompilerInfo().setClassdef(oldClassdef);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
+	 * @see org.eclipse.gef.commands.Command#redo() */
 	@Override
 	public void redo() {
 		getCompilerInfo().setClassdef(newClassdef);
 	}
-
 }

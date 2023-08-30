@@ -16,37 +16,52 @@ import java.util.Optional;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
 
-public final class GlobalConstantsReconciler {
+public class GlobalConstantsReconciler implements STCoreReconciler {
 
-	public static void reconcile(final GlobalConstants dest, final Optional<EList<VarDeclaration>> source,
-			final String originalSource) {
+	@Override
+	public void reconcile(final LibraryElement dest, final Optional<? extends STCorePartition> source) {
+		if (dest instanceof final GlobalConstants globalConstants && source.isPresent()
+				&& source.get() instanceof final GlobalConstantsPartition globalConstantsPartition) {
+			reconcile(globalConstants, globalConstantsPartition);
+		}
+	}
+
+	public static void reconcile(final GlobalConstants dest, final GlobalConstantsPartition source) {
 		// check duplicates in source (very bad)
-		if (source.filter(GlobalConstantsReconciler::checkDuplicates).isPresent()) {
+		if (checkDuplicates(source.getConstants())) {
 			return; // don't even try to attempt this or risk screwing dest up
 		}
+		// update package & imports
+		CompilerInfo compilerInfo = dest.getCompilerInfo();
+		if (compilerInfo == null) {
+			compilerInfo = LibraryElementFactory.eINSTANCE.createCompilerInfo();
+			dest.setCompilerInfo(compilerInfo);
+		}
+		compilerInfo.setPackageName(source.getPackageName());
+		ECollections.setEList(compilerInfo.getImports(), source.getImports());
 		// update constants
-		source.ifPresent(constants -> ECollections.setEList(dest.getConstants(), constants));
+		ECollections.setEList(dest.getConstants(), source.getConstants());
 		// update original source
-		if (originalSource != null) {
+		if (source.getOriginalSource() != null) {
 			OriginalSource destOriginalSource = dest.getSource();
 			if (destOriginalSource == null) {
 				destOriginalSource = LibraryElementFactory.eINSTANCE.createOriginalSource();
 				dest.setSource(destOriginalSource);
 			}
-			destOriginalSource.setText(originalSource);
+			destOriginalSource.setText(source.getOriginalSource());
 		}
 	}
 
 	protected static boolean checkDuplicates(final EList<? extends VarDeclaration> list) {
 		return list.stream().map(VarDeclaration::getName).distinct().count() != list.size();
-	}
-
-	private GlobalConstantsReconciler() {
-		throw new UnsupportedOperationException();
 	}
 }

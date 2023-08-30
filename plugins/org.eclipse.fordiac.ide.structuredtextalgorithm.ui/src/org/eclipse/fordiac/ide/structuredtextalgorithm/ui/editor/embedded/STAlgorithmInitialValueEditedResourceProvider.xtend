@@ -14,8 +14,8 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded
 
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
-import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.STAlgorithmParser
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
@@ -45,7 +45,7 @@ class STAlgorithmInitialValueEditedResourceProvider implements IEditedResourcePr
 		})
 		val resource = SERVICE_PROVIDER.get(XtextResource) as STAlgorithmResource
 		resource.URI = element?.eResource?.URI ?: SYNTHETIC_URI
-		resource.fbType = element.getContainerOfType(FBType)
+		resource.libraryElement = element.getContainerOfType(LibraryElement)
 		resourceSet.resources.add(resource)
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		resource.entryPoint = parser.grammarAccess.STInitializerExpressionSourceRule

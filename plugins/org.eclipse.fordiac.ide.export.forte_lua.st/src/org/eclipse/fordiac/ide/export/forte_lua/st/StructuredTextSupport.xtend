@@ -93,7 +93,6 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
-import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
 abstract class StructuredTextSupport implements ILanguageSupport {
@@ -964,9 +963,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			STFeatureExpression:
 				object.feature.dependencies
 			STFunction:
-				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
-					name = object.sourceName
-				]]
+				#[object]
 			default:
 				emptySet
 		}

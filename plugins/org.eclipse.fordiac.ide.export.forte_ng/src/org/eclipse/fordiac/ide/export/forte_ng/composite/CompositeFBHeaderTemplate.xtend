@@ -46,10 +46,11 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		  «generateReadInputDataDeclaration»
 		  «generateWriteOutputDataDeclaration»
+		  «generateReadInternal2InterfaceOutputDataDeclaration»
 		  «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
 		public:
-		  «FBClassName»(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);
+		  «FBClassName»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
 		
 		  «generateInterfaceDeclarations»
 		};
@@ -63,20 +64,24 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		#include "typelib.h"
 		«super.generateHeaderIncludes»
 	'''
+	
+	def protected generateReadInternal2InterfaceOutputDataDeclaration() '''
+		void readInternal2InterfaceOutputData(TEventID paEOID) override;
+	'''
 
 	def protected generateFBNetwork() '''
 		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterFBType)]»
-			static const SCFB_FBInstanceData scm_astInternalFBs[];
+			static const SCFB_FBInstanceData scmInternalFBs[];
 		«ENDIF»
-		static const SCFB_FBParameter scm_astParamters[];
+		static const SCFB_FBParameter scmParamters[];
 		«IF !type.FBNetwork.eventConnections.empty»
-			static const SCFB_FBConnectionData scm_astEventConnections[];
-			static const SCFB_FBFannedOutConnectionData scm_astFannedOutEventConnections[];
+			static const SCFB_FBConnectionData scmEventConnections[];
+			static const SCFB_FBFannedOutConnectionData scmFannedOutEventConnections[];
 		«ENDIF»
 		«IF !type.FBNetwork.dataConnections.empty»
-			static const SCFB_FBConnectionData scm_astDataConnections[];
-			static const SCFB_FBFannedOutConnectionData scm_astFannedOutDataConnections[];
+			static const SCFB_FBConnectionData scmDataConnections[];
+			static const SCFB_FBFannedOutConnectionData scmFannedOutDataConnections[];
 		«ENDIF»
-		static const SCFB_FBNData scm_stFBNData;
+		static const SCFB_FBNData scmFBNData;
 	'''
 }

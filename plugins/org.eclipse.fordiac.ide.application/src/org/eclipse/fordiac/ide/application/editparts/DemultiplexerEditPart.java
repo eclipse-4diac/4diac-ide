@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 
-public class DemultiplexerEditPart extends StructManipulatorEditPart {
+public class DemultiplexerEditPart extends AbstractStructManipulatorEditPart {
 	public DemultiplexerEditPart() {
 		super();
 	}

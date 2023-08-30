@@ -41,8 +41,8 @@ class FunctionFBImplTemplate extends ForteFBTemplate<FunctionFBType> {
 		«generateFBInterfaceDefinition»
 		«generateFBInterfaceSpecDefinition»
 		
-		«FBClassName»::«FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-		    «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId)«// no newline
+		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, CResource *const paSrcRes) :
+		    «baseClass»(paSrcRes, &scmFBInterfaceSpec, paInstanceNameId)«// no newline
 			»«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«generateConnectionInitializer» {
 		}
 		
@@ -54,7 +54,7 @@ class FunctionFBImplTemplate extends ForteFBTemplate<FunctionFBType> {
 	'''
 
 	def protected CharSequence generateExecuteEvent() '''
-		void «FBClassName»::executeEvent(TEventID paEIID) {
+		void «FBClassName»::executeEvent(const TEventID paEIID, CEventChainExecutionThread *const paECET) {
 		  «generateBodyCall»
 		  «FOR event : type.interfaceList.eventOutputs»
 		  	«event.generateSendEvent»
@@ -81,7 +81,7 @@ class FunctionFBImplTemplate extends ForteFBTemplate<FunctionFBType> {
 	}
 
 	def protected generateSendEvent(Event event) {
-		'''sendOutputEvent(scm_nEvent«event.name»ID);'''
+		'''sendOutputEvent(scmEvent«event.name»ID, paECET);'''
 	}
 
 	override protected generateImplIncludes() '''

@@ -21,17 +21,13 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.provider.CompilerContentProvider;
 import org.eclipse.fordiac.ide.gef.provider.CompilerLabelProvider;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCompilerInfoClassdefCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCompilerInfoHeaderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCompilerLanguageCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCompilerProductCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCompilerVendorCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCompilerVersionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewCompilerCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteCompilerCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -55,7 +51,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
@@ -67,8 +62,6 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	private static final String LANGUAGE_CPP = "Cpp"; //$NON-NLS-1$
 	private static final String LANGUAGE_JAVA = "Java"; //$NON-NLS-1$
 	private TableViewer compilerViewer;
-	private Text headerText;
-	private Text classdefText;
 
 	private static final String COMPILER_VERSION = "compiler_version"; //$NON-NLS-1$
 	private static final String COMPILER_LANGUAGE = "language"; //$NON-NLS-1$
@@ -90,29 +83,21 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			switch (property) {
-			case COMPILER_LANGUAGE:
-				return getLanguageIndex(((Compiler) element).getLanguage().getName());
-			case COMPILER_PRODUCT:
-				return ((Compiler) element).getProduct();
-			case COMPILER_VENDOR:
-				return ((Compiler) element).getVendor();
-			default:
-				return ((Compiler) element).getVersion();
-			}
+			return switch (property) {
+			case COMPILER_LANGUAGE -> getLanguageIndex(((Compiler) element).getLanguage().getName());
+			case COMPILER_PRODUCT -> ((Compiler) element).getProduct();
+			case COMPILER_VENDOR -> ((Compiler) element).getVendor();
+			default -> ((Compiler) element).getVersion();
+			};
 		}
 
 		private Object getLanguageIndex(final String language) {
-			switch (language) {
-			case LANGUAGE_JAVA:
-				return Integer.valueOf(LANGUAGE_JAVA_INDEX);
-			case LANGUAGE_CPP:
-				return Integer.valueOf(LANGUAGE_CPP_INDEX);
-			case LANGUAGE_C:
-				return Integer.valueOf(LANGUAGE_C_INDEX);
-			default:
-				return Integer.valueOf(LANGUAGE_OTHER_INDEX);
-			}
+			return switch (language) {
+			case LANGUAGE_JAVA -> Integer.valueOf(LANGUAGE_JAVA_INDEX);
+			case LANGUAGE_CPP -> Integer.valueOf(LANGUAGE_CPP_INDEX);
+			case LANGUAGE_C -> Integer.valueOf(LANGUAGE_C_INDEX);
+			default -> Integer.valueOf(LANGUAGE_OTHER_INDEX);
+			};
 		}
 
 		@Override
@@ -169,6 +154,7 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createCompilerInfoGroup(getRightComposite());
+
 	}
 
 	private void createCompilerInfoGroup(final Composite parent) {
@@ -176,17 +162,6 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		compilerInfoGroup.setLayout(new GridLayout(1, false));
 		compilerInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
-		final Composite composite = getWidgetFactory().createComposite(compilerInfoGroup, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false));
-		getWidgetFactory().createCLabel(composite, FordiacMessages.Header + ":"); //$NON-NLS-1$
-		headerText = createGroupText(composite, true);
-		headerText.addModifyListener(
-				e -> executeCommand(new ChangeCompilerInfoHeaderCommand((FBType) type, headerText.getText())));
-		getWidgetFactory().createCLabel(composite, FordiacMessages.Classdef + ":"); //$NON-NLS-1$
-		classdefText = createGroupText(composite, true);
-		classdefText.addModifyListener(
-				e -> executeCommand(new ChangeCompilerInfoClassdefCommand((FBType) type, classdefText.getText())));
 		final Composite compositeBottom = getWidgetFactory().createComposite(compilerInfoGroup);
 		compositeBottom.setLayout(new GridLayout(2, false));
 		compositeBottom.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
@@ -200,8 +175,8 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		compilerViewer.setContentProvider(new CompilerContentProvider());
 		compilerViewer.setLabelProvider(new CompilerLabelProvider());
 		compilerViewer
-		.setCellEditors(new CellEditor[] { ComboBoxWidgetFactory.createComboBoxCellEditor(table, VALUE_SET),
-				new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) });
+				.setCellEditors(new CellEditor[] { ComboBoxWidgetFactory.createComboBoxCellEditor(table, VALUE_SET),
+						new TextCellEditor(table), new TextCellEditor(table), new TextCellEditor(table) });
 		compilerViewer.setColumnProperties(
 				new String[] { COMPILER_LANGUAGE, COMPILER_VENDOR, COMPILER_PRODUCT, COMPILER_VERSION });
 
@@ -232,15 +207,8 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
 		if (null == commandStack) { // disable all field
-			headerText.setEnabled(false);
-			classdefText.setEnabled(false);
 			compilerViewer.setCellModifier(null);
 		}
-	}
-
-	@Override
-	protected CompilableType getType() {
-		return (CompilableType) super.getType();
 	}
 
 	@Override
@@ -249,11 +217,6 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if ((getType() != null) && (null != getType().getCompilerInfo())) {
-			final CompilerInfo compilerInfo = getType().getCompilerInfo();
-			headerText.setText(null != compilerInfo.getHeader() ? compilerInfo.getHeader()
-					: ""); //$NON-NLS-1$
-			classdefText.setText(null != compilerInfo.getClassdef() ? compilerInfo.getClassdef()
-					: ""); //$NON-NLS-1$
 			compilerViewer.setInput(type);
 		}
 		commandStack = commandStackBuffer;

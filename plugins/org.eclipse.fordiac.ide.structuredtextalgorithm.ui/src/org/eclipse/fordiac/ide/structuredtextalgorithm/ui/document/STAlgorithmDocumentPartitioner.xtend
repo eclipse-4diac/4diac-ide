@@ -12,11 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document
 
-import org.eclipse.emf.common.util.EList
-import org.eclipse.fordiac.ide.model.libraryElement.ICallable
+import java.util.Optional
+import org.eclipse.emf.common.util.ECollections
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
+import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmPartition
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmPartitioner
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.ui.editor.model.XtextDocument
 
@@ -24,7 +26,7 @@ import static org.eclipse.emf.common.util.ECollections.*
 
 class STAlgorithmDocumentPartitioner extends STAlgorithmPartitioner implements STCoreDocumentPartitioner {
 
-	override EList<ICallable> partition(XtextDocument document) {
+	override Optional<? extends STCorePartition> partition(XtextDocument document) {
 		try {
 			document.readOnly [ resource |
 				if (resource.modificationStamp != document.modificationStamp) {
@@ -37,8 +39,8 @@ class STAlgorithmDocumentPartitioner extends STAlgorithmPartitioner implements S
 		}
 	}
 
-	def protected EList<ICallable> getEmergencyPartition(XtextDocument document) {
-		newBasicEList(document.get.newLostAndFound(0))
+	def protected Optional<? extends STCorePartition> getEmergencyPartition(XtextDocument document) {
+		Optional.of(new STAlgorithmPartition(null, ECollections.emptyEList, document.get, newBasicEList(document.get.newLostAndFound(0))))
 	}
 
 	override getEmergencyPartition(XtextResource resource) {

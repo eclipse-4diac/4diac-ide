@@ -50,7 +50,7 @@ public final class FBTestRunner {
 		return checkResults(seq, eventManager);
 	}
 
-	private static Optional<String> checkResults(final ServiceSequence seq, final EventManager eventManager) {
+	public static Optional<String> checkResults(final ServiceSequence seq, final EventManager eventManager) {
 		final EList<ServiceTransaction> expectedResults = seq.getServiceTransaction();
 		final EList<Transaction> results = eventManager.getTransactions();
 

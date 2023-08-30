@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="BasicCalcEmptyAlgs" Comment="Basic FB with empty ECC">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK115394" Date="2023-07-26">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="INT" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<InternalVars>
+			<VarDeclaration Name="Fn0" Type="INT" Comment=""/>
+			<VarDeclaration Name="Fn1" Type="INT" Comment=""/>
+			<VarDeclaration Name="Fnx" Type="INT" Comment=""/>
+		</InternalVars>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="546.6666666666667" y="420.0">
+			</ECState>
+			<ECState Name="CALC" Comment="" x="1673.3333333333335" y="373.33333333333337">
+				<ECAction Algorithm="calc1"/>
+				<ECAction Algorithm="calc2"/>
+				<ECAction Algorithm="calc3"/>
+				<ECAction Algorithm="calc4"/>
+				<ECAction Algorithm="calc5"/>
+				<ECAction Algorithm="calc6"/>
+				<ECAction Algorithm="calc7"/>
+				<ECAction Algorithm="calc8"/>
+				<ECAction Algorithm="calc9"/>
+				<ECAction Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="CALC" Condition="REQ" Comment="" x="1286.6666666666667" y="386.6666666666667"/>
+			<ECTransition Source="CALC" Destination="START" Condition="1" Comment="" x="1220.0" y="600.0"/>
+		</ECC>
+		<Algorithm Name="calc1" Comment="">
+			<ST><![CDATA[
+ALGORITHM calc1
+ OUT:=1+1;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="calc2" Comment="">
+			<ST><![CDATA[
+ALGORITHM calc2
+ OUT:=2+2;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="calc3" Comment="">
+			<ST><![CDATA[
+ALGORITHM calc3
+ OUT:=3+3;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="calc4" Comment="">
+			<ST><![CDATA[
+ALGORITHM calc4
+ OUT:=4+4;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="calc5" Comment="">
+			<ST><![CDATA[
+ALGORITHM calc5
+ OUT:=5+5;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="calc6" Comment="">
+			<ST><![CDATA[
+ALGORITHM calc6
+ OUT:=6+6;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="calc7" Comment="">
+			<ST><![CDATA[
+ALGORITHM calc7
+ OUT:=7+7;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="calc8" Comment="">
+			<ST><![CDATA[
+ALGORITHM calc8
+ OUT:=8+8;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="calc9" Comment="">
+			<ST><![CDATA[
+ALGORITHM calc9
+ OUT:=9+9;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="Documentation" Type="WSTRING"><![CDATA[<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+]]></Attribute>
+</FBType>

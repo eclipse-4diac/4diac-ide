@@ -31,9 +31,10 @@ public class CreationPopupDialog extends PopupDialog {
 
 	private final ICreationExecutor executor;
 
-	public CreationPopupDialog(final Shell parent, final int shellStyle, final boolean takeFocusOnOpen, final boolean persistSize,
-			final boolean persistLocation, final boolean showDialogMenu, final boolean showPersistActions, final String titleText,
-			final String infoText, final Object[] elements, final LabelProvider labelProvider, final ICreationExecutor executor) {
+	public CreationPopupDialog(final Shell parent, final int shellStyle, final boolean takeFocusOnOpen,
+			final boolean persistSize, final boolean persistLocation, final boolean showDialogMenu,
+			final boolean showPersistActions, final String titleText, final String infoText, final Object[] elements,
+			final LabelProvider labelProvider, final ICreationExecutor executor) {
 		super(parent, shellStyle, takeFocusOnOpen, persistSize, persistLocation, showDialogMenu, showPersistActions,
 				titleText, infoText);
 		this.elements = elements.clone();
@@ -65,8 +66,7 @@ public class CreationPopupDialog extends PopupDialog {
 
 		proposalTable.setHeaderVisible(false);
 		proposalTable.addListener(SWT.Selection, e -> {
-			if (e.item instanceof TableItem) {
-				final TableItem selected = (TableItem) e.item;
+			if (e.item instanceof final TableItem selected) {
 				executor.execute(selected.getData());
 			}
 			close();

@@ -14,10 +14,8 @@
 package org.eclipse.fordiac.ide.model.search;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -180,11 +178,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 					final LibraryElement type = ie.getType();
 					return type != null ? type.getName() : "unknown";
 				}
-				if (element instanceof final CompilableType ct) {
-					return ct.getName();
-				}
-				if (element instanceof final DataType dt) {
-					return dt.getName();
+				if (element instanceof final INamedElement namedElement) {
+					return namedElement.getName();
 				}
 				return super.getText(element);
 			}
@@ -253,17 +248,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 			return res.getDevice().getAutomationSystem().getName() + "." + res.getDevice().getName() + "." //$NON-NLS-1$
 					+ res.getName();
 		}
-		if (element instanceof final Application app) {
-			return app.getName();
-		}
-		if (element instanceof final FBType fbtype) {
-			return fbtype.getName();
-		}
-		if (element instanceof final CompilableType ct) {
-			return ct.getName();
-		}
-		if (element instanceof final DataType dt) {
-			return dt.getName();
+		if (element instanceof final INamedElement namedElement) {
+			return namedElement.getName();
 		}
 		return element.toString();
 	}

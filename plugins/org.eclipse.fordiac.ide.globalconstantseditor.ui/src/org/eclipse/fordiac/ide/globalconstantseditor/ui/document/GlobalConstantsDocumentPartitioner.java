@@ -14,14 +14,16 @@ package org.eclipse.fordiac.ide.globalconstantseditor.ui.document;
 
 import java.util.Optional;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.globalconstantseditor.util.GlobalConstantsPartitioner;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
 
-public class GlobalConstantsDocumentPartitioner extends GlobalConstantsPartitioner {
+public class GlobalConstantsDocumentPartitioner extends GlobalConstantsPartitioner
+		implements STCoreDocumentPartitioner {
 
-	public Optional<EList<VarDeclaration>> partition(final XtextDocument document) {
+	@Override
+	public Optional<? extends STCorePartition> partition(final XtextDocument document) {
 		try {
 			return document.readOnly(resource -> {
 				if (resource.getModificationStamp() != document.getModificationStamp()) {

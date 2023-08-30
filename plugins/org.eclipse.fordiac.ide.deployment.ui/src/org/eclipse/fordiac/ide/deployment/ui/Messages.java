@@ -21,7 +21,7 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.ui.messages"; //$NON-NLS-1$
 
@@ -106,6 +106,9 @@ public final class Messages extends NLS {
 	public static String Output_FormattedXML;
 
 	public static String XMLFormatter_ExceptionDuringXMLFormating;
+
+	public static String DeploymentHandler_ErrorsInAutomationSystem;
+	public static String DeploymentHandler_DeployLabel;
 
 	static {
 		// initialize resource bundle

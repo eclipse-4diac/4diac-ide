@@ -73,6 +73,8 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			return createInterfaceEditPart(modelElement);
 		} else if (modelElement instanceof Value) {
 			return new FBNValueEditPart();
+		} else if (modelElement instanceof HiddenPinIndicator) {
+			return new HiddenPinIndicatorEditPart();
 		}
 
 		throw createEditpartCreationException(modelElement);

@@ -28,7 +28,6 @@ public class ChangeNameCommand extends Command {
 	private INamedElement adapterElement;
 
 	public ChangeNameCommand(final INamedElement element, final String name) {
-		super();
 		this.element = element;
 		this.name = name;
 	}
@@ -71,16 +70,15 @@ public class ChangeNameCommand extends Command {
 	}
 
 	private void checkForAdapter() {
-		if (element instanceof AdapterDeclaration) {
-			final AdapterDeclaration adpDecl = (AdapterDeclaration) element;
+		if (element instanceof final AdapterDeclaration adpDecl) {
 			if (adpDecl.getAdapterFB() != null) {
 				adapterElement = adpDecl.getAdapterFB();
 			} else if (adpDecl.getAdapterNetworkFB() != null) {
 				adapterElement = adpDecl.getAdapterNetworkFB();
 			}
 		}
-		if (element instanceof AdapterFB) {
-			adapterElement = ((AdapterFB) element).getAdapterDecl();
+		if (element instanceof final AdapterFB adapterFB) {
+			adapterElement = adapterFB.getAdapterDecl();
 		}
 	}
 

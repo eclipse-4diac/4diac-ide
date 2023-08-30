@@ -21,9 +21,7 @@ package org.eclipse.fordiac.ide.ui;
 
 import org.eclipse.osgi.util.NLS;
 
-/**
- * The Class Messages.
- */
+/** The Class Messages. */
 public final class FordiacMessages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.ui.messages"; //$NON-NLS-1$
 
@@ -52,6 +50,7 @@ public final class FordiacMessages extends NLS {
 	public static String Identification; // NOSONAR
 	public static String InitialValue;  // NOSONAR
 	public static String Inputs;  // NOSONAR
+	public static String Imports;  // NOSONAR
 	public static String InstanceComment;  // NOSONAR
 	public static String InstanceName;  // NOSONAR
 	public static String InstanceInfo;  // NOSONAR
@@ -64,6 +63,7 @@ public final class FordiacMessages extends NLS {
 	public static String NewSystem;  // NOSONAR
 	public static String Organization;  // NOSONAR
 	public static String Outputs; // NOSONAR
+	public static String Package;  // NOSONAR
 	public static String Pin;  // NOSONAR
 	public static String Product;  // NOSONAR
 	public static String Properties;  // NOSONAR
@@ -113,7 +113,7 @@ public final class FordiacMessages extends NLS {
 	public static String TableCopyPaste_TEXT_Paste;  // NOSONAR
 	public static String TableCopyPaste_TEXT_Cut;  // NOSONAR
 	public static String NatTable_TEXT_Paste;  // NOSONAR
-	
+
 	public static String Group_LABEL_LockSize;  // NOSONAR
 	public static String Group_TOOLTIP_DisableAutoResize;  // NOSONAR
 

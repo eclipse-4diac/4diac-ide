@@ -76,7 +76,7 @@
 				<Attribute Name="width" Type="LREAL" Value="1960.0"/>
 				<Attribute Name="height" Type="LREAL" Value="1300.0"/>
 			</SubApp>
-			<SubApp Name="Ex3a" Comment="fan-in of event connections, data values   &amp;#10;- trigger E_SPLIT.EI   &amp;#10;- expect 2x E_CTU.CUO, CV := 2, Q:= TRUE" x="-2526.666666666667" y="2000.0">
+			<SubApp Name="Ex3a" Comment="fan-in of event connections, data values   &amp;#10;- trigger E_SPLIT.EI   &amp;#10;- expect 2x E_CTU.CUO, CV := 2, Q:= TRUE" x="-2526.666666666667" y="1886.6666666666667">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>
@@ -92,7 +92,7 @@
 				</SubAppNetwork>
 				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
 				<Attribute Name="width" Type="LREAL" Value="2620.0"/>
-				<Attribute Name="height" Type="LREAL" Value="1553.3333333333335"/>
+				<Attribute Name="height" Type="LREAL" Value="1673.3333333333335"/>
 			</SubApp>
 			<SubApp Name="Ex6a" Comment="for loop  &amp;#10;- trigger 1x E_PERMIT.EI  &amp;#10;- expect 2x CUO and 2x SimpleNOT.CNF and CV := 2" x="-2520.0" y="6773.333333333334">
 				<SubAppInterfaceList>
@@ -233,6 +233,122 @@
 				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
 				<Attribute Name="width" Type="LREAL" Value="2686.666666666667"/>
 				<Attribute Name="height" Type="LREAL" Value="1460.0"/>
+			</SubApp>
+			<SubApp Name="Ex7a" Comment="for loop with a repeated calculation &amp;#10;- trigger 1x E_PERMIT.EI   &amp;#10;- expect 2x CUO and 2x SimpleNOT.CNF and CV := 2" x="-2513.3333333333335" y="8546.666666666668">
+				<SubAppInterfaceList>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<FB Name="E_CTU" Type="E_CTU" Comment="" x="1713.3333333333335" y="33.333333333333336">
+						<Parameter Name="PV" Value="2"/>
+					</FB>
+					<FB Name="SimpleNOT" Type="SimpleNOT" Comment="" x="2746.666666666667" y="166.66666666666669">
+					</FB>
+					<FB Name="E_PERMIT" Type="E_DEFAULT_PERMIT" Comment="" x="266.6666666666667" y="186.66666666666669">
+						<Parameter Name="PERMIT" Value="TRUE"/>
+					</FB>
+					<FB Name="calc" Type="BasicCalcEmpty" Comment="" x="3980.0" y="140.0">
+					</FB>
+					<EventConnections>
+						<Connection Source="E_CTU.CUO" Destination="SimpleNOT.REQ" Comment="" dx1="220.0"/>
+						<Connection Source="SimpleNOT.CNF" Destination="E_PERMIT.EI" Comment="" dx1="80.0" dx2="80.0" dy="-386.6666666666667"/>
+						<Connection Source="E_PERMIT.EO" Destination="E_CTU.CU" Comment="" dx1="100.0"/>
+						<Connection Source="SimpleNOT.CNF" Destination="calc.REQ" Comment="" dx1="186.66666666666669"/>
+					</EventConnections>
+					<DataConnections>
+						<Connection Source="E_CTU.Q" Destination="SimpleNOT.DI1" Comment="" dx1="220.0"/>
+						<Connection Source="SimpleNOT.DO1" Destination="E_PERMIT.PERMIT" Comment="" dx1="80.0" dx2="80.0" dy="260.0"/>
+					</DataConnections>
+				</SubAppNetwork>
+				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+				<Attribute Name="width" Type="LREAL" Value="6466.666666666667"/>
+				<Attribute Name="height" Type="LREAL" Value="1626.6666666666667"/>
+			</SubApp>
+			<SubApp Name="Ex7b" Comment="for loop with a repeated calculation with resource-intensive algorithm &amp;#10;- trigger 1x E_PERMIT.EI   &amp;#10;- expect 2x CUO and 2x SimpleNOT.CNF and CV := 2" x="-1886.6666666666667" y="10300.0">
+				<SubAppInterfaceList>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<FB Name="E_CTU" Type="E_CTU" Comment="" x="1713.3333333333335" y="33.333333333333336">
+						<Parameter Name="PV" Value="2"/>
+					</FB>
+					<FB Name="SimpleNOT" Type="SimpleNOT" Comment="" x="2746.666666666667" y="166.66666666666669">
+					</FB>
+					<FB Name="E_PERMIT" Type="E_DEFAULT_PERMIT" Comment="" x="266.6666666666667" y="186.66666666666669">
+						<Parameter Name="PERMIT" Value="TRUE"/>
+					</FB>
+					<FB Name="calc" Type="BasicCalcFibonacci" Comment="" x="3980.0" y="140.0">
+					</FB>
+					<EventConnections>
+						<Connection Source="E_CTU.CUO" Destination="SimpleNOT.REQ" Comment="" dx1="220.0"/>
+						<Connection Source="SimpleNOT.CNF" Destination="E_PERMIT.EI" Comment="" dx1="80.0" dx2="80.0" dy="-386.6666666666667"/>
+						<Connection Source="E_PERMIT.EO" Destination="E_CTU.CU" Comment="" dx1="100.0"/>
+						<Connection Source="SimpleNOT.CNF" Destination="calc.REQ" Comment="" dx1="186.66666666666669" dx2="186.66666666666669" dy="0.0"/>
+					</EventConnections>
+					<DataConnections>
+						<Connection Source="E_CTU.Q" Destination="SimpleNOT.DI1" Comment="" dx1="220.0"/>
+						<Connection Source="SimpleNOT.DO1" Destination="E_PERMIT.PERMIT" Comment="" dx1="80.0" dx2="80.0" dy="260.0"/>
+					</DataConnections>
+				</SubAppNetwork>
+				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+				<Attribute Name="width" Type="LREAL" Value="6100.0"/>
+				<Attribute Name="height" Type="LREAL" Value="1626.6666666666667"/>
+			</SubApp>
+			<SubApp Name="Ex7c" Comment="for loop with a repeated calculation with many small algorithms&amp;#10;- trigger 1x E_PERMIT.EI   &amp;#10;- expect 2x CUO and 2x SimpleNOT.CNF and CV := 2" x="-1066.6666666666667" y="12166.666666666668">
+				<SubAppInterfaceList>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<FB Name="E_CTU" Type="E_CTU" Comment="" x="1713.3333333333335" y="33.333333333333336">
+						<Parameter Name="PV" Value="2"/>
+					</FB>
+					<FB Name="SimpleNOT" Type="SimpleNOT" Comment="" x="2746.666666666667" y="166.66666666666669">
+					</FB>
+					<FB Name="E_PERMIT" Type="E_DEFAULT_PERMIT" Comment="" x="266.6666666666667" y="186.66666666666669">
+						<Parameter Name="PERMIT" Value="TRUE"/>
+					</FB>
+					<FB Name="calc" Type="BasicCalcEmptyAlgs" Comment="" x="3980.0" y="140.0">
+					</FB>
+					<EventConnections>
+						<Connection Source="E_CTU.CUO" Destination="SimpleNOT.REQ" Comment="" dx1="220.0"/>
+						<Connection Source="SimpleNOT.CNF" Destination="E_PERMIT.EI" Comment="" dx1="80.0" dx2="80.0" dy="-386.6666666666667"/>
+						<Connection Source="E_PERMIT.EO" Destination="E_CTU.CU" Comment="" dx1="100.0"/>
+						<Connection Source="SimpleNOT.CNF" Destination="calc.REQ" Comment="" dx1="186.66666666666669" dx2="186.66666666666669" dy="0.0"/>
+					</EventConnections>
+					<DataConnections>
+						<Connection Source="E_CTU.Q" Destination="SimpleNOT.DI1" Comment="" dx1="220.0"/>
+						<Connection Source="SimpleNOT.DO1" Destination="E_PERMIT.PERMIT" Comment="" dx1="80.0" dx2="80.0" dy="260.0"/>
+					</DataConnections>
+				</SubAppNetwork>
+				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+				<Attribute Name="width" Type="LREAL" Value="6100.0"/>
+				<Attribute Name="height" Type="LREAL" Value="1626.6666666666667"/>
+			</SubApp>
+			<SubApp Name="Ex7d" Comment="for loop with a repeated calculation with many states, each having a small algorithm&amp;#10;- trigger 1x E_PERMIT.EI   &amp;#10;- expect 2x CUO and 2x SimpleNOT.CNF and CV := 2" x="940.0" y="13946.666666666668">
+				<SubAppInterfaceList>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<FB Name="E_CTU" Type="E_CTU" Comment="" x="1713.3333333333335" y="33.333333333333336">
+						<Parameter Name="PV" Value="2"/>
+					</FB>
+					<FB Name="SimpleNOT" Type="SimpleNOT" Comment="" x="2746.666666666667" y="166.66666666666669">
+					</FB>
+					<FB Name="E_PERMIT" Type="E_DEFAULT_PERMIT" Comment="" x="266.6666666666667" y="186.66666666666669">
+						<Parameter Name="PERMIT" Value="TRUE"/>
+					</FB>
+					<FB Name="calc" Type="BasicCalcManyStates" Comment="" x="3980.0" y="140.0">
+					</FB>
+					<EventConnections>
+						<Connection Source="E_CTU.CUO" Destination="SimpleNOT.REQ" Comment="" dx1="220.0"/>
+						<Connection Source="SimpleNOT.CNF" Destination="E_PERMIT.EI" Comment="" dx1="80.0" dx2="80.0" dy="-386.6666666666667"/>
+						<Connection Source="E_PERMIT.EO" Destination="E_CTU.CU" Comment="" dx1="100.0"/>
+						<Connection Source="SimpleNOT.CNF" Destination="calc.REQ" Comment="" dx1="186.66666666666669" dx2="186.66666666666669" dy="0.0"/>
+					</EventConnections>
+					<DataConnections>
+						<Connection Source="E_CTU.Q" Destination="SimpleNOT.DI1" Comment="" dx1="220.0"/>
+						<Connection Source="SimpleNOT.DO1" Destination="E_PERMIT.PERMIT" Comment="" dx1="80.0" dx2="80.0" dy="260.0"/>
+					</DataConnections>
+				</SubAppNetwork>
+				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+				<Attribute Name="width" Type="LREAL" Value="6100.0"/>
+				<Attribute Name="height" Type="LREAL" Value="1626.6666666666667"/>
 			</SubApp>
 		</SubAppNetwork>
 	</Application>
@@ -593,7 +709,7 @@
 		<SubAppNetwork>
 			<Group Name="Info_DataConnections" Comment="The subapps in this App serve as test cases for various versions of WITH-constructs (on updating data values to the outputs). &amp;#10;- WITH at the inputs &amp;#10;- WITH at the outputs" x="1893.3333333333335" y="133.33333333333334" width="2920.0" height="900.0">
 			</Group>
-			<SubApp Name="Ex1a" Comment="no WITH at the output variables, do not update&amp;#10;trigger REQ, expect CNF and &amp;#10;DO1.OUT:=TRUE &amp;#10;DO2.OUT:=-10 &amp;#10;DO3.OUT:=15 &amp;#10;DO4.OUT:=2.0 (data values from type)" x="180.0" y="1266.6666666666667">
+			<SubApp Name="Ex1a" Comment="no WITH at the output variables, do not update &amp;#10;trigger REQ, expect CNF and  &amp;#10;DO1.OUT:=TRUE  &amp;#10;DO2.OUT:=-10  &amp;#10;DO3.OUT:=15  &amp;#10;DO4.OUT:=2.0 (data values from type)" x="180.0" y="1266.6666666666667">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>
@@ -628,7 +744,7 @@
 				<Attribute Name="width" Type="LREAL" Value="3106.666666666667"/>
 				<Attribute Name="height" Type="LREAL" Value="3573.3333333333335"/>
 			</SubApp>
-			<SubApp Name="Ex1b" Comment="WITH at the output values, update&amp;#10;trigger UPDATE, expect CNF and  &amp;#10;DO1.OUT:=FALSE  &amp;#10;DO2.OUT:=42  &amp;#10;DO3.OUT:=21  &amp;#10;DO4.OUT:=3.14 (data values from instance)" x="3393.3333333333335" y="1233.3333333333335">
+			<SubApp Name="Ex1b" Comment="WITH at the output values, update &amp;#10;trigger UPDATE, expect CNF and   &amp;#10;DO1.OUT:=FALSE   &amp;#10;DO2.OUT:=42   &amp;#10;DO3.OUT:=21   &amp;#10;DO4.OUT:=3.14 (data values from instance)" x="3393.3333333333335" y="1233.3333333333335">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>

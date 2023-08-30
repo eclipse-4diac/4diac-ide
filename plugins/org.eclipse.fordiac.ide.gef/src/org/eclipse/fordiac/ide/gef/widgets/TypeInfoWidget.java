@@ -100,7 +100,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		this.widgetFactory = widgetFactory;
 	}
 
-	private FormToolkit getWidgetFactory() {
+	protected FormToolkit getWidgetFactory() {
 		return widgetFactory;
 	}
 
@@ -202,18 +202,13 @@ public class TypeInfoWidget implements CommandExecutor {
 
 			@Override
 			public Object getValue(final Object element, final String property) {
-				switch (property) {
-				case VERSION_PROPERTY:
-					return ((VersionInfo) element).getVersion();
-				case ORGANIZATION_PROPERTY:
-					return ((VersionInfo) element).getOrganization();
-				case AUTHOR_PROPERTY:
-					return ((VersionInfo) element).getAuthor();
-				case DATE_PROPERTY:
-					return ((VersionInfo) element).getDate();
-				default:
-					return ((VersionInfo) element).getRemarks();
-				}
+				return switch (property) {
+				case VERSION_PROPERTY -> ((VersionInfo) element).getVersion();
+				case ORGANIZATION_PROPERTY -> ((VersionInfo) element).getOrganization();
+				case AUTHOR_PROPERTY -> ((VersionInfo) element).getAuthor();
+				case DATE_PROPERTY -> ((VersionInfo) element).getDate();
+				default -> ((VersionInfo) element).getRemarks();
+				};
 			}
 
 			@Override
@@ -221,23 +216,13 @@ public class TypeInfoWidget implements CommandExecutor {
 				final TableItem tableItem = (TableItem) element;
 				final VersionInfo data = (VersionInfo) tableItem.getData();
 				Command cmd = null;
-				switch (property) {
-				case VERSION_PROPERTY:
-					cmd = new ChangeVersionCommand(data, value.toString());
-					break;
-				case ORGANIZATION_PROPERTY:
-					cmd = new ChangeOrganizationCommand(data, value.toString());
-					break;
-				case AUTHOR_PROPERTY:
-					cmd = new ChangeAuthorCommand(data, value.toString());
-					break;
-				case DATE_PROPERTY:
-					cmd = new ChangeDateCommand(data, value.toString());
-					break;
-				default:
-					cmd = new ChangeRemarksCommand(data, value.toString());
-					break;
-				}
+				cmd = switch (property) {
+				case VERSION_PROPERTY -> new ChangeVersionCommand(data, value.toString());
+				case ORGANIZATION_PROPERTY -> new ChangeOrganizationCommand(data, value.toString());
+				case AUTHOR_PROPERTY -> new ChangeAuthorCommand(data, value.toString());
+				case DATE_PROPERTY -> new ChangeDateCommand(data, value.toString());
+				default -> new ChangeRemarksCommand(data, value.toString());
+				};
 				executeCommand(cmd);
 				versionViewer.refresh(data);
 			}
@@ -271,7 +256,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		return composite;
 	}
 
-	private Text createGroupText(final Composite group, final boolean editable) {
+	protected Text createGroupText(final Composite group, final boolean editable) {
 		final Text text = getWidgetFactory().createText(group, "", SWT.BORDER); //$NON-NLS-1$
 		text.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		text.setEditable(editable);
@@ -317,7 +302,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		}
 	}
 
-	private Group createGroup(final Composite parent, final String text) {
+	protected Group createGroup(final Composite parent, final String text) {
 		final Group group = new Group(parent, SWT.SHADOW_NONE);
 		group.setText(text);
 		getWidgetFactory().adapt(group);
@@ -335,4 +320,15 @@ public class TypeInfoWidget implements CommandExecutor {
 		versionViewer.setCellModifier(null);
 	}
 
+	protected LibraryElement getType() {
+		return type;
+	}
+
+	protected Consumer<Command> getCommandExecutor() {
+		return commandExecutor;
+	}
+
+	protected void setCommandExecutor(final Consumer<Command> commandExecutor) {
+		this.commandExecutor = commandExecutor;
+	}
 }

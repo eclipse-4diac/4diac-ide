@@ -187,52 +187,6 @@ United States, other countries, or both.\n
          id="org.eclipse.emf.compare"
          version="0.0.0"/>
 
-   <requires>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.gef"/>
-      <import plugin="org.eclipse.emf.ecore"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.emf.ecore.editor"/>
-      <import plugin="org.eclipse.ui.navigator"/>
-      <import plugin="org.eclipse.ui.views.properties.tabbed"/>
-      <import plugin="org.eclipse.fordiac.ide.deployment"/>
-      <import plugin="org.eclipse.emf.edit"/>
-      <import plugin="org.eclipse.emf.ecore.edit"/>
-      <import plugin="org.eclipse.jface"/>
-      <import plugin="org.eclipse.ui.workbench"/>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.emf.ecore.xmi"/>
-      <import plugin="org.eclipse.ltk.core.refactoring"/>
-      <import plugin="org.eclipse.ui.navigator.resources"/>
-      <import plugin="org.eclipse.emf.edit.ui"/>
-      <import plugin="org.eclipse.ui.editors"/>
-      <import plugin="org.eclipse.swt"/>
-      <import plugin="org.eclipse.emf.mwe2.runtime" version="2.9.1" match="greaterOrEqual"/>
-      <import plugin="org.antlr.runtime"/>
-      <import plugin="org.eclipse.emf.common"/>
-      <import plugin="org.apache.commons.logging" version="1.0.0" match="compatible"/>
-      <import plugin="org.eclipse.core.expressions"/>
-      <import plugin="org.eclipse.jface.text"/>
-      <import plugin="org.eclipse.ui.forms"/>
-      <import plugin="org.eclipse.ui.workbench.texteditor"/>
-      <import plugin="org.eclipse.core.net"/>
-      <import plugin="org.apache.commons.lang" version="2.6.0" match="compatible"/>
-      <import plugin="com.google.guava"/>
-      <import plugin="org.eclipse.osgi"/>
-      <import plugin="org.eclipse.emf.codegen" version="2.12.0" match="compatible"/>
-      <import plugin="org.eclipse.text" version="3.5.0" match="compatible"/>
-      <import plugin="org.eclipse.debug.core" version="3.5.0" match="compatible"/>
-      <import feature="org.eclipse.xtext.xbase.lib" version="2.10.0.v201605250459"/>
-      <import feature="org.eclipse.xtext.xbase" version="2.10.0.v201605250459"/>
-      <import feature="org.eclipse.xtext.redist" version="2.11.0.v20170201-0242"/>
-      <import feature="org.eclipse.xtend.sdk" version="2.11.0.v20170201-0242"/>
-      <import plugin="org.eclipse.jdt.core" match="compatible"/>
-      <import plugin="org.eclipse.jdt.launching"/>
-      <import plugin="org.eclipse.ocl.ecore"/>
-      <import feature="org.eclipse.nebula.widgets.nattable.core.feature" version="2.0.3" match="greaterOrEqual"/>
-   </requires>
-
    <plugin
          id="org.eclipse.fordiac.ide.model"
          download-size="0"
@@ -557,6 +511,13 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.hierarchymanager.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.contracts"
          download-size="0"
          install-size="0"
          version="0.0.0"

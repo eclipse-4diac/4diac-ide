@@ -28,13 +28,21 @@
             class="org.eclipse.fordiac.ide.fb.interpreter.handler.RecordExecutionTraceHandler"
             commandId="org.eclipse.fordiac.ide.fb.interpreter.recordExecutionTrace">
       </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fb.interpreter.handler.CreateRuntimeTestFunctionBlockHandler"
+            commandId="org.eclipse.fordiac.ide.fb.interpreter.createTestFb">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
       <command
             id="org.eclipse.fordiac.ide.fb.interpreter.recordExecutionTrace"
             name="Record Execution Trace for Network">
-      </command>   
+      </command>
+      <command
+            id="org.eclipse.fordiac.ide.fb.interpreter.createTestFb"
+            name="Create FB for Test Specification">
+      </command>    
    </extension>
    <extension
            point="org.eclipse.ui.menus">
@@ -45,17 +53,25 @@
             label="Record Execution Trace for Network"
             style="push">
             <visibleWhen checkEnabled="true">
-				<!--	<with variable="selection">
-            			<iterate>
-            				<or>
-            					<instanceof
+            </visibleWhen>
+       </command>
+       <command
+            commandId="org.eclipse.fordiac.ide.fb.interpreter.createTestFb"
+            label="Create FB for Test Specification"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+                       	    <instanceof
                        				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
-            					<instanceof
-                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
-            				</or>
-            			</iterate>
-        		
-            		</with>-->
+            				<instanceof
+                       				value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            			</or>
+            		</iterate>
+            	</with>
             </visibleWhen>
        </command>
 	</menuContribution>

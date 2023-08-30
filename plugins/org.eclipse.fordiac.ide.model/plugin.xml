@@ -18,6 +18,21 @@
             genModel="model/fordiac.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated fordiac -->
+      <package
+            uri="http://www.eclipse.org/4diac/xml/buildpath.xsd"
+            class="org.eclipse.fordiac.ide.model.buildpath.BuildpathPackage"
+            genModel="model/fordiac.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated fordiac -->
+      <parser
+            type="buildpath"
+            class="org.eclipse.fordiac.ide.model.buildpath.util.BuildpathResourceFactoryImpl"/>
+   </extension>
+
    <extension point="org.eclipse.fordiac.ide.model.TypeEntryCreator">
       <TypeEntryCreator
             class="org.eclipse.fordiac.ide.model.typelibrary.impl.CreateAdapterTypeEntry">
@@ -178,6 +193,17 @@
 			value="true">
 		</persistent>
 	</extension>
+ <extension
+       id="validation"
+       name="4diac IDE Validation Problem"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.model.problem">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
+ </extension>
  <extension
        id="initialValue"
        name="4diac IDE Initial Value Problem"

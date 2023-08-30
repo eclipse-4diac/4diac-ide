@@ -16,14 +16,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.internal;
 
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.gef.commands.Command;
 
-/**
- * The Class ChangeComplierInfoCommand.
- */
+/** The Class ChangeComplierInfoCommand. */
 public abstract class ChangeCompilerInfoCommand extends Command {
 
 	/** The identification of the type. */
@@ -33,15 +31,11 @@ public abstract class ChangeCompilerInfoCommand extends Command {
 		return compilerInfo;
 	}
 
-	/**
-	 * Instantiates a new change comment command.
+	/** Instantiates a new change comment command.
 	 *
 	 * @param type    which identification information is about to change
-	 * @param comment the comment
-	 */
-	protected ChangeCompilerInfoCommand(final CompilableType type) {
-		super();
-
+	 * @param comment the comment */
+	protected ChangeCompilerInfoCommand(final LibraryElement type) {
 		if (type.getCompilerInfo() == null) {
 			type.setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());
 		}

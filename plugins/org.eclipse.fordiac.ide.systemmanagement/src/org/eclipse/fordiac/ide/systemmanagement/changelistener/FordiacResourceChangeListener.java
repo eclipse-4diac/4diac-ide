@@ -62,6 +62,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.google.common.base.Objects;
+
 public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private static class FileToRenameEntry {
@@ -70,7 +72,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		private final TypeEntry existingTypeEntry;
 
 		public FileToRenameEntry(final IFile filetoRename, final TypeEntry existingTypeEntry) {
-			super();
 			this.filetoRename = filetoRename;
 			this.existingTypeEntry = existingTypeEntry;
 		}
@@ -182,10 +183,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		IEditorPart activeEditor = null;
 
 		for (final TypeEntry entry : changedFiles) {
-			final IEditorPart findEditor = EditorUtils
-					.findEditor((final IEditorPart editor) -> editor
-							.getEditorInput() instanceof final FileEditorInput fileEditorInput
-							&& fileEditorInput.getFile().equals(entry.getFile()));
+			final IEditorPart findEditor = EditorUtils.findEditor((final IEditorPart editor) -> editor
+					.getEditorInput() instanceof final FileEditorInput fileEditorInput
+					&& fileEditorInput.getFile().equals(entry.getFile()));
 
 			if (findEditor != null) {
 				if (findEditor == EditorUtils.getCurrentActiveEditor()) {
@@ -226,37 +226,36 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private boolean handleResourceChanged(final IResourceDelta delta) {
 		if (isFileChange(delta)) {
-			collectTypeEntries(delta);
+			refreshTypeEntry(delta);
 		} else if (IResourceDelta.OPEN == delta.getFlags()) {
 			// project is opened oder closed
 			if (0 != delta.getAffectedChildren(IResourceDelta.ADDED).length) {
 				handleProjectAdd(delta);
 			} else if (0 != delta.getAffectedChildren(IResourceDelta.REMOVED).length) {
 				handleProjectRemove(delta);
+				return false;
 			}
-			return false;
 		} else if (delta.getResource().getType() == IResource.PROJECT) {
-			return checkForErrorMarkerChanges(delta);
+			checkForErrorMarkerChanges(delta);
 		}
 		return true;
 	}
 
-	public boolean checkForErrorMarkerChanges(final IResourceDelta delta) {
+	public void checkForErrorMarkerChanges(final IResourceDelta delta) {
 		for (final IResourceDelta d : delta.getAffectedChildren()) {
 			if (IResourceDelta.MARKERS == (d.getFlags() & IResourceDelta.MARKERS)) {
 				systemManager.notifyListeners();
-				return false;
 			}
 		}
-		return true;
 	}
 
-	private void collectTypeEntries(final IResourceDelta delta) {
+	private void refreshTypeEntry(final IResourceDelta delta) {
 		final IFile file = (IFile) delta.getResource();
 
 		final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 		if (typeEntryForFile != null
 				&& typeEntryForFile.getLastModificationTimestamp() != file.getModificationStamp()) {
+			typeEntryForFile.refresh();
 			changedFiles.add(typeEntryForFile);
 		}
 	}
@@ -316,20 +315,18 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private void handleFileDelete(final IResourceDelta delta) {
-		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(delta.getResource().getProject());
 		final IFile file = (IFile) delta.getResource();
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
 
-		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		final TypeEntry entry = typeLib.getTypeEntry(file);
 		if (null != entry) {
 			closeAllEditorsForFile(file);
 			final FileToRenameEntry rnEntry = getFileRenameEntry(entry);
-			if(rnEntry != null) {
-				// the file was moved to a new location update the type entry and do not remove it from the
-				// rename list
+			typeLib.removeTypeEntry(entry);
+			if (rnEntry != null) {
 				entry.setFile(rnEntry.getFile());
+				typeLib.addTypeEntry(entry);
 				filesToRename.remove(rnEntry);
-			} else {
-				typeLib.removeTypeEntry(entry);
 			}
 			systemManager.notifyListeners();
 		}
@@ -375,7 +372,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				final String newPath = replaceLast(oldPath, oldName, newName);
 
 				try {// this will trigger handleFileMove() and further handleFileRename(). file.move() is a workaround
-					// to rename a file
+						// to rename a file
 					entry.getFile().move(new Path(newPath), true, new NullProgressMonitor());
 				} catch (final CoreException e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
@@ -410,22 +407,18 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		} else {
 			if (!src.getProject().equals(dst.getProject())) {
 				if (src.getProject().exists()) {
-					handleFileMoveBetweenProjects(src, dst);
+					handleFileMove(src, dst);
 				} else {
 					handleFileAfterProjectRename(src, dst);
 				}
 			} else {
-				// file was moved update pallette entry
-				final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(src);
-				if (null != entry) {
-					entry.setFile(dst);
-				}
+				handleFileMove(src, dst);
 			}
 			updateEditorInput(src, dst);
 		}
 	}
 
-	private static void handleFileMoveBetweenProjects(final IFile src, final IFile dst) {
+	private static void handleFileMove(final IFile src, final IFile dst) {
 		final TypeLibrary srcTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(src.getProject());
 		final TypeEntry entry = srcTypeLib.getTypeEntry(src);
 		if (null != entry) {
@@ -443,7 +436,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			// we have to create the entry
 			typeLib.createTypeEntry(dst);
 		} else {
+			typeLib.removeTypeEntry(entry);
 			entry.setFile(dst);
+			typeLib.addTypeEntry(entry);
 		}
 	}
 
@@ -467,14 +462,22 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			return;
 		}
 		final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
-		entry.getTypeLibrary().removeTypeEntry(entry);
-		entry.setFile(newFile);
-		entry.getTypeLibrary().addTypeEntry(entry);
+
+		if (!Objects.equal(newFile, entry.getFile())) {
+			final TypeLibrary typeLibrary = entry.getTypeLibrary();
+			if (typeLibrary != null) {
+				typeLibrary.removeTypeEntry(entry);
+			}
+			entry.setFile(newFile);
+			if (typeLibrary != null) {
+				typeLibrary.addTypeEntry(entry);
+			}
+		}
 
 		final LibraryElement type = entry.getTypeEditable();
 		if ((null != type) && // this means we couldn't load the type seems
-				// like a problem in the type's XML file
-				// TODO report on error
+		// like a problem in the type's XML file
+		// TODO report on error
 				(!newTypeName.equals(type.getName()))) {
 			type.setName(newTypeName);
 			entry.save();
@@ -547,19 +550,18 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			for (final IEditorReference editorReference : editorReferences) {
 				final IEditorPart editor = editorReference.getEditor(false);
 				if (null != editor) {
-					//the editor is loaded check if it is ours and if yes update it
+					// the editor is loaded check if it is ours and if yes update it
 					final IEditorInput input = editor.getEditorInput();
 					if ((src.equals(((FileEditorInput) input).getFile())
 							&& editor instanceof final IEditorFileChangeListener editorFileChangeListener)) {
 						editorFileChangeListener.updateEditorInput(new FileEditorInput(dst));
 					}
-				} else {
-					// the editor is not yet loaded check if it may be ours. We can not load it as the file it is referring
-					// to is not existing anymore, therefore we can only close it
-					if (editorMatching.matches(editorReference, new FileEditorInput(src))) {
-						activePage.closeEditors(new IEditorReference[] { editorReference }, false);
+				} else // the editor is not yet loaded check if it may be ours. We can not load it as the file it is
+						 // referring
+				// to is not existing anymore, therefore we can only close it
+				if (editorMatching.matches(editorReference, new FileEditorInput(src))) {
+					activePage.closeEditors(new IEditorReference[] { editorReference }, false);
 
-					}
 				}
 			}
 		});

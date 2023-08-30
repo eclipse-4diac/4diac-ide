@@ -123,6 +123,10 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			}
 		}
 
+		private void refreshComment() {
+			getFigure().setToolTip(new ConnectionTooltipFigure(getModel()));
+		}
+
 	}
 
 	private final class SrcDstAdapter extends AdapterImpl {
@@ -166,6 +170,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 	private static final float[] BROKEN_CONNECTION_DASH_PATTERN = new float[] { 5.0f, 5.0f };
 
 	public ConnectionEditPart() {
+		// nothing to do here
 	}
 
 	@Override
@@ -352,10 +357,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		return contentAdapter;
 	}
 
-	private void refreshComment() {
-		getFigure().setToolTip(new ConnectionTooltipFigure(getModel()));
-	}
-
 	@Override
 	public void deactivate() {
 		if (isActive()) {
@@ -382,8 +383,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		final PolylineConnection connection = getFigure();
 		connection.setAlpha(value);
 		for (final Object fig : connection.getChildren()) {
-			if (fig instanceof Shape) {
-				((Shape) fig).setAlpha(value);
+			if (fig instanceof final Shape shape) {
+				shape.setAlpha(value);
 			}
 		}
 	}

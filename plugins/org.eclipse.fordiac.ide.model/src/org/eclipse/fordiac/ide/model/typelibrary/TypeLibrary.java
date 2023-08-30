@@ -27,10 +27,9 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 import java.text.Collator;
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -39,10 +38,14 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
+import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -55,16 +58,18 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 public final class TypeLibrary {
 
 	private IProject project;
+	private Buildpath buildpath;
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
-	private final Map<String, AdapterTypeEntry> adapterTypes = new HashMap<>();
-	private final Map<String, DeviceTypeEntry> deviceTypes = new HashMap<>();
-	private final Map<String, FBTypeEntry> fbTypes = new HashMap<>();
-	private final Map<String, ResourceTypeEntry> resourceTypes = new HashMap<>();
-	private final Map<String, SegmentTypeEntry> segmentTypes = new HashMap<>();
-	private final Map<String, SubAppTypeEntry> subAppTypes = new HashMap<>();
-	private final Map<String, SystemEntry> systems = new HashMap<>();
-	private final Map<String, GlobalConstantsEntry> globalConstants = new HashMap<>();
-	private final Map<String, TypeEntry> errorTypes = new HashMap<>();
+	private final Map<String, AdapterTypeEntry> adapterTypes = new ConcurrentHashMap<>();
+	private final Map<String, DeviceTypeEntry> deviceTypes = new ConcurrentHashMap<>();
+	private final Map<String, FBTypeEntry> fbTypes = new ConcurrentHashMap<>();
+	private final Map<String, ResourceTypeEntry> resourceTypes = new ConcurrentHashMap<>();
+	private final Map<String, SegmentTypeEntry> segmentTypes = new ConcurrentHashMap<>();
+	private final Map<String, SubAppTypeEntry> subAppTypes = new ConcurrentHashMap<>();
+	private final Map<String, SystemEntry> systems = new ConcurrentHashMap<>();
+	private final Map<String, GlobalConstantsEntry> globalConstants = new ConcurrentHashMap<>();
+	private final Map<String, TypeEntry> errorTypes = new ConcurrentHashMap<>();
+	private final Map<IFile, TypeEntry> fileMap = new ConcurrentHashMap<>();
 
 	public Map<String, AdapterTypeEntry> getAdapterTypes() {
 		return adapterTypes;
@@ -72,7 +77,8 @@ public final class TypeLibrary {
 
 	public List<AdapterTypeEntry> getAdapterTypesSorted() {
 		return getAdapterTypes().values().stream()
-				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getTypeName(), o2.getTypeName())).toList();
+				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getFullTypeName(), o2.getFullTypeName()))
+				.toList();
 	}
 
 	public Map<String, DeviceTypeEntry> getDeviceTypes() {
@@ -146,14 +152,7 @@ public final class TypeLibrary {
 	}
 
 	public TypeEntry getTypeEntry(final IFile typeFile) {
-		if (isDataTypeFile(typeFile)) {
-			return dataTypeLib.getDerivedDataTypes().get(TypeEntry.getTypeNameFromFile(typeFile));
-		}
-		final Map<String, ? extends TypeEntry> typeEntryList = getTypeList(typeFile);
-		if (null != typeEntryList) {
-			return typeEntryList.get(TypeEntry.getTypeNameFromFile(typeFile));
-		}
-		return null;
+		return fileMap.get(typeFile);
 	}
 
 	public void reload() {
@@ -166,11 +165,9 @@ public final class TypeLibrary {
 		getSystems().clear();
 		getGlobalConstants().clear();
 		dataTypeLib.getDerivedDataTypes().clear();
+		fileMap.clear();
+		buildpath = BuildpathUtil.loadBuildpath(project);
 		checkAdditions(project);
-	}
-
-	private static boolean isDataTypeFile(final IFile typeFile) {
-		return TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(typeFile.getFileExtension());
 	}
 
 	public DataTypeLibrary getDataTypeLibrary() {
@@ -181,43 +178,24 @@ public final class TypeLibrary {
 		return project;
 	}
 
-	private Map<String, ? extends TypeEntry> getTypeList(final IFile typeFile) {
-		final String extension = typeFile.getFileExtension();
-		if (null != extension) {
-			switch (extension.toUpperCase()) {
-			case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING:
-				return getAdapterTypes();
-			case TypeLibraryTags.DEVICE_TYPE_FILE_ENDING:
-				return getDeviceTypes();
-			case TypeLibraryTags.FB_TYPE_FILE_ENDING, TypeLibraryTags.FC_TYPE_FILE_ENDING:
-				return getFbTypes();
-			case TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING:
-				return getResourceTypes();
-			case TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING:
-				return getSegmentTypes();
-			case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING:
-				return getSubAppTypes();
-			case TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING:
-				return getSystems();
-			case TypeLibraryTags.GLOBAL_CONST_FILE_ENDING:
-				return getGlobalConstants();
-			default:
-				break;
-			}
-		}
-		return Collections.emptyMap();
+	public Buildpath getBuildpath() {
+		return buildpath;
 	}
 
 	/** Instantiates a new fB type library. */
 	TypeLibrary(final IProject project) {
 		this.project = project;
-		if (project != null && project.exists()) {
+		if (project != null && project.isAccessible()) {
+			buildpath = BuildpathUtil.loadBuildpath(project);
 			checkAdditions(project);
 		}
 	}
 
 	public TypeEntry createTypeEntry(final IFile file) {
-		final TypeEntry entry = TypeEntryFactory.INSTANCE.createTypeEntry(file);
+		if (BuildpathUtil.findSourceFolder(buildpath, file).isEmpty()) {
+			return null;
+		}
+		final TypeEntry entry = fileMap.computeIfAbsent(file, TypeEntryFactory.INSTANCE::createTypeEntry);
 		if (null != entry) {
 			if (!FordiacKeywords.isReservedKeyword(entry.getTypeName())) {
 				addTypeEntry(entry);
@@ -229,21 +207,16 @@ public final class TypeLibrary {
 		return entry;
 	}
 
-	public TypeEntry createErrorTypeEntry(final String typeFbElement, final FBType fbType) {
-		final TypeEntry entry = createErrorTypeEntry(fbType);
-		entry.setType(fbType);
-		fbType.setName(typeFbElement);
-		fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		addErrorTypeEntry(entry);
-		return entry;
-	}
-
-	public void addErrorTypeEntry(final TypeEntry entry) {
-		errorTypes.put(entry.getTypeName(), entry);
-	}
-
-	public void removeErrorTypeEntry(final TypeEntry entry) {
-		errorTypes.remove(entry.getTypeName());
+	public TypeEntry createErrorTypeEntry(final String typeName, final EClass typeClass) {
+		return errorTypes.computeIfAbsent(typeName, name -> {
+			final FBType fbType = (FBType) LibraryElementFactory.eINSTANCE.create(typeClass);
+			PackageNameHelper.setFullTypeName(fbType, name);
+			fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
+			final TypeEntry entry = createErrorTypeEntry(fbType);
+			entry.setType(fbType);
+			entry.setTypeLibrary(this);
+			return entry;
+		});
 	}
 
 	private static TypeEntry createErrorTypeEntry(final FBType fbType) {
@@ -254,19 +227,47 @@ public final class TypeLibrary {
 	}
 
 	public void addTypeEntry(final TypeEntry entry) {
-		final TypeEntry errorEntry = errorTypes.get(entry.getTypeName());
-		if (errorEntry != null) {
-			removeErrorTypeEntry(errorEntry);
+		if (entry.getTypeLibrary() != null) {
+			entry.getTypeLibrary().removeTypeEntry(entry);
 		}
 		entry.setTypeLibrary(this);
+		if (entry.getFile() != null) {
+			fileMap.put(entry.getFile(), entry);
+		}
+		addTypeEntryNameReference(entry);
+	}
+
+	public void addTypeEntryNameReference(final TypeEntry entry) {
 		if (entry instanceof final DataTypeEntry dtEntry) {
-			dataTypeLib.addTypeEntry(dtEntry);
+			if (!dataTypeLib.addTypeEntry(dtEntry)) {
+				handleDuplicateTypeName(entry);
+			}
 		} else {
-			addBlockTypeEntry(entry);
+			errorTypes.remove(entry.getFullTypeName());
+			if (!addBlockTypeEntry(entry)) {
+				handleDuplicateTypeName(entry);
+			}
+		}
+	}
+
+	private static void handleDuplicateTypeName(final TypeEntry entry) {
+		if (entry.getFile() != null) {
+			FordiacMarkerHelper.createMarkers(entry.getFile(), List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(
+					MessageFormat.format(Messages.TypeLibrary_TypeExists, entry.getFullTypeName()))));
+		} else {
+			FordiacLogHelper.logWarning(MessageFormat.format(Messages.TypeLibrary_TypeExists, entry.getFullTypeName()));
 		}
 	}
 
 	public void removeTypeEntry(final TypeEntry entry) {
+		removeTypeEntryNameReference(entry);
+		if (entry.getFile() != null) {
+			fileMap.remove(entry.getFile());
+		}
+		entry.setTypeLibrary(null);
+	}
+
+	public void removeTypeEntryNameReference(final TypeEntry entry) {
 		if (entry instanceof final DataTypeEntry dtEntry) {
 			dataTypeLib.removeTypeEntry(dtEntry);
 		} else {
@@ -281,6 +282,7 @@ public final class TypeLibrary {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
+		buildpath = BuildpathUtil.loadBuildpath(project);
 		checkDeletions();
 		checkAdditions(project);
 	}
@@ -295,10 +297,13 @@ public final class TypeLibrary {
 		checkDeletionsForTypeGroup(getSystems().values());
 		checkDeletionsForTypeGroup(getGlobalConstants().values());
 		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes().values());
+		fileMap.values().removeIf(entry -> !entry.getFile().exists()
+				|| !BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent());
 	}
 
-	private static void checkDeletionsForTypeGroup(final Collection<? extends TypeEntry> typeEntries) {
-		typeEntries.removeIf(e -> (!e.getFile().exists()));
+	private void checkDeletionsForTypeGroup(final Collection<? extends TypeEntry> typeEntries) {
+		typeEntries.removeIf(entry -> !entry.getFile().exists()
+				|| !BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent());
 	}
 
 	private void checkAdditions(final IContainer container) {
@@ -309,7 +314,7 @@ public final class TypeLibrary {
 				if (resource instanceof final IFolder folder) {
 					checkAdditions(folder);
 				}
-				if ((resource instanceof final IFile file) && (!containsType(file))) {
+				if (resource instanceof final IFile file && !containsType(file)) {
 					// only add new entry if it does not exist
 					createTypeEntry(file);
 				}
@@ -343,45 +348,52 @@ public final class TypeLibrary {
 		return getAdapterTypeEntry(name);
 	}
 
-	private void addBlockTypeEntry(final TypeEntry entry) {
+	private boolean addBlockTypeEntry(final TypeEntry entry) {
 		if (entry instanceof final AdapterTypeEntry adpEntry) {
-			getAdapterTypes().put(entry.getTypeName(), adpEntry);
-		} else if (entry instanceof final DeviceTypeEntry devEntry) {
-			getDeviceTypes().put(entry.getTypeName(), devEntry);
-		} else if (entry instanceof final FBTypeEntry fbtEntry) {
-			getFbTypes().put(entry.getTypeName(), fbtEntry);
-		} else if (entry instanceof final ResourceTypeEntry resEntry) {
-			getResourceTypes().put(entry.getTypeName(), resEntry);
-		} else if (entry instanceof final SegmentTypeEntry segEntry) {
-			getSegmentTypes().put(entry.getTypeName(), segEntry);
-		} else if (entry instanceof final SubAppTypeEntry subAppEntry) {
-			getSubAppTypes().put(entry.getTypeName(), subAppEntry);
-		} else if (entry instanceof final SystemEntry sysEntry) {
-			getSystems().put(entry.getTypeName(), sysEntry);
-		} else if (entry instanceof final GlobalConstantsEntry globalConstEntry) {
-			getGlobalConstants().put(entry.getTypeName(), globalConstEntry);
-		} else {
-			FordiacLogHelper.logError("Unknown type entry to be added to library: " + entry.getClass().getName()); //$NON-NLS-1$
+			return getAdapterTypes().putIfAbsent(entry.getFullTypeName(), adpEntry) == null;
 		}
+		if (entry instanceof final DeviceTypeEntry devEntry) {
+			return getDeviceTypes().putIfAbsent(entry.getFullTypeName(), devEntry) == null;
+		}
+		if (entry instanceof final FBTypeEntry fbtEntry) {
+			return getFbTypes().putIfAbsent(entry.getFullTypeName(), fbtEntry) == null;
+		}
+		if (entry instanceof final ResourceTypeEntry resEntry) {
+			return getResourceTypes().putIfAbsent(entry.getFullTypeName(), resEntry) == null;
+		}
+		if (entry instanceof final SegmentTypeEntry segEntry) {
+			return getSegmentTypes().putIfAbsent(entry.getFullTypeName(), segEntry) == null;
+		}
+		if (entry instanceof final SubAppTypeEntry subAppEntry) {
+			return getSubAppTypes().putIfAbsent(entry.getFullTypeName(), subAppEntry) == null;
+		}
+		if (entry instanceof final SystemEntry sysEntry) {
+			return getSystems().putIfAbsent(entry.getFullTypeName(), sysEntry) == null;
+		}
+		if (entry instanceof final GlobalConstantsEntry globalConstEntry) {
+			return getGlobalConstants().putIfAbsent(entry.getFullTypeName(), globalConstEntry) == null;
+		}
+		FordiacLogHelper.logError("Unknown type entry to be added to library: " + entry.getClass().getName()); //$NON-NLS-1$
+		return true;
 	}
 
 	private void removeBlockTypeEntry(final TypeEntry entry) {
 		if (entry instanceof AdapterTypeEntry) {
-			getAdapterTypes().remove(entry.getTypeName());
+			getAdapterTypes().remove(entry.getFullTypeName(), entry);
 		} else if (entry instanceof DeviceTypeEntry) {
-			getDeviceTypes().remove(entry.getTypeName());
+			getDeviceTypes().remove(entry.getFullTypeName(), entry);
 		} else if (entry instanceof FBTypeEntry) {
-			getFbTypes().remove(entry.getTypeName());
+			getFbTypes().remove(entry.getFullTypeName(), entry);
 		} else if (entry instanceof ResourceTypeEntry) {
-			getResourceTypes().remove(entry.getTypeName());
+			getResourceTypes().remove(entry.getFullTypeName(), entry);
 		} else if (entry instanceof SegmentTypeEntry) {
-			getSegmentTypes().remove(entry.getTypeName());
+			getSegmentTypes().remove(entry.getFullTypeName(), entry);
 		} else if (entry instanceof SubAppTypeEntry) {
-			getSubAppTypes().remove(entry.getTypeName());
+			getSubAppTypes().remove(entry.getFullTypeName(), entry);
 		} else if (entry instanceof SystemEntry) {
-			getSystems().remove(entry.getTypeName());
+			getSystems().remove(entry.getFullTypeName(), entry);
 		} else if (entry instanceof GlobalConstantsEntry) {
-			getGlobalConstants().remove(entry.getTypeName());
+			getGlobalConstants().remove(entry.getFullTypeName(), entry);
 		} else {
 			FordiacLogHelper.logError("Unknown type entry to be removed from library: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
@@ -389,6 +401,7 @@ public final class TypeLibrary {
 
 	void setProject(final IProject newProject) {
 		project = newProject;
+		reload();
 	}
 
 }

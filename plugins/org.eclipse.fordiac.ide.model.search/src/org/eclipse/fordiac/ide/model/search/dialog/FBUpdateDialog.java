@@ -116,6 +116,7 @@ public class FBUpdateDialog extends MessageDialog {
 			configureTableViewer(treeViewer);
 			treeViewer.setInput(result.toArray());
 			GridLayoutFactory.fillDefaults().generateLayout(searchResArea);
+			changeSelectionState(treeViewer.getTree(), true); // check all elements per default
 		}
 		return parent;
 	}
@@ -171,7 +172,7 @@ public class FBUpdateDialog extends MessageDialog {
 			@Override
 			public String getText(final Object element) {
 				if (element instanceof final SubApp subapp) {
-					return subapp.isTyped() ? "Typed SubApp" : "Untyped SubApp";  //$NON-NLS-1$//$NON-NLS-2$
+					return subapp.isTyped() ? "Typed SubApp" : "Untyped SubApp"; //$NON-NLS-1$//$NON-NLS-2$
 				}
 				if (element instanceof final IInterfaceElement interfaceElem) {
 					return interfaceElem.getTypeName();

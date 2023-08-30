@@ -92,9 +92,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
-import static extension org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util.GlobalConstantsUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
-import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.findActualNodeFor
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
@@ -544,15 +542,11 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				variableLanguageSupport.computeIfAbsent(feature)[new VarDeclarationSupport(it)].getDependencies(
 					#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})
 			STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock:
-				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
-					name = feature.sourceName
-				]]
+				#[feature]
 			STVarDeclaration:
 				#[feature.featureType]
 			STFunction:
-				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
-					name = feature.sourceName
-				]] + feature.parameterDependencies
+				#[feature] + feature.parameterDependencies
 			FunctionFBType:
 				#[feature] + feature.parameterDependencies
 			ICallable:

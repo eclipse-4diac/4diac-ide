@@ -167,14 +167,6 @@ United States, other countries, or both.\n
    </license>
 
    <requires>
-      <import feature="org.eclipse.platform" version="4.20" match="greaterOrEqual"/>
-      <import feature="org.eclipse.gef" version="3.11" match="greaterOrEqual"/>
-      <import feature="org.eclipse.emf.common" version="2.24" match="greaterOrEqual"/>
-      <import feature="org.eclipse.emf.ecore" version="2.24" match="greaterOrEqual"/>
-      <import feature="org.eclipse.emf.edit.ui" version="2.22" match="greaterOrEqual"/>
-      <import feature="org.eclipse.xtext.redist" version="2.24" match="greaterOrEqual"/>
-      <import feature="org.eclipse.xtext.runtime" version="2.24" match="greaterOrEqual"/>
-      <import feature="org.eclipse.xtext.ui" version="2.24" match="greaterOrEqual"/>
       <import feature="org.eclipse.fordiac.ide.workbench.feature" version="2.0" match="greaterOrEqual"/>
    </requires>
 

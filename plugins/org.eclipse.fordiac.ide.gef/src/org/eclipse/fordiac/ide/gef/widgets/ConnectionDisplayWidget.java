@@ -22,6 +22,7 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.gef.properties.ChangeDestinationSourceDialog;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeConnectionCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
@@ -31,7 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteChangeDestinationSourceWidget;
 import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -59,11 +60,7 @@ public class ConnectionDisplayWidget {
 
 	protected Section connectionSection;
 	protected TableViewer connectionsViewer;
-	protected AddDeleteWidget deleteButton;
-
-	private static final String TARGET = "target"; //$NON-NLS-1$
-	private static final String PIN = "pin"; //$NON-NLS-1$
-	protected static final String COMMENT = "comment"; //$NON-NLS-1$
+	protected AddDeleteChangeDestinationSourceWidget inputButtons;
 
 	private static final int TARGET_PIN_WIDTH = 100;
 	private static final int COMMENT_WIDTH = 200;
@@ -74,7 +71,6 @@ public class ConnectionDisplayWidget {
 	private final AbstractSection parentSection;
 
 	protected boolean isInputViewer; // true - yes; false - out-conn viewer
-
 
 	public ConnectionDisplayWidget(final TabbedPropertySheetWidgetFactory widgetFactory, final Composite parent,
 			final AbstractSection section) {
@@ -89,20 +85,22 @@ public class ConnectionDisplayWidget {
 		connectionSection.setText(Messages.InterfaceElementSection_ConnectionGroup);
 		connectionSection.setLayout(new GridLayout(1, false));
 		connectionSection
-		.setLayoutData(GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).create());
+				.setLayoutData(GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).create());
 
 		final Composite composite = widgetFactory.createComposite(connectionSection);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		deleteButton = new AddDeleteWidget();
-		deleteButton.createControls(composite, widgetFactory);
-		deleteButton.setVisibleCreateButton(false);
+		inputButtons = new AddDeleteChangeDestinationSourceWidget();
+		inputButtons.createControls(composite, widgetFactory);
+		inputButtons.setVisibleCreateButton(false);
 
 		connectionsViewer = createConnectionsViewer(composite);
 
-		deleteButton.bindToTableViewer(connectionsViewer, parentSection, ref -> null,
-				ref -> new DeleteConnectionCommand((Connection) ref));
+		inputButtons.bindToTableViewer(connectionsViewer, parentSection, ref -> null,
+				ref -> new DeleteConnectionCommand((Connection) ref),
+				ref -> new ChangeDestinationSourceDialog(connectionsViewer.getControl().getShell(), (Connection) ref,
+						getInterfaceElement((Connection) ref)));
 
 		connectionSection.setClient(composite);
 	}
@@ -110,7 +108,8 @@ public class ConnectionDisplayWidget {
 	protected TableViewer createConnectionsViewer(final Composite parent) {
 		final TableViewer viewer = TableWidgetFactory.createTableViewer(parent);
 		viewer.getTable().setLayout(createTableLayout(viewer.getTable()));
-		viewer.setColumnProperties(new String[] { TARGET, PIN, COMMENT });
+		viewer.setColumnProperties(
+				new String[] { FordiacMessages.Target, FordiacMessages.Pin, FordiacMessages.Comment });
 		viewer.setCellModifier(new ConnectionCellModifier(viewer));
 		viewer.setCellEditors(new CellEditor[] { null, null, new CustomTextCellEditor(viewer.getTable()) });
 		viewer.setLabelProvider(new ConnectionTableLabelProvider());
@@ -152,9 +151,8 @@ public class ConnectionDisplayWidget {
 	}
 
 	public void setEditable(final boolean edit) {
-		deleteButton.setVisibleDeleteButton(edit);
+		inputButtons.setVisible(edit);
 	}
-
 
 	private class ConnectionCellModifier implements ICellModifier {
 		private final TableViewer viewer;
@@ -165,12 +163,12 @@ public class ConnectionDisplayWidget {
 
 		@Override
 		public boolean canModify(final Object element, final String property) {
-			return COMMENT.equals(property);
+			return FordiacMessages.Comment.equals(property);
 		}
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			if (COMMENT.equals(property)) {
+			if (FordiacMessages.Comment.equals(property)) {
 				final Connection con = (Connection) element;
 				return con.getComment() != null ? con.getComment() : ""; //$NON-NLS-1$
 			}
@@ -182,7 +180,7 @@ public class ConnectionDisplayWidget {
 			final TableItem tableItem = (TableItem) element;
 			final Object data = tableItem.getData();
 
-			if (COMMENT.equals(property)) {
+			if (FordiacMessages.Comment.equals(property)) {
 				final Connection con = (Connection) data;
 				parentSection.executeCommand(new ChangeConnectionCommentCommand(con, value.toString()));
 				viewer.refresh(data);
@@ -211,8 +209,7 @@ public class ConnectionDisplayWidget {
 
 		@Override
 		public Image getColumnImage(final Object element, final int columnIndex) {
-			if (element instanceof Connection) {
-				final Connection con = ((Connection) element);
+			if (element instanceof final Connection con) {
 				final IInterfaceElement ie = getInterfaceElement(con);
 				if (null != ie) {
 					switch (columnIndex) {
@@ -233,8 +230,7 @@ public class ConnectionDisplayWidget {
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof Connection) {
-				final Connection con = ((Connection) element);
+			if (element instanceof final Connection con) {
 				final IInterfaceElement ie = getInterfaceElement(con);
 				if (null != ie) {
 					switch (columnIndex) {
@@ -260,18 +256,19 @@ public class ConnectionDisplayWidget {
 			}
 			return element.toString();
 		}
-
-		private IInterfaceElement getInterfaceElement(final Connection con) {
-			return (type.equals(con.getSource())) ? con.getDestination() : con.getSource();
-		}
 	}
 
+	private IInterfaceElement getInterfaceElement(final Connection con) {
+		if (con != null) {
+			return (type.equals(con.getSource())) ? con.getDestination() : con.getSource();
+		}
+		return null;
+	}
 
 	private static class ConnectionContentProvider implements IStructuredContentProvider {
 		@Override
 		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof IInterfaceElement) {
-				final IInterfaceElement element = ((IInterfaceElement) inputElement);
+			if (inputElement instanceof final IInterfaceElement element) {
 				if ((element.isIsInput() && (null != element.getFBNetworkElement()))
 						|| (!element.isIsInput() && (null == element.getFBNetworkElement()))) {
 					return element.getInputConnections().toArray();
@@ -281,6 +278,4 @@ public class ConnectionDisplayWidget {
 			return new Object[] {};
 		}
 	}
-
-
 }

@@ -18,15 +18,13 @@ import java.io.InputStream
 import java.util.Map
 import org.eclipse.core.resources.ResourcesPlugin
 import org.eclipse.core.runtime.Path
-import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
-import org.eclipse.fordiac.ide.structuredtextcore.FBTypeXtextResource
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner
 import org.eclipse.xtext.resource.FileExtensionProvider
 import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.eclipse.xtext.util.LazyStringInputStream
 
-class STCoreResource extends FBTypeXtextResource {
+class STCoreResource extends LibraryElementXtextResource {
 	public static final String OPTION_PLAIN_ST = STCoreResource.name + ".PLAIN_ST";
 
 	@Inject
@@ -37,7 +35,7 @@ class STCoreResource extends FBTypeXtextResource {
 
 	override doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		val actualOptions = options ?: defaultLoadOptions
-		clearInternalFBType
+		clearInternalLibraryElement
 		if (actualOptions.loadPlainST || isLoadLiveScope(actualOptions, inputStream)) {
 			super.doLoad(inputStream, actualOptions)
 		} else {
@@ -45,18 +43,15 @@ class STCoreResource extends FBTypeXtextResource {
 				val typeFile = ResourcesPlugin.workspace.root.getFile(new Path(uri.toPlatformString(true)))
 				val typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile)
 				if (typeEntry !== null) {
-					val libraryElement = typeEntry.type
-					if (libraryElement instanceof FBType) {
-						fbType = libraryElement
-					}
+					libraryElement = typeEntry.type
 				}
 			} catch (Throwable t) {
 				throw new IOException("Couldn't load FB type", t)
 			}
-			val text = fbType.combine
+			val text = libraryElement.combine
 			super.doLoad(new LazyStringInputStream(text, encoding), actualOptions)
 		}
-		updateInternalFBType
+		updateInternalLibraryElement
 	}
 
 	def protected boolean isLoadPlainST(Map<?, ?> options) {

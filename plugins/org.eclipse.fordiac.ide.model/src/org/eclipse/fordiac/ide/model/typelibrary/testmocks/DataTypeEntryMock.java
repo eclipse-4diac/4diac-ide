@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.typelibrary.testmocks;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -26,7 +27,6 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 	private IFile file;
 
 	public DataTypeEntryMock(final AnyDerivedType dataType, final TypeLibrary typelib, final IFile file) {
-		super();
 		this.dataType = dataType;
 		this.typelib = typelib;
 		this.file = file;
@@ -93,8 +93,17 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 	}
 
 	@Override
+	public String getFullTypeName() {
+		return PackageNameHelper.getFullTypeName(getType());
+	}
+
+	@Override
 	public void save() {
 		// currently not needed in mock
 	}
 
+	@Override
+	public void refresh() {
+		// currently not needed in mock
+	}
 }

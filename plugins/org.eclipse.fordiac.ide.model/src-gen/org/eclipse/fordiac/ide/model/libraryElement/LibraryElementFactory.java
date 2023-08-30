@@ -198,15 +198,6 @@ public interface LibraryElementFactory extends EFactory {
 	CommunicationMappingTarget createCommunicationMappingTarget();
 
 	/**
-	 * Returns a new object of class '<em>Compilable Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Compilable Type</em>'.
-	 * @generated
-	 */
-	CompilableType createCompilableType();
-
-	/**
 	 * Returns a new object of class '<em>Compiler</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -457,6 +448,15 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	Identification createIdentification();
+
+	/**
+	 * Returns a new object of class '<em>Import</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Import</em>'.
+	 * @generated
+	 */
+	Import createImport();
 
 	/**
 	 * Returns a new object of class '<em>Input Primitive</em>'.

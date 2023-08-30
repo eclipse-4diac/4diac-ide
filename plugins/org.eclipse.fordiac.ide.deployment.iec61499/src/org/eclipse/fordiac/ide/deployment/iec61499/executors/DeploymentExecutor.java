@@ -39,9 +39,11 @@ import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.deployment.iec61499.handlers.EthernetDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -111,14 +113,28 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	private static String getValidType(final FBNetworkElement fb) {
 		if (fb != null && fb.getTypeEntry() != null) {
-			if (fb instanceof StructManipulator) {
+			if (fb instanceof final StructManipulator structMan) {
 				// the _1 is needed for 4diac FORTE to separate type name from configuration
 				// part
-				return fb.getTypeName() + "_1" + ((StructManipulator) fb).getStructType().getName(); //$NON-NLS-1$
+				return fb.getTypeName() + "_1" + getFullForteEncodedTypeName(structMan.getStructType()); //$NON-NLS-1$
+			}
+			if (fb.getType() != null) {
+				return getFullForteEncodedTypeName(fb.getType());
 			}
 			return fb.getTypeName();
 		}
 		return null;
+	}
+
+	private static String getFullForteEncodedTypeName(final LibraryElement libEl) {
+		final CompilerInfo compilerInfo = libEl.getCompilerInfo();
+		if (compilerInfo != null) {
+			final String packageName = compilerInfo.getPackageName();
+			if (packageName != null && !packageName.isEmpty()) {
+				return packageName.replace(':', '_') + "__" + libEl.getName(); //$NON-NLS-1$
+			}
+		}
+		return libEl.getName();
 	}
 
 	@Override
@@ -174,8 +190,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fbData,
 			final VarDeclaration varDecl) throws DeploymentException {
 		final String encodedValue = encodeXMLChars(value);
-		final String request = generateWriteParamRequest(fbData.getPrefix() + fbData.getFb().getName(), varDecl.getName(),
-				encodedValue);
+		final String request = generateWriteParamRequest(fbData.getPrefix() + fbData.getFb().getName(),
+				varDecl.getName(), encodedValue);
 		try {
 			sendREQ(resource.getName(), request);
 		} catch (final IOException e) {
@@ -190,23 +206,22 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 			throws DeploymentException {
 		final IInterfaceElement source = connData.getSource();
 		final IInterfaceElement destination = connData.getDestination();
-		if (null != source && null != destination && null != source.getFBNetworkElement()
-				&& null != destination.getFBNetworkElement()) {
-			final FBNetworkElement sourceFB = source.getFBNetworkElement();
-			final FBNetworkElement destFB = destination.getFBNetworkElement();
-			final String request = MessageFormat.format(CREATE_CONNECTION, getNextId(),
-					connData.getSourcePrefix() + sourceFB.getName() + "." + source.getName(), //$NON-NLS-1$
-					connData.getDestinationPrefix() + destFB.getName() + "." + destination.getName()); //$NON-NLS-1$
-
-			try {
-				sendREQ(resource.getName(), request);
-			} catch (final IOException e) {
-				// TODO model refactoring - add here more information on what connection had the
-				// issue
-				throw new DeploymentException(Messages.DeploymentExecutor_CreateConnectionFailed, e);
-			}
-		} else {
+		if ((null == source) || (null == destination) || (null == source.getFBNetworkElement())
+				|| (null == destination.getFBNetworkElement())) {
 			throw new DeploymentException(Messages.DeploymentExecutor_CreateConnectionFailed);
+		}
+		final FBNetworkElement sourceFB = source.getFBNetworkElement();
+		final FBNetworkElement destFB = destination.getFBNetworkElement();
+		final String request = MessageFormat.format(CREATE_CONNECTION, getNextId(),
+				connData.getSourcePrefix() + sourceFB.getName() + "." + source.getName(), //$NON-NLS-1$
+				connData.getDestinationPrefix() + destFB.getName() + "." + destination.getName()); //$NON-NLS-1$
+
+		try {
+			sendREQ(resource.getName(), request);
+		} catch (final IOException e) {
+			// TODO model refactoring - add here more information on what connection had the
+			// issue
+			throw new DeploymentException(Messages.DeploymentExecutor_CreateConnectionFailed, e);
 		}
 	}
 
@@ -235,7 +250,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	}
 
 	@Override
-	public void writeDeviceParameter(final Device device, final String parameter, final String value) throws DeploymentException {
+	public void writeDeviceParameter(final Device device, final String parameter, final String value)
+			throws DeploymentException {
 		final String encodedValue = encodeXMLChars(value);
 		final String request = MessageFormat.format(getWriteParameterMessage(), Integer.valueOf(id), encodedValue,
 				parameter);
@@ -265,7 +281,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	}
 
 	@Override
-	public void deleteConnection(final Resource res, final ConnectionDeploymentData conData) throws DeploymentException {
+	public void deleteConnection(final Resource res, final ConnectionDeploymentData conData)
+			throws DeploymentException {
 		// do nothing
 	}
 
@@ -277,7 +294,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public void startFB(final Resource res, final FBDeploymentData fbData) throws DeploymentException {
 		final String fullFbInstanceName = fbData.getPrefix() + fbData.getFb().getName();
-		final String request = MessageFormat.format(START_FB, getNextId(), fullFbInstanceName, fbData.getFb().getTypeName());
+		final String request = MessageFormat.format(START_FB, getNextId(), fullFbInstanceName,
+				fbData.getFb().getFullTypeName());
 		try {
 			sendREQ(res.getName(), request);
 		} catch (final IOException e) {
@@ -346,8 +364,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 			final XMLResource xmlResource = new XMLResourceImpl();
 			xmlResource.load(source, respMapping.getLoadOptions());
 			for (final EObject object : xmlResource.getContents()) {
-				if (object instanceof Response) {
-					return (Response) object;
+				if (object instanceof final Response response) {
+					return response;
 				}
 			}
 		}
@@ -424,7 +442,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void clearForce(final MonitoringBaseElement element) throws DeploymentException {
-		final String request = MessageFormat.format(FORCE_VALUE, getNextId(), "*", element.getQualifiedString(), "false"); //$NON-NLS-1$ //$NON-NLS-2$
+		final String request = MessageFormat.format(FORCE_VALUE, getNextId(), "*", element.getQualifiedString(), //$NON-NLS-1$
+				"false"); //$NON-NLS-1$
 		try {
 			sendREQ(element.getResourceString(), request);
 		} catch (final IOException e) {

@@ -54,7 +54,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -251,7 +250,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 				interfaceElement = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(
 						newElement.getInterface(), oldInterface, errorMessage, errorMarkerBuilders);
 				errorMarkerBuilders.stream().map(FordiacMarkerCommandHelper::newCreateMarkersCommand)
-				.forEachOrdered(createMarkersCmds::add);
+						.forEachOrdered(createMarkersCmds::add);
 			}
 
 			return interfaceElement;
@@ -280,12 +279,12 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	protected void transferInstanceComments() {
 		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getComment().isBlank())
-		.forEach(ie -> {
-			final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
-			if (newIE != null) {
-				newIE.setComment(ie.getComment());
-			}
-		});
+				.forEach(ie -> {
+					final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
+					if (newIE != null) {
+						newIE.setComment(ie.getComment());
+					}
+				});
 	}
 
 	private void checkSourceParam(final VarDeclaration variable) {
@@ -319,12 +318,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	private void handleErrorMarker() {
 		if (onlyNewElementIsErrorMarker()) {
-			final String errorMessage = MessageFormat.format("Type File: {0} could not be loaded for FB", //$NON-NLS-1$
-					entry.getFile() != null ? entry.getFile().getFullPath() : "null type"); //$NON-NLS-1$
+			final String errorMessage = MessageFormat.format("Type: ({0}) could not be loaded for FB: {1}", //$NON-NLS-1$
+					entry.getFullTypeName(), newElement.getName());
 			((ErrorMarkerRef) newElement).setErrorMessage(errorMessage);
 			createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(
 					ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(newElement)));
-			moveEntryToErrorLib();
 		}
 
 		if ((oldElement instanceof ErrorMarkerFBNElement) && (newElement instanceof ErrorMarkerFBNElement)) {
@@ -338,7 +336,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 		for (final IInterfaceElement element : oldElement.getInterface().getAllInterfaceElements()) {
 			deleteMarkersCmds
-			.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(element)));
+					.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(element)));
 		}
 
 		for (final VarDeclaration input : oldElement.getInterface().getInputVars()) {
@@ -362,9 +360,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 				final String errorMessage = VariableOperations.validateValue(input);
 				input.getValue().setErrorMessage(errorMessage);
 				if (!errorMessage.isBlank()) {
-					createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(
-							ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
-							.setType(FordiacErrorMarker.INITIAL_VALUE_MARKER).setTarget(input.getValue())));
+					createMarkersCmds.add(FordiacMarkerCommandHelper
+							.newCreateMarkersCommand(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
+									.setType(FordiacErrorMarker.INITIAL_VALUE_MARKER).setTarget(input.getValue())));
 				}
 			}
 		}
@@ -430,13 +428,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 	}
 
-	private void moveEntryToErrorLib() {
-		final TypeLibrary typeLibrary = oldElement.getTypeLibrary();
-		typeLibrary.removeTypeEntry(entry);
-		typeLibrary.addErrorTypeEntry(entry);
-
-	}
-
 	private ErrorMarkerInterface createMissingMarker(final IInterfaceElement oldInterface,
 			final FBNetworkElement element) {
 		final List<ErrorMarkerBuilder> errorMarkerBuilders = new ArrayList<>();
@@ -445,7 +436,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 						MessageFormat.format(Messages.UpdateFBTypeCommand_Pin_not_found, oldInterface.getName()),
 						errorMarkerBuilders);
 		errorMarkerBuilders.stream().map(FordiacMarkerCommandHelper::newCreateMarkersCommand)
-		.forEachOrdered(createMarkersCmds::add);
+				.forEachOrdered(createMarkersCmds::add);
 		return errorMarkerInterface;
 	}
 
@@ -488,7 +479,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 						source, errorMessage, errorMarkerBuilders);
 			}
 			errorMarkerBuilders.stream().map(FordiacMarkerCommandHelper::newCreateMarkersCommand)
-			.forEachOrdered(createMarkersCmds::add);
+					.forEachOrdered(createMarkersCmds::add);
 		}
 
 		// set repaired endpoints

@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: 4diac IDE UI tests
+Bundle-SymbolicName: org.eclipse.fordiac.ide.test.ui
+Bundle-Version: 2.0.1.qualifier
+Bundle-Vendor: Eclipse 4diac
+Automatic-Module-Name: org.eclipse.fordiac.ide.test.ui
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Import-Package: org.eclipse.core.runtime,
+ org.eclipse.draw2d.geometry,
+ org.junit;version="4.13.2",
+ org.junit.jupiter.api,
+ org.junit.jupiter.api.extension,
+ org.junit.jupiter.api.function,
+ org.junit.jupiter.params,
+ org.junit.jupiter.params.provider,
+ org.opentest4j,
+ org.slf4j
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.swtbot.swt.finder,
+ org.eclipse.swtbot.eclipse.finder,
+ org.eclipse.swtbot.eclipse.gef.finder,
+ org.eclipse.gef

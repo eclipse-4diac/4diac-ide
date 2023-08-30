@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University
+ * Copyright (c) 2020, 2023 Johannes Kepler University
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,9 @@
  * Contributors:
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *     - add current source directory as include directory
+ *     - search source files recursive
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.cmake
 
@@ -30,6 +34,8 @@ class CMakeListsTemplate extends ForteNgExportTemplate {
 	
 	forte_add_directory_module()
 	
+	forte_add_include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+	
 	# If you want to set your own name independent of storage location you can use
 	# forte_add_module("YOUR_MODULE_NAME_HERE" <ON/OFF> "short description of your module")
 	# ON/OFF to specify if the module shall be added by default or not
@@ -37,7 +43,7 @@ class CMakeListsTemplate extends ForteNgExportTemplate {
 	
 	# To specify the source-files to be included in this module you can use
 	
-	forte_add_all_sourcefiles()
+	forte_add_all_sourcefiles_recursive()
 	
 	# This will add all files named *.h *.cpp *.c in the current directory
 	# The order the files are added in is dependent on your file system.

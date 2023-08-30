@@ -62,8 +62,8 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 			«type.generateInternalFbDeclarations»
 			
 		«ENDIF»
-		«FBClassName»::«FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-		    «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF»)«// no newline
+		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, CResource *const paSrcRes) :
+		    «baseClass»(paSrcRes, &scmFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»&scmInternalVars«ELSE»nullptr«ENDIF»)«// no newline
 			»«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«generateConnectionInitializer» {
 		}
 		
@@ -73,13 +73,10 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 			
 		«ENDIF»	
 		«generateExecuteEvent»
-		
-		«generateAlgorithms»
-		
-		«generateMethods»
-		
 		«generateInterfaceDefinitions»
 		«type.internalVars.generateAccessorDefinition("getVarInternal", false)»
+		«generateAlgorithms»
+		«generateMethods»
 	'''
 
 	def generateChangeFBExecutionState() //
@@ -91,9 +88,9 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 
 	def protected generateSendEvent(Event event) {
 		if (event.FBNetworkElement instanceof AdapterFB) {
-			return '''sendAdapterEvent(scm_n«event.FBNetworkElement.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«event.name»ID);'''
+			return '''sendAdapterEvent(scm«event.FBNetworkElement.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scmEvent«event.name»ID, paECET);'''
 		}
-		'''sendOutputEvent(scm_nEvent«event.name»ID);'''
+		'''sendOutputEvent(scmEvent«event.name»ID, paECET);'''
 	}
 
 	def private getAdapterDeclaration(Event event) {
@@ -110,6 +107,7 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		void «FBClassName»::«alg.generateAlgorithmName»(void) {
 		  «algorithmLanguageSupport.get(alg)?.generate(emptyMap)»
 		}
+		
 	'''
 
 	def protected generateMethods() '''

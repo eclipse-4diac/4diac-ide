@@ -787,6 +787,7 @@ public interface StandardFunctions extends Functions {
 		millisecond.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
+	@SuppressWarnings("squid:S107")
 	@Comment("Splits time informations about year, month, day, hour, minute and second of DATE_AND_TIME value.")
 	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue, X extends AnyIntValue, Y extends AnyIntValue, Z extends AnyIntValue> void SPLIT_DT(
 			@Comment("The input date time.") final DateAndTimeValue in,
@@ -805,6 +806,7 @@ public interface StandardFunctions extends Functions {
 		millisecond.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
+	@SuppressWarnings("squid:S107")
 	@Comment("Splits time informations about year, month, day, hour, minute and second of LDATE_AND_TIME value.")
 	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue, X extends AnyIntValue, Y extends AnyIntValue, Z extends AnyIntValue> void SPLIT_LDT(
 			@Comment("The input date time.") final LDateAndTimeValue in,
@@ -2256,6 +2258,21 @@ public interface StandardFunctions extends Functions {
 		return DateValue.toDateValue(value);
 	}
 
+	@Comment("Converts LDATE_AND_TIME value to LDATE value.")
+	static LDateValue LDT_TO_LDATE(final LDateAndTimeValue value) {
+		return LDateValue.toLDateValue(value);
+	}
+
+	@Comment("Converts the a DATE value to an LDATE")
+	static LDateValue DATE_TO_LDATE(final DateValue value) {
+		return LDateValue.toLDateValue(value);
+	}
+
+	@Comment("Converts the an LDATE value to a DATE")
+	static DateValue LDATE_TO_DATE(final LDateValue value) {
+		return DateValue.toDateValue(value);
+	}
+
 	@Comment("Converts LDATE_AND_TIME value to LTIME_OF_DAY value.")
 	static LTimeOfDayValue LDT_TO_LTOD(final LDateAndTimeValue value) {
 		return LTimeOfDayValue.toLTimeOfDayValue(value);
@@ -2274,6 +2291,11 @@ public interface StandardFunctions extends Functions {
 	@Comment("Converts DATE_AND_TIME value to DATE value.")
 	static DateValue DT_TO_DATE(final DateAndTimeValue value) {
 		return DateValue.toDateValue(value);
+	}
+
+	@Comment("Converts DATE_AND_TIME value to LDATE value.")
+	static LDateValue DT_TO_LDATE(final DateAndTimeValue value) {
+		return LDateValue.toLDateValue(value);
 	}
 
 	@Comment("Converts DATE_AND_TIME value to LTIME_OF_DAY value.")
@@ -2751,12 +2773,333 @@ public interface StandardFunctions extends Functions {
 		return LWordValue.toLWordValue(value.stringValue());
 	}
 
+	/* overloaded TO_TYPE functions */
+
+	@Comment("Converts the supplied value to an LREAL")
+	static <T extends AnyNumValue> LRealValue TO_LREAL(final T value) {
+		return LRealValue.toLRealValue(value);
+	}
+
+	@Comment("Converts the supplied value to an LREAL")
+	static LRealValue TO_LREAL(final LWordValue value) {
+		return LWORD_TO_LREAL(value);
+	}
+
+	@Comment("Converts the supplied value to a REAL")
+	static <T extends AnyNumValue> RealValue TO_REAL(final T value) {
+		return RealValue.toRealValue(value);
+	}
+
+	@Comment("Converts the supplied value to a REAL")
+	static RealValue TO_REAL(final DWordValue value) {
+		return DWORD_TO_REAL(value);
+	}
+
+	@Comment("Converts the supplied value to an LINT")
+	static <T extends AnyIntValue> LIntValue TO_LINT(final T value) {
+		return LIntValue.toLIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an LINT")
+	static <T extends AnyBitValue> LIntValue TO_LINT(final T value) {
+		return LIntValue.toLIntValue(value.longValue());
+	}
+
+	@Comment("Converts the supplied value to an DINT")
+	static <T extends AnyIntValue> DIntValue TO_DINT(final T value) {
+		return DIntValue.toDIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an DINT")
+	static <T extends AnyBitValue> DIntValue TO_DINT(final T value) {
+		return DIntValue.toDIntValue(value.intValue());
+	}
+
+	@Comment("Converts the supplied value to an INT")
+	static <T extends AnyIntValue> IntValue TO_INT(final T value) {
+		return IntValue.toIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an INT")
+	static <T extends AnyBitValue> IntValue TO_INT(final T value) {
+		return IntValue.toIntValue(value.shortValue());
+	}
+
+	@Comment("Converts the supplied value to an SINT")
+	static <T extends AnyIntValue> SIntValue TO_SINT(final T value) {
+		return SIntValue.toSIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an SINT")
+	static <T extends AnyBitValue> SIntValue TO_SINT(final T value) {
+		return SIntValue.toSIntValue(value.byteValue());
+	}
+
+	@Comment("Converts the supplied value to an ULINT")
+	static <T extends AnyIntValue> ULIntValue TO_ULINT(final T value) {
+		return ULIntValue.toULIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an ULINT")
+	static <T extends AnyBitValue> ULIntValue TO_ULINT(final T value) {
+		return ULIntValue.toULIntValue(value.longValue());
+	}
+
+	@Comment("Converts the supplied value to an UDINT")
+	static <T extends AnyIntValue> UDIntValue TO_UDINT(final T value) {
+		return UDIntValue.toUDIntValue(value.intValue());
+	}
+
+	@Comment("Converts the supplied value to an UDINT")
+	static <T extends AnyBitValue> UDIntValue TO_UDINT(final T value) {
+		return UDIntValue.toUDIntValue(value.intValue());
+	}
+
+	@Comment("Converts the supplied value to an UINT")
+	static <T extends AnyIntValue> UIntValue TO_UINT(final T value) {
+		return UIntValue.toUIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an UINT")
+	static <T extends AnyBitValue> UIntValue TO_UINT(final T value) {
+		return UIntValue.toUIntValue(value.shortValue());
+	}
+
+	@Comment("Converts the supplied value to an USINT")
+	static <T extends AnyIntValue> USIntValue TO_USINT(final T value) {
+		return USIntValue.toUSIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an USINT")
+	static <T extends AnyBitValue> USIntValue TO_USINT(final T value) {
+		return USIntValue.toUSIntValue(value.byteValue());
+	}
+
+	@Comment("Converts the supplied value to an USINT")
+	static USIntValue TO_USINT(final CharValue value) {
+		return CHAR_TO_USINT(value);
+	}
+
+	@Comment("Converts the CHAR value to an USINT")
+	static USIntValue CHAR_TO_USINT(final CharValue value) {
+		return USIntValue.toUSIntValue((byte) value.charValue());
+	}
+
 	@SuppressWarnings("unchecked")
 	private static <T extends AnyRealValue> T apply(final T value, final DoubleUnaryOperator operator) {
 		if (value instanceof RealValue) {
 			return (T) RealValue.toRealValue((float) operator.applyAsDouble(value.doubleValue()));
 		}
 		return (T) LRealValue.toLRealValue(operator.applyAsDouble(value.doubleValue()));
+	}
+
+	@Comment("Converts the supplied value to an LWORD")
+	static <T extends AnyIntValue> LWordValue TO_LWORD(final T value) {
+		return LWordValue.toLWordValue(value.longValue());
+	}
+
+	@Comment("Converts the supplied value to an LWORD")
+	static <T extends AnyBitValue> LWordValue TO_LWORD(final T value) {
+		return LWordValue.toLWordValue(value);
+	}
+
+	@Comment("Converts the supplied value to an LWORD")
+	static LWordValue TO_LWORD(final LRealValue value) {
+		return LREAL_TO_LWORD(value);
+	}
+
+	@Comment("Converts the supplied value to an LWORD")
+	static LWordValue TO_LWORD(final WCharValue value) {
+		return WCHAR_TO_LWORD(value);
+	}
+
+	@Comment("Converts the supplied value to an LWORD")
+	static LWordValue TO_LWORD(final CharValue value) {
+		return CHAR_TO_LWORD(value);
+	}
+
+	@Comment("Converts the supplied value to an DWORD")
+	static <T extends AnyIntValue> DWordValue TO_DWORD(final T value) {
+		return DWordValue.toDWordValue(value.intValue());
+	}
+
+	@Comment("Converts the supplied value to a DWORD")
+	static <T extends AnyBitValue> DWordValue TO_DWORD(final T value) {
+		return DWordValue.toDWordValue(value);
+	}
+
+	@Comment("Converts the supplied value to a DWORD")
+	static DWordValue TO_DWORD(final RealValue value) {
+		return REAL_TO_DWORD(value);
+	}
+
+	@Comment("Converts the supplied value to an DWORD")
+	static DWordValue TO_DWORD(final WCharValue value) {
+		return WCHAR_TO_DWORD(value);
+	}
+
+	@Comment("Converts the supplied value to an DWORD")
+	static DWordValue TO_DWORD(final CharValue value) {
+		return CHAR_TO_DWORD(value);
+	}
+
+	@Comment("Converts the supplied value to a WORD")
+	static <T extends AnyIntValue> WordValue TO_WORD(final T value) {
+		return WordValue.toWordValue(value.shortValue());
+	}
+
+	@Comment("Converts the supplied value to a WORD")
+	static <T extends AnyBitValue> WordValue TO_WORD(final T value) {
+		return WordValue.toWordValue(value);
+	}
+
+	@Comment("Converts the supplied value to an WORD")
+	static WordValue TO_WORD(final WCharValue value) {
+		return WCHAR_TO_WORD(value);
+	}
+
+	@Comment("Converts the supplied value to an WORD")
+	static WordValue TO_WORD(final CharValue value) {
+		return CHAR_TO_WORD(value);
+	}
+
+	@Comment("Converts the supplied value to an BYTE")
+	static <T extends AnyIntValue> ByteValue TO_BYTE(final T value) {
+		return ByteValue.toByteValue(value.byteValue());
+	}
+
+	@Comment("Converts the supplied value to an BYTE")
+	static <T extends AnyBitValue> ByteValue TO_BYTE(final T value) {
+		return ByteValue.toByteValue(value);
+	}
+
+	@Comment("Converts the supplied value to an BYTE")
+	static ByteValue TO_BYTE(final CharValue value) {
+		return CHAR_TO_BYTE(value);
+	}
+
+	@Comment("Converts the supplied value to an LTIME")
+	static LTimeValue TO_LTIME(final TimeValue value) {
+		return TIME_TO_LTIME(value);
+	}
+
+	@Comment("Converts the supplied value to an TIME")
+	static TimeValue TO_TIME(final LTimeValue value) {
+		return LTIME_TO_TIME(value);
+	}
+
+	@Comment("Converts the supplied value to an LDT")
+	static LDateAndTimeValue TO_LDT(final DateAndTimeValue value) {
+		return DT_TO_LDT(value);
+	}
+
+	@Comment("Converts the supplied value to an DT")
+	static DateAndTimeValue TO_DT(final LDateAndTimeValue value) {
+		return LDT_TO_DT(value);
+	}
+
+	@Comment("Converts the supplied value to an LDATE")
+	static LDateValue TO_LDATE(final LDateAndTimeValue value) {
+		return LDT_TO_LDATE(value);
+	}
+
+	@Comment("Converts the supplied value to an LDATE")
+	static LDateValue TO_LDATE(final DateAndTimeValue value) {
+		return DT_TO_LDATE(value);
+	}
+
+	@Comment("Converts the supplied value to an LDATE")
+	static LDateValue TO_LDATE(final DateValue value) {
+		return DATE_TO_LDATE(value);
+	}
+
+	@Comment("Converts the supplied value to an DATE")
+	static DateValue TO_DATE(final LDateAndTimeValue value) {
+		return LDT_TO_DATE(value);
+	}
+
+	@Comment("Converts the supplied value to an DATE")
+	static DateValue TO_DATE(final DateAndTimeValue value) {
+		return DT_TO_DATE(value);
+	}
+
+	@Comment("Converts the supplied value to an DATE")
+	static DateValue TO_DATE(final LDateValue value) {
+		return LDATE_TO_DATE(value);
+	}
+
+	@Comment("Converts the supplied value to an LTOD")
+	static LTimeOfDayValue TO_LTOD(final LDateAndTimeValue value) {
+		return LDT_TO_LTOD(value);
+	}
+
+	@Comment("Converts the supplied value to an LTOD")
+	static LTimeOfDayValue TO_LTOD(final DateAndTimeValue value) {
+		return DT_TO_LTOD(value);
+	}
+
+	@Comment("Converts the supplied value to an LTOD")
+	static LTimeOfDayValue TO_LTOD(final TimeOfDayValue value) {
+		return TOD_TO_LTOD(value);
+	}
+
+	@Comment("Converts the supplied value to an TOD")
+	static TimeOfDayValue TO_TOD(final LDateAndTimeValue value) {
+		return LDT_TO_TOD(value);
+	}
+
+	@Comment("Converts the supplied value to an TOD")
+	static TimeOfDayValue TO_TOD(final DateAndTimeValue value) {
+		return DT_TO_TOD(value);
+	}
+
+	@Comment("Converts the supplied value to an TOD")
+	static TimeOfDayValue TO_TOD(final LTimeOfDayValue value) {
+		return LTOD_TO_TOD(value);
+	}
+
+	@Comment("Converts the supplied value to a WSTRING")
+	static WStringValue TO_WSTRING(final StringValue value) {
+		return STRING_TO_WSTRING(value);
+	}
+
+	@Comment("Converts the supplied value to a WSTRING")
+	static WStringValue TO_WSTRING(final WCharValue value) {
+		return WCHAR_TO_WSTRING(value);
+	}
+
+	@Comment("Converts the supplied value to a STRING")
+	static StringValue TO_STRING(final WStringValue value) {
+		return WSTRING_TO_STRING(value);
+	}
+
+	@Comment("Converts the supplied value to a STRING")
+	static StringValue TO_STRING(final CharValue value) {
+		return CHAR_TO_STRING(value);
+	}
+
+	@Comment("Converts the supplied value to a WCHAR")
+	static WCharValue TO_WCHAR(final WordValue value) {
+		return WORD_TO_WCHAR(value);
+	}
+
+	static WCharValue WORD_TO_WCHAR(final WordValue value) {
+		return WCharValue.toWCharValue((char) value.shortValue());
+	}
+
+	@Comment("Converts the supplied value to a WCHAR")
+	static WCharValue TO_WCHAR(final CharValue value) {
+		return CHAR_TO_WCHAR(value);
+	}
+
+	@Comment("Converts the supplied value to a CHAR")
+	static CharValue TO_CHAR(final ByteValue value) {
+		return BYTE_TO_CHAR(value);
+	}
+
+	@Comment("Converts the supplied value to a CHAR")
+	static CharValue TO_WCHAR(final WCharValue value) {
+		return WCHAR_TO_CHAR(value);
 	}
 
 	@SuppressWarnings("unchecked")

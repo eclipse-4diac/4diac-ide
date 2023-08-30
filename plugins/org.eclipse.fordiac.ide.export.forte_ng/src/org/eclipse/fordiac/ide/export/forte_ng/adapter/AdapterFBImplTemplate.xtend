@@ -1,24 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
- *               2020 Johannes Kepler University
- *
+ * Copyright (c) 2019, 2023 fortiss GmbH
+ *                          Johannes Kepler University
+ *                          Martin Erich Jobst
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *     - add readInputData and writeOutputData
  *   Alois Zoitl
  *     - Fix issues in adapter code generation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.adapter
 
 import java.nio.file.Path
+import java.util.List
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
+import org.eclipse.fordiac.ide.model.libraryElement.Event
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
@@ -39,38 +43,99 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterFBType> {
 		
 		«generateFBInterfaceSpecDefinition»
 		
+		«generateReadInputDataDefinition»
+		
+		«generateWriteOutputDataDefinition»
 	'''
 
 	override protected generateFBDefinition() '''
-		DEFINE_ADAPTER_TYPE(«FBClassName», «type.name.FORTEStringId»)
-	'''
-	
-	def generateFBInterfaceSpecSocket()
-	'''
-	const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpecSocket = {
-	  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventInputNames, «IF hasInputWith»scm_anEIWith«ELSE»nullptr«ENDIF», scm_anEIWithIndexes«ENDIF»,
-	  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventOutputNames, «IF hasOutputWith»scm_anEOWith«ELSE»nullptr«ENDIF», scm_anEOWithIndexes«ENDIF»,
-	  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scm_anDataInputNames, scm_anDataInputTypeIds«ENDIF»,
-	  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scm_anDataOutputNames, scm_anDataOutputTypeIds«ENDIF»,
-	  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», nullptr
-	};
-	'''
-	
-	def generateFBInterfaceSpecPlug()
-	'''
-	const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpecPlug = {
-	  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventOutputNames, «IF hasOutputWith»scm_anEOWith«ELSE»nullptr«ENDIF», scm_anEOWithIndexes«ENDIF»,
-	  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventInputNames, «IF hasInputWith»scm_anEIWith«ELSE»nullptr«ENDIF», scm_anEIWithIndexes«ENDIF»,
-	  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scm_anDataOutputNames, scm_anDataOutputTypeIds«ENDIF»,
-	  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scm_anDataInputNames, scm_anDataInputTypeIds«ENDIF»,
-	  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», nullptr
-	};
+		DEFINE_ADAPTER_TYPE(«FBClassName», «type.generateTypeSpec»)
 	'''
 
-	override protected generateFBInterfaceSpecDefinition()
+	def generateFBInterfaceSpecSocket() '''
+		const SFBInterfaceSpec «FBClassName»::scmFBInterfaceSpecSocket = {
+		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scmEventInputNames, «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
+		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
+		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
+		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scmDataOutputNames, scmDataOutputTypeIds«ENDIF»,
+		  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», nullptr
+		};
 	'''
-	«generateFBInterfaceSpecSocket»
 
-	«generateFBInterfaceSpecPlug»
+	def generateFBInterfaceSpecPlug() '''
+		const SFBInterfaceSpec «FBClassName»::scmFBInterfaceSpecPlug = {
+		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
+		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scmEventInputNames, «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
+		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scmDataOutputNames, scmDataOutputTypeIds«ENDIF»,
+		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
+		  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», nullptr
+		};
 	'''
+
+	override protected generateFBInterfaceSpecDefinition() '''
+		«generateFBInterfaceSpecSocket»
+		
+		«generateFBInterfaceSpecPlug»
+	'''
+
+	override protected generateReadInputDataDefinition() '''
+		void «FBClassName»::readInputData(«IF (type.interfaceList.eventInputs + type.interfaceList.eventOutputs).exists[!with.empty]»const TEventID paEIID«ELSE»TEventID«ENDIF») {
+		  if(isSocket()) {
+		    «type.interfaceList.eventInputs.generateReadInputDataBody»
+		  } else {
+		    «type.interfaceList.eventOutputs.generateReadInputDataBody»
+		  }
+		}
+	'''
+
+	override protected generateReadInputDataBody(List<Event> events) '''
+		«IF events.exists[!with.empty]»
+			switch(paEIID) {
+			  «FOR event : events.filter[!with.empty]»
+			  	case «event.generateEventID»: {
+			  	  RES_DATA_CON_CRITICAL_REGION();
+			  	  «FOR variable : event.with.map[withVariable]»
+			  	  	«val index = variable.interfaceElementIndex»readData(«index», *mDIs[«index»], mDIConns[«index»]);
+			  	  «ENDFOR»
+			  	  break;
+			  	}
+			  «ENDFOR»
+			  default:
+			    break;
+			}
+		«ELSE»
+			// nothing to do
+		«ENDIF»
+	'''
+
+	override protected generateWriteOutputDataDefinition() '''
+		void «FBClassName»::writeOutputData(«IF (type.interfaceList.eventInputs + type.interfaceList.eventOutputs).exists[!with.empty]»const TEventID paEIID«ELSE»TEventID«ENDIF») {
+		  if(isSocket()) {
+		    «type.interfaceList.eventOutputs.generateWriteOutputDataBody»
+		  } else {
+		    «type.interfaceList.eventInputs.generateWriteOutputDataBody»
+		  }
+		}
+	'''
+
+	override protected generateWriteOutputDataBody(List<Event> events) '''
+		«IF events.exists[!with.empty]»
+			switch(paEIID) {
+			  «FOR event : events.filter[!with.empty]»
+			  	case «event.generateEventID»: {
+			  	  RES_DATA_CON_CRITICAL_REGION();
+			  	  «FOR variable : event.with.map[withVariable]»
+			  	  	«val index = variable.interfaceElementIndex»writeData(«index», *mDOs[«index»], mDOConns[«index»]);
+			  	  «ENDFOR»
+			  	  break;
+			  	}
+			  «ENDFOR»
+			  default:
+			    break;
+			}
+		«ELSE»
+			// nothing to do
+		«ENDIF»
+	'''
+
 }

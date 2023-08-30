@@ -59,6 +59,28 @@ public final class Messages extends NLS {
 	public static String RunServiceSequenceHandler_SequenceDoesNotMatchECC;
 	public static String RunServiceSequenceHandler_SequenceMatchesECC;
 	public static String RunServiceSequenceHandler_Success;
+	public static String RecordSequenceDialog_AddRandomEvents;
+
+	public static String RecordSequenceDialog_AddRandomValues;
+
+	public static String RecordSequenceDialog_Button;
+
+	public static String RecordSequenceDialog_Info;
+
+	public static String RecordSequenceDialog_InitialData;
+
+	public static String RecordSequenceDialog_InputEvents;
+
+	public static String RecordSequenceDialog_ProvideInputs;
+
+	public static String RecordSequenceDialog_SpecifyEventsTooltipText;
+
+	public static String RecordSequenceDialog_SpecifyParametersTooltipText;
+
+	public static String RecordSequenceDialog_StartState;
+
+	public static String RecordSequenceDialog_Title;
+
 	public static String RecordServiceSequenceHandler_APPEND;
 	public static String RecordServiceSequenceHandler_CHECK_VARIABLE_NAMES;
 	public static String RecordServiceSequenceHandler_CONFIGURATION;

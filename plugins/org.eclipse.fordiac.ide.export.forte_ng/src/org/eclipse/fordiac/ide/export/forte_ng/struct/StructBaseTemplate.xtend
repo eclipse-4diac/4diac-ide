@@ -19,17 +19,11 @@ import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
 import org.eclipse.fordiac.ide.model.data.StructuredType
 
-import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
-
 abstract class StructBaseTemplate extends ForteLibraryElementTemplate<StructuredType> {
 
 	new(StructuredType type, String name, Path prefix) {
 		super(type, name, prefix)
 	}
-
-	override protected getClassName() '''CIEC_«type.name»'''
-
-	def static structuredTypeFileName(StructuredType type) '''forte_«type.name.toLowerCase»'''
 
 	def protected CharSequence generateConstructorParameters() //
 	'''«FOR param : type.memberVariables SEPARATOR ", "»const «param.generateVariableTypeNameAsParameter» &«param.generateNameAsParameter»«ENDFOR»'''

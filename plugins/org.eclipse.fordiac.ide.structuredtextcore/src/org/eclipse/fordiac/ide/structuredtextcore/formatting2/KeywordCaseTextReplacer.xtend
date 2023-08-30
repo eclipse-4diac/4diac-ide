@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  * 
  * Contributors:
  *   Martin Melik Merkumians - initial API and implementation and/or initial documentation
+ *   Martin Jobst - avoid replacement if contents are identical
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.formatting2
 
@@ -19,10 +21,10 @@ import org.eclipse.xtext.formatting2.ITextReplacerContext
 
 class KeywordCaseTextReplacer extends AbstractTextReplacer {
 
-	String replacementText
+	final String replacementText
 
 	new(IFormattableDocument document, ITextSegment region) {
-		super(document, region)
+		this(document, region, region.text.toUpperCase)
 	}
 
 	new(IFormattableDocument document, ITextSegment region, String replacementText) {
@@ -31,9 +33,9 @@ class KeywordCaseTextReplacer extends AbstractTextReplacer {
 	}
 
 	override createReplacements(ITextReplacerContext context) {
-		val replacement = replacementText === null ? region.replaceWith(region.text.toUpperCase) : region.replaceWith(
-				replacementText)
-		context.addReplacement(replacement)
+		if(region.text != replacementText) {
+			context.addReplacement(region.replaceWith(replacementText))
+		}
 		return context
 	}
 

@@ -21,8 +21,9 @@ import java.util.List;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 public class ViewerPropertyTester extends PropertyTester {
 
@@ -39,7 +40,15 @@ public class ViewerPropertyTester extends PropertyTester {
 			}
 		}
 
-		final IEditorPart part = EditorUtils.getCurrentActiveEditor();
+		final IWorkbenchPart part = getCurrentActiveView();
 		return (part != null) && (part.getAdapter(FBNetwork.class) != null);
+	}
+
+	public static IWorkbenchPart getCurrentActiveView() {
+		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (window != null && window.getActivePage() != null) {
+			return window.getActivePage().getActivePart();
+		}
+		return null;
 	}
 }

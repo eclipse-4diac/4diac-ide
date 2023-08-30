@@ -29,6 +29,7 @@ Import-Package: org.apache.log4j,
  org.eclipse.xtext.ui.codemining;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.fordiac.ide.structuredtextcore.ui,
+ org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup,
  org.eclipse.fordiac.ide.structuredtextcore.ui.codemining,
  org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist,
  org.eclipse.fordiac.ide.structuredtextcore.ui.document,
@@ -43,5 +44,6 @@ Export-Package: org.eclipse.fordiac.ide.structuredtextcore.ui,
  org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix,
  org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring,
  org.eclipse.fordiac.ide.structuredtextcore.ui.resource,
- org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring
+ org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring,
+ org.eclipse.fordiac.ide.structuredtextcore.ui.validation
 Bundle-Activator: org.eclipse.fordiac.ide.structuredtextcore.ui.internal.StructuredtextcoreActivatorEx
