@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.test.ui;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -66,6 +68,7 @@ public class CompositeInstanceViewerTests {
 	private static final String FILE = "File"; //$NON-NLS-1$
 	private static final String FINISH = "Finish"; //$NON-NLS-1$
 	private static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
+	private static final String F_SUB = "F_SUB"; //$NON-NLS-1$
 	private static final String GO_TO_PARENT = "Go To Parent"; //$NON-NLS-1$
 	private static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
 	private static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
@@ -75,6 +78,7 @@ public class CompositeInstanceViewerTests {
 	private static final String OK = "OK"; //$NON-NLS-1$
 	private static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
 	private static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
+	private static final String REQ = "REQ"; //$NON-NLS-1$
 	private static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
 	private static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
 	private static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
@@ -161,17 +165,7 @@ public class CompositeInstanceViewerTests {
 	@Test
 	public void compositeInstanceViewerAppearsAfterDoubleClickOnFB() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(200, 100));
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
-		assertNotNull(editor);
-		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		assertNotNull(viewer);
-		final SWTBotGefFigureCanvas canvas = viewer.getCanvas();
-		assertNotNull(canvas);
-		assertNotNull(editor.getEditPart(E_N_TABLE_FB));
-		editor.click(E_N_TABLE_FB);
-		final SWTBotGefEditPart parent = editor.getEditPart(E_N_TABLE_FB).parent();
-		assertNotNull(parent);
-		parent.doubleClick();
+		final SWTBotGefEditor editor = goToCompositeInstanceViewer(E_N_TABLE_FB);
 
 		UIThreadRunnable.syncExec(() -> {
 			final IEditorPart editorPart = editor.getReference().getEditor(false);
@@ -186,10 +180,54 @@ public class CompositeInstanceViewerTests {
 
 	/**
 	 * Checks if it is possible to move FB in CompositeInstanceViewer
+	 *
+	 * The method checks whether an FB can be moved in the CompositeinstanceViewer.
+	 * First an E_N_TABLE FB is moved to the editing area and then the
+	 * CompositeInstanceViewer is reached by double clicking on the FB. The
+	 * coordinates of the F_SUB FB are fetched and an attempt is made to move the
+	 * FB. Afterwards the position are checked again, these should be as expected
+	 * the same as at the beginning. For certain checks it is also necessary to
+	 * create a new draw2d.geometry Point, because draw2d.geometry Points are not
+	 * compatible with the former.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void compositeInstanceViewerMoveFB() {
-		// in progress
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(200, 200));
+		goToCompositeInstanceViewer(E_N_TABLE_FB);
+
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		assertNotNull(editor.getEditPart(F_SUB));
+		editor.click(F_SUB);
+		SWTBotGefEditPart parent = editor.getEditPart(F_SUB).parent();
+		assertNotNull(parent);
+
+		IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
+		assertNotNull(figure);
+		Rectangle fbBounds = figure.getBounds().getCopy();
+		assertNotNull(fbBounds);
+		figure.translateToAbsolute(fbBounds);
+		final Point posFSub = new Point(fbBounds.x, fbBounds.y);
+
+		final org.eclipse.draw2d.geometry.Point posToCheck1 = new org.eclipse.draw2d.geometry.Point(posFSub);
+		assertTrue(fbBounds.contains(posToCheck1));
+		parent.click();
+
+		final Point pos2 = new Point(85, 85);
+		editor.drag(parent, pos2.x, pos2.y);
+		final org.eclipse.draw2d.geometry.Point posToCheck2 = new org.eclipse.draw2d.geometry.Point(pos2);
+
+		parent = editor.getEditPart(F_SUB).parent();
+		figure = ((GraphicalEditPart) parent.part()).getFigure();
+		fbBounds = figure.getBounds().getCopy();
+		figure.translateToAbsolute(fbBounds);
+		assertNotEquals(posToCheck2.x, fbBounds.x);
+		assertEquals(posToCheck1.x, fbBounds.x);
+		assertNotEquals(posToCheck2.y, fbBounds.y);
+		assertEquals(posToCheck1.y, fbBounds.y);
+		assertFalse(fbBounds.contains(posToCheck2));
+		assertTrue(fbBounds.contains(posToCheck1));
 	}
 
 	/**
@@ -229,6 +267,23 @@ public class CompositeInstanceViewerTests {
 	// Region of utility methods
 
 	/**
+	 * Creates a new 4diac IDE project
+	 *
+	 * The method creates a new 4diac IDE project with the static String of
+	 * PROJECT_NAME and is called from {@link #beforeAll() method beforeAll}.
+	 */
+	private static void createProject() {
+		bot.menu(FILE).menu(NEW).menu(FORDIAC_IDE_PROJECT).click();
+		final SWTBotShell shell = bot.shell(NEW_4DIAC_PROJECT);
+		shell.activate();
+		bot.textWithLabel(PROJECT_NAME_LABEL).setText(PROJECT_NAME);
+		assertEquals(bot.textWithLabel(INITIAL_SYSTEM_NAME_LABEL).getText(), PROJECT_NAME);
+		assertEquals(bot.textWithLabel(INITIAL_APPLICATION_NAME_LABEL).getText(), PROJECT_NAME + APP);
+		bot.button(FINISH).click();
+		bot.waitUntil(shellCloses(shell));
+	}
+
+	/**
 	 * Creates a connection between two pins.
 	 *
 	 * The method creates a connection between the two given pins, the order of the
@@ -265,23 +320,6 @@ public class CompositeInstanceViewerTests {
 	}
 
 	/**
-	 * Creates a new 4diac IDE project
-	 *
-	 * The method creates a new 4diac IDE project with the static String of
-	 * PROJECT_NAME and is called from {@link #beforeAll() method beforeAll}.
-	 */
-	private static void createProject() {
-		bot.menu(FILE).menu(NEW).menu(FORDIAC_IDE_PROJECT).click();
-		final SWTBotShell shell = bot.shell(NEW_4DIAC_PROJECT);
-		shell.activate();
-		bot.textWithLabel(PROJECT_NAME_LABEL).setText(PROJECT_NAME);
-		assertEquals(bot.textWithLabel(INITIAL_SYSTEM_NAME_LABEL).getText(), PROJECT_NAME);
-		assertEquals(bot.textWithLabel(INITIAL_APPLICATION_NAME_LABEL).getText(), PROJECT_NAME + APP);
-		bot.button(FINISH).click();
-		bot.waitUntil(shellCloses(shell));
-	}
-
-	/**
 	 * Drags and drops a FB onto the canvas with given name and position.
 	 *
 	 * @param fbName The name of the Function Block.
@@ -314,6 +352,26 @@ public class CompositeInstanceViewerTests {
 
 		assertNotNull(canvas);
 		eCycleNode.dragAndDrop(canvas, point);
+	}
+
+	/**
+	 * Selects of FB and double clicks on it.
+	 *
+	 * @return editor The SWTBotGefEditor is returned
+	 */
+	private static SWTBotGefEditor goToCompositeInstanceViewer(final String fb) {
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		assertNotNull(viewer);
+		final SWTBotGefFigureCanvas canvas = viewer.getCanvas();
+		assertNotNull(canvas);
+		assertNotNull(editor.getEditPart(fb));
+		editor.click(fb);
+		final SWTBotGefEditPart parent = editor.getEditPart(fb).parent();
+		assertNotNull(parent);
+		parent.doubleClick();
+		return editor;
 	}
 
 	/**
