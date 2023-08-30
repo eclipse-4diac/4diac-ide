@@ -23,6 +23,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -118,11 +120,44 @@ public class CompositeFBGenerator {
 					toTestFBs.add(compositeFB.getFBNetwork().getFBNamed(name));
 				} else if (j == 2) {
 					matchFBs.add(compositeFB.getFBNetwork().getFBNamed(name));
+					addTimeOutFB(net, p0);
 				} else if (i == testSuite.getTestCases().size() - 1 && j == blocksToAdd.size() - 1) {
 					muxFB = compositeFB.getFBNetwork().getFBNamed(name);
 				}
 			}
 		}
+
+	}
+
+	private void addTimeOutFB(final FBNetwork net, final Position p0) {
+		final FBNetworkElement compEl = LibraryElementFactory.eINSTANCE.createCFBInstance();
+
+		final TypeEntry compType = sourceType.getTypeLibrary().getFBTypeEntry("E_TimeOut"); //$NON-NLS-1$
+		compEl.setTypeEntry(compType);
+		final Position p = LibraryElementFactory.eINSTANCE.createPosition();
+		p.setX(p0.getX() + 100);
+		p.setY(p0.getY() + 100);
+		compEl.setPosition(p);
+		compEl.setInterface(EcoreUtil.copy(compEl.getType().getInterfaceList()));
+
+		net.getNetworkElements().add(compEl);
+		final String name = NameRepository.createUniqueName(compEl, "TESTAPPFB1");//$NON-NLS-1$
+		compEl.setName(name);
+
+		// connection
+		final AdapterConnection a = createAdapterConnection(
+				matchFBs.get(matchFBs.size() - 1).getInterface().getPlugs().get(0),
+				compositeFB.getFBNetwork().getFBNamed(name).getInterface().getSockets().get(0));
+		compositeFB.getFBNetwork().getAdapterConnections().add(a);
+	}
+
+	private static AdapterConnection createAdapterConnection(final AdapterDeclaration source,
+			final AdapterDeclaration dest) {
+		final AdapterConnection con = LibraryElementFactory.eINSTANCE.createAdapterConnection();
+		con.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
+		con.setSource(source);
+		con.setDestination(dest);
+		return con;
 	}
 
 	private void createWiths() {
@@ -259,16 +294,14 @@ public class CompositeFBGenerator {
 	}
 
 	private void createConnToBlockToTest(final int index) {
-
-		for (int i = 0; i < toTestFBs.get(index).getInterface().getEventOutputs().size(); i++) {
-			if (testFBs.get(index).getInterface().getEventOutputs().get(i).getName().contains("expected")) { //$NON-NLS-1$
-				break;
-			}
+		// event
+		for (int i = 0; i < toTestFBs.get(index).getInterface().getEventInputs().size(); i++) {
 			compositeFB.getFBNetwork().getEventConnections()
 					.add(createEventConnection(testFBs.get(index).getInterface().getEventOutputs().get(i),
 							toTestFBs.get(index).getInterface().getEventInputs().get(i)));
 		}
 
+		// data
 		for (int i = 0; i < toTestFBs.get(index).getInterface().getInputVars().size(); i++) {
 			compositeFB.getFBNetwork().getDataConnections()
 					.add(createDataConnection(testFBs.get(index).getInterface().getOutputVars().get(i),
@@ -279,6 +312,7 @@ public class CompositeFBGenerator {
 
 	private void createConnToTestFB(final int index) {
 		// Event connection
+
 		compositeFB.getFBNetwork().getEventConnections()
 				.add(createEventConnection(compositeFB.getInterfaceList().getEventInputs().get(index),
 						testFBs.get(index).getInterface().getEventInputs().get(index)));
@@ -306,8 +340,8 @@ public class CompositeFBGenerator {
 					.add(AbstractFBGenerator.createEvent(testCase.getName() + "_TEST", true)); //$NON-NLS-1$
 		}
 
-		compositeFB.getInterfaceList().getEventOutputs().add(AbstractFBGenerator.createEvent("ERROR1", false)); //$NON-NLS-1$
-		compositeFB.getInterfaceList().getEventOutputs().add(AbstractFBGenerator.createEvent("SUCCESS1", false)); //$NON-NLS-1$
+		compositeFB.getInterfaceList().getEventOutputs().add(AbstractFBGenerator.createEvent("ERROR", false)); //$NON-NLS-1$
+		compositeFB.getInterfaceList().getEventOutputs().add(AbstractFBGenerator.createEvent("SUCCESS", false)); //$NON-NLS-1$
 	}
 
 }

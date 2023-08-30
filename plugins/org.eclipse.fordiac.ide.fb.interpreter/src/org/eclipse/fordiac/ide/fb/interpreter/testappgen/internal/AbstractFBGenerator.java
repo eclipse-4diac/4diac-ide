@@ -115,7 +115,6 @@ public abstract class AbstractFBGenerator {
 	protected abstract List<VarDeclaration> createOutputDataList();
 
 	protected void addEvents() {
-
 		destinationFB.getInterfaceList().getEventInputs().addAll(createInputEventList());
 		destinationFB.getInterfaceList().getEventOutputs().addAll(createOutputEventList());
 
@@ -212,5 +211,9 @@ public abstract class AbstractFBGenerator {
 			}
 		}
 		return retBool;
+	}
+
+	public TypeEntry getTypeEntry() {
+		return entry;
 	}
 }

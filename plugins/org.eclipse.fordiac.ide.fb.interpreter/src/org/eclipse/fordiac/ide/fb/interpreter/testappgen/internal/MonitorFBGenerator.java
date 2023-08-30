@@ -72,9 +72,9 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 			// InputPrimitive
 
 			eccGen.createState("S", cnt); //$NON-NLS-1$
-			eccGen.getLast().setName(NameRepository.createUniqueName(eccGen.getLast(), "S1")); //$NON-NLS-1$
+			eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
 			cnt++;
-			eccGen.createTransitionFromTo(continueFrom, eccGen.getLast(),
+			eccGen.createTransitionFromTo(continueFrom, eccGen.getLastState(),
 					destinationFB.getInterfaceList().getEvent(testState.getTestTrigger().getEvent()));
 			eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1)
 					.setConditionExpression(createConditionExpression(testState.getTestTrigger().getParameters()));
@@ -83,20 +83,20 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 			if (!testState.getTestOutputs().isEmpty()) {
 				if (testState.getTestOutputs().size() == 1) {
 					eccGen.createState("S", cnt); //$NON-NLS-1$
-					eccGen.getLast().setName(NameRepository.createUniqueName(eccGen.getLast(), "S1")); //$NON-NLS-1$
-					eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLast(),
+					eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
+					eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
 							destinationFB.getInterfaceList().getEvent(testState.getTestOutputs().get(0).getEvent()));
 					eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1)
 							.setConditionExpression(
 									createConditionExpression(testState.getTestOutputs().get(0).getParameters()));
 					cnt++;
-					continueFrom = eccGen.getLast();
+					continueFrom = eccGen.getLastState();
 				} else {
 					final int prevCnt = cnt;
 					eccGen.createState("S", cnt + 2 * testState.getTestOutputs().size()); //$NON-NLS-1$
-					eccGen.getLast().setName(NameRepository.createUniqueName(eccGen.getLast(), "S1")); //$NON-NLS-1$
-					continueFrom = eccGen.getLast();
-					createStates(eccGen, eccGen.getNTimesLast(1), eccGen.getLast(), testState.getTestOutputs(), cnt);
+					eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
+					continueFrom = eccGen.getLastState();
+					createStates(eccGen, eccGen.getNTimesLast(1), eccGen.getLastState(), testState.getTestOutputs(), cnt);
 					eccGen.decreaseCaseCountBy(eccGen.getCaseCount());
 
 					cnt = prevCnt - 1 + 3 * testState.getTestOutputs().size();
@@ -106,15 +106,15 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 			}
 		}
 		eccGen.createState("S", cnt); //$NON-NLS-1$
-		eccGen.getLast().setName(NameRepository.createUniqueName(eccGen.getLast(), "S1")); //$NON-NLS-1$
+		eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
 
 		final ECAction action = TestEccGenerator.createAction();
 		action.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(0));
 		eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1).getECAction().add(action);
 		if (lastMultiple) {
-			eccGen.createTransitionFromTo(continueFrom, eccGen.getLast(), null);
+			eccGen.createTransitionFromTo(continueFrom, eccGen.getLastState(), null);
 		} else {
-			eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLast(), null);
+			eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(), null);
 		}
 
 		eccGen.decreaseCaseCount();
@@ -137,21 +137,21 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 
 		for (final OutputPrimitive firstColumn : listOutP) {
 			eccGen.createState("S", cnt); //$NON-NLS-1$
-			eccGen.getLast().setName(NameRepository.createUniqueName(eccGen.getLast(), "S1")); //$NON-NLS-1$
+			eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
 			cnt++;
-			eccGen.createTransitionFromTo(state, eccGen.getLast(),
+			eccGen.createTransitionFromTo(state, eccGen.getLastState(),
 					destinationFB.getInterfaceList().getEvent(firstColumn.getEvent()));
 			eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1)
 					.setConditionExpression(createConditionExpression(firstColumn.getParameters()));
 			final List<OutputPrimitive> outPList = (List<OutputPrimitive>) EcoreUtil.copyAll(listOutP);
 			outPList.remove(indexOutputPrim(firstColumn.getEvent(), outPList));
 			if (outPList.isEmpty()) {
-				eccGen.createTransitionFromTo(eccGen.getLast(), to, null);
+				eccGen.createTransitionFromTo(eccGen.getLastState(), to, null);
 				eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1)
 						.setConditionExpression(createConditionExpression(firstColumn.getParameters()));
 				return;
 			}
-			createStates(eccGen, eccGen.getLast(), to, outPList, cnt);
+			createStates(eccGen, eccGen.getLastState(), to, outPList, cnt);
 			eccGen.increaseCaseCount();
 		}
 	}

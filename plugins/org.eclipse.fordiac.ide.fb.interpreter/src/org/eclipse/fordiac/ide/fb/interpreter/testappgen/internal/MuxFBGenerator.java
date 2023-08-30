@@ -43,8 +43,8 @@ public class MuxFBGenerator extends AbstractFBGenerator {
 		for (final TestCase testCase : testSuite.getTestCases()) {
 			list.add(createEvent(testCase.getName() + "_TEST", true)); //$NON-NLS-1$
 		}
-		list.add(createEvent("ERROR", true));//$NON-NLS-1$
-		list.add(createEvent("SUCCESS", true)); //$NON-NLS-1$
+		list.add(createEvent("ERR", true));//$NON-NLS-1$
+		list.add(createEvent("SUC", true)); //$NON-NLS-1$
 		return list;
 
 	}
@@ -52,8 +52,8 @@ public class MuxFBGenerator extends AbstractFBGenerator {
 	@Override
 	protected List<Event> createOutputEventList() {
 		final List<Event> list = new ArrayList<>();
-		list.add(createEvent("ERR", false));//$NON-NLS-1$
-		list.add(createEvent("SUCC", false)); //$NON-NLS-1$
+		list.add(createEvent("ERROR", false));//$NON-NLS-1$
+		list.add(createEvent("SUCCESS", false)); //$NON-NLS-1$
 		return list;
 	}
 
@@ -95,42 +95,42 @@ public class MuxFBGenerator extends AbstractFBGenerator {
 			if (ev.getName().contains("TEST")) { //$NON-NLS-1$
 				// create state from input event
 				eccGen.createState("S", 0); //$NON-NLS-1$
-				eccGen.getLast().setName(NameRepository.createUniqueName(eccGen.getLast(), "S1")); //$NON-NLS-1$
-				eccGen.createTransitionFromTo(eccGen.getEcc().getStart(), eccGen.getLast(), ev);
+				eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
+				eccGen.createTransitionFromTo(eccGen.getEcc().getStart(), eccGen.getLastState(), ev);
 				stateCnt++;
 
 				// create state for error output
 				eccGen.createState("S", stateCnt); //$NON-NLS-1$
-				eccGen.getLast().setName(NameRepository.createUniqueName(eccGen.getLast(), "S1")); //$NON-NLS-1$
-				eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLast(),
+				eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
+				eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
 						destinationFB.getInterfaceList().getEventInputs()
-								.get(destinationFB.getInterfaceList().getEventInputs().size() - 1));
-				eccGen.createTransitionFromTo(eccGen.getLast(), eccGen.getEcc().getStart(), null);
+								.get(destinationFB.getInterfaceList().getEventInputs().size() - 2));
+				eccGen.createTransitionFromTo(eccGen.getLastState(), eccGen.getEcc().getStart(), null);
 
 				final ECAction errAction = TestEccGenerator.createAction();
 				final ECAction sucAction = TestEccGenerator.createAction();
-				errAction.setOutput(destinationFB.getInterfaceList().getEventInputs()
-						.get(destinationFB.getInterfaceList().getEventInputs().size() - 2));
+				errAction.setOutput(destinationFB.getInterfaceList().getEventOutputs()
+						.get(destinationFB.getInterfaceList().getEventOutputs().size() - 2));
 				if (!destinationFB.getInterfaceList().getOutputVars().isEmpty()) {
 					final Algorithm alg = TestEccGenerator.createMuxFbAlgorithm(destinationFB, i);
 					errAction.setAlgorithm(alg);
 					sucAction.setAlgorithm(alg);
 
 				}
-				eccGen.getLast().getECAction().add(errAction);
+				eccGen.getLastState().getECAction().add(errAction);
 				eccGen.increaseCaseCount();
 
 				// create state for success output
 				eccGen.createState("S", stateCnt); //$NON-NLS-1$
-				eccGen.getLast().setName(NameRepository.createUniqueName(eccGen.getLast(), "S1")); //$NON-NLS-1$
-				eccGen.createTransitionFromTo(eccGen.getNTimesLast(2), eccGen.getLast(),
+				eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
+				eccGen.createTransitionFromTo(eccGen.getNTimesLast(2), eccGen.getLastState(),
 						destinationFB.getInterfaceList().getEventInputs()
-								.get(destinationFB.getInterfaceList().getEventInputs().size() - 2));
-				eccGen.createTransitionFromTo(eccGen.getLast(), eccGen.getEcc().getStart(), null);
+								.get(destinationFB.getInterfaceList().getEventInputs().size() - 1));
+				eccGen.createTransitionFromTo(eccGen.getLastState(), eccGen.getEcc().getStart(), null);
 
-				sucAction.setOutput(destinationFB.getInterfaceList().getEventInputs()
-						.get(destinationFB.getInterfaceList().getEventInputs().size() - 1));
-				eccGen.getLast().getECAction().add(sucAction);
+				sucAction.setOutput(destinationFB.getInterfaceList().getEventOutputs()
+						.get(destinationFB.getInterfaceList().getEventOutputs().size() - 1));
+				eccGen.getLastState().getECAction().add(sucAction);
 			}
 			eccGen.increaseCaseCount();
 			eccGen.increaseCaseCount();
