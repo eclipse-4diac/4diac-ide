@@ -1,7 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
- *               2020 Johannes Kepler University Linz
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2019, 2023 fortiss GmbH, 2020 Johannes Kepler University Linz, 
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +11,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Alois Zoitl  - fixed adapter and fb number generation in connection lists
+ *                - added adapter connection generation 
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.composite
 
@@ -21,6 +21,7 @@ import java.util.HashSet
 import java.util.List
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
@@ -111,6 +112,10 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 			«type.FBNetwork.dataConnections.exportDataConns»
 			
 		«ENDIF»
+		«IF !type.FBNetwork.adapterConnections.empty»
+			«type.FBNetwork.adapterConnections.exportAdapterConns»
+			
+		«ENDIF»
 		«generateFBNDataStruct()»
 	'''
 
@@ -121,6 +126,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		  «fannedOutEventConns», «IF 0 != fannedOutEventConns»scmFannedOutEventConnections«ELSE»nullptr«ENDIF»,
 		  «dataConnNumber», «IF 0 != dataConnNumber»scmDataConnections«ELSE»nullptr«ENDIF»,
 		  «fannedOutDataConns», «IF 0 != fannedOutDataConns»scmFannedOutDataConnections«ELSE»nullptr«ENDIF»,
+		  «type.FBNetwork.adapterConnections.size», «IF !type.FBNetwork.adapterConnections.empty»scmAdapterConnections«ELSE»nullptr«ENDIF»,
 		  «numCompFBParams», «IF 0 != numCompFBParams»scmParamters«ELSE»nullptr«ENDIF»
 		};
 		
@@ -220,6 +226,12 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		}
 		return retVal
 	}
+
+	def protected exportAdapterConns(EList<AdapterConnection> adapterConns)'''
+		const SCFB_FBConnectionData «FBClassName»::scmAdapterConnections[] = {
+		  «FOR aConn : adapterConns»«aConn.getConnListEntry»«ENDFOR»
+		};
+	'''
 
 	def protected getConnListEntry(
 		Connection con) '''  {«con.source.generateConnectionPortID(con.sourceElement)», «con.destination.generateConnectionPortID(con.destinationElement)»},

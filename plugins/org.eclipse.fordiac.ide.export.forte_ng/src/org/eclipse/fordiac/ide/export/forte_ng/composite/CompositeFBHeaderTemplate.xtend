@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
- *               2020 Johannes Kepler University
+ * Copyright (c) 2019, 2023 fortiss GmbH, Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,8 +10,7 @@
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl
- *     - Fix connections and parameter generation
+ *   Alois Zoitl - Fix connections and parameter generation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.composite
 
@@ -81,6 +79,9 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		«IF !type.FBNetwork.dataConnections.empty»
 			static const SCFB_FBConnectionData scmDataConnections[];
 			static const SCFB_FBFannedOutConnectionData scmFannedOutDataConnections[];
+		«ENDIF»
+		«IF !type.FBNetwork.adapterConnections.empty»
+			static const SCFB_FBConnectionData scmAdapterConnections[];
 		«ENDIF»
 		static const SCFB_FBNData scmFBNData;
 	'''
