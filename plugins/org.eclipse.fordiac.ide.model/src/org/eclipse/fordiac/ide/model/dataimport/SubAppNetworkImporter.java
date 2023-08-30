@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -81,7 +81,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			fbNetworkElementMap.put(subApp.getName(), subApp);
 		}
 
-		if ((null == subApp.getTypeEntry() && type != null) || (subApp instanceof ErrorMarkerRef)) {
+		if ((null == subApp.getTypeEntry() && type != null) || (subApp instanceof ErrorMarkerFBNElement)) {
 			final String errorMessage = MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", //$NON-NLS-1$
 					type, subApp.getName());
 			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(subApp)
