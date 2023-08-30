@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteChangeDestinationSourceWidget;
 import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
@@ -98,12 +97,9 @@ public class ConnectionDisplayWidget {
 
 		connectionsViewer = createConnectionsViewer(composite);
 
-		final String[] labels = { SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
-
 		inputButtons.bindToTableViewer(connectionsViewer, parentSection, ref -> null,
 				ref -> new DeleteConnectionCommand((Connection) ref),
-				ref -> new ChangeDestinationSourceDialog(null, Messages.InterfaceElementSection_MessageDialog_TITLE,
-						null, "", MessageDialog.NONE, 0, labels, (Connection) ref, //$NON-NLS-1$
+				ref -> new ChangeDestinationSourceDialog(connectionsViewer.getControl().getShell(), (Connection) ref,
 						getInterfaceElement((Connection) ref)));
 
 		connectionSection.setClient(composite);

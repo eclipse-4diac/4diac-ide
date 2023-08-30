@@ -21,6 +21,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectAdapterConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectEventConnectionCommand;
@@ -78,6 +79,7 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 
 	private static final int NUMBER_OF_COLLUMNS = 1;
 	private static final int TABLE_COL_WIDTH = 150;
+	private static final String[] BUTTON_LABELS = { SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
 	private Connection connection;
 	private final IInterfaceElement ieToChange;
@@ -96,11 +98,9 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 		OUTPUT_NOSUBAPP, OUTPUT_SUBAPP, INPUT_NOSUBAPP, INPUT_SUBAPP
 	}
 
-	public ChangeDestinationSourceDialog(final Shell parentShell, final String dialogTitle,
-			final Image dialogTitleImage, final String dialogMessage, final int dialogImageType, final int defaultIndex,
-			final String[] dialogButtonLabels, final Connection con, final IInterfaceElement ie) {
-		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, defaultIndex,
-				dialogButtonLabels);
+	public ChangeDestinationSourceDialog(final Shell parentShell, final Connection con, final IInterfaceElement ie) {
+		super(parentShell, Messages.InterfaceElementSection_MessageDialog_TITLE, null, "", MessageDialog.NONE, //$NON-NLS-1$
+				0, BUTTON_LABELS);
 		this.connection = con;
 		this.ieToChange = ie;
 		if (con.getSource().equals(ie)) {
