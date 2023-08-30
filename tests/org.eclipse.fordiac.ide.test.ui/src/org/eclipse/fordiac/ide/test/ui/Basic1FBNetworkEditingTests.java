@@ -56,31 +56,32 @@ import org.junit.jupiter.api.Test;
 
 public class Basic1FBNetworkEditingTests {
 
-	private static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
-	private static final String NEW = "New"; //$NON-NLS-1$
-	private static final String FILE = "File"; //$NON-NLS-1$
-	private static final String OK = "OK"; //$NON-NLS-1$
-	private static final String FINISH = "Finish"; //$NON-NLS-1$
 	private static final String APP = "App"; //$NON-NLS-1$
-	private static final String EDIT = "Edit"; //$NON-NLS-1$
 	private static final String DELETE = "Delete"; //$NON-NLS-1$
 	private static final String DELETE_PROJECT_WARNING = "Delete project contents on disk (cannot be undone)"; //$NON-NLS-1$
 	private static final String DELETE_RESOURCES = "Delete Resources"; //$NON-NLS-1$
-	private static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
-	private static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
-	private static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
-	private static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
-	private static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
-	private static final String NEW_4DIAC_PROJECT = "New 4diacProject"; //$NON-NLS-1$
-	private static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
-	private static final String EVENTS_NODE = "events"; //$NON-NLS-1$
-	private static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
 	private static final String E_CTUD_TREE_ITEM = "E_CTUD [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
 	private static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	private static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
 	private static final String E_D_FF_TREE_ITEM = "E_D_FF [Data latch (d) flip flop]"; //$NON-NLS-1$
 	private static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
-	private static final String E_TABLE_CTRL_TREE_ITEM = "E_TABLE_CTRL [Support function block for E_TABLE]";
+	private static final String E_TABLE_CTRL_TREE_ITEM = "E_TABLE_CTRL [Support function block for E_TABLE]"; //$NON-NLS-1$
+	private static final String EDIT = "Edit"; //$NON-NLS-1$
+	private static final String EVENTS_NODE = "events"; //$NON-NLS-1$
+	private static final String FILE = "File"; //$NON-NLS-1$
+	private static final String FINISH = "Finish"; //$NON-NLS-1$
+	private static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
+	private static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
+	private static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
+	private static final String NEW = "New"; //$NON-NLS-1$
+	private static final String NEW_4DIAC_PROJECT = "New 4diacProject"; //$NON-NLS-1$
+	private static final String OK = "OK"; //$NON-NLS-1$
+	private static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
+	private static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
+	private static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
+	private static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
+	private static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
+	// FB pins and values
 	private static final String START = "START"; //$NON-NLS-1$
 	private static final String STOP = "STOP"; //$NON-NLS-1$
 	private static final String D = "D"; //$NON-NLS-1$
@@ -739,55 +740,6 @@ public class Basic1FBNetworkEditingTests {
 		final SWTBot4diacGefViewer viewer = createConnection(QU, QD);
 		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
 		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
-	}
-
-	/**
-	 * Checks if it is possible to double click on FB and new Tab (breadcrumb)
-	 * appears
-	 */
-	@Disabled
-	public void compositeInstanceViewerAppearsAfterDoubleClickOnFB() {
-		// in progress
-	}
-
-	/**
-	 * Checks if it is possible to move FB in CompositeInstanceViewer
-	 */
-	@Disabled
-	public void compositeInstanceViewerMoveFB() {
-		// in progress
-	}
-
-	/**
-	 * Checks if it is possible to delete FB in CompositeInstanceViewer
-	 */
-	@Disabled
-	public void compositeInstanceViewerDeleteFB() {
-		// in progress
-	}
-
-	/**
-	 * Checks if it is possible to edit name of FB in CompositeInstanceViewer
-	 */
-	@Disabled
-	public void compositeInstanceViewerEditingOfFB() {
-		// in progress
-	}
-
-	/**
-	 * Checks if it is possible to add connections in CompositeInstanceViewer
-	 */
-	@Disabled
-	public void compositeInstanceViewerConnectionCanBeAdded() {
-		// in progress
-	}
-
-	/**
-	 * Checks if it is possible to add another FB in CompositeInstanceViewer
-	 */
-	@Disabled
-	public void compositeInstanceViewerAddAnotherFB() {
-		// in progress
 	}
 
 	// End of region for test methods
