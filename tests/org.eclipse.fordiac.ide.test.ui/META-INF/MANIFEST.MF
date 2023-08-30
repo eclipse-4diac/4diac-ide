@@ -20,4 +20,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swtbot.swt.finder,
  org.eclipse.swtbot.eclipse.finder,
  org.eclipse.swtbot.eclipse.gef.finder,
- org.eclipse.gef
+ org.eclipse.gef,
+ org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.ui.forms,
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.fordiac.ide.fbtypeeditor.network
