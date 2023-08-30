@@ -57,8 +57,7 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 	}
 
 	public static Command getUpdateCommand(final FBNetworkElement element) {
-		if (element instanceof StructManipulator) {
-			final StructManipulator mux = (StructManipulator) element;
+		if (element instanceof final StructManipulator mux) {
 			final DataTypeLibrary lib = mux.getType().getTypeLibrary().getDataTypeLibrary();
 			final StructuredType updated = (StructuredType) lib.getType(mux.getStructType().getName());
 			return new ChangeStructCommand(mux, updated);

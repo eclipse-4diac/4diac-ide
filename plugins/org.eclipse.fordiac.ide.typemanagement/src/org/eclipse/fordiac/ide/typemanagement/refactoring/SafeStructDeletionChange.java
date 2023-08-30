@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
@@ -151,7 +152,9 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
-			final Command cmd = new UpdateFBTypeCommand(manipulator);
+			final DataTypeLibrary lib = manipulator.getType().getTypeLibrary().getDataTypeLibrary();
+			final StructuredType updated = (StructuredType) lib.getType(manipulator.getStructType().getQualifiedName());
+			final Command cmd = new ChangeStructCommand(manipulator, updated);
 			Display.getDefault().syncExec(cmd::execute);
 			return super.perform(pm);
 		}
