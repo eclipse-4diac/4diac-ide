@@ -98,6 +98,7 @@ public class Basic1FBNetworkEditingTests {
 	private static final String EO1 = "EO1"; //$NON-NLS-1$
 	private static final String EO2 = "EO2"; //$NON-NLS-1$
 	private static final String DTO = "DTO"; //$NON-NLS-1$
+	private static final String CLKO = "CLKO"; //$NON-NLS-1$
 	private static final String INIT = "INIT"; //$NON-NLS-1$
 	private static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
@@ -666,26 +667,59 @@ public class Basic1FBNetworkEditingTests {
 
 	/**
 	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event output pin and a data output
+	 * pin of type unsigned integer.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void invalidConnectionBetweenEventOutputPinAndUintOutputPin() {
-		// in progress
+		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(CLKO, CV);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
 	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event output pin and a data output
+	 * pin of type time.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void invalidConnectionBetweenEventOutputPinAndTimeOutputPin() {
-		// in progress
+		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(CLKO, DTO);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
 	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event output pin and a data output
+	 * pin of boolean.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void invalidConnectionBetweenEventOutputPinAndBoolOutputPin() {
-		// in progress
+		dragAndDropEventsFB(E_D_FF_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(EO, Q);
+		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
+		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
 	}
 
 	/**
