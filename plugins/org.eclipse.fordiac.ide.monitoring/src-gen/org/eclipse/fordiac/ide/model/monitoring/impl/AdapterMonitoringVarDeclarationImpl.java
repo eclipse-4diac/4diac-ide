@@ -949,4 +949,14 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 		return InterfaceElementAnnotations.isInOutVar(this);
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateVarInOutSourceTypeIsWellDefined(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutSourceTypeIsWellDefined(this, diagnostics, context);
+	}
+
 } // AdapterMonitoringVarDeclarationImpl

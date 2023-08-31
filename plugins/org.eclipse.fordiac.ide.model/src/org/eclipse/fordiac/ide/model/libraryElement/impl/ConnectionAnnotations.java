@@ -13,12 +13,14 @@
 
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.text.MessageFormat;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -47,6 +49,72 @@ public class ConnectionAnnotations {
 			}
 		}
 		return true;
+	}
+
+	public static boolean validateVarInOutArraySizesAreCompatible(@NonNull final Connection connection,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (connection.getDestination() instanceof final VarDeclaration connectionDestinationVar
+				&& connectionDestinationVar.isInOutVar()) { // If the destination is a VAR_IN_OUT the source is also one
+			final VarDeclaration definingVarDeclaration = getVarInOutSourceVarDeclaration(connection);
+			if ((definingVarDeclaration != null && definingVarDeclaration.isArray()
+					&& connectionDestinationVar.isArray())
+					&& !definingVarDeclaration.getArraySize().getValue()
+							.equals(connectionDestinationVar.getArraySize().getValue())
+					&& !connectionDestinationVar.getArraySize().getValue().contains("*")) { //$NON-NLS-1$
+				if (diagnostics != null) {
+					diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+							LibraryElementValidator.CONNECTION__VALIDATE_VAR_IN_OUT_ARRAY_SIZES_ARE_COMPATIBLE,
+							MessageFormat.format(Messages.ConnectionValidator_VarInOutArraySizeMismatch,
+									connectionDestinationVar.getFullTypeName(),
+									definingVarDeclaration.getFullTypeName()),
+							FordiacMarkerHelper.getDiagnosticData(connectionDestinationVar)));
+				}
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static boolean validateVarInOutStringLengthsMatch(@NonNull final Connection connection,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (connection.getDestination() instanceof final VarDeclaration connectionDestinationVar
+				&& connectionDestinationVar.isInOutVar()) { // If the destination is a VAR_IN_OUT the source is also one
+			final VarDeclaration definingVarDeclaration = getVarInOutSourceVarDeclaration(connection);
+			if (definingVarDeclaration != null
+					&& definingVarDeclaration.getType() instanceof final AnyStringType sourceType
+					&& connectionDestinationVar.getType() instanceof final AnyStringType destinationType
+					&& sourceType.getMaxLength() != destinationType.getMaxLength()) {
+				if (diagnostics != null) {
+					diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+							LibraryElementValidator.CONNECTION__VALIDATE_VAR_IN_OUT_STRING_LENGTHS_MATCH,
+							MessageFormat.format(Messages.ConnectionValidator_VarInOutStringSizeMismatch,
+									Integer.valueOf(destinationType.getMaxLength()),
+									Integer.valueOf(sourceType.getMaxLength())),
+							FordiacMarkerHelper.getDiagnosticData(connectionDestinationVar)));
+				}
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Get the VarDeclaration of the first FB in a chain of VAR_IN_OUT connections
+	 *
+	 * @param connection a connection to start from
+	 * @return The source VarDeclaration
+	 */
+	private static VarDeclaration getVarInOutSourceVarDeclaration(@NonNull final Connection connection) {
+		if (connection.getSource() instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()) {
+			VarDeclaration sourcePin = sourceVar;
+			VarDeclaration inputVarInOut = InterfaceListAnnotations.getInOutVarOpposite(sourcePin);
+			while (!inputVarInOut.getInputConnections().isEmpty()) {
+				sourcePin = (VarDeclaration) inputVarInOut.getInputConnections().get(0).getSource();
+				inputVarInOut = InterfaceListAnnotations.getInOutVarOpposite(sourcePin);
+			}
+			return inputVarInOut;
+		}
+		return null;
 	}
 
 	private ConnectionAnnotations() {

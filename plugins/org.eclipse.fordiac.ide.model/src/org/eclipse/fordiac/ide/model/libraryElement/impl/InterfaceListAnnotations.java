@@ -40,7 +40,8 @@ final class InterfaceListAnnotations {
 		retVal.addAll(il.getSockets());
 		retVal.addAll(il.getEventOutputs());
 		retVal.addAll(il.getOutputVars());
-		// Users of getAllInterfaceElements expect to get all elements for ui and connection checks. Therefore we need
+		// Users of getAllInterfaceElements expect to get all elements for ui and
+		// connection checks. Therefore we need
 		// to deliver also the mapped output side here
 		retVal.addAll(il.getOutMappedInOutVars());
 		retVal.addAll(il.getPlugs());
@@ -132,4 +133,7 @@ final class InterfaceListAnnotations {
 		return inOutVar;
 	}
 
+	public static VarDeclaration getInOutVarOpposite(final VarDeclaration inOutVar) {
+		return getInOutVarOpposite((InterfaceList) inOutVar.eContainer(), inOutVar);
+	}
 }

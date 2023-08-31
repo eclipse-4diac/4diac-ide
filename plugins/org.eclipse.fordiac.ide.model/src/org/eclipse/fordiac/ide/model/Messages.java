@@ -277,6 +277,9 @@ public final class Messages extends NLS {
 	public static String UpdateFBTypeCommand_type_mismatch;
 
 	public static String ConnectionValidator_VarInOutConnectionCrossesResourceBoundaries;
+	public static String ConnectionValidator_VarInOutSourceNotWellDefined;
+	public static String ConnectionValidator_VarInOutArraySizeMismatch;
+	public static String ConnectionValidator_VarInOutStringSizeMismatch;
 
 	static {
 		// initialize resource bundle

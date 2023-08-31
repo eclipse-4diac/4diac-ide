@@ -220,4 +220,20 @@ public interface Connection extends ConfigurableObject, ErrorMarkerRef, HiddenEl
 	 */
 	boolean validateMappedVarInOutsDoNotCrossResourceBoundaries(DiagnosticChain diagnostics, Map<Object, Object> context);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateVarInOutArraySizesAreCompatible(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateVarInOutStringLengthsMatch(DiagnosticChain diagnostics, Map<Object, Object> context);
+
 } // Connection

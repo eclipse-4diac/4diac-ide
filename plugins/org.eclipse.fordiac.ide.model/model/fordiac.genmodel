@@ -199,6 +199,16 @@
         <genParameters ecoreParameter="lib.ecore#//Connection/validateMappedVarInOutsDoNotCrossResourceBoundaries/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//Connection/validateMappedVarInOutsDoNotCrossResourceBoundaries/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//Connection/validateVarInOutArraySizesAreCompatible"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateVarInOutArraySizesAreCompatible(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//Connection/validateVarInOutArraySizesAreCompatible/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//Connection/validateVarInOutArraySizesAreCompatible/context"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//Connection/validateVarInOutStringLengthsMatch"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateVarInOutStringLengthsMatch(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//Connection/validateVarInOutStringLengthsMatch/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//Connection/validateVarInOutStringLengthsMatch/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ConnectionRoutingData">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx1"/>
@@ -680,6 +690,11 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/getFullTypeName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);"/>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/isInOutVar" body="return InterfaceElementAnnotations.isInOutVar(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateVarInOutSourceTypeIsWellDefined"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutSourceTypeIsWellDefined(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSourceTypeIsWellDefined/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSourceTypeIsWellDefined/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VersionInfo/author"/>
