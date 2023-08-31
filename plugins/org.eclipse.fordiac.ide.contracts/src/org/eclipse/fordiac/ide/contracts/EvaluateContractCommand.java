@@ -34,7 +34,7 @@ public class EvaluateContractCommand extends Command {
 
 	@Override
 	public void execute() {
-		if (subapp.getName().contains("_CONTRACT")) { //$NON-NLS-1$
+		if (subapp.getName().startsWith("_CONTRACT")) { //$NON-NLS-1$
 			final String oldComment = subapp.getComment();
 			int pos = oldComment.indexOf("ConstractState");//$NON-NLS-1$
 			if (pos == -1) {
