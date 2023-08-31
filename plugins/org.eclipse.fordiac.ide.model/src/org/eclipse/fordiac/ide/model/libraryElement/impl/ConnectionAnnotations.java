@@ -107,10 +107,10 @@ public class ConnectionAnnotations {
 	private static VarDeclaration getVarInOutSourceVarDeclaration(@NonNull final Connection connection) {
 		if (connection.getSource() instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()) {
 			VarDeclaration sourcePin = sourceVar;
-			VarDeclaration inputVarInOut = InterfaceListAnnotations.getInOutVarOpposite(sourcePin);
+			VarDeclaration inputVarInOut = sourcePin.getInOutVarOpposite();
 			while (!inputVarInOut.getInputConnections().isEmpty()) {
 				sourcePin = (VarDeclaration) inputVarInOut.getInputConnections().get(0).getSource();
-				inputVarInOut = InterfaceListAnnotations.getInOutVarOpposite(sourcePin);
+				inputVarInOut = sourcePin.getInOutVarOpposite();
 			}
 			return inputVarInOut;
 		}

@@ -90,7 +90,7 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	 *
 	 * @generated
 	 */
-	protected MonitoringSwitch<Adapter> modelSwitch = new MonitoringSwitch<>() {
+	protected MonitoringSwitch<Adapter> modelSwitch = new MonitoringSwitch<Adapter>() {
 			@Override
 			public Adapter caseMonitoringElement(MonitoringElement object) {
 				return createMonitoringElementAdapter();

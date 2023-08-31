@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.jdt.annotation.NonNull;
@@ -45,6 +46,18 @@ public class VarDeclarationAnnotations {
 			return false;
 		}
 		return true;
+	}
+
+	public static VarDeclaration getInOutVarOpposite(@NonNull final VarDeclaration inOutVar) {
+		final InterfaceList interfaceList = (InterfaceList) inOutVar.eContainer();
+		if (inOutVar.isInOutVar()) {
+			if (inOutVar.isIsInput()) {
+				return interfaceList.getOutMappedInOutVars().get(interfaceList.getInOutVars().indexOf(inOutVar));
+			}
+			return interfaceList.getInOutVars().get(interfaceList.getOutMappedInOutVars().indexOf(inOutVar));
+		}
+		// if no inout var return the given var as backup
+		return inOutVar;
 	}
 
 	private VarDeclarationAnnotations() {

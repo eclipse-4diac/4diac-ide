@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -117,7 +116,7 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart {
 
 	protected IInterfaceElement getTargetInterfaceElement() {
 		if (getCastedModel() instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && !varDecl.isIsInput()) {
-			return ((InterfaceList) varDecl.eContainer()).getInOutVarOpposite(varDecl);
+			return varDecl.getInOutVarOpposite();
 		}
 		return getCastedModel();
 	}

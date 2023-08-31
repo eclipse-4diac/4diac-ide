@@ -581,6 +581,16 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @generated
 	 */
 	@Override
+	public VarDeclaration getInOutVarOpposite() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.getInOutVarOpposite(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public FBNetworkElement getFBNetworkElement() {
 		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
 	}

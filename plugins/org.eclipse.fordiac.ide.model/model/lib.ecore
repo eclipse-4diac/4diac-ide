@@ -1241,12 +1241,6 @@
         <details key="body" value="return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getInOutVarOpposite" eType="#//VarDeclaration">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return InterfaceListAnnotations.getInOutVarOpposite(this, inOutVar);"/>
-      </eAnnotations>
-      <eParameters name="inOutVar" lowerBound="1" eType="#//VarDeclaration"/>
-    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="plugs" upperBound="-1"
         eType="#//AdapterDeclaration" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -1803,6 +1797,11 @@
           <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
         </eGenericType>
       </eParameters>
+    </eOperations>
+    <eOperations name="getInOutVarOpposite" eType="#//VarDeclaration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.getInOutVarOpposite(this);"/>
+      </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="arraySize" eType="#//ArraySize"
         containment="true" eOpposite="#//ArraySize/varDeclaration"/>

@@ -272,14 +272,14 @@ public class MapToCommand extends Command {
 				IInterfaceElement destination = targetElement.getInterfaceElement(interfaceElement.getName());
 				if (destination instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& !varDeclaration.isIsInput()) {
-					destination = destinationElement.getInterface().getInOutVarOpposite(varDeclaration);
+					destination = varDeclaration.getInOutVarOpposite();
 				}
 
 				final var sourceElement = connection.getSourceElement().getOpposite();
 				var source = sourceElement.getInterfaceElement(connection.getSource().getName());
 				if (source instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& varDeclaration.isIsInput()) {
-					source = sourceElement.getInterface().getInOutVarOpposite(varDeclaration);
+					source = varDeclaration.getInOutVarOpposite();
 				}
 				addConnectionCreateCommand(source, destination, connection.isVisible());
 			}
@@ -303,13 +303,13 @@ public class MapToCommand extends Command {
 						.getInterfaceElement(connection.getDestination().getName());
 				if (destination instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& !varDeclaration.isIsInput()) {
-					destination = destinationElement.getInterface().getInOutVarOpposite(varDeclaration);
+					destination = varDeclaration.getInOutVarOpposite();
 				}
 
 				var source = targetElement.getInterfaceElement(interfaceElement.getName());
 				if (source instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& varDeclaration.isIsInput()) {
-					source = targetElement.getInterface().getInOutVarOpposite(varDeclaration);
+					source = varDeclaration.getInOutVarOpposite();
 				}
 				addConnectionCreateCommand(source, destination, connection.isVisible());
 				if ((destination instanceof AdapterDeclaration) || (destination instanceof VarDeclaration)) {

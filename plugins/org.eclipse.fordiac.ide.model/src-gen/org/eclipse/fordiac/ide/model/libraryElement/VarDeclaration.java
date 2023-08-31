@@ -147,4 +147,12 @@ public interface VarDeclaration extends IInterfaceElement {
 	 */
 	boolean validateVarInOutSourceTypeIsWellDefined(DiagnosticChain diagnostics, Map<Object, Object> context);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	VarDeclaration getInOutVarOpposite();
+
 } // VarDeclaration
