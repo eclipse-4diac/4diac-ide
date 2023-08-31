@@ -153,17 +153,15 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 					HandlerUtil.getActiveShell(event), eventPins.get(0));
 			String time = ""; //$NON-NLS-1$
 			String offsetText = null;
-			String state = ""; //$NON-NLS-1$
 			if (dialog.open() != CANCEL) {
 
 				time = dialog.getTime();
-				state = dialog.getState();
 				if (dialog.hasOffset()) {
 					offsetText = dialog.getOffsetText();
 				}
 
 				final UpdateContractCommand uccmd = UpdateContractCommand.createContractAssumption(eventPins, time,
-						offsetText, state);
+						offsetText);
 				if (uccmd.canExecute()) {
 					uccmd.execute();
 				}

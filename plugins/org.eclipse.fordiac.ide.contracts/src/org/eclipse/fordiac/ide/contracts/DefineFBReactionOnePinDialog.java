@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.contracts;
 
 import org.eclipse.fordiac.ide.application.utilities.IntervalVerifyListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -95,12 +94,7 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 		}
 
 		label = new Label(group, SWT.None);
-		label.setText("occurs "); //$NON-NLS-1$
-		inputOffsetCombo = ComboBoxWidgetFactory.createCombo(group);
-		inputOffsetCombo.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
-		final String[] options = { "within", "every" }; //$NON-NLS-1$ //$NON-NLS-2$
-		inputOffsetCombo.setItems(options);
-		inputOffsetCombo.select(0);
+		label.setText("occurs every"); //$NON-NLS-1$
 
 		inputTime = new Text(group, SWT.RIGHT);
 		inputTime.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTime));

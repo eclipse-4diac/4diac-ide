@@ -43,10 +43,10 @@ public class UpdateContractCommand extends Command {
 	}
 
 	public static UpdateContractCommand createContractAssumption(final List<Event> eventPins, final String time,
-			final String offset, final String state) {
+			final String offset) {
 		final StringBuilder comment = new StringBuilder();
 		comment.append("ASSUMPTION " + eventPins.get(0).getName()); //$NON-NLS-1$
-		comment.append(" occurs " + state + " ");   //$NON-NLS-1$//$NON-NLS-2$
+		comment.append(" occurs every ");   //$NON-NLS-1$
 		comment.append(time + "ms "); //$NON-NLS-1$
 		if (offset != null) {
 			comment.append("with " + offset + "ms" + " offset");   //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
