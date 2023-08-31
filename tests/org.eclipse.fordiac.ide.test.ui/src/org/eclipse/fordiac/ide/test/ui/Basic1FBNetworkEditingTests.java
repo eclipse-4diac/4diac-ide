@@ -176,20 +176,48 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 
 	/**
 	 * Checks if the FB can be moved onto the canvas.
+	 *
+	 * The method drag and drops the FB E_CYCLE to a certain position onto the
+	 * canvas and it is checked whether the FB is in the correct position.
+	 * Afterwards the FB is moved to a new point and this position is also checked.
+	 * To achieve this it is necessary to create a draw2d.geometry Point with the
+	 * same coordinates of the swt.graphics Point.
 	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void moveFB() {
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 300));
+		final Point pos1 = new Point(200, 200);
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, pos1);
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		assertNotNull(editor);
 		assertNotNull(editor.getEditPart(E_CYCLE_FB));
 		editor.click(E_CYCLE_FB);
-		final SWTBotGefEditPart parent = editor.getEditPart(E_CYCLE_FB).parent();
+		SWTBotGefEditPart parent = editor.getEditPart(E_CYCLE_FB).parent();
 		assertNotNull(parent);
+
+		IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
+		assertNotNull(figure);
+		Rectangle fbBounds = figure.getBounds().getCopy();
+		assertNotNull(fbBounds);
+		figure.translateToAbsolute(fbBounds);
+		assertEquals(pos1.x, fbBounds.x);
+		assertEquals(pos1.y, fbBounds.y);
+
+		final org.eclipse.draw2d.geometry.Point posToCheck1 = new org.eclipse.draw2d.geometry.Point(pos1);
+		assertEquals(posToCheck1.x, fbBounds.x);
+		assertEquals(posToCheck1.y, fbBounds.y);
 		parent.click();
-		editor.drag(parent, 300, 300);
-		assertNotNull(editor.getEditPart(E_CYCLE_FB));
+
+		final Point pos2 = new Point(85, 85);
+		editor.drag(parent, pos2.x, pos2.y);
+		final org.eclipse.draw2d.geometry.Point posToCheck2 = new org.eclipse.draw2d.geometry.Point(pos2);
+
+		parent = editor.getEditPart(E_CYCLE_FB).parent();
+		figure = ((GraphicalEditPart) parent.part()).getFigure();
+		fbBounds = figure.getBounds().getCopy();
+		figure.translateToAbsolute(fbBounds);
+		assertEquals(posToCheck2.x, fbBounds.x);
+		assertEquals(posToCheck2.y, fbBounds.y);
 	}
 
 	/**
