@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.contracts.model;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -39,7 +40,7 @@ public class GuaranteeTwoEvents extends Guarantee {
 	private String secondOutputEvent;
 
 	GuaranteeTwoEvents() {
-		throw new ExceptionInInitializerError("GuaranteeTwoEvents not Implemented"); //$NON-NLS-1$
+		// throw new ExceptionInInitializerError("GuaranteeTwoEvents not Implemented"); //$NON-NLS-1$
 		// remove when class is correctly evaluated in contract
 	}
 
@@ -123,11 +124,6 @@ public class GuaranteeTwoEvents extends Guarantee {
 		return false;
 	}
 
-	public static boolean isCompatibleWith(final EList<Guarantee> guarantees) {
-		// TODO Implement
-		return false;
-	}
-
 	private static boolean isCorrectGuarantee(final String[] parts) {
 		if (parts.length != GUARANTEE_LENGTH) {
 			return false;
@@ -178,5 +174,15 @@ public class GuaranteeTwoEvents extends Guarantee {
 		comment.append("ms \n"); //$NON-NLS-1$
 		return comment.toString();
 
+	}
+
+	public static boolean isCompatibleWith(final Map<String, EList<Guarantee>> mapGuarantees,
+			final Map<String, EList<Reaction>> mapReactions,
+			final Map<String, EList<GuaranteeTwoEvents>> mapGuaranteeTwoEvents) {
+		if (mapGuarantees.isEmpty() && mapReactions.isEmpty() && mapGuaranteeTwoEvents.size() == 1) {
+			return true;
+		}
+		// TODO Implement the rest
+		return false;
 	}
 }

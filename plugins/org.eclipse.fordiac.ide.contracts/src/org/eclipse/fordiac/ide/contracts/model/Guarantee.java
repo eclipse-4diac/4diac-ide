@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.contracts.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -156,23 +157,46 @@ public class Guarantee extends ContractElement {
 		return false;
 	}
 
+	private static void sortHelper(final Map<String, EList<Guarantee>> mapGuarantees,
+			final Map<String, EList<Reaction>> mapReactions,
+			final Map<String, EList<GuaranteeTwoEvents>> mapGuaranteeTwoEvents, final Guarantee guarantee) {
+		if (guarantee instanceof final GuaranteeTwoEvents guaranteeTwoEvents) {
+			if (mapGuaranteeTwoEvents.containsKey(guaranteeTwoEvents.getOutputEvent())) {
+				mapGuaranteeTwoEvents.get(guaranteeTwoEvents.getOutputEvent()).add(guaranteeTwoEvents);
+			} else {
+				final EList<GuaranteeTwoEvents> toAdd = new BasicEList<>();
+				toAdd.add(guaranteeTwoEvents);
+				mapGuaranteeTwoEvents.put(guaranteeTwoEvents.getOutputEvent(), toAdd);
+			}
+		} else if (guarantee instanceof final Reaction reaction) {
+			if (mapReactions.containsKey(reaction.getOutputEvent())) {
+				mapReactions.get(reaction.getOutputEvent()).add(reaction);
+			} else {
+				final EList<Reaction> toAdd = new BasicEList<>();
+				toAdd.add(reaction);
+				mapReactions.put(reaction.getOutputEvent(), toAdd);
+			}
+		} else if (mapGuarantees.containsKey(guarantee.getOutputEvent())) {
+			mapGuarantees.get(guarantee.getOutputEvent()).add(guarantee);
+		} else {
+			final EList<Guarantee> toAdd = new BasicEList<>();
+			toAdd.add(guarantee);
+			mapGuarantees.put(guarantee.getOutputEvent(), toAdd);
+		}
+	}
+
 	public static boolean isCompatibleWith(final EList<Guarantee> guarantees) {
 		final Map<String, EList<Guarantee>> mapGuarantees = new HashMap<>();
-		for (final Guarantee guarantee : guarantees) {
-			if (guarantee instanceof GuaranteeTwoEvents) {
-				return GuaranteeTwoEvents.isCompatibleWith(guarantees);
-			}
-			if (guarantee instanceof Reaction) {
-				return Reaction.isCompatibleWith(guarantees);
-			}
-			if (mapGuarantees.containsKey(guarantee.getOutputEvent())) {
-				mapGuarantees.get(guarantee.getOutputEvent()).add(guarantee);
-			} else {
-				final EList<Guarantee> toAdd = new BasicEList<>();
-				toAdd.add(guarantee);
-				mapGuarantees.put(guarantee.getOutputEvent(), toAdd);
-			}
-
+		final Map<String, EList<Reaction>> mapReactions = new HashMap<>();
+		final Map<String, EList<GuaranteeTwoEvents>> mapGuaranteeTwoEvents = new HashMap<>();
+		final Consumer<Guarantee> sort = guarantee -> sortHelper(mapGuarantees, mapReactions, mapGuaranteeTwoEvents,
+				guarantee);
+		guarantees.parallelStream().forEach(sort);
+		if (mapGuaranteeTwoEvents.size() > 0) {
+			return GuaranteeTwoEvents.isCompatibleWith(mapGuarantees, mapReactions, mapGuaranteeTwoEvents);
+		}
+		if (mapReactions.size() > 0) {
+			return Reaction.isCompatibleWith(mapGuarantees, mapReactions);
 		}
 		for (final Map.Entry<String, EList<Guarantee>> entry : mapGuarantees.entrySet()) {
 			if (entry.getValue().size() != 1 && !ContractElement.isTimeConsistent(entry.getValue())) {

@@ -103,38 +103,100 @@ public class AssumptionWithOffset extends Assumption {
 	}
 
 	public static boolean isCompatibleWith(final EList<Assumption> assumptions) {
-		// TODO Implement
 		final EList<Assumption> normal = new BasicEList<>();
 		final EList<AssumptionWithOffset> withOffset = new BasicEList<>();
-		for (final Assumption assumption : assumptions) {
-			if (assumption instanceof final AssumptionWithOffset toAdd) {
+		assumptions.parallelStream().forEach(a -> {
+			if (a instanceof final AssumptionWithOffset toAdd) {
 				withOffset.add(toAdd);
 			} else {
-				normal.add(assumption);
+				normal.add(a);
 			}
-
+		});
+		if (normal.isEmpty() && withOffset.size() == 1) {
+			return true;
 		}
-		if (normal.size() > 1 && !Assumption.isCompatibleWith(normal)) {
-			return false;
+		if (normal.size() > 1) {
+			if (!Assumption.isCompatibleWith(normal)) {
+				return false;
+			}
+			final Assumption newAssumption = normal.get(0).getOwner().getAssumptionWith(normal.get(0).getInputEvent());
+			normal.clear();
+			normal.add(newAssumption);
 		}
-		if (withOffset.size() != 1 && !AssumptionWithOffset.isCompatibleWithOffset(withOffset)) {
-			return false;
+		if (withOffset.size() != 1) {
+			if (!AssumptionWithOffset.isCompatibleWithOffset(withOffset)) {
+				return false;
+			}
+			final AssumptionWithOffset newAssumption = (AssumptionWithOffset) withOffset.get(0).getOwner()
+					.getAssumptionWith(withOffset.get(0).getInputEvent());
+			withOffset.clear();
+			withOffset.add(newAssumption);
 		}
-		// TODO continue here
-		return withandwithout(normal.get(0), withOffset.get(0));
+		// here exactly one Assumption and one AssumptionnWithOffset exist
+		return compatibleWithAndWithout(normal.get(0), withOffset.get(0));
 
 	}
 
-	private static boolean withandwithout(final Assumption assumption,
+	private static boolean compatibleWithAndWithout(final Assumption assumption,
 			final AssumptionWithOffset assumptionWithOffset) {
-		// TODO Auto-generated method stub
+		// TODO Implement
+		if (assumption.getMax() == -1 && assumptionWithOffset.getMax() == -1
+				&& assumptionWithOffset.getMaxOffset() == -1) {
 
+		}
 		return false;
 	}
 
 	private static boolean isCompatibleWithOffset(final EList<AssumptionWithOffset> withOffset) {
-		// TODO Implement
-		return false;
+		int mini;
+		int miniOffest;
+		int maxi;
+		int maxiOffset;
+		mini = withOffset.get(0).getMin();
+		maxi = withOffset.get(0).getMax();
+		miniOffest = withOffset.get(0).getMinOffset();
+		maxiOffset = withOffset.get(0).getMaxOffset();
+		if (maxi == -1) {
+			maxi = mini;
+		}
+		if (maxiOffset == -1) {
+			maxiOffset = miniOffest;
+		}
+		for (int i = 1; withOffset.size() > i; i++) {
+			if (mini < withOffset.get(i).getMin()) {
+				mini = withOffset.get(i).getMin();
+			}
+			if (maxi > withOffset.get(i).getMax()) {
+				maxi = withOffset.get(i).getMax();
+			}
+			if (miniOffest < withOffset.get(i).getMinOffset()) {
+				miniOffest = withOffset.get(i).getMinOffset();
+			}
+			if (maxiOffset > withOffset.get(i).getMaxOffset()) {
+				maxiOffset = withOffset.get(i).getMaxOffset();
+			}
+
+		}
+		if (mini > maxi || miniOffest > maxiOffset) {
+			return false;
+		}
+		simplifyAssumptionWithOffset(withOffset.get(0), mini, maxi, miniOffest, maxiOffset);
+
+		return true;
+	}
+
+	private static void simplifyAssumptionWithOffset(final AssumptionWithOffset toRemove, final int mini,
+			final int maxi, final int miniOffest, final int maxiOffset) {
+		toRemove.getOwner().getAssumptions().removeIf(
+				a -> ((a.getInputEvent().equals(toRemove.getInputEvent())) && (a instanceof AssumptionWithOffset)));
+		final AssumptionWithOffset toAdd = new AssumptionWithOffset();
+		toAdd.setInputEvent(toRemove.getInputEvent());
+		toAdd.setMax(maxi);
+		toAdd.setMin(mini);
+		toAdd.setMaxOffset(maxiOffset);
+		toAdd.setMinOffset(miniOffest);
+		toAdd.setOwner(toRemove.getOwner());
+		toRemove.getOwner().add(toAdd);
 	}
 
 	@Override

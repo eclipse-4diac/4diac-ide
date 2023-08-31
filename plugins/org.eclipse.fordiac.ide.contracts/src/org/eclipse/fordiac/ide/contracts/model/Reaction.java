@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.model;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.util.EList;
 
 public class Reaction extends Guarantee {
@@ -20,10 +22,10 @@ public class Reaction extends Guarantee {
 	private static final int POS_WITHIN = 3;
 	private static final int POS_REACTION = 1;
 	private static final int GUARANTEE_LENGTH = 5;
-	private static final int POSITION_NO = 3;
+	private static final int POSITION_NO = 4;
 
 	Reaction() {
-		throw new ExceptionInInitializerError("Reaction not Implemented"); //$NON-NLS-1$
+		// throw new ExceptionInInitializerError("Reaction not Implemented"); //$NON-NLS-1$
 		// remove when class is correctly evaluated in contract
 	}
 
@@ -34,7 +36,7 @@ public class Reaction extends Guarantee {
 			throw new IllegalArgumentException("Error with Guarantee: " + line); //$NON-NLS-1$
 		}
 		final Reaction reaction = new Reaction();
-		final String[] events = parts[1].split(","); //$NON-NLS-1$
+		final String[] events = parts[2].split(","); //$NON-NLS-1$
 		reaction.setOutputEvent(events[1].substring(0, events[1].length() - 1));
 		reaction.setInputEvent(events[0].substring(1, events[0].length()));
 		if (parts[POSITION_NO].contains(",")) { //$NON-NLS-1$
@@ -47,12 +49,6 @@ public class Reaction extends Guarantee {
 		reaction.setMax(Integer.parseInt(parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - 2)));
 		reaction.setMin(0);
 		return reaction;
-
-	}
-
-	public static boolean isCompatibleWith(final EList<Guarantee> guarantees) {
-		// TODO implement
-		return false;
 
 	}
 
@@ -88,5 +84,15 @@ public class Reaction extends Guarantee {
 		}
 		comment.append("ms \n"); //$NON-NLS-1$
 		return comment.toString();
+	}
+
+	public static boolean isCompatibleWith(final Map<String, EList<Guarantee>> mapGuarantees,
+			final Map<String, EList<Reaction>> mapReactions) {
+		if (mapGuarantees.isEmpty() && mapReactions.size() == 1) {
+			return true;
+		}
+		// TODO Implement the rest
+		return false;
+
 	}
 }
