@@ -1639,14 +1639,15 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertNoErrors
 	}
-	
+
 	@Test
 	def void testExitNotInALoopIsAnError() {
 		'''
 			FUNCTION test
 			EXIT;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STExit, STCoreValidator.EXIT_NOT_IN_LOOP, "The EXIT keyword is only valid inside a loop statement (FOR/WHILE/REPEAT)")
+		'''.parse.assertError(STCorePackage.eINSTANCE.STExit, STCoreValidator.EXIT_NOT_IN_LOOP,
+			"An EXIT statement is only valid inside a loop statement (FOR/WHILE/REPEAT)")
 	}
-	
+
 }

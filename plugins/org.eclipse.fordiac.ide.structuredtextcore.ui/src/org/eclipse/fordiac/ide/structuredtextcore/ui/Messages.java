@@ -35,6 +35,8 @@ public final class Messages extends NLS {
 	public static String STCoreQuickfixProvider_RemoveUnnecessaryConversionLabel;
 	public static String STCoreQuickfixProvider_RemoveUnnecessaryLiteralConversionDescription;
 	public static String STCoreQuickfixProvider_RemoveUnnecessaryLiteralConversionLabel;
+	public static String STCoreQuickfixProvider_RemoveInvalidExitStatementLabel;
+	public static String STCoreQuickfixProvider_RemoveInvalidExitStatementDescription;
 	public static String STCoreCodeMiningPreferencePage_EnableCodeMinings;
 	public static String STCoreCodeMiningPreferencePage_EnableLiteralTypeCodeMinings;
 	public static String STCoreCodeMiningPreferencePage_EnableReferencedVariablesCodeMinings;

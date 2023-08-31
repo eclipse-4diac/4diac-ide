@@ -24,6 +24,7 @@ import java.text.MessageFormat;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
@@ -59,6 +60,13 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 	@Inject
 	protected EObjectAtOffsetHelper offsetHelper;
+
+	@Fix(STCoreValidator.EXIT_NOT_IN_LOOP)
+	public static void fixExitNotInLoop(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveInvalidExitStatementLabel,
+				Messages.STCoreQuickfixProvider_RemoveInvalidExitStatementDescription, null,
+				(element, context) -> EcoreUtil.delete(element));
+	}
 
 	@Fix(STCoreValidator.TRAILING_UNDERSCORE_IN_IDENTIFIER_ERROR)
 	public static void fixTrailingUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
@@ -197,7 +205,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 										document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
 								final EObject container = EcoreUtil2.getContainerOfType(element,
 										STFunction.class) != null
-										? EcoreUtil2.getContainerOfType(element, STFunction.class)
+												? EcoreUtil2.getContainerOfType(element, STFunction.class)
 												: EcoreUtil2.getContainerOfType(element, STMethod.class);
 								final var inputBlocks = EcoreUtil2.getAllContentsOfType(container,
 										STVarInputDeclarationBlock.class);
@@ -230,7 +238,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 										document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
 								final EObject container = EcoreUtil2.getContainerOfType(element,
 										STFunction.class) != null
-										? EcoreUtil2.getContainerOfType(element, STFunction.class)
+												? EcoreUtil2.getContainerOfType(element, STFunction.class)
 												: EcoreUtil2.getContainerOfType(element, STMethod.class);
 								final var outputBlocks = EcoreUtil2.getAllContentsOfType(container,
 										STVarOutputDeclarationBlock.class);
@@ -262,7 +270,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 										document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
 								final EObject container = EcoreUtil2.getContainerOfType(element,
 										STFunction.class) != null
-										? EcoreUtil2.getContainerOfType(element, STFunction.class)
+												? EcoreUtil2.getContainerOfType(element, STFunction.class)
 												: EcoreUtil2.getContainerOfType(element, STMethod.class);
 								final var inOutBlocks = EcoreUtil2.getAllContentsOfType(container,
 										STVarInOutDeclarationBlock.class);
@@ -291,7 +299,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 							final var varDeclaration = factory.createSTVarDeclaration();
 							varDeclaration.setType(type);
 							varDeclaration
-							.setName(document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
+									.setName(document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
 							EObject container = EcoreUtil2.getContainerOfType(element, STFunction.class);
 							if (container == null) {
 								container = EcoreUtil2.getContainerOfType(element, STAlgorithm.class);
