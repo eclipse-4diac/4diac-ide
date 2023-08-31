@@ -41,7 +41,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeature;
@@ -49,7 +49,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpress
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement;
@@ -211,14 +210,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass stAssignmentStatementEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass stCallStatementEClass = null;
+	private EClass stAssignmentEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -871,8 +863,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getSTAssignmentStatement() {
-		return stAssignmentStatementEClass;
+	public EClass getSTAssignment() {
+		return stAssignmentEClass;
 	}
 
 	/**
@@ -881,8 +873,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTAssignmentStatement_Left() {
-		return (EReference)stAssignmentStatementEClass.getEStructuralFeatures().get(0);
+	public EReference getSTAssignment_Left() {
+		return (EReference)stAssignmentEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -891,28 +883,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTAssignmentStatement_Right() {
-		return (EReference)stAssignmentStatementEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getSTCallStatement() {
-		return stCallStatementEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getSTCallStatement_Call() {
-		return (EReference)stCallStatementEClass.getEStructuralFeatures().get(0);
+	public EReference getSTAssignment_Right() {
+		return (EReference)stAssignmentEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -2331,12 +2303,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		stStatementEClass = createEClass(ST_STATEMENT);
 
-		stAssignmentStatementEClass = createEClass(ST_ASSIGNMENT_STATEMENT);
-		createEReference(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__LEFT);
-		createEReference(stAssignmentStatementEClass, ST_ASSIGNMENT_STATEMENT__RIGHT);
-
-		stCallStatementEClass = createEClass(ST_CALL_STATEMENT);
-		createEReference(stCallStatementEClass, ST_CALL_STATEMENT__CALL);
+		stAssignmentEClass = createEClass(ST_ASSIGNMENT);
+		createEReference(stAssignmentEClass, ST_ASSIGNMENT__LEFT);
+		createEReference(stAssignmentEClass, ST_ASSIGNMENT__RIGHT);
 
 		stCallArgumentEClass = createEClass(ST_CALL_ARGUMENT);
 		createEReference(stCallArgumentEClass, ST_CALL_ARGUMENT__ARGUMENT);
@@ -2556,8 +2525,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stVarTempDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
 		stElementaryInitializerExpressionEClass.getESuperTypes().add(this.getSTInitializerExpression());
 		stArrayInitializerExpressionEClass.getESuperTypes().add(this.getSTInitializerExpression());
-		stAssignmentStatementEClass.getESuperTypes().add(this.getSTStatement());
-		stCallStatementEClass.getESuperTypes().add(this.getSTStatement());
+		stAssignmentEClass.getESuperTypes().add(this.getSTExpression());
 		stCallUnnamedArgumentEClass.getESuperTypes().add(this.getSTCallArgument());
 		stCallNamedInputArgumentEClass.getESuperTypes().add(this.getSTCallArgument());
 		stCallNamedOutputArgumentEClass.getESuperTypes().add(this.getSTCallArgument());
@@ -2566,6 +2534,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stForStatementEClass.getESuperTypes().add(this.getSTStatement());
 		stWhileStatementEClass.getESuperTypes().add(this.getSTStatement());
 		stRepeatStatementEClass.getESuperTypes().add(this.getSTStatement());
+		stExpressionEClass.getESuperTypes().add(this.getSTStatement());
 		stNumericLiteralEClass.getESuperTypes().add(this.getSTExpression());
 		stDateLiteralEClass.getESuperTypes().add(this.getSTExpression());
 		stTimeLiteralEClass.getESuperTypes().add(this.getSTExpression());
@@ -2643,12 +2612,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		initEClass(stStatementEClass, STStatement.class, "STStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		initEClass(stAssignmentStatementEClass, STAssignmentStatement.class, "STAssignmentStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getSTAssignmentStatement_Left(), this.getSTExpression(), null, "left", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getSTAssignmentStatement_Right(), this.getSTExpression(), null, "right", null, 0, 1, STAssignmentStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-
-		initEClass(stCallStatementEClass, STCallStatement.class, "STCallStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getSTCallStatement_Call(), this.getSTExpression(), null, "call", null, 0, 1, STCallStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEClass(stAssignmentEClass, STAssignment.class, "STAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSTAssignment_Left(), this.getSTExpression(), null, "left", null, 0, 1, STAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTAssignment_Right(), this.getSTExpression(), null, "right", null, 0, 1, STAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stCallArgumentEClass, STCallArgument.class, "STCallArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTCallArgument_Argument(), this.getSTExpression(), null, "argument", null, 0, 1, STCallArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

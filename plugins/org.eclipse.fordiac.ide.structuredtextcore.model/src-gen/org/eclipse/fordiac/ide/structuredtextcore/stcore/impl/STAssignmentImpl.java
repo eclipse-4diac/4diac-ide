@@ -24,25 +24,25 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ST Assignment Statement</b></em>'.
+ * An implementation of the model object '<em><b>ST Assignment</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STAssignmentStatementImpl#getLeft <em>Left</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STAssignmentStatementImpl#getRight <em>Right</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STAssignmentImpl#getLeft <em>Left</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STAssignmentImpl#getRight <em>Right</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class STAssignmentStatementImpl extends STStatementImpl implements STAssignmentStatement {
+public class STAssignmentImpl extends STExpressionImpl implements STAssignment {
 	/**
 	 * The cached value of the '{@link #getLeft() <em>Left</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -68,7 +68,7 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected STAssignmentStatementImpl() {
+	protected STAssignmentImpl() {
 		super();
 	}
 
@@ -79,7 +79,7 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT;
+		return STCorePackage.Literals.ST_ASSIGNMENT;
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
 		STExpression oldLeft = left;
 		left = newLeft;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT, oldLeft, newLeft);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT__LEFT, oldLeft, newLeft);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -117,14 +117,14 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
 		if (newLeft != left) {
 			NotificationChain msgs = null;
 			if (left != null)
-				msgs = ((InternalEObject)left).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT, null, msgs);
+				msgs = ((InternalEObject)left).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT__LEFT, null, msgs);
 			if (newLeft != null)
-				msgs = ((InternalEObject)newLeft).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT, null, msgs);
+				msgs = ((InternalEObject)newLeft).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT__LEFT, null, msgs);
 			msgs = basicSetLeft(newLeft, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT, newLeft, newLeft));
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT__LEFT, newLeft, newLeft));
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
 		STExpression oldRight = right;
 		right = newRight;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT, oldRight, newRight);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT__RIGHT, oldRight, newRight);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -162,14 +162,14 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
 		if (newRight != right) {
 			NotificationChain msgs = null;
 			if (right != null)
-				msgs = ((InternalEObject)right).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT, null, msgs);
+				msgs = ((InternalEObject)right).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT__RIGHT, null, msgs);
 			if (newRight != null)
-				msgs = ((InternalEObject)newRight).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT, null, msgs);
+				msgs = ((InternalEObject)newRight).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ASSIGNMENT__RIGHT, null, msgs);
 			msgs = basicSetRight(newRight, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT, newRight, newRight));
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ASSIGNMENT__RIGHT, newRight, newRight));
 	}
 
 	/**
@@ -180,9 +180,9 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT:
+			case STCorePackage.ST_ASSIGNMENT__LEFT:
 				return basicSetLeft(null, msgs);
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT:
+			case STCorePackage.ST_ASSIGNMENT__RIGHT:
 				return basicSetRight(null, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -197,9 +197,9 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT:
+			case STCorePackage.ST_ASSIGNMENT__LEFT:
 				return getLeft();
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT:
+			case STCorePackage.ST_ASSIGNMENT__RIGHT:
 				return getRight();
 			default:
 				return super.eGet(featureID, resolve, coreType);
@@ -214,10 +214,10 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT:
+			case STCorePackage.ST_ASSIGNMENT__LEFT:
 				setLeft((STExpression)newValue);
 				return;
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT:
+			case STCorePackage.ST_ASSIGNMENT__RIGHT:
 				setRight((STExpression)newValue);
 				return;
 			default:
@@ -234,10 +234,10 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT:
+			case STCorePackage.ST_ASSIGNMENT__LEFT:
 				setLeft((STExpression)null);
 				return;
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT:
+			case STCorePackage.ST_ASSIGNMENT__RIGHT:
 				setRight((STExpression)null);
 				return;
 			default:
@@ -254,13 +254,13 @@ public class STAssignmentStatementImpl extends STStatementImpl implements STAssi
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT__LEFT:
+			case STCorePackage.ST_ASSIGNMENT__LEFT:
 				return left != null;
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT__RIGHT:
+			case STCorePackage.ST_ASSIGNMENT__RIGHT:
 				return right != null;
 			default:
 				return super.eIsSet(featureID);
 		}
 	}
 
-} //STAssignmentStatementImpl
+} //STAssignmentImpl

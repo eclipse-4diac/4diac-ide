@@ -51,17 +51,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.value.ValueConverterFactory
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
@@ -74,8 +72,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifier
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
@@ -185,9 +181,6 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		"" // nop
 	}
 
-	def protected dispatch CharSequence generateStatement(STAssignmentStatement stmt) //
-	'''«stmt.left.generateExpression» = «stmt.right.generateExpression»'''
-
 	def protected dispatch CharSequence generateStatement(STIfStatement stmt) '''
 		if «stmt.condition.generateExpression» then
 		  «stmt.statements.generateStatementList»
@@ -255,12 +248,17 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateStatement(STExit stmt) '''break'''
 
-	def protected dispatch CharSequence generateStatement(STCallStatement stmt) '''«stmt.call.generateExpression»'''
+	def protected dispatch CharSequence generateStatement(STExpression stmt) {
+		stmt.generateExpression
+	}
 
 	def protected dispatch CharSequence generateExpression(STExpression expr) {
 		errors.add('''The expression «expr.eClass.name» is not supported''')
 		""
 	}
+
+	def protected dispatch CharSequence generateExpression(STAssignment expr) //
+	'''«expr.left.generateExpression» = «expr.right.generateExpression»'''
 
 	def protected dispatch CharSequence generateExpression(STBinaryExpression expr) {
 		switch (expr.op) {

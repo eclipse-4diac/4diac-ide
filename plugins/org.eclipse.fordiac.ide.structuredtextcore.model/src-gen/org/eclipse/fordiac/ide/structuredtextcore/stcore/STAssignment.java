@@ -19,36 +19,36 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>ST Assignment Statement</b></em>'.
+ * A representation of the model object '<em><b>ST Assignment</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement#getLeft <em>Left</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement#getRight <em>Right</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment#getLeft <em>Left</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment#getRight <em>Right</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTAssignmentStatement()
+ * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTAssignment()
  * @model
  * @generated
  */
-public interface STAssignmentStatement extends STStatement {
+public interface STAssignment extends STExpression {
 	/**
 	 * Returns the value of the '<em><b>Left</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Left</em>' containment reference.
 	 * @see #setLeft(STExpression)
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTAssignmentStatement_Left()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTAssignment_Left()
 	 * @model containment="true"
 	 * @generated
 	 */
 	STExpression getLeft();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement#getLeft <em>Left</em>}' containment reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment#getLeft <em>Left</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Left</em>' containment reference.
@@ -63,14 +63,14 @@ public interface STAssignmentStatement extends STStatement {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Right</em>' containment reference.
 	 * @see #setRight(STExpression)
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTAssignmentStatement_Right()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTAssignment_Right()
 	 * @model containment="true"
 	 * @generated
 	 */
 	STExpression getRight();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement#getRight <em>Right</em>}' containment reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment#getRight <em>Right</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Right</em>' containment reference.
@@ -79,4 +79,4 @@ public interface STAssignmentStatement extends STStatement {
 	 */
 	void setRight(STExpression value);
 
-} // STAssignmentStatement
+} // STAssignment

@@ -28,7 +28,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
@@ -195,8 +195,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 						Messages.STCoreQuickfixProvider_CreateMissingInputVariable, null,
 						(final EObject element, final IModificationContext context) -> {
 							final IXtextDocument document = context.getXtextDocument();
-							if (document != null
-									&& element.eContainer() instanceof final STAssignmentStatement assignment) {
+							if (document != null && element.eContainer() instanceof final STAssignment assignment) {
 								final var factory = STCoreFactory.eINSTANCE;
 								final var type = assignment.getRight().getResultType();
 								final var varDeclaration = factory.createSTVarDeclaration();
@@ -228,8 +227,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 						(final EObject element, final IModificationContext context) -> {
 
 							final IXtextDocument document = context.getXtextDocument();
-							if (document != null
-									&& element.eContainer() instanceof final STAssignmentStatement assignment) {
+							if (document != null && element.eContainer() instanceof final STAssignment assignment) {
 								final var factory = STCoreFactory.eINSTANCE;
 								final var type = assignment.getRight().getResultType();
 								final var varDeclaration = factory.createSTVarDeclaration();
@@ -260,8 +258,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 						Messages.STCoreQuickfixProvider_CreateMissingInOutVariable, null,
 						(final EObject element, final IModificationContext context) -> {
 							final IXtextDocument document = context.getXtextDocument();
-							if (document != null
-									&& element.eContainer() instanceof final STAssignmentStatement assignment) {
+							if (document != null && element.eContainer() instanceof final STAssignment assignment) {
 								final var factory = STCoreFactory.eINSTANCE;
 								final var type = assignment.getRight().getResultType();
 								final var varDeclaration = factory.createSTVarDeclaration();
@@ -292,8 +289,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 					Messages.STCoreQuickfixProvider_CreateMissingTempVariable, null,
 					(final EObject element, final IModificationContext context) -> {
 						final IXtextDocument document = context.getXtextDocument();
-						if (document != null
-								&& element.eContainer() instanceof final STAssignmentStatement assignment) {
+						if (document != null && element.eContainer() instanceof final STAssignment assignment) {
 							final var factory = STCoreFactory.eINSTANCE;
 							final var type = assignment.getRight().getResultType();
 							final var varDeclaration = factory.createSTVarDeclaration();

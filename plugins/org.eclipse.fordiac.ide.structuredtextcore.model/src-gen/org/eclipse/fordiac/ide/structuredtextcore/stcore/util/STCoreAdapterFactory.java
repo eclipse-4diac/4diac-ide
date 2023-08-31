@@ -141,12 +141,8 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTStatementAdapter();
 			}
 			@Override
-			public Adapter caseSTAssignmentStatement(STAssignmentStatement object) {
-				return createSTAssignmentStatementAdapter();
-			}
-			@Override
-			public Adapter caseSTCallStatement(STCallStatement object) {
-				return createSTCallStatementAdapter();
+			public Adapter caseSTAssignment(STAssignment object) {
+				return createSTAssignmentAdapter();
 			}
 			@Override
 			public Adapter caseSTCallArgument(STCallArgument object) {
@@ -525,30 +521,16 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement <em>ST Assignment Statement</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment <em>ST Assignment</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
 	 * @generated
 	 */
-	public Adapter createSTAssignmentStatementAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement <em>ST Call Statement</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
-	 * @generated
-	 */
-	public Adapter createSTCallStatementAdapter() {
+	public Adapter createSTAssignmentAdapter() {
 		return null;
 	}
 

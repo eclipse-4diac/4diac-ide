@@ -62,9 +62,13 @@ class STFunctionFormatter extends STCoreFormatter {
 			append[setNewLines(1, 2, 2)]
 		]
 
-		if(!stFunctionSource.name.nullOrEmpty) {
-			stFunctionSource.regionFor.keyword(STFunctionSourceAccess.PACKAGEKeyword_1_0).prepend[noSpace].append[oneSpace]
-			stFunctionSource.regionFor.keyword(STFunctionSourceAccess.semicolonKeyword_1_2).prepend[noSpace].append[newLines = 2]
+		if (!stFunctionSource.name.nullOrEmpty) {
+			stFunctionSource.regionFor.keyword(STFunctionSourceAccess.PACKAGEKeyword_1_0).prepend[noSpace].append [
+				oneSpace
+			]
+			stFunctionSource.regionFor.keyword(STFunctionSourceAccess.semicolonKeyword_1_2).prepend[noSpace].append [
+				newLines = 2
+			]
 		}
 		stFunctionSource.imports.forEach [
 			format
@@ -81,18 +85,17 @@ class STFunctionFormatter extends STCoreFormatter {
 
 		if (stFunction.returnType !== null) {
 			// We have a return type
-			stFunction.regionFor.keyword(":").surround[oneSpace]
-			stFunction.regionFor.feature(STFunctionPackage.Literals.ST_FUNCTION__RETURN_TYPE).prepend[oneSpace]
+			stFunction.regionFor.keyword(STFunctionAccess.colonKeyword_3_0).surround[oneSpace]
+			stFunction.regionFor.feature(STFunctionPackage.Literals.ST_FUNCTION__RETURN_TYPE).prepend[oneSpace].append[setNewLines(1, 1, 2)]
 		} else {
-			stFunction.regionFor.assignment(STFunctionAccess.nameAssignment_2)
+			stFunction.regionFor.assignment(STFunctionAccess.nameAssignment_2).append[setNewLines(1, 1, 2)]
 		}
 
 		stFunction.varDeclarations.forEach[format]
+		stFunction.varDeclarations.last?.append[setNewLines(1, 2, 2)]
 
-		if (!stFunction.code.empty) stFunction.code.get(0).prepend[setNewLines(1, 2, 2)]
 		stFunction.code.forEach[format]
-		if (!stFunction.code.empty) stFunction.code.last.append[setNewLines(1, 2, 2)]
 
-		stFunction.regionFor.keyword("END_FUNCTION").prepend[noSpace].prepend[setNewLines(1, 2, 2)].append[setNewLines(1, 2, 2)]
+		stFunction.regionFor.keyword("END_FUNCTION").prepend[noSpace].append[setNewLines(1, 2, 2)]
 	}
 }

@@ -20,7 +20,7 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.debug.st.breakpoint.STLineBreakpoint;
 import org.eclipse.fordiac.ide.debug.ui.breakpoint.CommonToggleBreakpointsTargetExtension;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
@@ -32,7 +32,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
 public class STToggleBreakpointsTargetExtension extends CommonToggleBreakpointsTargetExtension {
-	
+
 	private static final Set<String> APPLICABLE_LANGUAGES = Set.of(
 			"org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm", //$NON-NLS-1$
 			"org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"); //$NON-NLS-1$
@@ -46,11 +46,11 @@ public class STToggleBreakpointsTargetExtension extends CommonToggleBreakpointsT
 	protected boolean isValidSematicElementForBreakpoint(final EObject element) {
 		if (element instanceof STExpression) {
 			final EObject container = element.eContainer();
-			if (container instanceof STAssignmentStatement) {
-				return ((STAssignmentStatement) container).getRight() == element;
-			} else if (container instanceof STForStatement) {
-				return ((STForStatement) container).getFrom() == element
-						|| ((STForStatement) container).getBy() == element;
+			if (container instanceof final STAssignment assignment) {
+				return assignment.getRight() == element;
+			}
+			if (container instanceof final STForStatement forStatement) {
+				return forStatement.getFrom() == element || forStatement.getBy() == element;
 			}
 			return container instanceof STStatement || container instanceof STElseIfPart
 					|| container instanceof STCaseCases || container instanceof STContinue
@@ -65,7 +65,7 @@ public class STToggleBreakpointsTargetExtension extends CommonToggleBreakpointsT
 	}
 
 	@Override
-	protected boolean isValidBreakpointType(IBreakpoint breakpoint) {
+	protected boolean isValidBreakpointType(final IBreakpoint breakpoint) {
 		return breakpoint instanceof STLineBreakpoint;
 	}
 }

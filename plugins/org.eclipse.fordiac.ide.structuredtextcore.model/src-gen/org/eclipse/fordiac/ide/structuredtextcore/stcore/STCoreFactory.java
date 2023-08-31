@@ -162,22 +162,13 @@ public interface STCoreFactory extends EFactory {
 	STStatement createSTStatement();
 
 	/**
-	 * Returns a new object of class '<em>ST Assignment Statement</em>'.
+	 * Returns a new object of class '<em>ST Assignment</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>ST Assignment Statement</em>'.
+	 * @return a new object of class '<em>ST Assignment</em>'.
 	 * @generated
 	 */
-	STAssignmentStatement createSTAssignmentStatement();
-
-	/**
-	 * Returns a new object of class '<em>ST Call Statement</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>ST Call Statement</em>'.
-	 * @generated
-	 */
-	STCallStatement createSTCallStatement();
+	STAssignment createSTAssignment();
 
 	/**
 	 * Returns a new object of class '<em>ST Call Argument</em>'.

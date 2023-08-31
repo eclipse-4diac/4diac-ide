@@ -32,7 +32,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
  *
  * @generated
  */
-public class STExpressionImpl extends MinimalEObjectImpl.Container implements STExpression {
+public class STExpressionImpl extends STStatementImpl implements STExpression {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -68,10 +68,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.converter.STStringValueConvert
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
@@ -379,31 +378,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	@Check
-	public void checkValidLHS(final STAssignmentStatement statement) {
-		accept(isAssignable(statement.getLeft()), statement, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT);
-	}
-
-	private static boolean isValidCall(final STExpression expression) {
-		return expression instanceof final STFeatureExpression featureExpression && featureExpression.isCall()
-				&& ((STFeatureExpression) expression).getFeature() instanceof ICallable;
-	}
-
-	private static boolean isInCallStatementOnly(final STFeatureExpression expression) {
-		if (expression.eContainer() instanceof STMemberAccessExpression) {
-			return expression.eContainer().eContainer() instanceof STCallStatement;
-		}
-		return expression.eContainer() instanceof STCallStatement;
-	}
-
-	private static boolean hasReturnType(final ICallable callable) {
-		return callable.getReturnType() != null;
+	public void checkValidLHS(final STAssignment expression) {
+		accept(isAssignable(expression.getLeft()), expression, STCorePackage.Literals.ST_ASSIGNMENT__LEFT);
 	}
 
 	@Check
 	public void checkCallWithoutReturnIsOnlyInCallStatement(final STFeatureExpression expression) {
-		if (isValidCall(expression) && !hasReturnType((ICallable) expression.getFeature())
-				&& !isInCallStatementOnly(expression)) {
-			final var callable = (ICallable) expression.getFeature();
+		if (expression.getFeature() instanceof final ICallable callable && callable.getReturnType() == null
+				&& expression.isCall() && STCoreUtil.getAccessMode(expression) != AccessMode.NONE) {
 			error(MessageFormat.format(Messages.STCoreValidator_AssignmentOfCallWithoutReturnType, callable.getName()),
 					expression, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, RETURNED_TYPE_IS_VOID);
 		}
@@ -515,10 +497,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	@Check
-	public void checkAssignmentTypeCompatibility(final STAssignmentStatement statement) {
-		final var leftType = statement.getLeft().getResultType();
-		final var rightType = statement.getRight().getResultType();
-		checkTypeCompatibility(leftType, rightType, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__RIGHT);
+	public void checkAssignmentTypeCompatibility(final STAssignment expression) {
+		final var leftType = expression.getLeft().getResultType();
+		final var rightType = expression.getRight().getResultType();
+		checkTypeCompatibility(leftType, rightType, STCorePackage.Literals.ST_ASSIGNMENT__RIGHT);
 	}
 
 	@Check

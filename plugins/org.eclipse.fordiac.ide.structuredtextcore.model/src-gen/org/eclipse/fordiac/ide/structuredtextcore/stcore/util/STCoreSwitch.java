@@ -175,17 +175,11 @@ public class STCoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT: {
-				STAssignmentStatement stAssignmentStatement = (STAssignmentStatement)theEObject;
-				T result = caseSTAssignmentStatement(stAssignmentStatement);
-				if (result == null) result = caseSTStatement(stAssignmentStatement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case STCorePackage.ST_CALL_STATEMENT: {
-				STCallStatement stCallStatement = (STCallStatement)theEObject;
-				T result = caseSTCallStatement(stCallStatement);
-				if (result == null) result = caseSTStatement(stCallStatement);
+			case STCorePackage.ST_ASSIGNMENT: {
+				STAssignment stAssignment = (STAssignment)theEObject;
+				T result = caseSTAssignment(stAssignment);
+				if (result == null) result = caseSTExpression(stAssignment);
+				if (result == null) result = caseSTStatement(stAssignment);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -272,6 +266,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 			case STCorePackage.ST_EXPRESSION: {
 				STExpression stExpression = (STExpression)theEObject;
 				T result = caseSTExpression(stExpression);
+				if (result == null) result = caseSTStatement(stExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -279,6 +274,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STNumericLiteral stNumericLiteral = (STNumericLiteral)theEObject;
 				T result = caseSTNumericLiteral(stNumericLiteral);
 				if (result == null) result = caseSTExpression(stNumericLiteral);
+				if (result == null) result = caseSTStatement(stNumericLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -286,6 +282,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STDateLiteral stDateLiteral = (STDateLiteral)theEObject;
 				T result = caseSTDateLiteral(stDateLiteral);
 				if (result == null) result = caseSTExpression(stDateLiteral);
+				if (result == null) result = caseSTStatement(stDateLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -293,6 +290,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STTimeLiteral stTimeLiteral = (STTimeLiteral)theEObject;
 				T result = caseSTTimeLiteral(stTimeLiteral);
 				if (result == null) result = caseSTExpression(stTimeLiteral);
+				if (result == null) result = caseSTStatement(stTimeLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -300,6 +298,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STTimeOfDayLiteral stTimeOfDayLiteral = (STTimeOfDayLiteral)theEObject;
 				T result = caseSTTimeOfDayLiteral(stTimeOfDayLiteral);
 				if (result == null) result = caseSTExpression(stTimeOfDayLiteral);
+				if (result == null) result = caseSTStatement(stTimeOfDayLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -307,6 +306,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STDateAndTimeLiteral stDateAndTimeLiteral = (STDateAndTimeLiteral)theEObject;
 				T result = caseSTDateAndTimeLiteral(stDateAndTimeLiteral);
 				if (result == null) result = caseSTExpression(stDateAndTimeLiteral);
+				if (result == null) result = caseSTStatement(stDateAndTimeLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -314,6 +314,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STStringLiteral stStringLiteral = (STStringLiteral)theEObject;
 				T result = caseSTStringLiteral(stStringLiteral);
 				if (result == null) result = caseSTExpression(stStringLiteral);
+				if (result == null) result = caseSTStatement(stStringLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -362,6 +363,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STBinaryExpression stBinaryExpression = (STBinaryExpression)theEObject;
 				T result = caseSTBinaryExpression(stBinaryExpression);
 				if (result == null) result = caseSTExpression(stBinaryExpression);
+				if (result == null) result = caseSTStatement(stBinaryExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -369,6 +371,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STUnaryExpression stUnaryExpression = (STUnaryExpression)theEObject;
 				T result = caseSTUnaryExpression(stUnaryExpression);
 				if (result == null) result = caseSTExpression(stUnaryExpression);
+				if (result == null) result = caseSTStatement(stUnaryExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -376,6 +379,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STMemberAccessExpression stMemberAccessExpression = (STMemberAccessExpression)theEObject;
 				T result = caseSTMemberAccessExpression(stMemberAccessExpression);
 				if (result == null) result = caseSTExpression(stMemberAccessExpression);
+				if (result == null) result = caseSTStatement(stMemberAccessExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -383,6 +387,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STArrayAccessExpression stArrayAccessExpression = (STArrayAccessExpression)theEObject;
 				T result = caseSTArrayAccessExpression(stArrayAccessExpression);
 				if (result == null) result = caseSTExpression(stArrayAccessExpression);
+				if (result == null) result = caseSTStatement(stArrayAccessExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -390,6 +395,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STFeatureExpression stFeatureExpression = (STFeatureExpression)theEObject;
 				T result = caseSTFeatureExpression(stFeatureExpression);
 				if (result == null) result = caseSTExpression(stFeatureExpression);
+				if (result == null) result = caseSTStatement(stFeatureExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -397,6 +403,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STBuiltinFeatureExpression stBuiltinFeatureExpression = (STBuiltinFeatureExpression)theEObject;
 				T result = caseSTBuiltinFeatureExpression(stBuiltinFeatureExpression);
 				if (result == null) result = caseSTExpression(stBuiltinFeatureExpression);
+				if (result == null) result = caseSTStatement(stBuiltinFeatureExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -404,6 +411,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STMultibitPartialExpression stMultibitPartialExpression = (STMultibitPartialExpression)theEObject;
 				T result = caseSTMultibitPartialExpression(stMultibitPartialExpression);
 				if (result == null) result = caseSTExpression(stMultibitPartialExpression);
+				if (result == null) result = caseSTStatement(stMultibitPartialExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -663,32 +671,17 @@ public class STCoreSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ST Assignment Statement</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>ST Assignment</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ST Assignment Statement</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>ST Assignment</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseSTAssignmentStatement(STAssignmentStatement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ST Call Statement</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ST Call Statement</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseSTCallStatement(STCallStatement object) {
+	public T caseSTAssignment(STAssignment object) {
 		return null;
 	}
 

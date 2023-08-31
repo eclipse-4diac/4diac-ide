@@ -64,10 +64,13 @@ class STAlgorithmFormatter extends STCoreFormatter {
 	def dispatch void format(STAlgorithm sTAlgorithm, extension IFormattableDocument document) {
 		sTAlgorithm.regionFor.keyword("ALGORITHM").prepend[noIndentation].append[oneSpace]
 		sTAlgorithm.regionFor.assignment(STAlgorithmAccess.nameAssignment_1).append[setNewLines(1, 1, 2)]
-		sTAlgorithm.regionFor.keyword("END_ALGORITHM").prepend[noIndentation].append[setNewLines(2, 2, 2)]
 
-		if(sTAlgorithm.body.statements.size() > 0) sTAlgorithm.body.statements.get(0)?.prepend[setNewLines(1, 1, 2)]
-		sTAlgorithm.body.format
+		sTAlgorithm.body.varTempDeclarations.forEach[format]
+		sTAlgorithm.body.varTempDeclarations.last?.append[setNewLines(1, 2, 2)]
+
+		sTAlgorithm.body.statements.forEach[format]
+
+		sTAlgorithm.regionFor.keyword("END_ALGORITHM").prepend[noIndentation].append[setNewLines(2, 2, 2)]
 	}
 
 	def dispatch void format(STMethod sTMethod, extension IFormattableDocument document) {
@@ -80,9 +83,13 @@ class STAlgorithmFormatter extends STCoreFormatter {
 		} else {
 			sTMethod.regionFor.assignment(STMethodAccess.nameAssignment_1).append[setNewLines(1, 1, 2)]
 		}
+
+		sTMethod.body.varDeclarations.forEach[format]
+		sTMethod.body.varDeclarations.last?.append[setNewLines(1, 2, 2)]
+
+		sTMethod.body.statements.forEach[format]
+
 		sTMethod.regionFor.keyword("END_METHOD").prepend[noIndentation].append[setNewLines(2, 2, 2)]
-		if(sTMethod.body.statements.size > 0) sTMethod.body.statements.get(0).prepend[setNewLines(1, 1, 2)]
-		sTMethod.body.format
 	}
 
 }

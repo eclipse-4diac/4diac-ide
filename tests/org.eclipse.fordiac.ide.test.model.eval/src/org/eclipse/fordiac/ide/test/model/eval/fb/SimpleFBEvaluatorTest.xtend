@@ -261,11 +261,11 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	def void testMethodCallWithInOut() {
 		42.toIntValue.assertEquals(#[
 			'''
-				VAR_TEMP
-					tempVar : INT;
-				END_VAR
-				tempVar := DI1;
-				THIS.TEST_METHOD(X := tempVar, A := DI2, O => DO1); DO1 := DO1 + tempVar;'''.newSTAlgorithm("REQ"),
+			VAR_TEMP
+				tempVar : INT;
+			END_VAR
+			tempVar := DI1;
+			THIS.TEST_METHOD(X := tempVar, A := DI2, O => DO1); DO1 := DO1 + tempVar;'''.newSTAlgorithm("REQ"),
 			'''
 				METHOD TEST_METHOD
 				VAR_INPUT
@@ -288,11 +288,11 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	def void testMethodCallNonFormalWithInOut() {
 		42.toIntValue.assertEquals(#[
 			'''
-				VAR_TEMP
-					tempVar : INT;
-				END_VAR
-				tempVar := DI1;
-				THIS.TEST_METHOD(DI2, tempVar, DO1); DO1 := DO1 + tempVar;'''.newSTAlgorithm("REQ"),
+			VAR_TEMP
+				tempVar : INT;
+			END_VAR
+			tempVar := DI1;
+			THIS.TEST_METHOD(DI2, tempVar, DO1); DO1 := DO1 + tempVar;'''.newSTAlgorithm("REQ"),
 			'''
 				METHOD TEST_METHOD
 				VAR_INPUT
@@ -599,11 +599,11 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	def void testMethod2MethodCallNonFormalWithInOut() {
 		21.toIntValue.assertEquals(#[
 			'''
-				VAR_TEMP
-					tempVar : INT;
-				END_VAR
-				tempVar := DI1;
-				THIS.TEST_METHOD(DI2, tempVar); DO1 := tempVar;'''.newSTAlgorithm("REQ"),
+			VAR_TEMP
+				tempVar : INT;
+			END_VAR
+			tempVar := DI1;
+			THIS.TEST_METHOD(DI2, tempVar); DO1 := tempVar;'''.newSTAlgorithm("REQ"),
 			'''
 				METHOD TEST_METHOD
 				VAR_INPUT
@@ -679,8 +679,8 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 			'''
 				DO1 := DI1[0] + DI1[1] + DI1[2] + DI1[3] + DI1[4] + DI1[5];
 			'''.newSTAlgorithm("REQ")
-		].evaluateSimpleFB("REQ", #[inputVarDecl, outputVarDecl], emptyList, #[internalConstVarDecl], emptyList).variables.
-			get("DO1").value)
+		].evaluateSimpleFB("REQ", #[inputVarDecl, outputVarDecl], emptyList, #[internalConstVarDecl], emptyList).
+			variables.get("DO1").value)
 	}
 
 	@Test

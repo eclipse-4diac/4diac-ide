@@ -117,7 +117,7 @@ class STFunctionValidatorTest {
 			3 := 4;
 			2+3 := 5;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.VALUE_NOT_ASSIGNABLE)
 	}
 
 	@Test
@@ -134,7 +134,7 @@ class STFunctionValidatorTest {
 				int2 := sint1;
 				int1 := real;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NON_COMPATIBLE_TYPES)
 
 	}
 
@@ -152,7 +152,7 @@ class STFunctionValidatorTest {
 			testArray3 := testArray[1];
 			testArray := testArray4;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
@@ -204,7 +204,7 @@ class STFunctionValidatorTest {
 				bool1 := usint1;
 				word1 := ltime1;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
@@ -223,7 +223,7 @@ class STFunctionValidatorTest {
 			testArray2[0] := testArray2[1];
 			testArray2[0, 2] := 5;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
@@ -247,7 +247,7 @@ class STFunctionValidatorTest {
 				dword1 := WCHAR_TO_DWORD(wchar1);
 				int1 := sint1;
 			END_FUNCTION
-		'''.parse.assertNoErrors(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES);
+		'''.parse.assertNoErrors(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NON_COMPATIBLE_TYPES);
 	}
 
 	@Test
@@ -601,10 +601,10 @@ class STFunctionValidatorTest {
 			FUNCTION hubert
 			VAR
 				int1 : INT;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := 4 TO 17 DO
-				int1 := 17;
 			END_FOR;
 			int2 := int1; // read access -> warning
 			END_FUNCTION
@@ -614,10 +614,10 @@ class STFunctionValidatorTest {
 			FUNCTION hubert
 			VAR
 				int1 : INT;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := 4 TO 17 DO
-				int1 := 17;
 			END_FOR;
 			
 			IF int2 <> 0 THEN
@@ -1395,7 +1395,7 @@ class STFunctionValidatorTest {
 			END_VAR
 			assigned := called();
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES,
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NON_COMPATIBLE_TYPES,
 			"Cannot convert from REAL to STRING")
 	}
 
@@ -1424,7 +1424,7 @@ class STFunctionValidatorTest {
 			END_VAR
 			in1 := 2;
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.VALUE_NOT_ASSIGNABLE,
 			"Inputs shall not be be assigned. This will be elevated to an error in the future")
 	}
 
@@ -1437,7 +1437,7 @@ class STFunctionValidatorTest {
 			END_VAR
 			in1 := 2;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.VALUE_NOT_ASSIGNABLE,
 			"Constants cannot be assigned.")
 	}
 
@@ -1450,7 +1450,7 @@ class STFunctionValidatorTest {
 			END_VAR
 			in1 := 2;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.VALUE_NOT_ASSIGNABLE,
 			"Constants cannot be assigned.")
 	}
 
