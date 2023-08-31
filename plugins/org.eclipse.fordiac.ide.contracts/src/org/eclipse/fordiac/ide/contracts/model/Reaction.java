@@ -13,16 +13,27 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.model;
 
+import org.eclipse.emf.common.util.EList;
+
 public class Reaction extends Guarantee {
+	private static final int POS_MS = 4;
+	private static final int POS_WITHIN = 3;
+	private static final int POS_REACTION = 1;
+	private static final int GUARANTEE_LENGTH = 5;
 	private static final int POSITION_NO = 3;
 
 	Reaction() {
+		throw new ExceptionInInitializerError("Reaction not Implemented"); //$NON-NLS-1$
+		// remove when class is correctly evaluated in contract
 	}
 
 	static Guarantee createReaction(final String line) {
 
-		final Reaction reaction = new Reaction();
 		String[] parts = line.split(" "); //$NON-NLS-1$
+		if (!isCorrectGuarantee(parts)) {
+			throw new IllegalArgumentException("Error with Guarantee: " + line); //$NON-NLS-1$
+		}
+		final Reaction reaction = new Reaction();
 		final String[] events = parts[1].split(","); //$NON-NLS-1$
 		reaction.setOutputEvent(events[1].substring(0, events[1].length() - 1));
 		reaction.setInputEvent(events[0].substring(1, events[0].length()));
@@ -33,9 +44,49 @@ public class Reaction extends Guarantee {
 			reaction.setMax(Integer.parseInt(parts[0]));
 			return reaction;
 		}
-		reaction.setMax(-1);
-		reaction.setMin(Integer.parseInt(parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - 2)));
+		reaction.setMax(Integer.parseInt(parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - 2)));
+		reaction.setMin(0);
 		return reaction;
 
+	}
+
+	public static boolean isCompatibleWith(final EList<Guarantee> guarantees) {
+		// TODO implement
+		return false;
+
+	}
+
+	private static boolean isCorrectGuarantee(final String[] parts) {
+		if (parts.length != GUARANTEE_LENGTH) {
+			return false;
+		}
+		if (!"Reaction".equals(parts[POS_REACTION])) { //$NON-NLS-1$
+			return false;
+		}
+		if (!"within".equals(parts[POS_WITHIN])) { //$NON-NLS-1$
+			return false;
+		}
+		return "ms".equals(parts[POS_MS].subSequence(parts[POS_MS].length() - 2, parts[POS_MS].length())); //$NON-NLS-1$
+	}
+
+	@Override
+	public String createComment() {
+		final StringBuilder comment = new StringBuilder();
+		comment.append("GUARANTEE Reaction (");  //$NON-NLS-1$
+		comment.append(getInputEvent());
+		comment.append(","); //$NON-NLS-1$
+		comment.append(getOutputEvent());
+		comment.append(") within ");	 //$NON-NLS-1$
+		if (getMin() == 0 || getMin() == getMax()) {
+			comment.append(getMax());
+		} else {
+			comment.append("["); //$NON-NLS-1$
+			comment.append(getMin());
+			comment.append(","); //$NON-NLS-1$
+			comment.append(getMax());
+			comment.append("]"); //$NON-NLS-1$
+		}
+		comment.append("ms \n"); //$NON-NLS-1$
+		return comment.toString();
 	}
 }

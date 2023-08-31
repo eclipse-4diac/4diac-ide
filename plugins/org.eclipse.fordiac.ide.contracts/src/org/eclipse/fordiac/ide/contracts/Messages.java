@@ -20,6 +20,20 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.contracts.messages"; //$NON-NLS-1$
 
+	public static String Contract_ErrorAssumption;
+
+	public static String Contract_ErrorAssumptionsGuarantees;
+
+	public static String Contract_ErrorElements;
+
+	public static String Contract_ErrorGuarantee;
+
+	public static String Contract_ErrorIncosistentAssumptions;
+
+	public static String Contract_ErrorIncosistentGuarantees;
+
+	public static String Contract_ErrorName;
+
 	public static String DefineFBDecisionTwoPinDialog_CreateGuarantee;
 
 	public static String DefineFBDecisionTwoPinDialog_CreateReaction;
