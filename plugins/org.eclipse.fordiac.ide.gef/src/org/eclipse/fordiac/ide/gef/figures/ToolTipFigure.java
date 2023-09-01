@@ -45,8 +45,8 @@ public class ToolTipFigure extends Figure {
 
 		String nameLine = element.getName();
 
-		if ((element instanceof final IInterfaceElement ie) && (ie.getType() != null)) {
-			nameLine += " - " + ie.getType().getName(); //$NON-NLS-1$
+		if (element instanceof final IInterfaceElement ie && ie.getFullTypeName() != null) {
+			nameLine += " - " + ie.getFullTypeName(); //$NON-NLS-1$
 		}
 
 		if (element instanceof final ErrorMarkerRef emRef && emRef.hasError()) {
