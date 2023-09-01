@@ -126,6 +126,13 @@ final class ForteNgExportUtil {
 		}
 	}
 
+	def static String generateTypeGenIncludePath(INamedElement type) {
+		switch (path : type.generateTypePath) {
+			case !path.empty: '''«path»/«type.generateTypeBasename»_gen.cpp'''
+			default: '''«type.generateTypeBasename»_gen.cpp'''
+		}
+	}
+
 	def static String generateTypeInclude(INamedElement type) '''«type.generateTypeBasename».h'''
 
 	def static String generateTypeSource(INamedElement type) '''«type.generateTypeBasename».cpp'''

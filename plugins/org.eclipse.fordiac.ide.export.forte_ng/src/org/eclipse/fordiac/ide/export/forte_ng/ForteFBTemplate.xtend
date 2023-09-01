@@ -70,7 +70,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def protected generateImplIncludes() '''
 		#include "«fileBasename».h"
 		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-		#include "«fileBasename»_gen.cpp"
+		#include "«type.generateTypeGenIncludePath»"
 		#endif
 		
 		#include "criticalregion.h"
