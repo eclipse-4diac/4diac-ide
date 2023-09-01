@@ -110,8 +110,10 @@ class StructuredTextParseUtil {
 
 	def static void validateType(VarDeclaration decl, List<Issue> issues) {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
-		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, decl?.eResource?.URI, null,
-			decl.getContainerOfType(LibraryElement), null, issues)
+		// use context from FB type since the type declaration is in the context of the FB type (and not an instance)
+		val typeVariable = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name) ?: decl
+		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, typeVariable?.eResource?.URI, null,
+			typeVariable.getContainerOfType(LibraryElement), null, issues)
 	}
 
 	def static STExpressionSource parse(String expression, INamedElement expectedType, LibraryElement type,
@@ -138,8 +140,10 @@ class StructuredTextParseUtil {
 	def static STTypeDeclaration parseType(VarDeclaration decl, List<String> errors, List<String> warnings,
 		List<String> infos) {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
-		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, decl?.eResource?.URI, null, decl.name,
-			decl.getContainerOfType(LibraryElement), null, errors, warnings, infos)?.rootASTElement as STTypeDeclaration
+		// use context from FB type since the type declaration is in the context of the FB type (and not an instance)
+		val typeVariable = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name) ?: decl
+		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, typeVariable?.eResource?.URI, null, decl.name,
+			typeVariable.getContainerOfType(LibraryElement), null, errors, warnings, infos)?.rootASTElement as STTypeDeclaration
 	}
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, String name, LibraryElement type,
