@@ -167,6 +167,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			+ "forControlVariableNonTemporary"; //$NON-NLS-1$
 	public static final String FOR_CONTROL_VARIABLE_UNDEFINED = ISSUE_CODE_PREFIX + "forControlVariableUndefined"; //$NON-NLS-1$
 	public static final String EXIT_NOT_IN_LOOP = ISSUE_CODE_PREFIX + "exitNotInLoop"; //$NON-NLS-1$
+	public static final String NESTED_ASSIGNMENT = ISSUE_CODE_PREFIX + "nestedAssignment"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
 
@@ -497,6 +498,13 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	@Check
+	public void checkNestedAssignment(final STAssignment expression) {
+		if (expression.eContainer() instanceof STAssignment) {
+			error(Messages.STCoreValidator_NestedAssignment, null, NESTED_ASSIGNMENT);
+		}
+	}
+
+	@Check
 	public void checkAssignmentTypeCompatibility(final STAssignment expression) {
 		final var leftType = expression.getLeft().getResultType();
 		final var rightType = expression.getRight().getResultType();
@@ -815,10 +823,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				|| statement instanceof STRepeatStatement;
 	}
 
-	/*
-	 * Here we already know that we have a MultibitPartialExpression. This function
-	 * checks bound on static access (without "()")
-	 */
+	/* Here we already know that we have a MultibitPartialExpression. This function checks bound on static access
+	 * (without "()") */
 	private void checkMultibitPartialExpression(final STMultibitPartialExpression expression,
 			final DataType accessorType, final DataType receiverType) {
 		if (receiverType instanceof AnyBitType) {

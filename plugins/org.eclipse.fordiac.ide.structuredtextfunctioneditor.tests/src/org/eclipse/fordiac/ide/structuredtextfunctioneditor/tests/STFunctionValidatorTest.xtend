@@ -264,6 +264,20 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
+	def void testNestedAssignment() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+				int1 := int2 := 17;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NESTED_ASSIGNMENT)
+
+	}
+
+	@Test
 	def void testInvalidArrayInitializer() {
 		'''
 			FUNCTION hubert

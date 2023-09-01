@@ -52,6 +52,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_Unqualified_FB_Call_On_FB_With_Input_Event_Size_Not_One;
 	public static String STCoreValidator_UsingNonTemporaryAsControlVariable;
 	public static String STCoreValidator_NameNotVisible;
+	public static String STCoreValidator_NestedAssignment;
 	public static String STCoreValidator_CallableHasNoReturnType;
 	public static String STCoreValidator_BitAccessOutOfRange;
 	public static String STCoreValidator_BitAccessInvalidForType;
