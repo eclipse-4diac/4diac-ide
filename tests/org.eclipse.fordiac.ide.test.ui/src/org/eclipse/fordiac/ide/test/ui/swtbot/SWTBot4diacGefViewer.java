@@ -12,15 +12,21 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.swtbot;
 
+import java.util.Map;
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefViewer;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.waits.ICondition;
 
 public class SWTBot4diacGefViewer extends SWTBotGefViewer {
 
@@ -55,6 +61,37 @@ public class SWTBot4diacGefViewer extends SWTBotGefViewer {
 
 	public GraphicalViewer getGraphicalViewer() {
 		return graphicalViewer;
+	}
+
+	/**
+	 * Checks if there is a ConnectionEditPart in the editPartRegistry. Throws an
+	 * exception if no such part can be found after 1 second.
+	 *
+	 * @param editPartRegistry Map with all registered editParts
+	 * @throws Exception When no ConnectionEditPart can be found in the map of the
+	 *                   {@link EditPartViewer#getEditPartRegistry
+	 *                   EditPartRegistry}.
+	 */
+	public void waitForConnection() {
+		final Map<?, ?> editPartRegistry = getGraphicalViewer().getEditPartRegistry();
+		bot().waitUntil(new ICondition() {
+
+			@Override
+			public boolean test() throws Exception {
+				return editPartRegistry.values().stream().filter(v -> v instanceof ConnectionEditPart).count() == 1;
+			}
+
+			@Override
+			public void init(final SWTBot bot) {
+				// method must be implemented but empty since not needed
+			}
+
+			@Override
+			public String getFailureMessage() {
+				return "no ConnectionEditPart found";
+			}
+
+		}, 1000);
 	}
 
 }

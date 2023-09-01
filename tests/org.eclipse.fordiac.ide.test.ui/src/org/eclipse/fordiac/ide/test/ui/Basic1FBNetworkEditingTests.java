@@ -21,13 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Map;
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
-import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.graphics.Point;
@@ -39,9 +36,7 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
-import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
-import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
@@ -334,8 +329,7 @@ public class Basic1FBNetworkEditingTests {
 	public void validConnectionBetweenEventInputPinAndEventOutputPin() {
 		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 200));
 		final SWTBot4diacGefViewer viewer = createConnection(START, EO);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertDoesNotThrow(() -> waitUntilCondition(editPartRegistry));
+		assertDoesNotThrow(viewer::waitForConnection);
 	}
 
 	/**
@@ -352,8 +346,7 @@ public class Basic1FBNetworkEditingTests {
 	public void validConnectionBetweenEventOutputPinAndEventInputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(EO1, START);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertDoesNotThrow(() -> waitUntilCondition(editPartRegistry));
+		assertDoesNotThrow(viewer::waitForConnection);
 	}
 
 	/**
@@ -370,8 +363,7 @@ public class Basic1FBNetworkEditingTests {
 	public void validConnectionBetweenUintDataInputPinAndUintDataOutputPin() {
 		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(150, 150));
 		final SWTBot4diacGefViewer viewer = createConnection(PV, CV);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertDoesNotThrow(() -> waitUntilCondition(editPartRegistry));
+		assertDoesNotThrow(viewer::waitForConnection);
 	}
 
 	/**
@@ -388,8 +380,7 @@ public class Basic1FBNetworkEditingTests {
 	public void validConnectionBetweenBoolInputPinAndBoolOutputPin() {
 		dragAndDropEventsFB(E_D_FF_TREE_ITEM, new Point(150, 150));
 		final SWTBot4diacGefViewer viewer = createConnection(D, Q);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertDoesNotThrow(() -> waitUntilCondition(editPartRegistry));
+		assertDoesNotThrow(viewer::waitForConnection);
 	}
 
 	/**
@@ -415,8 +406,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventInputPinAndEventInputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(START, STOP);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -434,8 +424,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventInputPinAndUintInputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(150, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(START, N);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -453,8 +442,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventInputPinAndTimeInputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(150, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(START, DT);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -472,8 +460,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventInputPinAndBoolInputPin() {
 		dragAndDropEventsFB(E_D_FF_TREE_ITEM, new Point(150, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(CLK, D);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -491,8 +478,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventInputPinAndUintOutputPin() {
 		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 150));
 		final SWTBot4diacGefViewer viewer = createConnection(CD, CV);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -510,8 +496,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventInputPinAndTimeOutputPin() {
 		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(INIT, DTO);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -529,8 +514,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventInputPinAndBoolOutputPin() {
 		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 150));
 		final SWTBot4diacGefViewer viewer = createConnection(CD, QU);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -548,8 +532,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenTimeInputPinAndTimeOutputPin() {
 		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(DT, DTO);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -567,8 +550,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenTimeInputPinAndUintInputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(DT, N);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -586,8 +568,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenUintInputPinAndBoolOutputPin() {
 		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PV, QU);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -605,8 +586,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventOutputPinAndUintInputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(EO0, N);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -624,8 +604,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventOutputPinAndTimeInputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(EO1, DT);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -643,8 +622,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventOutputPinAndBoolInputPin() {
 		dragAndDropEventsFB(E_D_FF_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(EO, D);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -662,8 +640,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventOutputPinAndEventOutputPin() {
 		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(EO0, EO2);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -681,8 +658,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventOutputPinAndUintOutputPin() {
 		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(CLKO, CV);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -700,8 +676,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventOutputPinAndTimeOutputPin() {
 		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(CLKO, DTO);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -719,8 +694,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenEventOutputPinAndBoolOutputPin() {
 		dragAndDropEventsFB(E_D_FF_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(EO, Q);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	/**
@@ -738,8 +712,7 @@ public class Basic1FBNetworkEditingTests {
 	public void invalidConnectionBetweenBoolOutputPinAndBoolOutputPin() {
 		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(QU, QD);
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-		assertThrows(TimeoutException.class, () -> waitUntilCondition(editPartRegistry));
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
 	// End of region for test methods
@@ -832,36 +805,6 @@ public class Basic1FBNetworkEditingTests {
 
 		assertNotNull(canvas);
 		eCycleNode.dragAndDrop(canvas, point);
-	}
-
-	/**
-	 * Checks if there is a ConnectionEditPart in the editPartRegistry. Throws an
-	 * exception if no such part can be found after 1 second.
-	 *
-	 * @param editPartRegistry Map with all registered editParts
-	 * @throws Exception When no ConnectionEditPart can be found in the map of the
-	 *                   {@link EditPartViewer#getEditPartRegistry
-	 *                   EditPartRegistry}.
-	 */
-	private static void waitUntilCondition(final Map<?, ?> editPartRegistry) {
-		bot.waitUntil(new ICondition() {
-
-			@Override
-			public boolean test() throws Exception {
-				return editPartRegistry.values().stream().filter(v -> v instanceof ConnectionEditPart).count() == 1;
-			}
-
-			@Override
-			public void init(final SWTBot bot) {
-				// method must be implemented but empty since not needed
-			}
-
-			@Override
-			public String getFailureMessage() {
-				return "no ConnectionEditPart found";
-			}
-
-		}, 1000);
 	}
 
 	/**
