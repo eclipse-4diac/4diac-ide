@@ -72,9 +72,7 @@
     <genClasses ecoreClass="STCore.ecore#//STCoreSource">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCoreSource/statements"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STImport">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STImport/importedNamespace"/>
-    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STImport"/>
     <genClasses ecoreClass="STCore.ecore#//STVarDeclarationBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STVarDeclarationBlock/constant"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclarationBlock/varDeclarations"/>

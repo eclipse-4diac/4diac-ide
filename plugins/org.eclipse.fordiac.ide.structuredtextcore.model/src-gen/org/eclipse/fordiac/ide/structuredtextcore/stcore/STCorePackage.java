@@ -155,7 +155,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_IMPORT__IMPORTED_NAMESPACE = 0;
+	int ST_IMPORT__IMPORTED_NAMESPACE = LibraryElementPackage.IMPORT__IMPORTED_NAMESPACE;
 
 	/**
 	 * The number of structural features of the '<em>ST Import</em>' class.
@@ -164,7 +164,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_IMPORT_FEATURE_COUNT = 1;
+	int ST_IMPORT_FEATURE_COUNT = LibraryElementPackage.IMPORT_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationBlockImpl <em>ST Var Declaration Block</em>}' class.
@@ -2297,17 +2297,6 @@ public interface STCorePackage extends EPackage {
 	EClass getSTImport();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport#getImportedNamespace <em>Imported Namespace</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Imported Namespace</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport#getImportedNamespace()
-	 * @see #getSTImport()
-	 * @generated
-	 */
-	EAttribute getSTImport_ImportedNamespace();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock <em>ST Var Declaration Block</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4023,14 +4012,6 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass ST_IMPORT = eINSTANCE.getSTImport();
-
-		/**
-		 * The meta object literal for the '<em><b>Imported Namespace</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ST_IMPORT__IMPORTED_NAMESPACE = eINSTANCE.getSTImport_ImportedNamespace();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationBlockImpl <em>ST Var Declaration Block</em>}' class.

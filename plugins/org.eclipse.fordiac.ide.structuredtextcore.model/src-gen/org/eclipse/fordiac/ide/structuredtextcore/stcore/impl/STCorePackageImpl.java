@@ -683,16 +683,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSTImport_ImportedNamespace() {
-		return (EAttribute)stImportEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getSTVarDeclarationBlock() {
 		return stVarDeclarationBlockEClass;
 	}
@@ -2273,7 +2263,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEReference(stCoreSourceEClass, ST_CORE_SOURCE__STATEMENTS);
 
 		stImportEClass = createEClass(ST_IMPORT);
-		createEAttribute(stImportEClass, ST_IMPORT__IMPORTED_NAMESPACE);
 
 		stVarDeclarationBlockEClass = createEClass(ST_VAR_DECLARATION_BLOCK);
 		createEAttribute(stVarDeclarationBlockEClass, ST_VAR_DECLARATION_BLOCK__CONSTANT);
@@ -2518,6 +2507,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		// Add supertypes to classes
 		stCoreSourceEClass.getESuperTypes().add(this.getSTSource());
+		stImportEClass.getESuperTypes().add(theLibraryElementPackage.getImport());
 		stVarPlainDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
 		stVarInputDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
 		stVarOutputDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
@@ -2566,7 +2556,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEReference(getSTCoreSource_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STCoreSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stImportEClass, STImport.class, "STImport", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getSTImport_ImportedNamespace(), ecorePackage.getEString(), "importedNamespace", null, 0, 1, STImport.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stVarDeclarationBlockEClass, STVarDeclarationBlock.class, "STVarDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getSTVarDeclarationBlock_Constant(), ecorePackage.getEBoolean(), "constant", null, 0, 1, STVarDeclarationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

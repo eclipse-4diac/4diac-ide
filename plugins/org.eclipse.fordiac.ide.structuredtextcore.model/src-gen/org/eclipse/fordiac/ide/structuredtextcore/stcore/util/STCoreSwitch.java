@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.*;
 
 /**
@@ -99,6 +100,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 			case STCorePackage.ST_IMPORT: {
 				STImport stImport = (STImport)theEObject;
 				T result = caseSTImport(stImport);
+				if (result == null) result = caseImport(stImport);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1252,6 +1254,21 @@ public class STCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTInitializerExpressionSource(STInitializerExpressionSource object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Import</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Import</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseImport(Import object) {
 		return null;
 	}
 
