@@ -23,6 +23,7 @@ public final class Messages extends NLS {
 	public static String STCoreQuickfixProvider_ChangeConversionLabel;
 	public static String STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredDescription;
 	public static String STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredLabel;
+	public static String STCoreQuickfixProvider_CreateImport;
 	public static String STCoreQuickfixProvider_CreateMissingInOutVariable;
 	public static String STCoreQuickfixProvider_CreateMissingInputVariable;
 	public static String STCoreQuickfixProvider_CreateMissingOutputVariable;
