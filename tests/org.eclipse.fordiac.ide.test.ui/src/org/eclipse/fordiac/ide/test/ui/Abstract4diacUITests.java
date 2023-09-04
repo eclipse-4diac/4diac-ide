@@ -16,16 +16,20 @@ import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
+import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
+import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 
 public class Abstract4diacUITests {
@@ -46,6 +50,7 @@ public class Abstract4diacUITests {
 	private static final String OK = "OK"; //$NON-NLS-1$
 	private static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
 	private static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
+	private static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
 	private static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
 
 	/**
@@ -105,10 +110,29 @@ public class Abstract4diacUITests {
 	}
 
 	/**
+	 * Cleans the canvas from all objects.
+	 */
+	@SuppressWarnings("static-method")
+	@AfterEach
+	protected void cleanEditorArea() {
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		viewer.getCanvas().setFocus();
+
+		final SWTBotMenu editMenu = bot.menu(EDIT);
+		editMenu.menu(SELECT_ALL).click();
+		final SWTBotMenu deleteMenu = editMenu.menu(DELETE);
+		if (deleteMenu.isEnabled()) {
+			// not all Tests have a remaining FB
+			deleteMenu.click();
+		}
+	}
+
+	/**
 	 * Resets the workbench after
 	 */
 	@AfterClass
-	public static void afterClass() {
+	protected static void afterClass() {
 		bot.resetWorkbench();
 	}
 

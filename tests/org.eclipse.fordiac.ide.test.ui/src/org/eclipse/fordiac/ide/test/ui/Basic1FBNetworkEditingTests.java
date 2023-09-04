@@ -34,11 +34,9 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -54,7 +52,6 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	private static final String EDIT = "Edit"; //$NON-NLS-1$
 	private static final String EVENTS_NODE = "events"; //$NON-NLS-1$
 	private static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
-	private static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
 	private static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
 	private static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
 	// FB pins and values
@@ -740,25 +737,6 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 
 		assertNotNull(canvas);
 		eCycleNode.dragAndDrop(canvas, point);
-	}
-
-	/**
-	 * Cleans the canvas from all objects.
-	 */
-	@SuppressWarnings("static-method")
-	@AfterEach
-	public void cleanEditorArea() {
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
-		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		viewer.getCanvas().setFocus();
-
-		final SWTBotMenu editMenu = bot.menu(EDIT);
-		editMenu.menu(SELECT_ALL).click();
-		final SWTBotMenu deleteMenu = editMenu.menu(DELETE);
-		if (deleteMenu.isEnabled()) {
-			// not all Tests have a remaining FB
-			deleteMenu.click();
-		}
 	}
 
 }
