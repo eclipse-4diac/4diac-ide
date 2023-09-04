@@ -15,15 +15,23 @@
  *       - adapt non-compatible type quickfix
  *       - externalize strings and cleanup
  *       - add unnecessary conversion quickfixes
+ *       - add unused import and organize imports quickfixes
  *   Ulzii Jargalsaikhan
  *   	 - add quick fixes for missing variables
  */
 package org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix;
 
 import java.text.MessageFormat;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
+import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
@@ -31,17 +39,23 @@ import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProv
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionScope;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.diagnostics.Diagnostic;
+import org.eclipse.xtext.naming.IQualifiedNameConverter;
+import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.XtextResource;
@@ -52,10 +66,12 @@ import org.eclipse.xtext.ui.editor.model.edit.IModificationContext;
 import org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider;
 import org.eclipse.xtext.ui.editor.quickfix.Fix;
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor;
+import org.eclipse.xtext.util.Strings;
 import org.eclipse.xtext.validation.Issue;
 
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
@@ -64,6 +80,12 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 	@Inject
 	protected EObjectAtOffsetHelper offsetHelper;
+
+	@Inject
+	private IQualifiedNameConverter nameConverter;
+
+	@Inject
+	private Provider<STCoreTypeUsageCollector> typeUsageCollectorProvider;
 
 	@Fix(STCoreValidator.EXIT_NOT_IN_LOOP)
 	public static void fixExitNotInLoop(final Issue issue, final IssueResolutionAcceptor acceptor) {
@@ -183,6 +205,80 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 						}
 					});
 		}
+	}
+
+	@Fix(STCoreValidator.UNUSED_IMPORT)
+	public static void fixUnusedImport(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveUnusedImportLabel,
+				MessageFormat.format(Messages.STCoreQuickfixProvider_RemoveUnusedImportDescription, issue.getData()[0]),
+				null, (element, context) -> EcoreUtil.delete(element));
+	}
+
+	@Fix(STCoreValidator.UNUSED_IMPORT)
+	@Fix(STCoreValidator.WILDCARD_IMPORT)
+	public void organizeImports(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, Messages.STCoreQuickfixProvider_OrganizeImports,
+				Messages.STCoreQuickfixProvider_OrganizeImports, null,
+				(element, context) -> organizeImports(EcoreUtil2.getContainerOfType(element, STSource.class)));
+	}
+
+	protected void organizeImports(final STSource source) {
+		final QualifiedName packageName = getPackageName(source);
+		final EList<STImport> imports = getImports(source);
+		if (imports == null) {
+			return;
+		}
+		final STCoreTypeUsageCollector collector = typeUsageCollectorProvider.get();
+		final Set<QualifiedName> imported = new HashSet<>(collector.collectUsedTypes(source));
+		imported.removeIf(imp -> STCoreValidator.isImplicitImport(imp, packageName));
+		imports.removeIf(imp -> shouldRemoveImport(imp, imported));
+		imported.stream().map(nameConverter::toString).map(STCoreQuickfixProvider::createImport)
+				.forEachOrdered(imports::add);
+		ECollections.sort(imports, Comparator.comparing(STImport::getImportedNamespace));
+	}
+
+	protected QualifiedName getPackageName(final STSource source) {
+		if (source != null) {
+			final EStructuralFeature nameFeature = source.eClass().getEStructuralFeature("name"); //$NON-NLS-1$
+			if (nameFeature.getEType() == EcorePackage.eINSTANCE.getEString() && !nameFeature.isMany()) {
+				final String name = (String) source.eGet(nameFeature);
+				if (!Strings.isEmpty(name)) {
+					return nameConverter.toQualifiedName(name);
+				}
+			}
+		}
+		return QualifiedName.EMPTY;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected static EList<STImport> getImports(final STSource source) {
+		if (source != null) {
+			final EStructuralFeature importsFeature = source.eClass().getEStructuralFeature("imports"); //$NON-NLS-1$
+			if (importsFeature.getEType() == STCorePackage.eINSTANCE.getSTImport() && importsFeature.isMany()) {
+				return (EList<STImport>) source.eGet(importsFeature);
+			}
+		}
+		return null; // NOSONAR
+	}
+
+	protected boolean shouldRemoveImport(final STImport imp, final Set<QualifiedName> imported) {
+		final String importedNamespace = imp.getImportedNamespace();
+		if (Strings.isEmpty(importedNamespace)) {
+			return true;
+		}
+
+		final QualifiedName qualifiedName = nameConverter.toQualifiedName(importedNamespace);
+		if (qualifiedName == null || qualifiedName.isEmpty()) {
+			return true;
+		}
+
+		return !imported.remove(qualifiedName);
+	}
+
+	protected static STImport createImport(final String importedNamespace) {
+		final STImport result = STCoreFactory.eINSTANCE.createSTImport();
+		result.setImportedNamespace(importedNamespace);
+		return result;
 	}
 
 	@Override

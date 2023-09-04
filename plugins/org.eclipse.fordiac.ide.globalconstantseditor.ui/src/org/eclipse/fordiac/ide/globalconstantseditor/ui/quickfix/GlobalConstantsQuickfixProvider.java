@@ -18,22 +18,19 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.Messages;
 import org.eclipse.fordiac.ide.globalconstantseditor.validation.GlobalConstantsValidator;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.STCoreQuickfixProvider;
 import org.eclipse.xtext.ui.editor.model.edit.IModificationContext;
-import org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider;
 import org.eclipse.xtext.ui.editor.quickfix.Fix;
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor;
 import org.eclipse.xtext.validation.Issue;
 
-/**
- * Custom quickfixes.
+/** Custom quickfixes.
  *
- * See
- * https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#quick-fixes
- */
-public class GlobalConstantsQuickfixProvider extends DefaultQuickfixProvider {
+ * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#quick-fixes */
+public class GlobalConstantsQuickfixProvider extends STCoreQuickfixProvider {
 
 	@Fix(GlobalConstantsValidator.GLOBAL_VARS_NOT_MARKED_CONSTANT)
-	public void addConstModifier(final Issue issue, final IssueResolutionAcceptor acceptor) {
+	public static void addConstModifier(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, Messages.GlobalConstQuickFix_AddConstantKeyword,
 				Messages.GlobalConstQuickFix_AddConstantKeyword, null,
 				(final EObject object, final IModificationContext context) -> {
