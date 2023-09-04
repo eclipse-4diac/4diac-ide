@@ -40,7 +40,6 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
-import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Disabled;
@@ -86,18 +85,6 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	private static final String INIT = "INIT"; //$NON-NLS-1$
 	private static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
-
-	/**
-	 * Resets the workbench after
-	 */
-	@AfterClass
-	public static void afterClass() {
-		bot.resetWorkbench();
-	}
-
-	// End of region for test settings
-	// ----------------------------------------------------------------------------------------
-	// Region of test methods
 
 	/**
 	 * Drags and Drops a Function Block onto the canvas.

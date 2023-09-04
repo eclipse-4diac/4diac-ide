@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.junit.AfterClass;
 import org.junit.jupiter.api.BeforeAll;
 
 public class Abstract4diacUITests {
@@ -65,6 +66,14 @@ public class Abstract4diacUITests {
 		assertEquals(bot.textWithLabel(INITIAL_APPLICATION_NAME_LABEL).getText(), PROJECT_NAME + APP);
 		bot.button(FINISH).click();
 		bot.waitUntil(shellCloses(shell));
+	}
+
+	/**
+	 * Resets the workbench after
+	 */
+	@AfterClass
+	public static void afterClass() {
+		bot.resetWorkbench();
 	}
 
 }
