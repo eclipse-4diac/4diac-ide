@@ -38,16 +38,14 @@ public class Contract {
 
 	public static Contract getContractFromComment(final String comment) {
 		final Contract contract = new Contract();
-		final String[] lines = comment.split("\n"); //$NON-NLS-1$
+		final String[] lines = comment.split(System.lineSeparator());
 		for (final String line : lines) {
 			if (line.startsWith("ASSUMPTION")) { //$NON-NLS-1$
 				final Assumption toAdd = Assumption.createAssumption(line);
-				toAdd.setOwner(contract);
-				contract.add(toAdd);
+				contract.add(toAdd, contract);
 			} else if (line.startsWith("GUARANTEE")) { //$NON-NLS-1$
 				final Guarantee toAdd = Guarantee.createGuarantee(line);
-				toAdd.setOwner(contract);
-				contract.add(toAdd);
+				contract.add(toAdd, contract);
 			}
 		}
 		return contract;
@@ -78,14 +76,15 @@ public class Contract {
 		return guarantees;
 	}
 
-	void add(final Assumption assumption) {
-		if (assumption.getOwner() == this) {
-			isChanged = true;
-			assumptions.add(assumption);
-		}
+	void add(final Assumption assumption, final Contract owner) {
+		assumption.setContract(owner);
+		isChanged = true;
+		assumptions.add(assumption);
+
 	}
 
-	void add(final Guarantee guarantee) {
+	void add(final Guarantee guarantee, final Contract owner) {
+		guarantee.setContract(owner);
 		isChanged = true;
 		guarantees.add(guarantee);
 	}
@@ -138,7 +137,7 @@ public class Contract {
 	}
 
 	private void checkValidity() {
-		if (!(owner instanceof final SubApp subapp) || !subapp.getName().startsWith("_CONTRACT")) { //$NON-NLS-1$
+		if (!ContractUtils.isContractSubapp(owner)) {
 			setError(Messages.Contract_ErrorName);
 			isValid = false;
 			return;

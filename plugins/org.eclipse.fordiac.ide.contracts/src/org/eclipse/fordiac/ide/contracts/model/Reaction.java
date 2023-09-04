@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 
 public class Reaction extends Guarantee {
+
 	private static final int POS_MS = 4;
 	private static final int POS_WITHIN = 3;
 	private static final int POS_REACTION = 1;
@@ -25,7 +26,7 @@ public class Reaction extends Guarantee {
 	private static final int POSITION_NO = 4;
 
 	Reaction() {
-		// throw new ExceptionInInitializerError("Reaction not Implemented"); //$NON-NLS-1$
+		throw new ExceptionInInitializerError("Reaction not Implemented"); //$NON-NLS-1$
 		// remove when class is correctly evaluated in contract
 	}
 
@@ -36,13 +37,13 @@ public class Reaction extends Guarantee {
 			throw new IllegalArgumentException("Error with Guarantee: " + line); //$NON-NLS-1$
 		}
 		final Reaction reaction = new Reaction();
-		final String[] events = parts[2].split(","); //$NON-NLS-1$
+		final String[] events = parts[2].split(ContractKeywords.COMMA);
 		reaction.setOutputEvent(events[1].substring(0, events[1].length() - 1));
 		reaction.setInputEvent(events[0].substring(1, events[0].length()));
-		if (parts[POSITION_NO].contains(",")) { //$NON-NLS-1$
-			parts = parts[POSITION_NO].split(","); //$NON-NLS-1$
+		if (ContractUtils.isInterval(parts, POSITION_NO, ContractKeywords.INTERVAL_DIVIDER)) {
+			parts = parts[POSITION_NO].split(ContractKeywords.INTERVAL_DIVIDER);
 			reaction.setMin(Integer.parseInt(parts[0].substring(1)));
-			parts = parts[1].split("]"); //$NON-NLS-1$
+			parts = parts[1].split(ContractKeywords.INTERVAL_CLOSE);
 			reaction.setMax(Integer.parseInt(parts[0]));
 			return reaction;
 		}
@@ -56,15 +57,17 @@ public class Reaction extends Guarantee {
 		if (parts.length != GUARANTEE_LENGTH) {
 			return false;
 		}
-		if (!"Reaction".equals(parts[POS_REACTION])) { //$NON-NLS-1$
+		if (!ContractKeywords.REACTION.equals(parts[POS_REACTION])) {
 			return false;
 		}
-		if (!"within".equals(parts[POS_WITHIN])) { //$NON-NLS-1$
+		if (!ContractKeywords.WITHIN.equals(parts[POS_WITHIN])) {
 			return false;
 		}
-		return "ms".equals(parts[POS_MS].subSequence(parts[POS_MS].length() - 2, parts[POS_MS].length())); //$NON-NLS-1$
+		return ContractKeywords.UNIT_OF_TIME
+				.equals(parts[POS_MS].subSequence(parts[POS_MS].length() - 2, parts[POS_MS].length()));
 	}
 
+	// TODO continue here
 	@Override
 	public String createComment() {
 		final StringBuilder comment = new StringBuilder();
@@ -82,7 +85,8 @@ public class Reaction extends Guarantee {
 			comment.append(getMax());
 			comment.append("]"); //$NON-NLS-1$
 		}
-		comment.append("ms \n"); //$NON-NLS-1$
+		comment.append("ms"); //$NON-NLS-1$
+		comment.append(System.lineSeparator());
 		return comment.toString();
 	}
 

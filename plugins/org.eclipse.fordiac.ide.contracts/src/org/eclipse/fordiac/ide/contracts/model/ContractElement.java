@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.contracts.model;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class ContractElement {
 
@@ -38,7 +39,7 @@ public class ContractElement {
 		return max;
 	}
 
-	public Contract getOwner() {
+	public Contract getContract() {
 		return owner;
 	}
 
@@ -50,8 +51,12 @@ public class ContractElement {
 		this.max = max;
 	}
 
-	void setOwner(final Contract owner) {
+	void setContract(final Contract owner) {
 		this.owner = owner;
+	}
+
+	boolean hasValidOwner() {
+		return getContract().getOwner() instanceof final SubApp;
 	}
 
 	@SuppressWarnings("static-method")
@@ -98,14 +103,14 @@ public class ContractElement {
 				return false;
 			}
 		}
-		simplifyAssumption(contractElement.get(pos).getMin(), -1, contractElement.get(pos).getOwner(),
+		simplifyAssumption(contractElement.get(pos).getMin(), -1, contractElement.get(pos).getContract(),
 				(Assumption) contractElement.get(pos));
 		return true;
 	}
 
 	private static void simplifyContract(final EList<? extends ContractElement> contractElement, final int minimum,
 			final int maximum) {
-		final Contract contract = contractElement.get(0).getOwner();
+		final Contract contract = contractElement.get(0).getContract();
 		if (contractElement.get(0) instanceof final Assumption toRemove) {
 			simplifyAssumption(minimum, maximum, contract, toRemove);
 		} else if (contractElement.get(0) instanceof final Guarantee toRemove) {
@@ -122,8 +127,7 @@ public class ContractElement {
 		toAdd.setOutputEvent(toRemove.getOutputEvent());
 		toAdd.setMin(minimum);
 		toAdd.setMax(maximum);
-		toAdd.setOwner(contract);
-		contract.add(toAdd);
+		contract.add(toAdd, contract);
 	}
 
 	private static void simplifyAssumption(final int minimum, final int maximum, final Contract contract,
@@ -133,8 +137,7 @@ public class ContractElement {
 		toAdd.setInputEvent(toRemove.getInputEvent());
 		toAdd.setMin(minimum);
 		toAdd.setMax(maximum);
-		toAdd.setOwner(contract);
-		contract.add(toAdd);
+		contract.add(toAdd, contract);
 	}
 
 }

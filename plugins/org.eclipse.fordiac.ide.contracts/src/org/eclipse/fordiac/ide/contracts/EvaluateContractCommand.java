@@ -57,41 +57,41 @@ public class EvaluateContractCommand extends Command {
 
 	private boolean evaluate(final SubApp subappToEvaluate) {
 		final FBNetwork fBNetwork = subappToEvaluate.getSubAppNetwork();
-		final EList<FBNetworkElement> fBNetworkElemnents = fBNetwork.getNetworkElements();
+		final EList<FBNetworkElement> fBNetworkElements = fBNetwork.getNetworkElements();
 		final EList<SubApp> subApps = new BasicEList<>();
-		for (final FBNetworkElement element : fBNetworkElemnents) {
+		for (final FBNetworkElement element : fBNetworkElements) {
 			if ((element instanceof final SubApp containedSubapp)) {
 				final EvaluateContractCommand eccmd = new EvaluateContractCommand(containedSubapp);
 				if (eccmd.canExecute()) {
 					eccmd.execute();
 				}
-				if (!hasValideContract(containedSubapp)) {
+				if (!hasValidContract(containedSubapp)) {
 					return false;
 				}
 				subApps.add(containedSubapp);
 			}
 			if (subApps.isEmpty()) {
-				return hasValideContract(subapp);
+				return hasValidContract(subapp);
 			}
 
 		}
-		return evaluteContaindSubapps(subApps);
+		return evaluteContainedSubapps(subApps);
 	}
 
-	private boolean evaluteContaindSubapps(final EList<SubApp> subApps) {
+	private boolean evaluteContainedSubapps(final EList<SubApp> subApps) {
 		final int[] times = new int[2];
-		extractAssumtionNumbers(times, subapp);
+		extractAssumptionNumbers(times, subapp);
 		for (final SubApp containdSubApp : subApps) {
-			final int[] timesContaind = new int[2];
-			extractAssumtionNumbers(timesContaind, containdSubApp);
-			if ((times[0] < timesContaind[0]) || (times[1] > timesContaind[1])) {
+			final int[] timesContained = new int[2];
+			extractAssumptionNumbers(timesContained, containdSubApp);
+			if ((times[0] < timesContained[0]) || (times[1] > timesContained[1])) {
 				return false;
 			}
-			times[0] = timesContaind[0];
-			times[1] = timesContaind[1];
-			extractGuaranteeNumbers(timesContaind, containdSubApp);
-			times[0] += timesContaind[0];
-			times[1] += timesContaind[1];
+			times[0] = timesContained[0];
+			times[1] = timesContained[1];
+			extractGuaranteeNumbers(timesContained, containdSubApp);
+			times[0] += timesContained[0];
+			times[1] += timesContained[1];
 		}
 		final int[] timesGuarantee = new int[2];
 		extractGuaranteeNumbers(timesGuarantee, subapp);
@@ -114,7 +114,7 @@ public class EvaluateContractCommand extends Command {
 		}
 	}
 
-	private static void extractAssumtionNumbers(final int[] times, final SubApp source) {
+	private static void extractAssumptionNumbers(final int[] times, final SubApp source) {
 		String[] parts = source.getComment().split("ms"); //$NON-NLS-1$
 		parts = parts[0].split(" "); //$NON-NLS-1$
 		parts = parts[parts.length - 1].split(","); //$NON-NLS-1$
@@ -130,7 +130,7 @@ public class EvaluateContractCommand extends Command {
 		}
 	}
 
-	private static boolean hasValideContract(final SubApp contract) {
+	private static boolean hasValidContract(final SubApp contract) {
 		return contract.getComment().startsWith("TRUE") //$NON-NLS-1$
 				|| contract.getComment().startsWith("ASSUMPTION") && contract.getComment().contains("GUARANTEE");  //$NON-NLS-1$ //$NON-NLS-2$
 

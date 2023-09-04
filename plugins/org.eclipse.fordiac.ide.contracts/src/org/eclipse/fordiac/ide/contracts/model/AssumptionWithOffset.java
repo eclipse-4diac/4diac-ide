@@ -41,7 +41,7 @@ public class AssumptionWithOffset extends Assumption {
 		}
 		final AssumptionWithOffset assumption = new AssumptionWithOffset();
 		assumption.setInputEvent(parts[1]);
-		if (parts[POSITION_NO1].contains(",")) { //$NON-NLS-1$
+		if (ContractUtils.isInterval(parts, POSITION_NO1, ",")) { //$NON-NLS-1$
 			String[] number = parts[POSITION_NO1].split(","); //$NON-NLS-1$
 			assumption.setMin(Integer.parseInt(number[0].substring(1)));
 			number = number[1].split("]"); //$NON-NLS-1$
@@ -50,7 +50,7 @@ public class AssumptionWithOffset extends Assumption {
 			assumption.setMax(-1);
 			assumption.setMin(Integer.parseInt(parts[POSITION_NO1].substring(0, parts[POSITION_NO1].length() - 2)));
 		}
-		if (parts[POSITION_NO2].contains(",")) { //$NON-NLS-1$
+		if (ContractUtils.isInterval(parts, POSITION_NO2, ",")) { //$NON-NLS-1$
 			String[] number = parts[POSITION_NO2].split(","); //$NON-NLS-1$
 			assumption.setMinOffset(Integer.parseInt(number[0].substring(1)));
 			number = number[1].split("]"); //$NON-NLS-1$
@@ -119,7 +119,8 @@ public class AssumptionWithOffset extends Assumption {
 			if (!Assumption.isCompatibleWith(normal)) {
 				return false;
 			}
-			final Assumption newAssumption = normal.get(0).getOwner().getAssumptionWith(normal.get(0).getInputEvent());
+			final Assumption newAssumption = normal.get(0).getContract()
+					.getAssumptionWith(normal.get(0).getInputEvent());
 			normal.clear();
 			normal.add(newAssumption);
 		}
@@ -127,7 +128,7 @@ public class AssumptionWithOffset extends Assumption {
 			if (!AssumptionWithOffset.isCompatibleWithOffset(withOffset)) {
 				return false;
 			}
-			final AssumptionWithOffset newAssumption = (AssumptionWithOffset) withOffset.get(0).getOwner()
+			final AssumptionWithOffset newAssumption = (AssumptionWithOffset) withOffset.get(0).getContract()
 					.getAssumptionWith(withOffset.get(0).getInputEvent());
 			withOffset.clear();
 			withOffset.add(newAssumption);
@@ -140,10 +141,6 @@ public class AssumptionWithOffset extends Assumption {
 	private static boolean compatibleWithAndWithout(final Assumption assumption,
 			final AssumptionWithOffset assumptionWithOffset) {
 		// TODO Implement
-		if (assumption.getMax() == -1 && assumptionWithOffset.getMax() == -1
-				&& assumptionWithOffset.getMaxOffset() == -1) {
-
-		}
 		return false;
 	}
 
@@ -187,7 +184,7 @@ public class AssumptionWithOffset extends Assumption {
 
 	private static void simplifyAssumptionWithOffset(final AssumptionWithOffset toRemove, final int mini,
 			final int maxi, final int miniOffest, final int maxiOffset) {
-		toRemove.getOwner().getAssumptions().removeIf(
+		toRemove.getContract().getAssumptions().removeIf(
 				a -> ((a.getInputEvent().equals(toRemove.getInputEvent())) && (a instanceof AssumptionWithOffset)));
 		final AssumptionWithOffset toAdd = new AssumptionWithOffset();
 		toAdd.setInputEvent(toRemove.getInputEvent());
@@ -195,8 +192,7 @@ public class AssumptionWithOffset extends Assumption {
 		toAdd.setMin(mini);
 		toAdd.setMaxOffset(maxiOffset);
 		toAdd.setMinOffset(miniOffest);
-		toAdd.setOwner(toRemove.getOwner());
-		toRemove.getOwner().add(toAdd);
+		toRemove.getContract().add(toAdd, toRemove.getContract());
 	}
 
 	@Override
@@ -222,8 +218,10 @@ public class AssumptionWithOffset extends Assumption {
 			comment.append(getMinOffset());
 			comment.append(","); //$NON-NLS-1$
 			comment.append(getMaxOffset());
-			comment.append("]ms offset"); //$NON-NLS-1$
+			comment.append("]"); //$NON-NLS-1$
 		}
+		comment.append("ms offset"); //$NON-NLS-1$
+		comment.append(System.lineSeparator());
 		return comment.toString();
 	}
 }

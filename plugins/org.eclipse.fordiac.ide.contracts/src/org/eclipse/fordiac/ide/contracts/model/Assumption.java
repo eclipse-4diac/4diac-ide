@@ -13,7 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.model;
 
-import org.eclipse.emf.common.util.BasicEList;
+import java.util.List;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -27,24 +28,24 @@ public class Assumption extends ContractElement {
 	private static final int ASSUMPTION_LENGTH = 5;
 	private static final int POSITION_NO = 4;
 
-	Assumption() {
-
-	}
-
 	static Assumption createAssumption(final String line) {
-		if (line.contains("offset")) { //$NON-NLS-1$
+		if (line.contains(ContractKeywords.OFFSET)) {
 			return AssumptionWithOffset.createAssumptionWithOffset(line);
 		}
-		String[] parts = line.split(" "); //$NON-NLS-1$
-		if (!isCorrectAssumtion(parts)) {
+		final String[] parts = line.split(" "); //$NON-NLS-1$
+		if (!isCorrectAssumption(parts)) {
 			throw new IllegalArgumentException("Error with Assumption: " + line); //$NON-NLS-1$
 		}
+		return createAssumptionFrom(parts);
+	}
+
+	private static Assumption createAssumptionFrom(String[] parts) {
 		final Assumption assumption = new Assumption();
 		assumption.setInputEvent(parts[1]);
-		if (parts[POSITION_NO].contains(",")) { //$NON-NLS-1$
-			parts = parts[POSITION_NO].split(","); //$NON-NLS-1$
+		if (ContractUtils.isInterval(parts, POSITION_NO, ContractKeywords.INTERVAL_DIVIDER)) {
+			parts = parts[POSITION_NO].split(ContractKeywords.INTERVAL_DIVIDER);
 			assumption.setMin(Integer.parseInt(parts[0].substring(1)));
-			parts = parts[1].split("]"); //$NON-NLS-1$
+			parts = parts[1].split(ContractKeywords.INTERVAL_CLOSE);
 			assumption.setMax(Integer.parseInt(parts[0]));
 			return assumption;
 		}
@@ -53,55 +54,43 @@ public class Assumption extends ContractElement {
 		return assumption;
 	}
 
-	private static boolean isCorrectAssumtion(final String[] parts) {
+	private static boolean isCorrectAssumption(final String[] parts) {
 		if (parts.length != ASSUMPTION_LENGTH) {
 			return false;
 		}
-		if (!"occurs".equals(parts[POS_OCCURS])) { //$NON-NLS-1$
+		if (!ContractKeywords.OCCURS.equals(parts[POS_OCCURS])) {
 			return false;
 		}
-		if (!"every".equals(parts[POS_EVERY])) { //$NON-NLS-1$
+		if (!ContractKeywords.EVERY.equals(parts[POS_EVERY])) {
 			return false;
 		}
-		return "ms".equals(parts[POS_TIME].substring(parts[POS_TIME].length() - 2, parts[POS_TIME].length())); //$NON-NLS-1$
+		return ContractKeywords.UNIT_OF_TIME
+				.equals(parts[POS_TIME].substring(parts[POS_TIME].length() - 2, parts[POS_TIME].length()));
 	}
 
 	@Override
 	boolean isValid() {
-		if (getOwner().getOwner() instanceof final SubApp subapp) {
-			final EList<SubApp> subapps = new BasicEList<>();
-			final EList<FB> fBs = new BasicEList<>();
-			final EList<Event> inputEvents = subapp.getInterface().getEventInputs();
-			final EList<FBNetworkElement> fBNetworkElements = subapp.getSubAppNetwork().getNetworkElements();
-			for (final FBNetworkElement element : fBNetworkElements) {
-				if ((element instanceof final SubApp containedSubapp
-						&& containedSubapp.getName().startsWith("_CONTRACT"))) { //$NON-NLS-1$
-					subapps.add(containedSubapp);
-				} else if (element instanceof final FB fb) {
-					fBs.add(fb);
-				}
-			}
-			if (hasMatchingEvents(subapps, fBs, inputEvents)) {
-				return true;
-			}
-
+		if (!hasValidOwner()) {
+			return false;
 		}
-		return false;
+		final EList<FBNetworkElement> fBNetworkElements = ((SubApp) getContract().getOwner()).getSubAppNetwork()
+				.getNetworkElements();
+		final List<SubApp> containedSubapps = fBNetworkElements.parallelStream().filter(ContractUtils::isContractSubapp)
+				.map(el -> (SubApp) el).toList();
+		final List<FB> containedfBs = fBNetworkElements.parallelStream().filter(FB.class::isInstance)
+				.map(FB.class::cast).toList();
+		final EList<Event> inputEvents = ((SubApp) getContract().getOwner()).getInterface().getEventInputs();
+		return hasMatchingEvents(containedSubapps, containedfBs, inputEvents);
 	}
 
-	private boolean hasMatchingEvents(final EList<SubApp> subapps, final EList<FB> fBs,
-			final EList<Event> inputEvents) {
-		if (!subapps.isEmpty()) {
+	private boolean hasMatchingEvents(final List<SubApp> containedSubapps, final List<FB> containedfBs,
+			EList<Event> inputEvents) {
+		if (containedfBs.size() == 1) {
+			inputEvents = containedfBs.get(0).getInterface().getEventInputs();
+		}
+		if (!containedSubapps.isEmpty() || containedfBs.size() == 1) {
 			for (final Event inputE : inputEvents) {
 				if (inputE.getName().equals(getInputEvent())) {
-					return true;
-				}
-			}
-		}
-		if (fBs.size() == 1) {
-			final EList<Event> inputFBEvents = fBs.get(0).getInterface().getEventInputs();
-			for (final Event inputFBEs : inputFBEvents) {
-				if (inputFBEs.getName().equals(getInputEvent())) {
 					return true;
 				}
 			}
@@ -126,19 +115,20 @@ public class Assumption extends ContractElement {
 			return withOffset.createComment();
 		}
 		final StringBuilder comment = new StringBuilder();
-		comment.append("ASSUMPTION "); //$NON-NLS-1$
+		comment.append(ContractKeywords.ASSUMPTION);
 		comment.append(getInputEvent());
-		comment.append(" occurs every "); //$NON-NLS-1$
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.OCCURS);
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.EVERY);
+		comment.append(" "); //$NON-NLS-1$
 		if (getMax() == -1 || getMax() == getMin()) {
 			comment.append(getMin());
 		} else {
-			comment.append("["); //$NON-NLS-1$
-			comment.append(getMin());
-			comment.append(","); //$NON-NLS-1$
-			comment.append(getMax());
-			comment.append("]"); //$NON-NLS-1$
+			comment.append(ContractUtils.createInterval(this));
 		}
-		comment.append("ms \n"); //$NON-NLS-1$
+		comment.append(ContractKeywords.UNIT_OF_TIME);
+		comment.append(System.lineSeparator());
 		return comment.toString();
 	}
 

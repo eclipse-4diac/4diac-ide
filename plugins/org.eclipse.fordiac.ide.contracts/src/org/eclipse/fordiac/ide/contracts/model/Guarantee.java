@@ -67,7 +67,7 @@ public class Guarantee extends ContractElement {
 		final Guarantee guarantee = new Guarantee();
 		guarantee.setInputEvent(parts[POS_INPUT_EVENT]);
 		guarantee.setOutputEvent(parts[POS_OUTPUT_EVENT]);
-		if (parts[POSITION_NO].contains(",")) { //$NON-NLS-1$
+		if (ContractUtils.isInterval(parts, POSITION_NO, ",")) { //$NON-NLS-1$
 			parts = parts[POSITION_NO].split(","); //$NON-NLS-1$
 			guarantee.setMin(Integer.parseInt(parts[0].substring(1)));
 			parts = parts[1].split("]"); //$NON-NLS-1$
@@ -112,7 +112,7 @@ public class Guarantee extends ContractElement {
 		if (this instanceof final GuaranteeTwoEvents guaranteeTwoEvents) {
 			return guaranteeTwoEvents.isValid();
 		}
-		if (getOwner().getOwner() instanceof final SubApp subapp) {
+		if (getContract().getOwner() instanceof final SubApp subapp) {
 			final EList<SubApp> subapps = new BasicEList<>();
 			final EList<FB> fBs = new BasicEList<>();
 			final EList<FBNetworkElement> fBNetworkElements = subapp.getSubAppNetwork().getNetworkElements();
@@ -229,7 +229,8 @@ public class Guarantee extends ContractElement {
 			comment.append(getMax());
 			comment.append("]"); //$NON-NLS-1$
 		}
-		comment.append("ms \n"); //$NON-NLS-1$
+		comment.append("ms"); //$NON-NLS-1$
+		comment.append(System.lineSeparator());
 		return comment.toString();
 	}
 
