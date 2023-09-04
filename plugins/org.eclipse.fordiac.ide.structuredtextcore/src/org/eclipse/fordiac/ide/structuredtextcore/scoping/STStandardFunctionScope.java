@@ -36,13 +36,13 @@ public class STStandardFunctionScope extends AbstractScope {
 	}
 
 	@Override
-	protected Iterable<IEObjectDescription> getAllLocalElements() {
+	public Iterable<IEObjectDescription> getAllLocalElements() {
 		final var standardFunctions = standardFunctionProvider.get();
 		return Scopes.scopedElementsFor(standardFunctions);
 	}
 
 	@Override
-	protected IEObjectDescription getSingleLocalElementByName(final QualifiedName name) {
+	public IEObjectDescription getSingleLocalElementByName(final QualifiedName name) {
 		final var candidates = standardFunctionProvider.get(name.toString(), argumentTypes);
 		final var candidateDescriptions = Scopes.scopedElementsFor(candidates);
 		return StreamSupport.stream(candidateDescriptions.spliterator(), false).findFirst()

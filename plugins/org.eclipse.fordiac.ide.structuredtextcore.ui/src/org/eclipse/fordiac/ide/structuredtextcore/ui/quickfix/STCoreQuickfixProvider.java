@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionScope;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
@@ -42,7 +43,9 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.diagnostics.Diagnostic;
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
+import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.ui.editor.model.edit.IModification;
 import org.eclipse.xtext.ui.editor.model.edit.IModificationContext;
@@ -51,6 +54,7 @@ import org.eclipse.xtext.ui.editor.quickfix.Fix;
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor;
 import org.eclipse.xtext.validation.Issue;
 
+import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
 public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
@@ -179,6 +183,15 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 						}
 					});
 		}
+	}
+
+	@Override
+	protected Iterable<IEObjectDescription> queryScope(final IScope scope) {
+		if (scope instanceof final STStandardFunctionScope standardFunctionScope) {
+			return Iterables.concat(super.queryScope(standardFunctionScope.getParent()),
+					standardFunctionScope.getAllLocalElements());
+		}
+		return super.queryScope(scope);
 	}
 
 	@Fix(Diagnostic.LINKING_DIAGNOSTIC)
