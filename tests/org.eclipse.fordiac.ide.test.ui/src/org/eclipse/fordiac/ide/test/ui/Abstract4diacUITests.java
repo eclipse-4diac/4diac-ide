@@ -16,15 +16,26 @@ import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.AfterClass;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
 public class Abstract4diacUITests {
 
 	protected static SWT4diacGefBot bot;
 	private static final String APP = "App"; //$NON-NLS-1$
+	private static final String DELETE = "Delete"; //$NON-NLS-1$
+	private static final String DELETE_PROJECT_WARNING = "Delete project contents on disk (cannot be undone)"; //$NON-NLS-1$
+	private static final String DELETE_RESOURCES = "Delete Resources"; //$NON-NLS-1$
+	private static final String EDIT = "Edit"; //$NON-NLS-1$
 	private static final String FILE = "File"; //$NON-NLS-1$
 	private static final String FINISH = "Finish"; //$NON-NLS-1$
 	private static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
@@ -32,8 +43,10 @@ public class Abstract4diacUITests {
 	private static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
 	private static final String NEW = "New"; //$NON-NLS-1$
 	private static final String NEW_4DIAC_PROJECT = "New 4diacProject"; //$NON-NLS-1$
+	private static final String OK = "OK"; //$NON-NLS-1$
 	private static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
 	private static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
+	private static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
 
 	/**
 	 * Performs the necessary tasks to be able to perform the tests.
@@ -65,6 +78,29 @@ public class Abstract4diacUITests {
 		assertEquals(bot.textWithLabel(INITIAL_SYSTEM_NAME_LABEL).getText(), PROJECT_NAME);
 		assertEquals(bot.textWithLabel(INITIAL_APPLICATION_NAME_LABEL).getText(), PROJECT_NAME + APP);
 		bot.button(FINISH).click();
+		bot.waitUntil(shellCloses(shell));
+	}
+
+	/**
+	 * Deletes 4diac IDE project.
+	 */
+	@AfterAll
+	protected static void deleteProject() {
+		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
+		systemExplorerView.show();
+		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
+		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
+		final SWTBotTree tree = new SWTBotTree(swtTree);
+
+		final SWTBotTreeItem treeItem = tree.getTreeItem(PROJECT_NAME);
+		treeItem.select();
+		bot.menu(EDIT).menu(DELETE).click();
+
+		// the project deletion confirmation dialog
+		final SWTBotShell shell = bot.shell(DELETE_RESOURCES);
+		shell.activate();
+		bot.checkBox(DELETE_PROJECT_WARNING).select();
+		bot.button(OK).click();
 		bot.waitUntil(shellCloses(shell));
 	}
 

@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui;
 
-import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,11 +35,9 @@ import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -48,8 +45,6 @@ import org.junit.jupiter.api.Test;
 public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 
 	private static final String DELETE = "Delete"; //$NON-NLS-1$
-	private static final String DELETE_PROJECT_WARNING = "Delete project contents on disk (cannot be undone)"; //$NON-NLS-1$
-	private static final String DELETE_RESOURCES = "Delete Resources"; //$NON-NLS-1$
 	private static final String E_CTUD_TREE_ITEM = "E_CTUD [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
 	private static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	private static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
@@ -58,7 +53,6 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	private static final String E_TABLE_CTRL_TREE_ITEM = "E_TABLE_CTRL [Support function block for E_TABLE]"; //$NON-NLS-1$
 	private static final String EDIT = "Edit"; //$NON-NLS-1$
 	private static final String EVENTS_NODE = "events"; //$NON-NLS-1$
-	private static final String OK = "OK"; //$NON-NLS-1$
 	private static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
 	private static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
 	private static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
@@ -767,26 +761,4 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		}
 	}
 
-	/**
-	 * Deletes 4diac IDE project.
-	 */
-	@AfterAll
-	public static void deleteProject() {
-		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-
-		final SWTBotTreeItem treeItem = tree.getTreeItem(PROJECT_NAME);
-		treeItem.select();
-		bot.menu(EDIT).menu(DELETE).click();
-
-		// the project deletion confirmation dialog
-		final SWTBotShell shell = bot.shell(DELETE_RESOURCES);
-		shell.activate();
-		bot.checkBox(DELETE_PROJECT_WARNING).select();
-		bot.button(OK).click();
-		bot.waitUntil(shellCloses(shell));
-	}
 }
