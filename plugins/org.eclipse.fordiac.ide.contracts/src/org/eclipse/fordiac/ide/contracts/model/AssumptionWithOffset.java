@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 
 public class AssumptionWithOffset extends Assumption {
+
 	private static final int POS_OFFSET = 7;
 	private static final int POS_WITH = 5;
 	private static final int ASSUMPTION_LENGTH = 8;
@@ -41,24 +42,25 @@ public class AssumptionWithOffset extends Assumption {
 		}
 		final AssumptionWithOffset assumption = new AssumptionWithOffset();
 		assumption.setInputEvent(parts[1]);
-		if (ContractUtils.isInterval(parts, POSITION_NO1, ",")) { //$NON-NLS-1$
-			String[] number = parts[POSITION_NO1].split(","); //$NON-NLS-1$
+		if (ContractUtils.isInterval(parts, POSITION_NO1, ContractKeywords.INTERVAL_DIVIDER)) {
+			String[] number = parts[POSITION_NO1].split(ContractKeywords.INTERVAL_DIVIDER);
 			assumption.setMin(Integer.parseInt(number[0].substring(1)));
-			number = number[1].split("]"); //$NON-NLS-1$
+			number = number[1].split(ContractKeywords.INTERVAL_CLOSE);
 			assumption.setMax(Integer.parseInt(number[0]));
 		} else {
 			assumption.setMax(-1);
-			assumption.setMin(Integer.parseInt(parts[POSITION_NO1].substring(0, parts[POSITION_NO1].length() - 2)));
+			assumption.setMin(Integer.parseInt(parts[POSITION_NO1].substring(0,
+					parts[POSITION_NO1].length() - ContractKeywords.UNIT_OF_TIME.length())));
 		}
-		if (ContractUtils.isInterval(parts, POSITION_NO2, ",")) { //$NON-NLS-1$
-			String[] number = parts[POSITION_NO2].split(","); //$NON-NLS-1$
+		if (ContractUtils.isInterval(parts, POSITION_NO2, ContractKeywords.INTERVAL_DIVIDER)) {
+			String[] number = parts[POSITION_NO2].split(ContractKeywords.INTERVAL_DIVIDER);
 			assumption.setMinOffset(Integer.parseInt(number[0].substring(1)));
-			number = number[1].split("]"); //$NON-NLS-1$
+			number = number[1].split(ContractKeywords.INTERVAL_CLOSE);
 			assumption.setMaxOffset(Integer.parseInt(number[0]));
 		} else {
 			assumption.setMaxOffset(-1);
-			assumption
-					.setMinOffset(Integer.parseInt(parts[POSITION_NO2].substring(0, parts[POSITION_NO2].length() - 2)));
+			assumption.setMinOffset(Integer.parseInt(parts[POSITION_NO2].substring(0,
+					parts[POSITION_NO2].length() - ContractKeywords.UNIT_OF_TIME.length())));
 		}
 
 		return assumption;
@@ -68,22 +70,24 @@ public class AssumptionWithOffset extends Assumption {
 		if (parts.length != ASSUMPTION_LENGTH) {
 			return false;
 		}
-		if (!"occurs".equals(parts[POS_OCCURS])) { //$NON-NLS-1$
+		if (!ContractKeywords.OCCURS.equals(parts[POS_OCCURS])) {
 			return false;
 		}
-		if (!"every".equals(parts[POS_EVERY])) { //$NON-NLS-1$
+		if (!ContractKeywords.EVERY.equals(parts[POS_EVERY])) {
 			return false;
 		}
-		if (!"ms".equals(parts[POS_TIME].substring(parts[POS_TIME].length() - 2, parts[POS_TIME].length()))) { //$NON-NLS-1$
+		if (!ContractKeywords.UNIT_OF_TIME.equals(parts[POS_TIME].substring(
+				parts[POS_TIME].length() - ContractKeywords.UNIT_OF_TIME.length(), parts[POS_TIME].length()))) {
 			return false;
 		}
-		if (!"with".equals(parts[POS_WITH])) { //$NON-NLS-1$
+		if (!ContractKeywords.WITH.equals(parts[POS_WITH])) {
 			return false;
 		}
-		if (!"ms".equals(parts[POS_TIME2].substring(parts[POS_TIME2].length() - 2, parts[POS_TIME2].length()))) { //$NON-NLS-1$
+		if (!ContractKeywords.UNIT_OF_TIME.equals(parts[POS_TIME2].substring(
+				parts[POS_TIME2].length() - ContractKeywords.UNIT_OF_TIME.length(), parts[POS_TIME2].length()))) {
 			return false;
 		}
-		return "offset".equals(parts[POS_OFFSET]); //$NON-NLS-1$
+		return ContractKeywords.OFFSET.equals(parts[POS_OFFSET]);
 	}
 
 	public int getMinOffset() {
@@ -198,29 +202,35 @@ public class AssumptionWithOffset extends Assumption {
 	@Override
 	public String createComment() {
 		final StringBuilder comment = new StringBuilder();
-		comment.append("ASSUMPTION "); //$NON-NLS-1$
+		comment.append(ContractKeywords.ASSUMPTION);
+		comment.append(" "); //$NON-NLS-1$
 		comment.append(getInputEvent());
-		comment.append(" occurs every "); //$NON-NLS-1$
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.OCCURS);
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.EVERY);
+		comment.append(" "); //$NON-NLS-1$
 		if (getMax() == -1 || getMax() == getMin()) {
 			comment.append(getMin());
 		} else {
-			comment.append("["); //$NON-NLS-1$
-			comment.append(getMin());
-			comment.append(","); //$NON-NLS-1$
-			comment.append(getMax());
-			comment.append("]"); //$NON-NLS-1$
+			comment.append(ContractUtils.createInterval(this));
 		}
-		comment.append("ms with "); //$NON-NLS-1$
+		comment.append(ContractKeywords.UNIT_OF_TIME);
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.WITH);
+		comment.append(" "); //$NON-NLS-1$
 		if (getMaxOffset() == -1 || getMaxOffset() == getMinOffset()) {
 			comment.append(getMinOffset());
 		} else {
-			comment.append("["); //$NON-NLS-1$
+			comment.append(ContractKeywords.INTERVAL_OPEN);
 			comment.append(getMinOffset());
-			comment.append(","); //$NON-NLS-1$
+			comment.append(ContractKeywords.INTERVAL_DIVIDER);
 			comment.append(getMaxOffset());
-			comment.append("]"); //$NON-NLS-1$
+			comment.append(ContractKeywords.INTERVAL_CLOSE);
 		}
-		comment.append("ms offset"); //$NON-NLS-1$
+		comment.append(ContractKeywords.UNIT_OF_TIME);
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.OFFSET);
 		comment.append(System.lineSeparator());
 		return comment.toString();
 	}

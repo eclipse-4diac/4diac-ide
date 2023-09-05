@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class Guarantee extends ContractElement {
+
 	private static final int POS_MS = 10;
 	private static final int POS_WITHIN = 9;
 	private static final int POS_OCCUR = 8;
@@ -54,10 +55,10 @@ public class Guarantee extends ContractElement {
 	}
 
 	public static Guarantee createGuarantee(final String line) {
-		if (line.contains("Reaction")) { //$NON-NLS-1$
+		if (line.contains(ContractKeywords.REACTION)) {
 			return Reaction.createReaction(line);
 		}
-		if (line.contains("events")) { //$NON-NLS-1$
+		if (line.contains(ContractKeywords.EVENTS)) {
 			return GuaranteeTwoEvents.createGuaranteeTwoEvents(line);
 		}
 		String[] parts = line.split(" "); //$NON-NLS-1$
@@ -67,14 +68,15 @@ public class Guarantee extends ContractElement {
 		final Guarantee guarantee = new Guarantee();
 		guarantee.setInputEvent(parts[POS_INPUT_EVENT]);
 		guarantee.setOutputEvent(parts[POS_OUTPUT_EVENT]);
-		if (ContractUtils.isInterval(parts, POSITION_NO, ",")) { //$NON-NLS-1$
-			parts = parts[POSITION_NO].split(","); //$NON-NLS-1$
+		if (ContractUtils.isInterval(parts, POSITION_NO, ContractKeywords.INTERVAL_DIVIDER)) {
+			parts = parts[POSITION_NO].split(ContractKeywords.INTERVAL_DIVIDER);
 			guarantee.setMin(Integer.parseInt(parts[0].substring(1)));
-			parts = parts[1].split("]"); //$NON-NLS-1$
+			parts = parts[1].split(ContractKeywords.INTERVAL_CLOSE);
 			guarantee.setMax(Integer.parseInt(parts[0]));
 			return guarantee;
 		}
-		guarantee.setMax(Integer.parseInt(parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - 2)));
+		guarantee.setMax(Integer.parseInt(
+				parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length())));
 		guarantee.setMin(0);
 		return guarantee;
 	}
@@ -83,28 +85,29 @@ public class Guarantee extends ContractElement {
 		if (parts.length != GUARANTEE_LENGTH) {
 			return false;
 		}
-		if (!"Whenever".equals(parts[POS_WHENEVER])) { //$NON-NLS-1$
+		if (!ContractKeywords.WHENEVER.equals(parts[POS_WHENEVER])) {
 			return false;
 		}
-		if (!"event".equals(parts[POS_EVENT])) { //$NON-NLS-1$
+		if (!ContractKeywords.EVENT.equals(parts[POS_EVENT])) {
 			return false;
 		}
-		if (!"occurs,".equals(parts[POS_OCCURS])) { //$NON-NLS-1$
+		if (!(ContractKeywords.OCCURS + ContractKeywords.COMMA).equals(parts[POS_OCCURS])) {
 			return false;
 		}
-		if (!"then".equals(parts[POS_THEN])) { //$NON-NLS-1$
+		if (!ContractKeywords.THEN.equals(parts[POS_THEN])) {
 			return false;
 		}
-		if (!"event".equals(parts[POS_EVENT_STRING])) { //$NON-NLS-1$
+		if (!ContractKeywords.EVENT.equals(parts[POS_EVENT_STRING])) {
 			return false;
 		}
-		if (!"occur".equals(parts[POS_OCCUR])) { //$NON-NLS-1$
+		if (!ContractKeywords.OCCUR.equals(parts[POS_OCCUR])) {
 			return false;
 		}
-		if (!"within".equals(parts[POS_WITHIN])) { //$NON-NLS-1$
+		if (!ContractKeywords.WITHIN.equals(parts[POS_WITHIN])) {
 			return false;
 		}
-		return "ms".equals(parts[POS_MS].subSequence(parts[POS_MS].length() - 2, parts[POS_MS].length())); //$NON-NLS-1$
+		return ContractKeywords.UNIT_OF_TIME.equals(parts[POS_MS]
+				.subSequence(parts[POS_MS].length() - ContractKeywords.UNIT_OF_TIME.length(), parts[POS_MS].length()));
 	}
 
 	@Override
@@ -112,27 +115,21 @@ public class Guarantee extends ContractElement {
 		if (this instanceof final GuaranteeTwoEvents guaranteeTwoEvents) {
 			return guaranteeTwoEvents.isValid();
 		}
-		if (getContract().getOwner() instanceof final SubApp subapp) {
-			final EList<SubApp> subapps = new BasicEList<>();
-			final EList<FB> fBs = new BasicEList<>();
-			final EList<FBNetworkElement> fBNetworkElements = subapp.getSubAppNetwork().getNetworkElements();
-			for (final FBNetworkElement element : fBNetworkElements) {
-				if ((element instanceof final SubApp containedSubapp
-						&& containedSubapp.getName().startsWith("_CONTRACT"))) { //$NON-NLS-1$
-					subapps.add(containedSubapp);
-				} else if (element instanceof final FB fb) {
-					fBs.add(fb);
-				}
-			}
-			if (hasMatchingEvent(subapp, subapps, fBs)) {
-				return true;
-			}
+		if (!hasValidOwner()) {
+			return false;
 		}
-		return false;
+		final EList<FBNetworkElement> fBNetworkElements = ((SubApp) getContract().getOwner()).getSubAppNetwork()
+				.getNetworkElements();
+		final List<SubApp> containedSubapps = fBNetworkElements.parallelStream().filter(ContractUtils::isContractSubapp)
+				.map(el -> (SubApp) el).toList();
+		final List<FB> containedfBs = fBNetworkElements.parallelStream().filter(FB.class::isInstance)
+				.map(FB.class::cast).toList();
+		return hasMatchingEvent(((SubApp) getContract().getOwner()), containedSubapps, containedfBs);
 	}
 
-	private boolean hasMatchingEvent(final SubApp subapp, final EList<SubApp> subapps, final EList<FB> fBs) {
-		if (!subapps.isEmpty()) {
+	private boolean hasMatchingEvent(final SubApp subapp, final List<SubApp> containedSubapps,
+			final List<FB> containedfBs) {
+		if (!containedSubapps.isEmpty()) {
 			final EList<Event> inputEvents = subapp.getInterface().getEventInputs();
 			final EList<Event> outputEvents = subapp.getInterface().getEventOutputs();
 			final List<Event> inputNames = inputEvents.parallelStream().filter(e -> e.getName().equals(getInputEvent()))
@@ -143,9 +140,9 @@ public class Guarantee extends ContractElement {
 				return true;
 			}
 		}
-		if (fBs.size() == 1) {
-			final EList<Event> inputFBEvents = fBs.get(0).getInterface().getEventInputs();
-			final EList<Event> outputFBEvents = fBs.get(0).getInterface().getEventOutputs();
+		if (containedfBs.size() == 1) {
+			final EList<Event> inputFBEvents = containedfBs.get(0).getInterface().getEventInputs();
+			final EList<Event> outputFBEvents = containedfBs.get(0).getInterface().getEventOutputs();
 			final List<Event> inputNames = inputFBEvents.parallelStream()
 					.filter(e -> e.getName().equals(getInputEvent())).toList();
 			final List<Event> outputNames = outputFBEvents.parallelStream().filter(e -> e.getName().equals(outputEvent))
@@ -215,21 +212,33 @@ public class Guarantee extends ContractElement {
 			return twoEvents.createComment();
 		}
 		final StringBuilder comment = new StringBuilder();
-		comment.append("GUARANTEE Whenever event "); //$NON-NLS-1$
+		comment.append(ContractKeywords.GUARANTEE);
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.WHENEVER);
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.EVENT);
+		comment.append(" "); //$NON-NLS-1$
 		comment.append(getInputEvent());
-		comment.append(" occurs, then event "); //$NON-NLS-1$
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.OCCURS);
+		comment.append(ContractKeywords.COMMA);
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.THEN);
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.EVENT);
+		comment.append(" "); //$NON-NLS-1$
 		comment.append(outputEvent);
-		comment.append(" occur within "); //$NON-NLS-1$
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.OCCUR);
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.WITHIN);
+		comment.append(" "); //$NON-NLS-1$
 		if (getMin() == 0 || getMin() == getMax()) {
 			comment.append(getMax());
 		} else {
-			comment.append("["); //$NON-NLS-1$
-			comment.append(getMin());
-			comment.append(","); //$NON-NLS-1$
-			comment.append(getMax());
-			comment.append("]"); //$NON-NLS-1$
+			comment.append(ContractUtils.createInterval(this));
 		}
-		comment.append("ms"); //$NON-NLS-1$
+		comment.append(ContractKeywords.UNIT_OF_TIME);
 		comment.append(System.lineSeparator());
 		return comment.toString();
 	}

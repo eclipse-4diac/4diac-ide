@@ -50,7 +50,8 @@ public class Assumption extends ContractElement {
 			return assumption;
 		}
 		assumption.setMax(-1);
-		assumption.setMin(Integer.parseInt(parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - 2)));
+		assumption.setMin(Integer.parseInt(
+				parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length())));
 		return assumption;
 	}
 
@@ -64,8 +65,8 @@ public class Assumption extends ContractElement {
 		if (!ContractKeywords.EVERY.equals(parts[POS_EVERY])) {
 			return false;
 		}
-		return ContractKeywords.UNIT_OF_TIME
-				.equals(parts[POS_TIME].substring(parts[POS_TIME].length() - 2, parts[POS_TIME].length()));
+		return ContractKeywords.UNIT_OF_TIME.equals(parts[POS_TIME].substring(
+				parts[POS_TIME].length() - ContractKeywords.UNIT_OF_TIME.length(), parts[POS_TIME].length()));
 	}
 
 	@Override

@@ -22,7 +22,8 @@ public final class ContractUtils {
 	}
 
 	static boolean isContractSubapp(final FBNetworkElement element) {
-		return element instanceof final SubApp containedSubapp && containedSubapp.getName().startsWith("_CONTRACT"); //$NON-NLS-1$
+		return element instanceof final SubApp containedSubapp
+				&& containedSubapp.getName().startsWith(ContractKeywords.CONTRACT);
 	}
 
 	static boolean isInterval(final String[] parts, final int pos, final CharSequence div) {

@@ -70,7 +70,8 @@ public class GuaranteeTwoEvents extends Guarantee {
 			return guarantee;
 		}
 		guarantee.setMax(-1);
-		guarantee.setMin(Integer.parseInt(parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - 2)));
+		guarantee.setMin(Integer.parseInt(
+				parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length())));
 		return guarantee;
 
 	}

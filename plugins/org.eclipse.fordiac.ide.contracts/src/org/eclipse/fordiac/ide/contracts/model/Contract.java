@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class Contract {
+
 	private final EList<Assumption> assumptions = new BasicEList<>();
 	private final EList<Guarantee> guarantees = new BasicEList<>();
 	private boolean isValid;
@@ -40,10 +41,10 @@ public class Contract {
 		final Contract contract = new Contract();
 		final String[] lines = comment.split(System.lineSeparator());
 		for (final String line : lines) {
-			if (line.startsWith("ASSUMPTION")) { //$NON-NLS-1$
+			if (line.startsWith(ContractKeywords.ASSUMPTION)) {
 				final Assumption toAdd = Assumption.createAssumption(line);
 				contract.add(toAdd, contract);
-			} else if (line.startsWith("GUARANTEE")) { //$NON-NLS-1$
+			} else if (line.startsWith(ContractKeywords.GUARANTEE)) {
 				final Guarantee toAdd = Guarantee.createGuarantee(line);
 				contract.add(toAdd, contract);
 			}
@@ -117,8 +118,9 @@ public class Contract {
 
 	public void writeToOwner() {
 		if (owner instanceof final SubApp subapp) {
-			if (!subapp.getName().startsWith("_CONTRACT")) { //$NON-NLS-1$
-				subapp.setName(NameRepository.createUniqueName(subapp, "_CONTRACT_" + subapp.getName())); //$NON-NLS-1$
+			if (!subapp.getName().startsWith(ContractKeywords.CONTRACT)) {
+				subapp.setName(
+						NameRepository.createUniqueName(subapp, ContractKeywords.CONTRACT + "_" + subapp.getName())); //$NON-NLS-1$
 			}
 
 			subapp.setComment(this.getAsString());

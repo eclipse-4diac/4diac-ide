@@ -47,7 +47,8 @@ public class Reaction extends Guarantee {
 			reaction.setMax(Integer.parseInt(parts[0]));
 			return reaction;
 		}
-		reaction.setMax(Integer.parseInt(parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - 2)));
+		reaction.setMax(Integer.parseInt(
+				parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length())));
 		reaction.setMin(0);
 		return reaction;
 
@@ -63,29 +64,31 @@ public class Reaction extends Guarantee {
 		if (!ContractKeywords.WITHIN.equals(parts[POS_WITHIN])) {
 			return false;
 		}
-		return ContractKeywords.UNIT_OF_TIME
-				.equals(parts[POS_MS].subSequence(parts[POS_MS].length() - 2, parts[POS_MS].length()));
+		return ContractKeywords.UNIT_OF_TIME.equals(parts[POS_MS]
+				.subSequence(parts[POS_MS].length() - ContractKeywords.UNIT_OF_TIME.length(), parts[POS_MS].length()));
 	}
 
-	// TODO continue here
 	@Override
 	public String createComment() {
 		final StringBuilder comment = new StringBuilder();
-		comment.append("GUARANTEE Reaction (");  //$NON-NLS-1$
+		comment.append(ContractKeywords.GUARANTEE);
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.REACTION);
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.EVENTS_OPEN);
 		comment.append(getInputEvent());
-		comment.append(","); //$NON-NLS-1$
+		comment.append(ContractKeywords.COMMA);
 		comment.append(getOutputEvent());
-		comment.append(") within ");	 //$NON-NLS-1$
+		comment.append(ContractKeywords.EVENTS_CLOSE);
+		comment.append(" "); //$NON-NLS-1$
+		comment.append(ContractKeywords.WITHIN);
+		comment.append(" "); //$NON-NLS-1$
 		if (getMin() == 0 || getMin() == getMax()) {
 			comment.append(getMax());
 		} else {
-			comment.append("["); //$NON-NLS-1$
-			comment.append(getMin());
-			comment.append(","); //$NON-NLS-1$
-			comment.append(getMax());
-			comment.append("]"); //$NON-NLS-1$
+			comment.append(ContractUtils.createInterval(this));
 		}
-		comment.append("ms"); //$NON-NLS-1$
+		comment.append(ContractKeywords.UNIT_OF_TIME);
 		comment.append(System.lineSeparator());
 		return comment.toString();
 	}
