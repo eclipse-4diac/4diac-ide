@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.test.ui;
 
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
+import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -21,12 +22,14 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
+import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -40,23 +43,25 @@ import org.junit.jupiter.api.BeforeAll;
 public class Abstract4diacUITests {
 
 	protected static SWT4diacGefBot bot;
-	private static final String APP = "App"; //$NON-NLS-1$
-	private static final String DELETE = "Delete"; //$NON-NLS-1$
-	private static final String DELETE_PROJECT_WARNING = "Delete project contents on disk (cannot be undone)"; //$NON-NLS-1$
-	private static final String DELETE_RESOURCES = "Delete Resources"; //$NON-NLS-1$
-	private static final String EDIT = "Edit"; //$NON-NLS-1$
-	private static final String FILE = "File"; //$NON-NLS-1$
-	private static final String FINISH = "Finish"; //$NON-NLS-1$
-	private static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
-	private static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
-	private static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
-	private static final String NEW = "New"; //$NON-NLS-1$
-	private static final String NEW_4DIAC_PROJECT = "New 4diacProject"; //$NON-NLS-1$
-	private static final String OK = "OK"; //$NON-NLS-1$
-	private static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
-	private static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
-	private static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
-	private static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
+	protected static final String APP = "App"; //$NON-NLS-1$
+	protected static final String DELETE = "Delete"; //$NON-NLS-1$
+	protected static final String DELETE_PROJECT_WARNING = "Delete project contents on disk (cannot be undone)"; //$NON-NLS-1$
+	protected static final String DELETE_RESOURCES = "Delete Resources"; //$NON-NLS-1$
+	protected static final String EDIT = "Edit"; //$NON-NLS-1$
+	protected static final String EVENTS_NODE = "events"; //$NON-NLS-1$
+	protected static final String FILE = "File"; //$NON-NLS-1$
+	protected static final String FINISH = "Finish"; //$NON-NLS-1$
+	protected static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
+	protected static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
+	protected static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
+	protected static final String NEW = "New"; //$NON-NLS-1$
+	protected static final String NEW_4DIAC_PROJECT = "New 4diacProject"; //$NON-NLS-1$
+	protected static final String OK = "OK"; //$NON-NLS-1$
+	protected static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
+	protected static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
+	protected static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
+	protected static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
+	protected static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
 
 	/**
 	 * Performs the necessary tasks to be able to perform the tests.
@@ -89,6 +94,41 @@ public class Abstract4diacUITests {
 		assertEquals(bot.textWithLabel(INITIAL_APPLICATION_NAME_LABEL).getText(), PROJECT_NAME + APP);
 		bot.button(FINISH).click();
 		bot.waitUntil(shellCloses(shell));
+	}
+
+	/**
+	 * Drags and drops a FB onto the canvas with given name and position.
+	 *
+	 * @param fbName The name of the Function Block.
+	 * @param point  The Position of the FB on the canvas.
+	 */
+	protected static void dragAndDropEventsFB(final String fbName, final Point point) {
+		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
+		systemExplorerView.show();
+		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
+		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
+		final SWTBotTree tree = new SWTBotTree(swtTree);
+		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
+		treeProjectItem.select();
+		treeProjectItem.expand();
+		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(TYPE_LIBRARY_NODE);
+		typeLibraryNode.select();
+		typeLibraryNode.expand();
+		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(EVENTS_NODE);
+		eventsNode.select();
+		eventsNode.expand();
+		bot.waitUntil(treeItemHasNode(eventsNode, fbName));
+		final SWTBotTreeItem eCycleNode = eventsNode.getNode(fbName);
+		eCycleNode.select();
+		eCycleNode.click();
+
+		// select application editor
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		final SWTBotGefFigureCanvas canvas = viewer.getCanvas();
+
+		assertNotNull(canvas);
+		eCycleNode.dragAndDrop(canvas, point);
 	}
 
 	/**

@@ -692,43 +692,4 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
-	// End of region for test methods
-	// ----------------------------------------------------------------------------------------
-	// Region of utility methods
-
-	/**
-	 * Drags and drops a FB onto the canvas with given name and position.
-	 *
-	 * @param fbName The name of the Function Block.
-	 * @param point  The Position of the FB on the canvas.
-	 */
-	private static void dragAndDropEventsFB(final String fbName, final Point point) {
-		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
-		treeProjectItem.select();
-		treeProjectItem.expand();
-		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(TYPE_LIBRARY_NODE);
-		typeLibraryNode.select();
-		typeLibraryNode.expand();
-		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(EVENTS_NODE);
-		eventsNode.select();
-		eventsNode.expand();
-		bot.waitUntil(treeItemHasNode(eventsNode, fbName));
-		final SWTBotTreeItem eCycleNode = eventsNode.getNode(fbName);
-		eCycleNode.select();
-		eCycleNode.click();
-
-		// select application editor
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
-		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		final SWTBotGefFigureCanvas canvas = viewer.getCanvas();
-
-		assertNotNull(canvas);
-		eCycleNode.dragAndDrop(canvas, point);
-	}
-
 }
