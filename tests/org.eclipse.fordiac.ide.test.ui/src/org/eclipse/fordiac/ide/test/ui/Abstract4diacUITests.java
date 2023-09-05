@@ -201,6 +201,27 @@ public class Abstract4diacUITests {
 	}
 
 	/**
+	 * Select a given FB on the editing area and double click it to access the
+	 * CompositeInstanceViewer. After that the SWTBotGefEditor will be returned.
+	 *
+	 * @return editor The SWTBotGefEditor is returned
+	 */
+	protected static SWTBotGefEditor goToCompositeInstanceViewer(final String fb) {
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		assertNotNull(viewer);
+		final SWTBotGefFigureCanvas canvas = viewer.getCanvas();
+		assertNotNull(canvas);
+		assertNotNull(editor.getEditPart(fb));
+		editor.click(fb);
+		final SWTBotGefEditPart parent = editor.getEditPart(fb).parent();
+		assertNotNull(parent);
+		parent.doubleClick();
+		return editor;
+	}
+
+	/**
 	 * Deletes 4diac IDE project.
 	 */
 	@AfterAll

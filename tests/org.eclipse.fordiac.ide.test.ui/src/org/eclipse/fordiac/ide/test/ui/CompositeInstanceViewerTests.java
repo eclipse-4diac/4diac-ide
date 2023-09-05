@@ -22,12 +22,10 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
-import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
-import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.ui.IEditorPart;
 import org.junit.jupiter.api.Disabled;
@@ -141,26 +139,6 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	@Disabled
 	public void compositeInstanceViewerAddAnotherFB() {
 		// in progress
-	}
-
-	/**
-	 * Selects of FB and double clicks on it.
-	 *
-	 * @return editor The SWTBotGefEditor is returned
-	 */
-	private static SWTBotGefEditor goToCompositeInstanceViewer(final String fb) {
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
-		assertNotNull(editor);
-		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		assertNotNull(viewer);
-		final SWTBotGefFigureCanvas canvas = viewer.getCanvas();
-		assertNotNull(canvas);
-		assertNotNull(editor.getEditPart(fb));
-		editor.click(fb);
-		final SWTBotGefEditPart parent = editor.getEditPart(fb).parent();
-		assertNotNull(parent);
-		parent.doubleClick();
-		return editor;
 	}
 
 }
