@@ -52,6 +52,7 @@ public class Abstract4diacUITests {
 	protected static final String E_CTUD_TREE_ITEM = "E_CTUD [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
 	protected static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	protected static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
+	protected static final String E_DEMUX = "E_DEMUX"; //$NON-NLS-1$
 	protected static final String E_D_FF_TREE_ITEM = "E_D_FF [Data latch (d) flip flop]"; //$NON-NLS-1$
 	protected static final String E_N_TABLE_FB = "E_N_TABLE"; //$NON-NLS-1$
 	protected static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
@@ -219,6 +220,13 @@ public class Abstract4diacUITests {
 		assertNotNull(parent);
 		parent.doubleClick();
 		return editor;
+	}
+
+	/**
+	 * Returns from CompositeinstanceViewer back to Editing Area
+	 */
+	protected static void returnToEditingArea() {
+		bot.menu(NAVIGATE).menu(GO_TO_PARENT).click();
 	}
 
 	/**

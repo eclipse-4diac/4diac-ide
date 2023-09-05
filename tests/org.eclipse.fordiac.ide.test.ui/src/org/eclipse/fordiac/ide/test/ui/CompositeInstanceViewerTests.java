@@ -54,7 +54,7 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 				assertTrue(breadCrumbEditor.getActiveEditor() instanceof CompositeInstanceViewer);
 			}
 		});
-		bot.menu(NAVIGATE).menu(GO_TO_PARENT).click();
+		returnToEditingArea();
 	}
 
 	/**
@@ -107,20 +107,44 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 		assertEquals(posToCheck1.y, fbBounds.y);
 		assertFalse(fbBounds.contains(posToCheck2));
 		assertTrue(fbBounds.contains(posToCheck1));
+
+		returnToEditingArea();
 	}
 
 	/**
 	 * Checks if it is possible to delete FB in CompositeInstanceViewer
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void compositeInstanceViewerDeleteFB() {
-		// in progress
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(200, 200));
+		goToCompositeInstanceViewer(E_N_TABLE_FB);
+
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		assertNotNull(editor.getEditPart(E_DEMUX));
+		editor.click(E_DEMUX);
+		final SWTBotGefEditPart parent = editor.getEditPart(E_DEMUX).parent();
+		assertNotNull(parent);
+		parent.click();
+
+		assertTrue(bot.menu(EDIT).isVisible());
+		bot.menu(EDIT).click();
+		assertTrue(bot.menu(DELETE).isVisible());
+		assertFalse(bot.menu(DELETE).isEnabled());
+
+		bot.menu(EDIT).menu(SELECT_ALL).click();
+		assertTrue(bot.menu(DELETE).isVisible());
+		assertFalse(bot.menu(DELETE).isEnabled());
+
+		returnToEditingArea();
 	}
 
 	/**
 	 * Checks if it is possible to edit name of FB in CompositeInstanceViewer
 	 */
-	@Disabled
+	@Disabled("Disabled until implementation.")
+	@Test
 	public void compositeInstanceViewerEditingOfFB() {
 		// in progress
 	}
@@ -128,7 +152,8 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	/**
 	 * Checks if it is possible to add connections in CompositeInstanceViewer
 	 */
-	@Disabled
+	@Disabled("Disabled until implementation.")
+	@Test
 	public void compositeInstanceViewerConnectionCanBeAdded() {
 		// in progress
 	}
@@ -136,7 +161,8 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	/**
 	 * Checks if it is possible to add another FB in CompositeInstanceViewer
 	 */
-	@Disabled
+	@Disabled("Disabled until implementation.")
+	@Test
 	public void compositeInstanceViewerAddAnotherFB() {
 		// in progress
 	}
