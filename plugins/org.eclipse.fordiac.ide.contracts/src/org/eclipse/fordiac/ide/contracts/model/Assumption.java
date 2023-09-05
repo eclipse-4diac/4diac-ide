@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.contracts.model;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.contracts.exceptions.AssumptionExeption;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -34,7 +35,7 @@ public class Assumption extends ContractElement {
 		}
 		final String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectAssumption(parts)) {
-			throw new IllegalArgumentException("Error with Assumption: " + line); //$NON-NLS-1$
+			throw new AssumptionExeption("Error with Assumption: " + line); //$NON-NLS-1$
 		}
 		return createAssumptionFrom(parts);
 	}

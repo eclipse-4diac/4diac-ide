@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.contracts.model;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.contracts.exceptions.ReactionExeption;
 
 public class Reaction extends Guarantee {
 
@@ -34,7 +35,7 @@ public class Reaction extends Guarantee {
 
 		String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectGuarantee(parts)) {
-			throw new IllegalArgumentException("Error with Guarantee: " + line); //$NON-NLS-1$
+			throw new ReactionExeption("Error with Guarantee: " + line); //$NON-NLS-1$
 		}
 		final Reaction reaction = new Reaction();
 		final String[] events = parts[2].split(ContractKeywords.COMMA);

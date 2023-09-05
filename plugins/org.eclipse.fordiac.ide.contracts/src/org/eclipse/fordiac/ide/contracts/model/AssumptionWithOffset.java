@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.contracts.model;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.contracts.exceptions.AssumptionWithOffsetExeption;
 
 public class AssumptionWithOffset extends Assumption {
 
@@ -38,7 +39,8 @@ public class AssumptionWithOffset extends Assumption {
 	static Assumption createAssumptionWithOffset(final String line) {
 		final String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectAssumtion(parts)) {
-			throw new IllegalArgumentException("Error with Assumption: " + line); //$NON-NLS-1$
+			throw new AssumptionWithOffsetExeption("Error with Assumption: " + line); //$NON-NLS-1$
+
 		}
 		final AssumptionWithOffset assumption = new AssumptionWithOffset();
 		assumption.setInputEvent(parts[1]);

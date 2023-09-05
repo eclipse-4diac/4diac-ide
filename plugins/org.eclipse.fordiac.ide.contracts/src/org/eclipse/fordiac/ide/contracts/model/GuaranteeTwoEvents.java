@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.contracts.exceptions.GuaranteeTwoEventsExeption;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -55,7 +56,8 @@ public class GuaranteeTwoEvents extends Guarantee {
 	static Guarantee createGuaranteeTwoEvents(final String line) {
 		String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectGuarantee(parts)) {
-			throw new IllegalArgumentException("Error with Guarantee: " + line); //$NON-NLS-1$
+			throw new GuaranteeTwoEventsExeption("Error with Guarantee: " + line); //$NON-NLS-1$
+
 		}
 		final GuaranteeTwoEvents guarantee = new GuaranteeTwoEvents();
 		guarantee.setInputEvent(parts[POSITION_INPUT_EVENT]);

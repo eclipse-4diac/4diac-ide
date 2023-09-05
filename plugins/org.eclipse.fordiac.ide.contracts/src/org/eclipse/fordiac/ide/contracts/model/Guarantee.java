@@ -20,6 +20,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.contracts.exceptions.GuaranteeExeption;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -63,7 +64,8 @@ public class Guarantee extends ContractElement {
 		}
 		String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectGuarantee(parts)) {
-			throw new IllegalArgumentException("Error with Guarantee: " + line); //$NON-NLS-1$
+			throw new GuaranteeExeption("Error with Guarantee: " + line);
+
 		}
 		final Guarantee guarantee = new Guarantee();
 		guarantee.setInputEvent(parts[POS_INPUT_EVENT]);

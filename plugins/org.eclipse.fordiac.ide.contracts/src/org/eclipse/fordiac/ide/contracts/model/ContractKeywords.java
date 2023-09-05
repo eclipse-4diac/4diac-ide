@@ -37,10 +37,10 @@ public final class ContractKeywords {
 	static final String EVENTS_OPEN = "("; //$NON-NLS-1$
 	static final String EVENTS_CLOSE = ")"; //$NON-NLS-1$
 	static final String REACTION = "Reaction"; //$NON-NLS-1$
-	public static final String CONTRACT = "_CONTRACT";
-	public static final String CONSTRACT_STATE = "ConstractState";
-	public static final String FALSE = " FALSE";
-	public static final String TRUE = " TRUE";
-	static final String WITH = "with";
+	public static final String CONTRACT = "_CONTRACT"; //$NON-NLS-1$
+	public static final String CONSTRACT_STATE = "ConstractState"; //$NON-NLS-1$
+	public static final String FALSE = " FALSE"; //$NON-NLS-1$
+	public static final String TRUE = " TRUE"; //$NON-NLS-1$
+	static final String WITH = "with"; //$NON-NLS-1$
 
 }
