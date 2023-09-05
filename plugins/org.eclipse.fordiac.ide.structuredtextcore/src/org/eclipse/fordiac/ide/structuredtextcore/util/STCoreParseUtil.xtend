@@ -59,15 +59,10 @@ final class STCoreParseUtil {
 		if(!additionalContent.nullOrEmpty) resource.additionalContent.addAll(additionalContent)
 		resource.load(new LazyStringInputStream(text), loadOptions ?: resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
-		issues.addAll(validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl).filter[relevantIssue])
+		issues.addAll(validator.validate(resource, CheckMode.FAST_ONLY, CancelIndicator.NullImpl))
 		return resource.parseResult
 	}
 	
-	def private static boolean isRelevantIssue(Issue issue) {
-		val fragment = issue.uriToProblem.fragment
-		return fragment == "/" || fragment.startsWith("//") || fragment.startsWith("/0") // only element (no index) or first element (zero index) in contents
-	}
-
 	def static IParseResult postProcess(String name, List<String> errors, List<String> warnings, List<String> infos,
 		List<Issue> issues, IParseResult parseResult) {
 

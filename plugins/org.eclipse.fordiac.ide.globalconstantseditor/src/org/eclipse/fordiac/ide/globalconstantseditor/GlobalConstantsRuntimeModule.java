@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreComme
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STCoreLinkingDiagnosticMessageProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreResourceValidator;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
@@ -35,6 +36,7 @@ import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
+import org.eclipse.xtext.validation.IResourceValidator;
 
 import com.google.inject.Binder;
 import com.google.inject.name.Names;
@@ -90,6 +92,10 @@ public class GlobalConstantsRuntimeModule extends AbstractGlobalConstantsRuntime
 
 	public Class<? extends STCoreReconciler> bindSTCoreReconciler() {
 		return GlobalConstantsReconciler.class;
+	}
+
+	public Class<? extends IResourceValidator> bindIResourceValidator() {
+		return STCoreResourceValidator.class;
 	}
 
 	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
