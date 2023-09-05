@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class DeleteVarInOutCommand extends DeleteInterfaceCommand {
@@ -35,7 +34,7 @@ public class DeleteVarInOutCommand extends DeleteInterfaceCommand {
 
 	private void collectAdditionalOppositeDeleteCmds() {
 		final VarDeclaration varInOut = getInterfaceElement();
-		final VarDeclaration inOutVarOpposite = ((InterfaceList) varInOut.eContainer()).getInOutVarOpposite(varInOut);
+		final VarDeclaration inOutVarOpposite = varInOut.getInOutVarOpposite();
 
 		handleWiths(inOutVarOpposite);
 		handleSubAppConnections(inOutVarOpposite);
@@ -43,8 +42,7 @@ public class DeleteVarInOutCommand extends DeleteInterfaceCommand {
 
 	private static IInterfaceElement getInterfaceElement(final VarDeclaration varInOut) {
 		if (varInOut.isInOutVar() && !varInOut.isIsInput()) {
-			final InterfaceList il = (InterfaceList) varInOut.eContainer();
-			return il.getInOutVarOpposite(varInOut);
+			return varInOut.getInOutVarOpposite();
 		}
 		return varInOut;
 	}

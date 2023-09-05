@@ -238,7 +238,7 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<>(Attribute.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES);
+			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -304,7 +304,7 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
+			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
 		}
 		return inputConnections;
 	}
@@ -316,7 +316,7 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
+			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
 		}
 		return outputConnections;
 	}
@@ -365,7 +365,7 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	@Override
 	public EList<With> getWith() {
 		if (with == null) {
-			with = new EObjectContainmentEList<>(With.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH);
+			with = new EObjectContainmentEList<With>(With.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH);
 		}
 		return with;
 	}

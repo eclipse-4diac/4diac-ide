@@ -42,6 +42,8 @@ import org.eclipse.gef.GraphicalEditPart;
 
 public class FBNetworkConnection extends HideableConnection {
 
+	private static final String THREE_DOTS = "\u2026"; //$NON-NLS-1$
+
 	private static int maxWidth = Activator.getDefault().getPreferenceStore()
 			.getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
 
@@ -214,13 +216,19 @@ public class FBNetworkConnection extends HideableConnection {
 		if (builder.length() > maxWidth) {
 			switch (pinLabelStyle) {
 			case DiagramPreferences.PIN_LABEL_STYLE_PIN_COMMENT: {
-				builder.delete(maxWidth, builder.length()); // start inclusive, end exclusive
-				builder.insert(maxWidth, "\u2026"); //$NON-NLS-1$
+				if (ie.getComment() != null && !ie.getComment().isBlank()) {
+					builder.delete(maxWidth, builder.length()); // start inclusive, end exclusive
+					builder.insert(maxWidth, THREE_DOTS);
+				} else {
+					builder.delete(0, builder.length() - maxWidth);
+					builder.insert(0, THREE_DOTS);
+				}
+
 				break;
 			}
 			case DiagramPreferences.PIN_LABEL_STYLE_PIN_NAME, DiagramPreferences.PIN_LABEL_STYLE_SRC_PIN_NAME: {
 				builder.delete(0, builder.length() - maxWidth);
-				builder.insert(0, "\u2026"); //$NON-NLS-1$
+				builder.insert(0, THREE_DOTS);
 				break;
 			}
 			default:

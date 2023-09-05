@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreComme
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreResourceValidator
 import org.eclipse.xtext.Constants
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider
@@ -38,6 +39,7 @@ import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater
 import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy
 import org.eclipse.xtext.scoping.IScopeProvider
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
+import org.eclipse.xtext.validation.IResourceValidator
 
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
@@ -92,6 +94,10 @@ class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 
 	def Class<? extends STCoreMapper> bindSTCoreMapper() {
 		return STAlgorithmMapper
+	}
+
+	def Class<? extends IResourceValidator> bindIResourceValidator() {
+		return STCoreResourceValidator
 	}
 
 	def Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {

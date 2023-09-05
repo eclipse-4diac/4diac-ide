@@ -97,8 +97,8 @@ public final class LinkConstraints {
 
 		if (!typeCheck(source, target)) {
 			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
-					(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
-					(null != target.getType()) ? target.getType().getName() : FordiacMessages.NA));
+					(null != source.getFullTypeName()) ? source.getFullTypeName() : FordiacMessages.NA,
+					(null != target.getFullTypeName()) ? target.getFullTypeName() : FordiacMessages.NA));
 			return false;
 
 		}
@@ -150,6 +150,11 @@ public final class LinkConstraints {
 	public static boolean typeCheck(final IInterfaceElement source, final IInterfaceElement target) {
 		final DataType sourceType = getFullDataType(source);
 		final DataType targetType = getFullDataType(target);
+		// Stricter type checks for VAR_IN_OUTs
+		if (source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()
+				&& target instanceof final VarDeclaration targetVar && targetVar.isInOutVar()) {
+			return targetType.isAssignableFrom(sourceType) && sourceType.isAssignableFrom(targetType);
+		}
 		// if source has generic type, it adapts to the target, which must fall into the
 		// generic type category
 		if (GenericTypes.isAnyType(sourceType) && sourceType.isAssignableFrom(targetType)) {

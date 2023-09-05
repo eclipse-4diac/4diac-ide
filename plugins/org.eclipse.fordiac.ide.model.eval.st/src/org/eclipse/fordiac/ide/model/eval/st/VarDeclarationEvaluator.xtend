@@ -53,10 +53,7 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator implements Variabl
 			val errors = newArrayList
 			val warnings = newArrayList
 			val infos = newArrayList
-			// use variable from FB type since the type declaration is in the context of the FB type and not an instance
-			val typeVariable = varDeclaration.FBNetworkElement?.type?.interfaceList?.getVariable(varDeclaration.name) ?:
-				varDeclaration
-			parseResultType = typeVariable.parseType(
+			parseResultType = varDeclaration.parseType(
 				errors,
 				warnings,
 				infos

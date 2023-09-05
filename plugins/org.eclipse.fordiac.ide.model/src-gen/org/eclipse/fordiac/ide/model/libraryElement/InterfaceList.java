@@ -222,14 +222,6 @@ public interface InterfaceList extends EObject {
 	List<VarDeclaration> getVisibleOutputVars();
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model inOutVarRequired="true"
-	 * @generated
-	 */
-	VarDeclaration getInOutVarOpposite(VarDeclaration inOutVar);
-
-	/**
 	 * Returns the value of the '<em><b>Out Mapped In Out Vars</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}.
 	 * <!-- begin-user-doc -->

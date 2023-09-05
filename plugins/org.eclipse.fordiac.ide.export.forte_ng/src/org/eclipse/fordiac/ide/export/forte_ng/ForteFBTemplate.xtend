@@ -70,7 +70,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def protected generateImplIncludes() '''
 		#include "«fileBasename».h"
 		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-		#include "«fileBasename»_gen.cpp"
+		#include "«type.generateTypeGenIncludePath»"
 		#endif
 		
 		#include "criticalregion.h"
@@ -314,8 +314,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def protected getWithVariable(With with) {
 		val varDeclaration = with.variables
 		if (varDeclaration.inOutVar && varDeclaration.isIsInput) {
-			val interfaceList = varDeclaration.eContainer as InterfaceList
-			interfaceList.getInOutVarOpposite(varDeclaration)
+			varDeclaration.getInOutVarOpposite()
 		} else
 			varDeclaration
 	}

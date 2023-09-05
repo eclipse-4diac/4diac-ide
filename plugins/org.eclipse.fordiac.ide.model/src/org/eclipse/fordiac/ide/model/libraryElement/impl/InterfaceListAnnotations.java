@@ -40,7 +40,8 @@ final class InterfaceListAnnotations {
 		retVal.addAll(il.getSockets());
 		retVal.addAll(il.getEventOutputs());
 		retVal.addAll(il.getOutputVars());
-		// Users of getAllInterfaceElements expect to get all elements for ui and connection checks. Therefore we need
+		// Users of getAllInterfaceElements expect to get all elements for ui and
+		// connection checks. Therefore we need
 		// to deliver also the mapped output side here
 		retVal.addAll(il.getOutMappedInOutVars());
 		retVal.addAll(il.getPlugs());
@@ -120,16 +121,4 @@ final class InterfaceListAnnotations {
 	private InterfaceListAnnotations() {
 		throw new UnsupportedOperationException("Helper class should not be instantiated!"); //$NON-NLS-1$
 	}
-
-	public static VarDeclaration getInOutVarOpposite(final InterfaceList il, final VarDeclaration inOutVar) {
-		if (inOutVar.isInOutVar()) {
-			if (inOutVar.isIsInput()) {
-				return il.getOutMappedInOutVars().get(il.getInOutVars().indexOf(inOutVar));
-			}
-			return il.getInOutVars().get(il.getOutMappedInOutVars().indexOf(inOutVar));
-		}
-		// if no inout var return the given var as backup
-		return inOutVar;
-	}
-
 }

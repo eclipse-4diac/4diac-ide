@@ -213,10 +213,15 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	}
 
 	private String getPinTypeName() {
-		if (getType().getType() instanceof final StructuredType structuredType) {
-			return getStructTypes(structuredType);
+		final StringBuilder sb = new StringBuilder();
+		final String typeName = getType().getFullTypeName();
+		if (typeName != null) {
+			sb.append(typeName);
 		}
-		return getType().getType() != null ? getType().getType().getName() : ""; //$NON-NLS-1$
+		if (getType().getType() instanceof final StructuredType structuredType) {
+			appendStructTypes(sb, structuredType);
+		}
+		return sb.toString();
 	}
 
 	private String getTypeComment() {
@@ -243,13 +248,12 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	}
 
 	protected String getTypeInitialValue() {
-		if (getType() instanceof final VarDeclaration varDeclaration) {
-			if (varDeclaration.isIsInput() && (varDeclaration.getFBNetworkElement() != null)) {
-				final FBType fbType = varDeclaration.getFBNetworkElement().getType();
-				if (null != fbType) {
-					return InitialValueHelper
-							.getDefaultValue(fbType.getInterfaceList().getInterfaceElement(varDeclaration.getName()));
-				}
+		if ((getType() instanceof final VarDeclaration varDeclaration)
+				&& (varDeclaration.isIsInput() && (varDeclaration.getFBNetworkElement() != null))) {
+			final FBType fbType = varDeclaration.getFBNetworkElement().getType();
+			if (null != fbType) {
+				return InitialValueHelper
+						.getDefaultValue(fbType.getInterfaceList().getInterfaceElement(varDeclaration.getName()));
 			}
 		}
 		return ""; //$NON-NLS-1$
@@ -293,10 +297,8 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 
 	// this method will be removed as soon as there is a toString for StructType in
 	// the model
-	private static String getStructTypes(final StructuredType st) {
+	private static String appendStructTypes(final StringBuilder sb, final StructuredType st) {
 		final EList<VarDeclaration> list = st.getMemberVariables();
-		final StringBuilder sb = new StringBuilder();
-		sb.append(st.getName());
 		sb.append(": ("); //$NON-NLS-1$
 		boolean printString = false;
 		for (final VarDeclaration v : list) {
@@ -304,7 +306,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 				sb.append(v.getType().getName());
 				printString = true;
 			} else {
-				sb.append("not set");
+				sb.append("not set"); //$NON-NLS-1$
 			}
 			sb.append(", "); //$NON-NLS-1$
 		}

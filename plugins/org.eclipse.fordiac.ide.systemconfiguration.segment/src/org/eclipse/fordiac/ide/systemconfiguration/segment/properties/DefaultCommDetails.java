@@ -45,7 +45,7 @@ public class DefaultCommDetails extends CommunicationConfigurationDetails {
 		final DefaultConfiguration config = CommunicationFactory.eINSTANCE.createDefaultConfiguration();
 		final CommunicationMappingTarget target = LibraryElementFactory.eINSTANCE.createCommunicationMappingTarget();
 		config.setTarget(target);
-		target.setName("Communication channel"); //$NON-NLS-1$
+		target.setName("CommunicationChannel"); //$NON-NLS-1$
 		return config;
 	}
 

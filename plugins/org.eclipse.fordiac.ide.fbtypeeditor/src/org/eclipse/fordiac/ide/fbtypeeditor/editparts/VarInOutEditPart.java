@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteVarInOutCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
@@ -46,8 +45,7 @@ public class VarInOutEditPart extends InterfaceEditPart {
 				protected Command getDirectEditCommand(final DirectEditRequest request) {
 					if (getHost() instanceof final VarInOutEditPart viewEditPart) {
 						final VarDeclaration varDecl = viewEditPart.getModel();
-						return new ChangeNameCommand(
-								((InterfaceList) varDecl.eContainer()).getInOutVarOpposite(varDecl),
+						return new ChangeNameCommand(varDecl.getInOutVarOpposite(),
 								(String) request.getCellEditor().getValue());
 					}
 					return null;
