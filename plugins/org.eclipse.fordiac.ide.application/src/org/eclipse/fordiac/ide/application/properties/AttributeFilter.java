@@ -25,10 +25,6 @@ public class AttributeFilter implements IFilter {
 		Object inputHelper = (toTest instanceof final EditPart editpart) ? editpart.getModel() : toTest;
 		inputHelper = (inputHelper instanceof final FBNetwork fbNetwork) ? fbNetwork.eContainer() : inputHelper;
 
-		if (inputHelper instanceof ConfigurableObject) {
-			return true;
-		}
-		return false;
+		return inputHelper instanceof ConfigurableObject;
 	}
-
 }
