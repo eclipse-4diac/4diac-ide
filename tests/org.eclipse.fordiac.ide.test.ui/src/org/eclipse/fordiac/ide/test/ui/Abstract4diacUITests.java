@@ -53,13 +53,17 @@ public class Abstract4diacUITests {
 	protected static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	protected static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
 	protected static final String E_D_FF_TREE_ITEM = "E_D_FF [Data latch (d) flip flop]"; //$NON-NLS-1$
+	protected static final String E_N_TABLE_FB = "E_N_TABLE"; //$NON-NLS-1$
 	protected static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
 	protected static final String E_TABLE_CTRL_TREE_ITEM = "E_TABLE_CTRL [Support function block for E_TABLE]"; //$NON-NLS-1$
 	protected static final String FILE = "File"; //$NON-NLS-1$
 	protected static final String FINISH = "Finish"; //$NON-NLS-1$
 	protected static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
+	protected static final String F_SUB = "F_SUB"; //$NON-NLS-1$
+	protected static final String GO_TO_PARENT = "Go To Parent"; //$NON-NLS-1$
 	protected static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
 	protected static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
+	protected static final String NAVIGATE = "Navigate"; //$NON-NLS-1$
 	protected static final String NEW = "New"; //$NON-NLS-1$
 	protected static final String NEW_4DIAC_PROJECT = "New 4diacProject"; //$NON-NLS-1$
 	protected static final String OK = "OK"; //$NON-NLS-1$
