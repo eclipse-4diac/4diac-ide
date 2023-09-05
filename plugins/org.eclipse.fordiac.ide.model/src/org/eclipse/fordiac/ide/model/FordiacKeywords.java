@@ -24,6 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -51,6 +52,12 @@ public final class FordiacKeywords {
 	public static final Set<String> RESERVED_KEYWORDS = Stream.of(RESERVED_ST_KEYWORDS, RESERVED_DATATYPE_KEYWORDS,
 			RESERVED_DATATYPE_CLASS_KEYWORDS, RESERVED_TIME_UNIT_KEYWORDS).flatMap(Set::stream)
 			.collect(Collectors.toUnmodifiableSet());
+
+	public static final Map<String, AllowedContexts> ALLOWED_CONTEXTS = Stream
+			.of(FordiacKeywords.class.getDeclaredFields())
+			.filter(f -> f.getAnnotation(AllowedContexts.class) != null
+					&& f.getAnnotation(AllowedContexts.class).value() != null)
+			.collect(Collectors.toUnmodifiableMap(FordiacKeywords::getName, FordiacKeywords::getAllowedContexts));
 
 	public enum KeywordTypes {
 		DATATYPE, DATATYPE_CLASS, TIME_UNIT, STRUCTURED_TEXT
@@ -542,46 +549,50 @@ public final class FordiacKeywords {
 		// Used only for annotation
 	}
 
+	private static String getName(final Field f) {
+		try {
+			return (String) f.get(null);  // Static field, so get with null
+		} catch (final IllegalArgumentException | IllegalAccessException e) {
+			FordiacLogHelper.logError("Exception in keyword access", e); //$NON-NLS-1$
+			throw new IllegalStateException(e);
+		}
+	}
+
+	private static AllowedContexts getAllowedContexts(final Field f) {
+		try {
+			return f.getAnnotation(AllowedContexts.class);
+		} catch (final IllegalArgumentException e) {
+			FordiacLogHelper.logError("Exception in allowed context access", e); //$NON-NLS-1$
+			throw new IllegalStateException(e);
+		}
+	}
+
 	private static Set<String> getKeywordsOfType(final KeywordTypes type) {
 		return List.of(FordiacKeywords.class.getDeclaredFields()).stream()
-				.filter(field -> isKeyword(field) && field.getAnnotation(Keyword.class).value() == type).map(field -> {
-					try {
-						return (String) field.get(null); // Static field, so get with null
-					} catch (final IllegalArgumentException | IllegalAccessException e) {
-						FordiacLogHelper.logError("Exception in keyword access", e); //$NON-NLS-1$
-						throw new IllegalStateException(e);
-					}
-				}).collect(Collectors.toUnmodifiableSet());
+				.filter(field -> isKeyword(field) && field.getAnnotation(Keyword.class).value() == type)
+				.map(FordiacKeywords::getName).collect(Collectors.toUnmodifiableSet());
 	}
 
 	public static boolean isReservedKeyword(final String nameProposal) {
-		return RESERVED_KEYWORDS.parallelStream().anyMatch(keyword -> keyword.equalsIgnoreCase(nameProposal));
+		return RESERVED_KEYWORDS.contains(nameProposal.toUpperCase());
 	}
 
 	public static boolean isReservedKeyword(final String name, final Object context) {
 		if (context == null) {
 			return isReservedKeyword(name);
 		}
-		return Stream.of(FordiacKeywords.class.getDeclaredFields()).parallel().filter(FordiacKeywords::isKeyword)
-				.anyMatch(field -> matchesValue(field, name) && !matchesAllowedContext(field, context));
+
+		final String upperCaseName = name.toUpperCase();
+		return RESERVED_KEYWORDS.contains(upperCaseName) && !matchesAllowedContext(upperCaseName, context);
 	}
 
 	private static boolean isKeyword(final Field field) {
 		return field.getType().equals(String.class) && field.isAnnotationPresent(Keyword.class);
 	}
 
-	private static boolean matchesValue(final Field field, final String value) {
-		try {
-			return value.equalsIgnoreCase((String) field.get(null));
-		} catch (IllegalArgumentException | IllegalAccessException | ClassCastException e) {
-			FordiacLogHelper.logError("Exception in keyword access", e); //$NON-NLS-1$
-			throw new IllegalStateException(e);
-		}
-	}
-
-	private static boolean matchesAllowedContext(final Field field, final Object context) {
-		final var allowedContexts = field.getAnnotation(AllowedContexts.class);
-		return allowedContexts != null && allowedContexts.value() != null
+	private static boolean matchesAllowedContext(final String upperCaseName, final Object context) {
+		final var allowedContexts = ALLOWED_CONTEXTS.get(upperCaseName);
+		return allowedContexts != null
 				&& Stream.of(allowedContexts.value()).anyMatch(value -> value.isAssignableFrom(context.getClass()));
 	}
 }
