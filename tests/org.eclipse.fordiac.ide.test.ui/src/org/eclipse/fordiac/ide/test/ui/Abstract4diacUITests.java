@@ -84,6 +84,7 @@ public class Abstract4diacUITests {
 	protected static final String CV = "CV"; //$NON-NLS-1$
 	protected static final String DT = "DT"; //$NON-NLS-1$
 	protected static final String EO = "EO"; //$NON-NLS-1$
+	protected static final String EI = "EI"; //$NON-NLS-1$
 	protected static final String PV = "PV"; //$NON-NLS-1$
 	protected static final String QD = "QD"; //$NON-NLS-1$
 	protected static final String QU = "QU"; //$NON-NLS-1$

@@ -16,17 +16,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.eclipse.ui.IEditorPart;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -151,11 +154,25 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 
 	/**
 	 * Checks if it is possible to add connections in CompositeInstanceViewer
+	 *
+	 * The method checks if it is possible to add connections between FB pins in
+	 * CompositeInstanceViewer. It is expected that this is not possible.
 	 */
-	@Disabled("Disabled until implementation.")
+	@SuppressWarnings("static-method")
 	@Test
 	public void compositeInstanceViewerConnectionCanBeAdded() {
-		// in progress
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(200, 200));
+		goToCompositeInstanceViewer(E_N_TABLE_FB);
+		SWTBot4diacGefViewer viewer = createConnection(EO, EI);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+		viewer = createConnection(N, CV);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+		viewer = createConnection(START, STOP);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+		viewer = createConnection(START, EO0);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+
+		returnToEditingArea();
 	}
 
 	/**
