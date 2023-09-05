@@ -40,4 +40,7 @@ public final class ContractUtils {
 		return interval.toString();
 	}
 
+	static int getStartPosition(final String[] parts, final int posTime) {
+		return parts[posTime].length() - ContractKeywords.UNIT_OF_TIME.length();
+	}
 }

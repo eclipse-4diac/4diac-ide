@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.model;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.contracts.exceptions.AssumptionWithOffsetExeption;
@@ -75,15 +77,15 @@ public class AssumptionWithOffset extends Assumption {
 		if (!ContractKeywords.EVERY.equals(parts[POS_EVERY])) {
 			return false;
 		}
-		if (!ContractKeywords.UNIT_OF_TIME.equals(parts[POS_TIME].substring(
-				parts[POS_TIME].length() - ContractKeywords.UNIT_OF_TIME.length(), parts[POS_TIME].length()))) {
+		if (!ContractKeywords.UNIT_OF_TIME.equals(
+				parts[POS_TIME].substring(ContractUtils.getStartPosition(parts, POS_TIME), parts[POS_TIME].length()))) {
 			return false;
 		}
 		if (!ContractKeywords.WITH.equals(parts[POS_WITH])) {
 			return false;
 		}
-		if (!ContractKeywords.UNIT_OF_TIME.equals(parts[POS_TIME2].substring(
-				parts[POS_TIME2].length() - ContractKeywords.UNIT_OF_TIME.length(), parts[POS_TIME2].length()))) {
+		if (!ContractKeywords.UNIT_OF_TIME.equals(parts[POS_TIME2]
+				.substring(ContractUtils.getStartPosition(parts, POS_TIME2), parts[POS_TIME2].length()))) {
 			return false;
 		}
 		return ContractKeywords.OFFSET.equals(parts[POS_OFFSET]);
@@ -105,10 +107,10 @@ public class AssumptionWithOffset extends Assumption {
 		this.maxOffset = maxOffset;
 	}
 
-	public static boolean isCompatibleWith(final EList<Assumption> assumptions) {
+	public static boolean isCompatibleWith(final Iterable<Assumption> assumptions) {
 		final EList<Assumption> normal = new BasicEList<>();
 		final EList<AssumptionWithOffset> withOffset = new BasicEList<>();
-		assumptions.parallelStream().forEach(a -> {
+		((Collection<Assumption>) assumptions).parallelStream().forEach(a -> {
 			if (a instanceof final AssumptionWithOffset toAdd) {
 				withOffset.add(toAdd);
 			} else {

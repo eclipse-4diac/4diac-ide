@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,8 +106,8 @@ public class Guarantee extends ContractElement {
 		if (!ContractKeywords.WITHIN.equals(parts[POS_WITHIN])) {
 			return false;
 		}
-		return ContractKeywords.UNIT_OF_TIME.equals(parts[POS_MS]
-				.subSequence(parts[POS_MS].length() - ContractKeywords.UNIT_OF_TIME.length(), parts[POS_MS].length()));
+		return ContractKeywords.UNIT_OF_TIME.equals(
+				parts[POS_MS].subSequence(ContractUtils.getStartPosition(parts, POS_MS), parts[POS_MS].length()));
 	}
 
 	@Override
@@ -181,13 +182,13 @@ public class Guarantee extends ContractElement {
 		}
 	}
 
-	public static boolean isCompatibleWith(final EList<Guarantee> guarantees) {
+	public static boolean isCompatibleWith(final Iterable<Guarantee> guarantees) {
 		final Map<String, EList<Guarantee>> mapGuarantees = new HashMap<>();
 		final Map<String, EList<Reaction>> mapReactions = new HashMap<>();
 		final Map<String, EList<GuaranteeTwoEvents>> mapGuaranteeTwoEvents = new HashMap<>();
 		final Consumer<Guarantee> sort = guarantee -> sortHelper(mapGuarantees, mapReactions, mapGuaranteeTwoEvents,
 				guarantee);
-		guarantees.parallelStream().forEach(sort);
+		((Collection<Guarantee>) guarantees).parallelStream().forEach(sort);
 		if (mapGuaranteeTwoEvents.size() > 0) {
 			return GuaranteeTwoEvents.isCompatibleWith(mapGuarantees, mapReactions, mapGuaranteeTwoEvents);
 		}

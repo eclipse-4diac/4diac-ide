@@ -144,8 +144,8 @@ public class GuaranteeTwoEvents extends Guarantee {
 		if (!ContractKeywords.WITHIN.equals(parts[POS_WITHIN])) {
 			return false;
 		}
-		return ContractKeywords.UNIT_OF_TIME
-				.equals(parts[POS_MS].subSequence(parts[POS_MS].length() - 2, parts[POS_MS].length()));
+		return ContractKeywords.UNIT_OF_TIME.equals(
+				parts[POS_MS].subSequence(ContractUtils.getStartPosition(parts, POS_MS), parts[POS_MS].length()));
 	}
 
 	@Override

@@ -63,8 +63,8 @@ public class Assumption extends ContractElement {
 		if (!ContractKeywords.EVERY.equals(parts[POS_EVERY])) {
 			return false;
 		}
-		return ContractKeywords.UNIT_OF_TIME.equals(parts[POS_TIME].substring(
-				parts[POS_TIME].length() - ContractKeywords.UNIT_OF_TIME.length(), parts[POS_TIME].length()));
+		return ContractKeywords.UNIT_OF_TIME.equals(
+				parts[POS_TIME].substring(ContractUtils.getStartPosition(parts, POS_TIME), parts[POS_TIME].length()));
 	}
 
 	@Override
