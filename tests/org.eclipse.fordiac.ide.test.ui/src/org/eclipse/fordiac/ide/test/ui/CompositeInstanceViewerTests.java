@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -171,17 +172,23 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 		viewer = createConnection(START, EO0);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-
 		returnToEditingArea();
 	}
 
 	/**
 	 * Checks if it is possible to add another FB in CompositeInstanceViewer
 	 */
-	@Disabled("Disabled until implementation.")
+	@SuppressWarnings("static-method")
 	@Test
 	public void compositeInstanceViewerAddAnotherFB() {
-		// in progress
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 200));
+		goToCompositeInstanceViewer(E_CYCLE_FB);
+		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(100, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		assertNotNull(editor.getEditPart(E_DELAY_FB));
+		assertNull(editor.getEditPart(E_SWITCH_FB));
+		returnToEditingArea();
 	}
 
 }

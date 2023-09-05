@@ -52,10 +52,13 @@ public class Abstract4diacUITests {
 	protected static final String E_CTUD_TREE_ITEM = "E_CTUD [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
 	protected static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	protected static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
+	protected static final String E_DELAY_FB = "E_DELAY"; //$NON-NLS-1$
 	protected static final String E_DEMUX = "E_DEMUX"; //$NON-NLS-1$
 	protected static final String E_D_FF_TREE_ITEM = "E_D_FF [Data latch (d) flip flop]"; //$NON-NLS-1$
 	protected static final String E_N_TABLE_FB = "E_N_TABLE"; //$NON-NLS-1$
 	protected static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
+	protected static final String E_SWITCH_FB = "E_SWITCH";
+	protected static final String E_SWITCH_TREE_ITEM = "E_SWITCH [Switching (demultiplexing) an event based on boolean input G]";
 	protected static final String E_TABLE_CTRL_TREE_ITEM = "E_TABLE_CTRL [Support function block for E_TABLE]"; //$NON-NLS-1$
 	protected static final String FILE = "File"; //$NON-NLS-1$
 	protected static final String FINISH = "Finish"; //$NON-NLS-1$
