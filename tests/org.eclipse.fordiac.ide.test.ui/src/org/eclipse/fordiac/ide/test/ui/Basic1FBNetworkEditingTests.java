@@ -42,41 +42,6 @@ import org.junit.jupiter.api.Test;
 
 public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 
-	private static final String DELETE = "Delete"; //$NON-NLS-1$
-	private static final String E_CTUD_TREE_ITEM = "E_CTUD [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
-	private static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
-	private static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
-	private static final String E_D_FF_TREE_ITEM = "E_D_FF [Data latch (d) flip flop]"; //$NON-NLS-1$
-	private static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
-	private static final String E_TABLE_CTRL_TREE_ITEM = "E_TABLE_CTRL [Support function block for E_TABLE]"; //$NON-NLS-1$
-	private static final String EDIT = "Edit"; //$NON-NLS-1$
-	private static final String EVENTS_NODE = "events"; //$NON-NLS-1$
-	private static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
-	private static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
-	private static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
-	// FB pins and values
-	private static final String START = "START"; //$NON-NLS-1$
-	private static final String STOP = "STOP"; //$NON-NLS-1$
-	private static final String D = "D"; //$NON-NLS-1$
-	private static final String N = "N"; //$NON-NLS-1$
-	private static final String Q = "Q"; //$NON-NLS-1$
-	private static final String CD = "CD"; //$NON-NLS-1$
-	private static final String CV = "CV"; //$NON-NLS-1$
-	private static final String DT = "DT"; //$NON-NLS-1$
-	private static final String EO = "EO"; //$NON-NLS-1$
-	private static final String PV = "PV"; //$NON-NLS-1$
-	private static final String QD = "QD"; //$NON-NLS-1$
-	private static final String QU = "QU"; //$NON-NLS-1$
-	private static final String CLK = "CLK"; //$NON-NLS-1$
-	private static final String EO0 = "EO0"; //$NON-NLS-1$
-	private static final String EO1 = "EO1"; //$NON-NLS-1$
-	private static final String EO2 = "EO2"; //$NON-NLS-1$
-	private static final String DTO = "DTO"; //$NON-NLS-1$
-	private static final String CLKO = "CLKO"; //$NON-NLS-1$
-	private static final String INIT = "INIT"; //$NON-NLS-1$
-	private static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
-	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
-
 	/**
 	 * Drags and Drops a Function Block onto the canvas.
 	 *
