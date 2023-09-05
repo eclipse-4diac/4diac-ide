@@ -697,42 +697,6 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	// Region of utility methods
 
 	/**
-	 * Creates a connection between two pins.
-	 *
-	 * The method creates a connection between the two given pins, the order of the
-	 * pins is not important and returns a SWTBot4diacGefViewer. Whether a
-	 * connection could actually be created is not checked here.
-	 *
-	 * @param pin1 One of the two pins between a connection is (tried to) create.
-	 * @param pin2 One of the two pins between a connection is (tried to) create.
-	 * @return SWTBot4diacGefViewer
-	 */
-	private static SWTBot4diacGefViewer createConnection(final String pin1, final String pin2) {
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
-		assertNotNull(editor);
-		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		assertNotNull(viewer);
-		// select input pin
-		editor.click(pin1);
-		final SWTBotGefEditPart ei = editor.getEditPart(pin1);
-		assertNotNull(ei);
-		final IFigure figure = ((GraphicalEditPart) ei.part()).getFigure();
-		assertNotNull(figure);
-		final Rectangle inputPinBounds1 = figure.getBounds().getCopy();
-		assertNotNull(inputPinBounds1);
-		figure.translateToAbsolute(inputPinBounds1);
-		// select output pin
-		editor.click(pin2);
-		final SWTBotGefEditPart eo = editor.getEditPart(pin2);
-		assertNotNull(eo);
-		final Rectangle inputPinBounds2 = ((GraphicalEditPart) eo.part()).getFigure().getBounds().getCopy();
-		assertNotNull(inputPinBounds2);
-		figure.translateToAbsolute(inputPinBounds2);
-		viewer.drag(pin2, inputPinBounds1.getCenter().x, inputPinBounds1.getCenter().y);
-		return viewer;
-	}
-
-	/**
 	 * Drags and drops a FB onto the canvas with given name and position.
 	 *
 	 * @param fbName The name of the Function Block.
