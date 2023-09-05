@@ -54,7 +54,7 @@ public class GuaranteeTwoEvents extends Guarantee {
 	}
 
 	static Guarantee createGuaranteeTwoEvents(final String line) {
-		String[] parts = line.split(" "); //$NON-NLS-1$
+		final String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectGuarantee(parts)) {
 			throw new GuaranteeTwoEventsExeption("Error with Guarantee: " + line); //$NON-NLS-1$
 
@@ -65,10 +65,7 @@ public class GuaranteeTwoEvents extends Guarantee {
 		guarantee.setSecondOutputEvent(events[1].substring(0, events[1].length() - 1));
 		guarantee.setOutputEvent(events[0].substring(1, events[0].length()));
 		if (ContractUtils.isInterval(parts, POSITION_NO, ContractKeywords.INTERVAL_DIVIDER)) {
-			parts = parts[POSITION_NO].split(ContractKeywords.INTERVAL_DIVIDER);
-			guarantee.setMin(Integer.parseInt(parts[0].substring(1)));
-			parts = parts[1].split(ContractKeywords.INTERVAL_CLOSE);
-			guarantee.setMax(Integer.parseInt(parts[0]));
+			guarantee.setRangeFromInterval(parts, POSITION_NO);
 			return guarantee;
 		}
 		guarantee.setMax(-1);

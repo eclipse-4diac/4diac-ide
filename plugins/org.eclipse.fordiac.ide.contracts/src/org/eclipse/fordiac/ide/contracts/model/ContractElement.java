@@ -140,4 +140,10 @@ public class ContractElement {
 		contract.add(toAdd, contract);
 	}
 
+	void setRangeFromInterval(String[] parts, final int position) {
+		parts = parts[position].split(ContractKeywords.INTERVAL_DIVIDER);
+		setMin(Integer.parseInt(parts[0].substring(1)));
+		parts = parts[1].split(ContractKeywords.INTERVAL_CLOSE);
+		setMax(Integer.parseInt(parts[0]));
+	}
 }

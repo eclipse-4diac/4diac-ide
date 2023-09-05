@@ -33,7 +33,7 @@ public class Reaction extends Guarantee {
 
 	static Guarantee createReaction(final String line) {
 
-		String[] parts = line.split(" "); //$NON-NLS-1$
+		final String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectGuarantee(parts)) {
 			throw new ReactionExeption("Error with Guarantee: " + line); //$NON-NLS-1$
 		}
@@ -42,10 +42,7 @@ public class Reaction extends Guarantee {
 		reaction.setOutputEvent(events[1].substring(0, events[1].length() - 1));
 		reaction.setInputEvent(events[0].substring(1, events[0].length()));
 		if (ContractUtils.isInterval(parts, POSITION_NO, ContractKeywords.INTERVAL_DIVIDER)) {
-			parts = parts[POSITION_NO].split(ContractKeywords.INTERVAL_DIVIDER);
-			reaction.setMin(Integer.parseInt(parts[0].substring(1)));
-			parts = parts[1].split(ContractKeywords.INTERVAL_CLOSE);
-			reaction.setMax(Integer.parseInt(parts[0]));
+			reaction.setRangeFromInterval(parts, POSITION_NO);
 			return reaction;
 		}
 		reaction.setMax(Integer.parseInt(

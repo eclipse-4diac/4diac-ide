@@ -62,19 +62,16 @@ public class Guarantee extends ContractElement {
 		if (line.contains(ContractKeywords.EVENTS)) {
 			return GuaranteeTwoEvents.createGuaranteeTwoEvents(line);
 		}
-		String[] parts = line.split(" "); //$NON-NLS-1$
+		final String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectGuarantee(parts)) {
-			throw new GuaranteeExeption("Error with Guarantee: " + line);
+			throw new GuaranteeExeption("Error with Guarantee: " + line); //$NON-NLS-1$
 
 		}
 		final Guarantee guarantee = new Guarantee();
 		guarantee.setInputEvent(parts[POS_INPUT_EVENT]);
 		guarantee.setOutputEvent(parts[POS_OUTPUT_EVENT]);
 		if (ContractUtils.isInterval(parts, POSITION_NO, ContractKeywords.INTERVAL_DIVIDER)) {
-			parts = parts[POSITION_NO].split(ContractKeywords.INTERVAL_DIVIDER);
-			guarantee.setMin(Integer.parseInt(parts[0].substring(1)));
-			parts = parts[1].split(ContractKeywords.INTERVAL_CLOSE);
-			guarantee.setMax(Integer.parseInt(parts[0]));
+			guarantee.setRangeFromInterval(parts, POSITION_NO);
 			return guarantee;
 		}
 		guarantee.setMax(Integer.parseInt(

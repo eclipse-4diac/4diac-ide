@@ -45,10 +45,7 @@ public class AssumptionWithOffset extends Assumption {
 		final AssumptionWithOffset assumption = new AssumptionWithOffset();
 		assumption.setInputEvent(parts[1]);
 		if (ContractUtils.isInterval(parts, POSITION_NO1, ContractKeywords.INTERVAL_DIVIDER)) {
-			String[] number = parts[POSITION_NO1].split(ContractKeywords.INTERVAL_DIVIDER);
-			assumption.setMin(Integer.parseInt(number[0].substring(1)));
-			number = number[1].split(ContractKeywords.INTERVAL_CLOSE);
-			assumption.setMax(Integer.parseInt(number[0]));
+			assumption.setRangeFromInterval(parts, POSITION_NO1);
 		} else {
 			assumption.setMax(-1);
 			assumption.setMin(Integer.parseInt(parts[POSITION_NO1].substring(0,

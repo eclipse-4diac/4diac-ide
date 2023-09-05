@@ -40,14 +40,11 @@ public class Assumption extends ContractElement {
 		return createAssumptionFrom(parts);
 	}
 
-	private static Assumption createAssumptionFrom(String[] parts) {
+	private static Assumption createAssumptionFrom(final String[] parts) {
 		final Assumption assumption = new Assumption();
 		assumption.setInputEvent(parts[1]);
 		if (ContractUtils.isInterval(parts, POSITION_NO, ContractKeywords.INTERVAL_DIVIDER)) {
-			parts = parts[POSITION_NO].split(ContractKeywords.INTERVAL_DIVIDER);
-			assumption.setMin(Integer.parseInt(parts[0].substring(1)));
-			parts = parts[1].split(ContractKeywords.INTERVAL_CLOSE);
-			assumption.setMax(Integer.parseInt(parts[0]));
+			assumption.setRangeFromInterval(parts, POSITION_NO);
 			return assumption;
 		}
 		assumption.setMax(-1);
