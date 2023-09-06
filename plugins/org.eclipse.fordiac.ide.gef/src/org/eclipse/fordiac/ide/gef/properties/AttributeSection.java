@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.change.AttributeChangeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AttributeCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.AttributeDeleteCommand;
@@ -29,10 +28,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -53,7 +54,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class AbstractAttributeSection extends AbstractSection {
+public class AttributeSection extends AbstractSection {
 	private TableViewer attributeViewer;
 	private static final String NAME_COL = "name"; //$NON-NLS-1$
 	private static final String VALUE_COL = "value"; //$NON-NLS-1$
@@ -61,10 +62,16 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	private static final String COMMENT_COL = "comment"; //$NON-NLS-1$
 
 	@Override
-	protected abstract ConfigurableObject getInputType(Object input);
+	protected ConfigurableObject getInputType(final Object input) {
+		Object inputHelper = input instanceof final EditPart editpart ? editpart.getModel() : input;
+		inputHelper = inputHelper instanceof final FBNetwork fbNetwork ? fbNetwork.eContainer() : inputHelper;
+		return inputHelper instanceof final ConfigurableObject configurableObject ? configurableObject : null;
+	}
 
 	@Override
-	protected abstract EObject getType();
+	protected ConfigurableObject getType() {
+		return type instanceof final ConfigurableObject configurableObject ? configurableObject : null;
+	}
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -86,15 +93,12 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 	}
 
 	private void configureButtonList(final AddDeleteWidget buttons, final TableViewer attributeViewer) {
-		buttons.bindToTableViewer(attributeViewer, this,
-				ref -> newCreateCommand((ConfigurableObject) getType(), (Attribute) ref),
-				ref -> newDeleteCommand((ConfigurableObject) getType(), (Attribute) ref));
+		buttons.bindToTableViewer(attributeViewer, this, ref -> newCreateCommand(getType(), (Attribute) ref),
+				ref -> newDeleteCommand(getType(), (Attribute) ref));
 	}
 
-	private static AttributeCreateCommand newCreateCommand(final ConfigurableObject object,
-			final Attribute ref) {
-		return new AttributeCreateCommand(object,
-				ref);
+	private static AttributeCreateCommand newCreateCommand(final ConfigurableObject object, final Attribute ref) {
+		return new AttributeCreateCommand(object, ref);
 	}
 
 	private static Command newDeleteCommand(final ConfigurableObject object, final Attribute ref) {
@@ -165,18 +169,13 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			switch (property) {
-			case NAME_COL:
-				return ((Attribute) element).getName();
-			case VALUE_COL:
-				return ((Attribute) element).getValue();
-			case TYPE_COL:
-				return Integer.valueOf(((Attribute) element).getType().getValue());
-			case COMMENT_COL:
-				return ((Attribute) element).getComment();
-			default:
-				return null;
-			}
+			return switch (property) {
+			case NAME_COL -> ((Attribute) element).getName();
+			case VALUE_COL -> ((Attribute) element).getValue();
+			case TYPE_COL -> Integer.valueOf(((Attribute) element).getType().getValue());
+			case COMMENT_COL -> ((Attribute) element).getComment();
+			default -> null;
+			};
 		}
 
 		@Override

@@ -157,7 +157,7 @@
                tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditVarInOut">
          </propertySection>
          <propertySection 
-         	   class="org.eclipse.fordiac.ide.application.properties.ApplicationAttributeSection"
+         	   class="org.eclipse.fordiac.ide.gef.properties.AttributeSection"
       		   filter="org.eclipse.fordiac.ide.application.properties.AttributeFilter"
                id="org.eclipse.fordiac.ide.application.properties.AttributeSection"
                tab="org.eclipse.fordiac.ide.application.propertyAttributeTab">
