@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
@@ -42,7 +41,6 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 	private String offsetText;
 	private Button offsetCheckbox;
 	private boolean defineOffset;
-	private CCombo inputOffsetCombo;
 	private String state;
 
 	public DefineFBReactionOnePinDialog(final Shell parentShell, final Event pinFrom) {
@@ -151,7 +149,6 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 			offsetText = offset.getText();
 		}
 		inputTimeText = inputTime.getText();
-		state = inputOffsetCombo.getItem(inputOffsetCombo.getSelectionIndex());
 		final String[] strInputTime = DefineContractUtils.getTimeIntervalFromString(inputTimeText);
 		String[] strOffset = { "0", "0" };  //$NON-NLS-1$//$NON-NLS-2$
 		if (offset.isVisible()) {
