@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -216,7 +217,7 @@ public class FBNetworkConnection extends HideableConnection {
 		if (builder.length() > maxWidth) {
 			switch (pinLabelStyle) {
 			case DiagramPreferences.PIN_LABEL_STYLE_PIN_COMMENT: {
-				if (ie.getComment() != null && !ie.getComment().isBlank()) {
+				if (CommentHelper.hasComment(ie)) {
 					builder.delete(maxWidth, builder.length()); // start inclusive, end exclusive
 					builder.insert(maxWidth, THREE_DOTS);
 				} else {
@@ -299,8 +300,7 @@ public class FBNetworkConnection extends HideableConnection {
 
 	private StringBuilder generateFullIEString(final IInterfaceElement ie) {
 		final StringBuilder builder = new StringBuilder();
-		if (pinLabelStyle.equals(DiagramPreferences.PIN_LABEL_STYLE_PIN_COMMENT) && ie.getComment() != null
-				&& !ie.getComment().isBlank()) {
+		if (pinLabelStyle.equals(DiagramPreferences.PIN_LABEL_STYLE_PIN_COMMENT) && CommentHelper.hasComment(ie)) {
 			builder.append(ie.getComment());
 		} else {
 			if (ie.getFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
