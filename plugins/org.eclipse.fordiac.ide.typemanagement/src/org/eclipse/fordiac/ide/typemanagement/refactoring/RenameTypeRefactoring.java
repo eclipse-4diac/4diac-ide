@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -89,7 +88,8 @@ public class RenameTypeRefactoring extends Refactoring {
 	}
 
 	public static void checkEditor(final RefactoringStatus result, final TypeEntry typeEntry, final String oldName) {
-		// depending if the in-place renaming is active we may not be in the display thread
+		// depending if the in-place renaming is active we may not be in the display
+		// thread
 		Display.getDefault().syncExec(() -> {
 			final IEditorPart findEditor = EditorUtils
 					.findEditor((final IEditorPart editor) -> editor.getEditorInput() instanceof FileEditorInput
@@ -109,7 +109,7 @@ public class RenameTypeRefactoring extends Refactoring {
 				MessageFormat.format(
 						"There are unsaved changes for type \"{0}\". Do you want to save them before renaming?", //$NON-NLS-1$
 						TypeEntry.getTypeNameFromFileName(oldName)),
-				SWT.NONE, "Save", "Cancel");  //$NON-NLS-1$//$NON-NLS-2$
+				SWT.NONE, "Save", "Cancel"); //$NON-NLS-1$//$NON-NLS-2$
 		return result == 0;
 	}
 
@@ -162,20 +162,20 @@ public class RenameTypeRefactoring extends Refactoring {
 	}
 
 	private CompositeChange createFBDataChange(final FBType type) {
-		final Set<INamedElement> allFBs = InstanceSearch.performSearch(FBTypeSearch.createFBTypeSearch(type));
 		final CompositeChange parentChange = new CompositeChange(
 				MessageFormat.format(Messages.Refactoring_RenameFromTo, typeEntry.getTypeName(), getNewName()));
+		Set<INamedElement> allFBs;
 		if (type instanceof SubAppType) {
 			parentChange.add(
 					new RenameTypeChange(typeEntry, getNewName() + TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT));
-
 		} else {
 			parentChange
 					.add(new RenameTypeChange(typeEntry, getNewName() + TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT));
 		}
 		final CompositeChange change = new CompositeChange(Messages.Refactoring_AffectedInstancesOfFB);
-		change.add(
-				new UpdateInstancesChange(allFBs.stream().map(FB.class::cast).collect(Collectors.toList()), typeEntry));
+		allFBs = InstanceSearch.performSearch(FBTypeSearch.createFBTypeSearch(type));
+		change.add(new UpdateInstancesChange(
+				allFBs.stream().map(FBNetworkElement.class::cast).collect(Collectors.toList()), typeEntry));
 		if (!allFBs.isEmpty()) {
 			parentChange.add(change);
 		}

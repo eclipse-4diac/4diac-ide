@@ -17,7 +17,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
 public class FBTypeSearch extends InstanceSearch {
 
@@ -53,6 +56,15 @@ public class FBTypeSearch extends InstanceSearch {
 						&& fb.getTypeEntry().getTypeName().equals(entry.getName())) {
 					return true;
 				}
+				if (fb.getTypeEntry().getTypeEditable() instanceof ServiceInterfaceFBType
+						&& entry instanceof ServiceInterfaceFBType
+						&& fb.getTypeEntry().getTypeName().equals(entry.getName())) {
+					return true;
+				}
+			} else if (searchCandiate instanceof final SubApp subApp && subApp.getTypeEntry() != null
+					&& (subApp.getTypeEntry().getTypeEditable() instanceof SubAppType && entry instanceof SubAppType
+							&& subApp.getTypeEntry().getTypeName().equals(entry.getName()))) {
+				return true;
 			}
 			return false;
 		}
