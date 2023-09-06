@@ -25,19 +25,16 @@ import org.eclipse.fordiac.ide.model.commands.change.AttributeChangeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AttributeCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.AttributeDeleteCommand;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
@@ -115,7 +112,7 @@ public class AttributeSection extends AbstractSection {
 		configureTableLayout();
 		final Table table = attributeViewer.getTable();
 
-		attributeViewer.setContentProvider(new InputContentProvider());
+		attributeViewer.setContentProvider(ArrayContentProvider.getInstance());
 		attributeViewer.setLabelProvider(new InputLabelProvider());
 		attributeViewer.setCellEditors(new CellEditor[] { new TextCellEditor(table),
 				ComboBoxWidgetFactory.createComboBoxCellEditor(table, getDataTypes(), SWT.READ_ONLY),
@@ -145,7 +142,7 @@ public class AttributeSection extends AbstractSection {
 	public void refresh() {
 		super.refresh();
 		if (null != type) {
-			attributeViewer.setInput(getType());
+			attributeViewer.setInput(getType().getAttributes());
 		}
 	}
 
@@ -180,40 +177,17 @@ public class AttributeSection extends AbstractSection {
 		@Override
 		public void modify(final Object element, final String property, final Object value) {
 			final Attribute data = (Attribute) ((TableItem) element).getData();
-			AttributeChangeCommand cmd = null;
-			switch (property) {
-			case NAME_COL:
-				cmd = new AttributeChangeCommand(data, value.toString(), null, null, null);
-				break;
-			case VALUE_COL:
-				cmd = new AttributeChangeCommand(data, null, value.toString(), null, null);
-				break;
-			case TYPE_COL:
-				cmd = new AttributeChangeCommand(data, null, null, BaseType1.get(((Integer) value).intValue()), null);
-				break;
-			case COMMENT_COL:
-				cmd = new AttributeChangeCommand(data, null, null, null, value.toString());
-				break;
-			default:
-			}
+			final AttributeChangeCommand cmd = switch (property) {
+			case NAME_COL -> new AttributeChangeCommand(data, value.toString(), null, null, null);
+			case VALUE_COL -> new AttributeChangeCommand(data, null, value.toString(), null, null);
+			case TYPE_COL ->
+				new AttributeChangeCommand(data, null, null, BaseType1.get(((Integer) value).intValue()), null);
+			case COMMENT_COL -> new AttributeChangeCommand(data, null, null, null, value.toString());
+			default -> null;
+			};
+
 			executeCommand(cmd);
 			attributeViewer.refresh(data);
-		}
-	}
-
-	public static class InputContentProvider implements IStructuredContentProvider {
-		@Override
-		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof Application) {
-				return ((Application) inputElement).getAttributes().toArray();
-			}
-			if (inputElement instanceof Device) {
-				return ((Device) inputElement).getAttributes().toArray();
-			}
-			if (inputElement instanceof Segment) {
-				return ((Segment) inputElement).getAttributes().toArray();
-			}
-			return new Object[] {};
 		}
 	}
 
@@ -225,19 +199,14 @@ public class AttributeSection extends AbstractSection {
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof Attribute) {
-				switch (columnIndex) {
-				case 0:
-					return ((Attribute) element).getName();
-				case 1:
-					return ((Attribute) element).getType().getName();
-				case 2:
-					return ((Attribute) element).getValue();
-				case 3:
-					return ((Attribute) element).getComment() != null ? ((Attribute) element).getComment() : ""; //$NON-NLS-1$
-				default:
-					break;
-				}
+			if (element instanceof final Attribute attribute) {
+				return switch (columnIndex) {
+				case 0 -> attribute.getName();
+				case 1 -> attribute.getType().getName();
+				case 2 -> attribute.getValue();
+				case 3 -> attribute.getComment() != null ? attribute.getComment() : ""; //$NON-NLS-1$
+				default -> element.toString();
+				};
 			}
 			return element.toString();
 		}
