@@ -28,12 +28,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
@@ -42,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
@@ -62,8 +62,9 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
-		provider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
-		final DataLayer dataLayer = setupDataLayer();
+		provider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
+		final DataLayer dataLayer = new DataLayer(provider);
+		dataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(provider));
 
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new VarDeclarationColumnProvider(),
 				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
@@ -83,7 +84,6 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 		final BaseFBType currentType = getType();
 		if (currentType != null) {
 			provider.setInput(currentType.getInternalVars());
-			provider.setTypeLib(getDataTypeLib());
 			initTypeSelection(getDataTypeLib());
 		}
 	}
@@ -95,7 +95,6 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 		}
 		return getType().getInternalVars().indexOf(varInternal) + 1;
 	}
-
 
 	@Override
 	public Object getEntry(final int index) {

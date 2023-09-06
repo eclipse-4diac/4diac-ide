@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,45 +10,43 @@
  *
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *   Martin Jobst - refactor to generic implementation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import java.util.List;
+
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
-public class AdapterColumnProvider implements IDataProvider {
+public class TypedElementColumnProvider implements IDataProvider {
 
-	public static final int NAME = 0;
-	public static final int TYPE = 1;
-	public static final int COMMENT = 2;
+	private final List<TypedElementTableColumn> columns;
+
+	public TypedElementColumnProvider() {
+		this(TypedElementTableColumn.DEFAULT_COLUMNS);
+	}
+
+	public TypedElementColumnProvider(final List<TypedElementTableColumn> columns) {
+		this.columns = columns;
+	}
 
 	@Override
 	public Object getDataValue(final int columnIndex, final int rowIndex) {
-		switch (columnIndex) {
-		case NAME:
-			return FordiacMessages.Name;
-		case TYPE:
-			return FordiacMessages.Type;
-		case COMMENT:
-			return FordiacMessages.Comment;
-		default:
-			return ""; //$NON-NLS-1$
-		}
+		return columns.get(columnIndex);
 	}
 
 	@Override
 	public void setDataValue(final int columnIndex, final int rowIndex, final Object newValue) {
-
+		throw new UnsupportedOperationException(); // Setting data values to the header is not supported
 	}
 
 	@Override
 	public int getColumnCount() {
-		return COMMENT + 1;
+		return columns.size();
 	}
 
 	@Override
 	public int getRowCount() {
 		return 1;
 	}
-
 }

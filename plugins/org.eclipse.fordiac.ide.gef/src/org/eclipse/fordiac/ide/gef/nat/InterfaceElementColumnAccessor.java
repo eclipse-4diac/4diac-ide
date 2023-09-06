@@ -14,25 +14,26 @@ package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.commands.change.ChangeFbTypeCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 
-public class FBColumnAccessor extends TypedElementColumnAccessor<FB> {
+public class InterfaceElementColumnAccessor<T extends IInterfaceElement> extends TypedElementColumnAccessor<T> {
 
-	public FBColumnAccessor(final CommandExecutor commandExecutor) {
+	public InterfaceElementColumnAccessor(final CommandExecutor commandExecutor) {
 		super(commandExecutor, TypedElementTableColumn.DEFAULT_COLUMNS);
 	}
 
-	public FBColumnAccessor(final CommandExecutor commandExecutor, final List<TypedElementTableColumn> columns) {
+	public InterfaceElementColumnAccessor(final CommandExecutor commandExecutor,
+			final List<TypedElementTableColumn> columns) {
 		super(commandExecutor, columns);
 	}
 
 	@Override
-	public Command createCommand(final FB rowObject, final TypedElementTableColumn column, final Object newValue) {
+	public Command createCommand(final T rowObject, final TypedElementTableColumn column, final Object newValue) {
 		return switch (column) {
-		case TYPE -> ChangeFbTypeCommand.forTypeName(rowObject, newValue.toString());
+		case TYPE -> ChangeDataTypeCommand.forTypeName(rowObject, newValue.toString());
 		default -> super.createCommand(rowObject, column, newValue);
 		};
 	}

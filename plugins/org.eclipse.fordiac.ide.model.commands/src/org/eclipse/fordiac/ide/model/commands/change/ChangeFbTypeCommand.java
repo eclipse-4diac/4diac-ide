@@ -14,10 +14,12 @@
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
-
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeFbTypeCommand extends Command {
@@ -26,10 +28,23 @@ public class ChangeFbTypeCommand extends Command {
 	FBTypeEntry oldEntry;
 	final FBTypeEntry newType;
 
-	public ChangeFbTypeCommand(final FB fb, final FBTypeEntry newType) {
-		super();
+	protected ChangeFbTypeCommand(final FB fb, final FBTypeEntry newType) {
 		this.fb = fb;
 		this.newType = newType;
+	}
+
+	public static ChangeFbTypeCommand forTypeName(final FB fb, final String typeName) {
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(fb);
+		FBTypeEntry typeEntry = typeLibrary.getFBTypeEntry(typeName);
+		if (typeEntry == null) {
+			typeEntry = (FBTypeEntry) typeLibrary.createErrorTypeEntry(typeName,
+					LibraryElementPackage.eINSTANCE.getFBType());
+		}
+		return ChangeFbTypeCommand.forDataType(fb, typeEntry);
+	}
+
+	public static ChangeFbTypeCommand forDataType(final FB fb, final FBTypeEntry typeEntry) {
+		return new ChangeFbTypeCommand(fb, typeEntry);
 	}
 
 	@Override

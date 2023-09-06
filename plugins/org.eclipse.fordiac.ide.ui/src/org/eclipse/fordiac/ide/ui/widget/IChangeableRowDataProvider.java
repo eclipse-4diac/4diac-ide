@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,20 +9,16 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *   Martin Jobst - refactor to generic implementation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.ui.widget;
 
-import org.eclipse.gef.commands.CompoundCommand;
+import java.util.List;
 
-public interface I4diacNatTableUtil {
+import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
 
-	void addEntry(Object entry, boolean isInput, int index, CompoundCommand cmd);
+public interface IChangeableRowDataProvider<T> extends IRowDataProvider<T> {
 
-	void removeEntry(Object entry, CompoundCommand cmd);
-
-	void executeCompoundCommand(CompoundCommand cmd);
-
-	boolean isEditable();
+	void setInput(List<T> list);
 }
