@@ -262,7 +262,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 			// @formatter:off
 			subapp.getInterface().getAllInterfaceElements().stream()
 				.filter(ie -> ie.getTypeName().equalsIgnoreCase(struct.getName()))
-				.map(ie -> new ChangeDataTypeCommand(ie, struct))
+				.map(ie -> ChangeDataTypeCommand.forDataType(ie, struct))
 				.forEach(cmd::add);
 			// @formatter:on
 			Display.getDefault().syncExec(cmd::execute);

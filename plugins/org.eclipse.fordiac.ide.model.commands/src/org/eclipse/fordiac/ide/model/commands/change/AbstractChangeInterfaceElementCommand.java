@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
@@ -33,6 +34,11 @@ public abstract class AbstractChangeInterfaceElementCommand extends Command {
 
 	protected AbstractChangeInterfaceElementCommand(final IInterfaceElement interfaceElement) {
 		this.interfaceElement = interfaceElement;
+	}
+
+	@Override
+	public boolean canExecute() {
+		return interfaceElement != null;
 	}
 
 	@Override
@@ -141,5 +147,11 @@ public abstract class AbstractChangeInterfaceElementCommand extends Command {
 		if (interfaceElement instanceof final VarDeclaration varDeclaration && varDeclaration.getArraySize() != null) {
 			varDeclaration.getArraySize().setErrorMessage(message);
 		}
+	}
+
+	protected boolean isSubAppPinAndConnected() {
+		return interfaceElement.getFBNetworkElement() instanceof SubApp
+				&& (!interfaceElement.getInputConnections().isEmpty()
+						|| !interfaceElement.getOutputConnections().isEmpty());
 	}
 }

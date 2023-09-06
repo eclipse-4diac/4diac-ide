@@ -43,7 +43,7 @@ public class ChangeArraySizeCommand extends AbstractChangeInterfaceElementComman
 
 	@Override
 	public boolean canExecute() {
-		return (null != getInterfaceElement());
+		return super.canExecute() && !isSubAppPinAndConnected();
 	}
 
 	@Override

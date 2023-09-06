@@ -40,14 +40,14 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand {
+public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand {
 	private static final Pattern ARRAY_TYPE_DECLARATION_PATTERN = Pattern.compile("ARRAY\\s*\\[(.*)\\]\\s*OF\\s+(.+)"); //$NON-NLS-1$
 
 	private final DataType dataType;
 	private DataType oldDataType;
 	private final CompoundCommand additionalCommands = new CompoundCommand();
 
-	public ChangeDataTypeCommand(final IInterfaceElement interfaceElement, final DataType dataType) {
+	private ChangeDataTypeCommand(final IInterfaceElement interfaceElement, final DataType dataType) {
 		super(interfaceElement);
 		this.dataType = dataType;
 	}
@@ -101,6 +101,11 @@ public class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand
 			return result;
 		}
 		return forTypeName(interfaceElement, typeDeclaration);
+	}
+
+	@Override
+	public boolean canExecute() {
+		return super.canExecute() && !isSubAppPinAndConnected();
 	}
 
 	@Override
