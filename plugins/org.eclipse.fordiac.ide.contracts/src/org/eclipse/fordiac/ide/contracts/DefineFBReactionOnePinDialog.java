@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class DefineFBReactionOnePinDialog extends MessageDialog {
-	private static final int NUM_COLUMNS = 4;
+	private static final int NUM_COLUMNS = 3;
 	private Text inputTime;
 	private Text offset;
 	private final Event pinFrom;
@@ -105,10 +105,6 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 		labelOffset.setText(Messages.DefineFBReactionOnePinDialog_SpecifyOffset);
 		labelOffset.setVisible(false);
 
-		final Label labelOff = new Label(group, SWT.None);
-		labelOff.setText(""); //$NON-NLS-1$
-		labelOff.setVisible(false);
-
 		offset = new Text(group, SWT.RIGHT);
 		offset.addListener(SWT.KeyDown, new IntervalVerifyListener(offset));
 
@@ -129,7 +125,6 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 				labelOffset.setVisible(offsetCheckbox.getSelection());
 				offset.setVisible(offsetCheckbox.getSelection());
 				labelOffsetMs.setVisible(offsetCheckbox.getSelection());
-				labelOff.setVisible(offsetCheckbox.getSelection());
 
 			}
 
@@ -154,15 +149,26 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 		if (offset.isVisible()) {
 			strOffset = DefineContractUtils.getTimeIntervalFromString(offsetText);
 		}
-		if (inputTimeText.isBlank() || (offset.isVisible() && offset.getText().isBlank())
-				|| (strInputTime.length == 2 && (Integer.parseInt(strInputTime[0]) > Integer.parseInt(strInputTime[1])))
-				|| (offset.isVisible() && strOffset.length == 2
-						&& (Integer.parseInt(strOffset[0]) > Integer.parseInt(strOffset[1])))) {
+		if (!isCorrect(strInputTime, strOffset)) {
 			MessageDialog.openError(this.getShell(), Messages.DefineFBReactionOnePinDialog_Error,
 					Messages.DefineFBReactionOnePinDialog_PleaseFill);
 		} else {
 			super.buttonPressed(buttonId);
 		}
+	}
+
+	private boolean isCorrect(final String[] strInputTime, final String[] strOffset) {
+		if (inputTimeText.isBlank()) {
+			return false;
+		}
+		if ((offset.isVisible() && offset.getText().isBlank())) {
+			return false;
+		}
+		if ((strInputTime.length == 2 && (Integer.parseInt(strInputTime[0]) > Integer.parseInt(strInputTime[1])))) {
+			return false;
+		}
+		return !(offset.isVisible() && strOffset.length == 2
+				&& (Integer.parseInt(strOffset[0]) > Integer.parseInt(strOffset[1])));
 	}
 
 }
