@@ -11,7 +11,7 @@
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.application.properties;
+package org.eclipse.fordiac.ide.gef.filters;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -22,9 +22,13 @@ public class AttributeFilter implements IFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		Object inputHelper = (toTest instanceof final EditPart editpart) ? editpart.getModel() : toTest;
+		return parseObject(toTest) instanceof ConfigurableObject;
+	}
+
+	public static Object parseObject(final Object input) {
+		Object inputHelper = (input instanceof final EditPart editpart) ? editpart.getModel() : input;
 		inputHelper = (inputHelper instanceof final FBNetwork fbNetwork) ? fbNetwork.eContainer() : inputHelper;
 
-		return inputHelper instanceof ConfigurableObject;
+		return inputHelper;
 	}
 }

@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
 import org.eclipse.fordiac.ide.model.commands.change.AttributeChangeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AttributeCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.AttributeDeleteCommand;
@@ -28,12 +29,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -63,9 +62,9 @@ public class AttributeSection extends AbstractSection {
 
 	@Override
 	protected ConfigurableObject getInputType(final Object input) {
-		Object inputHelper = input instanceof final EditPart editpart ? editpart.getModel() : input;
-		inputHelper = inputHelper instanceof final FBNetwork fbNetwork ? fbNetwork.eContainer() : inputHelper;
-		return inputHelper instanceof final ConfigurableObject configurableObject ? configurableObject : null;
+		return AttributeFilter.parseObject(input) instanceof final ConfigurableObject configurableObject
+				? configurableObject
+				: null;
 	}
 
 	@Override

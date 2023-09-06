@@ -158,7 +158,7 @@
          </propertySection>
          <propertySection 
          	   class="org.eclipse.fordiac.ide.gef.properties.AttributeSection"
-      		   filter="org.eclipse.fordiac.ide.application.properties.AttributeFilter"
+      		   filter="org.eclipse.fordiac.ide.gef.filters.AttributeFilter"
                id="org.eclipse.fordiac.ide.application.properties.AttributeSection"
                tab="org.eclipse.fordiac.ide.application.propertyAttributeTab">
      	 </propertySection>
