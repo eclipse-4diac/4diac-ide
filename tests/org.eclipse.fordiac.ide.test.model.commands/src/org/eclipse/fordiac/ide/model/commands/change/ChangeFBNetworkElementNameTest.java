@@ -24,12 +24,12 @@ public class ChangeFBNetworkElementNameTest extends FBNetworkTestBase {
 
 	private static final String NEW_NAME = "ModifiedName"; //$NON-NLS-1$
 
-	private static State executeRenameCommand(State state) {
-		state.setCommand(new ChangeFBNetworkElementName(state.getFbNetwork().getNetworkElements().get(0), NEW_NAME));
+	private static State executeRenameCommand(final State state) {
+		state.setCommand(ChangeNameCommand.forName(state.getFbNetwork().getNetworkElements().get(0), NEW_NAME));
 		return commandExecution(state);
 	}
 
-	private static void verifyRenamedState(State state, State oldState, TestFunction t) {
+	private static void verifyRenamedState(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getFbNetwork().getElementNamed(NEW_NAME));
 	}
 

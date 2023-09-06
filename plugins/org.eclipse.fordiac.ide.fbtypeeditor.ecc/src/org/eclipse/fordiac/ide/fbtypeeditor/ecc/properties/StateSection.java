@@ -76,7 +76,7 @@ public class StateSection extends AbstractSection {
 		stateNameText = createGroupText(nameComposite, true);
 		stateNameText.addListener(SWT.Modify, e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeNameCommand(getType(), stateNameText.getText()));
+			executeCommand(ChangeNameCommand.forName(getType(), stateNameText.getText()));
 			addContentAdapter();
 		});
 	}

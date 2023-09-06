@@ -72,7 +72,7 @@ public class TypedElementColumnAccessor<T extends ITypedElement> implements ICol
 
 	public Command createCommand(final T rowObject, final TypedElementTableColumn column, final Object newValue) {
 		return switch (column) {
-		case NAME -> new ChangeNameCommand(rowObject, newValue.toString());
+		case NAME -> ChangeNameCommand.forName(rowObject, newValue.toString());
 		case TYPE -> throw new UnsupportedOperationException("Cannot change type"); //$NON-NLS-1$
 		case COMMENT -> new ChangeCommentCommand(rowObject, newValue.toString());
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$

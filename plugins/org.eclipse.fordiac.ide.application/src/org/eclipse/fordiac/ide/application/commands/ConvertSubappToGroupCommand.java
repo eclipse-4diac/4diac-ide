@@ -48,7 +48,7 @@ public class ConvertSubappToGroupCommand extends Command {
 		destination.setHeight(sourceSubapp.getHeight());
 
 		// copy subapp name to group
-		final ChangeNameCommand copyNameCmd = new ChangeNameCommand(destination, sourceSubapp.getName());
+		final ChangeNameCommand copyNameCmd = ChangeNameCommand.forName(destination, sourceSubapp.getName());
 		copyNameCmd.execute();
 		convertToGroupCmd.add(copyNameCmd);
 

@@ -18,7 +18,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -63,7 +63,7 @@ public class InterfaceElementSection extends AbstractSection {
 		nameText = createGroupText(composite, true);
 		nameText.addModifyListener(e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeSubAppIENameCommand(getType(), nameText.getText()));
+			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
 		});
 
@@ -86,10 +86,8 @@ public class InterfaceElementSection extends AbstractSection {
 			if (getType() instanceof AdapterDeclaration) {
 				final DataType newType = getTypeLibrary().getAdapterTypeEntry(typeCombo.getText()).getType();
 				cmd = newChangeTypeCommand((VarDeclaration) getType(), newType);
-			} else {
-				if (getType() instanceof final VarDeclaration varDecl) {
-					cmd = newChangeTypeCommand(varDecl, getDataTypeLib().getType(typeCombo.getText()));
-				}
+			} else if (getType() instanceof final VarDeclaration varDecl) {
+				cmd = newChangeTypeCommand(varDecl, getDataTypeLib().getType(typeCombo.getText()));
 			}
 			executeCommand(cmd);
 		});
@@ -146,11 +144,9 @@ public class InterfaceElementSection extends AbstractSection {
 		commandStack = commandStackBuffer;
 	}
 
-	/**
-	 * Set the input fields edit able or not
+	/** Set the input fields edit able or not
 	 *
-	 * @param editAble flag indicating if the fields should be editable
-	 */
+	 * @param editAble flag indicating if the fields should be editable */
 	private void setEditableFields(final boolean editAble) {
 		nameText.setEditable(editAble);
 		nameText.setEnabled(editAble);
@@ -175,7 +171,8 @@ public class InterfaceElementSection extends AbstractSection {
 
 		if (objToCheck instanceof final IInterfaceElement ie) {
 			return ie;
-		} else if (input instanceof final Value value) {
+		}
+		if (input instanceof final Value value) {
 			return value.getParentIE();
 		}
 		return null;

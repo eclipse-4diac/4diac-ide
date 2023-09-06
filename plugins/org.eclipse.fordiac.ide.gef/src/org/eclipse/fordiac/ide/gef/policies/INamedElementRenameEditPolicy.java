@@ -26,7 +26,7 @@ public class INamedElementRenameEditPolicy extends DirectEditPolicy {
 	@Override
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
 		if (getHost() instanceof final AbstractDirectEditableEditPart viewEditPart) {
-			return new ChangeNameCommand(viewEditPart.getINamedElement(), (String) request.getCellEditor().getValue());
+			return ChangeNameCommand.forName(viewEditPart.getINamedElement(), (String) request.getCellEditor().getValue());
 		}
 		return null;
 	}

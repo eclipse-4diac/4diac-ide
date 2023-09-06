@@ -69,7 +69,7 @@ public class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<Var
 	@Override
 	public void setDataValue(final VarDeclaration rowObject, final int columnIndex, final Object newValue) {
 		final Command cmd = switch (columns.get(columnIndex)) {
-		case NAME -> new ChangeNameCommand(rowObject, newValue.toString());
+		case NAME -> ChangeNameCommand.forName(rowObject, newValue.toString());
 		case TYPE -> ChangeDataTypeCommand.forTypeDeclaration(rowObject, newValue.toString());
 		case COMMENT -> new ChangeCommentCommand(rowObject, newValue.toString());
 		case INITIAL_VALUE -> new ChangeValueCommand(rowObject, newValue.toString());

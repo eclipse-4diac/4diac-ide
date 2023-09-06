@@ -119,7 +119,7 @@ public class FlattenSubAppCommand extends Command {
 		// ensure unique name in new network
 		if (!NameRepository.isValidName(element, element.getName())) {
 			final String uniqueName = NameRepository.createUniqueName(element, element.getName());
-			final ChangeNameCommand uniqueNameCmd = new ChangeNameCommand(element, uniqueName);
+			final ChangeNameCommand uniqueNameCmd = ChangeNameCommand.forName(element, uniqueName);
 			uniqueNameCmd.execute();
 			setUniqueName.add(uniqueNameCmd);
 		}

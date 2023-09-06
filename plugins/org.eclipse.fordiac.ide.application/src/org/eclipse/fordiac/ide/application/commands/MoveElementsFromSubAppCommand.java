@@ -147,7 +147,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 		// ensure unique name in new network
 		if (!NameRepository.isValidName(element, element.getName())) {
 			final String uniqueName = NameRepository.createUniqueName(element, element.getName());
-			final ChangeNameCommand changeNameCommand = new ChangeNameCommand(element, uniqueName);
+			final ChangeNameCommand changeNameCommand = ChangeNameCommand.forName(element, uniqueName);
 			changeNameCommand.execute();
 			setUniqueName.add(changeNameCommand);
 		}

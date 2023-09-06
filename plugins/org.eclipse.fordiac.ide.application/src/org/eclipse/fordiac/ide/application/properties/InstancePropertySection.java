@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -161,7 +161,7 @@ public class InstancePropertySection extends AbstractSection {
 		nameText = createGroupText(fbInfoGroup, true);
 		nameText.addModifyListener(e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeFBNetworkElementName(getType(), nameText.getText()));
+			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
 		});
 

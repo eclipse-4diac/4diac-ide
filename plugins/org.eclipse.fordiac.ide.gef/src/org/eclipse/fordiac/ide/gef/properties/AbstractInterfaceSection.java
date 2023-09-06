@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -97,7 +96,7 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 		nameText = createGroupText(composite, true);
 		nameText.addModifyListener(event -> {
 			removeContentAdapter();
-			executeCommand(getRenameCommand(nameText.getText()));
+			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
 		});
 
@@ -185,14 +184,6 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 		}
 	}
 
-	private ChangeNameCommand getRenameCommand(final String newValue) {
-		final INamedElement element = getType();
-		if (element instanceof FBNetworkElement) {
-			return new ChangeFBNetworkElementName((FBNetworkElement) element, newValue);
-		}
-		return new ChangeNameCommand(getType(), nameText.getText());
-	}
-
 	private class ValueCommentCellModifier implements ICellModifier {
 		@Override
 		public boolean canModify(final Object element, final String property) {
@@ -201,14 +192,11 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			switch (property) {
-			case VALUE_PROPERTY:
-				return getVarDeclarationValue((VarDeclaration) element);
-			case COMMENT_PROPERTY:
-				return ((INamedElement) element).getComment() != null ? ((INamedElement) element).getComment() : ""; //$NON-NLS-1$
-			default:
-				return null;
-			}
+			return switch (property) {
+			case VALUE_PROPERTY -> getVarDeclarationValue((VarDeclaration) element);
+			case COMMENT_PROPERTY -> ((INamedElement) element).getComment() != null ? ((INamedElement) element).getComment() : ""; //$NON-NLS-1$
+			default -> null;
+			};
 		}
 
 		@Override
