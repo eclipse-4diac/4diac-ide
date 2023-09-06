@@ -215,12 +215,20 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 6;
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Is Withed' of 'Var Declaration'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 7;
+
+	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 6;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 7;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -1501,6 +1509,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(localVariable, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(localVariable, diagnostics, context);
 		return result;
 	}
 
@@ -2103,6 +2112,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(varDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(varDeclaration, diagnostics, context);
 		return result;
 	}
 
@@ -2114,6 +2124,16 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return varDeclaration.validateVarInOutSourceTypeIsWellDefined(diagnostics, context);
+	}
+
+	/**
+	 * Validates the validateVarInOutIsWithed constraint of '<em>Var Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateVarDeclaration_validateVarInOutIsWithed(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return varDeclaration.validateVarInOutIsWithed(diagnostics, context);
 	}
 
 	/**

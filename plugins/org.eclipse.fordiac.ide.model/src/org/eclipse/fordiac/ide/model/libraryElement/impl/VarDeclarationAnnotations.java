@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
@@ -41,6 +42,25 @@ public class VarDeclarationAnnotations {
 						LibraryElementValidator.VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED,
 						MessageFormat.format(Messages.ConnectionValidator_VarInOutSourceNotWellDefined,
 								varDeclaration.getFullTypeName()),
+						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateVarInOutIsWithed(@NonNull final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (varDeclaration.isInOutVar() && varDeclaration.getWiths().isEmpty()) {
+			if (diagnostics != null) {
+				final String typeName = varDeclaration.eContainer().eContainer() instanceof final FB fb ? fb.getName()
+						: ((INamedElement) varDeclaration.eContainer().eContainer()).getName();
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED,
+						MessageFormat.format(
+								varDeclaration.isIsInput() ? Messages.ConnectionValidator_VarInOutInputSideHasNoWith
+										: Messages.ConnectionValidator_VarInOutOutputSideHasNoWith,
+								varDeclaration.getName(), typeName),
 						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
 			}
 			return false;

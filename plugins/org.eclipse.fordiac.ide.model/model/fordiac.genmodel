@@ -693,6 +693,11 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/getInOutVarOpposite"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.getInOutVarOpposite(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateVarInOutIsWithed"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutIsWithed(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutIsWithed/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutIsWithed/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VersionInfo/author"/>

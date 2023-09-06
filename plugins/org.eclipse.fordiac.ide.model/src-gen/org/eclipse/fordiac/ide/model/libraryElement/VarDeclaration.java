@@ -155,4 +155,12 @@ public interface VarDeclaration extends IInterfaceElement {
 	 */
 	VarDeclaration getInOutVarOpposite();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateVarInOutIsWithed(DiagnosticChain diagnostics, Map<Object, Object> context);
+
 } // VarDeclaration

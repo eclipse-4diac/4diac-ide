@@ -260,7 +260,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES);
+			attributes = new EObjectContainmentEList.Resolving<>(Attribute.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -357,7 +357,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
+			inputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
 		}
 		return inputConnections;
 	}
@@ -369,7 +369,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
+			outputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
 		}
 		return outputConnections;
 	}
@@ -508,7 +508,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public EList<With> getWiths() {
 		if (withs == null) {
-			withs = new EObjectWithInverseResolvingEList<With>(With.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS, LibraryElementPackage.WITH__VARIABLES);
+			withs = new EObjectWithInverseResolvingEList<>(With.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS, LibraryElementPackage.WITH__VARIABLES);
 		}
 		return withs;
 	}
@@ -967,6 +967,16 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public VarDeclaration getInOutVarOpposite() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.getInOutVarOpposite(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateVarInOutIsWithed(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutIsWithed(this, diagnostics, context);
 	}
 
 } // AdapterMonitoringVarDeclarationImpl
