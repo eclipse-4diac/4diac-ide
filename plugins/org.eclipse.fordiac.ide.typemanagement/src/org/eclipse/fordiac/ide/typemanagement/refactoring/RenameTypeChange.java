@@ -29,7 +29,7 @@ public class RenameTypeChange extends RenameResourceChange {
 
 	public RenameTypeChange(final TypeEntry typeEntry, final String newName) {
 		super(typeEntry.getFile().getFullPath(), newName);
-		this.typeEntry=typeEntry;
+		this.typeEntry = typeEntry;
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class RenameTypeChange extends RenameResourceChange {
 		final IPath newPath = renamedResourcePath(typeEntry.getFile().getFullPath(), getNewName());
 		final IResource findMember = ResourcesPlugin.getWorkspace().getRoot().findMember(newPath);
 		if (findMember instanceof final IFile file) {
-			FordiacResourceChangeListener.updateTypeEntry(file, typeEntry);
+			FordiacResourceChangeListener.updateTypeEntryByRename(file, typeEntry);
 		}
 		return perform;
 	}

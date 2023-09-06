@@ -555,4 +555,12 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	}
 
 	protected abstract void createNewFB();
+
+	public FBNetworkElement getOldElement() {
+		return oldElement;
+	}
+
+	public FBNetworkElement getNewElement() {
+		return newElement;
+	}
 }

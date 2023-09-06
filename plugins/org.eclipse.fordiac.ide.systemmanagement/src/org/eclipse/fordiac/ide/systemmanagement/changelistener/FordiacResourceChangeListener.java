@@ -484,6 +484,36 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
+	public static void updateTypeEntryByRename(final IFile newFile, final TypeEntry entry) {
+		if (entry == null) { // change to Assert ?
+			return;
+		}
+		final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
+
+		if (!Objects.equal(newFile, entry.getFile())) {
+			final TypeLibrary typeLibrary = entry.getTypeLibrary();
+			if (typeLibrary != null) {
+				typeLibrary.removeTypeEntry(entry);
+			}
+			entry.setFile(newFile);
+
+			// update type and typeEditable names
+			LibraryElement type = entry.getTypeEditable();
+			if ((null != type)) {
+				type.setName(newTypeName);
+			}
+			type = entry.getType();
+			if ((null != type)) {
+				type.setName(newTypeName);
+			}
+
+			if (typeLibrary != null) {
+				typeLibrary.addTypeEntry(entry);
+			}
+			entry.save();
+		}
+	}
+
 	private void handleProjectAdd(final IResourceDelta delta) {
 		final IProject project = delta.getResource().getProject();
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
