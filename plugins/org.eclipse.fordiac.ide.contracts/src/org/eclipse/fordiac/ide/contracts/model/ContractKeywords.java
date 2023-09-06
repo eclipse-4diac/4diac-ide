@@ -18,20 +18,20 @@ public final class ContractKeywords {
 
 	}
 
-	static final String OFFSET = "offset"; //$NON-NLS-1$
-	static final String OCCURS = "occurs"; //$NON-NLS-1$
-	static final String EVERY = "every"; //$NON-NLS-1$
-	static final String WHENEVER = "Whenever"; //$NON-NLS-1$
-	static final String EVENT = "event"; //$NON-NLS-1$
-	static final String OCCUR = "occur"; //$NON-NLS-1$
-	static final String WITHIN = "within"; //$NON-NLS-1$
-	static final String EVENTS = "events"; //$NON-NLS-1$
-	static final String THEN = "then"; //$NON-NLS-1$
-	static final String COMMA = ","; //$NON-NLS-1$
-	static final String EVENTS_OPEN = "("; //$NON-NLS-1$
-	static final String EVENTS_CLOSE = ")"; //$NON-NLS-1$
-	static final String REACTION = "Reaction"; //$NON-NLS-1$
-	static final String WITH = "with"; //$NON-NLS-1$
+	public static final String WHENEVER = "Whenever"; //$NON-NLS-1$
+	public static final String EVENT = "event"; //$NON-NLS-1$
+	public static final String OCCUR = "occur"; //$NON-NLS-1$
+	public static final String WITHIN = "within"; //$NON-NLS-1$
+	public static final String EVENTS = "events"; //$NON-NLS-1$
+	public static final String THEN = "then"; //$NON-NLS-1$
+	public static final String COMMA = ","; //$NON-NLS-1$
+	public static final String EVENTS_OPEN = "("; //$NON-NLS-1$
+	public static final String EVENTS_CLOSE = ")"; //$NON-NLS-1$
+	public static final String REACTION = "Reaction"; //$NON-NLS-1$
+	public static final String OFFSET = "offset"; //$NON-NLS-1$
+	public static final String WITH = "with"; //$NON-NLS-1$
+	public static final String EVERY = "every"; //$NON-NLS-1$
+	public static final String OCCURS = "occurs"; //$NON-NLS-1$
 	public static final String INTERVAL_DIVIDER = ","; //$NON-NLS-1$
 	public static final String INTERVAL_CLOSE = "]"; //$NON-NLS-1$
 	public static final String INTERVAL_OPEN = "["; //$NON-NLS-1$
@@ -42,5 +42,6 @@ public final class ContractKeywords {
 	public static final String CONSTRACT_STATE = "ConstractState"; //$NON-NLS-1$
 	public static final String FALSE = " FALSE"; //$NON-NLS-1$
 	public static final String TRUE = " TRUE"; //$NON-NLS-1$
+	public static final String _CONTRACT_ = "_CONTRACT_";
 
 }

@@ -14,5 +14,5 @@
 package org.eclipse.fordiac.ide.contracts.model;
 
 public abstract class AbstractTime {
-
+	// only used to extend from
 }
