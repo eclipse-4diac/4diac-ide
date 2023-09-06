@@ -13,6 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
@@ -57,6 +60,54 @@ public class ContractElement {
 
 	boolean hasValidOwner() {
 		return getContract().getOwner() instanceof final SubApp;
+	}
+
+	List<AbstractTime> getTimestamp() {
+		return getTimestamp(ContractConstants.DEFAULT_NUMBER_TIMES);
+	}
+
+	List<AbstractTime> getTimestamp(final int number) {
+		final List<AbstractTime> timestamps = new ArrayList<>();
+		if (getMax() == -1) {
+			int time = getMin();
+			for (int i = 0; i < number; i++) {
+				timestamps.add(new Instant(time));
+				time += getMin();
+			}
+		} else {
+			int minTime = getMin();
+			int maxTime = getMax();
+			for (int i = 0; i < number; i++) {
+				timestamps.add(new Interval(minTime, maxTime));
+				minTime += getMin();
+				maxTime += getMax();
+			}
+		}
+		return timestamps;
+	}
+
+	List<AbstractTime> getTimestamp(final Interval range) {
+		final List<AbstractTime> timestamps = new ArrayList<>();
+		if (getMax() == -1) {
+			int time = getMin();
+			while (time <= range.getMaxTime()) {
+				if (time >= range.getMinTime()) {
+					timestamps.add(new Instant(time));
+				}
+				time += getMin();
+			}
+		} else {
+			int minTime = getMin();
+			int maxTime = getMax();
+			while (minTime <= range.getMaxTime()) {
+				if (maxTime >= range.getMinTime()) {
+					timestamps.add(new Interval(minTime, maxTime));
+				}
+				minTime += getMin();
+				maxTime += getMax();
+			}
+		}
+		return timestamps;
 	}
 
 	@SuppressWarnings("static-method")

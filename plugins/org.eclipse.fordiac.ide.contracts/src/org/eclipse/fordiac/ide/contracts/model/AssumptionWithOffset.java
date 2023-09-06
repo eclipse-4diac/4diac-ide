@@ -14,6 +14,8 @@
 package org.eclipse.fordiac.ide.contracts.model;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -235,5 +237,17 @@ public class AssumptionWithOffset extends Assumption {
 		comment.append(ContractKeywords.OFFSET);
 		comment.append(System.lineSeparator());
 		return comment.toString();
+	}
+
+	@Override
+	List<AbstractTime> getTimestamp(final int number) {
+		// TODO implement
+		return Collections.emptyList();
+	}
+
+	@Override
+	List<AbstractTime> getTimestamp(final Interval range) {
+		// TODO implement
+		return Collections.emptyList();
 	}
 }
