@@ -18,6 +18,7 @@ import java.util.Collection;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.contracts.exceptions.AssumptionWithOffsetExeption;
+import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 
 public class AssumptionWithOffset extends Assumption {
 

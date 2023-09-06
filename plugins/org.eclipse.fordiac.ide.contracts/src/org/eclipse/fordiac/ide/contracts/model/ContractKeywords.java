@@ -20,10 +20,10 @@ public final class ContractKeywords {
 
 	static final String OFFSET = "offset"; //$NON-NLS-1$
 	public static final String INTERVAL_DIVIDER = ","; //$NON-NLS-1$
-	static final String INTERVAL_CLOSE = "]"; //$NON-NLS-1$
+	public static final String INTERVAL_CLOSE = "]"; //$NON-NLS-1$
 	static final String OCCURS = "occurs"; //$NON-NLS-1$
 	static final String EVERY = "every"; //$NON-NLS-1$
-	static final String INTERVAL_OPEN = "["; //$NON-NLS-1$
+	public static final String INTERVAL_OPEN = "["; //$NON-NLS-1$
 	public static final String ASSUMPTION = "ASSUMPTION"; //$NON-NLS-1$
 	public static final String UNIT_OF_TIME = "ms"; //$NON-NLS-1$
 	static final String WHENEVER = "Whenever"; //$NON-NLS-1$

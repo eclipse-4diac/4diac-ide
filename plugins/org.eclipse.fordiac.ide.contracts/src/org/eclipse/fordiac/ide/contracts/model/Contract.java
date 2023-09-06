@@ -19,6 +19,7 @@ import java.util.Map;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.contracts.Messages;
+import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -92,12 +93,15 @@ public class Contract {
 
 	void removeAssumption(final int index) {
 		isChanged = true;
-		assumptions.remove(index);
+		final Assumption removedAssumption = assumptions.remove(index);
+		removedAssumption.setContract(null);
 	}
 
 	void removeGuarantee(final int index) {
 		isChanged = true;
-		guarantees.remove(index);
+		final Guarantee removedGuarantee = guarantees.remove(index);
+		removedGuarantee.setContract(null);
+
 	}
 
 	public boolean isValid() {

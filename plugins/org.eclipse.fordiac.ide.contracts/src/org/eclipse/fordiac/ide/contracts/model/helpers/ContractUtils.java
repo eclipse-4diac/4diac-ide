@@ -11,8 +11,10 @@
  *   Paul Pavlicek
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.contracts.model;
+package org.eclipse.fordiac.ide.contracts.model.helpers;
 
+import org.eclipse.fordiac.ide.contracts.model.ContractElement;
+import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
@@ -21,16 +23,16 @@ public final class ContractUtils {
 
 	}
 
-	static boolean isContractSubapp(final FBNetworkElement element) {
+	public static boolean isContractSubapp(final FBNetworkElement element) {
 		return element instanceof final SubApp containedSubapp
 				&& containedSubapp.getName().startsWith(ContractKeywords.CONTRACT);
 	}
 
-	static boolean isInterval(final String[] parts, final int pos, final CharSequence div) {
+	public static boolean isInterval(final String[] parts, final int pos, final CharSequence div) {
 		return parts[pos].contains(div);
 	}
 
-	static String createInterval(final ContractElement source) {
+	public static String createInterval(final ContractElement source) {
 		final StringBuilder interval = new StringBuilder();
 		interval.append(ContractKeywords.INTERVAL_OPEN);
 		interval.append(source.getMin());
@@ -40,7 +42,7 @@ public final class ContractUtils {
 		return interval.toString();
 	}
 
-	static int getStartPosition(final String[] parts, final int posTime) {
+	public static int getStartPosition(final String[] parts, final int posTime) {
 		return parts[posTime].length() - ContractKeywords.UNIT_OF_TIME.length();
 	}
 }

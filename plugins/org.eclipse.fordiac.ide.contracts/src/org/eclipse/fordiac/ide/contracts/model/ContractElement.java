@@ -71,13 +71,13 @@ public class ContractElement {
 
 	static boolean isTimeConsistent(final EList<? extends ContractElement> contractElement) {
 		if (contractElement.get(0).getMax() == -1) {
-			return isSingelAssumtion(contractElement, 0);
+			return isSingleAssumption(contractElement, 0);
 		}
 		int maximum = contractElement.get(0).getMax();
 		int minimum = contractElement.get(0).getMin();
 		for (int i = 1; contractElement.size() > i; i++) {
 			if (contractElement.get(i).getMax() == -1) {
-				return isSingelAssumtion(contractElement, i);
+				return isSingleAssumption(contractElement, i);
 			}
 			if (minimum < contractElement.get(i).getMin()) {
 				minimum = contractElement.get(i).getMin();
@@ -97,7 +97,7 @@ public class ContractElement {
 
 	// checks if there is only one assumtion of the type: x occures every y ms
 	// if true simplifys Assumtion and returns true
-	private static boolean isSingelAssumtion(final EList<? extends ContractElement> contractElement, final int pos) {
+	private static boolean isSingleAssumption(final EList<? extends ContractElement> contractElement, final int pos) {
 		for (int i = pos + 1; i < contractElement.size(); i++) {
 			if (contractElement.get(i).getMax() == -1) {
 				return false;

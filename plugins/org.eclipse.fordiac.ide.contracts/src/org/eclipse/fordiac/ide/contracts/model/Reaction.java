@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.contracts.exceptions.ReactionExeption;
+import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 
 public class Reaction extends Guarantee {
 
