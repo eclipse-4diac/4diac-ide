@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -65,12 +66,16 @@ public final class InterfaceElementAnnotations {
 
 	public static boolean validateName(final IInterfaceElement element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
+		if (isErrorMarker(element)) {
+			return true; // do not check error markers
+		}
 		if (hasDuplicateSibling(element)) {
 			if (diagnostics != null) {
-				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-						LibraryElementValidator.IINTERFACE_ELEMENT__VALIDATE_NAME,
-						MessageFormat.format(Messages.InterfaceElementAnnotations_DuplicateName, element.getName()),
-						FordiacMarkerHelper.getDiagnosticData(element)));
+				diagnostics
+						.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+								LibraryElementValidator.IINTERFACE_ELEMENT__VALIDATE_NAME, MessageFormat
+										.format(Messages.InterfaceElementAnnotations_DuplicateName, element.getName()),
+								FordiacMarkerHelper.getDiagnosticData(element)));
 			}
 			return false;
 		}
@@ -95,16 +100,20 @@ public final class InterfaceElementAnnotations {
 			while (contents.hasNext()) {
 				final EObject next = contents.next();
 				if (next instanceof final IInterfaceElement sibling && sibling != element
-						&& Objects.equals(sibling.getName(), element.getName())
+						&& Objects.equals(sibling.getName(), element.getName()) && !isErrorMarker(sibling)
 						&& !isVarInOutOppositeSiblings(element, sibling)) {
 					return true;
 				}
-				if (next instanceof final INamedElement namedElement) {
+				if (next instanceof INamedElement) {
 					contents.prune();
 				}
 			}
 		}
 		return false;
+	}
+
+	static boolean isErrorMarker(final IInterfaceElement element) {
+		return element instanceof final ErrorMarkerInterface;
 	}
 
 	static boolean isVarInOutOppositeSiblings(final IInterfaceElement element, final IInterfaceElement sibling) {
