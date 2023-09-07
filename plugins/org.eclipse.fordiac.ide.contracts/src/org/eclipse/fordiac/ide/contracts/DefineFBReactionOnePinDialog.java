@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.contracts;
 
 import org.eclipse.fordiac.ide.application.utilities.IntervalVerifyListener;
+import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -83,23 +84,24 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 
 		Label label = new Label(group, SWT.None);
 		if (pinTo != null) {
-			label.setText("Reaction (" + pinFrom.getName() + " , " + pinTo.getName() + ")");   //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+			label.setText(ContractKeywords.REACTION + " " + ContractKeywords.EVENTS_OPEN + pinFrom.getName() //$NON-NLS-1$
+					+ ContractKeywords.COMMA + pinTo.getName() + ContractKeywords.EVENTS_CLOSE);
 
 			label.setLayoutData(GridDataFactory.fillDefaults().span(NUM_COLUMNS, 1).grab(true, true).create());
 		} else {
-			label.setText("Event " + pinFrom.getName()); //$NON-NLS-1$
+			label.setText(ContractKeywords.EVENT + " " + pinFrom.getName()); //$NON-NLS-1$
 			label.setLayoutData(GridDataFactory.fillDefaults().span(NUM_COLUMNS, 1).grab(true, true).create());
 		}
 
 		label = new Label(group, SWT.None);
-		label.setText("occurs every"); //$NON-NLS-1$
+		label.setText(ContractKeywords.OCCURS + " " + ContractKeywords.EVERY); //$NON-NLS-1$
 
 		inputTime = new Text(group, SWT.RIGHT);
 		inputTime.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTime));
 		inputTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		label = new Label(group, SWT.None);
-		label.setText(" ms"); //$NON-NLS-1$
+		label.setText(" " + ContractKeywords.UNIT_OF_TIME); //$NON-NLS-1$
 
 		final Label labelOffset = new Label(group, SWT.None);
 		labelOffset.setText(Messages.DefineFBReactionOnePinDialog_SpecifyOffset);
@@ -111,11 +113,11 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 		offset.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		offset.setVisible(false);
 		final Label labelOffsetMs = new Label(group, SWT.None);
-		labelOffsetMs.setText(" ms"); //$NON-NLS-1$
+		labelOffsetMs.setText(" " + ContractKeywords.UNIT_OF_TIME); //$NON-NLS-1$
 		labelOffsetMs.setVisible(false);
 
 		offsetCheckbox = new Button(dialogArea, SWT.CHECK);
-		offsetCheckbox.setText("Offset"); //$NON-NLS-1$
+		offsetCheckbox.setText(ContractKeywords.OFFSET);
 		offsetCheckbox.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
 		offsetCheckbox.addSelectionListener(new SelectionListener() {
 
