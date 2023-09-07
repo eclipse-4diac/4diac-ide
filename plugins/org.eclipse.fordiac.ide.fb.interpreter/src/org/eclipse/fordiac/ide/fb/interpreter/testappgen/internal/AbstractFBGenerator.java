@@ -143,9 +143,9 @@ public abstract class AbstractFBGenerator {
 
 	protected List<Event> getExpectedEvents(final boolean isInput) {
 		final List<Event> list = new ArrayList<>();
-		for (final TestCase testCase : testSuite.getTestCases()) {
+		for (final TestCase testC : testSuite.getTestCases()) {
 			final StringBuilder sb = new StringBuilder();
-			for (final TestState testState : testCase.getTestStates()) {
+			for (final TestState testState : testC.getTestStates()) {
 				for (final OutputPrimitive prim : testState.getTestOutputs()) {
 					sb.append(prim.getEvent() + "_"); //$NON-NLS-1$
 				}

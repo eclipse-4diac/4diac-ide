@@ -73,34 +73,29 @@ public class TestFbGenerator extends AbstractFBGenerator {
 				final Event ev = destinationFB.getInterfaceList().getEvent(testState.getTestTrigger().getEvent());
 				final ECAction actToTest = TestEccGenerator.createAction();
 				actToTest.setOutput(ev);
-				actToTest.setAlgorithm(createValueSettingAlgorithm(testState, eccGen.getCaseCount()));
-				eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1).getECAction().add(actToTest);
+				actToTest.setAlgorithm(createValueSettingAlgorithm(testState));
+				eccGen.getLastState().getECAction().add(actToTest);
 
 				if (stateCnt <= 1) {
-					eccGen.createTransitionFromTo(eccGen.getEcc().getECState().get(0),
-							eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1),
+					eccGen.createTransitionFromTo(eccGen.getEcc().getECState().get(0), eccGen.getLastState(),
 							inputEventList.get(eccGen.getCaseCount()));
 					final ECAction actToMatch = TestEccGenerator.createAction();
 					actToMatch.setOutput(createCombinedOutputEvent(testCase));
-					eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1).getECAction()
-							.add(actToMatch);
+					eccGen.getLastState().getECAction().add(actToMatch);
 
 				} else {
-					eccGen.createTransitionFromTo(
-							eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 2),
-							eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1), null);
+					eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(), null);
 				}
 
 				stateCnt++;
 			}
-			eccGen.createTransitionFromTo(eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1),
-					eccGen.getEcc().getECState().get(0), null);
+			eccGen.createTransitionFromTo(eccGen.getLastState(), eccGen.getEcc().getECState().get(0), null);
 
 			eccGen.increaseCaseCount();
 		}
 	}
 
-	private Algorithm createValueSettingAlgorithm(final TestState testState, final int caseCount) {
+	private Algorithm createValueSettingAlgorithm(final TestState testState) {
 		boolean containsParameters = false;
 		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		int nameCnt = 0;
@@ -140,11 +135,10 @@ public class TestFbGenerator extends AbstractFBGenerator {
 	private static String createDataPinName(final String s) {
 		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < s.length(); i++) {
-			final Character c = s.charAt(i);
-			if (c.equals(':')) {
+			if (s.charAt(i) == ':') {
 				sb.append("_expected:"); //$NON-NLS-1$
 			} else {
-				sb.append(c);
+				sb.append(s.charAt(i));
 			}
 		}
 		return sb.toString();

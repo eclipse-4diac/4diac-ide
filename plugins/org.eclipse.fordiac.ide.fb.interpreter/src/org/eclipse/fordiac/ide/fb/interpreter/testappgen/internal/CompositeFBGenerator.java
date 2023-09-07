@@ -93,38 +93,51 @@ public class CompositeFBGenerator {
 		// each testCase needs a matchFB, testFB and toTestFB
 		for (int i = 0; i < testSuite.getTestCases().size(); i++) {
 			for (int j = 0; j < blocksToAdd.size(); j++) {
+				// last block in blocksToAdd list is the muxFB which only needs to be added once
+				// so unless the outer loop is in it's last run through, we skip to add the
+				// muxFB
 				if (i < testSuite.getTestCases().size() - 1 && j == blocksToAdd.size() - 1) {
 					break;
 				}
 				final FBNetworkElement el = LibraryElementFactory.eINSTANCE.createFB();
 				el.setTypeEntry(sourceType.getTypeLibrary().getFBTypeEntry(blocksToAdd.get(j).getName()));
 
-				final Position p0 = LibraryElementFactory.eINSTANCE.createPosition();
+				final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
 				if (i == testSuite.getTestCases().size() - 1 && j == blocksToAdd.size() - 1) {
-					p0.setX(50 + 250 * j);
-					p0.setY(net.getNetworkElements().get((testSuite.getTestCases().size() * 3) / 2).getPosition()
+					pos.setX(50 + 250 * j);
+					pos.setY(net.getNetworkElements().get((testSuite.getTestCases().size() * 3) / 2).getPosition()
 							.getY());
 				} else {
-					p0.setX(50 + 250 * j);
-					p0.setY(50 + 250 * i);
+					pos.setX(50 + 250 * j);
+					pos.setY(50 + 250 * i);
 				}
-				el.setPosition(p0);
+				el.setPosition(pos);
 				el.setInterface(EcoreUtil.copy(el.getType().getInterfaceList()));
 
 				net.getNetworkElements().add(el);
 				final String name = NameRepository.createUniqueName(el, "TESTAPPFB1"); //$NON-NLS-1$
 				el.setName(name);
-				if (j == 0) {
-					testFBs.add(compositeFB.getFBNetwork().getFBNamed(name));
-				} else if (j == 1) {
-					toTestFBs.add(compositeFB.getFBNetwork().getFBNamed(name));
-				} else if (j == 2) {
-					matchFBs.add(compositeFB.getFBNetwork().getFBNamed(name));
-					addTimeOutFB(net, p0);
-				} else if (i == testSuite.getTestCases().size() - 1 && j == blocksToAdd.size() - 1) {
-					muxFB = compositeFB.getFBNetwork().getFBNamed(name);
+
+				addBlockToAccordingList(name, i, j);
+				// add timeOut block to matchFb
+				if (j == 2) {
+					addTimeOutFB(net, pos);
 				}
 			}
+		}
+
+	}
+
+	private void addBlockToAccordingList(final String name, final int i, final int j) {
+		if (j == 0) {
+			testFBs.add(compositeFB.getFBNetwork().getFBNamed(name));
+		} else if (j == 1) {
+			toTestFBs.add(compositeFB.getFBNetwork().getFBNamed(name));
+		} else if (j == 2) {
+			matchFBs.add(compositeFB.getFBNetwork().getFBNamed(name));
+
+		} else if (i == testSuite.getTestCases().size() - 1 && j == blocksToAdd.size() - 1) {
+			muxFB = compositeFB.getFBNetwork().getFBNamed(name);
 		}
 
 	}

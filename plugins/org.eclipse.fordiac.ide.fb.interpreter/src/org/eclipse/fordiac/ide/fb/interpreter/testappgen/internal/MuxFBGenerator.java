@@ -79,7 +79,7 @@ public class MuxFBGenerator extends AbstractFBGenerator {
 			return new ArrayList<>();
 		}
 		final List<VarDeclaration> list = new ArrayList<>();
-		final VarDeclaration varDecl = createVarDeclaration("DO1", false);
+		final VarDeclaration varDecl = createVarDeclaration("DO1", false); //$NON-NLS-1$
 		varDecl.setType(sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.BOOL));
 		varDecl.setComment(""); //$NON-NLS-1$
 		list.add(varDecl);

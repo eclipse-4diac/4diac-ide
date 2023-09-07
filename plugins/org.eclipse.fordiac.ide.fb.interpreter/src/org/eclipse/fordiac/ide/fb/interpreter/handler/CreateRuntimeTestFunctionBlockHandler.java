@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestSuite;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -36,7 +35,6 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final FBType type = editor.getAdapter(FBType.class);
 

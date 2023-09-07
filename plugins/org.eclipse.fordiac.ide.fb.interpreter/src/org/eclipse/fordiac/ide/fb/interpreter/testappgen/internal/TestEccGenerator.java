@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class TestEccGenerator {
 	private final ECC ecc;
+	// caseCount is for positioning purposes
 	private int caseCount;
 
 	public TestEccGenerator(final ECC ecc, final int caseCount) {
@@ -73,28 +74,30 @@ public class TestEccGenerator {
 		return LibraryElementFactory.eINSTANCE.createECAction();
 	}
 
-	public Algorithm createMatchAlgorithm(final BasicFBType fb, final List<VarDeclaration> inputData,
+	public static Algorithm createMatchAlgorithm(final BasicFBType fb, final List<VarDeclaration> inputData,
 			final String outputPinName) {
-
+		final String algName = "matchAlgo"; //$NON-NLS-1$
+		if (fb.getAlgorithmNamed(algName) != null) {
+			return fb.getAlgorithmNamed(algName);
+		}
 		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-		alg.setName("matchAlgo"); //$NON-NLS-1$
+		alg.setName(algName);
 
 		final StringBuilder text = new StringBuilder();
 
 		text.append("ALGORITHM " + alg.getName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		text.append("IF "); //$NON-NLS-1$
-		for (int i = 0; i < inputData.size(); i++) {
+		for (int i = 0; i < inputData.size(); i += 2) {
 			if (i > 0) {
 				text.append(" AND ");//$NON-NLS-1$
 			}
-			text.append(inputData.get(i).getName() + "=");//$NON-NLS-1$
-			i++;
-			text.append(inputData.get(i).getName());
+			text.append(inputData.get(i).getName() + " = ");//$NON-NLS-1$
+			text.append(inputData.get(i + 1).getName());
 		}
 		text.append("\nTHEN\n");//$NON-NLS-1$
 		text.append(outputPinName + ":= BOOL#TRUE;\n");//$NON-NLS-1$
 		text.append("ELSE\n"); //$NON-NLS-1$
-		text.append(outputPinName + ":= BOOL#FALSE;\n");//$NON-NLS-1$
+		text.append(outputPinName + " := BOOL#FALSE;\n");//$NON-NLS-1$
 		text.append("END_IF;\n"); //$NON-NLS-1$
 		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
 		text.append("\n\n\n"); //$NON-NLS-1$
@@ -130,11 +133,15 @@ public class TestEccGenerator {
 	}
 
 	public static Algorithm createTimeOutAlg(final BasicFBType fb) {
+		final String algName = "TimeOutAlg"; //$NON-NLS-1$
+		if (fb.getAlgorithmNamed(algName) != null) {
+			return fb.getAlgorithmNamed(algName);
+		}
 		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		final StringBuilder text = new StringBuilder();
-		alg.setName("TimeOutAlg");//$NON-NLS-1$
-		text.append("ALGORITHM TimeOutAlg \n");//$NON-NLS-1$
-		text.append("timeOut.DT := t#300ms; \n");//$NON-NLS-1$
+		alg.setName(algName);
+		text.append("ALGORITHM " + alg.getName() + "\n");//$NON-NLS-1$ //$NON-NLS-2$
+		text.append("timeOut.DT := t#1000ms; \n");//$NON-NLS-1$
 		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
 		text.append("\n\n\n"); //$NON-NLS-1$
 
@@ -159,6 +166,8 @@ public class TestEccGenerator {
 		return getEcc().getECState().get(getEcc().getECState().size() - 1);
 	}
 
+	// getNtimesLast(0) returns the last and getNtimesLast(1) returns the one before
+	// the last state
 	public ECState getNTimesLast(final int i) {
 		return getEcc().getECState().get(getEcc().getECState().size() - i - 1);
 	}
