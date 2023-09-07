@@ -48,7 +48,6 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -58,6 +57,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.DragTracker;
@@ -559,11 +559,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	private TypeLibrary getTypeLibrary() {
-		if (getModel().eContainer().eContainer() instanceof final FBType fbt) {
-			return fbt.getTypeEntry().getTypeLibrary();
-		}
-		// we are in an app or supp
-		return getModel().getFbNetwork().getAutomationSystem().getTypeLibrary();
+		return TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(getModel());
 	}
 
 	@Override
