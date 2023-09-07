@@ -45,4 +45,41 @@ public final class ContractUtils {
 	public static int getStartPosition(final String[] parts, final int posTime) {
 		return parts[posTime].length() - ContractKeywords.UNIT_OF_TIME.length();
 	}
+
+	public static String createAssumptionString(final String event, final String time) {
+		final ContractElementBuilder elementStr = new ContractElementBuilder();
+		elementStr.addAssumption_().addEvent_(event).addOccurs_().addEvery_().addTime(time).addTimeUnit();
+		return elementStr.toString();
+	}
+
+	public static String createOffsetString(final String time) {
+		final ContractElementBuilder elementStr = new ContractElementBuilder();
+		elementStr.addWith_().addTime(time).addTimeUnit().addSpace().addOffet();
+		return elementStr.toString();
+	}
+
+	public static String createReactionString(final String inputEvent, final String outputEvent, final String time) {
+		final ContractElementBuilder elementStr = new ContractElementBuilder();
+		elementStr.addGuarantee_().addReaction_().addEOpen().addEvent(inputEvent).addComma().addEvent(outputEvent)
+				.addEClose();
+		elementStr.addWithin_().addTime(time).addTimeUnit();
+		return elementStr.toString();
+	}
+
+	public static String createGuaranteeString(final String inputEvent, final String outputEvent, final String time) {
+		final ContractElementBuilder elementStr = new ContractElementBuilder();
+		elementStr.addGuarantee_().addWhenever_().addEvery_().addEvent_(inputEvent).addOccursComma();
+		elementStr.addThen().addEvent().addEvent_(outputEvent).addOccurs_().addWithin_().addTime(time).addTimeUnit();
+		return elementStr.toString();
+	}
+
+	public static String createGuaranteeTwoEvents(final String inputEvent, final String outputEvent,
+			final String secondOutputEvent, final String time) {
+		final ContractElementBuilder elementStr = new ContractElementBuilder();
+		elementStr.addGuarantee_().addWhenever_().addEvent().addSpace().addEvent_(inputEvent).addOccursComma();
+		elementStr.addThen().addEvents().addEOpen().addEvent(outputEvent).addComma().addEvent(secondOutputEvent);
+		elementStr.addEClose().addOccur().addWithin_().addTime(time).addTimeUnit();
+		return elementStr.toString();
+
+	}
 }

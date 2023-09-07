@@ -213,33 +213,12 @@ public class Guarantee extends ContractElement {
 			return twoEvents.createComment();
 		}
 		final StringBuilder comment = new StringBuilder();
-		comment.append(ContractKeywords.GUARANTEE);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.WHENEVER);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.EVENT);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(getInputEvent());
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.OCCURS);
-		comment.append(ContractKeywords.COMMA);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.THEN);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.EVENT);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(outputEvent);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.OCCUR);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.WITHIN);
-		comment.append(" "); //$NON-NLS-1$
 		if (getMin() == 0 || getMin() == getMax()) {
-			comment.append(getMax());
+			comment.append(ContractUtils.createGuaranteeString(getInputEvent(), outputEvent, String.valueOf(getMax())));
 		} else {
-			comment.append(ContractUtils.createInterval(this));
+			comment.append(ContractUtils.createGuaranteeString(getInputEvent(), outputEvent,
+					ContractUtils.createInterval(this)));
 		}
-		comment.append(ContractKeywords.UNIT_OF_TIME);
 		comment.append(System.lineSeparator());
 		return comment.toString();
 	}

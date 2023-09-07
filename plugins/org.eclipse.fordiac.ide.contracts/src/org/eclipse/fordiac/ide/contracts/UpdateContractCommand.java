@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
 import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
+import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -46,76 +47,30 @@ public class UpdateContractCommand extends Command {
 	public static UpdateContractCommand createContractAssumption(final List<Event> eventPins, final String time,
 			final String offset) {
 		final StringBuilder comment = new StringBuilder();
-		comment.append(ContractKeywords.ASSUMPTION);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(eventPins.get(0).getName());
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.OCCURS);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.EVERY);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(time);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.UNIT_OF_TIME);
+		comment.append(ContractUtils.createAssumptionString(eventPins.get(0).getName(), time));
 		comment.append(" "); //$NON-NLS-1$
 		if (offset != null) {
-			comment.append(ContractKeywords.WITH);
-			comment.append(" "); //$NON-NLS-1$
-			comment.append(offset);
-			comment.append(ContractKeywords.UNIT_OF_TIME);
-			comment.append(" "); //$NON-NLS-1$
-			comment.append(ContractKeywords.OFFSET);
+			comment.append(ContractUtils.createOffsetString(offset));
 		}
 		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(), comment.toString());
 	}
 
 	public static UpdateContractCommand createContractReaction(final List<Event> eventPins, final String time) {
-		final StringBuilder comment = new StringBuilder();
-		comment.append(ContractKeywords.GUARANTEE);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.REACTION);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.EVENTS_OPEN);
-		comment.append(eventPins.get(1).getName());
-		comment.append(ContractKeywords.EVENTS_CLOSE);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.WITHIN);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(time);
-		comment.append(ContractKeywords.UNIT_OF_TIME);
-		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(), comment.toString());
+		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(),
+				ContractUtils.createReactionString(eventPins.get(0).getName(), eventPins.get(1).getName(), time));
 	}
 
 	public static UpdateContractCommand createContractReaction(final List<Event> eventPins, final String time,
 			final boolean dummy) {
-		final StringBuilder comment = new StringBuilder();
-		comment.append(ContractKeywords.GUARANTEE);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.WHENEVER);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.EVENT);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(eventPins.get(0).getName());
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.OCCURS);
-		comment.append(ContractKeywords.COMMA);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.THEN);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.EVENT);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(eventPins.get(1).getName());
-		comment.append(" occur within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
-		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(), comment.toString());
+		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(),
+				ContractUtils.createGuaranteeString(eventPins.get(0).getName(), eventPins.get(1).getName(), time));
 	}
 
 	public static UpdateContractCommand createContractGuarantee(final Event event, final List<Event> outputEvents,
 			final String time) {
-		final StringBuilder comment = new StringBuilder();
-		comment.append("GUARANTEE Whenever event " + event.getName() + " occurs, then events (" //$NON-NLS-1$ //$NON-NLS-2$
-				+ outputEvents.get(0).getName() + "," + outputEvents.get(1).getName() + ") occur"); //$NON-NLS-1$ //$NON-NLS-2$
-		comment.append(" within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
-		return new UpdateContractCommand(outputEvents.get(0).getFBNetworkElement(), comment.toString());
+		return new UpdateContractCommand(outputEvents.get(0).getFBNetworkElement(),
+				ContractUtils.createGuaranteeTwoEvents(event.getName(), outputEvents.get(0).getName(),
+						outputEvents.get(1).getName(), time));
 	}
 
 	@Override

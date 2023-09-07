@@ -70,24 +70,13 @@ public class Reaction extends Guarantee {
 	@Override
 	public String createComment() {
 		final StringBuilder comment = new StringBuilder();
-		comment.append(ContractKeywords.GUARANTEE);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.REACTION);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.EVENTS_OPEN);
-		comment.append(getInputEvent());
-		comment.append(ContractKeywords.COMMA);
-		comment.append(getOutputEvent());
-		comment.append(ContractKeywords.EVENTS_CLOSE);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.WITHIN);
-		comment.append(" "); //$NON-NLS-1$
 		if (getMin() == 0 || getMin() == getMax()) {
-			comment.append(getMax());
+			comment.append(
+					ContractUtils.createReactionString(getInputEvent(), getOutputEvent(), String.valueOf(getMax())));
 		} else {
-			comment.append(ContractUtils.createInterval(this));
+			comment.append(ContractUtils.createReactionString(getInputEvent(), getOutputEvent(),
+					ContractUtils.createInterval(this)));
 		}
-		comment.append(ContractKeywords.UNIT_OF_TIME);
 		comment.append(System.lineSeparator());
 		return comment.toString();
 	}

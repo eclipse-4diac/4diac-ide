@@ -115,21 +115,15 @@ public class Assumption extends ContractElement {
 			return withOffset.createComment();
 		}
 		final StringBuilder comment = new StringBuilder();
-		comment.append(ContractKeywords.ASSUMPTION);
-		comment.append(getInputEvent());
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.OCCURS);
-		comment.append(" "); //$NON-NLS-1$
-		comment.append(ContractKeywords.EVERY);
-		comment.append(" "); //$NON-NLS-1$
 		if (getMax() == -1 || getMax() == getMin()) {
-			comment.append(getMin());
+			comment.append(ContractUtils.createAssumptionString(getInputEvent(), String.valueOf(getMin())));
+
 		} else {
-			comment.append(ContractUtils.createInterval(this));
+			comment.append(ContractUtils.createAssumptionString(getInputEvent(), ContractUtils.createInterval(this)));
 		}
-		comment.append(ContractKeywords.UNIT_OF_TIME);
 		comment.append(System.lineSeparator());
 		return comment.toString();
+
 	}
 
 }
