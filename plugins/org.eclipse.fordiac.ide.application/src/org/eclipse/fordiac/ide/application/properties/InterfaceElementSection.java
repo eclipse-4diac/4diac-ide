@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -237,7 +238,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	}
 
 	private boolean hasComment() {
-		return ((getType().getComment() != null) && !getType().getComment().isBlank());
+		return CommentHelper.hasComment(getType());
 	}
 
 	private String getInstanceComment() {

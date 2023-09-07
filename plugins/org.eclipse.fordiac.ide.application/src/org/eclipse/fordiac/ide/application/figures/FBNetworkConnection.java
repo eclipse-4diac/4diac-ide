@@ -239,7 +239,7 @@ public class FBNetworkConnection extends HideableConnection {
 		return builder.toString();
 	}
 
-	private IFigure createSourceLabelToolTip(final EList<Connection> connections) {
+	private static IFigure createSourceLabelToolTip(final EList<Connection> connections) {
 		final List<Connection> hiddenConnections = getHiddenConnections(connections);
 		if (!hiddenConnections.isEmpty()) {
 			final StringBuilder builder = new StringBuilder();
@@ -250,8 +250,7 @@ public class FBNetworkConnection extends HideableConnection {
 					builder.append(System.lineSeparator());
 
 					// < pin comment >
-					if (con.getDestination().getComment() != null && !con.getDestination().getComment().isEmpty()
-							&& !con.getDestination().getComment().isBlank()) {
+					if (CommentHelper.hasComment(con.getDestination())) {
 						builder.append(con.getDestination().getComment());
 						builder.append(System.lineSeparator());
 					}
@@ -282,7 +281,7 @@ public class FBNetworkConnection extends HideableConnection {
 					}
 					builder.append(ie.getName());
 					builder.append(System.lineSeparator());
-					if (ie.getComment() != null && !ie.getComment().isEmpty() && !ie.getComment().isBlank()) {
+					if (CommentHelper.hasComment(ie)) {
 						builder.append(ie.getComment());
 						builder.append(System.lineSeparator());
 					}
@@ -312,7 +311,6 @@ public class FBNetworkConnection extends HideableConnection {
 		return builder;
 	}
 
-	@SuppressWarnings("unchecked")
 	int getMaxFanOutLabelWidth() {
 		final InterfaceEditPart source = (InterfaceEditPart) connEP.getSource();
 		return ((List<ConnectionEditPart>) source.getSourceConnections()).stream()
