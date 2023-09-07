@@ -17,13 +17,20 @@ import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.Map;
+
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
+import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
@@ -96,6 +103,7 @@ public class Abstract4diacUITests {
 	protected static final String EO1 = "EO1"; //$NON-NLS-1$
 	protected static final String EO2 = "EO2"; //$NON-NLS-1$
 	protected static final String DTO = "DTO"; //$NON-NLS-1$
+	protected static final String IN1 = "IN1"; //$NON-NLS-1$
 	protected static final String CLKO = "CLKO"; //$NON-NLS-1$
 	protected static final String INIT = "INIT"; //$NON-NLS-1$
 	protected static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
@@ -202,7 +210,44 @@ public class Abstract4diacUITests {
 		assertNotNull(inputPinBounds2);
 		figure.translateToAbsolute(inputPinBounds2);
 		viewer.drag(pin2, inputPinBounds1.getCenter().x, inputPinBounds1.getCenter().y);
+		checkIfConnectionCanBeFound(pin1, pin2);
 		return viewer;
+	}
+
+	protected static boolean checkIfConnectionCanBeFound(final String srcPinName, final String dstPinName) {
+		return findConnection(srcPinName, dstPinName) != null;
+	}
+
+	protected static ConnectionEditPart findConnection(final String srcPinName, final String dstPinName) {
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		final GraphicalViewer graphicalViewer = viewer.getGraphicalViewer();
+
+		return Display.getDefault().syncCall(() -> {
+			graphicalViewer.flush();
+			final Map<?, ?> editPartRegistry = graphicalViewer.getEditPartRegistry();
+			for (final Object obj : editPartRegistry.values()) {
+				if (obj instanceof final ConnectionEditPart cEP) {
+					// search for connection between the 2 pins
+					final EditPart source = cEP.getSource();
+					final EditPart target = cEP.getTarget();
+
+					final IFigure srcFigure = ((GraphicalEditPart) source).getFigure();
+					final Label srcLabel = (Label) srcFigure;
+					final String srcText = srcLabel.getText();
+
+					final IFigure dstFigure = ((GraphicalEditPart) target).getFigure();
+					final Label dstLabel = (Label) dstFigure;
+					final String dstText = dstLabel.getText();
+
+					if (srcPinName.equals(srcText) && dstPinName.equals(dstText)) {
+						return cEP;
+					}
+
+				}
+			}
+			return null;
+		});
 	}
 
 	/**
