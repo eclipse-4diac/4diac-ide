@@ -15,6 +15,9 @@ package org.eclipse.fordiac.ide.gef.filters;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IFilter;
 
@@ -27,6 +30,14 @@ public class AttributeFilter implements IFilter {
 
 	public static Object parseObject(final Object input) {
 		Object inputHelper = (input instanceof final EditPart editpart) ? editpart.getModel() : input;
+
+		// handle exception: interface elements of functions
+		if (inputHelper instanceof final IInterfaceElement interfaceElement
+				&& interfaceElement.eContainer() instanceof final InterfaceList interfaceList
+				&& interfaceList.eContainer() instanceof FunctionFBType) {
+			return null;
+		}
+
 		inputHelper = (inputHelper instanceof final FBNetwork fbNetwork) ? fbNetwork.eContainer() : inputHelper;
 
 		return inputHelper;
