@@ -47,6 +47,9 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 
 		final TestSuite testSuite = new TestSuite(type.getService().getServiceSequence());
 		testSuite.getTestCases().removeIf(n -> (n.getdataSource().getServiceSequenceType().equals("FORBIDDEN")));
+		if (testSuite.getTestCases().isEmpty()) {
+			return Status.OK_STATUS;
+		}
 
 		final FBType testtype = new TestFbGenerator(type, testSuite).generateTestFb();
 		testtype.getTypeEntry().save();

@@ -116,6 +116,13 @@ public class MuxFBGenerator extends AbstractFBGenerator {
 					errAction.setAlgorithm(alg);
 					sucAction.setAlgorithm(alg);
 
+					// create transition for correct events received but not matching data
+					eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
+							destinationFB.getInterfaceList().getEventInputs()
+									.get(destinationFB.getInterfaceList().getEventInputs().size() - 1));
+					eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1)
+							.setConditionExpression("NOT DO" + i + "_match"); //$NON-NLS-1$ //$NON-NLS-2$
+
 				}
 				eccGen.getLastState().getECAction().add(errAction);
 				eccGen.increaseCaseCount();
@@ -123,6 +130,7 @@ public class MuxFBGenerator extends AbstractFBGenerator {
 				// create state for success output
 				eccGen.createState("S", stateCnt); //$NON-NLS-1$
 				eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
+
 				eccGen.createTransitionFromTo(eccGen.getNTimesLast(2), eccGen.getLastState(),
 						destinationFB.getInterfaceList().getEventInputs()
 								.get(destinationFB.getInterfaceList().getEventInputs().size() - 1));
