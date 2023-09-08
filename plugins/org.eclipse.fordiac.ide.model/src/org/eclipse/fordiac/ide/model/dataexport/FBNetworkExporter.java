@@ -102,7 +102,9 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addCommentElement(final Comment comment) throws XMLStreamException {
-		if (comment.isInGroup()) {
+		final boolean hasAttributes = !comment.getAttributes().isEmpty();
+
+		if (comment.isInGroup() || hasAttributes) {
 			addStartElement(LibraryElementTags.COMMENT_ELEMENT);
 		} else {
 			addEmptyStartElement(LibraryElementTags.COMMENT_ELEMENT);
@@ -114,8 +116,15 @@ class FBNetworkExporter extends CommonElementExporter {
 				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getWidth()));
 		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE,
 				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getHeight()));
+
 		if (comment.isInGroup()) {
 			addGroupAttribute(comment.getGroup());
+		}
+		if (hasAttributes) {
+			addAttributes(comment.getAttributes());
+		}
+
+		if (comment.isInGroup() || hasAttributes) {
 			addEndElement();
 		}
 	}
