@@ -172,11 +172,11 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 			} else { // e.g., IP address of device
 				infoSection.setText(Messages.InterfaceElementSection_InterfaceElement);
 			}
-			typeCommentText.setText(getTypeComment());
+			typeCommentText.setText(CommentHelper.getTypeComment(getType()));
 
 			configureOpenEditorButton();
 
-			instanceCommentText.setText(getInstanceComment());
+			instanceCommentText.setText(CommentHelper.getInstanceComment(getType()));
 			instanceCommentText.setForeground(getForegroundColor());
 
 			parameterText.setText(getTypeInitialValue());
@@ -225,29 +225,6 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		return sb.toString();
 	}
 
-	private String getTypeComment() {
-		final FBNetworkElement fb = getType().getFBNetworkElement();
-		if ((fb != null) && (fb.getType() != null)) {
-			final IInterfaceElement interfaceElement = fb.getType().getInterfaceList()
-					.getInterfaceElement(getType().getName());
-			if (interfaceElement != null) {
-				return interfaceElement.getComment() != null ? interfaceElement.getComment() : ""; //$NON-NLS-1$
-			}
-		}
-		return ""; //$NON-NLS-1$
-	}
-
-	private boolean hasComment() {
-		return CommentHelper.hasComment(getType());
-	}
-
-	private String getInstanceComment() {
-		if (hasComment()) {
-			return getType().getComment();
-		}
-		return getTypeComment();
-	}
-
 	protected String getTypeInitialValue() {
 		if ((getType() instanceof final VarDeclaration varDeclaration)
 				&& (varDeclaration.isIsInput() && (varDeclaration.getFBNetworkElement() != null))) {
@@ -261,7 +238,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	}
 
 	private Color getForegroundColor() {
-		if (!hasComment()) {
+		if (!CommentHelper.hasComment(getType())) {
 			return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
 		}
 		return null;
