@@ -136,7 +136,7 @@ public class UpdateContractCommand extends Command {
 		}
 		final SubApp subapp = subappcmd.getElement();
 		cncmd = new ChangeNameCommand(subapp,
-				NameRepository.createUniqueName(subapp, ContractKeywords._CONTRACT_ + fbNetworkElement.getName()));
+				NameRepository.createUniqueName(subapp, ContractKeywords.CONTRACT_KEYWORD + fbNetworkElement.getName()));
 		if (cncmd.canExecute()) {
 			cncmd.execute();
 		}

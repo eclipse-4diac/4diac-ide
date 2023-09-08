@@ -26,13 +26,13 @@ public class ContractElementBuilder {
 		return contractElement.toString();
 	}
 
-	public ContractElementBuilder addAssumption_() {
+	public ContractElementBuilder addAssumption() {
 		contractElement.append(ContractKeywords.ASSUMPTION);
 		contractElement.append(" "); //$NON-NLS-1$
 		return this;
 	}
 
-	public ContractElementBuilder addEvent_(final String event) {
+	public ContractElementBuilder addEventSpace(final String event) {
 		contractElement.append(event);
 		contractElement.append(" "); //$NON-NLS-1$
 		return this;
@@ -43,13 +43,13 @@ public class ContractElementBuilder {
 		return this;
 	}
 
-	public ContractElementBuilder addOccurs_() {
+	public ContractElementBuilder addOccurs() {
 		contractElement.append(ContractKeywords.OCCURS);
 		contractElement.append(" "); //$NON-NLS-1$
 		return this;
 	}
 
-	public ContractElementBuilder addEvery_() {
+	public ContractElementBuilder addEvery() {
 		contractElement.append(ContractKeywords.EVERY);
 		contractElement.append(" "); //$NON-NLS-1$
 		return this;
@@ -65,7 +65,7 @@ public class ContractElementBuilder {
 		return this;
 	}
 
-	public ContractElementBuilder addWith_() {
+	public ContractElementBuilder addWith() {
 		contractElement.append(ContractKeywords.WITH);
 		contractElement.append(" "); //$NON-NLS-1$
 		return this;
@@ -81,13 +81,13 @@ public class ContractElementBuilder {
 		return this;
 	}
 
-	public ContractElementBuilder addGuarantee_() {
+	public ContractElementBuilder addGuarantee() {
 		contractElement.append(ContractKeywords.GUARANTEE);
 		contractElement.append(" "); //$NON-NLS-1$
 		return this;
 	}
 
-	public ContractElementBuilder addReaction_() {
+	public ContractElementBuilder addReaction() {
 		contractElement.append(ContractKeywords.REACTION);
 		contractElement.append(" "); //$NON-NLS-1$
 		return this;
@@ -109,13 +109,13 @@ public class ContractElementBuilder {
 		return this;
 	}
 
-	public ContractElementBuilder addWithin_() {
+	public ContractElementBuilder addWithin() {
 		contractElement.append(ContractKeywords.WITHIN);
 		contractElement.append(" "); //$NON-NLS-1$
 		return this;
 	}
 
-	public ContractElementBuilder addWhenever_() {
+	public ContractElementBuilder addWhenever() {
 		contractElement.append(ContractKeywords.WHENEVER);
 		contractElement.append(" "); //$NON-NLS-1$
 		return this;

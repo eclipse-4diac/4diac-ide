@@ -42,6 +42,6 @@ public final class ContractKeywords {
 	public static final String CONSTRACT_STATE = "ConstractState"; //$NON-NLS-1$
 	public static final String FALSE = " FALSE"; //$NON-NLS-1$
 	public static final String TRUE = " TRUE"; //$NON-NLS-1$
-	public static final String _CONTRACT_ = "_CONTRACT_";
+	public static final String CONTRACT_KEYWORD = "_CONTRACT_"; //$NON-NLS-1$
 
 }

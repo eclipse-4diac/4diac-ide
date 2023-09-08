@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 public class DefineFBDecisionTwoPinDialog extends MessageDialog {
+	private static final int NUM_COLUMNS = 3;
 	private boolean isReaction;
 	private Button reactionCheckbox;
 	private Button guaranteeCheckbox;
@@ -49,7 +50,7 @@ public class DefineFBDecisionTwoPinDialog extends MessageDialog {
 
 		final Composite dialog = new Composite(dialogArea, SWT.NONE);
 		dialog.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
-		dialog.setLayout(new GridLayout(3, false));
+		dialog.setLayout(new GridLayout(NUM_COLUMNS, false));
 
 		reactionCheckbox = new Button(dialog, SWT.CHECK);
 		reactionCheckbox.setText(Messages.DefineFBDecisionTwoPinDialog_CreateReaction);

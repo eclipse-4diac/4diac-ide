@@ -48,37 +48,37 @@ public final class ContractUtils {
 
 	public static String createAssumptionString(final String event, final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
-		elementStr.addAssumption_().addEvent_(event).addOccurs_().addEvery_().addTime(time).addTimeUnit();
+		elementStr.addAssumption().addEventSpace(event).addOccurs().addEvery().addTime(time).addTimeUnit();
 		return elementStr.toString();
 	}
 
 	public static String createOffsetString(final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
-		elementStr.addWith_().addTime(time).addTimeUnit().addSpace().addOffet();
+		elementStr.addWith().addTime(time).addTimeUnit().addSpace().addOffet();
 		return elementStr.toString();
 	}
 
 	public static String createReactionString(final String inputEvent, final String outputEvent, final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
-		elementStr.addGuarantee_().addReaction_().addEOpen().addEvent(inputEvent).addComma().addEvent(outputEvent)
+		elementStr.addGuarantee().addReaction().addEOpen().addEvent(inputEvent).addComma().addEvent(outputEvent)
 				.addEClose();
-		elementStr.addWithin_().addTime(time).addTimeUnit();
+		elementStr.addWithin().addTime(time).addTimeUnit();
 		return elementStr.toString();
 	}
 
 	public static String createGuaranteeString(final String inputEvent, final String outputEvent, final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
-		elementStr.addGuarantee_().addWhenever_().addEvery_().addEvent_(inputEvent).addOccursComma();
-		elementStr.addThen().addEvent().addEvent_(outputEvent).addOccurs_().addWithin_().addTime(time).addTimeUnit();
+		elementStr.addGuarantee().addWhenever().addEvery().addEventSpace(inputEvent).addOccursComma();
+		elementStr.addThen().addEvent().addEventSpace(outputEvent).addOccurs().addWithin().addTime(time).addTimeUnit();
 		return elementStr.toString();
 	}
 
 	public static String createGuaranteeTwoEvents(final String inputEvent, final String outputEvent,
 			final String secondOutputEvent, final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
-		elementStr.addGuarantee_().addWhenever_().addEvent().addSpace().addEvent_(inputEvent).addOccursComma();
+		elementStr.addGuarantee().addWhenever().addEvent().addSpace().addEventSpace(inputEvent).addOccursComma();
 		elementStr.addThen().addEvents().addEOpen().addEvent(outputEvent).addComma().addEvent(secondOutputEvent);
-		elementStr.addEClose().addOccur().addWithin_().addTime(time).addTimeUnit();
+		elementStr.addEClose().addOccur().addWithin().addTime(time).addTimeUnit();
 		return elementStr.toString();
 
 	}

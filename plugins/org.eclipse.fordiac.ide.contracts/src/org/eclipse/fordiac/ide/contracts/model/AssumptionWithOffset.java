@@ -110,7 +110,7 @@ public class AssumptionWithOffset extends Assumption {
 		this.maxOffset = maxOffset;
 	}
 
-	public static boolean isCompatibleWith(final Iterable<Assumption> assumptions) {
+	public static boolean isCompatibleWithOffset(final Iterable<Assumption> assumptions) {
 		final EList<Assumption> normal = new BasicEList<>();
 		final EList<AssumptionWithOffset> withOffset = new BasicEList<>();
 		((Collection<Assumption>) assumptions).parallelStream().forEach(a -> {

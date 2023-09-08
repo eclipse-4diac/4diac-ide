@@ -102,7 +102,7 @@ public class Assumption extends ContractElement {
 
 		for (final Assumption assumption : assumptions) {
 			if (assumption instanceof AssumptionWithOffset) {
-				return AssumptionWithOffset.isCompatibleWith(assumptions);
+				return AssumptionWithOffset.isCompatibleWithOffset(assumptions);
 			}
 
 		}
