@@ -1303,7 +1303,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_DECLARATION__NAME = LibraryElementPackage.INAMED_ELEMENT__NAME;
+	int ST_VAR_DECLARATION__NAME = LibraryElementPackage.ITYPED_ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -1312,7 +1312,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_DECLARATION__COMMENT = LibraryElementPackage.INAMED_ELEMENT__COMMENT;
+	int ST_VAR_DECLARATION__COMMENT = LibraryElementPackage.ITYPED_ELEMENT__COMMENT;
 
 	/**
 	 * The feature id for the '<em><b>Located At</b></em>' reference.
@@ -1321,7 +1321,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_DECLARATION__LOCATED_AT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ST_VAR_DECLARATION__LOCATED_AT = LibraryElementPackage.ITYPED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Array</b></em>' attribute.
@@ -1330,7 +1330,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_DECLARATION__ARRAY = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 1;
+	int ST_VAR_DECLARATION__ARRAY = LibraryElementPackage.ITYPED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Ranges</b></em>' containment reference list.
@@ -1339,7 +1339,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_DECLARATION__RANGES = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 2;
+	int ST_VAR_DECLARATION__RANGES = LibraryElementPackage.ITYPED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Count</b></em>' attribute list.
@@ -1348,7 +1348,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_DECLARATION__COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 3;
+	int ST_VAR_DECLARATION__COUNT = LibraryElementPackage.ITYPED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -1357,7 +1357,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_DECLARATION__TYPE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 4;
+	int ST_VAR_DECLARATION__TYPE = LibraryElementPackage.ITYPED_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Max Length</b></em>' containment reference.
@@ -1366,7 +1366,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_DECLARATION__MAX_LENGTH = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 5;
+	int ST_VAR_DECLARATION__MAX_LENGTH = LibraryElementPackage.ITYPED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Default Value</b></em>' containment reference.
@@ -1375,7 +1375,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_DECLARATION__DEFAULT_VALUE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 6;
+	int ST_VAR_DECLARATION__DEFAULT_VALUE = LibraryElementPackage.ITYPED_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>ST Var Declaration</em>' class.
@@ -1384,7 +1384,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_DECLARATION_FEATURE_COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 7;
+	int ST_VAR_DECLARATION_FEATURE_COUNT = LibraryElementPackage.ITYPED_ELEMENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STTypeDeclarationImpl <em>ST Type Declaration</em>}' class.

@@ -460,6 +460,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass iTypedElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass iVarElementEClass = null;
 
 	/**
@@ -2705,6 +2712,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EClass getITypedElement() {
+		return iTypedElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getIVarElement() {
 		return iVarElementEClass;
 	}
@@ -4224,6 +4241,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(interfaceListEClass, INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS);
 		createEReference(interfaceListEClass, INTERFACE_LIST__ERROR_MARKER);
 
+		iTypedElementEClass = createEClass(ITYPED_ELEMENT);
+
 		iVarElementEClass = createEClass(IVAR_ELEMENT);
 		createEReference(iVarElementEClass, IVAR_ELEMENT__VAR_DECLARATIONS);
 
@@ -4492,10 +4511,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		groupEClass.getESuperTypes().add(this.getFBNetworkElement());
 		hiddenElementEClass.getESuperTypes().add(this.getConfigurableObject());
 		iCallableEClass.getESuperTypes().add(this.getINamedElement());
-		iInterfaceElementEClass.getESuperTypes().add(this.getINamedElement());
+		iInterfaceElementEClass.getESuperTypes().add(this.getITypedElement());
 		iInterfaceElementEClass.getESuperTypes().add(this.getConfigurableObject());
 		iInterfaceElementEClass.getESuperTypes().add(this.getHiddenElement());
 		inputPrimitiveEClass.getESuperTypes().add(this.getPrimitive());
+		iTypedElementEClass.getESuperTypes().add(this.getINamedElement());
 		libraryElementEClass.getESuperTypes().add(this.getINamedElement());
 		linkEClass.getESuperTypes().add(this.getINamedElement());
 		linkEClass.getESuperTypes().add(this.getConfigurableObject());
@@ -4534,7 +4554,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		textFunctionEClass.getESuperTypes().add(this.getFunction());
 		textFunctionBodyEClass.getESuperTypes().add(this.getFunctionBody());
 		textMethodEClass.getESuperTypes().add(this.getMethod());
-		typedConfigureableObjectEClass.getESuperTypes().add(this.getINamedElement());
+		typedConfigureableObjectEClass.getESuperTypes().add(this.getITypedElement());
 		typedConfigureableObjectEClass.getESuperTypes().add(this.getConfigurableObject());
 		valueEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		varDeclarationEClass.getESuperTypes().add(this.getIInterfaceElement());
@@ -5006,10 +5026,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(iInterfaceElementEClass, this.getFBNetworkElement(), "getFBNetworkElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(iInterfaceElementEClass, ecorePackage.getEString(), "getTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		addEOperation(iInterfaceElementEClass, ecorePackage.getEString(), "getFullTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
 		op = addEOperation(iInterfaceElementEClass, ecorePackage.getEBoolean(), "validateName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		g1 = createEGenericType(ecorePackage.getEMap());
@@ -5075,6 +5091,14 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(interfaceListEClass, this.getVarDeclList(), "getVisibleInputVars", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(interfaceListEClass, this.getVarDeclList(), "getVisibleOutputVars", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(iTypedElementEClass, ITypedElement.class, "ITypedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		addEOperation(iTypedElementEClass, this.getINamedElement(), "getType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(iTypedElementEClass, ecorePackage.getEString(), "getTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(iTypedElementEClass, ecorePackage.getEString(), "getFullTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(iVarElementEClass, IVarElement.class, "IVarElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getIVarElement_VarDeclarations(), this.getVarDeclaration(), null, "varDeclarations", null, 0, -1, IVarElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -5987,7 +6011,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
-		  (iInterfaceElementEClass.getEOperations().get(3),
+		  (iInterfaceElementEClass.getEOperations().get(1),
 		   source,
 		   new String[] {
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$

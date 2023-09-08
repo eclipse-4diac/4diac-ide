@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -42,7 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * @model
  * @generated
  */
-public interface STVarDeclaration extends INamedElement {
+public interface STVarDeclaration extends ITypedElement {
 	/**
 	 * Returns the value of the '<em><b>Located At</b></em>' reference.
 	 * <!-- begin-user-doc -->

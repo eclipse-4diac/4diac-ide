@@ -324,7 +324,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//STString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STVarDeclaration" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="STVarDeclaration" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ITypedElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="locatedAt" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="array" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ranges" upperBound="-1"

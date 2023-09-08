@@ -608,6 +608,11 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
 	}
 
+	def protected dispatch Variable<?> newVariable(INamedElement v, Value value) {
+		error('''The variable «v.name» with type «v.eClass.name» is not supported''')
+		throw new UnsupportedOperationException('''The variable «v.name» with type «v.eClass.name» is not supported''')
+	}
+
 	def protected dispatch Variable<?> newVariable(VarDeclaration v, Value value) {
 		VariableOperations.newVariable(v, value)
 	}

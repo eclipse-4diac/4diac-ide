@@ -1114,20 +1114,10 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IInterfaceElement" abstract="true" interface="true"
-      eSuperTypes="#//INamedElement #//ConfigurableObject #//HiddenElement">
+      eSuperTypes="#//ITypedElement #//ConfigurableObject #//HiddenElement">
     <eOperations name="getFBNetworkElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="getTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="DataType dataType = getType();&#xA;if(dataType != null){&#xA;&#x9;return dataType.getName();&#xA;}&#xA;return null;"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="getFullTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="validateName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
@@ -1305,6 +1295,20 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ITypedElement" abstract="true" interface="true"
+      eSuperTypes="#//INamedElement">
+    <eOperations name="getType" eType="#//INamedElement"/>
+    <eOperations name="getTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();&#xA;if(type != null){&#xA;&#x9;return type.getName();&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getFullTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getTypeName();"/>
+      </eAnnotations>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IVarElement" abstract="true" interface="true">
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclarations" upperBound="-1"
@@ -1719,7 +1723,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TypedConfigureableObject" eSuperTypes="#//INamedElement #//ConfigurableObject">
+  <eClassifiers xsi:type="ecore:EClass" name="TypedConfigureableObject" eSuperTypes="#//ITypedElement #//ConfigurableObject">
     <eOperations name="getTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getTypeName(this);"/>

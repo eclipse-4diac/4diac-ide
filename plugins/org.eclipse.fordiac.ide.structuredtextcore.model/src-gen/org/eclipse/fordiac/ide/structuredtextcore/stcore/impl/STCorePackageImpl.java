@@ -2531,7 +2531,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stTimeOfDayLiteralEClass.getESuperTypes().add(this.getSTExpression());
 		stDateAndTimeLiteralEClass.getESuperTypes().add(this.getSTExpression());
 		stStringLiteralEClass.getESuperTypes().add(this.getSTExpression());
-		stVarDeclarationEClass.getESuperTypes().add(theLibraryElementPackage.getINamedElement());
+		stVarDeclarationEClass.getESuperTypes().add(theLibraryElementPackage.getITypedElement());
 		stReturnEClass.getESuperTypes().add(this.getSTStatement());
 		stContinueEClass.getESuperTypes().add(this.getSTStatement());
 		stExitEClass.getESuperTypes().add(this.getSTStatement());

@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.*;
 
@@ -323,6 +324,7 @@ public class STCoreSwitch<T> extends Switch<T> {
 			case STCorePackage.ST_VAR_DECLARATION: {
 				STVarDeclaration stVarDeclaration = (STVarDeclaration)theEObject;
 				T result = caseSTVarDeclaration(stVarDeclaration);
+				if (result == null) result = caseITypedElement(stVarDeclaration);
 				if (result == null) result = caseINamedElement(stVarDeclaration);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -1284,6 +1286,21 @@ public class STCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseINamedElement(INamedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ITyped Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ITyped Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseITypedElement(ITypedElement object) {
 		return null;
 	}
 
