@@ -481,6 +481,7 @@
              label="TypeInfo">
        </propertyTab>
        <propertyTab
+             afterTab="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsTypeInfoTab"
              category="GlobalConstants"
              id="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsAttributeTab"
              label="Attributes">
