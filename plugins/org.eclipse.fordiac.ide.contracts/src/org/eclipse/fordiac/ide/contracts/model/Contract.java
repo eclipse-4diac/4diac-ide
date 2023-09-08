@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.contracts.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -28,14 +29,23 @@ public class Contract {
 
 	private final EList<Assumption> assumptions = new BasicEList<>();
 	private final EList<Guarantee> guarantees = new BasicEList<>();
-	private boolean isValid;
-	private boolean isChanged;
+	private boolean isValid = true;
+	private boolean isChanged = false;
 	private FBNetworkElement owner;
 	private String error;
+	private Optional<String> errors;
+
+	// private void hasError() {
+	// errors.isPresent();
+	// if (errors.isPresent()) {
+	// final String error = errors.get();
+	// return error;
+	// }
+	// final String x = errors.orElse(null);
+	// }
 
 	Contract() {
-		isChanged = true;
-		isValid = false;
+		// reduce visibility to package
 	}
 
 	public static Contract getContractFromComment(final String comment) {
@@ -54,10 +64,10 @@ public class Contract {
 	}
 
 	public String getError() {
-		return error;
+		return errors.orElse(""); //$NON-NLS-1$
 	}
 
-	void setError(final String error) {
+	void setError(final String error) { // TOOD addError
 		this.error = error;
 	}
 
@@ -101,7 +111,6 @@ public class Contract {
 		isChanged = true;
 		final Guarantee removedGuarantee = guarantees.remove(index);
 		removedGuarantee.setContract(null);
-
 	}
 
 	public boolean isValid() {
@@ -112,8 +121,8 @@ public class Contract {
 		return isValid;
 	}
 
-	public Guarantee getGuarateeWith(final String InputEvent) {
-		return guarantees.stream().filter(g -> g.getInputEvent().equals(InputEvent)).findAny().orElse(null);
+	public Guarantee getGuaranteeWith(final String inputEvent) {
+		return guarantees.stream().filter(g -> g.getInputEvent().equals(inputEvent)).findAny().orElse(null);
 	}
 
 	public Assumption getAssumptionWith(final String InputEvent) {
@@ -134,10 +143,10 @@ public class Contract {
 	public String getAsString() {
 		final StringBuilder comment = new StringBuilder();
 		for (final Assumption assumption : assumptions) {
-			comment.append(assumption.createComment());
+			comment.append(assumption.asString());
 		}
 		for (final Guarantee guarantee : guarantees) {
-			comment.append(guarantee.createComment());
+			comment.append(guarantee.asString());
 		}
 		return comment.toString();
 	}
@@ -157,13 +166,13 @@ public class Contract {
 		for (final Assumption assumption : assumptions) {
 			if (!assumption.isValid()) {
 				isValid = false;
-				setError(Messages.Contract_ErrorAssumption + assumption.createComment());
+				setError(Messages.Contract_ErrorAssumption + assumption.asString());
 				return;
 			}
 		}
 		for (final Guarantee guarantee : guarantees) {
 			if (!guarantee.isValid()) {
-				setError(Messages.Contract_ErrorGuarantee + guarantee.createComment());
+				setError(Messages.Contract_ErrorGuarantee + guarantee.asString());
 				isValid = false;
 				return;
 			}
@@ -188,22 +197,26 @@ public class Contract {
 
 	private boolean hasConsistentContract() {
 		final Map<String, EList<ContractElement>> mapContractElements = new HashMap<>();
-		mapAssuGuarTo(mapContractElements);
+		fillContractElementMap(mapContractElements);
 		for (final Map.Entry<String, EList<ContractElement>> entry : mapContractElements.entrySet()) {
-			if (entry.getValue().size() != 2) {
+			if (!isAssumptionGuaranteePair(entry)) {
 				return false;
 			}
 
-			final int assumtionMin = entry.getValue().get(0).getMin();
+			final int assumptionMin = entry.getValue().get(0).getMin();
 			final int guaranteeMax = entry.getValue().get(1).getMax();
-			if (assumtionMin > guaranteeMax) {
+			if (assumptionMin > guaranteeMax) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private void mapAssuGuarTo(final Map<String, EList<ContractElement>> mapContractElements) {
+	private static boolean isAssumptionGuaranteePair(final Map.Entry<String, EList<ContractElement>> entry) {
+		return entry.getValue().size() == 2;
+	}
+
+	private void fillContractElementMap(final Map<String, EList<ContractElement>> mapContractElements) {
 		for (final Assumption assumption : assumptions) {
 			if (mapContractElements.containsKey(assumption.getInputEvent())) {
 				mapContractElements.get(assumption.getInputEvent()).add(assumption);

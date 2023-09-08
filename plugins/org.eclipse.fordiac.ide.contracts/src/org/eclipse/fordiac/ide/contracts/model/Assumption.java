@@ -110,9 +110,9 @@ public class Assumption extends ContractElement {
 	}
 
 	@Override
-	public String createComment() {
+	public String asString() {
 		if (this instanceof final AssumptionWithOffset withOffset) {
-			return withOffset.createComment();
+			return withOffset.asString();
 		}
 		final StringBuilder comment = new StringBuilder();
 		if (getMax() == -1 || getMax() == getMin()) {

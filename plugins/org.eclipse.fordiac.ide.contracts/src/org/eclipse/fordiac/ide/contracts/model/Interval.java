@@ -30,4 +30,15 @@ public class Interval extends AbstractTime {
 		return minTime;
 	}
 
+	public boolean isValid() {
+		return minTime <= maxTime;
+	}
+
+	public Interval calculateOverlap(final Interval other) {
+		return null; // TODO
+	}
+
+	public Interval merge(final Interval other) {
+		return null;
+	}
 }

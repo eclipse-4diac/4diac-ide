@@ -19,7 +19,7 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
-public class ContractElement {
+public abstract class ContractElement {
 
 	private int min;
 	private int max;
@@ -42,6 +42,13 @@ public class ContractElement {
 		return max;
 	}
 
+	public AbstractTime getBounds() {
+		if (max == -1) {
+			return new Instant(min);
+		}
+		return new Interval(min, max);
+	}
+
 	public Contract getContract() {
 		return owner;
 	}
@@ -62,11 +69,11 @@ public class ContractElement {
 		return getContract().getOwner() instanceof SubApp;
 	}
 
-	List<AbstractTime> getTimestamp() {
-		return getTimestamp(ContractConstants.DEFAULT_NUMBER_TIMES);
+	List<AbstractTime> getOccurrences() {
+		return getOccurrences(ContractConstants.DEFAULT_NUMBER_TIMES);
 	}
 
-	List<AbstractTime> getTimestamp(final int number) {
+	List<AbstractTime> getOccurrences(final int number) {
 		final List<AbstractTime> timestamps = new ArrayList<>();
 		if (getMax() == -1) {
 			int time = getMin();
@@ -86,7 +93,7 @@ public class ContractElement {
 		return timestamps;
 	}
 
-	List<AbstractTime> getTimestamp(final Interval range) {
+	List<AbstractTime> getOccurrences(final Interval range) {
 		final List<AbstractTime> timestamps = new ArrayList<>();
 		if (getMax() == -1) {
 			int time = getMin();
@@ -110,22 +117,24 @@ public class ContractElement {
 		return timestamps;
 	}
 
-	@SuppressWarnings("static-method")
-	boolean isValid() {
-		return false;
-	}
+	abstract boolean isValid();
 
-	@SuppressWarnings("static-method")
-	public String createComment() {
-		return "This is a ContractElement"; //$NON-NLS-1$
-	}
+	abstract String asString();
 
-	static boolean isTimeConsistent(final EList<? extends ContractElement> contractElement) {
+	// TODO move methods
+	// method returns boolean, but secretly alters the contract. very bad.
+	static boolean isTimeConsistent(final EList<? extends ContractElement> contractElement) { // TODO all lists as
+																								 // plural
 		if (contractElement.get(0).getMax() == -1) {
 			return isSingleAssumption(contractElement, 0);
 		}
 		int maximum = contractElement.get(0).getMax();
 		int minimum = contractElement.get(0).getMin();
+		// TODO
+		// for (final ContractElement contractEl : contractElement.subList(1, contractElement.size())) {
+		//
+		// }
+
 		for (int i = 1; contractElement.size() > i; i++) {
 			if (contractElement.get(i).getMax() == -1) {
 				return isSingleAssumption(contractElement, i);
@@ -146,10 +155,10 @@ public class ContractElement {
 		return true;
 	}
 
-	// checks if there is only one assumtion of the type: x occures every y ms
-	// if true simplifys Assumtion and returns true
+	// checks if there is only one assumption of the type: x occurs every y ms
+	// if true simplifies Assumption and returns true
 	private static boolean isSingleAssumption(final EList<? extends ContractElement> contractElement, final int pos) {
-		for (int i = pos + 1; i < contractElement.size(); i++) {
+		for (int i = pos + 1; i < contractElement.size(); i++) { // TODO sublist
 			if (contractElement.get(i).getMax() == -1) {
 				return false;
 			}
@@ -181,6 +190,7 @@ public class ContractElement {
 		contract.add(toAdd, contract);
 	}
 
+	// why is a method editing a contract in the contractelement class? TODO
 	private static void simplifyAssumption(final int minimum, final int maximum, final Contract contract,
 			final Assumption toRemove) {
 		contract.getAssumptions().removeIf(a -> (a.getInputEvent().equals(toRemove.getInputEvent())));
@@ -190,6 +200,7 @@ public class ContractElement {
 		toAdd.setMax(maximum);
 		contract.add(toAdd, contract);
 	}
+	// TODO move to contract, e.g., as contract.mergeAssumptionsForEvent(String eventName);
 
 	void setRangeFromInterval(String[] parts, final int position) {
 		parts = parts[position].split(ContractKeywords.INTERVAL_DIVIDER);

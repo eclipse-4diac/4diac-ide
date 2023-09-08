@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -204,7 +205,7 @@ public class AssumptionWithOffset extends Assumption {
 	}
 
 	@Override
-	public String createComment() {
+	public String asString() {
 		final StringBuilder comment = new StringBuilder();
 		if (getMax() == -1 || getMax() == getMin()) {
 			comment.append(ContractUtils.createAssumptionString(getInputEvent(), String.valueOf(getMin())));
@@ -232,14 +233,71 @@ public class AssumptionWithOffset extends Assumption {
 	}
 
 	@Override
-	List<AbstractTime> getTimestamp(final int number) {
-		// TODO implement
-		return Collections.emptyList();
+	List<AbstractTime> getOccurrences(final int number) {
+		if (number < 1) {
+			return Collections.emptyList();
+		}
+		final List<AbstractTime> timestamps = new ArrayList<>();
+		timestamps.add(getFirstTime());
+		for (int i = 0; i < number - 1; i++) {
+			timestamps.add(getNextOccurrence((Interval) timestamps.get(i)));
+		}
+		return timestamps;
 	}
 
 	@Override
-	List<AbstractTime> getTimestamp(final Interval range) {
-		// TODO implement
-		return Collections.emptyList();
+	List<AbstractTime> getOccurrences(final Interval range) {
+		final List<AbstractTime> timestamps = new ArrayList<>();
+		final AbstractTime toAdd = getFirstTime();
+		if (toAdd instanceof Instant instant) {
+			while (instant.getTime() <= range.getMaxTime()) {
+				if (instant.getTime() >= range.getMinTime()) {
+					timestamps.add(instant);
+				}
+				instant = new Instant(instant.getTime() + getMin());
+			}
+		} else {
+			Interval interval = (Interval) toAdd;
+			while (interval.getMaxTime() <= range.getMaxTime()) {
+				if (interval.getMinTime() >= range.getMinTime()) {
+					timestamps.add(interval);
+				}
+				interval = getNextOccurrence(interval);
+			}
+		}
+		return timestamps;
 	}
+
+	private Interval getNextOccurrence(final Interval lastTimestamp) {
+		int min = lastTimestamp.getMinTime();
+		min += getMin();
+		int max = lastTimestamp.getMaxTime();
+		if (getMax() == -1) {
+			max += getMin();
+		} else {
+			max += getMax();
+		}
+		return new Interval(min, max);
+	}
+
+	private AbstractTime getFirstTime() {
+		if (getMax() == -1 && getMaxOffset() == -1) {
+			return new Instant(getMin() + getMinOffset());
+		}
+		final int min = getMin() + getMinOffset();
+		int max = 0;
+		if (getMax() == -1) {
+			max += getMin();
+		} else {
+			max += getMax();
+		}
+		if (getMaxOffset() == -1) {
+			max += getMinOffset();
+		} else {
+			max += getMaxOffset();
+		}
+		return new Interval(min, max);
+
+	}
+
 }

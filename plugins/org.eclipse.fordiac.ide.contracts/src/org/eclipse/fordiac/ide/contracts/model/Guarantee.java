@@ -205,12 +205,12 @@ public class Guarantee extends ContractElement {
 	}
 
 	@Override
-	public String createComment() {
+	public String asString() {
 		if (this instanceof final Reaction reaction) {
-			return reaction.createComment();
+			return reaction.asString();
 		}
 		if (this instanceof final GuaranteeTwoEvents twoEvents) {
-			return twoEvents.createComment();
+			return twoEvents.asString();
 		}
 		final StringBuilder comment = new StringBuilder();
 		if (getMin() == 0 || getMin() == getMax()) {

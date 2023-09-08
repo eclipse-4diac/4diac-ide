@@ -150,7 +150,7 @@ public class GuaranteeTwoEvents extends Guarantee {
 	}
 
 	@Override
-	public String createComment() {
+	public String asString() {
 		final StringBuilder comment = new StringBuilder();
 		if (getMin() == 0 || getMin() == getMax()) {
 			comment.append(ContractUtils.createGuaranteeTwoEvents(getInputEvent(), getOutputEvent(),

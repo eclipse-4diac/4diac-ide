@@ -13,7 +13,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.exceptions;
 
+import org.eclipse.fordiac.ide.contracts.model.Contract;
+
 public class ContractExeption extends RuntimeException {
+	public Contract contract;
+
 	private static final long serialVersionUID = -8342770793430663718L;
 
 	ContractExeption(final String errorMessage) {
