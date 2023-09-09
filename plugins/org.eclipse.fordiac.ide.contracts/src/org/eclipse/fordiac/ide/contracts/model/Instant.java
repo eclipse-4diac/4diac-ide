@@ -24,4 +24,7 @@ public class Instant extends AbstractTime {
 		return time;
 	}
 
+	public Instant add(final Instant other) {
+		return new Instant(this.getTime() + other.getTime());
+	}
 }
