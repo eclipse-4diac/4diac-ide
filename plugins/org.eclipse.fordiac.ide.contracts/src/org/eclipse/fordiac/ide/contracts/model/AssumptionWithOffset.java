@@ -38,7 +38,7 @@ public class AssumptionWithOffset extends Assumption {
 	private int maxOffset;
 
 	AssumptionWithOffset() {
-		throw new ExceptionInInitializerError("AssumptionWithOffset not Implemented"); //$NON-NLS-1$
+		throw new UnsupportedOperationException("AssumptionWithOffset not Implemented"); //$NON-NLS-1$
 		// remove when class is correctly evaluated in contracts
 	}
 

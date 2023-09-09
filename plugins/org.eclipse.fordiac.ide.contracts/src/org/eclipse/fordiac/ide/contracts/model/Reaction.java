@@ -28,7 +28,7 @@ public class Reaction extends Guarantee {
 	private static final int POSITION_NO = 4;
 
 	Reaction() {
-		throw new ExceptionInInitializerError("Reaction not Implemented"); //$NON-NLS-1$
+		throw new UnsupportedOperationException("Reaction not Implemented"); //$NON-NLS-1$
 		// remove when class is correctly evaluated in contract
 	}
 

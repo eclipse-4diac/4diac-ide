@@ -42,7 +42,7 @@ public class GuaranteeTwoEvents extends Guarantee {
 	private String secondOutputEvent;
 
 	GuaranteeTwoEvents() {
-		throw new ExceptionInInitializerError("GuaranteeTwoEvents not Implemented"); //$NON-NLS-1$
+		throw new UnsupportedOperationException("GuaranteeTwoEvents not Implemented"); //$NON-NLS-1$
 		// remove when class is correctly evaluated in contract
 	}
 
