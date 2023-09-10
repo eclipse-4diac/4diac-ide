@@ -104,6 +104,7 @@ public class Abstract4diacUITests {
 	protected static final String EO2 = "EO2"; //$NON-NLS-1$
 	protected static final String DTO = "DTO"; //$NON-NLS-1$
 	protected static final String IN1 = "IN1"; //$NON-NLS-1$
+	protected static final String REQ = "REQ"; //$NON-NLS-1$
 	protected static final String CLKO = "CLKO"; //$NON-NLS-1$
 	protected static final String INIT = "INIT"; //$NON-NLS-1$
 	protected static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
@@ -288,11 +289,11 @@ public class Abstract4diacUITests {
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
-
+	
 		final SWTBotTreeItem treeItem = tree.getTreeItem(PROJECT_NAME);
 		treeItem.select();
 		bot.menu(EDIT).menu(DELETE).click();
-
+	
 		// the project deletion confirmation dialog
 		final SWTBotShell shell = bot.shell(DELETE_RESOURCES);
 		shell.activate();

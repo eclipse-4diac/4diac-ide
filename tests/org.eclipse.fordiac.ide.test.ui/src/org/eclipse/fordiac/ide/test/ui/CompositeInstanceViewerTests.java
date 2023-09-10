@@ -21,10 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.PolylineConnection;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
+import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
@@ -145,6 +148,22 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	}
 
 	/**
+	 * Checks if it is possible to add another FB in CompositeInstanceViewer
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void compositeInstanceViewerAddAnotherFB() {
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 200));
+		goToCompositeInstanceViewer(E_CYCLE_FB);
+		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(100, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		assertNotNull(editor.getEditPart(E_DELAY_FB));
+		assertNull(editor.getEditPart(E_SWITCH_FB));
+		returnToEditingArea();
+	}
+
+	/**
 	 * Checks if it is possible to edit name of FB in CompositeInstanceViewer
 	 */
 	@Disabled("Disabled until implementation.")
@@ -176,18 +195,38 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	}
 
 	/**
-	 * Checks if it is possible to add another FB in CompositeInstanceViewer
+	 * Checks if it is possible to delete a connection in CompositeInstanceViewer
 	 */
 	@SuppressWarnings("static-method")
 	@Test
-	public void compositeInstanceViewerAddAnotherFB() {
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 200));
-		goToCompositeInstanceViewer(E_CYCLE_FB);
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(100, 100));
+	public void compositeInstanceViewerDeleteConnection() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		goToCompositeInstanceViewer(E_N_TABLE_FB);
+
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
-		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(E_DELAY_FB));
-		assertNull(editor.getEditPart(E_SWITCH_FB));
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		final ConnectionEditPart connection = findConnection(EO, REQ);
+		final PolylineConnection figure = (PolylineConnection) connection.getFigure();
+		final PointList points = figure.getPoints();
+		final org.eclipse.draw2d.geometry.Point firstPoint = points.getFirstPoint();
+		figure.translateToAbsolute(firstPoint);
+		viewer.click(firstPoint.x, firstPoint.y);
+		assertTrue(figure.containsPoint(points.getFirstPoint()));
+
+		// select breadcrumb tab of FB label
+		UIThreadRunnable.syncExec(() -> {
+			final IEditorPart editorPart = editor.getReference().getEditor(false);
+			if (editorPart instanceof final AbstractBreadCrumbEditor breadCrumbEditor) {
+				final String title = breadCrumbEditor.getBreadcrumb().getActiveItem().getText();
+				assertEquals(E_N_TABLE_FB, title);
+				assertTrue(breadCrumbEditor.getActiveEditor() instanceof CompositeInstanceViewer);
+			}
+		});
+
+		assertFalse(bot.menu(EDIT).menu(DELETE).isEnabled());
+		assertTrue(bot.menu(EDIT).menu(SELECT_ALL).isEnabled());
+		bot.menu(EDIT).menu(SELECT_ALL).click();
+		assertFalse(bot.menu(EDIT).menu(DELETE).isEnabled());
 		returnToEditingArea();
 	}
 
