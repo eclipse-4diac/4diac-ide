@@ -4467,7 +4467,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		baseFBTypeEClass.getESuperTypes().add(this.getFBType());
 		basicFBTypeEClass.getESuperTypes().add(this.getBaseFBType());
 		automationSystemEClass.getESuperTypes().add(this.getLibraryElement());
-		automationSystemEClass.getESuperTypes().add(this.getConfigurableObject());
 		cfbInstanceEClass.getESuperTypes().add(this.getFB());
 		commentEClass.getESuperTypes().add(this.getFBNetworkElement());
 		communicationChannelEClass.getESuperTypes().add(this.getFB());
@@ -4483,7 +4482,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		deviceEClass.getESuperTypes().add(this.getColorizableElement());
 		deviceEClass.getESuperTypes().add(this.getIVarElement());
 		deviceTypeEClass.getESuperTypes().add(this.getLibraryElement());
-		deviceTypeEClass.getESuperTypes().add(this.getConfigurableObject());
 		ecStateEClass.getESuperTypes().add(this.getINamedElement());
 		ecStateEClass.getESuperTypes().add(this.getPositionableElement());
 		ecTransitionEClass.getESuperTypes().add(this.getPositionableElement());
@@ -4502,12 +4500,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		fbNetworkElementEClass.getESuperTypes().add(this.getPositionableElement());
 		fbNetworkElementEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		fbTypeEClass.getESuperTypes().add(this.getLibraryElement());
-		fbTypeEClass.getESuperTypes().add(this.getConfigurableObject());
 		fbTypeEClass.getESuperTypes().add(this.getICallable());
 		functionEClass.getESuperTypes().add(this.getICallable());
 		functionFBTypeEClass.getESuperTypes().add(this.getFBType());
 		globalConstantsEClass.getESuperTypes().add(this.getLibraryElement());
-		globalConstantsEClass.getESuperTypes().add(this.getConfigurableObject());
 		groupEClass.getESuperTypes().add(this.getFBNetworkElement());
 		hiddenElementEClass.getESuperTypes().add(this.getConfigurableObject());
 		iCallableEClass.getESuperTypes().add(this.getINamedElement());
@@ -4517,6 +4513,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		inputPrimitiveEClass.getESuperTypes().add(this.getPrimitive());
 		iTypedElementEClass.getESuperTypes().add(this.getINamedElement());
 		libraryElementEClass.getESuperTypes().add(this.getINamedElement());
+		libraryElementEClass.getESuperTypes().add(this.getConfigurableObject());
 		linkEClass.getESuperTypes().add(this.getINamedElement());
 		linkEClass.getESuperTypes().add(this.getConfigurableObject());
 		localVariableEClass.getESuperTypes().add(this.getVarDeclaration());
@@ -4530,14 +4527,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		resourceEClass.getESuperTypes().add(this.getIVarElement());
 		resourceEClass.getESuperTypes().add(this.getMappingTarget());
 		resourceTypeEClass.getESuperTypes().add(this.getLibraryElement());
-		resourceTypeEClass.getESuperTypes().add(this.getConfigurableObject());
 		resourceTypeFBEClass.getESuperTypes().add(this.getFB());
 		segmentEClass.getESuperTypes().add(this.getTypedConfigureableObject());
 		segmentEClass.getESuperTypes().add(this.getPositionableElement());
 		segmentEClass.getESuperTypes().add(this.getColorizableElement());
 		segmentEClass.getESuperTypes().add(this.getIVarElement());
 		segmentTypeEClass.getESuperTypes().add(this.getLibraryElement());
-		segmentTypeEClass.getESuperTypes().add(this.getConfigurableObject());
 		serviceSequenceEClass.getESuperTypes().add(this.getINamedElement());
 		serviceSequenceEClass.getESuperTypes().add(this.getConfigurableObject());
 		serviceInterfaceEClass.getESuperTypes().add(this.getINamedElement());

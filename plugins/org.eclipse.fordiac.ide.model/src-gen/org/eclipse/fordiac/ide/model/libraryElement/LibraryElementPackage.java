@@ -923,13 +923,22 @@ public interface LibraryElementPackage extends EPackage {
 	int LIBRARY_ELEMENT__COMMENT = INAMED_ELEMENT__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIBRARY_ELEMENT__ATTRIBUTES = INAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LIBRARY_ELEMENT__VERSION_INFO = INAMED_ELEMENT_FEATURE_COUNT + 0;
+	int LIBRARY_ELEMENT__VERSION_INFO = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
@@ -938,7 +947,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIBRARY_ELEMENT__IDENTIFICATION = INAMED_ELEMENT_FEATURE_COUNT + 1;
+	int LIBRARY_ELEMENT__IDENTIFICATION = INAMED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
@@ -947,7 +956,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIBRARY_ELEMENT__COMPILER_INFO = INAMED_ELEMENT_FEATURE_COUNT + 2;
+	int LIBRARY_ELEMENT__COMPILER_INFO = INAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -956,7 +965,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIBRARY_ELEMENT__TYPE_ENTRY = INAMED_ELEMENT_FEATURE_COUNT + 3;
+	int LIBRARY_ELEMENT__TYPE_ENTRY = INAMED_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Library Element</em>' class.
@@ -965,7 +974,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIBRARY_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 4;
+	int LIBRARY_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl <em>FB Type</em>}' class.
@@ -994,6 +1003,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB_TYPE__COMMENT = LIBRARY_ELEMENT__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FB_TYPE__ATTRIBUTES = LIBRARY_ELEMENT__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -1032,22 +1050,13 @@ public interface LibraryElementPackage extends EPackage {
 	int FB_TYPE__TYPE_ENTRY = LIBRARY_ELEMENT__TYPE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FB_TYPE__ATTRIBUTES = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FB_TYPE__INTERFACE_LIST = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
+	int FB_TYPE__INTERFACE_LIST = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference.
@@ -1056,7 +1065,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FB_TYPE__SERVICE = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
+	int FB_TYPE__SERVICE = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>FB Type</em>' class.
@@ -1065,7 +1074,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FB_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
+	int FB_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBTypeImpl <em>Adapter FB Type</em>}' class.
@@ -1094,6 +1103,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTER_FB_TYPE__ATTRIBUTES = FB_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -1130,15 +1148,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_FB_TYPE__TYPE_ENTRY = FB_TYPE__TYPE_ENTRY;
-
-	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_FB_TYPE__ATTRIBUTES = FB_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
@@ -1194,6 +1203,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_TYPE__COMMENT = DataPackage.DATA_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTER_TYPE__ATTRIBUTES = DataPackage.DATA_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -1879,6 +1897,15 @@ public interface LibraryElementPackage extends EPackage {
 	int BASE_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FB_TYPE__ATTRIBUTES = FB_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1913,15 +1940,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int BASE_FB_TYPE__TYPE_ENTRY = FB_TYPE__TYPE_ENTRY;
-
-	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FB_TYPE__ATTRIBUTES = FB_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
@@ -2023,6 +2041,15 @@ public interface LibraryElementPackage extends EPackage {
 	int BASIC_FB_TYPE__COMMENT = BASE_FB_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__ATTRIBUTES = BASE_FB_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2057,15 +2084,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int BASIC_FB_TYPE__TYPE_ENTRY = BASE_FB_TYPE__TYPE_ENTRY;
-
-	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASIC_FB_TYPE__ATTRIBUTES = BASE_FB_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
@@ -2176,6 +2194,15 @@ public interface LibraryElementPackage extends EPackage {
 	int AUTOMATION_SYSTEM__COMMENT = LIBRARY_ELEMENT__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AUTOMATION_SYSTEM__ATTRIBUTES = LIBRARY_ELEMENT__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2212,22 +2239,13 @@ public interface LibraryElementPackage extends EPackage {
 	int AUTOMATION_SYSTEM__TYPE_ENTRY = LIBRARY_ELEMENT__TYPE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AUTOMATION_SYSTEM__ATTRIBUTES = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Application</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AUTOMATION_SYSTEM__APPLICATION = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
+	int AUTOMATION_SYSTEM__APPLICATION = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Mapping</b></em>' containment reference list.
@@ -2236,7 +2254,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AUTOMATION_SYSTEM__MAPPING = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
+	int AUTOMATION_SYSTEM__MAPPING = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>System Configuration</b></em>' containment reference.
@@ -2245,7 +2263,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
+	int AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Command Stack</b></em>' attribute.
@@ -2254,7 +2272,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AUTOMATION_SYSTEM__COMMAND_STACK = LIBRARY_ELEMENT_FEATURE_COUNT + 4;
+	int AUTOMATION_SYSTEM__COMMAND_STACK = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Automation System</em>' class.
@@ -2263,7 +2281,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AUTOMATION_SYSTEM_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 5;
+	int AUTOMATION_SYSTEM_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2806,6 +2824,15 @@ public interface LibraryElementPackage extends EPackage {
 	int COMPOSITE_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_FB_TYPE__ATTRIBUTES = FB_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2840,15 +2867,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPOSITE_FB_TYPE__TYPE_ENTRY = FB_TYPE__TYPE_ENTRY;
-
-	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMPOSITE_FB_TYPE__ATTRIBUTES = FB_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
@@ -3328,6 +3346,15 @@ public interface LibraryElementPackage extends EPackage {
 	int DEVICE_TYPE__COMMENT = LIBRARY_ELEMENT__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEVICE_TYPE__ATTRIBUTES = LIBRARY_ELEMENT__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3364,22 +3391,13 @@ public interface LibraryElementPackage extends EPackage {
 	int DEVICE_TYPE__TYPE_ENTRY = LIBRARY_ELEMENT__TYPE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEVICE_TYPE__ATTRIBUTES = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Var Declaration</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEVICE_TYPE__VAR_DECLARATION = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
+	int DEVICE_TYPE__VAR_DECLARATION = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Resource Type Name</b></em>' containment reference list.
@@ -3388,7 +3406,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEVICE_TYPE__RESOURCE_TYPE_NAME = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
+	int DEVICE_TYPE__RESOURCE_TYPE_NAME = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Resource</b></em>' containment reference list.
@@ -3397,7 +3415,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEVICE_TYPE__RESOURCE = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
+	int DEVICE_TYPE__RESOURCE = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>FB Network</b></em>' containment reference.
@@ -3406,7 +3424,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEVICE_TYPE__FB_NETWORK = LIBRARY_ELEMENT_FEATURE_COUNT + 4;
+	int DEVICE_TYPE__FB_NETWORK = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Profile</b></em>' attribute.
@@ -3415,7 +3433,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEVICE_TYPE__PROFILE = LIBRARY_ELEMENT_FEATURE_COUNT + 5;
+	int DEVICE_TYPE__PROFILE = LIBRARY_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Attribute Declarations</b></em>' containment reference list.
@@ -3424,7 +3442,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEVICE_TYPE__ATTRIBUTE_DECLARATIONS = LIBRARY_ELEMENT_FEATURE_COUNT + 6;
+	int DEVICE_TYPE__ATTRIBUTE_DECLARATIONS = LIBRARY_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Device Type</em>' class.
@@ -3433,7 +3451,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEVICE_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 7;
+	int DEVICE_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Algorithm</b></em>' reference.
@@ -3695,6 +3713,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ERROR_MARKER_DATA_TYPE__COMMENT = DataPackage.DATA_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ERROR_MARKER_DATA_TYPE__ATTRIBUTES = DataPackage.DATA_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -4270,6 +4297,15 @@ public interface LibraryElementPackage extends EPackage {
 	int FUNCTION_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUNCTION_FB_TYPE__ATTRIBUTES = FB_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4304,15 +4340,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int FUNCTION_FB_TYPE__TYPE_ENTRY = FB_TYPE__TYPE_ENTRY;
-
-	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUNCTION_FB_TYPE__ATTRIBUTES = FB_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
@@ -4379,6 +4406,15 @@ public interface LibraryElementPackage extends EPackage {
 	int GLOBAL_CONSTANTS__COMMENT = LIBRARY_ELEMENT__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GLOBAL_CONSTANTS__ATTRIBUTES = LIBRARY_ELEMENT__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4415,22 +4451,13 @@ public interface LibraryElementPackage extends EPackage {
 	int GLOBAL_CONSTANTS__TYPE_ENTRY = LIBRARY_ELEMENT__TYPE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GLOBAL_CONSTANTS__ATTRIBUTES = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Constants</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GLOBAL_CONSTANTS__CONSTANTS = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
+	int GLOBAL_CONSTANTS__CONSTANTS = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
@@ -4439,7 +4466,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GLOBAL_CONSTANTS__SOURCE = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
+	int GLOBAL_CONSTANTS__SOURCE = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Global Constants</em>' class.
@@ -4448,7 +4475,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GLOBAL_CONSTANTS_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
+	int GLOBAL_CONSTANTS_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.GroupImpl <em>Group</em>}' class.
@@ -5969,6 +5996,15 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE__COMMENT = LIBRARY_ELEMENT__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_TYPE__ATTRIBUTES = LIBRARY_ELEMENT__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6005,22 +6041,13 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE__TYPE_ENTRY = LIBRARY_ELEMENT__TYPE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESOURCE_TYPE__ATTRIBUTES = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Var Declaration</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_TYPE__VAR_DECLARATION = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
+	int RESOURCE_TYPE__VAR_DECLARATION = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>FB Network</b></em>' containment reference.
@@ -6029,7 +6056,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_TYPE__FB_NETWORK = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
+	int RESOURCE_TYPE__FB_NETWORK = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Supported FB Types</b></em>' reference.
@@ -6038,7 +6065,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_TYPE__SUPPORTED_FB_TYPES = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
+	int RESOURCE_TYPE__SUPPORTED_FB_TYPES = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Resource Type</em>' class.
@@ -6047,7 +6074,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 4;
+	int RESOURCE_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeFBImpl <em>Resource Type FB</em>}' class.
@@ -6287,6 +6314,15 @@ public interface LibraryElementPackage extends EPackage {
 	int SEGMENT_TYPE__COMMENT = LIBRARY_ELEMENT__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEGMENT_TYPE__ATTRIBUTES = LIBRARY_ELEMENT__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6323,22 +6359,13 @@ public interface LibraryElementPackage extends EPackage {
 	int SEGMENT_TYPE__TYPE_ENTRY = LIBRARY_ELEMENT__TYPE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SEGMENT_TYPE__ATTRIBUTES = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Var Declaration</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEGMENT_TYPE__VAR_DECLARATION = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
+	int SEGMENT_TYPE__VAR_DECLARATION = LIBRARY_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Segment Type</em>' class.
@@ -6347,7 +6374,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SEGMENT_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
+	int SEGMENT_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl <em>Service</em>}' class.
@@ -6580,6 +6607,15 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_INTERFACE_FB_TYPE__COMMENT = FB_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_INTERFACE_FB_TYPE__ATTRIBUTES = FB_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6614,15 +6650,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SERVICE_INTERFACE_FB_TYPE__TYPE_ENTRY = FB_TYPE__TYPE_ENTRY;
-
-	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_INTERFACE_FB_TYPE__ATTRIBUTES = FB_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
@@ -6680,6 +6707,15 @@ public interface LibraryElementPackage extends EPackage {
 	int SIMPLE_FB_TYPE__COMMENT = BASE_FB_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_FB_TYPE__ATTRIBUTES = BASE_FB_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6714,15 +6750,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SIMPLE_FB_TYPE__TYPE_ENTRY = BASE_FB_TYPE__TYPE_ENTRY;
-
-	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_FB_TYPE__ATTRIBUTES = BASE_FB_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.
@@ -7309,6 +7336,15 @@ public interface LibraryElementPackage extends EPackage {
 	int SUB_APP_TYPE__COMMENT = COMPOSITE_FB_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_APP_TYPE__ATTRIBUTES = COMPOSITE_FB_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7343,15 +7379,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SUB_APP_TYPE__TYPE_ENTRY = COMPOSITE_FB_TYPE__TYPE_ENTRY;
-
-	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUB_APP_TYPE__ATTRIBUTES = COMPOSITE_FB_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Interface List</b></em>' containment reference.

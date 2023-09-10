@@ -34,7 +34,9 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -53,6 +55,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getAttributes <em>Attributes</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getVersionInfo <em>Version Info</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getIdentification <em>Identification</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getCompilerInfo <em>Compiler Info</em>}</li>
@@ -101,6 +104,16 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 * @ordered
 	 */
 	protected String comment = COMMENT_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAttributes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Attribute> attributes;
 
 	/**
 	 * The cached value of the '{@link #getVersionInfo() <em>Version Info</em>}' containment reference list.
@@ -215,6 +228,19 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		comment = newComment;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.LIBRARY_ELEMENT__COMMENT, oldComment, comment));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<Attribute> getAttributes() {
+		if (attributes == null) {
+			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES);
+		}
+		return attributes;
 	}
 
 	/**
@@ -408,6 +434,46 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 * @generated
 	 */
 	@Override
+	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
+		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Attribute getAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getAttributeValue(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean deleteAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getQualifiedName() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
 	}
@@ -430,6 +496,8 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES:
+				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.LIBRARY_ELEMENT__VERSION_INFO:
 				return ((InternalEList<?>)getVersionInfo()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
@@ -453,6 +521,8 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 				return getName();
 			case LibraryElementPackage.LIBRARY_ELEMENT__COMMENT:
 				return getComment();
+			case LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES:
+				return getAttributes();
 			case LibraryElementPackage.LIBRARY_ELEMENT__VERSION_INFO:
 				return getVersionInfo();
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
@@ -482,6 +552,10 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 				return;
 			case LibraryElementPackage.LIBRARY_ELEMENT__COMMENT:
 				setComment((String)newValue);
+				return;
+			case LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES:
+				getAttributes().clear();
+				getAttributes().addAll((Collection<? extends Attribute>)newValue);
 				return;
 			case LibraryElementPackage.LIBRARY_ELEMENT__VERSION_INFO:
 				getVersionInfo().clear();
@@ -516,6 +590,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 			case LibraryElementPackage.LIBRARY_ELEMENT__COMMENT:
 				setComment(COMMENT_EDEFAULT);
 				return;
+			case LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES:
+				getAttributes().clear();
+				return;
 			case LibraryElementPackage.LIBRARY_ELEMENT__VERSION_INFO:
 				getVersionInfo().clear();
 				return;
@@ -546,6 +623,8 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case LibraryElementPackage.LIBRARY_ELEMENT__COMMENT:
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			case LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES:
+				return attributes != null && !attributes.isEmpty();
 			case LibraryElementPackage.LIBRARY_ELEMENT__VERSION_INFO:
 				return versionInfo != null && !versionInfo.isEmpty();
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
@@ -557,6 +636,38 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == ConfigurableObject.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES: return LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == ConfigurableObject.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**

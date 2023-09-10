@@ -35,7 +35,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface GlobalConstants extends LibraryElement, ConfigurableObject {
+public interface GlobalConstants extends LibraryElement {
 	/**
 	 * Returns the value of the '<em><b>Constants</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}.

@@ -16,7 +16,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -26,15 +25,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.data.DataType;
-
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -48,7 +40,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Service;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl#getAttributes <em>Attributes</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl#getInterfaceList <em>Interface List</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl#getService <em>Service</em>}</li>
  * </ul>
@@ -56,16 +47,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Service;
  * @generated
  */
 public class FBTypeImpl extends LibraryElementImpl implements FBType {
-	/**
-	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAttributes()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Attribute> attributes;
-
 	/**
 	 * The cached value of the '{@link #getInterfaceList() <em>Interface List</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -103,19 +84,6 @@ public class FBTypeImpl extends LibraryElementImpl implements FBType {
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.FB_TYPE;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<Attribute> getAttributes() {
-		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.FB_TYPE__ATTRIBUTES);
-		}
-		return attributes;
 	}
 
 	/**
@@ -277,50 +245,8 @@ public class FBTypeImpl extends LibraryElementImpl implements FBType {
 	 * @generated
 	 */
 	@Override
-	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
-		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Attribute getAttribute(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getAttributeValue(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean deleteAttribute(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.FB_TYPE__ATTRIBUTES:
-				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
 				return basicSetInterfaceList(null, msgs);
 			case LibraryElementPackage.FB_TYPE__SERVICE:
@@ -338,8 +264,6 @@ public class FBTypeImpl extends LibraryElementImpl implements FBType {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.FB_TYPE__ATTRIBUTES:
-				return getAttributes();
 			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
 				return getInterfaceList();
 			case LibraryElementPackage.FB_TYPE__SERVICE:
@@ -358,10 +282,6 @@ public class FBTypeImpl extends LibraryElementImpl implements FBType {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.FB_TYPE__ATTRIBUTES:
-				getAttributes().clear();
-				getAttributes().addAll((Collection<? extends Attribute>)newValue);
-				return;
 			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
 				setInterfaceList((InterfaceList)newValue);
 				return;
@@ -382,9 +302,6 @@ public class FBTypeImpl extends LibraryElementImpl implements FBType {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.FB_TYPE__ATTRIBUTES:
-				getAttributes().clear();
-				return;
 			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
 				setInterfaceList((InterfaceList)null);
 				return;
@@ -405,8 +322,6 @@ public class FBTypeImpl extends LibraryElementImpl implements FBType {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.FB_TYPE__ATTRIBUTES:
-				return attributes != null && !attributes.isEmpty();
 			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
 				return interfaceList != null;
 			case LibraryElementPackage.FB_TYPE__SERVICE:
@@ -414,48 +329,6 @@ public class FBTypeImpl extends LibraryElementImpl implements FBType {
 			default:
 				return super.eIsSet(featureID);
 		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == ConfigurableObject.class) {
-			switch (derivedFeatureID) {
-				case LibraryElementPackage.FB_TYPE__ATTRIBUTES: return LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
-				default: return -1;
-			}
-		}
-		if (baseClass == ICallable.class) {
-			switch (derivedFeatureID) {
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == ConfigurableObject.class) {
-			switch (baseFeatureID) {
-				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return LibraryElementPackage.FB_TYPE__ATTRIBUTES;
-				default: return -1;
-			}
-		}
-		if (baseClass == ICallable.class) {
-			switch (baseFeatureID) {
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 } //FBTypeImpl

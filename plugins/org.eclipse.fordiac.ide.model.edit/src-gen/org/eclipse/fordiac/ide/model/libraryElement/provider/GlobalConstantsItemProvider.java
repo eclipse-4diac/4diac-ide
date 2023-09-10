@@ -133,9 +133,6 @@ public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(GlobalConstants.class)) {
-			case LibraryElementPackage.GLOBAL_CONSTANTS__ATTRIBUTES:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
 			case LibraryElementPackage.GLOBAL_CONSTANTS__CONSTANTS:
 			case LibraryElementPackage.GLOBAL_CONSTANTS__SOURCE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));

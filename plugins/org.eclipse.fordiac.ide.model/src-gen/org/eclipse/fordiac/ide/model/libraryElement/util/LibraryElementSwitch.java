@@ -22,6 +22,109 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.Color;
+import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.ECC;
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Function;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Identification;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
+import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Link;
+import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
+import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
+import org.eclipse.fordiac.ide.model.libraryElement.Service;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
+import org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.libraryElement.*;
 
 /**
@@ -122,9 +225,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseAdapterFBType(adapterFBType);
 				if (result == null) result = caseFBType(adapterFBType);
 				if (result == null) result = caseLibraryElement(adapterFBType);
-				if (result == null) result = caseConfigurableObject(adapterFBType);
 				if (result == null) result = caseICallable(adapterFBType);
 				if (result == null) result = caseINamedElement(adapterFBType);
+				if (result == null) result = caseConfigurableObject(adapterFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -134,6 +237,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(adapterType);
 				if (result == null) result = caseLibraryElement(adapterType);
 				if (result == null) result = caseINamedElement(adapterType);
+				if (result == null) result = caseConfigurableObject(adapterType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -181,9 +285,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseBaseFBType(baseFBType);
 				if (result == null) result = caseFBType(baseFBType);
 				if (result == null) result = caseLibraryElement(baseFBType);
-				if (result == null) result = caseConfigurableObject(baseFBType);
 				if (result == null) result = caseICallable(baseFBType);
 				if (result == null) result = caseINamedElement(baseFBType);
+				if (result == null) result = caseConfigurableObject(baseFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -193,9 +297,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseBaseFBType(basicFBType);
 				if (result == null) result = caseFBType(basicFBType);
 				if (result == null) result = caseLibraryElement(basicFBType);
-				if (result == null) result = caseConfigurableObject(basicFBType);
 				if (result == null) result = caseICallable(basicFBType);
 				if (result == null) result = caseINamedElement(basicFBType);
+				if (result == null) result = caseConfigurableObject(basicFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -203,8 +307,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				AutomationSystem automationSystem = (AutomationSystem)theEObject;
 				T result = caseAutomationSystem(automationSystem);
 				if (result == null) result = caseLibraryElement(automationSystem);
-				if (result == null) result = caseConfigurableObject(automationSystem);
 				if (result == null) result = caseINamedElement(automationSystem);
+				if (result == null) result = caseConfigurableObject(automationSystem);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -294,9 +398,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseCompositeFBType(compositeFBType);
 				if (result == null) result = caseFBType(compositeFBType);
 				if (result == null) result = caseLibraryElement(compositeFBType);
-				if (result == null) result = caseConfigurableObject(compositeFBType);
 				if (result == null) result = caseICallable(compositeFBType);
 				if (result == null) result = caseINamedElement(compositeFBType);
+				if (result == null) result = caseConfigurableObject(compositeFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -364,8 +468,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				DeviceType deviceType = (DeviceType)theEObject;
 				T result = caseDeviceType(deviceType);
 				if (result == null) result = caseLibraryElement(deviceType);
-				if (result == null) result = caseConfigurableObject(deviceType);
 				if (result == null) result = caseINamedElement(deviceType);
+				if (result == null) result = caseConfigurableObject(deviceType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -403,6 +507,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseErrorMarkerRef(errorMarkerDataType);
 				if (result == null) result = caseLibraryElement(errorMarkerDataType);
 				if (result == null) result = caseINamedElement(errorMarkerDataType);
+				if (result == null) result = caseConfigurableObject(errorMarkerDataType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -495,9 +600,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				FBType fbType = (FBType)theEObject;
 				T result = caseFBType(fbType);
 				if (result == null) result = caseLibraryElement(fbType);
-				if (result == null) result = caseConfigurableObject(fbType);
 				if (result == null) result = caseICallable(fbType);
 				if (result == null) result = caseINamedElement(fbType);
+				if (result == null) result = caseConfigurableObject(fbType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -520,9 +625,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseFunctionFBType(functionFBType);
 				if (result == null) result = caseFBType(functionFBType);
 				if (result == null) result = caseLibraryElement(functionFBType);
-				if (result == null) result = caseConfigurableObject(functionFBType);
 				if (result == null) result = caseICallable(functionFBType);
 				if (result == null) result = caseINamedElement(functionFBType);
+				if (result == null) result = caseConfigurableObject(functionFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -530,8 +635,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				GlobalConstants globalConstants = (GlobalConstants)theEObject;
 				T result = caseGlobalConstants(globalConstants);
 				if (result == null) result = caseLibraryElement(globalConstants);
-				if (result == null) result = caseConfigurableObject(globalConstants);
 				if (result == null) result = caseINamedElement(globalConstants);
+				if (result == null) result = caseConfigurableObject(globalConstants);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -620,6 +725,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				LibraryElement libraryElement = (LibraryElement)theEObject;
 				T result = caseLibraryElement(libraryElement);
 				if (result == null) result = caseINamedElement(libraryElement);
+				if (result == null) result = caseConfigurableObject(libraryElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -753,8 +859,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				ResourceType resourceType = (ResourceType)theEObject;
 				T result = caseResourceType(resourceType);
 				if (result == null) result = caseLibraryElement(resourceType);
-				if (result == null) result = caseConfigurableObject(resourceType);
 				if (result == null) result = caseINamedElement(resourceType);
+				if (result == null) result = caseConfigurableObject(resourceType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -790,8 +896,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				SegmentType segmentType = (SegmentType)theEObject;
 				T result = caseSegmentType(segmentType);
 				if (result == null) result = caseLibraryElement(segmentType);
-				if (result == null) result = caseConfigurableObject(segmentType);
 				if (result == null) result = caseINamedElement(segmentType);
+				if (result == null) result = caseConfigurableObject(segmentType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -827,9 +933,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseServiceInterfaceFBType(serviceInterfaceFBType);
 				if (result == null) result = caseFBType(serviceInterfaceFBType);
 				if (result == null) result = caseLibraryElement(serviceInterfaceFBType);
-				if (result == null) result = caseConfigurableObject(serviceInterfaceFBType);
 				if (result == null) result = caseICallable(serviceInterfaceFBType);
 				if (result == null) result = caseINamedElement(serviceInterfaceFBType);
+				if (result == null) result = caseConfigurableObject(serviceInterfaceFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -839,9 +945,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseBaseFBType(simpleFBType);
 				if (result == null) result = caseFBType(simpleFBType);
 				if (result == null) result = caseLibraryElement(simpleFBType);
-				if (result == null) result = caseConfigurableObject(simpleFBType);
 				if (result == null) result = caseICallable(simpleFBType);
 				if (result == null) result = caseINamedElement(simpleFBType);
+				if (result == null) result = caseConfigurableObject(simpleFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -917,9 +1023,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseCompositeFBType(subAppType);
 				if (result == null) result = caseFBType(subAppType);
 				if (result == null) result = caseLibraryElement(subAppType);
-				if (result == null) result = caseConfigurableObject(subAppType);
 				if (result == null) result = caseICallable(subAppType);
 				if (result == null) result = caseINamedElement(subAppType);
+				if (result == null) result = caseConfigurableObject(subAppType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
