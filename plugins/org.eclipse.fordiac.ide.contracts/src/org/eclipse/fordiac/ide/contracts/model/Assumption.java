@@ -106,7 +106,7 @@ public class Assumption extends ContractElement {
 			}
 
 		}
-		return ContractElement.isTimeConsistent(assumptions);
+		return Contract.isTimeConsistent(assumptions);
 	}
 
 	@Override

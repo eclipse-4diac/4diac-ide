@@ -197,7 +197,7 @@ public class Guarantee extends ContractElement {
 			return Reaction.isCompatibleWith(mapGuarantees, mapReactions);
 		}
 		for (final Map.Entry<String, EList<Guarantee>> entry : mapGuarantees.entrySet()) {
-			if (entry.getValue().size() != 1 && !ContractElement.isTimeConsistent(entry.getValue())) {
+			if (entry.getValue().size() != 1 && !Contract.isTimeConsistent(entry.getValue())) {
 				return false;
 			}
 		}

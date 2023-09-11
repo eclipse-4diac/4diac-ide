@@ -264,4 +264,80 @@ public class Contract {
 		return true;
 	}
 
+	static boolean isTimeConsistent(final EList<? extends ContractElement> contractElements) {
+		if (contractElements.get(0).getMax() == -1) {
+			return isSingleAssumption(contractElements, 0);
+		}
+		int maximum = contractElements.get(0).getMax();
+		int minimum = contractElements.get(0).getMin();
+		// TODO
+		// for (final ContractElement contractEl : contractElement.subList(1, contractElement.size())) {
+		//
+		// }
+
+		for (int i = 1; contractElements.size() > i; i++) {
+			if (contractElements.get(i).getMax() == -1) {
+				return isSingleAssumption(contractElements, i);
+			}
+			if (minimum < contractElements.get(i).getMin()) {
+				minimum = contractElements.get(i).getMin();
+			}
+			if (maximum > contractElements.get(i).getMax()) {
+				maximum = contractElements.get(i).getMax();
+			}
+			if (maximum < minimum) {
+				return false;
+			}
+
+		}
+
+		simplifyContract(contractElements, minimum, maximum);
+		return true;
+	}
+
+	// checks if there is only one assumption of the type: x occurs every y ms
+	// if true simplifies Assumption and returns true
+	private static boolean isSingleAssumption(final EList<? extends ContractElement> contractElements, final int pos) {
+		for (final ContractElement contractEl : contractElements.subList(pos + 1, contractElements.size())) {
+			if (contractEl.getMax() == -1) {
+				return false;
+			}
+		}
+		simplifyAssumption(contractElements.get(pos).getMin(), -1, contractElements.get(pos).getContract(),
+				(Assumption) contractElements.get(pos));
+		return true;
+	}
+
+	private static void simplifyContract(final EList<? extends ContractElement> contractElements, final int minimum,
+			final int maximum) {
+		final Contract contract = contractElements.get(0).getContract();
+		if (contractElements.get(0) instanceof final Assumption toRemove) {
+			simplifyAssumption(minimum, maximum, contract, toRemove);
+		} else if (contractElements.get(0) instanceof final Guarantee toRemove) {
+			simplifyGuarantee(minimum, maximum, contract, toRemove);
+		}
+
+	}
+
+	private static void simplifyGuarantee(final int minimum, final int maximum, final Contract contract,
+			final Guarantee toRemove) {
+		contract.getGuarantees().removeIf(g -> (g.getInputEvent().equals(toRemove.getInputEvent())));
+		final Guarantee toAdd = new Guarantee();
+		toAdd.setInputEvent(toRemove.getInputEvent());
+		toAdd.setOutputEvent(toRemove.getOutputEvent());
+		toAdd.setMin(minimum);
+		toAdd.setMax(maximum);
+		contract.add(toAdd, contract);
+	}
+
+	private static void simplifyAssumption(final int minimum, final int maximum, final Contract contract,
+			final Assumption toRemove) {
+		contract.getAssumptions().removeIf(a -> (a.getInputEvent().equals(toRemove.getInputEvent())));
+		final Assumption toAdd = new Assumption();
+		toAdd.setInputEvent(toRemove.getInputEvent());
+		toAdd.setMin(minimum);
+		toAdd.setMax(maximum);
+		contract.add(toAdd, contract);
+	}
+
 }
