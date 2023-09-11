@@ -226,6 +226,11 @@ public class Contract {
 		}
 	}
 
+	/** Checks is all {@link Guarantee}, {@link Reaction} and {@link GuaranteeTwoEvents} are consistent. If they are
+	 * they are replaced with a single one. After this call returns true only one of each exists per Event in the
+	 * contract.
+	 *
+	 * @return true if Guarantees are consistent else false */
 	private boolean hasConsistentGuarantees() {
 		final Map<String, EList<Guarantee>> mapGuarantees = new HashMap<>();
 		for (final Guarantee guarantee : guarantees) {
@@ -245,6 +250,11 @@ public class Contract {
 		return true;
 	}
 
+	/** Checks is all {@link Assumption} and {@link AssumptionWithOffset} are consistent. If they are they are replaced
+	 * with a single one. After this call returns true only one {@link Assumption} or one {@link AssumptionWithOffset}
+	 * per Event exist in the contract.
+	 *
+	 * @return true if Assumptions are consistent else false */
 	private boolean hasConsistentAssumptions() {
 		final Map<String, EList<Assumption>> mapAssumptions = new HashMap<>();
 		for (final Assumption assumption : assumptions) {
@@ -264,6 +274,10 @@ public class Contract {
 		return true;
 	}
 
+	/** Checks for overlapping times in the given List an calls simplifyContract if there is overlapping
+	 *
+	 * @param contractElements a list of Element that extend ContractElemnt an share an InputEvent
+	 * @return true if the Elements have a TimeOverlap else false */
 	static boolean isTimeConsistent(final EList<? extends ContractElement> contractElements) {
 		if (contractElements.get(0).getMax() == -1) {
 			return isSingleAssumption(contractElements, 0);
@@ -308,6 +322,12 @@ public class Contract {
 		return true;
 	}
 
+	/** Replaces two or more ContractElements with a common InputEvent an a time overlap given by minimum and maximum
+	 * with an single new ContractElement in the contract.
+	 *
+	 * @param contractElements
+	 * @param minimum
+	 * @param maximum */
 	private static void simplifyContract(final EList<? extends ContractElement> contractElements, final int minimum,
 			final int maximum) {
 		final Contract contract = contractElements.get(0).getContract();
