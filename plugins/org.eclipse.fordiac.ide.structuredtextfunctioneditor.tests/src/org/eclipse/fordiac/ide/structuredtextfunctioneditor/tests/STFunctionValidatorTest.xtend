@@ -75,9 +75,9 @@ class STFunctionValidatorTest {
 			bol1 := TRUE;
 		ELSE
 			bol1 := FALSE;
+			// comment
 			bOl1 := FALSE;
 		END_IF;
-			bOl1 := 1;
 		END_FUNCTION'''.parse.assertWarning(STCorePackage.Literals.ST_FEATURE_EXPRESSION,
 			STFunctionValidator.WRONG_NAME_CASE)
 	}
