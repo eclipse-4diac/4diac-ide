@@ -47,8 +47,10 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -183,9 +185,12 @@ public class CommonElementExporter {
 		writer = createEventWriter();
 	}
 
-	/** Constructor for chaining several exporters together (e.g., for the FBNetworkExporter)
+	/**
+	 * Constructor for chaining several exporters together (e.g., for the
+	 * FBNetworkExporter)
 	 *
-	 * @param parent the calling exporter */
+	 * @param parent the calling exporter
+	 */
 	protected CommonElementExporter(final CommonElementExporter parent) {
 		writer = parent.writer;
 		tabCount = parent.tabCount;
@@ -278,10 +283,12 @@ public class CommonElementExporter {
 		addNameAndCommentAttribute(namedElement);
 	}
 
-	/** Adds the identification.
+	/**
+	 * Adds the identification.
 	 *
 	 * @param libraryelement the libraryelement
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	protected void addIdentification(final LibraryElement libraryelement) throws XMLStreamException {
 		if (null != libraryelement.getIdentification()) {
 			addStartElement(LibraryElementTags.IDENTIFICATION_ELEMENT);
@@ -308,10 +315,12 @@ public class CommonElementExporter {
 		}
 	}
 
-	/** Adds the version info.
+	/**
+	 * Adds the version info.
 	 *
 	 * @param libraryelement the libraryelement
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	protected void addVersionInfo(final LibraryElement libraryelement) throws XMLStreamException {
 		if (!libraryelement.getVersionInfo().isEmpty()) {
 			for (final VersionInfo info : libraryelement.getVersionInfo()) {
@@ -365,11 +374,13 @@ public class CommonElementExporter {
 		}
 	}
 
-	/** Writhe an XML attribute directly to the output stream
+	/**
+	 * Writhe an XML attribute directly to the output stream
 	 *
 	 * @param attributeName  the name of the attribute
 	 * @param attributeValue the value of the attribute
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	protected void writeAttributeRaw(final String attributeName, final String attributeValue)
 			throws XMLStreamException {
 		try (Writer osWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
@@ -383,11 +394,13 @@ public class CommonElementExporter {
 		}
 	}
 
-	/** Take the given string and escape all &, <, >, ", ', newlines, and tabs with the according XML escaped
-	 * characters.
+	/**
+	 * Take the given string and escape all &, <, >, ", ', newlines, and tabs with
+	 * the according XML escaped characters.
 	 *
 	 * @param value the string to escape
-	 * @return the escaped string */
+	 * @return the escaped string
+	 */
 	protected static String fullyEscapeValue(final String value) {
 		String escapedValue = value.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -411,9 +424,15 @@ public class CommonElementExporter {
 		writer.writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, (null != name) ? name : ""); //$NON-NLS-1$
 	}
 
+	protected void addParamsConfig(final InterfaceList interfaces) throws XMLStreamException {
+		for (final IInterfaceElement ie : interfaces.getAllInterfaceElements()) {
+			addParam(ie);
+		}
+	}
+
 	protected void addParamsConfig(final EList<VarDeclaration> inputVars) throws XMLStreamException {
 		for (final VarDeclaration inVar : inputVars) {
-			addParam(inVar.getName(), inVar.getValue());
+			addParam(inVar);
 		}
 	}
 
@@ -421,6 +440,47 @@ public class CommonElementExporter {
 		for (final ErrorMarkerInterface ep : errorPins) {
 			addParam(ep.getName(), ep.getValue());
 		}
+	}
+
+	private void addParam(final IInterfaceElement ie) throws XMLStreamException {
+		final boolean hasAttributes = hasNonTrivialAttributes(ie);
+		final boolean hasInitalValue = (ie instanceof final VarDeclaration varDecl) && (varDecl.getValue() != null
+				&& varDecl.getValue().getValue() != null && !varDecl.getValue().getValue().isBlank());
+
+		if (hasAttributes) {
+			addStartElement(LibraryElementTags.PARAMETER_ELEMENT);
+		} else if (hasInitalValue) {
+			addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
+		} else {
+			return;
+		}
+
+		addNameAttribute(ie.getName());
+		String value = ""; //$NON-NLS-1$
+		if (hasInitalValue) {
+			value = ((VarDeclaration) ie).getValue().getValue();
+		}
+		writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
+		addCommentAttribute(ie.getComment());
+
+		if (hasAttributes) {
+			for (final Attribute attribute : ie.getAttributes()) {
+				if (!(attribute.getName().equals(LibraryElementTags.VAR_CONFIG)
+						&& (ie instanceof final VarDeclaration varDecl) && !varDecl.isVarConfig())) {
+					addAttributeElement(attribute.getName(), attribute.getType().getName(), attribute.getValue(),
+							attribute.getComment());
+				}
+			}
+			addEndElement();
+		}
+	}
+
+	private static boolean hasNonTrivialAttributes(final IInterfaceElement ie) {
+		if (ie.getAttributes().isEmpty()) {
+			return false;
+		}
+		return ie.getAttributes().stream().anyMatch(att -> !att.getName().equals(LibraryElementTags.VAR_CONFIG)
+				|| (ie instanceof final VarDeclaration varDecl) && varDecl.isVarConfig());
 	}
 
 	private void addParam(final String pinName, final Value value) throws XMLStreamException {

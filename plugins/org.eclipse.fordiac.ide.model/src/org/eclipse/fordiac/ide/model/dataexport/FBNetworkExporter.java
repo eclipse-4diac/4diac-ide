@@ -21,12 +21,10 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -43,7 +41,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.SubAppTypeEntryImpl;
 
 class FBNetworkExporter extends CommonElementExporter {
@@ -146,12 +143,8 @@ class FBNetworkExporter extends CommonElementExporter {
 		addAttributes(fbnElement.getAttributes());
 		if (!isUntypedSubapp(fbnElement) && !(fbnElement instanceof Group)) {
 			// for untyped subapp initial values are stored in the vardeclarations
-			addParamsConfig(fbnElement.getInterface().getInputVars());
+			addParamsConfig(fbnElement.getInterface());
 			addErrorMarkerParamsConfig(fbnElement.getInterface().getErrorMarker());
-			addPinComments(fbnElement.getInterface().getAllInterfaceElements());
-			// Saving only hidden pins
-			addPinVisibilityAttribute(fbnElement);
-			addPinVarConfigurationAttribute(fbnElement);
 		}
 
 		if (fbnElement instanceof final SubApp subApp && isUntypedSubapp(fbnElement)) {
@@ -291,43 +284,4 @@ class FBNetworkExporter extends CommonElementExporter {
 		addAttributeElement(LibraryElementTags.GROUP_NAME, IecTypes.ElementaryTypes.STRING.getName(), group.getName(),
 				null);
 	}
-
-	private void addPinComments(final EList<IInterfaceElement> allInterfaceElements) throws XMLStreamException {
-		for (final IInterfaceElement ie : allInterfaceElements) {
-			if (!ie.getComment().isBlank()) {
-				addAttributeElement(LibraryElementTags.PIN_COMMENT, IecTypes.ElementaryTypes.STRING.getName(),
-						ie.getName() + ":" + ie.getComment(), null); //$NON-NLS-1$
-			}
-
-		}
-	}
-
-	private void addPinVisibilityAttribute(final FBNetworkElement fbnElement) throws XMLStreamException {
-		for (final IInterfaceElement ie : fbnElement.getInterface().getAllInterfaceElements()) {
-			// If the pin is hidden, add the attribute to the .sys file
-			if (!ie.isVisible()) {
-				final Attribute visibilityAttribute = ie.getAttribute(LibraryElementTags.ELEMENT_VISIBLE);
-				if (visibilityAttribute != null) {
-					addAttributeElement(visibilityAttribute.getName(), visibilityAttribute.getType().getName(),
-							ie.getName() + ":" + visibilityAttribute.getValue(), //$NON-NLS-1$
-							visibilityAttribute.getComment());
-				}
-			}
-		}
-	}
-
-	private void addPinVarConfigurationAttribute(final FBNetworkElement fbnElement) throws XMLStreamException {
-		for (final VarDeclaration inVar : fbnElement.getInterface().getInputVars()) {
-			if (inVar.isVarConfig()) {
-				final Attribute varconfigurationAttribute = inVar.getAttribute(LibraryElementTags.VAR_CONFIG);
-				if (varconfigurationAttribute != null) {
-					addAttributeElement(varconfigurationAttribute.getName(),
-							varconfigurationAttribute.getType().getName(),
-							inVar.getName() + ":" + varconfigurationAttribute.getValue(), //$NON-NLS-1$
-							varconfigurationAttribute.getComment());
-				}
-			}
-		}
-	}
-
 }
