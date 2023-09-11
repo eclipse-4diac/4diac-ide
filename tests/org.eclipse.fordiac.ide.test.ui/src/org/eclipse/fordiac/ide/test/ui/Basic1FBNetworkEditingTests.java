@@ -252,6 +252,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	/**
 	 * Checks if it is possible to edit the automatically generated name of the FB
 	 */
+	@Disabled
 	@Test
 	public void editFBName() {
 		// in progress
@@ -328,9 +329,57 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	/**
 	 * Checks if the connection is still there after moving the FB
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
+	@Test
 	public void connectionCanBeFoundAfterMovingFB() {
 		// in progress
+		final Point pos1 = new Point(100, 150);
+		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, pos1);
+		createConnection(INIT, CLKO);
+		createConnection(N, CV);
+
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		assertNotNull(viewer);
+		final SWTBotGefFigureCanvas canvas = viewer.getCanvas();
+		assertNotNull(canvas);
+		canvas.setFocus();
+
+		assertTrue(checkIfConnectionCanBeFound(CLKO, INIT));
+		assertTrue(checkIfConnectionCanBeFound(CV, N));
+
+		assertNotNull(editor);
+		assertNotNull(editor.getEditPart(E_TABLE_CTRL_FB));
+		editor.click(E_TABLE_CTRL_FB);
+		SWTBotGefEditPart parent = editor.getEditPart(E_TABLE_CTRL_FB).parent();
+		assertNotNull(parent);
+
+		IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
+		assertNotNull(figure);
+		Rectangle fbBounds = figure.getBounds().getCopy();
+		assertNotNull(fbBounds);
+		figure.translateToAbsolute(fbBounds);
+		assertEquals(pos1.x, fbBounds.x);
+		assertEquals(pos1.y, fbBounds.y);
+
+		final org.eclipse.draw2d.geometry.Point posToCheck1 = new org.eclipse.draw2d.geometry.Point(pos1);
+		assertEquals(posToCheck1.x, fbBounds.x);
+		assertEquals(posToCheck1.y, fbBounds.y);
+		parent.click();
+
+		final Point pos2 = new Point(85, 85);
+		editor.drag(parent, pos2.x, pos2.y);
+		final org.eclipse.draw2d.geometry.Point posToCheck2 = new org.eclipse.draw2d.geometry.Point(pos2);
+
+		parent = editor.getEditPart(E_TABLE_CTRL_FB).parent();
+		figure = ((GraphicalEditPart) parent.part()).getFigure();
+		fbBounds = figure.getBounds().getCopy();
+		figure.translateToAbsolute(fbBounds);
+		assertEquals(posToCheck2.x, fbBounds.x);
+		assertEquals(posToCheck2.y, fbBounds.y);
+
+		assertTrue(checkIfConnectionCanBeFound(CLKO, INIT));
+		assertTrue(checkIfConnectionCanBeFound(CV, N));
 	}
 
 	/**

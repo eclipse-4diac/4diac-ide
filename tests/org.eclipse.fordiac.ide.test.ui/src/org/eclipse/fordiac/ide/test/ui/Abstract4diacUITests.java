@@ -66,6 +66,7 @@ public class Abstract4diacUITests {
 	protected static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
 	protected static final String E_SWITCH_FB = "E_SWITCH";
 	protected static final String E_SWITCH_TREE_ITEM = "E_SWITCH [Switching (demultiplexing) an event based on boolean input G]";
+	protected static final String E_TABLE_CTRL_FB = "E_TABLE_CTRL"; //$NON-NLS-1$
 	protected static final String E_TABLE_CTRL_TREE_ITEM = "E_TABLE_CTRL [Support function block for E_TABLE]"; //$NON-NLS-1$
 	protected static final String FILE = "File"; //$NON-NLS-1$
 	protected static final String FINISH = "Finish"; //$NON-NLS-1$
@@ -289,11 +290,11 @@ public class Abstract4diacUITests {
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
-	
+
 		final SWTBotTreeItem treeItem = tree.getTreeItem(PROJECT_NAME);
 		treeItem.select();
 		bot.menu(EDIT).menu(DELETE).click();
-	
+
 		// the project deletion confirmation dialog
 		final SWTBotShell shell = bot.shell(DELETE_RESOURCES);
 		shell.activate();
