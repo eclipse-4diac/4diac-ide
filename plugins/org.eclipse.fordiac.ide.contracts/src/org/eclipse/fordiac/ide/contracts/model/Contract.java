@@ -20,6 +20,7 @@ import java.util.Optional;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.contracts.Messages;
+import org.eclipse.fordiac.ide.contracts.model.ContractConstants.ContractState;
 import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -29,20 +30,9 @@ public class Contract {
 
 	private final EList<Assumption> assumptions = new BasicEList<>();
 	private final EList<Guarantee> guarantees = new BasicEList<>();
-	private boolean isValid = true;
-	private boolean isChanged = false;
 	private FBNetworkElement owner;
-	private String error;
-	private Optional<String> errors;
-
-	// private void hasError() {
-	// errors.isPresent();
-	// if (errors.isPresent()) {
-	// final String error = errors.get();
-	// return error;
-	// }
-	// final String x = errors.orElse(null);
-	// }
+	private Optional<String> error;
+	private ContractState state = ContractState.UNKNOWN;
 
 	Contract() {
 		// reduce visibility to package
@@ -64,15 +54,15 @@ public class Contract {
 	}
 
 	public String getError() {
-		return errors.orElse(""); //$NON-NLS-1$
+		return error.orElse(""); //$NON-NLS-1$
 	}
 
-	void setError(final String error) { // TOOD addError
-		this.error = error;
+	void addError(final String error) {
+		this.error = Optional.ofNullable(error);
 	}
 
 	public void setOwner(final FBNetworkElement owner) {
-		isChanged = true;
+		state = ContractState.UNKNOWN;
 		this.owner = owner;
 	}
 
@@ -90,35 +80,34 @@ public class Contract {
 
 	void add(final Assumption assumption, final Contract owner) {
 		assumption.setContract(owner);
-		isChanged = true;
+		state = ContractState.UNKNOWN;
 		assumptions.add(assumption);
 
 	}
 
 	void add(final Guarantee guarantee, final Contract owner) {
 		guarantee.setContract(owner);
-		isChanged = true;
+		state = ContractState.UNKNOWN;
 		guarantees.add(guarantee);
 	}
 
 	void removeAssumption(final int index) {
-		isChanged = true;
+		state = ContractState.UNKNOWN;
 		final Assumption removedAssumption = assumptions.remove(index);
 		removedAssumption.setContract(null);
 	}
 
 	void removeGuarantee(final int index) {
-		isChanged = true;
+		state = ContractState.UNKNOWN;
 		final Guarantee removedGuarantee = guarantees.remove(index);
 		removedGuarantee.setContract(null);
 	}
 
 	public boolean isValid() {
-		if (isChanged) {
+		if (state == ContractState.UNKNOWN) {
 			checkValidity();
-			isChanged = false;
 		}
-		return isValid;
+		return state == ContractState.VALID;
 	}
 
 	public Guarantee getGuaranteeWith(final String inputEvent) {
@@ -153,46 +142,46 @@ public class Contract {
 
 	private void checkValidity() {
 		if (!ContractUtils.isContractSubapp(owner)) {
-			setError(Messages.Contract_ErrorName);
-			isValid = false;
+			addError(Messages.Contract_ErrorName);
+			state = ContractState.INVALID;
 			return;
 		}
 		if (assumptions.isEmpty() && guarantees.isEmpty()) {
-			setError(Messages.Contract_ErrorElements);
-			isValid = false;
+			addError(Messages.Contract_ErrorElements);
+			state = ContractState.INVALID;
 			return;
 		}
 
 		for (final Assumption assumption : assumptions) {
 			if (!assumption.isValid()) {
-				isValid = false;
-				setError(Messages.Contract_ErrorAssumption + assumption.asString());
+				addError(Messages.Contract_ErrorAssumption + assumption.asString());
+				state = ContractState.INVALID;
 				return;
 			}
 		}
 		for (final Guarantee guarantee : guarantees) {
 			if (!guarantee.isValid()) {
-				setError(Messages.Contract_ErrorGuarantee + guarantee.asString());
-				isValid = false;
+				addError(Messages.Contract_ErrorGuarantee + guarantee.asString());
+				state = ContractState.INVALID;
 				return;
 			}
 		}
 		if (!hasConsistentAssumptions()) {
-			setError(Messages.Contract_ErrorIncosistentAssumptions);
-			isValid = false;
+			addError(Messages.Contract_ErrorIncosistentAssumptions);
+			state = ContractState.INVALID;
 			return;
 		}
 		if (!hasConsistentGuarantees()) {
-			setError(Messages.Contract_ErrorIncosistentGuarantees);
-			isValid = false;
+			addError(Messages.Contract_ErrorIncosistentGuarantees);
+			state = ContractState.INVALID;
 			return;
 		}
 		if (!hasConsistentContract()) {
-			setError(Messages.Contract_ErrorAssumptionsGuarantees);
-			isValid = false;
+			addError(Messages.Contract_ErrorAssumptionsGuarantees);
+			state = ContractState.INVALID;
 			return;
 		}
-		isValid = true;
+		state = ContractState.VALID;
 	}
 
 	private boolean hasConsistentContract() {
