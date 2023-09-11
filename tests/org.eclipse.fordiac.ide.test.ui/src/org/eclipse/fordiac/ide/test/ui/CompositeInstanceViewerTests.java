@@ -230,4 +230,16 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 		returnToEditingArea();
 	}
 
+	/**
+	 * Checks if second breadcrumb tab appears after another double on a composite
+	 * FB
+	 */
+	@Disabled
+	@Test
+	public void isAnotherBreadcrumbTabAppearingAfterDoubleClickOnCompositeFB() {
+		// in progress
+		// for instance drag and drop E_N_TABLE and than double click on E_TABLE - is
+		// another breadcrumb tab appearing (right next to E_N_TABLE)
+	}
+
 }
