@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 import static extension org.eclipse.fordiac.ide.model.eval.EvaluatorFactory.*
+import org.eclipse.fordiac.ide.model.eval.EvaluatorCache
 
 final class VariableOperations {
 	private new() {
@@ -66,14 +67,30 @@ final class VariableOperations {
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl) {
-		if (decl.array || !decl.initialValue.nullOrEmpty) {
-			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
-			if (evaluator instanceof VariableEvaluator) {
-				evaluator.evaluateVariable
-			} else
-				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
-		} else
-			newVariable(decl.name, decl.type)
+		try(val cache = EvaluatorCache.open()) {
+			if (decl.hasDeclaredInitialValue) {
+				newVariable(decl.name, decl.evaluateResultType, cache.computeInitialValueIfAbsent(decl) [
+					val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
+					if (evaluator instanceof VariableEvaluator) {
+						evaluator.evaluate
+					} else
+						throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+				])
+			} else if (decl.hasInheritedInitialValue) {
+				// use variable from FB type since the initial value is inherited from the FB type
+				val typeVariable = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name) ?: decl
+				newVariable(decl.name, decl.evaluateResultType, cache.computeInitialValueIfAbsent(typeVariable) [
+					val evaluator = typeVariable.createEvaluator(VarDeclaration, null, emptySet, null)
+					if (evaluator instanceof VariableEvaluator) {
+						evaluator.evaluate
+					} else
+						throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+				])
+			} else if (decl.array)
+				newVariable(decl.name, decl.evaluateResultType)
+			else
+				newVariable(decl.name, decl.type)
+		}
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl, String initialValue) {
@@ -90,11 +107,15 @@ final class VariableOperations {
 
 	def static INamedElement evaluateResultType(VarDeclaration decl) {
 		if (decl.array) {
-			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
-			if (evaluator instanceof VariableEvaluator) {
-				evaluator.evaluateResultType
-			} else
-				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+			try(val cache = EvaluatorCache.open()) {
+				cache.computeResultTypeIfAbsent(decl) [
+					val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
+					if (evaluator instanceof VariableEvaluator) {
+						evaluator.evaluateResultType
+					} else
+						throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+				]
+			}
 		} else
 			decl.type
 	}
@@ -143,6 +164,18 @@ final class VariableOperations {
 			type = dataType
 			value = LibraryElementFactory.eINSTANCE.createValue => [value = initialValue]
 		]).newVariable.value
+	}
+
+	def static boolean hasInitialValue(VarDeclaration decl) {
+		decl.hasDeclaredInitialValue || decl.hasInheritedInitialValue
+	}
+
+	def static boolean hasDeclaredInitialValue(VarDeclaration decl) {
+		!decl.value?.value.nullOrEmpty
+	}
+
+	def static boolean hasInheritedInitialValue(VarDeclaration decl) {
+		!decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name)?.value?.value.nullOrEmpty
 	}
 
 	def static String getInitialValue(VarDeclaration decl) {

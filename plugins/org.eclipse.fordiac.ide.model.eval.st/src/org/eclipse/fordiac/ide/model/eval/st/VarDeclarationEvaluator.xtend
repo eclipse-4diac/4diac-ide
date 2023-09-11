@@ -25,8 +25,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration
 
+import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
+
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
-import static extension org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.eclipse.xtext.EcoreUtil2.*
@@ -69,14 +70,14 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator implements Variabl
 
 	def protected prepareInitialValue() {
 		evaluateResultType
-		if (parseResult === null && !varDeclaration.initialValue.nullOrEmpty) {
+		if (parseResult === null && !varDeclaration.value?.value.nullOrEmpty) {
 			val errors = newArrayList
 			val warnings = newArrayList
 			val infos = newArrayList
-			parseResult = varDeclaration.initialValue.parse(
-				varDeclaration?.eResource?.URI,
+			parseResult = varDeclaration.value.value.parse(
+				varDeclaration.eResource?.URI,
 				resultType,
-				varDeclaration?.getContainerOfType(LibraryElement),
+				varDeclaration.getContainerOfType(LibraryElement),
 				null,
 				errors,
 				warnings,
