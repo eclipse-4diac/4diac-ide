@@ -78,6 +78,8 @@ public final class LinkConstraints {
 			return false;
 		}
 
+		// from here on we can assume we have only data pins
+
 		if (isSwapNeeded(source, parent)) {
 			final IInterfaceElement temp = source;
 			source = target;
@@ -86,6 +88,13 @@ public final class LinkConstraints {
 
 		if (!sourceAndDestCheck(source, target, parent)) {
 			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
+			return false;
+		}
+
+		if (target instanceof final VarDeclaration targetData && targetData.isInOutVar()
+				&& source instanceof final VarDeclaration sourceData && !sourceData.isInOutVar()) {
+			// a non inout is connected to an inout
+			ErrorMessenger.popUpErrorMessage(Messages.ConnectionValidator_OutputsCannotBeConnectedToVarInOuts);
 			return false;
 		}
 

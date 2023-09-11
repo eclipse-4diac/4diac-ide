@@ -98,6 +98,22 @@ public class ConnectionAnnotations {
 		return true;
 	}
 
+	public static boolean validateVarInOutsAreNotConnectedToOuts(final Connection connection,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (connection.getDestination() instanceof final VarDeclaration destinationVar && destinationVar.isInOutVar()
+				&& connection.getSource() instanceof final VarDeclaration sourceVar && !sourceVar.isInOutVar()) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONNECTION__VALIDATE_VAR_IN_OUTS_ARE_NOT_CONNECTED_TO_OUTS,
+						Messages.ConnectionValidator_OutputsCannotBeConnectedToVarInOuts,
+						FordiacMarkerHelper.getDiagnosticData(connection)));
+			}
+			return false;
+
+		}
+		return true;
+	}
+
 	/**
 	 * Get the VarDeclaration of the first FB in a chain of VAR_IN_OUT connections
 	 *
@@ -120,5 +136,4 @@ public class ConnectionAnnotations {
 	private ConnectionAnnotations() {
 		throw new UnsupportedOperationException("Helper class must not be instantiated"); //$NON-NLS-1$
 	}
-
 }
