@@ -73,4 +73,15 @@ public class Interval extends AbstractTime {
 	public Interval add(final Instant other) {
 		return new Interval(this.getMinTime() + other.getTime(), this.getMaxTime() + other.getTime());
 	}
+
+	@Override
+	public Interval add(final AbstractTime other) {
+		if (other instanceof final Instant otherInstant) {
+			return this.add(otherInstant);
+		}
+		if (other instanceof final Interval otherInterval) {
+			return this.add(otherInterval);
+		}
+		return null;
+	}
 }

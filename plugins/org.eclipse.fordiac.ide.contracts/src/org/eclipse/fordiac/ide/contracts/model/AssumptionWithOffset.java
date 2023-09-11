@@ -240,7 +240,7 @@ public class AssumptionWithOffset extends Assumption {
 		final List<AbstractTime> timestamps = new ArrayList<>();
 		timestamps.add(getFirstTime());
 		for (int i = 0; i < number - 1; i++) {
-			timestamps.add(getNextOccurrence((Interval) timestamps.get(i)));
+			timestamps.add(timestamps.get(i).add(getBounds()));
 		}
 		return timestamps;
 	}
@@ -262,22 +262,10 @@ public class AssumptionWithOffset extends Assumption {
 				if (interval.getMinTime() >= range.getMinTime()) {
 					timestamps.add(interval);
 				}
-				interval = getNextOccurrence(interval);
+				interval = interval.add(getBounds());
 			}
 		}
 		return timestamps;
-	}
-
-	private Interval getNextOccurrence(final Interval lastTimestamp) {
-		int min = lastTimestamp.getMinTime();
-		min += getMin();
-		int max = lastTimestamp.getMaxTime();
-		if (getMax() == -1) {
-			max += getMin();
-		} else {
-			max += getMax();
-		}
-		return new Interval(min, max);
 	}
 
 	private AbstractTime getFirstTime() {

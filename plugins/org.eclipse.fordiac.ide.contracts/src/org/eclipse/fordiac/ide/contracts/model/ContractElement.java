@@ -75,20 +75,13 @@ public abstract class ContractElement {
 
 	List<AbstractTime> getOccurrences(final int number) {
 		final List<AbstractTime> timestamps = new ArrayList<>();
-		if (getMax() == -1) {
-			int time = getMin();
-			for (int i = 0; i < number; i++) {
-				timestamps.add(new Instant(time));
-				time += getMin();
-			}
-		} else {
-			int minTime = getMin();
-			int maxTime = getMax();
-			for (int i = 0; i < number; i++) {
-				timestamps.add(new Interval(minTime, maxTime));
-				minTime += getMin();
-				maxTime += getMax();
-			}
+		final AbstractTime timeOccurrenc = getBounds();
+		AbstractTime toAdd = timeOccurrenc;
+		int count = 0;
+		while (count < number) {
+			timestamps.add(toAdd);
+			toAdd = toAdd.add(timeOccurrenc);
+			count++;
 		}
 		return timestamps;
 	}

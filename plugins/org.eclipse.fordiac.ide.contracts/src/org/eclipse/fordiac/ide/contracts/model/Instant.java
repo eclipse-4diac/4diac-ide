@@ -31,4 +31,15 @@ public class Instant extends AbstractTime {
 	public Interval add(final Interval other) {
 		return other.add(this);
 	}
+
+	@Override
+	public AbstractTime add(final AbstractTime other) {
+		if (other instanceof final Instant otherInstant) {
+			return this.add(otherInstant);
+		}
+		if (other instanceof final Interval otherInterval) {
+			return this.add(otherInterval);
+		}
+		return null;
+	}
 }
