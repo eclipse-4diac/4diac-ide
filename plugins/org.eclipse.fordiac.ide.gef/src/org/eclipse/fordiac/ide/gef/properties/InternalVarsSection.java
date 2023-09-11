@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
@@ -42,6 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.ColumnCachingDataLayer;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
@@ -63,7 +65,8 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 		buttons.createControls(composite, getWidgetFactory());
 
 		provider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
-		final DataLayer dataLayer = new DataLayer(provider);
+		final DataLayer dataLayer = new ColumnCachingDataLayer<>(provider, VarDeclarationTableColumn.DEFAULT_COLUMNS,
+				VarDeclarationTableColumn.INITIAL_VALUE);
 		dataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(provider));
 
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new VarDeclarationColumnProvider(),

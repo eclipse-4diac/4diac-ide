@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
@@ -41,6 +42,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.ColumnCachingDataLayer;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
@@ -108,7 +110,8 @@ public class StructViewingComposite extends Composite
 	private void createNatTable(final Composite parent) {
 		structMemberProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
 		structMemberProvider.setInput(getType().getMemberVariables());
-		final DataLayer inputDataLayer = new DataLayer(structMemberProvider);
+		final DataLayer inputDataLayer = new ColumnCachingDataLayer<>(structMemberProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS, VarDeclarationTableColumn.INITIAL_VALUE);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(structMemberProvider));
 		initTypeSelection(getType().getTypeLibrary().getDataTypeLibrary());
 		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),

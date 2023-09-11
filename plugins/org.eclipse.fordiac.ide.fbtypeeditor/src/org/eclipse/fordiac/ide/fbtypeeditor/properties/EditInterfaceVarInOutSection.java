@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateVarInOutCommand;
@@ -44,6 +45,7 @@ import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.ColumnCachingDataLayer;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
@@ -94,7 +96,8 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 
 	public void setupInputTable(final Composite parent) {
 		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
-		final DataLayer inputDataLayer = new DataLayer(inputProvider);
+		final DataLayer inputDataLayer = new ColumnCachingDataLayer<>(inputProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS, VarDeclarationTableColumn.INITIAL_VALUE);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider));
 		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),
 				getSectionEditableRule(), new DataTypeSelectionButton(typeSelection), this, true);

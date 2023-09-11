@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
+import org.eclipse.fordiac.ide.ui.widget.ColumnCachingDataLayer;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
@@ -74,7 +75,9 @@ public class VarConfigurationSection extends AbstractSection {
 
 		inputDataProvider = new ChangeableListDataProvider<>(new VarConfigDeclarationColumnAccessor(this));
 
-		final DataLayer inputDataLayer = new DataLayer(inputDataProvider);
+		final DataLayer inputDataLayer = new ColumnCachingDataLayer<>(inputDataProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG,
+				VarDeclarationTableColumn.INITIAL_VALUE);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputDataProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
 

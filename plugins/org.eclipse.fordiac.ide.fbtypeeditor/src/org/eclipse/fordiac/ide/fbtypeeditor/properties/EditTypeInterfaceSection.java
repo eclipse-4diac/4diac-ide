@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
+import org.eclipse.fordiac.ide.ui.widget.ColumnCachingDataLayer;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.widgets.Group;
@@ -54,7 +55,8 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 	public void setupInputTable(final Group inputsGroup) {
 		inputProvider = new ChangeableListDataProvider<>(
 				new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
-		final DataLayer inputDataLayer = new DataLayer(inputProvider);
+		final DataLayer inputDataLayer = new ColumnCachingDataLayer<>(inputProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG, VarDeclarationTableColumn.INITIAL_VALUE);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
