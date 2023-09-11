@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -54,11 +55,8 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 
 	@Override
 	protected List<VarDeclaration> createInputDataList() {
-		final List<VarDeclaration> list = new ArrayList<>();
-		for (final VarDeclaration varDeclaration : sourceType.getInterfaceList().getInputVars()) {
-			list.add(createVarDeclaration(varDeclaration, varDeclaration.getName(), true));
-		}
-		return list;
+		return sourceType.getInterfaceList().getInputVars().stream()
+				.map(n -> createVarDeclaration(n, n.getName(), true)).toList();
 	}
 
 	@Override
@@ -82,13 +80,12 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 					.getEvent(testCase.getTestStates().get(i).getTestTrigger().getEvent()));
 			eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1).setConditionExpression(
 					createConditionExpression(testCase.getTestStates().get(i).getTestTrigger().getParameters()));
-//			createTransitionsBackList(eccGen, eccGen.getLastState(), testCase.getTestStates().get(i).getTestOutputs());
+
+			continueFrom = eccGen.getLastState();
 
 			// OutputPrimitives
 			if (!testCase.getTestStates().get(i).getTestOutputs().isEmpty()) {
 				if (testCase.getTestStates().get(i).getTestOutputs().size() == 1) {
-					createTransitionsBackPrimitiveList(eccGen, eccGen.getLastState(),
-							testCase.getTestStates().get(i).getTestOutputs());
 					eccGen.createState("S", cnt); //$NON-NLS-1$
 					eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
 					eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
@@ -107,8 +104,6 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 					final int prevCnt = cnt;
 					eccGen.createState("S", cnt + 2 * testCase.getTestStates().get(i).getTestOutputs().size()); //$NON-NLS-1$
 					eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "BS1")); //$NON-NLS-1$
-					// createTransitionsBack(eccGen,
-					// testCase.getTestStates().get(i).getTestOutputs().get(0).getEvent());
 					continueFrom = eccGen.getLastState();
 					createStates(eccGen, eccGen.getNTimesLast(1), eccGen.getLastState(),
 							testCase.getTestStates().get(i).getTestOutputs(), cnt);
@@ -119,7 +114,7 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 
 			}
 		}
-		createTransitionsBackForAllStates(eccGen, testCase);
+		createTransitionsBackForAllStates(eccGen);
 		eccGen.createState("S", cnt); //$NON-NLS-1$
 		eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
 
@@ -136,21 +131,20 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 		eccGen.createTransitionFromTo(eccGen.getLastState(), eccGen.getEcc().getStart(), null);
 	}
 
-	private void createTransitionsBackForAllStates(final TestEccGenerator eccGen, final TestCase testCase) {
+	private void createTransitionsBackForAllStates(final TestEccGenerator eccGen) {
 		for (final ECState state : eccGen.getEcc().getECState()) {
-			if ((!state.getName().contains("BS") && !state.getName().equals("START"))
+			if ((!state.getName().contains("BS") && !state.getName().equals("START")) //$NON-NLS-1$//$NON-NLS-2$
 					&& !(state.getOutTransitions().size() == 1
-							&& state.getOutTransitions().get(0).getConditionExpression().equals("1"))) {
+							&& state.getOutTransitions().get(0).getConditionExpression().equals("1"))) { //$NON-NLS-1$
 				createTransitionsBackTransitionList(eccGen, state, state.getOutTransitions());
 			}
 		}
-
 	}
 
 	private static String createConditionExpression(String text) {
 		if (text != null) {
 			text = text.replace(":", ""); //$NON-NLS-1$//$NON-NLS-2$
-			if ((text.split(";")).length > 1) {
+			if ((text.split(";")).length > 1) { //$NON-NLS-1$
 				text = text.replace(";", " AND"); //$NON-NLS-1$//$NON-NLS-2$
 				text = text.substring(0, text.length() - 4);
 			} else {
@@ -189,24 +183,6 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 		}
 	}
 
-	private void createTransitionsBackPrimitiveList(final TestEccGenerator eccGen, final ECState from,
-			final List<OutputPrimitive> outgoingTransitions) {
-		for (final Event backEv : destinationFB.getInterfaceList().getEventInputs()) {
-			boolean inList = false;
-			for (final OutputPrimitive outP : outgoingTransitions) {
-				if (backEv.getName().equals(outP.getEvent())
-						&& (outP.getParameters() == null || outP.getParameters().isEmpty())) {
-					inList = true;
-				}
-			}
-			if (!inList) {
-				eccGen.createTransitionFromTo(from, eccGen.getEcc().getStart(), backEv);
-				eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1)
-						.setConditionExpression(""); //$NON-NLS-1$
-			}
-		}
-	}
-
 	private void createStates(final TestEccGenerator eccGen, final ECState state, final ECState to,
 			final List<OutputPrimitive> listOutP, int cnt) {
 
@@ -225,21 +201,14 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 				eccGen.createTransitionFromTo(eccGen.getLastState(), to, null);
 				return;
 			}
-//			createTransitionsBackList(eccGen, eccGen.getLastState(), listOutP.subList(1, listOutP.size()));
 			createStates(eccGen, eccGen.getLastState(), to, outPList, cnt);
 			eccGen.increaseCaseCount();
 		}
 	}
 
 	private static int indexOutputPrim(final String ev, final List<OutputPrimitive> list) {
-		int i = 0;
-		for (final OutputPrimitive outputPrimitive : list) {
-			if (outputPrimitive.getEvent().equals(ev)) {
-				return i;
-			}
-			i++;
-		}
-		return i;
+		return IntStream.range(0, list.size()).filter(i -> list.get(i).getEvent().equals(ev)).findFirst()
+				.orElse(list.size());
 	}
 
 	@Override
