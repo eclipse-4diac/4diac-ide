@@ -35,11 +35,10 @@ import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
-import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueRefreshJob;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
@@ -75,6 +74,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	private Button openEditorButton;
 	private Section infoSection;
 	private ConnectionDisplayWidget connectionDisplayWidget;
+	private InitialValueRefreshJob refreshJob;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -118,6 +118,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		parameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.DefaultValue + ":"); //$NON-NLS-1$
 		parameterText = createGroupText(composite, false);
 		parameterText.setLayoutData(new GridData(SWT.FILL, 0, true, false, 2, 1));
+		refreshJob = new InitialValueRefreshJob(null, this::updateTypeInitialValue, false);
 
 		typeInfoSection.setClient(composite);
 	}
@@ -179,7 +180,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 			instanceCommentText.setText(CommentHelper.getInstanceComment(getType()));
 			instanceCommentText.setForeground(getForegroundColor());
 
-			parameterText.setText(getTypeInitialValue());
+			refreshTypeInitialValue();
 			currentParameterEditor.setInterfaceElement(getType());
 			currentParameterEditor.refresh();
 
@@ -225,16 +226,23 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		return sb.toString();
 	}
 
-	protected String getTypeInitialValue() {
-		if ((getType() instanceof final VarDeclaration varDeclaration)
-				&& (varDeclaration.isIsInput() && (varDeclaration.getFBNetworkElement() != null))) {
-			final FBType fbType = varDeclaration.getFBNetworkElement().getType();
-			if (null != fbType) {
-				return InitialValueHelper
-						.getDefaultValue(fbType.getInterfaceList().getInterfaceElement(varDeclaration.getName()));
-			}
+	protected void refreshTypeInitialValue() {
+		if (getType() instanceof final VarDeclaration varDeclaration && varDeclaration.isIsInput()
+				&& varDeclaration.getFBNetworkElement() != null
+				&& varDeclaration.getFBNetworkElement().getType() != null) {
+			parameterText.setText(FordiacMessages.ComputingPlaceholderValue);
+			refreshJob.setInterfaceElement(varDeclaration.getFBNetworkElement().getType().getInterfaceList()
+					.getInterfaceElement(varDeclaration.getName()));
+			refreshJob.refresh();
+		} else {
+			parameterText.setText("");//$NON-NLS-1$
 		}
-		return ""; //$NON-NLS-1$
+	}
+
+	private void updateTypeInitialValue(final String value) {
+		if (!parameterText.isDisposed() && FordiacMessages.ComputingPlaceholderValue.equals(parameterText.getText())) {
+			parameterText.setText(value);
+		}
 	}
 
 	private Color getForegroundColor() {
@@ -314,4 +322,9 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		// no implementation needed
 	}
 
+	@Override
+	public void dispose() {
+		super.dispose();
+		refreshJob.cancel();
+	}
 }
