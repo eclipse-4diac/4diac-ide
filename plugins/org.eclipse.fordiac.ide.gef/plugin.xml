@@ -113,13 +113,13 @@
         	commandId="org.eclipse.fordiac.ide.gef.zoom100"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+1">
+            sequence="M1+0">
       	</key>
 		<key
         	commandId="org.eclipse.fordiac.ide.gef.zoomfitpage"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+0">
+            sequence="M1+M2+0">
       	</key>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
