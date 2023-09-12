@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -350,6 +351,15 @@ public final class TypeLibrary {
 		}
 
 		return getAdapterTypeEntry(name);
+	}
+
+	public List<TypeEntry> findUnqualified(final String name) {
+		final String unqualifiedName = PackageNameHelper.extractPlainTypeName(name);
+		return Stream
+				.of(getSubAppTypes().values(), getFbTypes().values(), dataTypeLib.getDerivedDataTypes(),
+						getAdapterTypes().values())
+				.<TypeEntry>flatMap(Collection::stream).filter(entry -> unqualifiedName.equals(entry.getTypeName()))
+				.toList();
 	}
 
 	private boolean addBlockTypeEntry(final TypeEntry entry) {
