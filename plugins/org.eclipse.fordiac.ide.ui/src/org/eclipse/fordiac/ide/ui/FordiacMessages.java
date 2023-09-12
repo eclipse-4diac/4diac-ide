@@ -36,6 +36,7 @@ public final class FordiacMessages extends NLS {
 	public static String Classification;  // NOSONAR
 	public static String Comment;  // NOSONAR
 	public static String CompilerInfo;  // NOSONAR
+	public static String ComputingPlaceholderValue;  // NOSONAR
 	public static String Date;  // NOSONAR
 	public static String DataType;  // NOSONAR
 	public static String Description;  // NOSONAR

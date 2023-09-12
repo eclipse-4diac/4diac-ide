@@ -38,13 +38,19 @@ public abstract class AbstractCachingDataLayer extends DataLayer {
 	@Override
 	public Object getDataValue(final int columnIndex, final int rowIndex) {
 		if (cache != null && isCachedValue(columnIndex, rowIndex)) {
-			return cache.getCalculatedValue(columnIndex, rowIndex, true,
+			final Object value = cache.getCalculatedValue(columnIndex, rowIndex, true,
 					() -> super.getDataValue(columnIndex, rowIndex));
+			if (value == null) {
+				return getPlaceholderValue(columnIndex, rowIndex);
+			}
+			return value;
 		}
 		return super.getDataValue(columnIndex, rowIndex);
 	}
 
 	protected abstract boolean isCachedValue(final int columnIndex, final int rowIndex);
+
+	protected abstract Object getPlaceholderValue(final int columnIndex, final int rowIndex);
 
 	@Override
 	public void setDataValue(final int columnIndex, final int rowIndex, final Object newValue) {
