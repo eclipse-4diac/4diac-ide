@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
@@ -44,7 +45,6 @@ import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
-import org.eclipse.fordiac.ide.ui.widget.ColumnCachingDataLayer;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
@@ -73,8 +73,8 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 	@Override
 	public void setupOutputTable(final Group outputsGroup) {
 		outputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
-		final DataLayer outputDataLayer = new ColumnCachingDataLayer<>(outputProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS, VarDeclarationTableColumn.INITIAL_VALUE);
+		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputProvider));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new VarDeclarationColumnProvider(),
@@ -90,8 +90,8 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 	public void setupInputTable(final Group inputsGroup) {
 		inputProvider = new ChangeableListDataProvider<>(
 				new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
-		final DataLayer inputDataLayer = new ColumnCachingDataLayer<>(inputProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG, VarDeclarationTableColumn.INITIAL_VALUE);
+		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
