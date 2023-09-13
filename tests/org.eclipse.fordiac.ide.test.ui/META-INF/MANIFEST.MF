@@ -24,4 +24,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.ui.forms,
  org.eclipse.fordiac.ide.ui,
- org.eclipse.fordiac.ide.fbtypeeditor.network
+ org.eclipse.fordiac.ide.gef,
+ org.eclipse.fordiac.ide.fbtypeeditor.network,
+ org.eclipse.fordiac.ide.application

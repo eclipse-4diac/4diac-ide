@@ -20,11 +20,16 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Map;
+
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart;
+import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
@@ -34,10 +39,10 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
+import org.eclipse.swtbot.swt.finder.keyboard.Keystrokes;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
@@ -252,10 +257,42 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	/**
 	 * Checks if it is possible to edit the automatically generated name of the FB
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
 	@Test
 	public void editFBName() {
-		// in progress
+		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(100, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		final GraphicalViewer graphicalViewer = viewer.getGraphicalViewer();
+		final Map<?, ?> editPartRegistry = graphicalViewer.getEditPartRegistry();
+		final String newName = "Testee"; //$NON-NLS-1$
+		InstanceNameFigure iNFigure = null;
+		for (final Object obj : editPartRegistry.values()) {
+			if (obj instanceof final InstanceNameEditPart iNEP) {
+				final InstanceNameFigure figure = iNEP.getFigure();
+				assertNotNull(figure);
+				final String text = figure.getText();
+
+				if (E_SR_FB.equals(text)) {
+					iNFigure = figure;
+					final Rectangle bounds = figure.getBounds().getCopy();
+					assertNotNull(bounds);
+					figure.translateToAbsolute(bounds);
+					editor.setFocus();
+					editor.doubleClick(bounds.x, bounds.y);
+					bot.text(E_SR_FB).setText(newName);
+					bot.activeShell().pressShortcut(Keystrokes.CR);
+					assertEquals(newName, figure.getText());
+					break;
+                                }
+			}
+		}
+		assertNotNull(iNFigure);
+		assertNotNull(editor.getEditPart(newName));
+		assertDoesNotThrow(iNFigure::getText);
+		assertEquals(newName, iNFigure.getText());
 	}
 
 	/**

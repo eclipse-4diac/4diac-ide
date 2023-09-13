@@ -64,6 +64,8 @@ public class Abstract4diacUITests {
 	protected static final String E_D_FF_TREE_ITEM = "E_D_FF [Data latch (d) flip flop]"; //$NON-NLS-1$
 	protected static final String E_N_TABLE_FB = "E_N_TABLE"; //$NON-NLS-1$
 	protected static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
+	protected static final String E_SR_FB = "E_SR"; //$NON-NLS-1$
+	protected static final String E_SR_TREE_ITEM = E_SR_FB + " [Event-driven bistable]";
 	protected static final String E_SWITCH_FB = "E_SWITCH";
 	protected static final String E_SWITCH_TREE_ITEM = "E_SWITCH [Switching (demultiplexing) an event based on boolean input G]";
 	protected static final String E_TABLE_CTRL_FB = "E_TABLE_CTRL"; //$NON-NLS-1$
@@ -124,6 +126,7 @@ public class Abstract4diacUITests {
 		bot = new SWT4diacGefBot();
 		bot.viewByTitle("Welcome").close(); //$NON-NLS-1$
 		SWTBotPreferences.TIMEOUT = 10000;
+		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US"; //$NON-NLS-1$
 		createProject();
 	}
 
