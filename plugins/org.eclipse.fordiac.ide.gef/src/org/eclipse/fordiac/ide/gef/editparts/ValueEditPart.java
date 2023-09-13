@@ -248,7 +248,11 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	protected void updateDefaultValue(final String value) {
 		if (isActive() && getFigure() instanceof final ValueFigure valueFigure
 				&& FordiacMessages.ComputingPlaceholderValue.equals(valueFigure.getText())) {
-			valueFigure.updateValue(value);
+			if (value.length() <= DiagramPreferences.getMaxDefaultValueLength()) {
+				valueFigure.updateValue(value);
+			} else {
+				valueFigure.updateValue(FordiacMessages.ValueTooLarge);
+			}
 		}
 	}
 

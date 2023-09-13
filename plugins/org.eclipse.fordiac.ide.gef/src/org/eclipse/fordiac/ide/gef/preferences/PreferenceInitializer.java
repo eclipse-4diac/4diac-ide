@@ -20,9 +20,7 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-/**
- * Class used to initialize default preference values.
- */
+/** Class used to initialize default preference values. */
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
@@ -35,6 +33,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(DiagramPreferences.PIN_LABEL_STYLE, DiagramPreferences.PIN_LABEL_STYLE_PIN_NAME);
 
 		store.setDefault(DiagramPreferences.MAX_VALUE_LABEL_SIZE, 25); // big enough to fully show an ip address and
+		store.setDefault(DiagramPreferences.MAX_DEFAULT_VALUE_LENGTH, 1000);
 		// port
 		store.setDefault(DiagramPreferences.MAX_PIN_LABEL_SIZE, 12);
 		store.setDefault(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE, 60);

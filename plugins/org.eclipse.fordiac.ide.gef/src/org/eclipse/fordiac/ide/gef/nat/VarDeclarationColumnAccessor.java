@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -26,6 +27,7 @@ import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
@@ -59,7 +61,7 @@ public class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<Var
 		case NAME -> rowObject.getName();
 		case TYPE -> rowObject.getFullTypeName();
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
-		case INITIAL_VALUE -> InitialValueHelper.getInitialOrDefaultValue(rowObject);
+		case INITIAL_VALUE -> getInitialValue(rowObject);
 		case VAR_CONFIG -> Boolean.valueOf(rowObject.isVarConfig());
 		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
 		default -> throw new IllegalArgumentException("Unexpected value: " + columns.get(columnIndex)); //$NON-NLS-1$
@@ -80,6 +82,14 @@ public class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<Var
 		if (cmd.canExecute()) {
 			commandExecutor.executeCommand(cmd);
 		}
+	}
+
+	protected static String getInitialValue(final VarDeclaration rowObject) {
+		final String value = InitialValueHelper.getInitialOrDefaultValue(rowObject);
+		if (value.length() > DiagramPreferences.getMaxDefaultValueLength()) {
+			return FordiacMessages.ValueTooLarge;
+		}
+		return value;
 	}
 
 	@Override
