@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
@@ -33,6 +34,8 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
 
 public class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<VarDeclaration> {
+
+	private static final String NULL_DEFAULT = ""; //$NON-NLS-1$
 
 	private final CommandExecutor commandExecutor;
 	private final List<VarDeclarationTableColumn> columns;
@@ -71,12 +74,13 @@ public class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<Var
 	@Override
 	public void setDataValue(final VarDeclaration rowObject, final int columnIndex, final Object newValue) {
 		final Command cmd = switch (columns.get(columnIndex)) {
-		case NAME -> ChangeNameCommand.forName(rowObject, newValue.toString());
-		case TYPE -> ChangeDataTypeCommand.forTypeDeclaration(rowObject, newValue.toString());
-		case COMMENT -> new ChangeCommentCommand(rowObject, newValue.toString());
-		case INITIAL_VALUE -> new ChangeValueCommand(rowObject, newValue.toString());
-		case VAR_CONFIG -> new ChangeVarConfigurationCommand(rowObject, Boolean.parseBoolean(newValue.toString()));
-		case VISIBLE -> new HidePinCommand(rowObject, Boolean.parseBoolean(newValue.toString()));
+		case NAME -> ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+		case TYPE -> ChangeDataTypeCommand.forTypeDeclaration(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+		case COMMENT -> new ChangeCommentCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+		case INITIAL_VALUE -> new ChangeValueCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+		case VAR_CONFIG -> new ChangeVarConfigurationCommand(rowObject,
+				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
+		case VISIBLE -> new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		default -> throw new IllegalArgumentException("Unexpected value: " + columns.get(columnIndex)); //$NON-NLS-1$
 		};
 		if (cmd.canExecute()) {

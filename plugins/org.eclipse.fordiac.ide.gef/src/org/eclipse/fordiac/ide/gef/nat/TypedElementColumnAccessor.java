@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -26,6 +27,8 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
 
 public class TypedElementColumnAccessor<T extends ITypedElement> implements IColumnPropertyAccessor<T> {
+
+	private static final String NULL_DEFAULT = ""; //$NON-NLS-1$
 
 	private final CommandExecutor commandExecutor;
 	private final List<TypedElementTableColumn> columns;
@@ -72,9 +75,9 @@ public class TypedElementColumnAccessor<T extends ITypedElement> implements ICol
 
 	public Command createCommand(final T rowObject, final TypedElementTableColumn column, final Object newValue) {
 		return switch (column) {
-		case NAME -> ChangeNameCommand.forName(rowObject, newValue.toString());
+		case NAME -> ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case TYPE -> throw new UnsupportedOperationException("Cannot change type"); //$NON-NLS-1$
-		case COMMENT -> new ChangeCommentCommand(rowObject, newValue.toString());
+		case COMMENT -> new ChangeCommentCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
 	}
