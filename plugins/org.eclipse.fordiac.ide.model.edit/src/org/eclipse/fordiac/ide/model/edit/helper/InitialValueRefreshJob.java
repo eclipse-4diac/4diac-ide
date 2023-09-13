@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.edit.helper;
 
 import java.text.MessageFormat;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -30,6 +31,7 @@ public class InitialValueRefreshJob extends Job {
 	private final Consumer<String> consumer;
 	private final boolean initialOrDefaultValue;
 	private final boolean runConsumerInUIThread;
+	private final AtomicBoolean interruptible = new AtomicBoolean();
 
 	public InitialValueRefreshJob(final IInterfaceElement interfaceElement, final Consumer<String> consumer) {
 		this(interfaceElement, consumer, true);
@@ -56,10 +58,12 @@ public class InitialValueRefreshJob extends Job {
 		if (monitor.isCanceled()) {
 			return Status.CANCEL_STATUS;
 		}
+		interruptible.set(true);
 		final String value = initialOrDefaultValue // use initial and default or only default value?
 				? InitialValueHelper.getInitialOrDefaultValue(interfaceElement)
 				: InitialValueHelper.getDefaultValue(interfaceElement);
-		if (monitor.isCanceled()) {
+		interruptible.set(false);
+		if (monitor.isCanceled() || Thread.interrupted()) {
 			return Status.CANCEL_STATUS;
 		}
 		if (runConsumerInUIThread) {
@@ -68,6 +72,16 @@ public class InitialValueRefreshJob extends Job {
 			consumer.accept(value);
 		}
 		return Status.OK_STATUS;
+	}
+
+	@Override
+	protected void canceling() {
+		if (interruptible.get()) {
+			final Thread thread = getThread();
+			if (thread != null) {
+				thread.interrupt();
+			}
+		}
 	}
 
 	public void refresh() {
