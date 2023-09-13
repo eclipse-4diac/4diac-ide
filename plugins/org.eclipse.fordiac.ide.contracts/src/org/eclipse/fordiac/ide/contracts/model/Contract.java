@@ -345,8 +345,7 @@ public class Contract {
 		final Guarantee toAdd = new Guarantee();
 		toAdd.setInputEvent(toRemove.getInputEvent());
 		toAdd.setOutputEvent(toRemove.getOutputEvent());
-		toAdd.setMin(minimum);
-		toAdd.setMax(maximum);
+		toAdd.setTime(new Interval(minimum, maximum));
 		contract.add(toAdd, contract);
 	}
 
@@ -355,8 +354,7 @@ public class Contract {
 		contract.getAssumptions().removeIf(a -> (a.getInputEvent().equals(toRemove.getInputEvent())));
 		final Assumption toAdd = new Assumption();
 		toAdd.setInputEvent(toRemove.getInputEvent());
-		toAdd.setMin(minimum);
-		toAdd.setMax(maximum);
+		toAdd.setTime(new Interval(minimum, maximum));
 		contract.add(toAdd, contract);
 	}
 

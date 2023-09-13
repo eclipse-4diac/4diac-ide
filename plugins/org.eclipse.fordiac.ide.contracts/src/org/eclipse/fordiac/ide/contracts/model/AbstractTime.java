@@ -25,4 +25,23 @@ public abstract class AbstractTime {
 		}
 		return null;
 	}
+
+	public int getMin() {
+		if (this instanceof final Instant instant) {
+			instant.getTime();
+		} else if (this instanceof final Interval interval) {
+			interval.getMinTime();
+		}
+		return Integer.MIN_VALUE;
+	}
+
+	public int getMax() {
+		if (this instanceof final Instant instant) {
+			instant.getTime();
+		} else if (this instanceof final Interval interval) {
+			interval.getMaxTime();
+		}
+		return Integer.MIN_VALUE;
+	}
+
 }

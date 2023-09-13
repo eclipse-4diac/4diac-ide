@@ -69,9 +69,8 @@ public class GuaranteeTwoEvents extends Guarantee {
 			guarantee.setRangeFromInterval(parts, POSITION_NO);
 			return guarantee;
 		}
-		guarantee.setMax(Integer.parseInt(
-				parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length())));
-		guarantee.setMin(0);
+		guarantee.setTime(new Interval(0, Integer.parseInt(parts[POSITION_NO].substring(0,
+				parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length()))));
 		return guarantee;
 
 	}

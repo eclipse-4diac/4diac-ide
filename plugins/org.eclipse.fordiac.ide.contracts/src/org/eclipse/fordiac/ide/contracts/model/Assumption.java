@@ -48,9 +48,8 @@ public class Assumption extends ContractElement {
 			assumption.setRangeFromInterval(parts, POSITION_NO);
 			return assumption;
 		}
-		assumption.setMax(-1);
-		assumption.setMin(Integer.parseInt(
-				parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length())));
+		assumption.setTime(new Instant(Integer.parseInt(parts[POSITION_NO].substring(0,
+				parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length()))));
 		return assumption;
 	}
 

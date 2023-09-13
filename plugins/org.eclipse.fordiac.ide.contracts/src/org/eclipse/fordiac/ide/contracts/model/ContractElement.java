@@ -20,10 +20,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public abstract class ContractElement {
 
-	private int min;
-	private int max;
+	AbstractTime time;
 	private String inputEvent;
 	private Contract owner;
+
+	AbstractTime getTime() {
+		return time;
+	}
+
+	void setTime(final AbstractTime time) {
+		this.time = time;
+	}
 
 	public String getInputEvent() {
 		return inputEvent;
@@ -34,30 +41,22 @@ public abstract class ContractElement {
 	}
 
 	public int getMin() {
-		return min;
+		return time.getMin();
 	}
 
 	public int getMax() {
-		return max;
+		return time.getMax();
 	}
 
 	public AbstractTime getBounds() {
-		if (max == -1) {
-			return new Instant(min);
+		if (time.getMax() == -1) {
+			return new Instant(time.getMin());
 		}
-		return new Interval(min, max);
+		return new Interval(time.getMin(), time.getMax());
 	}
 
 	public Contract getContract() {
 		return owner;
-	}
-
-	void setMin(final int min) {
-		this.min = min;
-	}
-
-	void setMax(final int max) {
-		this.max = max;
 	}
 
 	void setContract(final Contract owner) {
@@ -115,8 +114,9 @@ public abstract class ContractElement {
 
 	void setRangeFromInterval(String[] parts, final int position) {
 		parts = parts[position].split(ContractKeywords.INTERVAL_DIVIDER);
-		setMin(Integer.parseInt(parts[0].substring(1)));
+		final int min = Integer.parseInt(parts[0].substring(1));
 		parts = parts[1].split(ContractKeywords.INTERVAL_CLOSE);
-		setMax(Integer.parseInt(parts[0]));
+		final int max = Integer.parseInt(parts[0]);
+		setTime(new Interval(min, max));
 	}
 }

@@ -46,9 +46,8 @@ public class Reaction extends Guarantee {
 			reaction.setRangeFromInterval(parts, POSITION_NO);
 			return reaction;
 		}
-		reaction.setMax(Integer.parseInt(
-				parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length())));
-		reaction.setMin(0);
+		reaction.setTime(new Interval(0, Integer.parseInt(parts[POSITION_NO].substring(0,
+				parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length()))));
 		return reaction;
 
 	}
