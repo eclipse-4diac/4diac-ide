@@ -18,21 +18,21 @@ import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.event.ILayerEvent;
 import org.eclipse.nebula.widgets.nattable.layer.event.IVisualChangeEvent;
-import org.eclipse.nebula.widgets.nattable.util.CalculatedValueCache;
+import org.eclipse.nebula.widgets.nattable.util.ICalculatedValueCache;
 
 public abstract class AbstractCachingDataLayer extends DataLayer {
 
-	private final CalculatedValueCache cache;
+	private final ICalculatedValueCache cache;
 
 	protected AbstractCachingDataLayer(final IDataProvider dataProvider) {
 		super(dataProvider);
-		cache = new CalculatedValueCache(this, true, true);
+		cache = new SafeCalculatedValueCache(this, true, true);
 	}
 
 	protected AbstractCachingDataLayer(final IDataProvider dataProvider, final int defaultColumnWidth,
 			final int defaultRowHeight) {
 		super(dataProvider, defaultColumnWidth, defaultRowHeight);
-		cache = new CalculatedValueCache(this, true, true);
+		cache = new SafeCalculatedValueCache(this, true, true);
 	}
 
 	@Override
