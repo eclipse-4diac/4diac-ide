@@ -886,8 +886,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				|| statement instanceof STRepeatStatement;
 	}
 
-	/* Here we already know that we have a MultibitPartialExpression. This function checks bound on static access
-	 * (without "()") */
+	/*
+	 * Here we already know that we have a MultibitPartialExpression. This function
+	 * checks bound on static access (without "()")
+	 */
 	private void checkMultibitPartialExpression(final STMultibitPartialExpression expression,
 			final DataType accessorType, final DataType receiverType) {
 		if (receiverType instanceof AnyBitType) {
@@ -980,7 +982,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	protected static IsAssignableResult isAssignable(final STExpression expression) {
-		if (expression instanceof final STMultibitPartialExpression) {
+		if (expression instanceof STMultibitPartialExpression) {
 			return IsAssignableResult.ASSIGNABLE;
 		}
 		if (expression instanceof final STFeatureExpression featureExpression) {

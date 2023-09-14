@@ -180,7 +180,7 @@ public class FBUpdateDialog extends MessageDialog {
 				if (element instanceof final StructManipulator manipulator) {
 					return manipulator.getTypeName();
 				}
-				if (element instanceof final SubAppType) {
+				if (element instanceof SubAppType) {
 					return "SubAppType";
 				}
 				return element.getClass().getSimpleName();

@@ -59,7 +59,7 @@ public class ContractElement {
 	}
 
 	boolean hasValidOwner() {
-		return getContract().getOwner() instanceof final SubApp;
+		return getContract().getOwner() instanceof SubApp;
 	}
 
 	List<AbstractTime> getTimestamp() {

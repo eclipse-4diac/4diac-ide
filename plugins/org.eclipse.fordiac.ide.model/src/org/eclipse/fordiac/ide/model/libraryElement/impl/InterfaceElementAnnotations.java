@@ -79,7 +79,7 @@ public final class InterfaceElementAnnotations {
 			}
 			return false;
 		}
-		if (!FordiacKeywords.DT.equals(element.getName())  // allow "DT" for IEC 61499 standard blocks
+		if (!FordiacKeywords.DT.equals(element.getName()) // allow "DT" for IEC 61499 standard blocks
 				&& existsDataType(getDataTypeLibrary(element), element.getName())) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
@@ -113,7 +113,7 @@ public final class InterfaceElementAnnotations {
 	}
 
 	static boolean isErrorMarker(final IInterfaceElement element) {
-		return element instanceof final ErrorMarkerInterface;
+		return element instanceof ErrorMarkerInterface;
 	}
 
 	static boolean isVarInOutOppositeSiblings(final IInterfaceElement element, final IInterfaceElement sibling) {

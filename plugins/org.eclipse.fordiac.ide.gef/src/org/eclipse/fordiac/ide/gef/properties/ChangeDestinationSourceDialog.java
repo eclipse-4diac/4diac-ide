@@ -162,7 +162,7 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 			}
 
 			if (!possibleInterfaceLists.isEmpty()) {
-				if (connection instanceof final DataConnection) {
+				if (connection instanceof DataConnection) {
 					return getVarDeclarationsFromInterfaceLists(possibleInterfaceLists, ie.isIsInput());
 				}
 				if (connection instanceof EventConnection) {
@@ -188,7 +188,8 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 		return possibleInterfaceLists;
 	}
 
-	// Returns the input or output swapped if needed for interfaceElements of Subapps
+	// Returns the input or output swapped if needed for interfaceElements of
+	// Subapps
 	private boolean inputSwap(final boolean input, final InterfaceList ieList) {
 		if (ie.getFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped()) {
 			if (subapp.getSubAppNetwork().getNetworkElements().contains(ieList.getFBNetworkElement())) {
