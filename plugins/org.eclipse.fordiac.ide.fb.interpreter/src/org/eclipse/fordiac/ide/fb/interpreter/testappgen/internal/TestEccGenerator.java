@@ -114,14 +114,14 @@ public class TestEccGenerator {
 		return alg;
 	}
 
-	public static Algorithm createMuxFbAlgorithm(final BasicFBType fb, final int indexInput) {
+	public static Algorithm createMuxFbAlgorithm(final BasicFBType fb, final String name) {
 		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		final StringBuilder text = new StringBuilder();
-		alg.setName("A" + indexInput); //$NON-NLS-1$
-		text.append("ALGORITHM A" + indexInput + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		alg.setName("A_" + name); //$NON-NLS-1$
+		text.append("ALGORITHM A_" + name + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		text.append(fb.getInterfaceList().getOutputVars().get(0).getName());
 		text.append(":="); //$NON-NLS-1$
-		text.append(fb.getInterfaceList().getInputVars().get(indexInput).getName());
+		text.append("'" + name + "'"); //$NON-NLS-1$ //$NON-NLS-2$
 		text.append(";"); //$NON-NLS-1$
 		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
 		text.append("\n\n\n"); //$NON-NLS-1$

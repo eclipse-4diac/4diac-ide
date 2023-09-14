@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.fb.interpreter.Messages;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.TestFbGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.CompositeFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.RunAllFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.MatchFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.MuxFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestSuite;
@@ -60,11 +61,15 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 		final FBType muxType = new MuxFBGenerator(type, testSuite).generateMuxFB();
 		muxType.getTypeEntry().save();
 
+		final FBType demuxType = new RunAllFBGenerator(type, testSuite).generateDemuxFB();
+		demuxType.getTypeEntry().save();
+
 		final List<FBType> list = new ArrayList<>();
 		list.add(testtype);
 		list.add(type);
 		list.add(matchtype);
 		list.add(muxType);
+		list.add(demuxType);
 
 		final CompositeFBType compositeType = new CompositeFBGenerator(type, testSuite, list).generateCompositeFB();
 		compositeType.getTypeEntry().save();
