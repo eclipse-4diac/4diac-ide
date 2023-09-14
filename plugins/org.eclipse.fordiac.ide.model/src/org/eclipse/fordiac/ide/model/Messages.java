@@ -187,6 +187,10 @@ public final class Messages extends NLS {
 	/** Identifier pattern does not match for unknown reasons */
 	public static String IdentifierVerifier_ERROR_UnkownExpressionError;
 
+	public static String IdentifierVerifier_PackageNameNotAValidIdentifier;
+
+	public static String IdentifierVerifier_PackageNameReservedKeyword;
+
 	/** The Import utils_ erro r_ arraysize_ number format. */
 	public static String Import_ERROR_ArraySize_NumberFormat;
 

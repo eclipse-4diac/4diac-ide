@@ -171,26 +171,63 @@ public final class BuildpathUtil {
 		return buildpath.getSourceFolders().stream().filter(candidate -> matches(candidate, resource)).findFirst();
 	}
 
+	/** Find a path relative to a source folder
+	 *
+	 * @param buildpath The build path configuration
+	 * @param resource  The resource, may be {@code null}
+	 * @return A path relative to a source folder */
+	public static Optional<IPath> findRelativePath(final Buildpath buildpath, final IResource resource) {
+		Objects.requireNonNull(buildpath);
+		if (resource == null) {
+			return Optional.empty();
+		}
+		return buildpath.getSourceFolders().stream()
+				.map(candidate -> getRelativePath(candidate, resource).filter(path -> matches(candidate, path)))
+				.flatMap(Optional::stream).findFirst();
+	}
+
 	/** Test if a resource matches the set of resources for the source folder
 	 *
 	 * @param sourceFolder The source folder
 	 * @param resource     The resource, may be {@code null}
 	 * @return {@code true} if the resource matches, {@code false} otherwise */
 	public static boolean matches(final SourceFolder sourceFolder, final IResource resource) {
+		return getRelativePath(sourceFolder, resource).filter(path -> matches(sourceFolder, path)).isPresent();
+	}
+
+	/** Test if a relative path matches the set of resources for the source folder
+	 *
+	 * @param sourceFolder The source folder
+	 * @param relativePath The relative path, may be {@code null}
+	 * @return {@code true} if the resource matches, {@code false} otherwise */
+	public static boolean matches(final SourceFolder sourceFolder, final IPath relativePath) {
 		Objects.requireNonNull(sourceFolder);
-		if (resource == null) {
+		if (relativePath == null) {
 			return false;
 		}
-		final IContainer container = findContainer(sourceFolder, resource.getProject());
-		if (container == null || !container.getFullPath().isPrefixOf(resource.getFullPath())) {
-			return false;
-		}
+		final Path path = Paths.get(relativePath.toString());
 		final List<PathMatcher> includes = getPathMatchers(sourceFolder.getIncludes());
 		final List<PathMatcher> excludes = getPathMatchers(sourceFolder.getExcludes());
-		final Path path = Paths.get(resource.getFullPath().makeRelativeTo(container.getFullPath()).toString());
 		return (includes.isEmpty() // empty includes means all files included by default
 				|| includes.stream().anyMatch(matcher -> matcher.matches(path)))
 				&& excludes.stream().noneMatch(matcher -> matcher.matches(path));
+	}
+
+	/** Get the path relative to the source folder
+	 *
+	 * @param sourceFolder The source folder
+	 * @param resource     The resource, may be {@code null}
+	 * @return A path relative to the source folder */
+	public static Optional<IPath> getRelativePath(final SourceFolder sourceFolder, final IResource resource) {
+		Objects.requireNonNull(sourceFolder);
+		if (resource == null) {
+			return Optional.empty();
+		}
+		final IContainer container = findContainer(sourceFolder, resource.getProject());
+		if (container == null || !container.getFullPath().isPrefixOf(resource.getFullPath())) {
+			return Optional.empty();
+		}
+		return Optional.of(resource.getFullPath().makeRelativeTo(container.getFullPath()));
 	}
 
 	private static IContainer findContainer(final SourceFolder sourceFolder, final IProject project) {

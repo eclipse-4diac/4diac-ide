@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -49,10 +50,16 @@ public class TypeFromTemplateCreator {
 
 	private final IFile targetTypeFile;
 	private final File typeTemplate;
+	private final String packageName;
 
 	public TypeFromTemplateCreator(final IFile targetTypeFile, final File typeTemplate) {
+		this(targetTypeFile, typeTemplate, null);
+	}
+
+	public TypeFromTemplateCreator(final IFile targetTypeFile, final File typeTemplate, final String packageName) {
 		this.targetTypeFile = targetTypeFile;
 		this.typeTemplate = typeTemplate;
+		this.packageName = packageName;
 	}
 
 	public TypeEntry createTypeFromTemplate() {
@@ -64,6 +71,7 @@ public class TypeFromTemplateCreator {
 			importer.loadElement();
 			final LibraryElement type = importer.getElement();
 			type.setName(TypeEntry.getTypeNameFromFile(targetTypeFile));
+			PackageNameHelper.setPackageName(type, packageName);
 			setupIdentifcationAndVersionInfo(type);
 			performTypeSpecificSetup(type);
 			entry.setLastModificationTimestamp(targetTypeFile.getModificationStamp());

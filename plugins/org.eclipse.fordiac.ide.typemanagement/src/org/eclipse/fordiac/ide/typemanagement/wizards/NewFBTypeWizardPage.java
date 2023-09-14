@@ -30,10 +30,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -42,6 +48,8 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -60,6 +68,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
@@ -69,6 +78,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private Button openTypeCheckbox;
 	private int openTypeParentHeight = -1;
 	private boolean openType = true;
+	private Text packageNameText;
 	private TableViewer templateTableViewer;
 
 	private static class TemplateInfo {
@@ -143,6 +153,12 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		final Optional<String> errorMessage = IdentifierVerifier.verifyIdentifier(super.getFileName());
 		if (errorMessage.isPresent()) {
 			setErrorMessage(errorMessage.get());
+			return false;
+		}
+
+		final Optional<String> packageNameErrorMessage = IdentifierVerifier.verifyPackageName(getPackageName());
+		if (packageNameErrorMessage.isPresent()) {
+			setErrorMessage(packageNameErrorMessage.get());
 			return false;
 		}
 
@@ -227,8 +243,25 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	@Override
 	protected void createAdvancedControls(final Composite parent) {
+		createPackageNameSelection(parent);
 		createTemplateTypeSelection(parent);
 		super.createAdvancedControls(parent);
+	}
+
+	private void createPackageNameSelection(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(composite);
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
+
+		final Label packageNameLabel = new Label(composite, SWT.NONE);
+		packageNameLabel.setText(FordiacMessages.Package + ":"); //$NON-NLS-1$
+		packageNameLabel.setFont(parent.getFont());
+
+		packageNameText = new Text(composite, SWT.BORDER);
+		packageNameText.setText(getInitialPackageName());
+		packageNameText.addListener(SWT.Modify, this);
+		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).hint(250, SWT.DEFAULT)
+				.applyTo(packageNameText);
 	}
 
 	private void createTemplateTypeSelection(final Composite parent) {
@@ -344,4 +377,22 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		return openTypeCheckbox;
 	}
 
+	public String getInitialPackageName() {
+		final IPath containerFullPath = getContainerFullPath();
+		if (containerFullPath != null && containerFullPath.segmentCount() > 0) {
+			final IContainer container = containerFullPath.segmentCount() == 1
+					? ResourcesPlugin.getWorkspace().getRoot().getProject(containerFullPath.segment(0))
+					: ResourcesPlugin.getWorkspace().getRoot().getFolder(containerFullPath);
+			final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(container.getProject());
+			final IPath relativePath = BuildpathUtil.findRelativePath(typeLibrary.getBuildpath(), container)
+					.orElse(containerFullPath);
+			return Stream.of(relativePath.segments())
+					.collect(Collectors.joining(PackageNameHelper.PACKAGE_NAME_DELIMITER));
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	public String getPackageName() {
+		return packageNameText.getText();
+	}
 }
