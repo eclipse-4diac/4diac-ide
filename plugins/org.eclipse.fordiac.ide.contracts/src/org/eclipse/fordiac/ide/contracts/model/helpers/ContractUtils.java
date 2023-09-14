@@ -49,13 +49,13 @@ public final class ContractUtils {
 	public static String createAssumptionString(final String event, final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
 		elementStr.addAssumption().addEventSpace(event).addOccurs().addEvery().addTime(time).addTimeUnit();
-		return elementStr.toString();
+		return elementStr.getString();
 	}
 
 	public static String createOffsetString(final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
 		elementStr.addWith().addTime(time).addTimeUnit().addSpace().addOffet();
-		return elementStr.toString();
+		return elementStr.getString();
 	}
 
 	public static String createReactionString(final String inputEvent, final String outputEvent, final String time) {
@@ -63,14 +63,14 @@ public final class ContractUtils {
 		elementStr.addGuarantee().addReaction().addEOpen().addEvent(inputEvent).addComma().addEvent(outputEvent)
 				.addEClose();
 		elementStr.addWithin().addTime(time).addTimeUnit();
-		return elementStr.toString();
+		return elementStr.getString();
 	}
 
 	public static String createGuaranteeString(final String inputEvent, final String outputEvent, final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
 		elementStr.addGuarantee().addWhenever().addEvery().addEventSpace(inputEvent).addOccursComma();
 		elementStr.addThen().addEvent().addEventSpace(outputEvent).addOccurs().addWithin().addTime(time).addTimeUnit();
-		return elementStr.toString();
+		return elementStr.getString();
 	}
 
 	public static String createGuaranteeTwoEvents(final String inputEvent, final String outputEvent,
@@ -79,7 +79,7 @@ public final class ContractUtils {
 		elementStr.addGuarantee().addWhenever().addEvent().addSpace().addEventSpace(inputEvent).addOccursComma();
 		elementStr.addThen().addEvents().addEOpen().addEvent(outputEvent).addComma().addEvent(secondOutputEvent);
 		elementStr.addEClose().addOccur().addWithin().addTime(time).addTimeUnit();
-		return elementStr.toString();
+		return elementStr.getString();
 
 	}
 
