@@ -12,12 +12,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.swtbot;
 
+import java.util.List;
+
+import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.Result;
+import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 
@@ -46,6 +52,35 @@ public class SWTBot4diacGefEditor extends SWTBotGefEditor {
 	@Override
 	public SWTBot4diacGefViewer getSWTBotGefViewer() {
 		return viewer4diac;
+	}
+
+	/**
+	 * Checks if there is a Selection of FBEditParts. Throws an exception if no such
+	 * part can be found after 1 second.
+	 *
+	 * @throws Exception When no Selection of a FBEditPart can be found in the list.
+	 */
+	public void waitForSelectedFBEditPart() {
+
+		bot().waitUntil(new ICondition() {
+
+			@Override
+			public boolean test() throws Exception {
+				final List<SWTBotGefEditPart> selectedEditParts = selectedEditParts();
+				return selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart).count() > 0;
+			}
+
+			@Override
+			public void init(final SWTBot bot) {
+				// method must be implemented but empty since not needed
+			}
+
+			@Override
+			public String getFailureMessage() {
+				return "no selection found";
+			}
+
+		}, 1000);
 	}
 
 }

@@ -15,17 +15,21 @@ package org.eclipse.fordiac.ide.test.ui;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart;
 import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
+import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
@@ -142,6 +146,37 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		parent.click();
 		bot.menu(EDIT).menu(DELETE).click();
 		assertNull(editor.getEditPart(E_CYCLE_FB));
+	}
+
+	/**
+	 * Checks if FB can be selected by drawing a rectangle by mouse left click over
+	 * the FB
+	 *
+	 * First, a rectangle is drawn next to the FB to check whether it is not
+	 * selected as expected. Then a rectangle is drawn over the FB to check whether
+	 * the FB is selected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void selectFbViaMouseLeftClickRectangleOverFB() {
+		dragAndDropEventsFB(E_D_FF_TREE_ITEM, new Point(200, 200));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+
+		// drag rectangle next to FB, therefore FB should not be selected
+		editor.drag(40, 40, 80, 80);
+		assertThrows(TimeoutException.class, () -> editor.waitForSelectedFBEditPart());
+		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
+		assertTrue(selectedEditParts.isEmpty());
+		assertFalse(selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart)
+				.map(p -> (FBEditPart) p.part()).anyMatch(fb -> E_D_FF_FB.equals(fb.getModel().getName())));
+
+		// drag rectangle over to FB, therefore FB should be selected
+		editor.drag(50, 50, 350, 350);
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart)
+				.map(p -> (FBEditPart) p.part()).anyMatch(fb -> E_D_FF_FB.equals(fb.getModel().getName())));
 	}
 
 	/**
