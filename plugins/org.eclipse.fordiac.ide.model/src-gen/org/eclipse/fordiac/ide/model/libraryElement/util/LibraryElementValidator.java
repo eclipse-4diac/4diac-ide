@@ -192,12 +192,20 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final int CONNECTION__VALIDATE_VAR_IN_OUT_STRING_LENGTHS_MATCH = 3;
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Outs Are Not Connected To Outs' of 'Connection'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int CONNECTION__VALIDATE_VAR_IN_OUTS_ARE_NOT_CONNECTED_TO_OUTS = 4;
+
+	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'IInterface Element'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int IINTERFACE_ELEMENT__VALIDATE_NAME = 4;
+	public static final int IINTERFACE_ELEMENT__VALIDATE_NAME = 5;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'INamed Element'.
@@ -205,7 +213,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int INAMED_ELEMENT__VALIDATE_NAME = 5;
+	public static final int INAMED_ELEMENT__VALIDATE_NAME = 6;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Source Type Is Well Defined' of 'Var Declaration'.
@@ -213,7 +221,15 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 6;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 7;
+
+	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Is Withed' of 'Var Declaration'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 8;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -221,7 +237,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 6;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 8;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -507,6 +523,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(adapterConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutArraySizesAreCompatible(adapterConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutStringLengthsMatch(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateVarInOutsAreNotConnectedToOuts(adapterConnection, diagnostics, context);
 		return result;
 	}
 
@@ -895,6 +912,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(connection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutArraySizesAreCompatible(connection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutStringLengthsMatch(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateVarInOutsAreNotConnectedToOuts(connection, diagnostics, context);
 		return result;
 	}
 
@@ -929,6 +947,16 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
+	 * Validates the validateVarInOutsAreNotConnectedToOuts constraint of '<em>Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConnection_validateVarInOutsAreNotConnectedToOuts(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return connection.validateVarInOutsAreNotConnectedToOuts(diagnostics, context);
+	}
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -955,6 +983,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(dataConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutArraySizesAreCompatible(dataConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutStringLengthsMatch(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateVarInOutsAreNotConnectedToOuts(dataConnection, diagnostics, context);
 		return result;
 	}
 
@@ -1164,6 +1193,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(eventConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutArraySizesAreCompatible(eventConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutStringLengthsMatch(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateVarInOutsAreNotConnectedToOuts(eventConnection, diagnostics, context);
 		return result;
 	}
 
@@ -1523,6 +1553,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(localVariable, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(localVariable, diagnostics, context);
 		return result;
 	}
 
@@ -2125,6 +2156,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(varDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(varDeclaration, diagnostics, context);
 		return result;
 	}
 
@@ -2136,6 +2168,16 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return varDeclaration.validateVarInOutSourceTypeIsWellDefined(diagnostics, context);
+	}
+
+	/**
+	 * Validates the validateVarInOutIsWithed constraint of '<em>Var Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateVarDeclaration_validateVarInOutIsWithed(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return varDeclaration.validateVarInOutIsWithed(diagnostics, context);
 	}
 
 	/**

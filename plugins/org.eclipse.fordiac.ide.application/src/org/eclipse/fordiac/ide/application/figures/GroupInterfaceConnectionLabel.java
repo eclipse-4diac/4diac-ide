@@ -26,6 +26,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public class GroupInterfaceConnectionLabel extends FBNetworkConnectionLabel {
 
@@ -55,10 +57,14 @@ public class GroupInterfaceConnectionLabel extends FBNetworkConnectionLabel {
 		// @formatter:off
 		return connections.stream()
 				.filter(con -> !con.isVisible())
-				.filter(con -> con.getDestinationElement().getGroup() == null
-								|| con.getSourceElement().getGroup() != con.getDestinationElement().getGroup())
+				.filter(con -> getGroupForPin(con.getDestination()) == null
+								|| getGroupForPin(con.getSource()) != getGroupForPin(con.getDestination()).getGroup())
 				.toList();
 		// @formatter:on
+	}
+
+	private static Group getGroupForPin(final IInterfaceElement ie) {
+		return (ie.getFBNetworkElement() != null) ? ie.getFBNetworkElement().getGroup() : null;
 	}
 
 	@Override
@@ -125,16 +131,10 @@ public class GroupInterfaceConnectionLabel extends FBNetworkConnectionLabel {
 			}
 		}
 
-		/*
-		 * Draws the small part of the connection that is needed to connect the first
-		 * group interface label with the other fan out labels.
+		/* Draws the small part of the connection that is needed to connect the first group interface label with the
+		 * other fan out labels.
 		 *
-		 * -----------------------------------> | <- draws this
-		 * 					   					|
-		 *						 -------------> |
-		 * 										|
-		 * 						 -------------> |
-		 */
+		 * -----------------------------------> | <- draws this | -------------> | | -------------> | */
 		private void drawFanOutConnector(final HideableConnection connFigure, final Graphics g,
 				final Rectangle bounds) {
 			if (isFirstFanOutGroupInterface(connFigure)) {

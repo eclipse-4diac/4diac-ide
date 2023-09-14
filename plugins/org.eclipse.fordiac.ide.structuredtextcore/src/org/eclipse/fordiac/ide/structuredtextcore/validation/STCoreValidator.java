@@ -457,17 +457,22 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkFeatureExpression(final STFeatureExpression featureExpression) {
-
 		final INamedElement feature = featureExpression.getFeature();
-		final INode node = NodeModelUtils.getNode(featureExpression);
-
-		if (node != null && feature != null) {
+		if (feature != null && !feature.eIsProxy()) {
 			final String originalName = feature.getName();
-			final String nameInText = node.getText().trim().substring(0, originalName.length());
-
-			if (originalName.equalsIgnoreCase(nameInText) && !originalName.equals(nameInText)) {
-				warning(Messages.STCoreValidator_Wrong_Name_Case, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
-						WRONG_NAME_CASE, nameInText, originalName);
+			if (originalName != null) {
+				final List<INode> nodes = NodeModelUtils.findNodesForFeature(featureExpression,
+						STCorePackage.eINSTANCE.getSTFeatureExpression_Feature());
+				if (!nodes.isEmpty()) {
+					final INode node = nodes.get(0);
+					final String nameInText = node.getRootNode().getText().substring(node.getOffset(),
+							node.getEndOffset());
+					if (!originalName.equals(nameInText) && originalName.equalsIgnoreCase(nameInText)) {
+						warning(Messages.STCoreValidator_Wrong_Name_Case,
+								STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, WRONG_NAME_CASE, nameInText,
+								originalName);
+					}
+				}
 			}
 		}
 	}

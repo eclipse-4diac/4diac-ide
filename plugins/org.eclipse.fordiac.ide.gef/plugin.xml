@@ -13,12 +13,25 @@
         </themeElementCategory>
         <fontDefinition
                 label="Diagram Font"
-                defaultsTo="org.eclipse.jface.textfont"
                 categoryId="org.eclipse.fordiac.ide.themeCategory"
                 id="org.eclipse.fordiac.ide.preferences.diagramFontDefinition">
             <description>
                 Font to be used in all 4diac IDE graphical editors and diagrams
             </description>
+            <!--These font values are based on the current setting for Eclipse Platform JFace Text Editor Font-->
+            <fontValue
+               	os="linux"
+               	value="Monospace-regular-10"
+               	ws="gtk">
+			</fontValue>
+	        <fontValue
+	        	os="win32"
+	        	value="Consolas-regular-10">
+	        </fontValue>
+	        <fontValue
+	        	os="macosx"
+	            value="Menlo-regular-12">
+	         </fontValue>
         </fontDefinition>
     </extension>
    <extension
