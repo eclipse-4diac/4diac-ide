@@ -115,10 +115,14 @@ public class VarConfigurationSection extends AbstractSection {
 	@Override
 	protected CommandStack getCommandStack(final IWorkbenchPart part, final Object input) {
 		super.getCommandStack(part, input);
-		if (input instanceof FBNetworkEditPart) {
-			final AutomationSystem automationsys = (AutomationSystem) ((FBNetworkEditPart) input).getModel()
-					.eContainer().eContainer();
-			return automationsys.getCommandStack();
+		if (input instanceof final FBNetworkEditPart fbnEditPart) {
+			EObject eObject = fbnEditPart.getModel().eContainer();
+
+			while (!(eObject instanceof AutomationSystem)) {
+				eObject = eObject.eContainer();
+			}
+
+			return ((AutomationSystem) eObject).getCommandStack();
 		}
 		if (input instanceof final EObject eObj) {
 			final EObject root = EcoreUtil.getRootContainer(eObj);
