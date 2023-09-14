@@ -19,7 +19,7 @@ import java.util.List
 import java.util.Map
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource
 import org.eclipse.xtext.ParserRule
@@ -56,6 +56,7 @@ final class STCoreParseUtil {
 		resourceSet.resources.add(resource)
 		resource.entryPoint = entryPoint
 		resource.libraryElement = type
+		resource.includeInternalLibraryElement = type instanceof BaseFBType
 		if(!additionalContent.nullOrEmpty) resource.additionalContent.addAll(additionalContent)
 		resource.load(new LazyStringInputStream(text), loadOptions ?: resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator

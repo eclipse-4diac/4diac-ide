@@ -17,6 +17,7 @@ import java.util.Map;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.STAlgorithmParser;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
@@ -65,6 +66,7 @@ public abstract class STAlgorithmEditedResourceProvider implements IEditedResour
 		final STAlgorithmResource resource = (STAlgorithmResource) SERVICE_PROVIDER_FBT.get(XtextResource.class);
 		resource.setURI(getURI());
 		resource.setLibraryElement(libraryElement);
+		resource.setIncludeInternalLibraryElement(libraryElement instanceof BaseFBType);
 		resource.setEntryPoint(getEntryPoint());
 		resourceSet.getResources().add(resource);
 		resource.getDefaultLoadOptions().putAll(Map.of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE, // resolve all

@@ -13,6 +13,8 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.resource;
 
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
@@ -29,7 +31,9 @@ public class STCoreResourceForIEditorInputFactory extends ResourceForIEditorInpu
 				&& editorInput instanceof final IFileEditorInput fileEditorInput) {
 			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEditorInput.getFile());
 			if (typeEntry != null) {
-				libraryElementXtextResource.setLibraryElement(typeEntry.getTypeEditable());
+				final LibraryElement libraryElement = typeEntry.getTypeEditable();
+				libraryElementXtextResource.setLibraryElement(libraryElement);
+				libraryElementXtextResource.setIncludeInternalLibraryElement(libraryElement instanceof BaseFBType);
 				if (resource instanceof final STCoreResource stCoreResource) {
 					stCoreResource.getDefaultLoadOptions().put(STCoreResource.OPTION_PLAIN_ST, Boolean.TRUE);
 				}
