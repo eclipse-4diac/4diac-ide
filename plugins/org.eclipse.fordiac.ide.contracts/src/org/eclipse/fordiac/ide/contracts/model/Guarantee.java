@@ -83,19 +83,7 @@ public class Guarantee extends ContractElement {
 	}
 
 	private static boolean isCorrectGuarantee(final String[] parts) {
-		if (parts.length != GUARANTEE_LENGTH) {
-			return false;
-		}
-		if (!ContractKeywords.WHENEVER.equals(parts[POS_WHENEVER])) {
-			return false;
-		}
-		if (!ContractKeywords.EVENT.equals(parts[POS_EVENT])) {
-			return false;
-		}
-		if (!(ContractKeywords.OCCURS + ContractKeywords.COMMA).equals(parts[POS_OCCURS])) {
-			return false;
-		}
-		if (!ContractKeywords.THEN.equals(parts[POS_THEN])) {
+		if (!hasCorrectBeginning(parts)) {
 			return false;
 		}
 		if (!ContractKeywords.EVENT.equals(parts[POS_EVENT_STRING])) {
@@ -109,6 +97,22 @@ public class Guarantee extends ContractElement {
 		}
 		return ContractKeywords.UNIT_OF_TIME.equals(
 				parts[POS_MS].subSequence(ContractUtils.getStartPosition(parts, POS_MS), parts[POS_MS].length()));
+	}
+
+	protected static boolean hasCorrectBeginning(final String[] parts) {
+		if (parts.length != GUARANTEE_LENGTH) {
+			return false;
+		}
+		if (!ContractKeywords.WHENEVER.equals(parts[POS_WHENEVER])) {
+			return false;
+		}
+		if (!ContractKeywords.EVENT.equals(parts[POS_EVENT])) {
+			return false;
+		}
+		if (!(ContractKeywords.OCCURS + ContractKeywords.COMMA).equals(parts[POS_OCCURS])) {
+			return false;
+		}
+		return ContractKeywords.THEN.equals(parts[POS_THEN]);
 	}
 
 	@Override
