@@ -13,11 +13,25 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.exceptions;
 
+import org.eclipse.fordiac.ide.contracts.model.Assumption;
+
 public class AssumptionExeption extends ContractExeption {
-	private static final long serialVersionUID = 4209720705088097594L;
+
+	private static final long serialVersionUID = 1219002219665724117L;
+	public final Assumption assumption;
+
+	public AssumptionExeption(final Assumption assumption, final String errorMessage) {
+		super(errorMessage);
+		this.assumption = assumption;
+
+	}
 
 	public AssumptionExeption(final String errorMessage) {
-		super(errorMessage);
+		this(null, errorMessage);
+	}
+
+	Assumption getAssumption() {
+		return assumption;
 	}
 
 }

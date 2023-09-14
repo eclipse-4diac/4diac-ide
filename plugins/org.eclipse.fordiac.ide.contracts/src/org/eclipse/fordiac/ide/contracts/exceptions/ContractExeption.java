@@ -16,11 +16,20 @@ package org.eclipse.fordiac.ide.contracts.exceptions;
 import org.eclipse.fordiac.ide.contracts.model.Contract;
 
 public class ContractExeption extends RuntimeException {
-	public Contract contract;
 
-	private static final long serialVersionUID = -8342770793430663718L;
+	private static final long serialVersionUID = 2453711497586948029L;
+	private final Contract contract;
+
+	ContractExeption(final Contract contract, final String errorMessage) {
+		super(errorMessage);
+		this.contract = contract;
+	}
 
 	ContractExeption(final String errorMessage) {
-		super(errorMessage);
+		this(null, errorMessage);
+	}
+
+	public Contract getContract() {
+		return contract;
 	}
 }

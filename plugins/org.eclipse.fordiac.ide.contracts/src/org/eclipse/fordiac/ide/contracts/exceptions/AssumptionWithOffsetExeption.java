@@ -13,12 +13,23 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.exceptions;
 
+import org.eclipse.fordiac.ide.contracts.model.AssumptionWithOffset;
+
 public class AssumptionWithOffsetExeption extends ContractExeption {
 
-	private static final long serialVersionUID = -192971294236966579L;
+	private static final long serialVersionUID = 7450659197700485935L;
+	public final AssumptionWithOffset assumption;
 
-	public AssumptionWithOffsetExeption(final String errorMessage) {
+	public AssumptionWithOffsetExeption(final AssumptionWithOffset assumption, final String errorMessage) {
 		super(errorMessage);
+		this.assumption = assumption;
 	}
 
+	public AssumptionWithOffsetExeption(final String errorMessage) {
+		this(null, errorMessage);
+	}
+
+	AssumptionWithOffset getAssumption() {
+		return assumption;
+	}
 }
