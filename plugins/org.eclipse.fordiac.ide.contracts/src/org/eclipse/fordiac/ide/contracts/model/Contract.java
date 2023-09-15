@@ -194,7 +194,7 @@ public class Contract {
 
 			final int assumptionMin = entry.getValue().get(0).getMin();
 			final int guaranteeMax = entry.getValue().get(1).getMax();
-			if (assumptionMin > guaranteeMax) {
+			if (assumptionMin < guaranteeMax) {
 				return false;
 			}
 		}
