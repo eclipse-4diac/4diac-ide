@@ -24,11 +24,21 @@ public class AssumptionTest {
 	@SuppressWarnings("static-method")
 	@Test
 	public void test() {
-		final Contract contract = Contract.getContractFromComment("ASSUMPTION VV occurs within [1,2]ms"); //$NON-NLS-1$
-		final Assumption toTest = contract.getAssumptions().get(0);
+		// Time and Event extraction and String reproduction test start
+		Contract contract = Contract.getContractFromComment("ASSUMPTION VV occurs every [1,2]ms"); //$NON-NLS-1$
+		Assumption toTest = contract.getAssumptions().get(0);
 		assertTrue(toTest.getMin() == 1);
 		assertTrue(toTest.getMax() == 2);
 		assertTrue("VV".equals(toTest.getInputEvent())); //$NON-NLS-1$
-		assertTrue("ASSUMPTION VV occurs within [1,2]ms".equals(toTest.asString())); //$NON-NLS-1$
+		assertTrue(("ASSUMPTION VV occurs every [1,2]ms" + System.lineSeparator()).equals(toTest.asString())); //$NON-NLS-1$
+
+		contract = Contract.getContractFromComment("ASSUMPTION CC occurs every 2ms"); //$NON-NLS-1$
+		toTest = contract.getAssumptions().get(0);
+		assertTrue(toTest.getMin() == 2);
+		assertTrue(toTest.getMax() == 2);
+		assertTrue("CC".equals(toTest.getInputEvent())); //$NON-NLS-1$
+		assertTrue(("ASSUMPTION CC occurs every 2ms" + System.lineSeparator()).equals(toTest.asString())); //$NON-NLS-1$
+
+		// end Time and Event extraction and String reproduction test
 	}
 }

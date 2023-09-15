@@ -89,7 +89,7 @@ public class Guarantee extends ContractElement {
 		if (!ContractKeywords.EVENT.equals(parts[POS_EVENT_STRING])) {
 			return false;
 		}
-		if (!ContractKeywords.OCCUR.equals(parts[POS_OCCUR])) {
+		if (!ContractKeywords.OCCURS.equals(parts[POS_OCCUR])) {
 			return false;
 		}
 		if (!ContractKeywords.WITHIN.equals(parts[POS_WITHIN])) {

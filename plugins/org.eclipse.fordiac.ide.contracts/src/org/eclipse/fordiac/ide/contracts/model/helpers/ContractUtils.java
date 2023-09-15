@@ -68,7 +68,7 @@ public final class ContractUtils {
 
 	public static String createGuaranteeString(final String inputEvent, final String outputEvent, final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
-		elementStr.addGuarantee().addWhenever().addEvery().addEventSpace(inputEvent).addOccursComma();
+		elementStr.addGuarantee().addWhenever().addEvent().addEventSpace(inputEvent).addOccursComma();
 		elementStr.addThen().addEvent().addEventSpace(outputEvent).addOccurs().addWithin().addTime(time).addTimeUnit();
 		return elementStr.getString();
 	}
