@@ -270,7 +270,8 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	protected static EList<STImport> getImports(final STSource source) {
 		if (source != null) {
 			final EStructuralFeature importsFeature = source.eClass().getEStructuralFeature("imports"); //$NON-NLS-1$
-			if (importsFeature.getEType() == STCorePackage.eINSTANCE.getSTImport() && importsFeature.isMany()) {
+			if (importsFeature != null && importsFeature.getEType() == STCorePackage.eINSTANCE.getSTImport()
+					&& importsFeature.isMany()) {
 				return (EList<STImport>) source.eGet(importsFeature);
 			}
 		}
@@ -306,7 +307,10 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		return super.queryScope(scope);
 	}
 
-	/* Copied from XbaseQuickfixProvider.createLinkingIssueResolutions(Issue, IssueResolutionAcceptor) */
+	/*
+	 * Copied from XbaseQuickfixProvider.createLinkingIssueResolutions(Issue,
+	 * IssueResolutionAcceptor)
+	 */
 	@Override
 	public void createLinkingIssueResolutions(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		final IModificationContext modificationContext = getModificationContextFactory()
@@ -319,10 +323,12 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 						throws Exception {
 					try {
 						final EObject target = state.getEObject(issue.getUriToProblem().fragment());
-						final EReference reference = getUnresolvedEReference(issue, target);
-						if (reference != null && reference.getEReferenceType() != null) {
-							createLinkingIssueQuickfixes(issue, getCancelableAcceptor(acceptor, cancelIndicator),
-									xtextDocument, state, target, reference);
+						if (getImports(EcoreUtil2.getContainerOfType(target, STSource.class)) != null) {
+							final EReference reference = getUnresolvedEReference(issue, target);
+							if (reference != null && reference.getEReferenceType() != null) {
+								createLinkingIssueQuickfixes(issue, getCancelableAcceptor(acceptor, cancelIndicator),
+										xtextDocument, state, target, reference);
+							}
 						}
 					} catch (final WrappedException e) {
 						// issue information seems to be out of sync, e.g. there is no
