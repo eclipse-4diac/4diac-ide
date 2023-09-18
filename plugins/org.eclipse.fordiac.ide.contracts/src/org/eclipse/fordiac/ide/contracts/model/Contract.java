@@ -291,12 +291,8 @@ public class Contract {
 		}
 		int maximum = contractElements.get(0).getMax();
 		int minimum = contractElements.get(0).getMin();
-		// TODO
-		// for (final ContractElement contractEl : contractElement.subList(1, contractElement.size())) {
-		//
-		// }
 
-		for (int i = 1; contractElements.size() > i; i++) {
+		for (int i = 1; i < contractElements.size(); i++) {
 			if (contractElements.get(i).getMax() == -1) {
 				return isSingleAssumption(contractElements, i);
 			}
