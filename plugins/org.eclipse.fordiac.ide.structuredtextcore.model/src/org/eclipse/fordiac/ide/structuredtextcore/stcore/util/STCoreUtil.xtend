@@ -222,6 +222,10 @@ final class STCoreUtil {
 			STMemberAccessExpression case container.member == expression: container.accessMode
 			STArrayAccessExpression case container.receiver == expression: container.accessMode
 			STCallArgument: container.accessMode
+			STForStatement case container.statements.contains(expression),
+			STIfStatement case container.statements.contains(expression),
+			STRepeatStatement case container.statements.contains(expression),
+			STWhileStatement case container.statements.contains(expression): AccessMode.NONE
 			STStatement,
 			STExpressionSource,
 			STInitializerExpression,
