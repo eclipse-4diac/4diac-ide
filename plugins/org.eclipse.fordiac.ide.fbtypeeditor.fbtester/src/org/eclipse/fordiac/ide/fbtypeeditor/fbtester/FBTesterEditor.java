@@ -123,8 +123,7 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 		final String response = configCreator.close();
 		if (response != null) {
 			final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-			msb.setMessage(MessageFormat.format(
-					Messages.FBTester_CleaningDeviceFailed, response));
+			msb.setMessage(MessageFormat.format(Messages.FBTester_CleaningDeviceFailed, response));
 			msb.open();
 		}
 		super.dispose();
@@ -133,8 +132,7 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInput(input);
-		if (input instanceof FBTypeEditorInput) {
-			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+		if (input instanceof final FBTypeEditorInput untypedInput) {
 			type = untypedInput.getContent();
 			typeLib = type.getTypeLibrary();
 		}
@@ -198,13 +196,14 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 				}
 				if (response != null) {
 					final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-					msb.setMessage(MessageFormat.format(
-							Messages.FORTERemoteTester_FBCanNotBeTestedBecauseOfTheFollowingError, response));
+					msb.setMessage(MessageFormat
+							.format(Messages.FORTERemoteTester_FBCanNotBeTestedBecauseOfTheFollowingError, response));
 					msb.open();
 					resetButton.setSelection(false);
 					resetButton.setText(Messages.FBTester_ResetButton_Reset);
 				}
 			}
+
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
 				widgetSelected(e);
@@ -228,7 +227,6 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 				widgetSelected(e);
 			}
 		});
-
 
 		final SashForm horizontal = new SashForm(topEditorContents, SWT.HORIZONTAL | SWT.SMOOTH);
 		final Composite graphicalEditor = new Composite(horizontal, SWT.NONE);
@@ -387,13 +385,12 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 			for (final IConfigurationElement element : elements) {
 				try {
 					final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
-					if (obj instanceof IFBTestConfiguratonCreator) {
-						final IFBTestConfiguratonCreator contributor = (IFBTestConfiguratonCreator) obj;
+					if (obj instanceof final IFBTestConfiguratonCreator contributor) {
 						contributor.setType(type);
 						final IFBTestConfiguration configuration = contributor.createConfigurationPage(parent);
 						final String lang = element.getAttribute("label"); //$NON-NLS-1$
 						configurations.put(lang, configuration);
-						configCreators.put(lang,contributor);
+						configCreators.put(lang, contributor);
 						configCreator = contributor;
 					}
 				} catch (final Exception e) {
@@ -435,7 +432,7 @@ public class FBTesterEditor extends GraphicalEditor implements IFBTEditorPart {
 
 	@Override
 	public Object getSelectableEditPart() {
-		// nothing todo here
+		// nothing need to do here
 		return null;
 	}
 
