@@ -133,9 +133,16 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 
 	private void createTransitionsBackForAllStates(final TestEccGenerator eccGen) {
 		for (final ECState state : eccGen.getEcc().getECState()) {
-			if ((!state.getName().contains("BS") && !state.getName().equals("START")) //$NON-NLS-1$//$NON-NLS-2$
+			// no transition needed when we are at the start state, at a binding state (BS),
+			// at the last state before the detected output, at a sate with only one out
+			// transition where the condition event is null and the condition expression is
+			// 1
+			if (!state.getName().equals("START") && !state.getName().contains("BS") //$NON-NLS-1$//$NON-NLS-2$
 					&& !(state.getOutTransitions().size() == 1
-							&& state.getOutTransitions().get(0).getConditionExpression().equals("1"))) { //$NON-NLS-1$
+							&& state.getOutTransitions().get(0).getConditionEvent() == null
+							&& state.getOutTransitions().get(0).getConditionExpression().equals("1"))
+					&& !state.getName().equals(
+							eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1).getName())) {
 				createTransitionsBackTransitionList(eccGen, state, state.getOutTransitions());
 			}
 		}
