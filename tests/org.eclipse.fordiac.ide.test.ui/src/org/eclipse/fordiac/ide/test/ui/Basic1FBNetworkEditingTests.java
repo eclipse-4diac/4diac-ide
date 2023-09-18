@@ -180,6 +180,72 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	}
 
 	/**
+	 * Checks if FB can be selected by clicking on somewhere within the FB bounds
+	 * but not on a pin or FB instance name
+	 *
+	 * First attempts are made to click next to the FB to check whether it is not
+	 * selected as expected. Then several attempts are made to click on the FB
+	 * (meaning within the FB bounds) to select the FB as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void selectFbViaMouseLeftClickOnFB() {
+		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(150, 250));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+
+		// check bounds of FB
+		editor.getEditPart(E_SWITCH_FB);
+		editor.click(E_SWITCH_FB);
+		final SWTBotGefEditPart parent = editor.getEditPart(E_SWITCH_FB).parent();
+		final IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
+		final Rectangle fbBounds = figure.getBounds().getCopy();
+		figure.translateToAbsolute(fbBounds);
+
+		// click next to the FB
+		Point point = new Point(145, 245);
+		assertFalse(fbBounds.contains(point.x, point.y));
+		assertThrows(TimeoutException.class, () -> editor.waitForSelectedFBEditPart());
+		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertFalse(isFbSelected(selectedEditParts, E_SWITCH_FB));
+
+		// click next to the FB
+		point = new Point(265, 350);
+		assertFalse(fbBounds.contains(point.x, point.y));
+		assertThrows(TimeoutException.class, () -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertFalse(isFbSelected(selectedEditParts, E_SWITCH_FB));
+
+		// click exactly at the insertion point
+		point = new Point(150, 250);
+		editor.click(point.x, point.y);
+		assertTrue(fbBounds.contains(point.x, point.y));
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(isFbSelected(selectedEditParts, E_SWITCH_FB));
+
+		// click within the FB bounds but not on a pin or instance name
+		point = new Point(170, 300);
+		editor.click(point.x, point.y);
+		assertTrue(fbBounds.contains(point.x, point.y));
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(isFbSelected(selectedEditParts, E_SWITCH_FB));
+
+		// click within the FB bounds but not on a pin or instance name
+		point = new Point(200, 340);
+		editor.click(point.x, point.y);
+		assertTrue(fbBounds.contains(point.x, point.y));
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(isFbSelected(selectedEditParts, E_SWITCH_FB));
+	}
+
+	/**
 	 * Checks if the FB can be moved onto the canvas.
 	 *
 	 * The method drag and drops the FB E_CYCLE to a certain position onto the

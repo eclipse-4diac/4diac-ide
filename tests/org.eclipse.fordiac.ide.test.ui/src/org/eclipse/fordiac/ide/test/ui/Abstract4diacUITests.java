@@ -17,11 +17,13 @@ import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.ConnectionEditPart;
@@ -255,6 +257,19 @@ public class Abstract4diacUITests {
 			}
 			return null;
 		});
+	}
+
+	/**
+	 * Checks if FB is selected by searching selectedEditParts list and returns the
+	 * corresponding boolean value.
+	 *
+	 * @param selectedEditParts The List of selected EditParts.
+	 * @param fbName            The FB that is searched for.
+	 * @return true is fbName is in the List, otherwise false.
+	 */
+	protected static boolean isFbSelected(final List<SWTBotGefEditPart> selectedEditParts, final String fbName) {
+		return selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
+				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
 	}
 
 	/**
