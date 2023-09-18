@@ -41,7 +41,7 @@ public class GuaranteeTwoEvents extends Guarantee {
 		// remove when class is correctly evaluated in contract
 	}
 
-	String getSecondOutputEvent() {
+	public String getSecondOutputEvent() {
 		return secondOutputEvent;
 	}
 

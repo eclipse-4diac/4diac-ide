@@ -76,7 +76,7 @@ public final class ContractUtils {
 	public static String createGuaranteeTwoEvents(final String inputEvent, final String outputEvent,
 			final String secondOutputEvent, final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
-		elementStr.addGuarantee().addWhenever().addEvent().addSpace().addEventSpace(inputEvent).addOccursComma();
+		elementStr.addGuarantee().addWhenever().addEvent().addEventSpace(inputEvent).addOccursComma();
 		elementStr.addThen().addEvents().addEOpen().addEvent(outputEvent).addComma().addEvent(secondOutputEvent);
 		elementStr.addEClose().addOccur().addWithin().addTime(time).addTimeUnit();
 		return elementStr.getString();

@@ -26,7 +26,7 @@ public class AssumptionWithOffsetTest {
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void test() {	// Test runs if AssumptionWithOffest constructor throws Exeption gets //
+	public void test() {	// Test runs if AssumptionWithOffest constructor throws Exception gets //
 		// Time and Event extraction and String reproduction test start
 		Contract contract = Contract.getContractFromComment("ASSUMPTION CU occurs every 7ms with 8ms offset"); //$NON-NLS-1$
 		AssumptionWithOffset toTest = (AssumptionWithOffset) contract.getAssumptions().get(0);
