@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.ServiceFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
@@ -349,11 +350,10 @@ public class ServiceSequenceAssignView extends ViewPart {
 			seq.setName(name);
 			final List<String> events = ServiceSequenceUtils.splitList(textEvent.getText());
 			final List<String> parameters = ServiceSequenceUtils.splitList(textParam.getText());
-			final FBType typeCopy = EcoreUtil.copy(fbType);
 
 			try {
-				setParameters(typeCopy, parameters);
-				runInterpreter(seq, events, true, true, typeCopy, count);
+				final boolean parameterSet = setParameters(fbType, parameters);
+				runInterpreter(seq, events, fbType, count, parameterSet);
 			} catch (final Exception e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
@@ -364,34 +364,54 @@ public class ServiceSequenceAssignView extends ViewPart {
 		return null;
 	}
 
-	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames, final boolean isAppend,
-			final boolean isRandom, final FBType fbType, final int count) {
-		final List<Event> events;
+	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames, final FBType fbType,
+			final int count, final boolean parameterSet) {
 		final FBType typeCopy = EcoreUtil.copy(fbType);
-		events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
-				.filter(Objects::nonNull).collect(Collectors.toList());
-		if (isRandom && (count > 0)) {
-			events.addAll(InputGenerator.getRandomEventsSequence(typeCopy, count));
+		final List<Event> events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
+				.filter(Objects::nonNull).toList();
+
+		if (!events.isEmpty() && (count > 0)) {
+			if (parameterSet) {
+				addToGenSequence(fbType, seq, events.subList(0, 1), false);
+				addToGenSequence(fbType, seq, events.subList(1, events.size()), true);
+			} else {
+				addToGenSequence(fbType, seq, events, true);
+			}
 		}
-		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, events, isRandom,
+		if ((count - events.size()) > 0) {
+			final List<Event> generatedEvents = new ArrayList<>();
+			generatedEvents.addAll(InputGenerator.getRandomEventsSequence(typeCopy, count - events.size()));
+			addToGenSequence(typeCopy, seq, generatedEvents, true);
+		}
+	}
+
+	private static void addToGenSequence(final FBType fbType, final ServiceSequence seq, final List<Event> eventList,
+			final boolean isRandom) {
+		final FBType typeCopy = EcoreUtil.copy(fbType);
+		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, eventList, isRandom,
 				Messages.ServiceSequenceAssignView_START);
-		EventManagerUtils.process(eventManager);
-		if (!isAppend) {
-			seq.getServiceTransaction().clear();
+		if (!isRandom) {
+			TransactionFactory.addTraceInfoTo(eventManager.getTransactions());
 		}
+		EventManagerUtils.process(eventManager);
+
 		for (final Transaction transaction : eventManager.getTransactions()) {
 			ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
 		}
 	}
 
-	private static void setParameters(final FBType fbType, final List<String> parameters) {
+	private static boolean setParameters(final FBType fbType, final List<String> parameters) {
 		// parameter: format "VarName:=Value"
+		boolean parameterSet = false;
 		for (final String param : parameters) {
 			final String[] paramValues = param.split(":=", 2); //$NON-NLS-1$
 			if (paramValues.length == 2) {
 				VariableUtils.setVariable(fbType, paramValues[0], paramValues[1]);
+				parameterSet = true;
+
 			}
 		}
+		return parameterSet;
 	}
 
 	private static Event findEvent(final FBType fbType, final String eventName) {
