@@ -13,14 +13,19 @@
 package org.eclipse.fordiac.ide.test.ui;
 
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.eclipse.draw2d.IFigure;
+import java.util.List;
+
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
@@ -31,6 +36,7 @@ import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -82,6 +88,9 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final Point point1 = new Point(100, 100);
 		eCycleNode.dragAndDrop(canvas, point1);
 		assertNotNull(editor.getEditPart(E_CYCLE_FB));
+		final Rectangle absPos1 = getAbsolutePosition(editor, E_CYCLE_FB);
+		assertEquals(point1.x, absPos1.x);
+		assertEquals(point1.y, absPos1.y);
 
 		// select FB E_SWITCH
 		final SWTBotTreeItem eSwitchNode = eventsNode.getNode(E_SWITCH_TREE_ITEM);
@@ -91,6 +100,9 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final Point point2 = new Point(300, 150);
 		eSwitchNode.dragAndDrop(canvas, point2);
 		assertNotNull(editor.getEditPart(E_SWITCH_FB));
+		final Rectangle absPos2 = getAbsolutePosition(editor, E_SWITCH_FB);
+		assertEquals(point2.x, absPos2.x);
+		assertEquals(point2.y, absPos2.y);
 	}
 
 	/**
@@ -114,6 +126,40 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		bot.menu(EDIT).menu(DELETE).click();
 		assertNull(editor.getEditPart(E_CYCLE_FB));
 		assertNotNull(editor.getEditPart(E_SWITCH_FB));
+		assertTrue(editor.selectedEditParts().isEmpty());
+	}
+
+	/**
+	 *
+	 * Checks if FBs can be selected together by drawing a rectangle by mouse left
+	 * click over the FBs
+	 *
+	 * First, a rectangle is drawn next to the FBs to check whether they are not
+	 * selected as expected. Then a rectangle is drawn over the FBs to check whether
+	 * the FBs are selected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void select2FBsViaMouseLeftClickOnFB() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(300, 100));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+
+		// drag rectangle next to FBs, therefore FBs should not be selected
+		editor.drag(40, 40, 200, 200);
+		assertThrows(TimeoutException.class, () -> editor.waitForSelectedFBEditPart());
+		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
+		assertTrue(selectedEditParts.isEmpty());
+		assertFalse(isFbSelected(selectedEditParts, E_N_TABLE_FB));
+		assertFalse(isFbSelected(selectedEditParts, E_CTUD_FB));
+
+		// drag rectangle over FBs, therefore FBs should be selected
+		editor.drag(50, 50, 500, 300);
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(isFbSelected(selectedEditParts, E_N_TABLE_FB));
+		assertTrue(isFbSelected(selectedEditParts, E_CTUD_FB));
 	}
 
 	/**
@@ -122,45 +168,40 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	 * The method drag and drops 2 FBs E_CYCLE and E_SWITCH to a certain position
 	 * onto the canvas and it is checked whether the FBs are in the correct
 	 * position. Afterwards one FB is moved to a new point and this position is also
-	 * checked. To achieve this it is necessary to create a draw2d.geometry Point
-	 * with the same coordinates of the swt.graphics Point.
+	 * checked. Than it is checks whether the position of E_SWITCH has changed,
+	 * which is not expected. To achieve this it is necessary to create a
+	 * draw2d.geometry Point with the same coordinates of the swt.graphics Point.
 	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void move1FB() {
-		final Point pos1 = new Point(200, 200);
+		final Point pos1 = new Point(100, 100);
 		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, pos1);
-		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(400, 200));
+		final Point pos2 = new Point(350, 100);
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, pos2);
+
+		// select E_CYCLE and check position of E_CYCLE
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		assertNotNull(editor);
 		assertNotNull(editor.getEditPart(E_CYCLE_FB));
 		editor.click(E_CYCLE_FB);
-		SWTBotGefEditPart parent = editor.getEditPart(E_CYCLE_FB).parent();
-		assertNotNull(parent);
+		final SWTBotGefEditPart fb1 = editor.getEditPart(E_CYCLE_FB).parent();
+		assertNotNull(fb1);
+		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, E_CYCLE_FB);
+		assertTrue(fb1Bounds1.contains(pos1.x, pos1.y));
 
-		IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
-		assertNotNull(figure);
-		Rectangle fbBounds = figure.getBounds().getCopy();
-		assertNotNull(fbBounds);
-		figure.translateToAbsolute(fbBounds);
-		assertEquals(pos1.x, fbBounds.x);
-		assertEquals(pos1.y, fbBounds.y);
+		// check position of E_N_TABLE
+		final Rectangle fb2Bounds1 = getAbsolutePosition(editor, E_N_TABLE_FB);
+		assertTrue(fb2Bounds1.contains(pos2.x, pos2.y));
 
-		final org.eclipse.draw2d.geometry.Point posToCheck1 = new org.eclipse.draw2d.geometry.Point(pos1);
-		assertEquals(posToCheck1.x, fbBounds.x);
-		assertEquals(posToCheck1.y, fbBounds.y);
-		parent.click();
+		// move E_CYCLE and check new position
+		final Point pos3 = new Point(125, 185);
+		editor.drag(fb1, pos3.x, pos3.y);
+		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, E_CYCLE_FB);
+		assertTrue(fb1Bounds2.contains(pos3.x, pos3.y));
 
-		final Point pos2 = new Point(85, 85);
-		editor.drag(parent, pos2.x, pos2.y);
-		final org.eclipse.draw2d.geometry.Point posToCheck2 = new org.eclipse.draw2d.geometry.Point(pos2);
-
-		parent = editor.getEditPart(E_CYCLE_FB).parent();
-		figure = ((GraphicalEditPart) parent.part()).getFigure();
-		fbBounds = figure.getBounds().getCopy();
-		figure.translateToAbsolute(fbBounds);
-		assertEquals(posToCheck2.x, fbBounds.x);
-		assertEquals(posToCheck2.y, fbBounds.y);
+		// check if E_N_TABLE is still on same position
+		assertTrue(fb2Bounds1.contains(pos2.x, pos2.y));
 	}
 
 	/**
@@ -180,76 +221,93 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final Point pos2 = new Point(400, 200);
 		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, pos2);
 
-		// E_CYCLE
+		// select and move E_CYCLE
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		assertNotNull(editor);
 		assertNotNull(editor.getEditPart(E_CYCLE_FB));
 		editor.click(E_CYCLE_FB);
-		SWTBotGefEditPart parent1 = editor.getEditPart(E_CYCLE_FB).parent();
-		assertNotNull(parent1);
-
-		IFigure figure1 = ((GraphicalEditPart) parent1.part()).getFigure();
-		assertNotNull(figure1);
-		Rectangle fbBounds1 = figure1.getBounds().getCopy();
-		assertNotNull(fbBounds1);
-		figure1.translateToAbsolute(fbBounds1);
-		assertEquals(pos1.x, fbBounds1.x);
-		assertEquals(pos1.y, fbBounds1.y);
-
-		final org.eclipse.draw2d.geometry.Point posToCheck1 = new org.eclipse.draw2d.geometry.Point(pos1);
-		assertEquals(posToCheck1.x, fbBounds1.x);
-		assertEquals(posToCheck1.y, fbBounds1.y);
-		parent1.click();
-
+		final SWTBotGefEditPart fb1 = editor.getEditPart(E_CYCLE_FB).parent();
+		assertNotNull(fb1);
+		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, E_CYCLE_FB);
+		assertTrue(fb1Bounds1.contains(pos1.x, pos1.y));
 		final Point pos3 = new Point(85, 85);
-		editor.drag(parent1, pos3.x, pos3.y);
-		final org.eclipse.draw2d.geometry.Point posToCheck3 = new org.eclipse.draw2d.geometry.Point(pos3);
+		editor.drag(fb1, pos3.x, pos3.y);
+		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, E_CYCLE_FB);
+		assertTrue(fb1Bounds2.contains(pos3.x, pos3.y));
 
-		parent1 = editor.getEditPart(E_CYCLE_FB).parent();
-		figure1 = ((GraphicalEditPart) parent1.part()).getFigure();
-		fbBounds1 = figure1.getBounds().getCopy();
-		figure1.translateToAbsolute(fbBounds1);
-		assertEquals(posToCheck3.x, fbBounds1.x);
-		assertEquals(posToCheck3.y, fbBounds1.y);
-
-		// E_SWITCH
+		// select and move E_SWITCH
 		editor.click(E_SWITCH_FB);
-		SWTBotGefEditPart parent2 = editor.getEditPart(E_SWITCH_FB).parent();
-		assertNotNull(parent2);
-
-		IFigure figure2 = ((GraphicalEditPart) parent2.part()).getFigure();
-		assertNotNull(figure2);
-		Rectangle fbBounds2 = figure2.getBounds().getCopy();
-		assertNotNull(fbBounds2);
-		figure2.translateToAbsolute(fbBounds2);
-		assertEquals(pos2.x, fbBounds2.x);
-		assertEquals(pos2.y, fbBounds2.y);
-
-		final org.eclipse.draw2d.geometry.Point posToCheck2 = new org.eclipse.draw2d.geometry.Point(pos2);
-		assertEquals(posToCheck2.x, fbBounds2.x);
-		assertEquals(posToCheck2.y, fbBounds2.y);
-		parent2.click();
-
+		final SWTBotGefEditPart fb2 = editor.getEditPart(E_SWITCH_FB).parent();
+		assertNotNull(fb2);
+		final Rectangle fb2Bounds1 = getAbsolutePosition(editor, E_SWITCH_FB);
+		assertTrue(fb2Bounds1.contains(pos2.x, pos2.y));
 		final Point pos4 = new Point(285, 85);
-		editor.drag(parent2, pos4.x, pos4.y);
-		final org.eclipse.draw2d.geometry.Point posToCheck4 = new org.eclipse.draw2d.geometry.Point(pos4);
-
-		parent2 = editor.getEditPart(E_SWITCH_FB).parent();
-		figure2 = ((GraphicalEditPart) parent2.part()).getFigure();
-		fbBounds2 = figure2.getBounds().getCopy();
-		figure2.translateToAbsolute(fbBounds2);
-		assertEquals(posToCheck4.x, fbBounds2.x);
-		assertEquals(posToCheck4.y, fbBounds2.y);
+		editor.drag(fb2, pos4.x, pos4.y);
+		final Rectangle fb2Bounds2 = getAbsolutePosition(editor, E_SWITCH_FB);
+		assertTrue(fb2Bounds2.contains(pos4.x, pos4.y));
 	}
 
 	/**
-	 * Checks if FBs can be moved together - left click draw rectangle over both FBs
+	 * Checks if FBs can be selected and moved together by drawing a rectangle by
+	 * mouse left click over the FBs
 	 *
+	 * First, a rectangle is drawn next to the FBs to check whether they are not
+	 * selected as expected. Then a rectangle is drawn over the FBs to check whether
+	 * the FBs are selected.
 	 */
-	@Disabled("until implementation")
+	@SuppressWarnings("static-method")
 	@Test
 	public void moveBothFBTogether() {
-		// in progress
+		final Point absPos1Fb1 = new Point(100, 100);
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, absPos1Fb1);
+		final Point absPos1Fb2 = new Point(100, 220);
+		dragAndDropEventsFB(E_SR_TREE_ITEM, absPos1Fb2);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+
+		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, E_CYCLE_FB);
+		assertTrue(fb1Bounds1.contains(absPos1Fb1.x, absPos1Fb1.y));
+		final Rectangle fb2Bounds1 = getAbsolutePosition(editor, E_SR_FB);
+		assertTrue(fb2Bounds1.contains(absPos1Fb2.x, absPos1Fb2.y));
+
+		// drag rectangle over FBs, therefore FBs should be selected
+		editor.drag(50, 50, 400, 400);
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(isFbSelected(selectedEditParts, E_CYCLE_FB));
+		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
+
+		// move selection by clicking on point within selection (120, 120) and drag to
+		// new Point (285, 85)
+		final Point pointFrom = new Point(120, 120);
+		final Point pointTo = new Point(285, 85);
+		editor.drag(pointFrom.x, pointFrom.y, pointTo.x, pointTo.y);
+
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(isFbSelected(selectedEditParts, E_CYCLE_FB));
+		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
+
+		// Calculation of translation
+		final int translationX = pointTo.x - pointFrom.x;
+		final int translationY = pointTo.y - pointFrom.y;
+
+		// Calculation of new Position of E_CYCLEs
+		final int absPos2Fb1X = absPos1Fb1.x + translationX;
+		final int absPos2Fb1Y = absPos1Fb1.y + translationY;
+		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, E_CYCLE_FB);
+		assertEquals(absPos2Fb1X, fb1Bounds2.x);
+		assertEquals(absPos2Fb1Y, fb1Bounds2.y);
+		assertTrue(fb1Bounds2.contains(absPos2Fb1X, absPos2Fb1Y));
+
+		// Calculation of new Position of E_SR
+		final int absPos2Fb2X = absPos1Fb2.x + translationX;
+		final int absPos2Fb2Y = absPos1Fb2.y + translationY;
+		final Rectangle fb2Bounds2 = getAbsolutePosition(editor, E_SR_FB);
+		assertEquals(absPos2Fb2X, fb2Bounds2.x);
+		assertEquals(absPos2Fb2Y, fb2Bounds2.y);
+		assertTrue(fb2Bounds2.contains(absPos2Fb2X, absPos2Fb2Y));
 	}
 
 	/**

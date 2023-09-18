@@ -259,6 +259,17 @@ public class Abstract4diacUITests {
 		});
 	}
 
+	protected static Rectangle getAbsolutePosition(final SWTBotGefEditor editor, final String fb) {
+		final SWTBotGefEditPart parent = editor.getEditPart(fb).parent();
+		assertNotNull(parent);
+		final IFigure figurePos = ((GraphicalEditPart) parent.part()).getFigure();
+		assertNotNull(figurePos);
+		final Rectangle fbBounds = figurePos.getBounds().getCopy();
+		assertNotNull(fbBounds);
+		figurePos.translateToAbsolute(fbBounds);
+		return fbBounds;
+	}
+
 	/**
 	 * Checks if FB is selected by searching selectedEditParts list and returns the
 	 * corresponding boolean value.
