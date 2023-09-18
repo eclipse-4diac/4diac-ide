@@ -29,17 +29,22 @@ import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.AppendServiceSequenceCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateOutputPrimitiveCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateTransactionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPartFactory;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.MinSpaceFreeformFigure;
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.ServiceSequenceTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPartFactory;
@@ -56,9 +61,11 @@ import org.eclipse.jface.widgets.TextFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorPart;
@@ -66,7 +73,7 @@ import org.eclipse.ui.part.ViewPart;
 
 public class ServiceSequenceAssignView extends ViewPart {
 
-	private static final String DEFAULT_SEQUENCE_NAME = Messages.ServiceSequenceSection_ServiceSequence;
+	private static final String DEFAULT_SEQUENCE_NAME = "ServiceSequence"; //$NON-NLS-1$
 	private static final int DEFAULT_SEQUENCE_NUM = 10;
 	private GraphicalViewer viewer;
 	private ActionRegistry actionRegistry;
@@ -75,12 +82,11 @@ public class ServiceSequenceAssignView extends ViewPart {
 	private Text textEvent;
 	private Text textParam;
 	private Text textName;
+	private Group settingsGroup;
 
 	private static final int MARGIN = 10;
 	private boolean sequenceVisible = false;
-	private boolean settingsVisible = false;
-	private boolean isRepeat = true;
-	private ServiceSequence serviceSequence;
+	private ServiceSequence generatedSequence;
 	private int count = DEFAULT_SEQUENCE_NUM;
 
 	private static Composite createParentComposite(final Composite parent) {
@@ -99,8 +105,8 @@ public class ServiceSequenceAssignView extends ViewPart {
 	}
 
 	private static Composite createSubheaderComposite(final Composite parent) {
-		final Composite returnComposite = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(2).generateLayout(returnComposite);
+		final Composite returnComposite = new Composite(parent, SWT.FILL);
+		GridLayoutFactory.fillDefaults().numColumns(11).generateLayout(returnComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(returnComposite);
 		return returnComposite;
 	}
@@ -112,78 +118,45 @@ public class ServiceSequenceAssignView extends ViewPart {
 		return returnComposite;
 	}
 
-	private static Composite createExpandComposite(final Composite parent) {
-		final Composite returnComposite = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(2).generateLayout(returnComposite);
-		GridDataFactory.fillDefaults().grab(false, false).span(2, 1).applyTo(returnComposite);
-		return returnComposite;
-	}
-
-	private static Composite createExpandButtonComposite(final Composite parent) {
-		final Composite returnComposite = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().generateLayout(returnComposite);
-		GridDataFactory.fillDefaults().grab(false, false).applyTo(returnComposite);
-		return returnComposite;
-	}
-
-	private static Composite createSettingsComposite(final Composite parent) {
-		final Composite returnComposite = new Composite(parent, SWT.BORDER);
-		GridLayoutFactory.fillDefaults().numColumns(9).margins(MARGIN, MARGIN).generateLayout(returnComposite);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(returnComposite);
-		return returnComposite;
-	}
-
 	@Override
 	public void createPartControl(final Composite parent) {
+		// create composites
 		final Composite parentComposite = createParentComposite(parent);
 		final Composite headerComposite = createHeaderComposite(parentComposite);
-		final Composite subheaderComposite = createSubheaderComposite(headerComposite);
 		final Composite bodyComposite = createBodyComposite(parentComposite);
 		bodyComposite.setVisible(sequenceVisible);
 
-		lblHead = new Label(subheaderComposite, SWT.LEFT);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(lblHead);
+		// create settings group
+		settingsGroup = new Group(headerComposite, 1);
+		settingsGroup.setLayout(new GridLayout(2, false));
+		settingsGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 
-		final Button reloadBtn = ButtonFactory.newButton(SWT.RIGHT).text(Messages.ServiceSequenceAssignView_RELOAD)
-				.onSelect(x -> {
-					initializeGraphicalViewer();
-				}).create(subheaderComposite);
-		GridDataFactory.fillDefaults().grab(false, false).applyTo(reloadBtn);
+		final Composite subheaderComposite = createSubheaderComposite(settingsGroup);
+		subheaderComposite.setLayout(new GridLayout(11, false));
+		subheaderComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
 
-		final Composite expandComposite = createExpandComposite(subheaderComposite);
-		final Composite expandButtonComposite = createExpandButtonComposite(expandComposite);
-		final Composite settingsComposite = createSettingsComposite(expandComposite);
-		settingsComposite.setVisible(settingsVisible);
+		// name
+		LabelFactory.newLabel(SWT.NONE).text(Messages.ServiceSequenceAssignView_NAME).create(subheaderComposite);
+		textName = TextFactory.newText(SWT.NONE).text(DEFAULT_SEQUENCE_NAME).create(subheaderComposite);
+		textName.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
 
-		final Button expandToggle = ButtonFactory.newButton(SWT.TOGGLE).text("...").onSelect(x -> { //$NON-NLS-1$
-			final Button source = (Button) x.getSource();
-			settingsVisible = source.getSelection();
-			settingsComposite.setVisible(settingsVisible);
-		}).create(expandButtonComposite);
-		GridDataFactory.fillDefaults().grab(false, false).applyTo(expandToggle);
+		// initial events
+		LabelFactory.newLabel(SWT.NONE).text(Messages.ServiceSequenceAssignView_INITIAL_EVENTS)
+				.create(subheaderComposite);
+		textEvent = TextFactory.newText(SWT.NONE).create(subheaderComposite);
+		textEvent.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
 
-		final Label lblName = LabelFactory.newLabel(SWT.NONE).text(Messages.ServiceSequenceAssignView_NAME)
-				.create(settingsComposite);
-		GridDataFactory.fillDefaults().applyTo(lblName);
-		textName = TextFactory.newText(SWT.NONE).text(DEFAULT_SEQUENCE_NAME).create(settingsComposite);
-		GridDataFactory.fillDefaults().applyTo(textName);
+		// initial parameters
+		LabelFactory.newLabel(SWT.NONE).text(Messages.ServiceSequenceAssignView_INITIAL_PARAMETERS)
+				.create(subheaderComposite);
+		textParam = TextFactory.newText(SWT.NONE).create(subheaderComposite);
+		textParam.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
 
-		final Label lblEvent = LabelFactory.newLabel(SWT.NONE).text(Messages.ServiceSequenceAssignView_INITIAL_EVENTS)
-				.create(settingsComposite);
-		GridDataFactory.fillDefaults().applyTo(lblEvent);
-		textEvent = TextFactory.newText(SWT.NONE).create(settingsComposite);
-		GridDataFactory.fillDefaults().applyTo(textEvent);
-
-		final Label lblParam = LabelFactory.newLabel(SWT.NONE)
-				.text(Messages.ServiceSequenceAssignView_INITIAL_PARAMETERS).create(settingsComposite);
-		GridDataFactory.fillDefaults().applyTo(lblParam);
-		textParam = TextFactory.newText(SWT.NONE).create(settingsComposite);
-		GridDataFactory.fillDefaults().applyTo(textParam);
-
-		final Label lblRandom = LabelFactory.newLabel(SWT.NONE).text(Messages.ServiceSequenceAssignView_EVENT_COUNT)
-				.create(settingsComposite);
-		GridDataFactory.fillDefaults().applyTo(lblRandom);
-		final Text numRandom = TextFactory.newText(SWT.NONE).text("10").create(settingsComposite); //$NON-NLS-1$
+		// event-count field
+		LabelFactory.newLabel(SWT.NONE).text(Messages.ServiceSequenceAssignView_EVENT_COUNT).create(subheaderComposite);
+		final Text numRandom = TextFactory.newText(SWT.NONE).text(String.valueOf(DEFAULT_SEQUENCE_NUM))
+				.create(subheaderComposite);
+		numRandom.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true));
 		numRandom.addVerifyListener(e -> {
 			for (final char c : e.text.toCharArray()) {
 				if ((c < '0') || (c > '9')) {
@@ -194,30 +167,34 @@ public class ServiceSequenceAssignView extends ViewPart {
 		});
 		GridDataFactory.fillDefaults().applyTo(numRandom);
 
-		final Button contBtn = ButtonFactory.newButton(SWT.CHECK).text(Messages.ServiceSequenceAssignView_AUTO_CONTINUE)
-				.create(settingsComposite);
-		GridDataFactory.fillDefaults().applyTo(contBtn);
-		contBtn.setSelection(isRepeat);
+		// reload button
+		final Button reloadBtn = ButtonFactory.newButton(SWT.PUSH).text(Messages.ServiceSequenceAssignView_RELOAD)
+				.onSelect(x -> refreshGraphicalViewer()).create(subheaderComposite);
+		reloadBtn.setLayoutData(new GridData(SWT.None, SWT.RIGHT));
+		GridDataFactory.fillDefaults().applyTo(reloadBtn);
 
-		final Composite viewerComposite = new Composite(bodyComposite, SWT.BORDER);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(viewerComposite);
-		viewerComposite.setLayout(new FillLayout());
-
+		// Generate Sequence Button
 		final Consumer<SelectionEvent> gen = x -> {
 			try {
 				count = Integer.parseInt(numRandom.getText());
 			} catch (final NumberFormatException e) {
 				count = DEFAULT_SEQUENCE_NUM;
 			}
-			serviceSequence = getNext();
+			generatedSequence = getNext();
 			sequenceVisible = true;
 			refreshGraphicalViewer();
-			viewerComposite.redraw();
+			subheaderComposite.redraw();
 			bodyComposite.setVisible(sequenceVisible);
 		};
 		final Button genBtn = ButtonFactory.newButton(SWT.PUSH)
 				.text(Messages.ServiceSequenceAssignView_GENERATE_SEQUENCE).onSelect(gen).create(subheaderComposite);
+		genBtn.setLayoutData(new GridData(SWT.None, SWT.RIGHT));
 		GridDataFactory.fillDefaults().applyTo(genBtn);
+
+		// Graphical Viewer + assign type buttons
+		final Composite viewerComposite = new Composite(bodyComposite, SWT.BORDER);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(viewerComposite);
+		viewerComposite.setLayout(new FillLayout());
 
 		final Composite selectorComposite = new Composite(bodyComposite, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(false, false).applyTo(selectorComposite);
@@ -225,87 +202,37 @@ public class ServiceSequenceAssignView extends ViewPart {
 		final Composite subselectorComposite = new Composite(selectorComposite, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(subselectorComposite);
 		subselectorComposite.setLayout(new GridLayout());
+
 		final Button possibleBtn = ButtonFactory.newButton(SWT.PUSH).text(Messages.ServiceSequenceAssignView_POSSIBLE)
-				.onSelect(x -> {
-					serviceSequence.setServiceSequenceType(ServiceSequenceTypes.DEFAULT);
-					saveSequence();
-					isRepeat = contBtn.getSelection();
-					if (isRepeat) {
-						gen.accept(null);
-					} else {
-						sequenceVisible = false;
-						refreshGraphicalViewer();
-						viewerComposite.redraw();
-						bodyComposite.setVisible(sequenceVisible);
-					}
-				}).create(subselectorComposite);
+				.onSelect(x -> assignType(ServiceSequenceTypes.DEFAULT, gen)).create(subselectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(possibleBtn);
 		final Button conditionalBtn = ButtonFactory.newButton(SWT.PUSH)
-				.text("\u2753 " + Messages.ServiceSequenceAssignView_CONDITIONAL).onSelect(x -> { //$NON-NLS-1$
-					serviceSequence.setServiceSequenceType(ServiceSequenceTypes.CONDITIONAL);
-					saveSequence();
-					isRepeat = contBtn.getSelection();
-					if (isRepeat) {
-						gen.accept(null);
-					} else {
-						sequenceVisible = false;
-						refreshGraphicalViewer();
-						viewerComposite.redraw();
-						bodyComposite.setVisible(sequenceVisible);
-					}
-
-				}).create(subselectorComposite);
+				.text("\u2753 " + Messages.ServiceSequenceAssignView_CONDITIONAL).onSelect(x -> //$NON-NLS-1$
+				assignType(ServiceSequenceTypes.CONDITIONAL, gen)).create(subselectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(conditionalBtn);
 		final Button alwaysBtn = ButtonFactory.newButton(SWT.PUSH)
-				.text("\u2705 " + Messages.ServiceSequenceAssignView_ALWAYS).onSelect(x -> { //$NON-NLS-1$
-					serviceSequence.setServiceSequenceType(ServiceSequenceTypes.ALWAYS);
-					saveSequence();
-					isRepeat = contBtn.getSelection();
-					if (isRepeat) {
-						gen.accept(null);
-					} else {
-						sequenceVisible = false;
-						refreshGraphicalViewer();
-						viewerComposite.redraw();
-						bodyComposite.setVisible(sequenceVisible);
-					}
-
-				}).create(subselectorComposite);
+				.text("\u2705 " + Messages.ServiceSequenceAssignView_ALWAYS).onSelect(x -> //$NON-NLS-1$
+				assignType(ServiceSequenceTypes.ALWAYS, gen)).create(subselectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(alwaysBtn);
 		final Button forbiddenBtn = ButtonFactory.newButton(SWT.PUSH)
-				.text("\u26D4 " + Messages.ServiceSequenceAssignView_FORBIDDEN).onSelect(x -> { //$NON-NLS-1$
-					serviceSequence.setServiceSequenceType(ServiceSequenceTypes.FORBIDDEN);
-					saveSequence();
-					isRepeat = contBtn.getSelection();
-					if (isRepeat) {
-						gen.accept(null);
-					} else {
-						sequenceVisible = false;
-						refreshGraphicalViewer();
-						viewerComposite.redraw();
-						bodyComposite.setVisible(sequenceVisible);
-					}
-
-				}).create(subselectorComposite);
+				.text("\u26D4 " + Messages.ServiceSequenceAssignView_FORBIDDEN).onSelect(x -> //$NON-NLS-1$
+				assignType(ServiceSequenceTypes.FORBIDDEN, gen)).create(subselectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(forbiddenBtn);
 
 		final Button skipBtn = ButtonFactory.newButton(SWT.PUSH).text(Messages.ServiceSequenceAssignView_SKIP)
-				.onSelect(x -> {
-					isRepeat = contBtn.getSelection();
-					if (isRepeat) {
-						gen.accept(null);
-					} else {
-						sequenceVisible = false;
-						refreshGraphicalViewer();
-						viewerComposite.redraw();
-						bodyComposite.setVisible(sequenceVisible);
-					}
-				}).create(selectorComposite);
+				.onSelect(x -> gen.accept(null)).create(selectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(skipBtn);
 
 		createGraphicalViewer(viewerComposite);
 
 		setTitleImage(FordiacImage.ICON_BASIC_FB.getImage());
+	}
+
+	private void assignType(final String type, final Consumer<SelectionEvent> gen) {
+		generatedSequence.setServiceSequenceType(type);
+		saveSequence();
+		gen.accept(null);
+
 	}
 
 	private void createGraphicalViewer(final Composite parent) {
@@ -333,15 +260,18 @@ public class ServiceSequenceAssignView extends ViewPart {
 			if (lblHead != null) {
 				lblHead.setText(fbType.getName());
 			}
+			if (settingsGroup != null) {
+				settingsGroup.setText(fbType.getName());
+			}
 		}
 
 	}
 
 	private void refreshGraphicalViewer() {
-		if ((fbType != null) && (serviceSequence != null)) {
+		if ((fbType != null) && (generatedSequence != null)) {
 			final FBType typeCopy = EcoreUtil.copy(fbType);
 			typeCopy.setService(ServiceFactory.createDefaultServiceModel());
-			typeCopy.getService().getServiceSequence().set(0, serviceSequence);
+			typeCopy.getService().getServiceSequence().set(0, generatedSequence);
 			viewer.setContents(typeCopy);
 		}
 	}
@@ -352,7 +282,35 @@ public class ServiceSequenceAssignView extends ViewPart {
 
 	private void saveSequence() {
 		final CommandStack cs = getSite().getPage().getActiveEditor().getAdapter(CommandStack.class);
-		cs.execute(new AppendServiceSequenceCommand(fbType.getService(), serviceSequence));
+		// cs.execute(new AppendServiceSequenceCommand(fbType.getService(),
+		// generatedSequence));
+
+		// create generated sequence
+		cs.execute(new CreateServiceSequenceCommand(fbType.getService()));
+		final ServiceSequence sequence = fbType.getService().getServiceSequence()
+				.get(fbType.getService().getServiceSequence().size() - 1);
+		sequence.setName(NameRepository.createUniqueName(sequence, generatedSequence.getName() + "_1")); //$NON-NLS-1$
+		sequence.setComment(generatedSequence.getComment());
+		for (final ServiceTransaction genTransaction : generatedSequence.getServiceTransaction()) {
+			cs.execute(new CreateTransactionCommand(sequence));
+			final ServiceTransaction transaction = sequence.getServiceTransaction()
+					.get(sequence.getServiceTransaction().size() - 1);
+			transaction.getInputPrimitive().setParameters(genTransaction.getInputPrimitive().getParameters());
+			for (final OutputPrimitive outP : genTransaction.getOutputPrimitive()) {
+				boolean isLeftInterface = false;
+				if (fbType.getService().getLeftInterface().getName().equals(outP.getInterface().getName())) {
+					isLeftInterface = true;
+				}
+				cs.execute(new CreateOutputPrimitiveCommand(transaction, isLeftInterface));
+				transaction.getOutputPrimitive().get(transaction.getOutputPrimitive().size() - 1)
+						.setEvent(outP.getEvent());
+				transaction.getOutputPrimitive().get(transaction.getOutputPrimitive().size() - 1)
+						.setParameters(outP.getParameters());
+			}
+		}
+		sequence.setServiceSequenceType(generatedSequence.getServiceSequenceType());
+		sequence.setStartState(generatedSequence.getStartState());
+
 	}
 
 	@Override
@@ -383,6 +341,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 	private ServiceSequence getNext() {
 		if (fbType != null) {
 			final ServiceSequence seq = LibraryElementFactory.eINSTANCE.createServiceSequence();
+
 			String name = textName.getText();
 			if ((name == null) || name.isBlank()) {
 				name = DEFAULT_SEQUENCE_NAME;
@@ -398,6 +357,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 			} catch (final Exception e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
+			seq.setStartState("START"); //$NON-NLS-1$
 			return seq;
 		}
 
