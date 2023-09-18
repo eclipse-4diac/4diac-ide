@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.tests;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -27,7 +28,7 @@ public class ContractTest {
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void test() {
+	public void testValid() {
 		final Contract contract = Contract
 				.getContractFromComment("ASSUMPTION CU occurs every [11,22]ms" + System.lineSeparator() //$NON-NLS-1$
 						+ "GUARANTEE Whenever event CU occurs, then event CUO occurs within [7,10]ms"); //$NON-NLS-1$
@@ -46,6 +47,28 @@ public class ContractTest {
 		subApp.getSubAppNetwork().getNetworkElements().add(EcoreUtil.copy(subApp));
 		assertTrue(contract.isValid());
 
+	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void testNotValid() {
+		final Contract contract = Contract
+				.getContractFromComment("ASSUMPTION CU occurs every [11,22]ms" + System.lineSeparator() //$NON-NLS-1$
+						+ "GUARANTEE Whenever event CU occurs, then event CUO occurs within [7,10]ms"); //$NON-NLS-1$
+		final SubApp subApp = LibraryElementFactory.eINSTANCE.createSubApp();
+		subApp.setName("_CONTRACT_Test"); //$NON-NLS-1$
+		contract.setOwner(subApp);
+		final InterfaceList iList = LibraryElementFactory.eINSTANCE.createInterfaceList();
+		subApp.setInterface(iList);
+		final Event input = LibraryElementFactory.eINSTANCE.createEvent();
+		input.setName("CD"); //$NON-NLS-1$
+		subApp.getInterface().getEventInputs().add(input);
+		final Event output = LibraryElementFactory.eINSTANCE.createEvent();
+		output.setName("CUO"); //$NON-NLS-1$
+		subApp.getInterface().getEventOutputs().add(output);
+		subApp.setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
+		subApp.getSubAppNetwork().getNetworkElements().add(EcoreUtil.copy(subApp));
+		assertFalse(contract.isValid());
 	}
 
 }
