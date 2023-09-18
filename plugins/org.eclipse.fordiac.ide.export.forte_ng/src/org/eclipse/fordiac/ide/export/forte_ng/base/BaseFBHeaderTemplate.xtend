@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 - 2023 Martin Erich Jobst
- *               2022, 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Martin Erich Jobst,
+ *               			Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -51,36 +51,30 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		  «generateFBInterfaceDeclaration»
 		
 		  «generateFBInterfaceSpecDeclaration»
+		
 		  «IF !type.internalFbs.empty»
 		  	static const size_t csmAmountOfInternalFBs = «type.internalFbs.size»;
 		  	TFunctionBlockPtr *mInternalFBs = createInternalFBs(csmAmountOfInternalFBs, scmInternalFBDefinitions, getResourcePtr());
 		  	«generateInternalFbDefinition»
 		  	
 		  «ENDIF»
-		  «IF !type.internalVars.isEmpty»
-		  	«generateInternalVarDeclaration(type)»
-		  	
-		  	«type.internalVars.generateVariableDeclarations(false)»
-		  	
-		  «ENDIF»
-		  «IF !type.internalConstVars.isEmpty»
-		  	«type.internalConstVars.generateVariableDeclarations(true)»
-		  	
-		  «ENDIF»
+		  «generateInternalVarDeclaration(type)»
+		  «type.internalVars.generateVariableDeclarations(false)»
+		  «type.internalConstVars.generateVariableDeclarations(true)»
 		  «generateAccessorDeclaration("getVarInternal", false)»
+		
 		  «type.internalFbs.generateInternalFBAccessors»
 		  «generateAlgorithms»
 		  «generateMethods»
 		  «generateAdditionalDeclarations»
-		
-		  void executeEvent(TEventID paEIID) override;
+		  void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 		
 		  «generateReadInputDataDeclaration»
 		  «generateWriteOutputDataDeclaration»
 		  «(type.internalVars + type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
 		public:
-		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);
+		  «FBClassName»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
 		«IF !type.internalFbs.empty»
 			
 			  EMGMResponse changeFBExecutionState(EMGMCommandType paCommand) override;
@@ -113,7 +107,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 	def abstract CharSequence generateClassInclude()
 
 	def protected generateAlgorithms() '''
-		«FOR alg : type.algorithm»
+		«FOR alg : type.algorithm AFTER '\n'»
 			«alg.generateAlgorithm»
 		«ENDFOR»
 	'''
@@ -123,7 +117,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 	'''
 
 	def protected generateMethods() '''
-		«FOR method : type.methods»
+		«FOR method : type.methods AFTER '\n'»
 			«methodLanguageSupport.get(method)?.generate(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})»
 		«ENDFOR»
 	'''

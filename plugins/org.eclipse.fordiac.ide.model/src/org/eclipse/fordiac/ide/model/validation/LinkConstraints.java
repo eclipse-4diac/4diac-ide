@@ -43,20 +43,24 @@ import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 /** The Class LinkConstraints. */
 public final class LinkConstraints {
 
-	/** Can create data connection.
+	/**
+	 * Can create data connection.
 	 *
 	 * @param source             the source
 	 * @param target             the target
 	 * @param parent             the fbnetwork the connection should be created in
 	 * @param internalConnection the internal connection
 	 *
-	 * @return true, if a data connection can be created (the source and target type are compatible */
+	 * @return true, if a data connection can be created (the source and target type
+	 *         are compatible
+	 */
 	public static boolean canCreateDataConnection(final IInterfaceElement source, final IInterfaceElement target,
 			final FBNetwork parent) {
 		return canExistDataConnection(source, target, parent, null);
 	}
 
-	/** Can exist data connection.
+	/**
+	 * Can exist data connection.
 	 *
 	 * @param source             the source
 	 * @param target             the target
@@ -64,15 +68,17 @@ public final class LinkConstraints {
 	 * @param internalConnection the internal connection
 	 * @param reConnect          is it a reconnection or not
 	 *
-	 * @return true, if successful */
+	 * @return true, if successful
+	 */
 	public static boolean canExistDataConnection(IInterfaceElement source, IInterfaceElement target,
-			final FBNetwork parent,
-			final Connection con) {
+			final FBNetwork parent, final Connection con) {
 
 		if (!isDataPin(source) || !isDataPin(target)) {
 			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
+
+		// from here on we can assume we have only data pins
 
 		if (isSwapNeeded(source, parent)) {
 			final IInterfaceElement temp = source;
@@ -85,6 +91,13 @@ public final class LinkConstraints {
 			return false;
 		}
 
+		if (target instanceof final VarDeclaration targetData && targetData.isInOutVar()
+				&& source instanceof final VarDeclaration sourceData && !sourceData.isInOutVar()) {
+			// a non inout is connected to an inout
+			ErrorMessenger.popUpErrorMessage(Messages.ConnectionValidator_OutputsCannotBeConnectedToVarInOuts);
+			return false;
+		}
+
 		if (!hasAlreadyInputConnectionsCheck(source, target, con)) {
 			ErrorMessenger.popUpErrorMessage(MessageFormat
 					.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, target.getName()));
@@ -92,32 +105,33 @@ public final class LinkConstraints {
 		}
 
 		if (!typeCheck(source, target)) {
-
 			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
-					(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
-							(null != target.getType()) ? target.getType().getName() : FordiacMessages.NA));
+					(null != source.getFullTypeName()) ? source.getFullTypeName() : FordiacMessages.NA,
+					(null != target.getFullTypeName()) ? target.getFullTypeName() : FordiacMessages.NA));
 			return false;
 
 		}
 
-
 		return isWithConstraintOK(source) && isWithConstraintOK(target);
 	}
 
-
-	/** Elements which are not linked by a with construct are not allowed to be connected
+	/**
+	 * Elements which are not linked by a with construct are not allowed to be
+	 * connected
 	 *
 	 * @param varDecl
-	 * @return */
+	 * @return
+	 */
 	public static boolean isWithConstraintOK(final IInterfaceElement varDecl) {
 		if ((!(varDecl instanceof ErrorMarkerInterface)) && (((VarDeclaration) varDecl).getWiths().isEmpty())) {
-			// data in or outputs which are not connect by withs are not allowed to be connected
-			EObject obj = varDecl.eContainer();
-			if (null != obj) {
-				obj = obj.eContainer();
+			// data in or outputs which are not connect by withs are not allowed to be
+			// connected
+			if (null != varDecl.eContainer()) {
+				final var obj = varDecl.eContainer().eContainer();
 				if ((obj instanceof CompositeFBType) || (obj instanceof SubApp)
 						|| (obj instanceof ErrorMarkerFBNElement)) {
-					// data connections from and to interface data ports from composits, subaps, error markers should
+					// data connections from and to interface data ports from composits, subaps,
+					// error markers should
 					// also be allowed from unwithed composite inputs (e.g., parameters for the FB)
 					return true;
 				}
@@ -131,13 +145,7 @@ public final class LinkConstraints {
 	}
 
 	public static boolean hasAlreadyOutputConnectionsCheck(final IInterfaceElement source, final Connection con) {
-		for (final Connection connection : source.getOutputConnections()) {
-			if (!connection.equals(con)) {
-				return true;
-			}
-		}
-
-		return false;
+		return source.getOutputConnections().stream().anyMatch(connection -> !connection.equals(con));
 	}
 
 	/**
@@ -146,12 +154,18 @@ public final class LinkConstraints {
 	 * @param source the source
 	 * @param target the target
 	 *
-	 * @return true, if successful
+	 * @return true, if target is assignable from source
 	 */
 	public static boolean typeCheck(final IInterfaceElement source, final IInterfaceElement target) {
 		final DataType sourceType = getFullDataType(source);
 		final DataType targetType = getFullDataType(target);
-		// if source has generic type, it adapts to the target, which must fall into the generic type category
+		// Stricter type checks for VAR_IN_OUTs
+		if (source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()
+				&& target instanceof final VarDeclaration targetVar && targetVar.isInOutVar()) {
+			return targetType.isAssignableFrom(sourceType) && sourceType.isAssignableFrom(targetType);
+		}
+		// if source has generic type, it adapts to the target, which must fall into the
+		// generic type category
 		if (GenericTypes.isAnyType(sourceType) && sourceType.isAssignableFrom(targetType)) {
 			return true;
 		}
@@ -165,40 +179,29 @@ public final class LinkConstraints {
 		return element.getType();
 	}
 
-	/** Checks for already input connections check.
+	/**
+	 * Checks for already input connections check.
 	 *
 	 * @param target the target
 	 * @param con
 	 *
-	 * @return true, if successful */
+	 * @return true, if successful
+	 */
 	public static boolean hasAlreadyInputConnectionsCheck(final IInterfaceElement src, final IInterfaceElement target,
 			final Connection con) {
-		boolean hasOnlyBrokenCons = true;
-
 		if (!target.getInputConnections().isEmpty()) {
 			final FBNetwork fbNetworkTarget = getContainingFBNetwork(target);
 			final FBNetwork fbNetworkSrc = getContainingFBNetwork(src);
 			if ((null != fbNetworkTarget) && (fbNetworkTarget != fbNetworkSrc)) {
-				// Broken connection check must only be performed of src and target are in
-				// different networks allowing to connect broken
-				// connections in the same container would lead to broken fb networks, see
-				// [issues:#82] for details
-				for (final Connection connection : target.getInputConnections()) {
-					if ((!connection.isBrokenConnection()) && !(connection.equals(con))) {
-						hasOnlyBrokenCons = false;
-						break;
-					}
-				}
-			} else {
-				for (final Connection connection : target.getInputConnections()) {
-					if (!connection.equals(con)) {
-						hasOnlyBrokenCons = false;
-						break;
-					}
-				}
+				// Broken connection check must only be performed if src and target are in
+				// different networks allowing to connect broken connections in the same
+				// container would lead to broken fb networks, see [issues:#82] for details
+				return target.getInputConnections().stream()
+						.noneMatch(connection -> (!connection.isBrokenConnection()) && !(connection.equals(con)));
 			}
+			return target.getInputConnections().stream().noneMatch(connection -> (!connection.equals(con)));
 		}
-		return hasOnlyBrokenCons;
+		return true;
 	}
 
 	public static boolean isSwapNeeded(final IInterfaceElement source, final FBNetwork parent) {
@@ -213,26 +216,21 @@ public final class LinkConstraints {
 	}
 
 	private static FBNetwork getContainingFBNetwork(final IInterfaceElement target) {
-		FBNetwork retVal = null;
-		EObject obj = target.eContainer();
-		if (null != obj) {
-			obj = obj.eContainer();
-			if (null != obj) {
-				obj = obj.eContainer();
-				if (obj instanceof FBNetwork) {
-					retVal = (FBNetwork) obj;
-				}
-			}
+		if ((null != target.eContainer() && target.eContainer().eContainer() != null)
+				&& (target.eContainer().eContainer().eContainer() instanceof final FBNetwork fbNetwork)) {
+			return fbNetwork;
 		}
-		return retVal;
+		return null;
 	}
 
-	/** Source and dest check.
+	/**
+	 * Source and dest check.
 	 *
 	 * @param source the source
 	 * @param target the target
 	 *
-	 * @return true, if successful */
+	 * @return true, if successful
+	 */
 	public static boolean sourceAndDestCheck(final IInterfaceElement source, final IInterfaceElement target,
 			final FBNetwork parent) {
 		return isValidConnSource(source, parent) && isValidConnDestination(target, parent);
@@ -241,20 +239,24 @@ public final class LinkConstraints {
 	public static boolean isValidConnSource(final IInterfaceElement source, final FBNetwork parent) {
 		final EObject sourceCont = source.eContainer().eContainer();
 		if (!source.isIsInput()) {
-			// an output can only be a connection source if its container is part of the parent
+			// an output can only be a connection source if its container is part of the
+			// parent
 			return sourceCont != null && parent == sourceCont.eContainer();
 		}
-		// an input can only be a connection source if its a type input or the parent is the inside of the subapp
+		// an input can only be a connection source if its a type input or the parent is
+		// the inside of the subapp
 		return isTypeContainer(sourceCont) || isInsideSubapp(sourceCont, parent);
 	}
 
 	public static boolean isValidConnDestination(final IInterfaceElement dst, final FBNetwork parent) {
 		final EObject dstCont = dst.eContainer().eContainer();
 		if (dst.isIsInput()) {
-			// an input can only be a connection source if its container is part of the parent
+			// an input can only be a connection source if its container is part of the
+			// parent
 			return dstCont != null && parent == dstCont.eContainer();
 		}
-		// an output can only be a connection source if its a type input or the parent is the inside of the subapp
+		// an output can only be a connection source if its a type input or the parent
+		// is the inside of the subapp
 		return isTypeContainer(dstCont) || isInsideSubapp(dstCont, parent);
 	}
 
@@ -263,17 +265,18 @@ public final class LinkConstraints {
 	}
 
 	private static boolean isInsideSubapp(final EObject cont, final FBNetwork parent) {
-		return (cont instanceof SubApp) && ((SubApp) cont).getSubAppNetwork() == parent;
+		return (cont instanceof final SubApp subApp) && subApp.getSubAppNetwork() == parent;
 	}
 
-
-	/** Can exist event connection.
+	/**
+	 * Can exist event connection.
 	 *
 	 * @param source             the source
 	 * @param target             the target
 	 * @param internalConnection the internal connection
 	 *
-	 * @return true, if successful */
+	 * @return true, if successful
+	 */
 	public static boolean canExistEventConnection(IInterfaceElement source, IInterfaceElement target,
 			final FBNetwork parent) {
 		if (!isEventPin(source) || !isEventPin(target)) {
@@ -344,10 +347,9 @@ public final class LinkConstraints {
 		}
 
 		if (!adapaterTypeCompatibilityCheck(source, target)) {
-			ErrorMessenger
-			.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
+			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
 					(null != source.getType()) ? source.getType().getName() : FordiacMessages.ND,
-							(null != target.getType()) ? target.getType().getName() : FordiacMessages.ND));
+					(null != target.getType()) ? target.getType().getName() : FordiacMessages.ND));
 			return false;
 		}
 
@@ -358,7 +360,6 @@ public final class LinkConstraints {
 			final FBNetwork parent) {
 		return canExistAdapterConnection(source, target, parent, null);
 	}
-
 
 	public static boolean adapaterTypeCompatibilityCheck(final IInterfaceElement source,
 			final IInterfaceElement target) {
@@ -371,7 +372,7 @@ public final class LinkConstraints {
 	}
 
 	private LinkConstraints() {
-		throw new UnsupportedOperationException(Messages.LinkConstraints_ClassLinconstraintsShouldNotBeCreated);
+		throw new UnsupportedOperationException(Messages.LinkConstraints_ClassLinkconstraintsShouldNotBeCreated);
 	}
 
 }

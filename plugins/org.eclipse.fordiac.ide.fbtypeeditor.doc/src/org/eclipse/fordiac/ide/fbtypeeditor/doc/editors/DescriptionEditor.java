@@ -74,7 +74,6 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 	private CommandStack commandStack;
 	private RichTextEditor editor;
 
-
 	private FBType getFbType() {
 		return getEditorInput().getContent();
 	}
@@ -144,11 +143,10 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 				@Override
 				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 					try (FileInputStream fileInputStreamReader = new FileInputStream(image)) {
-						final byte[] bytes = new byte[(int) image.length()];
-						fileInputStreamReader.read(bytes);
+						final byte[] bytes = fileInputStreamReader.readAllBytes();
 						final String base64 = Base64.getEncoder().encodeToString(bytes);
-						Display.getDefault().asyncExec(
-								() -> editor.insertHTML("<img src= data:image/png;base64," + base64 + ">")); //$NON-NLS-1$ //$NON-NLS-2$
+						Display.getDefault()
+								.asyncExec(() -> editor.insertHTML("<img src= data:image/png;base64," + base64 + ">")); //$NON-NLS-1$ //$NON-NLS-2$
 						return Status.OK_STATUS;
 					} catch (final IOException e) {
 						FordiacLogHelper.logError(e.getMessage(), e);
@@ -167,7 +165,54 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 		GridLayoutFactory.fillDefaults().margins(0, 0).applyTo(parent);
 
 		try {
-			editor = new RichTextEditor(parent, createRichTextEditorConfiguration());
+			editor = new RichTextEditor(parent, createRichTextEditorConfiguration()) {
+				// all of this sanitization should be done by the nebula richtext widget internally
+				// FIXME: this anonymous class can be deleted when this has been fixed upstream
+				private String sanitize(final String text) {
+					// browser.evaluate will consume one layer of escaping and uses single quotes for string enclosing
+					return text.replace("\\", "\\\\").replace("\'", "\\\'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				}
+
+				private String sanitizeNewline(final String text) {
+					// browser.evaluate takes a string, a string literal can not continue across a newline
+					return text.replace("\n", "\\n").replace("\r", "\\r"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				}
+
+				private boolean isEditorLoaded() {
+					// the value of editorLoaded is not accessible by this class - we just work around that
+					boolean editorLoaded = false;
+					try {
+						var editorLoadedField = RichTextEditor.class.getDeclaredField("editorLoaded"); //$NON-NLS-1$
+						editorLoadedField.setAccessible(true);
+						editorLoaded = ((Boolean) editorLoadedField.get(this)).booleanValue();
+					} catch (Exception e) {
+						FordiacLogHelper.logInfo(e.getMessage());
+					}
+					return editorLoaded;
+				}
+				
+				@Override
+				public void setText(final String text) {
+					if (isEditorLoaded()) {
+				        super.setText(sanitize(text));
+					} else {
+						super.setText(text);
+					}
+				}
+
+				@Override
+				public void insertText(final String text) {
+					// currently unused
+					super.insertText(sanitizeNewline(sanitize(text)));
+				}
+
+				@Override
+				public void insertHTML(final String html) {
+					// currently only used to insert images, would also work without sanitization
+					super.insertHTML(sanitizeNewline(sanitize(html)));
+				}
+
+			};
 
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
 			editor.setText(getFbType().getDocumentation());
@@ -203,15 +248,13 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 
 		// FIXME disable custom button on Gtk/WebKit, which causes the UI to hang for 10s
 		// until https://bugs.eclipse.org/bugs/show_bug.cgi?id=581144 is fixed
-		if (!SWT.getPlatform().equals("gtk")) { //$NON-NLS-1$
+		if (!"gtk".equals(SWT.getPlatform())) { //$NON-NLS-1$
 			final InsertConvertedImageButton base64ImageInsert = new InsertConvertedImageButton();
 			editorConfig.addToolbarButton(base64ImageInsert);
 		}
 
 		return editorConfig;
 	}
-
-
 
 	private void executeCommand(final Command cmd) {
 		if (commandStack != null && cmd != null) {
@@ -264,7 +307,5 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 	public Object getSelectableEditPart() {
 		return null;
 	}
-
-
 
 }

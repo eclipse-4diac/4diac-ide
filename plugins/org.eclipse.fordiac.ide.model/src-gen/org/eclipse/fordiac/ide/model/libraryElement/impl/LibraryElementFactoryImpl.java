@@ -50,7 +50,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -78,6 +77,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
@@ -188,7 +188,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.COMMENT: return createComment();
 			case LibraryElementPackage.COMMUNICATION_CHANNEL: return createCommunicationChannel();
 			case LibraryElementPackage.COMMUNICATION_MAPPING_TARGET: return createCommunicationMappingTarget();
-			case LibraryElementPackage.COMPILABLE_TYPE: return createCompilableType();
 			case LibraryElementPackage.COMPILER: return createCompiler();
 			case LibraryElementPackage.COMPILER_INFO: return createCompilerInfo();
 			case LibraryElementPackage.COMPOSITE_FB_TYPE: return createCompositeFBType();
@@ -217,6 +216,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.GROUP: return createGroup();
 			case LibraryElementPackage.HIDDEN_ELEMENT: return createHiddenElement();
 			case LibraryElementPackage.IDENTIFICATION: return createIdentification();
+			case LibraryElementPackage.IMPORT: return createImport();
 			case LibraryElementPackage.INPUT_PRIMITIVE: return createInputPrimitive();
 			case LibraryElementPackage.INTERFACE_LIST: return createInterfaceList();
 			case LibraryElementPackage.LIBRARY_ELEMENT: return createLibraryElement();
@@ -515,17 +515,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public CommunicationMappingTarget createCommunicationMappingTarget() {
 		CommunicationMappingTargetImpl communicationMappingTarget = new CommunicationMappingTargetImpl();
 		return communicationMappingTarget;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public CompilableType createCompilableType() {
-		CompilableTypeImpl compilableType = new CompilableTypeImpl();
-		return compilableType;
 	}
 
 	/**
@@ -834,6 +823,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public Identification createIdentification() {
 		IdentificationImpl identification = new IdentificationImpl();
 		return identification;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Import createImport() {
+		ImportImpl import_ = new ImportImpl();
+		return import_;
 	}
 
 	/**

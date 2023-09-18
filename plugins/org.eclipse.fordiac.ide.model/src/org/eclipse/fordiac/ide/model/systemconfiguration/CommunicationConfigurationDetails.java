@@ -67,7 +67,7 @@ public abstract class CommunicationConfigurationDetails {
 
 	private static IConfigurationElement getCommConfigExtensionPoint(final String attribute, final String value) {
 		for (final IConfigurationElement e : getCommConfigExtensionPoint()) {
-			if (value.equals(e.getAttribute(attribute))) {
+			if (value.equalsIgnoreCase(e.getAttribute(attribute))) {
 				return e;
 			}
 		}

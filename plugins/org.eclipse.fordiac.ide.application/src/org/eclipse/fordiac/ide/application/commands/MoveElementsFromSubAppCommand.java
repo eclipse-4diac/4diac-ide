@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateComm
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -76,11 +77,8 @@ public class MoveElementsFromSubAppCommand extends Command {
 	}
 
 	private SubApp getSourceSubapp() {
-		if (!elements.isEmpty()) {
-			final FBNetworkElement fbel = this.elements.get(0).getOuterFBNetworkElement();
-			if (fbel instanceof SubApp) {
-				return (SubApp) fbel;
-			}
+		if (!elements.isEmpty() && (elements.get(0).getOuterFBNetworkElement() instanceof final SubApp fbel)) {
+			return fbel;
 		}
 		return null;
 	}
@@ -202,7 +200,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 		deleteConnectionsAndInterfaceElements.undo();
 		elements.forEach(this::undoRemoveElementFromSubapp);
 		unmappingCmds.undo();
-		// check for connections beiing displayed right (broken or not)
+		// check for connections being displayed right (broken or not)
 		elements.forEach(FBNetworkElement::checkConnections);
 	}
 

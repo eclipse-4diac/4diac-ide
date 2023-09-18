@@ -168,32 +168,6 @@ United States, other countries, or both.\n
    </license>
 
    <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.ui.forms"/>
-      <import plugin="org.eclipse.emf.edit"/>
-      <import plugin="org.eclipse.gef"/>
-      <import plugin="org.eclipse.emf.edit.ui"/>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.ui.views.properties.tabbed"/>
-      <import plugin="org.eclipse.ui.views"/>
-      <import plugin="org.eclipse.text"/>
-      <import plugin="org.eclipse.xtext.ui"/>
-      <import plugin="org.eclipse.ui.workbench"/>
-      <import plugin="org.eclipse.ui.navigator"/>
-      <import plugin="org.eclipse.ltk.core.refactoring"/>
-      <import plugin="org.eclipse.ui.editors"/>
-      <import plugin="org.eclipse.compare"/>
-      <import plugin="org.eclipse.xtext.ui.codetemplates.ui"/>
-      <import plugin="org.antlr.runtime"/>
-      <import plugin="org.eclipse.xtext.ui.shared"/>
-      <import plugin="org.apache.log4j"/>
-      <import plugin="org.eclipse.jface.text"/>
-      <import plugin="org.eclipse.emf.ecore"/>
-      <import plugin="org.eclipse.xtext.util"/>
-      <import plugin="org.eclipse.emf.common"/>
-      <import plugin="org.eclipse.xtext"/>
       <import feature="org.eclipse.fordiac.ide.workbench.feature"/>
    </requires>
 

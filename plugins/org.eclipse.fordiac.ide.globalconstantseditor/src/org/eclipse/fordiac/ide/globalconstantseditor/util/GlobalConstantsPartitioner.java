@@ -24,11 +24,16 @@ import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGra
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
@@ -36,12 +41,20 @@ import org.eclipse.xtext.resource.XtextResource;
 
 import com.google.inject.Inject;
 
-public class GlobalConstantsPartitioner {
+public class GlobalConstantsPartitioner implements STCorePartitioner {
 	@Inject
 	private GlobalConstantsGrammarAccess grammarAccess;
 
 	@Inject
 	private IEObjectDocumentationProvider documentationProvider;
+
+	@Override
+	public String combine(final LibraryElement libraryElement) {
+		if (libraryElement instanceof final GlobalConstants globalConstants) {
+			return combine(globalConstants);
+		}
+		return ""; //$NON-NLS-1$
+	}
 
 	public String combine(final GlobalConstants globalConstants) {
 		if (globalConstants.getSource() != null && globalConstants.getSource().getText() != null) {
@@ -62,7 +75,8 @@ public class GlobalConstantsPartitioner {
 		return "%s : %s;".formatted(decl.getName(), decl.getFullTypeName()); //$NON-NLS-1$
 	}
 
-	public Optional<EList<VarDeclaration>> partition(final XtextResource resource) {
+	@Override
+	public Optional<? extends STCorePartition> partition(final XtextResource resource) {
 		if (resource.getEntryPoint() != null
 				&& resource.getEntryPoint() != grammarAccess.getSTGlobalConstsSourceRule()) {
 			return Optional.empty();
@@ -74,16 +88,26 @@ public class GlobalConstantsPartitioner {
 		return Optional.empty();
 	}
 
-	protected Optional<EList<VarDeclaration>> partition(final STGlobalConstsSource source) {
+	protected Optional<? extends STCorePartition> partition(final STGlobalConstsSource source) {
 		try {
-			final var result = source.getElements().stream().flatMap(block -> block.getVarDeclarations().stream())
+			final var node = NodeModelUtils.findActualNodeFor(source);
+			final var text = node != null ? node.getText() : null;
+			final var imports = source.getImports().stream().map(this::convertSourceElement).filter(Objects::nonNull)
+					.collect(Collectors.<Import, EList<Import>>toCollection(ECollections::newBasicEList));
+			final var constants = source.getElements().stream().flatMap(block -> block.getVarDeclarations().stream())
 					.map(this::convertSourceElement).filter(Objects::nonNull).collect(Collectors
 							.<VarDeclaration, EList<VarDeclaration>>toCollection(ECollections::newBasicEList));
-			handleDuplicates(result);
-			return Optional.of(result);
+			handleDuplicates(constants);
+			return Optional.of(new GlobalConstantsPartition(source.getName(), imports, text, constants));
 		} catch (final Exception e) {
 			return Optional.empty();
 		}
+	}
+
+	protected Import convertSourceElement(final STImport decl) {
+		final var result = LibraryElementFactory.eINSTANCE.createImport();
+		result.setImportedNamespace(decl.getImportedNamespace());
+		return result;
 	}
 
 	protected VarDeclaration convertSourceElement(final STVarDeclaration decl) {

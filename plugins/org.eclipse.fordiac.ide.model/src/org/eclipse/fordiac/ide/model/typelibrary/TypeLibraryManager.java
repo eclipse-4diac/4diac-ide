@@ -1,7 +1,8 @@
 /********************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems,
+ * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems,
  * 		            		Johannes Kepler University,
  *                          Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +19,7 @@
  *              - Added support for project renameing
  *              - Extracted the typelibrary managing functions from the
  *                TypeLibrary
+ *  Martin Jobst - add helper to get type library from context object
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -37,6 +39,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public enum TypeLibraryManager {
@@ -50,7 +57,32 @@ public enum TypeLibraryManager {
 		synchronized (typeLibraryList) {
 			return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
 		}
+	}
 
+	public TypeLibrary getTypeLibraryFromContext(final EObject context) {
+		// attempt to get from root library element
+		if (EcoreUtil.getRootContainer(context) instanceof final LibraryElement libraryElement) {
+			return libraryElement.getTypeLibrary();
+		}
+		// attempt to get from EMF resource through URI
+		final Resource resource = context.eResource();
+		if (resource != null) {
+			final URI uri = resource.getURI();
+			if (uri != null) {
+				final IFile file;
+				if (uri.isPlatformResource()) {
+					file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true)));
+				} else if (uri.isFile()) {
+					file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toFileString()));
+				} else {
+					return null;
+				}
+				if (file.getProject() != null) {
+					return getTypeLibrary(file.getProject());
+				}
+			}
+		}
+		return null;
 	}
 
 	public void removeProject(final IProject project) {

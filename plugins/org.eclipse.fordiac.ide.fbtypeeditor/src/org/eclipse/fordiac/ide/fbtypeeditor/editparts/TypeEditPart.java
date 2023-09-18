@@ -38,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -199,7 +198,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
 	protected IInterfaceElement getTargetInterfaceElement() {
 		if (getCastedModel() instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && !varDecl.isIsInput()) {
-			return ((InterfaceList) varDecl.eContainer()).getInOutVarOpposite(varDecl);
+			return varDecl.getInOutVarOpposite();
 		}
 		return getCastedModel();
 	}

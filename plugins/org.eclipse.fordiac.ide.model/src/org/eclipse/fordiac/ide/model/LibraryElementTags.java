@@ -139,8 +139,11 @@ public final class LibraryElementTags {
 	public static final String DATE_ATTRIBUTE = "Date"; //$NON-NLS-1$
 	public static final String REMARKS_ATTRIBUTE = "Remarks"; //$NON-NLS-1$
 	public static final String COMPILER_ELEMENT = "Compiler"; //$NON-NLS-1$
+	public static final String IMPORT_ELEMENT = "Import"; //$NON-NLS-1$
 	public static final String HEADER_ATTRIBUTE = "header"; //$NON-NLS-1$
 	public static final String CLASSDEF_ATTRIBUTE = "classdef"; //$NON-NLS-1$
+	public static final String PACKAGE_NAME_ATTRIBUTE = "packageName"; //$NON-NLS-1$
+	public static final String DECLARATION_ATTRIBUTE = "declaration"; //$NON-NLS-1$
 	public static final String VENDOR_ATTRIBUTE = "Vendor"; //$NON-NLS-1$
 	public static final String PRODUCT_ATTRIBUTE = "Product"; //$NON-NLS-1$
 

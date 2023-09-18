@@ -16,9 +16,11 @@ package org.eclipse.fordiac.ide.model;
 import org.eclipse.osgi.util.NLS;
 
 /** The Class Messages. */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.messages"; //$NON-NLS-1$
+
+	public static String CommonElementImporter_ERROR_DeclarationNotSet;
 
 	/** The Common element importer_ erro r_ missing_ organization. */
 	public static String CommonElementImporter_ERROR_Missing_Organization;
@@ -199,6 +201,10 @@ public final class Messages extends NLS {
 	/** The Import utils_ erro r_ parameter value not set. */
 	public static String ImportUtils_ERROR_ParameterValueNotSet;
 
+	public static String InterfaceElementAnnotations_DuplicateName;
+
+	public static String InterfaceElementAnnotations_MemberNameCollidesWithDataType;
+
 	public static String NameRepository_NameAlreadyExists;
 
 	public static String NameRepository_NameNotAValidIdentifier;
@@ -219,11 +225,14 @@ public final class Messages extends NLS {
 
 	public static String TypeLibrary_ERROR_ReferencedTypeNotFound;
 
+	public static String TypeLibrary_TypeExists;
+
 	public static String FBNetworkImporter_ConnectionDestinationMissing;
 	public static String FBNetworkImporter_ConnectionDestinationNotFound;
 	public static String FBNetworkImporter_ConnectionSourceMissing;
 	public static String FBNetworkImporter_ConnectionSourceNotFound;
 	public static String FBNetworkImporter_MultipleInputs;
+	public static String FBNetworkImporter_NameCollision;
 
 	public static String FBNetworkImporter_ConnectionTypeMismatch;
 
@@ -257,7 +266,7 @@ public final class Messages extends NLS {
 	public static String ConnectionHelper_ErrorMarker_Dest_Missing;
 	public static String ConnectionHelper_pin_not_found;
 
-	public static String LinkConstraints_ClassLinconstraintsShouldNotBeCreated;
+	public static String LinkConstraints_ClassLinkconstraintsShouldNotBeCreated;
 	public static String LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct;
 	public static String LinkConstraints_STATUSMessage_hasAlreadyInputConnection;
 	public static String LinkConstraints_STATUSMessage_hasAlreadyOutputConnection;
@@ -266,6 +275,14 @@ public final class Messages extends NLS {
 	public static String ConnectingIncompatibleInterfaceTypes;
 
 	public static String UpdateFBTypeCommand_type_mismatch;
+
+	public static String ConnectionValidator_VarInOutConnectionCrossesResourceBoundaries;
+	public static String ConnectionValidator_VarInOutSourceNotWellDefined;
+	public static String ConnectionValidator_VarInOutInputSideHasNoWith;
+	public static String ConnectionValidator_VarInOutOutputSideHasNoWith;
+	public static String ConnectionValidator_VarInOutArraySizeMismatch;
+	public static String ConnectionValidator_VarInOutStringSizeMismatch;
+	public static String ConnectionValidator_OutputsCannotBeConnectedToVarInOuts;
 
 	static {
 		// initialize resource bundle

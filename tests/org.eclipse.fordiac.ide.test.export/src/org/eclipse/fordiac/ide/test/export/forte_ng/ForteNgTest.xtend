@@ -234,7 +234,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
 						 ***
 						 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
-						 *** Description: 
+						 *** Description:
 						 *** Version:
 						 *************************************************************************/
 						
@@ -253,28 +253,33 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						
 						private:
 						
-						  static const SFBInterfaceSpec scm_stFBInterfaceSpec;
-						  CIEC_ANY *getVarInternal(size_t) override;
-						  void «EXPORTED_ALGORITHM_NAME»(void);
-						  static const TForteInt16 scm_nStateINIT = 0;
-						  
-						  void enterStateINIT(void);
+						  static const SFBInterfaceSpec scmFBInterfaceSpec;
 						
-						  void executeEvent(TEventID paEIID) override;
+						  CIEC_ANY *getVarInternal(size_t) override;
+						
+						  void «EXPORTED_ALGORITHM_NAME»(void);
+						
+						  static const TForteInt16 scmStateINIT = 0;
+						
+						  void enterStateINIT(CEventChainExecutionThread *const paECET);
+						
+						  void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 						
 						  void readInputData(TEventID paEIID) override;
 						  void writeOutputData(TEventID paEIID) override;
 						
 						public:
-						  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);
+						  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
 						
 						  CIEC_ANY *getDI(size_t) override;
 						  CIEC_ANY *getDO(size_t) override;
+						  CIEC_ANY *getDIO(size_t) override;
 						  CEventConnection *getEOConUnchecked(TPortId) override;
 						  CDataConnection **getDIConUnchecked(TPortId) override;
 						  CDataConnection *getDOConUnchecked(TPortId) override;
+						  CInOutDataConnection **getDIOInConUnchecked(TPortId) override;
+						  CInOutDataConnection *getDIOOutConUnchecked(TPortId) override;
 						};
-						
 						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
@@ -291,7 +296,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
 						 ***
 						 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
-						 *** Description: 
+						 *** Description:
 						 *** Version:
 						 *************************************************************************/
 						
@@ -310,48 +315,43 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						
 						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringIdfunctionblock)
 						
-						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scm_stFBInterfaceSpec = {
+						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scmFBInterfaceSpec = {
 						  0, nullptr, nullptr, nullptr,
 						  0, nullptr, nullptr, nullptr,
 						  0, nullptr, nullptr,
 						  0, nullptr, nullptr,
+						  0, nullptr,
 						  0, nullptr
 						};
 						
-						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-						    CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr) {
+						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, CResource *const paSrcRes) :
+						    CBasicFB(paSrcRes, &scmFBInterfaceSpec, paInstanceNameId, nullptr) {
 						}
 						
-						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID){
+						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
 						  do {
-						    switch(m_nECCState) {
-						      case scm_nStateINIT:
+						    switch(mECCState) {
+						      case scmStateINIT:
 						        return; //no transition cleared
 						      default:
-						        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 1.", m_nECCState.operator TForteUInt16 ());
-						        m_nECCState = 0; // 0 is always the initial state
+						        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 1.", mECCState.operator TForteUInt16 ());
+						        mECCState = 0; // 0 is always the initial state
 						        return;
 						    }
-						    paEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
+						    paEIID = cgInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
 						  } while(true);
 						}
 						
-						void FORTE_functionblock::enterStateINIT(void) {
-						  m_nECCState = scm_nStateINIT;
+						void FORTE_functionblock::enterStateINIT(CEventChainExecutionThread *const paECET) {
+						  mECCState = scmStateINIT;
 						}
-						
-						
-						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
-						  #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
-						  #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
-						  «ALGORITHM_TEXT»
-						}
-						
 						
 						void FORTE_functionblock::readInputData(TEventID) {
+						  // nothing to do
 						}
 						
 						void FORTE_functionblock::writeOutputData(TEventID) {
+						  // nothing to do
 						}
 						
 						CIEC_ANY *FORTE_functionblock::getDI(size_t) {
@@ -359,6 +359,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						}
 						
 						CIEC_ANY *FORTE_functionblock::getDO(size_t) {
+						  return nullptr;
+						}
+						
+						CIEC_ANY *FORTE_functionblock::getDIO(size_t) {
 						  return nullptr;
 						}
 						
@@ -374,10 +378,23 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						  return nullptr;
 						}
 						
+						CInOutDataConnection **FORTE_functionblock::getDIOInConUnchecked(TPortId) {
+						  return nullptr;
+						}
+						
+						CInOutDataConnection *FORTE_functionblock::getDIOOutConUnchecked(TPortId) {
+						  return nullptr;
+						}
+						
 						CIEC_ANY *FORTE_functionblock::getVarInternal(size_t) {
 						  return nullptr;
 						}
 						
+						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
+						  #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
+						  #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
+						  «ALGORITHM_TEXT»
+						}
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
 					assertNoErrors(export.warnings)

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
@@ -23,7 +24,9 @@ import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
@@ -36,6 +39,7 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.ui.IEditorPart;
 
 public class InstanceNameEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
@@ -74,6 +78,12 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 	};
 
 	void refreshValue() {
+		if (getModel().hasErrorMarker()) {
+			getFigure().setBackgroundColor(ColorConstants.red);
+			getFigure().setOpaque(true);
+		} else {
+			getFigure().setOpaque(false);
+		}
 		getFigure().setText(getModel().getInstanceName());
 	}
 
@@ -87,7 +97,6 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 	public InstanceNameFigure getFigure() {
 		return (InstanceNameFigure) super.getFigure();
 	}
-
 
 	@Override
 	protected void createEditPolicies() {
@@ -125,8 +134,11 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		if (!getModel().getRefElement().isContainedInTypedInstance() && (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN)) {
+		final IEditorPart editor = EditorUtils.getCurrentActiveEditor();
+
+		if (!getModel().getRefElement().isContainedInTypedInstance() && editor.getAdapter(FBNetwork.class) != null
+				&& (request.getType() == RequestConstants.REQ_DIRECT_EDIT
+						|| request.getType() == RequestConstants.REQ_OPEN)) {
 			performDirectEdit();
 
 		} else {

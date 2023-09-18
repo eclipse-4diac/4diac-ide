@@ -86,15 +86,18 @@ public class FBTypeContentOutline extends ContentOutlinePage implements IAdaptab
 		contentOutlineViewer.setInput(fbType);
 		contentOutlineViewer.expandAll();
 
-		fbType.eAdapters().add(adapter);
-
+		if (fbType != null) {
+			fbType.eAdapters().add(adapter);
+		}
 	}
 
 	@Override
 	public void dispose() {
 		caf.removeAdapterFactory(adapterFactory);
 		caf.removeAdapterFactory(dataFactory);
-		fbType.eAdapters().remove(adapter);
+		if (fbType != null) {
+			fbType.eAdapters().remove(adapter);
+		}
 		contentOutlineViewer.removeSelectionChangedListener(this);
 		super.dispose();
 	}

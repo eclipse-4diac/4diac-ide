@@ -111,7 +111,7 @@
                tooltip="Open the resouce at the opposite end of the connection">
             <visibleWhen
                   checkEnabled="true">
-               <iterate>
+               <iterate ifEmpty="false">
                   <instanceof
                         value="org.eclipse.fordiac.ide.resourceediting.editparts.VirtualInOutputEditPart">
                   </instanceof>

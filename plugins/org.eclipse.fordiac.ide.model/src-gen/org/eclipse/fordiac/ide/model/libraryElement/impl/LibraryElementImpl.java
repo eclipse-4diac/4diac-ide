@@ -18,9 +18,11 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
+import java.util.Map;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
@@ -32,6 +34,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -52,6 +55,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getVersionInfo <em>Version Info</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getIdentification <em>Identification</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getCompilerInfo <em>Compiler Info</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getTypeEntry <em>Type Entry</em>}</li>
  * </ul>
  *
@@ -117,6 +121,16 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 * @ordered
 	 */
 	protected Identification identification;
+
+	/**
+	 * The cached value of the '{@link #getCompilerInfo() <em>Compiler Info</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCompilerInfo()
+	 * @generated
+	 * @ordered
+	 */
+	protected CompilerInfo compilerInfo;
 
 	/**
 	 * The default value of the '{@link #getTypeEntry() <em>Type Entry</em>}' attribute.
@@ -290,6 +304,74 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 * @generated
 	 */
 	@Override
+	public CompilerInfo getCompilerInfo() {
+		if (compilerInfo != null && compilerInfo.eIsProxy()) {
+			InternalEObject oldCompilerInfo = (InternalEObject)compilerInfo;
+			compilerInfo = (CompilerInfo)eResolveProxy(oldCompilerInfo);
+			if (compilerInfo != oldCompilerInfo) {
+				InternalEObject newCompilerInfo = (InternalEObject)compilerInfo;
+				NotificationChain msgs = oldCompilerInfo.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO, null, null);
+				if (newCompilerInfo.eInternalContainer() == null) {
+					msgs = newCompilerInfo.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO, oldCompilerInfo, compilerInfo));
+			}
+		}
+		return compilerInfo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CompilerInfo basicGetCompilerInfo() {
+		return compilerInfo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCompilerInfo(CompilerInfo newCompilerInfo, NotificationChain msgs) {
+		CompilerInfo oldCompilerInfo = compilerInfo;
+		compilerInfo = newCompilerInfo;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO, oldCompilerInfo, newCompilerInfo);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCompilerInfo(CompilerInfo newCompilerInfo) {
+		if (newCompilerInfo != compilerInfo) {
+			NotificationChain msgs = null;
+			if (compilerInfo != null)
+				msgs = ((InternalEObject)compilerInfo).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO, null, msgs);
+			if (newCompilerInfo != null)
+				msgs = ((InternalEObject)newCompilerInfo).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO, null, msgs);
+			msgs = basicSetCompilerInfo(newCompilerInfo, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO, newCompilerInfo, newCompilerInfo));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public TypeEntry getTypeEntry() {
 		return typeEntry;
 	}
@@ -336,12 +418,24 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 * @generated
 	 */
 	@Override
+	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.validateName(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.LIBRARY_ELEMENT__VERSION_INFO:
 				return ((InternalEList<?>)getVersionInfo()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 				return basicSetIdentification(null, msgs);
+			case LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO:
+				return basicSetCompilerInfo(null, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -364,6 +458,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 				if (resolve) return getIdentification();
 				return basicGetIdentification();
+			case LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO:
+				if (resolve) return getCompilerInfo();
+				return basicGetCompilerInfo();
 			case LibraryElementPackage.LIBRARY_ELEMENT__TYPE_ENTRY:
 				return getTypeEntry();
 			default:
@@ -392,6 +489,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 				return;
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 				setIdentification((Identification)newValue);
+				return;
+			case LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO:
+				setCompilerInfo((CompilerInfo)newValue);
 				return;
 			case LibraryElementPackage.LIBRARY_ELEMENT__TYPE_ENTRY:
 				setTypeEntry((TypeEntry)newValue);
@@ -422,6 +522,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 				setIdentification((Identification)null);
 				return;
+			case LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO:
+				setCompilerInfo((CompilerInfo)null);
+				return;
 			case LibraryElementPackage.LIBRARY_ELEMENT__TYPE_ENTRY:
 				setTypeEntry(TYPE_ENTRY_EDEFAULT);
 				return;
@@ -447,6 +550,8 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 				return versionInfo != null && !versionInfo.isEmpty();
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 				return identification != null;
+			case LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO:
+				return compilerInfo != null;
 			case LibraryElementPackage.LIBRARY_ELEMENT__TYPE_ENTRY:
 				return TYPE_ENTRY_EDEFAULT == null ? typeEntry != null : !TYPE_ENTRY_EDEFAULT.equals(typeEntry);
 			default:

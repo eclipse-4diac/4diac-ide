@@ -1,6 +1,7 @@
 /********************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2023 Johannes Kepler University Linz
+ *                          Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,8 @@
  *  Ernst Blecha
  *    - initial API and implementation and/or initial documentation
  *  Martin Melik Merkumians - adds DT keyword
+ *  Martin Jobst
+ *    - add allowed contexts
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
@@ -19,11 +22,16 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class FordiacKeywords {
@@ -44,6 +52,12 @@ public final class FordiacKeywords {
 	public static final Set<String> RESERVED_KEYWORDS = Stream.of(RESERVED_ST_KEYWORDS, RESERVED_DATATYPE_KEYWORDS,
 			RESERVED_DATATYPE_CLASS_KEYWORDS, RESERVED_TIME_UNIT_KEYWORDS).flatMap(Set::stream)
 			.collect(Collectors.toUnmodifiableSet());
+
+	public static final Map<String, AllowedContexts> ALLOWED_CONTEXTS = Stream
+			.of(FordiacKeywords.class.getDeclaredFields())
+			.filter(f -> f.getAnnotation(AllowedContexts.class) != null
+					&& f.getAnnotation(AllowedContexts.class).value() != null)
+			.collect(Collectors.toUnmodifiableMap(FordiacKeywords::getName, FordiacKeywords::getAllowedContexts));
 
 	public enum KeywordTypes {
 		DATATYPE, DATATYPE_CLASS, TIME_UNIT, STRUCTURED_TEXT
@@ -137,6 +151,7 @@ public final class FordiacKeywords {
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String DATE_AND_TIME = "DATE_AND_TIME"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)
+	@AllowedContexts(VarDeclaration.class) // allow for IEC 61499 standard blocks
 	public static final String DT = "DT"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.DATATYPE)
 	public static final String LDATE_AND_TIME = "LDATE_AND_TIME"; //$NON-NLS-1$
@@ -154,12 +169,14 @@ public final class FordiacKeywords {
 	public static final String LWORD = "LWORD"; //$NON-NLS-1$
 
 	@Keyword(KeywordTypes.TIME_UNIT)
+	@AllowedContexts(VarDeclaration.class) // allow for IEC 61499 standard blocks
 	public static final String DAY = "D"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.TIME_UNIT)
 	public static final String HOUR = "H"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.TIME_UNIT)
 	public static final String MINUTE = "M"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.TIME_UNIT)
+	@AllowedContexts({ VarDeclaration.class, Event.class }) // allow for IEC 61499 standard blocks
 	public static final String SECOND = "S"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.TIME_UNIT)
 	public static final String MILLISECOND = "MS"; //$NON-NLS-1$
@@ -392,6 +409,7 @@ public final class FordiacKeywords {
 	@Keyword(KeywordTypes.STRUCTURED_TEXT)
 	public static final String REPLACE = "REPLACE"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	@AllowedContexts(ServiceInterface.class) // allowed for service sequences
 	public static final String RESOURCE = "RESOURCE"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.STRUCTURED_TEXT)
 	public static final String RETAIN = "RETAIN"; //$NON-NLS-1$
@@ -521,25 +539,60 @@ public final class FordiacKeywords {
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
+	private @interface AllowedContexts {
+		Class<?>[] value();
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
 	private @interface ModelString {
 		// Used only for annotation
 	}
 
+	private static String getName(final Field f) {
+		try {
+			return (String) f.get(null);  // Static field, so get with null
+		} catch (final IllegalArgumentException | IllegalAccessException e) {
+			FordiacLogHelper.logError("Exception in keyword access", e); //$NON-NLS-1$
+			throw new IllegalStateException(e);
+		}
+	}
+
+	private static AllowedContexts getAllowedContexts(final Field f) {
+		try {
+			return f.getAnnotation(AllowedContexts.class);
+		} catch (final IllegalArgumentException e) {
+			FordiacLogHelper.logError("Exception in allowed context access", e); //$NON-NLS-1$
+			throw new IllegalStateException(e);
+		}
+	}
+
 	private static Set<String> getKeywordsOfType(final KeywordTypes type) {
 		return List.of(FordiacKeywords.class.getDeclaredFields()).stream()
-				.filter(field -> field.getType().equals(String.class) && field.isAnnotationPresent(Keyword.class)
-						&& field.getAnnotation(Keyword.class).value() == type)
-				.map(field -> {
-					try {
-						return (String) field.get(null); // Static field, so get with null
-					} catch (final IllegalArgumentException | IllegalAccessException e) {
-						FordiacLogHelper.logError("Exception in keyword access", e); //$NON-NLS-1$
-						throw new RuntimeException(e);// NOSONAR
-					}
-				}).collect(Collectors.toUnmodifiableSet());
+				.filter(field -> isKeyword(field) && field.getAnnotation(Keyword.class).value() == type)
+				.map(FordiacKeywords::getName).collect(Collectors.toUnmodifiableSet());
 	}
 
 	public static boolean isReservedKeyword(final String nameProposal) {
-		return RESERVED_KEYWORDS.parallelStream().anyMatch(keyword -> keyword.equalsIgnoreCase(nameProposal));
+		return RESERVED_KEYWORDS.contains(nameProposal.toUpperCase());
+	}
+
+	public static boolean isReservedKeyword(final String name, final Object context) {
+		if (context == null) {
+			return isReservedKeyword(name);
+		}
+
+		final String upperCaseName = name.toUpperCase();
+		return RESERVED_KEYWORDS.contains(upperCaseName) && !matchesAllowedContext(upperCaseName, context);
+	}
+
+	private static boolean isKeyword(final Field field) {
+		return field.getType().equals(String.class) && field.isAnnotationPresent(Keyword.class);
+	}
+
+	private static boolean matchesAllowedContext(final String upperCaseName, final Object context) {
+		final var allowedContexts = ALLOWED_CONTEXTS.get(upperCaseName);
+		return allowedContexts != null
+				&& Stream.of(allowedContexts.value()).anyMatch(value -> value.isAssignableFrom(context.getClass()));
 	}
 }

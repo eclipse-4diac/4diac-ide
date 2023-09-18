@@ -18,6 +18,8 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
+import org.eclipse.fordiac.ide.systemconfiguration.Messages;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
@@ -125,10 +127,14 @@ public class SegmentSection extends AbstractDoubleColumnSection {
 			commentText.setText(getType().getComment());
 			// TODO this works, but it's a bit shit as it relies on the id of the extension never being changed.
 			// Maybe find a way to make it nicer eventually
-			getRightComposite().setVisible(!getCommunicationType().equals("Ethernet"));
+			getRightComposite().setVisible(!"Ethernet".equals(getCommunicationType())); //$NON-NLS-1$
 			final CommunicationConfigurationDetails commConfig = CommunicationConfigurationDetails
 					.getCommConfigUiFromExtensionPoint(getCommunicationType(),
 							CommunicationConfigurationDetails.COMM_EXT_ATT_ID);
+			if (commConfig == null) {
+				ErrorMessenger.popUpErrorMessage(Messages.Segment_NoConfigErrorMessage);
+				return;
+			}
 			commConfigContents.dispose();
 			commConfigContents = commConfig.createUi(commConfigGroup, getType().getCommunication(), getSection(),
 					getWidgetFactory());

@@ -66,13 +66,23 @@ final class VariableOperations {
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl) {
-		if (decl.array || !decl.initialValue.nullOrEmpty) {
+		if (decl.hasDeclaredInitialValue) {
 			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
 			if (evaluator instanceof VariableEvaluator) {
 				evaluator.evaluateVariable
 			} else
 				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
-		} else
+		} else if (decl.hasInheritedInitialValue) {
+			// use variable from FB type since the initial value is inherited from the FB type
+			val typeVariable = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name) ?: decl
+			val evaluator = typeVariable.createEvaluator(VarDeclaration, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				evaluator.evaluateVariable
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+		} else if (decl.array)
+			newVariable(decl.name, decl.evaluateResultType)
+		else
 			newVariable(decl.name, decl.type)
 	}
 
@@ -143,6 +153,18 @@ final class VariableOperations {
 			type = dataType
 			value = LibraryElementFactory.eINSTANCE.createValue => [value = initialValue]
 		]).newVariable.value
+	}
+
+	def static boolean hasInitialValue(VarDeclaration decl) {
+		decl.hasDeclaredInitialValue || decl.hasInheritedInitialValue
+	}
+
+	def static boolean hasDeclaredInitialValue(VarDeclaration decl) {
+		!decl.value?.value.nullOrEmpty
+	}
+
+	def static boolean hasInheritedInitialValue(VarDeclaration decl) {
+		!decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name)?.value?.value.nullOrEmpty
 	}
 
 	def static String getInitialValue(VarDeclaration decl) {

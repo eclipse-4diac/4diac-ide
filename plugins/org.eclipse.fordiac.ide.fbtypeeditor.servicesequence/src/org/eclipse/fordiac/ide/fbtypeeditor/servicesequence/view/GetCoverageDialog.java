@@ -16,8 +16,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.eclipse.fordiac.ide.fb.interpreter.api.CoverageCalculator;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.CoverageCalculator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -37,8 +37,7 @@ public class GetCoverageDialog extends MessageDialog {
 	public GetCoverageDialog(final Shell parentShell, final HashMap<String, Integer> visitedStates,
 			final HashMap<ArrayList<String>, Integer> visitedPaths) {
 		super(parentShell, Messages.Coverage_NAME, null, "Shows the Coverage of the given Tests:", //$NON-NLS-1$
-				MessageDialog.INFORMATION, 0,
-				"OK"); //$NON-NLS-1$
+				MessageDialog.INFORMATION, 0, "OK"); //$NON-NLS-1$
 		this.visitedStates = visitedStates;
 		this.visitedPaths = visitedPaths;
 	}
@@ -63,8 +62,7 @@ public class GetCoverageDialog extends MessageDialog {
 
 		Label label = new Label(vistedStatesGroup, SWT.None);
 		label.setText(Messages.Coverage_NODECOVERAGE + ": "
-				+ CoverageCalculator.calculateNodeCoverageOfSuiteBy(visitedStates) * 100
-				+ "% \n");
+				+ CoverageCalculator.calculateNodeCoverageOfSuiteBy(visitedStates) * 100 + "% \n");
 
 		final Group vistedPathsGroup = new Group(dialogArea, SWT.NONE);
 		vistedPathsGroup.setText(Messages.Coverage_VISITED_PATHS);
@@ -85,7 +83,6 @@ public class GetCoverageDialog extends MessageDialog {
 		label = new Label(vistedPathsGroup, SWT.None);
 		label.setText(Messages.Coverage_PATHCOVERAGE + ": "
 				+ CoverageCalculator.calculatePathCoverageOfSuiteBy(visitedPaths) * 100 + "% \n");
-
 
 		return dialogArea;
 	}

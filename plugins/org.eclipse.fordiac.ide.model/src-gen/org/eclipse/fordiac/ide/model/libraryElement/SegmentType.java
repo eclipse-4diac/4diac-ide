@@ -34,7 +34,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface SegmentType extends CompilableType {
+public interface SegmentType extends LibraryElement, ConfigurableObject {
 	/**
 	 * Returns the value of the '<em><b>Var Declaration</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}.

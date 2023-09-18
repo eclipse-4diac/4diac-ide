@@ -67,6 +67,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -308,13 +309,13 @@ public abstract class CommonElementImporter {
 				if (!childHandler.checkChild(getReader().getLocalName())) {
 					throw new XMLStreamException(
 							"Unexpected xml child (" + getReader().getLocalName() + ") found in " + elementName //$NON-NLS-1$ //$NON-NLS-2$
-							+ getParseLocation());
+									+ getParseLocation());
 				}
 			} else if (XMLStreamConstants.END_ELEMENT == event) {
 				if (!getReader().getLocalName().equals(elementName)) {
 					throw new XMLStreamException(
 							"Unexpected xml end tag found in " + elementName + ": " + getReader().getLocalName() //$NON-NLS-1$ //$NON-NLS-2$
-							+ getParseLocation());
+									+ getParseLocation());
 				}
 				// we came to the end
 				break;
@@ -326,15 +327,13 @@ public abstract class CommonElementImporter {
 		return " in file: " + getFile() + " location: " + getReader().getLocation(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	/**
-	 * Parses the identification.
+	/** Parses the identification.
 	 *
 	 * @param elem the elem
 	 * @param node the node
 	 *
 	 * @return the identification
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected void parseIdentification(final LibraryElement elem) throws XMLStreamException {
 		final Identification ident = LibraryElementFactory.eINSTANCE.createIdentification();
 		final String standard = getAttributeValue(LibraryElementTags.STANDARD_ATTRIBUTE);
@@ -365,14 +364,12 @@ public abstract class CommonElementImporter {
 		proceedToEndElementNamed(LibraryElementTags.IDENTIFICATION_ELEMENT);
 	}
 
-	/**
-	 * Parses the version info.
+	/** Parses the version info.
 	 *
 	 * @param elem the library element the version info should be added to.
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected void parseVersionInfo(final LibraryElement elem) throws TypeImportException, XMLStreamException {
 		final VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
 
@@ -382,18 +379,16 @@ public abstract class CommonElementImporter {
 		}
 
 		final String version = getReader().getAttributeValue("", LibraryElementTags.VERSION_ATTRIBUTE); //$NON-NLS-1$
-		if (null != version) {
-			versionInfo.setVersion(version);
-		} else {
+		if (null == version) {
 			throw new TypeImportException(Messages.CommonElementImporter_ERROR_MissingVersionInfo);
 
 		}
+		versionInfo.setVersion(version);
 		final String author = getReader().getAttributeValue("", LibraryElementTags.AUTHOR_ATTRIBUTE); //$NON-NLS-1$
-		if (null != author) {
-			versionInfo.setAuthor(author);
-		} else {
+		if (null == author) {
 			throw new TypeImportException(Messages.CommonElementImporter_ERROR_MissingAuthorInfo);
 		}
+		versionInfo.setAuthor(author);
 
 		final String date = getReader().getAttributeValue("", LibraryElementTags.DATE_ATTRIBUTE); //$NON-NLS-1$
 		if (null != date) {
@@ -409,14 +404,11 @@ public abstract class CommonElementImporter {
 		proceedToEndElementNamed(LibraryElementTags.VERSION_INFO_ELEMENT);
 	}
 
-	/**
-	 * Gets the xand y.
+	/** Gets the x and y.
 	 *
-	 * @param positionableElement the positionable element where the parsed
-	 *                            coordinates should be set to
+	 * @param positionableElement the positionable element where the parsed coordinates should be set to
 	 *
-	 * @throws TypeImportException the FBT import exception
-	 */
+	 * @throws TypeImportException the FBT import exception */
 	public void getXandY(final PositionableElement positionableElement) throws TypeImportException {
 		try {
 			final String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
@@ -441,11 +433,10 @@ public abstract class CommonElementImporter {
 
 	private void readNameAttribute(final INamedElement namedElement) throws TypeImportException {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
-		if (null != name) {
-			namedElement.setName(name.trim());
-		} else {
+		if (null == name) {
 			throw new TypeImportException(Messages.Import_ERROR_NameNotDefined);
 		}
+		namedElement.setName(name.trim());
 	}
 
 	protected void readCommentAttribute(final INamedElement namedElement) {
@@ -492,20 +483,18 @@ public abstract class CommonElementImporter {
 		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
-		if (null != name) {
-			variable.setName(name);
-		} else {
+		if (null == name) {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterNotSet);
 		}
+		variable.setName(name);
 
 		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
-		if (null != value) {
-			final Value val = LibraryElementFactory.eINSTANCE.createValue();
-			val.setValue(value);
-			variable.setValue(val);
-		} else {
+		if (null == value) {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterValueNotSet);
 		}
+		final Value val = LibraryElementFactory.eINSTANCE.createValue();
+		val.setValue(value);
+		variable.setValue(val);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
 			variable.setComment(comment);
@@ -559,10 +548,18 @@ public abstract class CommonElementImporter {
 		if (null != classdef) {
 			compilerInfo.setClassdef(classdef);
 		}
+		final String packageName = getAttributeValue(LibraryElementTags.PACKAGE_NAME_ATTRIBUTE);
+		if (null != packageName) {
+			compilerInfo.setPackageName(packageName);
+		}
 
 		processChildren(LibraryElementTags.COMPILER_INFO_ELEMENT, name -> {
 			if (LibraryElementTags.COMPILER_ELEMENT.equals(name)) {
 				parseCompiler(compilerInfo);
+				return true;
+			}
+			if (LibraryElementTags.IMPORT_ELEMENT.equals(name)) {
+				parseImport(compilerInfo);
 				return true;
 			}
 			return false;
@@ -594,42 +591,53 @@ public abstract class CommonElementImporter {
 		}
 
 		final String vendor = getAttributeValue(LibraryElementTags.VENDOR_ATTRIBUTE);
-		if (null != vendor) {
-			comp.setVendor(vendor);
-		} else {
+		if (null == vendor) {
 			throw new TypeImportException(Messages.CompilableElementImporter_ERROR_VendorNotSet);
 		}
+		comp.setVendor(vendor);
 
 		final String product = getAttributeValue(LibraryElementTags.PRODUCT_ATTRIBUTE);
-		if (null != product) {
-			comp.setProduct(product);
-		} else {
+		if (null == product) {
 			throw new TypeImportException(Messages.CompilableElementImporter_ERROR_ProductNotSet);
 		}
+		comp.setProduct(product);
 
 		final String version = getAttributeValue(LibraryElementTags.VERSION_ATTRIBUTE);
-		if (null != version) {
-			comp.setVersion(version);
-		} else {
+		if (null == version) {
 			throw new TypeImportException(Messages.CompilableElementImporter_ERROR_VersionNotSet);
 		}
+		comp.setVersion(version);
 		proceedToEndElementNamed(LibraryElementTags.COMPILER_ELEMENT);
 		compilerInfo.getCompiler().add(comp);
+	}
+
+	private void parseImport(final CompilerInfo compilerInfo) throws TypeImportException, XMLStreamException {
+		final Import imp = LibraryElementFactory.eINSTANCE.createImport();
+
+		final String declaration = getAttributeValue(LibraryElementTags.DECLARATION_ATTRIBUTE);
+		if (null == declaration) {
+			throw new TypeImportException(Messages.CommonElementImporter_ERROR_DeclarationNotSet);
+		}
+		imp.setImportedNamespace(declaration);
+
+		proceedToEndElementNamed(LibraryElementTags.IMPORT_ELEMENT);
+		compilerInfo.getImports().add(imp);
 	}
 
 	protected void parseFBChildren(final FBNetworkElement block, final String parentNodeName)
 			throws TypeImportException, XMLStreamException {
 		processChildren(parentNodeName, name -> {
-			switch (name) {
-			case LibraryElementTags.PARAMETER_ELEMENT:
+			return switch (name) {
+			case LibraryElementTags.PARAMETER_ELEMENT -> {
 				parseParameter(block);
-				return true;
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
-				handleFBAttributeChild(block);
-				return true;
-			default:
-				return false;
+				yield true;
 			}
+			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
+				handleFBAttributeChild(block);
+				yield true;
+			}
+			default -> false;
+			};
 		});
 	}
 
@@ -648,7 +656,7 @@ public abstract class CommonElementImporter {
 
 	private boolean isPinCommentAttribute() {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
-		return (name != null) && LibraryElementTags.PIN_COMMENT.equals(name);
+		return LibraryElementTags.PIN_COMMENT.equals(name);
 	}
 
 	private void parsePinComment(final FBNetworkElement block) {
@@ -688,7 +696,7 @@ public abstract class CommonElementImporter {
 
 	protected boolean isProfileAttribute() {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
-		return (null != name) && LibraryElementTags.DEVICE_PROFILE.equals(name);
+		return LibraryElementTags.DEVICE_PROFILE.equals(name);
 	}
 
 	protected void parseProfile(final Device device) {
@@ -711,7 +719,7 @@ public abstract class CommonElementImporter {
 			switch (name) {
 			case LibraryElementTags.FBNETWORK_ELEMENT:
 				new ResDevFBNetworkImporter(this, fbNetwork, resource.getVarDeclarations())
-				.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
+						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseGenericAttributeNode(resource);
@@ -761,18 +769,18 @@ public abstract class CommonElementImporter {
 	public static void createParameters(final IVarElement element) {
 		if (element instanceof Device) {
 			element.getVarDeclarations()
-			.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-					.getType().getVarDeclaration()));
+					.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+							.getType().getVarDeclaration()));
 		}
 		if (element instanceof Resource) {
 			element.getVarDeclarations()
-			.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-					.getType().getVarDeclaration()));
+					.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+							.getType().getVarDeclaration()));
 		}
 		if (element instanceof Segment) {
 			element.getVarDeclarations()
-			.addAll(EcoreUtil.copyAll(((SegmentTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-					.getType().getVarDeclaration()));
+					.addAll(EcoreUtil.copyAll(((SegmentTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+							.getType().getVarDeclaration()));
 		}
 		for (final VarDeclaration varDecl : element.getVarDeclarations()) {
 			final Value value = LibraryElementFactory.eINSTANCE.createValue();
@@ -828,13 +836,11 @@ public abstract class CommonElementImporter {
 		return resourceFBNetwork;
 	}
 
-	/**
-	 * Take the given string and unescape all &, <, >, ", ', newlines, and tabs with
-	 * the according XML unsescaped characters.
+	/** Take the given string and unescape all &, <, >, ", ', newlines, and tabs with the according XML unsescaped
+	 * characters.
 	 *
 	 * @param value the string to unescape
-	 * @return the unescaped string
-	 */
+	 * @return the unescaped string */
 	protected static String fullyUnEscapeValue(final String value) {
 		String escapedValue = value.replace("&amp;", "&"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("&lt;", "<"); //$NON-NLS-1$ //$NON-NLS-2$

@@ -17,6 +17,10 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -40,6 +44,8 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -71,14 +77,19 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 
 	}
 
+	private static final Pattern TYPE_NAME_PATTERN = Pattern.compile("Name=\\\"(\\w*)\\\""); //$NON-NLS-1$
+	private static final Pattern TYPE_PACKAGE_NAME_PATTERN = Pattern.compile("packageName=\\\"([\\w:]*)\\\""); //$NON-NLS-1$
+
 	private IFile file;
+	private String typeName;
+	private String fullTypeName;
 
 	private long lastModificationTimestamp = IResource.NULL_STAMP;
 
 	private SoftReference<LibraryElement> typeRef;
-	private LibraryElement typeEditable;
+	private SoftReference<LibraryElement> typeEditableRef;
 
-	private TypeLibrary typeLibray;
+	private TypeLibrary typeLibrary;
 
 	private BasicEList<Adapter> eAdapters;
 
@@ -91,11 +102,44 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 
 	@Override
 	public void setFile(final IFile newFile) {
+		if (typeLibrary != null) {
+			throw new IllegalStateException("Cannot change file while added to type library"); //$NON-NLS-1$
+		}
 		final IFile oldFile = file;
 		file = newFile;
 		if (eNotificationRequired()) {
 			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FILE_FEATURE, oldFile,
 					file));
+		}
+	}
+
+	@Override
+	public String getTypeName() {
+		if (typeName == null) {
+			loadTypeNameFromFile();
+		}
+		return typeName;
+	}
+
+	private void setTypeName(final String typeName) {
+		this.typeName = typeName;
+	}
+
+	@Override
+	public String getFullTypeName() {
+		if (fullTypeName == null) {
+			loadTypeNameFromFile();
+		}
+		return fullTypeName;
+	}
+
+	private void setFullTypeName(final String fullTypeName) {
+		if (typeLibrary != null && fullTypeName != null) {
+			typeLibrary.removeTypeEntryNameReference(this);
+		}
+		this.fullTypeName = fullTypeName;
+		if (typeLibrary != null && fullTypeName != null) {
+			typeLibrary.addTypeEntryNameReference(this);
 		}
 	}
 
@@ -143,8 +187,11 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	public synchronized void setType(final LibraryElement newType) {
 		final LibraryElement oldType = (typeRef != null) ? typeRef.get() : null;
 		if (newType != null) {
+			Objects.requireNonNull(newType.getName(), "No name in new type"); //$NON-NLS-1$
 			encloseInResource(newType);
 			newType.setTypeEntry(this);
+			setTypeName(newType.getName());
+			setFullTypeName(PackageNameHelper.getFullTypeName(newType));
 			typeRef = new SoftReference<>(newType);
 		} else {
 			typeRef = null;
@@ -167,20 +214,27 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 
 	@Override
 	public synchronized LibraryElement getTypeEditable() {
-		if ((getFile() != null) && (typeEditable == null || isFileContentChanged())) {
-			// if the editable type is null load it from the file and set a copy
-			setTypeEditable(EcoreUtil.copy(getType()));
+		if (typeEditableRef != null) {
+			final LibraryElement typeEditable = typeEditableRef.get();
+			if (typeEditable != null && !isFileContentChanged()) {
+				return typeEditable;
+			}
 		}
-		return typeEditable;
+		// we need to get a fresh type editable in order to ensure consistency take a copy of the none editable type
+		final LibraryElement loadType = EcoreUtil.copy(getType());
+		setTypeEditable(loadType);
+		return loadType;
 	}
 
 	@Override
 	public synchronized void setTypeEditable(final LibraryElement newTypeEditable) {
-		final LibraryElement oldTypeEditable = typeEditable;
-		typeEditable = newTypeEditable;
+		final LibraryElement oldTypeEditable = (typeEditableRef != null) ? typeEditableRef.get() : null;
 		if (newTypeEditable != null) {
 			encloseInResource(newTypeEditable);
 			newTypeEditable.setTypeEntry(this);
+			typeEditableRef = new SoftReference<>(newTypeEditable);
+		} else {
+			typeEditableRef = null;
 		}
 		if (eNotificationRequired()) {
 			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE,
@@ -205,12 +259,12 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 
 	@Override
 	public TypeLibrary getTypeLibrary() {
-		return typeLibray;
+		return typeLibrary;
 	}
 
 	@Override
 	public void setTypeLibrary(final TypeLibrary typeLib) {
-		typeLibray = typeLib;
+		typeLibrary = typeLib;
 	}
 
 	@Override
@@ -247,10 +301,18 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	protected abstract AbstractTypeExporter getExporter();
 
 	@Override
+	public void refresh() {
+		if (isFileContentChanged()) {
+			loadTypeNameFromFile();
+			setType(null);
+		}
+	}
+
+	@Override
 	public String toString() {
 		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (label: "); //$NON-NLS-1$
-		result.append(getTypeName());
+		result.append(getFullTypeName());
 		result.append(", file: "); //$NON-NLS-1$
 		result.append(file);
 		result.append(", lastModificationTimestamp: "); //$NON-NLS-1$
@@ -302,6 +364,7 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 		// timestamp
 		// it is not necessary as the data is in memory
 		setLastModificationTimestamp(getFile().getModificationStamp());
+		FordiacMarkerHelper.updateMarkers(file, Collections.emptyList());
 		if (updateTypeOnSave) {
 			// make the edit result available for the reading entities
 			setType(EcoreUtil.copy(getTypeEditable()));
@@ -322,4 +385,28 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 		}
 	}
 
+	private void loadTypeNameFromFile() {
+		if (getFile() != null) {
+			if (getFile().exists()) {
+				try (Scanner scanner = new Scanner(getFile().getContents())) {
+					if (scanner.findWithinHorizon(TYPE_NAME_PATTERN, 0) != null) {
+						setTypeName(scanner.match().group(1));
+						if (scanner.findWithinHorizon(TYPE_PACKAGE_NAME_PATTERN, 0) != null) {
+							final String packageName = scanner.match().group(1);
+							setFullTypeName(packageName + "::" + typeName); //$NON-NLS-1$
+						} else {
+							setFullTypeName(typeName);
+						}
+						return;
+					}
+				} catch (final Exception e) {
+					FordiacLogHelper.logWarning(e.getMessage(), e);
+				}
+			}
+			setTypeName(TypeEntry.getTypeNameFromFile(getFile()));
+		} else {
+			setTypeName(""); //$NON-NLS-1$
+		}
+		setFullTypeName(typeName);
+	}
 }

@@ -18,7 +18,7 @@ public class InstanceName {
 
 	private final FBNetworkElement refElement;
 
-	public InstanceName(FBNetworkElement refElement) {
+	public InstanceName(final FBNetworkElement refElement) {
 		this.refElement = refElement;
 	}
 
@@ -28,5 +28,9 @@ public class InstanceName {
 
 	public String getInstanceName() {
 		return getRefElement().getName();
+	}
+
+	public boolean hasErrorMarker() {
+		return getRefElement().hasError();
 	}
 }

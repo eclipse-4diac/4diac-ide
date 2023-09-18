@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 
-public class MultiplexerEditPart extends StructManipulatorEditPart {
+public class MultiplexerEditPart extends AbstractStructManipulatorEditPart {
 	public MultiplexerEditPart() {
 		super();
 	}

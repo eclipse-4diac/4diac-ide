@@ -78,10 +78,10 @@ class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 	@Check
 	def checkUniquenessOfVariableNamesInAFunctionBlock(STVarDeclaration varDeclaration) {
 		val container = EcoreUtil2.getContainerOfType(varDeclaration, STAlgorithmSource)
-		val resource = (container as STAlgorithmSource)?.eResource
-		val fbType = (resource as STAlgorithmResource)?.fbType 
-		if (fbType instanceof BaseFBType) {
-			val baseFBType = fbType as BaseFBType
+		val resource = container?.eResource
+		val libraryElement = (resource as STAlgorithmResource)?.libraryElement 
+		if (libraryElement instanceof BaseFBType) {
+			val baseFBType = libraryElement
 			if (baseFBType.interfaceList.eventInputs.stream.anyMatch[it.name.equalsIgnoreCase(varDeclaration.name)]) {
 				error(MessageFormat.format(Messages.STAlgorithmValidator_NameUsedAsEventInput, varDeclaration.name), varDeclaration,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, VARIABLE_NAME_IN_USE_ON_INTERFACE, varDeclaration.name)
@@ -159,10 +159,10 @@ class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 	def checkAlgorithmForInputEvent(STAlgorithmSource source) {
 		val resource = source.eResource
 		if (resource instanceof STAlgorithmResource) {
-			val fbType = resource.fbType
-			if (fbType instanceof SimpleFBType) {
-				fbType.interfaceList.eventInputs.reject [ event |
-					fbType.algorithm.exists[alg|alg.name == event.name] || source.elements.filter(STAlgorithm).exists [ alg |
+			val libraryElement = resource.libraryElement
+			if (libraryElement instanceof SimpleFBType) {
+				libraryElement.interfaceList.eventInputs.reject [ event |
+					libraryElement.algorithm.exists[alg|alg.name == event.name] || source.elements.filter(STAlgorithm).exists [ alg |
 						alg.name == event.name
 					]
 				].forEach [ event |
@@ -178,9 +178,9 @@ class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 	def checkUnusedAlgorithm(STAlgorithm algorithm) {
 		val resource = algorithm.eResource
 		if (resource instanceof STAlgorithmResource) {
-			val fbType = resource.fbType
-			if (fbType instanceof SimpleFBType) {
-				if (!fbType.interfaceList.eventInputs.exists[name == algorithm.name]) {
+			val libraryElement = resource.libraryElement
+			if (libraryElement instanceof SimpleFBType) {
+				if (!libraryElement.interfaceList.eventInputs.exists[name == algorithm.name]) {
 					warning(MessageFormat.format(Messages.STAlgorithmValidator_UnusedAlgorithm, algorithm.name),
 						algorithm, LibraryElementPackage.eINSTANCE.INamedElement_Name, NO_INPUT_EVENT_FOR_ALGORITHM,
 						algorithm.name)

@@ -97,7 +97,12 @@ public class FordiacMatchEngine extends DefaultMatchEngine {
 		}
 
 		if (input instanceof final InterfaceList interfaceList) {
-			return interfaceList.getFBNetworkElement().getName() + ".InterfaceList";
+			if (interfaceList.getFBNetworkElement() != null) {
+				return interfaceList.getFBNetworkElement().getName() + ".InterfaceList";
+			}
+			if (interfaceList.eContainer() instanceof final FBType fb) {
+				return fb.getName() + ".InterfaceList";
+			}
 		}
 
 		return new DefaultIDFunction().apply(input);

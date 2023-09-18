@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.PreferenceConstants;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -74,7 +75,8 @@ public class CommonElementExporter {
 		public int read() throws IOException {
 			if (currentDataBuffer.hasRemaining()) {
 				return currentDataBuffer.get() & 0xFF;
-			} else if (bufferIterator.hasNext()) {
+			}
+			if (bufferIterator.hasNext()) {
 				currentDataBuffer = bufferIterator.next();
 				return currentDataBuffer.get() & 0xFF;
 			}
@@ -85,7 +87,8 @@ public class CommonElementExporter {
 		public int read(final byte[] b) throws IOException {
 			if (currentDataBuffer.hasRemaining()) {
 				return super.read(b);
-			} else if (bufferIterator.hasNext()) {
+			}
+			if (bufferIterator.hasNext()) {
 				currentDataBuffer = bufferIterator.next();
 				return super.read(b);
 			}
@@ -180,12 +183,9 @@ public class CommonElementExporter {
 		writer = createEventWriter();
 	}
 
-	/**
-	 * Constructor for chaining several exporters together (e.g., for the
-	 * FBNetworkExporter)
+	/** Constructor for chaining several exporters together (e.g., for the FBNetworkExporter)
 	 *
-	 * @param parent the calling exporter
-	 */
+	 * @param parent the calling exporter */
 	protected CommonElementExporter(final CommonElementExporter parent) {
 		writer = parent.writer;
 		tabCount = parent.tabCount;
@@ -278,12 +278,10 @@ public class CommonElementExporter {
 		addNameAndCommentAttribute(namedElement);
 	}
 
-	/**
-	 * Adds the identification.
+	/** Adds the identification.
 	 *
 	 * @param libraryelement the libraryelement
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected void addIdentification(final LibraryElement libraryelement) throws XMLStreamException {
 		if (null != libraryelement.getIdentification()) {
 			addStartElement(LibraryElementTags.IDENTIFICATION_ELEMENT);
@@ -310,12 +308,10 @@ public class CommonElementExporter {
 		}
 	}
 
-	/**
-	 * Adds the version info.
+	/** Adds the version info.
 	 *
 	 * @param libraryelement the libraryelement
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected void addVersionInfo(final LibraryElement libraryelement) throws XMLStreamException {
 		if (!libraryelement.getVersionInfo().isEmpty()) {
 			for (final VersionInfo info : libraryelement.getVersionInfo()) {
@@ -355,7 +351,7 @@ public class CommonElementExporter {
 		addCommentAttribute(namedElement.getComment());
 	}
 
-	protected void addNameTypeCommentAttribute(final INamedElement namedElement, final INamedElement type)
+	protected void addNameTypeCommentAttribute(final INamedElement namedElement, final LibraryElement type)
 			throws XMLStreamException {
 		addNameAttribute(namedElement.getName());
 		addTypeAttribute(type);
@@ -369,13 +365,11 @@ public class CommonElementExporter {
 		}
 	}
 
-	/**
-	 * Writhe an XML attribute directly to the output stream
+	/** Writhe an XML attribute directly to the output stream
 	 *
 	 * @param attributeName  the name of the attribute
 	 * @param attributeValue the value of the attribute
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected void writeAttributeRaw(final String attributeName, final String attributeValue)
 			throws XMLStreamException {
 		try (Writer osWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
@@ -389,13 +383,11 @@ public class CommonElementExporter {
 		}
 	}
 
-	/**
-	 * Take the given string and escape all &, <, >, ", ', newlines, and tabs with
-	 * the according XML escaped characters.
+	/** Take the given string and escape all &, <, >, ", ', newlines, and tabs with the according XML escaped
+	 * characters.
 	 *
 	 * @param value the string to escape
-	 * @return the escaped string
-	 */
+	 * @return the escaped string */
 	protected static String fullyEscapeValue(final String value) {
 		String escapedValue = value.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -407,8 +399,8 @@ public class CommonElementExporter {
 		return escapedValue;
 	}
 
-	protected void addTypeAttribute(final INamedElement type) throws XMLStreamException {
-		addTypeAttribute(((null != type) && (null != type.getName())) ? type.getName() : ""); //$NON-NLS-1$
+	protected void addTypeAttribute(final LibraryElement type) throws XMLStreamException {
+		addTypeAttribute(PackageNameHelper.getFullTypeName(type));
 	}
 
 	protected void addTypeAttribute(final String type) throws XMLStreamException {
@@ -424,6 +416,7 @@ public class CommonElementExporter {
 			addParam(inVar.getName(), inVar.getValue());
 		}
 	}
+
 	protected void addErrorMarkerParamsConfig(final EList<ErrorMarkerInterface> errorPins) throws XMLStreamException {
 		for (final ErrorMarkerInterface ep : errorPins) {
 			addParam(ep.getName(), ep.getValue());

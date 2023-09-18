@@ -38,7 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * <!-- end-user-doc -->
  * @generated
  */
-public class GlobalConstantsItemProvider extends CompilableTypeItemProvider {
+public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -133,6 +133,9 @@ public class GlobalConstantsItemProvider extends CompilableTypeItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(GlobalConstants.class)) {
+			case LibraryElementPackage.GLOBAL_CONSTANTS__ATTRIBUTES:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case LibraryElementPackage.GLOBAL_CONSTANTS__CONSTANTS:
 			case LibraryElementPackage.GLOBAL_CONSTANTS__SOURCE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));

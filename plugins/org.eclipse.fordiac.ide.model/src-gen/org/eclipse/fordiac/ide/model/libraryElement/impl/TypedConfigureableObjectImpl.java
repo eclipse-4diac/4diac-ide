@@ -18,9 +18,11 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
+import java.util.Map;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
@@ -209,6 +211,16 @@ public class TypedConfigureableObjectImpl extends EObjectImpl implements TypedCo
 	 * @generated
 	 */
 	@Override
+	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.validateName(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
 			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES);
@@ -267,6 +279,16 @@ public class TypedConfigureableObjectImpl extends EObjectImpl implements TypedCo
 	@Override
 	public TypeLibrary getTypeLibrary() {
 		return org.eclipse.fordiac.ide.model.Annotations.getTypeLibrary(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getFullTypeName() {
+		return (getTypeEntry() != null) ? getTypeEntry().getFullTypeName() : null;
 	}
 
 	/**

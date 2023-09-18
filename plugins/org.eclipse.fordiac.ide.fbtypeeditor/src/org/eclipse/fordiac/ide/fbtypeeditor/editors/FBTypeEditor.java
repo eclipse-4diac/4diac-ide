@@ -125,6 +125,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			getCommandStack().markSaveLocation();
 			typeEntry.save();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
+			setPartName(typeEntry.getFullTypeName());
 		}
 	}
 
@@ -174,28 +175,21 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	 * @throws PartInitException the part init exception */
 	@Override
 	public void init(final IEditorSite site, final IEditorInput editorInput) throws PartInitException {
-
 		if (editorInput instanceof final FileEditorInput fileEI) {
-			final IFile fbTypeFile = fileEI.getFile();
-			if (!fbTypeFile.exists()) {
-				throw new PartInitException(
-						new Status(IStatus.ERROR, FrameworkUtil.getBundle(getClass()).getSymbolicName(),
-								Messages.FBTypeEditor_TypeFileDoesnotExist));
-			}
-
-			typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fbTypeFile);
+			typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEI.getFile());
 		} else if (editorInput instanceof final FBTypeEditorInput fbTypeEI) {
 			typeEntry = fbTypeEI.getTypeEntry();
 		}
+		fbType = getFBType(typeEntry);
 
-		if (null != typeEntry) {
-			setPartName(typeEntry.getTypeName());
-
-			fbType = getFBType(typeEntry);
-			if (null != fbType) {
-				fbType.eAdapters().add(adapter);
-			}
+		if (fbType == null) {
+			throw new PartInitException(new Status(IStatus.ERROR, FrameworkUtil.getBundle(getClass()).getSymbolicName(),
+					Messages.FBTypeEditor_TypeFileDoesnotExist));
 		}
+
+		setPartName(typeEntry.getFullTypeName());
+
+		fbType.eAdapters().add(adapter);
 
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		getCommandStack().addCommandStackEventListener(this);
@@ -434,6 +428,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			}
 			getCommandStack().flush();
 			fbType.eAdapters().add(adapter);
+			setPartName(typeEntry.getFullTypeName());
 		}
 	}
 

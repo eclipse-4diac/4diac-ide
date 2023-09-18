@@ -125,13 +125,14 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 	}
 
 	private boolean isLockedGroup() {
-		return (graphicalEditPart instanceof final GroupContentEditPart groupContent && groupContent.getModel().getGroup().isLocked())
+		return (graphicalEditPart instanceof final GroupContentEditPart groupContent
+				&& groupContent.getModel().getGroup().isLocked())
 				|| (graphicalEditPart instanceof final GroupEditPart group && group.getModel().isLocked());
 	}
 
 	private GraphicalEditPart getTargetContainerEP() {
-		if (graphicalEditPart instanceof IContainerEditPart) {
-			return ((IContainerEditPart) graphicalEditPart).getContentEP();
+		if (graphicalEditPart instanceof final IContainerEditPart iContainerEP) {
+			return iContainerEP.getContentEP();
 		}
 		return graphicalEditPart;
 	}
@@ -165,11 +166,11 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 	}
 
 	private static FBNetworkElement getContainer(final GraphicalEditPart containerEP) {
-		if (containerEP instanceof UnfoldedSubappContentEditPart) {
-			return ((UnfoldedSubappContentEditPart) containerEP).getModel().getSubapp();
+		if (containerEP instanceof final UnfoldedSubappContentEditPart unfoldedSubappContentEP) {
+			return unfoldedSubappContentEP.getModel().getSubapp();
 		}
-		if (containerEP instanceof GroupContentEditPart) {
-			return ((GroupContentEditPart) containerEP).getModel().getGroup();
+		if (containerEP instanceof final GroupContentEditPart groupContentEp) {
+			return groupContentEp.getModel().getGroup();
 		}
 		return null;
 	}
@@ -191,8 +192,8 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 
 		for (final FBNetworkElement fbe : children) {
 			final Object object = editPartRegistry.get(fbe);
-			if (object instanceof GraphicalEditPart) {
-				final IFigure fbFigure = ((GraphicalEditPart) object).getFigure();
+			if (object instanceof final GraphicalEditPart graphicalEP) {
+				final IFigure fbFigure = graphicalEP.getFigure();
 				if (fbFigure != null) {
 					if (fbBounds == null) {
 						fbBounds = fbFigure.getBounds().getCopy();

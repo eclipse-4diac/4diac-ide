@@ -82,4 +82,12 @@ public interface TypedConfigureableObject extends INamedElement, ConfigurableObj
 	 */
 	TypeLibrary getTypeLibrary();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	String getFullTypeName();
+
 } // TypedConfigureableObject

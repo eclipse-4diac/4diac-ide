@@ -15,12 +15,17 @@ package org.eclipse.fordiac.ide.globalconstantseditor;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.resource.GlobalConstantsResource;
 import org.eclipse.fordiac.ide.globalconstantseditor.scoping.GlobalConstantsImportedNamespaceAwareLocalScopeProvider;
+import org.eclipse.fordiac.ide.globalconstantseditor.util.GlobalConstantsPartitioner;
+import org.eclipse.fordiac.ide.globalconstantseditor.util.GlobalConstantsReconciler;
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters;
 import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STCoreLinkingDiagnosticMessageProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreResourceValidator;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
@@ -31,6 +36,7 @@ import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
+import org.eclipse.xtext.validation.IResourceValidator;
 
 import com.google.inject.Binder;
 import com.google.inject.name.Names;
@@ -78,6 +84,18 @@ public class GlobalConstantsRuntimeModule extends AbstractGlobalConstantsRuntime
 
 	public Class<? extends ILinkingDiagnosticMessageProvider> bindILinkingDiagnosticMessageProvider() {
 		return STCoreLinkingDiagnosticMessageProvider.class;
+	}
+
+	public Class<? extends STCorePartitioner> bindSTCorePartitioner() {
+		return GlobalConstantsPartitioner.class;
+	}
+
+	public Class<? extends STCoreReconciler> bindSTCoreReconciler() {
+		return GlobalConstantsReconciler.class;
+	}
+
+	public Class<? extends IResourceValidator> bindIResourceValidator() {
+		return STCoreResourceValidator.class;
 	}
 
 	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {

@@ -78,7 +78,7 @@
                       checkEnabled="false">
                    <with
                          variable="selection">
-                      <iterate>
+                      <iterate ifEmpty="false">
                          <adapt
                                type="org.eclipse.core.resources.IFile">
                             <test
@@ -245,7 +245,7 @@
            <visibleWhen checkEnabled="false">
 				<and>
 					<reference definitionId="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor" />
-					<iterate>
+					<iterate ifEmpty="false">
 						<or>
 							<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
 							<instanceof value="org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart" />
@@ -271,7 +271,7 @@
             <visibleWhen checkEnabled="false">
             	<or>
 					<reference definitionId="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor" />
-					<iterate>
+					<iterate ifEmpty="false">
 						<or>
 							<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Application" />
 							<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem" />
@@ -287,7 +287,7 @@
             <visibleWhen checkEnabled="false">
 				<and>
 					<reference definitionId="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor" />
-					<iterate>
+					<iterate ifEmpty="false">
 						<or>
 							<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
 							<instanceof value="org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart" />
@@ -304,7 +304,7 @@
             <visibleWhen checkEnabled="false">
 				<and>
 					<reference definitionId="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor" />
-					<iterate>
+					<iterate ifEmpty="false">
 						<or>
 							<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
 							<instanceof value="org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart" />
@@ -347,14 +347,14 @@
 	<extension point="org.eclipse.core.expressions.definitions">
 		<definition id="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor">
 			<and>
-				<with variable="activeEditor">
+				<with variable="activePart">
 					<or>
 						<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
 						<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement"/>
 					</or>
 				</with>
 				<not>
-					<with variable="activeEditorId">
+					<with variable="activePartId">
 						<or>
 							<equals value="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor" />
 							<equals  value="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor" />

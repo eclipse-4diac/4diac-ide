@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.search.types;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
+@FunctionalInterface
 public interface SearchFilter {
 	boolean apply(INamedElement searchCanditate);
 }

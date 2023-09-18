@@ -17,6 +17,7 @@ import java.text.Collator;
 import java.util.Comparator;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.jdt.annotation.NonNull;
 
 public enum NamedElementComparator implements Comparator<INamedElement> {
 
@@ -25,7 +26,7 @@ public enum NamedElementComparator implements Comparator<INamedElement> {
 	private final Collator col = Collator.getInstance();
 
 	@Override
-	public int compare(final INamedElement o1, final INamedElement o2) {
+	public int compare(@NonNull final INamedElement o1, @NonNull final INamedElement o2) {
 		return col.compare(o1.getName(), o2.getName());
 	}
 }

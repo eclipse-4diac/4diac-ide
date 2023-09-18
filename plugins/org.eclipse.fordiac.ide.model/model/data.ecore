@@ -8,8 +8,6 @@
       </eAnnotations>
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="compilerInfo" eType="ecore:EClass lib.ecore#//CompilerInfo"
-        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArrayType" eSuperTypes="#//AnyDerivedType">
     <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">

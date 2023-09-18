@@ -167,10 +167,6 @@ United States, other countries, or both.\n
    </license>
 
    <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.draw2d"/>
       <import feature="org.eclipse.fordiac.ide.workbench.feature"/>
    </requires>
 

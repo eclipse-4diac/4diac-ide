@@ -76,7 +76,10 @@
 	            name="Plant Hierachy Content"
 	            priority="highest">
             <possibleChildren>
-	              <instanceof value="org.eclipse.emf.ecore.EObject"/>
+            	<or>
+	              <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.SubApp"/>
+	              <instanceof value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node"/>
+	            </or>
 	        </possibleChildren> 
             <triggerPoints>
                 <or>
@@ -253,4 +256,22 @@
           </propertySection>
        </propertySections>
     </extension>
+    <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            class="org.eclipse.fordiac.ide.hierarchymanager.ui.decorator.LevelCommentDecorator"
+            id="org.eclipse.fordiac.ide.hierarchymanager.ui.LevelCommentDecorator"
+            label="Level comment decoration"
+            lightweight="true"
+            state="true">
+            <enablement>
+            	<or>
+                	<objectClass name="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level" />
+               	</or>
+            </enablement>
+            <description>
+               Show instance comment beside typed fbnetwork elements.
+            </description>
+      </decorator>
+   </extension>
 </plugin>

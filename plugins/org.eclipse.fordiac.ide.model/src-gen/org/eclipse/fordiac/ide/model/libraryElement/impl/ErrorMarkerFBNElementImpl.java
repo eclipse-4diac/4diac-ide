@@ -24,7 +24,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -36,33 +35,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl#getErrorMessage <em>Error Message</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl#getRepairedElement <em>Repaired Element</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements ErrorMarkerFBNElement {
-	/**
-	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getErrorMessage()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String ERROR_MESSAGE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getErrorMessage()
-	 * @generated
-	 * @ordered
-	 */
-	protected String errorMessage = ERROR_MESSAGE_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getRepairedElement() <em>Repaired Element</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -90,29 +68,6 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.ERROR_MARKER_FBN_ELEMENT;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setErrorMessage(String newErrorMessage) {
-		String oldErrorMessage = errorMessage;
-		errorMessage = newErrorMessage;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE, oldErrorMessage, errorMessage));
 	}
 
 	/**
@@ -161,20 +116,8 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	 * @generated
 	 */
 	@Override
-	public boolean hasError() {
-		return getErrorMessage() != null && !getErrorMessage().isBlank();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE:
-				return getErrorMessage();
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT:
 				if (resolve) return getRepairedElement();
 				return basicGetRepairedElement();
@@ -191,9 +134,6 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE:
-				setErrorMessage((String)newValue);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT:
 				setRepairedElement((FBNetworkElement)newValue);
 				return;
@@ -211,9 +151,6 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE:
-				setErrorMessage(ERROR_MESSAGE_EDEFAULT);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT:
 				setRepairedElement((FBNetworkElement)null);
 				return;
@@ -231,61 +168,11 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE:
-				return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT:
 				return repairedElement != null;
 			default:
 				return super.eIsSet(featureID);
 		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == ErrorMarkerRef.class) {
-			switch (derivedFeatureID) {
-				case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE: return LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == ErrorMarkerRef.class) {
-			switch (baseFeatureID) {
-				case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE: return LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (errorMessage: "); //$NON-NLS-1$
-		result.append(errorMessage);
-		result.append(')');
-		return result.toString();
 	}
 
 } //ErrorMarkerFBNElementImpl

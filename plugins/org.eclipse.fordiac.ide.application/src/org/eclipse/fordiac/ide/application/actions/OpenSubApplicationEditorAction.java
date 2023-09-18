@@ -23,13 +23,10 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
-/**
- * The Class OpenSubApplicationEditorAction.
- */
+/** The Class OpenSubApplicationEditorAction. */
 public class OpenSubApplicationEditorAction extends AbstractOpenSystemElementListener {
 
 	private static final String OPEN_SUBAPP_LISTENER_ID = "org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"; //$NON-NLS-1$
-
 
 	/** The uiSubAppNetwork. */
 	private SubApp subApp;
@@ -41,20 +38,18 @@ public class OpenSubApplicationEditorAction extends AbstractOpenSystemElementLis
 	@Override
 	public void run(final IAction action) {
 		final EObject root = EcoreUtil.getRootContainer(subApp);
-		if (root instanceof AutomationSystem) {
-			openInSystemEditor(((AutomationSystem) root).getTypeEntry().getFile(), subApp);
-		} else if (root instanceof SubAppType) {
-			openInSubappTypeEditor((SubAppType) root, subApp);
+		if (root instanceof final AutomationSystem automationSystem) {
+			openInSystemEditor(automationSystem.getTypeEntry().getFile(), subApp);
+		} else if (root instanceof final SubAppType subAppType) {
+			openInSubappTypeEditor(subAppType, subApp);
 		}
 	}
 
 	@Override
 	public void selectionChanged(final IAction action, final ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structuredSel = (IStructuredSelection) selection;
-			if (structuredSel.getFirstElement() instanceof SubApp) {
-				subApp = (SubApp) structuredSel.getFirstElement();
-			}
+		if ((selection instanceof final IStructuredSelection structuredSel)
+				&& (structuredSel.getFirstElement() instanceof final SubApp firstElement)) {
+			subApp = firstElement;
 		}
 	}
 
@@ -67,7 +62,5 @@ public class OpenSubApplicationEditorAction extends AbstractOpenSystemElementLis
 	public String getOpenListenerID() {
 		return OPEN_SUBAPP_LISTENER_ID;
 	}
-
-
 
 }

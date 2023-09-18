@@ -33,10 +33,7 @@ import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
-/**
- * The visualization of an FB. It Provides several containers for its interface.
- *
- */
+/** The visualization of an FB. It Provides several containers for its interface. */
 public class FBNetworkElementFigure extends FBShape {
 
 	private static final class OpenTypeListener implements MouseListener {
@@ -83,11 +80,9 @@ public class FBNetworkElementFigure extends FBShape {
 		return model;
 	}
 
-	/**
-	 * Instantiates a new fB figure.
+	/** Instantiates a new fB figure.
 	 *
-	 * @param model the model
-	 */
+	 * @param model the model */
 	public FBNetworkElementFigure(final FBNetworkElement model, final AbstractFBNElementEditPart editPart) {
 		super(model.getType());
 		this.model = model;
@@ -130,10 +125,8 @@ public class FBNetworkElementFigure extends FBShape {
 					if (!getTypeLabel().isDrawUnderline()) {
 						getTypeLabel().setDrawUnderline(true);
 					}
-				} else {
-					if (getTypeLabel().isDrawUnderline()) {
-						getTypeLabel().setDrawUnderline(false);
-					}
+				} else if (getTypeLabel().isDrawUnderline()) {
+					getTypeLabel().setDrawUnderline(false);
 				}
 			}
 
@@ -147,9 +140,7 @@ public class FBNetworkElementFigure extends FBShape {
 		return new OpenTypeListener(editPart);
 	}
 
-	/**
-	 * Refresh tool tips.
-	 */
+	/** Refresh tool tips. */
 	public final void refreshToolTips() {
 		setToolTip(new FBNetworkElementTooltipFigure(model));
 	}
@@ -158,15 +149,15 @@ public class FBNetworkElementFigure extends FBShape {
 		final int x = getTop().getBounds().x();
 		final int y = getLabelBounds().y();
 		final int width = getTop().getBounds().width;
-		final int height = getTop().getBounds().height() + getMiddle().getBounds().height() + getBottom().getBounds().height()
-				+ getLabelBounds().height();
+		final int height = getTop().getBounds().height() + getMiddle().getBounds().height()
+				+ getBottom().getBounds().height() + getLabelBounds().height();
 		return new Rectangle(x, y, width, height);
 	}
 
 	public Rectangle getLabelBounds() {
 		for (final Object figure : getChildren()) {
-			if (figure instanceof InstanceNameFigure) {
-				return ((InstanceNameFigure) figure).getBounds();
+			if (figure instanceof final InstanceNameFigure nameFigure) {
+				return nameFigure.getBounds();
 			}
 		}
 		return new Rectangle();

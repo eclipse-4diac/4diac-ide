@@ -57,7 +57,7 @@ class CompositeFBFilter {
 	  «var fbs = fbn.networkElements.filter(e| !(e instanceof AdapterFB))»
 	  «FOR fb : fbs SEPARATOR ','»
 	  «IF !(fb instanceof AdapterFB)»
-	  {fbNameID = "«fb.name»", fbTypeID = "«fb.typeName»"}
+	  {fbNameID = "«fb.name»", fbTypeID = "«fb.fullTypeName»"}
 	  «ENDIF»
 	  «ENDFOR»
 	}'''

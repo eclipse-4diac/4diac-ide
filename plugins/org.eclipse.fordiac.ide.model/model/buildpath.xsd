@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema
+	xmlns:buildpath="http://www.eclipse.org/4diac/xml/buildpath.xsd"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.eclipse.org/4diac/xml/buildpath.xsd">
+
+	<xsd:complexType name="attribute">
+		<xsd:attribute name="name" type="xsd:string" />
+		<xsd:attribute name="value" type="xsd:string" />
+	</xsd:complexType>
+
+	<xsd:simpleType name="patternType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="glob" />
+			<xsd:enumeration value="regex" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:complexType name="pattern">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="syntax" default="glob" type="buildpath:patternType" use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="sourceFolder">
+		<xsd:sequence>
+			<xsd:element name="include" type="buildpath:pattern" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="exclude" type="buildpath:pattern" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="attribute" type="buildpath:attribute" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:anyURI" use="required" />
+	</xsd:complexType>
+
+	<xsd:complexType name="buildpath">
+		<xsd:sequence>
+			<xsd:element name="sourceFolder" type="buildpath:sourceFolder" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element name="buildpath" type="buildpath:buildpath" />
+</xsd:schema>

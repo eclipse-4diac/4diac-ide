@@ -18,9 +18,7 @@ package org.eclipse.fordiac.ide.gef;
 
 import org.eclipse.osgi.util.NLS;
 
-/**
- * The Class Messages.
- */
+/** The Class Messages. */
 @SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.gef.messages"; //$NON-NLS-1$
@@ -96,6 +94,7 @@ public final class Messages extends NLS {
 	public static String InterfaceElementSection_ConnectionGroup;
 	public static String InterfaceElementSection_InConnections;
 	public static String InterfaceElementSection_OutConnections;
+	public static String InterfaceElementSection_MessageDialog_TITLE;
 
 	static {
 		// initialize resource bundle

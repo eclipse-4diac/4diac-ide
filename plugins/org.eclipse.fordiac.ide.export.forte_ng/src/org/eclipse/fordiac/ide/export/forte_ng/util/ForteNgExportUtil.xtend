@@ -13,6 +13,9 @@
 package org.eclipse.fordiac.ide.export.forte_ng.util
 
 import java.util.regex.Pattern
+import org.eclipse.emf.common.util.EList
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType
@@ -32,7 +35,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
@@ -69,8 +75,9 @@ final class ForteNgExportUtil {
 				].toString
 			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
 			DataType: '''CIEC_«type.generateTypeNamePlain»«IF GenericTypes.isAnyType(type)»_VARIANT«ENDIF»'''
+			FBType: '''FORTE_«type.generateTypeNamePlain»'''
 			default:
-				type.name
+				type.generateTypeNamePlain
 		}
 	}
 
@@ -83,8 +90,9 @@ final class ForteNgExportUtil {
 				].toString
 			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
 			DataType: '''CIEC_«type.generateTypeNamePlain»'''
+			FBType: '''FORTE_«type.generateTypeNamePlain»'''
 			default:
-				type.name
+				type.generateTypeNamePlain
 		}
 	}
 
@@ -94,8 +102,78 @@ final class ForteNgExportUtil {
 				type.subranges.reverseView.fold(type.baseType.generateTypeNamePlain.FORTEStringId) [ result, subrange |
 					'''«type.generateTypeNamePlain.FORTEStringId», static_cast<CStringDictionary::TStringId>(«subrange.lowerLimit»), static_cast<CStringDictionary::TStringId>(«subrange.upperLimit»), «result»'''
 				].toString
-			DataType:
+			default:
 				type.generateTypeNamePlain.FORTEStringId
+		}
+	}
+
+	def static String generateDefiningInclude(EObject object) {
+		switch (object) {
+			LibraryElement: object.generateTypeIncludePath
+			default: object.eResource?.generateDefiningInclude
+		}
+	}
+
+	def static String generateDefiningInclude(Resource resource) {
+		resource.contents.filter(LibraryElement)?.head?.generateTypeIncludePath ?:
+			'''«resource.URI.trimFileExtension.lastSegment».h'''
+	}
+
+	def static String generateTypeIncludePath(INamedElement type) {
+		switch (path : type.generateTypePath) {
+			case !path.empty: '''«path»/«type.generateTypeBasename».h'''
+			default: '''«type.generateTypeBasename».h'''
+		}
+	}
+
+	def static String generateTypeGenIncludePath(INamedElement type) {
+		switch (path : type.generateTypePath) {
+			case !path.empty: '''«path»/«type.generateTypeBasename»_gen.cpp'''
+			default: '''«type.generateTypeBasename»_gen.cpp'''
+		}
+	}
+
+	def static String generateTypeInclude(INamedElement type) '''«type.generateTypeBasename».h'''
+
+	def static String generateTypeSource(INamedElement type) '''«type.generateTypeBasename».cpp'''
+
+	def static String generateTypeBasename(INamedElement type) {
+		switch (type) {
+			TimeType:
+				"forte_time"
+			LtimeType:
+				"forte_ltime"
+			DateType:
+				"forte_date"
+			LdateType:
+				"forte_ldate"
+			TimeOfDayType:
+				"forte_time_of_day"
+			LtodType:
+				"forte_ltime_of_day"
+			DateAndTimeType:
+				"forte_date_and_time"
+			LdtType:
+				"forte_ldate_and_time"
+			StringType case type.isSetMaxLength:
+				"forte_string_fixed"
+			StringType:
+				"forte_string"
+			WstringType:
+				"forte_wstring"
+			AdapterType: type.name
+			ArrayType: type.baseType.generateTypeBasename
+			DataType case GenericTypes.isAnyType(type): '''forte_«type.generateTypeNamePlain.toLowerCase»_variant'''
+			DataType: '''forte_«type.name.toLowerCase»'''
+			default:
+				type.name
+		}
+	}
+
+	def static String generateTypePath(INamedElement type) {
+		switch (type) {
+			LibraryElement:
+				type.compilerInfo?.packageName?.replace("::", "/") ?: ""
 			default:
 				type.name
 		}
@@ -103,22 +181,42 @@ final class ForteNgExportUtil {
 
 	def static String generateTypeNamePlain(INamedElement type) {
 		switch (type) {
-			TimeType: "TIME"
-			LtimeType: "LTIME"
-			DateType: "DATE"
-			LdateType: "LDATE"
-			TimeOfDayType: "TIME_OF_DAY"
-			LtodType: "LTIME_OF_DAY"
-			DateAndTimeType: "DATE_AND_TIME"
-			LdtType: "LDATE_AND_TIME"
-			ArrayType: "ARRAY"
-			StringType: "STRING"
-			WstringType: "WSTRING"
-			default: type.name
+			TimeType:
+				"TIME"
+			LtimeType:
+				"LTIME"
+			DateType:
+				"DATE"
+			LdateType:
+				"LDATE"
+			TimeOfDayType:
+				"TIME_OF_DAY"
+			LtodType:
+				"LTIME_OF_DAY"
+			DateAndTimeType:
+				"DATE_AND_TIME"
+			LdtType:
+				"LDATE_AND_TIME"
+			ArrayType:
+				"ARRAY"
+			StringType:
+				"STRING"
+			WstringType:
+				"WSTRING"
+			LibraryElement: '''«type.compilerInfo?.packageName?.replace(':', '_')?.concat("__")»«type.name»'''
+			default:
+				type.name
 		}
 	}
 
 	def static CharSequence getFORTEStringId(String s) '''g_nStringId«s»'''
+	
+	def static int getInterfaceElementIndex(IInterfaceElement element) {
+		if (element.eContainer !== null && element.eContainingFeature.many) {
+			(element.eContainer.eGet(element.eContainingFeature) as EList<? extends IInterfaceElement>).indexOf(element)
+		} else
+			0
+	}
 
 	static final Pattern END_COMMENT_PATTERN = Pattern.compile("\\*/")
 

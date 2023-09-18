@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
- *               2020 Johannes Kepler University
+ * Copyright (c) 2019, 2023 fortiss GmbH
+ *                          Johannes Kepler University
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +12,7 @@
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
+ *     - add readInputData and writeOutputData
  *   Alois Zoitl
  *     - Fix issues in adapter code generation
  *******************************************************************************/
@@ -46,21 +48,17 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 		
 		  «generateFBInterfaceSpecDeclaration»
 		
+		  «generateReadInputDataDeclaration»
+		  «generateWriteOutputDataDeclaration»
 		public:
 		  «type.interfaceList.inputVars.generateAccessors("getDI", "getDO")»
 		  «type.interfaceList.outputVars.generateAccessors("getDO", "getDI")»
 		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
-		
 		  «type.interfaceList.eventInputs.generateEventAccessors»
 		  «type.interfaceList.eventOutputs.generateEventAccessors»
-		
-		private:
-		  FORTE_ADAPTER_DATA_ARRAY(«type.interfaceList.eventInputs.size», «type.interfaceList.eventOutputs.size», «type.interfaceList.inputVars.size», «type.interfaceList.outputVars.size», «type.interfaceList.sockets.size + type.interfaceList.plugs.size»);
-		
-		public:
-		  «FBClassName»(CStringDictionary::TStringId pa_anAdapterInstanceName, CResource *pa_poSrcRes, bool pa_bIsPlug) :
-		      «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpecSocket, pa_anAdapterInstanceName, &scm_stFBInterfaceSpecPlug, pa_bIsPlug, m_anFBConnData, m_anFBVarsData) {	
-		   };
+		  «FBClassName»(CStringDictionary::TStringId paAdapterInstanceName, CResource *paSrcRes, bool paIsPlug) :
+		      «baseClass»(paSrcRes, &scmFBInterfaceSpecSocket, paAdapterInstanceName, &scmFBInterfaceSpecPlug, paIsPlug) {	
+		  };
 		
 		  virtual ~«FBClassName»() = default;
 		};
@@ -80,9 +78,9 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 	'''
 
 	override protected generateFBInterfaceSpecDeclaration() '''
-		static const SFBInterfaceSpec scm_stFBInterfaceSpecSocket;
+		static const SFBInterfaceSpec scmFBInterfaceSpecSocket;
 		
-		static const SFBInterfaceSpec scm_stFBInterfaceSpecPlug;
+		static const SFBInterfaceSpec scmFBInterfaceSpecPlug;
 	'''
 
 	override protected generateEventConstants(List<Event> events) '''
@@ -103,8 +101,8 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 
 	def protected generateEventAccessors(List<Event> events) '''
 		«FOR event : events»
-			int «event.generateName»() {
-			  return m_nParentAdapterListEventID + scm_nEvent«event.name»ID;
+			TEventID «event.generateName»() {
+			  return mParentAdapterListEventID + scmEvent«event.name»ID;
 			}
 			
 		«ENDFOR»

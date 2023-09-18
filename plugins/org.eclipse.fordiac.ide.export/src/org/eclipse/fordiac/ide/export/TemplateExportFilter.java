@@ -69,7 +69,7 @@ public abstract class TemplateExportFilter extends ExportFilter {
 						.map(v -> MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
 								name, v))
 						.collect(Collectors.toList())
-						: messages;
+				: messages;
 	}
 
 	@Override
@@ -165,13 +165,14 @@ public abstract class TemplateExportFilter extends ExportFilter {
 			getErrors().addAll(reformat(name, template.getErrors()));
 			getWarnings().addAll(reformat(name, template.getWarnings()));
 			getInfos().addAll(reformat(name, template.getInfos()));
-			if (template.getErrors().isEmpty()) {
-				final Path templatePath = destinationPath.resolve(template.getPath());
-				files.write(templatePath, content);
-			} else {
+			if (content == null || !template.getErrors().isEmpty()) {
 				files.clear();
 				break;
 			}
+			final String processed = content.toString().lines().map(String::stripTrailing)
+					.collect(Collectors.joining(System.lineSeparator()));
+			final Path templatePath = destinationPath.resolve(template.getPath());
+			files.write(templatePath, processed);
 		}
 		return files;
 	}

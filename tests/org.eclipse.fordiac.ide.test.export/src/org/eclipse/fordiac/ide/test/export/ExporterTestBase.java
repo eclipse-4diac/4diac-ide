@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportTemplate;
@@ -44,7 +45,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -212,7 +212,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @param fb reference to the function block
 	 *
 	 * @return the generated code or null on error */
-	public List<FileObject> generateFunctionBlock(final CompilableType fb) {
+	public List<FileObject> generateFunctionBlock(final LibraryElement fb) {
 		final Set<IExportTemplate> templates = (new ForteNgExportFilter() {
 			Set<IExportTemplate> getTemplateSet(final LibraryElement type) {
 				return getTemplates(type.getName(), type);
@@ -223,8 +223,13 @@ public abstract class ExporterTestBase<T extends FBType> {
 
 		for (final IExportTemplate template : templates) {
 			try {
-				result.add(new FileObject(template.getName(), template.generate(), template.getErrors(),
-						template.getWarnings(), template.getInfos()));
+				CharSequence content = template.generate();
+				if (content != null) {
+					content = content.toString().lines().map(String::stripTrailing)
+							.collect(Collectors.joining(System.lineSeparator()));
+				}
+				result.add(new FileObject(template.getName(), content, template.getErrors(), template.getWarnings(),
+						template.getInfos()));
 			} catch (final ExportException e) {
 				result.add(new FileObject(template.getName(), e.getMessage(), template.getErrors(),
 						template.getWarnings(), template.getInfos()));

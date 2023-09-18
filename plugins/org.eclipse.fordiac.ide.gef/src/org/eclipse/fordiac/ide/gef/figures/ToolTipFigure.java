@@ -28,20 +28,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.resource.JFaceResources;
 
-/**
- * The Class ToolTipFigure.
+/** The Class ToolTipFigure.
  *
- * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
- */
+ * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at) */
 public class ToolTipFigure extends Figure {
 
 	private final VerticalLineCompartmentFigure line;
 
-	/**
-	 * Instantiates a new tool tip figure.
+	/** Instantiates a new tool tip figure.
 	 *
-	 * @param element the element
-	 */
+	 * @param element the element */
 	public ToolTipFigure(final INamedElement element) {
 		final ToolbarLayout mainLayout = new ToolbarLayout(false);
 		setLayoutManager(mainLayout);
@@ -49,16 +45,16 @@ public class ToolTipFigure extends Figure {
 
 		String nameLine = element.getName();
 
-		if ((element instanceof IInterfaceElement) && (((IInterfaceElement) element).getType() != null)) {
-			nameLine += " - " + ((IInterfaceElement) element).getType().getName(); //$NON-NLS-1$
+		if (element instanceof final IInterfaceElement ie && ie.getFullTypeName() != null) {
+			nameLine += " - " + ie.getFullTypeName(); //$NON-NLS-1$
 		}
 
-		if (element instanceof ErrorMarkerRef && ((ErrorMarkerRef) element).hasError()) {
-			nameLine += System.lineSeparator() + ((ErrorMarkerRef) element).getErrorMessage();
+		if (element instanceof final ErrorMarkerRef emRef && emRef.hasError()) {
+			nameLine += System.lineSeparator() + emRef.getErrorMessage();
 		}
 
 		final Label nameLabel = new Label(nameLine);
-		if (element instanceof ErrorMarkerRef && ((ErrorMarkerRef) element).hasError()) {
+		if (element instanceof final ErrorMarkerRef emRef && emRef.hasError()) {
 			nameLabel.setIcon(JFaceResources.getImage("dialog_error_image")); //$NON-NLS-1$
 		}
 		add(nameLabel);
@@ -70,10 +66,10 @@ public class ToolTipFigure extends Figure {
 		if ((comment != null) && (!comment.isEmpty())) {
 			line.add(new Label(comment));
 		}
-		if (element instanceof Event) {
-			addWiths((Event) element);
-		} else if (element instanceof VarDeclaration) {
-			addVarDefaultValue((VarDeclaration) element);
+		if (element instanceof final Event event) {
+			addWiths(event);
+		} else if (element instanceof final VarDeclaration varDecl) {
+			addVarDefaultValue(varDecl);
 		}
 	}
 
@@ -107,15 +103,14 @@ public class ToolTipFigure extends Figure {
 		if (null != typeVar && null != typeVar.getValue()) {
 			String initvalue = FordiacMessages.InitialValue + ": "; //$NON-NLS-1$
 			if (!typeVar.getValue().getValue().isEmpty()) {
-				initvalue += variable.getValue().getValue();
+				initvalue += typeVar.getValue().getValue();
 			}
 			line.add(new Label(initvalue));
 		}
 	}
 
 	private static VarDeclaration getTypevariable(final VarDeclaration variable) {
-		if (variable.eContainer() instanceof Device) {
-			final Device dev = (Device) variable.eContainer();
+		if (variable.eContainer() instanceof final Device dev) {
 			if (null != dev.getType()) {
 				for (final VarDeclaration typeVar : dev.getType().getVarDeclaration()) {
 					if (typeVar.getName().equals(variable.getName())) {

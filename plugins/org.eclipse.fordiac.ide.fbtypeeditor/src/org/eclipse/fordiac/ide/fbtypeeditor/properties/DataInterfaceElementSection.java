@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -135,7 +134,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	protected void setInputInit() {
 		if (getType() != null) {
 			if (getType().isInOutVar() && !getType().isIsInput()) {
-				setupPinInfoWidget(((InterfaceList) getType().eContainer()).getInOutVarOpposite(getType()));
+				setupPinInfoWidget(getType().getInOutVarOpposite());
 			} else {
 				setupPinInfoWidget(getType());
 			}

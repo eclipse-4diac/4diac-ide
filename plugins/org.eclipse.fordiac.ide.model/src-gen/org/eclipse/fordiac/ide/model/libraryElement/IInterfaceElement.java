@@ -16,6 +16,8 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import java.util.Map;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -135,5 +137,13 @@ public interface IInterfaceElement extends INamedElement, ConfigurableObject, Hi
 	 * @generated
 	 */
 	String getFullTypeName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateName(DiagnosticChain diagnostics, Map<Object, Object> context);
 
 } // IInterfaceElement

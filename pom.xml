@@ -19,7 +19,7 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<maven.compiler.release/>
-		<tycho.version>3.0.5</tycho.version>
+		<tycho.version>4.0.1</tycho.version>
 		<tycho-repo.url>https://download.eclipse.org/releases/2023-06</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>

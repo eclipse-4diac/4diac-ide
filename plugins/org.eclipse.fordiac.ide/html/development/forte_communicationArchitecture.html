@@ -272,9 +272,9 @@
   <h5>Methods:</h5>
   <ul>
     <li>
-    <span class="inlineTitle">static CComLayer* createCommunicationLayer(char *pa_acLayerIdentifier, CComLayer* pa_poUpperLayer, CCommFB *
-    pa_poComFB)</span>: Creates a network Layer. Parameter pa_acLayerIdentifier is used to create all underneath layers,
-    pa_poUpperLayer is used to send data to the above layer, and pa_poComFB is the responsible Function Block.</li>
+    <span class="inlineTitle">static CComLayer* createCommunicationLayer(char *paLayerIdentifier, CComLayer* paUpperLayer, CCommFB *
+    paComFB)</span>: Creates a network Layer. Parameter paLayerIdentifier is used to create all underneath layers,
+    paUpperLayer is used to send data to the above layer, and paComFB is the responsible Function Block.</li>
   </ul>
   
   <h4>CComLayer:</h4>
@@ -284,20 +284,20 @@
   <h5>Methods:</h5>
   <ul>
     <li>
-    <span class="inlineTitle">EComResponse openConnection(char *pa_acConnectionParams, char *pa_acRemainingConnectionID)</span>: This function will configure
-    this layer and if necessary create necessary bottom layers.. The pa_acConnectionParams is used to configure the implemented
-    layer, and pa_acRemainingConnectionID ids configuration data of layers below this one. If 0 or *pa_acRemainingConnectionID
+    <span class="inlineTitle">EComResponse openConnection(char *paConnectionParams, char *paRemainingConnectionID)</span>: This function will configure
+    this layer and if necessary create necessary bottom layers.. The paConnectionParams is used to configure the implemented
+    layer, and paRemainingConnectionID ids configuration data of layers below this one. If 0 or *paRemainingConnectionID
     equals &#39;0x00&#39; than there is no further layer below this one. Returns status of the opening process (e_InitOk).</li>
     <li>
     <span class="inlineTitle">virtual void closeConnection() = 0</span>: Virtual function. Implementations of this function should preform the actions
     necessary for closing the layer and then call the closeConnection() of the bottom layer.</li>
     <li>
-    <span class="inlineTitle">virtual EComResponse sendData(void *pa_pvData, unsigned int pa_unSize) = 0</span>: Virtual function. Takes the given data and
-    performs the necessary process for sending data.Parameter pa_pvData is the pointer to the data to be sent and pa_unSize is the
+    <span class="inlineTitle">virtual EComResponse sendData(void *paData, unsigned int paSize) = 0</span>: Virtual function. Takes the given data and
+    performs the necessary process for sending data.Parameter paData is the pointer to the data to be sent and paSize is the
     size of the data. It returns the status of the sending process.</li>
     <li>
-    <span class="inlineTitle">virtual EComResponse recvData(const void *pa_pvData, unsigned int pa_unSize) = 0</span>:Virtual function. Takes the given data
-    and performs the necessary process for receiving data. Parameter pa_pvData is the pointer to the data received and pa_unSize is
+    <span class="inlineTitle">virtual EComResponse recvData(const void *paData, unsigned int paSize) = 0</span>:Virtual function. Takes the given data
+    and performs the necessary process for receiving data. Parameter paData is the pointer to the data received and paSize is
     the size of the data received. It returns the status of the receiving process.</li>
     <li>
     <span class="inlineTitle">virtual EComResponse processInterrupt()</span>: Virtual function. Used to finish the data received in a context outside the
@@ -311,7 +311,7 @@
   <h5>Methods:</h5>
   <ul>
     <li>
-    <span class="inlineTitle">void interruptCommFB(CComLayer *pa_poComLayer)</span>: Starts a new event chain. This function is used to change the thread
+    <span class="inlineTitle">void interruptCommFB(CComLayer *paComLayer)</span>: Starts a new event chain. This function is used to change the thread
     from the interruptCommFB() call to the thread which executes the resource in which the function block is created.</li>
     <li>
     <span class="inlineTitle">getFBTypeId(void)</span>: This method is used by the Query command to get the instances correct type name (eg.

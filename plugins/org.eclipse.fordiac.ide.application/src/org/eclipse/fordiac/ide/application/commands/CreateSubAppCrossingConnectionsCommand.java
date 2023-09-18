@@ -105,12 +105,11 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 		return false;
 	}
 
-
 	@Override
 	public void execute() {
 		final IInterfaceElement left = buildPath(source, sourceNetworks, false);
 		final IInterfaceElement right = buildPath(destination, destinationNetworks, true);
-		createConnection(source, match, left, right);
+		createConnection(match, left, right);
 	}
 
 	private static boolean isSwapNeeded(final IInterfaceElement source, final IInterfaceElement destination,
@@ -121,8 +120,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 	}
 
 	private static boolean isInputElement(final IInterfaceElement iel, final List<FBNetwork> networkList) {
-		if (iel.getFBNetworkElement() instanceof SubApp) {
-			final SubApp subapp = (SubApp) iel.getFBNetworkElement();
+		if (iel.getFBNetworkElement() instanceof final SubApp subapp) {
 			final FBNetwork search = subapp.getSubAppNetwork();
 			if (networkList.get(0) == search) {
 				return !iel.isIsInput();
@@ -155,8 +153,8 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 
 	private static FBNetwork addSubAppNetworkToList(final IInterfaceElement ie, final List<FBNetwork> networkList) {
 		FBNetwork subAppNetwork = null;
-		if (ie.getFBNetworkElement() instanceof SubApp) {
-			subAppNetwork = ((SubApp) ie.getFBNetworkElement()).getSubAppNetwork();
+		if (ie.getFBNetworkElement() instanceof final SubApp fBNetworkElement) {
+			subAppNetwork = fBNetworkElement.getSubAppNetwork();
 			networkList.add(0, subAppNetwork);
 		}
 		return subAppNetwork;
@@ -173,8 +171,8 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 		final List<FBNetwork> list = new ArrayList<>();
 		EObject current = source.eContainer();
 		while (current != null) {
-			if (current instanceof FBNetwork) {
-				list.add((FBNetwork) current);
+			if (current instanceof final FBNetwork currentFbNetwork) {
+				list.add(currentFbNetwork);
 			}
 			current = current.eContainer();
 		}
@@ -193,9 +191,9 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 			final IInterfaceElement createdPin = createInterfaceElement(isRightPath, ie, subapp);
 
 			if (isRightPath) {
-				createConnection(ie, network, createdPin, ie);
+				createConnection(network, createdPin, ie);
 			} else {
-				createConnection(ie, network, ie, createdPin);
+				createConnection(network, ie, createdPin);
 			}
 
 			ie = createdPin;
@@ -235,10 +233,10 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 		return LinkConstraints.typeCheck(source, pin);
 	}
 
-
-	private void createConnection(final IInterfaceElement ie, final FBNetwork network,
-			final IInterfaceElement connSource, final IInterfaceElement connDestination) {
-		final AbstractConnectionCreateCommand connCmd = AbstractConnectionCreateCommand.createCommand(ie, network);
+	private void createConnection(final FBNetwork network, final IInterfaceElement connSource,
+			final IInterfaceElement connDestination) {
+		final AbstractConnectionCreateCommand connCmd = AbstractConnectionCreateCommand.createCommand(network,
+				connSource, connDestination);
 		connCmd.setSource(connSource);
 		connCmd.setDestination(connDestination);
 		if (connCmd.canExecute()) {
@@ -272,7 +270,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 				&& (!LinkConstraints.typeCheck(source, destination))) {
 			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
 					(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
-							(null != destination.getType()) ? destination.getType().getName() : FordiacMessages.NA));
+					(null != destination.getType()) ? destination.getType().getName() : FordiacMessages.NA));
 			return false;
 
 		}
@@ -296,7 +294,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 		if (!LinkConstraints.adapaterTypeCompatibilityCheck(source, destination)) {
 			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
 					(null != source.getType()) ? source.getType().getName() : FordiacMessages.ND,
-							(null != destination.getType()) ? destination.getType().getName() : FordiacMessages.ND));
+					(null != destination.getType()) ? destination.getType().getName() : FordiacMessages.ND));
 			return false;
 		}
 

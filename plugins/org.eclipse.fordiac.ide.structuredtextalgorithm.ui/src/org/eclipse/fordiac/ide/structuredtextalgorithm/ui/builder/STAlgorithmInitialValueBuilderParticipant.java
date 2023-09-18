@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.ValidationUtil;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.EcoreUtil2;
@@ -75,6 +76,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	protected void doBuild(final IResourceDescription.Delta delta, final IBuildContext context,
 			final IProgressMonitor monitor) throws CoreException {
 		try {
+			final IFile file = getFile(delta.getNew().getURI());
+			final boolean ignoreWarnings = ValidationUtil.isIgnoreWarnings(file);
 			final Resource resource = context.getResourceSet().getResource(delta.getUri(), true);
 			final TreeIterator<EObject> allContents = EcoreUtil.getAllContents(resource, true);
 			while (allContents.hasNext()) {
@@ -85,8 +88,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				if (target instanceof SystemConfiguration) {
 					allContents.prune();
 				} else if (target instanceof final VarDeclaration varDeclaration) {
-					validateType(varDeclaration, delta, monitor);
-					validateValue(varDeclaration, delta, monitor);
+					validateType(varDeclaration, delta, ignoreWarnings, monitor);
+					validateValue(varDeclaration, delta, ignoreWarnings, monitor);
 				}
 			}
 		} catch (final OperationCanceledException e) {
@@ -106,7 +109,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	}
 
 	protected void validateType(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
-			final IProgressMonitor monitor) throws CoreException {
+			final boolean ignoreWarnings, final IProgressMonitor monitor) throws CoreException {
 		final List<Issue> issues = new ArrayList<>();
 		if (varDeclaration.isArray()) {
 			StructuredTextParseUtil.validateType(varDeclaration, issues);
@@ -121,14 +124,14 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				final IFile file = getFile(delta.getUri());
 				if (file != null && file.exists()) {
 					createMarkers(file, canonicalArraySize, FordiacErrorMarker.TYPE_DECLARATION_MARKER, issues,
-							monitor);
+							ignoreWarnings, monitor);
 				}
 			}
 		}
 	}
 
 	protected void validateValue(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
-			final IProgressMonitor monitor) throws CoreException {
+			final boolean ignoreWarnings, final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(varDeclaration);
 		final List<Issue> issues = new ArrayList<>();
 		if (!value.isBlank()) { // do not parse value if blank
@@ -145,7 +148,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			if (!issues.isEmpty()) {
 				final IFile file = getFile(delta.getUri());
 				if (file != null && file.exists()) {
-					createMarkers(file, canonicalValue, FordiacErrorMarker.INITIAL_VALUE_MARKER, issues, monitor);
+					createMarkers(file, canonicalValue, FordiacErrorMarker.INITIAL_VALUE_MARKER, issues, ignoreWarnings,
+							monitor);
 				}
 			}
 		}
@@ -191,12 +195,14 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	}
 
 	protected void createMarkers(final IFile file, final EObject object, final String type, final List<Issue> issues,
-			final IProgressMonitor monitor) throws CoreException {
+			final boolean ignoreWarnings, final IProgressMonitor monitor) throws CoreException {
 		for (final Issue issue : issues) {
 			if (monitor.isCanceled()) {
 				throw new OperationCanceledException();
 			}
-			createMarker(file, object, type, issue);
+			if (ValidationUtil.shouldProcess(issue, ignoreWarnings)) {
+				createMarker(file, object, type, issue);
+			}
 		}
 	}
 

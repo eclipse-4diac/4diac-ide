@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -45,12 +44,10 @@ public final class InitialValueHelper {
 			}
 			return getDefaultValue(element);
 		}
-		if (element instanceof final ErrorMarkerInterface marker) {
-			if (hasInitalValue(element)) {
-				return marker.getValue().getValue();
-			}
-			// no default value for error markers
+		if ((element instanceof final ErrorMarkerInterface marker) && hasInitalValue(element)) {
+			return marker.getValue().getValue();
 		}
+		// no default value for error markers
 		return ""; //$NON-NLS-1$
 	}
 
@@ -62,14 +59,12 @@ public final class InitialValueHelper {
 	}
 
 	public static String getDefaultValue(final Object element) {
-		if (element instanceof final VarDeclaration varDec) {
-			if ((varDec.getType() instanceof AnyType) && !IecTypes.GenericTypes.isAnyType(varDec.getType())) {
-				try {
-					return VariableOperations.newVariable(varDec).toString();
-				} catch (final Exception exc) {
-					// we are only logging it and jump to default value below
-					FordiacLogHelper.logWarning("could not aquire VarDec default value", exc); //$NON-NLS-1$
-				}
+		if ((element instanceof final VarDeclaration varDec)
+				&& ((varDec.getType() instanceof AnyType) && !IecTypes.GenericTypes.isAnyType(varDec.getType()))) {
+			try {
+				return VariableOperations.newVariable(varDec).toString();
+			} catch (final Exception exc) {
+				// fall though (NO LOGGING NECESSARY!!!)
 			}
 		}
 		return ""; //$NON-NLS-1$

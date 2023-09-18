@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2023 Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz
- *               2023 Martin Erich Jobst
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,9 +15,11 @@
  *   Alois Zoitl - fixed issues in adapter update
  *               - moved adapter type handling to own adapter command
  *   Martin Jobst - add value validation
+ *                - resolve imports
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +28,7 @@ import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
@@ -45,17 +48,22 @@ public class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand
 	private DataType oldDataType;
 	private final CompoundCommand additionalCommands = new CompoundCommand();
 
-	protected ChangeDataTypeCommand(final IInterfaceElement interfaceElement, final DataType dataType) {
+	public ChangeDataTypeCommand(final IInterfaceElement interfaceElement, final DataType dataType) {
 		super(interfaceElement);
 		this.dataType = dataType;
 	}
 
 	public static ChangeDataTypeCommand forTypeName(final IInterfaceElement interfaceElement, final String typeName) {
+		final TypeLibrary typeLibrary = getTypeLibrary(interfaceElement);
 		final DataType dataType;
 		if (interfaceElement instanceof AdapterDeclaration) {
-			dataType = getTypeLibrary(interfaceElement).getAdapterTypeEntry(typeName).getType();
+			dataType = ImportHelper
+					.resolveImport(typeName, interfaceElement, typeLibrary::getAdapterTypeEntry, name -> {
+						throw new NoSuchElementException(name);
+					}).getType();
 		} else {
-			dataType = getTypeLibrary(interfaceElement).getDataTypeLibrary().getType(typeName);
+			dataType = ImportHelper.resolveImport(typeName, interfaceElement,
+					typeLibrary.getDataTypeLibrary()::getTypeIfExists, typeLibrary.getDataTypeLibrary()::getType);
 		}
 		return ChangeDataTypeCommand.forDataType(interfaceElement, dataType);
 	}

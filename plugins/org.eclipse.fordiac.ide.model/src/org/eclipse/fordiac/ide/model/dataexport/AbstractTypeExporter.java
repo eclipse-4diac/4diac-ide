@@ -31,6 +31,7 @@ import javax.xml.stream.XMLStreamException;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
@@ -45,7 +46,6 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	private final LibraryElement type;
 
 	protected AbstractTypeExporter(final LibraryElement type) {
-		super();
 		this.type = type;
 	}
 
@@ -77,7 +77,6 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		return null;
 	}
 
-
 	protected void createXMLEntries() throws XMLStreamException {
 		createNamedElementEntry(getType(), getRootTag());
 		addIdentification(getType());
@@ -86,7 +85,7 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		addEndElement();
 	}
 
-	//Save the model using the Outputstream
+	// Save the model using the Outputstream
 	public static void saveType(final TypeEntry entry, final OutputStream outputStream) {
 		final AbstractTypeExporter exporter = getTypeExporter(entry);
 		if (exporter != null) {
@@ -103,7 +102,8 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	private static AbstractTypeExporter getTypeExporter(final TypeEntry entry) {
 		if (entry instanceof FBTypeEntry) {
 			return new FbtExporter((FBTypeEntry) entry);
-		} else if (entry instanceof AdapterTypeEntry) {
+		}
+		if (entry instanceof AdapterTypeEntry) {
 			return new AdapterExporter((AdapterTypeEntry) entry);
 		} else if (entry instanceof SubAppTypeEntry) {
 			return new SubApplicationTypeExporter((SubAppTypeEntry) entry);
@@ -128,6 +128,12 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 			if ((null != compilerInfo.getClassdef()) && !"".equals(compilerInfo.getClassdef())) { //$NON-NLS-1$
 				getWriter().writeAttribute(LibraryElementTags.CLASSDEF_ATTRIBUTE, compilerInfo.getClassdef());
 			}
+			if ((null != compilerInfo.getPackageName()) && !"".equals(compilerInfo.getPackageName())) { //$NON-NLS-1$
+				getWriter().writeAttribute(LibraryElementTags.PACKAGE_NAME_ATTRIBUTE, compilerInfo.getPackageName());
+			}
+			for (final Import imp : compilerInfo.getImports()) {
+				addImport(imp);
+			}
 			for (final org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler : compilerInfo.getCompiler()) {
 				addCompiler(compiler);
 			}
@@ -150,6 +156,16 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 				(null != compiler.getProduct()) ? compiler.getProduct() : ""); //$NON-NLS-1$
 		getWriter().writeAttribute(LibraryElementTags.VERSION_ATTRIBUTE,
 				(null != compiler.getVersion()) ? compiler.getVersion() : ""); //$NON-NLS-1$
+	}
+
+	/** Adds the import.
+	 *
+	 * @param imp the import
+	 * @throws XMLStreamException */
+	private void addImport(final Import imp) throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.IMPORT_ELEMENT);
+		getWriter().writeAttribute(LibraryElementTags.DECLARATION_ATTRIBUTE,
+				(null != imp.getImportedNamespace()) ? imp.getImportedNamespace() : ""); //$NON-NLS-1$
 	}
 
 	/** Adds the variable.

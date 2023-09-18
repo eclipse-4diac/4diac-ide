@@ -64,8 +64,7 @@
                   checkEnabled="false">
                <with
                      variable="selection">
-                  <iterate
-                        operator="and">
+                  <iterate operator="and"  ifEmpty="false">
                      <and>
 	                 	<instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart" />
 	                    <not> 

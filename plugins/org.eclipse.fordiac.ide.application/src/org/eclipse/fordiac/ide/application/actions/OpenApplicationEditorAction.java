@@ -37,11 +37,9 @@ public class OpenApplicationEditorAction extends AbstractOpenSystemElementListen
 
 	@Override
 	public void selectionChanged(final IAction action, final ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structuredSel = (IStructuredSelection) selection;
-			if (structuredSel.getFirstElement() instanceof Application) {
-				app = (Application) structuredSel.getFirstElement();
-			}
+		if ((selection instanceof final IStructuredSelection structuredSel)
+				&& (structuredSel.getFirstElement() instanceof final Application firstElement)) {
+			app = firstElement;
 		}
 	}
 

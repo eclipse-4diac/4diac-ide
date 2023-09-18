@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 
 public final class EventTypeLibrary {
-	private static final String EVENT = "Event"; //$NON-NLS-1$
+	public static final String EVENT = "Event"; //$NON-NLS-1$
 	private Map<String, DataType> typeMap;
 	private static EventTypeLibrary instance;
 
@@ -51,14 +51,12 @@ public final class EventTypeLibrary {
 		return typeMap.values();
 	}
 
-	/**
-	 * FIXME only return type if it really exists! --> after parsing/importing of
-	 * types is implemented --> planned for V0.3
+	/** FIXME only return type if it really exists! --> after parsing/importing of types is implemented --> planned for
+	 * V0.3
 	 *
 	 * @param name the name
 	 *
-	 * @return the type
-	 */
+	 * @return the type */
 	public DataType getType(final String name) {
 		if (name == null) {
 			return typeMap.get(EVENT);

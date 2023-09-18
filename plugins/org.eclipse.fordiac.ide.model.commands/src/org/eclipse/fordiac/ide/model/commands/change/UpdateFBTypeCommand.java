@@ -16,7 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
@@ -24,15 +23,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /** UpdateFBTypeCommand triggers an update of the type for an FB instance */
 public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
@@ -77,8 +79,10 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
+		entry = reloadTypeEntry(entry, srcElement);
+
 		FBNetworkElement copy;
-		if (invalidType()) {
+		if (entry == null || entry instanceof ErrorTypeEntry) {
 			copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
 		} else if (entry.getTypeName().startsWith(LibraryElementTags.FB_TYPE_COMM_MESSAGE)) {
 			copy = LibraryElementFactory.eINSTANCE.createCommunicationChannel();
@@ -99,10 +103,6 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		return copy;
 	}
 
-	public boolean invalidType() {
-		return ((entry.getFile() == null) || !entry.getFile().exists()) && !reloadErrorType();
-	}
-
 	private FBNetworkElement createMultiplexer() {
 		StructManipulator structManipulator;
 		if ("STRUCT_MUX".equals(entry.getType().getName())) { //$NON-NLS-1$
@@ -118,17 +118,37 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 				&& entry.getType().getName().startsWith("STRUCT"); //$NON-NLS-1$
 	}
 
-	public boolean reloadErrorType() {
-		final EObject rootContainer = EcoreUtil.getRootContainer(network);
-		if (rootContainer instanceof LibraryElement) {
-			final TypeLibrary typeLibrary = ((LibraryElement) rootContainer).getTypeLibrary();
-			final TypeEntry reloadedType = typeLibrary.find(entry.getTypeName());
-			if ((reloadedType != null) && (reloadedType.getFile() != null) && reloadedType.getFile().exists()) {
-				typeLibrary.removeErrorTypeEntry(entry);
-				entry = reloadedType;
-				return true;
-			}
+	private static TypeEntry reloadTypeEntry(final TypeEntry entry, final FBNetworkElement context) {
+		if (entry == null || isValidTypeEntry(entry)) {
+			return entry;
 		}
-		return false;
+
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(context);
+		if (typeLibrary == null) {
+			FordiacLogHelper.logWarning("Cannot get type library for current FB network element"); //$NON-NLS-1$
+			return entry;
+		}
+
+		final TypeEntry reloadedTypeEntry = typeLibrary.find(entry.getFullTypeName());
+		if (isValidTypeEntry(reloadedTypeEntry)) {
+			return reloadedTypeEntry;
+		}
+
+		if (entry instanceof SubAppTypeEntry) {
+			return typeLibrary.createErrorTypeEntry(entry.getFullTypeName(),
+					LibraryElementPackage.eINSTANCE.getSubAppType());
+		}
+		if (entry instanceof FBTypeEntry) {
+			return typeLibrary.createErrorTypeEntry(entry.getFullTypeName(),
+					LibraryElementPackage.eINSTANCE.getFBType());
+		}
+		FordiacLogHelper.logWarning("Unsupported error type entry for " + entry.getClass().getName()); //$NON-NLS-1$
+		return entry;
+	}
+
+	private static boolean isValidTypeEntry(final TypeEntry entry) {
+		// check that entry is still current in the type library (i.e., we can find the entry using its file)
+		return entry != null && entry.getFile() != null && entry.getFile().exists() && entry.getTypeLibrary() != null
+				&& entry.getTypeLibrary().getTypeEntry(entry.getFile()) == entry;
 	}
 }

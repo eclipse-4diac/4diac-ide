@@ -14,15 +14,25 @@
 
 package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 
 public class TracingAnnotations {
 
-	public static EList<ECTransition> getTransitions(final ECC ecc, final EccTrace trace) {
-		throw new UnsupportedOperationException("Not implemented yet !!! ");
+	public static EList<ECTransition> getTransitions(final ECC ecc, final EccTrace traces) {
+		final EList<ECTransition> transitions = new BasicEList<>();
+		for (final TransitionTrace trace : traces.getTransitionTraces()) {
+			transitions.addAll(ecc.getECTransition().stream()
+					.filter(s -> s.getSource().getName().equals(trace.getSourceState())
+							&& s.getDestination().getName().equals(trace.getDestinationState())
+							&& s.getConditionExpression().equals(trace.getCondExpression()))
+					.toList());
+		}
+		return transitions;
 	}
 
 	private TracingAnnotations() {

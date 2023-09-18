@@ -42,6 +42,9 @@ public final class Messages extends NLS {
 	public static String STCoreContentAssistPreferencePage_AutoActivationTriggers;
 	public static String STCoreContentAssistPreferencePage_ChangedSettingsEffect;
 
+	public static String STCoreSaveActionsPreferencePage_EnableFormat;
+	public static String STCoreSaveActionsPreferencePage_EnableSaveActions;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.model.search.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +28,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -34,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -97,14 +100,26 @@ public class InstanceSearch {
 		return searchResult;
 	}
 
-
-
 	public Set<INamedElement> performTypeLibBlockSearch(final TypeLibrary typeLibrary) {
 		searchResult = new HashSet<>();
 		final List<TypeEntry> allBlockTypes = new ArrayList<>();
 		allBlockTypes.addAll(typeLibrary.getSubAppTypes().values());
 		allBlockTypes.addAll(typeLibrary.getFbTypes().values());
-		allBlockTypes.parallelStream().forEach(f-> match(f.getTypeEditable()));
+		allBlockTypes.parallelStream().forEach(f -> match(f.getTypeEditable()));
+		return searchResult;
+	}
+
+	public Set<INamedElement> performInternalFBSearch(final TypeLibrary typeLibrary) {
+		searchResult = new HashSet<>();
+		// @formatter:off
+		typeLibrary.getFbTypes().values().parallelStream()
+			.map(FBTypeEntry::getType)
+			.filter(BaseFBType.class::isInstance)
+			.map(BaseFBType.class::cast)
+			.map(BaseFBType::getInternalFbs)
+			.flatMap(Collection::stream)
+			.forEach(this::match);
+		// @formatter:on
 		return searchResult;
 	}
 

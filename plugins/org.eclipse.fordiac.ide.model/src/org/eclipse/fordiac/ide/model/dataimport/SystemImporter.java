@@ -114,6 +114,9 @@ public class SystemImporter extends CommonElementImporter {
 			case LibraryElementTags.IDENTIFICATION_ELEMENT:
 				parseIdentification(getElement());
 				break;
+			case LibraryElementTags.COMPILER_INFO_ELEMENT:
+				getElement().setCompilerInfo(parseCompilerInfo());
+				break;
 			case LibraryElementTags.APPLICATION_ELEMENT:
 				getElement().getApplication().add(parseApplication());
 				break;
@@ -171,7 +174,8 @@ public class SystemImporter extends CommonElementImporter {
 				}
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
 				return true;
-			} else if (LibraryElementTags.PARAMETER_ELEMENT.equals(name)) {
+			}
+			if (LibraryElementTags.PARAMETER_ELEMENT.equals(name)) {
 				segment.getVarDeclarations().add(parseParameter());
 				proceedToEndElementNamed(LibraryElementTags.PARAMETER_ELEMENT);
 				return true;
@@ -181,7 +185,7 @@ public class SystemImporter extends CommonElementImporter {
 	}
 
 	private static void parseCommunication(final Segment segment) {
-		final String typeName = segment.getTypeName();
+		final String typeName = segment.getFullTypeName();
 		final CommunicationConfigurationDetails commConfig = CommunicationConfigurationDetails
 				.getCommConfigUiFromExtensionPoint(typeName, CommunicationConfigurationDetails.COMM_EXT_ATT_ID);
 		if (commConfig != null) {
@@ -236,7 +240,7 @@ public class SystemImporter extends CommonElementImporter {
 		final FBNetworkElement fromElement = findMappingTargetFromName(fromValue);
 		final FBNetworkElement toElement = (fromElement instanceof CommunicationChannel)
 				? findMappingTargetFromName(toValue, fromElement)
-						: findMappingTargetFromName(toValue);
+				: findMappingTargetFromName(toValue);
 		if (fromElement instanceof SubApp) {
 			FBNetworkHelper.loadSubappNetwork(fromElement);
 		}
@@ -370,7 +374,7 @@ public class SystemImporter extends CommonElementImporter {
 
 	private boolean isColorAttributeNode() {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
-		return (null != name) && LibraryElementTags.COLOR.equals(name);
+		return LibraryElementTags.COLOR.equals(name);
 	}
 
 	private void parseColor(final ColorizableElement colElement) {

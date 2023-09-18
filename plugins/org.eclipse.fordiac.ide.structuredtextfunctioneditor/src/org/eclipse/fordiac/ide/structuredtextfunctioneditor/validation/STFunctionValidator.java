@@ -80,7 +80,7 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 	@Check
 	public void checkFirstFunctionNameMatchesTypeName(final STFunction function) {
 		if (function.eResource() instanceof final STFunctionResource resource
-				&& resource.getFbType() instanceof final FunctionFBType fbType
+				&& resource.getLibraryElement() instanceof final FunctionFBType fbType
 				&& function.eContainer() instanceof final STFunctionSource source
 				&& source.getFunctions().indexOf(function) == 0
 				&& !Objects.equal(fbType.getName(), function.getName())) {
@@ -94,7 +94,7 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 	@Check
 	public void checkMultipleFunctions(final STFunction function) {
 		if (function.eResource() instanceof final STFunctionResource resource
-				&& resource.getFbType() instanceof final FunctionFBType fbType
+				&& resource.getLibraryElement() instanceof final FunctionFBType fbType
 				&& function.eContainer() instanceof final STFunctionSource source
 				&& source.getFunctions().indexOf(function) != 0) {
 			error(MessageFormat.format(Messages.STFunctionValidator_MultipleFunctions, fbType.getName()),

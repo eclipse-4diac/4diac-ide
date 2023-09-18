@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.datatypeeditor.properties;
 
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
 import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -69,7 +70,7 @@ public class DataTypeInfoSection extends AbstractSection {
 	}
 
 	private void createTypeInfoGroup(final Composite parent) {
-		typeInfoWidget = new TypeInfoWidget(getWidgetFactory());
+		typeInfoWidget = new PackageInfoWidget(getWidgetFactory());
 		typeInfoWidget.createControls(parent);
 	}
 

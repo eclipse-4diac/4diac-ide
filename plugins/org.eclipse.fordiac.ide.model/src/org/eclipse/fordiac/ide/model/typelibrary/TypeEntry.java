@@ -48,9 +48,11 @@ public interface TypeEntry extends Notifier {
 	/** Save the editable type to the file associated with this type entry */
 	void save();
 
-	default String getTypeName() {
-		return (getFile() != null) ? TypeEntry.getTypeNameFromFile(getFile()) : ""; //$NON-NLS-1$
-	}
+	String getTypeName();
+
+	String getFullTypeName();
+
+	void refresh();
 
 	static String getTypeNameFromFile(final IFile element) {
 		return getTypeNameFromFileName(element.getName());
@@ -64,5 +66,4 @@ public interface TypeEntry extends Notifier {
 		}
 		return name;
 	}
-
 }

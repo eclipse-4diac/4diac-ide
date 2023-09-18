@@ -31,7 +31,7 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		
 		«generateImplIncludes»
 		
-		DEFINE_FIRMWARE_DATATYPE(«type.name», «type.name.FORTEStringId»);
+		DEFINE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain», «type.generateTypeSpec»);
 		
 		const CStringDictionary::TStringId «className»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
 		
@@ -56,9 +56,9 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 	'''
 
 	def protected generateImplIncludes() '''
-		#include "«structuredTypeFileName(type)».h"
+		#include "«fileBasename».h"
 		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-		#include "«structuredTypeFileName(type)»_gen.cpp"
+		#include "«fileBasename»_gen.cpp"
 		#endif
 		
 		«getDependencies(emptyMap).generateDependencyIncludes»
@@ -68,7 +68,7 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		void «className»::setValue(const CIEC_ANY &paValue) {
 		  if (paValue.getDataTypeID() == e_STRUCT) {
 		    auto &otherStruct = static_cast<const CIEC_STRUCT &>(paValue);
-		    if («type.name.FORTEStringId» == otherStruct.getStructTypeNameID()) {
+		    if («type.generateTypeSpec» == otherStruct.getStructTypeNameID()) {
 		      operator=(static_cast<const «className» &>(paValue));
 		    }
 		  }

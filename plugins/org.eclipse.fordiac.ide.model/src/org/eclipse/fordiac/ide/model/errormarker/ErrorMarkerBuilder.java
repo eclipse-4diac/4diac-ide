@@ -32,6 +32,7 @@ public final class ErrorMarkerBuilder {
 	private String message;
 	private String location;
 	private EObject target;
+	private Map<String, Object> additionalAttributes;
 
 	protected ErrorMarkerBuilder() {
 	}
@@ -71,6 +72,9 @@ public final class ErrorMarkerBuilder {
 			attributes.put(FordiacErrorMarker.TARGET_URI,
 					FordiacMarkerHelper.getTargetUri(resource, target).toString());
 			attributes.put(FordiacErrorMarker.TARGET_TYPE, EcoreUtil.getURI(target.eClass()).toString());
+		}
+		if (additionalAttributes != null) {
+			attributes.putAll(additionalAttributes);
 		}
 		return attributes;
 	}
@@ -140,6 +144,21 @@ public final class ErrorMarkerBuilder {
 	public ErrorMarkerBuilder setTarget(final EObject target) {
 		this.target = target;
 		return this;
+	}
+
+	public ErrorMarkerBuilder addAdditionalAttributes(final Map<String, Object> attributes) {
+		if (additionalAttributes == null) {
+			additionalAttributes = new HashMap<>();
+		}
+		additionalAttributes.putAll(attributes);
+		return this;
+	}
+
+	public Map<String, Object> getAdditionalAttributes() {
+		if (additionalAttributes == null) {
+			additionalAttributes = new HashMap<>();
+		}
+		return additionalAttributes;
 	}
 
 	@Override

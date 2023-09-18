@@ -19,7 +19,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
+import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -35,7 +35,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 /** Properties tab which shows the FB type information of the selected FB */
 public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 
-	private TypeInfoWidget typeInfo;
+	private PackageInfoWidget typeInfo;
 
 	private Text fbTypeNameText;
 	private Text commentText;
@@ -62,7 +62,7 @@ public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createTypeAndCommentSection(getLeftComposite());
-		typeInfo = new TypeInfoWidget(getWidgetFactory());
+		typeInfo = new PackageInfoWidget(getWidgetFactory());
 		typeInfo.createControls(getLeftComposite(), getRightComposite());
 	}
 

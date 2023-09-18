@@ -15,39 +15,34 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.requests.CreateConnectionRequest;
 
-/**
- * An EditPolicy which allows drawing Connections between VariableInterfaces.
- */
+/** An EditPolicy which allows drawing Connections between VariableInterfaces. */
 public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 
 	@Override
 	protected AbstractConnectionCreateCommand createConnectionCreateCommand() {
-		final DataConnectionCreateCommand cmd = new DataConnectionCreateCommand(getParentNetwork());
-		cmd.setSource(((InterfaceEditPart) getHost()).getModel());
-		if ((cmd.getSource() instanceof VarDeclaration)
-				&& (!LinkConstraints.isWithConstraintOK(cmd.getSource()))) {
-			return null; // Elements which are not connected by a with construct are not allowed to be
-			// connected
+		final IInterfaceElement pin = (IInterfaceElement) getHost().getModel();
+		if ((pin instanceof VarDeclaration) && (!LinkConstraints.isWithConstraintOK(pin))) {
+			// Elements which are not connected by a with construct are not allowed to be connected
+			return null;
 		}
 
-		if (cmd.getSource().getType() instanceof StructuredType) {
-			final StructDataConnectionCreateCommand command = new StructDataConnectionCreateCommand(getParentNetwork());
-			command.setSource(cmd.getSource());
-			return command;
-		}
+		final AbstractConnectionCreateCommand cmd = (AbstractConnectionCreateCommand.isStructManipulatorDefPin(pin))
+				? new StructDataConnectionCreateCommand(getParentNetwork())
+				: new DataConnectionCreateCommand(getParentNetwork());
 
+		cmd.setSource(pin);
 		return cmd;
 
 	}
@@ -58,4 +53,19 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 		return new ReconnectDataConnectionCommand(connection, isSourceReconnect, newTarget, getParentNetwork());
 	}
 
+	@Override
+	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
+		final AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
+		final IInterfaceElement pin = (IInterfaceElement) getHost().getModel();
+		if (AbstractConnectionCreateCommand.isStructManipulatorDefPin(pin)
+				&& !(command instanceof StructDataConnectionCreateCommand)) {
+			// we are connecting to struct manipulator we need to switch to a StructDataConnectionCreatCommand
+			final StructDataConnectionCreateCommand structCmd = new StructDataConnectionCreateCommand(
+					command.getParent());
+			structCmd.setSource(command.getSource());
+			request.setStartCommand(structCmd);
+		}
+
+		return super.getConnectionCompleteCommand(request);
+	}
 }

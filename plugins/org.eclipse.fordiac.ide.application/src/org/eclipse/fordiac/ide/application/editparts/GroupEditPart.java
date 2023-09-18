@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -191,7 +192,14 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 
-		if (child instanceof InstanceNameFigure) {
+		if (child instanceof InstanceNameFigure
+				&& childEditPart instanceof final InstanceNameEditPart instanceNameEditPart) {
+			if (instanceNameEditPart.getModel().hasErrorMarker()) {
+				child.setBackgroundColor(ColorConstants.red);
+				child.setOpaque(true);
+			} else {
+				child.setOpaque(false);
+			}
 			getFigure().getNameFigure().add(child,
 					new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL));
 		} else {

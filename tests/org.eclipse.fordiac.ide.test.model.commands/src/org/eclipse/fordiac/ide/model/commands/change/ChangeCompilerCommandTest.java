@@ -39,8 +39,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 		return commandExecution(state);
 	}
 
-	public static void verifyDefaultState(final State state, final TestFunction t, final int index,
-			final int size) {
+	public static void verifyDefaultState(final State state, final TestFunction t, final int index, final int size) {
 		final CompilerInfo compilerInfo = state.getFbNetwork().getNetworkElements().get(0).getType().getCompilerInfo();
 		t.test(compilerInfo);
 		t.test(compilerInfo.getCompiler().size(), size);
@@ -320,13 +319,13 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 				), //
 				new ExecutionDescription<>("Add Compiler Info to Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeAddCommand, //
-						(State s, State o, TestFunction t) -> {
+						(final State s, final State o, final TestFunction t) -> {
 							verifyDefaultState(s, t, 0, 1);
 							verifyStateEmptyClassdefHeader(s, t);
 						}), //
 				new ExecutionDescription<>("Add second Compiler Info to Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeAddCommand, //
-						(State s, State o, TestFunction t) -> {
+						(final State s, final State o, final TestFunction t) -> {
 							verifyDefaultState(s, t, 0, 2);
 							verifyDefaultState(s, t, 1, 2);
 							verifyStateEmptyClassdefHeader(s, t);
@@ -334,35 +333,35 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 				), //
 				new ExecutionDescription<>("Delete first Compiler Info from Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeDeleteCommand, //
-						(State s, State o, TestFunction t) -> verifyDefaultState(s, t, 0, 1) //
+						(final State s, final State o, final TestFunction t) -> verifyDefaultState(s, t, 0, 1) //
 				), //
 				new ExecutionDescription<>("Change CompilerInfo Header on Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeChangeHeaderCommand, //
-						(State s, State o, TestFunction t) -> verifyChangedHeaderState(s, t, 0, 1) //
+						(final State s, final State o, final TestFunction t) -> verifyChangedHeaderState(s, t, 0, 1) //
 				), //
 				new ExecutionDescription<>("Change CompilerInfo Classdef on Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeChangeClassdefCommand, //
-						(State s, State o, TestFunction t) -> verifyChangedClassdefState(s, t, 0, 1) //
+						(final State s, final State o, final TestFunction t) -> verifyChangedClassdefState(s, t, 0, 1) //
 				), //
 				new ExecutionDescription<>("Change Compiler Language on Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeChangeLanguageCommand, //
-						(State s, State o, TestFunction t) -> verifyChangedLanguageState(s, t, 0, 1) //
+						(final State s, final State o, final TestFunction t) -> verifyChangedLanguageState(s, t, 0, 1) //
 				), //
 				new ExecutionDescription<>("Change Compiler Vendor on Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeChangeVendorCommand, //
-						(State s, State o, TestFunction t) -> verifyChangedVendorState(s, t, 0, 1) //
+						(final State s, final State o, final TestFunction t) -> verifyChangedVendorState(s, t, 0, 1) //
 				), //
 				new ExecutionDescription<>("Change Compiler Product on Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeChangeProductCommand, //
-						(State s, State o, TestFunction t) -> verifyChangedProductState(s, t, 0, 1) //
+						(final State s, final State o, final TestFunction t) -> verifyChangedProductState(s, t, 0, 1) //
 				), //
 				new ExecutionDescription<>("Change Compiler Version on Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeChangeVersionCommand, //
-						(State s, State o, TestFunction t) -> verifyChangedVersionState(s, t, 0, 1) //
+						(final State s, final State o, final TestFunction t) -> verifyChangedVersionState(s, t, 0, 1) //
 				), //
 				new ExecutionDescription<>("Add another Compiler Info to Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeAddCommand, //
-						(State s, State o, TestFunction t) -> {
+						(final State s, final State o, final TestFunction t) -> {
 							verifyChangedVersionState(s, t, 0, 2);
 							verifyDefaultState(s, t, 1, 2);
 							verifyStateClassdefHeader(s, t);
@@ -370,29 +369,34 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 				), //
 				new ExecutionDescription<>("Delete first Compiler Info from Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeDeleteCommand, //
-						(State s, State o, TestFunction t) -> {
+						(final State s, final State o, final TestFunction t) -> {
 							verifyDefaultState(s, t, 0, 1); //
 							verifyStateClassdefHeader(s, t);
 						}), //
 				new ExecutionDescription<>("Change CompilerInfo Header to NULL on Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeChangeHeaderToNullCommand, //
-						(State s, State o, TestFunction t) -> verifyChangedHeaderToNullState(s, t, 0, 1) //
+						(final State s, final State o, final TestFunction t) -> verifyChangedHeaderToNullState(s, t, 0,
+								1) //
 				), //
 				new ExecutionDescription<>("Change CompilerInfo Classdef to NULL on Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeChangeClassdefToNullCommand, //
-						(State s, State o, TestFunction t) -> verifyChangedClassdefToNullState(s, t, 0, 1) //
+						(final State s, final State o, final TestFunction t) -> verifyChangedClassdefToNullState(s, t,
+								0, 1) //
 				), //
 				new ExecutionDescription<>("Change Compiler Vendor to NULL on Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeChangeVendorToNullCommand, //
-						(State s, State o, TestFunction t) -> verifyChangedVendorToNullState(s, t, 0, 1) //
+						(final State s, final State o, final TestFunction t) -> verifyChangedVendorToNullState(s, t, 0,
+								1) //
 				), //
 				new ExecutionDescription<>("Change Compiler Product to NULL on Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeChangeProductToNullCommand, //
-						(State s, State o, TestFunction t) -> verifyChangedProductToNullState(s, t, 0, 1) //
+						(final State s, final State o, final TestFunction t) -> verifyChangedProductToNullState(s, t, 0,
+								1) //
 				), //
 				new ExecutionDescription<>("Change Compiler Version to NULL on Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeChangeVersionToNullCommand, //
-						(State s, State o, TestFunction t) -> verifyChangedVersionToNullState(s, t, 0, 1) //
+						(final State s, final State o, final TestFunction t) -> verifyChangedVersionToNullState(s, t, 0,
+								1) //
 				) //
 		);
 

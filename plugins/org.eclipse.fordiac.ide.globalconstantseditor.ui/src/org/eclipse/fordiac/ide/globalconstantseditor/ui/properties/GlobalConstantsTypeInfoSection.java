@@ -93,7 +93,7 @@ public class GlobalConstantsTypeInfoSection extends AbstractSection {
 	protected Object getInputType(final Object input) {
 		if (input instanceof final GlobalConstantsEditor editor
 				&& editor.getDocument() instanceof final GlobalConstantsDocument document) {
-			return document.getResourceGlobalConstants();
+			return document.getResourceLibraryElement();
 		}
 		return null;
 	}

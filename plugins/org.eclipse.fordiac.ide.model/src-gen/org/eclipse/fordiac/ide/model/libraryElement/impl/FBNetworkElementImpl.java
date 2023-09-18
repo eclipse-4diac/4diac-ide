@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -47,6 +48,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getPosition <em>Position</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getErrorMessage <em>Error Message</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getInterface <em>Interface</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getMapping <em>Mapping</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getGroup <em>Group</em>}</li>
@@ -64,6 +66,26 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @ordered
 	 */
 	protected Position position;
+
+	/**
+	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getErrorMessage()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ERROR_MESSAGE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getErrorMessage()
+	 * @generated
+	 * @ordered
+	 */
+	protected String errorMessage = ERROR_MESSAGE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getInterface() <em>Interface</em>}' containment reference.
@@ -180,6 +202,29 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION, newPosition, newPosition));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setErrorMessage(String newErrorMessage) {
+		String oldErrorMessage = errorMessage;
+		errorMessage = newErrorMessage;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_NETWORK_ELEMENT__ERROR_MESSAGE, oldErrorMessage, errorMessage));
 	}
 
 	/**
@@ -493,6 +538,16 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	 * @generated
 	 */
 	@Override
+	public boolean hasError() {
+		return getErrorMessage() != null && !getErrorMessage().isBlank();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void updatePosition(final int x, final int y) {
 		final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createPosition();
 		pos.setX(x);
@@ -558,6 +613,8 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
 				if (resolve) return getPosition();
 				return basicGetPosition();
+			case LibraryElementPackage.FB_NETWORK_ELEMENT__ERROR_MESSAGE:
+				return getErrorMessage();
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
 				if (resolve) return getInterface();
 				return basicGetInterface();
@@ -582,6 +639,9 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		switch (featureID) {
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
 				setPosition((Position)newValue);
+				return;
+			case LibraryElementPackage.FB_NETWORK_ELEMENT__ERROR_MESSAGE:
+				setErrorMessage((String)newValue);
 				return;
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
 				setInterface((InterfaceList)newValue);
@@ -609,6 +669,9 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
 				setPosition((Position)null);
 				return;
+			case LibraryElementPackage.FB_NETWORK_ELEMENT__ERROR_MESSAGE:
+				setErrorMessage(ERROR_MESSAGE_EDEFAULT);
+				return;
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
 				setInterface((InterfaceList)null);
 				return;
@@ -634,6 +697,8 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 		switch (featureID) {
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
 				return position != null;
+			case LibraryElementPackage.FB_NETWORK_ELEMENT__ERROR_MESSAGE:
+				return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
 				return interface_ != null;
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
@@ -658,6 +723,12 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 				default: return -1;
 			}
 		}
+		if (baseClass == ErrorMarkerRef.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.FB_NETWORK_ELEMENT__ERROR_MESSAGE: return LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -674,7 +745,29 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 				default: return -1;
 			}
 		}
+		if (baseClass == ErrorMarkerRef.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE: return LibraryElementPackage.FB_NETWORK_ELEMENT__ERROR_MESSAGE;
+				default: return -1;
+			}
+		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (errorMessage: "); //$NON-NLS-1$
+		result.append(errorMessage);
+		result.append(')');
+		return result.toString();
 	}
 
 } //FBNetworkElementImpl

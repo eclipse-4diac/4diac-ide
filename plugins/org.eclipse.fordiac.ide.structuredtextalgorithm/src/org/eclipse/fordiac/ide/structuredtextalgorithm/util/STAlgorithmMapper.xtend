@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.util
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
-import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
@@ -37,11 +37,11 @@ class STAlgorithmMapper implements STCoreMapper {
 	}
 
 	def dispatch EObject toModel(EObject element) {
-		if(element.eResource.FBType.eAllContents.contains(element)) element else null
+		if(element.eResource.libraryElement.eAllContents.contains(element)) element else null
 	}
 
 	def dispatch org.eclipse.fordiac.ide.model.libraryElement.STMethod toModel(STMethod method) {
-		val type = method.eResource.FBType
+		val type = method.eResource.libraryElement
 		if (type instanceof BaseFBType) {
 			type.methods.filter(org.eclipse.fordiac.ide.model.libraryElement.STMethod).findFirst [
 				name == method.name
@@ -51,7 +51,7 @@ class STAlgorithmMapper implements STCoreMapper {
 	}
 
 	def dispatch org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm toModel(STAlgorithm algorithm) {
-		val type = algorithm.eResource.FBType
+		val type = algorithm.eResource.libraryElement
 		if (type instanceof BaseFBType) {
 			type.algorithm.filter(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm).findFirst [
 				name == algorithm.name
@@ -60,9 +60,9 @@ class STAlgorithmMapper implements STCoreMapper {
 			null
 	}
 
-	def protected FBType getFBType(Resource resource) {
+	def protected LibraryElement getLibraryElement(Resource resource) {
 		if (resource instanceof STAlgorithmResource)
-			resource.fbType
+			resource.libraryElement
 		else
 			null
 	}

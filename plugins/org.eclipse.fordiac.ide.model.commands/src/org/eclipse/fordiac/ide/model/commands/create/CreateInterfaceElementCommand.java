@@ -24,12 +24,10 @@ import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 
@@ -54,7 +52,10 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 		newInterfaceElement = EcoreUtil.copy(copySrc);
 	}
 
-	/** constructor for creating a new interface element based on the provided information */
+	/**
+	 * constructor for creating a new interface element based on the provided
+	 * information
+	 */
 	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
 			final boolean isInput, final int index) {
 		this.isInput = isInput;
@@ -195,16 +196,11 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 	}
 
 	private void createAdapterCreateCommand() {
-		if (shouldAdapterFBBeCreated()) {
+		if (dataType instanceof AdapterType) {
 			final int xyPos = 10;
 			adapterCreateCmd = new AdapterCreateCommand(xyPos, xyPos, (AdapterDeclaration) newInterfaceElement,
 					(FBType) targetInterfaceList.eContainer());
 		}
-	}
-
-	private boolean shouldAdapterFBBeCreated() {
-		return (dataType instanceof AdapterType) && (targetInterfaceList.eContainer() instanceof CompositeFBType)
-				&& !(targetInterfaceList.eContainer() instanceof SubAppType);
 	}
 
 	@Override

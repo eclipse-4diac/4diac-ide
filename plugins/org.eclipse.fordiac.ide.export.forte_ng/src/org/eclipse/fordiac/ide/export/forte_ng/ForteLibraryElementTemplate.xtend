@@ -44,7 +44,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		]
 	}
 
-	def protected getClassName() '''FORTE_«type.name»'''
+	def protected getClassName() { type.generateTypeName }
 
 	def protected generateHeader() '''
 		/*************************************************************************
@@ -69,14 +69,14 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	'''
 
 	def protected generateVariableDeclarations(List<VarDeclaration> variables, boolean const) '''
-		«FOR variable : variables»
+		«FOR variable : variables AFTER '\n'»
 			«IF const»static const «ENDIF»«variable.generateVariableTypeName» «variable.generateName»;
 		«ENDFOR»
 	'''
 
 	def protected generateVariableDefinitions(List<VarDeclaration> variables, boolean const) '''
-		«FOR variable : variables»
-			«IF const»const «ENDIF»«variable.generateVariableTypeName» FORTE_«type.name»::«variable.generateName» = «variable.generateVariableDefaultValue»;
+		«FOR variable : variables AFTER '\n'»
+			«IF const»const «ENDIF»«variable.generateVariableTypeName» «className»::«variable.generateName» = «variable.generateVariableDefaultValue»;
 		«ENDFOR»
 	'''
 
@@ -97,7 +97,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 			}
 			
 		«ELSE»
-			«IF const»const «ENDIF»CIEC_ANY *«className»::«function»(size_t paIndex)«IF const» const«ENDIF» {
+			«IF const»const «ENDIF»CIEC_ANY *«className»::«function»(const size_t paIndex)«IF const» const«ENDIF» {
 			  switch(paIndex) {
 			    «FOR variable : variables»
 			    	case «variables.indexOf(variable)»: return &«variable.generateName»;
@@ -109,7 +109,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		«ENDIF»
 	'''
 
-	def protected CharSequence generateNameAsParameter(VarDeclaration variable) '''pa_«variable.name»'''
+	def protected CharSequence generateNameAsParameter(VarDeclaration variable) '''pa«variable.name»'''
 
 	def CharSequence generateVariableDefaultValue(VarDeclaration decl) {
 		variableLanguageSupport.get(decl)?.generate(emptyMap)

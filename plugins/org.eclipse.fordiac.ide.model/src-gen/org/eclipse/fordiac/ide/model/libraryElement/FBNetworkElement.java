@@ -35,7 +35,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface FBNetworkElement extends TypedConfigureableObject, PositionableElement {
+public interface FBNetworkElement extends TypedConfigureableObject, PositionableElement, ErrorMarkerRef {
 	/**
 	 * Returns the value of the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

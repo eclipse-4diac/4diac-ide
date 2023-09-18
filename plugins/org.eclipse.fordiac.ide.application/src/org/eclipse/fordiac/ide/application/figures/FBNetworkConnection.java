@@ -42,6 +42,8 @@ import org.eclipse.gef.GraphicalEditPart;
 
 public class FBNetworkConnection extends HideableConnection {
 
+	private static final String THREE_DOTS = "\u2026"; //$NON-NLS-1$
+
 	private static int maxWidth = Activator.getDefault().getPreferenceStore()
 			.getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
 
@@ -214,13 +216,19 @@ public class FBNetworkConnection extends HideableConnection {
 		if (builder.length() > maxWidth) {
 			switch (pinLabelStyle) {
 			case DiagramPreferences.PIN_LABEL_STYLE_PIN_COMMENT: {
-				builder.delete(maxWidth, builder.length()); // start inclusive, end exclusive
-				builder.insert(maxWidth, "\u2026"); //$NON-NLS-1$
+				if (ie.getComment() != null && !ie.getComment().isBlank()) {
+					builder.delete(maxWidth, builder.length()); // start inclusive, end exclusive
+					builder.insert(maxWidth, THREE_DOTS);
+				} else {
+					builder.delete(0, builder.length() - maxWidth);
+					builder.insert(0, THREE_DOTS);
+				}
+
 				break;
 			}
 			case DiagramPreferences.PIN_LABEL_STYLE_PIN_NAME, DiagramPreferences.PIN_LABEL_STYLE_SRC_PIN_NAME: {
 				builder.delete(0, builder.length() - maxWidth);
-				builder.insert(0, "\u2026"); //$NON-NLS-1$
+				builder.insert(0, THREE_DOTS);
 				break;
 			}
 			default:
@@ -237,7 +245,11 @@ public class FBNetworkConnection extends HideableConnection {
 			hiddenConnections.forEach(con -> {
 				if (con.getDestination() != null) {
 					// < block instance name >.< pin name >
-					builder.append(con.getDestinationElement().getName() + "." + con.getDestination().getName()); //$NON-NLS-1$
+					final FBNetworkElement destinationElement = con.getDestinationElement();
+					if (destinationElement != null) {
+						builder.append(destinationElement.getName() + "."); //$NON-NLS-1$
+					}
+					builder.append(con.getDestination().getName());
 					builder.append(System.lineSeparator());
 
 					// < pin comment >
@@ -248,8 +260,8 @@ public class FBNetworkConnection extends HideableConnection {
 					}
 
 					// < name of the group, where the block of the connected pin is located >
-					if (con.getDestinationElement().isInGroup()) {
-						builder.append(con.getDestinationElement().getGroup().getName());
+					if (destinationElement != null && destinationElement.isInGroup()) {
+						builder.append(destinationElement.getGroup().getName());
 						builder.append(System.lineSeparator());
 					}
 				}
@@ -267,8 +279,9 @@ public class FBNetworkConnection extends HideableConnection {
 			hiddenConnections.forEach(con -> {
 				if (con.getSource() != null) {
 					final IInterfaceElement ie = con.getSource();
-					if (ie.getFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
-						builder.append(ie.getFBNetworkElement().getName());
+					final FBNetworkElement sourceElement = ie.getFBNetworkElement();
+					if (sourceElement != null && !isInterfaceBarElement(ie)) {
+						builder.append(sourceElement.getName());
 						builder.append('.');
 					}
 					builder.append(ie.getName());
@@ -277,8 +290,8 @@ public class FBNetworkConnection extends HideableConnection {
 						builder.append(ie.getComment());
 						builder.append(System.lineSeparator());
 					}
-					if (ie.getFBNetworkElement().isInGroup()) {
-						builder.append(ie.getFBNetworkElement().getGroup().getName());
+					if (sourceElement != null && sourceElement.isInGroup()) {
+						builder.append(sourceElement.getGroup().getName());
 						builder.append(System.lineSeparator());
 					}
 					builder.append(System.lineSeparator());

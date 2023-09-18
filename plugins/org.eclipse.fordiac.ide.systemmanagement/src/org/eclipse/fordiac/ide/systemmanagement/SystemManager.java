@@ -74,7 +74,6 @@ public enum SystemManager {
 
 	public static final String TYPE_LIB_FOLDER_NAME = "Type Library"; //$NON-NLS-1$
 
-
 	/** The listeners. */
 	private final List<DistributedSystemListener> listeners = new ArrayList<>();
 
@@ -139,10 +138,11 @@ public enum SystemManager {
 		if (entry == null) {
 			entry = (SystemEntry) typeLibrary.createTypeEntry(systemFile);
 		}
-		entry.setType(SystemImporter.createAutomationSystem());
-		entry.getSystem().setName(name);
+		final AutomationSystem system = SystemImporter.createAutomationSystem();
+		system.setName(name);
+		entry.setType(system);
 		saveSystem(entry.getSystem());
-		return entry.getSystem();
+		return system;
 	}
 
 	public synchronized void removeProject(final IProject project) {
@@ -168,7 +168,6 @@ public enum SystemManager {
 		}
 		return null;
 	}
-
 
 	/** Save system.
 	 *

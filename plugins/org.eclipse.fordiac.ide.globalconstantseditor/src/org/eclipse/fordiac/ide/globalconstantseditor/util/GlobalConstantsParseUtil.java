@@ -67,7 +67,7 @@ public final class GlobalConstantsParseUtil {
 		final GlobalConstantsResource resource = (GlobalConstantsResource) SERVICE_PROVIDER_GCF
 				.get(XtextResource.class);
 		resource.setURI(type.eResource().getURI());
-		resource.setGlobalConstants(type);
+		resource.setLibraryElement(type);
 		resourceSet.getResources().add(resource);
 		final GlobalConstantsPartitioner partitioner = SERVICE_PROVIDER_GCF.get(GlobalConstantsPartitioner.class);
 		try {

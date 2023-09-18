@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
+import org.eclipse.fordiac.ide.model.data.AnyDateType
+import org.eclipse.fordiac.ide.model.data.AnyDurationType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -24,11 +26,14 @@ import static extension org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.G
 abstract class AbstractVariable<T extends Value> implements Variable<T> {
 	@Accessors final String name
 	@Accessors final INamedElement type
-	
+
 	override toString() {
-		switch(type) {
-			DataType case type.isAnyType: '''«value.type.name»#«value»'''
-			default: value.toString
+		switch (type) {
+			DataType case type.isAnyType &&
+				!(value.type instanceof AnyDurationType ||
+					value.type instanceof AnyDateType): '''«value.type.name»#«value»'''
+			default:
+				value.toString
 		}
 	}
 }

@@ -82,8 +82,8 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		// REQ_OPEN -> doubleclick
 
 		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN)
-				&& request instanceof SelectionRequest) {
-			performDirectEdit((SelectionRequest) request);
+				&& request instanceof final SelectionRequest selectionRequest) {
+			performDirectEdit(selectionRequest);
 		} else {
 			super.performRequest(request);
 		}
@@ -98,18 +98,15 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 		directEditManager.updateRefPosition(new Point(request.getLocation().x, request.getLocation().y));
 		if (request.getExtendedData().isEmpty()) {
 			directEditManager.show();
-		} else {
-			final Object key = request.getExtendedData().keySet().iterator().next();
-			if (key instanceof String) {
-				directEditManager.show((String) key);
-			}
+		} else if (request.getExtendedData().keySet().iterator().next() instanceof final String key) {
+			directEditManager.show(key);
 		}
 	}
 
 	@Override
 	public Command getCommand(final Request request) {
-		if (request instanceof DirectEditRequest) {
-			final AbstractCreateFBNetworkElementCommand cmd = getDirectEditCommand((DirectEditRequest) request);
+		if (request instanceof final DirectEditRequest directEditRequest) {
+			final AbstractCreateFBNetworkElementCommand cmd = getDirectEditCommand(directEditRequest);
 			if (null != cmd && cmd.canExecute()) {
 				getViewer().getEditDomain().getCommandStack().execute(cmd);
 				final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(cmd.getElement());
@@ -121,11 +118,9 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	}
 
 	private AbstractCreateFBNetworkElementCommand getDirectEditCommand(final DirectEditRequest request) {
-		final Object value = request.getCellEditor().getValue();
 		final Point refPoint = getInsertPos(request, getViewer(), getZoomManager().getZoom());
-		if (value instanceof TypeEntry) {
-			return AbstractCreateFBNetworkElementCommand.createCreateCommand((TypeEntry) value, fbNetwork,
-					refPoint.x, refPoint.y);
+		if (request.getCellEditor().getValue() instanceof final TypeEntry value) {
+			return AbstractCreateFBNetworkElementCommand.createCreateCommand(value, fbNetwork, refPoint.x, refPoint.y);
 		}
 		return null;
 	}

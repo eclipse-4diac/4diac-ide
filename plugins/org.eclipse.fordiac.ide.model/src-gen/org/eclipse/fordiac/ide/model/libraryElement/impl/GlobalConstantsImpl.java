@@ -31,6 +31,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
@@ -44,13 +46,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.GlobalConstantsImpl#getAttributes <em>Attributes</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.GlobalConstantsImpl#getConstants <em>Constants</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.GlobalConstantsImpl#getSource <em>Source</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class GlobalConstantsImpl extends CompilableTypeImpl implements GlobalConstants {
+public class GlobalConstantsImpl extends LibraryElementImpl implements GlobalConstants {
+	/**
+	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAttributes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Attribute> attributes;
+
 	/**
 	 * The cached value of the '{@link #getConstants() <em>Constants</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -88,6 +101,19 @@ public class GlobalConstantsImpl extends CompilableTypeImpl implements GlobalCon
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.GLOBAL_CONSTANTS;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<Attribute> getAttributes() {
+		if (attributes == null) {
+			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.GLOBAL_CONSTANTS__ATTRIBUTES);
+		}
+		return attributes;
 	}
 
 	/**
@@ -177,8 +203,50 @@ public class GlobalConstantsImpl extends CompilableTypeImpl implements GlobalCon
 	 * @generated
 	 */
 	@Override
+	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
+		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Attribute getAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getAttributeValue(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean deleteAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case LibraryElementPackage.GLOBAL_CONSTANTS__ATTRIBUTES:
+				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.GLOBAL_CONSTANTS__CONSTANTS:
 				return ((InternalEList<?>)getConstants()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.GLOBAL_CONSTANTS__SOURCE:
@@ -196,6 +264,8 @@ public class GlobalConstantsImpl extends CompilableTypeImpl implements GlobalCon
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case LibraryElementPackage.GLOBAL_CONSTANTS__ATTRIBUTES:
+				return getAttributes();
 			case LibraryElementPackage.GLOBAL_CONSTANTS__CONSTANTS:
 				return getConstants();
 			case LibraryElementPackage.GLOBAL_CONSTANTS__SOURCE:
@@ -215,6 +285,10 @@ public class GlobalConstantsImpl extends CompilableTypeImpl implements GlobalCon
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case LibraryElementPackage.GLOBAL_CONSTANTS__ATTRIBUTES:
+				getAttributes().clear();
+				getAttributes().addAll((Collection<? extends Attribute>)newValue);
+				return;
 			case LibraryElementPackage.GLOBAL_CONSTANTS__CONSTANTS:
 				getConstants().clear();
 				getConstants().addAll((Collection<? extends VarDeclaration>)newValue);
@@ -236,6 +310,9 @@ public class GlobalConstantsImpl extends CompilableTypeImpl implements GlobalCon
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case LibraryElementPackage.GLOBAL_CONSTANTS__ATTRIBUTES:
+				getAttributes().clear();
+				return;
 			case LibraryElementPackage.GLOBAL_CONSTANTS__CONSTANTS:
 				getConstants().clear();
 				return;
@@ -256,6 +333,8 @@ public class GlobalConstantsImpl extends CompilableTypeImpl implements GlobalCon
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case LibraryElementPackage.GLOBAL_CONSTANTS__ATTRIBUTES:
+				return attributes != null && !attributes.isEmpty();
 			case LibraryElementPackage.GLOBAL_CONSTANTS__CONSTANTS:
 				return constants != null && !constants.isEmpty();
 			case LibraryElementPackage.GLOBAL_CONSTANTS__SOURCE:
@@ -263,6 +342,38 @@ public class GlobalConstantsImpl extends CompilableTypeImpl implements GlobalCon
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == ConfigurableObject.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.GLOBAL_CONSTANTS__ATTRIBUTES: return LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == ConfigurableObject.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return LibraryElementPackage.GLOBAL_CONSTANTS__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 } //GlobalConstantsImpl

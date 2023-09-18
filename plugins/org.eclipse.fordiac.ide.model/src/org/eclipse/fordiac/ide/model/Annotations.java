@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -64,11 +65,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.jdt.annotation.NonNull;
 
 public final class Annotations {
 
 	// *** AdapterType ***//
-	public static InterfaceList getInterfaceList(final AdapterType at) {
+	public static InterfaceList getInterfaceList(@NonNull final AdapterType at) {
 		return at.getAdapterFBType().getInterfaceList();
 	}
 
@@ -76,21 +78,13 @@ public final class Annotations {
 		final AdapterFBType temp = EcoreUtil.copy(adapterFBType);
 		// fetch the interface to invert it
 		final List<Event> inputEvents = new ArrayList<>(temp.getInterfaceList().getEventOutputs());
-		for (final Event event : inputEvents) {
-			event.setIsInput(true);
-		}
-		final List<Event> outputEvents = new ArrayList<>(temp.getInterfaceList().getEventInputs());
-		for (final Event event : outputEvents) {
-			event.setIsInput(false);
-		}
 		final List<VarDeclaration> inputVars = new ArrayList<>(temp.getInterfaceList().getOutputVars());
-		for (final VarDeclaration varDecl : inputVars) {
-			varDecl.setIsInput(true);
-		}
+		Stream.concat(inputEvents.stream(), inputVars.stream()).forEach(element -> element.setIsInput(true));
+
+		final List<Event> outputEvents = new ArrayList<>(temp.getInterfaceList().getEventInputs());
 		final List<VarDeclaration> outputVars = new ArrayList<>(temp.getInterfaceList().getInputVars());
-		for (final VarDeclaration varDecl : outputVars) {
-			varDecl.setIsInput(false);
-		}
+		Stream.concat(outputEvents.stream(), outputVars.stream()).forEach(event -> event.setIsInput(false));
+
 		temp.getInterfaceList().getEventInputs().clear();
 		temp.getInterfaceList().getEventOutputs().clear();
 		temp.getInterfaceList().getInputVars().clear();
@@ -107,31 +101,31 @@ public final class Annotations {
 	}
 
 	// *** Application ***//
-	public static AutomationSystem getAutomationSystem(final Application a) {
+	public static AutomationSystem getAutomationSystem(@NonNull final Application a) {
 		return (AutomationSystem) a.eContainer();
 	}
 
 	// *** BaseFBType ***//
-	public static Algorithm getAlgorithmNamed(final BaseFBType baseFBType, final String name) {
+	public static Algorithm getAlgorithmNamed(@NonNull final BaseFBType baseFBType, final String name) {
 		return baseFBType.getAlgorithm().stream().filter(alg -> alg.getName().equals(name)).findFirst().orElse(null);
 	}
 
 	// *** Connection ***//
-	public static FBNetworkElement getSourceElement(final Connection c) {
+	public static FBNetworkElement getSourceElement(@NonNull final Connection c) {
 		return (null != c.getSource()) ? c.getSource().getFBNetworkElement() : null;
 	}
 
-	public static FBNetworkElement getDestinationElement(final Connection c) {
+	public static FBNetworkElement getDestinationElement(@NonNull final Connection c) {
 		return (null != c.getDestination()) ? c.getDestination().getFBNetworkElement() : null;
 	}
 
-	public static boolean isResourceConnection(final Connection c) {
+	public static boolean isResourceConnection(@NonNull final Connection c) {
 		// if source element is null it is a connection from a CFB interface element
 		return ((null != c.getSourceElement()) && (null != c.getSourceElement().getFbNetwork())
 				&& (c.getSourceElement().getFbNetwork().eContainer() instanceof Resource));
 	}
 
-	public static boolean isInterfaceConnection(final Connection c) {
+	public static boolean isInterfaceConnection(@NonNull final Connection c) {
 		return isInterfaceConnection(c, null);
 	}
 
@@ -155,7 +149,7 @@ public final class Annotations {
 		boolean destinationIsInterface = (d == container);
 
 		if (sourceIsInterface || destinationIsInterface) {
-			return (sourceIsInterface || destinationIsInterface);
+			return true;
 		}
 
 		if (s == path) {
@@ -185,7 +179,7 @@ public final class Annotations {
 		return (sourceIsInterface || destinationIsInterface);
 	}
 
-	public static void checkifConnectionBroken(final Connection c) {
+	public static void checkifConnectionBroken(@NonNull final Connection c) {
 		if (!c.isResourceConnection()) {
 			final Resource sourceRes = (null != c.getSourceElement()) ? c.getSourceElement().getResource() : null;
 			final Resource destinationRes = (null != c.getDestinationElement())
@@ -197,39 +191,32 @@ public final class Annotations {
 	}
 
 	// *** Device ***//
-	public static AutomationSystem getAutomationSystem(final Device d) {
+	public static AutomationSystem getAutomationSystem(@NonNull final Device d) {
 		return d.getSystemConfiguration().getAutomationSystem();
 	}
 
-	public static SystemConfiguration getSystemConfiguration(final Device d) {
+	public static SystemConfiguration getSystemConfiguration(@NonNull final Device d) {
 		return (SystemConfiguration) d.eContainer();
 	}
 
-	public static Resource getResourceNamed(final Device d, final String name) {
-		for (final Resource res : d.getResource()) {
-			if (res.getName().equals(name)) {
-				return res;
-			}
-		}
-		return null;
+	public static Resource getResourceNamed(@NonNull final Device device, final String name) {
+		return device.getResource().stream().filter(resource -> resource.getName().equals(name)).findFirst()
+				.orElse(null);
 	}
 
 	// *** ECState ***//
-	public static boolean isStartState(final ECState ecs) {
-		if (null != ecs.eContainer()) {
-			return ecs.equals(ecs.getECC().getStart());
-		}
-		return false;
+	public static boolean isStartState(@NonNull final ECState ecs) {
+		return null != ecs.getECC() && ecs.equals(ecs.getECC().getStart());
 	}
 
 	// *** ECTransition ***//
-	public static String getConditionText(final ECTransition ect) {
+	public static String getConditionText(@NonNull final ECTransition ect) {
 		String retVal = ""; //$NON-NLS-1$
 		final Event event = ect.getConditionEvent();
-		final String expression = ect.getConditionExpression();
 		if (event != null) {
 			retVal = getTransitionEventName(event);
 		}
+		final String expression = ect.getConditionExpression();
 		if (expression != null) {
 			if ("1".equals(expression)) { //$NON-NLS-1$
 				retVal = expression;
@@ -240,7 +227,7 @@ public final class Annotations {
 		return retVal;
 	}
 
-	public static String getTransitionEventName(final Event event) {
+	public static String getTransitionEventName(@NonNull final Event event) {
 		if (event.getFBNetworkElement() instanceof AdapterFB) {
 			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
 		}
@@ -250,12 +237,12 @@ public final class Annotations {
 	// *** SubApp ***//
 
 	// *** Mapping ***//
-	public static AutomationSystem getAutomationSystem(final Mapping m) {
+	public static AutomationSystem getAutomationSystem(@NonNull final Mapping m) {
 		return (null != m.eContainer()) ? (AutomationSystem) m.eContainer() : null;
 	}
 
 	// *** Resource ***//
-	public static AutomationSystem getAutomationSystem(final Resource r) {
+	public static AutomationSystem getAutomationSystem(@NonNull final Resource r) {
 		AutomationSystem system = null;
 		if (null != r.getDevice()) {
 			system = r.getDevice().getAutomationSystem();
@@ -268,7 +255,8 @@ public final class Annotations {
 		addConnectionWithIndex(fbn, connection, -1);
 	}
 
-	public static void addConnectionWithIndex(final FBNetwork fbn, final Connection connection, final int index) {
+	public static void addConnectionWithIndex(@NonNull final FBNetwork fbn, final Connection connection,
+			final int index) {
 		if (connection instanceof final EventConnection evCon) {
 			if (index != -1) {
 				fbn.getEventConnections().add(index, evCon);
@@ -292,7 +280,7 @@ public final class Annotations {
 		}
 	}
 
-	public static void removeConnection(final FBNetwork fbn, final Connection connection) {
+	public static void removeConnection(@NonNull final FBNetwork fbn, final Connection connection) {
 		if (connection instanceof EventConnection) {
 			fbn.getEventConnections().remove(connection);
 		}
@@ -304,7 +292,7 @@ public final class Annotations {
 		}
 	}
 
-	public static int getConnectionIndex(final FBNetwork fbn, final Connection connection) {
+	public static int getConnectionIndex(@NonNull final FBNetwork fbn, final Connection connection) {
 		if (connection instanceof EventConnection) {
 			return fbn.getEventConnections().indexOf(connection);
 		}
@@ -317,19 +305,19 @@ public final class Annotations {
 		return -1;
 	}
 
-	public static boolean isApplicationNetwork(final FBNetwork fbn) {
+	public static boolean isApplicationNetwork(@NonNull final FBNetwork fbn) {
 		return fbn.eContainer() instanceof Application;
 	}
 
-	public static boolean isSubApplicationNetwork(final FBNetwork fbn) {
+	public static boolean isSubApplicationNetwork(@NonNull final FBNetwork fbn) {
 		return fbn.eContainer() instanceof SubApp;
 	}
 
-	public static boolean isResourceNetwork(final FBNetwork fbn) {
+	public static boolean isResourceNetwork(@NonNull final FBNetwork fbn) {
 		return fbn.eContainer() instanceof Resource;
 	}
 
-	public static boolean isCFBTypeNetwork(final FBNetwork fbn) {
+	public static boolean isCFBTypeNetwork(@NonNull final FBNetwork fbn) {
 		return fbn.eContainer() instanceof CompositeFBType;
 	}
 
@@ -338,7 +326,7 @@ public final class Annotations {
 		return root instanceof final AutomationSystem system ? system : null;
 	}
 
-	public static Application getApplication(final FBNetwork fbn) {
+	public static Application getApplication(@NonNull final FBNetwork fbn) {
 		if (fbn.isApplicationNetwork()) {
 			// no null check is need as this is already done in isApplicationNetwork
 			return (Application) fbn.eContainer();
@@ -349,52 +337,33 @@ public final class Annotations {
 		return null;
 	}
 
-	public static FB getFBNamed(final FBNetwork fbn, final String name) {
-		for (final FBNetworkElement element : fbn.getNetworkElements()) {
-			if ((element instanceof final FB fb) && (element.getName().equals(name))) {
-				return fb;
-			}
-		}
-		return null;
+	public static FB getFBNamed(@NonNull final FBNetwork fbn, final String name) {
+		return fbn.getNetworkElements().stream().filter(FB.class::isInstance).map(FB.class::cast)
+				.filter(element -> (element.getName().equals(name))).findFirst().orElse(null);
 	}
 
-	public static SubApp getSubAppNamed(final FBNetwork fbn, final String name) {
-		for (final FBNetworkElement element : fbn.getNetworkElements()) {
-			if ((element instanceof final SubApp subApp) && element.getName().equals(name)) {
-				return subApp;
-			}
-		}
-		return null;
+	public static SubApp getSubAppNamed(@NonNull final FBNetwork fbn, final String name) {
+		return fbn.getNetworkElements().stream().filter(SubApp.class::isInstance).map(SubApp.class::cast)
+				.filter(element -> (element.getName().equals(name))).findFirst().orElse(null);
 	}
 
-	public static FBNetworkElement getElementNamed(final FBNetwork fbn, final String name) {
-		for (final FBNetworkElement element : fbn.getNetworkElements()) {
-			if (element.getName().equals(name)) {
-				return element;
-			}
-		}
-		return null;
+	public static FBNetworkElement getElementNamed(@NonNull final FBNetwork fbn, final String name) {
+		return fbn.getNetworkElements().stream().filter(element -> (element.getName().equals(name))).findFirst()
+				.orElse(null);
 	}
 
 	// *** AutomationSystem ***//
-	public static Device getDeviceNamed(final AutomationSystem as, final String name) {
-		if (as.getSystemConfiguration() != null) {
-			return as.getSystemConfiguration().getDeviceNamed(name);
-		}
-		return null;
+	public static Device getDeviceNamed(@NonNull final AutomationSystem as, final String name) {
+		return as.getSystemConfiguration() != null ? as.getSystemConfiguration().getDeviceNamed(name) : null;
 	}
 
-	public static Application getApplicationNamed(final AutomationSystem as, final String name) {
-		for (final Application app : as.getApplication()) {
-			if (app.getName().equals(name)) {
-				return app;
-			}
-		}
-		return null;
+	public static Application getApplicationNamed(@NonNull final AutomationSystem as, final String name) {
+		return as.getApplication().stream().filter(element -> (element.getName().equals(name))).findFirst()
+				.orElse(null);
 	}
 
 	// *** VarDeclaration ***//
-	public static boolean isArray(final VarDeclaration vd) {
+	public static boolean isArray(@NonNull final VarDeclaration vd) {
 		return vd.getArraySize() != null && vd.getArraySize().getValue() != null
 				&& !vd.getArraySize().getValue().isBlank();
 	}
@@ -403,18 +372,18 @@ public final class Annotations {
 		setVarConfig(varDeclarationImpl, Boolean.toString(config));
 	}
 
-	private static void setVarConfig(final VarDeclarationImpl varDeclarationImpl, final String config) {
-		varDeclarationImpl.setAttribute(LibraryElementTags.VAR_CONFIG, FordiacKeywords.STRING, config, "");  //$NON-NLS-1$
+	private static void setVarConfig(@NonNull final VarDeclarationImpl varDeclarationImpl, final String config) {
+		varDeclarationImpl.setAttribute(LibraryElementTags.VAR_CONFIG, FordiacKeywords.STRING, config, ""); //$NON-NLS-1$
 	}
 
-	public static boolean isVarConfig(final VarDeclaration vd) {
+	public static boolean isVarConfig(@NonNull final VarDeclaration vd) {
 		final String configurationAttribute = vd.getAttributeValue(LibraryElementTags.VAR_CONFIG);
 		return "true".equals(configurationAttribute); //$NON-NLS-1$
 	}
 
 	// *** ConfigurableObject ***//
-	public static void setAttribute(final ConfigurableObject object, final String attributeName, final String type,
-			final String value, final String comment) {
+	public static void setAttribute(@NonNull final ConfigurableObject object, final String attributeName,
+			final String type, final String value, final String comment) {
 		Attribute attribute = getAttribute(object, attributeName);
 		if (attribute == null) {
 			attribute = LibraryElementFactory.eINSTANCE.createAttribute();
@@ -448,77 +417,58 @@ public final class Annotations {
 
 	public static String getAttributeValue(final ConfigurableObject object, final String attributeName) {
 		final Attribute a = getAttribute(object, attributeName);
-		if (null != a) {
-			return a.getValue();
-		}
-		return null;
+		return null != a ? a.getValue() : null;
 	}
 
-	public static Attribute getAttribute(final ConfigurableObject object, final String attributeName) {
-		if (attributeName == null) {
-			return null;
-		}
-		for (final Attribute attribute : object.getAttributes()) {
-			if (attribute.getName().equalsIgnoreCase(attributeName)) {
-				return attribute;
-			}
-		}
-		return null;
+	public static Attribute getAttribute(@NonNull final ConfigurableObject object, final String attributeName) {
+		return attributeName != null ? object.getAttributes().stream()
+				.filter(attribute -> attribute.getName().equalsIgnoreCase(attributeName)).findFirst().orElse(null)
+				: null;
 	}
 
 	// *** DataConnection ***//
-	public static VarDeclaration getDataSource(final DataConnection dc) {
+	public static VarDeclaration getDataSource(@NonNull final DataConnection dc) {
 		return (VarDeclaration) dc.getSource();
 	}
 
-	public static VarDeclaration getDataDestination(final DataConnection dc) {
+	public static VarDeclaration getDataDestination(@NonNull final DataConnection dc) {
 		return (VarDeclaration) dc.getDestination();
 	}
 
 	// *** EventConnection ***//
-	public static Event getEventSource(final EventConnection ec) {
+	public static Event getEventSource(@NonNull final EventConnection ec) {
 		return (Event) ec.getSource();
 	}
 
-	public static Event getEventDestination(final EventConnection ec) {
+	public static Event getEventDestination(@NonNull final EventConnection ec) {
 		return (Event) ec.getDestination();
 	}
 
 	// *** AdapterConnection ***//
-	public static AdapterDeclaration getAdapterSource(final AdapterConnection ac) {
+	public static AdapterDeclaration getAdapterSource(@NonNull final AdapterConnection ac) {
 		return (AdapterDeclaration) ac.getSource();
 	}
 
-	public static AdapterDeclaration getAdapterDestination(final AdapterConnection ac) {
+	public static AdapterDeclaration getAdapterDestination(@NonNull final AdapterConnection ac) {
 		return (AdapterDeclaration) ac.getDestination();
 	}
 
 	// *** IInterfaceElement ***//
-	public static FBNetworkElement getFBNetworkElement(final IInterfaceElement iie) {
+	public static FBNetworkElement getFBNetworkElement(@NonNull final IInterfaceElement iie) {
 		return (iie.eContainer() instanceof final InterfaceList il) ? il.getFBNetworkElement() : null;
 	}
 
 	// *** SystemConfiguration ***//
-	public static AutomationSystem getAutomationSystem(final SystemConfiguration sc) {
+	public static AutomationSystem getAutomationSystem(@NonNull final SystemConfiguration sc) {
 		return (AutomationSystem) sc.eContainer();
 	}
 
-	public static Segment getSegmentNamed(final SystemConfiguration sc, final String name) {
-		for (final Segment segment : sc.getSegments()) {
-			if (segment.getName().equals(name)) {
-				return segment;
-			}
-		}
-		return null;
+	public static Segment getSegmentNamed(@NonNull final SystemConfiguration sc, final String name) {
+		return sc.getSegments().stream().filter(segment -> segment.getName().equals(name)).findFirst().orElse(null);
 	}
 
-	public static Device getDeviceNamed(final SystemConfiguration sc, final String name) {
-		for (final Device device : sc.getDevices()) {
-			if (device.getName().equals(name)) {
-				return device;
-			}
-		}
-		return null;
+	public static Device getDeviceNamed(@NonNull final SystemConfiguration sc, final String name) {
+		return sc.getDevices().stream().filter(device -> device.getName().equals(name)).findFirst().orElse(null);
 	}
 
 	// *** ResourceTypeFB ***//
@@ -527,42 +477,34 @@ public final class Annotations {
 	}
 
 	// *** TypedConfigureableObject ***//
-	public static String getTypeName(final TypedConfigureableObject tco) {
+	public static String getTypeName(@NonNull final TypedConfigureableObject tco) {
 		return (null != tco.getTypeEntry()) ? tco.getTypeEntry().getTypeName() : null;
 	}
 
-	public static LibraryElement getType(final TypedConfigureableObject tco) {
-		if (null != tco.getTypeEntry()) {
-			return tco.getTypeEntry().getType();
-		}
-		return null;
+	public static LibraryElement getType(@NonNull final TypedConfigureableObject tco) {
+		return null != tco.getTypeEntry() ? tco.getTypeEntry().getType() : null;
 	}
 
-	public static TypeLibrary getTypeLibrary(final TypedConfigureableObject tco) {
-		if (null != tco.getTypeEntry()) {
-			return tco.getTypeEntry().getTypeLibrary();
-		}
-		return null;
+	public static TypeLibrary getTypeLibrary(@NonNull final TypedConfigureableObject tco) {
+		return null != tco.getTypeEntry() ? tco.getTypeEntry().getTypeLibrary() : null;
 	}
 
 	// *** AdapterFB ***//
-	public static boolean isSocket(final AdapterFB afb) {
+	public static boolean isSocket(@NonNull final AdapterFB afb) {
 		return !afb.isPlug();
 	}
 
-	public static FBType getType(final AdapterFB afb) {
-		FBType retVal = null;
+	public static FBType getType(@NonNull final AdapterFB afb) {
 		if ((afb.getTypeEntry() instanceof final AdapterTypeEntry adpTypeEntry) && (null != afb.getAdapterDecl())) {
 			if (afb.isPlug()) {
-				retVal = adpTypeEntry.getType().getPlugType();
-			} else {
-				retVal = adpTypeEntry.getType().getSocketType();
+				return adpTypeEntry.getType().getPlugType();
 			}
+			return adpTypeEntry.getType().getSocketType();
 		}
-		return retVal;
+		return null;
 	}
 
-	public static boolean isPlug(final AdapterFB afb) {
+	public static boolean isPlug(@NonNull final AdapterFB afb) {
 		return !afb.getAdapterDecl().isIsInput();
 	}
 

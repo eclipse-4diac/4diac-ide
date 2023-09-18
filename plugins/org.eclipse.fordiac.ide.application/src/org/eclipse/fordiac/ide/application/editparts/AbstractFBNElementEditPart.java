@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
@@ -47,7 +48,6 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -57,6 +57,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.DragTracker;
@@ -254,6 +255,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	private InstanceName instanceName;
 
+	private HiddenPinIndicator inputPinIndicator;
+	private HiddenPinIndicator outputPinIndicator;
+
 	/** Returns an <code>IPropertyChangeListener</code> with implemented <code>propertyChange()</code>. e.g. a color
 	 * change event repaints the FunctionBlock.
 	 *
@@ -300,8 +304,27 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
 			getTargetFigure(interfaceEditPart).add(child, getInterfaceElementIndex(interfaceEditPart));
+		} else if (childEditPart instanceof HiddenPinIndicatorEditPart) {
+			addPinIndicatorFigure((HiddenPinIndicatorEditPart) childEditPart, child);
+		} else if (childEditPart instanceof final InstanceNameEditPart instanceNameEditPart) {
+			if (instanceNameEditPart.getModel().hasErrorMarker()) {
+				child.setBackgroundColor(ColorConstants.red);
+				child.setOpaque(true);
+			} else {
+				child.setOpaque(false);
+			}
+			getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
 		} else {
 			getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
+		}
+	}
+
+	private void addPinIndicatorFigure(final HiddenPinIndicatorEditPart indicatorEditPart,
+			final IFigure indicatorFigure) {
+		if (((HiddenPinIndicator) indicatorEditPart.getModel()).isInput()) {
+			getFigure().getPinIndicatorInput().add(indicatorFigure);
+		} else {
+			getFigure().getPinIndicatorOutput().add(indicatorFigure);
 		}
 	}
 
@@ -412,8 +435,19 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
 			getTargetFigure(interfaceEditPart).remove(child);
+		} else if (childEditPart instanceof HiddenPinIndicatorEditPart) {
+			removePinIndicatorFigure((HiddenPinIndicatorEditPart) childEditPart, child);
 		} else {
 			super.removeChildVisual(childEditPart);
+		}
+	}
+
+	private void removePinIndicatorFigure(final HiddenPinIndicatorEditPart indicatorEditPart,
+			final IFigure indicatorFigure) {
+		if (((HiddenPinIndicator) indicatorEditPart.getModel()).isInput()) {
+			getFigure().getPinIndicatorInput().remove(indicatorFigure);
+		} else {
+			getFigure().getPinIndicatorOutput().remove(indicatorFigure);
 		}
 	}
 
@@ -422,9 +456,31 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final List<Object> elements = new ArrayList<>();
 		elements.add(getInstanceName());
 		elements.addAll(getModel().getInterface().getAllInterfaceElements());
-		elements.removeAll(getModel().getInterface().getInputVars().stream().filter(it -> !it.isVisible()).toList());
-		elements.removeAll(getModel().getInterface().getOutputVars().stream().filter(it -> !it.isVisible()).toList());
+		final List<VarDeclaration> inputRemovalList = getModel().getInterface().getInputVars().stream()
+				.filter(it -> !it.isVisible()).toList();
+		final List<VarDeclaration> outputRemovalList = getModel().getInterface().getOutputVars().stream()
+				.filter(it -> !it.isVisible()).toList();
+		elements.removeAll(inputRemovalList);
+		elements.removeAll(outputRemovalList);
+		elements.addAll(getPinIndicators(!inputRemovalList.isEmpty(), !outputRemovalList.isEmpty()));
 		return elements;
+	}
+
+	private List<Object> getPinIndicators(final boolean input, final boolean output) {
+		final List<Object> indicators = new ArrayList<>(2);
+		if (input) {
+			if (inputPinIndicator == null) {
+				inputPinIndicator = new HiddenPinIndicator(getModel(), true);
+			}
+			indicators.add(inputPinIndicator);
+		}
+		if (output) {
+			if (outputPinIndicator == null) {
+				outputPinIndicator = new HiddenPinIndicator(getModel(), false);
+			}
+			indicators.add(outputPinIndicator);
+		}
+		return indicators;
 	}
 
 	protected InstanceName getInstanceName() {
@@ -503,11 +559,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	private TypeLibrary getTypeLibrary() {
-		if (getModel().eContainer().eContainer() instanceof final FBType fbt) {
-			return fbt.getTypeEntry().getTypeLibrary();
-		}
-		// we are in an app or supp
-		return getModel().getFbNetwork().getAutomationSystem().getTypeLibrary();
+		return TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(getModel());
 	}
 
 	@Override

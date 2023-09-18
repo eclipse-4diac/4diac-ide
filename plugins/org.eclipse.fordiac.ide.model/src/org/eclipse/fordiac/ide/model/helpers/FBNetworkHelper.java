@@ -54,8 +54,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorFBTypeEntryImpl;
-import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorSubAppTypeEntryImpl;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -124,17 +123,17 @@ public final class FBNetworkHelper {
 			final InterfaceList destInterface) {
 		for (final Connection connection : srcNetwork.getEventConnections()) {
 			dstNetwork.getEventConnections()
-			.add((EventConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
+					.add((EventConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
 		}
 
 		for (final Connection connection : srcNetwork.getDataConnections()) {
 			dstNetwork.getDataConnections()
-			.add((DataConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
+					.add((DataConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
 		}
 
 		for (final Connection connection : srcNetwork.getAdapterConnections()) {
 			dstNetwork.getAdapterConnections()
-			.add((AdapterConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
+					.add((AdapterConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
 		}
 	}
 
@@ -219,7 +218,7 @@ public final class FBNetworkHelper {
 		if (editorType != null) {
 			if (type.equals(editorType)) {
 				ErrorMessenger
-				.popUpErrorMessage(MessageFormat.format(Messages.Error_SelfInsertion, editorType.getName()));
+						.popUpErrorMessage(MessageFormat.format(Messages.Error_SelfInsertion, editorType.getName()));
 				return false;
 			}
 			if (containsType(editorType, getChildFBNElements(type))) {
@@ -259,13 +258,13 @@ public final class FBNetworkHelper {
 	}
 
 	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBType type) {
-		if (type instanceof final BaseFBType baseFBType
-				&& !(baseFBType.getTypeEntry() instanceof ErrorFBTypeEntryImpl)) { // basic and simple fb type
-			return baseFBType.getInternalFbs();
-		}
-		if (type instanceof final CompositeFBType cFBType
-				&& !(cFBType.getTypeEntry() instanceof ErrorSubAppTypeEntryImpl)) { // subapp and composite fb type
-			return cFBType.getFBNetwork().getNetworkElements();
+		if (!(type.getTypeEntry() instanceof ErrorTypeEntry)) {
+			if (type instanceof final BaseFBType baseFBType) { // basic and simple fb type
+				return baseFBType.getInternalFbs();
+			}
+			if (type instanceof final CompositeFBType cFBType) { // subapp and composite fb type
+				return cFBType.getFBNetwork().getNetworkElements();
+			}
 		}
 
 		return new BasicEList<>();

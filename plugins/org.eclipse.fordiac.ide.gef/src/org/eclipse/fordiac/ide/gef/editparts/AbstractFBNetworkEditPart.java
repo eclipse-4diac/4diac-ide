@@ -86,6 +86,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 		}
 		// as some of the children are in a different layer we can not use the index
 		// given.
+
 		// Currently -1 seems to be the best option
 		super.addChildVisual(childEditPart, -1);
 	}
@@ -107,17 +108,16 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 		super.removeChildVisual(childEditPart);
 	}
 
-	/**
-	 * go through all fb network elements and find inputs with parameters to be
-	 * shown.
-	 */
+	/** go through all fb network elements and find inputs with parameters to be shown. */
 	protected Collection<Value> getFBValues() {
 		final ArrayList<Value> valueElements = new ArrayList<>();
 		for (final FBNetworkElement element : getNetworkElements()) {
 			element.getInterface().getVisibleInputVars().stream().filter(di -> (di.getValue() != null))
-			.forEach(di -> valueElements.add(di.getValue()));
+					.forEach(di -> valueElements.add(di.getValue()));
+			element.getInterface().getInOutVars().stream().filter(di -> (di.getValue() != null))
+					.forEach(di -> valueElements.add(di.getValue()));
 			element.getInterface().getErrorMarker().stream().filter(er -> (er.getValue() != null))
-			.forEach(er -> valueElements.add(er.getValue()));
+					.forEach(er -> valueElements.add(er.getValue()));
 		}
 		return valueElements;
 	}
