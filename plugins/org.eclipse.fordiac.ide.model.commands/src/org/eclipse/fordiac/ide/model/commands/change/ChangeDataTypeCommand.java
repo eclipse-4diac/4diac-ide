@@ -41,7 +41,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand {
-	private static final Pattern ARRAY_TYPE_DECLARATION_PATTERN = Pattern.compile("ARRAY\\s*\\[(.*)\\]\\s*OF\\s+(.+)"); //$NON-NLS-1$
+	private static final Pattern ARRAY_TYPE_DECLARATION_PATTERN = Pattern.compile("ARRAY\\s*\\[(.*)\\]\\s*OF\\s+(.+)", //$NON-NLS-1$
+			Pattern.CASE_INSENSITIVE);
 
 	private final DataType dataType;
 	private DataType oldDataType;

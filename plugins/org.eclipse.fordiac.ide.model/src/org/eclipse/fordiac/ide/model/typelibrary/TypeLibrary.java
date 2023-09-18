@@ -164,7 +164,7 @@ public final class TypeLibrary {
 		getSubAppTypes().clear();
 		getSystems().clear();
 		getGlobalConstants().clear();
-		dataTypeLib.getDerivedDataTypes().clear();
+		dataTypeLib.clear();
 		fileMap.clear();
 		buildpath = BuildpathUtil.loadBuildpath(project);
 		checkAdditions(project);
@@ -296,7 +296,7 @@ public final class TypeLibrary {
 		checkDeletionsForTypeGroup(getSubAppTypes().values());
 		checkDeletionsForTypeGroup(getSystems().values());
 		checkDeletionsForTypeGroup(getGlobalConstants().values());
-		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes().values());
+		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes());
 		fileMap.values().removeIf(entry -> !entry.getFile().exists()
 				|| !BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent());
 	}
@@ -340,7 +340,7 @@ public final class TypeLibrary {
 			return entry;
 		}
 
-		entry = dataTypeLib.getDerivedDataTypes().get(name);
+		entry = dataTypeLib.getDerivedTypeEntry(name);
 		if (entry != null) {
 			return entry;
 		}

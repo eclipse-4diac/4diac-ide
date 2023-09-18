@@ -203,8 +203,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private boolean isDtpDuplicate(final TypeLibrary lib) {
-		final Map<String, ?> map = lib.getDataTypeLibrary().getDerivedDataTypes();
-		return map.containsKey(super.getFileName());
+		return lib.getDataTypeLibrary().getTypeIfExists(super.getFileName()) != null;
 	}
 
 	private boolean isGcfDuplicate(final TypeLibrary lib) {

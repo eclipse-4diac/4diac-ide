@@ -20,7 +20,7 @@
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +28,8 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
@@ -46,7 +45,8 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class DataTypeLibrary {
 
-	private static final Pattern STRING_MAX_LENGTH_PATTERN = Pattern.compile("(W?STRING)\\[(\\d+)\\]"); //$NON-NLS-1$
+	private static final Pattern STRING_MAX_LENGTH_PATTERN = Pattern.compile("(W?STRING)\\[(\\d+)\\]", //$NON-NLS-1$
+			Pattern.CASE_INSENSITIVE);
 
 	private final Map<String, DataType> typeMap = new ConcurrentHashMap<>();
 	private final Map<String, DataTypeEntry> derivedTypes = new ConcurrentHashMap<>();
@@ -59,16 +59,17 @@ public final class DataTypeLibrary {
 	}
 
 	public boolean addTypeEntry(final DataTypeEntry entry) {
-		errorTypes.remove(entry.getFullTypeName()); // remove stale error marker data type
-		return derivedTypes.putIfAbsent(entry.getFullTypeName(), entry) == null;
+		final String uppercaseName = entry.getFullTypeName().toUpperCase();
+		errorTypes.remove(uppercaseName); // remove stale error marker data type
+		return derivedTypes.putIfAbsent(uppercaseName, entry) == null;
 	}
 
 	public void removeTypeEntry(final DataTypeEntry entry) {
-		derivedTypes.remove(entry.getFullTypeName(), entry);
+		derivedTypes.remove(entry.getFullTypeName().toUpperCase(), entry);
 	}
 
 	private void addToTypeMap(final DataType type) {
-		typeMap.put(type.getName(), type);
+		typeMap.putIfAbsent(type.getName().toUpperCase(), type);
 	}
 
 	/** Inits the elementary types. */
@@ -80,49 +81,51 @@ public final class DataTypeLibrary {
 		GenericTypes.getAllGenericTypes().forEach(this::addToTypeMap);
 	}
 
-	public Map<String, DataTypeEntry> getDerivedDataTypes() {
-		return derivedTypes;
+	public Collection<DataTypeEntry> getDerivedDataTypes() {
+		return Collections.unmodifiableCollection(derivedTypes.values());
 	}
 
-	/** Gets the data types.
+	/**
+	 * Gets the data types.
 	 *
-	 * @return the data types */
+	 * @return the data types
+	 */
 	public List<DataType> getDataTypes() {
-		final List<DataType> dataTypes = new ArrayList<>(typeMap.size() + derivedTypes.size());
-		dataTypes.addAll(typeMap.values());
-		derivedTypes.values().stream().map(DataTypeEntry::getType).filter(Objects::nonNull)
-				.forEachOrdered(dataTypes::add);
-		return dataTypes;
+		return Stream.concat(typeMap.values().stream(),
+				derivedTypes.values().stream().map(DataTypeEntry::getType).filter(Objects::nonNull)).toList();
 	}
 
 	public static List<DataType> getNonUserDefinedDataTypes() {
 		return IecTypes.ElementaryTypes.getAllElementaryType();
 	}
 
-	/** Gets the data types sorted alphabetically from a to z.
+	/**
+	 * Gets the data types sorted alphabetically from a to z.
 	 *
-	 * @return the sorted data types list */
+	 * @return the sorted data types list
+	 */
 	public List<DataType> getDataTypesSorted() {
-		final List<DataType> dataTypes = getDataTypes();
-		Collections.sort(dataTypes, NamedElementComparator.INSTANCE);
-		return dataTypes;
+		return getDataTypes().stream().sorted(NamedElementComparator.INSTANCE).toList();
 	}
 
-	/** get type
+	/**
+	 * get type
 	 *
 	 * @param name the name
 	 *
-	 * @return the type or ErrorMarker */
+	 * @return the type or ErrorMarker
+	 */
 	public DataType getType(final String name) {
 		if (null == name) {
-			return typeMap.get("ANY"); //$NON-NLS-1$
+			return GenericTypes.ANY;
 		}
-		DataType type = typeMap.get(name);
+		final String uppercaseName = name.toUpperCase();
+		DataType type = typeMap.get(uppercaseName);
 		if (type != null) {
 			return type;
 		}
 
-		type = getDerivedType(name);
+		type = getDerivedType(uppercaseName);
 		if (type != null) {
 			return type;
 		}
@@ -136,37 +139,37 @@ public final class DataTypeLibrary {
 	}
 
 	public DataType getTypeIfExists(final String name) {
-		final DataType dataType = typeMap.get(name.toUpperCase());
+		final String uppercaseName = name.toUpperCase();
+		final DataType dataType = typeMap.get(uppercaseName);
 		if (dataType != null) {
 			return dataType;
 		}
-		return getDerivedType(name);
+		return getDerivedType(uppercaseName);
 	}
 
 	public List<StructuredType> getStructuredTypes() {
-		final List<StructuredType> types = getDerivedDataTypes().entrySet().stream()
-				.filter(entry -> (entry.getValue().getType() instanceof StructuredType))
-				.map(entry -> ((StructuredType) entry.getValue().getType())).collect(Collectors.toList());
-		types.add((StructuredType) getType(FordiacKeywords.ANY_STRUCT));
-		return types;
+		return Stream.concat(Stream.of(GenericTypes.ANY_STRUCT), derivedTypes.values().stream().map(TypeEntry::getType)
+				.filter(StructuredType.class::isInstance).map(StructuredType.class::cast)).toList();
 	}
 
 	public List<StructuredType> getStructuredTypesSorted() {
-		final List<StructuredType> structTypes = getStructuredTypes();
-		Collections.sort(structTypes, NamedElementComparator.INSTANCE);
-		return structTypes;
+		return getStructuredTypes().stream().sorted(NamedElementComparator.INSTANCE).toList();
 	}
 
-	private DataType getDerivedType(final String name) {
-		final DataTypeEntry entry = derivedTypes.get(name);
+	private DataType getDerivedType(final String uppercaseName) {
+		final DataTypeEntry entry = derivedTypes.get(uppercaseName);
 		if (null != entry) {
 			return entry.getType();
 		}
 		return null;
 	}
 
-	private DataType createParametricType(final String name) {
-		final Matcher matcher = STRING_MAX_LENGTH_PATTERN.matcher(name);
+	public DataTypeEntry getDerivedTypeEntry(final String name) {
+		return derivedTypes.get(name.toUpperCase());
+	}
+
+	private DataType createParametricType(final String typeName) {
+		final Matcher matcher = STRING_MAX_LENGTH_PATTERN.matcher(typeName);
 		if (matcher.matches()) {
 			try {
 				final String plainTypeName = matcher.group(1);
@@ -174,37 +177,40 @@ public final class DataTypeLibrary {
 				final DataType plainType = typeMap.get(plainTypeName);
 				if (plainType instanceof AnyStringType) {
 					final int maxLength = Integer.parseUnsignedInt(maxLengthString);
-					final AnyStringType type = (AnyStringType) DataFactory.eINSTANCE.create(plainType.eClass());
-					type.setName(name);
-					type.setMaxLength(maxLength);
-					typeMap.put(name, type);
-					return type;
+					return typeMap.computeIfAbsent(typeName.toUpperCase(), name -> {
+						final AnyStringType type = (AnyStringType) DataFactory.eINSTANCE.create(plainType.eClass());
+						type.setName(name);
+						type.setMaxLength(maxLength);
+						return type;
+					});
 				}
 			} catch (final NumberFormatException e) {
-				return createErrorMarkerType(name,
-						MessageFormat.format(Messages.DataTypeLibrary_InvalidMaxLengthInStringType, name));
+				return createErrorMarkerType(typeName,
+						MessageFormat.format(Messages.DataTypeLibrary_InvalidMaxLengthInStringType, typeName));
 			}
 		}
 		return null;
 	}
 
 	private ErrorMarkerDataType createErrorMarkerType(final String typeName, final String message) {
-		return errorTypes.computeIfAbsent(typeName, name -> {
+		return errorTypes.computeIfAbsent(typeName.toUpperCase(), name -> {
 			FordiacLogHelper.logInfo(message);
 			final ErrorMarkerDataType type = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
-			type.setName(name);
+			type.setName(typeName);
 			type.setErrorMessage(message);
 			return type;
 		});
 	}
 
 	public StructuredType getStructuredType(final String name) {
-		final DataType derivedType = getDerivedType(name);
+		final DataType derivedType = getDerivedType(name.toUpperCase());
 		if (derivedType instanceof final StructuredType structuredType) {
 			return structuredType;
 		}
-		return (StructuredType) typeMap.get(FordiacKeywords.ANY_STRUCT);
-
+		return GenericTypes.ANY_STRUCT;
 	}
 
+	void clear() {
+		derivedTypes.clear();
+	}
 }
