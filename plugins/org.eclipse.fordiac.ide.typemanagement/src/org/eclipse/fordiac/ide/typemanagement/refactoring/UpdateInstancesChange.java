@@ -54,6 +54,10 @@ public class UpdateInstancesChange extends Change {
 		this.instances.add(instance);
 	}
 
+	public UpdateInstancesChange(final FBNetworkElement instance) {
+		this(instance, null);
+	}
+
 	@Override
 	public String getName() {
 		final StringBuilder sb = new StringBuilder();

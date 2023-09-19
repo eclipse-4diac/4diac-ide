@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.search.types;
 
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 
@@ -25,6 +26,10 @@ public class FBInstanceSearch extends InstanceSearch {
 
 	public FBInstanceSearch(final DataTypeEntry dataTypeEntry) {
 		super(new StructInterfaceSearchFilter(dataTypeEntry));
+	}
+
+	public FBInstanceSearch(final FBType fbType) {
+		super(new FBTypeInstanceSearchFilter(fbType));
 	}
 
 	private FBInstanceSearch(final SearchFilter filter) {
@@ -41,11 +46,29 @@ public class FBInstanceSearch extends InstanceSearch {
 
 		@Override
 		public boolean apply(final INamedElement searchCandiate) {
-			if (searchCandiate instanceof final FBNetworkElement subapp) {
-				return subapp.getInterface().getAllInterfaceElements().stream()
+			if (searchCandiate instanceof final FBNetworkElement fbn) {
+				return fbn.getInterface().getAllInterfaceElements().stream()
 						.anyMatch(i -> i.getTypeName().equals(entry.getTypeName()));
 			}
 			return false;
 		}
+	}
+
+	private static class FBTypeInstanceSearchFilter implements SearchFilter {
+
+		private final FBType fbType;
+
+		public FBTypeInstanceSearchFilter(final FBType fbType) {
+			this.fbType = fbType;
+		}
+
+		@Override
+		public boolean apply(final INamedElement searchCanditate) {
+			if (searchCanditate instanceof final FBNetworkElement fbn) {
+				return fbn.getType() != null && fbn.getTypeName().equals(fbType.getName());
+			}
+			return false;
+		}
+
 	}
 }

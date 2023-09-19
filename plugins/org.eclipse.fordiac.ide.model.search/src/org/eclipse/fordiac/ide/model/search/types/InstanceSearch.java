@@ -108,6 +108,17 @@ public class InstanceSearch {
 		return searchResult;
 	}
 
+	public Set<INamedElement> performProjectSearch(final IProject project) {
+		searchResult = new HashSet<>();
+		final List<AutomationSystem> searchRootSystems = SystemManager.INSTANCE.getProjectSystems(project);
+		for (final AutomationSystem sys : searchRootSystems) {
+			searchApplications(sys);
+			searchTypeLibraryNetworks(sys.getTypeLibrary());
+		}
+
+		return searchResult;
+	}
+
 	public Set<INamedElement> performTypeLibBlockSearch(final TypeLibrary typeLibrary) {
 		searchResult = new HashSet<>();
 		final List<TypeEntry> allBlockTypes = new ArrayList<>();

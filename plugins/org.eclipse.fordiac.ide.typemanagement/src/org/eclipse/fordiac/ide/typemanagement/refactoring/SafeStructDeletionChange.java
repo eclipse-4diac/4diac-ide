@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -107,30 +109,33 @@ public class SafeStructDeletionChange extends CompositeChange {
 			.map(entry -> new DeleteMemberVariableChange(entry, struct.getName()))
 			.forEach(change::add);
 
-		// fb types
+		// fb types and its instances
 		StructDataTypeSearch.createStructInterfaceSearch(struct)
 			.performTypeLibBlockSearch(struct.getTypeLibrary())
 			.stream()
 			.map(FBType.class::cast)
 			.map(fbType -> new DeleteFBTypeInterfaceChange(fbType, struct))
-			.forEach(change::add);
+			.forEach(updateFBTypeChange -> addFbTypeInstances(updateFBTypeChange, change, struct));
+
 
 		// untyped subapps
 		StructDataTypeSearch.createStructSubappPinSearch(struct).performCompleteSearch().stream()
 			.map(SubApp.class::cast)
 			.map(sub -> new DeleteUntypedSubappPinsChange(sub, struct))
 			.forEach(change::add);
+
 		// @formatter:on
 	}
 
-	public static void addUpdateChanges(final CompositeChange change, final TypeEntry entry) {
+	public static void addUpdateChanges(final CompositeChange parentChange, final TypeEntry entry) {
 		final StructuredType type = (StructuredType) entry.getType();
-		addUpdateStructManipulatorChanges(change, type);
-		addUpdateFBTypeChanges(change, type);
-		addUpdateUntypedSubappPinChanges(change, type);
+		addUpdateStructManipulatorChanges(parentChange, type);
+		addUpdateFBTypeChanges(parentChange, type);
+		addUpdateUntypedSubappPinChanges(parentChange, type);
 	}
 
-	private static void addUpdateStructManipulatorChanges(final CompositeChange change, final StructuredType struct) {
+	private static void addUpdateStructManipulatorChanges(final CompositeChange parentChange,
+			final StructuredType struct) {
 		// @formatter:off
 		final StructDataTypeSearch search = StructDataTypeSearch.createStructManipulatorSearch(struct);
 		SystemManager.INSTANCE.getProjectSystems(struct.getTypeEntry().getFile().getProject()).stream()
@@ -138,27 +143,43 @@ public class SafeStructDeletionChange extends CompositeChange {
 			.flatMap(Collection::stream)
 			.map(StructManipulator.class::cast)
 			.map(UpdateManipulatorChange::new)
-			.forEach(change::add);
+			.forEach(parentChange::add);
 		// @formatter:off
 	}
 
-	private static void addUpdateFBTypeChanges(final CompositeChange change, final StructuredType struct) {
+	private static void addUpdateFBTypeChanges(final CompositeChange parentChange, final StructuredType struct) {
 		// @formatter:off
 		StructDataTypeSearch.createStructInterfaceSearch(struct)
 			.performTypeLibBlockSearch(struct.getTypeLibrary())
 			.stream()
 			.map(FBType.class::cast)
 			.map(UpdateFBTypeChange::new)
-			.forEach(change::add);
+			.forEach(parentChange::add);
 		// @formatter:on
 	}
 
-	private static void addUpdateUntypedSubappPinChanges(final CompositeChange change, final StructuredType struct) {
+	private static void addFbTypeInstances(final DeleteFBTypeInterfaceChange updateFBTypeChange,
+			final CompositeChange parentChange, final StructuredType struct) {
+
+		final FBType fbType = updateFBTypeChange.getFBType();
+		final var fbInstances = new FBInstanceSearch(fbType)
+				.performProjectSearch(fbType.getTypeEntry().getFile().getProject());
+
+		fbInstances.forEach(fbn -> {
+			updateFBTypeChange.add(new UpdateInstancesChange((FBNetworkElement) fbn));
+		});
+
+		parentChange.add(updateFBTypeChange);
+
+	}
+
+	private static void addUpdateUntypedSubappPinChanges(final CompositeChange parentChange,
+			final StructuredType struct) {
 		// @formatter:off
 		StructDataTypeSearch.createStructSubappPinSearch(struct).performCompleteSearch().stream()
 			.map(SubApp.class::cast)
 			.map(sub -> new UpdateUntypedSubappChange(sub, struct))
-			.forEach(change::add);
+			.forEach(parentChange::add);
 		// @formatter:on
 	}
 
@@ -211,19 +232,24 @@ public class SafeStructDeletionChange extends CompositeChange {
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
 			// @formatter:off
-			final VarDeclaration varDeclaration = type.getInterfaceList().getAllInterfaceElements().stream()
+			final List<VarDeclaration> varDeclaration = type.getInterfaceList().getAllInterfaceElements().stream()
 					.filter(VarDeclaration.class::isInstance)
 					.map(VarDeclaration.class::cast)
-					.filter(decl -> decl.getType().getName().equals(struct.getName()))
-					.findFirst()
-					.orElse(null);
+					.filter(decl -> decl.getType().getName().equals(struct.getName())).toList();
 			// @formatter:on
-			final ErrorMarkerDataType markerType = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
-			markerType.setName(varDeclaration.getTypeName());
 
-			final Command cmd = ChangeDataTypeCommand.forDataType(varDeclaration, markerType);
-			SafeStructDeletionChange.executeChange(cmd, type);
+			for (final VarDeclaration varDec : varDeclaration) {
+				final ErrorMarkerDataType markerType = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
+				markerType.setName(varDec.getTypeName());
+
+				final Command cmd = ChangeDataTypeCommand.forDataType(varDec, markerType);
+				SafeStructDeletionChange.executeChange(cmd, type);
+			}
 			return super.perform(pm);
+		}
+
+		public FBType getFBType() {
+			return type;
 		}
 
 	}
