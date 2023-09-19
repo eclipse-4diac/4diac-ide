@@ -54,7 +54,7 @@ public class FbSelectionTreeContentProvider extends TypeSelectionTreeContentProv
 			});
 
 			if (!fbs.getChildren().isEmpty()) {
-				return new TypeNode[] { fbs };
+				return fbs.getChildren().toArray();
 			}
 		}
 
