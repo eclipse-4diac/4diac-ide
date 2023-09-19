@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.nat.FbSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
@@ -77,7 +78,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		final DataLayer dataLayer = new DataLayer(provider);
 		dataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(provider));
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new TypedElementColumnProvider(),
-				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
+				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection, new FbSelectionTreeContentProvider()), this, false);
 		table.configure();
 
 		buttons.bindToTableViewer(table, this,

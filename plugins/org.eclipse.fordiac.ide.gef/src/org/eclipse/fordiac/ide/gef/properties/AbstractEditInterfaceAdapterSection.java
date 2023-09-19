@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.nat.AdapterSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
@@ -35,8 +36,6 @@ import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditInterfaceSection<AdapterDeclaration> {
-
-	private static final boolean ADAPTER_TYPE_SELECTION = true;
 
 	@Override
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
@@ -98,7 +97,7 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		outputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(outputProvider));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new TypedElementColumnProvider(), getSectionEditableRule(),
-				new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this, false);
+				new DataTypeSelectionButton(typeSelection, new AdapterSelectionTreeContentProvider()), this, false);
 	}
 
 	@Override
@@ -108,7 +107,7 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		inputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(inputProvider));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new TypedElementColumnProvider(), getSectionEditableRule(),
-				new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this, true);
+				new DataTypeSelectionButton(typeSelection, new AdapterSelectionTreeContentProvider()), this, true);
 	}
 
 	@Override

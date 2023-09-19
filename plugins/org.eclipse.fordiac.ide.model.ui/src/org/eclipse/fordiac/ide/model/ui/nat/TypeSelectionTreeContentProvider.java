@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.nat;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +27,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.Messages;
@@ -55,16 +53,13 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 	}
 
 	protected Object[] createTree(final HashMap<String, List<String>> inputElement) {
-		final List<TypeNode> result = new ArrayList<>();
 		final TypeNode elementaries = new TypeNode(Messages.DataTypeDropdown_Elementary_Types);
 		final TypeNode structures = new TypeNode(Messages.DataTypeDropdown_STRUCT_Types);
-		final TypeNode fbs = new TypeNode(Messages.DataTypeDropdown_FB_Types);
 
 		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(getCurrentProject());
 		final List<DataType> dataTypes = typeLib.getDataTypeLibrary().getDataTypesSorted();
 		final List<AdapterTypeEntry> adapterTypes = typeLib.getAdapterTypesSorted();
 		final List<StructuredType> structuredTypes = typeLib.getDataTypeLibrary().getStructuredTypesSorted();
-		final List<FBTypeEntry> fbTypes = new ArrayList<>(typeLib.getFbTypes().values());
 
 		inputElement.forEach((key, val) -> {
 			if (val != null && !val.isEmpty()) {
@@ -95,37 +90,22 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 								structures.addChild(runtimeNode);
 							}
 						}
-					} else if (key.equals(Messages.DataTypeDropdown_FB_Types)) {
-						final Optional<FBTypeEntry> type = fbTypes.stream()
-								.filter(fbType -> fbType.getType().getName().equals(value)).findFirst();
-						TypeNode newNode;
-						if (!type.isEmpty()) {
-							newNode = new TypeNode(type.get().getType().getName(), type.get().getType());
-							fbs.addChild(newNode);
-						}
 					}
 				});
 			}
 		});
 
-		if (!elementaries.getChildren().isEmpty()) {
-			result.add(elementaries);
+		if (elementaries.getChildren().isEmpty()) {
+			return structures.getChildren().toArray();
 		}
-		if (!structures.getChildren().isEmpty()) {
-			result.add(structures);
-		}
-		if (!fbs.getChildren().isEmpty()) {
-			result.add(fbs);
+		if (structures.getChildren().isEmpty()) {
+			return elementaries.getChildren().toArray();
 		}
 
-		if (result.size() == 1) {
-			return result.get(0).getChildren().toArray();
-		}
-
-		return result.toArray();
+		return new TypeNode[] { elementaries, structures };
 	}
 
-	private static void createSubdirectories(TypeNode node, final StructuredType structuredType,
+	protected static void createSubdirectories(TypeNode node, final LibraryElement libraryElement,
 			final IPath parentPath) {
 		// split up the path in subdirectories
 		final String[] paths = parentPath.segments();
@@ -143,31 +123,31 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 				node = current;
 			}
 		}
-		final TypeNode actualType = new TypeNode(structuredType.getName(), structuredType);
+		final TypeNode actualType = new TypeNode(libraryElement.getName(), libraryElement);
 		actualType.setParent(node);
 		node.addChild(actualType);
 	}
 
 	@Override
 	public Object[] getChildren(final Object parentElement) {
-		if (parentElement instanceof TypeNode) {
-			return ((TypeNode) parentElement).getChildren().toArray();
+		if (parentElement instanceof final TypeNode typeNode) {
+			return typeNode.getChildren().toArray();
 		}
 		return new Object[0];
 	}
 
 	@Override
 	public Object getParent(final Object element) {
-		if (element instanceof TypeNode) {
-			return ((TypeNode) element).getParent();
+		if (element instanceof final TypeNode typeNode) {
+			return typeNode.getParent();
 		}
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		if (element instanceof TypeNode) {
-			return !((TypeNode) element).getChildren().isEmpty();
+		if (element instanceof final TypeNode typeNode) {
+			return !typeNode.getChildren().isEmpty();
 		}
 		return false;
 	}
@@ -185,8 +165,8 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 		final IEditorPart openEditor = page.getActiveEditor();
 		if (openEditor != null) {
 			final IEditorInput editorInput = openEditor.getEditorInput();
-			if (editorInput instanceof FileEditorInput) {
-				return ((FileEditorInput) editorInput).getFile().getProject();
+			if (editorInput instanceof final FileEditorInput fileEditorInput) {
+				return fileEditorInput.getFile().getProject();
 			}
 		}
 		return null;
@@ -195,15 +175,15 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 	private static IProject getProjectFromProjectExplorerSelction(final IWorkbenchPage page) {
 		final IViewPart view = page.findView("org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"); //$NON-NLS-1$
 
-		if (view instanceof CommonNavigator) {
-			final ISelection selection = ((CommonNavigator) view).getCommonViewer().getSelection();
-			if (selection instanceof StructuredSelection && !((StructuredSelection) selection).isEmpty()) {
-				Object selElement = ((StructuredSelection) selection).getFirstElement();
-				if (selElement instanceof EObject) {
-					selElement = getFileForModel((EObject) selElement);
+		if (view instanceof final CommonNavigator commonNavigator) {
+			final ISelection selection = commonNavigator.getCommonViewer().getSelection();
+			if (selection instanceof final StructuredSelection structuredSelection && !structuredSelection.isEmpty()) {
+				Object selElement = structuredSelection.getFirstElement();
+				if (selElement instanceof final EObject obj) {
+					selElement = getFileForModel(obj);
 				}
-				if (selElement instanceof IResource) {
-					return ((IResource) selElement).getProject();
+				if (selElement instanceof final IResource resource) {
+					return resource.getProject();
 				}
 			}
 		}
@@ -213,8 +193,8 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 
 	private static IFile getFileForModel(final EObject sel) {
 		final EObject root = EcoreUtil.getRootContainer(sel);
-		if (root instanceof LibraryElement) {
-			return ((LibraryElement) root).getTypeEntry().getFile();
+		if (root instanceof final LibraryElement libraryElement) {
+			return libraryElement.getTypeEntry().getFile();
 		}
 		return null;
 	}
