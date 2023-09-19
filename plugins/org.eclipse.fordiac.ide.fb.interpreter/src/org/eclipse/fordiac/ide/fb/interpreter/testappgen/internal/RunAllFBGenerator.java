@@ -83,7 +83,7 @@ public class RunAllFBGenerator extends AbstractFBGenerator {
 
 	@Override
 	protected String getTypeName() {
-		return sourceType.getName() + "_DEMUX"; //$NON-NLS-1$ ;
+		return sourceType.getName() + "_DEMUX"; //$NON-NLS-1$
 	}
 
 	@Override

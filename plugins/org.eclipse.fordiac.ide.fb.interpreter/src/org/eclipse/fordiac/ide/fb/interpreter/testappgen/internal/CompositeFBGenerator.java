@@ -263,12 +263,6 @@ public class CompositeFBGenerator {
 						muxFB.getInterface().getEventInputs().get(muxFB.getInterface().getEventInputs().size() - 1)));
 		compositeFB.getFBNetwork().getEventConnections().add(createEventConnection(
 				demuxFB.getInterface().getEventOutputs().get(index), muxFB.getInterface().getEventInputs().get(index)));
-		// Data Connections
-//		if (!sourceType.getInterfaceList().getOutputVars().isEmpty()) {
-//			compositeFB.getFBNetwork().getDataConnections()
-//					.add(createDataConnection(matchFBs.get(index).getInterface().getOutputVars().get(0),
-//							muxFB.getInterface().getInputVars().get(index)));
-//		}
 	}
 
 	private void createConnToComposite() {
