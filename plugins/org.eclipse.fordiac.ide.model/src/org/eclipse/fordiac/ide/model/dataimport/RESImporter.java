@@ -83,6 +83,10 @@ public class RESImporter extends TypeImporter {
 				getElement().setFBNetwork(networkImporter.getFbNetwork());
 				networkImporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 				break;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(getElement());
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				break;
 			default:
 				return false;
 			}
