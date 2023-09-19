@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteImportCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
@@ -123,11 +124,11 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		final Consumer<Command> commandExecutorBuffer = getCommandExecutor();
 		setCommandExecutor(null);
 		if ((getType() != null)) {
-			nameText.setEditable(!(getType() instanceof FunctionFBType));
-			nameText.setEnabled(!(getType() instanceof FunctionFBType));
-			buttons.setButtonEnablement(!(getType() instanceof FunctionFBType));
-			buttons.setCreateButtonEnablement(!(getType() instanceof FunctionFBType));
-			table.setEnabled(!(getType() instanceof FunctionFBType));
+			nameText.setEditable(!isReadonly());
+			nameText.setEnabled(!isReadonly());
+			buttons.setButtonEnablement(!isReadonly());
+			buttons.setCreateButtonEnablement(!isReadonly());
+			table.setEnabled(!isReadonly());
 
 			if (null != getType().getCompilerInfo()) {
 				final CompilerInfo compilerInfo = getType().getCompilerInfo();
@@ -137,6 +138,19 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		}
 		setCommandExecutor(commandExecutorBuffer);
 
+	}
+
+	@Override
+	public void setEnabled(final boolean enablement) {
+		super.setEnabled(enablement);
+		nameText.setEnabled(enablement);
+		buttons.setVisible(enablement);
+		table.setEnabled(enablement);
+		packageViewer.setCellModifier(null);
+	}
+
+	private boolean isReadonly() {
+		return getType() instanceof FunctionFBType || getType() instanceof GlobalConstants;
 	}
 
 	private class ImportsCellModifier implements ICellModifier {
