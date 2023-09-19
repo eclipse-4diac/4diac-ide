@@ -87,12 +87,12 @@ public abstract class ContractElement {
 	List<AbstractTime> getOccurrences(final Interval range) {
 		final List<AbstractTime> timestamps = new ArrayList<>();
 		if (getMax() == -1) {
-			int time = getMin();
-			while (time <= range.getMaxTime()) {
-				if (time >= range.getMinTime()) {
-					timestamps.add(new Instant(time));
+			int timeMin = getMin();
+			while (timeMin <= range.getMaxTime()) {
+				if (timeMin >= range.getMinTime()) {
+					timestamps.add(new Instant(timeMin));
 				}
-				time += getMin();
+				timeMin += getMin();
 			}
 		} else {
 			int minTime = getMin();

@@ -24,11 +24,11 @@ public class Instant extends AbstractTime {
 		return time;
 	}
 
-	public Instant add(final Instant other) {
+	private Instant add(final Instant other) {
 		return new Instant(this.getTime() + other.getTime());
 	}
 
-	public Interval add(final Interval other) {
+	private Interval add(final Interval other) {
 		return other.add(this);
 	}
 
