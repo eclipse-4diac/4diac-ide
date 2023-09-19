@@ -191,6 +191,20 @@ public class Abstract4diacUITests {
 	}
 
 	/**
+	 * Deletes a FB from the editing area.
+	 *
+	 * @param editor         The SWTBot4diacGefEditor from which a FB with given
+	 *                       instance name should be deleted.
+	 * @param FbInstanceName The instance name of the FB
+	 */
+	protected static void deleteFB(final SWTBot4diacGefEditor editor, final String FbInstanceName) {
+		editor.setFocus();
+		final SWTBotGefEditPart fb = editor.getEditPart(FbInstanceName).parent();
+		fb.select().click();
+		bot.menu(EDIT).menu(DELETE).click();
+	}
+
+	/**
 	 * Creates a connection between two pins.
 	 *
 	 * The method creates a connection between the two given pins, the order of the
