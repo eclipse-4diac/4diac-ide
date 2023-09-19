@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.test.ui;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
@@ -25,6 +26,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
+import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
@@ -44,6 +46,8 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -280,6 +284,31 @@ public class Abstract4diacUITests {
 	 */
 	protected static boolean isFbSelected(final List<SWTBotGefEditPart> selectedEditParts, final String fbName) {
 		return selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
+				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
+	}
+
+	/**
+	 * Checks if given FB instance name can be found on the editing area.
+	 *
+	 * @param editor The SWTBot4diacGefEditor in which the FB instance name is
+	 *               searched
+	 * @param fbName The String of the FB instance name searched for
+	 * @return true if FB is onto editing area, false if not
+	 */
+	protected static boolean isFBNamePresendOnEditingArea(final SWTBot4diacGefEditor editor, final String fbName) {
+		final List<SWTBotGefEditPart> editParts = editor.editParts(new BaseMatcher<EditPart>() {
+			@Override
+			public boolean matches(final Object item) {
+				return item instanceof FBEditPart;
+			}
+
+			@Override
+			public void describeTo(final Description description) {
+				// method must be implemented but empty since not needed
+			}
+		});
+		assertFalse(editParts.isEmpty());
+		return editParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
 				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
 	}
 

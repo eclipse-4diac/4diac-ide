@@ -12,20 +12,47 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
+import org.eclipse.swt.graphics.Point;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class BasicMultipleFBNetworkEditingTests extends Abstract4diacUITests {
 
 	/**
-	 * Drag and drops a few FBs of the same kind onto the canvas and checks if new
-	 * FBs gets the next free running number.
+	 * Drag and drops a few event FBs of the same type on the editing area and
+	 * checks if new FBs gets the next free running number.
 	 *
+	 * First multiple E_CYCLE and E_SR are dragged in mixed order onto the editing
+	 * area. After that it is checked if the names were assigned correctly.
 	 */
-	@Disabled("until implementation")
+	@SuppressWarnings("static-method")
 	@Test
 	public void checkIfNewFbGetsNextFreeRunningNumber() {
-		// in progress
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(300, 100));
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(500, 100));
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 250));
+		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(300, 250));
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(500, 250));
+
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+
+		assertTrue(isFBNamePresendOnEditingArea(editor, "E_CYCLE")); //$NON-NLS-1$
+		assertTrue(isFBNamePresendOnEditingArea(editor, "E_CYCLE_1")); //$NON-NLS-1$
+		assertTrue(isFBNamePresendOnEditingArea(editor, "E_CYCLE_2")); //$NON-NLS-1$
+		assertTrue(isFBNamePresendOnEditingArea(editor, "E_CYCLE_3")); //$NON-NLS-1$
+		assertFalse(isFBNamePresendOnEditingArea(editor, "E_CYCLE_0")); //$NON-NLS-1$
+
+		assertTrue(isFBNamePresendOnEditingArea(editor, "E_SR")); //$NON-NLS-1$
+		assertTrue(isFBNamePresendOnEditingArea(editor, "E_SR_1")); //$NON-NLS-1$
+		assertFalse(isFBNamePresendOnEditingArea(editor, "E_SR_2")); //$NON-NLS-1$
+
 	}
 
 	/**
