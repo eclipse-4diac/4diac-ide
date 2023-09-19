@@ -107,13 +107,14 @@ public class TestFbGenerator extends AbstractFBGenerator {
 		alg.setName("A" + nameCnt); //$NON-NLS-1$
 		final StringBuilder text = new StringBuilder();
 		text.append("ALGORITHM " + alg.getName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		if (!testState.getTestTrigger().getParameters().equals("")) { //$NON-NLS-1$
+		if (testState.getTestTrigger().getParameters() != null
+				&& !testState.getTestTrigger().getParameters().equals("")) { //$NON-NLS-1$
 			containsParameters = true;
 			text.append(testState.getTestTrigger().getParameters().replace(";", ";\n")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		for (final OutputPrimitive outP : testState.getTestOutputs()) {
-			if (!outP.getParameters().equals("")) { //$NON-NLS-1$
+			if (outP.getParameters() != null && !outP.getParameters().equals("")) { //$NON-NLS-1$
 				containsParameters = true;
 				text.append(createDataPinName(outP.getParameters().replace(";", ";\n"))); //$NON-NLS-1$ //$NON-NLS-2$
 			}

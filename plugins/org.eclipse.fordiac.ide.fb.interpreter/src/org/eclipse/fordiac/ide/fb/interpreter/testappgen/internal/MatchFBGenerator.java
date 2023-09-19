@@ -176,11 +176,13 @@ public class MatchFBGenerator extends AbstractFBGenerator {
 				plug.getAdapterFB().getInterface().getEventOutputs().get(0));
 
 		eccGen.createTransitionFromTo(eccGen.getLastState(), sucState, null);
-		eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1)
-				.setConditionExpression("matchData"); //$NON-NLS-1$
 		eccGen.createTransitionFromTo(eccGen.getLastState(), errState, null);
-		eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1)
-				.setConditionExpression("NOT matchData"); //$NON-NLS-1$
+		if (!destinationFB.getInterfaceList().getInputVars().isEmpty()) {
+			eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 2)
+					.setConditionExpression("matchData"); //$NON-NLS-1$
+			eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1)
+					.setConditionExpression("NOT matchData"); //$NON-NLS-1$
+		}
 
 	}
 
