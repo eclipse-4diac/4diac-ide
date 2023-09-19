@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.nat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.Messages;
@@ -53,13 +55,16 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 	}
 
 	protected Object[] createTree(final HashMap<String, List<String>> inputElement) {
+		final List<TypeNode> result = new ArrayList<>();
 		final TypeNode elementaries = new TypeNode(Messages.DataTypeDropdown_Elementary_Types);
 		final TypeNode structures = new TypeNode(Messages.DataTypeDropdown_STRUCT_Types);
+		final TypeNode fbs = new TypeNode(Messages.DataTypeDropdown_FB_Types);
 
 		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(getCurrentProject());
 		final List<DataType> dataTypes = typeLib.getDataTypeLibrary().getDataTypesSorted();
 		final List<AdapterTypeEntry> adapterTypes = typeLib.getAdapterTypesSorted();
 		final List<StructuredType> structuredTypes = typeLib.getDataTypeLibrary().getStructuredTypesSorted();
+		final List<FBTypeEntry> fbTypes = new ArrayList<>(typeLib.getFbTypes().values());
 
 		inputElement.forEach((key, val) -> {
 			if (val != null && !val.isEmpty()) {
@@ -90,19 +95,34 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 								structures.addChild(runtimeNode);
 							}
 						}
+					} else if (key.equals(Messages.DataTypeDropdown_FB_Types)) {
+						final Optional<FBTypeEntry> type = fbTypes.stream()
+								.filter(fbType -> fbType.getType().getName().equals(value)).findFirst();
+						TypeNode newNode;
+						if (!type.isEmpty()) {
+							newNode = new TypeNode(type.get().getType().getName(), type.get().getType());
+							fbs.addChild(newNode);
+						}
 					}
 				});
 			}
 		});
 
-		if (elementaries.getChildren().isEmpty()) {
-			return structures.getChildren().toArray();
+		if (!elementaries.getChildren().isEmpty()) {
+			result.add(elementaries);
 		}
-		if (structures.getChildren().isEmpty()) {
-			return elementaries.getChildren().toArray();
+		if (!structures.getChildren().isEmpty()) {
+			result.add(structures);
+		}
+		if (!fbs.getChildren().isEmpty()) {
+			result.add(fbs);
 		}
 
-		return new TypeNode[] { elementaries, structures };
+		if (result.size() == 1) {
+			return result.get(0).getChildren().toArray();
+		}
+
+		return result.toArray();
 	}
 
 	private static void createSubdirectories(TypeNode node, final StructuredType structuredType,
