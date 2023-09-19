@@ -49,7 +49,7 @@ public class GuaranteeTwoEvents extends Guarantee {
 		this.secondOutputEvent = secondOutputEvent;
 	}
 
-	static Guarantee createGuaranteeTwoEvents(final String line) {
+	static Guarantee createGuaranteeTwoEvents(final String line) throws GuaranteeTwoEventsExeption {
 		final String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectGuarantee(parts)) {
 			throw new GuaranteeTwoEventsExeption("Error with Guarantee: " + line); //$NON-NLS-1$

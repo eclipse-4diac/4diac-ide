@@ -49,7 +49,7 @@ public class AssumptionWithOffset extends Assumption {
 		this.offSet = offSet;
 	}
 
-	static Assumption createAssumptionWithOffset(final String line) {
+	static Assumption createAssumptionWithOffset(final String line) throws AssumptionWithOffsetExeption {
 		final String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectAssumtion(parts)) {
 			throw new AssumptionWithOffsetExeption("Error with Assumption: " + line); //$NON-NLS-1$

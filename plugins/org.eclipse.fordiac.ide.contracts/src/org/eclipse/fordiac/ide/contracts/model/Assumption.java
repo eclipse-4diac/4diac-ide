@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.contracts.exceptions.AssumptionExeption;
+import org.eclipse.fordiac.ide.contracts.exceptions.AssumptionWithOffsetExeption;
 import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -30,7 +31,7 @@ public class Assumption extends ContractElement {
 	private static final int ASSUMPTION_LENGTH = 5;
 	private static final int POSITION_NO = 4;
 
-	static Assumption createAssumption(final String line) {
+	static Assumption createAssumption(final String line) throws AssumptionExeption, AssumptionWithOffsetExeption {
 		if (line.contains(ContractKeywords.OFFSET)) {
 			return AssumptionWithOffset.createAssumptionWithOffset(line);
 		}

@@ -20,6 +20,7 @@ import java.util.Optional;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.contracts.Messages;
+import org.eclipse.fordiac.ide.contracts.exceptions.ContractExeption;
 import org.eclipse.fordiac.ide.contracts.model.ContractConstants.ContractState;
 import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.NameRepository;
@@ -41,14 +42,20 @@ public class Contract {
 	public static Contract getContractFromComment(final String comment) {
 		final Contract contract = new Contract();
 		final String[] lines = comment.split(System.lineSeparator());
-		for (final String line : lines) {
-			if (line.startsWith(ContractKeywords.ASSUMPTION)) {
-				final Assumption toAdd = Assumption.createAssumption(line);
-				contract.add(toAdd, contract);
-			} else if (line.startsWith(ContractKeywords.GUARANTEE)) {
-				final Guarantee toAdd = Guarantee.createGuarantee(line);
-				contract.add(toAdd, contract);
+		try {
+			for (final String line : lines) {
+
+				if (line.startsWith(ContractKeywords.ASSUMPTION)) {
+					final Assumption toAdd = Assumption.createAssumption(line);
+					contract.add(toAdd, contract);
+				} else if (line.startsWith(ContractKeywords.GUARANTEE)) {
+					final Guarantee toAdd = Guarantee.createGuarantee(line);
+					contract.add(toAdd, contract);
+				}
 			}
+		} catch (final ContractExeption e) {
+			contract.state = ContractState.INVALID;
+			contract.addError(e.getMessage());
 		}
 		return contract;
 	}

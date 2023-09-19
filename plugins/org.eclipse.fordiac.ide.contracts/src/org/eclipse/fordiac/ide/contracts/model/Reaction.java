@@ -32,7 +32,7 @@ public class Reaction extends Guarantee {
 		// remove when class is correctly evaluated in contract
 	}
 
-	static Guarantee createReaction(final String line) {
+	static Guarantee createReaction(final String line) throws ReactionExeption {
 
 		final String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectGuarantee(parts)) {
