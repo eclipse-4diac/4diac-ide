@@ -18,6 +18,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
+import java.util.function.Consumer;
+
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -31,6 +33,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -51,7 +54,15 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.ILayerListener;
+import org.eclipse.nebula.widgets.nattable.layer.event.ILayerEvent;
+import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
+import org.eclipse.nebula.widgets.nattable.selection.command.ClearAllSelectionsCommand;
+import org.eclipse.nebula.widgets.nattable.selection.event.CellSelectionEvent;
+import org.eclipse.nebula.widgets.nattable.selection.event.RowSelectionEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -83,6 +94,12 @@ public class StructViewingComposite extends Composite
 
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(parent, widgetFactory);
+		parent.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(final MouseEvent e) {
+				natTable.doCommand(new ClearAllSelectionsCommand());
+			}
+		});
 
 		createNatTable(parent);
 
@@ -112,6 +129,34 @@ public class StructViewingComposite extends Composite
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
 		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(structMemberProvider));
 		natTable.configure();
+	}
+
+	public void setRowSelectionAction(final Consumer<ConfigurableObject> action) {
+		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
+		if (selectionLayer != null && !selectionLayer.hasLayerListener(RowSelectionListener.class)) {
+			selectionLayer.addLayerListener(new RowSelectionListener(action));
+		}
+	}
+
+	private class RowSelectionListener implements ILayerListener {
+		private final Consumer<ConfigurableObject> action;
+
+		public RowSelectionListener(final Consumer<ConfigurableObject> action) {
+			this.action = action;
+		}
+
+		@Override
+		public void handleLayerEvent(final ILayerEvent event) {
+			if ((event instanceof final CellSelectionEvent cellSelectionEvent) && natTable.isFocusControl()
+					&& (cellSelectionEvent.getRowPosition() == -1 && cellSelectionEvent.getColumnPosition() == -1)) {
+				action.accept(getType()); // selection cleared -> change attributes to structType
+			} else if (event instanceof final RowSelectionEvent rowSelectionEvent
+					&& NatTableWidgetFactory.getSelectionLayer(natTable).getSelectedRowCount() == 1) {
+				final int row = rowSelectionEvent.getRowPositionToMoveIntoViewport();
+				final VarDeclaration varDecl = structMemberProvider.getRowObject(row);
+				action.accept(varDecl); // row selected -> change attributes to varDecl of row
+			}
+		}
 	}
 
 	private DataType getDataType() {
@@ -212,8 +257,8 @@ public class StructViewingComposite extends Composite
 
 	@Override
 	public void removeEntry(final Object entry, final CompoundCommand cmd) {
-		if (entry instanceof VarDeclaration) {
-			cmd.add(new DeleteMemberVariableCommand(getType(), (VarDeclaration) entry));
+		if (entry instanceof final VarDeclaration varDecl) {
+			cmd.add(new DeleteMemberVariableCommand(getType(), varDecl));
 		}
 	}
 }

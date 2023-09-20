@@ -236,7 +236,10 @@ public final class NatTableWidgetFactory {
 	}
 
 	public static SelectionLayer getSelectionLayer(final NatTable table) {
-		final ILayer viewportLayer = table.getLayer().getUnderlyingLayerByPosition(1, 1);
+		ILayer viewportLayer = null;
+		if (table.getLayer() instanceof final GridLayer gridLayer) {
+			viewportLayer = gridLayer.getBodyLayer();
+		}
 
 		if (viewportLayer != null) {
 			return (SelectionLayer) viewportLayer.getUnderlyingLayerByPosition(0, 0);

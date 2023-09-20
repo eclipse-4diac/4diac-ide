@@ -18,11 +18,22 @@ import org.eclipse.fordiac.ide.gef.properties.AttributeSection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 
 public class StructAttributeSection extends AttributeSection {
+
+	@Override
+	protected void setType(final Object input) {
+		super.setType(input);
+		refresh(); // refresh to update input of viewer
+	}
+
 	@Override
 	protected ConfigurableObject getInputType(final Object input) {
-		if ((input instanceof final StructViewingComposite structViewingComposite)
-				&& (structViewingComposite.getStruct() instanceof final ConfigurableObject configObj)) {
-			return configObj;
+		if (input instanceof final ConfigurableObject configurableObject) {
+			return configurableObject;
+		}
+
+		if (input instanceof final StructViewingComposite structViewingComposite) {
+			structViewingComposite.setRowSelectionAction(this::setType);
+			return structViewingComposite.getStruct();
 		}
 		return null;
 	}
