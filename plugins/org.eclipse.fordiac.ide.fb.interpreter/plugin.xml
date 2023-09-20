@@ -84,7 +84,7 @@
        </command>
        <command
             commandId="org.eclipse.fordiac.ide.fb.interpreter.createMonitorFB"
-            label="Create monitor FB for Test Specification"
+            label="Create Composite monitor FB for Test Specification"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">
