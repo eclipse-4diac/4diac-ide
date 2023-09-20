@@ -35,12 +35,18 @@ public class Interval extends AbstractTime {
 	}
 
 	public Interval calculateOverlap(final Interval other) {
+		if (other == null) {
+			return null;
+		}
 		final int min = Math.max(other.getMinTime(), this.getMinTime());
 		final int max = Math.min(other.getMaxTime(), this.getMaxTime());
 		return new Interval(min, max);
 	}
 
 	public Interval merge(final Interval other) {
+		if (other == null) {
+			return null;
+		}
 		if (hasNoOverlap(other)) {
 			return new Interval(0, -1);
 		}
@@ -59,7 +65,7 @@ public class Interval extends AbstractTime {
 	}
 
 	private Interval add(final Instant other) {
-		return new Interval(this.getMinTime() + other.getTime(), this.getMaxTime() + other.getTime());
+		return new Interval(this.getMinTime() + other.getMin(), this.getMaxTime() + other.getMin());
 	}
 
 	@Override
@@ -71,5 +77,20 @@ public class Interval extends AbstractTime {
 			return this.add(otherInterval);
 		}
 		return null;
+	}
+
+	@Override
+	public int getMin() {
+		return minTime;
+	}
+
+	@Override
+	public int getMax() {
+		return maxTime;
+	}
+
+	@Override
+	public AbstractTime getCopy() {
+		return new Interval(minTime, maxTime);
 	}
 }

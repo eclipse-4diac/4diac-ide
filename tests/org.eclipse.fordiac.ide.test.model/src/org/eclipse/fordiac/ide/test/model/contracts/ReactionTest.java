@@ -11,39 +11,37 @@
  *   Paul Pavlicek
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.contracts.tests;
+package org.eclipse.fordiac.ide.test.model.contracts;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.eclipse.fordiac.ide.contracts.model.Contract;
 import org.eclipse.fordiac.ide.contracts.model.Guarantee;
-import org.junit.Test;
 
-public class ReactionTest {
+class ReactionTest {
 	private static final int MAX = 9;
 	private static final int MIN = 7;
 
 	@SuppressWarnings("static-method")
-	@Test
-	public void test() {	// Test runs if Reaction constructor throws Exception gets //
+	void test() {	// Test runs if Reaction constructor throws Exception gets //
 		// Time and Event extraction and String reproduction test start
 		Contract contract = Contract.getContractFromComment("GUARANTEE Reaction (CD,CDO) within [7,9]ms"); //$NON-NLS-1$
 		Guarantee toTest = contract.getGuarantees().get(0);
-		assertTrue(toTest.getMin() == MIN);
-		assertTrue(toTest.getMax() == MAX);
-		assertTrue("CD".equals(toTest.getInputEvent())); //$NON-NLS-1$
-		assertTrue("CDO".equals(toTest.getOutputEvent())); //$NON-NLS-1$
-		assertTrue(("GUARANTEE Reaction (CD,CDO) within [7,9]ms" + System.lineSeparator()) //$NON-NLS-1$
-				.equals(toTest.asString()));
+		assertEquals(MIN, toTest.getMin());
+		assertEquals(MAX, toTest.getMax());
+		assertEquals("CD", toTest.getInputEvent()); //$NON-NLS-1$
+		assertEquals("CDO", toTest.getOutputEvent()); //$NON-NLS-1$
+		assertEquals(("GUARANTEE Reaction (CD,CDO) within [7,9]ms" + System.lineSeparator()) //$NON-NLS-1$
+				, toTest.asString());
 
 		contract = Contract.getContractFromComment("GUARANTEE Reaction (CD,CDO) within 9ms"); //$NON-NLS-1$
 		toTest = contract.getGuarantees().get(0);
-		assertTrue(toTest.getMin() == 0);
-		assertTrue(toTest.getMax() == MAX);
-		assertTrue("CD".equals(toTest.getInputEvent())); //$NON-NLS-1$
-		assertTrue("CDO".equals(toTest.getOutputEvent())); //$NON-NLS-1$
-		assertTrue(("GUARANTEE Reaction (CD,CDO) within 9ms" + System.lineSeparator()) //$NON-NLS-1$
-				.equals(toTest.asString()));
+		assertEquals(0, toTest.getMin());
+		assertEquals(MAX, toTest.getMax());
+		assertEquals("CD", toTest.getInputEvent()); //$NON-NLS-1$
+		assertEquals("CDO", toTest.getOutputEvent()); //$NON-NLS-1$
+		assertEquals(("GUARANTEE Reaction (CD,CDO) within 9ms" + System.lineSeparator()) //$NON-NLS-1$
+				, toTest.asString());
 		// end Time and Event extraction and String reproduction test
 	}
 

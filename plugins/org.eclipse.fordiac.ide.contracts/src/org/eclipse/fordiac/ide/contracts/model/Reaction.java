@@ -29,7 +29,7 @@ public class Reaction extends Guarantee {
 
 	Reaction() {
 		throw new UnsupportedOperationException("Reaction not Implemented"); //$NON-NLS-1$
-		// remove when class is correctly evaluated in contract
+		// TODO remove when class is correctly evaluated in contract
 	}
 
 	static Guarantee createReaction(final String line) throws ReactionExeption {

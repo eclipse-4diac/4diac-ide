@@ -38,7 +38,7 @@ public class GuaranteeTwoEvents extends Guarantee {
 
 	GuaranteeTwoEvents() {
 		throw new UnsupportedOperationException("GuaranteeTwoEvents not Implemented"); //$NON-NLS-1$
-		// remove when class is correctly evaluated in contract
+		// TODO remove when class is correctly evaluated in contract
 	}
 
 	public String getSecondOutputEvent() {

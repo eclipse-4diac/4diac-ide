@@ -38,7 +38,7 @@ public class AssumptionWithOffset extends Assumption {
 
 	AssumptionWithOffset() {
 		throw new UnsupportedOperationException("AssumptionWithOffset not Implemented"); //$NON-NLS-1$
-		// remove when class is correctly evaluated in contracts
+		// TODO remove when class is correctly evaluated in contracts
 	}
 
 	AbstractTime getOffSet() {
@@ -103,7 +103,7 @@ public class AssumptionWithOffset extends Assumption {
 
 	public int getMinOffset() {
 		if (getOffSet() instanceof final Instant instant) {
-			return instant.getTime();
+			return instant.getMin();
 		}
 		if (getOffSet() instanceof final Interval interval) {
 			return interval.getMinTime();
@@ -113,7 +113,7 @@ public class AssumptionWithOffset extends Assumption {
 
 	public int getMaxOffset() {
 		if (getOffSet() instanceof final Instant instant) {
-			return instant.getTime();
+			return instant.getMin();
 		}
 		if (getOffSet() instanceof final Interval interval) {
 			return interval.getMaxTime();
@@ -259,11 +259,11 @@ public class AssumptionWithOffset extends Assumption {
 		final List<AbstractTime> timestamps = new ArrayList<>();
 		final AbstractTime toAdd = getFirstTime();
 		if (toAdd instanceof Instant instant) {
-			while (instant.getTime() <= range.getMaxTime()) {
-				if (instant.getTime() >= range.getMinTime()) {
+			while (instant.getMin() <= range.getMaxTime()) {
+				if (instant.getMin() >= range.getMinTime()) {
 					timestamps.add(instant);
 				}
-				instant = new Instant(instant.getTime() + getMin());
+				instant = new Instant(instant.getMin() + getMin());
 			}
 		} else {
 			Interval interval = (Interval) toAdd;

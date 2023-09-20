@@ -83,10 +83,10 @@ public abstract class ContractElement {
 	List<AbstractTime> getOccurrences(final int number) {
 		final List<AbstractTime> timestamps = new ArrayList<>();
 		final AbstractTime timeOccurrenc = getBounds();
-		AbstractTime toAdd = timeOccurrenc;
+		AbstractTime toAdd = timeOccurrenc.getCopy();
 		int count = 0;
 		while (count < number) {
-			timestamps.add(toAdd);
+			timestamps.add(toAdd.getCopy());
 			toAdd = toAdd.add(timeOccurrenc);
 			count++;
 		}

@@ -14,28 +14,13 @@
 package org.eclipse.fordiac.ide.contracts.model;
 
 public abstract class AbstractTime {
-	// only used to extend from
 
 	public abstract AbstractTime add(final AbstractTime other);
 
-	public int getMin() {
-		if (this instanceof final Instant instant) {
-			return instant.getTime();
-		}
-		if (this instanceof final Interval interval) {
-			return interval.getMinTime();
-		}
-		return Integer.MIN_VALUE;
-	}
+	public abstract int getMin();
 
-	public int getMax() {
-		if (this instanceof final Instant instant) {
-			return instant.getTime();
-		}
-		if (this instanceof final Interval interval) {
-			return interval.getMaxTime();
-		}
-		return Integer.MIN_VALUE;
-	}
+	public abstract int getMax();
+
+	public abstract AbstractTime getCopy();
 
 }

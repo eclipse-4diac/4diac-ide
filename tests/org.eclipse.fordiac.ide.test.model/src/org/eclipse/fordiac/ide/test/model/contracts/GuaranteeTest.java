@@ -11,43 +11,43 @@
  *   Paul Pavlicek
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.contracts.tests;
+package org.eclipse.fordiac.ide.test.model.contracts;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.eclipse.fordiac.ide.contracts.model.Contract;
 import org.eclipse.fordiac.ide.contracts.model.Guarantee;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class GuaranteeTest {
+class GuaranteeTest {
 
 	private static final int MAX = 100;
 	private static final int MIN = 7;
 
 	@SuppressWarnings("static-method")
 	@Test
-	public void test() {
+	void test() {
 		// Time and Event extraction and String reproduction test start
 		Contract contract = Contract
 				.getContractFromComment("GUARANTEE Whenever event CU occurs, then event CUO occurs within [7,100]ms"); //$NON-NLS-1$
 		Guarantee toTest = contract.getGuarantees().get(0);
-		assertTrue(toTest.getMin() == MIN);
-		assertTrue(toTest.getMax() == MAX);
-		assertTrue("CU".equals(toTest.getInputEvent())); //$NON-NLS-1$
-		assertTrue("CUO".equals(toTest.getOutputEvent())); //$NON-NLS-1$
-		assertTrue(
+		assertEquals(MIN, toTest.getMin());
+		assertEquals(MAX, toTest.getMax());
+		assertEquals("CU", toTest.getInputEvent()); //$NON-NLS-1$
+		assertEquals("CUO", toTest.getOutputEvent()); //$NON-NLS-1$
+		assertEquals(
 				("GUARANTEE Whenever event CU occurs, then event CUO occurs within [7,100]ms" + System.lineSeparator()) //$NON-NLS-1$
-						.equals(toTest.asString()));
+				, toTest.asString());
 
 		contract = Contract
 				.getContractFromComment("GUARANTEE Whenever event CU occurs, then event CUO occurs within 100ms"); //$NON-NLS-1$
 		toTest = contract.getGuarantees().get(0);
-		assertTrue(toTest.getMin() == 0);
-		assertTrue(toTest.getMax() == MAX);
-		assertTrue("CU".equals(toTest.getInputEvent())); //$NON-NLS-1$
-		assertTrue("CUO".equals(toTest.getOutputEvent())); //$NON-NLS-1$
-		assertTrue(("GUARANTEE Whenever event CU occurs, then event CUO occurs within 100ms" + System.lineSeparator()) //$NON-NLS-1$
-				.equals(toTest.asString()));
+		assertEquals(0, toTest.getMin());
+		assertEquals(MAX, toTest.getMax());
+		assertEquals("CU", toTest.getInputEvent()); //$NON-NLS-1$
+		assertEquals("CUO", toTest.getOutputEvent()); //$NON-NLS-1$
+		assertEquals(("GUARANTEE Whenever event CU occurs, then event CUO occurs within 100ms" + System.lineSeparator()) //$NON-NLS-1$
+				, toTest.asString());
 		// end Time and Event extraction and String reproduction test
 	}
 
