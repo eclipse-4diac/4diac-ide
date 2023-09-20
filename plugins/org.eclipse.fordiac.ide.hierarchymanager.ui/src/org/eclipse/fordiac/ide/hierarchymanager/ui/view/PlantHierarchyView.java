@@ -75,6 +75,15 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 	}
 
 	@Override
+	protected void setPartName(final String partName) {
+		if (currentProject != null) {
+			super.setPartName(partName + ": " + currentProject.getName()); //$NON-NLS-1$
+		} else {
+			super.setPartName(partName);
+		}
+	}
+
+	@Override
 	public boolean show(final ShowInContext context) {
 		if (context == null) {
 			return false;
@@ -105,7 +114,8 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 			if (projectName != null) {
 				final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 				if (project != null && project.exists() && project.isOpen()) {
-					// we can not use setInput here as getInitialInput is interacting with the viewer in the base class
+					// we can not use setInput here as getInitialInput is interacting with the
+					// viewer in the base class
 					currentProject = project;
 					return loadHierachyForProject(currentProject);
 				}
@@ -136,6 +146,7 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 			// the new project is different set
 			currentProject = proj;
 			getCommonViewer().setInput(loadHierachyForProject(proj));
+			setPartName(getConfigurationElement().getAttribute("name")); //$NON-NLS-1$
 		}
 	}
 
@@ -167,7 +178,8 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 			// try to create a new file
 			return createNewHierarchyFile(file, uri);
 		}
-		// we don't want to load the resource content as we can not give the mapping options
+		// we don't want to load the resource content as we can not give the mapping
+		// options
 		Resource resource = hierarchyResouceSet.getResource(uri, true);
 		try {
 			if (resource == null) {
