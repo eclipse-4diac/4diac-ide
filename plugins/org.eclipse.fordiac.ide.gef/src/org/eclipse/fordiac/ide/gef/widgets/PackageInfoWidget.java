@@ -71,11 +71,11 @@ public class PackageInfoWidget extends TypeInfoWidget {
 	private void createPackageInfoGroup(final Composite parent) {
 		final Group packageGroup = createGroup(parent, FordiacMessages.Package);
 		packageGroup.setLayout(new GridLayout(1, false));
-		packageGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		packageGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		composite = getWidgetFactory().createComposite(packageGroup, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		getWidgetFactory().createLabel(composite, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupText(composite, true);
 		nameText.addModifyListener(e -> {
@@ -90,7 +90,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 
 		final Composite compositeBottom = getWidgetFactory().createComposite(packageGroup);
 		compositeBottom.setLayout(new GridLayout(2, false));
-		compositeBottom.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		compositeBottom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		buttons = new AddDeleteWidget();
 		buttons.createControls(compositeBottom, getWidgetFactory());
@@ -113,8 +113,9 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
 		column1.setText(FordiacMessages.Name);
 
-		final TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout(true);
 		layout.addColumnData(new ColumnWeightData(25, 200));
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		table.setLayout(layout);
 	}
 

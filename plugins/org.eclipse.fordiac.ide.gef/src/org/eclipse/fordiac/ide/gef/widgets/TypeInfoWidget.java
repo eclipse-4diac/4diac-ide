@@ -174,7 +174,7 @@ public class TypeInfoWidget implements CommandExecutor {
 	private void createVersionInfoGroup(final Composite parent) {
 		final Group versionInfoGroup = createGroup(parent, FordiacMessages.VersionInfo);
 		versionInfoGroup.setLayout(new GridLayout(2, false));
-		versionInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		versionInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		addDeleteVersionInfoButtons = new AddDeleteWidget();
 		addDeleteVersionInfoButtons.createControls(versionInfoGroup, getWidgetFactory());
@@ -240,7 +240,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		column4.setText(FordiacMessages.Date);
 		final TableColumn column5 = new TableColumn(table, SWT.LEFT);
 		column5.setText(FordiacMessages.Remarks);
-		final TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout(true);
 		layout.addColumnData(new ColumnWeightData(D_MIN, MAX_MINUS_T_MIN));
 		layout.addColumnData(new ColumnWeightData(D_MIN, MAX_MINUS_MIN));
 		layout.addColumnData(new ColumnWeightData(D_MIN, MAX_MINUS_MIN));
