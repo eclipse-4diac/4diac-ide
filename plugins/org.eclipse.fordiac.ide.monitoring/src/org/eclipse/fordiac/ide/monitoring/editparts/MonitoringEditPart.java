@@ -133,12 +133,10 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	private void showPinValues(final boolean show) {
 		if (getModel().getCurrentValue() != null && !"".equals(getModel().getCurrentValue())) { //$NON-NLS-1$
 			final IInterfaceElement ie = getInterfaceElement();
-			if (ie instanceof VarDeclaration) {
-				final VarDeclaration varDec = (VarDeclaration) ie;
+			if (ie instanceof final VarDeclaration varDec) {
 				if (null != getViewer()) {
 					final Object obj = getViewer().getEditPartRegistry().get(varDec.getValue());
-					if (obj instanceof ValueEditPart) {
-						final ValueEditPart valueEP = (ValueEditPart) obj;
+					if (obj instanceof final ValueEditPart valueEP) {
 						valueEP.setVisible(show);
 					}
 				}
@@ -248,7 +246,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 			return new MonitoringValueDirectEditManager(this,
 					isStruct() ? new StructFigureCellEditorLocator(getFigure())
 							: new FigureCellEditorLocator(getFigure()),
-							(VarDeclaration) interfaceElement, getModel());
+					(VarDeclaration) interfaceElement, getModel());
 		}
 		return super.createDirectEditManager();
 	}
@@ -268,8 +266,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 			if (isVariable()) {
 				final VarDeclaration varDeclaration = (VarDeclaration) getInterfaceElement();
 				final DataType type = varDeclaration.getType();
-				final String value = WatchValueTreeNodeUtils.decorateCellValue(type, input);
-				figure.setText(WatchValueTreeNodeUtils.decorateHexValue(value, type, getModel()));
+				figure.setText(WatchValueTreeNodeUtils.decorateHexValue(input, type, getModel()));
 			} else {
 				figure.setText(input);
 			}

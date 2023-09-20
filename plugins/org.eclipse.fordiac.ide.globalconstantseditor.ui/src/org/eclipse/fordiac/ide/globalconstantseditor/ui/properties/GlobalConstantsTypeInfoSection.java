@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.globalconstantseditor.ui.properties;
 
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
 import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocument;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsEditor;
@@ -70,7 +71,7 @@ public class GlobalConstantsTypeInfoSection extends AbstractSection {
 	}
 
 	private void createTypeInfoGroup(final Composite parent) {
-		typeInfoWidget = new TypeInfoWidget(getWidgetFactory());
+		typeInfoWidget = new PackageInfoWidget(getWidgetFactory());
 		typeInfoWidget.createControls(parent);
 	}
 

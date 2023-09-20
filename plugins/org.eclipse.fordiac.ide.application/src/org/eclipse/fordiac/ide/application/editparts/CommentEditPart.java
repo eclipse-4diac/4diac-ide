@@ -53,13 +53,15 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
 public class CommentEditPart extends AbstractPositionableElementEditPart {
 
+	private static final int DOG_EAR_SIZE = 9;
+
 	public static final class StickyNoteCommentFigure extends Figure {
 
-		final InstanceCommentFigure comment;
+		private static final Color STICKY_NOTE_YELLOW = new Color(255, 255, 210);
+		private final InstanceCommentFigure comment;
 
 		public StickyNoteCommentFigure() {
 			setupFigure();
@@ -80,6 +82,7 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 
 		private void setupRootLayout() {
 			final GridLayout mainLayout = new GridLayout(1, true);
+			mainLayout.marginHeight = 0;
 			mainLayout.verticalSpacing = 0;
 			mainLayout.horizontalSpacing = 0;
 			setLayoutManager(mainLayout);
@@ -91,12 +94,14 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 
 		@Override
 		public void paintFigure(final Graphics g) {
-			setBackgroundColor(new Color(Display.getCurrent(), 255, 255, 210));
+			if (getLocalBackgroundColor() != STICKY_NOTE_YELLOW) {
+				setBackgroundColor(STICKY_NOTE_YELLOW);
+			}
 			final Rectangle r = getBounds();
 			final PointList pl = new PointList(5);
 			pl.addPoint(r.getTopLeft());
-			pl.addPoint(r.getTopRight().translate(-6, 0));
-			pl.addPoint(r.getTopRight().translate(0, 6));
+			pl.addPoint(r.getTopRight().translate(-DOG_EAR_SIZE, 0));
+			pl.addPoint(r.getTopRight().translate(0, DOG_EAR_SIZE));
 			pl.addPoint(r.getBottomRight());
 			pl.addPoint(r.getBottomLeft());
 			g.fillPolygon(pl);
@@ -105,31 +110,28 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 	}
 
 	public static class DogEar extends AbstractBorder {
-		private static final Insets INSETS = new Insets(3, 3, 3, 3);
+		private static final Insets INSETS = new Insets(2, 3, 1, 3);
 
-		/**
-		 * @see org.eclipse.draw2d.Border#getInsets(org.eclipse.draw2d.IFigure)
-		 */
+		/** @see org.eclipse.draw2d.Border#getInsets(org.eclipse.draw2d.IFigure) */
 		@Override
 		public Insets getInsets(final IFigure figure) {
 			return INSETS;
 		}
 
-		/**
-		 * @see org.eclipse.draw2d.Border#paint(org.eclipse.draw2d.IFigure,
-		 *      org.eclipse.draw2d.Graphics, org.eclipse.draw2d.geometry.Insets)
-		 */
+		/** @see org.eclipse.draw2d.Border#paint(org.eclipse.draw2d.IFigure, org.eclipse.draw2d.Graphics,
+		 *      org.eclipse.draw2d.geometry.Insets) */
 		@Override
 		public void paint(final IFigure figure, final Graphics g, final Insets insets) {
 			final Rectangle r = getPaintRectangle(figure, insets);
 			r.resize(-1, -1);
-			final PointList pl = new PointList(new int[] { -10, 10, 0, 10, -10, 0 });
+			final PointList pl = new PointList(
+					new int[] { -DOG_EAR_SIZE, DOG_EAR_SIZE, 0, DOG_EAR_SIZE, -DOG_EAR_SIZE, 0 });
 			pl.translate(r.getTopRight());
 			g.drawPolygon(pl);
-			g.drawLine(r.getTopLeft(), r.getTopRight().translate(-10, 0));
+			g.drawLine(r.getTopLeft(), r.getTopRight().translate(-DOG_EAR_SIZE, 0));
 			g.drawLine(r.getTopLeft(), r.getTopLeft());
 			g.drawLine(r.getBottomLeft(), r.getBottomRight());
-			g.drawLine(r.getTopRight().translate(0, 10), r.getBottomRight());
+			g.drawLine(r.getTopRight().translate(0, DOG_EAR_SIZE), r.getBottomRight());
 			g.drawLine(r.getTopLeft(), r.getBottomLeft());
 
 		}

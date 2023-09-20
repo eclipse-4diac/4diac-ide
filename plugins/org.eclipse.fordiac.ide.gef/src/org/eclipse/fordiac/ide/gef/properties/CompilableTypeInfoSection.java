@@ -160,11 +160,11 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	private void createCompilerInfoGroup(final Composite parent) {
 		final Group compilerInfoGroup = getWidgetFactory().createGroup(parent, FordiacMessages.CompilerInfo);
 		compilerInfoGroup.setLayout(new GridLayout(1, false));
-		compilerInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		compilerInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		final Composite compositeBottom = getWidgetFactory().createComposite(compilerInfoGroup);
 		compositeBottom.setLayout(new GridLayout(2, false));
-		compositeBottom.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		compositeBottom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		final AddDeleteWidget buttons = new AddDeleteWidget();
 		buttons.createControls(compositeBottom, getWidgetFactory());
@@ -195,11 +195,12 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		column3.setText(FordiacMessages.Product);
 		final TableColumn column4 = new TableColumn(table, SWT.LEFT);
 		column4.setText(FordiacMessages.Version);
-		final TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout(true);
 		layout.addColumnData(new ColumnWeightData(25, 80));
 		layout.addColumnData(new ColumnWeightData(25, 100));
 		layout.addColumnData(new ColumnWeightData(25, 100));
 		layout.addColumnData(new ColumnWeightData(25, 80));
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		table.setLayout(layout);
 	}
 
