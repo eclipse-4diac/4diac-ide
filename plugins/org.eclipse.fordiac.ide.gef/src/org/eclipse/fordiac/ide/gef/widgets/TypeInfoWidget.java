@@ -86,7 +86,7 @@ public class TypeInfoWidget implements CommandExecutor {
 	private Text typeText;
 	private Text descriptionText;
 
-	private boolean blockListeners;
+	protected boolean blockListeners;
 
 	private TableViewer versionViewer;
 	private AddDeleteWidget addDeleteVersionInfoButtons;
