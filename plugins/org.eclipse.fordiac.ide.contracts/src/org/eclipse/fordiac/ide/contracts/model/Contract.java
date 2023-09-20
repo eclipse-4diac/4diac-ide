@@ -300,12 +300,8 @@ public class Contract {
 			if (contractElements.get(i).getMax() == -1) {
 				return isSingleAssumption(contractElements, i);
 			}
-			if (minimum < contractElements.get(i).getMin()) {
-				minimum = contractElements.get(i).getMin();
-			}
-			if (maximum > contractElements.get(i).getMax()) {
-				maximum = contractElements.get(i).getMax();
-			}
+			minimum = Math.max(minimum, contractElements.get(i).getMin());
+			maximum = Math.min(maximum, contractElements.get(i).getMax());
 			if (maximum < minimum) {
 				return false;
 			}
@@ -349,17 +345,15 @@ public class Contract {
 	private static void simplifyGuarantee(final int minimum, final int maximum, final Contract contract,
 			final Guarantee toRemove) {
 		contract.getGuarantees().removeIf(g -> (g.getInputEvent().equals(toRemove.getInputEvent())));
-		final Guarantee toAdd = new Guarantee();
-		toAdd.setInputEvent(toRemove.getInputEvent());
-		toAdd.setOutputEvent(toRemove.getOutputEvent());
-		toAdd.setTime(new Interval(minimum, maximum));
+		final Guarantee toAdd = new Guarantee(toRemove.getInputEvent(), toRemove.getOutputEvent(),
+				new Interval(minimum, maximum));
 		contract.add(toAdd, contract);
 	}
 
 	private static void simplifyAssumption(final int minimum, final int maximum, final Contract contract,
 			final Assumption toRemove) {
 		contract.getAssumptions().removeIf(a -> (a.getInputEvent().equals(toRemove.getInputEvent())));
-		final Assumption toAdd = new Assumption();
+		final Assumption toAdd = new Assumption(toRemove.getInputEvent(), new Interval(minimum, maximum));
 		toAdd.setInputEvent(toRemove.getInputEvent());
 		toAdd.setTime(new Interval(minimum, maximum));
 		contract.add(toAdd, contract);

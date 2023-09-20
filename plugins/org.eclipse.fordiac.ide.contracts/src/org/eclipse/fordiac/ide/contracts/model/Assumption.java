@@ -31,6 +31,14 @@ public class Assumption extends ContractElement {
 	private static final int ASSUMPTION_LENGTH = 5;
 	private static final int POSITION_NO = 4;
 
+	Assumption() {
+		// reduced visibility
+	}
+
+	Assumption(final String inputEvent, final Interval interval) {
+		super(inputEvent, interval);
+	}
+
 	static Assumption createAssumption(final String line) throws AssumptionExeption, AssumptionWithOffsetExeption {
 		if (line.contains(ContractKeywords.OFFSET)) {
 			return AssumptionWithOffset.createAssumptionWithOffset(line);

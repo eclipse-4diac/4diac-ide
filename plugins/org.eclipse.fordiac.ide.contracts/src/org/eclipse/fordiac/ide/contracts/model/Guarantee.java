@@ -48,6 +48,12 @@ public class Guarantee extends ContractElement {
 	private String outputEvent;
 
 	Guarantee() {
+		// reduced visibility
+	}
+
+	public Guarantee(final String inputEvent, final String outputEvent, final AbstractTime time) {
+		super(inputEvent, time);
+		this.outputEvent = outputEvent;
 
 	}
 

@@ -20,9 +20,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public abstract class ContractElement {
 
-	AbstractTime time;
+	private AbstractTime time;
 	private String inputEvent;
 	private Contract owner;
+
+	ContractElement() {
+		// reduced visibility
+	}
+
+	ContractElement(final String inputEvent, final AbstractTime time) {
+		this.inputEvent = inputEvent;
+		this.time = time;
+	}
 
 	AbstractTime getTime() {
 		return time;
