@@ -77,7 +77,11 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false));
 		getWidgetFactory().createLabel(composite, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupText(composite, true);
-		nameText.addModifyListener(e -> executeCommand(new ChangePackageNameCommand(getType(), nameText.getText())));
+		nameText.addModifyListener(e -> {
+			if (!blockListeners) {
+				executeCommand(new ChangePackageNameCommand(getType(), nameText.getText()));
+			}
+		});
 
 		final Label importsLabel = new Label(packageGroup, SWT.NONE);
 		importsLabel.setText(FordiacMessages.Imports + ":"); //$NON-NLS-1$
