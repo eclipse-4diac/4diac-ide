@@ -162,7 +162,7 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 			}
 
 			if (!possibleInterfaceLists.isEmpty()) {
-				if (connection instanceof final DataConnection) {
+				if (connection instanceof DataConnection) {
 					return getVarDeclarationsFromInterfaceLists(possibleInterfaceLists, ie.isIsInput());
 				}
 				if (connection instanceof EventConnection) {
