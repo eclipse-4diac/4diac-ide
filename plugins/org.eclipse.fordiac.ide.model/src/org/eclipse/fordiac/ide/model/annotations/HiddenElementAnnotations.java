@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.annotations;
 
-import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 
 public final class HiddenElementAnnotations {
@@ -29,7 +29,7 @@ public final class HiddenElementAnnotations {
 	}
 
 	private static void setVisible(final HiddenElement connection, final String visible) {
-		connection.setAttribute(LibraryElementTags.ELEMENT_VISIBLE, FordiacKeywords.STRING, visible, "");  //$NON-NLS-1$
+		connection.setAttribute(LibraryElementTags.ELEMENT_VISIBLE, ElementaryTypes.STRING, visible, ""); //$NON-NLS-1$
 	}
 
 	public static boolean isVisible(final HiddenElement connection) {

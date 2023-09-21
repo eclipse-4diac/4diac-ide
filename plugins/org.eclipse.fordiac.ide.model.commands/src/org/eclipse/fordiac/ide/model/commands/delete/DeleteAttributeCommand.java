@@ -17,11 +17,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.gef.commands.Command;
 
-public class AttributeDeleteCommand extends Command {
+public class DeleteAttributeCommand extends Command {
 	private ConfigurableObject configurableObject;
 	private Attribute attribute;
 
-	public AttributeDeleteCommand(ConfigurableObject configurableObject, Attribute attribute) {
+	public DeleteAttributeCommand(ConfigurableObject configurableObject, Attribute attribute) {
 		this.configurableObject = configurableObject;
 		this.attribute = attribute;
 	}

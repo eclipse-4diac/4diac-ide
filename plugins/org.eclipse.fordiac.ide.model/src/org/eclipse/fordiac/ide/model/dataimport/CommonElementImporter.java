@@ -45,9 +45,11 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
@@ -58,6 +60,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -414,34 +417,37 @@ public abstract class CommonElementImporter {
 		}
 	}
 
-	protected void parseGenericAttributeNode(final ConfigurableObject confObject) throws XMLStreamException {
-		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
-		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
-		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+	protected void parseGenericAttributeNode(final ConfigurableObject confObject)
+			throws XMLStreamException, TypeImportException {
+		final Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
+		readNameCommentAttributes(attribute);
 
-		if (null == value) {
-			// we don't have a value attribute check for a CData value
+		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		final DataType dataType = typeName != null ? getDataTypeLibrary().getType(typeName) : ElementaryTypes.STRING;
+		if (dataType instanceof final ErrorMarkerDataType errorMarkerDataType) {
+			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMarkerDataType.getErrorMessage())
+					.setTarget(attribute));
+		}
+		attribute.setType(dataType);
+
+		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		if (null == value) { // we don't have a value attribute check for a CData value
 			value = readCDataSection();
 		}
+		attribute.setValue(value);
 
-		if ((null != name) && (null != value)) {
-			confObject.setAttribute(name, null == type ? IecTypes.ElementaryTypes.STRING.getName() : type, value,
-					comment);
+		confObject.getAttributes().add(attribute);
+		if (confObject instanceof final StructManipulator structManipulator) {
+			checkStructAttribute(structManipulator, attribute);
 		}
-
-		if (confObject instanceof StructManipulator) {
-			checkStructAttribute((StructManipulator) confObject, name);
-		}
-
 	}
 
-	private void checkStructAttribute(final StructManipulator fb, final String name) {
-		if (LibraryElementTags.STRUCTURED_TYPE_ELEMENT.equals(name)) {
-			final Attribute attr = fb.getAttribute(LibraryElementTags.STRUCTURED_TYPE_ELEMENT); // $NON-NLS-1$
-			final StructuredType structType = getTypeLibrary().getDataTypeLibrary().getStructuredType(attr.getValue());
+	private void checkStructAttribute(final StructManipulator fb, final Attribute attribute) {
+		if (LibraryElementTags.STRUCTURED_TYPE_ELEMENT.equals(attribute.getName())) {
+			final StructuredType structType = getTypeLibrary().getDataTypeLibrary()
+					.getStructuredType(attribute.getValue());
 			fb.setStructTypeElementsAtInterface(structType);
-		} else if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(name)) {
+		} else if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(attribute.getName())) {
 			// reset type to get visible children configured
 			fb.setStructTypeElementsAtInterface(fb.getStructType());
 		}
@@ -607,7 +613,7 @@ public abstract class CommonElementImporter {
 		}));
 	}
 
-	public void handleFBAttributeChild(final FBNetworkElement block) throws XMLStreamException {
+	public void handleFBAttributeChild(final FBNetworkElement block) throws XMLStreamException, TypeImportException {
 		if (isPinCommentAttribute()) {
 			parsePinComment(block);
 		} else if (isPinVisibilityAttribute()) {

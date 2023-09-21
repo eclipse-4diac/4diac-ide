@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
@@ -90,7 +91,7 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	 *
 	 * @generated
 	 */
-	protected MonitoringSwitch<Adapter> modelSwitch = new MonitoringSwitch<Adapter>() {
+	protected MonitoringSwitch<Adapter> modelSwitch = new MonitoringSwitch<>() {
 			@Override
 			public Adapter caseMonitoringElement(MonitoringElement object) {
 				return createMonitoringElementAdapter();
@@ -138,6 +139,10 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseINamedElement(INamedElement object) {
 				return createINamedElementAdapter();
+			}
+			@Override
+			public Adapter caseITypedElement(ITypedElement object) {
+				return createITypedElementAdapter();
 			}
 			@Override
 			public Adapter caseConfigurableObject(ConfigurableObject object) {
@@ -341,6 +346,20 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createINamedElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement <em>ITyped Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
+	 * @generated
+	 */
+	public Adapter createITypedElementAdapter() {
 		return null;
 	}
 

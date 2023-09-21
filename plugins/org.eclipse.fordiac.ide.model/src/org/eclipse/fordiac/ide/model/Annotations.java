@@ -25,7 +25,8 @@ import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.data.BaseType1;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -373,7 +374,7 @@ public final class Annotations {
 	}
 
 	private static void setVarConfig(@NonNull final VarDeclarationImpl varDeclarationImpl, final String config) {
-		varDeclarationImpl.setAttribute(LibraryElementTags.VAR_CONFIG, FordiacKeywords.STRING, config, ""); //$NON-NLS-1$
+		varDeclarationImpl.setAttribute(LibraryElementTags.VAR_CONFIG, ElementaryTypes.STRING, config, ""); //$NON-NLS-1$
 	}
 
 	public static boolean isVarConfig(@NonNull final VarDeclaration vd) {
@@ -383,12 +384,12 @@ public final class Annotations {
 
 	// *** ConfigurableObject ***//
 	public static void setAttribute(@NonNull final ConfigurableObject object, final String attributeName,
-			final String type, final String value, final String comment) {
+			final DataType type, final String value, final String comment) {
 		Attribute attribute = getAttribute(object, attributeName);
 		if (attribute == null) {
 			attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 			attribute.setName(attributeName);
-			attribute.setType(BaseType1.getByName(type));
+			attribute.setType(type);
 			attribute.setValue(value);
 			if (null != comment) {
 				attribute.setComment(comment);

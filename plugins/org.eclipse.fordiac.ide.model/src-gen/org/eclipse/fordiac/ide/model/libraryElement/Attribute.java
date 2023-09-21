@@ -16,6 +16,8 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -27,6 +29,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getAttributeDeclaration <em>Attribute Declaration</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getValue <em>Value</em>}</li>
  * </ul>
  *
@@ -34,7 +37,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface Attribute extends INamedElement, TypedElement {
+public interface Attribute extends ITypedElement {
 	/**
 	 * Returns the value of the '<em><b>Attribute Declaration</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -56,6 +59,28 @@ public interface Attribute extends INamedElement, TypedElement {
 	 * @generated
 	 */
 	void setAttributeDeclaration(AttributeDeclaration value);
+
+	/**
+	 * Returns the value of the '<em><b>Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Type</em>' reference.
+	 * @see #setType(DataType)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAttribute_Type()
+	 * @model transient="true"
+	 * @generated
+	 */
+	DataType getType();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Attribute#getType <em>Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Type</em>' reference.
+	 * @see #getType()
+	 * @generated
+	 */
+	void setType(DataType value);
 
 	/**
 	 * Returns the value of the '<em><b>Value</b></em>' attribute.

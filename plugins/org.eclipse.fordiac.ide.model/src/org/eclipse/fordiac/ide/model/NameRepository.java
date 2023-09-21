@@ -28,9 +28,11 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -92,14 +94,18 @@ public final class NameRepository {
 
 	}
 
-	/** Check and if necessary adapt the given name proposal so that it is a valid name for the given INamedElement
+	/**
+	 * Check and if necessary adapt the given name proposal so that it is a valid
+	 * name for the given INamedElement
 	 *
-	 * This method expects that the element is already correctly inserted in the model and that its eContainer returns
-	 * the correct container. The nameProposal needs to be a valid identifier
+	 * This method expects that the element is already correctly inserted in the
+	 * model and that its eContainer returns the correct container. The nameProposal
+	 * needs to be a valid identifier
 	 *
 	 * @param element      the element for which the name should be created
 	 * @param nameProposal a proposal for a name of the element
-	 * @return a valid unique element name */
+	 * @return a valid unique element name
+	 */
 	public static String createUniqueName(final INamedElement element, final String nameProposal) {
 		if (element instanceof Comment) {
 			return null;
@@ -124,11 +130,14 @@ public final class NameRepository {
 		return getUniqueName(getRefNames(element), retVal);
 	}
 
-	/** Check if the given nameProposal is a valid name for the given named element.
+	/**
+	 * Check if the given nameProposal is a valid name for the given named element.
 	 *
-	 * @param element      the named element for which a new name proposal should be checked
+	 * @param element      the named element for which a new name proposal should be
+	 *                     checked
 	 * @param nameProposal the new name to be checked
-	 * @return true if the nameProposal is a valid new name for the named element */
+	 * @return true if the nameProposal is a valid new name for the named element
+	 */
 	public static boolean isValidName(final INamedElement element, final String nameProposal) {
 		Assert.isNotNull(element.eContainer(),
 				"For a correct operation createuniqueName expects that the model element is already added in its containing model!"); //$NON-NLS-1$
@@ -201,6 +210,9 @@ public final class NameRepository {
 			}
 		} else if (refElement instanceof final ServiceSequence seq) {
 			elementsList = seq.getService().getServiceSequence();
+		} else if (refElement instanceof Attribute
+				&& refElement.eContainer() instanceof final ConfigurableObject configurableObject) {
+			elementsList = configurableObject.getAttributes();
 		} else {
 			throw new IllegalArgumentException(
 					"Reference list for given class not available: " + refElement.getClass().toString()); //$NON-NLS-1$
@@ -210,14 +222,18 @@ public final class NameRepository {
 				.collect(Collectors.toSet());
 	}
 
-	/** Generating a unique name for a name proposal which is definitely not in the list of given existing names
+	/**
+	 * Generating a unique name for a name proposal which is definitely not in the
+	 * list of given existing names
 	 *
-	 * If the proposed name is already found in the list an '_' and a consecutive number is appended to the proposed
-	 * name. The number incremented until a unique name is found.
+	 * If the proposed name is already found in the list an '_' and a consecutive
+	 * number is appended to the proposed name. The number incremented until a
+	 * unique name is found.
 	 *
 	 * @param existingNameList the list of names already existing in the context
 	 * @param nameProposal     a proposal for a name as starting point
-	 * @return a unique name */
+	 * @return a unique name
+	 */
 	private static String getUniqueName(final Set<String> existingNameList, final String nameProposal) {
 		String temp = nameProposal;
 		while (existingNameList.contains(temp)) {
@@ -230,9 +246,11 @@ public final class NameRepository {
 		final String digits = extractDigitsFromEnd(temp);
 		if (!"".equals(digits)) { //$NON-NLS-1$
 			try {
-				// if we are close to the limits of int we need to check if we have an overflow: check the exception
+				// if we are close to the limits of int we need to check if we have an overflow:
+				// check the exception
 				final long newNumber = Integer.parseInt(digits) + 1L;
-				// if the number was fine during conversion we need to check that we did not go over while incrementing
+				// if the number was fine during conversion we need to check that we did not go
+				// over while incrementing
 				if (newNumber > Integer.MAX_VALUE) {
 					return createFallbackProposal(nameProposal);
 				}
@@ -261,11 +279,10 @@ public final class NameRepository {
 		final StringBuilder sb = new StringBuilder();
 		int c = 0;
 		for (int i = data.length() - 1; i > 0 && c <= MAX_LENGTH_INTEGER; i--, c++) {
-			if (data.charAt(i) >= '0' && data.charAt(i) <= '9') {
-				sb.insert(0, data.charAt(i));
-			} else {
+			if ((data.charAt(i) < '0') || (data.charAt(i) > '9')) {
 				break;
 			}
+			sb.insert(0, data.charAt(i));
 		}
 		if (c > MAX_LENGTH_INTEGER) {
 			return ""; //$NON-NLS-1$

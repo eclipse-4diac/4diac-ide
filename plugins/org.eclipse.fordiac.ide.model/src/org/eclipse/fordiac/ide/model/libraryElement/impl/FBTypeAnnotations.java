@@ -13,14 +13,14 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.data.BaseType1;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 final class FBTypeAnnotations {
 
 	static void setDocumentation(final FBType type, final String value) {
-		type.setAttribute(LibraryElementTags.DOCUMENTATION, BaseType1.WSTRING.getName(), value, null);
+		type.setAttribute(LibraryElementTags.DOCUMENTATION, ElementaryTypes.WSTRING, value, null);
 	}
 
 	static String getDocumentation(final FBType type) {

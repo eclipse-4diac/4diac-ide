@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.data.DataType;
 
 /**
  * <!-- begin-user-doc -->
@@ -56,10 +57,10 @@ public interface ConfigurableObject extends EObject {
 	 *  searches for an existing Parameter with the specified parameterName. it is
 	 *  NOT case sensitive! If there is no Parameter available a new one will be created. 
 	 * <!-- end-model-doc -->
-	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String" typeDataType="org.eclipse.emf.ecore.xml.type.String" valueDataType="org.eclipse.emf.ecore.xml.type.String" commentDataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String" valueDataType="org.eclipse.emf.ecore.xml.type.String" commentDataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */
-	void setAttribute(String attributeName, String type, String value, String comment);
+	void setAttribute(String attributeName, DataType type, String value, String comment);
 
 	/**
 	 * <!-- begin-user-doc -->
