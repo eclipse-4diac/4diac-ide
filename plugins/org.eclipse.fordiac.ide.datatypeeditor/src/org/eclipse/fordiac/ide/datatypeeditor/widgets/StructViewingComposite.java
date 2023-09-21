@@ -18,8 +18,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
-import java.util.function.Consumer;
-
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -53,12 +51,10 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.edit.event.DataUpdateEvent;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.ILayerListener;
-import org.eclipse.nebula.widgets.nattable.layer.event.ILayerEvent;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.selection.command.ClearAllSelectionsCommand;
-import org.eclipse.nebula.widgets.nattable.selection.event.CellSelectionEvent;
 import org.eclipse.nebula.widgets.nattable.selection.event.RowSelectionEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
@@ -77,6 +73,9 @@ public class StructViewingComposite extends Composite
 	private final IWorkbenchPart part;
 	private final DataTypeEntry dataTypeEntry;
 	private IChangeableRowDataProvider<VarDeclaration> structMemberProvider;
+
+	private ConfigurableObject currentConfigurableObject = null;
+	private ConfigurablObjectListener configObjectListener = null;
 
 	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack,
 			final DataTypeEntry dataTypeEntry, final IWorkbenchPart part) {
@@ -98,6 +97,7 @@ public class StructViewingComposite extends Composite
 			@Override
 			public void mouseDown(final MouseEvent e) {
 				natTable.doCommand(new ClearAllSelectionsCommand());
+				fireConfigurablObjectChanged(getType());
 			}
 		});
 
@@ -129,33 +129,31 @@ public class StructViewingComposite extends Composite
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
 		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(structMemberProvider));
 		natTable.configure();
-	}
-
-	public void setRowSelectionAction(final Consumer<ConfigurableObject> action) {
 		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
-		if (selectionLayer != null && !selectionLayer.hasLayerListener(RowSelectionListener.class)) {
-			selectionLayer.addLayerListener(new RowSelectionListener(action));
-		}
+		selectionLayer.addLayerListener(event -> {
+			if (event instanceof final DataUpdateEvent dataUpdateEvent && dataUpdateEvent.getColumnPosition() == 0
+					&& currentConfigurableObject instanceof final VarDeclaration varDecl) {
+				fireConfigurablObjectChanged(varDecl);
+			} else if (event instanceof final RowSelectionEvent rowSelectionEvent
+					&& rowSelectionEvent.getSelectionLayer().getSelectedRowCount() == 1) {
+				final int row = rowSelectionEvent.getRowPositionToMoveIntoViewport();
+				fireConfigurablObjectChanged(structMemberProvider.getRowObject(row));
+			}
+		});
 	}
 
-	private class RowSelectionListener implements ILayerListener {
-		private final Consumer<ConfigurableObject> action;
-
-		public RowSelectionListener(final Consumer<ConfigurableObject> action) {
-			this.action = action;
+	public ConfigurableObject setConfigurablObjectListener(final ConfigurablObjectListener listener) {
+		configObjectListener = listener;
+		if (currentConfigurableObject == null) {
+			currentConfigurableObject = getStruct();
 		}
+		return currentConfigurableObject;
+	}
 
-		@Override
-		public void handleLayerEvent(final ILayerEvent event) {
-			if ((event instanceof final CellSelectionEvent cellSelectionEvent) && natTable.isFocusControl()
-					&& (cellSelectionEvent.getRowPosition() == -1 && cellSelectionEvent.getColumnPosition() == -1)) {
-				action.accept(getType()); // selection cleared -> change attributes to structType
-			} else if (event instanceof final RowSelectionEvent rowSelectionEvent
-					&& NatTableWidgetFactory.getSelectionLayer(natTable).getSelectedRowCount() == 1) {
-				final int row = rowSelectionEvent.getRowPositionToMoveIntoViewport();
-				final VarDeclaration varDecl = structMemberProvider.getRowObject(row);
-				action.accept(varDecl); // row selected -> change attributes to varDecl of row
-			}
+	private void fireConfigurablObjectChanged(final ConfigurableObject newObject) {
+		currentConfigurableObject = newObject;
+		if (configObjectListener != null) {
+			configObjectListener.handleObjectChanged(newObject);
 		}
 	}
 
@@ -260,5 +258,9 @@ public class StructViewingComposite extends Composite
 		if (entry instanceof final VarDeclaration varDecl) {
 			cmd.add(new DeleteMemberVariableCommand(getType(), varDecl));
 		}
+	}
+
+	public interface ConfigurablObjectListener {
+		void handleObjectChanged(ConfigurableObject newObject);
 	}
 }
