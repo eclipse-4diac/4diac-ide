@@ -11,9 +11,8 @@
  * Melanie Winter - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
+package org.eclipse.fordiac.ide.fb.interpreter.testcasemodel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
@@ -21,27 +20,25 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
 public class TestState {
-	private ServiceTransaction dataSource;
-	
-	public TestState(ServiceTransaction dataSource) {
+	private final ServiceTransaction dataSource;
+
+	public TestState(final ServiceTransaction dataSource) {
 		if (dataSource == null) {
-			throw new IllegalArgumentException("TestState must not be null.");
+			throw new IllegalArgumentException("TestState must not be null."); //$NON-NLS-1$
 		}
 		this.dataSource = dataSource;
 	}
 
-	public static TestState createTestState(ServiceTransaction serviceTransaction) {
+	public static TestState createTestState(final ServiceTransaction serviceTransaction) {
 
 		return new TestState(serviceTransaction);
 	}
-	
+
 	public InputPrimitive getTestTrigger() {
 		return dataSource.getInputPrimitive();
 	}
-	
+
 	public List<OutputPrimitive> getTestOutputs() {
-		List<OutputPrimitive> list = new ArrayList<>();
-		list.addAll(dataSource.getOutputPrimitive());
-		return list;
+		return dataSource.getOutputPrimitive();
 	}
 }

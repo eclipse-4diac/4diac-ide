@@ -11,157 +11,115 @@
  * Melanie Winter - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
+package org.eclipse.fordiac.ide.fb.interpreter.testappgen;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractCompositeFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
-public class CompositeFBGenerator {
-	private CompositeFBType compositeFB;
+public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 	private final TestSuite testSuite;
-	private final FBType sourceType;
 
 	private FB muxFB;
-	private FB demuxFB;
+	private FB runAllFB;
 	private final List<FBType> blocksToAdd;
 	private final List<FB> toTestFBs = new ArrayList<>();
 	private final List<FB> testFBs = new ArrayList<>();
 	private final List<FB> matchFBs = new ArrayList<>();
 
-	public CompositeFBGenerator(final FBType type, final TestSuite testSuite, final List<FBType> blocksToAdd) {
-		sourceType = type;
+	public CompositeTestFBGenerator(final FBType type, final TestSuite testSuite, final List<FBType> blocksToAdd) {
+		super(type);
 		this.testSuite = testSuite;
 		this.blocksToAdd = blocksToAdd;
 	}
 
 	public CompositeFBType generateCompositeFB() {
-		compositeFB = LibraryElementFactory.eINSTANCE.createCompositeFBType();
-		final Identification id = LibraryElementFactory.eINSTANCE.createIdentification();
-		compositeFB.setIdentification(id);
-		id.setStandard("IEC 61499"); //$NON-NLS-1$
-
-		compositeFB.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		compositeFB.setName(sourceType.getName() + "_COMPOSITE"); //$NON-NLS-1$
-
-		compositeFB.setService(LibraryElementFactory.eINSTANCE.createService());
-
-		final IProject project = sourceType.getTypeLibrary().getProject();
-		final String s = sourceType.getTypeEntry().getFile().getFullPath().toString();
-		final IFolder folder = project.getFolder(s.substring(project.getName().length() + 2, s.lastIndexOf('/')));
-		final IFile destfile = folder.getFile(sourceType.getName() + "_COMPOSITE.fbt"); //$NON-NLS-1$
-
-		final TypeEntry entry = sourceType.getTypeLibrary().createTypeEntry(destfile);
-		entry.setType(compositeFB);
-
-		addFBsToNetwork();
-
-		setValuesForFBs();
-		createEvents();
-		createDataOutputList();
-		createConnections();
-		createWiths();
-
+		createCompositeFB();
 		return compositeFB;
 	}
 
-	private void addFBsToNetwork() {
+	@Override
+	protected void addFBsToNetwork() {
 		final FBNetwork net = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		compositeFB.setFBNetwork(net);
 		// each testCase needs a matchFB, testFB and toTestFB
 		for (int i = 0; i < testSuite.getTestCases().size(); i++) {
 			for (int j = 0; j < blocksToAdd.size(); j++) {
-				// last block in blocksToAdd list is the muxFB which only needs to be added once
-				// so unless the outer loop is in it's last run through, we skip to add the
-				// muxFB
+				// last two blocks in blocksToAdd list are the muxFB and runAllFB which only
+				// needs to be added once so unless the outer loop is in it's last two run
+				// throughs, we don't add the last two in the list
 				if (i < testSuite.getTestCases().size() - 1 && j == blocksToAdd.size() - 2) {
 					break;
 				}
-				final FBNetworkElement el = LibraryElementFactory.eINSTANCE.createFB();
-				el.setTypeEntry(sourceType.getTypeLibrary().getFBTypeEntry(blocksToAdd.get(j).getName()));
 
-				final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+				int x;
+				int y;
+				// different position for muxFB and runAllFB
 				if (i == testSuite.getTestCases().size() - 1
 						&& (j == blocksToAdd.size() - 2 || j == blocksToAdd.size() - 1)) {
-					pos.setX(50 + 300 * j);
-					pos.setY(net.getNetworkElements().get((testSuite.getTestCases().size() * 3) / 2).getPosition()
-							.getY());
+					x = 50 + 400 * j;
+					y = net.getNetworkElements().get((testSuite.getTestCases().size() * 3) / 2).getPosition().getY();
 				} else {
-					pos.setX(50 + 300 * j);
-					pos.setY(50 + 250 * i);
+					x = 50 + 400 * j;
+					y = 50 + 250 * i;
 				}
-				el.setPosition(pos);
-				el.setInterface(EcoreUtil.copy(el.getType().getInterfaceList()));
+				final FB addedBlock = addFBToNetwork(net, blocksToAdd.get(j).getTypeEntry(), x, y);
+				// the actual instance of the added blocks get saved to a list for easier access
+				// when creating connections
+				addBlockToAccordingList(addedBlock, i, j);
 
-				net.getNetworkElements().add(el);
-				final String name = NameRepository.createUniqueName(el, "TESTAPPFB1"); //$NON-NLS-1$
-				el.setName(name);
-
-				addBlockToAccordingList(name, i, j);
 				// add timeOut block to matchFb
 				if (j == 2) {
-					addTimeOutFB(net, pos);
+					addTimeOutFB(net, x, y);
 				}
 			}
 		}
-
 	}
 
-	private void addBlockToAccordingList(final String name, final int i, final int j) {
+	private void addBlockToAccordingList(final FB fb, final int i, final int j) {
 		if (j == 0) {
-			testFBs.add(compositeFB.getFBNetwork().getFBNamed(name));
+			testFBs.add(fb);
 		} else if (j == 1) {
-			toTestFBs.add(compositeFB.getFBNetwork().getFBNamed(name));
+			toTestFBs.add(fb);
 		} else if (j == 2) {
-			matchFBs.add(compositeFB.getFBNetwork().getFBNamed(name));
-
+			matchFBs.add(fb);
 		} else if (i == testSuite.getTestCases().size() - 1 && j == blocksToAdd.size() - 2) {
-			muxFB = compositeFB.getFBNetwork().getFBNamed(name);
+			muxFB = fb;
 		} else if (i == testSuite.getTestCases().size() - 1 && j == blocksToAdd.size() - 1) {
-			demuxFB = compositeFB.getFBNetwork().getFBNamed(name);
+			runAllFB = fb;
 		}
-
 	}
 
-	private void addTimeOutFB(final FBNetwork net, final Position p0) {
+	private void addTimeOutFB(final FBNetwork net, final int x, final int y) {
 		final FBNetworkElement compEl = LibraryElementFactory.eINSTANCE.createCFBInstance();
 
 		final TypeEntry compType = sourceType.getTypeLibrary().getFBTypeEntry("E_TimeOut"); //$NON-NLS-1$
 		compEl.setTypeEntry(compType);
-		final Position p = LibraryElementFactory.eINSTANCE.createPosition();
-		p.setX(p0.getX() + 100);
-		p.setY(p0.getY() + 100);
-		compEl.setPosition(p);
+		addPosition(compEl, x + 200, y + 150);
+
 		compEl.setInterface(EcoreUtil.copy(compEl.getType().getInterfaceList()));
 
 		net.getNetworkElements().add(compEl);
 		final String name = NameRepository.createUniqueName(compEl, "TESTAPPFB1");//$NON-NLS-1$
 		compEl.setName(name);
 
-		// connection
+		// connection between matchFB and timeOut
 		final AdapterConnection a = createAdapterConnection(
 				matchFBs.get(matchFBs.size() - 1).getInterface().getPlugs().get(0),
 				compositeFB.getFBNetwork().getFBNamed(name).getInterface().getSockets().get(0));
@@ -177,79 +135,51 @@ public class CompositeFBGenerator {
 		return con;
 	}
 
-	private void createWiths() {
+	// every event is connected to every datapin
+	@Override
+	protected void createWiths() {
 		for (final Event output : compositeFB.getInterfaceList().getEventOutputs()) {
 			for (final VarDeclaration varD : compositeFB.getInterfaceList().getOutputVars()) {
-				final With w = LibraryElementFactory.eINSTANCE.createWith();
-				w.setVariables(varD);
-				output.getWith().add(w);
+				output.getWith().add(createWith(varD));
 			}
 		}
 	}
 
-	private void createDataOutputList() {
-		final VarDeclaration varDecl = AbstractFBGenerator.createVarDeclaration("TestCaseName", false); //$NON-NLS-1$
-		varDecl.setType(sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.STRING));
-		varDecl.setComment(""); //$NON-NLS-1$
-		compositeFB.getInterfaceList().getOutputVars().add(varDecl);
+	// datapin containing the name of the testCase
+	@Override
+	protected void createData() {
+		compositeFB.getInterfaceList().getOutputVars().add(createVarDeclaration(
+				sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.STRING), "TestCaseName", //$NON-NLS-1$
+				false));
 	}
 
-	private void setValuesForFBs() {
-		// some values might be null, so to be sure every value gets set again
-		for (int i = 0; i < testSuite.getTestCases().size(); i++) {
-			// toTestFB
-			setValue(toTestFBs.get(i).getInterface().getInputVars());
-			setValue(toTestFBs.get(i).getInterface().getOutputVars());
-
-			// testFB
-			setValue(testFBs.get(i).getInterface().getInputVars());
-			setValue(testFBs.get(i).getInterface().getOutputVars());
-
-			// matchFB
-			setValue(matchFBs.get(i).getInterface().getInputVars());
-			setValue(matchFBs.get(i).getInterface().getOutputVars());
-		}
-		// muxFB
-		setValue(muxFB.getInterface().getInputVars());
-		setValue(muxFB.getInterface().getOutputVars());
-	}
-
-	private static void setValue(final EList<VarDeclaration> vars) {
-		for (final VarDeclaration varD : vars) {
-			if (varD.getValue() == null) {
-				varD.setValue(LibraryElementFactory.eINSTANCE.createValue());
-				varD.getValue().setValue(""); //$NON-NLS-1$
-			}
-		}
-	}
-
-	private void createConnections() {
+	@Override
+	protected void createConnections() {
 		for (int i = 0; i < testSuite.getTestCases().size(); i++) {
 			createConnToTestFB(i);
 			createConnToBlockToTest(i);
 			createConnToMatchFB(i);
 			createConnToMuxFB(i);
 		}
-		createConnToDemuxFB();
+		createConnToRunAllFB();
 		createConnToComposite();
 	}
 
-	private void createConnToDemuxFB() {
+	private void createConnToRunAllFB() {
 		// event connections
 		compositeFB.getFBNetwork().getEventConnections()
 				.add(createEventConnection(
 						compositeFB.getInterfaceList().getEventInputs()
 								.get(compositeFB.getInterfaceList().getEventInputs().size() - 1),
-						demuxFB.getInterface().getEventInputs().get(0)));
+						runAllFB.getInterface().getEventInputs().get(0)));
 		compositeFB.getFBNetwork().getEventConnections().add(createEventConnection(
-				muxFB.getInterface().getEventOutputs().get(0), demuxFB.getInterface().getEventInputs().get(1)));
+				muxFB.getInterface().getEventOutputs().get(0), runAllFB.getInterface().getEventInputs().get(1)));
 		compositeFB.getFBNetwork().getEventConnections().add(createEventConnection(
-				muxFB.getInterface().getEventOutputs().get(1), demuxFB.getInterface().getEventInputs().get(1)));
+				muxFB.getInterface().getEventOutputs().get(1), runAllFB.getInterface().getEventInputs().get(1)));
 
 	}
 
 	private void createConnToMuxFB(final int index) {
-
 		// Event Connections
 		compositeFB.getFBNetwork().getEventConnections()
 				.add(createEventConnection(compositeFB.getInterfaceList().getEventInputs().get(index),
@@ -261,10 +191,12 @@ public class CompositeFBGenerator {
 		compositeFB.getFBNetwork().getEventConnections()
 				.add(createEventConnection(matchFBs.get(index).getInterface().getEventOutputs().get(1),
 						muxFB.getInterface().getEventInputs().get(muxFB.getInterface().getEventInputs().size() - 1)));
-		compositeFB.getFBNetwork().getEventConnections().add(createEventConnection(
-				demuxFB.getInterface().getEventOutputs().get(index), muxFB.getInterface().getEventInputs().get(index)));
+		compositeFB.getFBNetwork().getEventConnections()
+				.add(createEventConnection(runAllFB.getInterface().getEventOutputs().get(index),
+						muxFB.getInterface().getEventInputs().get(index)));
 	}
 
+	// create connections to the outputs of the composite
 	private void createConnToComposite() {
 		// Event Connections
 		compositeFB.getFBNetwork().getEventConnections()
@@ -343,35 +275,24 @@ public class CompositeFBGenerator {
 				.add(createEventConnection(compositeFB.getInterfaceList().getEventInputs().get(index),
 						testFBs.get(index).getInterface().getEventInputs().get(index)));
 		compositeFB.getFBNetwork().getEventConnections()
-				.add(createEventConnection(demuxFB.getInterface().getEventOutputs().get(index),
+				.add(createEventConnection(runAllFB.getInterface().getEventOutputs().get(index),
 						testFBs.get(index).getInterface().getEventInputs().get(index)));
 	}
 
-	private static EventConnection createEventConnection(final Event source, final Event dest) {
-		final EventConnection con = LibraryElementFactory.eINSTANCE.createEventConnection();
-		con.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
-		con.setSource(source);
-		con.setDestination(dest);
-		return con;
+	@Override
+	protected void createEvents() {
+		// each testCase needs an input event
+		testSuite.getTestCases().stream().forEach(
+				n -> compositeFB.getInterfaceList().getEventInputs().add(createEvent(n.getName() + "_TEST", true))); //$NON-NLS-1$
+
+		compositeFB.getInterfaceList().getEventInputs().add(createEvent("run_all_TEST", true)); //$NON-NLS-1$
+		compositeFB.getInterfaceList().getEventOutputs().add(createEvent("ERROR", false)); //$NON-NLS-1$
+		compositeFB.getInterfaceList().getEventOutputs().add(createEvent("SUCCESS", false)); //$NON-NLS-1$
 	}
 
-	private static DataConnection createDataConnection(final VarDeclaration source, final VarDeclaration dest) {
-		final DataConnection con = LibraryElementFactory.eINSTANCE.createDataConnection();
-		con.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
-		con.setSource(source);
-		con.setDestination(dest);
-		return con;
-	}
-
-	private void createEvents() {
-		for (final TestCase testCase : testSuite.getTestCases()) {
-			compositeFB.getInterfaceList().getEventInputs()
-					.add(AbstractFBGenerator.createEvent(testCase.getName() + "_TEST", true)); //$NON-NLS-1$
-		}
-		compositeFB.getInterfaceList().getEventInputs().add(AbstractFBGenerator.createEvent("run_all_TEST", true)); //$NON-NLS-1$
-
-		compositeFB.getInterfaceList().getEventOutputs().add(AbstractFBGenerator.createEvent("ERROR", false)); //$NON-NLS-1$
-		compositeFB.getInterfaceList().getEventOutputs().add(AbstractFBGenerator.createEvent("SUCCESS", false)); //$NON-NLS-1$
+	@Override
+	protected String getTypeName() {
+		return sourceType.getName() + "_TEST_COMPOSITE"; //$NON-NLS-1$
 	}
 
 }

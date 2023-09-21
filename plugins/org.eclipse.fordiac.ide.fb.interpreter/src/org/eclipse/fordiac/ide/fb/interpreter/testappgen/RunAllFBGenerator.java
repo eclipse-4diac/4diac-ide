@@ -11,28 +11,32 @@
  * Melanie Winter - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
+package org.eclipse.fordiac.ide.fb.interpreter.testappgen;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractBasicFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class RunAllFBGenerator extends AbstractFBGenerator {
+public class RunAllFBGenerator extends AbstractBasicFBGenerator {
 
 	public RunAllFBGenerator(final FBType type, final TestSuite testSuite) {
 		super(type, testSuite);
 	}
 
-	public FBType generateDemuxFB() {
+	public FBType generateRunAllFB() {
 		createBasicFB();
 		return destinationFB;
 	}
 
+	// run all starts the generation of events that are then sent to the testsignal
+	// and muxFb block, last complete indicates the last test finished
 	@Override
 	protected List<Event> createInputEventList() {
 		final List<Event> list = new ArrayList<>();
@@ -41,20 +45,19 @@ public class RunAllFBGenerator extends AbstractFBGenerator {
 		return list;
 	}
 
+	// event outputs are the same as the event inputs from the testsignal fb
 	@Override
 	protected List<Event> createOutputEventList() {
-		final List<Event> list = new ArrayList<>();
-		for (final TestCase testCase : testSuite.getTestCases()) {
-			list.add(createEvent(testCase.getName() + "_TEST", false)); //$NON-NLS-1$
-		}
-		return list;
+		return testSuite.getTestCases().stream().map(n -> createEvent(n.getName() + "_TEST", false)).toList(); //$NON-NLS-1$
 	}
 
+	// no data pins needed
 	@Override
 	protected List<VarDeclaration> createInputDataList() {
 		return new ArrayList<>();
 	}
 
+	// no data pins needed
 	@Override
 	protected List<VarDeclaration> createOutputDataList() {
 		return new ArrayList<>();
@@ -83,7 +86,7 @@ public class RunAllFBGenerator extends AbstractFBGenerator {
 
 	@Override
 	protected String getTypeName() {
-		return sourceType.getName() + "_DEMUX"; //$NON-NLS-1$
+		return sourceType.getName() + "_RUN_ALL"; //$NON-NLS-1$
 	}
 
 	@Override

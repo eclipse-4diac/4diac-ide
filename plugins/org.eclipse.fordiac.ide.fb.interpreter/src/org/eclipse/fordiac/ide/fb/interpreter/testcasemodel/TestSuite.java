@@ -11,7 +11,7 @@
  * Melanie Winter - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
+package org.eclipse.fordiac.ide.fb.interpreter.testcasemodel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,19 +26,15 @@ public class TestSuite {
 
 	public TestSuite(final FBType type) {
 		if (type.getService() == null || type.getService().getServiceSequence().isEmpty()) {
-			throw new IllegalArgumentException("Test suites must be defined as service model");
+			throw new IllegalArgumentException("Test suites must be defined as service model"); //$NON-NLS-1$
 		}
 		dataSource = type.getService();
-		for (final ServiceSequence serviceSequence : type.getService().getServiceSequence()) {
-			testCases.add(TestCase.createTestCase(serviceSequence));
-		}
+		type.getService().getServiceSequence().stream().forEach(n -> testCases.add(TestCase.createTestCase(n)));
 
 	}
 
 	public TestSuite(final List<ServiceSequence> sequences) {
-		for (final ServiceSequence serviceSequence : sequences) {
-			testCases.add(TestCase.createTestCase(serviceSequence));
-		}
+		sequences.stream().forEach(n -> testCases.add(TestCase.createTestCase(n)));
 	}
 
 	public Service getDataSource() {
@@ -47,9 +43,8 @@ public class TestSuite {
 
 	public static TestSuite createTestSuite(final FBType type) {
 		final TestSuite testSuite = new TestSuite(type);
-		for (final ServiceSequence serviceSequence : type.getService().getServiceSequence()) {
-			testSuite.testCases.add(TestCase.createTestCase(serviceSequence));
-		}
+		type.getService().getServiceSequence().stream()
+				.forEach(n -> testSuite.testCases.add(TestCase.createTestCase(n)));
 		return testSuite;
 	}
 

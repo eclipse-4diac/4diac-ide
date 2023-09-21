@@ -11,43 +11,41 @@
  * Melanie Winter - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
+package org.eclipse.fordiac.ide.fb.interpreter.testcasemodel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
 public class TestCase {
-	private String name;
-	private ServiceSequence dataSource;
-	private List<TestState> testStates = new ArrayList<>();
-	
-	public TestCase(ServiceSequence dataSource) { //, TestSuite testSuite
+	private final String name;
+	private final ServiceSequence dataSource;
+	private final List<TestState> testStates = new ArrayList<>();
+
+	public TestCase(final ServiceSequence dataSource) { // , TestSuite testSuite
 		if (dataSource == null) {
-			throw new IllegalArgumentException("TestCase must not be null.");
+			throw new IllegalArgumentException("TestCase must not be null."); //$NON-NLS-1$
 		}
 		this.dataSource = dataSource;
 		name = dataSource.getName();
 	}
 
-	public static TestCase createTestCase(ServiceSequence serviceSequence) {
-		TestCase testCase = new TestCase(serviceSequence);
-		for (ServiceTransaction serviceTransaction : serviceSequence.getServiceTransaction()) {
-			testCase.testStates.add(TestState.createTestState(serviceTransaction));
-		}
+	public static TestCase createTestCase(final ServiceSequence serviceSequence) {
+		final TestCase testCase = new TestCase(serviceSequence);
+		serviceSequence.getServiceTransaction().stream()
+				.forEach(n -> testCase.testStates.add(TestState.createTestState(n)));
 		return testCase;
 	}
 
 	public String getName() {
 		return name;
 	}
-	
-	public List<TestState> getTestStates(){
+
+	public List<TestState> getTestStates() {
 		return testStates;
 	}
-	
+
 	public ServiceSequence getdataSource() {
 		return dataSource;
 	}

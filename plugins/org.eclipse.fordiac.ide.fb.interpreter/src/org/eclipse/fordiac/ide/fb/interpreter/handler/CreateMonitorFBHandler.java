@@ -21,10 +21,10 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.fb.interpreter.Messages;
-import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.CompositeMonitorFBGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.MonitorFBGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestCase;
-import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestSuite;
+import org.eclipse.fordiac.ide.fb.interpreter.monitorgen.CompositeMonitorFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.monitorgen.MonitorFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestCase;
+import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl;
@@ -46,12 +46,15 @@ public class CreateMonitorFBHandler extends AbstractHandler {
 		// user should have a service sequence editor open
 		if (type == null) {
 			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
-					Messages.RecordExecutionTraceHandler_Incorrect_Selection, "Please open a Service model");
+					Messages.RecordExecutionTraceHandler_Incorrect_Selection,
+					Messages.CreateRuntimeTestFunctionBlockHandler_Select_Service_Model);
 			return Status.CANCEL_STATUS;
 		}
 		final TestSuite testSuite = new TestSuite(type);
 		FBType testtype;
 
+		// if a service sequence is selected only the monitorFB for this sequence is
+		// generated
 		if (((EditPart) selection.getFirstElement() != null)
 				&& (((EditPart) selection.getFirstElement()).getModel() instanceof ServiceSequenceImpl)) {
 			final ServiceSequenceImpl s = (ServiceSequenceImpl) ((EditPart) selection.getFirstElement()).getModel();
@@ -67,7 +70,9 @@ public class CreateMonitorFBHandler extends AbstractHandler {
 				testtype.getTypeEntry().save();
 
 			}
-		} else if (selection instanceof StructuredSelection) {
+		}
+		// if there is no selection a complete monitoring composite fb is created
+		else if (selection instanceof StructuredSelection) {
 			final List<FBType> monitorFBs = new ArrayList<>();
 			for (final TestCase testCase : testSuite.getTestCases()) {
 				if (testCase.getdataSource().getServiceSequenceType().equals("FORBIDDEN")) { //$NON-NLS-1$

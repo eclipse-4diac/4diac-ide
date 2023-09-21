@@ -352,8 +352,8 @@ public class ServiceSequenceAssignView extends ViewPart {
 			final List<String> parameters = ServiceSequenceUtils.splitList(textParam.getText());
 
 			try {
-				final boolean parameterSet = setParameters(fbType, parameters);
-				runInterpreter(seq, events, fbType, count, parameterSet);
+				setParameters(fbType, parameters);
+				runInterpreter(seq, events, fbType, count, parameters);
 			} catch (final Exception e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
@@ -365,14 +365,16 @@ public class ServiceSequenceAssignView extends ViewPart {
 	}
 
 	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames, final FBType fbType,
-			final int count, final boolean parameterSet) {
+			final int count, final List<String> parameters) {
 		final FBType typeCopy = EcoreUtil.copy(fbType);
 		final List<Event> events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
 				.filter(Objects::nonNull).toList();
 
 		if (!events.isEmpty() && (count > 0)) {
-			if (parameterSet) {
+			if (!parameters.isEmpty()) {
 				addToGenSequence(fbType, seq, events.subList(0, 1), false);
+				seq.getServiceTransaction().get(seq.getServiceTransaction().size() - 1).getInputPrimitive()
+						.setParameters(formatInputParameter(parameters));
 				addToGenSequence(fbType, seq, events.subList(1, events.size()), true);
 			} else {
 				addToGenSequence(fbType, seq, events, true);
@@ -383,6 +385,17 @@ public class ServiceSequenceAssignView extends ViewPart {
 			generatedEvents.addAll(InputGenerator.getRandomEventsSequence(typeCopy, count - events.size()));
 			addToGenSequence(typeCopy, seq, generatedEvents, true);
 		}
+	}
+
+	private static String formatInputParameter(final List<String> list) {
+		final StringBuilder sb = new StringBuilder();
+
+		for (final String s : list) {
+			sb.append(s);
+			sb.append("; \n"); //$NON-NLS-1$
+		}
+
+		return sb.toString();
 	}
 
 	private static void addToGenSequence(final FBType fbType, final ServiceSequence seq, final List<Event> eventList,
@@ -400,18 +413,14 @@ public class ServiceSequenceAssignView extends ViewPart {
 		}
 	}
 
-	private static boolean setParameters(final FBType fbType, final List<String> parameters) {
+	private static void setParameters(final FBType fbType, final List<String> parameters) {
 		// parameter: format "VarName:=Value"
-		boolean parameterSet = false;
 		for (final String param : parameters) {
 			final String[] paramValues = param.split(":=", 2); //$NON-NLS-1$
 			if (paramValues.length == 2) {
 				VariableUtils.setVariable(fbType, paramValues[0], paramValues[1]);
-				parameterSet = true;
-
 			}
 		}
-		return parameterSet;
 	}
 
 	private static Event findEvent(final FBType fbType, final String eventName) {

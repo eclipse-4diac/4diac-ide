@@ -11,7 +11,7 @@
  * Melanie Winter - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
+package org.eclipse.fordiac.ide.fb.interpreter.monitorgen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,10 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.TestEccGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractBasicFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestCase;
+import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -28,7 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class MonitorFBGenerator extends AbstractFBGenerator {
+public class MonitorFBGenerator extends AbstractBasicFBGenerator {
 	public MonitorFBGenerator(final FBType type, final TestSuite testSuite, final TestCase testCase) {
 		super(type, testSuite, testCase);
 	}
@@ -39,6 +43,8 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 		return destinationFB;
 	}
 
+	// create for every in- and output event from the to monitor fb an input event
+	// for the monitor fb
 	@Override
 	protected List<Event> createInputEventList() {
 		final Stream<Event> stream = Stream.concat(sourceType.getInterfaceList().getEventInputs().stream(),
@@ -46,6 +52,7 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 		return stream.map(n -> (createEvent(n.getName(), true))).toList();
 	}
 
+	// create a detected output event
 	@Override
 	protected List<Event> createOutputEventList() {
 		final List<Event> list = new ArrayList<>();
@@ -53,13 +60,16 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 		return list;
 	}
 
+	// create for every in- and output data pin from the to monitor fb an input data
+	// pin for the monitor fb
 	@Override
 	protected List<VarDeclaration> createInputDataList() {
 		final Stream<VarDeclaration> stream = Stream.concat(sourceType.getInterfaceList().getInputVars().stream(),
 				sourceType.getInterfaceList().getOutputVars().stream());
-		return stream.map(n -> createVarDeclaration(n, n.getName(), true)).toList();
+		return stream.map(n -> createVarDeclaration(n.getType(), n.getName(), true)).toList();
 	}
 
+	// no data output
 	@Override
 	protected List<VarDeclaration> createOutputDataList() {
 		return new ArrayList<>();
@@ -103,6 +113,7 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 					continueFrom = eccGen.getLastState();
 				} else {
 					final int prevCnt = cnt;
+					// Binding State (BS) where every possible combination comes back together
 					eccGen.createState("S", cnt + 2 * testCase.getTestStates().get(i).getTestOutputs().size()); //$NON-NLS-1$
 					eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "BS1")); //$NON-NLS-1$
 					continueFrom = eccGen.getLastState();
@@ -141,7 +152,7 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 			if (!state.getName().equals("START") && !state.getName().contains("BS") //$NON-NLS-1$//$NON-NLS-2$
 					&& !(state.getOutTransitions().size() == 1
 							&& state.getOutTransitions().get(0).getConditionEvent() == null
-							&& state.getOutTransitions().get(0).getConditionExpression().equals("1"))
+							&& state.getOutTransitions().get(0).getConditionExpression().equals("1")) //$NON-NLS-1$
 					&& !state.getName().equals(
 							eccGen.getEcc().getECState().get(eccGen.getEcc().getECState().size() - 1).getName())) {
 				createTransitionsBackTransitionList(eccGen, state, state.getOutTransitions());
@@ -214,6 +225,7 @@ public class MonitorFBGenerator extends AbstractFBGenerator {
 		}
 	}
 
+	// get the index of the event in the output primitive list
 	private static int indexOutputPrim(final String ev, final List<OutputPrimitive> list) {
 		return IntStream.range(0, list.size()).filter(i -> list.get(i).getEvent().equals(ev)).findFirst()
 				.orElse(list.size());

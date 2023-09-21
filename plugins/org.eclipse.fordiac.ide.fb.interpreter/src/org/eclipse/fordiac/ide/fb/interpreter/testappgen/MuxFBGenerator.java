@@ -11,11 +11,13 @@
  * Melanie Winter - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
+package org.eclipse.fordiac.ide.fb.interpreter.testappgen;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractBasicFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -25,7 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class MuxFBGenerator extends AbstractFBGenerator {
+public class MuxFBGenerator extends AbstractBasicFBGenerator {
 
 	public MuxFBGenerator(final FBType type, final TestSuite testSuite) {
 		super(type, testSuite);
@@ -37,19 +39,19 @@ public class MuxFBGenerator extends AbstractFBGenerator {
 		return destinationFB;
 	}
 
+	// mux fb has for each testCase an input, like the compositeFb
+	// also an error and success event input that are connected with the matchFbs
 	@Override
 	protected List<Event> createInputEventList() {
 		final List<Event> list = new ArrayList<>();
-		for (final TestCase testCase : testSuite.getTestCases()) {
-			list.add(createEvent(testCase.getName() + "_TEST", true)); //$NON-NLS-1$
-		}
-		list.add(createEvent("run_all_TEST", true));//$NON-NLS-1$
+		list.addAll(testSuite.getTestCases().stream().map(n -> createEvent(n.getName() + "_TEST", true)).toList()); //$NON-NLS-1$
 		list.add(createEvent("ERR", true));//$NON-NLS-1$
 		list.add(createEvent("SUC", true)); //$NON-NLS-1$
 		return list;
 
 	}
 
+	// error and success output events
 	@Override
 	protected List<Event> createOutputEventList() {
 		final List<Event> list = new ArrayList<>();
@@ -58,18 +60,19 @@ public class MuxFBGenerator extends AbstractFBGenerator {
 		return list;
 	}
 
+	// takes no input data
 	@Override
 	protected List<VarDeclaration> createInputDataList() {
 		return new ArrayList<>();
 	}
 
+	// string data output for the test name
 	@Override
 	protected List<VarDeclaration> createOutputDataList() {
 		final List<VarDeclaration> list = new ArrayList<>();
-		final VarDeclaration varDecl = AbstractFBGenerator.createVarDeclaration("TestCaseName", false); //$NON-NLS-1$
-		varDecl.setType(sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.STRING));
-		varDecl.setComment(""); //$NON-NLS-1$
-		list.add(varDecl);
+		list.add(createVarDeclaration(sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.STRING),
+				"TestCaseName", //$NON-NLS-1$
+				false));
 		return list;
 	}
 
@@ -98,7 +101,7 @@ public class MuxFBGenerator extends AbstractFBGenerator {
 				final ECAction sucAction = TestEccGenerator.createAction();
 				errAction.setOutput(destinationFB.getInterfaceList().getEventOutputs()
 						.get(destinationFB.getInterfaceList().getEventOutputs().size() - 2));
-				final Algorithm alg = TestEccGenerator.createMuxFbAlgorithm(destinationFB, ev.getName());
+				final Algorithm alg = createMuxFbAlgorithm(destinationFB, ev.getName());
 				errAction.setAlgorithm(alg);
 				sucAction.setAlgorithm(alg);
 
@@ -121,6 +124,16 @@ public class MuxFBGenerator extends AbstractFBGenerator {
 			eccGen.increaseCaseCount();
 			eccGen.increaseCaseCount();
 		}
+	}
+
+	// sets the name of the string data output
+	public static Algorithm createMuxFbAlgorithm(final BasicFBType fb, final String name) {
+		final StringBuilder algText = new StringBuilder();
+		algText.append(fb.getInterfaceList().getOutputVars().get(0).getName());
+		algText.append(":="); //$NON-NLS-1$
+		algText.append("'" + name + "'"); //$NON-NLS-1$ //$NON-NLS-2$
+		algText.append(";"); //$NON-NLS-1$
+		return TestEccGenerator.createAlgorithm(fb, name, algText.toString());
 	}
 
 	@Override
