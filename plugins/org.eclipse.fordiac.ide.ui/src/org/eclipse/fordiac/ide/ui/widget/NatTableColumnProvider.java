@@ -12,21 +12,17 @@
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
  *   Martin Jobst - refactor to generic implementation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.gef.nat;
+package org.eclipse.fordiac.ide.ui.widget;
 
 import java.util.List;
 
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
-public class VarDeclarationColumnProvider implements IDataProvider {
+public class NatTableColumnProvider<T extends NatTableColumn> implements IDataProvider {
 
-	private final List<VarDeclarationTableColumn> columns;
+	private final List<T> columns;
 
-	public VarDeclarationColumnProvider() {
-		this(VarDeclarationTableColumn.DEFAULT_COLUMNS);
-	}
-
-	public VarDeclarationColumnProvider(final List<VarDeclarationTableColumn> columns) {
+	public NatTableColumnProvider(final List<T> columns) {
 		this.columns = columns;
 	}
 
@@ -48,5 +44,9 @@ public class VarDeclarationColumnProvider implements IDataProvider {
 	@Override
 	public int getRowCount() {
 		return 1;
+	}
+
+	public List<T> getColumns() {
+		return columns;
 	}
 }

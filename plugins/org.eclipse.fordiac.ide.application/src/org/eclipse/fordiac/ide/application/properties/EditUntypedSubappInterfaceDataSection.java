@@ -27,10 +27,8 @@ import org.eclipse.fordiac.ide.application.commands.ResizingSubappInterfaceCreat
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
@@ -44,6 +42,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
@@ -76,7 +76,8 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputProvider));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new VarDeclarationColumnProvider(), new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
+				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS),
+				new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
 						VarDeclarationTableColumn.DEFAULT_COLUMNS, outputProvider),
 				null, this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
@@ -94,7 +95,7 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
 		inputTable = NatTableWidgetFactory
 				.createRowNatTable(inputsGroup, inputDataLayer,
-						new VarDeclarationColumnProvider(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG),
+						new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG),
 						new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
 								VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG, inputProvider),
 						null, this, true);
@@ -129,7 +130,7 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 		return (getType() != null) ? getType().getInterface() : null;
 	}
 
-	private class UntypedSubappInterfaceEditableRule extends VarDeclarationEditableRule {
+	private class UntypedSubappInterfaceEditableRule extends NatTableColumnEditableRule<VarDeclarationTableColumn> {
 
 		private static final Set<VarDeclarationTableColumn> CONNECTED_EDITABLE_COLUMNS = Set.of(
 				VarDeclarationTableColumn.NAME, VarDeclarationTableColumn.COMMENT,
@@ -139,7 +140,7 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 
 		public UntypedSubappInterfaceEditableRule(final IEditableRule parent,
 				final List<VarDeclarationTableColumn> columns, final IRowDataProvider<VarDeclaration> dataProvider) {
-			super(parent, columns, ALL_EDITABLE);
+			super(parent, columns, VarDeclarationTableColumn.ALL_EDITABLE);
 			this.dataProvider = dataProvider;
 		}
 

@@ -17,8 +17,8 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.InterfaceElementColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.TypedElementColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementTableColumn;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.ui.nat.AdapterTypeSelectionTreeContentProvi
 import org.eclipse.fordiac.ide.model.ui.widgets.AdapterTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
@@ -78,10 +79,10 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		outputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this));
 		final DataLayer outputDataLayer = new DataLayer(outputProvider);
 		outputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(outputProvider));
-		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new TypedElementColumnProvider(), getSectionEditableRule(),
-				new TypeSelectionButton(this::getTypeLibrary, AdapterTypeSelectionContentProvider.INSTANCE,
-						AdapterTypeSelectionTreeContentProvider.INSTANCE),
+		outputTable = NatTableWidgetFactory.createRowNatTable(
+				outputsGroup, outputDataLayer, new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
+				getSectionEditableRule(), new TypeSelectionButton(this::getTypeLibrary,
+						AdapterTypeSelectionContentProvider.INSTANCE, AdapterTypeSelectionTreeContentProvider.INSTANCE),
 				this, false);
 	}
 
@@ -90,10 +91,10 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		inputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this));
 		final DataLayer inputDataLayer = new DataLayer(inputProvider);
 		inputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(inputProvider));
-		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new TypedElementColumnProvider(), getSectionEditableRule(),
-				new TypeSelectionButton(this::getTypeLibrary, AdapterTypeSelectionContentProvider.INSTANCE,
-						AdapterTypeSelectionTreeContentProvider.INSTANCE),
+		inputTable = NatTableWidgetFactory.createRowNatTable(
+				inputsGroup, inputDataLayer, new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
+				getSectionEditableRule(), new TypeSelectionButton(this::getTypeLibrary,
+						AdapterTypeSelectionContentProvider.INSTANCE, AdapterTypeSelectionTreeContentProvider.INSTANCE),
 				this, true);
 	}
 

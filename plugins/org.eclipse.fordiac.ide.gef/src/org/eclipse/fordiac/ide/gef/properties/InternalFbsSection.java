@@ -17,8 +17,8 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.fordiac.ide.gef.nat.FBColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.TypedElementColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementTableColumn;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInternalFBOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.IndexUpDown;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalFBCommand;
@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -72,7 +73,8 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		provider = new ChangeableListDataProvider<>(new FBColumnAccessor(this));
 		final DataLayer dataLayer = new DataLayer(provider);
 		dataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(provider));
-		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new TypedElementColumnProvider(),
+		table = NatTableWidgetFactory.createRowNatTable(
+				composite, dataLayer, new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
 				IEditableRule.ALWAYS_EDITABLE, new TypeSelectionButton(this::getTypeLibrary,
 						FBTypeSelectionContentProvider.INSTANCE, FBTypeSelectionTreeContentProvider.INSTANCE),
 				this, false);

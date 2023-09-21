@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.gef.nat;
+package org.eclipse.fordiac.ide.ui.widget;
 
 import java.util.List;
 import java.util.Set;
@@ -18,19 +18,18 @@ import java.util.Set;
 import org.eclipse.nebula.widgets.nattable.config.EditableRule;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 
-public class TypedElementEditableRule extends EditableRule {
+public class NatTableColumnEditableRule<T extends NatTableColumn> extends EditableRule {
 	private final IEditableRule parent;
-	private final List<TypedElementTableColumn> columns;
-	private final Set<TypedElementTableColumn> editableColumns;
+	private final List<T> columns;
+	private final Set<T> editableColumns;
 
-	public TypedElementEditableRule(final IEditableRule parent, final List<TypedElementTableColumn> columns,
-			final Set<TypedElementTableColumn> editableColumns) {
+	public NatTableColumnEditableRule(final IEditableRule parent, final List<T> columns, final Set<T> editableColumns) {
 		this.parent = parent;
 		this.columns = columns;
 		this.editableColumns = editableColumns;
 	}
 
-	public List<TypedElementTableColumn> getColumns() {
+	public List<T> getColumns() {
 		return columns;
 	}
 
