@@ -20,7 +20,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -46,6 +45,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.RecordSequen
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -79,14 +79,11 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 				final RecordSequenceDialog dialog = new RecordSequenceDialog(HandlerUtil.getActiveShell(event), events,
 						parameters, seq);
 				final int returnCode = dialog.open();
-				final int count = dialog.getCount();
 				if (returnCode != CANCEL) {
 					try {
 						final FBType fbType = seq.getService().getFBType();
 						setParameters(fbType, parameters);
-						runInterpreter(seq, events, dialog.isAppend(), dialog.isRandom(), fbType, count,
-								dialog.getStartState());
-						seq.setStartState(dialog.getStartState());
+						runInterpreter(seq, events, parameters, fbType, dialog);
 					} catch (final Exception e) {
 						FordiacLogHelper.logError(e.getMessage(), e);
 						MessageDialog.openError(HandlerUtil.getActiveShell(event),
@@ -99,18 +96,86 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		return Status.OK_STATUS;
 	}
 
-	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames, final boolean isAppend,
-			final boolean isRandom, final FBType fbType, final int count, final String startState) {
-		final List<Event> events;
+	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames,
+			final List<String> parameters, final FBType fbType, final RecordSequenceDialog dialog) {
 		final FBType typeCopy = EcoreUtil.copy(fbType);
-		events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
-				.filter(Objects::nonNull).collect(Collectors.toList());
-		if (isRandom && (count > 0)) {
-			events.addAll(InputGenerator.getRandomEventsSequence(typeCopy, count));
+
+		EventManager eventManager = null;
+		List<Event> events = new ArrayList<>();
+		// random events, random parameters
+		if (dialog.isRandomEventBoxChecked() && dialog.isRandomParameterBoxChecked() && (dialog.getCount() > 0)) {
+			events.addAll(InputGenerator.getRandomEventsSequence(typeCopy, dialog.getCount()));
+			eventManager = addToGenSequence(fbType, seq, events, true, dialog.isAppend());
 		}
-		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, events, isRandom,
-				startState);
-		TransactionFactory.addTraceInfoTo(eventManager.getTransactions());
+		// random events, not random parameters
+		else if (dialog.isRandomEventBoxChecked() && !dialog.isRandomParameterBoxChecked() && (dialog.getCount() > 0)) {
+			events.addAll(InputGenerator.getRandomEventsSequence(typeCopy, dialog.getCount()));
+			eventManager = addToGenSequence(fbType, seq, events, false, dialog.isAppend());
+		}
+		// not random events, random parameters
+		else if (!dialog.isRandomEventBoxChecked() && dialog.isRandomParameterBoxChecked() && parameters.isEmpty()
+				&& (dialog.getCount() > 0)) {
+			events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
+					.filter(Objects::nonNull).toList();
+			eventManager = addToGenSequence(fbType, seq, events, true, dialog.isAppend());
+		}
+		// not random events, no parameters
+		else if (!dialog.isRandomEventBoxChecked() && !dialog.isRandomParameterBoxChecked() && parameters.isEmpty()
+				&& (dialog.getCount() > 0)) {
+			events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
+					.filter(Objects::nonNull).toList();
+			eventManager = addToGenSequence(fbType, seq, events, false, dialog.isAppend());
+		}
+		// not random events, not random parameters
+		else if (!dialog.isRandomEventBoxChecked() && !dialog.isRandomParameterBoxChecked() && !parameters.isEmpty()
+				&& (dialog.getCount() > 0)) {
+			events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
+					.filter(Objects::nonNull).toList();
+			eventManager = addToGenSequence(fbType, seq, events, false, dialog.isAppend());
+			for (final ServiceTransaction transaction : seq.getServiceTransaction()) {
+				transaction.getInputPrimitive().setParameters(formatInputParameter(parameters));
+			}
+		}
+
+		// not random events, for first event not random parameter but for the following
+		else if (!dialog.isRandomEventBoxChecked() && dialog.isRandomParameterBoxChecked() && !parameters.isEmpty()
+				&& (dialog.getCount() > 0)) {
+			events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
+					.filter(Objects::nonNull).toList();
+			eventManager = addToGenSequence(fbType, seq, events.subList(0, 1), false, dialog.isAppend());
+			eventManager.getTransactions().addAll(
+					(addToGenSequence(fbType, seq, events.subList(1, events.size()), true, true)).getTransactions());
+
+			seq.getServiceTransaction().get(0).getInputPrimitive().setParameters(formatInputParameter(parameters));
+		}
+
+		seq.setStartState(dialog.getStartState());
+
+		seq.setComment(
+				"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), fbType)); //$NON-NLS-1$
+		seq.setEventManager(eventManager);
+		ServiceSequenceSaveAndLoadHelper.saveServiceSequence(fbType, seq);
+	}
+
+	private static String formatInputParameter(final List<String> list) {
+		final StringBuilder sb = new StringBuilder();
+
+		for (final String s : list) {
+			sb.append(s);
+			sb.append("; \n"); //$NON-NLS-1$
+		}
+
+		return sb.toString();
+	}
+
+	private static EventManager addToGenSequence(final FBType fbType, final ServiceSequence seq,
+			final List<Event> eventList, final boolean isRandom, final boolean isAppend) {
+		final FBType typeCopy = EcoreUtil.copy(fbType);
+		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, eventList, isRandom,
+				Messages.ServiceSequenceAssignView_START);
+		if (!isRandom) {
+			TransactionFactory.addTraceInfoTo(eventManager.getTransactions());
+		}
 		EventManagerUtils.process(eventManager);
 		if (!isAppend) {
 			seq.getServiceTransaction().clear();
@@ -118,10 +183,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		for (final Transaction transaction : eventManager.getTransactions()) {
 			ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
 		}
-		seq.setComment(
-				"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), fbType)); //$NON-NLS-1$
-		seq.setEventManager(eventManager);
-		ServiceSequenceSaveAndLoadHelper.saveServiceSequence(fbType, seq);
+		return eventManager;
 	}
 
 	static void setParameters(final FBType fbType, final List<String> parameters) {

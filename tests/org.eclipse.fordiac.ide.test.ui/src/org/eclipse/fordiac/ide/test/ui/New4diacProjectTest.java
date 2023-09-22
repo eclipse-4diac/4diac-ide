@@ -58,6 +58,14 @@ public class New4diacProjectTest {
 	private static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
 	private static SWTWorkbenchBot bot = new SWTWorkbenchBot();
 
+	/**
+	 * Performs the necessary tasks to be able to perform the tests.
+	 *
+	 * The method creates the SWT4diacGefBot, starts 4diac IDE and closes the
+	 * welcome window. The Timeout is increase from default value of 5 Seconds to 10
+	 * Seconds. By calling the private method {@code createProject()} a new 4diac
+	 * IDE project is created to be able to perform the tests.
+	 */
 	@BeforeAll
 	public static void beforeAll() {
 		bot = new SWTWorkbenchBot();
@@ -66,6 +74,19 @@ public class New4diacProjectTest {
 		SWTBotPreferences.TIMEOUT = 10000;
 	}
 
+	@AfterClass
+	public static void afterClass() {
+		bot.resetWorkbench();
+	}
+
+	// End of region for test settings
+	// ----------------------------------------------------------------------------------------
+	// Region of test methods
+
+	/**
+	 * Checks if the menu "4diac IDE Project" exists and if the buttons are enabled
+	 * correctly.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void menuNew4diacProjectExists() {
@@ -78,6 +99,17 @@ public class New4diacProjectTest {
 		bot.button(CANCEL).click();
 	}
 
+	/**
+	 * Checks if a new 4diac IDE project can be created and is visible in the System
+	 * Explorer
+	 *
+	 * The method checks if you can create a project via the menu, if the buttons
+	 * are enabled correctly, if you can assign a project name and if the initial
+	 * system name and initial application name are autofilled correctly. Then it
+	 * checks if the project can be found in the hierarchy tree of the system
+	 * explorer. Afterwards the project will be deleted.
+	 *
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void createANew4diacIDEProject() {
@@ -107,6 +139,12 @@ public class New4diacProjectTest {
 		deleteProject(UI_TEST_PROJECT1);
 	}
 
+	/**
+	 * Checks if a new project can be created with an existing project name
+	 *
+	 * The method tries to create a project with an already existing name. This
+	 * should not be possible and the Finish button should be not enabled.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToCreateANew4diacIDEProjectMenuWithExistingName() {
@@ -120,6 +158,9 @@ public class New4diacProjectTest {
 		bot.button(CANCEL).click();
 	}
 
+	/**
+	 * Checks if an existing project can be deleted
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void deleteExisting4diacIDEProject() {
@@ -142,6 +183,12 @@ public class New4diacProjectTest {
 		bot.waitUntil(shellCloses(shell));
 	}
 
+	/**
+	 * Checks if the project cannot be found in the hierarchy tree after deletion.
+	 *
+	 * The method creates several projects. One of them is deleted and it is checked
+	 * whether it is no longer to be found in the hierarchy tree.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void isProjectNotInSystemExplorerAfterDeletion() {
@@ -161,6 +208,15 @@ public class New4diacProjectTest {
 
 	}
 
+	// End of region for test methods
+	// ----------------------------------------------------------------------------------------
+	// Region of utility methods
+
+	/**
+	 * Creates a new 4diac IDE project with given name.
+	 *
+	 * @param projectName Name of the new project.
+	 */
 	private static void createProject(final String projectName) {
 		bot.menu(FILE).menu(NEW).menu(FORDIAC_IDE_PROJECT).click();
 		final SWTBotShell shell = bot.shell(NEW_4DIAC_PROJECT);
@@ -172,6 +228,11 @@ public class New4diacProjectTest {
 		bot.waitUntil(shellCloses(shell));
 	}
 
+	/**
+	 * Deletes the 4diac IDE project with given name
+	 *
+	 * @param projectName Name of the project to be deleted
+	 */
 	private static void deleteProject(final String projectName) {
 		final SWTBotView systemExplorerView = bot.viewByTitle(SYSTEM_EXPLORER_LABEL);
 		systemExplorerView.show();
@@ -189,11 +250,6 @@ public class New4diacProjectTest {
 		bot.checkBox(DELETE_PROJECT_WARNING).select();
 		bot.button(OK).click();
 		bot.waitUntil(shellCloses(shell));
-	}
-
-	@AfterClass
-	public static void afterClass() {
-		bot.resetWorkbench();
 	}
 
 }

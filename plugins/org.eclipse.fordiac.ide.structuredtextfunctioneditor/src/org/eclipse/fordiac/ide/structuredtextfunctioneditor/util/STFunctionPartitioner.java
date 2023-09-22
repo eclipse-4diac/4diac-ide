@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
@@ -63,12 +64,17 @@ public class STFunctionPartitioner implements STCorePartitioner {
 		return ""; //$NON-NLS-1$
 	}
 
-	@SuppressWarnings("static-method") // overridable
-	protected String combine(final FunctionFBType fbType) {
+	protected static String combine(final FunctionFBType fbType) {
 		if (fbType.getBody() instanceof final STFunctionBody stBody && stBody.getText() != null) {
 			return stBody.getText();
 		}
-		return ""; //$NON-NLS-1$
+		return generateFunctionText(fbType);
+	}
+
+	protected static String generateFunctionText(final FunctionFBType fbType) {
+		final String packageName = PackageNameHelper.getPackageName(fbType);
+		final String packagePrefix = packageName.isBlank() ? "" : "PACKAGE %s;%n%n".formatted(packageName); //$NON-NLS-1$ //$NON-NLS-2$
+		return "%sFUNCTION %s%nEND_FUNCTION%n".formatted(packagePrefix, fbType.getName()); //$NON-NLS-1$
 	}
 
 	@Override

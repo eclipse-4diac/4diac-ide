@@ -165,8 +165,10 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	}
 
 	private LibraryElement reloadType() {
-		// reset editable type to force a fresh copy the next time the editable type is accessed
-		// also needs to happen before the reload, since SystemEntry delegates to setType,
+		// reset editable type to force a fresh copy the next time the editable type is
+		// accessed
+		// also needs to happen before the reload, since SystemEntry delegates to
+		// setType,
 		// which would otherwise reset the freshly reloaded type
 		if (getFile() != null) {
 			setTypeEditable(null);
@@ -338,11 +340,14 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 		this.updateTypeOnSave = updateTypeOnSave;
 	}
 
-	/** Search for the first directory parent which is existing. If none can be found we will return the workspace root.
-	 * This directory is then used as scheduling rule for locking the workspace. The direct parent of the entry's file
-	 * can not be used as it may need to be created.
+	/**
+	 * Search for the first directory parent which is existing. If none can be found
+	 * we will return the workspace root. This directory is then used as scheduling
+	 * rule for locking the workspace. The direct parent of the entry's file can not
+	 * be used as it may need to be created.
 	 *
-	 * @return the current folder or workspace root */
+	 * @return the current folder or workspace root
+	 */
 	private IContainer getRuleScope() {
 		IContainer parent = getFile().getParent();
 		while (parent != null && !parent.exists()) {
@@ -360,7 +365,8 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 			checkAndCreateFolderHierarchy(getFile(), monitor);
 			getFile().create(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
 		}
-		// "reset" the modification timestamp in the TypeEntry to avoid reload - as for this
+		// "reset" the modification timestamp in the TypeEntry to avoid reload - as for
+		// this
 		// timestamp
 		// it is not necessary as the data is in memory
 		setLastModificationTimestamp(getFile().getModificationStamp());
@@ -371,11 +377,14 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 		}
 	}
 
-	/** Check if the folders in the file's path exist and if not create them accordingly
+	/**
+	 * Check if the folders in the file's path exist and if not create them
+	 * accordingly
 	 *
 	 * @param file    for which the path should be checked
 	 * @param monitor
-	 * @throws CoreException */
+	 * @throws CoreException
+	 */
 	private static void checkAndCreateFolderHierarchy(final IFile file, final IProgressMonitor monitor)
 			throws CoreException {
 		final IContainer container = file.getParent();

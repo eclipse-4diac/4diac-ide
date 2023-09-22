@@ -63,6 +63,10 @@ public class GlobalConstantsImporter extends TypeImporter {
 			case LibraryElementTags.ORIGINAL_SOURCE_ELEMENT:
 				getElement().setSource(parseOriginalSource());
 				break;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(getElement());
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				break;
 			default:
 				return false;
 			}

@@ -95,8 +95,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				AdapterDeclaration adapterDeclaration = (AdapterDeclaration)theEObject;
 				T result = caseAdapterDeclaration(adapterDeclaration);
 				if (result == null) result = caseIInterfaceElement(adapterDeclaration);
-				if (result == null) result = caseINamedElement(adapterDeclaration);
+				if (result == null) result = caseITypedElement(adapterDeclaration);
 				if (result == null) result = caseHiddenElement(adapterDeclaration);
+				if (result == null) result = caseINamedElement(adapterDeclaration);
 				if (result == null) result = caseConfigurableObject(adapterDeclaration);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -110,8 +111,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(adapterFB);
 				if (result == null) result = casePositionableElement(adapterFB);
 				if (result == null) result = caseErrorMarkerRef(adapterFB);
-				if (result == null) result = caseINamedElement(adapterFB);
+				if (result == null) result = caseITypedElement(adapterFB);
 				if (result == null) result = caseConfigurableObject(adapterFB);
+				if (result == null) result = caseINamedElement(adapterFB);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -120,9 +122,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseAdapterFBType(adapterFBType);
 				if (result == null) result = caseFBType(adapterFBType);
 				if (result == null) result = caseLibraryElement(adapterFBType);
-				if (result == null) result = caseConfigurableObject(adapterFBType);
 				if (result == null) result = caseICallable(adapterFBType);
 				if (result == null) result = caseINamedElement(adapterFBType);
+				if (result == null) result = caseConfigurableObject(adapterFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -132,6 +134,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(adapterType);
 				if (result == null) result = caseLibraryElement(adapterType);
 				if (result == null) result = caseINamedElement(adapterType);
+				if (result == null) result = caseConfigurableObject(adapterType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -179,9 +182,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseBaseFBType(baseFBType);
 				if (result == null) result = caseFBType(baseFBType);
 				if (result == null) result = caseLibraryElement(baseFBType);
-				if (result == null) result = caseConfigurableObject(baseFBType);
 				if (result == null) result = caseICallable(baseFBType);
 				if (result == null) result = caseINamedElement(baseFBType);
+				if (result == null) result = caseConfigurableObject(baseFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -191,9 +194,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseBaseFBType(basicFBType);
 				if (result == null) result = caseFBType(basicFBType);
 				if (result == null) result = caseLibraryElement(basicFBType);
-				if (result == null) result = caseConfigurableObject(basicFBType);
 				if (result == null) result = caseICallable(basicFBType);
 				if (result == null) result = caseINamedElement(basicFBType);
+				if (result == null) result = caseConfigurableObject(basicFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -201,8 +204,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				AutomationSystem automationSystem = (AutomationSystem)theEObject;
 				T result = caseAutomationSystem(automationSystem);
 				if (result == null) result = caseLibraryElement(automationSystem);
-				if (result == null) result = caseConfigurableObject(automationSystem);
 				if (result == null) result = caseINamedElement(automationSystem);
+				if (result == null) result = caseConfigurableObject(automationSystem);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -215,8 +218,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(cfbInstance);
 				if (result == null) result = casePositionableElement(cfbInstance);
 				if (result == null) result = caseErrorMarkerRef(cfbInstance);
-				if (result == null) result = caseINamedElement(cfbInstance);
+				if (result == null) result = caseITypedElement(cfbInstance);
 				if (result == null) result = caseConfigurableObject(cfbInstance);
+				if (result == null) result = caseINamedElement(cfbInstance);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -239,8 +243,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(comment);
 				if (result == null) result = casePositionableElement(comment);
 				if (result == null) result = caseErrorMarkerRef(comment);
-				if (result == null) result = caseINamedElement(comment);
+				if (result == null) result = caseITypedElement(comment);
 				if (result == null) result = caseConfigurableObject(comment);
+				if (result == null) result = caseINamedElement(comment);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -253,8 +258,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(communicationChannel);
 				if (result == null) result = casePositionableElement(communicationChannel);
 				if (result == null) result = caseErrorMarkerRef(communicationChannel);
-				if (result == null) result = caseINamedElement(communicationChannel);
+				if (result == null) result = caseITypedElement(communicationChannel);
 				if (result == null) result = caseConfigurableObject(communicationChannel);
+				if (result == null) result = caseINamedElement(communicationChannel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -289,9 +295,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseCompositeFBType(compositeFBType);
 				if (result == null) result = caseFBType(compositeFBType);
 				if (result == null) result = caseLibraryElement(compositeFBType);
-				if (result == null) result = caseConfigurableObject(compositeFBType);
 				if (result == null) result = caseICallable(compositeFBType);
 				if (result == null) result = caseINamedElement(compositeFBType);
+				if (result == null) result = caseConfigurableObject(compositeFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -336,8 +342,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(demultiplexer);
 				if (result == null) result = casePositionableElement(demultiplexer);
 				if (result == null) result = caseErrorMarkerRef(demultiplexer);
-				if (result == null) result = caseINamedElement(demultiplexer);
+				if (result == null) result = caseITypedElement(demultiplexer);
 				if (result == null) result = caseConfigurableObject(demultiplexer);
+				if (result == null) result = caseINamedElement(demultiplexer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -348,8 +355,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = casePositionableElement(device);
 				if (result == null) result = caseColorizableElement(device);
 				if (result == null) result = caseIVarElement(device);
-				if (result == null) result = caseINamedElement(device);
+				if (result == null) result = caseITypedElement(device);
 				if (result == null) result = caseConfigurableObject(device);
+				if (result == null) result = caseINamedElement(device);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -357,8 +365,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				DeviceType deviceType = (DeviceType)theEObject;
 				T result = caseDeviceType(deviceType);
 				if (result == null) result = caseLibraryElement(deviceType);
-				if (result == null) result = caseConfigurableObject(deviceType);
 				if (result == null) result = caseINamedElement(deviceType);
+				if (result == null) result = caseConfigurableObject(deviceType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -396,6 +404,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseErrorMarkerRef(errorMarkerDataType);
 				if (result == null) result = caseLibraryElement(errorMarkerDataType);
 				if (result == null) result = caseINamedElement(errorMarkerDataType);
+				if (result == null) result = caseConfigurableObject(errorMarkerDataType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -406,8 +415,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(errorMarkerFBNElement);
 				if (result == null) result = casePositionableElement(errorMarkerFBNElement);
 				if (result == null) result = caseErrorMarkerRef(errorMarkerFBNElement);
-				if (result == null) result = caseINamedElement(errorMarkerFBNElement);
+				if (result == null) result = caseITypedElement(errorMarkerFBNElement);
 				if (result == null) result = caseConfigurableObject(errorMarkerFBNElement);
+				if (result == null) result = caseINamedElement(errorMarkerFBNElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -416,8 +426,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseErrorMarkerInterface(errorMarkerInterface);
 				if (result == null) result = caseIInterfaceElement(errorMarkerInterface);
 				if (result == null) result = caseErrorMarkerRef(errorMarkerInterface);
-				if (result == null) result = caseINamedElement(errorMarkerInterface);
+				if (result == null) result = caseITypedElement(errorMarkerInterface);
 				if (result == null) result = caseHiddenElement(errorMarkerInterface);
+				if (result == null) result = caseINamedElement(errorMarkerInterface);
 				if (result == null) result = caseConfigurableObject(errorMarkerInterface);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -433,8 +444,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseEvent(event);
 				if (result == null) result = caseIInterfaceElement(event);
 				if (result == null) result = caseICallable(event);
-				if (result == null) result = caseINamedElement(event);
+				if (result == null) result = caseITypedElement(event);
 				if (result == null) result = caseHiddenElement(event);
+				if (result == null) result = caseINamedElement(event);
 				if (result == null) result = caseConfigurableObject(event);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -457,8 +469,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(fb);
 				if (result == null) result = casePositionableElement(fb);
 				if (result == null) result = caseErrorMarkerRef(fb);
-				if (result == null) result = caseINamedElement(fb);
+				if (result == null) result = caseITypedElement(fb);
 				if (result == null) result = caseConfigurableObject(fb);
+				if (result == null) result = caseINamedElement(fb);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -474,8 +487,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(fbNetworkElement);
 				if (result == null) result = casePositionableElement(fbNetworkElement);
 				if (result == null) result = caseErrorMarkerRef(fbNetworkElement);
-				if (result == null) result = caseINamedElement(fbNetworkElement);
+				if (result == null) result = caseITypedElement(fbNetworkElement);
 				if (result == null) result = caseConfigurableObject(fbNetworkElement);
+				if (result == null) result = caseINamedElement(fbNetworkElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -483,9 +497,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				FBType fbType = (FBType)theEObject;
 				T result = caseFBType(fbType);
 				if (result == null) result = caseLibraryElement(fbType);
-				if (result == null) result = caseConfigurableObject(fbType);
 				if (result == null) result = caseICallable(fbType);
 				if (result == null) result = caseINamedElement(fbType);
+				if (result == null) result = caseConfigurableObject(fbType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -508,9 +522,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseFunctionFBType(functionFBType);
 				if (result == null) result = caseFBType(functionFBType);
 				if (result == null) result = caseLibraryElement(functionFBType);
-				if (result == null) result = caseConfigurableObject(functionFBType);
 				if (result == null) result = caseICallable(functionFBType);
 				if (result == null) result = caseINamedElement(functionFBType);
+				if (result == null) result = caseConfigurableObject(functionFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -518,8 +532,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				GlobalConstants globalConstants = (GlobalConstants)theEObject;
 				T result = caseGlobalConstants(globalConstants);
 				if (result == null) result = caseLibraryElement(globalConstants);
-				if (result == null) result = caseConfigurableObject(globalConstants);
 				if (result == null) result = caseINamedElement(globalConstants);
+				if (result == null) result = caseConfigurableObject(globalConstants);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -530,8 +544,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(group);
 				if (result == null) result = casePositionableElement(group);
 				if (result == null) result = caseErrorMarkerRef(group);
-				if (result == null) result = caseINamedElement(group);
+				if (result == null) result = caseITypedElement(group);
 				if (result == null) result = caseConfigurableObject(group);
+				if (result == null) result = caseINamedElement(group);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -558,8 +573,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.IINTERFACE_ELEMENT: {
 				IInterfaceElement iInterfaceElement = (IInterfaceElement)theEObject;
 				T result = caseIInterfaceElement(iInterfaceElement);
-				if (result == null) result = caseINamedElement(iInterfaceElement);
+				if (result == null) result = caseITypedElement(iInterfaceElement);
 				if (result == null) result = caseHiddenElement(iInterfaceElement);
+				if (result == null) result = caseINamedElement(iInterfaceElement);
 				if (result == null) result = caseConfigurableObject(iInterfaceElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -589,6 +605,13 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.ITYPED_ELEMENT: {
+				ITypedElement iTypedElement = (ITypedElement)theEObject;
+				T result = caseITypedElement(iTypedElement);
+				if (result == null) result = caseINamedElement(iTypedElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.IVAR_ELEMENT: {
 				IVarElement iVarElement = (IVarElement)theEObject;
 				T result = caseIVarElement(iVarElement);
@@ -599,6 +622,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				LibraryElement libraryElement = (LibraryElement)theEObject;
 				T result = caseLibraryElement(libraryElement);
 				if (result == null) result = caseINamedElement(libraryElement);
+				if (result == null) result = caseConfigurableObject(libraryElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -615,8 +639,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseLocalVariable(localVariable);
 				if (result == null) result = caseVarDeclaration(localVariable);
 				if (result == null) result = caseIInterfaceElement(localVariable);
-				if (result == null) result = caseINamedElement(localVariable);
+				if (result == null) result = caseITypedElement(localVariable);
 				if (result == null) result = caseHiddenElement(localVariable);
+				if (result == null) result = caseINamedElement(localVariable);
 				if (result == null) result = caseConfigurableObject(localVariable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -652,8 +677,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(multiplexer);
 				if (result == null) result = casePositionableElement(multiplexer);
 				if (result == null) result = caseErrorMarkerRef(multiplexer);
-				if (result == null) result = caseINamedElement(multiplexer);
+				if (result == null) result = caseITypedElement(multiplexer);
 				if (result == null) result = caseConfigurableObject(multiplexer);
+				if (result == null) result = caseINamedElement(multiplexer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -714,8 +740,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(resource);
 				if (result == null) result = caseIVarElement(resource);
 				if (result == null) result = caseMappingTarget(resource);
-				if (result == null) result = caseINamedElement(resource);
+				if (result == null) result = caseITypedElement(resource);
 				if (result == null) result = caseConfigurableObject(resource);
+				if (result == null) result = caseINamedElement(resource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -729,8 +756,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				ResourceType resourceType = (ResourceType)theEObject;
 				T result = caseResourceType(resourceType);
 				if (result == null) result = caseLibraryElement(resourceType);
-				if (result == null) result = caseConfigurableObject(resourceType);
 				if (result == null) result = caseINamedElement(resourceType);
+				if (result == null) result = caseConfigurableObject(resourceType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -743,8 +770,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(resourceTypeFB);
 				if (result == null) result = casePositionableElement(resourceTypeFB);
 				if (result == null) result = caseErrorMarkerRef(resourceTypeFB);
-				if (result == null) result = caseINamedElement(resourceTypeFB);
+				if (result == null) result = caseITypedElement(resourceTypeFB);
 				if (result == null) result = caseConfigurableObject(resourceTypeFB);
+				if (result == null) result = caseINamedElement(resourceTypeFB);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -755,8 +783,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = casePositionableElement(segment);
 				if (result == null) result = caseColorizableElement(segment);
 				if (result == null) result = caseIVarElement(segment);
-				if (result == null) result = caseINamedElement(segment);
+				if (result == null) result = caseITypedElement(segment);
 				if (result == null) result = caseConfigurableObject(segment);
+				if (result == null) result = caseINamedElement(segment);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -764,8 +793,8 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				SegmentType segmentType = (SegmentType)theEObject;
 				T result = caseSegmentType(segmentType);
 				if (result == null) result = caseLibraryElement(segmentType);
-				if (result == null) result = caseConfigurableObject(segmentType);
 				if (result == null) result = caseINamedElement(segmentType);
+				if (result == null) result = caseConfigurableObject(segmentType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -801,9 +830,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseServiceInterfaceFBType(serviceInterfaceFBType);
 				if (result == null) result = caseFBType(serviceInterfaceFBType);
 				if (result == null) result = caseLibraryElement(serviceInterfaceFBType);
-				if (result == null) result = caseConfigurableObject(serviceInterfaceFBType);
 				if (result == null) result = caseICallable(serviceInterfaceFBType);
 				if (result == null) result = caseINamedElement(serviceInterfaceFBType);
+				if (result == null) result = caseConfigurableObject(serviceInterfaceFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -813,9 +842,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseBaseFBType(simpleFBType);
 				if (result == null) result = caseFBType(simpleFBType);
 				if (result == null) result = caseLibraryElement(simpleFBType);
-				if (result == null) result = caseConfigurableObject(simpleFBType);
 				if (result == null) result = caseICallable(simpleFBType);
 				if (result == null) result = caseINamedElement(simpleFBType);
+				if (result == null) result = caseConfigurableObject(simpleFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -864,8 +893,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(subApp);
 				if (result == null) result = casePositionableElement(subApp);
 				if (result == null) result = caseErrorMarkerRef(subApp);
-				if (result == null) result = caseINamedElement(subApp);
+				if (result == null) result = caseITypedElement(subApp);
 				if (result == null) result = caseConfigurableObject(subApp);
+				if (result == null) result = caseINamedElement(subApp);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -878,8 +908,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(structManipulator);
 				if (result == null) result = casePositionableElement(structManipulator);
 				if (result == null) result = caseErrorMarkerRef(structManipulator);
-				if (result == null) result = caseINamedElement(structManipulator);
+				if (result == null) result = caseITypedElement(structManipulator);
 				if (result == null) result = caseConfigurableObject(structManipulator);
+				if (result == null) result = caseINamedElement(structManipulator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -889,9 +920,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseCompositeFBType(subAppType);
 				if (result == null) result = caseFBType(subAppType);
 				if (result == null) result = caseLibraryElement(subAppType);
-				if (result == null) result = caseConfigurableObject(subAppType);
 				if (result == null) result = caseICallable(subAppType);
 				if (result == null) result = caseINamedElement(subAppType);
+				if (result == null) result = caseConfigurableObject(subAppType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -938,8 +969,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT: {
 				TypedConfigureableObject typedConfigureableObject = (TypedConfigureableObject)theEObject;
 				T result = caseTypedConfigureableObject(typedConfigureableObject);
-				if (result == null) result = caseINamedElement(typedConfigureableObject);
+				if (result == null) result = caseITypedElement(typedConfigureableObject);
 				if (result == null) result = caseConfigurableObject(typedConfigureableObject);
+				if (result == null) result = caseINamedElement(typedConfigureableObject);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -960,8 +992,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				VarDeclaration varDeclaration = (VarDeclaration)theEObject;
 				T result = caseVarDeclaration(varDeclaration);
 				if (result == null) result = caseIInterfaceElement(varDeclaration);
-				if (result == null) result = caseINamedElement(varDeclaration);
+				if (result == null) result = caseITypedElement(varDeclaration);
 				if (result == null) result = caseHiddenElement(varDeclaration);
+				if (result == null) result = caseINamedElement(varDeclaration);
 				if (result == null) result = caseConfigurableObject(varDeclaration);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -1834,6 +1867,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseInterfaceList(InterfaceList object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ITyped Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ITyped Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseITypedElement(ITypedElement object) {
 		return null;
 	}
 

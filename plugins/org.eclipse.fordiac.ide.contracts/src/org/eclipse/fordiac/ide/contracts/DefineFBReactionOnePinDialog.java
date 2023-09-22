@@ -14,12 +14,11 @@
 package org.eclipse.fordiac.ide.contracts;
 
 import org.eclipse.fordiac.ide.application.utilities.IntervalVerifyListener;
+import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
@@ -34,7 +33,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class DefineFBReactionOnePinDialog extends MessageDialog {
-	private static final int NUM_COLUMNS = 4;
+	private static final int NUM_COLUMNS = 3;
 	private Text inputTime;
 	private Text offset;
 	private final Event pinFrom;
@@ -43,7 +42,6 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 	private String offsetText;
 	private Button offsetCheckbox;
 	private boolean defineOffset;
-	private CCombo inputOffsetCombo;
 	private String state;
 
 	public DefineFBReactionOnePinDialog(final Shell parentShell, final Event pinFrom) {
@@ -86,36 +84,28 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 
 		Label label = new Label(group, SWT.None);
 		if (pinTo != null) {
-			label.setText("Reaction (" + pinFrom.getName() + " , " + pinTo.getName() + ")");   //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+			label.setText(ContractKeywords.REACTION + " " + ContractKeywords.EVENTS_OPEN + pinFrom.getName() //$NON-NLS-1$
+					+ ContractKeywords.COMMA + pinTo.getName() + ContractKeywords.EVENTS_CLOSE);
 
 			label.setLayoutData(GridDataFactory.fillDefaults().span(NUM_COLUMNS, 1).grab(true, true).create());
 		} else {
-			label.setText("Event " + pinFrom.getName()); //$NON-NLS-1$
+			label.setText(ContractKeywords.EVENT + " " + pinFrom.getName()); //$NON-NLS-1$
 			label.setLayoutData(GridDataFactory.fillDefaults().span(NUM_COLUMNS, 1).grab(true, true).create());
 		}
 
 		label = new Label(group, SWT.None);
-		label.setText("occurs "); //$NON-NLS-1$
-		inputOffsetCombo = ComboBoxWidgetFactory.createCombo(group);
-		inputOffsetCombo.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
-		final String[] options = { "within", "every" }; //$NON-NLS-1$ //$NON-NLS-2$
-		inputOffsetCombo.setItems(options);
-		inputOffsetCombo.select(0);
+		label.setText(ContractKeywords.OCCURS + " " + ContractKeywords.EVERY); //$NON-NLS-1$
 
 		inputTime = new Text(group, SWT.RIGHT);
 		inputTime.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTime));
 		inputTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		label = new Label(group, SWT.None);
-		label.setText(" ms"); //$NON-NLS-1$
+		label.setText(" " + ContractKeywords.UNIT_OF_TIME); //$NON-NLS-1$
 
 		final Label labelOffset = new Label(group, SWT.None);
 		labelOffset.setText(Messages.DefineFBReactionOnePinDialog_SpecifyOffset);
 		labelOffset.setVisible(false);
-
-		final Label labelOff = new Label(group, SWT.None);
-		labelOff.setText(""); //$NON-NLS-1$
-		labelOff.setVisible(false);
 
 		offset = new Text(group, SWT.RIGHT);
 		offset.addListener(SWT.KeyDown, new IntervalVerifyListener(offset));
@@ -123,11 +113,11 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 		offset.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		offset.setVisible(false);
 		final Label labelOffsetMs = new Label(group, SWT.None);
-		labelOffsetMs.setText(" ms"); //$NON-NLS-1$
+		labelOffsetMs.setText(" " + ContractKeywords.UNIT_OF_TIME); //$NON-NLS-1$
 		labelOffsetMs.setVisible(false);
 
 		offsetCheckbox = new Button(dialogArea, SWT.CHECK);
-		offsetCheckbox.setText("Offset"); //$NON-NLS-1$
+		offsetCheckbox.setText(ContractKeywords.OFFSET);
 		offsetCheckbox.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
 		offsetCheckbox.addSelectionListener(new SelectionListener() {
 
@@ -137,7 +127,6 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 				labelOffset.setVisible(offsetCheckbox.getSelection());
 				offset.setVisible(offsetCheckbox.getSelection());
 				labelOffsetMs.setVisible(offsetCheckbox.getSelection());
-				labelOff.setVisible(offsetCheckbox.getSelection());
 
 			}
 
@@ -157,21 +146,31 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 			offsetText = offset.getText();
 		}
 		inputTimeText = inputTime.getText();
-		state = inputOffsetCombo.getItem(inputOffsetCombo.getSelectionIndex());
 		final String[] strInputTime = DefineContractUtils.getTimeIntervalFromString(inputTimeText);
 		String[] strOffset = { "0", "0" };  //$NON-NLS-1$//$NON-NLS-2$
 		if (offset.isVisible()) {
 			strOffset = DefineContractUtils.getTimeIntervalFromString(offsetText);
 		}
-		if (inputTimeText.isBlank() || (offset.isVisible() && offset.getText().isBlank())
-				|| (strInputTime.length == 2 && (Integer.parseInt(strInputTime[0]) > Integer.parseInt(strInputTime[1])))
-				|| (offset.isVisible() && strOffset.length == 2
-						&& (Integer.parseInt(strOffset[0]) > Integer.parseInt(strOffset[1])))) {
+		if (!isCorrect(strInputTime, strOffset)) {
 			MessageDialog.openError(this.getShell(), Messages.DefineFBReactionOnePinDialog_Error,
 					Messages.DefineFBReactionOnePinDialog_PleaseFill);
 		} else {
 			super.buttonPressed(buttonId);
 		}
+	}
+
+	private boolean isCorrect(final String[] strInputTime, final String[] strOffset) {
+		if (inputTimeText.isBlank()) {
+			return false;
+		}
+		if ((offset.isVisible() && offset.getText().isBlank())) {
+			return false;
+		}
+		if ((strInputTime.length == 2 && (Integer.parseInt(strInputTime[0]) > Integer.parseInt(strInputTime[1])))) {
+			return false;
+		}
+		return !(offset.isVisible() && strOffset.length == 2
+				&& (Integer.parseInt(strOffset[0]) > Integer.parseInt(strOffset[1])));
 	}
 
 }

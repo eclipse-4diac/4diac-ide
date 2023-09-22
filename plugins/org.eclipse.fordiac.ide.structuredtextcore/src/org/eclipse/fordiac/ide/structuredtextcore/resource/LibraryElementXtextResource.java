@@ -23,11 +23,12 @@ import org.eclipse.xtext.linking.lazy.LazyLinkingResource;
 public class LibraryElementXtextResource extends LazyLinkingResource {
 	private LibraryElement libraryElement;
 	private final List<EObject> additionalContent = new ArrayList<>();
+	private boolean includeInternalLibraryElement = true;
 
 	protected void updateInternalLibraryElement() {
 		clearInternalLibraryElement();
 		if (contents != null && !contents.isEmpty()) {
-			if (libraryElement != null) {
+			if (includeInternalLibraryElement && libraryElement != null) {
 				contents.add(EcoreUtil.copy(libraryElement));
 			}
 			contents.addAll(EcoreUtil.copyAll(additionalContent));
@@ -53,6 +54,15 @@ public class LibraryElementXtextResource extends LazyLinkingResource {
 
 	public List<EObject> getAdditionalContent() {
 		return additionalContent;
+	}
+
+	public boolean isIncludeInternalLibraryElement() {
+		return includeInternalLibraryElement;
+	}
+
+	public void setIncludeInternalLibraryElement(final boolean includeInternalLibraryElement) {
+		this.includeInternalLibraryElement = includeInternalLibraryElement;
+		updateInternalLibraryElement();
 	}
 
 	@Override

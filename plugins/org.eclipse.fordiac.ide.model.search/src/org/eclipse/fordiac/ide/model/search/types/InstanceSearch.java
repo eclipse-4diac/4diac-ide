@@ -53,6 +53,14 @@ public class InstanceSearch {
 
 	}
 
+	public static Set<INamedElement> performSearch(final InstanceSearch... searchers) {
+		final Set<INamedElement> results = new HashSet<>();
+		for (final InstanceSearch search : searchers) {
+			results.addAll(search.performCompleteSearch());
+		}
+		return results;
+	}
+
 	public Set<INamedElement> performApplicationSearch(final AutomationSystem sys) {
 		searchResult = new HashSet<>();
 		searchApplications(sys);
@@ -92,6 +100,17 @@ public class InstanceSearch {
 			}
 		}
 
+		for (final AutomationSystem sys : searchRootSystems) {
+			searchApplications(sys);
+			searchTypeLibraryNetworks(sys.getTypeLibrary());
+		}
+
+		return searchResult;
+	}
+
+	public Set<INamedElement> performProjectSearch(final IProject project) {
+		searchResult = new HashSet<>();
+		final List<AutomationSystem> searchRootSystems = SystemManager.INSTANCE.getProjectSystems(project);
 		for (final AutomationSystem sys : searchRootSystems) {
 			searchApplications(sys);
 			searchTypeLibraryNetworks(sys.getTypeLibrary());

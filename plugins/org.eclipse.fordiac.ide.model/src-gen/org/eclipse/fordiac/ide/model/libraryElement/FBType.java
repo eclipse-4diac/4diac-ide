@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * @model
  * @generated
  */
-public interface FBType extends LibraryElement, ConfigurableObject, ICallable {
+public interface FBType extends LibraryElement, ICallable {
 	/**
 	 * Returns the value of the '<em><b>Interface List</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -106,8 +106,8 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy() {
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof InstanceNameEditPart) {
-					return new ChangeFBNetworkElementName(((InstanceNameEditPart) getHost()).getModel().getRefElement(),
+				if (getHost() instanceof final InstanceNameEditPart instanceNameEditPart) {
+					return ChangeNameCommand.forName(instanceNameEditPart.getModel().getRefElement(),
 							(String) request.getCellEditor().getValue());
 				}
 				return null;
@@ -155,7 +155,7 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 	}
 
 	private boolean isResoruceTypeFBNElement() {
-		return ((getModel().getRefElement() instanceof FB) && (((FB) getModel().getRefElement()).isResourceTypeFB()));
+		return getModel().getRefElement() instanceof final FB fb && fb.isResourceTypeFB();
 	}
 
 	@Override

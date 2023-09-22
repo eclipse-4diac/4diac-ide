@@ -1697,24 +1697,12 @@ ruleSTStatement returns [EObject current=null]
 					afterParserOrEnumRuleCall();
 				}
 				    |
-				(
-					(ruleSTAssignmentStatement)=>
-					{
-						newCompositeNode(grammarAccess.getSTStatementAccess().getSTAssignmentStatementParserRuleCall_0_0_5());
-					}
-					this_STAssignmentStatement_5=ruleSTAssignmentStatement
-					{
-						$current = $this_STAssignmentStatement_5.current;
-						afterParserOrEnumRuleCall();
-					}
-				)
-				    |
 				{
-					newCompositeNode(grammarAccess.getSTStatementAccess().getSTCallStatementParserRuleCall_0_0_6());
+					newCompositeNode(grammarAccess.getSTStatementAccess().getSTAssignmentParserRuleCall_0_0_5());
 				}
-				this_STCallStatement_6=ruleSTCallStatement
+				this_STAssignment_5=ruleSTAssignment
 				{
-					$current = $this_STCallStatement_6.current;
+					$current = $this_STAssignment_5.current;
 					afterParserOrEnumRuleCall();
 				}
 				    |
@@ -1722,13 +1710,13 @@ ruleSTStatement returns [EObject current=null]
 					(
 						{
 							$current = forceCreateModelElement(
-								grammarAccess.getSTStatementAccess().getSTReturnAction_0_0_7_0(),
+								grammarAccess.getSTStatementAccess().getSTReturnAction_0_0_6_0(),
 								$current);
 						}
 					)
-					otherlv_8=RETURN
+					otherlv_7=RETURN
 					{
-						newLeafNode(otherlv_8, grammarAccess.getSTStatementAccess().getRETURNKeyword_0_0_7_1());
+						newLeafNode(otherlv_7, grammarAccess.getSTStatementAccess().getRETURNKeyword_0_0_6_1());
 					}
 				)
 				    |
@@ -1736,13 +1724,13 @@ ruleSTStatement returns [EObject current=null]
 					(
 						{
 							$current = forceCreateModelElement(
-								grammarAccess.getSTStatementAccess().getSTContinueAction_0_0_8_0(),
+								grammarAccess.getSTStatementAccess().getSTContinueAction_0_0_7_0(),
 								$current);
 						}
 					)
-					otherlv_10=CONTINUE
+					otherlv_9=CONTINUE
 					{
-						newLeafNode(otherlv_10, grammarAccess.getSTStatementAccess().getCONTINUEKeyword_0_0_8_1());
+						newLeafNode(otherlv_9, grammarAccess.getSTStatementAccess().getCONTINUEKeyword_0_0_7_1());
 					}
 				)
 				    |
@@ -1750,19 +1738,19 @@ ruleSTStatement returns [EObject current=null]
 					(
 						{
 							$current = forceCreateModelElement(
-								grammarAccess.getSTStatementAccess().getSTExitAction_0_0_9_0(),
+								grammarAccess.getSTStatementAccess().getSTExitAction_0_0_8_0(),
 								$current);
 						}
 					)
-					otherlv_12=EXIT
+					otherlv_11=EXIT
 					{
-						newLeafNode(otherlv_12, grammarAccess.getSTStatementAccess().getEXITKeyword_0_0_9_1());
+						newLeafNode(otherlv_11, grammarAccess.getSTStatementAccess().getEXITKeyword_0_0_8_1());
 					}
 				)
 			)
-			otherlv_13=Semicolon
+			otherlv_12=Semicolon
 			{
-				newLeafNode(otherlv_13, grammarAccess.getSTStatementAccess().getSemicolonKeyword_0_1());
+				newLeafNode(otherlv_12, grammarAccess.getSTStatementAccess().getSemicolonKeyword_0_1());
 			}
 		)
 		    |
@@ -1774,23 +1762,23 @@ ruleSTStatement returns [EObject current=null]
 						$current);
 				}
 			)
-			otherlv_15=Semicolon
+			otherlv_14=Semicolon
 			{
-				newLeafNode(otherlv_15, grammarAccess.getSTStatementAccess().getSemicolonKeyword_1_1());
+				newLeafNode(otherlv_14, grammarAccess.getSTStatementAccess().getSemicolonKeyword_1_1());
 			}
 		)
 	)
 ;
 
-// Entry rule entryRuleSTAssignmentStatement
-entryRuleSTAssignmentStatement returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getSTAssignmentStatementRule()); }
-	iv_ruleSTAssignmentStatement=ruleSTAssignmentStatement
-	{ $current=$iv_ruleSTAssignmentStatement.current; }
+// Entry rule entryRuleSTAssignment
+entryRuleSTAssignment returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTAssignmentRule()); }
+	iv_ruleSTAssignment=ruleSTAssignment
+	{ $current=$iv_ruleSTAssignment.current; }
 	EOF;
 
-// Rule STAssignmentStatement
-ruleSTAssignmentStatement returns [EObject current=null]
+// Rule STAssignment
+ruleSTAssignment returns [EObject current=null]
 @init {
 	enterRule();
 }
@@ -1798,84 +1786,46 @@ ruleSTAssignmentStatement returns [EObject current=null]
 	leaveRule();
 }:
 	(
-		(
-			(
-				{
-					newCompositeNode(grammarAccess.getSTAssignmentStatementAccess().getLeftSTAccessExpressionParserRuleCall_0_0());
-				}
-				lv_left_0_0=ruleSTAccessExpression
-				{
-					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getSTAssignmentStatementRule());
-					}
-					set(
-						$current,
-						"left",
-						lv_left_0_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STAccessExpression");
-					afterParserOrEnumRuleCall();
-				}
-			)
-		)
-		otherlv_1=ColonEqualsSign
 		{
-			newLeafNode(otherlv_1, grammarAccess.getSTAssignmentStatementAccess().getColonEqualsSignKeyword_1());
+			newCompositeNode(grammarAccess.getSTAssignmentAccess().getSTExpressionParserRuleCall_0());
+		}
+		this_STExpression_0=ruleSTExpression
+		{
+			$current = $this_STExpression_0.current;
+			afterParserOrEnumRuleCall();
 		}
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTAssignmentStatementAccess().getRightSTExpressionParserRuleCall_2_0());
-				}
-				lv_right_2_0=ruleSTExpression
-				{
-					if ($current==null) {
-						$current = createModelElementForParent(grammarAccess.getSTAssignmentStatementRule());
-					}
-					set(
-						$current,
-						"right",
-						lv_right_2_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
-					afterParserOrEnumRuleCall();
+					$current = forceCreateModelElementAndSet(
+						grammarAccess.getSTAssignmentAccess().getSTAssignmentLeftAction_1_0(),
+						$current);
 				}
 			)
-		)
-	)
-;
-
-// Entry rule entryRuleSTCallStatement
-entryRuleSTCallStatement returns [EObject current=null]:
-	{ newCompositeNode(grammarAccess.getSTCallStatementRule()); }
-	iv_ruleSTCallStatement=ruleSTCallStatement
-	{ $current=$iv_ruleSTCallStatement.current; }
-	EOF;
-
-// Rule STCallStatement
-ruleSTCallStatement returns [EObject current=null]
-@init {
-	enterRule();
-}
-@after {
-	leaveRule();
-}:
-	(
-		(
+			otherlv_2=ColonEqualsSign
 			{
-				newCompositeNode(grammarAccess.getSTCallStatementAccess().getCallSTAccessExpressionParserRuleCall_0());
+				newLeafNode(otherlv_2, grammarAccess.getSTAssignmentAccess().getColonEqualsSignKeyword_1_1());
 			}
-			lv_call_0_0=ruleSTAccessExpression
-			{
-				if ($current==null) {
-					$current = createModelElementForParent(grammarAccess.getSTCallStatementRule());
-				}
-				set(
-					$current,
-					"call",
-					lv_call_0_0,
-					"org.eclipse.fordiac.ide.structuredtextcore.STCore.STAccessExpression");
-				afterParserOrEnumRuleCall();
-			}
-		)
+			(
+				(
+					{
+						newCompositeNode(grammarAccess.getSTAssignmentAccess().getRightSTAssignmentParserRuleCall_1_2_0());
+					}
+					lv_right_3_0=ruleSTAssignment
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getSTAssignmentRule());
+						}
+						set(
+							$current,
+							"right",
+							lv_right_3_0,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STAssignment");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+		)?
 	)
 ;
 
@@ -5194,11 +5144,14 @@ ruleQualifiedName returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleT
 			newLeafNode(this_ID_0, grammarAccess.getQualifiedNameAccess().getIDTerminalRuleCall_0());
 		}
 		(
-			kw=ColonColon
-			{
-				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getQualifiedNameAccess().getColonColonKeyword_1_0());
-			}
+			(
+				(ColonColon)=>
+				kw=ColonColon
+				{
+					$current.merge(kw);
+					newLeafNode(kw, grammarAccess.getQualifiedNameAccess().getColonColonKeyword_1_0());
+				}
+			)
 			this_ID_2=RULE_ID
 			{
 				$current.merge(this_ID_2);

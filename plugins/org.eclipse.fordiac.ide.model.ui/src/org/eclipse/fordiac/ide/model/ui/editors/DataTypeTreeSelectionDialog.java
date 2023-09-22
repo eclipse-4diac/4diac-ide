@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.ui.nat.AdapterSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
@@ -39,16 +38,13 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
 public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
-	
-	private boolean isTypeSelectionForAdapters;
-
 	public DataTypeTreeSelectionDialog(final Shell parent) {
 		super(parent, createTreeLabelProvider(), new TypeSelectionTreeContentProvider());
 	}
-	
-	public DataTypeTreeSelectionDialog(final Shell parent, final boolean isTypeSelectionForAdapters) {
-		super(parent, createTreeLabelProvider(), new AdapterSelectionTreeContentProvider());
-		this.isTypeSelectionForAdapters = isTypeSelectionForAdapters;
+
+	public DataTypeTreeSelectionDialog(final Shell parent,
+			final TypeSelectionTreeContentProvider typeSelectionTreeContentProvider) {
+		super(parent, createTreeLabelProvider(), typeSelectionTreeContentProvider);
 	}
 
 	@Override
@@ -96,7 +92,7 @@ public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 		}
 		return null;
 	}
-	
+
 	protected static LabelProvider createTreeLabelProvider() {
 		return new LabelProvider() {
 			@Override
@@ -109,8 +105,7 @@ public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 
 			@Override
 			public Image getImage(final Object element) {
-				if (element instanceof TypeNode) {
-					final TypeNode node = (TypeNode) element;
+				if (element instanceof final TypeNode node) {
 					if (node.isDirectory()) {
 						return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
 					}
@@ -120,5 +115,5 @@ public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 			}
 		};
 	}
-	
+
 }

@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
@@ -44,8 +46,15 @@ public class HidePinCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return hiddenElement != null && (hiddenElement instanceof VarDeclaration || hiddenElement instanceof AdapterDeclaration);
+		return hiddenElement instanceof final IInterfaceElement interfaceElement
+				&& (interfaceElement instanceof VarDeclaration || interfaceElement instanceof AdapterDeclaration)
+				&& interfaceElement.isIsInput() && interfaceElement.getInputConnections().isEmpty()
+				&& !isExpandedSubAppPinAndConnected(interfaceElement);
 	}
 
+	protected static boolean isExpandedSubAppPinAndConnected(final IInterfaceElement interfaceElement) {
+		return interfaceElement.getFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded()
+				&& !interfaceElement.getInputConnections().isEmpty()
+				&& !interfaceElement.getOutputConnections().isEmpty();
+	}
 }
-

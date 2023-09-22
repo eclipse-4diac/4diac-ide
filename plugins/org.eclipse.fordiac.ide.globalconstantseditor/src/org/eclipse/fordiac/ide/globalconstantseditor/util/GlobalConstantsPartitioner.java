@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalCon
 import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGrammarAccess;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -42,6 +43,7 @@ import org.eclipse.xtext.resource.XtextResource;
 import com.google.inject.Inject;
 
 public class GlobalConstantsPartitioner implements STCorePartitioner {
+
 	@Inject
 	private GlobalConstantsGrammarAccess grammarAccess;
 
@@ -56,23 +58,27 @@ public class GlobalConstantsPartitioner implements STCorePartitioner {
 		return ""; //$NON-NLS-1$
 	}
 
-	public String combine(final GlobalConstants globalConstants) {
+	public static String combine(final GlobalConstants globalConstants) {
 		if (globalConstants.getSource() != null && globalConstants.getSource().getText() != null) {
 			return globalConstants.getSource().getText();
 		}
 		return generateGlobalConstantsText(globalConstants);
 	}
 
-	protected String generateGlobalConstantsText(final GlobalConstants globalConstants) {
-		return globalConstants.getConstants().stream().map(this::generateVarDeclarationText)
-				.collect(Collectors.joining("\n\t", "VAR_GLOBAL CONSTANT\n\t", "\nEND_VAR\n")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	protected static String generateGlobalConstantsText(final GlobalConstants globalConstants) {
+		final String packageName = PackageNameHelper.getPackageName(globalConstants);
+		final String packagePrefix = packageName.isBlank() ? "" : "PACKAGE %s;%n%n".formatted(packageName); //$NON-NLS-1$ //$NON-NLS-2$
+		final CharSequence prefix = "%sVAR_GLOBAL CONSTANT%n".formatted(packagePrefix); //$NON-NLS-1$
+		final String suffix = "END_VAR%n".formatted(); //$NON-NLS-1$
+		return globalConstants.getConstants().stream().map(GlobalConstantsPartitioner::generateVarDeclarationText)
+				.collect(Collectors.joining("", prefix, suffix)); //$NON-NLS-1$
 	}
 
-	protected String generateVarDeclarationText(final VarDeclaration decl) {
+	protected static String generateVarDeclarationText(final VarDeclaration decl) {
 		if (decl.getValue() != null && decl.getValue().getValue() != null && !decl.getValue().getValue().isBlank()) {
-			return "%s : %s := %s;".formatted(decl.getName(), decl.getFullTypeName(), decl.getValue().getValue()); //$NON-NLS-1$
+			return "\t%s : %s := %s;%n".formatted(decl.getName(), decl.getFullTypeName(), decl.getValue().getValue()); //$NON-NLS-1$
 		}
-		return "%s : %s;".formatted(decl.getName(), decl.getFullTypeName()); //$NON-NLS-1$
+		return "\t%s : %s;%n".formatted(decl.getName(), decl.getFullTypeName()); //$NON-NLS-1$
 	}
 
 	@Override

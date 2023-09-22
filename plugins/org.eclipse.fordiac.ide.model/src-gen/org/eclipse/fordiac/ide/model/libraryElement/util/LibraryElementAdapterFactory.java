@@ -311,6 +311,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createInterfaceListAdapter();
 			}
 			@Override
+			public Adapter caseITypedElement(ITypedElement object) {
+				return createITypedElementAdapter();
+			}
+			@Override
 			public Adapter caseIVarElement(IVarElement object) {
 				return createIVarElementAdapter();
 			}
@@ -1309,6 +1313,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createInterfaceListAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement <em>ITyped Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
+	 * @generated
+	 */
+	public Adapter createITypedElementAdapter() {
 		return null;
 	}
 

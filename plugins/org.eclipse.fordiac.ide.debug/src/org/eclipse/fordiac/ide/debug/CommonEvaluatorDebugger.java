@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableEvaluator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -67,11 +68,14 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 
 	@Override
 	public void trap(final Object context, final Evaluator eval) throws InterruptedException {
-		final EvaluatorDebugThread thread = getThread(Thread.currentThread());
-		final EvaluatorDebugStackFrame frame = this.getStackFrame(eval, thread);
-		if (thread.getThread().isInterrupted()) {
+		if (Thread.currentThread().isInterrupted()) {
 			throw new InterruptedException();
 		}
+		if (eval instanceof VariableEvaluator) {
+			return; // skip evaluated variables
+		}
+		final EvaluatorDebugThread thread = getThread(Thread.currentThread());
+		final EvaluatorDebugStackFrame frame = this.getStackFrame(eval, thread);
 		DebugEvent request = thread.peekRequest();
 		if (shouldSuspend(request, frame, context)) {
 			// update model
@@ -104,7 +108,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 						final Object resumeSource = request.getSource();
 						final Object resumeSourceParent = resumeSource instanceof EvaluatorDebugStackFrame
 								? ((EvaluatorDebugStackFrame) resumeSource).getParent()
-										: frame.getParent();
+								: frame.getParent();
 						final Object suspendSource = resumeSourceParent != null ? resumeSourceParent : debugTarget;
 						thread.request(suspendSource, DebugEvent.SUSPEND, DebugEvent.STEP_END);
 						break;
@@ -132,7 +136,8 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			if (request.getDetail() == DebugEvent.STEP_END) { // suspend after step only when:
 				if (source instanceof EvaluatorDebugThread) { // requested on thread (STEP_INTO)
 					return true;
-				} else if (source instanceof EvaluatorDebugStackFrame) { // requested on stack frame and:
+				}
+				if (source instanceof EvaluatorDebugStackFrame) { // requested on stack frame and:
 					if (source == frame) { // we reached the requested frame (STEP_OVER or STEP_RETURN)
 						return true;
 					}
@@ -157,16 +162,14 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			}
 			final IResource resource = getResource(context);
 			final int lineNumber = getLineNumber(context);
-			if (breakpoint instanceof EvaluatorLineBreakpoint) {
-				final EvaluatorLineBreakpoint evaluatorLineBreakpoint = (EvaluatorLineBreakpoint) breakpoint;
-				if (evaluatorLineBreakpoint.isApplicable(frame.getEvaluator())
-						&& Objects.equal(breakpoint.getMarker().getResource(), resource)
-						&& evaluatorLineBreakpoint.getLineNumber() == lineNumber) {
-					if (evaluatorLineBreakpoint.isConditionEnabled()) {
-						return evaluateBreakpointCondition(evaluatorLineBreakpoint, frame);
-					}
-					return true;
+			if ((breakpoint instanceof final EvaluatorLineBreakpoint evaluatorLineBreakpoint)
+					&& (evaluatorLineBreakpoint.isApplicable(frame.getEvaluator())
+							&& Objects.equal(breakpoint.getMarker().getResource(), resource)
+							&& evaluatorLineBreakpoint.getLineNumber() == lineNumber)) {
+				if (evaluatorLineBreakpoint.isConditionEnabled()) {
+					return evaluateBreakpointCondition(evaluatorLineBreakpoint, frame);
 				}
+				return true;
 			}
 		} catch (final CoreException e) {
 			FordiacLogHelper.logWarning(e.getMessage(), e);
@@ -194,13 +197,12 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 	public IResource getResource(final Object context) {
 		if (context instanceof EObject) {
 			final EObject root = EcoreUtil.getRootContainer((EObject) context);
-			if (root instanceof FBType) {
-				final FBType fbType = (FBType) root;
+			if (root instanceof final FBType fbType) {
 				return fbType.getTypeEntry().getFile();
 			}
 			return getResource(((EObject) context).eResource());
-		} else if (context instanceof Resource) {
-			final Resource resource = (Resource) context;
+		}
+		if (context instanceof final Resource resource) {
 			final URI uri = resource.getURI();
 			if (uri.isPlatformResource()) {
 				final String path = uri.toPlatformString(true);
@@ -216,7 +218,8 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			final ICompositeNode node = NodeModelUtils.findActualNodeFor((EObject) context);
 			if (context instanceof ICallable) {
 				return node.getEndLine();
-			} else if (node != null) {
+			}
+			if (node != null) {
 				return node.getStartLine();
 			}
 		}
@@ -281,7 +284,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			// notify dead group or reschedule
 			if (debugTarget.getProcess().isTerminated()) {
 				DebugPlugin.getDefault().getBreakpointManager()
-				.removeBreakpointListener(CommonEvaluatorDebugger.this.debugTarget);
+						.removeBreakpointListener(CommonEvaluatorDebugger.this.debugTarget);
 				CommonEvaluatorDebugger.this.debugTarget.fireTerminateEvent();
 			} else {
 				this.schedule(1000);

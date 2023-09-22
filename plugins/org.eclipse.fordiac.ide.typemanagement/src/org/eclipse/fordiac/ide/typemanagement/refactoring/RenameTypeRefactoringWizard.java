@@ -17,7 +17,6 @@ import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
 
 public class RenameTypeRefactoringWizard extends RefactoringWizard {
 
-
 	public RenameTypeRefactoringWizard(final Refactoring refactoring, final int flags) {
 		super(refactoring, flags);
 	}
@@ -25,7 +24,6 @@ public class RenameTypeRefactoringWizard extends RefactoringWizard {
 	@Override
 	protected void addUserInputPages() {
 		addPage(new RenameTypeRefactoringInputPage(DEFAULT_IMAGE, getRefactoring()));
-
 	}
 
 }

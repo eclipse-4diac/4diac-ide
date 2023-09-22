@@ -50,13 +50,14 @@ public class RecordSequenceDialog extends MessageDialog {
 	private Text inputParameterText;
 	private Text inputCount;
 	private Button appendCheckbox;
-	private Button randomCheckbox;
-	private Button randomCheckboxValues;
+	private Button randomEventsCheckbox;
+	private Button randomParametersCheckbox;
 	private CCombo inputStartStateCombo;
 	private final List<String> events;
 	private final List<String> parameters;
 	private boolean append;
-	private boolean random;
+	private boolean isEventBoxChecked;
+	private boolean isParameterBoxChecked;
 	private int count;
 	private String startState;
 	private Label labeldialog;
@@ -84,17 +85,17 @@ public class RecordSequenceDialog extends MessageDialog {
 		dialogTop.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
 		dialogTop.setLayout(new GridLayout(3, false));
 
-		randomCheckbox = new Button(dialogTop, SWT.CHECK);
-		randomCheckbox.setText(Messages.RecordSequenceDialog_AddRandomEvents);
-		randomCheckbox.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
-		randomCheckbox.addSelectionListener(new SelectionListener() {
+		randomEventsCheckbox = new Button(dialogTop, SWT.CHECK);
+		randomEventsCheckbox.setText(Messages.RecordSequenceDialog_AddRandomEvents);
+		randomEventsCheckbox.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
+		randomEventsCheckbox.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				inputEventText.setEnabled(!randomCheckbox.getSelection());
-				inputParameterText.setEnabled(!randomCheckbox.getSelection());
-				inputCount.setVisible(randomCheckbox.getSelection());
-				labeldialog.setVisible(randomCheckbox.getSelection());
+				inputEventText.setEnabled(!randomEventsCheckbox.getSelection());
+				inputParameterText.setEnabled(!randomEventsCheckbox.getSelection());
+				inputCount.setVisible(randomEventsCheckbox.getSelection());
+				labeldialog.setVisible(randomEventsCheckbox.getSelection());
 
 			}
 
@@ -111,9 +112,9 @@ public class RecordSequenceDialog extends MessageDialog {
 		inputCount.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		inputCount.setVisible(false);
 
-		randomCheckboxValues = new Button(dialogTop, SWT.CHECK);
-		randomCheckboxValues.setText(Messages.RecordSequenceDialog_AddRandomValues);
-		randomCheckboxValues.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
+		randomParametersCheckbox = new Button(dialogTop, SWT.CHECK);
+		randomParametersCheckbox.setText(Messages.RecordSequenceDialog_AddRandomValues);
+		randomParametersCheckbox.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
 
 		final Group group = new Group(dialogArea, SWT.NONE);
 		group.setText(Messages.RecordSequenceDialog_ProvideInputs);
@@ -163,7 +164,8 @@ public class RecordSequenceDialog extends MessageDialog {
 		events.addAll(getEvents());
 		parameters.addAll(getParameters());
 		append = appendCheckbox.getSelection();
-		random = randomCheckbox.getSelection();
+		isEventBoxChecked = randomEventsCheckbox.getSelection();
+		isParameterBoxChecked = randomParametersCheckbox.getSelection();
 		if (!getCountText().isBlank()) {
 			count = Integer.parseInt(getCountText());
 		} else {
@@ -195,8 +197,12 @@ public class RecordSequenceDialog extends MessageDialog {
 		return append;
 	}
 
-	public boolean isRandom() {
-		return random;
+	public boolean isRandomEventBoxChecked() {
+		return isEventBoxChecked;
+	}
+
+	public boolean isRandomParameterBoxChecked() {
+		return isParameterBoxChecked;
 	}
 
 	public int getCount() {

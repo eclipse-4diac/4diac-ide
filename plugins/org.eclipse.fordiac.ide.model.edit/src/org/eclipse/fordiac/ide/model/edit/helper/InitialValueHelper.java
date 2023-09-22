@@ -52,7 +52,7 @@ public final class InitialValueHelper {
 	}
 
 	private static boolean hasDataTypeInitialValue(final VarDeclaration varDec) {
-		if (varDec.getFBNetworkElement() instanceof final StructManipulator) {
+		if (varDec.getFBNetworkElement() instanceof StructManipulator) {
 			return !StructManipulation.getMemberVarValue(varDec).isBlank();
 		}
 		return false;

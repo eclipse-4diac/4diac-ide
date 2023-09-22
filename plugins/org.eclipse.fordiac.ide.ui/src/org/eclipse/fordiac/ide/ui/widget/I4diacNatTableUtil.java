@@ -17,12 +17,6 @@ import org.eclipse.gef.commands.CompoundCommand;
 
 public interface I4diacNatTableUtil {
 
-	int NAME = 0;
-	int TYPE = 1;
-	int COMMENT = 2;
-	int INITIAL_VALUE = 3;
-	int VAR_CONFIG = 4;
-
 	void addEntry(Object entry, boolean isInput, int index, CompoundCommand cmd);
 
 	void removeEntry(Object entry, CompoundCommand cmd);

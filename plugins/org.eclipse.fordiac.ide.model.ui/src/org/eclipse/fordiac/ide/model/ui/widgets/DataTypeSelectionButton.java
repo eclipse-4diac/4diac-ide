@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
+import org.eclipse.fordiac.ide.model.ui.nat.TypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.ui.widget.AbstractSelectionButton;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.window.Window;
@@ -35,17 +36,17 @@ import org.eclipse.swt.widgets.Text;
 
 public class DataTypeSelectionButton extends AbstractSelectionButton {
 
-	private boolean isTypeSelectionForAdapters = false;
-	
-	public DataTypeSelectionButton(Map<String, List<String>> elements) {
+	private TypeSelectionTreeContentProvider typeSelectionTreeContentProvider;
+
+	public DataTypeSelectionButton(final Map<String, List<String>> elements) {
 		super(elements);
 	}
-	
-	public DataTypeSelectionButton(Map<String, List<String>> elements, boolean isTypeSelectionForAdapters) {
+
+	public DataTypeSelectionButton(final Map<String, List<String>> elements, final TypeSelectionTreeContentProvider typeSelectionTreeContentProvider) {
 		super(elements);
-		this.isTypeSelectionForAdapters = isTypeSelectionForAdapters;
+		this.typeSelectionTreeContentProvider = typeSelectionTreeContentProvider;
 	}
-	
+
 	@Override
 	protected Control activateCell(final Composite parent, final Object originalCanonicalValue) {
 		refreshProposal();
@@ -55,12 +56,13 @@ public class DataTypeSelectionButton extends AbstractSelectionButton {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				DataTypeTreeSelectionDialog dialog = null;
-				if (isTypeSelectionForAdapters) {
-					dialog = new DataTypeTreeSelectionDialog(Display.getCurrent().getActiveShell(), isTypeSelectionForAdapters);
+				if (typeSelectionTreeContentProvider != null) {
+					dialog = new DataTypeTreeSelectionDialog(Display.getCurrent().getActiveShell(),
+							typeSelectionTreeContentProvider);
 				} else {
 					dialog = new DataTypeTreeSelectionDialog(Display.getCurrent().getActiveShell());
 				}
-				 
+
 				dialog.setHelpAvailable(false);
 				dialog.setInput(elements);
 

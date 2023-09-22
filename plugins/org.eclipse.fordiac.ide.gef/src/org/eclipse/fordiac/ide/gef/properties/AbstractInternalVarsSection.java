@@ -17,23 +17,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.nebula.widgets.nattable.NatTable;
-import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
@@ -44,7 +38,7 @@ public abstract class AbstractInternalVarsSection extends AbstractSection implem
 	IAction[] defaultCopyPasteCut = new IAction[3];
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
-	protected VarDeclarationListProvider provider;
+	protected IChangeableRowDataProvider<VarDeclaration> provider;
 	protected NatTable table;
 	protected Map<String, List<String>> typeSelection = new HashMap<>();
 
@@ -70,14 +64,13 @@ public abstract class AbstractInternalVarsSection extends AbstractSection implem
 	}
 
 	protected VarDeclaration getLastSelectedVariable() {
-		return (VarDeclaration) provider.getLastSelectedVariable(table);
+		return (VarDeclaration) NatTableWidgetFactory.getLastSelectedVariable(table);
 	}
 
 	protected String getName() {
 		final VarDeclaration varConst = getLastSelectedVariable();
 		return (null != varConst) ? varConst.getName() : null;
 	}
-
 
 	@Override
 	public void aboutToBeShown() {
@@ -145,51 +138,11 @@ public abstract class AbstractInternalVarsSection extends AbstractSection implem
 
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
 		final List<String> elementaryTypes = dataTypeLib.getDataTypesSorted().stream()
-				.filter(type -> !(type instanceof StructuredType))
-				.map(DataType::getName).collect(Collectors.toList());
+				.filter(type -> !(type instanceof StructuredType)).map(DataType::getName).collect(Collectors.toList());
 		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
 
 		final List<String> structuredTypes = dataTypeLib.getDataTypesSorted().stream()
 				.filter(StructuredType.class::isInstance).map(DataType::getName).collect(Collectors.toList());
 		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
-
-	protected DataLayer setupDataLayer() {
-		final DataLayer dataLayer = new DataLayer(provider);
-		final IConfigLabelAccumulator dataLayerLabelAccumulator = dataLayer.getConfigLabelAccumulator();
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (dataLayerLabelAccumulator != null) {
-				dataLayerLabelAccumulator.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-			}
-			configureLabels(configLabels, columnPosition, rowPosition);
-		});
-
-		return dataLayer;
-	}
-
-	protected void configureLabels(final LabelStack configLabels, final int columnPosition, final int rowPosition) {
-		final VarDeclaration rowItem = provider.getRowObject(rowPosition);
-		switch (columnPosition) {
-		case I4diacNatTableUtil.TYPE:
-			if (rowItem.getType() instanceof ErrorMarkerDataType
-					|| (rowItem.isArray() && rowItem.getArraySize().hasError())) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-			}
-			configLabels.addLabel(TypeDeclarationEditorConfiguration.TYPE_DECLARATION_CELL);
-			break;
-		case I4diacNatTableUtil.INITIAL_VALUE:
-			if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-			}
-			configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
-			break;
-		case I4diacNatTableUtil.NAME:
-		case I4diacNatTableUtil.COMMENT:
-			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			break;
-		default:
-			break;
-		}
-	}
-
 }

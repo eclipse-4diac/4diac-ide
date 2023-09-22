@@ -23,7 +23,6 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
@@ -34,27 +33,28 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand {
-	private static final Pattern ARRAY_TYPE_DECLARATION_PATTERN = Pattern.compile("ARRAY\\s*\\[(.*)\\]\\s*OF\\s+(.+)"); //$NON-NLS-1$
+public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand {
+	private static final Pattern ARRAY_TYPE_DECLARATION_PATTERN = Pattern.compile("ARRAY\\s*\\[(.*)\\]\\s*OF\\s+(.+)", //$NON-NLS-1$
+			Pattern.CASE_INSENSITIVE);
 
 	private final DataType dataType;
 	private DataType oldDataType;
 	private final CompoundCommand additionalCommands = new CompoundCommand();
 
-	public ChangeDataTypeCommand(final IInterfaceElement interfaceElement, final DataType dataType) {
+	private ChangeDataTypeCommand(final IInterfaceElement interfaceElement, final DataType dataType) {
 		super(interfaceElement);
 		this.dataType = dataType;
 	}
 
 	public static ChangeDataTypeCommand forTypeName(final IInterfaceElement interfaceElement, final String typeName) {
-		final TypeLibrary typeLibrary = getTypeLibrary(interfaceElement);
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(interfaceElement);
 		final DataType dataType;
 		if (interfaceElement instanceof AdapterDeclaration) {
 			dataType = ImportHelper
@@ -105,6 +105,11 @@ public class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand
 	}
 
 	@Override
+	public boolean canExecute() {
+		return super.canExecute() && !isSubAppPinAndConnected();
+	}
+
+	@Override
 	protected void doExecute() {
 		oldDataType = getInterfaceElement().getType();
 		setNewType();
@@ -137,13 +142,5 @@ public class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand
 
 	public CompoundCommand getAdditionalCommands() {
 		return additionalCommands;
-	}
-
-	protected static TypeLibrary getTypeLibrary(final IInterfaceElement interfaceElement) {
-		if (EcoreUtil.getRootContainer(interfaceElement) instanceof final LibraryElement libraryElement) {
-			return libraryElement.getTypeLibrary();
-		}
-		throw new IllegalArgumentException(
-				"Could not determine type library for variable " + interfaceElement.getQualifiedName()); //$NON-NLS-1$
 	}
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
- *               2022 - 2023 Martin Erich Jobst
+ * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
+ *                			Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,7 @@
  *   Martin Jobst - fix data type compatibility handling
  *                - refactor and clean up
  *                - refactor marker handling
+ *   Martin Melik Merkumians - modernize Java, preserves VarConfig and Visible attributes at type update
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
@@ -202,13 +203,13 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	public void setInterface() {
 		newElement.setInterface(newElement.getType().getInterfaceList().copy());
-		if (newElement instanceof Multiplexer) {
-			((Multiplexer) newElement).setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
+		if (newElement instanceof final Multiplexer multiplexer) {
+			multiplexer.setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
 					.getInterfaceList().getOutputVars().get(0).getType());
 		}
-		if (newElement instanceof Demultiplexer) {
-			((Demultiplexer) newElement).setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry)
-					.getType().getInterfaceList().getInputVars().get(0).getType());
+		if (newElement instanceof final Demultiplexer demultiplexer) {
+			demultiplexer.setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
+					.getInterfaceList().getInputVars().get(0).getType());
 		}
 	}
 
@@ -259,22 +260,20 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	}
 
 	protected static List<Connection> getAllConnections(final FBNetworkElement element) {
-		final List<Connection> connections = new ArrayList<>();
-		for (final IInterfaceElement ifEle : element.getInterface().getAllInterfaceElements()) {
+		return element.getInterface().getAllInterfaceElements().stream().map((final IInterfaceElement ifEle) -> {
 			if (ifEle.isIsInput()) {
-				connections.addAll(ifEle.getInputConnections());
-			} else {
-				connections.addAll(ifEle.getOutputConnections());
+				return ifEle.getInputConnections();
 			}
-		}
-		return connections;
+			return ifEle.getOutputConnections();
+		}).flatMap(List::stream).toList();
+
 	}
 
 	protected void createValues() {
-		for (final VarDeclaration inVar : newElement.getInterface().getInputVars()) {
+		newElement.getInterface().getInputVars().stream().forEach(inVar -> {
 			inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			checkSourceParam(inVar);
-		}
+		});
 	}
 
 	protected void transferInstanceComments() {
@@ -284,6 +283,17 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 					if (newIE != null) {
 						newIE.setComment(ie.getComment());
 					}
+				});
+	}
+
+	protected void transferVarDeclarationAttributes() {
+		newElement.getInterface().getAllInterfaceElements().stream().filter(VarDeclaration.class::isInstance)
+				.map(VarDeclaration.class::cast)
+				.map(varDeclaration -> new VarDeclaration[] { varDeclaration,
+						((VarDeclaration) oldElement.getInterfaceElement(varDeclaration.getName())) })
+				.filter(varDecPair -> varDecPair[1] != null).forEach(varDecPair -> { // 0 is new, 1 is old
+					varDecPair[0].setVisible(varDecPair[1].isVisible());
+					varDecPair[0].setVarConfig(varDecPair[1].isVarConfig());
 				});
 	}
 
@@ -334,19 +344,17 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 					FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(oldElement)));
 		}
 
-		for (final IInterfaceElement element : oldElement.getInterface().getAllInterfaceElements()) {
-			deleteMarkersCmds
-					.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(element)));
-		}
+		oldElement.getInterface().getAllInterfaceElements().stream().forEach(element -> deleteMarkersCmds
+				.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(element))));
 
-		for (final VarDeclaration input : oldElement.getInterface().getInputVars()) {
+		oldElement.getInterface().getInputVars().stream().forEach(input -> {
 			deleteMarkersCmds.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(
 					FordiacMarkerHelper.findMarkers(input.getValue(), FordiacErrorMarker.INITIAL_VALUE_MARKER)));
 			deleteMarkersCmds.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(
 					FordiacMarkerHelper.findMarkers(input.getArraySize(), FordiacErrorMarker.TYPE_DECLARATION_MARKER)));
-		}
+		});
 
-		for (final VarDeclaration input : newElement.getInterface().getInputVars()) {
+		newElement.getInterface().getInputVars().stream().forEach(input -> {
 			if (input.isArray()) {
 				final String errorMessage = VariableOperations.validateType(input);
 				input.getArraySize().setErrorMessage(errorMessage);
@@ -356,7 +364,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 							.setTarget(input.getArraySize())));
 				}
 			}
-			if (hasValue(input.getValue())) {
+			if (hasValue(input)) {
 				final String errorMessage = VariableOperations.validateValue(input);
 				input.getValue().setErrorMessage(errorMessage);
 				if (!errorMessage.isBlank()) {
@@ -365,7 +373,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 									.setType(FordiacErrorMarker.INITIAL_VALUE_MARKER).setTarget(input.getValue())));
 				}
 			}
-		}
+		});
 	}
 
 	// Ensure that connectionless pins with a value are saved as well
@@ -388,11 +396,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	private void checkErrorMarkerPinParameters() {
 		for (final ErrorMarkerInterface erroMarker : oldElement.getInterface().getErrorMarker()) {
 			if (hasValue(erroMarker.getValue())) {
-				final IInterfaceElement updatedSelected = newElement.getInterfaceElement(erroMarker.getName());
-				if (updatedSelected instanceof VarDeclaration) {
+				if (newElement
+						.getInterfaceElement(erroMarker.getName()) instanceof final VarDeclaration varDeclaration) {
 					final Value value = LibraryElementFactory.eINSTANCE.createValue();
 					value.setValue(erroMarker.getValue().getValue());
-					((VarDeclaration) updatedSelected).setValue(value);
+					varDeclaration.setValue(value);
 					if (erroMarker.isIsInput() && erroMarker.getInputConnections().isEmpty()) {
 						// remove errormarker because value was set to pin and no connection needs to be
 						// copied
@@ -405,6 +413,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 				}
 			}
 		}
+	}
+
+	private static boolean hasValue(final VarDeclaration varDeclaration) {
+		return hasValue(varDeclaration.getValue());
 	}
 
 	private static boolean hasValue(final Value value) {
@@ -483,11 +495,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 
 		// set repaired endpoints
-		if (source instanceof ErrorMarkerInterface) {
-			((ErrorMarkerInterface) source).setRepairedEndpoint(destination);
+		if (source instanceof final ErrorMarkerInterface errorMarkerInterface) {
+			errorMarkerInterface.setRepairedEndpoint(destination);
 		}
-		if (destination instanceof ErrorMarkerInterface) {
-			((ErrorMarkerInterface) destination).setRepairedEndpoint(source);
+		if (destination instanceof final ErrorMarkerInterface errorMarkerInterface) {
+			errorMarkerInterface.setRepairedEndpoint(source);
 		}
 
 		// reconnect/replace connection
@@ -512,8 +524,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	protected boolean isConnectionInList(final Connection conn) {
 		for (final Object cmd : reconnCmds.getCommands()) {
-			if ((cmd instanceof DeleteConnectionCommand)
-					&& ((DeleteConnectionCommand) cmd).getConnection().equals(conn)) {
+			if ((cmd instanceof final DeleteConnectionCommand deleteConnectionCommand)
+					&& deleteConnectionCommand.getConnection().equals(conn)) {
 				return true;
 			}
 		}
@@ -522,9 +534,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	protected boolean isConnectionToBeCreated(final IInterfaceElement source, final IInterfaceElement dest) {
 		for (final Object cmd : reconnCmds.getCommands()) {
-			if ((cmd instanceof AbstractConnectionCreateCommand)
-					&& (((AbstractConnectionCreateCommand) cmd).getSource() == source)
-					&& (((AbstractConnectionCreateCommand) cmd).getDestination() == dest)) {
+			if ((cmd instanceof final AbstractConnectionCreateCommand abstractConnectionCreateCommand)
+					&& (abstractConnectionCreateCommand.getSource() == source)
+					&& (abstractConnectionCreateCommand.getDestination() == dest)) {
 				return true;
 			}
 		}
@@ -543,4 +555,12 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	}
 
 	protected abstract void createNewFB();
+
+	public FBNetworkElement getOldElement() {
+		return oldElement;
+	}
+
+	public FBNetworkElement getNewElement() {
+		return newElement;
+	}
 }

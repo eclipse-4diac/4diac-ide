@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.util.Switch;
 
 import org.eclipse.fordiac.ide.model.data.*;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
@@ -90,6 +91,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyDerivedType);
 				if (result == null) result = caseLibraryElement(anyDerivedType);
 				if (result == null) result = caseINamedElement(anyDerivedType);
+				if (result == null) result = caseConfigurableObject(anyDerivedType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -101,6 +103,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(arrayType);
 				if (result == null) result = caseLibraryElement(arrayType);
 				if (result == null) result = caseINamedElement(arrayType);
+				if (result == null) result = caseConfigurableObject(arrayType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -109,6 +112,7 @@ public class DataSwitch<T> extends Switch<T> {
 				T result = caseDataType(dataType);
 				if (result == null) result = caseLibraryElement(dataType);
 				if (result == null) result = caseINamedElement(dataType);
+				if (result == null) result = caseConfigurableObject(dataType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -120,6 +124,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(directlyDerivedType);
 				if (result == null) result = caseLibraryElement(directlyDerivedType);
 				if (result == null) result = caseINamedElement(directlyDerivedType);
+				if (result == null) result = caseConfigurableObject(directlyDerivedType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -130,6 +135,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(enumeratedType);
 				if (result == null) result = caseLibraryElement(enumeratedType);
 				if (result == null) result = caseINamedElement(enumeratedType);
+				if (result == null) result = caseConfigurableObject(enumeratedType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -147,6 +153,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(structuredType);
 				if (result == null) result = caseLibraryElement(structuredType);
 				if (result == null) result = caseINamedElement(structuredType);
+				if (result == null) result = caseConfigurableObject(structuredType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -164,6 +171,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(subrangeType);
 				if (result == null) result = caseLibraryElement(subrangeType);
 				if (result == null) result = caseINamedElement(subrangeType);
+				if (result == null) result = caseConfigurableObject(subrangeType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -173,6 +181,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(valueType);
 				if (result == null) result = caseLibraryElement(valueType);
 				if (result == null) result = caseINamedElement(valueType);
+				if (result == null) result = caseConfigurableObject(valueType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -183,6 +192,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(elementaryType);
 				if (result == null) result = caseLibraryElement(elementaryType);
 				if (result == null) result = caseINamedElement(elementaryType);
+				if (result == null) result = caseConfigurableObject(elementaryType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -193,6 +203,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(derivedType);
 				if (result == null) result = caseLibraryElement(derivedType);
 				if (result == null) result = caseINamedElement(derivedType);
+				if (result == null) result = caseConfigurableObject(derivedType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -202,6 +213,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(eventType);
 				if (result == null) result = caseLibraryElement(eventType);
 				if (result == null) result = caseINamedElement(eventType);
+				if (result == null) result = caseConfigurableObject(eventType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -211,6 +223,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyType);
 				if (result == null) result = caseLibraryElement(anyType);
 				if (result == null) result = caseINamedElement(anyType);
+				if (result == null) result = caseConfigurableObject(anyType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -221,6 +234,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyElementaryType);
 				if (result == null) result = caseLibraryElement(anyElementaryType);
 				if (result == null) result = caseINamedElement(anyElementaryType);
+				if (result == null) result = caseConfigurableObject(anyElementaryType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -232,6 +246,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyMagnitudeType);
 				if (result == null) result = caseLibraryElement(anyMagnitudeType);
 				if (result == null) result = caseINamedElement(anyMagnitudeType);
+				if (result == null) result = caseConfigurableObject(anyMagnitudeType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -244,6 +259,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyNumType);
 				if (result == null) result = caseLibraryElement(anyNumType);
 				if (result == null) result = caseINamedElement(anyNumType);
+				if (result == null) result = caseConfigurableObject(anyNumType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -257,6 +273,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyRealType);
 				if (result == null) result = caseLibraryElement(anyRealType);
 				if (result == null) result = caseINamedElement(anyRealType);
+				if (result == null) result = caseConfigurableObject(anyRealType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -271,6 +288,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(realType);
 				if (result == null) result = caseLibraryElement(realType);
 				if (result == null) result = caseINamedElement(realType);
+				if (result == null) result = caseConfigurableObject(realType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -285,6 +303,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(lrealType);
 				if (result == null) result = caseLibraryElement(lrealType);
 				if (result == null) result = caseINamedElement(lrealType);
+				if (result == null) result = caseConfigurableObject(lrealType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -298,6 +317,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyIntType);
 				if (result == null) result = caseLibraryElement(anyIntType);
 				if (result == null) result = caseINamedElement(anyIntType);
+				if (result == null) result = caseConfigurableObject(anyIntType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -312,6 +332,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyUnsignedType);
 				if (result == null) result = caseLibraryElement(anyUnsignedType);
 				if (result == null) result = caseINamedElement(anyUnsignedType);
+				if (result == null) result = caseConfigurableObject(anyUnsignedType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -327,6 +348,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(usintType);
 				if (result == null) result = caseLibraryElement(usintType);
 				if (result == null) result = caseINamedElement(usintType);
+				if (result == null) result = caseConfigurableObject(usintType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -342,6 +364,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(uintType);
 				if (result == null) result = caseLibraryElement(uintType);
 				if (result == null) result = caseINamedElement(uintType);
+				if (result == null) result = caseConfigurableObject(uintType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -357,6 +380,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(udintType);
 				if (result == null) result = caseLibraryElement(udintType);
 				if (result == null) result = caseINamedElement(udintType);
+				if (result == null) result = caseConfigurableObject(udintType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -372,6 +396,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(ulintType);
 				if (result == null) result = caseLibraryElement(ulintType);
 				if (result == null) result = caseINamedElement(ulintType);
+				if (result == null) result = caseConfigurableObject(ulintType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -386,6 +411,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anySignedType);
 				if (result == null) result = caseLibraryElement(anySignedType);
 				if (result == null) result = caseINamedElement(anySignedType);
+				if (result == null) result = caseConfigurableObject(anySignedType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -401,6 +427,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(sintType);
 				if (result == null) result = caseLibraryElement(sintType);
 				if (result == null) result = caseINamedElement(sintType);
+				if (result == null) result = caseConfigurableObject(sintType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -416,6 +443,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(intType);
 				if (result == null) result = caseLibraryElement(intType);
 				if (result == null) result = caseINamedElement(intType);
+				if (result == null) result = caseConfigurableObject(intType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -431,6 +459,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(dintType);
 				if (result == null) result = caseLibraryElement(dintType);
 				if (result == null) result = caseINamedElement(dintType);
+				if (result == null) result = caseConfigurableObject(dintType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -446,6 +475,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(lintType);
 				if (result == null) result = caseLibraryElement(lintType);
 				if (result == null) result = caseINamedElement(lintType);
+				if (result == null) result = caseConfigurableObject(lintType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -458,6 +488,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyDurationType);
 				if (result == null) result = caseLibraryElement(anyDurationType);
 				if (result == null) result = caseINamedElement(anyDurationType);
+				if (result == null) result = caseConfigurableObject(anyDurationType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -471,6 +502,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(timeType);
 				if (result == null) result = caseLibraryElement(timeType);
 				if (result == null) result = caseINamedElement(timeType);
+				if (result == null) result = caseConfigurableObject(timeType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -484,6 +516,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(ltimeType);
 				if (result == null) result = caseLibraryElement(ltimeType);
 				if (result == null) result = caseINamedElement(ltimeType);
+				if (result == null) result = caseConfigurableObject(ltimeType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -495,6 +528,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyBitType);
 				if (result == null) result = caseLibraryElement(anyBitType);
 				if (result == null) result = caseINamedElement(anyBitType);
+				if (result == null) result = caseConfigurableObject(anyBitType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -507,6 +541,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(boolType);
 				if (result == null) result = caseLibraryElement(boolType);
 				if (result == null) result = caseINamedElement(boolType);
+				if (result == null) result = caseConfigurableObject(boolType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -519,6 +554,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(byteType);
 				if (result == null) result = caseLibraryElement(byteType);
 				if (result == null) result = caseINamedElement(byteType);
+				if (result == null) result = caseConfigurableObject(byteType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -531,6 +567,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(wordType);
 				if (result == null) result = caseLibraryElement(wordType);
 				if (result == null) result = caseINamedElement(wordType);
+				if (result == null) result = caseConfigurableObject(wordType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -543,6 +580,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(dwordType);
 				if (result == null) result = caseLibraryElement(dwordType);
 				if (result == null) result = caseINamedElement(dwordType);
+				if (result == null) result = caseConfigurableObject(dwordType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -555,6 +593,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(lwordType);
 				if (result == null) result = caseLibraryElement(lwordType);
 				if (result == null) result = caseINamedElement(lwordType);
+				if (result == null) result = caseConfigurableObject(lwordType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -566,6 +605,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyCharsType);
 				if (result == null) result = caseLibraryElement(anyCharsType);
 				if (result == null) result = caseINamedElement(anyCharsType);
+				if (result == null) result = caseConfigurableObject(anyCharsType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -578,6 +618,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anySCharsType);
 				if (result == null) result = caseLibraryElement(anySCharsType);
 				if (result == null) result = caseINamedElement(anySCharsType);
+				if (result == null) result = caseConfigurableObject(anySCharsType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -590,6 +631,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyWCharsType);
 				if (result == null) result = caseLibraryElement(anyWCharsType);
 				if (result == null) result = caseINamedElement(anyWCharsType);
+				if (result == null) result = caseConfigurableObject(anyWCharsType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -602,6 +644,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyStringType);
 				if (result == null) result = caseLibraryElement(anyStringType);
 				if (result == null) result = caseINamedElement(anyStringType);
+				if (result == null) result = caseConfigurableObject(anyStringType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -616,6 +659,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(stringType);
 				if (result == null) result = caseLibraryElement(stringType);
 				if (result == null) result = caseINamedElement(stringType);
+				if (result == null) result = caseConfigurableObject(stringType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -630,6 +674,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(wstringType);
 				if (result == null) result = caseLibraryElement(wstringType);
 				if (result == null) result = caseINamedElement(wstringType);
+				if (result == null) result = caseConfigurableObject(wstringType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -642,6 +687,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyCharType);
 				if (result == null) result = caseLibraryElement(anyCharType);
 				if (result == null) result = caseINamedElement(anyCharType);
+				if (result == null) result = caseConfigurableObject(anyCharType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -656,6 +702,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(charType);
 				if (result == null) result = caseLibraryElement(charType);
 				if (result == null) result = caseINamedElement(charType);
+				if (result == null) result = caseConfigurableObject(charType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -670,6 +717,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(wcharType);
 				if (result == null) result = caseLibraryElement(wcharType);
 				if (result == null) result = caseINamedElement(wcharType);
+				if (result == null) result = caseConfigurableObject(wcharType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -681,6 +729,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(anyDateType);
 				if (result == null) result = caseLibraryElement(anyDateType);
 				if (result == null) result = caseINamedElement(anyDateType);
+				if (result == null) result = caseConfigurableObject(anyDateType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -693,6 +742,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(dateAndTimeType);
 				if (result == null) result = caseLibraryElement(dateAndTimeType);
 				if (result == null) result = caseINamedElement(dateAndTimeType);
+				if (result == null) result = caseConfigurableObject(dateAndTimeType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -705,6 +755,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(ldtType);
 				if (result == null) result = caseLibraryElement(ldtType);
 				if (result == null) result = caseINamedElement(ldtType);
+				if (result == null) result = caseConfigurableObject(ldtType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -717,6 +768,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(dateType);
 				if (result == null) result = caseLibraryElement(dateType);
 				if (result == null) result = caseINamedElement(dateType);
+				if (result == null) result = caseConfigurableObject(dateType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -729,6 +781,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(timeOfDayType);
 				if (result == null) result = caseLibraryElement(timeOfDayType);
 				if (result == null) result = caseINamedElement(timeOfDayType);
+				if (result == null) result = caseConfigurableObject(timeOfDayType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -741,6 +794,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(ltodType);
 				if (result == null) result = caseLibraryElement(ltodType);
 				if (result == null) result = caseINamedElement(ltodType);
+				if (result == null) result = caseConfigurableObject(ltodType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -753,6 +807,7 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDataType(ldateType);
 				if (result == null) result = caseLibraryElement(ldateType);
 				if (result == null) result = caseINamedElement(ldateType);
+				if (result == null) result = caseConfigurableObject(ldateType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1612,6 +1667,21 @@ public class DataSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseINamedElement(INamedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConfigurableObject(ConfigurableObject object) {
 		return null;
 	}
 

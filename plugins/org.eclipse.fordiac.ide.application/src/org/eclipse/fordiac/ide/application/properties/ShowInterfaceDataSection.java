@@ -16,7 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
@@ -67,15 +66,11 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 		final FBNetworkElement selection = getType();
 		if (selection instanceof final StructManipulator structManipulator) {
 			if (selection instanceof Multiplexer) {
-				((FordiacInterfaceListProvider) inputProvider)
-						.setInput(structManipulator.getStructType().getMemberVariables());
-				((FordiacInterfaceListProvider) outputProvider)
-						.setInput(structManipulator.getInterface().getOutputVars());
+				inputProvider.setInput(structManipulator.getStructType().getMemberVariables());
+				outputProvider.setInput(structManipulator.getInterface().getOutputVars());
 			} else if (selection instanceof Demultiplexer) {
-				((FordiacInterfaceListProvider) inputProvider)
-						.setInput(structManipulator.getInterface().getInputVars());
-				((FordiacInterfaceListProvider) outputProvider)
-						.setInput(structManipulator.getStructType().getMemberVariables());
+				inputProvider.setInput(structManipulator.getInterface().getInputVars());
+				outputProvider.setInput(structManipulator.getStructType().getMemberVariables());
 			}
 		} else if ((selection instanceof SubApp) && (selection.getType() != null)) { // typed subapp
 			setTableInput(selection.getType().getInterfaceList());

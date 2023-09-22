@@ -22,12 +22,11 @@ import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSemanticSeque
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement;
@@ -98,8 +97,8 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.ST_ARRAY_INITIALIZER_EXPRESSION:
 				sequence_STArrayInitializerExpression(context, (STArrayInitializerExpression) semanticObject); 
 				return; 
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT:
-				sequence_STAssignmentStatement(context, (STAssignmentStatement) semanticObject); 
+			case STCorePackage.ST_ASSIGNMENT:
+				sequence_STAssignment(context, (STAssignment) semanticObject); 
 				return; 
 			case STCorePackage.ST_BINARY_EXPRESSION:
 				sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(context, (STBinaryExpression) semanticObject); 
@@ -112,9 +111,6 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 				return; 
 			case STCorePackage.ST_CALL_NAMED_OUTPUT_ARGUMENT:
 				sequence_STCallNamedOutputArgument(context, (STCallNamedOutputArgument) semanticObject); 
-				return; 
-			case STCorePackage.ST_CALL_STATEMENT:
-				sequence_STCallStatement(context, (STCallStatement) semanticObject); 
 				return; 
 			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT:
 				sequence_STCallUnnamedArgument(context, (STCallUnnamedArgument) semanticObject); 

@@ -23,28 +23,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
-import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection<VarDeclaration> {
@@ -102,37 +100,6 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	}
 
 	@Override
-	protected void configureLabels(final ListDataProvider<VarDeclaration> provider, final LabelStack configLabels,
-			final int columnPosition, final int rowPosition) {
-		final VarDeclaration rowItem = provider.getRowObject(rowPosition);
-		switch (columnPosition) {
-		case I4diacNatTableUtil.TYPE:
-			if (rowItem.getType() instanceof ErrorMarkerDataType
-					|| (rowItem.isArray() && rowItem.getArraySize().hasError())) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-			}
-			if (isEditable()) {
-				configLabels.addLabel(TypeDeclarationEditorConfiguration.TYPE_DECLARATION_CELL);
-			}
-			break;
-		case I4diacNatTableUtil.INITIAL_VALUE:
-			if (isEditable()) {
-				if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
-					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-				}
-				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
-			}
-			break;
-		case I4diacNatTableUtil.NAME:
-		case I4diacNatTableUtil.COMMENT:
-			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			break;
-		default:
-			break;
-		}
-	}
-
-	@Override
 	public void removeEntry(final Object entry, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			cmd.add(newDeleteCommand((IInterfaceElement) entry));
@@ -141,11 +108,13 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	public void setupOutputTable(final Group outputsGroup) {
-		outputProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
-		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
+		outputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
+		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS);
+		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputProvider));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new VarDeclarationColumnProvider(), getSectionEditableRule(), new DataTypeSelectionButton(typeSelection),
-				this, false);
+				new VarDeclarationColumnProvider(), getSectionEditableRule(),
+				new DataTypeSelectionButton(typeSelection), this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.configure();
@@ -153,25 +122,21 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	public void setupInputTable(final Group inputsGroup) {
-		inputProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
-		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
+		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
+		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS);
+		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new VarDeclarationColumnProvider(), getSectionEditableRule(), new DataTypeSelectionButton(typeSelection),
-				this, true);
+				new VarDeclarationColumnProvider(), getSectionEditableRule(),
+				new DataTypeSelectionButton(typeSelection), this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.configure();
 	}
 
 	@Override
-	protected void setInputInit() {
-		((VarDeclarationListProvider) outputProvider).setTypeLib(getDataTypeLib());
-		((VarDeclarationListProvider) inputProvider).setTypeLib(getDataTypeLib());
-	}
-
-	@Override
 	public void setTableInput(final InterfaceList il) {
-		((FordiacInterfaceListProvider<VarDeclaration>) inputProvider).setInput(il.getInputVars());
-		((FordiacInterfaceListProvider<VarDeclaration>) outputProvider).setInput(il.getOutputVars());
+		inputProvider.setInput(il.getInputVars());
+		outputProvider.setInput(il.getOutputVars());
 	}
 }

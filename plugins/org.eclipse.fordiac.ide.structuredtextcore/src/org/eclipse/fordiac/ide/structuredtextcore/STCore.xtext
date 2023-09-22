@@ -113,18 +113,14 @@ STStatement:
 	STForStatement |
 	STWhileStatement |
 	STRepeatStatement |
-	=> STAssignmentStatement |
-	STCallStatement |
+	STAssignment |
 	{STReturn} 'RETURN' |
 	{STContinue} 'CONTINUE' |
 	{STExit} 'EXIT') ';' |
 	{STNop} ';';
 
-STAssignmentStatement:
-	left=STAccessExpression ':=' right=STExpression;
-
-STCallStatement:
-	call=STAccessExpression;
+STAssignment returns STExpression:
+	STExpression ({STAssignment.left=current} ':=' right=STAssignment)?;
 
 STCallArgument:
 	STCallUnnamedArgument | STCallNamedInputArgument | STCallNamedOutputArgument;
@@ -241,8 +237,12 @@ STPrimaryExpression returns STExpression:
 	'(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions;
 
 STFeatureExpression returns STExpression:
-	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] (=>call?='(' (parameters+=STCallArgument
-	(',' parameters+=STCallArgument)*)? ')')?;
+	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] 
+	(=>call?='(' 
+		(
+			parameters+=STCallArgument (',' parameters+=STCallArgument)*
+		)?
+	')')?;
 
 STFeatureName:
 	QualifiedName | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
@@ -338,7 +338,7 @@ STAnyCharsType:
 	'STRING' | 'WSTRING' | 'CHAR' | 'WCHAR';
 
 QualifiedName:
-	ID ('::' ID)*;
+	ID (=>'::' ID)*;
 
 QualifiedNameWithWildcard:
 	QualifiedName '::*'?;

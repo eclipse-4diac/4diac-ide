@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
@@ -85,8 +85,8 @@ public class STCoreControlFlowValidator {
 	}
 
 	public void validateStatement(final STStatement statement) {
-		if (statement instanceof final STAssignmentStatement assignmentStatement) {
-			validateStatement(assignmentStatement);
+		if (statement instanceof final STAssignment assignment) {
+			validateStatement(assignment);
 		} else if (statement instanceof final STIfStatement ifStatement) {
 			validateStatement(ifStatement);
 		} else if (statement instanceof final STCaseStatement caseStatement) {
@@ -102,9 +102,9 @@ public class STCoreControlFlowValidator {
 		}
 	}
 
-	protected void validateStatement(final STAssignmentStatement statement) {
-		validateFeatureReferences(statement.getRight());
-		validateFeatureReferences(statement.getLeft());
+	protected void validateStatement(final STAssignment assignment) {
+		validateFeatureReferences(assignment.getRight());
+		validateFeatureReferences(assignment.getLeft());
 	}
 
 	protected void validateStatement(final STIfStatement statement) {

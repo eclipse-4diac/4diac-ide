@@ -19,7 +19,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.edit,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.typemanagement,
- org.eclipse.fordiac.ide.model.search
+ org.eclipse.fordiac.ide.model.search,
+ org.eclipse.ltk.core.refactoring
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: org.eclipse.fordiac.ide.datatypeeditor
 Bundle-ActivationPolicy: lazy

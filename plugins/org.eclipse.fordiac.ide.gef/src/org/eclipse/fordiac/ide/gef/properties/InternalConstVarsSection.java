@@ -16,7 +16,9 @@ import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalConstVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalConstVariableCommand;
@@ -25,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
@@ -45,8 +48,9 @@ public class InternalConstVarsSection extends AbstractInternalVarsSection {
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
-		provider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
-		final DataLayer dataLayer = setupDataLayer();
+		provider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
+		final DataLayer dataLayer = new VarDeclarationDataLayer(provider, VarDeclarationTableColumn.DEFAULT_COLUMNS);
+		dataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(provider));
 
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new VarDeclarationColumnProvider(),
 				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
@@ -66,7 +70,6 @@ public class InternalConstVarsSection extends AbstractInternalVarsSection {
 		final BaseFBType currentType = getType();
 		if (currentType != null) {
 			provider.setInput(currentType.getInternalConstVars());
-			provider.setTypeLib(getDataTypeLib());
 			initTypeSelection(getDataTypeLib());
 		}
 	}

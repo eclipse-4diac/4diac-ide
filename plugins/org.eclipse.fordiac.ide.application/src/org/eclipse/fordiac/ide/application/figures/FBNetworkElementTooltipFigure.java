@@ -26,6 +26,7 @@ import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.figures.VerticalLineCompartmentFigure;
 import org.eclipse.fordiac.ide.model.annotations.MappingAnnotations;
+import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -51,7 +52,7 @@ public class FBNetworkElementTooltipFigure extends Figure {
 		add(line);
 		setConstraint(line, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 
-		if (element.getComment() != null && element.getComment().length() > 0) {
+		if (CommentHelper.hasComment(element)) {
 			final FlowPage fp = new FlowPage();
 			final TextFlow content = new TextFlow(element.getComment());
 			content.setLayoutManager(new ParagraphTextLayout(content, ParagraphTextLayout.WORD_WRAP_HARD));

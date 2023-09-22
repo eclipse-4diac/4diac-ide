@@ -104,7 +104,7 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		nameText = createGroupText(fbInfoGroup, true);
 		nameText.addModifyListener(e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
+			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
 		});
 	}

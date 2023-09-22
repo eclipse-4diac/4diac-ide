@@ -22,6 +22,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -62,6 +63,28 @@ public class FBNetworkElementItemProvider extends TypedConfigureableObjectItemPr
 				getString("_UI_PropertyDescriptor_description", "_UI_PositionableElement_position_feature", //$NON-NLS-1$ //$NON-NLS-2$
 						"_UI_PositionableElement_type"),  //$NON-NLS-1$
 				LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__POSITION, true, false, true, null, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Error Message feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addErrorMessagePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ErrorMarkerRef_errorMessage_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerRef_errorMessage_feature", "_UI_ErrorMarkerRef_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.ERROR_MARKER_REF__ERROR_MESSAGE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/** This adds a property descriptor for the Mapping feature. <!-- begin-user-doc --> <!-- end-user-doc -->

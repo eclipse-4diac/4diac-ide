@@ -43,11 +43,11 @@ public class DataTypeExporter extends AbstractTypeExporter {
 	protected void createTypeSpecificXMLEntries() throws XMLStreamException {
 		addCompilerInfo(getType().getCompilerInfo());
 
-		if (getType() instanceof StructuredType) {
-			createStructContent((StructuredType) getType());
-		} else {
-			throw new XMLStreamException(MessageFormat.format(Messages.DataTypeExporter_UNSUPPORTED_DATA_TYPE, getType()));
+		if (!(getType() instanceof StructuredType)) {
+			throw new XMLStreamException(
+					MessageFormat.format(Messages.DataTypeExporter_UNSUPPORTED_DATA_TYPE, getType()));
 		}
+		createStructContent((StructuredType) getType());
 	}
 
 	private void createStructContent(final StructuredType type) throws XMLStreamException {
@@ -56,6 +56,9 @@ public class DataTypeExporter extends AbstractTypeExporter {
 			addVarDeclaration(varDecl);
 		}
 		addEndElement();
+		if (!type.getAttributes().isEmpty()) {
+			addAttributes(type.getAttributes());
+		}
 	}
 
 }

@@ -27,7 +27,8 @@ public class ChangeTypeCommandTest extends FBNetworkTestBase {
 	private static State changeDataInputType(final State state) {
 		final InterfaceList fb = state.getFunctionblock().getType().getInterfaceList();
 
-		state.setCommand(new ChangeDataTypeCommand(fb.getInputVars().get(0), getDatatypelib().getType(FordiacKeywords.LWORD)));
+		state.setCommand(ChangeDataTypeCommand.forDataType(fb.getInputVars().get(0),
+				getDatatypelib().getType(FordiacKeywords.LWORD)));
 		return commandExecution(state);
 	}
 
@@ -37,7 +38,8 @@ public class ChangeTypeCommandTest extends FBNetworkTestBase {
 		t.test(fb.getInputVars().get(0).getType(), getDatatypelib().getType(FordiacKeywords.LWORD));
 	}
 
-	private static void validateDataInputTypeNetworkElements(final State state, final State oldState, final TestFunction t) {
+	private static void validateDataInputTypeNetworkElements(final State state, final State oldState,
+			final TestFunction t) {
 		final InterfaceList fb = state.getFunctionblock().getType().getInterfaceList();
 		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
 		final InterfaceList fb2 = state.getFbNetwork().getNetworkElements().get(1).getInterface();
@@ -54,16 +56,16 @@ public class ChangeTypeCommandTest extends FBNetworkTestBase {
 				new ExecutionDescription<>("Prepare Functionblocks", //$NON-NLS-1$
 						WithCreateTest::createInterfaceElements, //
 						WithCreateTest::verifyFBCreation //
-						), //
+				), //
 				new ExecutionDescription<>("Change Datatype of DataInput of FBType", //$NON-NLS-1$
 						ChangeTypeCommandTest::changeDataInputType, //
 						ChangeTypeCommandTest::validateDataInputType //
-						), //
+				), //
 				new ExecutionDescription<>("Update FBType to Network elements", //$NON-NLS-1$
 						WithCreateTest::updateNetworkElements, //
 						ChangeTypeCommandTest::validateDataInputTypeNetworkElements //
-						) //
-				);
+				) //
+		);
 		return createCommands(executionDescriptions);
 	}
 

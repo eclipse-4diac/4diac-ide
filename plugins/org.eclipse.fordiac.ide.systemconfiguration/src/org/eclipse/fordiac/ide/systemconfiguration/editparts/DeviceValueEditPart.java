@@ -23,13 +23,13 @@ import org.eclipse.gef.RequestConstants;
 public class DeviceValueEditPart extends ValueEditPart {
 
 	@Override
-	protected String getDefaultValue(final IInterfaceElement ie) {
-		final VarDeclaration typeInput = getDeviceTypeInput(ie);
+	protected IInterfaceElement getDefaultValueContext() {
+		final VarDeclaration typeInput = getDeviceTypeInput(getModel().getParentIE());
 		if (typeInput != null) {
-			return super.getDefaultValue(typeInput);
+			return typeInput;
 		}
 		// we should never be here as all device interface need a type entry, but as backup
-		return super.getDefaultValue(ie);
+		return super.getDefaultValueContext();
 	}
 
 	private static VarDeclaration getDeviceTypeInput(final IInterfaceElement ie) {

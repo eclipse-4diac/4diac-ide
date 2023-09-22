@@ -16,6 +16,7 @@ import java.util.Collection
 import java.util.Map
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
@@ -59,6 +60,7 @@ final class STAlgorithmEmbeddedEditorUtil {
 			}
 			if (resource instanceof STAlgorithmResource) {
 				resource.libraryElement = type
+				resource.includeInternalLibraryElement = type instanceof BaseFBType
 				resource.additionalContent.clear
 				if (additionalContent !== null) {
 					resource.additionalContent.addAll(additionalContent)

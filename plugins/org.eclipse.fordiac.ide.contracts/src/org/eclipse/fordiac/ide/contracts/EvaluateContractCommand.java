@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.contracts;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -22,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 
 public class EvaluateContractCommand extends Command {
+
 	private final SubApp subapp;
 	private ChangeCommentCommand cccmd;
 
@@ -34,19 +36,19 @@ public class EvaluateContractCommand extends Command {
 
 	@Override
 	public void execute() {
-		if (subapp.getName().contains("_CONTRACT")) { //$NON-NLS-1$
+		if (subapp.getName().startsWith(ContractKeywords.CONTRACT)) {
 			final String oldComment = subapp.getComment();
-			int pos = oldComment.indexOf("ConstractState");//$NON-NLS-1$
+			int pos = oldComment.indexOf(ContractKeywords.CONSTRACT_STATE);
 			if (pos == -1) {
 				pos = oldComment.length();
 			}
 			final StringBuilder comment = new StringBuilder();
 			comment.append(oldComment.subSequence(0, pos));
-			comment.append(" ConstractState"); //$NON-NLS-1$
+			comment.append(ContractKeywords.CONSTRACT_STATE);
 			if (evaluate(subapp)) {
-				comment.append(" TRUE"); //$NON-NLS-1$
+				comment.append(ContractKeywords.TRUE);
 			} else {
-				comment.append(" FALSE"); //$NON-NLS-1$
+				comment.append(ContractKeywords.FALSE);
 			}
 			cccmd = new ChangeCommentCommand(subapp, comment.toString());
 			if (cccmd.canExecute()) {
@@ -57,41 +59,41 @@ public class EvaluateContractCommand extends Command {
 
 	private boolean evaluate(final SubApp subappToEvaluate) {
 		final FBNetwork fBNetwork = subappToEvaluate.getSubAppNetwork();
-		final EList<FBNetworkElement> fBNetworkElemnents = fBNetwork.getNetworkElements();
+		final EList<FBNetworkElement> fBNetworkElements = fBNetwork.getNetworkElements();
 		final EList<SubApp> subApps = new BasicEList<>();
-		for (final FBNetworkElement element : fBNetworkElemnents) {
+		for (final FBNetworkElement element : fBNetworkElements) {
 			if ((element instanceof final SubApp containedSubapp)) {
 				final EvaluateContractCommand eccmd = new EvaluateContractCommand(containedSubapp);
 				if (eccmd.canExecute()) {
 					eccmd.execute();
 				}
-				if (!hasValideContract(containedSubapp)) {
+				if (!hasValidContract(containedSubapp)) {
 					return false;
 				}
 				subApps.add(containedSubapp);
 			}
 			if (subApps.isEmpty()) {
-				return hasValideContract(subapp);
+				return hasValidContract(subapp);
 			}
 
 		}
-		return evaluteContaindSubapps(subApps);
+		return evaluteContainedSubapps(subApps);
 	}
 
-	private boolean evaluteContaindSubapps(final EList<SubApp> subApps) {
+	private boolean evaluteContainedSubapps(final EList<SubApp> subApps) {
 		final int[] times = new int[2];
-		extractAssumtionNumbers(times, subapp);
+		extractAssumptionNumbers(times, subapp);
 		for (final SubApp containdSubApp : subApps) {
-			final int[] timesContaind = new int[2];
-			extractAssumtionNumbers(timesContaind, containdSubApp);
-			if ((times[0] < timesContaind[0]) || (times[1] > timesContaind[1])) {
+			final int[] timesContained = new int[2];
+			extractAssumptionNumbers(timesContained, containdSubApp);
+			if ((times[0] < timesContained[0]) || (times[1] > timesContained[1])) {
 				return false;
 			}
-			times[0] = timesContaind[0];
-			times[1] = timesContaind[1];
-			extractGuaranteeNumbers(timesContaind, containdSubApp);
-			times[0] += timesContaind[0];
-			times[1] += timesContaind[1];
+			times[0] = timesContained[0];
+			times[1] = timesContained[1];
+			extractGuaranteeNumbers(timesContained, containdSubApp);
+			times[0] += timesContained[0];
+			times[1] += timesContained[1];
 		}
 		final int[] timesGuarantee = new int[2];
 		extractGuaranteeNumbers(timesGuarantee, subapp);
@@ -99,9 +101,9 @@ public class EvaluateContractCommand extends Command {
 	}
 
 	private static void extractGuaranteeNumbers(final int[] times, final SubApp source) {
-		String[] parts = source.getComment().split("ms"); //$NON-NLS-1$
+		String[] parts = source.getComment().split(ContractKeywords.UNIT_OF_TIME);
 		parts = parts[1].split(" "); //$NON-NLS-1$
-		parts = parts[parts.length - 1].split(","); //$NON-NLS-1$
+		parts = parts[parts.length - 1].split(ContractKeywords.UNIT_OF_TIME);
 		if (parts.length == 1) {
 			times[1] = Integer.parseInt(parts[0]);
 			times[0] = 0;
@@ -114,10 +116,10 @@ public class EvaluateContractCommand extends Command {
 		}
 	}
 
-	private static void extractAssumtionNumbers(final int[] times, final SubApp source) {
-		String[] parts = source.getComment().split("ms"); //$NON-NLS-1$
+	private static void extractAssumptionNumbers(final int[] times, final SubApp source) {
+		String[] parts = source.getComment().split(ContractKeywords.UNIT_OF_TIME);
 		parts = parts[0].split(" "); //$NON-NLS-1$
-		parts = parts[parts.length - 1].split(","); //$NON-NLS-1$
+		parts = parts[parts.length - 1].split(ContractKeywords.INTERVAL_DIVIDER);
 		if (parts.length == 1) {
 			times[1] = Integer.parseInt(parts[0]);
 			times[0] = 0;
@@ -130,9 +132,10 @@ public class EvaluateContractCommand extends Command {
 		}
 	}
 
-	private static boolean hasValideContract(final SubApp contract) {
-		return contract.getComment().startsWith("TRUE") //$NON-NLS-1$
-				|| contract.getComment().startsWith("ASSUMPTION") && contract.getComment().contains("GUARANTEE");  //$NON-NLS-1$ //$NON-NLS-2$
+	private static boolean hasValidContract(final SubApp contract) {
+		return contract.getComment().startsWith(ContractKeywords.TRUE)
+				|| contract.getComment().startsWith(ContractKeywords.ASSUMPTION)
+						&& contract.getComment().contains(ContractKeywords.GUARANTEE);
 
 	}
 

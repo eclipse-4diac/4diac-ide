@@ -31,19 +31,126 @@ import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.EValidator;
+
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 
 import org.eclipse.fordiac.ide.model.buildpath.BuildpathPackage;
+
 import org.eclipse.fordiac.ide.model.buildpath.impl.BuildpathPackageImpl;
+
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 
 import org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl;
+
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.Color;
+import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Function;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Identification;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
+import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.Language;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Link;
+import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
+import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
+import org.eclipse.fordiac.ide.model.libraryElement.Service;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
+import org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.With;
+
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
-import org.eclipse.fordiac.ide.model.libraryElement.*;
+
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -454,6 +561,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass interfaceListEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass iTypedElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2705,6 +2819,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EClass getITypedElement() {
+		return iTypedElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getIVarElement() {
 		return iVarElementEClass;
 	}
@@ -4224,6 +4348,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(interfaceListEClass, INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS);
 		createEReference(interfaceListEClass, INTERFACE_LIST__ERROR_MARKER);
 
+		iTypedElementEClass = createEClass(ITYPED_ELEMENT);
+
 		iVarElementEClass = createEClass(IVAR_ELEMENT);
 		createEReference(iVarElementEClass, IVAR_ELEMENT__VAR_DECLARATIONS);
 
@@ -4448,7 +4574,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		baseFBTypeEClass.getESuperTypes().add(this.getFBType());
 		basicFBTypeEClass.getESuperTypes().add(this.getBaseFBType());
 		automationSystemEClass.getESuperTypes().add(this.getLibraryElement());
-		automationSystemEClass.getESuperTypes().add(this.getConfigurableObject());
 		cfbInstanceEClass.getESuperTypes().add(this.getFB());
 		commentEClass.getESuperTypes().add(this.getFBNetworkElement());
 		communicationChannelEClass.getESuperTypes().add(this.getFB());
@@ -4464,7 +4589,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		deviceEClass.getESuperTypes().add(this.getColorizableElement());
 		deviceEClass.getESuperTypes().add(this.getIVarElement());
 		deviceTypeEClass.getESuperTypes().add(this.getLibraryElement());
-		deviceTypeEClass.getESuperTypes().add(this.getConfigurableObject());
 		ecStateEClass.getESuperTypes().add(this.getINamedElement());
 		ecStateEClass.getESuperTypes().add(this.getPositionableElement());
 		ecTransitionEClass.getESuperTypes().add(this.getPositionableElement());
@@ -4483,20 +4607,20 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		fbNetworkElementEClass.getESuperTypes().add(this.getPositionableElement());
 		fbNetworkElementEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		fbTypeEClass.getESuperTypes().add(this.getLibraryElement());
-		fbTypeEClass.getESuperTypes().add(this.getConfigurableObject());
 		fbTypeEClass.getESuperTypes().add(this.getICallable());
 		functionEClass.getESuperTypes().add(this.getICallable());
 		functionFBTypeEClass.getESuperTypes().add(this.getFBType());
 		globalConstantsEClass.getESuperTypes().add(this.getLibraryElement());
-		globalConstantsEClass.getESuperTypes().add(this.getConfigurableObject());
 		groupEClass.getESuperTypes().add(this.getFBNetworkElement());
 		hiddenElementEClass.getESuperTypes().add(this.getConfigurableObject());
 		iCallableEClass.getESuperTypes().add(this.getINamedElement());
-		iInterfaceElementEClass.getESuperTypes().add(this.getINamedElement());
+		iInterfaceElementEClass.getESuperTypes().add(this.getITypedElement());
 		iInterfaceElementEClass.getESuperTypes().add(this.getConfigurableObject());
 		iInterfaceElementEClass.getESuperTypes().add(this.getHiddenElement());
 		inputPrimitiveEClass.getESuperTypes().add(this.getPrimitive());
+		iTypedElementEClass.getESuperTypes().add(this.getINamedElement());
 		libraryElementEClass.getESuperTypes().add(this.getINamedElement());
+		libraryElementEClass.getESuperTypes().add(this.getConfigurableObject());
 		linkEClass.getESuperTypes().add(this.getINamedElement());
 		linkEClass.getESuperTypes().add(this.getConfigurableObject());
 		localVariableEClass.getESuperTypes().add(this.getVarDeclaration());
@@ -4510,14 +4634,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		resourceEClass.getESuperTypes().add(this.getIVarElement());
 		resourceEClass.getESuperTypes().add(this.getMappingTarget());
 		resourceTypeEClass.getESuperTypes().add(this.getLibraryElement());
-		resourceTypeEClass.getESuperTypes().add(this.getConfigurableObject());
 		resourceTypeFBEClass.getESuperTypes().add(this.getFB());
 		segmentEClass.getESuperTypes().add(this.getTypedConfigureableObject());
 		segmentEClass.getESuperTypes().add(this.getPositionableElement());
 		segmentEClass.getESuperTypes().add(this.getColorizableElement());
 		segmentEClass.getESuperTypes().add(this.getIVarElement());
 		segmentTypeEClass.getESuperTypes().add(this.getLibraryElement());
-		segmentTypeEClass.getESuperTypes().add(this.getConfigurableObject());
 		serviceSequenceEClass.getESuperTypes().add(this.getINamedElement());
 		serviceSequenceEClass.getESuperTypes().add(this.getConfigurableObject());
 		serviceInterfaceEClass.getESuperTypes().add(this.getINamedElement());
@@ -4534,7 +4656,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		textFunctionEClass.getESuperTypes().add(this.getFunction());
 		textFunctionBodyEClass.getESuperTypes().add(this.getFunctionBody());
 		textMethodEClass.getESuperTypes().add(this.getMethod());
-		typedConfigureableObjectEClass.getESuperTypes().add(this.getINamedElement());
+		typedConfigureableObjectEClass.getESuperTypes().add(this.getITypedElement());
 		typedConfigureableObjectEClass.getESuperTypes().add(this.getConfigurableObject());
 		valueEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		varDeclarationEClass.getESuperTypes().add(this.getIInterfaceElement());
@@ -5015,10 +5137,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(iInterfaceElementEClass, this.getFBNetworkElement(), "getFBNetworkElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(iInterfaceElementEClass, ecorePackage.getEString(), "getTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		addEOperation(iInterfaceElementEClass, ecorePackage.getEString(), "getFullTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
 		op = addEOperation(iInterfaceElementEClass, ecorePackage.getEBoolean(), "validateName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		g1 = createEGenericType(ecorePackage.getEMap());
@@ -5084,6 +5202,14 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(interfaceListEClass, this.getVarDeclList(), "getVisibleInputVars", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(interfaceListEClass, this.getVarDeclList(), "getVisibleOutputVars", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(iTypedElementEClass, ITypedElement.class, "ITypedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		addEOperation(iTypedElementEClass, this.getINamedElement(), "getType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(iTypedElementEClass, ecorePackage.getEString(), "getTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(iTypedElementEClass, ecorePackage.getEString(), "getFullTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(iVarElementEClass, IVarElement.class, "IVarElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getIVarElement_VarDeclarations(), this.getVarDeclaration(), null, "varDeclarations", null, 0, -1, IVarElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -6011,7 +6137,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
-		  (iInterfaceElementEClass.getEOperations().get(3),
+		  (iInterfaceElementEClass.getEOperations().get(1),
 		   source,
 		   new String[] {
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$

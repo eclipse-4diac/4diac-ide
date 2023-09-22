@@ -26,6 +26,7 @@
  *       - fix type validation for literals
  *       - validation for truncated string literals
  *       - validation for (initializer) expression source
+ *       - validation for unused or wildcard imports
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.validation;
 
@@ -39,6 +40,7 @@ import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.
 import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.StreamSupport;
@@ -60,6 +62,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter;
@@ -68,14 +71,14 @@ import org.eclipse.fordiac.ide.structuredtextcore.converter.STStringValueConvert
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
@@ -85,7 +88,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpressio
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
@@ -97,12 +102,16 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.AccessMode;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.diagnostics.Severity;
+import org.eclipse.xtext.naming.IQualifiedNameConverter;
+import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
+import org.eclipse.xtext.util.Strings;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ValidationMessageAcceptor;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 public class STCoreValidator extends AbstractSTCoreValidator {
 
@@ -111,6 +120,12 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Inject
 	private STStringValueConverter stringValueConverter;
+
+	@Inject
+	private IQualifiedNameConverter nameConverter;
+
+	@Inject
+	private Provider<STCoreTypeUsageCollector> typeUsageCollectorProvider;
 
 	public static final String ISSUE_CODE_PREFIX = "org.eclipse.fordiac.ide.structuredtextcore."; //$NON-NLS-1$
 	public static final String CONSECUTIVE_UNDERSCORE_IN_IDENTIFIER_ERROR = ISSUE_CODE_PREFIX
@@ -165,8 +180,59 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String FOR_CONTROL_VARIABLE_NON_TEMPORARY = ISSUE_CODE_PREFIX
 			+ "forControlVariableNonTemporary"; //$NON-NLS-1$
 	public static final String FOR_CONTROL_VARIABLE_UNDEFINED = ISSUE_CODE_PREFIX + "forControlVariableUndefined"; //$NON-NLS-1$
+	public static final String EXIT_NOT_IN_LOOP = ISSUE_CODE_PREFIX + "exitNotInLoop"; //$NON-NLS-1$
+	public static final String NESTED_ASSIGNMENT = ISSUE_CODE_PREFIX + "nestedAssignment"; //$NON-NLS-1$
+	public static final String INVALID_IMPORT = ISSUE_CODE_PREFIX + "invalidImport"; //$NON-NLS-1$
+	public static final String WILDCARD_IMPORT = ISSUE_CODE_PREFIX + "wildcardImport"; //$NON-NLS-1$
+	public static final String UNUSED_IMPORT = ISSUE_CODE_PREFIX + "unusedImport"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
+
+	private static final String WILDCARD = "*"; //$NON-NLS-1$
+
+	protected void checkImports(final STSource source, final String packageName, final List<? extends Import> imports) {
+		if (imports.isEmpty()) {
+			return;
+		}
+
+		final QualifiedName packageQualifiedName = Strings.isEmpty(packageName) ? QualifiedName.EMPTY
+				: nameConverter.toQualifiedName(packageName);
+
+		final STCoreTypeUsageCollector collector = typeUsageCollectorProvider.get();
+		final Set<QualifiedName> usedTypes = collector.collectUsedTypes(source);
+		imports.stream().forEach(imp -> checkImport(imp, packageQualifiedName, usedTypes));
+	}
+
+	protected void checkImport(final Import imp, final QualifiedName packageName, final Set<QualifiedName> usedTypes) {
+		final String importedNamespace = imp.getImportedNamespace();
+		if (Strings.isEmpty(importedNamespace)) {
+			return;
+		}
+
+		final QualifiedName qualifiedName = nameConverter.toQualifiedName(importedNamespace);
+		if (qualifiedName == null || qualifiedName.isEmpty()) {
+			return;
+		}
+
+		if (WILDCARD.equals(qualifiedName.getLastSegment())) {
+			if (qualifiedName.getSegmentCount() <= 1) {
+				error(MessageFormat.format(Messages.STCoreValidator_InvalidWildcardImport, importedNamespace), imp,
+						LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(), INVALID_IMPORT,
+						importedNamespace);
+			} else {
+				warning(MessageFormat.format(Messages.STCoreValidator_WildcardImportDiscouraged, importedNamespace),
+						imp, LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(), WILDCARD_IMPORT,
+						importedNamespace);
+			}
+		} else if (isImplicitImport(qualifiedName, packageName) || !usedTypes.contains(qualifiedName)) {
+			warning(MessageFormat.format(Messages.STCoreValidator_UnusedImport, importedNamespace), imp,
+					LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(), UNUSED_IMPORT, importedNamespace);
+		}
+	}
+
+	public static boolean isImplicitImport(final QualifiedName imported, final QualifiedName packageName) {
+		return imported.getSegmentCount() <= 1 || imported.skipLast(1).equals(packageName);
+	}
 
 	private void checkRangeOnValidity(final STExpression expression) {
 		if (expression instanceof final STBinaryExpression subRangeExpression) {
@@ -376,31 +442,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	@Check
-	public void checkValidLHS(final STAssignmentStatement statement) {
-		accept(isAssignable(statement.getLeft()), statement, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT);
-	}
-
-	private static boolean isValidCall(final STExpression expression) {
-		return expression instanceof final STFeatureExpression featureExpression && featureExpression.isCall()
-				&& ((STFeatureExpression) expression).getFeature() instanceof ICallable;
-	}
-
-	private static boolean isInCallStatementOnly(final STFeatureExpression expression) {
-		if (expression.eContainer() instanceof STMemberAccessExpression) {
-			return expression.eContainer().eContainer() instanceof STCallStatement;
-		}
-		return expression.eContainer() instanceof STCallStatement;
-	}
-
-	private static boolean hasReturnType(final ICallable callable) {
-		return callable.getReturnType() != null;
+	public void checkValidLHS(final STAssignment expression) {
+		accept(isAssignable(expression.getLeft()), expression, STCorePackage.Literals.ST_ASSIGNMENT__LEFT);
 	}
 
 	@Check
 	public void checkCallWithoutReturnIsOnlyInCallStatement(final STFeatureExpression expression) {
-		if (isValidCall(expression) && !hasReturnType((ICallable) expression.getFeature())
-				&& !isInCallStatementOnly(expression)) {
-			final var callable = (ICallable) expression.getFeature();
+		if (expression.getFeature() instanceof final ICallable callable && callable.getReturnType() == null
+				&& expression.isCall() && STCoreUtil.getAccessMode(expression) != AccessMode.NONE) {
 			error(MessageFormat.format(Messages.STCoreValidator_AssignmentOfCallWithoutReturnType, callable.getName()),
 					expression, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, RETURNED_TYPE_IS_VOID);
 		}
@@ -517,10 +566,17 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	@Check
-	public void checkAssignmentTypeCompatibility(final STAssignmentStatement statement) {
-		final var leftType = statement.getLeft().getResultType();
-		final var rightType = statement.getRight().getResultType();
-		checkTypeCompatibility(leftType, rightType, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__RIGHT);
+	public void checkNestedAssignment(final STAssignment expression) {
+		if (expression.eContainer() instanceof STAssignment) {
+			error(Messages.STCoreValidator_NestedAssignment, null, NESTED_ASSIGNMENT);
+		}
+	}
+
+	@Check
+	public void checkAssignmentTypeCompatibility(final STAssignment expression) {
+		final var leftType = expression.getLeft().getResultType();
+		final var rightType = expression.getRight().getResultType();
+		checkTypeCompatibility(leftType, rightType, STCorePackage.Literals.ST_ASSIGNMENT__RIGHT);
 	}
 
 	@Check
@@ -822,8 +878,23 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 	}
 
-	/* Here we already know that we have a MultibitPartialExpression. This function checks bound on static access
-	 * (without "()") */
+	@Check
+	public void checkExitIsInLoop(final STExit exitStatement) {
+		if (StreamSupport.stream(EcoreUtil2.getAllContainers(exitStatement).spliterator(), false)
+				.filter(STStatement.class::isInstance).map(STStatement.class::cast).noneMatch(this::isLoopStatement)) {
+			error(Messages.STCoreValidator_ExitNeedsToBeInsideALoop, null, EXIT_NOT_IN_LOOP);
+		}
+	}
+
+	private boolean isLoopStatement(final STStatement statement) {
+		return statement instanceof STForStatement || statement instanceof STWhileStatement
+				|| statement instanceof STRepeatStatement;
+	}
+
+	/*
+	 * Here we already know that we have a MultibitPartialExpression. This function
+	 * checks bound on static access (without "()")
+	 */
 	private void checkMultibitPartialExpression(final STMultibitPartialExpression expression,
 			final DataType accessorType, final DataType receiverType) {
 		if (receiverType instanceof AnyBitType) {
@@ -916,7 +987,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	protected static IsAssignableResult isAssignable(final STExpression expression) {
-		if (expression instanceof final STMultibitPartialExpression) {
+		if (expression instanceof STMultibitPartialExpression) {
 			return IsAssignableResult.ASSIGNABLE;
 		}
 		if (expression instanceof final STFeatureExpression featureExpression) {

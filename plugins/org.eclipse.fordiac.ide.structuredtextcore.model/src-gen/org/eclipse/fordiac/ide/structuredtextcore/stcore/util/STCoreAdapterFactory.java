@@ -26,6 +26,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.*;
 
 /**
@@ -141,12 +143,8 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTStatementAdapter();
 			}
 			@Override
-			public Adapter caseSTAssignmentStatement(STAssignmentStatement object) {
-				return createSTAssignmentStatementAdapter();
-			}
-			@Override
-			public Adapter caseSTCallStatement(STCallStatement object) {
-				return createSTCallStatementAdapter();
+			public Adapter caseSTAssignment(STAssignment object) {
+				return createSTAssignmentAdapter();
 			}
 			@Override
 			public Adapter caseSTCallArgument(STCallArgument object) {
@@ -301,8 +299,16 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTInitializerExpressionSourceAdapter();
 			}
 			@Override
+			public Adapter caseImport(Import object) {
+				return createImportAdapter();
+			}
+			@Override
 			public Adapter caseINamedElement(INamedElement object) {
 				return createINamedElementAdapter();
+			}
+			@Override
+			public Adapter caseITypedElement(ITypedElement object) {
+				return createITypedElementAdapter();
 			}
 			@Override
 			public Adapter caseICallable(ICallable object) {
@@ -525,30 +531,16 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement <em>ST Assignment Statement</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment <em>ST Assignment</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
 	 * @generated
 	 */
-	public Adapter createSTAssignmentStatementAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement <em>ST Call Statement</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
-	 * @generated
-	 */
-	public Adapter createSTCallStatementAdapter() {
+	public Adapter createSTAssignmentAdapter() {
 		return null;
 	}
 
@@ -1085,6 +1077,20 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Import <em>Import</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Import
+	 * @generated
+	 */
+	public Adapter createImportAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -1095,6 +1101,20 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createINamedElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement <em>ITyped Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
+	 * @generated
+	 */
+	public Adapter createITypedElementAdapter() {
 		return null;
 	}
 

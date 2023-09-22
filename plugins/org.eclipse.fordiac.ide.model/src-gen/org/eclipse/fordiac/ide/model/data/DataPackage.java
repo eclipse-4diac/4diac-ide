@@ -101,6 +101,15 @@ public interface DataPackage extends EPackage {
 	int DATA_TYPE__COMMENT = LibraryElementPackage.LIBRARY_ELEMENT__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_TYPE__ATTRIBUTES = LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -172,6 +181,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_TYPE__COMMENT = DATA_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_TYPE__ATTRIBUTES = DATA_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -247,6 +265,15 @@ public interface DataPackage extends EPackage {
 	int ANY_DERIVED_TYPE__COMMENT = ANY_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_DERIVED_TYPE__ATTRIBUTES = ANY_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -318,6 +345,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ARRAY_TYPE__COMMENT = ANY_DERIVED_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARRAY_TYPE__ATTRIBUTES = ANY_DERIVED_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -420,6 +456,15 @@ public interface DataPackage extends EPackage {
 	int VALUE_TYPE__COMMENT = DATA_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_TYPE__ATTRIBUTES = DATA_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -491,6 +536,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int DERIVED_TYPE__COMMENT = VALUE_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DERIVED_TYPE__ATTRIBUTES = VALUE_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -575,6 +629,15 @@ public interface DataPackage extends EPackage {
 	int DIRECTLY_DERIVED_TYPE__COMMENT = DERIVED_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTLY_DERIVED_TYPE__ATTRIBUTES = DERIVED_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -655,6 +718,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ENUMERATED_TYPE__COMMENT = VALUE_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENUMERATED_TYPE__ATTRIBUTES = VALUE_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -776,6 +848,15 @@ public interface DataPackage extends EPackage {
 	int STRUCTURED_TYPE__COMMENT = ANY_DERIVED_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRUCTURED_TYPE__ATTRIBUTES = ANY_DERIVED_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -895,6 +976,15 @@ public interface DataPackage extends EPackage {
 	int SUBRANGE_TYPE__COMMENT = DERIVED_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBRANGE_TYPE__ATTRIBUTES = DERIVED_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -986,6 +1076,15 @@ public interface DataPackage extends EPackage {
 	int ELEMENTARY_TYPE__COMMENT = VALUE_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ELEMENTARY_TYPE__ATTRIBUTES = VALUE_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1057,6 +1156,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int EVENT_TYPE__COMMENT = DATA_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_TYPE__ATTRIBUTES = DATA_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -1132,6 +1240,15 @@ public interface DataPackage extends EPackage {
 	int ANY_ELEMENTARY_TYPE__COMMENT = ANY_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_ELEMENTARY_TYPE__ATTRIBUTES = ANY_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1203,6 +1320,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_MAGNITUDE_TYPE__COMMENT = ANY_ELEMENTARY_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_MAGNITUDE_TYPE__ATTRIBUTES = ANY_ELEMENTARY_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -1278,6 +1404,15 @@ public interface DataPackage extends EPackage {
 	int ANY_NUM_TYPE__COMMENT = ANY_MAGNITUDE_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_NUM_TYPE__ATTRIBUTES = ANY_MAGNITUDE_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1349,6 +1484,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_REAL_TYPE__COMMENT = ANY_NUM_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_REAL_TYPE__ATTRIBUTES = ANY_NUM_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -1424,6 +1568,15 @@ public interface DataPackage extends EPackage {
 	int REAL_TYPE__COMMENT = ANY_REAL_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REAL_TYPE__ATTRIBUTES = ANY_REAL_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1495,6 +1648,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int LREAL_TYPE__COMMENT = ANY_REAL_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LREAL_TYPE__ATTRIBUTES = ANY_REAL_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -1570,6 +1732,15 @@ public interface DataPackage extends EPackage {
 	int ANY_INT_TYPE__COMMENT = ANY_NUM_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_INT_TYPE__ATTRIBUTES = ANY_NUM_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1641,6 +1812,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_UNSIGNED_TYPE__COMMENT = ANY_INT_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_UNSIGNED_TYPE__ATTRIBUTES = ANY_INT_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -1716,6 +1896,15 @@ public interface DataPackage extends EPackage {
 	int USINT_TYPE__COMMENT = ANY_UNSIGNED_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USINT_TYPE__ATTRIBUTES = ANY_UNSIGNED_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1787,6 +1976,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int UINT_TYPE__COMMENT = ANY_UNSIGNED_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UINT_TYPE__ATTRIBUTES = ANY_UNSIGNED_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -1862,6 +2060,15 @@ public interface DataPackage extends EPackage {
 	int UDINT_TYPE__COMMENT = ANY_UNSIGNED_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UDINT_TYPE__ATTRIBUTES = ANY_UNSIGNED_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1933,6 +2140,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ULINT_TYPE__COMMENT = ANY_UNSIGNED_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ULINT_TYPE__ATTRIBUTES = ANY_UNSIGNED_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -2008,6 +2224,15 @@ public interface DataPackage extends EPackage {
 	int ANY_SIGNED_TYPE__COMMENT = ANY_INT_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_SIGNED_TYPE__ATTRIBUTES = ANY_INT_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2079,6 +2304,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int SINT_TYPE__COMMENT = ANY_SIGNED_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SINT_TYPE__ATTRIBUTES = ANY_SIGNED_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -2154,6 +2388,15 @@ public interface DataPackage extends EPackage {
 	int INT_TYPE__COMMENT = ANY_SIGNED_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INT_TYPE__ATTRIBUTES = ANY_SIGNED_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2225,6 +2468,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int DINT_TYPE__COMMENT = ANY_SIGNED_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DINT_TYPE__ATTRIBUTES = ANY_SIGNED_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -2300,6 +2552,15 @@ public interface DataPackage extends EPackage {
 	int LINT_TYPE__COMMENT = ANY_SIGNED_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINT_TYPE__ATTRIBUTES = ANY_SIGNED_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2371,6 +2632,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_DURATION_TYPE__COMMENT = ANY_MAGNITUDE_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_DURATION_TYPE__ATTRIBUTES = ANY_MAGNITUDE_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -2446,6 +2716,15 @@ public interface DataPackage extends EPackage {
 	int TIME_TYPE__COMMENT = ANY_DURATION_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TIME_TYPE__ATTRIBUTES = ANY_DURATION_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2517,6 +2796,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int LTIME_TYPE__COMMENT = ANY_DURATION_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LTIME_TYPE__ATTRIBUTES = ANY_DURATION_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -2592,6 +2880,15 @@ public interface DataPackage extends EPackage {
 	int ANY_BIT_TYPE__COMMENT = ANY_ELEMENTARY_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_BIT_TYPE__ATTRIBUTES = ANY_ELEMENTARY_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2663,6 +2960,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int BOOL_TYPE__COMMENT = ANY_BIT_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOL_TYPE__ATTRIBUTES = ANY_BIT_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -2738,6 +3044,15 @@ public interface DataPackage extends EPackage {
 	int BYTE_TYPE__COMMENT = ANY_BIT_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BYTE_TYPE__ATTRIBUTES = ANY_BIT_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2809,6 +3124,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int WORD_TYPE__COMMENT = ANY_BIT_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORD_TYPE__ATTRIBUTES = ANY_BIT_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -2884,6 +3208,15 @@ public interface DataPackage extends EPackage {
 	int DWORD_TYPE__COMMENT = ANY_BIT_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DWORD_TYPE__ATTRIBUTES = ANY_BIT_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2955,6 +3288,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int LWORD_TYPE__COMMENT = ANY_BIT_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LWORD_TYPE__ATTRIBUTES = ANY_BIT_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -3030,6 +3372,15 @@ public interface DataPackage extends EPackage {
 	int ANY_CHARS_TYPE__COMMENT = ANY_ELEMENTARY_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_CHARS_TYPE__ATTRIBUTES = ANY_ELEMENTARY_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3101,6 +3452,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_SCHARS_TYPE__COMMENT = ANY_CHARS_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_SCHARS_TYPE__ATTRIBUTES = ANY_CHARS_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -3176,6 +3536,15 @@ public interface DataPackage extends EPackage {
 	int ANY_WCHARS_TYPE__COMMENT = ANY_CHARS_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_WCHARS_TYPE__ATTRIBUTES = ANY_CHARS_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3247,6 +3616,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_STRING_TYPE__COMMENT = ANY_CHARS_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_STRING_TYPE__ATTRIBUTES = ANY_CHARS_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -3331,6 +3709,15 @@ public interface DataPackage extends EPackage {
 	int STRING_TYPE__COMMENT = ANY_STRING_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_TYPE__ATTRIBUTES = ANY_STRING_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3411,6 +3798,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int WSTRING_TYPE__COMMENT = ANY_STRING_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WSTRING_TYPE__ATTRIBUTES = ANY_STRING_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -3495,6 +3891,15 @@ public interface DataPackage extends EPackage {
 	int ANY_CHAR_TYPE__COMMENT = ANY_CHARS_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_CHAR_TYPE__ATTRIBUTES = ANY_CHARS_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3566,6 +3971,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHAR_TYPE__COMMENT = ANY_CHAR_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHAR_TYPE__ATTRIBUTES = ANY_CHAR_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -3641,6 +4055,15 @@ public interface DataPackage extends EPackage {
 	int WCHAR_TYPE__COMMENT = ANY_CHAR_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WCHAR_TYPE__ATTRIBUTES = ANY_CHAR_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3712,6 +4135,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int ANY_DATE_TYPE__COMMENT = ANY_ELEMENTARY_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_DATE_TYPE__ATTRIBUTES = ANY_ELEMENTARY_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -3787,6 +4219,15 @@ public interface DataPackage extends EPackage {
 	int DATE_AND_TIME_TYPE__COMMENT = ANY_DATE_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_AND_TIME_TYPE__ATTRIBUTES = ANY_DATE_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3858,6 +4299,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int LDT_TYPE__COMMENT = ANY_DATE_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LDT_TYPE__ATTRIBUTES = ANY_DATE_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -3933,6 +4383,15 @@ public interface DataPackage extends EPackage {
 	int DATE_TYPE__COMMENT = ANY_DATE_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_TYPE__ATTRIBUTES = ANY_DATE_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4004,6 +4463,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int TIME_OF_DAY_TYPE__COMMENT = ANY_DATE_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TIME_OF_DAY_TYPE__ATTRIBUTES = ANY_DATE_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -4079,6 +4547,15 @@ public interface DataPackage extends EPackage {
 	int LTOD_TYPE__COMMENT = ANY_DATE_TYPE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LTOD_TYPE__ATTRIBUTES = ANY_DATE_TYPE__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4150,6 +4627,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int LDATE_TYPE__COMMENT = ANY_DATE_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LDATE_TYPE__ATTRIBUTES = ANY_DATE_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.

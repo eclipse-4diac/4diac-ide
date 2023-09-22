@@ -17,65 +17,97 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementErrorMarkerCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class ChangeNameCommand extends Command {
+public final class ChangeNameCommand extends Command implements ConnectionLayoutTagger {
 	private final INamedElement element;
 	private final String name;
 	private String oldName;
-	private INamedElement adapterElement;
-	private final CompoundCommand deleteErrorMarkersCommand = new CompoundCommand();
+	private final CompoundCommand additionalCommands = new CompoundCommand();
 
-	public ChangeNameCommand(final INamedElement element, final String name) {
+	private ChangeNameCommand(final INamedElement element, final String name) {
 		this.element = element;
 		this.name = name;
 	}
 
+	public static ChangeNameCommand forName(final INamedElement element, final String name) {
+		final ChangeNameCommand result = new ChangeNameCommand(element, name);
+		if (element instanceof final FBNetworkElement fbne) {
+			if (fbne.isMapped()) {
+				result.getAdditionalCommands().add(new ChangeNameCommand(fbne.getOpposite(), name));
+			}
+			if (fbne.hasError()) {
+				result.getAdditionalCommands().add(new DeleteFBNetworkElementErrorMarkerCommand(fbne));
+			}
+		}
+		if (element instanceof final IInterfaceElement interfaceElement
+				&& interfaceElement.getFBNetworkElement() instanceof final SubApp subApp && subApp.isMapped()) {
+			result.getAdditionalCommands().add(
+					new ChangeNameCommand(subApp.getOpposite().getInterfaceElement(interfaceElement.getName()), name));
+		}
+		if (element instanceof final AdapterDeclaration adapterDeclaration) {
+			if (adapterDeclaration.getAdapterFB() != null) {
+				result.getAdditionalCommands().add(new ChangeNameCommand(adapterDeclaration.getAdapterFB(), name));
+			}
+			if (adapterDeclaration.getAdapterNetworkFB() != null) {
+				result.getAdditionalCommands()
+						.add(new ChangeNameCommand(adapterDeclaration.getAdapterNetworkFB(), name));
+			}
+		}
+		if (element instanceof final AdapterFB adapterFB) {
+			result.getAdditionalCommands().add(new ChangeNameCommand(adapterFB.getAdapterDecl(), name));
+		}
+		return result;
+	}
+
 	@Override
 	public boolean canExecute() {
-		return NameRepository.isValidName(element, name);
+		return NameRepository.isValidName(element, name)
+				&& (additionalCommands.isEmpty() || additionalCommands.canExecute())
+				&& !(element instanceof final FBNetworkElement fbne && fbne.isContainedInTypedInstance());
+	}
+
+	@Override
+	public boolean canRedo() {
+		return super.canRedo() && (additionalCommands.isEmpty() || additionalCommands.canRedo());
+	}
+
+	@Override
+	public boolean canUndo() {
+		return super.canUndo() && (additionalCommands.isEmpty() || additionalCommands.canUndo());
 	}
 
 	@Override
 	public void execute() {
 		oldName = element.getName();
-		checkForAdapter();
-		checkForErrorMarkers();
-
-		if (deleteErrorMarkersCommand.canExecute()) {
-			deleteErrorMarkersCommand.execute();
-		}
 		setName(name);
+		additionalCommands.execute();
 	}
 
 	@Override
 	public void undo() {
-		if (deleteErrorMarkersCommand.canUndo()) {
-			deleteErrorMarkersCommand.undo();
-		}
+		additionalCommands.undo();
 		setName(oldName);
 	}
 
 	@Override
 	public void redo() {
-		if (deleteErrorMarkersCommand.canRedo()) {
-			deleteErrorMarkersCommand.redo();
-		}
 		setName(name);
+		additionalCommands.redo();
 	}
 
 	private void setName(final String name) {
 		element.setName(name);
-		if (null != adapterElement) {
-			adapterElement.setName(name);
-		}
 	}
 
 	public INamedElement getElement() {
@@ -86,23 +118,7 @@ public class ChangeNameCommand extends Command {
 		return oldName;
 	}
 
-	private void checkForAdapter() {
-		if (element instanceof final AdapterDeclaration adpDecl) {
-			if (adpDecl.getAdapterFB() != null) {
-				adapterElement = adpDecl.getAdapterFB();
-			} else if (adpDecl.getAdapterNetworkFB() != null) {
-				adapterElement = adpDecl.getAdapterNetworkFB();
-			}
-		}
-		if (element instanceof final AdapterFB adapterFB) {
-			adapterElement = adapterFB.getAdapterDecl();
-		}
+	public CompoundCommand getAdditionalCommands() {
+		return additionalCommands;
 	}
-
-	private void checkForErrorMarkers() {
-		if (element instanceof final FBNetworkElement fbne && fbne.hasError()) {
-			deleteErrorMarkersCommand.add(new DeleteFBNetworkElementErrorMarkerCommand(fbne));
-		}
-	}
-
 }

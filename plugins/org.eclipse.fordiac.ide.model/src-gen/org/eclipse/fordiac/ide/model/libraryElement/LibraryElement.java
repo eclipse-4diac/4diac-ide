@@ -40,7 +40,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * @model
  * @generated
  */
-public interface LibraryElement extends INamedElement {
+public interface LibraryElement extends INamedElement, ConfigurableObject {
 	/**
 	 * Returns the value of the '<em><b>Version Info</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VersionInfo}.

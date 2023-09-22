@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.model.search.types.StructManipulatorSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -45,7 +44,6 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -124,7 +122,7 @@ public class FBUpdateDialog extends MessageDialog {
 	private Set<INamedElement> createInputSet() {
 		final Set<INamedElement> inputElements = new HashSet<>();
 		// find SubAppTypes
-		final InstanceSearch search = StructDataTypeSearch
+		InstanceSearch search = StructDataTypeSearch
 				.createStructInterfaceSearch((StructuredType) dataTypeEntry.getTypeEditable());
 		// add types to input
 		inputElements.addAll(search.performTypeLibBlockSearch(dataTypeEntry.getTypeLibrary()).stream()
@@ -132,8 +130,8 @@ public class FBUpdateDialog extends MessageDialog {
 		// initiate map with types
 		inputElements.stream().forEach(st -> children.put(st.getName(), new HashSet<>()));
 		// add typed subapp instances as children
-		performSearch(new FBInstanceSearch(dataTypeEntry)).stream().filter(FBNetworkElement.class::isInstance)
-				.map(FBNetworkElement.class::cast).forEach(s -> {
+		InstanceSearch.performSearch(new FBInstanceSearch(dataTypeEntry)).stream()
+				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).forEach(s -> {
 					if (s instanceof StructManipulator || (s instanceof final SubApp subApp && !subApp.isTyped())) {
 						inputElements.add(s);
 					} else {
@@ -141,7 +139,12 @@ public class FBUpdateDialog extends MessageDialog {
 					}
 				});
 		// add structmanipulators and untyped subapps to input
-		inputElements.addAll(performSearch(new StructManipulatorSearch(dataTypeEntry)));
+		inputElements.addAll(InstanceSearch.performSearch(
+				StructDataTypeSearch.createStructMemberSearch((StructuredType) dataTypeEntry.getTypeEditable()),
+				new StructManipulatorSearch(dataTypeEntry)));
+		// add StructuredTypes
+		search = StructDataTypeSearch.createStructMemberSearch((StructuredType) dataTypeEntry.getTypeEditable());
+		inputElements.addAll(search.searchStructuredTypes(dataTypeEntry.getTypeLibrary()));
 		return inputElements;
 	}
 
@@ -158,6 +161,9 @@ public class FBUpdateDialog extends MessageDialog {
 				}
 				if (element instanceof final FBNetworkElement networkElem) {
 					return networkElem.getName();
+				}
+				if (element instanceof final StructuredType st) {
+					return st.getName();
 				}
 				return super.getText(element);
 			}
@@ -180,8 +186,11 @@ public class FBUpdateDialog extends MessageDialog {
 				if (element instanceof final StructManipulator manipulator) {
 					return manipulator.getTypeName();
 				}
-				if (element instanceof final SubAppType) {
-					return "SubAppType";
+				if (element instanceof SubAppType) {
+					return "SubAppType"; //$NON-NLS-1$
+				}
+				if (element instanceof StructuredType) {
+					return "StructuredType"; //$NON-NLS-1$
 				}
 				return element.getClass().getSimpleName();
 
@@ -197,26 +206,8 @@ public class FBUpdateDialog extends MessageDialog {
 		return structSearch.performCompleteSearch();
 	}
 
-	protected Set<INamedElement> performSubAppSearch() {
-		final InstanceSearch subAppSearch = new FBInstanceSearch(dataTypeEntry);
-		return subAppSearch.performCompleteSearch();
-	}
-
-	protected static Set<INamedElement> performSearch(final InstanceSearch... searchers) {
-		final Set<INamedElement> results = new HashSet<>();
-		for (final InstanceSearch search : searchers) {
-			results.addAll(search.performCompleteSearch());
-		}
-		return results;
-	}
-
 	private static TreeViewer createTreeViewer(final Composite parent) {
 		return new TreeViewer(parent, SWT.CHECK);
-	}
-
-	private static TableViewer createTableViewer(final Composite parent) {
-		return TableWidgetFactory.createTableViewer(parent,
-				SWT.CHECK | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 	}
 
 	private void configureTableViewer(final TreeViewer viewer) {
@@ -348,8 +339,8 @@ public class FBUpdateDialog extends MessageDialog {
 			@Override
 			public int compare(final Viewer viewer, final Object e1, final Object e2) {
 				final TreeColumn sortCol = table.getSortColumn();
-				String s1 = "";
-				String s2 = "";
+				String s1 = ""; //$NON-NLS-1$
+				String s2 = ""; //$NON-NLS-1$
 				if (sortCol.equals(colElement.getColumn())) {
 					s1 = labelElement.getText(e1);
 					s2 = labelElement.getText(e2);
@@ -413,7 +404,8 @@ public class FBUpdateDialog extends MessageDialog {
 		getAllItems(allItemList, Arrays.asList(table.getItems()));
 		for (final TreeItem tableItem : allItemList) {
 			tableItem.setChecked(state);
-			if (tableItem.getData() instanceof FBNetworkElement || tableItem.getData() instanceof FBType) {
+			if (tableItem.getData() instanceof StructuredType || tableItem.getData() instanceof FBNetworkElement
+					|| tableItem.getData() instanceof FBType) {
 				if (state) {
 					collectedElements.add(tableItem.getData());
 				} else {

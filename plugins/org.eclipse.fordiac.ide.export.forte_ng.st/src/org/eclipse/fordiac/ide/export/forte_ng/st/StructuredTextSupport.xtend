@@ -53,12 +53,11 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
@@ -161,13 +160,6 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		"" // nop
 	}
 
-	def protected dispatch CharSequence generateStatement(STAssignmentStatement stmt) {
-		if (stmt.right.isAnyVariableReference)
-			'''«stmt.left.generateExpression».setValue(«stmt.right.generateExpression».unwrap());'''
-		else
-			'''«stmt.left.generateExpression» = «stmt.right.generateExpression»;'''
-	}
-
 	def protected boolean isAnyVariableReference(STExpression expr) {
 		switch (expr) {
 			STFeatureExpression: expr.feature.isAnyTypeVariable
@@ -246,11 +238,18 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateStatement(STExit stmt) '''break;'''
 
-	def protected dispatch CharSequence generateStatement(STCallStatement stmt) '''«stmt.call.generateExpression»;'''
+	def protected dispatch CharSequence generateStatement(STExpression stmt) '''«stmt.generateExpression»;'''
 
 	def protected dispatch CharSequence generateExpression(STExpression expr) {
 		errors.add('''The expression «expr.eClass.name» is not supported''')
 		""
+	}
+
+	def protected dispatch CharSequence generateExpression(STAssignment expr) {
+		if (expr.right.isAnyVariableReference)
+			'''«expr.left.generateExpression».setValue(«expr.right.generateExpression».unwrap())'''
+		else
+			'''«expr.left.generateExpression» = «expr.right.generateExpression»'''
 	}
 
 	def protected dispatch CharSequence generateExpression(STBinaryExpression expr) //

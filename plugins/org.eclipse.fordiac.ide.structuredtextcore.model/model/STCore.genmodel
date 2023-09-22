@@ -72,9 +72,7 @@
     <genClasses ecoreClass="STCore.ecore#//STCoreSource">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCoreSource/statements"/>
     </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STImport">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STImport/importedNamespace"/>
-    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STImport"/>
     <genClasses ecoreClass="STCore.ecore#//STVarDeclarationBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STVarDeclarationBlock/constant"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclarationBlock/varDeclarations"/>
@@ -113,12 +111,9 @@
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STStatement"/>
-    <genClasses ecoreClass="STCore.ecore#//STAssignmentStatement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/left"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignmentStatement/right"/>
-    </genClasses>
-    <genClasses ecoreClass="STCore.ecore#//STCallStatement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallStatement/call"/>
+    <genClasses ecoreClass="STCore.ecore#//STAssignment">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignment/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignment/right"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STCallArgument">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallArgument/argument"/>

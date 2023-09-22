@@ -104,8 +104,8 @@ public class BuildPathPropertyPage extends PropertyPage {
 	@SuppressWarnings("unchecked")
 	protected void updateButtons() {
 		final IStructuredSelection selection = treeViewer.getStructuredSelection();
-		addIncludeButton.setEnabled(selection.size() == 1 && selection.getFirstElement() instanceof final SourceFolder);
-		addExcludeButton.setEnabled(selection.size() == 1 && selection.getFirstElement() instanceof final SourceFolder);
+		addIncludeButton.setEnabled(selection.size() == 1 && selection.getFirstElement() instanceof SourceFolder);
+		addExcludeButton.setEnabled(selection.size() == 1 && selection.getFirstElement() instanceof SourceFolder);
 		editButton.setEnabled(selection.size() == 1);
 		editButton.setText(selection.size() == 1 && selection.getFirstElement() instanceof final Attribute attribute
 				&& isBooleanAttribute(attribute) ? Messages.BuildPathPropertyPage_Toggle

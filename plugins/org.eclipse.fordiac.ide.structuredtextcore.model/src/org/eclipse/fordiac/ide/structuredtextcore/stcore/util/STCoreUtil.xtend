@@ -70,12 +70,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory
@@ -91,6 +90,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpressio
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression
@@ -217,13 +217,20 @@ final class STCoreUtil {
 
 	def static AccessMode getAccessMode(STExpression expression) {
 		switch (container : expression.eContainer) {
-			STCallStatement: AccessMode.NONE
-			STAssignmentStatement case container.left == expression: AccessMode.WRITE
+			STAssignment case container.left == expression: AccessMode.WRITE
 			STForStatement case container.variable == expression: AccessMode.WRITE
 			STMemberAccessExpression case container.member == expression: container.accessMode
 			STArrayAccessExpression case container.receiver == expression: container.accessMode
 			STCallArgument: container.accessMode
-			default: AccessMode.READ
+			STForStatement case container.statements.contains(expression),
+			STIfStatement case container.statements.contains(expression),
+			STRepeatStatement case container.statements.contains(expression),
+			STWhileStatement case container.statements.contains(expression): AccessMode.NONE
+			STStatement,
+			STExpressionSource,
+			STInitializerExpression,
+			STInitializerExpressionSource: AccessMode.READ
+			default: AccessMode.NONE
 		}
 	}
 
@@ -314,7 +321,7 @@ final class STCoreUtil {
 					expectedType.equivalentAnyBitType
 			STBinaryExpression case op.comparison:
 				expression === left ? right?.declaredResultType : left.declaredResultType
-			STAssignmentStatement:
+			STAssignment:
 				expression === left ? right.declaredResultType : left.declaredResultType
 			STIfStatement,
 			STWhileStatement,

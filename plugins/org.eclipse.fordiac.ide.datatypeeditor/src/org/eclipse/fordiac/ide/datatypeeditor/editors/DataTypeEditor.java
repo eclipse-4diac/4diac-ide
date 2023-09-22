@@ -36,31 +36,31 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.SaveTypeEntryCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.dialog.FBUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
+import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
@@ -208,78 +208,50 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	}
 
 	private void updateFB() {
-		Display.getDefault().asyncExec(() -> {
-			updateStructManipulators();
-			updateTypes();
-			updateInstances();
-		});
-
+		Command cmd = new CompoundCommand();
+		cmd = cmd.chain(getUpdateStructManipulatorsCommand());
+		cmd = cmd.chain(getUpdateTypesCommand());
+		cmd = cmd.chain(getUpdateInstancesCommand());
+		Display.getDefault().asyncExec(cmd::execute);
 	}
 
-	private void updateTypes() {
-
+	private Command getUpdateTypesCommand() {
 		final Set<FBType> fbTypes = structSaveDialog.getCollectedFBs().stream().filter(FBType.class::isInstance)
 				.map(FBType.class::cast).collect(Collectors.toSet());
-
-		fbTypes.stream().forEach(fbType -> {
-			fbType.getInterfaceList().getAllInterfaceElements().stream()
-					.filter(i -> i.getTypeName().equals(dataTypeEntry.getTypeName()))
-					.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(el -> {
-						el.setType(dataTypeEntry.getType());
-						if (el.getValue() != null && !el.getValue().getValue().isBlank()) {
-							el.getValue().setValue("");
-						}
-					});
-			fbType.getTypeEntry().save();
-
-		});
-
+		return FBUpdater.createUpdatePinInTypeDeclarationCommand(fbTypes, dataTypeEntry, null);
 	}
 
-	private void updateInstances() {
+	private Command getUpdateInstancesCommand() {
+		final List<Command> commands = new ArrayList<>();
 		structSaveDialog.getCollectedFBs().stream().forEach(instance -> {
 			if (instance instanceof final FBNetworkElement s) {
 				if (s instanceof final SubApp subApp && !subApp.isTyped()) {
-					udpateUntypedSubapps(subApp);
+					commands.add(new UpdateUntypedSubAppInterfaceCommand(s, dataTypeEntry));
 				} else {
-					new UpdateFBTypeCommand(s, s.getTypeEntry()).execute();
+					commands.add(new UpdateFBTypeCommand(s, s.getTypeEntry()));
 				}
+			} else if (instance instanceof final StructuredType st) {
+				for (final VarDeclaration varDeclaration : st.getMemberVariables()) {
+					final String typeName = varDeclaration.getTypeName();
+					if (typeName.equals(dataTypeEntry.getTypeName())) {
+						commands.add(
+								ChangeDataTypeCommand.forDataType(varDeclaration, dataTypeEntry.getTypeEditable()));
+					}
+				}
+				commands.add(new SaveTypeEntryCommand(st));
 			}
 		});
-
+		Command cmd = new CompoundCommand();
+		for (final Command subCmd : commands) {
+			cmd = cmd.chain(subCmd);
+		}
+		return cmd;
 	}
 
-	private void udpateUntypedSubapps(final FBNetworkElement subApp) {
-		subApp.getInterface().getAllInterfaceElements().stream()
-				.filter(i -> i.getTypeName().equals(dataTypeEntry.getTypeName()))
-				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(el -> {
-					el.setType(dataTypeEntry.getType());
-					if (el.getValue() != null && !el.getValue().getValue().isBlank()) { // as a fallback we just reset
-																						 // the current value
-						el.getValue().setValue("");
-					}
-				});
-	}
-
-	private void updateStructManipulators() {
-		structSaveDialog.getCollectedFBs().stream().filter(StructManipulator.class::isInstance)
-				.map(StructManipulator.class::cast).forEach(mux -> {
-					final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
-					final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(mux));
-
-					if (rootContainer instanceof final AutomationSystem autoSys) {
-						autoSys.getCommandStack().execute(new ChangeStructCommand(mux, structuredType));
-					} else if (rootContainer instanceof final SubAppType subApp) {
-						final IFile file = subApp.getTypeEntry().getFile();
-						final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-								.findEditor(new FileEditorInput(file));
-						if (editor != null) {
-							HandlerHelper.getCommandStack(editor).execute(new ChangeStructCommand(mux, structuredType));
-						} else {
-							(new ChangeStructCommand(mux, structuredType)).execute();
-						}
-					}
-				});
+	private Command getUpdateStructManipulatorsCommand() {
+		final List<StructManipulator> muxes = structSaveDialog.getCollectedFBs().stream()
+				.filter(StructManipulator.class::isInstance).map(StructManipulator.class::cast).toList();
+		return FBUpdater.createStructManipulatorsUpdateCommand(muxes, dataTypeEntry);
 	}
 
 	private static void loadAllOpenEditors() {
@@ -365,7 +337,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		if (dataTypeEntry.getTypeEditable() != null && (!importFailed)) {
+		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null && (!importFailed)) {
 			structComposite = new StructViewingComposite(parent, 1, commandStack, dataTypeEntry, this);
 			structComposite.createPartControl(parent);
 		} else if (importFailed) {

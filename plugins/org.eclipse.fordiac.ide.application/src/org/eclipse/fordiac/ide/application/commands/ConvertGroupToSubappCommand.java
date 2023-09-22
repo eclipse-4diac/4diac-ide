@@ -48,7 +48,7 @@ public class ConvertGroupToSubappCommand extends Command {
 		+ InstanceNameFigure.INSTANCE_LABEL_MARGIN));
 
 		// transfer group name
-		copyNameCmd = new ChangeNameCommand(destinationSubapp, sourceGroup.getName());
+		copyNameCmd = ChangeNameCommand.forName(destinationSubapp, sourceGroup.getName());
 		copyNameCmd.execute();
 
 		// copy instance comment of group

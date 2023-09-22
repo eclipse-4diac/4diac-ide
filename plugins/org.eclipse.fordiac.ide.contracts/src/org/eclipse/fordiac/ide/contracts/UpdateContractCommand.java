@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
+import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
+import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -43,42 +45,32 @@ public class UpdateContractCommand extends Command {
 	}
 
 	public static UpdateContractCommand createContractAssumption(final List<Event> eventPins, final String time,
-			final String offset, final String state) {
+			final String offset) {
 		final StringBuilder comment = new StringBuilder();
-		comment.append("ASSUMPTION " + eventPins.get(0).getName()); //$NON-NLS-1$
-		comment.append(" occurs " + state + " ");   //$NON-NLS-1$//$NON-NLS-2$
-		comment.append(time + "ms "); //$NON-NLS-1$
+		comment.append(ContractUtils.createAssumptionString(eventPins.get(0).getName(), time));
+		comment.append(" "); //$NON-NLS-1$
 		if (offset != null) {
-			comment.append("with " + offset + "ms" + " offset");   //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+			comment.append(ContractUtils.createOffsetString(offset));
 		}
-
 		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(), comment.toString());
 	}
 
 	public static UpdateContractCommand createContractReaction(final List<Event> eventPins, final String time) {
-		final StringBuilder comment = new StringBuilder();
-		comment.append("GUARANTEE Reaction (" + eventPins.get(0).getName() + ","   //$NON-NLS-1$//$NON-NLS-2$
-				+ eventPins.get(1).getName() + ")");  //$NON-NLS-1$
-		comment.append(" within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
-		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(), comment.toString());
+		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(),
+				ContractUtils.createReactionString(eventPins.get(0).getName(), eventPins.get(1).getName(), time));
 	}
 
 	public static UpdateContractCommand createContractReaction(final List<Event> eventPins, final String time,
 			final boolean dummy) {
-		final StringBuilder comment = new StringBuilder();
-		comment.append("GUARANTEE Whenever event " + eventPins.get(0).getName() + " occurs, then event "   //$NON-NLS-1$//$NON-NLS-2$
-				+ eventPins.get(1).getName());
-		comment.append(" occur within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
-		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(), comment.toString());
+		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(),
+				ContractUtils.createGuaranteeString(eventPins.get(0).getName(), eventPins.get(1).getName(), time));
 	}
 
 	public static UpdateContractCommand createContractGuarantee(final Event event, final List<Event> outputEvents,
 			final String time) {
-		final StringBuilder comment = new StringBuilder();
-		comment.append("GUARANTEE Whenever event " + event.getName() + " occurs, then events (" //$NON-NLS-1$ //$NON-NLS-2$
-				+ outputEvents.get(0).getName() + "," + outputEvents.get(1).getName() + ") occur"); //$NON-NLS-1$ //$NON-NLS-2$
-		comment.append(" within " + time + "ms ");   //$NON-NLS-1$//$NON-NLS-2$
-		return new UpdateContractCommand(outputEvents.get(0).getFBNetworkElement(), comment.toString());
+		return new UpdateContractCommand(outputEvents.get(0).getFBNetworkElement(),
+				ContractUtils.createGuaranteeTwoEvents(event.getName(), outputEvents.get(0).getName(),
+						outputEvents.get(1).getName(), time));
 	}
 
 	@Override
@@ -88,8 +80,9 @@ public class UpdateContractCommand extends Command {
 			final SubApp subapp = createNewSubapp();
 			final StringBuilder finalcomment = new StringBuilder();
 			final String oldcomment = subapp.getComment();
-			if (oldcomment.indexOf("ASSUMPTION ") == 0) { //$NON-NLS-1$
-				finalcomment.append(oldcomment + "\n"); //$NON-NLS-1$
+			if (oldcomment.indexOf(ContractKeywords.ASSUMPTION) == 0) {
+				finalcomment.append(oldcomment);
+				finalcomment.append(System.lineSeparator());
 			}
 			finalcomment.append(this.comment);
 			cccmd = new ChangeCommentCommand(subapp, finalcomment.toString());
@@ -142,8 +135,8 @@ public class UpdateContractCommand extends Command {
 			subappcmd.execute();
 		}
 		final SubApp subapp = subappcmd.getElement();
-		cncmd = new ChangeNameCommand(subapp,
-				NameRepository.createUniqueName(subapp, "_CONTRACT_" + fbNetworkElement.getName())); //$NON-NLS-1$
+		cncmd = ChangeNameCommand.forName(subapp, NameRepository.createUniqueName(subapp,
+				ContractKeywords.CONTRACT_KEYWORD + fbNetworkElement.getName()));
 		if (cncmd.canExecute()) {
 			cncmd.execute();
 		}

@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2014, 2015, 2017 Profactor GbmH, fortiss GmbH
- * 				 2019 - 2020, 2023 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2023 Profactor GbmH, fortiss GmbH
+ *                          Johannes Kepler University Linz
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +17,7 @@
  *   				   - moved max label size into a group
  *   				   - moved creating a group into a method
  *   Prankur Agarwal - added a field to input maximum hidden connection label size
+ *   Martin Erich Jobst - added max default value length and externalized strings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
@@ -66,7 +68,16 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	public static final String MAX_TYPE_LABEL_SIZE = "MaxTypeLabelSize"; //$NON-NLS-1$
 
+	public static final String MAX_DEFAULT_VALUE_LENGTH = "MaxDefaultValueLength"; //$NON-NLS-1$
+
+	public static final String VIRTUAL_GROUP_INTERFACES = "VirtualGroupInterfaces"; //$NON-NLS-1$
+
+	public static final String CONNECTION_AUTO_LAYOUT = "ConnectionAutoLayout"; //$NON-NLS-1$
+
 	private boolean changesOnLabelSize = false;
+
+	private static int maxDefaultValueLength = Activator.getDefault().getPreferenceStore()
+			.getInt(DiagramPreferences.MAX_DEFAULT_VALUE_LENGTH);
 
 	/** Instantiates a new diagram preferences. */
 	public DiagramPreferences() {
@@ -125,6 +136,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 				|| sourcePrefName.equalsIgnoreCase(MAX_PIN_LABEL_SIZE)
 				|| sourcePrefName.equalsIgnoreCase(MAX_TYPE_LABEL_SIZE)
 				|| sourcePrefName.equalsIgnoreCase(MAX_VALUE_LABEL_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(MAX_DEFAULT_VALUE_LENGTH)
 				|| sourcePrefName.equalsIgnoreCase(MAX_HIDDEN_CONNECTION_LABEL_SIZE)
 				|| sourcePrefName.equalsIgnoreCase(PIN_LABEL_STYLE);
 	}
@@ -164,6 +176,11 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 				Messages.DiagramPreferences_MaximumValueLabelSize, labelSize);
 		integerFieldEditorLabel.setValidRange(0, 120);
 		addField(integerFieldEditorLabel);
+
+		final IntegerFieldEditor integerFieldEditorValue = new IntegerFieldEditor(MAX_DEFAULT_VALUE_LENGTH,
+				Messages.DiagramPreferences_MaximumDefaultValueSize, labelSize);
+		integerFieldEditorValue.setValidRange(120, 100000);
+		addField(integerFieldEditorValue);
 
 		final IntegerFieldEditor integerFieldEditorTypeLabel = new IntegerFieldEditor(MAX_TYPE_LABEL_SIZE,
 				Messages.DiagramPreferences_MaximumTypeLabelSize, labelSize);
@@ -211,17 +228,17 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	}
 
 	private void createGroupLayoutOptionsPins() {
-		final Group group = createGroup("Layout Options");
-		final BooleanFieldEditor connectionAutoLayout = new BooleanFieldEditor("ConnectionAutoLayout",
-				"Layout connections automatically", group);
+		final Group group = createGroup(Messages.DiagramPreferences_LayoutOptions);
+		final BooleanFieldEditor connectionAutoLayout = new BooleanFieldEditor(CONNECTION_AUTO_LAYOUT,
+				Messages.DiagramPreferences_LayoutConnectionsAutomatically, group);
 		addField(connectionAutoLayout);
 		configGroup(group);
 	}
 
 	private void createGroupVirtualGroupInterfaceOptionsPins() {
-		final Group group = createGroup("Virtual Group Interface Options");
-		final BooleanFieldEditor vgi = new BooleanFieldEditor("VirtualGroupInterfaces",
-				"Enable Virtual Group Interfaces", group);
+		final Group group = createGroup(Messages.DiagramPreferences_VirtualGroupInterfaceOptions);
+		final BooleanFieldEditor vgi = new BooleanFieldEditor(VIRTUAL_GROUP_INTERFACES,
+				Messages.DiagramPreferences_EnableVirtualGroupInterfaces, group);
 		addField(vgi);
 		configGroup(group);
 	}
@@ -239,4 +256,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		// nothing to do here
 	}
 
+	public static int getMaxDefaultValueLength() {
+		return maxDefaultValueLength;
+	}
 }

@@ -102,6 +102,10 @@ public final class Messages extends NLS {
 	public static String typeManagementPreferencePageDescription;
 	public static String Warning;
 
+	public static String Refactoring_RenameFromTo;
+	public static String Refactoring_AffectedStruct;
+	public static String Refactoring_AffectedInstancesOfFB;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

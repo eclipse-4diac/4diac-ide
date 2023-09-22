@@ -32,6 +32,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_Identifier_Is_Reserved;
 	public static String STCoreValidator_Implicit_Conversion_In_Literal;
 	public static String STCoreValidator_Invalid_Literal;
+	public static String STCoreValidator_InvalidWildcardImport;
 	public static String STCoreValidator_Trailing_Underscore_In_Identifier;
 	public static String STCoreValidator_Argument_Not_Assignable;
 	public static String STCoreValidator_Assignment_Invalid_Left_Side;
@@ -42,6 +43,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_Mixing_Formal_And_NonFormal;
 	public static String STCoreValidator_BinaryOperator_Not_Applicable;
 	public static String STCoreValidator_Non_Compatible_Types;
+	public static String STCoreValidator_WildcardImportDiscouraged;
 	public static String STCoreValidator_Wrong_Name_Case;
 	public static String STCoreValidator_Wrong_Number_Of_Arguments;
 	public static String STCoreValidator_UnaryOperator_Not_Applicable;
@@ -50,8 +52,10 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_UnnecessaryNarrowConversion;
 	public static String STCoreValidator_UnnecessaryWideConversion;
 	public static String STCoreValidator_Unqualified_FB_Call_On_FB_With_Input_Event_Size_Not_One;
+	public static String STCoreValidator_UnusedImport;
 	public static String STCoreValidator_UsingNonTemporaryAsControlVariable;
 	public static String STCoreValidator_NameNotVisible;
+	public static String STCoreValidator_NestedAssignment;
 	public static String STCoreValidator_CallableHasNoReturnType;
 	public static String STCoreValidator_BitAccessOutOfRange;
 	public static String STCoreValidator_BitAccessInvalidForType;
@@ -78,6 +82,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_InsufficientArrayDimensions;
 	public static String STCoreValidator_CallsCannotBeAssignedTo;
 	public static String STCoreValidator_VariableMaybeNotInitialized;
+	public static String STCoreValidator_ExitNeedsToBeInsideALoop;
 
 	static {
 		// initialize resource bundle

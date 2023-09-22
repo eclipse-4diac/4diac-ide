@@ -520,6 +520,11 @@
                     	property="org.eclipse.core.resources.extension"
                      	value="fbt">
            			</test>
+           			<test
+       		 			forcePluginActivation="true"	
+                    	property="org.eclipse.core.resources.extension"
+                     	value="sub">
+           			</test>
                		<test
                		 	forcePluginActivation="true"	
                     	property="org.eclipse.core.resources.extension"

@@ -15,16 +15,16 @@ package org.eclipse.fordiac.ide.gef.nat;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 
 public class TypeDeclarationEditorConfiguration extends AbstractRegistryConfiguration {
 	public static final String TYPE_DECLARATION_CELL = "TYPE_DECLARATION_CELL"; //$NON-NLS-1$
 
-	final ListDataProvider<VarDeclaration> dataProvider;
+	final IRowDataProvider<VarDeclaration> dataProvider;
 
-	public TypeDeclarationEditorConfiguration(final ListDataProvider<VarDeclaration> dataProvider) {
+	public TypeDeclarationEditorConfiguration(final IRowDataProvider<VarDeclaration> dataProvider) {
 		this.dataProvider = dataProvider;
 	}
 

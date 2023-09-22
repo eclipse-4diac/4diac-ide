@@ -13,106 +13,117 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.model;
 
-import org.eclipse.emf.common.util.BasicEList;
+import java.util.List;
+
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.contracts.exceptions.AssumptionExeption;
+import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
-public class Assumption {
+public class Assumption extends ContractElement {
+	private static final int POS_OCCURS = 2;
+	private static final int POS_TIME = 4;
+	private static final int POS_EVERY = 3;
+	private static final int ASSUMPTION_LENGTH = 5;
 	private static final int POSITION_NO = 4;
-	private String event;
-	private int min;
-	private int max;
-	private Contract owner;
-
-	Assumption() {
-
-	}
 
 	static Assumption createAssumption(final String line) {
-		if (line.contains("offset")) { //$NON-NLS-1$
+		if (line.contains(ContractKeywords.OFFSET)) {
 			return AssumptionWithOffset.createAssumptionWithOffset(line);
 		}
+		final String[] parts = line.split(" "); //$NON-NLS-1$
+		if (!isCorrectAssumption(parts)) {
+			throw new AssumptionExeption("Error with Assumption: " + line); //$NON-NLS-1$
+		}
+		return createAssumptionFrom(parts);
+	}
+
+	private static Assumption createAssumptionFrom(final String[] parts) {
 		final Assumption assumption = new Assumption();
-		String[] parts = line.split(" "); //$NON-NLS-1$
-		assumption.setEvent(parts[1]);
-		if (parts[POSITION_NO].contains(",")) { //$NON-NLS-1$
-			parts = parts[POSITION_NO].split(","); //$NON-NLS-1$
-			assumption.setMin(Integer.parseInt(parts[0].substring(1)));
-			parts = parts[1].split("]"); //$NON-NLS-1$
-			assumption.setMax(Integer.parseInt(parts[0]));
+		assumption.setInputEvent(parts[1]);
+		if (ContractUtils.isInterval(parts, POSITION_NO, ContractKeywords.INTERVAL_DIVIDER)) {
+			assumption.setRangeFromInterval(parts, POSITION_NO);
 			return assumption;
 		}
 		assumption.setMax(-1);
-		assumption.setMin(Integer.parseInt(parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - 2)));
+		assumption.setMin(Integer.parseInt(
+				parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length())));
 		return assumption;
 	}
 
-	String getEvent() {
-		return event;
+	private static boolean isCorrectAssumption(final String[] parts) {
+		if (parts.length != ASSUMPTION_LENGTH) {
+			return false;
+		}
+		if (!ContractKeywords.OCCURS.equals(parts[POS_OCCURS])) {
+			return false;
+		}
+		if (!ContractKeywords.EVERY.equals(parts[POS_EVERY])) {
+			return false;
+		}
+		return ContractKeywords.UNIT_OF_TIME.equals(
+				parts[POS_TIME].substring(ContractUtils.getStartPosition(parts, POS_TIME), parts[POS_TIME].length()));
 	}
 
-	public int getMin() { // public for testing
-		return min;
-	}
-
-	int getMax() {
-		return max;
-	}
-
-	Contract getOwner() {
-		return owner;
-	}
-
-	void setEvent(final String event) {
-		this.event = event;
-	}
-
-	void setMin(final int min) {
-		this.min = min;
-	}
-
-	void setMax(final int max) {
-		this.max = max;
-	}
-
-	void setOwner(final Contract owner) {
-		this.owner = owner;
-	}
-
+	@Override
 	boolean isValid() {
-		if (getOwner().getOwner() instanceof final SubApp subapp) {
-			final EList<SubApp> subapps = new BasicEList<>();
-			final EList<FB> fBs = new BasicEList<>();
-			final EList<Event> inputEvents = subapp.getInterface().getEventInputs();
-			final EList<FBNetworkElement> fBNetworkElements = subapp.getFbNetwork().getNetworkElements();
-			for (final FBNetworkElement element : fBNetworkElements) {
-				if ((element instanceof final SubApp containedSubapp
-						&& containedSubapp.getName().startsWith("_CONTRACT"))) { //$NON-NLS-1$
-					subapps.add(containedSubapp);
-				} else if (element instanceof final FB fb) {
-					fBs.add(fb);
-				}
-			}
-			if (!subapps.isEmpty()) {
-				for (final Event inputE : inputEvents) {
-					if (inputE.getName().equals(event)) {
-						return true;
-					}
-				}
-			}
-			if (fBs.size() == 1) {
-				final EList<Event> inputFBEvents = fBs.get(0).getInterface().getEventInputs();
-				for (final Event inputFBEs : inputFBEvents) {
-					if (inputFBEs.getName().equals(event)) {
-						return true;
-					}
+		if (!hasValidOwner()) {
+			return false;
+		}
+		final EList<FBNetworkElement> fBNetworkElements = ((SubApp) getContract().getOwner()).getSubAppNetwork()
+				.getNetworkElements();
+		final List<SubApp> containedSubapps = fBNetworkElements.parallelStream().filter(ContractUtils::isContractSubapp)
+				.map(el -> (SubApp) el).toList();
+		final List<FB> containedfBs = fBNetworkElements.parallelStream().filter(FB.class::isInstance)
+				.map(FB.class::cast).toList();
+		final EList<Event> inputEvents = ((SubApp) getContract().getOwner()).getInterface().getEventInputs();
+		return hasMatchingEvents(containedSubapps, containedfBs, inputEvents);
+	}
+
+	private boolean hasMatchingEvents(final List<SubApp> containedSubapps, final List<FB> containedfBs,
+			EList<Event> inputEvents) {
+		if (containedfBs.size() == 1) {
+			inputEvents = containedfBs.get(0).getInterface().getEventInputs();
+		}
+		if (!containedSubapps.isEmpty() || containedfBs.size() == 1) {
+			for (final Event inputE : inputEvents) {
+				if (inputE.getName().equals(getInputEvent())) {
+					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	public static boolean isCompatibleWith(final EList<Assumption> assumptions) {
+
+		for (final Assumption assumption : assumptions) {
+			if (assumption instanceof AssumptionWithOffset) {
+				return AssumptionWithOffset.isCompatibleWithOffset(assumptions);
+			}
+
+		}
+		return ContractElement.isTimeConsistent(assumptions);
+	}
+
+	@Override
+	public String createComment() {
+		if (this instanceof final AssumptionWithOffset withOffset) {
+			return withOffset.createComment();
+		}
+		final StringBuilder comment = new StringBuilder();
+		if (getMax() == -1 || getMax() == getMin()) {
+			comment.append(ContractUtils.createAssumptionString(getInputEvent(), String.valueOf(getMin())));
+
+		} else {
+			comment.append(ContractUtils.createAssumptionString(getInputEvent(), ContractUtils.createInterval(this)));
+		}
+		comment.append(System.lineSeparator());
+		return comment.toString();
+
 	}
 
 }

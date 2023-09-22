@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
@@ -75,7 +75,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof UntypedSubAppInterfaceElementEditPart) {
-					return new ChangeSubAppIENameCommand(getModel(), (String) request.getCellEditor().getValue());
+					return ChangeNameCommand.forName(getModel(), (String) request.getCellEditor().getValue());
 				}
 				return null;
 			}

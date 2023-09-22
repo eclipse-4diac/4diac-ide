@@ -117,7 +117,7 @@ class STFunctionValidatorTest {
 			3 := 4;
 			2+3 := 5;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.VALUE_NOT_ASSIGNABLE)
 	}
 
 	@Test
@@ -134,7 +134,7 @@ class STFunctionValidatorTest {
 				int2 := sint1;
 				int1 := real;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NON_COMPATIBLE_TYPES)
 
 	}
 
@@ -152,7 +152,7 @@ class STFunctionValidatorTest {
 			testArray3 := testArray[1];
 			testArray := testArray4;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
@@ -204,7 +204,7 @@ class STFunctionValidatorTest {
 				bool1 := usint1;
 				word1 := ltime1;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
@@ -223,7 +223,7 @@ class STFunctionValidatorTest {
 			testArray2[0] := testArray2[1];
 			testArray2[0, 2] := 5;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
@@ -247,7 +247,7 @@ class STFunctionValidatorTest {
 				dword1 := WCHAR_TO_DWORD(wchar1);
 				int1 := sint1;
 			END_FUNCTION
-		'''.parse.assertNoErrors(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES);
+		'''.parse.assertNoErrors(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NON_COMPATIBLE_TYPES);
 	}
 
 	@Test
@@ -260,6 +260,20 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression,
 			STCoreValidator.NON_COMPATIBLE_TYPES)
+
+	}
+
+	@Test
+	def void testNestedAssignment() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+				int2 : INT;
+			END_VAR
+				int1 := int2 := 17;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NESTED_ASSIGNMENT)
 
 	}
 
@@ -496,7 +510,8 @@ class STFunctionValidatorTest {
 			FOR int1 := 4 TO 17 DO
 			END_FOR;
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.FOR_CONTROL_VARIABLE_NON_TEMPORARY)
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STForStatement,
+			STCoreValidator.FOR_CONTROL_VARIABLE_NON_TEMPORARY)
 	}
 
 	@Test
@@ -523,7 +538,8 @@ class STFunctionValidatorTest {
 				int1 := 17;
 			END_FOR;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
 		'''
 			FUNCTION hubert
 			VAR
@@ -537,7 +553,8 @@ class STFunctionValidatorTest {
 				END_FOR;
 			END_FOR;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
 		'''
 			FUNCTION hubert
 			VAR
@@ -551,7 +568,8 @@ class STFunctionValidatorTest {
 				END_FOR;
 			END_FOR;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_MODIFICATION)
 	}
 
 	@Test
@@ -597,22 +615,23 @@ class STFunctionValidatorTest {
 			FUNCTION hubert
 			VAR
 				int1 : INT;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := 4 TO 17 DO
-				int1 := 17;
 			END_FOR;
 			int2 := int1; // read access -> warning
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
 		'''
 			FUNCTION hubert
 			VAR
 				int1 : INT;
+				int2 : INT;
 			END_VAR
 			
 			FOR int1 := 4 TO 17 DO
-				int1 := 17;
 			END_FOR;
 			
 			IF int2 <> 0 THEN
@@ -630,7 +649,8 @@ class STFunctionValidatorTest {
 			
 			int2 := int1; // read access and may not have been written if IF, WHILE, and REPEAT not taken -> warning
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
 		'''
 			FUNCTION hubert
 			VAR
@@ -644,7 +664,8 @@ class STFunctionValidatorTest {
 			END_FOR;
 			int1 := int2; // read access and undefined from inner FOR loop -> warning
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
 		'''
 			FUNCTION hubert
 			VAR
@@ -656,7 +677,8 @@ class STFunctionValidatorTest {
 				FOR int2 := 4 TO 17 DO
 				END_FOR;
 			END_WHILE;
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
 		'''
 			FUNCTION hubert
 			VAR
@@ -670,7 +692,8 @@ class STFunctionValidatorTest {
 			UNTIL int2 <> 0 // read access and may be undefined from inner FOR loop -> warning
 			END_REPEAT;
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED)
 	}
 
 	@Test
@@ -1386,7 +1409,7 @@ class STFunctionValidatorTest {
 			END_VAR
 			assigned := called();
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES,
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.NON_COMPATIBLE_TYPES,
 			"Cannot convert from REAL to STRING")
 	}
 
@@ -1415,7 +1438,7 @@ class STFunctionValidatorTest {
 			END_VAR
 			in1 := 2;
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.VALUE_NOT_ASSIGNABLE,
 			"Inputs shall not be be assigned. This will be elevated to an error in the future")
 	}
 
@@ -1428,7 +1451,7 @@ class STFunctionValidatorTest {
 			END_VAR
 			in1 := 2;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.VALUE_NOT_ASSIGNABLE,
 			"Constants cannot be assigned.")
 	}
 
@@ -1441,7 +1464,7 @@ class STFunctionValidatorTest {
 			END_VAR
 			in1 := 2;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.VALUE_NOT_ASSIGNABLE,
 			"Constants cannot be assigned.")
 	}
 
@@ -1584,4 +1607,61 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertNoErrors
 	}
+
+	@Test
+	def void testExitInForIsOk() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				I : INT;
+			END_VAR
+			
+			FOR I := 0 TO 10 DO
+				EXIT;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testExitInWhileIsOk() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				I : INT;
+			END_VAR
+			
+			WHILE I < 0 DO
+				EXIT;
+			END_WHILE;
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testExitInRepeatIsOk() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				I : INT;
+			END_VAR
+			
+			REPEAT
+				EXIT;
+			UNTIL I < 0
+			END_REPEAT;
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testExitNotInALoopIsAnError() {
+		'''
+			FUNCTION test
+			EXIT;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STExit, STCoreValidator.EXIT_NOT_IN_LOOP,
+			"An EXIT statement is only valid inside a loop statement (FOR/WHILE/REPEAT)")
+	}
+
 }

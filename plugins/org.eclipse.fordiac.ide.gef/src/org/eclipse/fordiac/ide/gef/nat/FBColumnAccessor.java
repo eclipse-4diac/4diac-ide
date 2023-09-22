@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University, Linz
+ * Copyright (c) 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,95 +8,32 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Prankur Agarwal - initial API and implementation and/or initial documentation
+ *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFbTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
-import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
 
-public class FBColumnAccessor implements IColumnAccessor<FB> {
+public class FBColumnAccessor extends TypedElementColumnAccessor<FB> {
 
-	private final CommandExecutor section;
-	private TypeLibrary library;
-
-	public FBColumnAccessor(final CommandExecutor section) {
-		this.section = section;
+	public FBColumnAccessor(final CommandExecutor commandExecutor) {
+		super(commandExecutor, TypedElementTableColumn.DEFAULT_COLUMNS);
 	}
 
-	public FBColumnAccessor(final CommandExecutor section, final TypeLibrary library) {
-		this.section = section;
-		setTypeLib(library);
-	}
-
-	protected CommandExecutor getSection() {
-		return section;
-	}
-
-	protected TypeLibrary getLibrary() {
-		return library;
-	}
-
-	private void setLibrary(final TypeLibrary library) {
-		this.library = library;
+	public FBColumnAccessor(final CommandExecutor commandExecutor, final List<TypedElementTableColumn> columns) {
+		super(commandExecutor, columns);
 	}
 
 	@Override
-	public Object getDataValue(final FB rowObject, final int columnIndex) {
-		switch (columnIndex) {
-		case I4diacNatTableUtil.NAME:
-			return rowObject.getName();
-		case I4diacNatTableUtil.TYPE:
-			return rowObject.getTypeName();
-		case I4diacNatTableUtil.COMMENT:
-			return rowObject.getComment();
-		default:
-			return rowObject;
-		}
-	}
-
-	@Override
-	public void setDataValue(final FB rowObject, final int columnIndex, final Object newValue) {
-		final String value = newValue instanceof String ? (String) newValue : null;
-		Command cmd = null;
-		switch (columnIndex) {
-		case I4diacNatTableUtil.NAME:
-			if (value == null) {
-				return;
-			}
-			cmd = new ChangeNameCommand(rowObject, value);
-			break;
-		case I4diacNatTableUtil.TYPE:
-			if (!getLibrary().getFbTypes().containsKey(value)) {
-				return;
-			}
-			cmd = new ChangeFbTypeCommand(rowObject, getLibrary().getFbTypes().get(value));
-			break;
-		case I4diacNatTableUtil.COMMENT:
-			cmd = new ChangeCommentCommand(rowObject, value);
-			break;
-		default:
-			return;
-		}
-
-		getSection().executeCommand(cmd);
-	}
-
-	@Override
-	public int getColumnCount() {
-		return I4diacNatTableUtil.COMMENT + 1;
-	}
-
-	public void setTypeLib(final TypeLibrary dataTypeLib) {
-		if (getLibrary() == null) {
-			setLibrary(dataTypeLib);
-		}
+	public Command createCommand(final FB rowObject, final TypedElementTableColumn column, final Object newValue) {
+		return switch (column) {
+		case TYPE -> ChangeFbTypeCommand.forTypeName(rowObject, newValue.toString());
+		default -> super.createCommand(rowObject, column, newValue);
+		};
 	}
 }

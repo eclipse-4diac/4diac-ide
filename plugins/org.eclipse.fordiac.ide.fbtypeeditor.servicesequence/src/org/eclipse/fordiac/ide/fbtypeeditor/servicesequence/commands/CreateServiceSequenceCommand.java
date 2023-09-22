@@ -27,8 +27,8 @@ public class CreateServiceSequenceCommand extends AbstractCreateElementCommand<S
 	private ServiceSequence sequence;
 	private boolean emptyService;
 
-	private static final String LEFT_INTERFACE_NAME = "left interface"; //$NON-NLS-1$
-	private static final String RIGHT_INTERFACE_NAME = "right interface"; //$NON-NLS-1$
+	private static final String LEFT_INTERFACE_NAME = "external"; //$NON-NLS-1$
+	private static final String RIGHT_INTERFACE_NAME = "internal_interface"; //$NON-NLS-1$
 	private static final String DEFAULT_SEQUENCE_NAME = "ServiceSequence"; //$NON-NLS-1$
 	private ServiceInterface leftInterface;
 	private ServiceInterface rightInterface;

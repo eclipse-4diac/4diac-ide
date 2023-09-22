@@ -10,9 +10,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
         eType="#//STStatement" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STImport">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importedNamespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STImport" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Import"/>
   <eClassifiers xsi:type="ecore:EClass" name="STVarDeclarationBlock">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclarations" upperBound="-1"
@@ -80,14 +78,10 @@
         eType="#//STInitializerExpression" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STStatement"/>
-  <eClassifiers xsi:type="ecore:EClass" name="STAssignmentStatement" eSuperTypes="#//STStatement">
+  <eClassifiers xsi:type="ecore:EClass" name="STAssignment" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//STExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//STExpression"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STCallStatement" eSuperTypes="#//STStatement">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="call" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STCallArgument">
@@ -203,7 +197,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="STExpression" eSuperTypes="#//STStatement">
     <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return null;"/>
@@ -330,7 +324,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//STString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STVarDeclaration" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="STVarDeclaration" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ITypedElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="locatedAt" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="array" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ranges" upperBound="-1"

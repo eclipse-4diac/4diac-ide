@@ -53,9 +53,4 @@
 		<OutputVars>
 		</OutputVars>
 	</InterfaceList>
-	<FunctionBody>
-		<ST><![CDATA[FUNCTION Function
-END_FUNCTION
-]]></ST>
-	</FunctionBody>
 </Function>

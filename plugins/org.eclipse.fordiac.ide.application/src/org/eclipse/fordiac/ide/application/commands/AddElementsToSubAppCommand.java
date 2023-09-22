@@ -150,7 +150,7 @@ public class AddElementsToSubAppCommand extends Command {
 		// ensure unique name in new network
 		if (!NameRepository.isValidName(element, element.getName())) {
 			final String uniqueName = NameRepository.createUniqueName(element, element.getName());
-			final ChangeNameCommand cmd = new ChangeNameCommand(element, uniqueName);
+			final ChangeNameCommand cmd = ChangeNameCommand.forName(element, uniqueName);
 			cmd.execute();
 			setUniqueName.add(cmd);
 		}

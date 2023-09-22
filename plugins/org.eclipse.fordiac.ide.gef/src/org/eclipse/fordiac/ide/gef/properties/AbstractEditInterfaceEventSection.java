@@ -18,24 +18,24 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.nat.EventColumnProvider;
-import org.eclipse.fordiac.ide.gef.nat.EventListProvider;
-import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
+import org.eclipse.fordiac.ide.gef.nat.InterfaceElementColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementColumnProvider;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementEditableRule;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementTableColumn;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
-import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection<Event> {
@@ -82,29 +82,6 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 	}
 
 	@Override
-	protected void configureLabels(final ListDataProvider<Event> provider, final LabelStack configLabels,
-			final int columnPosition, final int rowPosition) {
-		final Event rowItem = provider.getRowObject(rowPosition);
-		switch (columnPosition) {
-		case I4diacNatTableUtil.TYPE:
-			if (rowItem.getType() instanceof ErrorMarkerDataType) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-			}
-			if (isEditable()) {
-
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-			}
-			break;
-		case I4diacNatTableUtil.NAME:
-		case I4diacNatTableUtil.COMMENT:
-			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			break;
-		default:
-			break;
-		}
-	}
-
-	@Override
 	public void removeEntry(final Object entry, final CompoundCommand cmd) {
 		if (entry instanceof Event) {
 			cmd.add(newDeleteCommand((Event) entry));
@@ -113,24 +90,32 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 
 	@Override
 	public void setupOutputTable(final Group outputsGroup) {
-		outputProvider = new EventListProvider(this);
-		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
-		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, new EventColumnProvider(),
-				getSectionEditableRule(), new DataTypeSelectionButton(typeSelection), this, false);
+		outputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this));
+		final DataLayer outputDataLayer = new DataLayer(outputProvider);
+		outputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(outputProvider));
+		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
+				new TypedElementColumnProvider(),
+				new TypedElementEditableRule(getSectionEditableRule(), TypedElementTableColumn.DEFAULT_COLUMNS,
+						Set.of(TypedElementTableColumn.NAME, TypedElementTableColumn.COMMENT)),
+				new DataTypeSelectionButton(typeSelection), this, false);
 	}
 
 	@Override
 	public void setupInputTable(final Group inputsGroup) {
-		inputProvider = new EventListProvider(this);
-		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
-		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, new EventColumnProvider(),
-				getSectionEditableRule(), new DataTypeSelectionButton(typeSelection), this, true);
+		inputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this));
+		final DataLayer inputDataLayer = new DataLayer(inputProvider);
+		inputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(inputProvider));
+		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
+				new TypedElementColumnProvider(),
+				new TypedElementEditableRule(getSectionEditableRule(), TypedElementTableColumn.DEFAULT_COLUMNS,
+						Set.of(TypedElementTableColumn.NAME, TypedElementTableColumn.COMMENT)),
+				new DataTypeSelectionButton(typeSelection), this, true);
 	}
 
 	@Override
 	public void setTableInput(final InterfaceList il) {
-		((FordiacInterfaceListProvider) inputProvider).setInput(il.getEventInputs());
-		((FordiacInterfaceListProvider) outputProvider).setInput(il.getEventOutputs());
+		inputProvider.setInput(il.getEventInputs());
+		outputProvider.setInput(il.getEventOutputs());
 	}
 
 }

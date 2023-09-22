@@ -28,21 +28,24 @@ import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -51,12 +54,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -65,14 +65,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class StructViewingComposite extends Composite implements CommandExecutor, I4diacNatTableUtil, ISelectionProvider
-{
+public class StructViewingComposite extends Composite
+		implements CommandExecutor, I4diacNatTableUtil, ISelectionProvider {
 	protected Map<String, List<String>> typeSelection = new HashMap<>();
 	private NatTable natTable;
 	private final CommandStack cmdStack;
 	private final IWorkbenchPart part;
 	private final DataTypeEntry dataTypeEntry;
-	private VarDeclarationListProvider structMemberProvider;
+	private IChangeableRowDataProvider<VarDeclaration> structMemberProvider;
 
 	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack,
 			final DataTypeEntry dataTypeEntry, final IWorkbenchPart part) {
@@ -108,55 +108,17 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private void createNatTable(final Composite parent) {
-		structMemberProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
+		structMemberProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
 		structMemberProvider.setInput(getType().getMemberVariables());
-		structMemberProvider.setTypeLib(getDataTypeLibrary());
-		final DataLayer inputDataLayer = setupDataLayer(structMemberProvider);
+		final DataLayer inputDataLayer = new VarDeclarationDataLayer(structMemberProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS);
+		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(structMemberProvider));
 		initTypeSelection(getType().getTypeLibrary().getDataTypeLibrary());
 		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),
 				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
 		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(structMemberProvider));
 		natTable.configure();
-	}
-
-	private static DataLayer setupDataLayer(final VarDeclarationListProvider provider) {
-		final DataLayer dataLayer = new DataLayer(provider);
-		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
-
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (labelAcc != null) {
-				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-			}
-			configureLabels(provider, configLabels, columnPosition, rowPosition);
-		});
-		return dataLayer;
-	}
-
-	private static void configureLabels(final VarDeclarationListProvider provider, final LabelStack configLabels,
-			final int columnPosition, final int rowPosition) {
-		final VarDeclaration rowItem = provider.getRowObject(rowPosition);
-		switch (columnPosition) {
-		case I4diacNatTableUtil.TYPE:
-			if (rowItem.getType() instanceof ErrorMarkerDataType
-					|| (rowItem.isArray() && rowItem.getArraySize().hasError())) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-			}
-			configLabels.addLabel(TypeDeclarationEditorConfiguration.TYPE_DECLARATION_CELL);
-			break;
-		case I4diacNatTableUtil.INITIAL_VALUE:
-			if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-			}
-			configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
-			break;
-		case I4diacNatTableUtil.NAME:
-		case I4diacNatTableUtil.COMMENT:
-			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			break;
-		default:
-			break;
-		}
 	}
 
 	private DataType getDataType() {
@@ -178,22 +140,11 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private VarDeclaration getLastSelectedVariable() {
-		return (VarDeclaration) structMemberProvider.getLastSelectedVariable(natTable);
+		return (VarDeclaration) NatTableWidgetFactory.getLastSelectedVariable(natTable);
 	}
 
 	private StructuredType getType() {
 		return (StructuredType) dataTypeEntry.getTypeEditable();
-	}
-
-	private DataTypeLibrary getDataTypeLibrary() {
-		return dataTypeEntry.getTypeLibrary().getDataTypeLibrary();
-	}
-
-	private boolean isValidStruct(final StructuredType type) {
-		return type.getMemberVariables().stream()
-				.filter(memVar -> memVar.getType() instanceof StructuredType)
-				.noneMatch(memVar -> memVar.getTypeName().equals(StructViewingComposite.this.getType().getName())
-						|| !isValidStruct(getDataTypeLibrary().getStructuredType(memVar.getTypeName())));
 	}
 
 	public void reload() {
@@ -207,8 +158,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
-		if (entry instanceof VarDeclaration) {
-			final VarDeclaration varEntry = (VarDeclaration) entry;
+		if (entry instanceof final VarDeclaration varEntry) {
 			cmd.add(new InsertVariableCommand(getType().getMemberVariables(), varEntry, index));
 		}
 	}
@@ -232,11 +182,6 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		return getType().getMemberVariables().get(index);
 	}
 
-	private static void createContextMenu(final TableViewer viewer) {
-		// TODO reimplement that
-		// OpenStructMenu.addTo(viewer);
-	}
-
 	@Override
 	public ISelection getSelection() {
 		// for now return the whole object so that property sheets and other stuff can filter on it.
@@ -251,12 +196,12 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
 		final List<String> elementaryTypes = new ArrayList<>();
 		dataTypeLib.getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
-		.forEach(type -> elementaryTypes.add(type.getName()));
+				.forEach(type -> elementaryTypes.add(type.getName()));
 		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
 
 		final List<String> structuredTypes = new ArrayList<>();
 		dataTypeLib.getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
-		.forEach(type -> structuredTypes.add(type.getName()));
+				.forEach(type -> structuredTypes.add(type.getName()));
 		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
 
