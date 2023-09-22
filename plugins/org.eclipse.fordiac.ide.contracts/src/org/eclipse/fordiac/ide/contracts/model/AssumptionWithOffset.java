@@ -106,7 +106,7 @@ public class AssumptionWithOffset extends Assumption {
 			return instant.getMin();
 		}
 		if (getOffSet() instanceof final Interval interval) {
-			return interval.getMinTime();
+			return interval.getMin();
 		}
 		return Integer.MIN_VALUE;
 	}
@@ -116,7 +116,7 @@ public class AssumptionWithOffset extends Assumption {
 			return instant.getMin();
 		}
 		if (getOffSet() instanceof final Interval interval) {
-			return interval.getMaxTime();
+			return interval.getMax();
 		}
 		return Integer.MIN_VALUE;
 	}
@@ -259,16 +259,16 @@ public class AssumptionWithOffset extends Assumption {
 		final List<AbstractTime> timestamps = new ArrayList<>();
 		final AbstractTime toAdd = getFirstTime();
 		if (toAdd instanceof Instant instant) {
-			while (instant.getMin() <= range.getMaxTime()) {
-				if (instant.getMin() >= range.getMinTime()) {
+			while (instant.getMin() <= range.getMax()) {
+				if (instant.getMin() >= range.getMin()) {
 					timestamps.add(instant);
 				}
 				instant = new Instant(instant.getMin() + getMin());
 			}
 		} else {
 			Interval interval = (Interval) toAdd;
-			while (interval.getMaxTime() <= range.getMaxTime()) {
-				if (interval.getMinTime() >= range.getMinTime()) {
+			while (interval.getMax() <= range.getMax()) {
+				if (interval.getMin() >= range.getMin()) {
 					timestamps.add(interval);
 				}
 				interval = interval.add(getBounds());

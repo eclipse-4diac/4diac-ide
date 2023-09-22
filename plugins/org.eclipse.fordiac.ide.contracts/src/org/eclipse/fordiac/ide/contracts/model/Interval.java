@@ -22,14 +22,6 @@ public class Interval extends AbstractTime {
 		this.maxTime = maxTime;
 	}
 
-	public int getMaxTime() {
-		return maxTime;
-	}
-
-	public int getMinTime() {
-		return minTime;
-	}
-
 	public boolean isValid() {
 		return minTime <= maxTime;
 	}
@@ -38,8 +30,8 @@ public class Interval extends AbstractTime {
 		if (other == null) {
 			return null;
 		}
-		final int min = Math.max(other.getMinTime(), this.getMinTime());
-		final int max = Math.min(other.getMaxTime(), this.getMaxTime());
+		final int min = Math.max(other.getMin(), this.getMin());
+		final int max = Math.min(other.getMax(), this.getMax());
 		return new Interval(min, max);
 	}
 
@@ -50,22 +42,22 @@ public class Interval extends AbstractTime {
 		if (hasNoOverlap(other)) {
 			return new Interval(0, -1);
 		}
-		final int min = Math.min(other.getMinTime(), this.getMinTime());
-		final int max = Math.max(other.maxTime, this.getMaxTime());
+		final int min = Math.min(other.getMin(), this.getMin());
+		final int max = Math.max(other.maxTime, this.getMax());
 		return new Interval(min, max);
 
 	}
 
 	private boolean hasNoOverlap(final Interval other) {
-		return (other.getMaxTime() < this.getMinTime()) && (other.getMinTime() > this.getMaxTime());
+		return (other.getMax() < this.getMin()) && (other.getMin() > this.getMax());
 	}
 
 	private Interval add(final Interval other) {
-		return new Interval(this.getMinTime() + other.getMinTime(), this.getMaxTime() + other.getMaxTime());
+		return new Interval(this.getMin() + other.getMin(), this.getMax() + other.getMax());
 	}
 
 	private Interval add(final Instant other) {
-		return new Interval(this.getMinTime() + other.getMin(), this.getMaxTime() + other.getMin());
+		return new Interval(this.getMin() + other.getMin(), this.getMax() + other.getMin());
 	}
 
 	@Override

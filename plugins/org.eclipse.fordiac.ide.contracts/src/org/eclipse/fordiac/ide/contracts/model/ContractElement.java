@@ -97,8 +97,8 @@ public abstract class ContractElement {
 		final List<AbstractTime> timestamps = new ArrayList<>();
 		if (getMax() == -1) {
 			int timeMin = getMin();
-			while (timeMin <= range.getMaxTime()) {
-				if (timeMin >= range.getMinTime()) {
+			while (timeMin <= range.getMax()) {
+				if (timeMin >= range.getMin()) {
 					timestamps.add(new Instant(timeMin));
 				}
 				timeMin += getMin();
@@ -106,8 +106,8 @@ public abstract class ContractElement {
 		} else {
 			int minTime = getMin();
 			int maxTime = getMax();
-			while (minTime <= range.getMaxTime()) {
-				if (maxTime >= range.getMinTime()) {
+			while (minTime <= range.getMax()) {
+				if (maxTime >= range.getMin()) {
 					timestamps.add(new Interval(minTime, maxTime));
 				}
 				minTime += getMin();
