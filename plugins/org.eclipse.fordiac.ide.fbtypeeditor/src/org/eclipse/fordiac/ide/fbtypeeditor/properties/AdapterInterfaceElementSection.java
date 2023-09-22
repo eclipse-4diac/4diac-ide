@@ -18,16 +18,16 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import java.util.stream.Collectors;
-
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.ui.nat.AdapterTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.AdapterTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
@@ -83,13 +83,18 @@ public class AdapterInterfaceElementSection extends AbstractDoubleColumnSection 
 	protected void setupPinInfoWidget(final IInterfaceElement ie) {
 		if (pinInfoBasicWidget != null) {
 			pinInfoBasicWidget.initialize(ie, this::executeCommand);
-			pinInfoBasicWidget.getTypeSelectionWidget().initialize(ie, getTypeSelectionContentProvider());
+			pinInfoBasicWidget.getTypeSelectionWidget().initialize(ie, getTypeSelectionContentProvider(),
+					getTypeSelectionTreeContentProvider());
 		}
 	}
 
+	@SuppressWarnings("static-method") // subclasses may override
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
-		return () -> getTypeLibrary().getAdapterTypesSorted().stream().map(AdapterTypeEntry::getType)
-				.collect(Collectors.toList());
+		return AdapterTypeSelectionContentProvider.INSTANCE;
 	}
 
+	@SuppressWarnings("static-method") // subclasses may override
+	protected ITreeContentProvider getTypeSelectionTreeContentProvider() {
+		return AdapterTypeSelectionTreeContentProvider.INSTANCE;
+	}
 }

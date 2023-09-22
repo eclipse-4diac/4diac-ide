@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import java.util.ArrayList;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.gef.widgets.ConnectionDisplayWidget;
@@ -21,10 +19,12 @@ import org.eclipse.fordiac.ide.gef.widgets.InternalConnectionsViewer;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.nat.EventTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.EventTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -37,7 +37,6 @@ public class PinEventInfoSection extends AbstractDoubleColumnSection {
 	private InternalConnectionsViewer outConnections;
 
 	private static final int NUM_OF_CONN_DISPLAYS = 2;
-
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -61,7 +60,7 @@ public class PinEventInfoSection extends AbstractDoubleColumnSection {
 
 	@Override
 	protected IInterfaceElement getType() {
-		return (IInterfaceElement)type;
+		return (IInterfaceElement) type;
 	}
 
 	@Override
@@ -101,7 +100,8 @@ public class PinEventInfoSection extends AbstractDoubleColumnSection {
 	protected void setInputInit() {
 		if (pinInfo != null) {
 			pinInfo.initialize(getType(), this::executeCommand);
-			pinInfo.getTypeSelectionWidget().initialize(getType(), getTypeSelectionContentProvider());
+			pinInfo.getTypeSelectionWidget().initialize(getType(), getTypeSelectionContentProvider(),
+					getTypeSelectionTreeContentProvider());
 		}
 	}
 
@@ -112,9 +112,13 @@ public class PinEventInfoSection extends AbstractDoubleColumnSection {
 		return composite;
 	}
 
-	@SuppressWarnings("static-method")  // allow subclasses to override
+	@SuppressWarnings("static-method") // allow subclasses to override
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
-		return () -> new ArrayList<>(EventTypeLibrary.getInstance().getEventTypes());
+		return EventTypeSelectionContentProvider.INSTANCE;
 	}
 
+	@SuppressWarnings("static-method") // allow subclasses to override
+	protected ITreeContentProvider getTypeSelectionTreeContentProvider() {
+		return EventTypeSelectionTreeContentProvider.INSTANCE;
+	}
 }

@@ -18,11 +18,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -39,8 +34,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -67,7 +61,6 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class StructViewingComposite extends Composite
 		implements CommandExecutor, I4diacNatTableUtil, ISelectionProvider {
-	protected Map<String, List<String>> typeSelection = new HashMap<>();
 	private NatTable natTable;
 	private final CommandStack cmdStack;
 	private final IWorkbenchPart part;
@@ -113,9 +106,8 @@ public class StructViewingComposite extends Composite
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(structMemberProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(structMemberProvider));
-		initTypeSelection(getType().getTypeLibrary().getDataTypeLibrary());
 		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),
-				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
+				IEditableRule.ALWAYS_EDITABLE, null, this, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
 		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(structMemberProvider));
 		natTable.configure();
@@ -174,6 +166,10 @@ public class StructViewingComposite extends Composite
 		return entry;
 	}
 
+	public TypeLibrary getTypeLibrary() {
+		return getType().getTypeLibrary();
+	}
+
 	public DataType getStruct() {
 		return getType();
 	}
@@ -184,25 +180,14 @@ public class StructViewingComposite extends Composite
 
 	@Override
 	public ISelection getSelection() {
-		// for now return the whole object so that property sheets and other stuff can filter on it.
+		// for now return the whole object so that property sheets and other stuff can
+		// filter on it.
 		return new StructuredSelection(this);
 	}
 
 	@Override
 	public boolean isEditable() {
 		return true;
-	}
-
-	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
-		final List<String> elementaryTypes = new ArrayList<>();
-		dataTypeLib.getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
-				.forEach(type -> elementaryTypes.add(type.getName()));
-		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
-
-		final List<String> structuredTypes = new ArrayList<>();
-		dataTypeLib.getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
-				.forEach(type -> structuredTypes.add(type.getName()));
-		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
 
 	public void refresh() {

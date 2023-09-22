@@ -14,10 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
@@ -33,7 +29,6 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateVarInOutCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteVarInOutCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -41,8 +36,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
@@ -67,8 +60,6 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 	private IChangeableRowDataProvider<VarDeclaration> inputProvider;
 	private NatTable inputTable;
 	private AddDeleteReorderListWidget inputButtons;
-
-	protected Map<String, List<String>> typeSelection = new HashMap<>();
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -100,7 +91,7 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider));
 		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),
-				getSectionEditableRule(), new DataTypeSelectionButton(typeSelection), this, true);
+				getSectionEditableRule(), null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.configure();
@@ -143,9 +134,6 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 		inputProvider.setInput(getType().getInterfaceList().getInOutVars());
 		if (isShowTableEditButtons()) {
 			inputButtons.setCreateButtonEnablement(isEditable());
-		}
-		if (isEditable()) {
-			initTypeSelection(getDataTypeLib());
 		}
 	}
 
@@ -190,15 +178,6 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
 		inputTable.refresh();
-	}
-
-	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
-		final List<String> elementaryTypes = dataTypeLib.getDataTypesSorted().stream()
-				.filter(type -> !(type instanceof StructuredType)).map(DataType::getName).toList();
-		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
-		final List<String> structuredTypes = dataTypeLib.getDataTypesSorted().stream()
-				.filter(StructuredType.class::isInstance).map(DataType::getName).toList();
-		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
 
 	protected static DataType getLastUsedDataType(final InterfaceList interfaceList,

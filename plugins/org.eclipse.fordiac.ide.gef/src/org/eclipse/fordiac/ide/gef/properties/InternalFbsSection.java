@@ -16,10 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.fordiac.ide.gef.nat.FBColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
@@ -31,9 +27,9 @@ import org.eclipse.fordiac.ide.model.commands.insert.InsertFBCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.nat.FbSelectionTreeContentProvider;
-import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
+import org.eclipse.fordiac.ide.model.ui.nat.FBTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.FBTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -52,7 +48,6 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InternalFbsSection extends AbstractSection implements I4diacNatTableUtil {
 	protected IChangeableRowDataProvider<FB> provider;
-	protected Map<String, List<String>> typeSelection = new HashMap<>();
 	protected NatTable table;
 
 	@Override
@@ -78,7 +73,9 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		final DataLayer dataLayer = new DataLayer(provider);
 		dataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(provider));
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new TypedElementColumnProvider(),
-				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection, new FbSelectionTreeContentProvider()), this, false);
+				IEditableRule.ALWAYS_EDITABLE, new TypeSelectionButton(this::getTypeLibrary,
+						FBTypeSelectionContentProvider.INSTANCE, FBTypeSelectionTreeContentProvider.INSTANCE),
+				this, false);
 		table.configure();
 
 		buttons.bindToTableViewer(table, this,
@@ -156,13 +153,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		final BaseFBType currentType = getType();
 		if (currentType != null) {
 			provider.setInput(currentType.getInternalFbs());
-			initTypeSelection(getTypeLibrary());
 		}
-	}
-
-	private void initTypeSelection(final TypeLibrary typeLib) {
-		typeSelection.put("FB Types", typeLib.getFbTypes().values().stream() //$NON-NLS-1$
-				.map(FBTypeEntry::getTypeName).toList());
 	}
 
 	@Override

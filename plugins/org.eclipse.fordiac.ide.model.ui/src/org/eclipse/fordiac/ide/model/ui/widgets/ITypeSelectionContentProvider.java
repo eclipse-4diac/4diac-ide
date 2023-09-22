@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,28 +11,32 @@
  * Contributors:
  *   Sebastian Hollersbacher
  *     - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst
+ *     - refactored for generic library elements and type entries
  ******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.ui.widgets;
 
-import java.util.List;
+import java.util.Collection;
 
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 /**
- * An interface to content providers for TypeSelectionWidget and DataTypeDropdown.
- *
- * @see org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget
- * @see DataTypeDropdown
+ * An interface to provide content for a type selection.
  */
 public interface ITypeSelectionContentProvider {
 	/**
-	 * Returns the elements to display in the DataTypeDropdown
-	 * and to select in TypeSelectionWidget
-	 * The result is not modified by the viewer.
+	 * Get the elements for the type selection
 	 *
-	 * @return a list of DataTypes to display in the viewer
+	 * @return a list of types to display in the viewer
 	 */
-	List<DataType> getTypes();
+	Collection<LibraryElement> getTypes(Object input);
+
+	/**
+	 * Get the type entries for the type selection
+	 *
+	 * @return a list of types to display in the viewer
+	 */
+	Collection<TypeEntry> getTypeEntries(Object input);
 }

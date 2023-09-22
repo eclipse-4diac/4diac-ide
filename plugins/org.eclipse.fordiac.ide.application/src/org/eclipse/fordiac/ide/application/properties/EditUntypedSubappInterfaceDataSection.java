@@ -41,7 +41,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
@@ -77,10 +76,9 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputProvider));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new VarDeclarationColumnProvider(),
-				new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
+				new VarDeclarationColumnProvider(), new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
 						VarDeclarationTableColumn.DEFAULT_COLUMNS, outputProvider),
-				new DataTypeSelectionButton(typeSelection), this, false);
+				null, this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.configure();
@@ -94,11 +92,12 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
-		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new VarDeclarationColumnProvider(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG),
-				new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
-						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG, inputProvider),
-				new DataTypeSelectionButton(typeSelection), this, true);
+		inputTable = NatTableWidgetFactory
+				.createRowNatTable(inputsGroup, inputDataLayer,
+						new VarDeclarationColumnProvider(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG),
+						new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
+								VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG, inputProvider),
+						null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());

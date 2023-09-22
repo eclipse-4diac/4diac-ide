@@ -15,7 +15,10 @@ package org.eclipse.fordiac.ide.application.properties;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoDataWidget;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.widgets.Composite;
 
 /** Here only because it's relevant for the filtering of the PinInfos */
@@ -34,7 +37,11 @@ public class PinDataInfoSection extends PinEventInfoSection {
 
 	@Override
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
-		return () -> getDataTypeLib().getDataTypesSorted();
+		return DataTypeSelectionContentProvider.INSTANCE;
 	}
 
+	@Override
+	protected ITreeContentProvider getTypeSelectionTreeContentProvider() {
+		return DataTypeSelectionTreeContentProvider.INSTANCE;
+	}
 }
