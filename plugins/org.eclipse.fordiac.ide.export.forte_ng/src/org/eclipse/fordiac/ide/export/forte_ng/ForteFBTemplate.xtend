@@ -331,13 +331,19 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«type.interfaceList.outMappedInOutVars.generateDataConnectionDeclarations(false)»
 		«generateAccessorDeclaration("getDI", false)»
 		«generateAccessorDeclaration("getDO", false)»
-		«generateAccessorDeclaration("getDIO", false)»
+		«IF (!type.interfaceList.inOutVars.empty)»
+			«generateAccessorDeclaration("getDIO", false)»
+		«ENDIF»
 		«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
 		«generateConnectionAccessorsDeclaration("getEOConUnchecked", "CEventConnection *")»
 		«generateConnectionAccessorsDeclaration("getDIConUnchecked", "CDataConnection **")»
 		«generateConnectionAccessorsDeclaration("getDOConUnchecked", "CDataConnection *")»
-		«generateConnectionAccessorsDeclaration("getDIOInConUnchecked", "CInOutDataConnection **")»
-		«generateConnectionAccessorsDeclaration("getDIOOutConUnchecked", "CInOutDataConnection *")»
+		«IF (!type.interfaceList.inOutVars.empty)»
+			«generateConnectionAccessorsDeclaration("getDIOInConUnchecked", "CInOutDataConnection **")»
+		«ENDIF»
+		«IF (!type.interfaceList.inOutVars.empty)»
+			«generateConnectionAccessorsDeclaration("getDIOOutConUnchecked", "CInOutDataConnection *")»
+		«ENDIF»
 		«generateEventAccessorDefinitions»
 	'''
 
@@ -348,12 +354,17 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		
 		«type.interfaceList.inputVars.generateAccessorDefinition("getDI", false)»
 		«type.interfaceList.outputVars.generateAccessorDefinition("getDO", false)»
-		«type.interfaceList.inOutVars.generateAccessorDefinition("getDIO", false)»
+		«IF (!type.interfaceList.inOutVars.empty)»
+			«type.interfaceList.inOutVars.generateAccessorDefinition("getDIO", false)»
+		«ENDIF»
 		«type.interfaceList.eventOutputs.generateConnectionAccessorsDefinition("getEOConUnchecked", "CEventConnection *")»
 		«type.interfaceList.inputVars.generateConnectionAccessorsDefinition("getDIConUnchecked", "CDataConnection **")»
 		«type.interfaceList.outputVars.generateConnectionAccessorsDefinition("getDOConUnchecked", "CDataConnection *")»
-		«type.interfaceList.inOutVars.generateConnectionAccessorsDefinition("getDIOInConUnchecked", "CInOutDataConnection **")»
-		«type.interfaceList.outMappedInOutVars.generateConnectionAccessorsDefinition("getDIOOutConUnchecked", "CInOutDataConnection *")»
+		«IF (!type.interfaceList.inOutVars.empty)»
+			«type.interfaceList.inOutVars.generateConnectionAccessorsDefinition("getDIOInConUnchecked", "CInOutDataConnection **")»«ENDIF»
+		«IF (!type.interfaceList.inOutVars.empty)»
+			«type.interfaceList.outMappedInOutVars.generateConnectionAccessorsDefinition("getDIOOutConUnchecked", "CInOutDataConnection *")»
+		«ENDIF»
 	'''
 
 	def protected generateSetInitialValuesDeclaration(Iterable<VarDeclaration> variables) '''
