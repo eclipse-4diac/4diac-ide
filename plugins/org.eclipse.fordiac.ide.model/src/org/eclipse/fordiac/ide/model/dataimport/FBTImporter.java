@@ -120,7 +120,7 @@ public class FBTImporter extends TypeImporter {
 
 	@Override
 	protected LibraryElement createRootModelElement() {
-		final FBType newType = LibraryElementFactory.eINSTANCE.createFBType();
+		final FBType newType = LibraryElementFactory.eINSTANCE.createServiceInterfaceFBType();
 		newType.setService(LibraryElementFactory.eINSTANCE.createService());
 		return newType;
 	}
@@ -171,20 +171,6 @@ public class FBTImporter extends TypeImporter {
 			}
 			return true;
 		};
-	}
-
-	@Override
-	public void loadElement() {
-		super.loadElement();
-
-		final FBType newType = getElement();
-
-		if ((newType instanceof BasicFBType) || (newType instanceof CompositeFBType)
-				|| (newType instanceof ServiceInterfaceFBType) || (newType instanceof SimpleFBType)
-				|| (newType instanceof SubAppType) || (newType instanceof FunctionFBType)) {
-			return;
-		}
-		setElement(convertToServiceInterfaceType(newType));
 	}
 
 	/**
@@ -383,6 +369,7 @@ public class FBTImporter extends TypeImporter {
 		dstType.setIdentification(srcType.getIdentification());
 		dstType.getVersionInfo().addAll(srcType.getVersionInfo());
 		dstType.setService(srcType.getService());
+		dstType.getAttributes().addAll(srcType.getAttributes());
 	}
 
 	/**
