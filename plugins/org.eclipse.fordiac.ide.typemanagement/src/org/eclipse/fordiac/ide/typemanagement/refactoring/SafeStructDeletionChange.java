@@ -240,7 +240,10 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 			for (final VarDeclaration varDec : varDeclaration) {
 				final ErrorMarkerDataType markerType = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
-				markerType.setName(varDec.getTypeName());
+				markerType.setName(struct.getName());
+				markerType.setTypeEntry(varDec.getType().getTypeEntry());
+				markerType.setErrorMessage(MessageFormat.format(
+						org.eclipse.fordiac.ide.model.Messages.DataTypeLibrary_MissingDatatype, struct.getName()));
 
 				final Command cmd = ChangeDataTypeCommand.forDataType(varDec, markerType);
 				SafeStructDeletionChange.executeChange(cmd, type);
