@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.Messages;
@@ -70,6 +71,9 @@ public class OpenLeafAction extends BaseSelectionListenerAction {
 		final String[] refPath = leaf.getRef().split("\\."); //$NON-NLS-1$
 		if (object instanceof final AutomationSystem sys) {
 			return findRefInSystem(sys, refPath);
+		}
+		if (object instanceof final SubAppType subAppType) {
+			return parseSubappPath(subAppType.getFBNetwork(), refPath);
 		}
 		return null;
 	}
@@ -121,6 +125,8 @@ public class OpenLeafAction extends BaseSelectionListenerAction {
 			retVal = network.getElementNamed(element);
 			if (retVal instanceof final SubApp subApp) {
 				network = subApp.getSubAppNetwork();
+			} else if (retVal instanceof final SubAppType subAppType) {
+				network = subAppType.getFBNetwork();
 			} else {
 				return null;
 			}
