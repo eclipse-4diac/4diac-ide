@@ -103,7 +103,7 @@ public class UpdateInstancesChange extends Change {
 		return null;
 	}
 
-	private void executeCommand(final TypeEntry rootTypeEntry, final IEditorPart editor, final Command cmd) {
+	private static void executeCommand(final TypeEntry rootTypeEntry, final IEditorPart editor, final Command cmd) {
 		if (editor == null) {
 			cmd.execute();
 			rootTypeEntry.save();
