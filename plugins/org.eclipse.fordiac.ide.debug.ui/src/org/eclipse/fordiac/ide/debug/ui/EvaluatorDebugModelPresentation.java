@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -26,6 +26,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
+import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
+import org.eclipse.fordiac.ide.debug.preferences.FordiacDebugPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
@@ -48,20 +50,20 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 				return new FBTypeEditorInput(fbType, fbType.getTypeEntry());
 			}
 			return getEditorInput(((EObject) element).eResource());
-		} else if (element instanceof final Resource resource) {
+		}
+		if (element instanceof final Resource resource) {
 			final URI uri = resource.getURI();
-			if (uri.isPlatformResource()) {
-				final String path = uri.toPlatformString(true);
-				final IResource workspaceResource = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(path));
-				if (workspaceResource instanceof final IFile file) {
-					final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-					if (typeEntry != null && typeEntry.getTypeEditable() instanceof final FBType fbType) {
-						return new FBTypeEditorInput(fbType, typeEntry);
-					}
-					return new FileEditorInput(file);
-				}
-			} else {
+			if (!uri.isPlatformResource()) {
 				return new URIEditorInput(uri);
+			}
+			final String path = uri.toPlatformString(true);
+			final IResource workspaceResource = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(path));
+			if (workspaceResource instanceof final IFile file) {
+				final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+				if (typeEntry != null && typeEntry.getTypeEditable() instanceof final FBType fbType) {
+					return new FBTypeEditorInput(fbType, typeEntry);
+				}
+				return new FileEditorInput(file);
 			}
 		}
 		return null;
@@ -98,7 +100,29 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 
 	@Override
 	public String getText(final Object element) {
+		if (element instanceof final EvaluatorDebugVariable variable) {
+			return getVariableText(variable);
+		}
 		return null;
+	}
+
+	protected static String getVariableText(final EvaluatorDebugVariable variable) {
+		final StringBuilder buffer = new StringBuilder();
+		try {
+			final String valueString = variable.getValue().getValueString();
+			final int valueMaxDisplayLength = FordiacDebugPreferences.getValueMaxDisplayLength();
+			buffer.append(variable.getName());
+			buffer.append(" := "); //$NON-NLS-1$
+			if (valueString.length() <= valueMaxDisplayLength) {
+				buffer.append(valueString);
+			} else {
+				buffer.append(valueString.substring(0, valueMaxDisplayLength));
+				buffer.append('\u2026');
+			}
+		} catch (final DebugException e) {
+			FordiacLogHelper.logError("Cannot get value string for " + variable.getName(), e); //$NON-NLS-1$
+		}
+		return buffer.toString();
 	}
 
 	@Override

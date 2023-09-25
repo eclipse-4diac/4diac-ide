@@ -202,4 +202,13 @@
          </view>
       </perspectiveExtension>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.debug.ui.preferences.FordiacDebugPreferencePage"
+            id="org.eclipse.fordiac.ide.debug.ui.preferences.FordiacDebugPreferencePage"
+            name="Debug">
+      </page>
+   </extension>
 </plugin>
