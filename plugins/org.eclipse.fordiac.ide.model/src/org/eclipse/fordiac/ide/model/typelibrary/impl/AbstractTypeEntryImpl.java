@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -44,7 +43,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
@@ -222,7 +220,8 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 				return typeEditable;
 			}
 		}
-		// we need to get a fresh type editable in order to ensure consistency take a copy of the none editable type
+		// we need to get a fresh type editable in order to ensure consistency take a
+		// copy of the none editable type
 		final LibraryElement loadType = EcoreUtil.copy(getType());
 		setTypeEditable(loadType);
 		return loadType;
@@ -370,7 +369,6 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 		// timestamp
 		// it is not necessary as the data is in memory
 		setLastModificationTimestamp(getFile().getModificationStamp());
-		FordiacMarkerHelper.updateMarkers(file, Collections.emptyList());
 		if (updateTypeOnSave) {
 			// make the edit result available for the reading entities
 			setType(EcoreUtil.copy(getTypeEditable()));

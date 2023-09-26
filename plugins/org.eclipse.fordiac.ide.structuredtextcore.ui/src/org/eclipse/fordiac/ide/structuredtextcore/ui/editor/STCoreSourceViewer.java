@@ -16,6 +16,7 @@ import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xtext.ui.editor.XtextSourceViewer;
+import org.eclipse.xtext.ui.internal.XtextPluginImages;
 
 import com.google.inject.Inject;
 import com.google.inject.MembersInjector;
@@ -44,11 +45,20 @@ public class STCoreSourceViewer extends XtextSourceViewer {
 	}
 
 	@Override
+	protected void createControl(final Composite parent, final int styles) {
+		// ensure XtextPluginImages is initialized in UI thread to avoid exception
+		// during computing code minings, which runs outside an UI thread
+		XtextPluginImages.get(null);
+		super.createControl(parent, styles);
+	}
+
+	@Override
 	public int modelLine2WidgetLine(final int modelLine) {
 		try {
 			return super.modelLine2WidgetLine(modelLine);
 		} catch (final IllegalStateException e) {
-			// catch IllegalStateException sporadically thrown by ProjectionMapping.toImageLine(int)
+			// catch IllegalStateException sporadically thrown by
+			// ProjectionMapping.toImageLine(int)
 			// see bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=532513
 			return -1;
 		}
@@ -59,7 +69,8 @@ public class STCoreSourceViewer extends XtextSourceViewer {
 		try {
 			return super.getClosestWidgetLineForModelLine(modelLine);
 		} catch (final IllegalStateException e) {
-			// catch IllegalStateException sporadically thrown by ProjectionMapping.toImageLine(int)
+			// catch IllegalStateException sporadically thrown by
+			// ProjectionMapping.toImageLine(int)
 			// see bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=532513
 			return -1;
 		}

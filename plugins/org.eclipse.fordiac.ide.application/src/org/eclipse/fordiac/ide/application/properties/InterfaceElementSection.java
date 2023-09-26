@@ -330,6 +330,8 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	@Override
 	public void dispose() {
 		super.dispose();
-		refreshJob.cancel();
+		if (refreshJob != null) {
+			refreshJob.cancel();
+		}
 	}
 }
