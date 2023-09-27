@@ -234,10 +234,6 @@ public class StructViewingComposite extends Composite
 		return true;
 	}
 
-	public void refresh() {
-		natTable.refresh();
-	}
-
 	@Override
 	public void addSelectionChangedListener(final ISelectionChangedListener listener) {
 		// currently nothing to be done here
