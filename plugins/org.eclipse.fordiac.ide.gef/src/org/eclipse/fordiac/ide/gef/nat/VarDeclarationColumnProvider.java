@@ -32,7 +32,7 @@ public class VarDeclarationColumnProvider implements IDataProvider {
 
 	@Override
 	public Object getDataValue(final int columnIndex, final int rowIndex) {
-		return columns.get(columnIndex);
+		return columns.get(columnIndex).getDisplayName();
 	}
 
 	@Override
