@@ -138,7 +138,6 @@ public final class NatTableWidgetFactory {
 		compositeLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalButton));
 
 		addEditDisabledLabel(dataLayer, editableRule, false);
-		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
 
 		final NatTable table = new NatTable(parent, compositeLayer, false);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
@@ -205,7 +204,6 @@ public final class NatTableWidgetFactory {
 		gridLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalButton));
 
 		addEditDisabledLabel(bodyDataLayer, editableRule, false);
-		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
 
 		final NatTable table = new NatTable(parent, gridLayer, false);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
@@ -286,7 +284,7 @@ public final class NatTableWidgetFactory {
 			break;
 
 		default:
-			return;	// all columns have same width
+			return; // all columns have same width
 		}
 	}
 
@@ -407,7 +405,7 @@ public final class NatTableWidgetFactory {
 	}
 
 	private NatTableWidgetFactory() {
-		throw new UnsupportedOperationException("Helper class should not be insantiated!");  //$NON-NLS-1$
+		throw new UnsupportedOperationException("Helper class should not be insantiated!"); //$NON-NLS-1$
 	}
 
 }
