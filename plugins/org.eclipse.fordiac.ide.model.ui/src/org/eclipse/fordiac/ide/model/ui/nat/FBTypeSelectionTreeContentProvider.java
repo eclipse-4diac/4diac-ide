@@ -35,6 +35,11 @@ public class FBTypeSelectionTreeContentProvider extends TypeSelectionTreeContent
 		addPathSubtree(fbTypes, typeLibrary.getFbTypes().values());
 		fbTypes.sortChildren();
 
-		return List.of(fbTypes);
+		return fbTypes.getChildren();
+	}
+
+	@Override
+	public String getTitle() {
+		return Messages.DataTypeDropdown_FB_Types;
 	}
 }

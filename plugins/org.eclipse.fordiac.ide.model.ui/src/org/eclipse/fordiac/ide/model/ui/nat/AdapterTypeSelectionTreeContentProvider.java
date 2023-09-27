@@ -35,6 +35,11 @@ public class AdapterTypeSelectionTreeContentProvider extends TypeSelectionTreeCo
 		addPathSubtree(adapters, typeLibrary.getAdapterTypes().values());
 		adapters.sortChildren();
 
-		return List.of(adapters);
+		return adapters.getChildren();
+	}
+
+	@Override
+	public String getTitle() {
+		return Messages.DataTypeDropdown_Adapter_Types;
 	}
 }

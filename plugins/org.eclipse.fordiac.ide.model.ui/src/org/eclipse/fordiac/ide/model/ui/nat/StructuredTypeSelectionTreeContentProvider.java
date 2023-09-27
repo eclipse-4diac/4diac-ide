@@ -32,4 +32,10 @@ public class StructuredTypeSelectionTreeContentProvider extends TypeSelectionTre
 
 		return structuredTypes.getChildren();
 	}
+
+	@Override
+	public String getTitle() {
+		return Messages.DataTypeDropdown_STRUCT_Types;
+	}
+
 }

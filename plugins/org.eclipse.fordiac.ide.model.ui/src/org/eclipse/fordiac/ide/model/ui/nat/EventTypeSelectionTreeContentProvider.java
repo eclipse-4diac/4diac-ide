@@ -32,6 +32,11 @@ public class EventTypeSelectionTreeContentProvider extends TypeSelectionTreeCont
 				.forEachOrdered(elementaryTypes::addChild);
 		elementaryTypes.sortChildren();
 
-		return List.of(elementaryTypes);
+		return elementaryTypes.getChildren();
+	}
+
+	@Override
+	public String getTitle() {
+		return Messages.DataTypeDropdown_Elementary_Types;
 	}
 }

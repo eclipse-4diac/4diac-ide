@@ -20,10 +20,10 @@ import java.util.function.Supplier;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
+import org.eclipse.fordiac.ide.model.ui.nat.TypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer.MoveDirectionEnum;
@@ -43,12 +43,13 @@ import org.eclipse.swt.widgets.Text;
 public class TypeSelectionButton extends TextCellEditor {
 
 	private final Supplier<TypeLibrary> supplier;
-	private final ITreeContentProvider treeContentProvider;
+	private final TypeSelectionTreeContentProvider treeContentProvider;
 
 	protected Button button;
 
 	public TypeSelectionButton(final Supplier<TypeLibrary> supplier,
-			final ITypeSelectionContentProvider contentProvider, final ITreeContentProvider treeContentProvider) {
+			final ITypeSelectionContentProvider contentProvider,
+			final TypeSelectionTreeContentProvider treeContentProvider) {
 		this.supplier = supplier;
 		this.treeContentProvider = treeContentProvider;
 		enableContentProposal(supplier, contentProvider);
@@ -71,6 +72,7 @@ public class TypeSelectionButton extends TextCellEditor {
 						Display.getCurrent().getActiveShell(), treeContentProvider);
 				dialog.setHelpAvailable(false);
 				dialog.setInput(supplier.get());
+				dialog.setTitle(treeContentProvider.getTitle());
 
 				if (dialog.open() != Window.OK) {
 					if (editMode != EditModeEnum.DIALOG) {

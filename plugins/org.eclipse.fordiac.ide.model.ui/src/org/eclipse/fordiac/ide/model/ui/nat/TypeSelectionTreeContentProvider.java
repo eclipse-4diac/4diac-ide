@@ -52,6 +52,11 @@ public abstract class TypeSelectionTreeContentProvider implements ITreeContentPr
 				});
 	}
 
+	@SuppressWarnings("static-method")
+	public String getTitle() {
+		return ""; //$NON-NLS-1$
+	}
+
 	protected static void addPathSubtree(final TypeNode node, final Collection<? extends TypeEntry> entries) {
 		addPathSubtree(node, entries, 1);
 	}
