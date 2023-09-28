@@ -472,6 +472,14 @@
     </command>
 
   </extension>
+  
+  <extension point="org.eclipse.ui.commandImages">
+		<image commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
+               icon="platform:/plugin/org.eclipse.search/icons/full/elcl16/search_prev.png"/>
+		<image commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
+               icon="platform:/plugin/org.eclipse.search/icons/full/elcl16/search_next.png"/>
+  </extension>
+  
   <extension point="org.eclipse.ui.handlers">
   
  <!-- HANDLER FOR FOLLOW LEFT CONNECTION, SECOND IS FOR OVERRIDING THE CONFLICTING SHORTCUT -->
@@ -792,9 +800,9 @@
     </menuContribution>
     <menuContribution locationURI="menu:navigate?after=goTo">
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
-               icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_prev.png"/>
+               icon="platform:/plugin/org.eclipse.search/icons/full/elcl16/search_prev.png"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
-               icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_next.png"/>
+               icon="platform:/plugin/org.eclipse.search/icons/full/elcl16/search_next.png"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.showInstance"
@@ -970,10 +978,8 @@
       </toolbar>
     </menuContribution>
     <menuContribution locationURI="toolbar:org.eclipse.ui.workbench.navigate">
-      <command commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
-               icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_prev.png"/>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
-               icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_next.png"/>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"/>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild"/>
     </menuContribution>
     <menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
       <command commandId="org.eclipse.fordiac.ide.application.commands.insertFB" >
@@ -1229,16 +1235,14 @@
       </command>
     </menuContribution>
     <menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=org.fordiac.ide.group.navigate">
-      <command commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
-               icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_prev.png">
+      <command commandId="org.eclipse.fordiac.ide.application.commands.gotoparent">
         <visibleWhen checkEnabled="true">
           <with variable="activeEditor">
             <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
           </with>
         </visibleWhen>
       </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
-               icon="platform:/plugin/org.eclipse.jdt.junit/icons/full/elcl16/select_next.png">
+      <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild">
         <visibleWhen checkEnabled="true">
           <with variable="activeEditor">
             <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
