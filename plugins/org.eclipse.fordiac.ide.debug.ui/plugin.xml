@@ -170,6 +170,16 @@
             id="org.eclipse.fordiac.ide.debug.model">
       </debugModelPresentation>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            class=""
+            adaptableType="org.eclipse.core.resources.IResource">
+         <adapter
+               type="org.eclipse.debug.ui.actions.ILaunchable">
+         </adapter>
+      </factory>
+   </extension>
 	<extension
          point="org.eclipse.ui.views">
       <view
