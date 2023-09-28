@@ -24,6 +24,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.scoping;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -33,6 +34,7 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -57,9 +59,13 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
-/** This class contains custom scoping description.
+/**
+ * This class contains custom scoping description.
  *
- * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#scoping on how and when to use it. */
+ * See
+ * https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#scoping
+ * on how and when to use it.
+ */
 public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 	protected static final EObjectDescription[] ADDITIONAL_LITERAL_TYPES = {
 			descriptionForType("D", ElementaryTypes.DATE), //$NON-NLS-1$
@@ -117,7 +123,8 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			}
 			if (context instanceof final STFeatureExpression expression && expression.isCall()) {
 				final List<DataType> argumentTypes = expression.getParameters().stream()
-						.map(STCallArgument::getResultType).map(DataType.class::cast).toList();
+						.map(STCallArgument::getResultType).map(DataType.class::cast)
+						.map(type -> Objects.requireNonNullElse(type, GenericTypes.ANY)).toList();
 				return new STStandardFunctionScope(
 						filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference),
 						standardFunctionProvider, argumentTypes, true);

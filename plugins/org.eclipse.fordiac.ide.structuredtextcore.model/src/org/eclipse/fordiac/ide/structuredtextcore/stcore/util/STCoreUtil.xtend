@@ -469,6 +469,12 @@ final class STCoreUtil {
 		].filterNull.toList
 	}
 
+	def static String generateSignature(ICallable callable) //
+	'''«callable.name»(«(callable.inputParameters.filter(ITypedElement).map[type?.name ?: "NULL"]
+		+ callable.outputParameters.filter(ITypedElement).map['''&«type?.name ?: "NULL"»''']
+		+ callable.inOutParameters.filter(ITypedElement).map['''&&«type?.name ?: "NULL"»''']
+	).join(",")»)'''
+
 	def static getFeatureType(INamedElement feature) {
 		switch (feature) {
 			VarDeclaration:
