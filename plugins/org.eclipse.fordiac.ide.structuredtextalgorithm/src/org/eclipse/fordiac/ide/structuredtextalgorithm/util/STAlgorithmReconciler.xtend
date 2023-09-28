@@ -12,14 +12,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.util
 
+import java.util.List
 import java.util.Optional
-import org.eclipse.emf.common.util.ECollections
 import org.eclipse.emf.common.util.EList
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler
 
@@ -71,10 +74,38 @@ class STAlgorithmReconciler implements STCoreReconciler {
 		dest => [
 			comment = source.comment
 			text = source.text
-			ECollections.setEList(inputParameters, source.inputParameters.map[copy].toList)
-			ECollections.setEList(outputParameters, source.outputParameters.map[copy].toList)
-			ECollections.setEList(inOutParameters, source.inOutParameters.map[copy].toList)
+			mergeParameters(inputParameters, source.inputParameters)
+			mergeParameters(outputParameters, source.outputParameters)
+			mergeParameters(inOutParameters, source.inOutParameters)
 			returnType = source.returnType
+		]
+		true
+	}
+	
+	def protected void mergeParameters(EList<INamedElement> dest, List<INamedElement> source) {
+		// remove from dest if not in source
+		dest.removeIf[param|!source.exists[name == param.name]]
+		// add or merge/move according to source
+		source.forEach [ param, index |
+			val candidate = dest.findFirst[name == param.name]
+			if (candidate !== null && mergeParameter(candidate, param)) {
+				dest.move(index, candidate) // move to position (dest must contain at least index algs since we insert as we go)
+			} else {
+				if(candidate !== null) dest.remove(candidate) // remove candidate (if exists)
+				dest.add(index, param.copy) // insert at position
+			}
+		]
+	}
+	
+	def protected dispatch boolean mergeParameter(INamedElement dest, INamedElement source) { false }
+
+	def protected dispatch boolean mergeParameter(VarDeclaration dest, VarDeclaration source) {
+		dest => [
+			name = source.name
+			comment = source.comment
+			type = source.type
+			ArraySizeHelper.setArraySize(it, ArraySizeHelper.getArraySize(source))
+			isInput = source.isIsInput
 		]
 		true
 	}
