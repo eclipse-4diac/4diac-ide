@@ -20,6 +20,7 @@ import com.google.inject.Binder
 import com.google.inject.name.Names
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocument
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentPartitioner
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentUpdaterChangeAdapterFilter
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorActions
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.hyperlinking.STAlgorithmHyperlinkHelper
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.ExtractMethodRefactoring
@@ -28,6 +29,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPr
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater.LibraryElementChangeAdapterFilter
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory
@@ -115,6 +117,10 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	def Class<? extends XtextDocumentReconcileStrategy> bindXtextDocumentReconcileStrategy() {
 		return STCoreDocumentReconcileStrategy
+	}
+
+	def Class<? extends LibraryElementChangeAdapterFilter> bindLibraryElementChangeAdapterFilter() {
+		return STAlgorithmDocumentUpdaterChangeAdapterFilter
 	}
 
 	def Class<? extends IEObjectHoverDocumentationProvider> bindIEObjectHoverDocumentationProvider() {

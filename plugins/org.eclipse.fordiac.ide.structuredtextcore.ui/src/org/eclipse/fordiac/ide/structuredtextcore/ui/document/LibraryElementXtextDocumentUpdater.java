@@ -17,12 +17,15 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.xtext.Constants;
+import org.eclipse.xtext.ui.editor.reconciler.XtextReconciler;
 
+import com.google.inject.ImplementedBy;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
@@ -32,12 +35,20 @@ public class LibraryElementXtextDocumentUpdater extends Job {
 
 	private LibraryElementXtextDocument document;
 	private volatile boolean paused = false;
-	private long delay = 500;
+
+	/**
+	 * The delay for running the update job.
+	 *
+	 * @implNote Ensure that this is not an exact multiple of the delay for the
+	 *           {@link XtextReconciler} to avoid a resonance effect.
+	 */
+	private long delay = 750;
 
 	@Inject
-	public LibraryElementXtextDocumentUpdater(@Named(Constants.LANGUAGE_NAME) final String name) {
+	public LibraryElementXtextDocumentUpdater(@Named(Constants.LANGUAGE_NAME) final String name,
+			final LibraryElementChangeAdapterFilter filter) {
 		super(name);
-		this.changeAdapter = new LibraryElementChangeAdapter(this);
+		this.changeAdapter = new LibraryElementChangeAdapter(this, filter);
 		setPriority(Job.SHORT);
 		setSystem(true);
 	}
@@ -119,15 +130,20 @@ public class LibraryElementXtextDocumentUpdater extends Job {
 
 	protected static class LibraryElementChangeAdapter extends EContentAdapter {
 		private final LibraryElementXtextDocumentUpdater reconciler;
+		private final LibraryElementChangeAdapterFilter filter;
 
-		protected LibraryElementChangeAdapter(final LibraryElementXtextDocumentUpdater reconciler) {
+		protected LibraryElementChangeAdapter(final LibraryElementXtextDocumentUpdater reconciler,
+				final LibraryElementChangeAdapterFilter filter) {
 			this.reconciler = reconciler;
+			this.filter = filter;
 		}
 
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			reconciler.handleLibraryElementChanged();
+			if (filter.shouldNotify(notification)) {
+				reconciler.handleLibraryElementChanged();
+			}
 		}
 
 		public void install(final LibraryElementXtextDocument document) {
@@ -164,8 +180,35 @@ public class LibraryElementXtextDocumentUpdater extends Job {
 		}
 
 		@Override
+		protected void addAdapter(final Notifier notifier) {
+			if (filter.shouldAdapt(notifier)) {
+				super.addAdapter(notifier);
+			}
+		}
+
+		@Override
 		protected boolean useRecursion() {
 			return false;
+		}
+	}
+
+	@ImplementedBy(DefaultLibraryElementChangeAdapterFilter.class)
+	public interface LibraryElementChangeAdapterFilter {
+		boolean shouldAdapt(Notifier notifier);
+
+		boolean shouldNotify(Notification notification);
+	}
+
+	public static class DefaultLibraryElementChangeAdapterFilter implements LibraryElementChangeAdapterFilter {
+
+		@Override
+		public boolean shouldAdapt(final Notifier notifier) {
+			return true;
+		}
+
+		@Override
+		public boolean shouldNotify(final Notification notification) {
+			return !notification.isTouch();
 		}
 	}
 }
