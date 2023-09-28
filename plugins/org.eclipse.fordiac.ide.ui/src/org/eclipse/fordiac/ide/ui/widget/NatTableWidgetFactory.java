@@ -139,7 +139,6 @@ public final class NatTableWidgetFactory {
 		compositeLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalCellEditor));
 
 		addEditDisabledLabel(dataLayer, editableRule, false);
-		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
 
 		final NatTable table = new NatTable(parent, compositeLayer, false);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
@@ -206,7 +205,6 @@ public final class NatTableWidgetFactory {
 		gridLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalCellEditor));
 
 		addEditDisabledLabel(bodyDataLayer, editableRule, false);
-		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
 
 		final NatTable table = new NatTable(parent, gridLayer, false);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);

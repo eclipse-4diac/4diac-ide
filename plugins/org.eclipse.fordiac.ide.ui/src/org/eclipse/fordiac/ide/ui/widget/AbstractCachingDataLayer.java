@@ -17,6 +17,7 @@ import org.eclipse.nebula.widgets.nattable.command.ILayerCommand;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.event.ILayerEvent;
+import org.eclipse.nebula.widgets.nattable.layer.event.IStructuralChangeEvent;
 import org.eclipse.nebula.widgets.nattable.layer.event.IVisualChangeEvent;
 import org.eclipse.nebula.widgets.nattable.util.ICalculatedValueCache;
 
@@ -69,7 +70,9 @@ public abstract class AbstractCachingDataLayer extends DataLayer {
 
 	@Override
 	public void fireLayerEvent(final ILayerEvent event) {
-		if (event instanceof IVisualChangeEvent) {
+		if (event instanceof IStructuralChangeEvent) {
+			killCache();
+		} else if (event instanceof IVisualChangeEvent) {
 			clearCache();
 		}
 		super.fireLayerEvent(event);

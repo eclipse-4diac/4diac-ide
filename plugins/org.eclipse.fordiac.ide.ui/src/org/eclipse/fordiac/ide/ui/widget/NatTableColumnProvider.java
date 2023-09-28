@@ -28,7 +28,7 @@ public class NatTableColumnProvider<T extends NatTableColumn> implements IDataPr
 
 	@Override
 	public Object getDataValue(final int columnIndex, final int rowIndex) {
-		return columns.get(columnIndex);
+		return columns.get(columnIndex).getDisplayName();
 	}
 
 	@Override
