@@ -167,25 +167,12 @@ Java and all Java-based trademarks are trademarks of Oracle Corporation in the
 United States, other countries, or both.\n
    </license>
 
-   <includes
-         id="org.eclipse.emf.mwe2.language.sdk"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.elk.algorithms.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.elk.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.emf.compare.ide.ui"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.emf.compare"
-         version="0.0.0"/>
+   <requires>
+      <import feature="org.eclipse.elk.algorithms.feature"/>
+      <import feature="org.eclipse.elk.feature"/>
+      <import feature="org.eclipse.emf.compare"/>
+      <import feature="org.eclipse.emf.compare.ide.ui"/>
+   </requires>
 
    <plugin
          id="org.eclipse.fordiac.ide.model"
@@ -279,76 +266,6 @@ United States, other countries, or both.\n
          fragment="true"/>
 
    <plugin
-         id="org.objectweb.asm"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.google.inject"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.emf.mwe.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.emf.mwe.utils"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.xtend"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.xtend.typesystem.emf"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.google.guava"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.commons.cli"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.commons.io"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.xpand"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.fordiac.ide.resourceediting"
          download-size="0"
          install-size="0"
@@ -356,63 +273,7 @@ United States, other countries, or both.\n
          unpack="false"/>
 
    <plugin
-         id="org.antlr.runtime"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.equinox.concurrent"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.fordiac.ide.model.commands"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.emf.ecore.source"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.emf.common.source"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.emf.codegen.ecore"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.emf.codegen"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.lucene.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="io.github.classgraph"
          download-size="0"
          install-size="0"
          version="0.0.0"
