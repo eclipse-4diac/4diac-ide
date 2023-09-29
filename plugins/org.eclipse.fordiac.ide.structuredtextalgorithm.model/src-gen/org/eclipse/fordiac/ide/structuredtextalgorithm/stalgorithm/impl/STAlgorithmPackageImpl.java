@@ -228,16 +228,6 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSTAlgorithmSource_Name() {
-		return (EAttribute)stAlgorithmSourceEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getSTAlgorithmSourceElement() {
 		return stAlgorithmSourceElementEClass;
 	}
@@ -340,7 +330,6 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 
 		stAlgorithmSourceEClass = createEClass(ST_ALGORITHM_SOURCE);
 		createEReference(stAlgorithmSourceEClass, ST_ALGORITHM_SOURCE__ELEMENTS);
-		createEAttribute(stAlgorithmSourceEClass, ST_ALGORITHM_SOURCE__NAME);
 
 		stAlgorithmSourceElementEClass = createEClass(ST_ALGORITHM_SOURCE_ELEMENT);
 
@@ -411,7 +400,6 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 
 		initEClass(stAlgorithmSourceEClass, STAlgorithmSource.class, "STAlgorithmSource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTAlgorithmSource_Elements(), this.getSTAlgorithmSourceElement(), null, "elements", null, 0, -1, STAlgorithmSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getSTAlgorithmSource_Name(), ecorePackage.getEString(), "name", "st", 0, 1, STAlgorithmSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		initEClass(stAlgorithmSourceElementEClass, STAlgorithmSourceElement.class, "STAlgorithmSourceElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 

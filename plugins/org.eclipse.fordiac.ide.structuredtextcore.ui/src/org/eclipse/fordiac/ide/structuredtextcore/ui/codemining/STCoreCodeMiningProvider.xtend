@@ -13,7 +13,10 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.codemining
 
 import com.google.inject.Inject
+import java.util.Collections
 import java.util.Set
+import java.util.concurrent.CompletableFuture
+import org.eclipse.core.runtime.IProgressMonitor
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
@@ -32,6 +35,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.jface.text.BadLocationException
 import org.eclipse.jface.text.IDocument
+import org.eclipse.jface.text.ITextViewer
 import org.eclipse.jface.text.codemining.ICodeMining
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils
 import org.eclipse.xtext.resource.XtextResource
@@ -45,11 +49,16 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 	@Inject extension STCoreGrammarAccess
 	@Inject extension STCoreCodeMiningPreferences
 
+	override provideCodeMinings(ITextViewer viewer, IProgressMonitor monitor) {
+		if (isEnableCodeMinings)
+			super.provideCodeMinings(viewer, monitor)
+		else
+			CompletableFuture.completedFuture(Collections.emptyList())
+	}
+
 	override void createCodeMinings(IDocument document, XtextResource resource, CancelIndicator indicator,
 		IAcceptor<? super ICodeMining> acceptor) throws BadLocationException {
-		if (isEnableCodeMinings) {
-			EcoreUtil.getAllProperContents(resource, true).forEach[createCodeMinings(document, acceptor)]
-		}
+		EcoreUtil.getAllProperContents(resource, true).forEach[createCodeMinings(document, acceptor)]
 	}
 
 	def dispatch void createCodeMinings(EObject element, IDocument document,

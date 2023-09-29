@@ -21,6 +21,8 @@ Require-Bundle: org.eclipse.xtext,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.model
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.fordiac.ide.structuredtextalgorithm,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.formatting2,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.naming,
  org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr,
  org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.internal,
  org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.lexer,
@@ -29,6 +31,5 @@ Export-Package: org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.structuredtextalgorithm.serializer,
  org.eclipse.fordiac.ide.structuredtextalgorithm.services,
  org.eclipse.fordiac.ide.structuredtextalgorithm.util,
- org.eclipse.fordiac.ide.structuredtextalgorithm.validation,
- org.eclipse.fordiac.ide.structuredtextalgorithm.formatting2
+ org.eclipse.fordiac.ide.structuredtextalgorithm.validation
 Import-Package: org.apache.log4j

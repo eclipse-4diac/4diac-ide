@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm
 
 import com.google.inject.Binder
 import com.google.inject.name.Names
+import org.eclipse.fordiac.ide.structuredtextalgorithm.naming.STAlgorithmQualifiedNameProvider
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResourceDescriptionStrategy
 import org.eclipse.fordiac.ide.structuredtextalgorithm.scoping.STAlgorithmImportedNamespaceAwareLocalScopeProvider
@@ -24,7 +25,6 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmReconcile
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters
 import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameConverter
-import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameProvider
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner
@@ -77,7 +77,7 @@ class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 	}
 
 	override Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
-		return STCoreQualifiedNameProvider
+		return STAlgorithmQualifiedNameProvider
 	}
 
 	def Class<? extends IQualifiedNameConverter> bindIQualifiedNameConverter() {

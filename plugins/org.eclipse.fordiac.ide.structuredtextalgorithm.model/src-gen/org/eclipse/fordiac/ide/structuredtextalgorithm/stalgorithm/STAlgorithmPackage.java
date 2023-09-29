@@ -219,22 +219,13 @@ public interface STAlgorithmPackage extends EPackage {
 	int ST_ALGORITHM_SOURCE__ELEMENTS = STCorePackage.ST_SOURCE_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ST_ALGORITHM_SOURCE__NAME = STCorePackage.ST_SOURCE_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>Source</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_ALGORITHM_SOURCE_FEATURE_COUNT = STCorePackage.ST_SOURCE_FEATURE_COUNT + 2;
+	int ST_ALGORITHM_SOURCE_FEATURE_COUNT = STCorePackage.ST_SOURCE_FEATURE_COUNT + 1;
 
 
 	/**
@@ -405,17 +396,6 @@ public interface STAlgorithmPackage extends EPackage {
 	EReference getSTAlgorithmSource_Elements();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource#getName()
-	 * @see #getSTAlgorithmSource()
-	 * @generated
-	 */
-	EAttribute getSTAlgorithmSource_Name();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSourceElement <em>Source Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -572,14 +552,6 @@ public interface STAlgorithmPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ST_ALGORITHM_SOURCE__ELEMENTS = eINSTANCE.getSTAlgorithmSource_Elements();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ST_ALGORITHM_SOURCE__NAME = eINSTANCE.getSTAlgorithmSource_Name();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmSourceElementImpl <em>Source Element</em>}' class.

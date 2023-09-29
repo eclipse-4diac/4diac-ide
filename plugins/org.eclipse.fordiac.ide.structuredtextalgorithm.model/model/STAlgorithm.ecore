@@ -37,8 +37,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="STAlgorithmSource" eSuperTypes="../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.ecore#//STSource">
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
         eType="#//STAlgorithmSourceElement" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        defaultValueLiteral="st"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STAlgorithmSourceElement" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STMethod" eSuperTypes="#//STAlgorithmSourceElement ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ICallable">
