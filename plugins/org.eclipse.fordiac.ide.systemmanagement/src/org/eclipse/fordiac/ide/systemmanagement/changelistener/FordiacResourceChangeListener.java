@@ -231,7 +231,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			// project is opened oder closed
 			if (0 != delta.getAffectedChildren(IResourceDelta.ADDED).length) {
 				handleProjectAdd(delta);
-			} else if (0 != delta.getAffectedChildren(IResourceDelta.REMOVED).length) {
+				return false;
+			}
+			if (0 != delta.getAffectedChildren(IResourceDelta.REMOVED).length) {
 				handleProjectRemove(delta);
 				return false;
 			}
@@ -265,7 +267,8 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private boolean handleResourceRemoved(final IResourceDelta delta) {
-		if (delta.getFlags() == IResourceDelta.MOVED_TO) {
+		final IProject project = delta.getResource().getProject();
+		if (delta.getFlags() == IResourceDelta.MOVED_TO || !TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
 			// we will handle movement only on the add side
 			return false;
 		}
@@ -284,6 +287,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private boolean handleResourceMovedFrom(final IResourceDelta delta) {
+		final IProject project = delta.getResource().getProject();
+		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
+			return false;
+		}
+
 		switch (delta.getResource().getType()) {
 		case IResource.FILE:
 			handleFileMove(delta);
@@ -298,6 +306,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private boolean handleResourceCopy(final IResourceDelta delta) {
+		final IProject project = delta.getResource().getProject();
+		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
+			return false;
+		}
+
 		switch (delta.getResource().getType()) {
 		case IResource.FILE:
 			handleFileCopy(delta);
@@ -316,6 +329,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private void handleFileDelete(final IResourceDelta delta) {
 		final IFile file = (IFile) delta.getResource();
+		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(file.getProject())) {
+			return;
+		}
 		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
 
 		final TypeEntry entry = typeLib.getTypeEntry(file);
@@ -337,20 +353,27 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private void handleFileCopy(final IResourceDelta delta) {
-		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
+		final IFile file = (IFile) delta.getResource();
+		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(file.getProject())) {
+			return;
+		}
 		if (file.getProject().isOpen() && delta.getFlags() != IResourceDelta.MARKERS) {
-			final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(delta.getResource().getProject());
+			final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
 			final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			if (typeEntryForFile == null) {
 				final TypeEntry entry = typeLib.createTypeEntry(file);
 				if (null != entry && containedTypeNameIsDifferent(file)) {
-					// we only need to update the type entry if the file content is different from the file name
-					// this happens when a type is copied into a new project or when a project is opened or imported
+					// we only need to update the type entry if the file content is different from
+					// the file name
+					// this happens when a type is copied into a new project or when a project is
+					// opened or imported
 					updateTypeEntry(file, entry);
 				}
 			} else if (!file.equals(typeEntryForFile.getFile())) {
-				// After a file has been copied and the copied file is not the same as the founded type entry
-				// the file and the resulting type must be renamed with a unique name put it in the rename list
+				// After a file has been copied and the copied file is not the same as the
+				// founded type entry
+				// the file and the resulting type must be renamed with a unique name put it in
+				// the rename list
 				filesToRename.add(new FileToRenameEntry(file, typeEntryForFile));
 			}
 		}
@@ -371,7 +394,8 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				final String oldPath = entry.getFile().getFullPath().toOSString();
 				final String newPath = replaceLast(oldPath, oldName, newName);
 
-				try {// this will trigger handleFileMove() and further handleFileRename(). file.move() is a workaround
+				try {// this will trigger handleFileMove() and further handleFileRename().
+						// file.move() is a workaround
 						// to rename a file
 					entry.getFile().move(new Path(newPath), true, new NullProgressMonitor());
 				} catch (final CoreException e) {
@@ -528,7 +552,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				} catch (final CoreException e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
-				TypeLibraryManager.INSTANCE.getTypeLibrary(project).reload();
+				TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 				systemManager.notifyListeners();
 				ResourcesPlugin.getWorkspace().addResourceChangeListener(FordiacResourceChangeListener.this);
 				return Status.OK_STATUS;
@@ -536,7 +560,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		};
 		job.setUser(false);
 		job.setSystem(true);
-		job.setPriority(Job.INTERACTIVE);  // give this job the highest possible priority
+		job.setPriority(Job.INTERACTIVE); // give this job the highest possible priority
 		job.setRule(project);
 		job.schedule();
 	}
@@ -586,8 +610,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 							&& editor instanceof final IEditorFileChangeListener editorFileChangeListener)) {
 						editorFileChangeListener.updateEditorInput(new FileEditorInput(dst));
 					}
-				} else // the editor is not yet loaded check if it may be ours. We can not load it as the file it is
-						 // referring
+				} else // the editor is not yet loaded check if it may be ours. We can not load it as
+						// the file it is
+						// referring
 				// to is not existing anymore, therefore we can only close it
 				if (editorMatching.matches(editorReference, new FileEditorInput(src))) {
 					activePage.closeEditors(new IEditorReference[] { editorReference }, false);
