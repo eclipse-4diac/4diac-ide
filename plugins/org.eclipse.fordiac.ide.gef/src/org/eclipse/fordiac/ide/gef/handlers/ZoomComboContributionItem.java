@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.gef.handlers;
 import org.eclipse.draw2d.zoom.ZoomListener;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
-import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -31,58 +30,48 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.menus.WorkbenchWindowControlContribution;
-import org.eclipse.ui.part.MultiPageEditorPart;
 
-/** This class is based on the {@link org.eclipse.gef.ui.actions.ZoomComboContributionItem} by @author Eric Bordeau
+/**
+ * This class is based on the
+ * {@link org.eclipse.gef.ui.actions.ZoomComboContributionItem} by @author Eric
+ * Bordeau
  *
- * @author Alois Zoitl ported it to the WorkbenchWindowControlContribution and extended it with support for multipage
- *         editors.
+ * @author Alois Zoitl ported it to the WorkbenchWindowControlContribution and
+ *         extended it with support for multipage editors.
  *
- *         This class is supposed to be contributed back to a revamped GEF 3 project. */
+ *         This class is supposed to be contributed back to a revamped GEF 3
+ *         project.
+ */
 public class ZoomComboContributionItem extends WorkbenchWindowControlContribution implements ZoomListener {
-
-	private class ZoomContributorPartListener implements IPartListener {
+	private Combo combo;
+	private ZoomManager zoomManager;
+	private IPartListener partListener = new IPartListener() {
 		@Override
 		public void partActivated(final IWorkbenchPart part) {
-			setZoomManager(part.getAdapter(ZoomManager.class));
-			if (part instanceof MultiPageEditorPart && part != activeMultiPageEditorPart) {
-				activeMultiPageEditorPart = (MultiPageEditorPart) part;
-				activeMultiPageEditorPart.addPageChangedListener(pageChangeListener);
+			final ZoomManager zm = part.getAdapter(ZoomManager.class);
+			if (zm != null) {
+				setZoomManager(zm);
 			}
 		}
 
 		@Override
-		public void partBroughtToTop(final IWorkbenchPart p) {
+		public void partBroughtToTop(final IWorkbenchPart part) {
 			// Nothing to be done here
 		}
 
 		@Override
 		public void partClosed(final IWorkbenchPart part) {
-			if (part == activeMultiPageEditorPart) {
-				unHookPageChangeListener();
-			}
+			// Nothing to be done here
 		}
 
 		@Override
 		public void partDeactivated(final IWorkbenchPart part) {
-			if (part == activeMultiPageEditorPart) {
-				unHookPageChangeListener();
-			}
+			// Nothing to be done here
 		}
 
 		@Override
-		public void partOpened(final IWorkbenchPart p) {
+		public void partOpened(final IWorkbenchPart part) {
 			// Nothing to be done here
-		}
-	}
-
-	private Combo combo;
-	private ZoomManager zoomManager;
-	private IPartListener partListener;
-	private MultiPageEditorPart activeMultiPageEditorPart;
-	private final IPageChangedListener pageChangeListener = event -> {
-		if (activeMultiPageEditorPart != null) {
-			setZoomManager(activeMultiPageEditorPart.getAdapter(ZoomManager.class));
 		}
 	};
 
@@ -92,16 +81,14 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 
 	public ZoomComboContributionItem(final String id) {
 		super(id);
-		// nothing special to be done here
 	}
-
 
 	@Override
 	protected Control createControl(final Composite parent) {
-		hookPartListener();
-		combo = new Combo(parent, SWT.DROP_DOWN);
+		getPartService().addPartListener(partListener);
 
-		combo.addSelectionListener( new SelectionListener() {
+		combo = new Combo(parent, SWT.DROP_DOWN);
+		combo.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				handleComboSelected();
@@ -124,9 +111,10 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 			}
 		});
 
+		setZoomManager(getWorkbenchWindow().getActivePage().getActiveEditor().getAdapter(ZoomManager.class));
+
 		return combo;
 	}
-
 
 	@Override
 	public void zoomChanged(final double zoom) {
@@ -136,17 +124,15 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 	@Override
 	public void dispose() {
 		super.dispose();
-		if (partListener == null) {
-			return;
-		}
-		getPartService().removePartListener(partListener);
-		unHookPageChangeListener();
+		combo = null;
 		if (zoomManager != null) {
 			zoomManager.removeZoomListener(this);
 			zoomManager = null;
 		}
-		combo = null;
-		partListener = null;
+		if (partListener != null) {
+			getPartService().removePartListener(partListener);
+			partListener = null;
+		}
 	}
 
 	private IPartService getPartService() {
@@ -155,18 +141,6 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 
 	private ZoomManager getZoomManager() {
 		return zoomManager;
-	}
-
-	private void hookPartListener() {
-		partListener = new ZoomContributorPartListener();
-		getPartService().addPartListener(partListener);
-	}
-
-	private void unHookPageChangeListener() {
-		if (activeMultiPageEditorPart != null) {
-			activeMultiPageEditorPart.removePageChangedListener(pageChangeListener);
-			activeMultiPageEditorPart = null;
-		}
 	}
 
 	private void setZoomManager(final ZoomManager zm) {
@@ -180,12 +154,9 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 		zoomManager = zm;
 		if (zoomManager != null) {
 			repopulateCombo();
-		}
-		refresh();
-
-		if (zoomManager != null) {
 			zoomManager.addZoomListener(this);
 		}
+		refresh();
 	}
 
 	private void repopulateCombo() {
@@ -196,18 +167,13 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 		if (combo == null || combo.isDisposed()) {
 			return;
 		}
-		if (zoomManager == null) {
-			combo.setEnabled(false);
-			combo.setText(""); //$NON-NLS-1$
+
+		final String zoom = getZoomManager().getZoomAsText();
+		final int index = combo.indexOf(zoom);
+		if (index == -1) {
+			combo.setText(zoom);
 		} else {
-			final String zoom = getZoomManager().getZoomAsText();
-			final int index = combo.indexOf(zoom);
-			if (index == -1) {
-				combo.setText(zoom);
-			} else {
-				combo.select(index);
-			}
-			combo.setEnabled(true);
+			combo.select(index);
 		}
 		combo.pack();
 		combo.getParent().pack();
@@ -215,13 +181,13 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 
 	private void handleComboSelected() {
 		if (zoomManager != null) {
-			if (combo.getSelectionIndex() >= 0) {
-				zoomManager.setZoomAsText(combo.getItem(combo.getSelectionIndex()));
+			final int selected = combo.getSelectionIndex();
+			if (selected >= 0) {
+				zoomManager.setZoomAsText(combo.getItem(selected));
 			} else {
 				zoomManager.setZoomAsText(combo.getText());
 			}
 		}
 		refresh();
 	}
-
 }
