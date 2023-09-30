@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
- *               2019 Johannes Kepler University Linz
+ * Copyright (c) 2017, 2023 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +14,7 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 
@@ -41,7 +42,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 	private String arraySize;
 	private String value;
 
-	private AdapterCreateCommand adapterCreateCmd;
+	private AdapterFBCreateCommand adapterCreateCmd;
 
 	private final InterfaceList targetInterfaceList;
 
@@ -137,7 +138,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 		} else {
 			finalizeCopyInterfaceElement();
 		}
-		createAdapterCreateCommand();
+		createAdapterFBCreateCommand();
 		insertElement();
 		newInterfaceElement.setName(NameRepository.createUniqueName(newInterfaceElement, name));
 		if (null != adapterCreateCmd) {
@@ -195,11 +196,13 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 		}
 	}
 
-	private void createAdapterCreateCommand() {
-		if (dataType instanceof AdapterType) {
+	private void createAdapterFBCreateCommand() {
+		final EObject targetElement = targetInterfaceList.eContainer();
+		if (dataType instanceof AdapterType && targetElement instanceof final FBType fbType
+				&& !(fbType instanceof SubAppType)) {
 			final int xyPos = 10;
-			adapterCreateCmd = new AdapterCreateCommand(xyPos, xyPos, (AdapterDeclaration) newInterfaceElement,
-					(FBType) targetInterfaceList.eContainer());
+			adapterCreateCmd = new AdapterFBCreateCommand(xyPos, xyPos, (AdapterDeclaration) newInterfaceElement,
+					fbType);
 		}
 	}
 

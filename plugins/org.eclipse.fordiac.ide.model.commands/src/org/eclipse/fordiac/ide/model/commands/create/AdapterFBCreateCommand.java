@@ -22,9 +22,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
-public class AdapterCreateCommand extends FBCreateCommand {
+public class AdapterFBCreateCommand extends FBCreateCommand {
 
-	public AdapterCreateCommand(final int x, final int y, final AdapterDeclaration adapterDecl, final FBType parent) {
+	public AdapterFBCreateCommand(final int x, final int y, final AdapterDeclaration adapterDecl, final FBType parent) {
 		super(getFBNetwork(parent), LibraryElementFactory.eINSTANCE.createAdapterFB(), x, y);
 		getAdapterFB().setTypeEntry(adapterDecl.getType().getTypeEntry());
 		getAdapterFB().setAdapterDecl(adapterDecl);
