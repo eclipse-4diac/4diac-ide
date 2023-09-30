@@ -368,6 +368,88 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	}
 
 	/**
+	 * Checks whether the connection remains and moves along with moving FBs
+	 *
+	 * First two FB are dragged onto the editing area and a connection is created.
+	 * The position of the start and end point of the connection is fetched. Then
+	 * two new points are created and the delta values of the translation between
+	 * the original position and the new position are calculated.
+	 *
+	 * Then the E_CTUD is moved and it is checked whether the end point of the
+	 * connection has also moved and whether the start point has remained unchanged.
+	 *
+	 * Afterwards, the E_SWITCH is also moved and checked whether the start point
+	 * and end point of the connection match the new positions of the FBs.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void checkIfConnectionRemainsAfterMovingBothFBsOneAfterAnother() {
+		final Point pos1 = new Point(375, 75);
+		dragAndDropEventsFB(E_SELECT_TREE_ITEM, pos1);
+		final Point pos2 = new Point(175, 125);
+		dragAndDropEventsFB(E_CTUD_TREE_ITEM, pos2);
+		createConnection(QU, G);
+		final ConnectionEditPart connection = findConnection(QU, G);
+		assertNotNull(connection);
+
+		// select E_SELECT
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		assertNotNull(editor.getEditPart(E_CTUD_FB));
+		assertNotNull(editor.getEditPart(E_SELECT_FB));
+		editor.click(E_SELECT_FB);
+		final SWTBotGefEditPart fb1 = editor.getEditPart(E_SELECT_FB).parent();
+		assertNotNull(fb1);
+		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, E_SELECT_FB);
+		assertTrue(fb1Bounds1.contains(pos1.x, pos1.y));
+
+		// get connection start and end point
+		final PolylineConnection polyLineConnection = (PolylineConnection) connection.getFigure();
+		final org.eclipse.draw2d.geometry.Point startPointConnection = polyLineConnection.getPoints().getFirstPoint();
+		final org.eclipse.draw2d.geometry.Point endPointConnection = polyLineConnection.getPoints().getLastPoint();
+
+		// calculate deltas of translation
+		final Point pos3 = new Point(45, 105);
+		final int fb1DeltaX = pos3.x - pos1.x;
+		final int fb1DeltaY = pos3.y - pos1.y;
+
+		final Point pos4 = new Point(345, 145);
+		final int fb2DeltaX = pos4.x - pos2.x;
+		final int fb2DeltaY = pos4.y - pos2.y;
+
+		// move E_SELECT
+		editor.drag(fb1, pos3.x, pos3.y);
+		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, E_SELECT_FB);
+		assertTrue(fb1Bounds2.contains(pos3.x, pos3.y));
+		assertNotNull(connection);
+		org.eclipse.draw2d.geometry.Point newStartPointConnection = polyLineConnection.getPoints().getFirstPoint();
+		org.eclipse.draw2d.geometry.Point newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
+
+		assertEquals(startPointConnection, newStartPointConnection);
+		assertEquals(endPointConnection.x + fb1DeltaX, newEndPointConnection.x);
+		assertEquals(endPointConnection.y + fb1DeltaY, newEndPointConnection.y);
+
+		// select E_CTUD
+		editor.click(E_CTUD_FB);
+		final SWTBotGefEditPart fb2 = editor.getEditPart(E_CTUD_FB).parent();
+		assertNotNull(fb2);
+		final Rectangle fb2Bounds1 = getAbsolutePosition(editor, E_CTUD_FB);
+		assertTrue(fb2Bounds1.contains(pos2.x, pos2.y));
+		// move E_CTUD
+		editor.drag(fb2, pos4.x, pos4.y);
+		final Rectangle fb2Bounds2 = getAbsolutePosition(editor, E_CTUD_FB);
+		assertTrue(fb2Bounds2.contains(pos4.x, pos4.y));
+		assertNotNull(connection);
+		newStartPointConnection = polyLineConnection.getPoints().getFirstPoint();
+		newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
+
+		assertEquals(startPointConnection.x + fb2DeltaX, newStartPointConnection.x);
+		assertEquals(startPointConnection.y + fb2DeltaY, newStartPointConnection.y);
+		assertEquals(endPointConnection.x + fb1DeltaX, newEndPointConnection.x);
+		assertEquals(endPointConnection.y + fb1DeltaY, newEndPointConnection.y);
+	}
+
+	/**
 	 * Checks if connections stays in place after moving both FBs at the same time
 	 *
 	 */
@@ -376,5 +458,4 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	public void checkIfConnectionRemainsAfterMovingBothFBsTogether() {
 		// in progress
 	}
-
 }

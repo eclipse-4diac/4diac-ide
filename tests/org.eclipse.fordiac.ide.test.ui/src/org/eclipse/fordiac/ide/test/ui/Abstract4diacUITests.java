@@ -73,6 +73,9 @@ public class Abstract4diacUITests {
 	protected static final String E_D_FF_TREE_ITEM = E_D_FF_FB + " [Data latch (d) flip flop]"; //$NON-NLS-1$
 	protected static final String E_N_TABLE_FB = "E_N_TABLE"; //$NON-NLS-1$
 	protected static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
+	protected static final String E_SELECT_FB = "E_SELECT"; //$NON-NLS-1$
+	protected static final String E_SELECT_TREE_ITEM = E_SELECT_FB
+			+ " [selection between two events based on boolean input G]";
 	protected static final String E_SR_FB = "E_SR"; //$NON-NLS-1$
 	protected static final String E_SR_TREE_ITEM = E_SR_FB + " [Event-driven bistable]"; //$NON-NLS-1$
 	protected static final String E_SWITCH_FB = "E_SWITCH"; //$NON-NLS-1$
@@ -100,6 +103,7 @@ public class Abstract4diacUITests {
 	protected static final String START = "START"; //$NON-NLS-1$
 	protected static final String STOP = "STOP"; //$NON-NLS-1$
 	protected static final String D = "D"; //$NON-NLS-1$
+	protected static final String G = "G"; //$NON-NLS-1$
 	protected static final String N = "N"; //$NON-NLS-1$
 	protected static final String Q = "Q"; //$NON-NLS-1$
 	protected static final String CD = "CD"; //$NON-NLS-1$
