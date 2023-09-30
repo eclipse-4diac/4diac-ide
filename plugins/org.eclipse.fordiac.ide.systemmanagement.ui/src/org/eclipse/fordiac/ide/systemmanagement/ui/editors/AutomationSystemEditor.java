@@ -66,6 +66,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.EditorPart;
@@ -91,6 +92,12 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	@Override
+	public String getTitleToolTip() {
+		final String tooltip = (system != null) ? system.getTypeEntry().getFullTypeName() + "\n" : ""; //$NON-NLS-1$ //$NON-NLS-2$
+		return tooltip + super.getTitleToolTip();
+	}
+
+	@Override
 	protected Composite createPageContainer(final Composite parent) {
 		final Composite pageContainer = new Composite(parent, SWT.NONE);
 		pageContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -108,8 +115,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	private void loadSystem() {
-		if (getEditorInput() instanceof FileEditorInput) {
-			system = SystemManager.INSTANCE.getSystem(((FileEditorInput) getEditorInput()).getFile());
+		if (getEditorInput() instanceof final FileEditorInput fileEI) {
+			system = SystemManager.INSTANCE.getSystem(fileEI.getFile());
 			// register as listener and call this method
 			if (null != system) {
 				getCommandStack().addCommandStackEventListener(this);
@@ -138,9 +145,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return new CompositeInstanceViewer();
 		}
 
-		if (model instanceof SubApp) {
-			if ((((SubApp) model).isTyped()) || (((SubApp) model).isContainedInTypedInstance())
-					|| (((SubApp) model).isUnfolded())) {
+		if (model instanceof final SubApp subApp) {
+			if (subApp.isTyped() || subApp.isContainedInTypedInstance() || subApp.isUnfolded()) {
 				return new SubappInstanceViewer();
 			}
 			return new SubAppNetworkEditor();
@@ -167,8 +173,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		if (model instanceof IFile) {
 			return getEditorInput();
 		}
-		if (model instanceof SubApp) {
-			final SubApp subApp = (SubApp) model;
+		if (model instanceof final SubApp subApp) {
 			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance()) || subApp.isUnfolded()) {
 				return new CompositeAndSubAppInstanceViewerInput(subApp);
 			}
@@ -179,17 +184,17 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return new CompositeAndSubAppInstanceViewerInput((FB) model);
 		}
 
-		if (model instanceof Application) {
-			return new ApplicationEditorInput((Application) model);
+		if (model instanceof final Application app) {
+			return new ApplicationEditorInput(app);
 		}
-		if (model instanceof SystemConfiguration) {
-			return new SystemConfigurationEditorInput((SystemConfiguration) model);
+		if (model instanceof final SystemConfiguration sysConf) {
+			return new SystemConfigurationEditorInput(sysConf);
 		}
-		if (model instanceof Device) {
-			return new SystemConfigurationEditorInput(((Device) model).getSystemConfiguration());
+		if (model instanceof final Device dev) {
+			return new SystemConfigurationEditorInput(dev.getSystemConfiguration());
 		}
-		if (model instanceof Resource) {
-			return new ResourceEditorInput((Resource) model);
+		if (model instanceof final Resource res) {
+			return new ResourceEditorInput(res);
 		}
 		return null;
 	}
@@ -342,9 +347,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	private Object getSelection(final GraphicalViewer viewer) {
 		Object selection = null;
 		final IEditorPart activeEditor = getActiveEditor();
-		if (activeEditor instanceof DiagramEditorWithFlyoutPalette) {
-			selection = viewer.getEditPartRegistry()
-					.get(((DiagramEditorWithFlyoutPalette) activeEditor).getModel());
+		if (activeEditor instanceof final DiagramEditorWithFlyoutPalette diagramEditor) {
+			selection = viewer.getEditPartRegistry().get(diagramEditor.getModel());
 		}
 		if (selection == null) {
 			selection = viewer.getRootEditPart();
@@ -355,7 +359,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	@Override
 	public void updateEditorInput(final FileEditorInput newInput) {
 		setInput(newInput);
-		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
+		firePropertyChange(IWorkbenchPart.PROP_TITLE);
 	}
 
 }
