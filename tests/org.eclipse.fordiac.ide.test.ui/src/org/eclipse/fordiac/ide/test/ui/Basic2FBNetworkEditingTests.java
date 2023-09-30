@@ -23,9 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
+import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
@@ -311,13 +313,58 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	}
 
 	/**
-	 * Checks if connections stays in place after moving one FB
+	 * Checks whether the connection remains and moves along with moving FB
 	 *
+	 * First two FB are dragged onto the editing area and a connection is created.
+	 * The position of the start and end point of the connection is fetched. Then a
+	 * new point is created and the delta values of the translation between the
+	 * original position and the new position are calculated.
+	 *
+	 * Then the E_CYCLE is moved and it is checked whether the start point of the
+	 * connection has also moved and whether the end point has remained unchanged.
 	 */
-	@Disabled("until implementation")
+	@SuppressWarnings("static-method")
 	@Test
 	public void checkIfConnectionRemainsAfterMoving1FB() {
-		// in progress
+		final Point pos1 = new Point(100, 50);
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, pos1);
+		dragAndDropEventsFB(E_DEMUX_TREE_ITEM, new Point(300, 50));
+		createConnection(EO, EI);
+		final ConnectionEditPart connection = findConnection(EO, EI);
+		assertNotNull(connection);
+
+		// select E_CYCLE
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+		assertNotNull(editor.getEditPart(E_CYCLE_FB));
+		editor.click(E_CYCLE_FB);
+		final SWTBotGefEditPart fb1 = editor.getEditPart(E_CYCLE_FB).parent();
+		assertNotNull(fb1);
+		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, E_CYCLE_FB);
+		assertTrue(fb1Bounds1.contains(pos1.x, pos1.y));
+
+		// get connection start and end point
+		final PolylineConnection polyLineConnection = (PolylineConnection) connection.getFigure();
+		final org.eclipse.draw2d.geometry.Point startPointConnection = polyLineConnection.getPoints().getFirstPoint();
+		final org.eclipse.draw2d.geometry.Point endPointConnection = polyLineConnection.getPoints().getLastPoint();
+
+		// calculate deltas of translation
+		final Point pos2 = new Point(305, 245);
+		final int deltaX = pos2.x - pos1.x;
+		final int deltaY = pos2.y - pos1.y;
+
+		// move E_CYCLE
+		editor.drag(fb1, pos2.x, pos2.y);
+		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, E_CYCLE_FB);
+		assertTrue(fb1Bounds2.contains(pos2.x, pos2.y));
+		assertNotNull(connection);
+		final org.eclipse.draw2d.geometry.Point newStartPointConnection = polyLineConnection.getPoints()
+				.getFirstPoint();
+		final org.eclipse.draw2d.geometry.Point newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
+
+		assertEquals(startPointConnection.x + deltaX, newStartPointConnection.x);
+		assertEquals(startPointConnection.y + deltaY, newStartPointConnection.y);
+		assertEquals(endPointConnection, newEndPointConnection);
 	}
 
 	/**

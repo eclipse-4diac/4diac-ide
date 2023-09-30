@@ -29,4 +29,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.model,
  org.eclipse.swt,
- org.hamcrest.core
+ org.hamcrest.core,
+ org.eclipse.draw2d

@@ -67,7 +67,8 @@ public class Abstract4diacUITests {
 	protected static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	protected static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
 	protected static final String E_DELAY_FB = "E_DELAY"; //$NON-NLS-1$
-	protected static final String E_DEMUX = "E_DEMUX"; //$NON-NLS-1$
+	protected static final String E_DEMUX_FB = "E_DEMUX"; //$NON-NLS-1$
+	protected static final String E_DEMUX_TREE_ITEM = E_DEMUX_FB + " [Event demultiplexor]"; //$NON-NLS-1$
 	protected static final String E_D_FF_FB = "E_D_FF"; //$NON-NLS-1$
 	protected static final String E_D_FF_TREE_ITEM = E_D_FF_FB + " [Data latch (d) flip flop]"; //$NON-NLS-1$
 	protected static final String E_N_TABLE_FB = "E_N_TABLE"; //$NON-NLS-1$
