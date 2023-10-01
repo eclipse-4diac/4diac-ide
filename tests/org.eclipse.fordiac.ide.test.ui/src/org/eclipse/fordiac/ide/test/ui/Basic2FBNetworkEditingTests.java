@@ -39,7 +39,6 @@ import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
@@ -452,10 +451,63 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	/**
 	 * Checks if connections stays in place after moving both FBs at the same time
 	 *
+	 * First two FB are dragged onto the editing area and a connection is created.
+	 * The position of the start and end point of the connection is fetched. Then a
+	 * rectangle is dragged over the 2 FBs and the two are moved by clicking on an
+	 * FB and moved to a new position. The translation is calculated and compared
+	 * with the new values of the connection start and end point.
 	 */
-	@Disabled("until implementation")
+	@SuppressWarnings("static-method")
 	@Test
 	public void checkIfConnectionRemainsAfterMovingBothFBsTogether() {
-		// in progress
+		final Point pos1 = new Point(200, 100);
+		dragAndDropEventsFB(E_DEMUX_TREE_ITEM, pos1);
+		final Point pos2 = new Point(100, 275);
+		dragAndDropEventsFB(E_SR_TREE_ITEM, pos2);
+		createConnection(EO1, R);
+		ConnectionEditPart connection = findConnection(EO1, R);
+		assertNotNull(connection);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+
+		// get connection start and end point
+		final PolylineConnection polyLineConnection = (PolylineConnection) connection.getFigure();
+		final org.eclipse.draw2d.geometry.Point startPointConnection = polyLineConnection.getPoints().getFirstPoint();
+		final org.eclipse.draw2d.geometry.Point endPointConnection = polyLineConnection.getPoints().getLastPoint();
+
+		// drag rectangle over FBs, therefore FBs should be selected
+		editor.drag(30, 30, 400, 400);
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(isFbSelected(selectedEditParts, E_DEMUX_FB));
+		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
+
+		// move selection by clicking on one FB but not on instance name or a pin
+		final Point pointFrom = new Point(125, 300);
+		final Point pointTo = new Point(290, 230);
+		editor.drag(pointFrom.x, pointFrom.y, pointTo.x, pointTo.y);
+
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(isFbSelected(selectedEditParts, E_DEMUX_FB));
+		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
+
+		// calculation of translation
+		final int translationX = pointTo.x - pointFrom.x;
+		final int translationY = pointTo.y - pointFrom.y;
+
+		// check if connection has been moved
+		connection = findConnection(EO1, R);
+		assertNotNull(connection);
+		final org.eclipse.draw2d.geometry.Point newStartPointConnection = polyLineConnection.getPoints()
+				.getFirstPoint();
+		final org.eclipse.draw2d.geometry.Point newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
+
+		assertEquals(startPointConnection.x + translationX, newStartPointConnection.x);
+		assertEquals(startPointConnection.y + translationY, newStartPointConnection.y);
+		assertEquals(endPointConnection.x + translationX, newEndPointConnection.x);
+		assertEquals(endPointConnection.y + translationY, newEndPointConnection.y);
+
 	}
 }
