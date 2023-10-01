@@ -16,42 +16,6 @@
 			<unit id="org.eclipse.nebula.feature.feature.group" version="3.0.0.202303072132"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/modeling/emf/compare/updates/releases/3.3/R202212280858/"/>
-			<unit id="org.eclipse.emf.compare.feature.group" version="3.3.21.202212280858"/>
-			<unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="3.3.21.202212280858"/>
-			<unit id="org.eclipse.emf.compare.ide.ui.source.feature.group" version="3.3.21.202212280858"/>
-			<unit id="org.eclipse.emf.compare.rcp.ui.feature.group" version="3.3.21.202212280858"/>
-			<unit id="org.eclipse.emf.compare.rcp.ui.source.feature.group" version="3.3.21.202212280858"/>
-			<unit id="org.eclipse.emf.compare.source.feature.group" version="3.3.21.202212280858"/>
-			<unit id="org.eclipse.emf.compare.egit.feature.group" version="3.3.21.202212280858"/>
-			<unit id="org.eclipse.emf.compare.egit.source.feature.group" version="3.3.21.202212280858"/>
-		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="http://download.eclipse.org/nattable/releases/2.1.0/repository/"/>
-			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="2.1.0.202303310549"/>
-			<unit id="org.eclipse.nebula.widgets.nattable.core.source.feature.feature.group" version="2.1.0.202303310549"/>
-		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/eclipse/updates/4.28"/>
-			<unit id="org.eclipse.pde.feature.group" version="3.15.0.v20230605-0440"/>
-			<unit id="org.eclipse.platform.sdk" version="4.28.0.I20230605-0440"/>
-		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/releases/2023-06"/>
-			<unit id="org.eclipse.egit.feature.group" version="6.6.0.202305301015-r"/>
-			<unit id="org.eclipse.emf.sdk.feature.group" version="2.34.0.v20230406-1334"/>
-			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.18.0.v20221201-0557"/>
-			<unit id="org.eclipse.sirius.properties.feature.feature.group" version="7.2.0.202306070701"/>
-			<unit id="org.eclipse.sirius.samples.feature.group" version="7.2.0.202306070701"/>
-			<unit id="org.eclipse.sirius.specifier.feature.group" version="7.2.0.202306070701"/>
-			<unit id="org.eclipse.sirius.specifier.properties.feature.feature.group" version="7.2.0.202306070701"/>
-			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.31.0.v20230529-0659"/>
-			<unit id="org.eclipse.swtbot.eclipse.feature.group" version="4.1.0.202306071420"/>
-			<unit id="org.eclipse.swtbot.eclipse.gef.feature.group" version="4.1.0.202306071420"/>
-			<unit id="org.eclipse.swtbot.feature.group" version="4.1.0.202306071420"/>
-			<unit id="org.eclipse.swtbot.ide.feature.group" version="4.1.0.202306071420"/>
-		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/tools/gef/classic/latest/"/>
 			<unit id="org.eclipse.draw2d.examples" version="0.0.0"/>
 			<unit id="org.eclipse.draw2d.examples.source" version="0.0.0"/>
@@ -63,6 +27,42 @@
 			<unit id="org.eclipse.gef.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.gef.sdk.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.gef.source.feature.group" version="0.0.0"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/eclipse/updates/4.29"/>
+			<unit id="org.eclipse.pde.feature.group" version="3.15.100.v20230903-1000"/>
+			<unit id="org.eclipse.platform.sdk" version="4.29.0.I20230903-1000"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/releases/2023-09"/>
+			<unit id="org.eclipse.egit.feature.group" version="6.7.0.202309050840-r"/>
+			<unit id="org.eclipse.emf.sdk.feature.group" version="2.35.0.v20230829-0934"/>
+			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.18.0.v20221201-0557"/>
+			<unit id="org.eclipse.sirius.properties.feature.feature.group" version="7.2.1.202309051053"/>
+			<unit id="org.eclipse.sirius.samples.feature.group" version="7.2.1.202309051053"/>
+			<unit id="org.eclipse.sirius.specifier.feature.group" version="7.2.1.202309051053"/>
+			<unit id="org.eclipse.sirius.specifier.properties.feature.feature.group" version="7.2.1.202309051053"/>
+			<unit id="org.eclipse.swtbot.eclipse.feature.group" version="4.1.0.202306071420"/>
+			<unit id="org.eclipse.swtbot.eclipse.gef.feature.group" version="4.1.0.202306071420"/>
+			<unit id="org.eclipse.swtbot.feature.group" version="4.1.0.202306071420"/>
+			<unit id="org.eclipse.swtbot.ide.feature.group" version="4.1.0.202306071420"/>
+			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.32.0.v20230827-1315"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="http://download.eclipse.org/nattable/releases/2.2.0/repository/"/>
+			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="2.2.0.202306301103"/>
+			<unit id="org.eclipse.nebula.widgets.nattable.core.source.feature.feature.group" version="2.2.0.202306301103"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="http://download.eclipse.org/modeling/emf/compare/updates/releases/3.3"/>
+			<unit id="org.eclipse.emf.compare.egit.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.egit.source.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.ide.ui.source.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.rcp.ui.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.rcp.ui.source.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.source.feature.group" version="3.3.21.202212280858"/>
 		</location>
 	</locations>
 </target>
