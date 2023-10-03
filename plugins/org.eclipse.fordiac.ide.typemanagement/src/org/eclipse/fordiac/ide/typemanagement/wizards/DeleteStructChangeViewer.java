@@ -57,10 +57,12 @@ public class DeleteStructChangeViewer implements IChangePreviewViewer {
 					case DELETE_PIN:
 						change.addState(ChangeState.DELETE_PIN);
 						change.getState().remove(ChangeState.CHANGE_TO_ANY);
+						changeItem.setChecked(false);
 						break;
 					case CHANGE_TO_ANY_STRUCT:
 						change.addState(ChangeState.CHANGE_TO_ANY);
 						change.getState().remove(ChangeState.DELETE_PIN);
+						deletePinItem.setChecked(false);
 						break;
 					default:
 						break;
@@ -82,7 +84,9 @@ public class DeleteStructChangeViewer implements IChangePreviewViewer {
 		final Change change = input.getChange();
 		if (change instanceof final DeleteFBTypeInterfaceChange deleteChange) {
 			this.change = deleteChange;
+			this.change.getState().clear();
 		}
+
 	}
 
 }
