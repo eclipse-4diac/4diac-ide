@@ -48,8 +48,17 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 			return Status.CANCEL_STATUS;
 		}
 
-		if (!(target instanceof Node)) {
+		if (!(target instanceof Level)) {
 			return Status.CANCEL_STATUS;
+		}
+
+		if ((getCurrentEvent().data instanceof final TreeSelection selection)
+				&& (selection.getFirstElement() instanceof final SubApp subapp)) {
+			final RootLevel root = (RootLevel) EcoreUtil.getRootContainer((Level) target);
+			if (root != null && root.getLevels().stream()
+					.anyMatch(l -> hasChild(l, CreateLeafOperation.getSubAppHierName(subapp)))) {
+				return Status.CANCEL_STATUS;
+			}
 		}
 
 		return Status.OK_STATUS;
@@ -141,5 +150,14 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 		}
 
 		return checkIfChild(source, target.eContainer());
+	}
+
+	private static boolean hasChild(final Level level, final String subappName) {
+		return level.getChildren().stream().anyMatch(node -> {
+			if (node instanceof final Leaf leaf) {
+				return leaf.getRef().equals(subappName);
+			}
+			return node instanceof final Level l && hasChild(l, subappName);
+		});
 	}
 }
