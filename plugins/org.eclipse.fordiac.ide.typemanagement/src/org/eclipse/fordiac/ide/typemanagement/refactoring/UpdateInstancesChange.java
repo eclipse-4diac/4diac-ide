@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.StringJoiner;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -60,14 +61,15 @@ public class UpdateInstancesChange extends Change {
 
 	@Override
 	public String getName() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append("Update FB instances - ");//$NON-NLS-1$
+		final StringJoiner fbList = new StringJoiner(", "); //$NON-NLS-1$
 		for (final FBNetworkElement fb : instances) {
-			sb.append(fb.getTypeName());
-			sb.append(" - ");//$NON-NLS-1$
-			sb.append(fb.getName());
+			if (fb.getTypeName() != null) {
+				fbList.add(fb.getQualifiedName() + " : " + fb.getTypeName()); //$NON-NLS-1$
+			} else {
+				fbList.add(fb.getQualifiedName());
+			}
 		}
-		return sb.toString();
+		return "Update FB instances - " + fbList.toString(); //$NON-NLS-1$
 	}
 
 	@Override
