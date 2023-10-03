@@ -1212,7 +1212,7 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
-	def void testDuplicateFunctionmNameIsForbidden() {
+	def void testDuplicateFunctionNameIsForbidden() {
 		'''
 			FUNCTION duplicate
 			END_FUNCTION
@@ -1661,7 +1661,17 @@ class STFunctionValidatorTest {
 			EXIT;
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STExit, STCoreValidator.EXIT_NOT_IN_LOOP,
-			"An EXIT statement is only valid inside a loop statement (FOR/WHILE/REPEAT)")
+			"EXIT statement is only valid inside a loop statement (FOR/WHILE/REPEAT)")
+	}
+	
+	@Test
+	def void testContinueNotInALoopIsAnError() {
+		'''
+			FUNCTION test
+			CONTINUE;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STContinue, STCoreValidator.CONTINUE_NOT_IN_LOOP,
+			"CONTINUE statement is only valid inside a loop statement (FOR/WHILE/REPEAT)")
 	}
 
 }

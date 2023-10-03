@@ -110,6 +110,13 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 				(element, context) -> EcoreUtil.delete(element));
 	}
 
+	@Fix(STCoreValidator.CONTINUE_NOT_IN_LOOP)
+	public static void fixContinueNotInLoop(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveInvalidContinueStatementLabel,
+				Messages.STCoreQuickfixProvider_RemoveInvalidContinueStatementDescription, null,
+				(element, context) -> EcoreUtil.delete(element));
+	}
+
 	@Fix(STCoreValidator.TRAILING_UNDERSCORE_IN_IDENTIFIER_ERROR)
 	public static void fixTrailingUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveTrailingUnderscoreLabel,
