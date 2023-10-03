@@ -182,7 +182,15 @@ class FBNetworkImporter extends CommonElementImporter {
 		} else {
 			fbNetworkElementMap.put(group.getName(), group);
 		}
-		proceedToEndElementNamed(LibraryElementTags.GROUP_ELEMENT);
+
+		processChildren(LibraryElementTags.GROUP_ELEMENT, tagName -> {
+			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(tagName)) {
+				parseGenericAttributeNode(group);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			}
+			return false;
+		});
 	}
 
 	private void parseComment() throws TypeImportException, XMLStreamException {
@@ -637,8 +645,10 @@ class FBNetworkImporter extends CommonElementImporter {
 		return null;
 	}
 
-	/** Check if the element that contains the fbnetwork has an interface element with the given name. this is needed
-	 * for subapps, cfbs, devices and resources */
+	/**
+	 * Check if the element that contains the fbnetwork has an interface element
+	 * with the given name. this is needed for subapps, cfbs, devices and resources
+	 */
 	protected IInterfaceElement getContainingInterfaceElement(final String interfaceElement, final EClass conType,
 			final boolean isInput) {
 		return getInterfaceElement(interfaceList, interfaceElement, conType, !isInput); // for connections to the
@@ -719,10 +729,12 @@ class FBNetworkImporter extends CommonElementImporter {
 		return variable;
 	}
 
-	/** returns an valid dx, dy integer value
+	/**
+	 * returns an valid dx, dy integer value
 	 *
 	 * @param value
-	 * @return if value is valid the converted int of that otherwise 0 */
+	 * @return if value is valid the converted int of that otherwise 0
+	 */
 	private static int parseConnectionValue(final String value) {
 		try {
 			return CoordinateConverter.INSTANCE.convertFrom1499XML(value);
