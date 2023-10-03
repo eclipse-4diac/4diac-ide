@@ -344,6 +344,7 @@ public class SystemImporter extends CommonElementImporter {
 				if (null != parameter) {
 					final VarDeclaration devParam = getParamter(device.getVarDeclarations(), parameter.getName());
 					if (null != devParam) {
+						devParam.getAttributes().addAll(parameter.getAttributes());
 						devParam.setValue(parameter.getValue());
 					} else {
 						parameter.setIsInput(true);

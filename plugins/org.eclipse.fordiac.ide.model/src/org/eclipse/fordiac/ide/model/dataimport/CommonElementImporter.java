@@ -467,7 +467,16 @@ public abstract class CommonElementImporter {
 		if (null != comment) {
 			variable.setComment(comment);
 		}
-		proceedToEndElementNamed(LibraryElementTags.PARAMETER_ELEMENT);
+
+		processChildren(LibraryElementTags.PARAMETER_ELEMENT, tagName -> {
+			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(tagName)) {
+				parseGenericAttributeNode(variable);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			}
+			return false;
+		});
+
 		return variable;
 	}
 
