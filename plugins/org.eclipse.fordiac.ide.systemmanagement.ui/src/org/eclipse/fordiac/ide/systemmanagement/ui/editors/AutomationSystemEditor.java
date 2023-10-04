@@ -18,8 +18,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
@@ -68,6 +71,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
@@ -202,7 +206,22 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		if (null != system) {
-			SystemManager.saveSystem(system);
+			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(getFile().getParent()) {
+
+				@Override
+				protected void execute(final IProgressMonitor monitor)
+						throws CoreException, InvocationTargetException, InterruptedException {
+					SystemManager.saveSystem(system, monitor);
+				}
+			};
+			try {
+				operation.run(monitor);
+			} catch (final InvocationTargetException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			} catch (final InterruptedException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+				Thread.currentThread().interrupt();
+			}
 			getCommandStack().markSaveLocation();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
@@ -254,7 +273,22 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return;
 		}
 		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-		SystemManager.saveSystem(system, file);
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(file.getParent()) {
+
+			@Override
+			protected void execute(final IProgressMonitor monitor)
+					throws CoreException, InvocationTargetException, InterruptedException {
+				SystemManager.saveSystem(system, file, monitor);
+			}
+		};
+		try {
+			getSite().getWorkbenchWindow().run(true, true, operation);
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	@Override

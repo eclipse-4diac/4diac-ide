@@ -56,9 +56,11 @@ import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.ui.XtextProjectHelper;
 
-/** The Class SystemManager.
+/**
+ * The Class SystemManager.
  *
- * @author gebenh */
+ * @author gebenh
+ */
 public enum SystemManager {
 
 	INSTANCE;
@@ -131,7 +133,8 @@ public enum SystemManager {
 	}
 
 	@SuppressWarnings("static-method")
-	public synchronized AutomationSystem createNewSystem(final IContainer location, final String name) {
+	public synchronized AutomationSystem createNewSystem(final IContainer location, final String name,
+			final IProgressMonitor monitor) throws CoreException {
 		final IFile systemFile = location.getFile(new Path(name + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT));
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject());
 		SystemEntry entry = (SystemEntry) typeLibrary.getTypeEntry(systemFile);
@@ -141,7 +144,7 @@ public enum SystemManager {
 		final AutomationSystem system = SystemImporter.createAutomationSystem();
 		system.setName(name);
 		entry.setType(system);
-		saveSystem(entry.getSystem());
+		saveSystem(entry.getSystem(), monitor);
 		return system;
 	}
 
@@ -155,12 +158,14 @@ public enum SystemManager {
 		notifyListeners();
 	}
 
-	/** Load system.
+	/**
+	 * Load system.
 	 *
 	 *
 	 * systemFile xml file for the system
 	 *
-	 * @return the system entry */
+	 * @return the system entry
+	 */
 	private static SystemEntry initSystem(final IFile systemFile) {
 		if (systemFile.exists()) {
 			return (SystemEntry) TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject())
@@ -169,23 +174,27 @@ public enum SystemManager {
 		return null;
 	}
 
-	/** Save system.
+	/**
+	 * Save system.
 	 *
 	 * @param system the system
-	 * @param all    the all */
-	public static void saveSystem(final AutomationSystem system) {
+	 * @param all    the all
+	 * @throws CoreException
+	 */
+	public static void saveSystem(final AutomationSystem system, final IProgressMonitor monitor) throws CoreException {
 		final TypeEntry typeEntry = system.getTypeEntry();
 		Assert.isNotNull(typeEntry); // there should be no system without type entry
-		typeEntry.save();
+		typeEntry.save(monitor);
 	}
 
-	public static void saveSystem(final AutomationSystem system, final IFile file) {
+	public static void saveSystem(final AutomationSystem system, final IFile file, final IProgressMonitor monitor)
+			throws CoreException {
 		final TypeEntry typeEntry = system.getTypeEntry();
 		Assert.isNotNull(typeEntry); // there should be no system without type entry
 		typeEntry.getTypeLibrary().removeTypeEntry(typeEntry);
 		typeEntry.setFile(file);
 		TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject()).addTypeEntry(typeEntry);
-		typeEntry.save();
+		typeEntry.save(monitor);
 	}
 
 	@SuppressWarnings("static-method")
@@ -217,9 +226,11 @@ public enum SystemManager {
 		listeners.forEach(DistributedSystemListener::distributedSystemWorkspaceChanged);
 	}
 
-	/** Adds the workspace listener.
+	/**
+	 * Adds the workspace listener.
 	 *
-	 * @param listener the listener */
+	 * @param listener the listener
+	 */
 	public void addWorkspaceListener(final DistributedSystemListener listener) {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.util.Objects;
@@ -26,13 +27,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
@@ -269,32 +267,17 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	}
 
 	@Override
-	public void save() {
+	public void save(final IProgressMonitor monitor) throws CoreException {
 		final AbstractTypeExporter exporter = getExporter();
 
 		if (null != exporter) {
 			final InputStream fileContent = exporter.getFileContent();
 			if (fileContent != null) {
-				final WorkspaceJob job = new WorkspaceJob("Save type file: " + getFile().getName()) {
-					@Override
-					public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-						try {
-							try (fileContent) {
-								writeToFile(fileContent, monitor);
-							} catch (final CoreException e) {
-								FordiacLogHelper.logError(e.getMessage(), e);
-							}
-						} catch (final Exception e) {
-							FordiacLogHelper.logError(e.getMessage(), e);
-						}
-						return Status.OK_STATUS;
-					}
-				};
-				job.setUser(false);
-				job.setSystem(true);
-				job.setPriority(Job.SHORT);
-				job.setRule(getRuleScope());
-				job.schedule();
+				try (fileContent) {
+					writeToFile(fileContent, monitor);
+				} catch (final IOException e) {
+					throw new CoreException(Status.error(e.getMessage(), e));
+				}
 			}
 		}
 	}

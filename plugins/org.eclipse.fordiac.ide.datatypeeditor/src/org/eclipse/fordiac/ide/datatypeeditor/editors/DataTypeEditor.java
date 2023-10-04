@@ -22,6 +22,7 @@
 
 package org.eclipse.fordiac.ide.datatypeeditor.editors;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -86,6 +87,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
@@ -169,10 +171,10 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	public void doSave(final IProgressMonitor monitor) {
 		removeListenerFromDataTypeObj();
 		loadAllOpenEditors();
-		createSaveDialog();
+		createSaveDialog(monitor);
 	}
 
-	private void createSaveDialog() {
+	private void createSaveDialog(final IProgressMonitor monitor) {
 		final String[] labels = { Messages.StructAlteringButton_SaveAndUpdate, Messages.StructAlteringButton_SaveAs,
 				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
@@ -182,11 +184,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		// Depending on the button clicked:
 		switch (structSaveDialog.open()) {
 		case DEFAULT_BUTTON_INDEX:
-			dataTypeEntry.save();
-			addListenerToDataTypeObj();
-			commandStack.markSaveLocation();
-			updateFB();
-			firePropertyChange(IEditorPart.PROP_DIRTY);
+			doSaveInternal(monitor);
 			break;
 		case SAVE_AS_BUTTON_INDEX:
 			doSaveAs();
@@ -198,6 +196,29 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		default:
 			break;
 		}
+	}
+
+	private void doSaveInternal(final IProgressMonitor monitor) {
+		commandStack.markSaveLocation();
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(dataTypeEntry.getFile().getParent()) {
+
+			@Override
+			protected void execute(final IProgressMonitor monitor)
+					throws CoreException, InvocationTargetException, InterruptedException {
+				dataTypeEntry.save(monitor);
+			}
+		};
+		try {
+			operation.run(monitor);
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt();
+		}
+		addListenerToDataTypeObj();
+		firePropertyChange(IEditorPart.PROP_DIRTY);
+		updateFB();
 	}
 
 	@Override

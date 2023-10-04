@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.typelibrary.testmocks;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
@@ -98,7 +99,7 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 	}
 
 	@Override
-	public void save() {
+	public void save(final IProgressMonitor monitor) {
 		// currently not needed in mock
 	}
 

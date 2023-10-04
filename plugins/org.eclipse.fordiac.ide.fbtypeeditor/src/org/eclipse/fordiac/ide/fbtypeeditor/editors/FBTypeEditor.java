@@ -20,6 +20,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -81,6 +82,7 @@ import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -121,10 +123,27 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	public void doSave(final IProgressMonitor monitor) {
 		if ((null != typeEntry) && (checkTypeSaveAble())) {
 			performPresaveHooks();
-			// allow each editor to save back changes before saving to file
-			editors.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
 			getCommandStack().markSaveLocation();
-			typeEntry.save();
+
+			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(typeEntry.getFile().getParent()) {
+
+				@Override
+				protected void execute(final IProgressMonitor monitor)
+						throws CoreException, InvocationTargetException, InterruptedException {
+					// allow each editor to save back changes before saving to file
+					editors.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
+					typeEntry.save(monitor);
+				}
+			};
+			try {
+				operation.run(monitor);
+			} catch (final InvocationTargetException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			} catch (final InterruptedException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+				Thread.currentThread().interrupt();
+			}
+
 			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 	}

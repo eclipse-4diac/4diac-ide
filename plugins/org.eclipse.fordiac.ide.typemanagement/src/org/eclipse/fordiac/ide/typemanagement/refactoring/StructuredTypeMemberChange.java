@@ -32,7 +32,6 @@ public class StructuredTypeMemberChange extends Change {
 
 	private final CompoundCommand cmd = new CompoundCommand();
 
-
 	public StructuredTypeMemberChange(final StructuredType affectedStruct, final TypeEntry oldTypeEntry,
 			final String oldName, final String newName) {
 		this.affectedStruct = affectedStruct;
@@ -61,8 +60,7 @@ public class StructuredTypeMemberChange extends Change {
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
 
-		final StructuredType structuredTypeEditable = (StructuredType) affectedStruct.getTypeEntry()
-				.getTypeEditable();
+		final StructuredType structuredTypeEditable = (StructuredType) affectedStruct.getTypeEntry().getTypeEditable();
 		for (final VarDeclaration varDeclaration : structuredTypeEditable.getMemberVariables()) {
 			final String typeName = varDeclaration.getTypeName();
 			if (typeName.equals(oldName)) {
@@ -71,7 +69,7 @@ public class StructuredTypeMemberChange extends Change {
 		}
 
 		cmd.execute();
-		structuredTypeEditable.getTypeEntry().save();
+		structuredTypeEditable.getTypeEntry().save(pm);
 
 		return null;
 	}

@@ -286,7 +286,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	}
 
-	private boolean handleResourceMovedFrom(final IResourceDelta delta) {
+	private boolean handleResourceMovedFrom(final IResourceDelta delta) throws CoreException {
 		final IProject project = delta.getResource().getProject();
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
 			return false;
@@ -305,7 +305,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	}
 
-	private boolean handleResourceCopy(final IResourceDelta delta) {
+	private boolean handleResourceCopy(final IResourceDelta delta) throws CoreException {
 		final IProject project = delta.getResource().getProject();
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
 			return false;
@@ -352,7 +352,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return filesToRename.stream().filter(entry -> entry.getTypeEntry().equals(palEntry)).findAny().orElse(null);
 	}
 
-	private void handleFileCopy(final IResourceDelta delta) {
+	private void handleFileCopy(final IResourceDelta delta) throws CoreException {
 		final IFile file = (IFile) delta.getResource();
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(file.getProject())) {
 			return;
@@ -422,7 +422,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		systemManager.renameProject(oldProject, newProject);
 	}
 
-	private void handleFileMove(final IResourceDelta delta) {
+	private void handleFileMove(final IResourceDelta delta) throws CoreException {
 		final IFile src = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getMovedFromPath());
 		final IFile dst = (IFile) delta.getResource();
 
@@ -466,12 +466,12 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private void handleFileRename(final IFile dst, final IFile src) {
+	private void handleFileRename(final IFile dst, final IFile src) throws CoreException {
 		handleTypeRename(src, dst);
 		systemManager.notifyListeners();
 	}
 
-	public static void handleTypeRename(final IFile src, final IFile file) {
+	public static void handleTypeRename(final IFile src, final IFile file) throws CoreException {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
 		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(src);
 		if (entry != null && src.equals(entry.getFile())) {
@@ -481,7 +481,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	public static void updateTypeEntry(final IFile newFile, final TypeEntry entry) {
+	public static void updateTypeEntry(final IFile newFile, final TypeEntry entry) throws CoreException {
 		if (entry == null) { // change to Assert ?
 			return;
 		}
@@ -508,7 +508,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	public static void updateTypeEntryByRename(final IFile newFile, final TypeEntry entry) {
+	public static void updateTypeEntryByRename(final IFile newFile, final TypeEntry entry) throws CoreException {
 		if (entry == null) { // change to Assert ?
 			return;
 		}

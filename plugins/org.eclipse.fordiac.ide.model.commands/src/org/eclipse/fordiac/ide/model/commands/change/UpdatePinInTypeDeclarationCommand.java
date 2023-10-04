@@ -12,10 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 
 /** UpdateFBTypeCommand triggers an update of the type for an FB instance */
@@ -52,6 +55,10 @@ public class UpdatePinInTypeDeclarationCommand extends Command {
 						}
 					}
 				});
-		fbType.getTypeEntry().save();
+		try {
+			fbType.getTypeEntry().save();
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
 	}
 }

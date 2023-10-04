@@ -16,6 +16,9 @@
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -47,7 +50,12 @@ public interface TypeEntry extends Notifier {
 	void setTypeLibrary(TypeLibrary typeLib);
 
 	/** Save the editable type to the file associated with this type entry */
-	void save();
+	default void save() throws CoreException {
+		save(new NullProgressMonitor());
+	}
+
+	/** Save the editable type to the file associated with this type entry */
+	void save(IProgressMonitor monitor) throws CoreException;
 
 	String getTypeName();
 

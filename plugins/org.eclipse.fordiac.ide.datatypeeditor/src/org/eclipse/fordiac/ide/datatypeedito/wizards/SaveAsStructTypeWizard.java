@@ -16,11 +16,14 @@
 package org.eclipse.fordiac.ide.datatypeedito.wizards;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.application.Messages;
@@ -35,6 +38,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorReference;
@@ -42,6 +46,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class SaveAsStructTypeWizard extends AbstractSaveAsWizard {
 
@@ -116,16 +121,31 @@ public class SaveAsStructTypeWizard extends AbstractSaveAsWizard {
 
 	private IFile persistNewType() {
 		final IFile targetFile = getTargetTypeFile();
-		final String newName = TypeEntry.getTypeNameFromFile(targetFile);
-		final TypeEntry entry = createTypeEntry(targetFile);
-		final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
-		type.setName(structuredType.getName());
-		type.setComment(structuredType.getComment());
-		entry.setType(type);
-		InterfaceListCopier.copyVarList(type.getMemberVariables(), structuredType.getMemberVariables(), true);
-		TypeManagementPreferencesHelper.setupVersionInfo(type);
-		type.setName(newName);
-		entry.save();
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(targetFile.getParent()) {
+
+			@Override
+			protected void execute(final IProgressMonitor monitor)
+					throws CoreException, InvocationTargetException, InterruptedException {
+				final String newName = TypeEntry.getTypeNameFromFile(targetFile);
+				final TypeEntry entry = createTypeEntry(targetFile);
+				final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
+				type.setName(structuredType.getName());
+				type.setComment(structuredType.getComment());
+				entry.setType(type);
+				InterfaceListCopier.copyVarList(type.getMemberVariables(), structuredType.getMemberVariables(), true);
+				TypeManagementPreferencesHelper.setupVersionInfo(type);
+				type.setName(newName);
+				entry.save(monitor);
+			}
+		};
+		try {
+			getContainer().run(true, true, operation);
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt();
+		}
 		return targetFile;
 	}
 

@@ -135,16 +135,14 @@ public class SystemEditor extends EditorPart
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		if (null != system) {
-			SystemManager.saveSystem(system);
-			getCommandStack().markSaveLocation();
-			firePropertyChange(IEditorPart.PROP_DIRTY);
-		}
+		// with the breadcrumb based automation system editor this editor should not
+		// support a save method
 	}
 
 	@Override
 	public void doSaveAs() {
-		// with the breadcrumb based automation system editor this editor should not support a save as method
+		// with the breadcrumb based automation system editor this editor should not
+		// support a save as method
 	}
 
 	@Override

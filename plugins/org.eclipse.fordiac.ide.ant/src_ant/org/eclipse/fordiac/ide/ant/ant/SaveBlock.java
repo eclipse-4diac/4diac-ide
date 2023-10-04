@@ -14,14 +14,21 @@ package org.eclipse.fordiac.ide.ant.ant;
 
 import java.text.MessageFormat;
 
+import org.apache.tools.ant.BuildException;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public class SaveBlock extends AbstractBlockModelTask {
 
 	@Override
 	protected void modifyBlock(final FBType fb) {
-		fb.getTypeEntry().save();
-		log(MessageFormat.format("Save {0}/{1}", projectname, blockname)); //$NON-NLS-1$
+		try {
+			fb.getTypeEntry().save();
+			log(MessageFormat.format("Save {0}/{1}", projectname, blockname)); //$NON-NLS-1$
+		} catch (final CoreException e) {
+			throw new BuildException(e);
+		}
 	}
 
 }

@@ -15,9 +15,12 @@ package org.eclipse.fordiac.ide.typemanagement.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
@@ -45,12 +48,15 @@ import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class TypeFromTemplateCreator {
 
 	private final IFile targetTypeFile;
 	private final File typeTemplate;
 	private final String packageName;
+	private TypeEntry entry;
 
 	public TypeFromTemplateCreator(final IFile targetTypeFile, final File typeTemplate) {
 		this(targetTypeFile, typeTemplate, null);
@@ -62,29 +68,44 @@ public class TypeFromTemplateCreator {
 		this.packageName = packageName;
 	}
 
-	public TypeEntry createTypeFromTemplate() {
-		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeLibrary(targetTypeFile.getProject())
-				.createTypeEntry(targetTypeFile);
+	public void createTypeFromTemplate(final IProgressMonitor monitor) {
+		entry = TypeLibraryManager.INSTANCE.getTypeLibrary(targetTypeFile.getProject()).createTypeEntry(targetTypeFile);
 
 		final TypeImporter importer = getTypeImporter(entry);
 		if (importer != null) {
-			importer.loadElement();
-			final LibraryElement type = importer.getElement();
-			type.setName(TypeEntry.getTypeNameFromFile(targetTypeFile));
-			PackageNameHelper.setPackageName(type, packageName);
-			setupIdentifcationAndVersionInfo(type);
-			performTypeSpecificSetup(type);
-			entry.setLastModificationTimestamp(targetTypeFile.getModificationStamp());
-			entry.setType(type);
-			entry.save();
-			return entry;
+			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(targetTypeFile.getParent()) {
+
+				@Override
+				protected void execute(final IProgressMonitor monitor)
+						throws CoreException, InvocationTargetException, InterruptedException {
+					importer.loadElement();
+					final LibraryElement type = importer.getElement();
+					type.setName(TypeEntry.getTypeNameFromFile(targetTypeFile));
+					PackageNameHelper.setPackageName(type, packageName);
+					setupIdentifcationAndVersionInfo(type);
+					performTypeSpecificSetup(type);
+					entry.setLastModificationTimestamp(targetTypeFile.getModificationStamp());
+					entry.setType(type);
+					entry.save(monitor);
+				}
+			};
+			try {
+				operation.run(monitor);
+			} catch (final InvocationTargetException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			} catch (final InterruptedException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+				Thread.currentThread().interrupt();
+			}
+		} else {
+			entry = null;
 		}
-		return null;
 	}
 
-	@SuppressWarnings("static-method")  // allow subclasses to override
+	@SuppressWarnings("static-method") // allow subclasses to override
 	protected void performTypeSpecificSetup(final LibraryElement type) {
-		// hook for subclasses to perform any type specific setup, e.g., saveassubapptype -> setup interface and network
+		// hook for subclasses to perform any type specific setup, e.g.,
+		// saveassubapptype -> setup interface and network
 		if (type instanceof final AdapterType adpType) {
 			// for adapter types we need to also set the name for the adapterfbtype entry
 			adpType.getAdapterFBType().setName(type.getName());
@@ -177,4 +198,7 @@ public class TypeFromTemplateCreator {
 		TypeManagementPreferencesHelper.setupVersionInfo(type);
 	}
 
+	public TypeEntry getTypeEntry() {
+		return entry;
+	}
 }

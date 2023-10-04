@@ -77,7 +77,7 @@ public class DeleteFBTypeInterfaceChange extends CompositeChange {
 				cmd = new DeleteInterfaceCommand(varDec);
 			}
 
-			SafeStructDeletionChange.executeChange(cmd, type);
+			SafeStructDeletionChange.executeChange(cmd, type, pm);
 		}
 		return super.perform(pm);
 	}
