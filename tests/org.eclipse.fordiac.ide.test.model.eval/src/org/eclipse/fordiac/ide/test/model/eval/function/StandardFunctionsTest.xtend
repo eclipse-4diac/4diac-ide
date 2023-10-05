@@ -347,6 +347,10 @@ class StandardFunctionsTest {
 		3.toWordValue.assertEquals(StandardFunctions.invoke("SHR", 6.toWordValue, 1.toIntValue))
 		3.toDWordValue.assertEquals(StandardFunctions.invoke("SHR", 6.toDWordValue, 1.toIntValue))
 		3.toLWordValue.assertEquals(StandardFunctions.invoke("SHR", 6.toLWordValue, 1.toIntValue))
+		0x7f.toByteValue.assertEquals(StandardFunctions.invoke("SHR", 0xff.toByteValue, 1.toIntValue))
+		0x7fff.toWordValue.assertEquals(StandardFunctions.invoke("SHR", 0xffff.toWordValue, 1.toIntValue))
+		0x7fffffff.toDWordValue.assertEquals(StandardFunctions.invoke("SHR", 0xffffffff.toDWordValue, 1.toIntValue))
+		0x7fffffffffffffff#L.toLWordValue.assertEquals(StandardFunctions.invoke("SHR", 0xffffffffffffffff#L.toLWordValue, 1.toIntValue))
 	}
 
 	@Test
