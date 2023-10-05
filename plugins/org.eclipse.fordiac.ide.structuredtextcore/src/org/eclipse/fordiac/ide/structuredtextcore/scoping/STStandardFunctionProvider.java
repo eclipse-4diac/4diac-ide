@@ -35,9 +35,11 @@ import org.eclipse.fordiac.ide.model.eval.function.ReturnValueComment;
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreRegionString;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.EObjectDescription;
 import org.eclipse.xtext.resource.IEObjectDescription;
@@ -175,7 +177,14 @@ public class STStandardFunctionProvider {
 	}
 
 	protected static IEObjectDescription createStandardFunctionDescription(final STStandardFunction standardFunction) {
-		return new EObjectDescription(QualifiedName.create(standardFunction.getName()), standardFunction, null);
+		final STCoreRegionString regionString = STCoreResourceDescriptionStrategy
+				.getCallableParameterProposal(standardFunction);
+		return new EObjectDescription(QualifiedName.create(standardFunction.getName()), standardFunction,
+				Map.of(STCoreResourceDescriptionStrategy.DISPLAY_STRING,
+						STCoreResourceDescriptionStrategy.getCallableDisplayString(standardFunction),
+						STCoreResourceDescriptionStrategy.PARAMETER_PROPOSAL, regionString.toString(),
+						STCoreResourceDescriptionStrategy.PARAMETER_PROPOSAL_REGIONS,
+						regionString.getRegions().toString()));
 	}
 
 	protected static class StandardFunctionLookupKey {

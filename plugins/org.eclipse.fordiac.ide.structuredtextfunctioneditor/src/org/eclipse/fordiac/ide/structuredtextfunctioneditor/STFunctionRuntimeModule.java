@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverter
 import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
@@ -39,6 +40,7 @@ import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
+import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
@@ -47,7 +49,10 @@ import org.eclipse.xtext.validation.IResourceValidator;
 import com.google.inject.Binder;
 import com.google.inject.name.Names;
 
-/** Use this class to register components to be used at runtime / without the Equinox extension registry. */
+/**
+ * Use this class to register components to be used at runtime / without the
+ * Equinox extension registry.
+ */
 @SuppressWarnings("static-method")
 public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
 
@@ -81,6 +86,10 @@ public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
 
 	public Class<? extends IQualifiedNameConverter> bindIQualifiedNameConverter() {
 		return STCoreQualifiedNameConverter.class;
+	}
+
+	public Class<? extends IDefaultResourceDescriptionStrategy> bindIDefaultResourceDescriptionStrategy() {
+		return STCoreResourceDescriptionStrategy.class;
 	}
 
 	public Class<? extends ICommentAssociater> bindICommentAssociater() {
