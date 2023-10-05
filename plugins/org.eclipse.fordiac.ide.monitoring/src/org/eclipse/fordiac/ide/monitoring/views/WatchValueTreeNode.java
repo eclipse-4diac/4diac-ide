@@ -60,8 +60,8 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 
 	@Override
 	public WatchValueTreeNode addChild(final EObject monitoringBaseElement) {
-		if (monitoringBaseElement instanceof MonitoringBaseElement) {
-			final WatchValueTreeNode node = createNode((MonitoringBaseElement) monitoringBaseElement, this);
+		if (monitoringBaseElement instanceof final MonitoringBaseElement monBaseEl) {
+			final WatchValueTreeNode node = createNode(monBaseEl, this);
 			if (node != null) {
 				getChildren().add(node);
 			}
@@ -91,9 +91,8 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 
 	public static WatchValueTreeNode createStructNode(final MonitoringBaseElement monitoringBaseElement,
 			final DataType type, final WatchValueTreeNode parent) {
-		if (monitoringBaseElement instanceof MonitoringElement
-				&& !((MonitoringElement) monitoringBaseElement).isOffline()
-				&& !((MonitoringElement) monitoringBaseElement).getCurrentValue().equals("N/A")) { //$NON-NLS-1$
+		if (monitoringBaseElement instanceof final MonitoringElement monElement && !monElement.isOffline()
+				&& !monElement.getCurrentValue().equals("N/A")) { //$NON-NLS-1$
 			return createOnlineNode(monitoringBaseElement, type, parent);
 		}
 
@@ -154,8 +153,8 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 			return varName != null ? varName : "N/A"; //$NON-NLS-1$
 		}
 
-		if (monitoringBaseElement instanceof MonitoringElement) {
-			return ((MonitoringElement) monitoringBaseElement).getPortString();
+		if (monitoringBaseElement instanceof final MonitoringElement monEl) {
+			return monEl.getPortString();
 		}
 
 		return "N/A"; //$NON-NLS-1$
@@ -163,12 +162,12 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 
 	public String getValue() {
 
-		if (!isStructNode() && monitoringBaseElement instanceof MonitoringElement) {
-			return ((MonitoringElement) monitoringBaseElement).getCurrentValue();
+		if (!isStructNode() && monitoringBaseElement instanceof final MonitoringElement monEl) {
+			return monEl.getCurrentValue();
 		}
 
-		if (isStructRootNode() && monitoringBaseElement instanceof MonitoringElement) {
-			return ((MonitoringElement) monitoringBaseElement).getCurrentValue();
+		if (isStructRootNode() && monitoringBaseElement instanceof final MonitoringElement monEl) {
+			return monEl.getCurrentValue();
 		}
 
 		if (isStructLeaf()) {
@@ -203,14 +202,16 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 		return isArray;
 	}
 
-	// high level nodes are often initialised with null as value (as to not show any value in the watch tree)
-	// so we have to allow for the array flag to be manually set if needed (e.g. for hex decoration)
+	// high level nodes are often initialised with null as value (as to not show any
+	// value in the watch tree)
+	// so we have to allow for the array flag to be manually set if needed (e.g. for
+	// hex decoration)
 	public void setIsArray(final boolean isArray) {
 		this.isArray = isArray;
 	}
 
 	private void updateIsArray(final String value) {
-		isArray = value != null ? value.startsWith("[") : false; //$NON-NLS-1$
+		isArray = (value != null && value.startsWith("[")); //$NON-NLS-1$
 	}
 
 	public String getVarName() {
