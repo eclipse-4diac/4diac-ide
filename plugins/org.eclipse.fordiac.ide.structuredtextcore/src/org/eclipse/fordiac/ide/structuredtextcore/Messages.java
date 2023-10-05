@@ -82,7 +82,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_InsufficientArrayDimensions;
 	public static String STCoreValidator_CallsCannotBeAssignedTo;
 	public static String STCoreValidator_VariableMaybeNotInitialized;
-	public static String STCoreValidator_ExitNeedsToBeInsideALoop;
+	public static String STCoreValidator_ControlFlowStatementNeedsToBeInsideALoop;
 
 	static {
 		// initialize resource bundle

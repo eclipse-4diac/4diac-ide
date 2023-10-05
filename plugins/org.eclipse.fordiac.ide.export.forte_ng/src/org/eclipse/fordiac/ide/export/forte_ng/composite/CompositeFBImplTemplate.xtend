@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
 class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
@@ -261,7 +262,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
 		for (FBNetworkElement fb : fbs) {
 			for (VarDeclaration v : fb.getInterface.getInputVars.filter[it.value !== null && !it.value.value.isEmpty]) {
-				retVal.append('''  {«fb.fbId», «v.name.FORTEStringId», "«getParamValue(v)»"},
+				retVal.append('''  {«fb.fbId», «v.name.FORTEStringId», "«getParamValue(v).convertToJavaString»"},
 				''')
 				numCompFBParams++
 			}

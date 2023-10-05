@@ -122,8 +122,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 					&& (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass()))) {
 				Display.getDefault().asyncExec(() -> {
 					if (null != dataTypeEntry) {
-						setPartName(dataTypeEntry.getFile().getName());
+						// input should be set before the partname
 						setInput(new FileEditorInput(dataTypeEntry.getFile()));
+						setPartName(dataTypeEntry.getFile().getName());
 					}
 				});
 			}
@@ -175,7 +176,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		final String[] labels = { Messages.StructAlteringButton_SaveAndUpdate, Messages.StructAlteringButton_SaveAs,
 				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
-		structSaveDialog = new FBUpdateDialog(null, Messages.StructViewingComposite_Headline, null, "",
+		structSaveDialog = new FBUpdateDialog(null, Messages.StructViewingComposite_Headline, null, "", //$NON-NLS-1$
 				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, dataTypeEntry);
 
 		// Depending on the button clicked:
@@ -271,6 +272,12 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		getCommandStack().addCommandStackEventListener(this);
 		initializeActionRegistry();
 		setActionHandlers(site);
+	}
+
+	@Override
+	public String getTitleToolTip() {
+		final String tooltip = (dataTypeEntry != null) ? dataTypeEntry.getFullTypeName() + "\n" : ""; //$NON-NLS-1$ //$NON-NLS-2$
+		return tooltip + super.getTitleToolTip();
 	}
 
 	private void addListenerToDataTypeObj() {
@@ -458,6 +465,6 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	@Override
 	public void updateEditorInput(final FileEditorInput newInput) {
 		setInput(newInput);
-		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
+		firePropertyChange(IWorkbenchPart.PROP_TITLE);
 	}
 }

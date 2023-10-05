@@ -40,6 +40,8 @@ public final class Messages extends NLS {
 	public static String STCoreQuickfixProvider_RemoveUnusedImportLabel;
 	public static String STCoreQuickfixProvider_RemoveInvalidExitStatementLabel;
 	public static String STCoreQuickfixProvider_RemoveInvalidExitStatementDescription;
+	public static String STCoreQuickfixProvider_RemoveInvalidContinueStatementLabel;
+	public static String STCoreQuickfixProvider_RemoveInvalidContinueStatementDescription;
 	public static String STCoreQuickfixProvider_OrganizeImports;
 	public static String STCoreCodeMiningPreferencePage_EnableCodeMinings;
 	public static String STCoreCodeMiningPreferencePage_EnableLiteralTypeCodeMinings;

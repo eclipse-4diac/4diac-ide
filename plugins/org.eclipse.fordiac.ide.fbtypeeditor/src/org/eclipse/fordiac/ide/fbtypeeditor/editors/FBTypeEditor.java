@@ -108,8 +108,9 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(notification.getFeature())) {
 				Display.getDefault().asyncExec(() -> {
 					if (null != typeEntry) {
-						setPartName(typeEntry.getFile().getName());
+						// the input should be set before the title is updated
 						setInput(new FileEditorInput(typeEntry.getFile()));
+						setPartName(typeEntry.getFile().getName());
 					}
 				});
 			}
@@ -125,7 +126,6 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			getCommandStack().markSaveLocation();
 			typeEntry.save();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
-			setPartName(typeEntry.getFullTypeName());
 		}
 	}
 
@@ -189,7 +189,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 					Messages.FBTypeEditor_TypeFileDoesnotExist));
 		}
 
-		setPartName(typeEntry.getFullTypeName());
+		setPartName(typeEntry.getTypeName());
 
 		fbType.eAdapters().add(adapter);
 
@@ -197,6 +197,12 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		getCommandStack().addCommandStackEventListener(this);
 
 		super.init(site, editorInput);
+	}
+
+	@Override
+	public String getTitleToolTip() {
+		final String tooltip = (typeEntry != null) ? typeEntry.getFullTypeName() + "\n" : ""; //$NON-NLS-1$ //$NON-NLS-2$
+		return tooltip + super.getTitleToolTip();
 	}
 
 	@SuppressWarnings("static-method") // allow children to override this method
@@ -441,7 +447,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			}
 			getCommandStack().flush();
 			fbType.eAdapters().add(adapter);
-			setPartName(typeEntry.getFullTypeName());
+			setPartName(typeEntry.getTypeName());
 		}
 	}
 
@@ -469,7 +475,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	@Override
 	public void updateEditorInput(final FileEditorInput newInput) {
 		setInput(newInput);
-		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
+		firePropertyChange(IWorkbenchPart.PROP_TITLE);
 	}
 
 	@Override

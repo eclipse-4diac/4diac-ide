@@ -17,16 +17,21 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.StringJoiner;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -60,14 +65,15 @@ public class UpdateInstancesChange extends Change {
 
 	@Override
 	public String getName() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append("Update FB instances - ");//$NON-NLS-1$
+		final StringJoiner fbList = new StringJoiner(", "); //$NON-NLS-1$
 		for (final FBNetworkElement fb : instances) {
-			sb.append(fb.getTypeName());
-			sb.append(" - ");//$NON-NLS-1$
-			sb.append(fb.getName());
+			if (fb.getTypeName() != null) {
+				fbList.add(fb.getQualifiedName() + " : " + fb.getTypeName()); //$NON-NLS-1$
+			} else {
+				fbList.add(fb.getQualifiedName());
+			}
 		}
-		return sb.toString();
+		return "Update FB instances - " + fbList.toString(); //$NON-NLS-1$
 	}
 
 	@Override
@@ -79,6 +85,13 @@ public class UpdateInstancesChange extends Change {
 		if (instance instanceof final SubApp subApp && !subApp.isTyped()) {
 			return new UpdateUntypedSubAppInterfaceCommand(instance, (DataTypeEntry) typeEntry);
 		}
+
+		if (instance instanceof final StructManipulator muxer) {
+			final LibraryElement structuredType = typeEntry.getTypeEditable();
+			Assert.isTrue(structuredType instanceof StructuredType);
+			return new ChangeStructCommand(muxer, (StructuredType) structuredType);
+		}
+
 		return new UpdateFBTypeCommand(instance, typeEntry);
 	}
 
@@ -103,7 +116,7 @@ public class UpdateInstancesChange extends Change {
 		return null;
 	}
 
-	private void executeCommand(final TypeEntry rootTypeEntry, final IEditorPart editor, final Command cmd) {
+	private static void executeCommand(final TypeEntry rootTypeEntry, final IEditorPart editor, final Command cmd) {
 		if (editor == null) {
 			cmd.execute();
 			rootTypeEntry.save();

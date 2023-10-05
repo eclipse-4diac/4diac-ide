@@ -473,7 +473,16 @@ public abstract class CommonElementImporter {
 		if (null != comment) {
 			variable.setComment(comment);
 		}
-		proceedToEndElementNamed(LibraryElementTags.PARAMETER_ELEMENT);
+
+		processChildren(LibraryElementTags.PARAMETER_ELEMENT, tagName -> {
+			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(tagName)) {
+				parseGenericAttributeNode(variable);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			}
+			return false;
+		});
+
 		return variable;
 	}
 
@@ -659,14 +668,12 @@ public abstract class CommonElementImporter {
 		final Value val = LibraryElementFactory.eINSTANCE.createValue();
 		val.setValue(value);
 
-		final IInterfaceElement ie = block.getInterfaceElement(name);
-		if (null == ie) {
-			createParameterErrorMarker(block, name, val);
-			return;
-		}
+		final IInterfaceElement ie = getInterfaceElement(block, name, val);
+
 		if (ie instanceof final VarDeclaration varDecl) {
 			varDecl.setValue(val);
 		}
+
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
 			ie.setComment(comment);
@@ -682,7 +689,16 @@ public abstract class CommonElementImporter {
 		});
 	}
 
-	protected void createParameterErrorMarker(final FBNetworkElement block, final String name, final Value value) {
+	public IInterfaceElement getInterfaceElement(final FBNetworkElement block, final String name, final Value val) {
+		IInterfaceElement ie = block.getInterfaceElement(name);
+		if (null == ie) {
+			ie = createParameterErrorMarker(block, name, val);
+		}
+		return ie;
+	}
+
+	protected ErrorMarkerInterface createParameterErrorMarker(final FBNetworkElement block, final String name,
+			final Value value) {
 		final String errorMessage = MessageFormat.format(Messages.CommonElementImporter_ERROR_MissingPinForParameter,
 				name, block.getName());
 		final ErrorMarkerInterface errorMarkerInterface = FordiacErrorMarkerInterfaceHelper
@@ -690,6 +706,7 @@ public abstract class CommonElementImporter {
 		errorMarkerInterface.setValue(value);
 		errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
 				.setTarget(errorMarkerInterface).setLineNumber(getLineNumber()));
+		return errorMarkerInterface;
 	}
 
 	protected boolean isProfileAttribute() {
@@ -792,16 +809,12 @@ public abstract class CommonElementImporter {
 
 	private static VarDeclaration getTypeVariable(final VarDeclaration variable) {
 		EList<VarDeclaration> varList = null;
-		if (variable.eContainer() instanceof Device) {
-			final Device dev = (Device) variable.eContainer();
+		if (variable.eContainer() instanceof final Device dev) {
 			if (null != dev.getType()) {
 				varList = dev.getType().getVarDeclaration();
 			}
-		} else if (variable.eContainer() instanceof Resource) {
-			final Resource res = (Resource) variable.eContainer();
-			if (null != res.getType()) {
-				varList = res.getType().getVarDeclaration();
-			}
+		} else if ((variable.eContainer() instanceof final Resource res) && (null != res.getType())) {
+			varList = res.getType().getVarDeclaration();
 		}
 
 		if (null != varList) {

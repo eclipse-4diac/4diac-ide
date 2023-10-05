@@ -28,15 +28,13 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -90,7 +88,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 		return name.substring(0, lastIndexOf);
 	}
 
-	private static boolean hasOpenEditor(final EObject modelObj) {
+	public static boolean hasOpenEditor(final EObject modelObj) {
 		final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(modelObj));
 		if (rootContainer instanceof final LibraryElement elem) {
 			editorNames.contains(elem.getName());
@@ -215,48 +213,6 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 	}
 
-	private static class DeleteFBTypeInterfaceChange extends CompositeChange {
-
-		final FBType type;
-		final StructuredType struct;
-
-		public DeleteFBTypeInterfaceChange(final FBType type, final StructuredType struct) {
-			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteFBTypeInterface, type.getName()));
-			this.type = type;
-			this.struct = struct;
-			if (!hasOpenEditor(type)) {
-				SafeFBTypeDeletionChange.addUpdateChanges(this, type, false);
-			}
-		}
-
-		@Override
-		public Change perform(final IProgressMonitor pm) throws CoreException {
-			// @formatter:off
-			final List<VarDeclaration> varDeclaration = type.getInterfaceList().getAllInterfaceElements().stream()
-					.filter(VarDeclaration.class::isInstance)
-					.map(VarDeclaration.class::cast)
-					.filter(decl -> decl.getType().getName().equals(struct.getName())).toList();
-			// @formatter:on
-
-			for (final VarDeclaration varDec : varDeclaration) {
-				final ErrorMarkerDataType markerType = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
-				markerType.setName(struct.getName());
-				markerType.setTypeEntry(varDec.getType().getTypeEntry());
-				markerType.setErrorMessage(MessageFormat.format(
-						org.eclipse.fordiac.ide.model.Messages.DataTypeLibrary_MissingDatatype, struct.getName()));
-
-				final Command cmd = ChangeDataTypeCommand.forDataType(varDec, markerType);
-				SafeStructDeletionChange.executeChange(cmd, type);
-			}
-			return super.perform(pm);
-		}
-
-		public FBType getFBType() {
-			return type;
-		}
-
-	}
-
 	private static class DeleteUntypedSubappPinsChange extends CompositeChange {
 
 		final SubApp subapp;
@@ -310,7 +266,12 @@ public class SafeStructDeletionChange extends CompositeChange {
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
 			final DataTypeLibrary lib = manipulator.getType().getTypeLibrary().getDataTypeLibrary();
-			final StructuredType updated = (StructuredType) lib.getType(manipulator.getStructType().getQualifiedName());
+			StructuredType updated = (StructuredType) lib
+					.getTypeIfExists(manipulator.getStructType().getQualifiedName());
+			if (updated == null) {
+				updated = GenericTypes.ANY_STRUCT;
+			}
+
 			final Command cmd = new ChangeStructCommand(manipulator, updated);
 
 			SafeStructDeletionChange.executeChange(cmd, manipulator);
@@ -368,7 +329,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 	}
 
-	private static void executeChange(final Command cmd, final EObject modelObj) {
+	public static void executeChange(final Command cmd, final EObject modelObj) {
 		final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(modelObj));
 		if (rootContainer instanceof final LibraryElement elem) {
 			Display.getDefault().syncExec(() -> {
@@ -377,12 +338,12 @@ public class SafeStructDeletionChange extends CompositeChange {
 						.findEditor(new FileEditorInput(entry.getFile()));
 				if (editor == null) {
 					cmd.execute();
-					entry.setType(EcoreUtil.copy(entry.getTypeEditable())); // needed that subsequent changes have the
-																			// updated type
-					entry.save(); // save immediately to avoid update problems of subsequent changes
 				} else {
 					editor.getAdapter(CommandStack.class).execute(cmd);
 				}
+				entry.setType(EcoreUtil.copy(entry.getTypeEditable())); // needed that subsequent changes have the
+				// updated type
+				entry.save();
 			});
 		}
 	}
