@@ -96,7 +96,7 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator implements Variabl
 		prepareInitialValue
 		val result = newVariable(varDeclaration.name, resultType)
 		if (parseResult?.initializerExpression !== null) {
-			result.evaluateInitializerExpression(parseResult.initializerExpression)
+			result.evaluateInitializerExpression(parseResult.trap.initializerExpression)
 		}
 		result.value
 	}
@@ -105,7 +105,7 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator implements Variabl
 		prepareInitialValue
 		val result = newVariable(varDeclaration.name, resultType)
 		if (parseResult?.initializerExpression !== null) {
-			result.evaluateInitializerExpression(parseResult.initializerExpression)
+			result.evaluateInitializerExpression(parseResult.trap.initializerExpression)
 		}
 		result
 	}

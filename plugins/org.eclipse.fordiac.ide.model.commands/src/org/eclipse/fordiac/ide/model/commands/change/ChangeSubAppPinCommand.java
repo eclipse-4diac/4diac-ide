@@ -33,10 +33,7 @@ public class ChangeSubAppPinCommand extends AbstractUpdateFBNElementCommand {
 		newElement = EcoreUtil.copy(oldElement);
 		if (newElement instanceof final SubApp subApp) {
 			final EList<IInterfaceElement> otherIn = subApp.getInterface().getAllInterfaceElements();
-			otherIn.stream().filter(in -> in.getName().equals(type.getName())).forEach(s -> {
-				s.setType(type);
-			});
+			otherIn.stream().filter(in -> in.getName().equals(type.getName())).forEach(s -> s.setType(type));
 		}
-
 	}
 }

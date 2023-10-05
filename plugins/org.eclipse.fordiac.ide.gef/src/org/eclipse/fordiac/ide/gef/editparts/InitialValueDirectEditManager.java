@@ -21,11 +21,14 @@ import org.eclipse.swt.widgets.Composite;
 
 public class InitialValueDirectEditManager extends TextDirectEditManager {
 	private final VarDeclaration varDeclaration;
+	private final String initialValue;
 
 	public InitialValueDirectEditManager(final GraphicalEditPart source, final CellEditorLocator locator,
-			final VarDeclaration varDeclaration) {
+			final VarDeclaration varDeclaration, final String initialValue) {
 		super(source, locator);
 		this.varDeclaration = varDeclaration;
+		this.initialValue = initialValue != null ? initialValue
+				: InitialValueHelper.getInitialOrDefaultValue(varDeclaration);
 	}
 
 	@Override
@@ -36,6 +39,6 @@ public class InitialValueDirectEditManager extends TextDirectEditManager {
 	@Override
 	protected void initCellEditor() {
 		super.initCellEditor();
-		getCellEditor().setValue(InitialValueHelper.getInitialOrDefaultValue(varDeclaration));
+		getCellEditor().setValue(initialValue);
 	}
 }

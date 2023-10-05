@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.fordiac.ide.model.data.*;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
@@ -311,6 +312,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseINamedElement(INamedElement object) {
 				return createINamedElementAdapter();
+			}
+			@Override
+			public Adapter caseConfigurableObject(ConfigurableObject object) {
+				return createConfigurableObjectAdapter();
 			}
 			@Override
 			public Adapter caseLibraryElement(LibraryElement object) {
@@ -1131,6 +1136,20 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createINamedElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject <em>Configurable Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject
+	 * @generated
+	 */
+	public Adapter createConfigurableObjectAdapter() {
 		return null;
 	}
 

@@ -499,7 +499,8 @@ public class ExtractCallableRefactoring extends Refactoring {
 	protected Optional<STExpression> getSelectedSingleExpression() {
 		if (selectedSemanticElements.size() == 1) {
 			return selectedSemanticElements.stream().filter(STExpression.class::isInstance)
-					.map(STExpression.class::cast).findAny();
+					.map(STExpression.class::cast).filter(expr -> STCoreUtil.getAccessMode(expr) != AccessMode.NONE)
+					.findAny();
 		}
 		return Optional.empty();
 	}

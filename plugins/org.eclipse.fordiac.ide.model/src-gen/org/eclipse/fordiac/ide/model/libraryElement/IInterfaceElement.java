@@ -41,7 +41,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface IInterfaceElement extends INamedElement, ConfigurableObject, HiddenElement {
+public interface IInterfaceElement extends ITypedElement, ConfigurableObject, HiddenElement {
 	/**
 	 * Returns the value of the '<em><b>Is Input</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -121,22 +121,6 @@ public interface IInterfaceElement extends INamedElement, ConfigurableObject, Hi
 	 * @generated
 	 */
 	FBNetworkElement getFBNetworkElement();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	String getTypeName();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	String getFullTypeName();
 
 	/**
 	 * <!-- begin-user-doc -->

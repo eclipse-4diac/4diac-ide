@@ -108,8 +108,9 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(notification.getFeature())) {
 				Display.getDefault().asyncExec(() -> {
 					if (null != typeEntry) {
-						setPartName(typeEntry.getFile().getName());
+						// the input should be set before the title is updated
 						setInput(new FileEditorInput(typeEntry.getFile()));
+						setPartName(typeEntry.getFile().getName());
 					}
 				});
 			}
@@ -125,7 +126,6 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			getCommandStack().markSaveLocation();
 			typeEntry.save();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
-			setPartName(typeEntry.getFullTypeName());
 		}
 	}
 
@@ -166,13 +166,15 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		// TODO implement a save as new type method
 	}
 
-	/** The <code>MultiPageEditorExample</code> implementation of this method checks that the input is an instance of
-	 * <code>FBTypeEditorInput</code>.
+	/**
+	 * The <code>MultiPageEditorExample</code> implementation of this method checks
+	 * that the input is an instance of <code>FBTypeEditorInput</code>.
 	 *
 	 * @param site        the site
 	 * @param editorInput the editor input
 	 *
-	 * @throws PartInitException the part init exception */
+	 * @throws PartInitException the part init exception
+	 */
 	@Override
 	public void init(final IEditorSite site, final IEditorInput editorInput) throws PartInitException {
 		if (editorInput instanceof final FileEditorInput fileEI) {
@@ -187,7 +189,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 					Messages.FBTypeEditor_TypeFileDoesnotExist));
 		}
 
-		setPartName(typeEntry.getFullTypeName());
+		setPartName(typeEntry.getTypeName());
 
 		fbType.eAdapters().add(adapter);
 
@@ -197,7 +199,13 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		super.init(site, editorInput);
 	}
 
-	@SuppressWarnings("static-method")  // allow children to override this method
+	@Override
+	public String getTitleToolTip() {
+		final String tooltip = (typeEntry != null) ? typeEntry.getFullTypeName() + "\n" : ""; //$NON-NLS-1$ //$NON-NLS-2$
+		return tooltip + super.getTitleToolTip();
+	}
+
+	@SuppressWarnings("static-method") // allow children to override this method
 	protected FBType getFBType(final TypeEntry typeEntry) {
 		if (typeEntry instanceof final FBTypeEntry fbtEntry) {
 			return fbtEntry.getTypeEditable();
@@ -232,7 +240,8 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		super.dispose();
 
 		if (dirty && typeEntry != null) {
-			// purge editable type from typelib after super.dispose() so that no notifiers will be called
+			// purge editable type from typelib after super.dispose() so that no notifiers
+			// will be called
 			typeEntry.setTypeEditable(null);
 		}
 
@@ -293,16 +302,19 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		return sortedEditorsMap;
 	}
 
-	/** Check if the given editor type is a valid editor for the given type
+	/**
+	 * Check if the given editor type is a valid editor for the given type
 	 *
 	 * @param fbType     type to be edited in this type editor
 	 * @param editorType editor type string as defined the fBTEditorTabs.exsd
-	 * @return true if the editor should be shown otherwise false */
+	 * @return true if the editor should be shown otherwise false
+	 */
 	protected boolean checkTypeEditorType(final FBType fbType, final String editorType) {
 		return ((editorType.equals("ForAllTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllFBTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllNonAdapterFBTypes") && !(fbType instanceof AdapterFBType)) || //$NON-NLS-1$
 				(editorType.equals("ForAllNonFunctionFBTypes") && !(fbType instanceof FunctionFBType)) || //$NON-NLS-1$
+				(editorType.equals("ForInterpretableFBTypes")) && isInterpretableType(fbType) || //$NON-NLS-1$
 				((fbType instanceof BaseFBType) && editorType.equals("base")) || //$NON-NLS-1$
 				((fbType instanceof BasicFBType) && editorType.equals("basic")) || //$NON-NLS-1$
 				((fbType instanceof SimpleFBType) && editorType.equals("simple")) || //$NON-NLS-1$
@@ -312,14 +324,20 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		);
 	}
 
+	protected static boolean isInterpretableType(final FBType fbType) {
+		return fbType instanceof BaseFBType || fbType instanceof FunctionFBType;
+	}
+
 	private FBTypeEditorInput getFBTypeEditorInput() {
 		return new FBTypeEditorInput(fbType, typeEntry);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui. IWorkbenchPart,
-	 * org.eclipse.jface.viewers.ISelection) */
+	 * @see org.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui.
+	 * IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
+	 */
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor())) {
@@ -349,7 +367,8 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		}
 
 		if (isEditorActive()) {
-			// we should only call super if the editor is active otherwise we may get disposed errors
+			// we should only call super if the editor is active otherwise we may get
+			// disposed errors
 			T result = super.getAdapter(adapter);
 			if (result == null && shouldCheckAllEditors(adapter)) {
 				result = editors.stream().map(innerEditor -> Adapters.adapt(innerEditor, adapter))
@@ -428,7 +447,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			}
 			getCommandStack().flush();
 			fbType.eAdapters().add(adapter);
-			setPartName(typeEntry.getFullTypeName());
+			setPartName(typeEntry.getTypeName());
 		}
 	}
 
@@ -456,7 +475,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	@Override
 	public void updateEditorInput(final FileEditorInput newInput) {
 		setInput(newInput);
-		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
+		firePropertyChange(IWorkbenchPart.PROP_TITLE);
 	}
 
 	@Override

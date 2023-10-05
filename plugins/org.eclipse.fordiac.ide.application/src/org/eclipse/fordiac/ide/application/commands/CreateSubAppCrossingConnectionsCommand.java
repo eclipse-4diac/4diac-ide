@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -69,7 +70,8 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		// as not all checks of the createconnection command are valid we need to do our own checks
+		// as not all checks of the createconnection command are valid we need to do our
+		// own checks
 		// first the generic checks
 		if (source == null || destination == null) {
 			return false;
@@ -89,7 +91,8 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 		}
 
 		if (source instanceof Event) {
-			// the only event specific connection we currently have is duplicate connection which makes no sense here so
+			// the only event specific connection we currently have is duplicate connection
+			// which makes no sense here so
 			// we can return true
 			return true;
 		}
@@ -173,6 +176,9 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 		while (current != null) {
 			if (current instanceof final FBNetwork currentFbNetwork) {
 				list.add(currentFbNetwork);
+			}
+			if (current instanceof final SubAppType satype) {
+				list.add(satype.getFBNetwork());
 			}
 			current = current.eContainer();
 		}

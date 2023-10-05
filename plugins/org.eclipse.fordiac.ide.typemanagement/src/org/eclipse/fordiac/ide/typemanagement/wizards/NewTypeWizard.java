@@ -75,7 +75,8 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 			return false;
 		}
 		final IFile targetTypeFile = getTargetFile();
-		entry = new TypeFromTemplateCreator(getTargetFile(), template).createTypeFromTemplate();
+		final String packageName = page1.getPackageName();
+		entry = new TypeFromTemplateCreator(targetTypeFile, template, packageName).createTypeFromTemplate();
 		if (entry != null) {
 			if (page1.getOpenType()) {
 				openTypeEditor(targetTypeFile);

@@ -12,20 +12,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui;
 
-import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Map;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
-import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -36,57 +34,21 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
-import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
-import org.eclipse.swtbot.swt.finder.waits.ICondition;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.junit.AfterClass;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
+import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-public class Basic1FBNetworkEditingTests {
+public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 
-	private static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
-	private static final String NEW = "New"; //$NON-NLS-1$
-	private static final String FILE = "File"; //$NON-NLS-1$
-	private static final String OK = "OK"; //$NON-NLS-1$
-	private static final String FINISH = "Finish"; //$NON-NLS-1$
-	private static final String APP = "App"; //$NON-NLS-1$
-	private static final String EDIT = "Edit"; //$NON-NLS-1$
-	private static final String DELETE = "Delete"; //$NON-NLS-1$
-	private static final String DELETE_PROJECT_WARNING = "Delete project contents on disk (cannot be undone)"; //$NON-NLS-1$
-	private static final String DELETE_RESOURCES = "Delete Resources"; //$NON-NLS-1$
-	private static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
-	private static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
-	private static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
-	private static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
-	private static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
-	private static final String NEW_4DIAC_PROJECT = "New 4diacProject"; //$NON-NLS-1$
-	private static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
-	private static final String EVENTS_NODE = "events"; //$NON-NLS-1$
-	private static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
-	private static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
-	private static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
-	private static final String START = "START"; //$NON-NLS-1$
-	private static final String EO = "EO"; //$NON-NLS-1$
-	private static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
-	private static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
-	private static SWT4diacGefBot bot;
-
-	@BeforeAll
-	public static void beforeAll() {
-		bot = new SWT4diacGefBot();
-		bot.viewByTitle("Welcome").close(); //$NON-NLS-1$
-		// increase timeout to 10 seconds
-		SWTBotPreferences.TIMEOUT = 10000;
-		createProject();
-	}
-
+	/**
+	 * Drags and Drops a Function Block onto the canvas.
+	 *
+	 * The method selects the event FB E_CYCLE from the System Explorer hierarchy
+	 * tree and then drags it onto the canvas of the editing area. Afterwards it is
+	 * checked if the canvas is not empty.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void dragAndDrop1FB() {
@@ -127,6 +89,10 @@ public class Basic1FBNetworkEditingTests {
 		assertNotNull(editor.getEditPart(E_CYCLE_FB));
 	}
 
+	/**
+	 * Checks if the FB is dragged onto the canvas is also visible in the hierarchy
+	 * tree.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void isAddedFbInProjectAppNode() {
@@ -155,6 +121,9 @@ public class Basic1FBNetworkEditingTests {
 		assertTrue(appNode.getNode(E_CYCLE_FB).isVisible());
 	}
 
+	/**
+	 * Checks if the FB is no longer on the canvas after deletion.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void deleteExistingFB() {
@@ -170,21 +139,58 @@ public class Basic1FBNetworkEditingTests {
 		assertNull(editor.getEditPart(E_CYCLE_FB));
 	}
 
+	/**
+	 * Checks if the FB can be moved onto the canvas.
+	 *
+	 * The method drag and drops the FB E_CYCLE to a certain position onto the
+	 * canvas and it is checked whether the FB is in the correct position.
+	 * Afterwards the FB is moved to a new point and this position is also checked.
+	 * To achieve this it is necessary to create a draw2d.geometry Point with the
+	 * same coordinates of the swt.graphics Point.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void moveFB() {
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 300));
+		final Point pos1 = new Point(200, 200);
+		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, pos1);
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		assertNotNull(editor);
 		assertNotNull(editor.getEditPart(E_CYCLE_FB));
 		editor.click(E_CYCLE_FB);
-		final SWTBotGefEditPart parent = editor.getEditPart(E_CYCLE_FB).parent();
+		SWTBotGefEditPart parent = editor.getEditPart(E_CYCLE_FB).parent();
 		assertNotNull(parent);
+
+		IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
+		assertNotNull(figure);
+		Rectangle fbBounds = figure.getBounds().getCopy();
+		assertNotNull(fbBounds);
+		figure.translateToAbsolute(fbBounds);
+		assertEquals(pos1.x, fbBounds.x);
+		assertEquals(pos1.y, fbBounds.y);
+
+		final org.eclipse.draw2d.geometry.Point posToCheck1 = new org.eclipse.draw2d.geometry.Point(pos1);
+		assertEquals(posToCheck1.x, fbBounds.x);
+		assertEquals(posToCheck1.y, fbBounds.y);
 		parent.click();
-		editor.drag(parent, 300, 300);
-		assertNotNull(editor.getEditPart(E_CYCLE_FB));
+
+		final Point pos2 = new Point(85, 85);
+		editor.drag(parent, pos2.x, pos2.y);
+		final org.eclipse.draw2d.geometry.Point posToCheck2 = new org.eclipse.draw2d.geometry.Point(pos2);
+
+		parent = editor.getEditPart(E_CYCLE_FB).parent();
+		figure = ((GraphicalEditPart) parent.part()).getFigure();
+		fbBounds = figure.getBounds().getCopy();
+		figure.translateToAbsolute(fbBounds);
+		assertEquals(posToCheck2.x, fbBounds.x);
+		assertEquals(posToCheck2.y, fbBounds.y);
 	}
 
+	/**
+	 * Checks if the value of the data input pin of type time can be edited.
+	 *
+	 * The method sets the default value of data input pin of type time of FB
+	 * E_CYCLE to a new value.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void editDTofECycle() {
@@ -200,6 +206,12 @@ public class Basic1FBNetworkEditingTests {
 		assertNotNull(editor.getEditPart(NEW_VAL));
 	}
 
+	/**
+	 * Checks if the default value of data input pin is displayed correctly.
+	 *
+	 * The method checks if the default value of data input pin of type time of FB
+	 * E_CYCLE is displayed correctly.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void directEditorDefaultValueTest() {
@@ -214,6 +226,12 @@ public class Basic1FBNetworkEditingTests {
 		e.save();
 	}
 
+	/**
+	 * Checks if the new value of data input is displayed correctly.
+	 *
+	 * The method checks if the new entered value of data input pin of type time of
+	 * FB E_CYCLE is displayed correctly.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void directEditorNewValueTest() {
@@ -231,134 +249,461 @@ public class Basic1FBNetworkEditingTests {
 		assertEquals(NEW_VAL, editor.toTextEditor().getText());
 	}
 
+	/**
+	 * Checks if it is possible to edit the automatically generated name of the FB
+	 */
+	@Disabled
+	@Test
+	public void editFBName() {
+		// in progress
+	}
+
+	/**
+	 * Checks if a valid connection can be created.
+	 *
+	 * The method checks if its possible to create a valid connection between an
+	 * event input pin and a event output pin. It is also checked if the connection
+	 * can be found in the
+	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
+	 * registered EditParts}.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
-	public void createValidConnection() {
+	public void validConnectionBetweenEventInputPinAndEventOutputPin() {
 		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 200));
+		final SWTBot4diacGefViewer viewer = createConnection(START, EO);
+		assertDoesNotThrow(viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if a valid connection can be created.
+	 *
+	 * The method checks if its possible to create a valid connection between an
+	 * event output pin and a event input pin. It is also checked if the connection
+	 * can be found in the
+	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
+	 * registered EditParts}.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void validConnectionBetweenEventOutputPinAndEventInputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(EO1, START);
+		assertDoesNotThrow(viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if a valid connection can be created.
+	 *
+	 * The method checks if its possible to create a valid connection between an
+	 * data input pin of type unsigned integer and a data output pin of type
+	 * unsigned integer. It is also checked if the connection can be found in the
+	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
+	 * registered EditParts}.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void validConnectionBetweenUintDataInputPinAndUintDataOutputPin() {
+		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(150, 150));
+		final SWTBot4diacGefViewer viewer = createConnection(PV, CV);
+		assertDoesNotThrow(viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if the connection is still there after moving the FB
+	 *
+	 * The method checks if its possible to create a valid connection between an
+	 * data input pin of type boolean and a data output pin of type boolean. It is
+	 * also checked if the connection can be found in the
+	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
+	 * registered EditParts}.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void validConnectionBetweenBoolInputPinAndBoolOutputPin() {
+		dragAndDropEventsFB(E_D_FF_TREE_ITEM, new Point(150, 150));
+		final SWTBot4diacGefViewer viewer = createConnection(D, Q);
+		assertDoesNotThrow(viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if the connection is still there after moving the FB
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void connectionCanBeFoundAfterMovingFB() {
+		// in progress
+		final Point pos1 = new Point(100, 150);
+		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, pos1);
+		createConnection(INIT, CLKO);
+		createConnection(N, CV);
+
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
-		assertNotNull(editor);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		assertNotNull(viewer);
-		// select input pin
-		editor.click(START);
-		final SWTBotGefEditPart ei = editor.getEditPart(START);
-		assertNotNull(ei);
-		final IFigure figure = ((GraphicalEditPart) ei.part()).getFigure();
-		assertNotNull(figure);
-		final Rectangle inputPinBounds = figure.getBounds().getCopy();
-		assertNotNull(inputPinBounds);
-		figure.translateToAbsolute(inputPinBounds);
-		// select output pin
-		editor.click(EO);
-		final SWTBotGefEditPart eo = editor.getEditPart(EO);
-		assertNotNull(eo);
-		final Rectangle outputPinBounds = ((GraphicalEditPart) eo.part()).getFigure().getBounds().getCopy();
-		assertNotNull(outputPinBounds);
-		figure.translateToAbsolute(outputPinBounds);
-		viewer.drag(EO, inputPinBounds.getCenter().x, inputPinBounds.getCenter().y);
-
-		final Map<?, ?> editPartRegistry = viewer.getGraphicalViewer().getEditPartRegistry();
-
-		bot.waitUntil(new ICondition() {
-
-			@Override
-			public boolean test() throws Exception {
-				return editPartRegistry.values().stream().filter(v -> v instanceof ConnectionEditPart).count() == 1;
-			}
-
-			@Override
-			public void init(final SWTBot bot) {
-				// method must be implemented but empty since not needed
-			}
-
-			@Override
-			public String getFailureMessage() {
-				return "no ConnectionEditPart found";
-			}
-
-		}, 5000);
-
-		assertEquals(1, editPartRegistry.values().stream().filter(v -> v instanceof ConnectionEditPart).count());
-	}
-
-	private static void createProject() {
-		bot.menu(FILE).menu(NEW).menu(FORDIAC_IDE_PROJECT).click();
-		final SWTBotShell shell = bot.shell(NEW_4DIAC_PROJECT);
-		shell.activate();
-		bot.textWithLabel(PROJECT_NAME_LABEL).setText(PROJECT_NAME);
-		assertEquals(bot.textWithLabel(INITIAL_SYSTEM_NAME_LABEL).getText(), PROJECT_NAME);
-		assertEquals(bot.textWithLabel(INITIAL_APPLICATION_NAME_LABEL).getText(), PROJECT_NAME + APP);
-		bot.button(FINISH).click();
-		bot.waitUntil(shellCloses(shell));
-	}
-
-	private static void dragAndDropEventsFB(final String fbName, final Point point) {
-		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
-		treeProjectItem.select();
-		treeProjectItem.expand();
-		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(TYPE_LIBRARY_NODE);
-		typeLibraryNode.select();
-		typeLibraryNode.expand();
-		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(EVENTS_NODE);
-		eventsNode.select();
-		eventsNode.expand();
-		bot.waitUntil(treeItemHasNode(eventsNode, fbName));
-		final SWTBotTreeItem eCycleNode = eventsNode.getNode(fbName);
-		eCycleNode.select();
-		eCycleNode.click();
-
-		// select application editor
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
-		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		final SWTBotGefFigureCanvas canvas = viewer.getCanvas();
-
 		assertNotNull(canvas);
-		eCycleNode.dragAndDrop(canvas, point);
+		canvas.setFocus();
+
+		assertTrue(checkIfConnectionCanBeFound(CLKO, INIT));
+		assertTrue(checkIfConnectionCanBeFound(CV, N));
+
+		assertNotNull(editor);
+		assertNotNull(editor.getEditPart(E_TABLE_CTRL_FB));
+		editor.click(E_TABLE_CTRL_FB);
+		SWTBotGefEditPart parent = editor.getEditPart(E_TABLE_CTRL_FB).parent();
+		assertNotNull(parent);
+
+		IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
+		assertNotNull(figure);
+		Rectangle fbBounds = figure.getBounds().getCopy();
+		assertNotNull(fbBounds);
+		figure.translateToAbsolute(fbBounds);
+		assertEquals(pos1.x, fbBounds.x);
+		assertEquals(pos1.y, fbBounds.y);
+
+		final org.eclipse.draw2d.geometry.Point posToCheck1 = new org.eclipse.draw2d.geometry.Point(pos1);
+		assertEquals(posToCheck1.x, fbBounds.x);
+		assertEquals(posToCheck1.y, fbBounds.y);
+		parent.click();
+
+		final Point pos2 = new Point(85, 85);
+		editor.drag(parent, pos2.x, pos2.y);
+		final org.eclipse.draw2d.geometry.Point posToCheck2 = new org.eclipse.draw2d.geometry.Point(pos2);
+
+		parent = editor.getEditPart(E_TABLE_CTRL_FB).parent();
+		figure = ((GraphicalEditPart) parent.part()).getFigure();
+		fbBounds = figure.getBounds().getCopy();
+		figure.translateToAbsolute(fbBounds);
+		assertEquals(posToCheck2.x, fbBounds.x);
+		assertEquals(posToCheck2.y, fbBounds.y);
+
+		assertTrue(checkIfConnectionCanBeFound(CLKO, INIT));
+		assertTrue(checkIfConnectionCanBeFound(CV, N));
 	}
 
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and an event input
+	 * pin.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
 	@SuppressWarnings("static-method")
-	@AfterEach
-	public void cleanEditorArea() {
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
-		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		viewer.getCanvas().setFocus();
-
-		final SWTBotMenu editMenu = bot.menu(EDIT);
-		editMenu.menu(SELECT_ALL).click();
-		final SWTBotMenu deleteMenu = editMenu.menu(DELETE);
-		if (deleteMenu.isEnabled()) {
-			// not all Tests have a remaining FB
-			deleteMenu.click();
-		}
+	@Test
+	public void invalidConnectionBetweenEventInputPinAndEventInputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(START, STOP);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
-	@AfterAll
-	public static void deleteProject() {
-		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-
-		final SWTBotTreeItem treeItem = tree.getTreeItem(PROJECT_NAME);
-		treeItem.select();
-		bot.menu(EDIT).menu(DELETE).click();
-
-		// the project deletion confirmation dialog
-		final SWTBotShell shell = bot.shell(DELETE_RESOURCES);
-		shell.activate();
-		bot.checkBox(DELETE_PROJECT_WARNING).select();
-		bot.button(OK).click();
-		bot.waitUntil(shellCloses(shell));
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and a data input
+	 * pin of type unsigned integer.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventInputPinAndUintInputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(150, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(START, N);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
-	@AfterClass
-	public static void afterClass() {
-		bot.resetWorkbench();
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and a data input
+	 * pin of type time.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventInputPinAndTimeInputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(150, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(START, DT);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and a data input
+	 * pin of type boolean.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventInputPinAndBoolInputPin() {
+		dragAndDropEventsFB(E_D_FF_TREE_ITEM, new Point(150, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(CLK, D);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and a data output
+	 * pin of type unsigned integer.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventInputPinAndUintOutputPin() {
+		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 150));
+		final SWTBot4diacGefViewer viewer = createConnection(CD, CV);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and a data output
+	 * pin of type time.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventInputPinAndTimeOutputPin() {
+		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(INIT, DTO);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event input pin and a data output
+	 * pin of type boolean.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventInputPinAndBoolOutputPin() {
+		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 150));
+		final SWTBot4diacGefViewer viewer = createConnection(CD, QU);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between a data input pin of type time and a
+	 * data output pin of type time.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenTimeInputPinAndTimeOutputPin() {
+		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(DT, DTO);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between a data input pin of type time and a
+	 * data input pin of type unsigned integer.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenTimeInputPinAndUintInputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(DT, N);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between a data input pin of type unsigned
+	 * integer and a data input pin of type boolean.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenUintInputPinAndBoolOutputPin() {
+		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(PV, QU);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event output pin and a data input
+	 * pin of type unsigned integer.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventOutputPinAndUintInputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(EO0, N);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event output pin and a data input
+	 * pin of type time.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventOutputPinAndTimeInputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(EO1, DT);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event output pin and a data input
+	 * pin of boolean.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventOutputPinAndBoolInputPin() {
+		dragAndDropEventsFB(E_D_FF_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(EO, D);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event output pin and an event
+	 * output pin.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventOutputPinAndEventOutputPin() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(EO0, EO2);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event output pin and a data output
+	 * pin of type unsigned integer.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventOutputPinAndUintOutputPin() {
+		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(CLKO, CV);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event output pin and a data output
+	 * pin of type time.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventOutputPinAndTimeOutputPin() {
+		dragAndDropEventsFB(E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(CLKO, DTO);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between an event output pin and a data output
+	 * pin of boolean.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenEventOutputPinAndBoolOutputPin() {
+		dragAndDropEventsFB(E_D_FF_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(EO, Q);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
+	/**
+	 * Checks if an invalid connection can be created.
+	 *
+	 * Attempts to create a connection between a data output pin of type boolean and
+	 * a data output pin of type boolean.
+	 *
+	 * @throws TimeoutException When the attempted connection cannot be found in the
+	 *                          map of the {@link EditPartViewer#getEditPartRegistry
+	 *                          EditPartRegistry} as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void invalidConnectionBetweenBoolOutputPinAndBoolOutputPin() {
+		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefViewer viewer = createConnection(QU, QD);
+		assertThrows(TimeoutException.class, viewer::waitForConnection);
+	}
+
 }

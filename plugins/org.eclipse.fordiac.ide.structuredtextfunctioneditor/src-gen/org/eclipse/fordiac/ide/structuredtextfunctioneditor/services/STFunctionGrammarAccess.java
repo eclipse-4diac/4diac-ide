@@ -495,8 +495,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	//    STForStatement |
 	//    STWhileStatement |
 	//    STRepeatStatement |
-	//    => STAssignmentStatement |
-	//    STCallStatement |
+	//    STAssignment |
 	//    {STReturn} 'RETURN' |
 	//    {STContinue} 'CONTINUE' |
 	//    {STExit} 'EXIT') ';' |
@@ -509,24 +508,14 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTStatementAccess().getRule();
 	}
 	
-	//STAssignmentStatement:
-	//    left=STAccessExpression ':=' right=STExpression;
-	public STCoreGrammarAccess.STAssignmentStatementElements getSTAssignmentStatementAccess() {
-		return gaSTCore.getSTAssignmentStatementAccess();
+	//STAssignment returns STExpression:
+	//    STExpression ({STAssignment.left=current} ':=' right=STAssignment)?;
+	public STCoreGrammarAccess.STAssignmentElements getSTAssignmentAccess() {
+		return gaSTCore.getSTAssignmentAccess();
 	}
 	
-	public ParserRule getSTAssignmentStatementRule() {
-		return getSTAssignmentStatementAccess().getRule();
-	}
-	
-	//STCallStatement:
-	//    call=STAccessExpression;
-	public STCoreGrammarAccess.STCallStatementElements getSTCallStatementAccess() {
-		return gaSTCore.getSTCallStatementAccess();
-	}
-	
-	public ParserRule getSTCallStatementRule() {
-		return getSTCallStatementAccess().getRule();
+	public ParserRule getSTAssignmentRule() {
+		return getSTAssignmentAccess().getRule();
 	}
 	
 	//STCallArgument:
@@ -889,8 +878,12 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STFeatureExpression returns STExpression:
-	//    {STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] (=>call?='(' (parameters+=STCallArgument
-	//    (',' parameters+=STCallArgument)*)? ')')?;
+	//    {STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName]
+	//    (=>call?='('
+	//        (
+	//            parameters+=STCallArgument (',' parameters+=STCallArgument)*
+	//        )?
+	//    ')')?;
 	public STCoreGrammarAccess.STFeatureExpressionElements getSTFeatureExpressionAccess() {
 		return gaSTCore.getSTFeatureExpressionAccess();
 	}
@@ -1168,7 +1161,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//QualifiedName:
-	//    ID ('::' ID)*;
+	//    ID (=>'::' ID)*;
 	public STCoreGrammarAccess.QualifiedNameElements getQualifiedNameAccess() {
 		return gaSTCore.getQualifiedNameAccess();
 	}

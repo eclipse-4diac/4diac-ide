@@ -85,7 +85,11 @@ public class DataTypeImporter extends TypeImporter {
 				setElement(convertToStructuredType(getElement()));
 				parseStructuredType((StructuredType) getElement());
 				break;
-				// TODO support other AnyDerivedTypes such as ArrayType
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(getElement());
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				break;
+			// TODO support other AnyDerivedTypes such as ArrayType
 			default:
 				return false;
 			}

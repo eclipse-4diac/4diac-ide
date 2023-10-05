@@ -61,7 +61,7 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof CompositeInternalInterfaceEditPart) {
-					return new ChangeNameCommand(getModel(), (String) request.getCellEditor().getValue());
+					return ChangeNameCommand.forName(getModel(), (String) request.getCellEditor().getValue());
 				}
 				return null;
 			}

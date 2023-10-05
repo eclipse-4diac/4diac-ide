@@ -209,7 +209,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AutomationSystem" eSuperTypes="#//LibraryElement #//ConfigurableObject">
+  <eClassifiers xsi:type="ecore:EClass" name="AutomationSystem" eSuperTypes="#//LibraryElement">
     <eOperations name="getDeviceNamed" lowerBound="1" eType="#//Device">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);"/>
@@ -600,7 +600,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="inConnections" upperBound="-1"
         eType="#//Link" eOpposite="#//Link/device"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DeviceType" eSuperTypes="#//LibraryElement #//ConfigurableObject">
+  <eClassifiers xsi:type="ecore:EClass" name="DeviceType" eSuperTypes="#//LibraryElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclaration" upperBound="-1"
         eType="#//VarDeclaration" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -981,7 +981,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="group" eType="#//Group"
         eOpposite="#//Group/groupElements"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FBType" eSuperTypes="#//LibraryElement #//ConfigurableObject #//ICallable">
+  <eClassifiers xsi:type="ecore:EClass" name="FBType" eSuperTypes="#//LibraryElement #//ICallable">
     <eOperations name="getInputParameters" upperBound="-1" eType="#//INamedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
@@ -1036,7 +1036,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//FunctionBody"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="GlobalConstants" eSuperTypes="#//LibraryElement #//ConfigurableObject">
+  <eClassifiers xsi:type="ecore:EClass" name="GlobalConstants" eSuperTypes="#//LibraryElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="constants" upperBound="-1"
         eType="#//VarDeclaration" containment="true" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//OriginalSource"
@@ -1129,20 +1129,10 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IInterfaceElement" abstract="true" interface="true"
-      eSuperTypes="#//INamedElement #//ConfigurableObject #//HiddenElement">
+      eSuperTypes="#//ITypedElement #//ConfigurableObject #//HiddenElement">
     <eOperations name="getFBNetworkElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="getTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="DataType dataType = getType();&#xA;if(dataType != null){&#xA;&#x9;return dataType.getName();&#xA;}&#xA;return null;"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="getFullTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="validateName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
@@ -1321,6 +1311,20 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ITypedElement" abstract="true" interface="true"
+      eSuperTypes="#//INamedElement">
+    <eOperations name="getType" eType="#//INamedElement"/>
+    <eOperations name="getTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();&#xA;if(type != null){&#xA;&#x9;return type.getName();&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getFullTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getTypeName();"/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IVarElement" abstract="true" interface="true">
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclarations" upperBound="-1"
         eType="#//VarDeclaration" containment="true"/>
@@ -1331,7 +1335,7 @@
     <eLiterals name="Java" value="2"/>
     <eLiterals name="Cpp" value="3"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LibraryElement" eSuperTypes="#//INamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="LibraryElement" eSuperTypes="#//INamedElement #//ConfigurableObject">
     <eOperations name="getTypeLibrary" lowerBound="1" eType="#//TypeLibrary">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="if (null != getTypeEntry()) {&#xA;&#x9;return getTypeEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
@@ -1499,7 +1503,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ResourceType" eSuperTypes="#//LibraryElement #//ConfigurableObject">
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceType" eSuperTypes="#//LibraryElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclaration" upperBound="-1"
         eType="#//VarDeclaration" containment="true" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fBNetwork" lowerBound="1"
@@ -1541,7 +1545,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="communication" eType="#//CommunicationConfiguration"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SegmentType" eSuperTypes="#//LibraryElement #//ConfigurableObject">
+  <eClassifiers xsi:type="ecore:EClass" name="SegmentType" eSuperTypes="#//LibraryElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclaration" upperBound="-1"
         eType="#//VarDeclaration" containment="true"/>
   </eClassifiers>
@@ -1734,7 +1738,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TypedConfigureableObject" eSuperTypes="#//INamedElement #//ConfigurableObject">
+  <eClassifiers xsi:type="ecore:EClass" name="TypedConfigureableObject" eSuperTypes="#//ITypedElement #//ConfigurableObject">
     <eOperations name="getTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getTypeName(this);"/>

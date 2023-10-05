@@ -81,7 +81,7 @@ public class SegmentSection extends AbstractDoubleColumnSection {
 		nameText = createGroupText(composite, true);
 		nameText.addModifyListener(event -> {
 			removeContentAdapter();
-			executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
+			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
 		});
 

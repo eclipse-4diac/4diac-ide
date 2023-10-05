@@ -45,7 +45,7 @@ public class VarInOutEditPart extends InterfaceEditPart {
 				protected Command getDirectEditCommand(final DirectEditRequest request) {
 					if (getHost() instanceof final VarInOutEditPart viewEditPart) {
 						final VarDeclaration varDecl = viewEditPart.getModel();
-						return new ChangeNameCommand(varDecl.getInOutVarOpposite(),
+						return ChangeNameCommand.forName(varDecl.getInOutVarOpposite(),
 								(String) request.getCellEditor().getValue());
 					}
 					return null;

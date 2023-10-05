@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -44,7 +43,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
@@ -165,8 +163,10 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	}
 
 	private LibraryElement reloadType() {
-		// reset editable type to force a fresh copy the next time the editable type is accessed
-		// also needs to happen before the reload, since SystemEntry delegates to setType,
+		// reset editable type to force a fresh copy the next time the editable type is
+		// accessed
+		// also needs to happen before the reload, since SystemEntry delegates to
+		// setType,
 		// which would otherwise reset the freshly reloaded type
 		if (getFile() != null) {
 			setTypeEditable(null);
@@ -220,7 +220,8 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 				return typeEditable;
 			}
 		}
-		// we need to get a fresh type editable in order to ensure consistency take a copy of the none editable type
+		// we need to get a fresh type editable in order to ensure consistency take a
+		// copy of the none editable type
 		final LibraryElement loadType = EcoreUtil.copy(getType());
 		setTypeEditable(loadType);
 		return loadType;
@@ -338,11 +339,14 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 		this.updateTypeOnSave = updateTypeOnSave;
 	}
 
-	/** Search for the first directory parent which is existing. If none can be found we will return the workspace root.
-	 * This directory is then used as scheduling rule for locking the workspace. The direct parent of the entry's file
-	 * can not be used as it may need to be created.
+	/**
+	 * Search for the first directory parent which is existing. If none can be found
+	 * we will return the workspace root. This directory is then used as scheduling
+	 * rule for locking the workspace. The direct parent of the entry's file can not
+	 * be used as it may need to be created.
 	 *
-	 * @return the current folder or workspace root */
+	 * @return the current folder or workspace root
+	 */
 	private IContainer getRuleScope() {
 		IContainer parent = getFile().getParent();
 		while (parent != null && !parent.exists()) {
@@ -360,22 +364,25 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 			checkAndCreateFolderHierarchy(getFile(), monitor);
 			getFile().create(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
 		}
-		// "reset" the modification timestamp in the TypeEntry to avoid reload - as for this
+		// "reset" the modification timestamp in the TypeEntry to avoid reload - as for
+		// this
 		// timestamp
 		// it is not necessary as the data is in memory
 		setLastModificationTimestamp(getFile().getModificationStamp());
-		FordiacMarkerHelper.updateMarkers(file, Collections.emptyList());
 		if (updateTypeOnSave) {
 			// make the edit result available for the reading entities
 			setType(EcoreUtil.copy(getTypeEditable()));
 		}
 	}
 
-	/** Check if the folders in the file's path exist and if not create them accordingly
+	/**
+	 * Check if the folders in the file's path exist and if not create them
+	 * accordingly
 	 *
 	 * @param file    for which the path should be checked
 	 * @param monitor
-	 * @throws CoreException */
+	 * @throws CoreException
+	 */
 	private static void checkAndCreateFolderHierarchy(final IFile file, final IProgressMonitor monitor)
 			throws CoreException {
 		final IContainer container = file.getParent();

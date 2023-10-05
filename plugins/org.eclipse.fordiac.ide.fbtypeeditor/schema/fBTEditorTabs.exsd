@@ -87,6 +87,8 @@
                   </enumeration>
                   <enumeration value="ForAllNonFunctionFBTypes">
                   </enumeration>
+                  <enumeration value="ForInterpretableFBTypes">
+                  </enumeration>
                   <enumeration value="ForAllTypes">
                   </enumeration>
                </restriction>

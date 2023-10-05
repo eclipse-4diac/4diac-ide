@@ -27,9 +27,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -42,22 +39,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl#getAttributes <em>Attributes</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentTypeImpl#getVarDeclaration <em>Var Declaration</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class SegmentTypeImpl extends LibraryElementImpl implements SegmentType {
-	/**
-	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAttributes()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Attribute> attributes;
 	/**
 	 * The cached value of the '{@link #getVarDeclaration() <em>Var Declaration</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -93,19 +80,6 @@ public class SegmentTypeImpl extends LibraryElementImpl implements SegmentType {
 	 * @generated
 	 */
 	@Override
-	public EList<Attribute> getAttributes() {
-		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.SEGMENT_TYPE__ATTRIBUTES);
-		}
-		return attributes;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<VarDeclaration> getVarDeclaration() {
 		if (varDeclaration == null) {
 			varDeclaration = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION);
@@ -119,50 +93,8 @@ public class SegmentTypeImpl extends LibraryElementImpl implements SegmentType {
 	 * @generated
 	 */
 	@Override
-	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
-		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Attribute getAttribute(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getAttributeValue(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean deleteAttribute(final String attributeName) {
-		return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT_TYPE__ATTRIBUTES:
-				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
 				return ((InternalEList<?>)getVarDeclaration()).basicRemove(otherEnd, msgs);
 			default:
@@ -178,8 +110,6 @@ public class SegmentTypeImpl extends LibraryElementImpl implements SegmentType {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT_TYPE__ATTRIBUTES:
-				return getAttributes();
 			case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
 				return getVarDeclaration();
 			default:
@@ -196,10 +126,6 @@ public class SegmentTypeImpl extends LibraryElementImpl implements SegmentType {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT_TYPE__ATTRIBUTES:
-				getAttributes().clear();
-				getAttributes().addAll((Collection<? extends Attribute>)newValue);
-				return;
 			case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
 				getVarDeclaration().clear();
 				getVarDeclaration().addAll((Collection<? extends VarDeclaration>)newValue);
@@ -218,9 +144,6 @@ public class SegmentTypeImpl extends LibraryElementImpl implements SegmentType {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT_TYPE__ATTRIBUTES:
-				getAttributes().clear();
-				return;
 			case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
 				getVarDeclaration().clear();
 				return;
@@ -238,45 +161,11 @@ public class SegmentTypeImpl extends LibraryElementImpl implements SegmentType {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SEGMENT_TYPE__ATTRIBUTES:
-				return attributes != null && !attributes.isEmpty();
 			case LibraryElementPackage.SEGMENT_TYPE__VAR_DECLARATION:
 				return varDeclaration != null && !varDeclaration.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == ConfigurableObject.class) {
-			switch (derivedFeatureID) {
-				case LibraryElementPackage.SEGMENT_TYPE__ATTRIBUTES: return LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == ConfigurableObject.class) {
-			switch (baseFeatureID) {
-				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return LibraryElementPackage.SEGMENT_TYPE__ATTRIBUTES;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 } //SegmentTypeImpl

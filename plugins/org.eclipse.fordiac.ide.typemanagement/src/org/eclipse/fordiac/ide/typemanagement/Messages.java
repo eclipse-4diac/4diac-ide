@@ -87,8 +87,10 @@ public final class Messages extends NLS {
 	public static String NewFBTypeWizardPage_NoTypeTemplatesFoundCheckTemplatesDirectory;
 	public static String NewFBTypeWizardPage_OpenTypeForEditingWhenDone;
 	public static String NewFBTypeWizardPage_InvalidOrNoComment;
+	public static String NewVersionOf;
 	public static String RenameType_Name;
 	public static String RenameType_TypeExists;
+	public static String OldTypeLibVersionCouldNotBeDeleted;
 	public static String OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE;
 	public static String OpenTypeHandler_NO_FILES_IN_WORKSPACE;
 	public static String OpenTypeHandler_NO_FILES_SELECTED;
@@ -101,6 +103,11 @@ public final class Messages extends NLS {
 	public static String typeManagementPreferencePageVersionTitle;
 	public static String typeManagementPreferencePageDescription;
 	public static String Warning;
+	public static String WillBeImported;
+
+	public static String Refactoring_RenameFromTo;
+	public static String Refactoring_AffectedStruct;
+	public static String Refactoring_AffectedInstancesOfFB;
 
 	static {
 		// initialize resource bundle

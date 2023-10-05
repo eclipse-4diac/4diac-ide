@@ -18,7 +18,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.contracts.model.AssumptionWithOffset;
 import org.eclipse.fordiac.ide.contracts.model.Contract;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
@@ -39,22 +38,14 @@ public class EvaluateContractHandler extends AbstractHandler {
 			if (obj instanceof final SubApp subapp) {
 				final Contract test = Contract.getContractFromComment(subapp.getComment());
 				test.setOwner(subapp);
-				if (test.isValid()) {
-					System.out.println("contract valid");
+				final EvaluateContractOnlyCommand ecocmd = new EvaluateContractOnlyCommand(test);
+				if (ecocmd.canExecute()) {
+					ecocmd.execute();
 				}
-				if (test.getAssumptions().get(0).getMin() == 1) {
-					System.out.println("first assumtion works");
-				}
-				if (((AssumptionWithOffset) test.getAssumptions().get(1)).getMaxOffset() == -1) {
-					System.out.println("second max assumtion works");
-				}
-				if (((AssumptionWithOffset) test.getAssumptions().get(1)).getMinOffset() == 2) {
-					System.out.println("second min assumtion works");
-				}
-				final EvaluateContractCommand eccmd = new EvaluateContractCommand(subapp);
-				if (eccmd.canExecute()) {
-					eccmd.execute();
-				}
+				// final EvaluateContractCommand eccmd = new EvaluateContractCommand(subapp);
+				// if (eccmd.canExecute()) {
+				// eccmd.execute();
+				// }
 			}
 		}
 		return Status.OK_STATUS;

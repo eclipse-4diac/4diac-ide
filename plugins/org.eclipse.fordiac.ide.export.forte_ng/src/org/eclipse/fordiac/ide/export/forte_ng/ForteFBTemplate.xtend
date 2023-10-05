@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
 
@@ -461,12 +460,33 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«FOR fb : fbs»
 			«fb.generateInternalFBAccessors(fbs.indexOf(fb))»
 		«ENDFOR»
+		«IF !fbs.empty»
+			size_t getInternalFBNum() const override {
+			  return csmAmountOfInternalFBs;
+			}
+			
+			const SCFB_FBInstanceData *getInternalFBDefinition(size_t paIntFBNum) const override {
+			  if(paIntFBNum < csmAmountOfInternalFBs) {
+			    return scmInternalFBDefinitions + paIntFBNum;
+			  }
+			  return nullptr;
+			}
+			
+			CFunctionBlock *getInternalFB(size_t paIntFBNum) override {
+			  if(paIntFBNum < csmAmountOfInternalFBs) {
+			    return mInternalFBs[paIntFBNum];
+			  }
+			  return nullptr;
+			}
+			
+		«ENDIF»
 	'''
 
 	def protected generateInternalFBAccessors(FB fb, int index) '''
 		«fb.type.generateTypeName» &fb_«fb.name»() {
 		  return *static_cast<«fb.type.generateTypeName»*>(mInternalFBs[«index»]);
 		};
+		
 	'''
 
 	def protected generateEventAccessorDefinitions() '''

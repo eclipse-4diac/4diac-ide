@@ -24,6 +24,9 @@ import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
+
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 
 /** This class provides static methods to check whether a string is a valid IEC 61499 compliant identifier. */
 public final class IdentifierVerifier {
@@ -33,6 +36,9 @@ public final class IdentifierVerifier {
 	private static final String INVALID_IDENTIFIER_REGEX = "[^_A-Za-z\\d]"; //$NON-NLS-1$
 	private static final Pattern INVALID_IDENTIFIER_PATTERN = Pattern.compile(INVALID_IDENTIFIER_REGEX,
 			Pattern.MULTILINE);
+
+	private static final String PACKAGE_NAME_REGEX = IDENTIFIER_REGEX + "(?:::" + IDENTIFIER_REGEX + ")*"; //$NON-NLS-1$ //$NON-NLS-2$
+	private static final Pattern PACKAGE_NAME_PATTERN = Pattern.compile(PACKAGE_NAME_REGEX, Pattern.MULTILINE);
 
 	private IdentifierVerifier() {
 		throw new UnsupportedOperationException();
@@ -75,5 +81,19 @@ public final class IdentifierVerifier {
 			return Optional.of(MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, identifier));
 		}
 		return Optional.empty();
+	}
+
+	public static Optional<String> verifyPackageName(final String packageName) {
+		if (packageName == null || packageName.isBlank()) {
+			return Optional.empty(); // allow empty package names
+		}
+		if (!PACKAGE_NAME_PATTERN.matcher(packageName).matches()) {
+			return Optional
+					.of(MessageFormat.format(Messages.IdentifierVerifier_PackageNameNotAValidIdentifier, packageName));
+		}
+		return Stream.of(packageName.split(PackageNameHelper.PACKAGE_NAME_DELIMITER))
+				.filter(FordiacKeywords::isReservedKeyword).map(identifier -> MessageFormat
+						.format(Messages.IdentifierVerifier_PackageNameReservedKeyword, packageName, identifier))
+				.findFirst();
 	}
 }

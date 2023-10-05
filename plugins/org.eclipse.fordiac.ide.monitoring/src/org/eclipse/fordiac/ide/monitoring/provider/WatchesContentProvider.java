@@ -86,7 +86,7 @@ public class WatchesContentProvider implements ITreeContentProvider {
 				hasValueOnForte = !((MonitoringElement) element).getCurrentValue().equals("N/A"); //$NON-NLS-1$
 				final WatchValueTreeNode node = root.addChild(element);
 
-				if (expandedElements != null) {
+				if (expandedElements != null && node != null) {
 					getTreeViewer().refresh(node);
 					updateExpandedState(Arrays.asList(expandedElements), node);
 				}
@@ -113,10 +113,9 @@ public class WatchesContentProvider implements ITreeContentProvider {
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 			final int featureID = notification.getFeatureID(MonitoringElement.class);
 			if (featureID == MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE
-					&& notification.getNotifier() instanceof MonitoringElement) {
+					&& notification.getNotifier() instanceof final MonitoringElement element) {
 				Display.getDefault().asyncExec(() -> {
 					if (!viewer.getControl().isDisposed()) {
-						final MonitoringElement element = (MonitoringElement) notification.getNotifier();
 						if (!hasValueOnForte) {
 							init();
 							hasValueOnForte = true;
@@ -157,8 +156,6 @@ public class WatchesContentProvider implements ITreeContentProvider {
 		}
 	};
 
-
-
 	private void updateExpandedState(final List<Object> expanded, final WatchValueTreeNode newNode) {
 		for (final Object e : expanded) {
 			if (hasBeenExpanded(newNode, e)) {
@@ -169,9 +166,9 @@ public class WatchesContentProvider implements ITreeContentProvider {
 	}
 
 	private static boolean hasBeenExpanded(final WatchValueTreeNode newNode, final Object e) {
-		return e instanceof WatchValueTreeNode
-				&& ((WatchValueTreeNode) e).getMonitoringBaseElement().equals(newNode.getMonitoringBaseElement())
-				&& ((WatchValueTreeNode) e).getWatchedElementString().equals(newNode.getWatchedElementString());
+		return e instanceof final WatchValueTreeNode watchTreeNode
+				&& watchTreeNode.getMonitoringBaseElement().equals(newNode.getMonitoringBaseElement())
+				&& watchTreeNode.getWatchedElementString().equals(newNode.getWatchedElementString());
 	}
 
 	public WatchValueTreeNode getNodeFromElement(final MonitoringElement monitoringElement) {

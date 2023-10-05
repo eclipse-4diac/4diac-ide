@@ -29,29 +29,33 @@ public class STAlgorithmImportedNamespaceAwareLocalScopeProvider extends Importe
 			final boolean ignoreCase) {
 		final var result = super.internalGetImportedNamespaceResolvers(context, ignoreCase);
 		if (context.eContainer() == null) {
-			final var resource = context.eResource();
-			if (resource instanceof final LibraryElementXtextResource libraryElementXtextResource) {
-				final LibraryElement libraryElement = libraryElementXtextResource.getLibraryElement();
-				if (libraryElement != null) {
-					if (libraryElement.getName() != null) {
-						final var fbTypeName = getQualifiedNameProvider().getFullyQualifiedName(libraryElement);
-						result.add(doCreateImportNormalizer(fbTypeName, true, ignoreCase));
-					}
-					final CompilerInfo compilerInfo = libraryElement.getCompilerInfo();
-					if (compilerInfo != null) {
-						final String packageName = compilerInfo.getPackageName();
-						if (packageName != null && !packageName.isEmpty()) {
-							final QualifiedName name = getQualifiedNameConverter().toQualifiedName(packageName);
-							if (name != null && !name.isEmpty()) {
-								result.add(doCreateImportNormalizer(name, true, ignoreCase));
-							}
-						}
-						result.addAll(super.internalGetImportedNamespaceResolvers(compilerInfo, ignoreCase));
+			final CompilerInfo compilerInfo = getCompilerInfo(context);
+			if (compilerInfo != null) {
+				final String packageName = compilerInfo.getPackageName();
+				if (packageName != null && !packageName.isEmpty()) {
+					final QualifiedName name = getQualifiedNameConverter().toQualifiedName(packageName);
+					if (name != null && !name.isEmpty()) {
+						result.add(doCreateImportNormalizer(name, true, ignoreCase));
 					}
 				}
+				result.addAll(super.internalGetImportedNamespaceResolvers(compilerInfo, ignoreCase));
 			}
 		}
 		return result;
+	}
+
+	protected static CompilerInfo getCompilerInfo(final EObject context) {
+		if (context.eResource() instanceof final LibraryElementXtextResource libraryElementXtextResource) {
+			return getCompilerInfo(libraryElementXtextResource.getLibraryElement());
+		}
+		return null;
+	}
+
+	protected static CompilerInfo getCompilerInfo(final LibraryElement libraryElement) {
+		if (libraryElement != null) {
+			return libraryElement.getCompilerInfo();
+		}
+		return null;
 	}
 
 	@Override

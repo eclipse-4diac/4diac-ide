@@ -520,6 +520,11 @@
                     	property="org.eclipse.core.resources.extension"
                      	value="fbt">
            			</test>
+           			<test
+       		 			forcePluginActivation="true"	
+                    	property="org.eclipse.core.resources.extension"
+                     	value="sub">
+           			</test>
                		<test
                		 	forcePluginActivation="true"	
                     	property="org.eclipse.core.resources.extension"
@@ -703,4 +708,18 @@
          </enabledWhen>
       </page>
    </extension>
+   
+   <extension
+         point="org.eclipse.ltk.ui.refactoring.changePreviewViewers">
+      <changePreviewViewer
+            class="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteStructChangeViewer"
+            id="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteStructChangeViewer">
+         <enablement>
+         <or>
+         <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeInterfaceChange"/>
+         </or>
+         </enablement>
+      </changePreviewViewer>
+   </extension>
+   
 </plugin>

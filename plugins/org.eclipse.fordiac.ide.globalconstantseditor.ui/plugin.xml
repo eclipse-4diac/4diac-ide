@@ -480,6 +480,12 @@
              id="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsTypeInfoTab"
              label="TypeInfo">
        </propertyTab>
+       <propertyTab
+             afterTab="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsTypeInfoTab"
+             category="GlobalConstants"
+             id="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsAttributeTab"
+             label="Attributes">
+       </propertyTab>
     </propertyTabs>
  </extension>
  <extension
@@ -490,6 +496,14 @@
              class="org.eclipse.fordiac.ide.globalconstantseditor.ui.properties.GlobalConstantsTypeInfoSection"
              id="org.eclipse.fordiac.ide.globalconstantseditor.ui.properties.GlobalConstantsTypeInfoSection"
              tab="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsTypeInfoTab">
+          <input
+                type="org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsEditor">
+          </input>
+       </propertySection>
+       <propertySection
+             class="org.eclipse.fordiac.ide.globalconstantseditor.ui.properties.GlobalConstantsAttributeSection"
+             id="org.eclipse.fordiac.ide.globalconstantseditor.ui.properties.GlobalConstantsAttributeSection"
+             tab="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsAttributeTab">
           <input
                 type="org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsEditor">
           </input>

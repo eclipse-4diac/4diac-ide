@@ -18,35 +18,31 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationEditableRule;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
-import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
-import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.ide.ui.handlers.NatTableHandler;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
+import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -54,14 +50,8 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
-import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
-import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
-import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridLayout;
@@ -77,23 +67,14 @@ public class InstancePropertySection extends AbstractSection {
 	private static final int ONE_COLUMN = 1;
 	private static final int TWO_COLUMNS = 2;
 
-	private static final int NAME_COL_ID = 0;
-	private static final int TYPE_COL_ID = 1;
-	private static final int INITIAL_VALUE_COL_ID = 2;
-	private static final int COMMENT_COL_ID = 3;
-	public static final int VISIBLE_COL_ID = 4;
-	public static final int ISVARCONFIG_COL_ID = 5;
-
-	private static final int COL_COUNT = 6;
-
 	private Text nameText;
 	private Text commentText;
 
 	private NatTable inputTable;
 	private NatTable outputTable;
 
-	private VarDeclarationListProvider inputDataProvider;
-	private VarDeclarationListProvider outputDataProvider;
+	private IChangeableRowDataProvider<VarDeclaration> inputDataProvider;
+	private IChangeableRowDataProvider<VarDeclaration> outputDataProvider;
 
 	IAction[] defaultCopyPasteCut = new IAction[3];
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
@@ -134,18 +115,30 @@ public class InstancePropertySection extends AbstractSection {
 		inputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
 		outputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
 
-		inputDataProvider = new VarDeclarationListProvider(new ArrayList<>(), true);
-		outputDataProvider = new VarDeclarationListProvider(new ArrayList<>(), false);
+		inputDataProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+		outputDataProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
 
-		final DataLayer inputDataLayer = new DataLayer(inputDataProvider);
-		configureDataLayerLabels(inputDataLayer, true);
-		final DataLayer outputDataLayer = new DataLayer(outputDataProvider);
-		configureDataLayerLabels(outputDataLayer, false);
+		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputDataProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputDataProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
 
-		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, new ColumnDataProvider(),
-				inputDataProvider.getEditableRule());
-		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer, new ColumnDataProvider(),
-				outputDataProvider.getEditableRule());
+		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputDataProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputDataProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+
+		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer,
+				new VarDeclarationColumnProvider(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG),
+				new VarDeclarationEditableRule(IEditableRule.ALWAYS_EDITABLE,
+						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer,
+				new VarDeclarationColumnProvider(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG),
+				new VarDeclarationEditableRule(IEditableRule.ALWAYS_EDITABLE,
+						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG,
+						VarDeclarationEditableRule.DEFAULT_EDITABLE_NO_INITIAL_VALUE));
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
@@ -162,76 +155,6 @@ public class InstancePropertySection extends AbstractSection {
 		tableSectionComposite.layout();
 	}
 
-	private void configureDataLayerLabels(final DataLayer dataLayer, final boolean isInput) {
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (isInput) {
-				configureDataLayerLabelsInputs(configLabels, columnPosition, rowPosition);
-			} else {
-				configureDataLayerLabelsOutputs(configLabels, columnPosition, rowPosition);
-			}
-		});
-	}
-
-	private void configureDataLayerLabelsOutputs(final LabelStack configLabels, final int columnPosition,
-			final int rowPosition) {
-		final VarDeclaration rowItem = outputDataProvider.getRowObject(rowPosition);
-		final FBType fbType = rowItem.getFBNetworkElement().getType();
-		final EList<VarDeclaration> varDeclarations = fbType != null ? fbType.getInterfaceList().getOutputVars() : null;
-
-		final String defaultComment = getDefaultComment(getType(), rowPosition, varDeclarations);
-		configureColumns(configLabels, columnPosition, rowItem, defaultComment);
-	}
-
-	private void configureDataLayerLabelsInputs(final LabelStack configLabels, final int columnPosition,
-			final int rowPosition) {
-		final VarDeclaration rowItem = inputDataProvider.getRowObject(rowPosition);
-		final FBType fbType = rowItem.getFBNetworkElement().getType();
-		final EList<VarDeclaration> varDeclarations = fbType != null ? fbType.getInterfaceList().getInputVars() : null;
-
-		final String defaultComment = getDefaultComment(getType(), rowPosition, varDeclarations);
-
-		if (columnPosition == INITIAL_VALUE_COL_ID && rowItem.getValue().hasError()) {
-			configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-		}
-		configureColumns(configLabels, columnPosition, rowItem, defaultComment);
-	}
-
-	private static String getDefaultComment(final INamedElement type, final int rowPosition,
-			final EList<VarDeclaration> varDeclarations) {
-		if (type instanceof final StructManipulator structManipulator) {
-			final List<VarDeclaration> variableList = structManipulator.getStructType().getMemberVariables();
-			if (!variableList.isEmpty()) {
-				return variableList.get(rowPosition).getComment();
-			}
-		} else if (varDeclarations != null) {
-			return varDeclarations.get(rowPosition).getComment();
-		}
-		return null;
-	}
-
-	private static void configureColumns(final LabelStack configLabels, final int columnPosition,
-			final VarDeclaration rowItem,
-			final String defaultComment) {
-		if (columnPosition == INITIAL_VALUE_COL_ID && !InitialValueHelper.hasInitalValue(rowItem)
-				|| columnPosition == COMMENT_COL_ID && defaultComment != null
-				&& rowItem.getComment().equals(defaultComment)) {
-			configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
-		}
-		if (columnPosition == NAME_COL_ID || columnPosition == COMMENT_COL_ID) {
-			// We want to align the pin names and comments to the left side
-			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-		}
-		if (columnPosition == INITIAL_VALUE_COL_ID) {
-			configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
-		}
-		if (columnPosition == VISIBLE_COL_ID) {
-			configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
-		}
-		if (columnPosition == ISVARCONFIG_COL_ID) {
-			configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
-		}
-	}
-
 	protected void createFBInfoGroup(final Composite parent) {
 		final Composite fbInfoGroup = getWidgetFactory().createComposite(parent);
 		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).applyTo(fbInfoGroup);
@@ -241,7 +164,7 @@ public class InstancePropertySection extends AbstractSection {
 		nameText = createGroupText(fbInfoGroup, true);
 		nameText.addModifyListener(e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeFBNetworkElementName(getType(), nameText.getText()));
+			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
 		});
 
@@ -250,7 +173,7 @@ public class InstancePropertySection extends AbstractSection {
 
 		commentText = createGroupText(fbInfoGroup, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false)
-		.hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
+				.hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
 		commentText.addModifyListener(e -> {
 			removeContentAdapter();
 			final Command cmd = createChangeCommentCommand();
@@ -330,8 +253,9 @@ public class InstancePropertySection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
-		inputDataProvider.setInput(getType());
-		outputDataProvider.setInput(getType());
+
+		inputDataProvider.setInput(getType().getInterface().getInputVars());
+		outputDataProvider.setInput(getType().getInterface().getOutputVars());
 
 		inputTable.refresh();
 		outputTable.refresh();
@@ -368,206 +292,6 @@ public class InstancePropertySection extends AbstractSection {
 		if (getType() != null) {
 			getType().eAdapters().remove(fbnElementAdapter);
 			getType().getInterface().eAdapters().remove(interfaceAdapter);
-		}
-	}
-
-	protected static boolean isExpandedSubAppPinAndConnected(final VarDeclaration rowObject) {
-		return rowObject.getFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded()
-				&& !rowObject.getInputConnections().isEmpty() && !rowObject.getOutputConnections().isEmpty();
-	}
-
-	private class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> {
-		private final boolean isInputData;
-
-		public VarDeclarationListProvider(final List<VarDeclaration> list, final boolean isInputData) {
-
-			super(list, new VarDeclarationColumnAccessor(isInputData));
-			this.isInputData = isInputData;
-		}
-
-		@Override
-		public int getRowCount() {
-			if (this.list != null) {
-				return super.getRowCount();
-			}
-			return 0;
-		}
-
-		public void setInput(final Object inputElement) {
-			if (inputElement instanceof final FBNetworkElement fbNetworkElement) {
-				if (isInputData) {
-					this.list = fbNetworkElement.getInterface().getInputVars();
-				} else {
-					this.list = fbNetworkElement.getInterface().getOutputVars();
-				}
-			}
-		}
-
-		public IEditableRule getEditableRule() {
-			return new IEditableRule() {
-				@Override
-				public boolean isEditable(final int columnIndex, final int rowIndex) {
-					return (columnIndex == INITIAL_VALUE_COL_ID && isInputData) || columnIndex == COMMENT_COL_ID
-							|| columnIndex == VISIBLE_COL_ID || columnIndex == ISVARCONFIG_COL_ID;
-				}
-
-				@Override // Added the visible column stuff
-				public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
-					return (cell.getColumnIndex() == INITIAL_VALUE_COL_ID && isInputData)
-							|| cell.getColumnIndex() == COMMENT_COL_ID || cell.getColumnIndex() == VISIBLE_COL_ID
-							|| cell.getColumnIndex() == ISVARCONFIG_COL_ID;
-				}
-			};
-		}
-	}
-
-	public class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<VarDeclaration> {
-		protected final boolean isInputData;
-
-		public VarDeclarationColumnAccessor(final boolean isInputData) {
-			this.isInputData = isInputData;
-		}
-
-		@Override
-		public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
-			switch (columnIndex) {
-			case NAME_COL_ID:
-				return rowObject.getName();
-			case TYPE_COL_ID:
-				return rowObject.getFullTypeName();
-			case INITIAL_VALUE_COL_ID:
-				return InitialValueHelper.getInitialOrDefaultValue(rowObject);
-			case COMMENT_COL_ID:
-				return rowObject.getComment();
-			case VISIBLE_COL_ID: // I added
-				return rowObject.isVisible();
-			case ISVARCONFIG_COL_ID:
-				return rowObject.isVarConfig();
-			default:
-				return null;
-			}
-		}
-
-		@Override
-		public void setDataValue(final VarDeclaration rowObject, final int columnIndex, final Object newValue) {
-			Command cmd = null;
-			switch (columnIndex) {
-			case INITIAL_VALUE_COL_ID:
-				if (!isInputData) {
-					return;
-				}
-				cmd = new ChangeValueCommand(rowObject, (String) newValue);
-				break;
-			case COMMENT_COL_ID:
-				cmd = new ChangeCommentCommand(rowObject, (String) newValue);
-				break;
-			case VISIBLE_COL_ID:
-				if (((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
-						|| (!rowObject.isIsInput() && rowObject.getOutputConnections().isEmpty()))
-						&& !isExpandedSubAppPinAndConnected(rowObject)) {
-					final Boolean newValueBool = NatTableHandler.parseNewValueObject(newValue);
-					if (newValueBool != null) {
-						cmd = new HidePinCommand(rowObject, newValueBool.booleanValue());
-					}
-				}
-				break;
-			case ISVARCONFIG_COL_ID:
-				final Boolean newValueBool = NatTableHandler.parseNewValueObject(newValue);
-				if (newValueBool != null) {
-					cmd = new ChangeVarConfigurationCommand(rowObject, newValueBool.booleanValue());
-				}
-				break;
-			default:
-				return;
-			}
-			executeCommand(cmd);
-		}
-
-		@Override
-		public int getColumnCount() {
-			// it can be used to show VarConfig only in inputs table
-			if (!isInputData) {
-				return COL_COUNT - 1;
-			}
-			return COL_COUNT;
-		}
-
-		@Override
-		public String getColumnProperty(final int columnIndex) {
-			switch (columnIndex) {
-			case NAME_COL_ID:
-				return FordiacMessages.Name;
-			case TYPE_COL_ID:
-				return FordiacMessages.Type;
-			case INITIAL_VALUE_COL_ID:
-				return FordiacMessages.InitialValue;
-			case COMMENT_COL_ID:
-				return FordiacMessages.Comment;
-			case VISIBLE_COL_ID:
-				return FordiacMessages.Visible;
-			case ISVARCONFIG_COL_ID:
-				return FordiacMessages.VarConfig;
-			default:
-				return null;
-			}
-		}
-
-		@Override
-		public int getColumnIndex(final String propertyName) {
-			switch (propertyName) {
-			case "Name":
-				return NAME_COL_ID;
-			case "Type":
-				return TYPE_COL_ID;
-			case "Initial Value":
-				return INITIAL_VALUE_COL_ID;
-			case "Comment":
-				return COMMENT_COL_ID;
-			case "Visible":
-				return VISIBLE_COL_ID;
-			case "VarConfig":
-				return ISVARCONFIG_COL_ID;
-			default:
-				return -1;
-			}
-		}
-	}
-
-	public static class ColumnDataProvider implements IDataProvider {
-
-		@Override
-		public Object getDataValue(final int columnIndex, final int rowIndex) {
-			switch (columnIndex) {
-			case NAME_COL_ID:
-				return FordiacMessages.Name;
-			case TYPE_COL_ID:
-				return FordiacMessages.Type;
-			case INITIAL_VALUE_COL_ID:
-				return FordiacMessages.InitialValue;
-			case COMMENT_COL_ID:
-				return FordiacMessages.Comment;
-			case VISIBLE_COL_ID:
-				return FordiacMessages.Visible;
-			case ISVARCONFIG_COL_ID:
-				return FordiacMessages.VarConfig;
-			default:
-				return FordiacMessages.EmptyField;
-			}
-		}
-
-		@Override
-		public int getColumnCount() {
-			return COL_COUNT;
-		}
-
-		@Override
-		public int getRowCount() {
-			return 1;
-		}
-
-		@Override
-		public void setDataValue(final int columnIndex, final int rowIndex, final Object newValue) {
-			// Setting data values to the header is not supported
 		}
 	}
 }

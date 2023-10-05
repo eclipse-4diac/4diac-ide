@@ -25,7 +25,7 @@ public class AbstractViewRenameEditPolicy extends DirectEditPolicy {
 	protected Command getDirectEditCommand(DirectEditRequest request) {
 		if (getHost() instanceof AbstractViewEditPart) {
 			AbstractViewEditPart viewEditPart = (AbstractViewEditPart) getHost();
-			return new ChangeNameCommand(viewEditPart.getINamedElement(), (String) request.getCellEditor().getValue());
+			return ChangeNameCommand.forName(viewEditPart.getINamedElement(), (String) request.getCellEditor().getValue());
 		}
 		return null;
 	}

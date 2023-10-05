@@ -21,9 +21,11 @@ package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationWithVarConfigColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationWithVarConfigColumnProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
@@ -32,14 +34,11 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
-import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.swt.widgets.Group;
 
 public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
@@ -54,24 +53,19 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 
 	@Override
 	public void setupInputTable(final Group inputsGroup) {
-		inputProvider = new VarDeclarationListProvider(new VarDeclarationWithVarConfigColumnAccessor(this));
-		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
+		inputProvider = new ChangeableListDataProvider<>(
+				new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
+		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG);
+		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new VarDeclarationWithVarConfigColumnProvider(), getSectionEditableRule(),
-				new DataTypeSelectionButton(typeSelection), this, true);
+				new VarDeclarationColumnProvider(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG),
+				getSectionEditableRule(), new DataTypeSelectionButton(typeSelection), this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.configure();
-	}
-
-	@Override
-	protected void configureLabels(final ListDataProvider<VarDeclaration> provider, final LabelStack configLabels,
-			final int columnPosition, final int rowPosition) {
-		super.configureLabels(provider, configLabels, columnPosition, rowPosition);
-		if (columnPosition == I4diacNatTableUtil.VAR_CONFIG) {
-			configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
-		}
 	}
 
 	@Override

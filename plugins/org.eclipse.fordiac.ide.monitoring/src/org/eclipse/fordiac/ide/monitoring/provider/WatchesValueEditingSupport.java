@@ -43,8 +43,7 @@ public class WatchesValueEditingSupport extends EditingSupport {
 
 	@Override
 	protected void setValue(final Object element, final Object value) {
-		if (element instanceof WatchValueTreeNode) {
-			final WatchValueTreeNode node = (WatchValueTreeNode) element;
+		if (element instanceof final WatchValueTreeNode node) {
 			final MonitoringElement monitoringElement = (MonitoringElement) node.getMonitoringBaseElement();
 
 			if (isValid((String) value, monitoringElement)) {
@@ -75,11 +74,10 @@ public class WatchesValueEditingSupport extends EditingSupport {
 			final IInterfaceElement ie = ((WatchValueTreeNode) element).getMonitoringBaseElement().getPort()
 					.getInterfaceElement();
 			if (value != null && ie.getType() != null
-					&& WatchValueTreeNodeUtils.isHexDecorationNecessary(value,
-							ie.getType())) {
+					&& WatchValueTreeNodeUtils.isHexDecorationNecessary(value, ie.getType())) {
 				return WatchValueTreeNodeUtils.decorateHexNumber(value);
 			}
-			return WatchValueTreeNodeUtils.decorateCellValue(ie.getType(), value);
+			return value;
 		}
 		return ""; //$NON-NLS-1$
 	}
@@ -91,8 +89,7 @@ public class WatchesValueEditingSupport extends EditingSupport {
 
 	@Override
 	protected boolean canEdit(final Object element) {
-		if (element instanceof WatchValueTreeNode) {
-			final WatchValueTreeNode watchNode = (WatchValueTreeNode) element;
+		if (element instanceof final WatchValueTreeNode watchNode) {
 			return !(watchNode.getMonitoringBaseElement().getPort().getInterfaceElement() instanceof Event)
 					&& !watchNode.isStructRootNode();
 		}
@@ -104,7 +101,7 @@ public class WatchesValueEditingSupport extends EditingSupport {
 			final IInterfaceElement ie = monElement.getPort().getInterfaceElement();
 			final String validationMsg = (ie instanceof VarDeclaration)
 					? VariableOperations.validateValue((VarDeclaration) ie, newValue)
-							: null;
+					: null;
 			if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
 				ErrorMessenger.popUpErrorMessage(validationMsg);
 				return false;
@@ -122,8 +119,7 @@ public class WatchesValueEditingSupport extends EditingSupport {
 	}
 
 	public static void writeOnlineValueToOffline(final MonitoringElement element, final String value) {
-		if (element.getPort() != null
-				&& element.getPort().getSystem() != null
+		if (element.getPort() != null && element.getPort().getSystem() != null
 				&& element.getPort().getSystem().getCommandStack() != null) {
 			final CommandStack cmdStack = element.getPort().getSystem().getCommandStack();
 			cmdStack.execute(new ChangeValueCommand((VarDeclaration) element.getPort().getInterfaceElement(), value));

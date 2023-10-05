@@ -16,14 +16,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.fordiac.ide.gef.nat.FBColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.FBColumnProvider;
-import org.eclipse.fordiac.ide.gef.nat.FBListProvider;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementColumnProvider;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInternalFBOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.IndexUpDown;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalFBCommand;
@@ -33,16 +32,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.nat.FbSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -50,7 +51,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InternalFbsSection extends AbstractSection implements I4diacNatTableUtil {
-	protected FBListProvider provider;
+	protected IChangeableRowDataProvider<FB> provider;
 	protected Map<String, List<String>> typeSelection = new HashMap<>();
 	protected NatTable table;
 
@@ -73,22 +74,11 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
-		provider = new FBListProvider(new ArrayList<>(), new FBColumnAccessor(this, null));
+		provider = new ChangeableListDataProvider<>(new FBColumnAccessor(this));
 		final DataLayer dataLayer = new DataLayer(provider);
-		final IConfigLabelAccumulator dataLayerLabelAccumulator = dataLayer.getConfigLabelAccumulator();
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (dataLayerLabelAccumulator != null) {
-				dataLayerLabelAccumulator.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-			}
-			if (columnPosition == I4diacNatTableUtil.TYPE) {
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-			}
-			if (columnPosition == I4diacNatTableUtil.NAME || columnPosition == I4diacNatTableUtil.COMMENT) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			}
-		});
-		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new FBColumnProvider(),
-				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
+		dataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(provider));
+		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new TypedElementColumnProvider(),
+				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection, new FbSelectionTreeContentProvider()), this, false);
 		table.configure();
 
 		buttons.bindToTableViewer(table, this,
@@ -117,7 +107,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	}
 
 	private FB getLastSelectedFB() {
-		return (FB) provider.getLastSelectedVariable(table);
+		return (FB) NatTableWidgetFactory.getLastSelectedVariable(table);
 	}
 
 	@Override
@@ -145,6 +135,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		table.refresh();
 
 	}
+
 	@Override
 	public boolean isEditable() {
 		return true;
@@ -165,7 +156,6 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		final BaseFBType currentType = getType();
 		if (currentType != null) {
 			provider.setInput(currentType.getInternalFbs());
-			provider.setTypeLib(currentType.getTypeLibrary());
 			initTypeSelection(getTypeLibrary());
 		}
 	}

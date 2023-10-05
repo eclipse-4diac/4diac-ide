@@ -18,7 +18,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class ModelTest {
 
-	public void test() {
+	private static final int MAX_OFFSET = 9;
+	private static final int MIN_OFFSET = 8;
+
+	private ModelTest() {
+		// Nothing to do here
+	}
+
+	public static void test() {
 		final SubApp subApp = LibraryElementFactory.eINSTANCE.createSubApp();
 		subApp.setComment("ASSUMPTION VV occurs within [1,2]ms   \nGUARANTEE Reaction(VV,BB) within [6,39]ms \n"); //$NON-NLS-1$
 		subApp.setComment(
@@ -29,8 +36,8 @@ public class ModelTest {
 
 		assert (contract.getAssumptions().get(0).getMin() == 1);
 		assert (contract.getAssumptions().get(0).getMax() == 2);
-		assert (((AssumptionWithOffset) contract.getAssumptions().get(1)).getMinOffset() == 8);
-		assert (((AssumptionWithOffset) contract.getAssumptions().get(1)).getMaxOffset() == 9);
+		assert (((AssumptionWithOffset) contract.getAssumptions().get(1)).getMinOffset() == MIN_OFFSET);
+		assert (((AssumptionWithOffset) contract.getAssumptions().get(1)).getMaxOffset() == MAX_OFFSET);
 	}
 
 }

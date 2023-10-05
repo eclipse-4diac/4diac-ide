@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2017 AIT, fortiss GmbH, Profactor GmbH
- * 				 2018 - 2019 Johannes Kepler University
+ * Copyright (c) 2012, 2023 AIT, fortiss GmbH, Profactor GmbH
+ * 				            Johannes Kepler University
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,7 @@
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - reworked update fb type to accept also supapps
  *   Alois Zoitl - fixed issues in maintaining FB parameters
+ *   Martin Melik Merkumians - preserves VarConfig and Visible attributes at type update
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
@@ -68,6 +70,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
 		createValues();
 		transferInstanceComments();
+		transferVarDeclarationAttributes();
 	}
 
 	protected void setEntry(final TypeEntry entry) {
@@ -147,7 +150,8 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	private static boolean isValidTypeEntry(final TypeEntry entry) {
-		// check that entry is still current in the type library (i.e., we can find the entry using its file)
+		// check that entry is still current in the type library (i.e., we can find the
+		// entry using its file)
 		return entry != null && entry.getFile() != null && entry.getFile().exists() && entry.getTypeLibrary() != null
 				&& entry.getTypeLibrary().getTypeEntry(entry.getFile()) == entry;
 	}

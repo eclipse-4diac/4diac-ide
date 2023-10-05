@@ -32,6 +32,12 @@
                id="org.eclipse.fordiac.ide.datatypeeditor.propertyDataTypeInfoTab"
                label="TypeInfo">
          </propertyTab>
+         <propertyTab
+               afterTab="org.eclipse.fordiac.ide.datatypeeditor.propertyDataTypeInfoTab"
+               category="DataType"
+               id="org.eclipse.fordiac.ide.datatypeeditor.propertyStructAttributeTab"
+               label="Attributes">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -42,6 +48,14 @@
                class="org.eclipse.fordiac.ide.datatypeeditor.properties.DataTypeInfoSection"
                id="org.eclipse.fordiac.ide.datatypeeditor.properties.DataTypeInfoSection"
                tab="org.eclipse.fordiac.ide.datatypeeditor.propertyDataTypeInfoTab">
+   		<input
+                  type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite">
+        </input>  
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.datatypeeditor.properties.StructAttributeSection"
+               id="org.eclipse.fordiac.ide.datatypeeditor.properties.StructAttributeSection"
+               tab="org.eclipse.fordiac.ide.datatypeeditor.propertyStructAttributeTab">
    		<input
                   type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite">
         </input>  

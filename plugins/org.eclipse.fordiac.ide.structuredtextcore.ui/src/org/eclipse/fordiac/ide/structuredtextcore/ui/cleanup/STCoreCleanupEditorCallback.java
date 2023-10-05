@@ -13,11 +13,14 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.text.DocumentRewriteSession;
+import org.eclipse.jface.text.DocumentRewriteSessionType;
 import org.eclipse.jface.text.Region;
+import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.xtext.ui.editor.IXtextEditorCallback;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.formatting.IContentFormatterFactory;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
+import org.eclipse.xtext.ui.editor.model.XtextDocument;
 
 import com.google.inject.Inject;
 
@@ -47,10 +50,29 @@ public class STCoreCleanupEditorCallback extends IXtextEditorCallback.NullImpl {
 	}
 
 	protected void performSaveActions(final XtextEditor editor) {
-		final IXtextDocument document = editor.getDocument();
-		if (contentFormatterFactory != null && preferences.isEnableFormat()) {
-			contentFormatterFactory.createConfiguredFormatter(null, null).format(document,
-					new Region(0, document.getLength()));
+		if (preferences.isEnableFormat()) {
+			performFormat(editor);
+		}
+	}
+
+	protected void performFormat(final XtextEditor editor) {
+		if (contentFormatterFactory == null) {
+			return;
+		}
+
+		final IContentFormatter formatter = contentFormatterFactory.createConfiguredFormatter(null, null);
+		final XtextDocument document = (XtextDocument) editor.getDocument();
+		final String savedContents = document.get();
+
+		final DocumentRewriteSession rewriteSession = document
+				.startRewriteSession(DocumentRewriteSessionType.SEQUENTIAL);
+		try {
+			formatter.format(document, new Region(0, document.getLength()));
+		} catch (final Exception e) {
+			document.set(savedContents);
+			throw e;
+		} finally {
+			document.stopRewriteSession(rewriteSession);
 		}
 	}
 }

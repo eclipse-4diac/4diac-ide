@@ -83,6 +83,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
@@ -391,6 +392,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateInputPrimitive((InputPrimitive)value, diagnostics, context);
 			case LibraryElementPackage.INTERFACE_LIST:
 				return validateInterfaceList((InterfaceList)value, diagnostics, context);
+			case LibraryElementPackage.ITYPED_ELEMENT:
+				return validateITypedElement((ITypedElement)value, diagnostics, context);
 			case LibraryElementPackage.IVAR_ELEMENT:
 				return validateIVarElement((IVarElement)value, diagnostics, context);
 			case LibraryElementPackage.LIBRARY_ELEMENT:
@@ -1465,6 +1468,25 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateInterfaceList(InterfaceList interfaceList, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(interfaceList, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateITypedElement(ITypedElement iTypedElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(iTypedElement, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(iTypedElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(iTypedElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(iTypedElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(iTypedElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(iTypedElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(iTypedElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(iTypedElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(iTypedElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validateINamedElement_validateName(iTypedElement, diagnostics, context);
+		return result;
 	}
 
 	/**

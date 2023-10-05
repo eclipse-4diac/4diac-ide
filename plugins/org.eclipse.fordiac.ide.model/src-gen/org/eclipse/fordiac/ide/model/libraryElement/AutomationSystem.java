@@ -39,7 +39,7 @@ import org.eclipse.gef.commands.CommandStack;
  * @model
  * @generated
  */
-public interface AutomationSystem extends LibraryElement, ConfigurableObject {
+public interface AutomationSystem extends LibraryElement {
 	/**
 	 * Returns the value of the '<em><b>Application</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.Application}.

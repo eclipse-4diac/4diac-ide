@@ -227,11 +227,10 @@
                        filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
                        tab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters">
       </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.ApplicationAttributeSection"
+      <propertySection class="org.eclipse.fordiac.ide.gef.properties.AttributeSection"
+      				   filter="org.eclipse.fordiac.ide.gef.filters.AttributeFilter"
                        id="org.eclipse.fordiac.ide.application.properties.AttributeSection"
                        tab="org.eclipse.fordiac.ide.application.propertyAttributeTab">
-        <input type="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart">
-        </input>
       </propertySection>
       <propertySection class="org.eclipse.fordiac.ide.application.properties.VarConfigurationSection"
                        id="org.eclipse.fordiac.ide.application.properties.VarConfigSection"

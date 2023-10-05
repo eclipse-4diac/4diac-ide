@@ -61,7 +61,7 @@ public final class ValidateProject {
 			typeLibrary.getSubAppTypes().values().forEach(SubAppTypeEntry::getType);
 			typeLibrary.getAdapterTypes().values().forEach(AdapterTypeEntry::getType);
 			typeLibrary.getFbTypes().values().forEach(FBTypeEntry::getType);
-			typeLibrary.getDataTypeLibrary().getDerivedDataTypes().values().forEach(DataTypeEntry::getType);
+			typeLibrary.getDataTypeLibrary().getDerivedDataTypes().forEach(DataTypeEntry::getType);
 		}
 	}
 

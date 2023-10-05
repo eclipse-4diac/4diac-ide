@@ -13,7 +13,6 @@
 
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -30,8 +29,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class TestEccGenerator {
 	private final ECC ecc;
+	// caseCount is for positioning purposes
 	private int caseCount;
-	private final List<String> algorithmNames = new ArrayList<>();
 
 	public TestEccGenerator(final ECC ecc, final int caseCount) {
 		this.ecc = ecc;
@@ -42,7 +41,7 @@ public class TestEccGenerator {
 		final ECTransition transition = LibraryElementFactory.eINSTANCE.createECTransition();
 		if (input != null) {
 			transition.setConditionEvent(input);
-			transition.setConditionExpression("");
+			transition.setConditionExpression(""); //$NON-NLS-1$
 		}
 		transition.setSource(from);
 		transition.setDestination(to);
@@ -71,43 +70,84 @@ public class TestEccGenerator {
 		state.setPosition(pS);
 	}
 
-	public ECAction createAction() {
+	public static ECAction createAction() {
 		return LibraryElementFactory.eINSTANCE.createECAction();
 	}
 
-	public Algorithm createMatchAlgorithm(final BasicFBType fb, final List<VarDeclaration> outputData,
-			final String name) {
-
-		if (algorithmNames.contains(name)) {
-			return fb.getAlgorithmNamed(name);
+	public static Algorithm createMatchAlgorithm(final BasicFBType fb, final List<VarDeclaration> inputData,
+			final String outputPinName) {
+		final String algName = "matchAlgo"; //$NON-NLS-1$
+		if (fb.getAlgorithmNamed(algName) != null) {
+			return fb.getAlgorithmNamed(algName);
 		}
-		algorithmNames.add(name);
 		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-		alg.setName(name);
+		alg.setName(algName);
 
 		final StringBuilder text = new StringBuilder();
 
-		text.append("ALGORITHM " + name + "\n");
-		for (final VarDeclaration varDecl : outputData) {
-			final String varName = varDecl.getName().substring(0, varDecl.getName().indexOf('_'));
-			text.append("if " + varName + "_expected = " + varName + "_received then\n");
-			text.append(varName + "_matchData := true;\n");
-			text.append("else\n");
-			text.append(varName + "_matchData := false;\n");
-			text.append("end_if;\n");
+		text.append("ALGORITHM " + alg.getName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		text.append("IF "); //$NON-NLS-1$
+		for (int i = 0; i < inputData.size(); i += 2) {
+			if (i > 0) {
+				text.append(" AND ");//$NON-NLS-1$
+			}
+			text.append(inputData.get(i).getName() + " = ");//$NON-NLS-1$
+			text.append(inputData.get(i + 1).getName());
 		}
+		text.append("\nTHEN\n");//$NON-NLS-1$
+		text.append(outputPinName + ":= BOOL#TRUE;\n");//$NON-NLS-1$
+		text.append("ELSE\n"); //$NON-NLS-1$
+		text.append(outputPinName + " := BOOL#FALSE;\n");//$NON-NLS-1$
+		text.append("END_IF;\n"); //$NON-NLS-1$
 		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
-		text.append("\n\n\n");
+		text.append("\n\n\n"); //$NON-NLS-1$
 
 		alg.setText(text.toString());
 		fb.getCallables().add(alg);
 		return alg;
 	}
 
-	public Algorithm createTestFbAlgortihm(final BasicFBType fb, final TestSuite testSuite, final String name) {
+	public static Algorithm createTestFbAlgorithm(final BasicFBType fb, final String name) {
 		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		alg.setName(name);
 		fb.getCallables().add(alg);
+		return alg;
+	}
+
+	public static Algorithm createMuxFbAlgorithm(final BasicFBType fb, final String name) {
+		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
+		final StringBuilder text = new StringBuilder();
+		alg.setName("A_" + name); //$NON-NLS-1$
+		text.append("ALGORITHM A_" + name + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		text.append(fb.getInterfaceList().getOutputVars().get(0).getName());
+		text.append(":="); //$NON-NLS-1$
+		text.append("'" + name + "'"); //$NON-NLS-1$ //$NON-NLS-2$
+		text.append(";"); //$NON-NLS-1$
+		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
+		text.append("\n\n\n"); //$NON-NLS-1$
+
+		alg.setText(text.toString());
+		fb.getCallables().add(alg);
+
+		return alg;
+	}
+
+	public static Algorithm createTimeOutAlg(final BasicFBType fb) {
+		final String algName = "TimeOutAlg"; //$NON-NLS-1$
+		if (fb.getAlgorithmNamed(algName) != null) {
+			return fb.getAlgorithmNamed(algName);
+		}
+		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
+		final StringBuilder text = new StringBuilder();
+		alg.setName(algName);
+		text.append("ALGORITHM " + alg.getName() + "\n");//$NON-NLS-1$ //$NON-NLS-2$
+		text.append("timeOut.DT := t#1000ms; \n");//$NON-NLS-1$
+		text.append("\nEND_ALGORITHM"); //$NON-NLS-1$
+		text.append("\n\n\n"); //$NON-NLS-1$
+
+		alg.setText(text.toString());
+		fb.getCallables().add(alg);
+
 		return alg;
 	}
 
@@ -122,10 +162,12 @@ public class TestEccGenerator {
 		state.setPosition(pS);
 	}
 
-	public ECState getLast() {
+	public ECState getLastState() {
 		return getEcc().getECState().get(getEcc().getECState().size() - 1);
 	}
 
+	// getNtimesLast(0) returns the last and getNtimesLast(1) returns the one before
+	// the last state
 	public ECState getNTimesLast(final int i) {
 		return getEcc().getECState().get(getEcc().getECState().size() - i - 1);
 	}
@@ -140,6 +182,10 @@ public class TestEccGenerator {
 
 	public void decreaseCaseCount() {
 		caseCount--;
+	}
+
+	public void decreaseCaseCountBy(final int i) {
+		caseCount = caseCount - i;
 	}
 
 	public int getCaseCount() {

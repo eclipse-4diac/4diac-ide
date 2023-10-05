@@ -41,15 +41,20 @@ import com.google.inject.Inject;
 public class STFunctionValidator extends AbstractSTFunctionValidator {
 
 	@Inject
-	ResourceDescriptionsProvider resourceDescriptionsProvider;
+	private ResourceDescriptionsProvider resourceDescriptionsProvider;
 
 	@Inject
-	IContainer.Manager containerManager;
+	private IContainer.Manager containerManager;
 
 	public static final String ISSUE_CODE_PREFIX = "org.eclipse.fordiac.ide.structuredtextfunction."; //$NON-NLS-1$
 	public static final String DUPLICATE_FUNCTION_NAME = ISSUE_CODE_PREFIX + "duplicateFunctionName"; //$NON-NLS-1$
 	public static final String FUNCTION_NAME_MISMATCH = ISSUE_CODE_PREFIX + "functionNameMismatch"; //$NON-NLS-1$
 	public static final String MULTIPLE_FUNCTIONS = ISSUE_CODE_PREFIX + "multipleFunctions"; //$NON-NLS-1$
+
+	@Check
+	public void checkImports(final STFunctionSource source) {
+		checkImports(source, source.getName(), source.getImports());
+	}
 
 	@Check
 	public void checkControlFlow(final STFunction function) {

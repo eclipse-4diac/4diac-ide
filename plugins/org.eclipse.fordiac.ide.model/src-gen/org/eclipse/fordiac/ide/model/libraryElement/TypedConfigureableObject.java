@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * @model
  * @generated
  */
-public interface TypedConfigureableObject extends INamedElement, ConfigurableObject {
+public interface TypedConfigureableObject extends ITypedElement, ConfigurableObject {
 	/**
 	 * Returns the value of the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->

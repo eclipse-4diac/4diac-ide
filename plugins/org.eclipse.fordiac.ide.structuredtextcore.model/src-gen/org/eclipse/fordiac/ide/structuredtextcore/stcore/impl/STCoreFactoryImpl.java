@@ -90,8 +90,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 			case STCorePackage.ST_ARRAY_INITIALIZER_EXPRESSION: return createSTArrayInitializerExpression();
 			case STCorePackage.ST_ARRAY_INIT_ELEMENT: return createSTArrayInitElement();
 			case STCorePackage.ST_STATEMENT: return createSTStatement();
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT: return createSTAssignmentStatement();
-			case STCorePackage.ST_CALL_STATEMENT: return createSTCallStatement();
+			case STCorePackage.ST_ASSIGNMENT: return createSTAssignment();
 			case STCorePackage.ST_CALL_ARGUMENT: return createSTCallArgument();
 			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT: return createSTCallUnnamedArgument();
 			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT: return createSTCallNamedInputArgument();
@@ -365,20 +364,9 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * @generated
 	 */
 	@Override
-	public STAssignmentStatement createSTAssignmentStatement() {
-		STAssignmentStatementImpl stAssignmentStatement = new STAssignmentStatementImpl();
-		return stAssignmentStatement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public STCallStatement createSTCallStatement() {
-		STCallStatementImpl stCallStatement = new STCallStatementImpl();
-		return stCallStatement;
+	public STAssignment createSTAssignment() {
+		STAssignmentImpl stAssignment = new STAssignmentImpl();
+		return stAssignment;
 	}
 
 	/**

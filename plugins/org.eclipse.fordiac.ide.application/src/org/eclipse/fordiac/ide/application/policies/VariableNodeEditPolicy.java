@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionComm
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -27,14 +28,17 @@ import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateConnectionRequest;
 
-/** An EditPolicy which allows drawing Connections between VariableInterfaces. */
+/**
+ * An EditPolicy which allows drawing Connections between VariableInterfaces.
+ */
 public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 
 	@Override
 	protected AbstractConnectionCreateCommand createConnectionCreateCommand() {
 		final IInterfaceElement pin = (IInterfaceElement) getHost().getModel();
 		if ((pin instanceof VarDeclaration) && (!LinkConstraints.isWithConstraintOK(pin))) {
-			// Elements which are not connected by a with construct are not allowed to be connected
+			// Elements which are not connected by a with construct are not allowed to be
+			// connected
 			return null;
 		}
 
@@ -57,9 +61,16 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
 		final AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
 		final IInterfaceElement pin = (IInterfaceElement) getHost().getModel();
-		if (AbstractConnectionCreateCommand.isStructManipulatorDefPin(pin)
-				&& !(command instanceof StructDataConnectionCreateCommand)) {
-			// we are connecting to struct manipulator we need to switch to a StructDataConnectionCreatCommand
+
+		if (command instanceof StructDataConnectionCreateCommand) {
+			// if we drag from a struct manipulater but target is not a struct use normal
+			// data connection creation
+			if (!(pin.getType() instanceof StructuredType)) {
+				final DataConnectionCreateCommand structCmd = new DataConnectionCreateCommand(command.getParent());
+				structCmd.setSource(command.getSource());
+				request.setStartCommand(structCmd);
+			}
+		} else if (AbstractConnectionCreateCommand.shouldStructDataConnCreationBeUsed(pin, command.getSource())) {
 			final StructDataConnectionCreateCommand structCmd = new StructDataConnectionCreateCommand(
 					command.getParent());
 			structCmd.setSource(command.getSource());

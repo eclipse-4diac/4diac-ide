@@ -158,7 +158,6 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(AutomationSystem.class)) {
-			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
 			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,43 +10,43 @@
  *
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *   Martin Jobst - refactor to generic implementation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
+import java.util.List;
+
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
 public class VarDeclarationColumnProvider implements IDataProvider {
 
+	private final List<VarDeclarationTableColumn> columns;
+
+	public VarDeclarationColumnProvider() {
+		this(VarDeclarationTableColumn.DEFAULT_COLUMNS);
+	}
+
+	public VarDeclarationColumnProvider(final List<VarDeclarationTableColumn> columns) {
+		this.columns = columns;
+	}
+
 	@Override
 	public Object getDataValue(final int columnIndex, final int rowIndex) {
-		switch (columnIndex) {
-		case I4diacNatTableUtil.NAME:
-			return FordiacMessages.Name;
-		case I4diacNatTableUtil.TYPE:
-			return FordiacMessages.Type;
-		case I4diacNatTableUtil.COMMENT:
-			return FordiacMessages.Comment;
-		case I4diacNatTableUtil.INITIAL_VALUE:
-			return FordiacMessages.InitialValue;
-		default:
-			return FordiacMessages.EmptyField;
-		}
+		return columns.get(columnIndex).getDisplayName();
+	}
+
+	@Override
+	public void setDataValue(final int columnIndex, final int rowIndex, final Object newValue) {
+		throw new UnsupportedOperationException(); // Setting data values to the header is not supported
 	}
 
 	@Override
 	public int getColumnCount() {
-		return I4diacNatTableUtil.INITIAL_VALUE + 1;
+		return columns.size();
 	}
 
 	@Override
 	public int getRowCount() {
 		return 1;
-	}
-
-	@Override
-	public void setDataValue(final int columnIndex, final int rowIndex, final Object newValue) {
-		// Setting data values to the header is not supported
 	}
 }

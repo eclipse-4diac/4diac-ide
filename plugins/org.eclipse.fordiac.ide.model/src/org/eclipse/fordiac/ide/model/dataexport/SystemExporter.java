@@ -144,6 +144,7 @@ public class SystemExporter extends AbstractTypeExporter {
 				addXYAttributes(0, 0);
 				addParamsConfig(resource.getVarDeclarations());
 				new FBNetworkExporter(this).createFBNetworkElement(resource.getFBNetwork());
+				addAttributes(resource.getAttributes());
 				addEndElement();
 			}
 		}

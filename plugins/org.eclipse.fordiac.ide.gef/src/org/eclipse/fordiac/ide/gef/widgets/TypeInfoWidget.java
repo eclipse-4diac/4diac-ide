@@ -86,7 +86,7 @@ public class TypeInfoWidget implements CommandExecutor {
 	private Text typeText;
 	private Text descriptionText;
 
-	private boolean blockListeners;
+	protected boolean blockListeners;
 
 	private TableViewer versionViewer;
 	private AddDeleteWidget addDeleteVersionInfoButtons;
@@ -174,7 +174,7 @@ public class TypeInfoWidget implements CommandExecutor {
 	private void createVersionInfoGroup(final Composite parent) {
 		final Group versionInfoGroup = createGroup(parent, FordiacMessages.VersionInfo);
 		versionInfoGroup.setLayout(new GridLayout(2, false));
-		versionInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		versionInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		addDeleteVersionInfoButtons = new AddDeleteWidget();
 		addDeleteVersionInfoButtons.createControls(versionInfoGroup, getWidgetFactory());
@@ -240,7 +240,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		column4.setText(FordiacMessages.Date);
 		final TableColumn column5 = new TableColumn(table, SWT.LEFT);
 		column5.setText(FordiacMessages.Remarks);
-		final TableLayout layout = new TableLayout();
+		final TableLayout layout = new TableLayout(true);
 		layout.addColumnData(new ColumnWeightData(D_MIN, MAX_MINUS_T_MIN));
 		layout.addColumnData(new ColumnWeightData(D_MIN, MAX_MINUS_MIN));
 		layout.addColumnData(new ColumnWeightData(D_MIN, MAX_MINUS_MIN));
@@ -316,7 +316,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		functionText.setEnabled(enablement);
 		typeText.setEnabled(enablement);
 		descriptionText.setEnabled(enablement);
-		addDeleteVersionInfoButtons.setVisible(enablement);
+		addDeleteVersionInfoButtons.setButtonEnablement(enablement);
 		versionViewer.setCellModifier(null);
 	}
 

@@ -18,16 +18,16 @@ import com.google.inject.Inject;
 import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement;
@@ -97,8 +97,8 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			case STCorePackage.ST_ARRAY_INITIALIZER_EXPRESSION:
 				sequence_STArrayInitializerExpression(context, (STArrayInitializerExpression) semanticObject); 
 				return; 
-			case STCorePackage.ST_ASSIGNMENT_STATEMENT:
-				sequence_STAssignmentStatement(context, (STAssignmentStatement) semanticObject); 
+			case STCorePackage.ST_ASSIGNMENT:
+				sequence_STAssignment(context, (STAssignment) semanticObject); 
 				return; 
 			case STCorePackage.ST_BINARY_EXPRESSION:
 				sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(context, (STBinaryExpression) semanticObject); 
@@ -111,9 +111,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				return; 
 			case STCorePackage.ST_CALL_NAMED_OUTPUT_ARGUMENT:
 				sequence_STCallNamedOutputArgument(context, (STCallNamedOutputArgument) semanticObject); 
-				return; 
-			case STCorePackage.ST_CALL_STATEMENT:
-				sequence_STCallStatement(context, (STCallStatement) semanticObject); 
 				return; 
 			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT:
 				sequence_STCallUnnamedArgument(context, (STCallUnnamedArgument) semanticObject); 
@@ -234,6 +231,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STStatement returns STArrayAccessExpression
+	 *     STAssignment returns STArrayAccessExpression
+	 *     STAssignment.STAssignment_1_0 returns STArrayAccessExpression
 	 *     STExpression returns STArrayAccessExpression
 	 *     STSubrangeExpression returns STArrayAccessExpression
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STArrayAccessExpression
@@ -271,6 +271,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STStatement returns STMemberAccessExpression
+	 *     STAssignment returns STMemberAccessExpression
+	 *     STAssignment.STAssignment_1_0 returns STMemberAccessExpression
 	 *     STExpression returns STMemberAccessExpression
 	 *     STSubrangeExpression returns STMemberAccessExpression
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STMemberAccessExpression
@@ -308,6 +311,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STStatement returns STBinaryExpression
+	 *     STAssignment returns STBinaryExpression
+	 *     STAssignment.STAssignment_1_0 returns STBinaryExpression
 	 *     STExpression returns STBinaryExpression
 	 *     STSubrangeExpression returns STBinaryExpression
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STBinaryExpression
@@ -384,23 +390,23 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
-	 *     STStatement returns STAssignmentStatement
-	 *     STAssignmentStatement returns STAssignmentStatement
+	 *     STStatement returns STAssignment
+	 *     STAssignment returns STAssignment
 	 *
 	 * Constraint:
-	 *     (left=STAccessExpression right=STExpression)
+	 *     (left=STAssignment_STAssignment_1_0 right=STAssignment)
 	 * </pre>
 	 */
-	protected void sequence_STAssignmentStatement(ISerializationContext context, STAssignmentStatement semanticObject) {
+	protected void sequence_STAssignment(ISerializationContext context, STAssignment semanticObject) {
 		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT));
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__RIGHT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__RIGHT));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_ASSIGNMENT__LEFT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_ASSIGNMENT__LEFT));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_ASSIGNMENT__RIGHT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_ASSIGNMENT__RIGHT));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTAssignmentStatementAccess().getLeftSTAccessExpressionParserRuleCall_0_0(), semanticObject.getLeft());
-		feeder.accept(grammarAccess.getSTAssignmentStatementAccess().getRightSTExpressionParserRuleCall_2_0(), semanticObject.getRight());
+		feeder.accept(grammarAccess.getSTAssignmentAccess().getSTAssignmentLeftAction_1_0(), semanticObject.getLeft());
+		feeder.accept(grammarAccess.getSTAssignmentAccess().getRightSTAssignmentParserRuleCall_1_2_0(), semanticObject.getRight());
 		feeder.finish();
 	}
 	
@@ -408,6 +414,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STStatement returns STBuiltinFeatureExpression
+	 *     STAssignment returns STBuiltinFeatureExpression
+	 *     STAssignment.STAssignment_1_0 returns STBuiltinFeatureExpression
 	 *     STExpression returns STBuiltinFeatureExpression
 	 *     STSubrangeExpression returns STBuiltinFeatureExpression
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STBuiltinFeatureExpression
@@ -485,27 +494,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
-	 *     STStatement returns STCallStatement
-	 *     STCallStatement returns STCallStatement
-	 *
-	 * Constraint:
-	 *     call=STAccessExpression
-	 * </pre>
-	 */
-	protected void sequence_STCallStatement(ISerializationContext context, STCallStatement semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_STATEMENT__CALL) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_STATEMENT__CALL));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTCallStatementAccess().getCallSTAccessExpressionParserRuleCall_0(), semanticObject.getCall());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * <pre>
-	 * Contexts:
 	 *     STCallArgument returns STCallUnnamedArgument
 	 *     STCallUnnamedArgument returns STCallUnnamedArgument
 	 *
@@ -570,6 +558,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STStatement returns STDateAndTimeLiteral
+	 *     STAssignment returns STDateAndTimeLiteral
+	 *     STAssignment.STAssignment_1_0 returns STDateAndTimeLiteral
 	 *     STExpression returns STDateAndTimeLiteral
 	 *     STSubrangeExpression returns STDateAndTimeLiteral
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STDateAndTimeLiteral
@@ -618,6 +609,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STStatement returns STDateLiteral
+	 *     STAssignment returns STDateLiteral
+	 *     STAssignment.STAssignment_1_0 returns STDateLiteral
 	 *     STExpression returns STDateLiteral
 	 *     STSubrangeExpression returns STDateLiteral
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STDateLiteral
@@ -730,6 +724,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STStatement returns STFeatureExpression
+	 *     STAssignment returns STFeatureExpression
+	 *     STAssignment.STAssignment_1_0 returns STFeatureExpression
 	 *     STExpression returns STFeatureExpression
 	 *     STSubrangeExpression returns STFeatureExpression
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STFeatureExpression
@@ -806,8 +803,8 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 */
 	protected void sequence_STImport(ISerializationContext context, STImport semanticObject) {
 		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_IMPORT__IMPORTED_NAMESPACE) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_IMPORT__IMPORTED_NAMESPACE));
+			if (transientValues.isValueTransient(semanticObject, LibraryElementPackage.Literals.IMPORT__IMPORTED_NAMESPACE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, LibraryElementPackage.Literals.IMPORT__IMPORTED_NAMESPACE));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getSTImportAccess().getImportedNamespaceQualifiedNameWithWildcardParserRuleCall_1_0(), semanticObject.getImportedNamespace());
@@ -847,6 +844,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STStatement returns STNumericLiteral
+	 *     STAssignment returns STNumericLiteral
+	 *     STAssignment.STAssignment_1_0 returns STNumericLiteral
 	 *     STExpression returns STNumericLiteral
 	 *     STSubrangeExpression returns STNumericLiteral
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STNumericLiteral
@@ -957,6 +957,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STStatement returns STStringLiteral
+	 *     STAssignment returns STStringLiteral
+	 *     STAssignment.STAssignment_1_0 returns STStringLiteral
 	 *     STExpression returns STStringLiteral
 	 *     STSubrangeExpression returns STStringLiteral
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STStringLiteral
@@ -1034,6 +1037,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STStatement returns STTimeLiteral
+	 *     STAssignment returns STTimeLiteral
+	 *     STAssignment.STAssignment_1_0 returns STTimeLiteral
 	 *     STExpression returns STTimeLiteral
 	 *     STSubrangeExpression returns STTimeLiteral
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STTimeLiteral
@@ -1082,6 +1088,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STStatement returns STTimeOfDayLiteral
+	 *     STAssignment returns STTimeOfDayLiteral
+	 *     STAssignment.STAssignment_1_0 returns STTimeOfDayLiteral
 	 *     STExpression returns STTimeOfDayLiteral
 	 *     STSubrangeExpression returns STTimeOfDayLiteral
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STTimeOfDayLiteral
@@ -1149,6 +1158,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STStatement returns STUnaryExpression
+	 *     STAssignment returns STUnaryExpression
+	 *     STAssignment.STAssignment_1_0 returns STUnaryExpression
 	 *     STExpression returns STUnaryExpression
 	 *     STSubrangeExpression returns STUnaryExpression
 	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STUnaryExpression

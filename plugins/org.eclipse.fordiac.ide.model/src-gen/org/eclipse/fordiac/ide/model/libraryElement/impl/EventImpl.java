@@ -414,9 +414,9 @@ public class EventImpl extends EObjectImpl implements Event {
 	 */
 	@Override
 	public String getTypeName() {
-		DataType dataType = getType();
-		if(dataType != null){
-			return dataType.getName();
+		org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();
+		if(type != null){
+			return type.getName();
 		}
 		return null;
 	}
@@ -428,7 +428,7 @@ public class EventImpl extends EObjectImpl implements Event {
 	 */
 	@Override
 	public String getFullTypeName() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFullTypeName(this);
+		return getTypeName();
 	}
 
 	/**

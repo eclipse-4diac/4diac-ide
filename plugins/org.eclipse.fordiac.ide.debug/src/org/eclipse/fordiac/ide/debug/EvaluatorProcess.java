@@ -34,10 +34,9 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamsProxy;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
-import org.eclipse.fordiac.ide.model.eval.EvaluatorExitException;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorCache;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadGroup;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class EvaluatorProcess extends PlatformObject implements IProcess, Callable<IStatus> {
 
@@ -65,16 +64,10 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 	@SuppressWarnings("boxing")
 	@Override
 	public IStatus call() throws Exception {
-		try {
+		try (EvaluatorCache cache = EvaluatorCache.open()) {
 			this.evaluator.prepare();
 			final long start = System.nanoTime();
-			Value result = null;
-			try {
-				result = this.evaluator.evaluate();
-			} catch (final EvaluatorExitException e) {
-				FordiacLogHelper.logWarning(e.getMessage(), e);
-				// exit
-			}
+			final Value result = this.evaluator.evaluate();
 			if (result != null) {
 				this.streamsProxy.getOutputStreamMonitor().info(String.format("Result: %s", result)); //$NON-NLS-1$
 			}
@@ -190,16 +183,19 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter.equals(IProcess.class)) {
 			return (T) this;
-		} else if (adapter.equals(IDebugTarget.class)) {
+		}
+		if (adapter.equals(IDebugTarget.class)) {
 			for (final IDebugTarget target : getLaunch().getDebugTargets()) {
 				if (this.equals(target.getProcess())) {
 					return (T) target;
 				}
 			}
 			return null;
-		} else if (adapter.equals(ILaunch.class)) {
+		}
+		if (adapter.equals(ILaunch.class)) {
 			return (T) getLaunch();
-		} else if (adapter.equals(ILaunchConfiguration.class)) {
+		}
+		if (adapter.equals(ILaunchConfiguration.class)) {
 			return (T) getLaunch().getLaunchConfiguration();
 		}
 		return super.getAdapter(adapter);

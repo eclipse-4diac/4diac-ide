@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.gef.editors.TypeDeclarationEditor;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -61,7 +60,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createText(parent);
-		nameText.addModifyListener(e -> executeCommand(createChangeNameCommand()));
+		nameText.addModifyListener(e -> executeCommand(ChangeNameCommand.forName(type, nameText.getText())));
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createText(parent);
@@ -72,13 +71,6 @@ public class PinInfoBasicWidget implements CommandExecutor {
 		typeSelectionWidget.createControls(parent);
 		typeDeclarationEditor = new TypeDeclarationEditor(parent, SWT.SINGLE | SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(typeDeclarationEditor.getControl());
-	}
-
-	private ChangeNameCommand createChangeNameCommand() {
-		if (isSubappPin()) {
-			return new ChangeSubAppIENameCommand(type, nameText.getText());
-		}
-		return new ChangeNameCommand(type, nameText.getText());
 	}
 
 	protected Text createText(final Composite parent) {

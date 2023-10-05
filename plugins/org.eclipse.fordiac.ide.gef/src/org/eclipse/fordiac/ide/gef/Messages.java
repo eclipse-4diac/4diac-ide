@@ -41,9 +41,17 @@ public final class Messages extends NLS {
 	public static String ConnectionSection_Source;
 	public static String ConnectionSection_Target;
 	public static String DiagramPreferences_CornerDimension;
+
+	public static String DiagramPreferences_EnableVirtualGroupInterfaces;
 	public static String DiagramPreferences_FB;
 	public static String DiagramPreferences_GeneralDiagramPreferences;
 	public static String DiagramPreferences_LabelSize;
+	public static String DiagramPreferences_LayoutConnectionsAutomatically;
+
+	public static String DiagramPreferences_LayoutOptions;
+
+	public static String DiagramPreferences_MaximumDefaultValueSize;
+
 	public static String DiagramPreferences_MaximumValueLabelSize;
 	public static String DiagramPreferences_MinimumPinLabelSize;
 	public static String DiagramPreferences_MaximumPinLabelSize;
@@ -61,6 +69,8 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_ShowConnectedOutputPinName;
 
 	public static String DiagramPreferences_Restart;
+
+	public static String DiagramPreferences_VirtualGroupInterfaceOptions;
 	public static String FBFigure_TYPE_NOT_SET;
 	public static String FordiacContextMenuProvider_Align;
 

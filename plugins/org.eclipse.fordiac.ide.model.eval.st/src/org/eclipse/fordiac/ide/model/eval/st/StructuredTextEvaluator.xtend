@@ -52,13 +52,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
@@ -232,12 +231,8 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		throw new UnsupportedOperationException('''The statement «stmt.eClass.name» is not supported''')
 	}
 
-	def protected dispatch void evaluateStatement(STAssignmentStatement stmt) {
-		stmt.left.evaluateVariable.value = stmt.right.trap.evaluateExpression
-	}
-
-	def protected dispatch void evaluateStatement(STCallStatement stmt) {
-		stmt.call.trap.evaluateExpression
+	def protected dispatch void evaluateStatement(STExpression stmt) {
+		stmt.evaluateExpression
 	}
 
 	def protected dispatch void evaluateStatement(STIfStatement stmt) {
@@ -343,6 +338,12 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def protected dispatch Value evaluateExpression(STExpression expr) {
 		error('''The expression «expr.eClass.name» is not supported''')
 		throw new UnsupportedOperationException('''The expression «expr.eClass.name» is not supported''')
+	}
+
+	def protected dispatch Value evaluateExpression(STAssignment expr) {
+		val value = expr.right.trap.evaluateExpression
+		expr.left.evaluateVariable.value = value
+		value
 	}
 
 	def protected dispatch Value evaluateExpression(STBinaryExpression expr) {
@@ -605,6 +606,11 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def protected dispatch Variable<?> evaluateVariable(STMultibitPartialExpression expr, Variable<?> receiver) {
 		new PartialVariable(receiver, expr.resultType as DataType,
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
+	}
+
+	def protected dispatch Variable<?> newVariable(INamedElement v, Value value) {
+		error('''The variable «v.name» with type «v.eClass.name» is not supported''')
+		throw new UnsupportedOperationException('''The variable «v.name» with type «v.eClass.name» is not supported''')
 	}
 
 	def protected dispatch Variable<?> newVariable(VarDeclaration v, Value value) {

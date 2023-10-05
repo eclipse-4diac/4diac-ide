@@ -28,7 +28,6 @@
     </genClasses>
     <genClasses ecoreClass="STAlgorithm.ecore#//STAlgorithmSource">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STAlgorithm.ecore#//STAlgorithmSource/elements"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STAlgorithm.ecore#//STAlgorithmSource/name"/>
     </genClasses>
     <genClasses ecoreClass="STAlgorithm.ecore#//STAlgorithmSourceElement"/>
     <genClasses ecoreClass="STAlgorithm.ecore#//STMethod">

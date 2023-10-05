@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * @model
  * @generated
  */
-public interface STExpression extends EObject {
+public interface STExpression extends STStatement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

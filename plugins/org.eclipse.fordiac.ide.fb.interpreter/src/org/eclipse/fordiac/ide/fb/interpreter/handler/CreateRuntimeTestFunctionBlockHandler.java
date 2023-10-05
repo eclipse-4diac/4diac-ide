@@ -22,12 +22,13 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.fb.interpreter.Messages;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.TestFbGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.CompositeFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.RunAllFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.MatchFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.MuxFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestSuite;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -35,7 +36,6 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final FBType type = editor.getAdapter(FBType.class);
 
@@ -46,20 +46,31 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 			return Status.CANCEL_STATUS;
 		}
 
-		// convert the service sequences one by one
-		TestSuite testSuite = new TestSuite(type.getService().getServiceSequence());
-		
+		final TestSuite testSuite = new TestSuite(type.getService().getServiceSequence());
+		testSuite.getTestCases().removeIf(n -> (n.getdataSource().getServiceSequenceType().equals("FORBIDDEN")));
+		if (testSuite.getTestCases().isEmpty()) {
+			return Status.OK_STATUS;
+		}
+
 		final FBType testtype = new TestFbGenerator(type, testSuite).generateTestFb();
 		testtype.getTypeEntry().save();
-		
+
 		final FBType matchtype = new MatchFBGenerator(type, testSuite).generateMatchFB();
 		matchtype.getTypeEntry().save();
-		
-		List<FBType> list = new ArrayList<>();
+
+		final FBType muxType = new MuxFBGenerator(type, testSuite).generateMuxFB();
+		muxType.getTypeEntry().save();
+
+		final FBType demuxType = new RunAllFBGenerator(type, testSuite).generateDemuxFB();
+		demuxType.getTypeEntry().save();
+
+		final List<FBType> list = new ArrayList<>();
 		list.add(testtype);
 		list.add(type);
 		list.add(matchtype);
-		
+		list.add(muxType);
+		list.add(demuxType);
+
 		final CompositeFBType compositeType = new CompositeFBGenerator(type, testSuite, list).generateCompositeFB();
 		compositeType.getTypeEntry().save();
 

@@ -63,7 +63,7 @@ public class RenameApplication extends AbstractHandler {
 	}
 
 	private static void performApplicationRename(final Application application, final String newName) {
-		final ChangeNameCommand cmd = new ChangeNameCommand(application, newName);
+		final ChangeNameCommand cmd = ChangeNameCommand.forName(application, newName);
 		final CommandStack cmdStack = application.getAutomationSystem().getCommandStack();
 		cmdStack.execute(cmd);
 	}

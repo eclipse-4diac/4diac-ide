@@ -53,7 +53,7 @@ public class ResourceSection extends AbstractInterfaceSection {
 		nameText = createGroupText(composite, true);
 		nameText.addModifyListener(event -> {
 			removeContentAdapter();
-			executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
+			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
 		});
 		getWidgetFactory().createCLabel(composite, "Instance Comment:");

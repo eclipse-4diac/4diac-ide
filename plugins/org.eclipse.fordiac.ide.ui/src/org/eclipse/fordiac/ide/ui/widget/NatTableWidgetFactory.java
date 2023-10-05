@@ -24,6 +24,7 @@ import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.copy.command.CopyDataCommandHandler;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.edit.action.KeyEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.action.MouseEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.command.DeleteSelectionCommandHandler;
@@ -84,10 +85,10 @@ public final class NatTableWidgetFactory {
 	public static final String CHECKBOX_CELL = "CHECKBOX_CELL"; //$NON-NLS-1$
 	public static final String VAR_GONFIGURATION_CELL = "VAR_GONFIGURATION_CELL"; //$NON-NLS-1$
 
-	static final char[] ACTIVATION_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
-			'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2',
-			'3', '4', '5', '6', '7', '8', '9', '_', '.', SWT.BS };
+	static final char[] ACTIVATION_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+			'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+			'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4',
+			'5', '6', '7', '8', '9', '_', '.', SWT.BS };
 
 	public static char[] getActivationChars() {
 		return ACTIVATION_CHARS;
@@ -102,7 +103,6 @@ public final class NatTableWidgetFactory {
 			final IDataProvider headerDataProvider, final IEditableRule editableRule) {
 		return createNatTable(parent, dataLayer, headerDataProvider, editableRule, null);
 	}
-
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider, final IEditableRule editableRule,
@@ -138,7 +138,6 @@ public final class NatTableWidgetFactory {
 		compositeLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalButton));
 
 		addEditDisabledLabel(dataLayer, editableRule, false);
-		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
 
 		final NatTable table = new NatTable(parent, compositeLayer, false);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
@@ -146,7 +145,6 @@ public final class NatTableWidgetFactory {
 
 		return table;
 	}
-
 
 	public static NatTable createRowNatTable(final Composite parent, final DataLayer bodyDataLayer,
 			final IDataProvider columnHeaderProvider, final IEditableRule editableRule,
@@ -206,7 +204,6 @@ public final class NatTableWidgetFactory {
 		gridLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalButton));
 
 		addEditDisabledLabel(bodyDataLayer, editableRule, false);
-		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
 
 		final NatTable table = new NatTable(parent, gridLayer, false);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
@@ -244,6 +241,18 @@ public final class NatTableWidgetFactory {
 		return null;
 	}
 
+	public static Object getLastSelectedVariable(final NatTable table) {
+		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
+		if (selectionLayer != null) {
+			final int[] rows = selectionLayer.getFullySelectedRowPositions();
+			if (rows.length > 0) {
+				final DataLayer dataLayer = (DataLayer) selectionLayer.getUnderlyingLayerByPosition(0, 0);
+				return ((ListDataProvider<?>) dataLayer.getDataProvider()).getRowObject(rows[rows.length - 1]);
+			}
+		}
+		return null;
+	}
+
 	private static void setColumnWidths(final DataLayer dataLayer) {
 		dataLayer.setColumnPercentageSizing(true);
 		switch (dataLayer.getColumnCount()) {
@@ -275,7 +284,7 @@ public final class NatTableWidgetFactory {
 			break;
 
 		default:
-			return;	// all columns have same width
+			return; // all columns have same width
 		}
 	}
 
@@ -350,14 +359,15 @@ public final class NatTableWidgetFactory {
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
 						LEFT_ALIGNMENT);
 
-
 				cellStyle = new Style();
 				final Font font = GUIHelper.getFont(new FontData(GUIHelper.DEFAULT_FONT.toString(), 10, SWT.BOLD));
 				cellStyle.setAttributeValue(CellStyleAttributes.FONT, font);
-				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL, GridRegion.COLUMN_HEADER);
-				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT, GridRegion.COLUMN_HEADER);
-				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.EDIT, GridRegion.COLUMN_HEADER);
-
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
+						GridRegion.COLUMN_HEADER);
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
+						GridRegion.COLUMN_HEADER);
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.EDIT,
+						GridRegion.COLUMN_HEADER);
 
 				cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_WIDGET_LIGHT_SHADOW);
@@ -368,8 +378,8 @@ public final class NatTableWidgetFactory {
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						DISABLED_HEADER);
 				// Padding for the left aligned cells
-				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER, new BackgroundPainter(new
-						PaddingDecorator(new TextPainter(false, true, false, true), 2, 2, 2, 2)));
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER, new BackgroundPainter(
+						new PaddingDecorator(new TextPainter(false, true, false, true), 2, 2, 2, 2)));
 
 				configRegistry.unregisterConfigAttribute(CellConfigAttributes.CELL_STYLE, DisplayMode.SELECT,
 						SelectionStyleLabels.SELECTION_ANCHOR_STYLE);
@@ -387,16 +397,15 @@ public final class NatTableWidgetFactory {
 			uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.F2), new KeyEditAction());
 			uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(), new KeyEditAction());
 			uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(SWT.MOD2), new KeyEditAction());
-			uiBindingRegistry.registerFirstSingleClickBinding(
-					new CellPainterMouseEventMatcher(GridRegion.BODY, MouseEventMatcher.LEFT_BUTTON, CheckBoxPainter.class),
-					new MouseEditAction());
+			uiBindingRegistry.registerFirstSingleClickBinding(new CellPainterMouseEventMatcher(GridRegion.BODY,
+					MouseEventMatcher.LEFT_BUTTON, CheckBoxPainter.class), new MouseEditAction());
 			uiBindingRegistry.registerDoubleClickBinding(new CellEditorMouseEventMatcher(GridRegion.BODY),
 					new MouseEditAction());
 		}
 	}
 
 	private NatTableWidgetFactory() {
-		throw new UnsupportedOperationException("Helper class should not be insantiated!");  //$NON-NLS-1$
+		throw new UnsupportedOperationException("Helper class should not be insantiated!"); //$NON-NLS-1$
 	}
 
 }

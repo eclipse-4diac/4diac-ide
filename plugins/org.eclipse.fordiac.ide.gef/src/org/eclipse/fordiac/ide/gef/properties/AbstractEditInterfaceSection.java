@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
@@ -52,10 +53,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
-import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -67,11 +64,11 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> extends AbstractSection
 		implements I4diacNatTableUtil {
 
-	protected ListDataProvider<T> inputProvider;
+	protected IChangeableRowDataProvider<T> inputProvider;
 	protected NatTable inputTable;
 	private AddDeleteReorderListWidget inputButtons;
 
-	protected ListDataProvider<T> outputProvider;
+	protected IChangeableRowDataProvider<T> outputProvider;
 	protected NatTable outputTable;
 	private AddDeleteReorderListWidget outputButtons;
 
@@ -90,9 +87,6 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 	protected abstract void setupOutputTable(Group outputsGroup);
 
 	protected abstract void setupInputTable(Group inputsGroup);
-
-	protected abstract void configureLabels(final ListDataProvider<T> provider, final LabelStack configLabels,
-			final int columnPosition, final int rowPosition);
 
 	@Override
 	protected abstract INamedElement getInputType(Object input);
@@ -195,19 +189,6 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 		executeCommand(cmd);
 		inputTable.refresh();
 		outputTable.refresh();
-	}
-
-	protected DataLayer setupDataLayer(final ListDataProvider<T> provider) {
-		final DataLayer dataLayer = new DataLayer(provider);
-		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
-
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (labelAcc != null) {
-				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-			}
-			configureLabels(provider, configLabels, columnPosition, rowPosition);
-		});
-		return dataLayer;
 	}
 
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {

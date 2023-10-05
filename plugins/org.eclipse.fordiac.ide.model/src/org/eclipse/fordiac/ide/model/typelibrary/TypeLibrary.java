@@ -27,6 +27,7 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 import java.text.Collator;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,6 +45,7 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -164,8 +166,9 @@ public final class TypeLibrary {
 		getSubAppTypes().clear();
 		getSystems().clear();
 		getGlobalConstants().clear();
-		dataTypeLib.getDerivedDataTypes().clear();
+		dataTypeLib.clear();
 		fileMap.clear();
+		deleteTypeLibraryMarkers(project);
 		buildpath = BuildpathUtil.loadBuildpath(project);
 		checkAdditions(project);
 	}
@@ -200,8 +203,8 @@ public final class TypeLibrary {
 			if (!FordiacKeywords.isReservedKeyword(entry.getTypeName())) {
 				addTypeEntry(entry);
 			} else {
-				FordiacMarkerHelper.createMarkers(file, List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(
-						MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, entry.getTypeName()))));
+				createTypeLibraryMarker(file,
+						MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, entry.getTypeName()));
 			}
 		}
 		return entry;
@@ -252,8 +255,8 @@ public final class TypeLibrary {
 
 	private static void handleDuplicateTypeName(final TypeEntry entry) {
 		if (entry.getFile() != null) {
-			FordiacMarkerHelper.createMarkers(entry.getFile(), List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(
-					MessageFormat.format(Messages.TypeLibrary_TypeExists, entry.getFullTypeName()))));
+			createTypeLibraryMarker(entry.getFile(),
+					MessageFormat.format(Messages.TypeLibrary_TypeExists, entry.getFullTypeName()));
 		} else {
 			FordiacLogHelper.logWarning(MessageFormat.format(Messages.TypeLibrary_TypeExists, entry.getFullTypeName()));
 		}
@@ -273,6 +276,7 @@ public final class TypeLibrary {
 		} else {
 			removeBlockTypeEntry(entry);
 		}
+		deleteTypeLibraryMarkers(entry.getFile());
 	}
 
 	void refresh() {
@@ -296,7 +300,7 @@ public final class TypeLibrary {
 		checkDeletionsForTypeGroup(getSubAppTypes().values());
 		checkDeletionsForTypeGroup(getSystems().values());
 		checkDeletionsForTypeGroup(getGlobalConstants().values());
-		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes().values());
+		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes());
 		fileMap.values().removeIf(entry -> !entry.getFile().exists()
 				|| !BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent());
 	}
@@ -340,7 +344,7 @@ public final class TypeLibrary {
 			return entry;
 		}
 
-		entry = dataTypeLib.getDerivedDataTypes().get(name);
+		entry = dataTypeLib.getDerivedTypeEntry(name);
 		if (entry != null) {
 			return entry;
 		}
@@ -399,9 +403,17 @@ public final class TypeLibrary {
 		}
 	}
 
+	private static void createTypeLibraryMarker(final IResource resource, final String message) {
+		FordiacMarkerHelper.createMarkers(resource, List.of(
+				ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(FordiacErrorMarker.TYPE_LIBRARY_MARKER)));
+	}
+
+	private static void deleteTypeLibraryMarkers(final IResource resource) {
+		FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER, Collections.emptyList());
+	}
+
 	void setProject(final IProject newProject) {
 		project = newProject;
 		reload();
 	}
-
 }

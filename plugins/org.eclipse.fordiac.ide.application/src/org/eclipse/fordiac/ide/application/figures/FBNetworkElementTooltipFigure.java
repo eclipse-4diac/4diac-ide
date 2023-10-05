@@ -26,6 +26,8 @@ import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.figures.VerticalLineCompartmentFigure;
 import org.eclipse.fordiac.ide.model.annotations.MappingAnnotations;
+import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -35,9 +37,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 /** The Class FBTooltipFigure. */
 public class FBNetworkElementTooltipFigure extends Figure {
 
-	/** Instantiates a new fB tooltip figure.
+	/**
+	 * Instantiates a new fB tooltip figure.
 	 *
-	 * @param fbView the fb view */
+	 * @param fbView the fb view
+	 */
 	public FBNetworkElementTooltipFigure(final FBNetworkElement element) {
 		setLayoutManager(new GridLayout());
 
@@ -47,11 +51,13 @@ public class FBNetworkElementTooltipFigure extends Figure {
 
 		createTypeAndVersionLabel(element);
 
+		createPackageLabel(element);
+
 		final Figure line = new VerticalLineCompartmentFigure();
 		add(line);
 		setConstraint(line, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 
-		if (element.getComment() != null && element.getComment().length() > 0) {
+		if (CommentHelper.hasComment(element)) {
 			final FlowPage fp = new FlowPage();
 			final TextFlow content = new TextFlow(element.getComment());
 			content.setLayoutManager(new ParagraphTextLayout(content, ParagraphTextLayout.WORD_WRAP_HARD));
@@ -108,5 +114,14 @@ public class FBNetworkElementTooltipFigure extends Figure {
 		add(typeVersionLabel);
 		setConstraint(typeVersionLabel, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 
+	}
+
+	private void createPackageLabel(final FBNetworkElement element) {
+		final LibraryElement type = element.getType();
+		if (!PackageNameHelper.getPackageName(type).isBlank()) {
+			final Label packageLabel = new Label(PackageNameHelper.getPackageName(type));
+			add(packageLabel);
+			setConstraint(packageLabel, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
+		}
 	}
 }

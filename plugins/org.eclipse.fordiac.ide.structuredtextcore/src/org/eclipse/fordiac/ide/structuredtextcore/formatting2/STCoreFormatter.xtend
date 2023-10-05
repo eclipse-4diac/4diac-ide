@@ -20,13 +20,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
@@ -315,26 +314,17 @@ class STCoreFormatter extends AbstractFormatter2 {
 		stCase.statements.forEach[surround[indent] format]
 	}
 
-	/** Formats the STAssignmentStatement */
-	def dispatch void format(STAssignmentStatement assignmentStatement, extension IFormattableDocument document) {
-		assignmentStatement.regionFor.keyword(":=").surround[oneSpace]
-		assignmentStatement.regionFor.keyword(";").surround[noSpace]
-		assignmentStatement.left.format
-		assignmentStatement.right.format
-		assignmentStatement.append[setNewLines(1, 2, 2)]
-	}
-
-	/** Formats the STCallStatement */
-	def dispatch void format(STCallStatement callStatement, extension IFormattableDocument document) {
-		callStatement.call.format
-		callStatement.regionFor.keyword(";").surround[noSpace]
-		callStatement.append[setNewLines(1, 2, 2)]
+	/** Formats the STAssignment */
+	def dispatch void format(STAssignment assignment, extension IFormattableDocument document) {
+		assignment.left.format
+		assignment.regionFor.keyword(":=").surround[oneSpace]
+		assignment.right.format
+		assignment.regionFor.keyword(";").prepend[noSpace].append[setNewLines(1, 1, 2)]
 	}
 
 	/** Formats the STStatements */
 	def dispatch void format(STStatement statement, extension IFormattableDocument document) {
-		statement.regionFor.keyword(";").surround[noSpace]
-		statement.append[setNewLines(1, 2, 2)]
+		statement.regionFor.keyword(";").surround[noSpace].append[setNewLines(1, 1, 2)]
 	}
 
 	/** Formats the STElementaryInitializerExpression */
@@ -490,6 +480,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		]
 		featureExpression.regionFor.keyword(STFeatureExpressionAccess.rightParenthesisKeyword_2_2).prepend[noSpace]
 		featureExpression.parameters.forEach[format]
+		featureExpression.regionFor.keyword(";").prepend[noSpace].append[setNewLines(1, 1, 2)]
 	}
 
 	def dispatch void format(STMultibitPartialExpression mBPExpression, extension IFormattableDocument document) {
