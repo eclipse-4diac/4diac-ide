@@ -93,6 +93,9 @@ Workflow {
 				generateStub = true
 				generateXtendStub = true
 			}
+			renameRefactoring = {
+				useChangeSerializer = true
+			}
 			formatter = {
 				generateStub = true
 				generateXtendStub = true

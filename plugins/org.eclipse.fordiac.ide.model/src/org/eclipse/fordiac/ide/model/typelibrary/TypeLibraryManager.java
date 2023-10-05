@@ -117,6 +117,14 @@ public enum TypeLibraryManager {
 		return typeLib.getTypeEntry(typeFile);
 	}
 
+	public TypeEntry getTypeEntryForURI(final URI uri) {
+		if (uri.isPlatformResource()) {
+			return getTypeEntryForFile(
+					ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true))));
+		}
+		return null;
+	}
+
 	public void loadToolLibrary() {
 		synchronized (typeLibraryList) {
 			final IProject toolLibProject = getToolLibProject();

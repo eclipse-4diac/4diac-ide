@@ -24,6 +24,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
@@ -49,7 +51,14 @@ public class STCoreResource extends LibraryElementXtextResource {
 		final Map<?, ?> actualOptions = Objects.requireNonNullElse(options, getDefaultLoadOptions());
 		if (isLoadPlainST(actualOptions, inputStream)) {
 			super.doLoad(inputStream, actualOptions);
-			updateInternalLibraryElement();
+			if (getLibraryElement() == null) {
+				final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri);
+				if (typeEntry != null) {
+					setLibraryElement(typeEntry.getTypeEditable());
+				}
+			} else {
+				updateInternalLibraryElement();
+			}
 		} else { // inputStream contains full XML for library element
 			// chain load library element from inputStream
 			final LibraryElement libraryElement;

@@ -32,7 +32,13 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDoc
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameStrategy;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSimpleNameProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceForIEditorInputFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceUIServiceProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper;
@@ -44,6 +50,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreResourceUI
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.ide.refactoring.IRenameNameValidator;
+import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
+import org.eclipse.xtext.ide.serializer.IChangeSerializer;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.ui.editor.IXtextEditorCallback;
 import org.eclipse.xtext.ui.editor.XtextEditor;
@@ -65,7 +74,10 @@ import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
+import org.eclipse.xtext.ui.refactoring.impl.AbstractRenameProcessor;
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
+import org.eclipse.xtext.ui.refactoring2.ChangeConverter;
+import org.eclipse.xtext.ui.refactoring2.rename.ISimpleNameProvider;
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
 import org.eclipse.xtext.ui.shared.Access;
 import org.eclipse.xtext.ui.validation.IResourceUIValidatorExtension;
@@ -208,5 +220,31 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 
 	public Class<? extends IResourceUIValidatorExtension> bindIResourceUIValidatorExtension() {
 		return STCoreResourceUIValidatorExtension.class;
+	}
+
+	@Override
+	public Class<? extends AbstractRenameProcessor> bindAbstractRenameProcessor() {
+		return STCoreRenameElementProcessor.class;
+	}
+
+	public Class<? extends ISimpleNameProvider> bindISimpleNameProvider() {
+		return STCoreSimpleNameProvider.class;
+	}
+
+	@Override
+	public Class<? extends IRenameStrategy2> bindIRenameStrategy2() {
+		return STCoreRenameStrategy.class;
+	}
+
+	public Class<? extends IRenameNameValidator> bindIRenameNameValidator() {
+		return STCoreRenameNameValidator.class;
+	}
+
+	public Class<? extends IChangeSerializer> bindIChangeSerializer() {
+		return STCoreChangeSerializer.class;
+	}
+
+	public Class<? extends ChangeConverter.Factory> bindChangeConverter$Factory() {
+		return STCoreChangeConverter.Factory.class;
 	}
 }

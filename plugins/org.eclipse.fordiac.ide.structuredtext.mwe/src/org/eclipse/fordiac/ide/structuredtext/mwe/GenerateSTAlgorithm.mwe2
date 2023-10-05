@@ -87,7 +87,9 @@ Workflow {
 			fragment = ui.contentAssist.ContentAssistFragment2 {
 				generateStub = false
 			}
-			fragment = ui.refactoring.RefactorElementNameFragment2 {}
+			fragment = ui.refactoring.RefactorElementNameFragment2 {
+				useChangeSerializer = true
+			}
 			fragment = ui.templates.CodetemplatesGeneratorFragment2 {}
 			fragment = formatting.Formatter2Fragment2 {
 				generateStub = true
