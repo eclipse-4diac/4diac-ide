@@ -76,6 +76,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
@@ -181,6 +182,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			+ "forControlVariableNonTemporary"; //$NON-NLS-1$
 	public static final String FOR_CONTROL_VARIABLE_UNDEFINED = ISSUE_CODE_PREFIX + "forControlVariableUndefined"; //$NON-NLS-1$
 	public static final String EXIT_NOT_IN_LOOP = ISSUE_CODE_PREFIX + "exitNotInLoop"; //$NON-NLS-1$
+	public static final String CONTINUE_NOT_IN_LOOP = ISSUE_CODE_PREFIX + "continueNotInLoop"; //$NON-NLS-1$
 	public static final String NESTED_ASSIGNMENT = ISSUE_CODE_PREFIX + "nestedAssignment"; //$NON-NLS-1$
 	public static final String INVALID_IMPORT = ISSUE_CODE_PREFIX + "invalidImport"; //$NON-NLS-1$
 	public static final String WILDCARD_IMPORT = ISSUE_CODE_PREFIX + "wildcardImport"; //$NON-NLS-1$
@@ -882,7 +884,17 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public void checkExitIsInLoop(final STExit exitStatement) {
 		if (StreamSupport.stream(EcoreUtil2.getAllContainers(exitStatement).spliterator(), false)
 				.filter(STStatement.class::isInstance).map(STStatement.class::cast).noneMatch(this::isLoopStatement)) {
-			error(Messages.STCoreValidator_ExitNeedsToBeInsideALoop, null, EXIT_NOT_IN_LOOP);
+			error(MessageFormat.format(Messages.STCoreValidator_ControlFlowStatementNeedsToBeInsideALoop, "EXIT"), null, //$NON-NLS-1$
+					EXIT_NOT_IN_LOOP);
+		}
+	}
+
+	@Check
+	public void checkContinueIsInLoop(final STContinue continueStatement) {
+		if (StreamSupport.stream(EcoreUtil2.getAllContainers(continueStatement).spliterator(), false)
+				.filter(STStatement.class::isInstance).map(STStatement.class::cast).noneMatch(this::isLoopStatement)) {
+			error(MessageFormat.format(Messages.STCoreValidator_ControlFlowStatementNeedsToBeInsideALoop, "CONTINUE"), //$NON-NLS-1$
+					null, CONTINUE_NOT_IN_LOOP);
 		}
 	}
 
