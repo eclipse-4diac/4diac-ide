@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -265,7 +266,12 @@ public class SafeStructDeletionChange extends CompositeChange {
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
 			final DataTypeLibrary lib = manipulator.getType().getTypeLibrary().getDataTypeLibrary();
-			final StructuredType updated = (StructuredType) lib.getType(manipulator.getStructType().getQualifiedName());
+			StructuredType updated = (StructuredType) lib
+					.getTypeIfExists(manipulator.getStructType().getQualifiedName());
+			if (updated == null) {
+				updated = GenericTypes.ANY_STRUCT;
+			}
+
 			final Command cmd = new ChangeStructCommand(manipulator, updated);
 
 			SafeStructDeletionChange.executeChange(cmd, manipulator);
