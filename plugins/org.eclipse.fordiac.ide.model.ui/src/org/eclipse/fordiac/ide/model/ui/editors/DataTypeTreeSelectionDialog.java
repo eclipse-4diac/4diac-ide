@@ -44,7 +44,12 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 
 	public DataTypeTreeSelectionDialog(final Shell parent, final ITreeContentProvider contentProvider) {
-		super(parent, new DelegatingStyledCellLabelProvider(new TreeNodeLabelProvider()), contentProvider);
+		this(parent, contentProvider, new TreeNodeLabelProvider());
+	}
+
+	public DataTypeTreeSelectionDialog(final Shell parent, final ITreeContentProvider contentProvider,
+			final IStyledLabelProvider labelProvider) {
+		super(parent, new DelegatingStyledCellLabelProvider(labelProvider), contentProvider);
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.ui.nat.TypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer.MoveDirectionEnum;
@@ -44,14 +45,22 @@ public class TypeSelectionButton extends TextCellEditor {
 
 	private final Supplier<TypeLibrary> supplier;
 	private final TypeSelectionTreeContentProvider treeContentProvider;
+	private final IStyledLabelProvider treeLabelProvider;
 
 	protected Button button;
 
 	public TypeSelectionButton(final Supplier<TypeLibrary> supplier,
 			final ITypeSelectionContentProvider contentProvider,
 			final TypeSelectionTreeContentProvider treeContentProvider) {
+		this(supplier, contentProvider, treeContentProvider, null);
+	}
+
+	public TypeSelectionButton(final Supplier<TypeLibrary> supplier,
+			final ITypeSelectionContentProvider contentProvider,
+			final TypeSelectionTreeContentProvider treeContentProvider, final IStyledLabelProvider treeLabelProvider) {
 		this.supplier = supplier;
 		this.treeContentProvider = treeContentProvider;
+		this.treeLabelProvider = treeLabelProvider;
 		enableContentProposal(supplier, contentProvider);
 	}
 
@@ -68,8 +77,10 @@ public class TypeSelectionButton extends TextCellEditor {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(
-						Display.getCurrent().getActiveShell(), treeContentProvider);
+				final DataTypeTreeSelectionDialog dialog = (treeLabelProvider == null)
+						? new DataTypeTreeSelectionDialog(Display.getCurrent().getActiveShell(), treeContentProvider)
+						: new DataTypeTreeSelectionDialog(Display.getCurrent().getActiveShell(), treeContentProvider,
+								treeLabelProvider);
 				dialog.setHelpAvailable(false);
 				dialog.setInput(supplier.get());
 				dialog.setTitle(treeContentProvider.getTitle());
