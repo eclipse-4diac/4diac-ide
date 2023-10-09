@@ -24,6 +24,10 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
@@ -35,7 +39,6 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -52,11 +55,10 @@ import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.graphics.Color;
 
-public class TypeEditPart extends AbstractInterfaceElementEditPart {
+public class TypeEditPart extends AbstractInterfaceElementEditPart implements AnnotableGraphicalEditPart {
 
 	private final TypeLibrary typeLib;
 
@@ -143,17 +145,19 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
 	private void updateFigure(final TypeFigure typeFigure) {
 		typeFigure.setText(getTypeName());
+	}
 
-		final Display display = Display.getCurrent();
-		if (null != display) {
-			if (getINamedElement() instanceof final VarDeclaration varDecl
-					&& (varDecl.getType() instanceof ErrorMarkerDataType
-							|| (varDecl.isArray() && varDecl.getArraySize().hasError()))) {
-				typeFigure.setOpaque(true);
-				typeFigure.setBackgroundColor(display.getSystemColor(SWT.COLOR_RED));
-			} else {
-				typeFigure.setOpaque(false);
-			}
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		setAnnotationColor(GraphicalAnnotationStyles.getAnnotationColor(
+				event.getModel().getAnnotations(getModel().getReferencedElement()),
+				FordiacAnnotationUtil::showOnTargetType));
+	}
+
+	public void setAnnotationColor(final Color color) {
+		getFigure().setOpaque(color != null);
+		if (color != null) {
+			getFigure().setBackgroundColor(color);
 		}
 	}
 
@@ -262,5 +266,4 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	public boolean isConnectable() {
 		return false;
 	}
-
 }

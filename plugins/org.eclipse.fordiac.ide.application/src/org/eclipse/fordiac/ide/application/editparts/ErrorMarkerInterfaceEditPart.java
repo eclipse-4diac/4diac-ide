@@ -28,7 +28,6 @@ import org.eclipse.gef.requests.GroupRequest;
 public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
 
 	public ErrorMarkerInterfaceEditPart() {
-		super();
 	}
 
 	@Override
@@ -61,7 +60,7 @@ public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		final IFigure figure = new InterfaceFigure();
+		final IFigure figure = super.createFigure();
 		figure.setBackgroundColor(ColorConstants.red);
 		figure.setOpaque(true);
 		return figure;

@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNConnectionEndpointPolicy;
 import org.eclipse.fordiac.ide.application.tools.ConnectionSelectEditPartTracker;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
@@ -124,7 +125,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		}
 
 		private void refreshComment() {
-			getFigure().setToolTip(new ConnectionTooltipFigure(getModel()));
+			getFigure().setToolTip(new ConnectionTooltipFigure(getModel(),
+					FordiacAnnotationUtil.getAnnotationModel(ConnectionEditPart.this)));
 		}
 
 	}
@@ -223,7 +225,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		connectionFigure.setHidden(!getModel().isVisible());
 
 		performConnTypeConfiguration(connectionFigure);
-		connectionFigure.setToolTip(new ConnectionTooltipFigure(getModel()));
+		connectionFigure
+				.setToolTip(new ConnectionTooltipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
 		connectionFigure.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 		return connectionFigure;
 	}

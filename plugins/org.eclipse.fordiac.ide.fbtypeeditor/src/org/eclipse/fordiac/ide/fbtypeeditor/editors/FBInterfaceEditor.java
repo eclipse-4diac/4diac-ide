@@ -26,6 +26,9 @@ import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationModelEventDispatcher;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.MinSpaceFreeformFigure;
@@ -58,6 +61,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.part.MultiPageEditorSite;
 
 public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
 
@@ -67,17 +71,39 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	private PaletteRoot paletteRoot;
 	private TypeLibrary typeLib;
 
+	private GraphicalAnnotationModel annotationModel;
+	private GraphicalAnnotationModelListener annotationModelEventDispatcher;
+
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInput(input);
-		if (input instanceof FBTypeEditorInput) {
-			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+		if (input instanceof final FBTypeEditorInput untypedInput) {
 			fbType = untypedInput.getContent();
 			typeLib = untypedInput.getTypeEntry().getTypeLibrary();
+		}
+		if (site instanceof final MultiPageEditorSite multiPageEditorSite) {
+			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 		}
 		super.init(site, input);
 		setPartName(FordiacMessages.Interface);
 		setTitleImage(FordiacImage.ICON_INTERFACE_EDITOR.getImage());
+	}
+
+	@Override
+	protected void initializeGraphicalViewer() {
+		super.initializeGraphicalViewer();
+		if (annotationModel != null) {
+			annotationModelEventDispatcher = new FordiacAnnotationModelEventDispatcher(getGraphicalViewer());
+			annotationModel.addAnnotationModelListener(annotationModelEventDispatcher, true);
+		}
+	}
+
+	@Override
+	public void dispose() {
+		if (annotationModel != null) {
+			annotationModel.removeAnnotationModelListener(annotationModelEventDispatcher);
+		}
+		super.dispose();
 	}
 
 	@Override
@@ -164,7 +190,8 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer, final ZoomManager zoomManager) {
+	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
+			final ZoomManager zoomManager) {
 		return new InterfaceContextMenuProvider(viewer, zoomManager, getActionRegistry(), typeLib.getDataTypeLibrary());
 	}
 

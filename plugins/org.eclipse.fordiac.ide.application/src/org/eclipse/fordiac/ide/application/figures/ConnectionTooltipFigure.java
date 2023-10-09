@@ -22,9 +22,10 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.jface.resource.JFaceResources;
 
 /**
  * The Class ConnectionTooltipFigure.
@@ -36,29 +37,18 @@ public class ConnectionTooltipFigure extends Figure {
 	 *
 	 * @param connection the fb view
 	 */
-	public ConnectionTooltipFigure(final Connection connection) {
+	public ConnectionTooltipFigure(final Connection connection, final GraphicalAnnotationModel annotationModel) {
 		setLayoutManager(new GridLayout());
 
 		final StringBuilder label = new StringBuilder();
-
 
 		if (null != connection) {
 			getEndpointLabel(label, connection.getSource());
 			label.append(" -> "); //$NON-NLS-1$
 			getEndpointLabel(label, connection.getDestination());
-
-			if (connection.hasError()) {
-				label.append(System.lineSeparator());
-				label.append(connection.getErrorMessage());
-			}
 		}
-
 
 		final Label connNameLabel = new Label(label.toString());
-		if (connection != null && connection.hasError()) {
-			connNameLabel.setIcon(JFaceResources.getImage("dialog_error_image")); //$NON-NLS-1$
-		}
-
 		add(connNameLabel);
 
 		final TextFlow content = new TextFlow(
@@ -74,6 +64,10 @@ public class ConnectionTooltipFigure extends Figure {
 
 		setConstraint(connNameLabel, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 
+		if (connection != null && annotationModel != null) {
+			annotationModel.getAnnotations(connection).stream().forEach(annotation -> add(
+					new Label(annotation.getText(), GraphicalAnnotationStyles.getAnnotationImage(annotation))));
+		}
 	}
 
 	private static void getEndpointLabel(final StringBuilder label, final IInterfaceElement interfaceElement) {

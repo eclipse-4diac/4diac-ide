@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
@@ -37,6 +36,8 @@ import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.application.policies.DeleteFBNElementEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNElementSelectionPolicy;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -75,7 +76,8 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Point;
 
 /** This class implements an EditPart for a FunctionBlock. */
-public abstract class AbstractFBNElementEditPart extends AbstractPositionableElementEditPart {
+public abstract class AbstractFBNElementEditPart extends AbstractPositionableElementEditPart
+		implements AnnotableGraphicalEditPart {
 
 	protected static final class TypeDirectEditPolicy extends DirectEditPolicy {
 		@Override
@@ -120,15 +122,12 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				switch (notification.getEventType()) {
-				case Notification.ADD, Notification.ADD_MANY, Notification.MOVE, Notification.REMOVE, Notification.REMOVE_MANY:
+				if (!notification.isTouch()) {
 					refreshChildren();
-					// this ensure that parameters are correctly updated when pins are added or removed (e.g.,
+					// this ensure that parameters are correctly updated when pins are added or
+					// removed (e.g.,
 					// errormarkerpins are deleted)
 					getParent().refresh();
-					break;
-				default:
-					break;
 				}
 			}
 		};
@@ -258,10 +257,13 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	private HiddenPinIndicator inputPinIndicator;
 	private HiddenPinIndicator outputPinIndicator;
 
-	/** Returns an <code>IPropertyChangeListener</code> with implemented <code>propertyChange()</code>. e.g. a color
-	 * change event repaints the FunctionBlock.
+	/**
+	 * Returns an <code>IPropertyChangeListener</code> with implemented
+	 * <code>propertyChange()</code>. e.g. a color change event repaints the
+	 * FunctionBlock.
 	 *
-	 * @return the preference change listener */
+	 * @return the preference change listener
+	 */
 	@Override
 	public org.eclipse.jface.util.IPropertyChangeListener getPreferenceChangeListener() {
 		if (null == listener) {
@@ -304,16 +306,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
 			getTargetFigure(interfaceEditPart).add(child, getInterfaceElementIndex(interfaceEditPart));
-		} else if (childEditPart instanceof HiddenPinIndicatorEditPart) {
-			addPinIndicatorFigure((HiddenPinIndicatorEditPart) childEditPart, child);
-		} else if (childEditPart instanceof final InstanceNameEditPart instanceNameEditPart) {
-			if (instanceNameEditPart.getModel().hasErrorMarker()) {
-				child.setBackgroundColor(ColorConstants.red);
-				child.setOpaque(true);
-			} else {
-				child.setOpaque(false);
-			}
-			getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
+		} else if (childEditPart instanceof final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart) {
+			addPinIndicatorFigure(hiddenPinIndicatorEditPart, child);
 		} else {
 			getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
 		}
@@ -435,8 +429,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
 			getTargetFigure(interfaceEditPart).remove(child);
-		} else if (childEditPart instanceof HiddenPinIndicatorEditPart) {
-			removePinIndicatorFigure((HiddenPinIndicatorEditPart) childEditPart, child);
+		} else if (childEditPart instanceof final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart) {
+			removePinIndicatorFigure(hiddenPinIndicatorEditPart, child);
 		} else {
 			super.removeChildVisual(childEditPart);
 		}
@@ -577,4 +571,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		return new ScrollingDragEditPartsTracker(this);
 	}
 
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		getChildren().stream().filter(InstanceNameEditPart.class::isInstance).map(InstanceNameEditPart.class::cast)
+				.forEach(child -> child.updateAnnotations(event));
+	}
 }

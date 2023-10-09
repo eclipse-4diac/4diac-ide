@@ -35,6 +35,10 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -49,8 +53,10 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.swt.graphics.Color;
 
-public class InterfaceEditPart extends AbstractInterfaceElementEditPart implements NodeEditPart {
+public class InterfaceEditPart extends AbstractInterfaceElementEditPart
+		implements NodeEditPart, AnnotableGraphicalEditPart {
 
 	public class InterfaceFigure extends Label implements InteractionStyleFigure {
 		public InterfaceFigure() {
@@ -132,6 +138,16 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	}
 
 	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		setAnnotationColor(GraphicalAnnotationStyles.getAnnotationColor(event.getModel().getAnnotations(getModel()),
+				FordiacAnnotationUtil::showOnTarget));
+		final CommentTypeEditPart commentTypeEditPart = findAssociatedCommentTypeEP();
+		if (commentTypeEditPart != null) {
+			commentTypeEditPart.updateAnnotations(event);
+		}
+	}
+
+	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		if (getCastedModel() instanceof Event && null != sourceConnections) {
@@ -145,6 +161,13 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		}
 	}
 
+	private void setAnnotationColor(final Color color) {
+		getFigure().setOpaque(color != null);
+		if (color != null) {
+			getFigure().setBackgroundColor(color);
+		}
+	}
+
 	@Override
 	public IInterfaceElement getCastedModel() {
 		return (IInterfaceElement) getModel();
@@ -154,7 +177,8 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	public void activate() {
 		super.activate();
 		checkAssociatedCommentType();
-		// tell the root edipart that we are here and that it should add the type comment children
+		// tell the root edipart that we are here and that it should add the type
+		// comment children
 		refreshTypeRoot();
 	}
 
@@ -306,5 +330,4 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 				.filter(c -> this.getModel().equals(((CommentTypeEditPart) c).getInterfaceElement())).findAny()
 				.orElse(null);
 	}
-
 }

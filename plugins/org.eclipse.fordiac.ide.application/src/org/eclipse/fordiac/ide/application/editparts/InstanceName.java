@@ -29,8 +29,4 @@ public class InstanceName {
 	public String getInstanceName() {
 		return getRefElement().getName();
 	}
-
-	public boolean hasErrorMarker() {
-		return getRefElement().hasError();
-	}
 }
