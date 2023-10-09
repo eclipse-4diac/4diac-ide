@@ -13,28 +13,32 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
+import java.util.function.Supplier;
 
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 
-public class AttributeConfigLabelAccumulator implements IConfigLabelAccumulator {
-	private final IRowDataProvider<? extends ITypedElement> dataProvider;
+public class AttributeConfigLabelAccumulator extends AbstractAnnotatedConfigLabelAccumulator<Attribute> {
 	private final List<AttributeTableColumn> columns;
 
-	public AttributeConfigLabelAccumulator(final IRowDataProvider<? extends ITypedElement> dataProvider) {
-		this(dataProvider, AttributeTableColumn.DEFAULT_COLUMNS);
+	public AttributeConfigLabelAccumulator(final IRowDataProvider<Attribute> dataProvider) {
+		this(dataProvider, () -> null);
 	}
 
-	public AttributeConfigLabelAccumulator(final IRowDataProvider<? extends ITypedElement> dataProvider,
+	public AttributeConfigLabelAccumulator(final IRowDataProvider<Attribute> dataProvider,
+			final Supplier<GraphicalAnnotationModel> annotationModelSupplier) {
+		this(dataProvider, annotationModelSupplier, AttributeTableColumn.DEFAULT_COLUMNS);
+	}
+
+	public AttributeConfigLabelAccumulator(final IRowDataProvider<Attribute> dataProvider,
+			final Supplier<GraphicalAnnotationModel> annotationModelSupplier,
 			final List<AttributeTableColumn> columns) {
-		this.dataProvider = dataProvider;
+		super(dataProvider, annotationModelSupplier);
 		this.columns = columns;
 	}
 
@@ -44,18 +48,15 @@ public class AttributeConfigLabelAccumulator implements IConfigLabelAccumulator 
 
 	@Override
 	public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition, final int rowPosition) {
-		final ITypedElement rowItem = dataProvider.getRowObject(rowPosition);
+		final Attribute rowItem = getDataProvider().getRowObject(rowPosition);
 		switch (columns.get(columnPosition)) {
 		case NAME:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTarget);
 			break;
 		case TYPE:
 			configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-			if (rowItem.getType() instanceof ErrorMarkerDataType
-					|| (rowItem instanceof final TypedConfigureableObject typedObject
-							&& typedObject.getTypeEntry() instanceof ErrorTypeEntry)) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-			}
+			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTargetType);
 			break;
 		case VALUE:
 			configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);

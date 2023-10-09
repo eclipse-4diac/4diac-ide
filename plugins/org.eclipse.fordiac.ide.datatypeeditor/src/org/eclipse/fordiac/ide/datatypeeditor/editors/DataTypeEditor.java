@@ -40,6 +40,8 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.SaveTypeEntryCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
@@ -82,6 +84,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -98,6 +101,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListener {
 
 	private final CommandStack commandStack = new CommandStack();
+	private GraphicalAnnotationModel annotationModel;
 	private StructViewingComposite structComposite;
 	private Composite errorComposite;
 	private boolean importFailed;
@@ -153,6 +157,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		getActionRegistry().dispose();
 		removeListenerFromDataTypeObj();
+		if (annotationModel != null) {
+			annotationModel.dispose();
+		}
 		super.dispose();
 		if (dirty && dataTypeEntry != null) {
 			// purge editable type from type entry after super.dispose() so that no
@@ -293,6 +300,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		getCommandStack().addCommandStackEventListener(this);
 		initializeActionRegistry();
 		setActionHandlers(site);
+		if (input instanceof final IFileEditorInput fileEditorInput) {
+			annotationModel = new FordiacMarkerGraphicalAnnotationModel(fileEditorInput.getFile());
+		}
 	}
 
 	@Override
@@ -365,7 +375,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	@Override
 	public void createPartControl(final Composite parent) {
 		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null && (!importFailed)) {
-			structComposite = new StructViewingComposite(parent, 1, commandStack, dataTypeEntry, this);
+			structComposite = new StructViewingComposite(parent, 1, commandStack, annotationModel, dataTypeEntry, this);
 			structComposite.createPartControl(parent);
 		} else if (importFailed) {
 			createErrorComposite(parent, Messages.ErrorCompositeMessage);
@@ -430,6 +440,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		}
 		if (key == ActionRegistry.class) {
 			return key.cast(getActionRegistry());
+		}
+		if (key == GraphicalAnnotationModel.class) {
+			return key.cast(annotationModel);
 		}
 
 		return super.getAdapter(key);

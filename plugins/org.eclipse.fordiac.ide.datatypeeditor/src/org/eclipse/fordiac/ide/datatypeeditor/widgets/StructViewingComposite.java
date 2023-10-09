@@ -19,6 +19,7 @@
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -70,6 +71,7 @@ public class StructViewingComposite extends Composite
 		implements CommandExecutor, I4diacNatTableUtil, ISelectionProvider {
 	private NatTable natTable;
 	private final CommandStack cmdStack;
+	private final GraphicalAnnotationModel annotationModel;
 	private final IWorkbenchPart part;
 	private final DataTypeEntry dataTypeEntry;
 	private IChangeableRowDataProvider<VarDeclaration> structMemberProvider;
@@ -78,9 +80,11 @@ public class StructViewingComposite extends Composite
 	private ConfigurablObjectListener configObjectListener = null;
 
 	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack,
-			final DataTypeEntry dataTypeEntry, final IWorkbenchPart part) {
+			final GraphicalAnnotationModel annotationModel, final DataTypeEntry dataTypeEntry,
+			final IWorkbenchPart part) {
 		super(parent, style);
 		this.cmdStack = cmdStack;
+		this.annotationModel = annotationModel;
 		this.dataTypeEntry = dataTypeEntry;
 		this.part = part;
 	}
@@ -122,7 +126,8 @@ public class StructViewingComposite extends Composite
 		structMemberProvider.setInput(getType().getMemberVariables());
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(structMemberProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
-		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(structMemberProvider));
+		inputDataLayer.setConfigLabelAccumulator(
+				new VarDeclarationConfigLabelAccumulator(structMemberProvider, this::getAnnotationModel));
 		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer,
 				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,
 				null, this, false);
@@ -220,6 +225,10 @@ public class StructViewingComposite extends Composite
 
 	public Object getEntry(final int index) {
 		return getType().getMemberVariables().get(index);
+	}
+
+	public GraphicalAnnotationModel getAnnotationModel() {
+		return annotationModel;
 	}
 
 	@Override

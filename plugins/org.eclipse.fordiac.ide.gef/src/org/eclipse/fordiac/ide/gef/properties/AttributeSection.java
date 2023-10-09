@@ -70,7 +70,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 
 		provider = new ChangeableListDataProvider<>(new AttributeColumnAccessor(this));
 		final DataLayer dataLayer = new DataLayer(provider);
-		dataLayer.setConfigLabelAccumulator(new AttributeConfigLabelAccumulator(provider));
+		dataLayer.setConfigLabelAccumulator(new AttributeConfigLabelAccumulator(provider, this::getAnnotationModel));
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
 				new NatTableColumnProvider<>(AttributeTableColumn.DEFAULT_COLUMNS),
 				new AttributeEditableRule(IEditableRule.ALWAYS_EDITABLE, AttributeTableColumn.DEFAULT_COLUMNS,

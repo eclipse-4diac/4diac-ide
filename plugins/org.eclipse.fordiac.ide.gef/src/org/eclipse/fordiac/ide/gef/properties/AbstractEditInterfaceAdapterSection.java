@@ -83,7 +83,8 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	public void setupOutputTable(final Group outputsGroup) {
 		outputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this));
 		final DataLayer outputDataLayer = new DataLayer(outputProvider);
-		outputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(outputProvider));
+		outputDataLayer.setConfigLabelAccumulator(
+				new TypedElementConfigLabelAccumulator(outputProvider, this::getAnnotationModel));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(),
 				createTypeSelectionButton(), this, false);
@@ -93,7 +94,8 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	public void setupInputTable(final Group inputsGroup) {
 		inputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this));
 		final DataLayer inputDataLayer = new DataLayer(inputProvider);
-		inputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(inputProvider));
+		inputDataLayer.setConfigLabelAccumulator(
+				new TypedElementConfigLabelAccumulator(inputProvider, this::getAnnotationModel));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(),
 				createTypeSelectionButton(), this, true);

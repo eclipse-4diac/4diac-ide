@@ -23,6 +23,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -50,6 +52,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	private ComposedAdapterFactory adapterFactory;
 	private Composite parent;
 
+	private GraphicalAnnotationModel annotationModel;
+
 	// block updates triggered by any command
 	protected boolean blockRefresh = false;
 
@@ -62,7 +66,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	protected abstract void setInputInit();
 
 	protected void setType(final Object input) {
-		// as the property sheet is reused for different selection first remove listening to the old element
+		// as the property sheet is reused for different selection first remove
+		// listening to the old element
 		removeContentAdapter();
 		type = getInputType(input);
 		addContentAdapter();
@@ -97,6 +102,9 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		if (null == commandStack) { // disable all fields
 			setInputCode();
 		}
+		removeAnnotationModelListener();
+		annotationModel = part.getAdapter(GraphicalAnnotationModel.class);
+		addAnnotationModelListener();
 		setType(input);
 		setInputInit();
 	}
@@ -122,6 +130,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	@Override
 	public void dispose() {
 		removeContentAdapter();
+		removeAnnotationModelListener();
 		super.dispose();
 	}
 
@@ -134,6 +143,20 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	protected void addContentAdapter() {
 		if ((null != getType()) && !getType().eAdapters().contains(contentAdapter)) {
 			getType().eAdapters().add(contentAdapter);
+		}
+	}
+
+	private final GraphicalAnnotationModelListener annotationModelListener = event -> notifiyRefresh();
+
+	protected void removeAnnotationModelListener() {
+		if (annotationModel != null) {
+			annotationModel.removeAnnotationModelListener(annotationModelListener);
+		}
+	}
+
+	protected void addAnnotationModelListener() {
+		if (annotationModel != null) {
+			annotationModel.addAnnotationModelListener(annotationModelListener);
 		}
 	}
 
@@ -183,5 +206,9 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 			adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		}
 		return adapterFactory;
+	}
+
+	public GraphicalAnnotationModel getAnnotationModel() {
+		return annotationModel;
 	}
 }

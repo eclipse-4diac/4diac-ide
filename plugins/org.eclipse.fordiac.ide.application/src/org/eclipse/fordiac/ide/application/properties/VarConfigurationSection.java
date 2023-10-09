@@ -78,7 +78,7 @@ public class VarConfigurationSection extends AbstractSection {
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputDataProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputDataProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
 
 		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer,
 				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG),

@@ -57,7 +57,7 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG),
 				getSectionEditableRule(), null, this, true);
