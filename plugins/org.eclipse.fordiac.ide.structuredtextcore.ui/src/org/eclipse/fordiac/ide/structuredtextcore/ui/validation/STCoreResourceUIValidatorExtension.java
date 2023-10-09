@@ -81,7 +81,7 @@ public class STCoreResourceUIValidatorExtension extends DefaultResourceUIValidat
 
 	protected static URI getCanonicalURI(final URI uri) {
 		if (uri != null && uri.hasFragment() && uri.fragment().startsWith("/1")) { //$NON-NLS-1$
-			return uri.trimFragment().appendFragment(uri.fragment().substring(2));
+			return uri.trimFragment().appendFragment("/" + uri.fragment().substring(2)); //$NON-NLS-1$
 		}
 		return uri;
 	}
