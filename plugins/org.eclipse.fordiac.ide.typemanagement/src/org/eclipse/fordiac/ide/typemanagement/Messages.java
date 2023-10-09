@@ -109,6 +109,9 @@ public final class Messages extends NLS {
 	public static String Refactoring_AffectedStruct;
 	public static String Refactoring_AffectedInstancesOfFB;
 
+	public static String DeleteStructChange_DeleteChoice;
+	public static String DeleteStructChange_ChangeToAnyStruct;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
