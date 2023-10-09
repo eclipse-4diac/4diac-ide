@@ -20,6 +20,7 @@ import java.util.Map
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource
 import org.eclipse.xtext.ParserRule
@@ -43,19 +44,21 @@ final class STCoreParseUtil {
 		URI uri) {
 		serviceProvider.parse(resourceSet, text, entryPoint, type, additionalContent, issues, uri, null)
 	}
-	
+
 	def static parse(IResourceServiceProvider serviceProvider, XtextResourceSet resourceSet, String text,
 		ParserRule entryPoint, LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues,
 		URI uri, boolean includeInternalLibraryElement) {
-		serviceProvider.parse(resourceSet, text, entryPoint, type, additionalContent, issues, uri, null, includeInternalLibraryElement)
+		serviceProvider.parse(resourceSet, text, entryPoint, type, additionalContent, issues, uri, null,
+			includeInternalLibraryElement)
 	}
 
 	def static parse(IResourceServiceProvider serviceProvider, XtextResourceSet resourceSet, String text,
 		ParserRule entryPoint, LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues,
 		URI uri, Map<?, ?> loadOptions) {
-		return parse(serviceProvider, resourceSet, text, entryPoint, type, additionalContent, issues, uri, loadOptions, type instanceof BaseFBType)
+		return parse(serviceProvider, resourceSet, text, entryPoint, type, additionalContent, issues, uri, loadOptions,
+			type instanceof BaseFBType || type instanceof GlobalConstants)
 	}
-	
+
 	def static parse(IResourceServiceProvider serviceProvider, XtextResourceSet resourceSet, String text,
 		ParserRule entryPoint, LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues,
 		URI uri, Map<?, ?> loadOptions, boolean includeInternalLibraryElement) {
@@ -75,7 +78,7 @@ final class STCoreParseUtil {
 		issues.addAll(validator.validate(resource, CheckMode.FAST_ONLY, CancelIndicator.NullImpl))
 		return resource.parseResult
 	}
-	
+
 	def static IParseResult postProcess(String name, List<String> errors, List<String> warnings, List<String> infos,
 		List<Issue> issues, IParseResult parseResult) {
 
