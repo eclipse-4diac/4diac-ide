@@ -39,9 +39,11 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.actions.UpdateAction;
-import org.eclipse.gef.ui.properties.UndoablePropertySheetPage;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -64,10 +66,9 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 
 public class SystemEditor extends EditorPart
-		implements CommandStackEventListener, ITabbedPropertySheetPageContributor, ISelectionListener {
+		implements CommandStackEventListener, ISelectionListener, ISelectionProvider {
 
 	private static final ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 
@@ -108,11 +109,6 @@ public class SystemEditor extends EditorPart
 	public void stackChanged(final CommandStackEvent event) {
 		updateActions(stackActions);
 		firePropertyChange(IEditorPart.PROP_DIRTY);
-	}
-
-	@Override
-	public String getContributorId() {
-		return "org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -220,6 +216,8 @@ public class SystemEditor extends EditorPart
 		createApplicationsSection(toolkit, bottomComp);
 
 		createSysconfSection(toolkit, bottomComp);
+
+		getSite().setSelectionProvider(this);
 
 		if (null != system) {
 			typeInfo.initialize(system, this::executeCommand);
@@ -332,11 +330,6 @@ public class SystemEditor extends EditorPart
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
-		if (adapter == org.eclipse.ui.views.properties.IPropertySheetPage.class) {
-			return adapter.cast(new UndoablePropertySheetPage(getCommandStack(),
-					getActionRegistry().getAction(ActionFactory.UNDO.getId()),
-					getActionRegistry().getAction(ActionFactory.REDO.getId())));
-		}
 		if (adapter == CommandStack.class) {
 			return adapter.cast(getCommandStack());
 		}
@@ -379,4 +372,25 @@ public class SystemEditor extends EditorPart
 		factories.add(new DataItemProviderAdapterFactory());
 		return factories;
 	}
+
+	@Override
+	public ISelection getSelection() {
+		return new StructuredSelection(system);
+	}
+
+	@Override
+	public void addSelectionChangedListener(final ISelectionChangedListener listener) {
+		// nothing to do here
+	}
+
+	@Override
+	public void removeSelectionChangedListener(final ISelectionChangedListener listener) {
+		// nothing to do here
+	}
+
+	@Override
+	public void setSelection(final ISelection selection) {
+		// nothing to do here
+	}
+
 }
