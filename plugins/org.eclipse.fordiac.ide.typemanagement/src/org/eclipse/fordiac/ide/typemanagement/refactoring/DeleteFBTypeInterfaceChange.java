@@ -36,7 +36,19 @@ import org.eclipse.ltk.core.refactoring.CompositeChange;
 public class DeleteFBTypeInterfaceChange extends CompositeChange {
 
 	public enum ChangeState {
-		DELETE_PIN, CHANGE_TO_ANY
+		DELETE_PIN(Messages.DeleteStructChange_DeleteChoice),
+		CHANGE_TO_ANY(Messages.DeleteStructChange_ChangeToAnyStruct);
+
+		private final String descriptor;
+
+		ChangeState(final String desc) {
+			this.descriptor = desc;
+		}
+
+		@Override
+		public String toString() {
+			return this.descriptor;
+		}
 	}
 
 	final FBType type;
