@@ -81,9 +81,11 @@ final class CallableAnnotations {
 		return ECollections.emptyEList();
 	}
 
-	@SuppressWarnings("unused")
 	static EList<INamedElement> getInOutParameters(final Event event) {
-		return ECollections.emptyEList(); // events may not have in/out parameters
+		if (event.eContainer() instanceof final InterfaceList interfaceList) {
+			return ECollections.unmodifiableEList(interfaceList.getInOutVars());
+		}
+		return ECollections.emptyEList();
 	}
 
 	@SuppressWarnings("unused")
@@ -99,9 +101,8 @@ final class CallableAnnotations {
 		return ECollections.unmodifiableEList(fb.getInterface().getOutputVars());
 	}
 
-	@SuppressWarnings("unused")
 	static EList<INamedElement> getInOutParameters(final FB fb) {
-		return ECollections.emptyEList(); // FBs may not have in/out parameters
+		return ECollections.unmodifiableEList(fb.getInterface().getInOutVars());
 	}
 
 	@SuppressWarnings("unused")

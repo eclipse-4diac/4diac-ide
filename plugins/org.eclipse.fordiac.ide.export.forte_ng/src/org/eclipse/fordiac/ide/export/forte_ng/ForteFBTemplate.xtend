@@ -509,11 +509,11 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateEventAccessorDefinition(Event event) '''
 		void «event.generateName»(«event.generateEventAccessorParameters») {
-		  «FOR variable : event.inputParameters.filter(VarDeclaration)»
+		  «FOR variable : (event.inputParameters + event.inOutParameters).filter(VarDeclaration)»
 		  	«variable.generateName» = «variable.generateNameAsParameter»;
 		  «ENDFOR»
-		  receiveInputEvent(«event.generateEventID», nullptr);
-		  «FOR variable : event.outputParameters.filter(VarDeclaration)»
+		  executeEvent(«event.generateEventID», nullptr);
+		  «FOR variable : (event.outputParameters + event.inOutParameters).filter(VarDeclaration)»
 		  	«IF GenericTypes.isAnyType(variable.type)»
 		  		«variable.generateNameAsParameter».setValue(«variable.generateName».unwrap());
 		  	«ELSE»
@@ -531,13 +531,13 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected CharSequence generateEventAccessorParameters(Event event) //
-	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«IF param.isIsInput»const «ENDIF»«param.generateVariableTypeNameAsParameter» &«param.generateNameAsParameter»«ENDFOR»'''
+	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«IF param.isInput && !param.inOutVar»const «ENDIF»«param.generateVariableTypeNameAsParameter» &«param.generateNameAsParameter»«ENDFOR»'''
 
 	def protected CharSequence generateEventAccessorForwardArguments(Event event) //
 	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«param.generateNameAsParameter»«ENDFOR»'''
 
 	def protected getEventAccessorParameters(Event event) {
-		(event.inputParameters + event.outputParameters).filter(VarDeclaration)
+		(event.inputParameters + event.outputParameters + event.inOutParameters).filter(VarDeclaration)
 	}
 
 	def protected getFBClassName() { className }
