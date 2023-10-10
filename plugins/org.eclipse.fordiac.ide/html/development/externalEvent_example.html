@@ -34,7 +34,7 @@
 <h3>Edit the Headerfile</h3>
 <p>This time we want to create a timed <span class="element4diac">SIFB</span> so we do not inherit from <span class="element4diac">CFunctionBlock</span>. Instead we inherit from <span class="element4diac">CEventSourceFB</span>. A <span class="element4diac">CEventSourceFB</span> can react to External Events. Therefore you should correct the first line of your class declaration like this:</p> 
 
-<div class="code">class FORTE_SIBF_T_FF3 : public CEventSourceFB{</div>
+<div class="code">class FORTE_SIFB_T_FF3 : public CEventSourceFB{</div>
 
 <p>In this case we want to get External Events from the included Timer handler. Include the 2 files <span class="fileLocation">timerha.h</span> and <span class="fileLocation">resource.h</span> and change <span class="fileLocation">funcbloc.h</span> to <span class="fileLocation">esfb.h</span>. Your include parameters should look like this:</p>
 
@@ -46,7 +46,7 @@
 
 <p>Then we need a new Constuctor as well as two new private members <span class="specificText">bool m_bActive;</span> which will indicate that the timed Function Block is currently active and <span class="specificText">STimedFBListEntry m_stTimeListEntry;</span> which represents the Timer list entry of this timed Function Block.</p> 
 
-<div class="code">EVENT_SOURCE_FUNCTION_BLOCK_CTOR(FORTE_SIBF_T_FF3){
+<div class="code">EVENT_SOURCE_FUNCTION_BLOCK_CTOR(FORTE_SIFB_T_FF3){
 	    m_stEventSourceEventEntry.m_poFB = this;
 	    setEventChainExecutor(pa_poSrcRes-&gt;getResourceEventExecution());
 	    m_bActive = false;
@@ -63,11 +63,11 @@
 <h3>Edit the Sourcefile</h3>
 <p>Then you need to edit the <span class="specificText">executeEvent</span> method. The usual start and stop Events will register this block to the <span class="specificText">CTimerHandler</span>. Add a new event <span class="specificText">cg_nExternalEventID</span>, which is defined in <span class="specificText">CEventSourceFB</span>, and let it set your outputs. This will be triggered if your Function Block receives an External Event.</p>
 
-<div class="code">void FORTE_SIBF_T_FF3::executeEvent(TEventID paEIID){
+<div class="code">void FORTE_SIFB_T_FF3::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET){
   switch(paEIID){
 	case cg_nExternalEventID:
 		Q() = !Q();
-	  sendOutputEvent(scm_nEventEOID);
+	  sendOutputEvent(scm_nEventEOID, paECET);
 	  break;
 	case scm_nEventSTOPID:
 	  if(m_bActive){

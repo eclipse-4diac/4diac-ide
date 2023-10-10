@@ -52,7 +52,7 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBT
 		    	  #error add code for «event.name» event!
 		    	  /*
 		    	    do not forget to send output event, calling e.g.
-		    	      sendOutputEvent(scmEventCNFID);
+		    	      sendOutputEvent(scmEventCNFID, paECET);
 		    	  */
 		    	  break;
 		    «ENDFOR»

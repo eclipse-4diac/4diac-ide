@@ -611,11 +611,11 @@ final class ValueOperations {
 			DWordValue:
 				DWordValue.toDWordValue(first.intValue >>> second.intValue)
 			WordValue:
-				WordValue.toWordValue((first.shortValue >>> second.intValue) as short)
+				WordValue.toWordValue((first.intValue >>> second.intValue) as short)
 			ByteValue:
-				ByteValue.toByteValue((first.byteValue >>> second.intValue) as byte)
+				ByteValue.toByteValue((first.intValue >>> second.intValue) as byte)
 			default:
-				throw new UnsupportedOperationException('''The shift left operation is not supported for types «first.type.name» and «second.type.name»''')
+				throw new UnsupportedOperationException('''The shift right operation is not supported for types «first.type.name» and «second.type.name»''')
 		}
 	}
 

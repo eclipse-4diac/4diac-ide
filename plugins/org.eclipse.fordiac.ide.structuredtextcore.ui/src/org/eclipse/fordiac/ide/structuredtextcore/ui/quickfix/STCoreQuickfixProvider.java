@@ -66,6 +66,7 @@ import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.resource.impl.AliasedEObjectDescription;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
@@ -355,12 +356,16 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		final IScope scope = scopeProvider.getScope(target, reference);
 		final QualifiedName packageName = nameProvider.getFullyQualifiedName(state.getContents().get(0));
 		for (final IEObjectDescription description : scope.getAllElements()) {
-			if (Objects.equals(issueString, description.getQualifiedName().getLastSegment())
+			if (!isAliased(description) && Objects.equals(issueString, description.getQualifiedName().getLastSegment())
 					&& !STCoreValidator.isImplicitImport(description.getQualifiedName(), packageName)
 					&& isVisible(description, target)) {
 				createImportProposal(issue, description.getQualifiedName(), acceptor);
 			}
 		}
+	}
+
+	protected static boolean isAliased(final IEObjectDescription description) {
+		return description instanceof AliasedEObjectDescription;
 	}
 
 	@SuppressWarnings("static-method") // subclasses may override
