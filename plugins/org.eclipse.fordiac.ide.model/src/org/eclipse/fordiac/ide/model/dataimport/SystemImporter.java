@@ -83,11 +83,13 @@ public class SystemImporter extends CommonElementImporter {
 		return createAutomationSystem();
 	}
 
-	/** Create an empty automation system model
+	/**
+	 * Create an empty automation system model
 	 *
 	 * this can either be used for the importer or for creating a new system
 	 *
-	 * @return the automation system model with its basic setup */
+	 * @return the automation system model with its basic setup
+	 */
 	public static AutomationSystem createAutomationSystem() {
 		final AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
 		system.setCommandStack(new CommandStack());
@@ -362,7 +364,7 @@ public class SystemImporter extends CommonElementImporter {
 		});
 	}
 
-	private void parseDeviceAttribute(final Device device) throws XMLStreamException {
+	private void parseDeviceAttribute(final Device device) throws XMLStreamException, TypeImportException {
 		if (isColorAttributeNode()) {
 			parseColor(device);
 		} else if (isProfileAttribute()) {

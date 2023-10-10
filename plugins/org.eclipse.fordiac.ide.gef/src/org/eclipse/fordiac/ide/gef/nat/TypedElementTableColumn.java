@@ -15,8 +15,9 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
 
-public enum TypedElementTableColumn {
+public enum TypedElementTableColumn implements NatTableColumn {
 	NAME(FordiacMessages.Name), TYPE(FordiacMessages.Type), COMMENT(FordiacMessages.Comment);
 
 	public static final List<TypedElementTableColumn> DEFAULT_COLUMNS = List.of(NAME, TYPE, COMMENT);
@@ -27,6 +28,7 @@ public enum TypedElementTableColumn {
 		this.displayName = displayName;
 	}
 
+	@Override
 	public String getDisplayName() {
 		return displayName;
 	}

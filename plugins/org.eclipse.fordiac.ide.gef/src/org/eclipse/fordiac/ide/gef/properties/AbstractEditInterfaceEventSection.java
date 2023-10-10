@@ -16,23 +16,23 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.InterfaceElementColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.TypedElementColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
-import org.eclipse.fordiac.ide.gef.nat.TypedElementEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementTableColumn;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
+import org.eclipse.fordiac.ide.model.ui.nat.EventTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.EventTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
@@ -40,16 +40,7 @@ import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection<Event> {
 
-	@Override
-	protected String[] fillTypeCombo() {
-		final List<String> list = new ArrayList<>();
-		for (final DataType dataType : EventTypeLibrary.getInstance().getEventTypes()) {
-			list.add(dataType.getName());
-		}
-		return list.toArray(new String[0]);
-	}
-
-	protected DataType getLastUsedEventType(final InterfaceList interfaceList, final boolean isInput,
+	protected static DataType getLastUsedEventType(final InterfaceList interfaceList, final boolean isInput,
 			final IInterfaceElement interfaceElement) {
 		if (null != interfaceElement) {
 			return interfaceElement.getType();
@@ -58,7 +49,7 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		if (!eventList.isEmpty()) {
 			return eventList.get(eventList.size() - 1).getType();
 		}
-		return EventTypeLibrary.getInstance().getType(fillTypeCombo()[0]);
+		return EventTypeLibrary.getInstance().getType(null);
 	}
 
 	@Override
@@ -94,10 +85,12 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		final DataLayer outputDataLayer = new DataLayer(outputProvider);
 		outputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(outputProvider));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new TypedElementColumnProvider(),
-				new TypedElementEditableRule(getSectionEditableRule(), TypedElementTableColumn.DEFAULT_COLUMNS,
+				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
+				new NatTableColumnEditableRule(getSectionEditableRule(), TypedElementTableColumn.DEFAULT_COLUMNS,
 						Set.of(TypedElementTableColumn.NAME, TypedElementTableColumn.COMMENT)),
-				new DataTypeSelectionButton(typeSelection), this, false);
+				new TypeSelectionButton(this::getTypeLibrary, EventTypeSelectionContentProvider.INSTANCE,
+						EventTypeSelectionTreeContentProvider.INSTANCE),
+				this, false);
 	}
 
 	@Override
@@ -106,10 +99,12 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		final DataLayer inputDataLayer = new DataLayer(inputProvider);
 		inputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(inputProvider));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new TypedElementColumnProvider(),
-				new TypedElementEditableRule(getSectionEditableRule(), TypedElementTableColumn.DEFAULT_COLUMNS,
+				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
+				new NatTableColumnEditableRule(getSectionEditableRule(), TypedElementTableColumn.DEFAULT_COLUMNS,
 						Set.of(TypedElementTableColumn.NAME, TypedElementTableColumn.COMMENT)),
-				new DataTypeSelectionButton(typeSelection), this, true);
+				new TypeSelectionButton(this::getTypeLibrary, EventTypeSelectionContentProvider.INSTANCE,
+						EventTypeSelectionTreeContentProvider.INSTANCE),
+				this, true);
 	}
 
 	@Override

@@ -143,8 +143,25 @@
 	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"
 	                  	tooltip="Zoom out">
 	            </command>
+	            <control class="org.eclipse.fordiac.ide.gef.handlers.FontComboContributionItem"
+              			id="org.eclipse.fordiac.ide.toolbars.fontToolbarComboBox">
+              		<visibleWhen>
+         				<or> 
+         					<with variable="activeEditor">
+                   				<adapt type="org.eclipse.ui.editors.text.TextEditor"/>
+            				</with>
+           				</or>                 
+         			</visibleWhen>
+        		</control>
 	            <control class="org.eclipse.fordiac.ide.gef.handlers.ZoomComboContributionItem"
-              			id="org.eclipse.fordiac.ide.toolbars.zoomToolbar">
+              			id="org.eclipse.fordiac.ide.toolbars.zoomToolbarComboBox">
+              		<visibleWhen>
+         				 <or> 
+         	 				<with variable="activeEditor">
+                   				<adapt type="org.eclipse.gef.editparts.ZoomManager"/>
+            				</with>
+           				</or> 
+         			</visibleWhen>
         		</control>
 				<command
 	            		commandId="org.eclipse.ui.edit.text.zoomIn"

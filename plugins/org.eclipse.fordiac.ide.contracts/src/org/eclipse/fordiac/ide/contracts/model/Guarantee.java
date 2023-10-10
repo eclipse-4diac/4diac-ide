@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.contracts.exceptions.ContractExeption;
 import org.eclipse.fordiac.ide.contracts.exceptions.GuaranteeExeption;
 import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -46,6 +47,12 @@ public class Guarantee extends ContractElement {
 	private String outputEvent;
 
 	Guarantee() {
+		// reduced visibility
+	}
+
+	public Guarantee(final String inputEvent, final String outputEvent, final AbstractTime time) {
+		super(inputEvent, time);
+		this.outputEvent = outputEvent;
 
 	}
 
@@ -57,7 +64,7 @@ public class Guarantee extends ContractElement {
 		this.outputEvent = outputEvent;
 	}
 
-	public static Guarantee createGuarantee(final String line) {
+	public static Guarantee createGuarantee(final String line) throws ContractExeption {
 		if (line.contains(ContractKeywords.REACTION)) {
 			return Reaction.createReaction(line);
 		}
@@ -76,13 +83,30 @@ public class Guarantee extends ContractElement {
 			guarantee.setRangeFromInterval(parts, POSITION_NO);
 			return guarantee;
 		}
-		guarantee.setMax(Integer.parseInt(
-				parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length())));
-		guarantee.setMin(0);
+		guarantee.setTime(new Interval(0, Integer.parseInt(parts[POSITION_NO].substring(0,
+				parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length()))));
+
 		return guarantee;
 	}
 
 	private static boolean isCorrectGuarantee(final String[] parts) {
+		if (!hasCorrectBeginning(parts)) {
+			return false;
+		}
+		if (!ContractKeywords.EVENT.equals(parts[POS_EVENT_STRING])) {
+			return false;
+		}
+		if (!ContractKeywords.OCCURS.equals(parts[POS_OCCUR])) {
+			return false;
+		}
+		if (!ContractKeywords.WITHIN.equals(parts[POS_WITHIN])) {
+			return false;
+		}
+		return ContractKeywords.UNIT_OF_TIME.equals(
+				parts[POS_MS].subSequence(ContractUtils.getStartPosition(parts, POS_MS), parts[POS_MS].length()));
+	}
+
+	protected static boolean hasCorrectBeginning(final String[] parts) {
 		if (parts.length != GUARANTEE_LENGTH) {
 			return false;
 		}
@@ -95,20 +119,7 @@ public class Guarantee extends ContractElement {
 		if (!(ContractKeywords.OCCURS + ContractKeywords.COMMA).equals(parts[POS_OCCURS])) {
 			return false;
 		}
-		if (!ContractKeywords.THEN.equals(parts[POS_THEN])) {
-			return false;
-		}
-		if (!ContractKeywords.EVENT.equals(parts[POS_EVENT_STRING])) {
-			return false;
-		}
-		if (!ContractKeywords.OCCUR.equals(parts[POS_OCCUR])) {
-			return false;
-		}
-		if (!ContractKeywords.WITHIN.equals(parts[POS_WITHIN])) {
-			return false;
-		}
-		return ContractKeywords.UNIT_OF_TIME.equals(
-				parts[POS_MS].subSequence(ContractUtils.getStartPosition(parts, POS_MS), parts[POS_MS].length()));
+		return ContractKeywords.THEN.equals(parts[POS_THEN]);
 	}
 
 	@Override
@@ -197,7 +208,7 @@ public class Guarantee extends ContractElement {
 			return Reaction.isCompatibleWith(mapGuarantees, mapReactions);
 		}
 		for (final Map.Entry<String, EList<Guarantee>> entry : mapGuarantees.entrySet()) {
-			if (entry.getValue().size() != 1 && !ContractElement.isTimeConsistent(entry.getValue())) {
+			if (entry.getValue().size() != 1 && !Contract.isTimeConsistent(entry.getValue())) {
 				return false;
 			}
 		}
@@ -205,12 +216,12 @@ public class Guarantee extends ContractElement {
 	}
 
 	@Override
-	public String createComment() {
+	public String asString() {
 		if (this instanceof final Reaction reaction) {
-			return reaction.createComment();
+			return reaction.asString();
 		}
 		if (this instanceof final GuaranteeTwoEvents twoEvents) {
-			return twoEvents.createComment();
+			return twoEvents.asString();
 		}
 		final StringBuilder comment = new StringBuilder();
 		if (getMin() == 0 || getMin() == getMax()) {

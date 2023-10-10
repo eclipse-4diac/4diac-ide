@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPr
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater.LibraryElementChangeAdapterFilter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
@@ -41,6 +42,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemant
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreResourceUIValidatorExtension;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocument;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocumentPartitioner;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocumentUpdaterChangeAdapterFilter;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
@@ -113,6 +115,10 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public Class<? extends XtextDocumentReconcileStrategy> bindXtextDocumentReconcileStrategy() {
 		return STCoreDocumentReconcileStrategy.class;
+	}
+
+	public Class<? extends LibraryElementChangeAdapterFilter> bindLibraryElementChangeAdapterFilter() {
+		return STFunctionDocumentUpdaterChangeAdapterFilter.class;
 	}
 
 	public Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {

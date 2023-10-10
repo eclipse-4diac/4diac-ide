@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH,
+ * Copyright (c) 2020, 2023 Primetals Technologies Germany GmbH,
  *                          Primetals Technologies Austria GmbH,
  *                          Johannes Kepler University Linz
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,27 +17,21 @@
  *   Lukas Wais		  - implemented tree menu for structured types
  *   Alois Zoitl	  - fixed fokus checking for linux.
  *   Dunja Životin    - extracted DataTypeTreeSelectionDialog and TypeNode into separate classes
+ *   Martin Jobst     - refactored type proposals
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.ui.editors;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Supplier;
 
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionProposalProvider;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
-import org.eclipse.jface.fieldassist.IContentProposalListener2;
-import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.window.Window;
@@ -57,32 +52,24 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private ContentProposalAdapter adapter;
 	private Text textControl;
+	private final Supplier<TypeLibrary> supplier;
 	private final ITypeSelectionContentProvider contentProvider;
-	private SimpleContentProposalProvider provider;
-	private List<DataType> types;
-	private String[] elementaryTypes = new String[0];
+	private final ITreeContentProvider treeContentProvider;
 	private final TableViewer viewer;
-	/* A flag that indicates if the content proposals have been set to elementary types (this is the case if the text
-	 * field is empty) or all types. This means that the ModifyListener of the textControl does not have to set the
-	 * types for the proposal provider with every modify event but only when its necessary. */
-	private boolean isElementary;
 
 	private boolean isTraverseNextProcessActive;
 	private boolean isTraversePreviousProcessActive;
 
-	public DataTypeDropdown(final ITypeSelectionContentProvider contentProvider, final TableViewer viewer) {
+	public DataTypeDropdown(final Supplier<TypeLibrary> supplier, final ITypeSelectionContentProvider contentProvider,
+			final ITreeContentProvider treeContentProvider, final TableViewer viewer) {
 		super(viewer.getTable());
+		this.supplier = supplier;
 		this.contentProvider = contentProvider;
+		this.treeContentProvider = treeContentProvider;
 		this.viewer = viewer;
-		types = new ArrayList<>(); // empty list for initial provider creation
 		configureTextControl();
 		createDialogButton();
 		enableContentProposal();
-		loadContent();
-	}
-
-	public DataType getType(final String value) {
-		return types.stream().filter(type -> value.equals(type.getName())).findAny().orElse(null);
 	}
 
 	@Override
@@ -92,20 +79,6 @@ public class DataTypeDropdown extends TextCellEditor {
 		} else {
 			super.doSetValue(value);
 		}
-	}
-
-	/* is called with every opening of the content proposal popup, may lead to performance issues */
-	private void loadContent() {
-		types = getDataTypesSorted(); // get sorted types for convenient order in dialog
-		provider.setProposals(getTypesAsStringArray());
-	}
-
-	// can be overridden to filter the list differently
-	protected List<DataType> getDataTypesSorted() {
-		if (null != contentProvider) {
-			return contentProvider.getTypes();
-		}
-		return Collections.emptyList();
 	}
 
 	@Override
@@ -126,16 +99,6 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private void configureTextControl() {
 		textControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		textControl.addModifyListener(e -> {
-			loadContent(); // refresh content before opening textfield
-			if (textControl.getText().isEmpty()) {
-				provider.setProposals(getElementaryTypes());
-				isElementary = true;
-			} else if (isElementary) {
-				provider.setProposals(getTypesAsStringArray());
-				isElementary = false;
-			}
-		});
 		textControl.addListener(SWT.Traverse, e -> {
 			e.doit = false; // prevent the action from doing anything automatically
 			if ((e.detail == SWT.TRAVERSE_TAB_NEXT) && ((e.stateMask & SWT.CTRL) != 0)) {
@@ -200,19 +163,6 @@ public class DataTypeDropdown extends TextCellEditor {
 		adapter.setEnabled(true);
 	}
 
-	private String[] getElementaryTypes() {
-		// only load elementary types once because they do not change
-		if (null == elementaryTypes || elementaryTypes.length == 0) {
-			elementaryTypes = types.stream().filter(type -> !(type instanceof StructuredType)).map(DataType::getName)
-					.toArray(String[]::new);
-		}
-		return elementaryTypes;
-	}
-
-	private String[] getTypesAsStringArray() {
-		return types.stream().map(DataType::getName).toArray(String[]::new);
-	}
-
 	private void createDialogButton() {
 		final Button menuButton = new Button((Composite) getControl(), SWT.FLAT);
 		menuButton.setText("..."); //$NON-NLS-1$
@@ -231,13 +181,9 @@ public class DataTypeDropdown extends TextCellEditor {
 	}
 
 	private void openDialog() {
-		loadContent(); // refresh content before opening
-
-		final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getControl().getShell());
-		HashMap<String, List<String>> allTypes = new HashMap<>();
-		allTypes.put(Messages.DataTypeDropdown_Elementary_Types, Arrays.asList(getElementaryTypes()));
-		allTypes.put(Messages.DataTypeDropdown_STRUCT_Types, types.stream().map(INamedElement::getName).collect(Collectors.toList()));
-		dialog.setInput(allTypes);
+		final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getControl().getShell(),
+				treeContentProvider);
+		dialog.setInput(supplier.get());
 		dialog.setTitle(Messages.DataTypeDropdown_Type_Selection);
 		dialog.setMessage(Messages.DataTypeDropdown_Select_Type);
 		dialog.setDoubleClickSelects(false); // because it is incompatible with multi-level tree
@@ -250,12 +196,9 @@ public class DataTypeDropdown extends TextCellEditor {
 		}
 		final Object result = dialog.getFirstResult();
 		// check for DataType so that no VarDeclaration or directories can be selected
-		if (result instanceof TypeNode) {
-			final TypeNode node = (TypeNode) result;
-			if (!node.isDirectory()) { // nodes without types are directories
-				doSetValue(node.getName());
-				fireApplyEditorValue();
-			}
+		if ((result instanceof final TypeNode node) && !node.isDirectory()) { // nodes without types are directories
+			doSetValue(node.getFullName());
+			fireApplyEditorValue();
 		}
 		deactivate();
 	}
@@ -266,24 +209,8 @@ public class DataTypeDropdown extends TextCellEditor {
 			'5', '6', '7', '8', '9', '_', '.', SWT.BS };
 
 	private void enableContentProposal() {
-		provider = new SimpleContentProposalProvider(getTypesAsStringArray());
-		provider.setFiltering(true);
-
-		adapter = new ContentProposalAdapter(text, new TextContentAdapter(), provider, null, ACTIVATION_CHARS);
-		adapter.addContentProposalListener(new IContentProposalListener2() {
-
-			@Override
-			public void proposalPopupClosed(final ContentProposalAdapter adapter) {
-				// no need to listen to closing
-			}
-
-			@Override
-			public void proposalPopupOpened(final ContentProposalAdapter adapter) {
-				loadContent();
-			}
-
-		});
-
+		adapter = new ContentProposalAdapter(text, new TextContentAdapter(),
+				new TypeSelectionProposalProvider(supplier, contentProvider), null, ACTIVATION_CHARS);
 		adapter.addContentProposalListener(proposal -> {
 			fireApplyEditorValue();
 			// if apply value was triggered programmatically -> tab to next/previous cell
@@ -306,17 +233,19 @@ public class DataTypeDropdown extends TextCellEditor {
 			deactivate();
 		}
 	}
+
 	private boolean insideAnyEditorArea() {
 		final Point cursorLocation = getControl().getDisplay().getCursorLocation();
 		final Point containerRelativeCursor = getControl().getParent().toControl(cursorLocation);
 		return getControl().getBounds().contains(containerRelativeCursor);
 	}
 
-
 	@Override
 	protected boolean dependsOnExternalFocusListener() {
-		/* if true, a separate focus listener is created and the whole cell editor looses focus when the proposal popup
-		 * is opened */
+		/*
+		 * if true, a separate focus listener is created and the whole cell editor
+		 * looses focus when the proposal popup is opened
+		 */
 		return false;
 	}
 }

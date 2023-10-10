@@ -20,8 +20,33 @@ public class Instant extends AbstractTime {
 		this.time = time;
 	}
 
-	public int getTime() {
+	private Instant add(final Instant other) {
+		return new Instant(this.getMin() + other.getMin());
+	}
+
+	@Override
+	public AbstractTime add(final AbstractTime other) {
+		if (other instanceof final Instant otherInstant) {
+			return this.add(otherInstant);
+		}
+		if (other instanceof final Interval otherInterval) {
+			return otherInterval.add(this);
+		}
+		return null;
+	}
+
+	@Override
+	public int getMin() {
 		return time;
 	}
 
+	@Override
+	public int getMax() {
+		return getMin();
+	}
+
+	@Override
+	public Instant getCopy() {
+		return new Instant(time);
+	}
 }

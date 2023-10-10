@@ -25,6 +25,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
@@ -33,6 +35,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -53,6 +56,7 @@ public class TypeSelectionWidget {
 
 	private ConfigurableObject configurableObject;
 	private ITypeSelectionContentProvider contentProvider;
+	private ITreeContentProvider treeContentProvider;
 
 	private Composite composite;
 	private TableViewer tableViewer;
@@ -128,9 +132,11 @@ public class TypeSelectionWidget {
 		typeChangeEnabled = enabled;
 	}
 
-	public void initialize(final ConfigurableObject type, final ITypeSelectionContentProvider contentProvider) {
+	public void initialize(final ConfigurableObject type, final ITypeSelectionContentProvider contentProvider,
+			final ITreeContentProvider treeContentProvider) {
 		this.configurableObject = type;
 		this.contentProvider = contentProvider;
+		this.treeContentProvider = treeContentProvider;
 
 		if (type instanceof StructManipulator) {
 			resizeTextField();
@@ -151,7 +157,8 @@ public class TypeSelectionWidget {
 	}
 
 	private CellEditor[] createCellEditors() {
-		return new CellEditor[] { new DataTypeDropdown(contentProvider, tableViewer) };
+		return new CellEditor[] {
+				new DataTypeDropdown(this::getTypeLibrary, contentProvider, treeContentProvider, tableViewer) };
 	}
 
 	private TableViewer createTableViewer(final Composite parent) {
@@ -194,6 +201,10 @@ public class TypeSelectionWidget {
 			final DataType dtp = ((VarDeclaration) configurableObject).getType();
 			openEditorButton.setEnabled((dtp instanceof StructuredType) && !IecTypes.GenericTypes.isAnyType(dtp)); // $NON-NLS-1$
 		}
+	}
+
+	protected TypeLibrary getTypeLibrary() {
+		return TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(configurableObject);
 	}
 
 	public Composite getControl() {

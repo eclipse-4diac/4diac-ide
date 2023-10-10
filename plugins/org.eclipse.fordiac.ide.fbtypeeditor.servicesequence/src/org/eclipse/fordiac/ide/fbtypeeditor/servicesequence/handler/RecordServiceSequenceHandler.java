@@ -26,6 +26,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
@@ -105,33 +106,33 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		// random events, random parameters
 		if (dialog.isRandomEventBoxChecked() && dialog.isRandomParameterBoxChecked() && (dialog.getCount() > 0)) {
 			events.addAll(InputGenerator.getRandomEventsSequence(typeCopy, dialog.getCount()));
-			eventManager = addToGenSequence(fbType, seq, events, true, dialog.isAppend());
+			eventManager = addToGenSequence(fbType, seq, events, true, dialog.getStartState(), dialog.isAppend());
 		}
 		// random events, not random parameters
 		else if (dialog.isRandomEventBoxChecked() && !dialog.isRandomParameterBoxChecked() && (dialog.getCount() > 0)) {
 			events.addAll(InputGenerator.getRandomEventsSequence(typeCopy, dialog.getCount()));
-			eventManager = addToGenSequence(fbType, seq, events, false, dialog.isAppend());
+			eventManager = addToGenSequence(fbType, seq, events, false, dialog.getStartState(), dialog.isAppend());
 		}
 		// not random events, random parameters
 		else if (!dialog.isRandomEventBoxChecked() && dialog.isRandomParameterBoxChecked() && parameters.isEmpty()
 				&& (dialog.getCount() > 0)) {
 			events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
 					.filter(Objects::nonNull).toList();
-			eventManager = addToGenSequence(fbType, seq, events, true, dialog.isAppend());
+			eventManager = addToGenSequence(fbType, seq, events, true, dialog.getStartState(), dialog.isAppend());
 		}
 		// not random events, no parameters
 		else if (!dialog.isRandomEventBoxChecked() && !dialog.isRandomParameterBoxChecked() && parameters.isEmpty()
 				&& (dialog.getCount() > 0)) {
 			events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
 					.filter(Objects::nonNull).toList();
-			eventManager = addToGenSequence(fbType, seq, events, false, dialog.isAppend());
+			eventManager = addToGenSequence(fbType, seq, events, false, dialog.getStartState(), dialog.isAppend());
 		}
 		// not random events, not random parameters
 		else if (!dialog.isRandomEventBoxChecked() && !dialog.isRandomParameterBoxChecked() && !parameters.isEmpty()
 				&& (dialog.getCount() > 0)) {
 			events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
 					.filter(Objects::nonNull).toList();
-			eventManager = addToGenSequence(fbType, seq, events, false, dialog.isAppend());
+			eventManager = addToGenSequence(fbType, seq, events, false, dialog.getStartState(), dialog.isAppend());
 			for (final ServiceTransaction transaction : seq.getServiceTransaction()) {
 				transaction.getInputPrimitive().setParameters(formatInputParameter(parameters));
 			}
@@ -142,9 +143,15 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 				&& (dialog.getCount() > 0)) {
 			events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
 					.filter(Objects::nonNull).toList();
-			eventManager = addToGenSequence(fbType, seq, events.subList(0, 1), false, dialog.isAppend());
-			eventManager.getTransactions().addAll(
-					(addToGenSequence(fbType, seq, events.subList(1, events.size()), true, true)).getTransactions());
+			eventManager = addToGenSequence(fbType, seq, events.subList(0, 1), false, dialog.getStartState(),
+					dialog.isAppend());
+			final String lastState = ((BasicFBTypeRuntime) (((FBTransaction) eventManager.getTransactions().get(0))
+					.getOutputEventOccurrences()
+					.get(((FBTransaction) eventManager.getTransactions().get(0)).getOutputEventOccurrences().size() - 1)
+					.getFbRuntime())).getActiveState();
+			eventManager.getTransactions()
+					.addAll((addToGenSequence(fbType, seq, events.subList(1, events.size()), true, lastState, true))
+							.getTransactions());
 
 			seq.getServiceTransaction().get(0).getInputPrimitive().setParameters(formatInputParameter(parameters));
 		}
@@ -169,10 +176,10 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	}
 
 	private static EventManager addToGenSequence(final FBType fbType, final ServiceSequence seq,
-			final List<Event> eventList, final boolean isRandom, final boolean isAppend) {
+			final List<Event> eventList, final boolean isRandom, final String startState, final boolean isAppend) {
 		final FBType typeCopy = EcoreUtil.copy(fbType);
 		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, eventList, isRandom,
-				Messages.ServiceSequenceAssignView_START);
+				startState);
 		if (!isRandom) {
 			TransactionFactory.addTraceInfoTo(eventManager.getTransactions());
 		}

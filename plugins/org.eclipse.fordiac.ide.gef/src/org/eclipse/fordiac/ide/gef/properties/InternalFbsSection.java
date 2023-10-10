@@ -16,28 +16,33 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.fordiac.ide.gef.nat.FBColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.TypedElementColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementTableColumn;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInternalFBOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.IndexUpDown;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalFBCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertFBCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.nat.FbSelectionTreeContentProvider;
-import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
+import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
+import org.eclipse.fordiac.ide.model.ui.nat.FBTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
+import org.eclipse.fordiac.ide.model.ui.widgets.FBTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -45,6 +50,7 @@ import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -52,7 +58,6 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InternalFbsSection extends AbstractSection implements I4diacNatTableUtil {
 	protected IChangeableRowDataProvider<FB> provider;
-	protected Map<String, List<String>> typeSelection = new HashMap<>();
 	protected NatTable table;
 
 	@Override
@@ -77,8 +82,11 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		provider = new ChangeableListDataProvider<>(new FBColumnAccessor(this));
 		final DataLayer dataLayer = new DataLayer(provider);
 		dataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(provider));
-		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new TypedElementColumnProvider(),
-				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection, new FbSelectionTreeContentProvider()), this, false);
+		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
+				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,
+				new TypeSelectionButton(this::getTypeLibrary, FBTypeSelectionContentProvider.INSTANCE,
+						FBTypeSelectionTreeContentProvider.INSTANCE, FBTreeNodeLabelProvider.INSTANCE),
+				this, false);
 		table.configure();
 
 		buttons.bindToTableViewer(table, this,
@@ -156,13 +164,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		final BaseFBType currentType = getType();
 		if (currentType != null) {
 			provider.setInput(currentType.getInternalFbs());
-			initTypeSelection(getTypeLibrary());
 		}
-	}
-
-	private void initTypeSelection(final TypeLibrary typeLib) {
-		typeSelection.put("FB Types", typeLib.getFbTypes().values().stream() //$NON-NLS-1$
-				.map(FBTypeEntry::getTypeName).toList());
 	}
 
 	@Override
@@ -171,4 +173,31 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 			cmd.add(new DeleteInternalFBCommand(getType(), fb));
 		}
 	}
+
+	public static class FBTreeNodeLabelProvider extends DataTypeTreeSelectionDialog.TreeNodeLabelProvider {
+
+		public static final FBTreeNodeLabelProvider INSTANCE = new FBTreeNodeLabelProvider();
+
+		@Override
+		public Image getImage(final Object element) {
+			if (element instanceof final TypeNode node && node.getType() != null) {
+				final LibraryElement type = node.getType();
+
+				if (type instanceof BasicFBType) {
+					return FordiacImage.ICON_BASIC_FB.getImage();
+				}
+				if (type instanceof CompositeFBType) {
+					return FordiacImage.ICON_COMPOSITE_FB.getImage();
+				}
+				if (type instanceof SimpleFBType) {
+					return FordiacImage.ICON_SIMPLE_FB.getImage();
+				}
+				if (type instanceof ServiceInterfaceFBType) {
+					return FordiacImage.ICON_SIFB.getImage();
+				}
+			}
+			return super.getImage(element);
+		}
+	}
+
 }

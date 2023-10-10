@@ -12,16 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
@@ -40,7 +33,6 @@ public abstract class AbstractInternalVarsSection extends AbstractSection implem
 
 	protected IChangeableRowDataProvider<VarDeclaration> provider;
 	protected NatTable table;
-	protected Map<String, List<String>> typeSelection = new HashMap<>();
 
 	@Override
 	protected BaseFBType getType() {
@@ -134,15 +126,5 @@ public abstract class AbstractInternalVarsSection extends AbstractSection implem
 	@Override
 	public boolean isEditable() {
 		return true;
-	}
-
-	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
-		final List<String> elementaryTypes = dataTypeLib.getDataTypesSorted().stream()
-				.filter(type -> !(type instanceof StructuredType)).map(DataType::getName).collect(Collectors.toList());
-		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
-
-		final List<String> structuredTypes = dataTypeLib.getDataTypesSorted().stream()
-				.filter(StructuredType.class::isInstance).map(DataType::getName).collect(Collectors.toList());
-		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
 }

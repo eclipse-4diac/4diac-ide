@@ -19,15 +19,15 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<maven.compiler.release/>
-		<tycho.version>4.0.1</tycho.version>
-		<tycho-repo.url>https://download.eclipse.org/releases/2023-06</tycho-repo.url>
+		<tycho.version>4.0.3</tycho.version>
+		<tycho-repo.url>https://download.eclipse.org/releases/2023-09</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 		<sonar.java.source>17</sonar.java.source>
 		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/17/updates/release/latest</org.eclipse.justj.jre.repository>
-        <xtend-version>2.31.0</xtend-version>
-        <eclipse.platform.version>4.28</eclipse.platform.version>
-        <equinox.executable.version>3.8.2100</equinox.executable.version>
+        <xtend-version>2.32.0</xtend-version>
+        <eclipse.platform.version>4.29</eclipse.platform.version>
+        <equinox.executable.version>3.8.2200</equinox.executable.version>
 	</properties>
 
 	<repositories>
@@ -91,9 +91,6 @@
 					</execution>
 				</executions>
 				<configuration>
-					<sources>
-						<source>src</source>
-					</sources>
 					<outputDirectory>${basedir}/xtend-gen</outputDirectory>
 					<testOutputDirectory>${basedir}/xtend-gen</testOutputDirectory>
 					<showEmptyDirWarning>false</showEmptyDirWarning>

@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 
@@ -50,8 +50,7 @@ public class ToggleSubAppRepresentationCommand extends Command implements Connec
 		if (null == text) {
 			subapp.deleteAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);
 		} else {
-			subapp.setAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE,
-					IecTypes.ElementaryTypes.STRING.getName(), text, ""); //$NON-NLS-1$
+			subapp.setAttribute(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE, ElementaryTypes.STRING, text, ""); //$NON-NLS-1$
 		}
 	}
 }

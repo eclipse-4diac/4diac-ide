@@ -158,11 +158,11 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private void addSubappHeightAndWidthAttributes(final SubApp subApp) throws XMLStreamException {
 		if (subApp.getWidth() != 0) {
-			addAttributeElement(LibraryElementTags.WIDTH_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL.getName(),
+			addAttributeElement(LibraryElementTags.WIDTH_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL,
 					CoordinateConverter.INSTANCE.convertTo1499XML(subApp.getWidth()), null);
 		}
 		if (subApp.getHeight() != 0) {
-			addAttributeElement(LibraryElementTags.HEIGHT_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL.getName(),
+			addAttributeElement(LibraryElementTags.HEIGHT_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL,
 					CoordinateConverter.INSTANCE.convertTo1499XML(subApp.getHeight()), null);
 		}
 	}
@@ -281,7 +281,6 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addGroupAttribute(final Group group) throws XMLStreamException {
-		addAttributeElement(LibraryElementTags.GROUP_NAME, IecTypes.ElementaryTypes.STRING.getName(), group.getName(),
-				null);
+		addAttributeElement(LibraryElementTags.GROUP_NAME, IecTypes.ElementaryTypes.STRING, group.getName(), null);
 	}
 }

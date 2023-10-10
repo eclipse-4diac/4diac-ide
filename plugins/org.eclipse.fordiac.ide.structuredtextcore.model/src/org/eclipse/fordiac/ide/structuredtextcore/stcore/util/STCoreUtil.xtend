@@ -63,9 +63,9 @@ import org.eclipse.fordiac.ide.model.eval.function.Comment
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
-import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
@@ -469,6 +469,12 @@ final class STCoreUtil {
 		].filterNull.toList
 	}
 
+	def static String generateSignature(ICallable callable) //
+	'''«callable.name»(«(callable.inputParameters.filter(ITypedElement).map[type?.name ?: "NULL"]
+		+ callable.outputParameters.filter(ITypedElement).map['''&«type?.name ?: "NULL"»''']
+		+ callable.inOutParameters.filter(ITypedElement).map['''&&«type?.name ?: "NULL"»''']
+	).join(",")»)'''
+
 	def static getFeatureType(INamedElement feature) {
 		switch (feature) {
 			VarDeclaration:
@@ -495,7 +501,7 @@ final class STCoreUtil {
 			}
 			AdapterDeclaration:
 				feature.adapterFB?.type
-			FB:
+			ITypedElement:
 				feature.type
 			default:
 				null

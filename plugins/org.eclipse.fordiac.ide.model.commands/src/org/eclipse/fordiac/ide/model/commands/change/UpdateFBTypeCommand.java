@@ -18,6 +18,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.List;
+
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
@@ -135,6 +137,11 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		final TypeEntry reloadedTypeEntry = typeLibrary.find(entry.getFullTypeName());
 		if (isValidTypeEntry(reloadedTypeEntry)) {
 			return reloadedTypeEntry;
+		}
+
+		final List<TypeEntry> candidates = typeLibrary.findUnqualified(entry.getTypeName());
+		if (candidates.size() == 1 && isValidTypeEntry(candidates.get(0))) {
+			return candidates.get(0);
 		}
 
 		if (entry instanceof SubAppTypeEntry) {

@@ -19,14 +19,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
@@ -35,13 +31,10 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
-import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.widgets.Group;
 
@@ -49,22 +42,6 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	protected static final String INITIAL_VALUE = "initialvalue"; //$NON-NLS-1$
 	protected static final int INITIALVALUE_WIDTH = 100;
-	private DataTypeDropdown typeDropdown;
-
-	@Override
-	protected CellEditor createTypeCellEditor(final TableViewer viewer) {
-		typeDropdown = new DataTypeDropdown(() -> getDataTypeLib().getDataTypesSorted(), viewer);
-		return typeDropdown;
-	}
-
-	@Override
-	protected String[] fillTypeCombo() {
-		final List<String> list = new ArrayList<>();
-		for (final DataType dataType : getDataTypeLib().getDataTypesSorted()) {
-			list.add(dataType.getName());
-		}
-		return list.toArray(new String[0]);
-	}
 
 	protected static DataType getLastUsedDataType(final InterfaceList interfaceList, final boolean isInput,
 			final IInterfaceElement interfaceElement) {
@@ -113,8 +90,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputProvider));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new VarDeclarationColumnProvider(), getSectionEditableRule(),
-				new DataTypeSelectionButton(typeSelection), this, false);
+				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(), null,
+				this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.configure();
@@ -127,8 +104,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new VarDeclarationColumnProvider(), getSectionEditableRule(),
-				new DataTypeSelectionButton(typeSelection), this, true);
+				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(), null,
+				this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.configure();

@@ -15,16 +15,25 @@ package org.eclipse.fordiac.ide.test.ui;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
+import org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart;
+import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
+import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
@@ -34,10 +43,10 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
+import org.eclipse.swtbot.swt.finder.keyboard.Keystrokes;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
@@ -137,6 +146,103 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		parent.click();
 		bot.menu(EDIT).menu(DELETE).click();
 		assertNull(editor.getEditPart(E_CYCLE_FB));
+	}
+
+	/**
+	 * Checks if FB can be selected by drawing a rectangle by mouse left click over
+	 * the FB
+	 *
+	 * First, a rectangle is drawn next to the FB to check whether it is not
+	 * selected as expected. Then a rectangle is drawn over the FB to check whether
+	 * the FB is selected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void selectFbViaMouseLeftClickRectangleOverFB() {
+		dragAndDropEventsFB(E_D_FF_TREE_ITEM, new Point(200, 200));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+
+		// drag rectangle next to FB, therefore FB should not be selected
+		editor.drag(40, 40, 80, 80);
+		assertThrows(TimeoutException.class, () -> editor.waitForSelectedFBEditPart());
+		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
+		assertTrue(selectedEditParts.isEmpty());
+		assertFalse(selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart)
+				.map(p -> (FBEditPart) p.part()).anyMatch(fb -> E_D_FF_FB.equals(fb.getModel().getName())));
+
+		// drag rectangle over to FB, therefore FB should be selected
+		editor.drag(50, 50, 350, 350);
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart)
+				.map(p -> (FBEditPart) p.part()).anyMatch(fb -> E_D_FF_FB.equals(fb.getModel().getName())));
+	}
+
+	/**
+	 * Checks if FB can be selected by clicking on somewhere within the FB bounds
+	 * but not on a pin or FB instance name
+	 *
+	 * First attempts are made to click next to the FB to check whether it is not
+	 * selected as expected. Then several attempts are made to click on the FB
+	 * (meaning within the FB bounds) to select the FB as expected.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void selectFbViaMouseLeftClickOnFB() {
+		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(150, 250));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+
+		// check bounds of FB
+		editor.getEditPart(E_SWITCH_FB);
+		editor.click(E_SWITCH_FB);
+		final SWTBotGefEditPart parent = editor.getEditPart(E_SWITCH_FB).parent();
+		final IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
+		final Rectangle fbBounds = figure.getBounds().getCopy();
+		figure.translateToAbsolute(fbBounds);
+
+		// click next to the FB
+		Point point = new Point(145, 245);
+		assertFalse(fbBounds.contains(point.x, point.y));
+		assertThrows(TimeoutException.class, () -> editor.waitForSelectedFBEditPart());
+		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertFalse(isFbSelected(selectedEditParts, E_SWITCH_FB));
+
+		// click next to the FB
+		point = new Point(265, 350);
+		assertFalse(fbBounds.contains(point.x, point.y));
+		assertThrows(TimeoutException.class, () -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertFalse(isFbSelected(selectedEditParts, E_SWITCH_FB));
+
+		// click exactly at the insertion point
+		point = new Point(150, 250);
+		editor.click(point.x, point.y);
+		assertTrue(fbBounds.contains(point.x, point.y));
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(isFbSelected(selectedEditParts, E_SWITCH_FB));
+
+		// click within the FB bounds but not on a pin or instance name
+		point = new Point(170, 300);
+		editor.click(point.x, point.y);
+		assertTrue(fbBounds.contains(point.x, point.y));
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(isFbSelected(selectedEditParts, E_SWITCH_FB));
+
+		// click within the FB bounds but not on a pin or instance name
+		point = new Point(200, 340);
+		editor.click(point.x, point.y);
+		assertTrue(fbBounds.contains(point.x, point.y));
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		selectedEditParts = editor.selectedEditParts();
+		assertFalse(selectedEditParts.isEmpty());
+		assertTrue(isFbSelected(selectedEditParts, E_SWITCH_FB));
 	}
 
 	/**
@@ -252,10 +358,42 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	/**
 	 * Checks if it is possible to edit the automatically generated name of the FB
 	 */
-	@Disabled
+	@SuppressWarnings("static-method")
 	@Test
 	public void editFBName() {
-		// in progress
+		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(100, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editor);
+
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
+		final GraphicalViewer graphicalViewer = viewer.getGraphicalViewer();
+		final Map<?, ?> editPartRegistry = graphicalViewer.getEditPartRegistry();
+		final String newName = "Testee"; //$NON-NLS-1$
+		InstanceNameFigure iNFigure = null;
+		for (final Object obj : editPartRegistry.values()) {
+			if (obj instanceof final InstanceNameEditPart iNEP) {
+				final InstanceNameFigure figure = iNEP.getFigure();
+				assertNotNull(figure);
+				final String text = figure.getText();
+
+				if (E_SR_FB.equals(text)) {
+					iNFigure = figure;
+					final Rectangle bounds = figure.getBounds().getCopy();
+					assertNotNull(bounds);
+					figure.translateToAbsolute(bounds);
+					editor.setFocus();
+					editor.doubleClick(bounds.x, bounds.y);
+					bot.text(E_SR_FB).setText(newName);
+					bot.activeShell().pressShortcut(Keystrokes.CR);
+					assertEquals(newName, figure.getText());
+					break;
+                                }
+			}
+		}
+		assertNotNull(iNFigure);
+		assertNotNull(editor.getEditPart(newName));
+		assertDoesNotThrow(iNFigure::getText);
+		assertEquals(newName, iNFigure.getText());
 	}
 
 	/**

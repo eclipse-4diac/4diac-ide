@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public interface TypeEntry extends Notifier {
@@ -51,6 +52,10 @@ public interface TypeEntry extends Notifier {
 	String getTypeName();
 
 	String getFullTypeName();
+
+	default String getPackageName() {
+		return PackageNameHelper.extractPackageName(getFullTypeName());
+	}
 
 	void refresh();
 

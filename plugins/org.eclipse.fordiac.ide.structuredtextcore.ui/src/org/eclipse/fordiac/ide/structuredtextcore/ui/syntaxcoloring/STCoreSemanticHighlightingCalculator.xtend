@@ -13,6 +13,7 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *       - distinguish variable scope
+ *       - do not resolve features during highlighting
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring
@@ -21,9 +22,11 @@ import com.google.inject.Inject
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
@@ -89,7 +92,9 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 	def protected dispatch boolean highlightElement(STFeatureExpression featuresExpression,
 		IHighlightedPositionAcceptor acceptor, CancelIndicator cancelIndicator) {
 
-		val style = switch (feature : featuresExpression.feature) {
+		// do not resolve features during highlighting
+		// features are resolved by the reconciler and we are then called again anyway
+		val style = switch (feature : featuresExpression.featureNoresolve) {
 			VarDeclaration:
 				STCoreHighlightingStyles.MEMBER_VARIABLE_ID
 			FB:
@@ -117,4 +122,9 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 		}
 	}
 
+	def protected INamedElement getFeatureNoresolve(STFeatureExpression expression) {
+		switch (feature : expression.eGet(STCorePackage.eINSTANCE.STFeatureExpression_Feature, false)) {
+			INamedElement case !feature.eIsProxy: feature
+		}
+	}
 }

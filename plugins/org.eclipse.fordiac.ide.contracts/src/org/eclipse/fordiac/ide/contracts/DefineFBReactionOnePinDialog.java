@@ -21,7 +21,6 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -32,28 +31,19 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class DefineFBReactionOnePinDialog extends MessageDialog {
+public class DefineFBReactionOnePinDialog extends ContractElementDialog {
 	private static final int NUM_COLUMNS = 3;
-	private Text inputTime;
 	private Text offset;
-	private final Event pinFrom;
 	private final Event pinTo;
-	private String inputTimeText;
 	private String offsetText;
 	private Button offsetCheckbox;
 	private boolean defineOffset;
 	private String state;
 
 	public DefineFBReactionOnePinDialog(final Shell parentShell, final Event pinFrom) {
-		super(parentShell, Messages.DefineFBReactionOnePinDialog_Title, null,
-				Messages.DefineFBReactionOnePinDialog_Info, MessageDialog.INFORMATION, 0,
-				Messages.DefineFBReactionOnePinDialog_Button);
-		this.pinFrom = pinFrom;
+		super(parentShell, pinFrom, Messages.DefineFBReactionOnePinDialog_Title,
+				Messages.DefineFBReactionOnePinDialog_Info);
 		this.pinTo = null;
-	}
-
-	public String getTime() {
-		return inputTimeText;
 	}
 
 	public boolean hasOffset() {
@@ -70,12 +60,7 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 
 	@Override
 	protected Control createCustomArea(final Composite parent) {
-		parent.setLayout(new FillLayout());
-		final Composite dialogArea = new Composite(parent, SWT.FILL);
-		dialogArea.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
-		final GridLayout layout = new GridLayout(2, false);
-		dialogArea.setLayout(layout);
-
+		final Composite dialogArea = (Composite) super.createCustomArea(parent);
 		final Group group = new Group(dialogArea, SWT.FILL);
 
 		group.setText(Messages.DefineFBReactionOnePinDialog_DefineAssumption);
@@ -96,9 +81,9 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 		label = new Label(group, SWT.None);
 		label.setText(ContractKeywords.OCCURS + " " + ContractKeywords.EVERY); //$NON-NLS-1$
 
-		inputTime = new Text(group, SWT.RIGHT);
-		inputTime.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTime));
-		inputTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		inputTimeText = new Text(group, SWT.RIGHT);
+		inputTimeText.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTimeText));
+		inputTimeText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		label = new Label(group, SWT.None);
 		label.setText(" " + ContractKeywords.UNIT_OF_TIME); //$NON-NLS-1$
@@ -145,8 +130,8 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 		if (offsetCheckbox.isEnabled()) {
 			offsetText = offset.getText();
 		}
-		inputTimeText = inputTime.getText();
-		final String[] strInputTime = DefineContractUtils.getTimeIntervalFromString(inputTimeText);
+		inputTime = inputTimeText.getText();
+		final String[] strInputTime = DefineContractUtils.getTimeIntervalFromString(inputTime);
 		String[] strOffset = { "0", "0" };  //$NON-NLS-1$//$NON-NLS-2$
 		if (offset.isVisible()) {
 			strOffset = DefineContractUtils.getTimeIntervalFromString(offsetText);
@@ -160,7 +145,7 @@ public class DefineFBReactionOnePinDialog extends MessageDialog {
 	}
 
 	private boolean isCorrect(final String[] strInputTime, final String[] strOffset) {
-		if (inputTimeText.isBlank()) {
+		if (inputTime.isBlank()) {
 			return false;
 		}
 		if ((offset.isVisible() && offset.getText().isBlank())) {

@@ -28,11 +28,11 @@ public class Reaction extends Guarantee {
 	private static final int POSITION_NO = 4;
 
 	Reaction() {
-		throw new ExceptionInInitializerError("Reaction not Implemented"); //$NON-NLS-1$
-		// remove when class is correctly evaluated in contract
+		throw new UnsupportedOperationException("Reaction not Implemented"); //$NON-NLS-1$
+		// TODO remove when class is correctly evaluated in contract
 	}
 
-	static Guarantee createReaction(final String line) {
+	static Guarantee createReaction(final String line) throws ReactionExeption {
 
 		final String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectGuarantee(parts)) {
@@ -46,9 +46,8 @@ public class Reaction extends Guarantee {
 			reaction.setRangeFromInterval(parts, POSITION_NO);
 			return reaction;
 		}
-		reaction.setMax(Integer.parseInt(
-				parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length())));
-		reaction.setMin(0);
+		reaction.setTime(new Interval(0, Integer.parseInt(parts[POSITION_NO].substring(0,
+				parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length()))));
 		return reaction;
 
 	}
@@ -68,7 +67,7 @@ public class Reaction extends Guarantee {
 	}
 
 	@Override
-	public String createComment() {
+	public String asString() {
 		final StringBuilder comment = new StringBuilder();
 		if (getMin() == 0 || getMin() == getMax()) {
 			comment.append(

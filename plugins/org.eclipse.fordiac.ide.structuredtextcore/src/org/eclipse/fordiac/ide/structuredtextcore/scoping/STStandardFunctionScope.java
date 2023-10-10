@@ -13,13 +13,12 @@
 package org.eclipse.fordiac.ide.structuredtextcore.scoping;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.scoping.IScope;
-import org.eclipse.xtext.scoping.Scopes;
 import org.eclipse.xtext.scoping.impl.AbstractScope;
 
 public class STStandardFunctionScope extends AbstractScope {
@@ -37,20 +36,20 @@ public class STStandardFunctionScope extends AbstractScope {
 
 	@Override
 	public Iterable<IEObjectDescription> getAllLocalElements() {
-		final var standardFunctions = standardFunctionProvider.get();
-		return Scopes.scopedElementsFor(standardFunctions);
+		return standardFunctionProvider.getDescriptions();
 	}
 
 	@Override
 	public IEObjectDescription getSingleLocalElementByName(final QualifiedName name) {
-		final var candidates = standardFunctionProvider.get(name.toString(), argumentTypes);
-		final var candidateDescriptions = Scopes.scopedElementsFor(candidates);
-		return StreamSupport.stream(candidateDescriptions.spliterator(), false).findFirst()
-				.orElse(super.getSingleLocalElementByName(name));
+		if (name.getSegmentCount() == 1) {
+			return standardFunctionProvider.findDescription(name.getFirstSegment(), argumentTypes).orElse(null);
+		}
+		return null;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("STStandardFunctionScope [argumentTypes=%s]", argumentTypes); //$NON-NLS-1$
+		return String.format("STStandardFunctionScope [argumentTypes=%s]", //$NON-NLS-1$
+				argumentTypes.stream().map(DataType::getName).collect(Collectors.joining(", ", "(", ")"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 }

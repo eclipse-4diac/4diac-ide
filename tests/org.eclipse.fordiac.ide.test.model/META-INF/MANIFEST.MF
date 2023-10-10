@@ -7,7 +7,8 @@ Fragment-Host: org.eclipse.fordiac.ide.model
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.model
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Eclipse 4diac
-Import-Package: org.junit.jupiter.api,
+Import-Package: org.eclipse.fordiac.ide.contracts.model,
+ org.junit.jupiter.api,
  org.junit.jupiter.api.function,
  org.junit.jupiter.params,
  org.junit.jupiter.params.provider,

@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2023 Johannes Kepler University Linz
+ *                          Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,17 +15,15 @@
  *   Lukas Wais - reworked tree structure
  *   Michael Oberlehner  - refactored tree structure
  *   Sebastian Hollersbacher - changed DropDownBox to autocompletion Textfield
- *   						   for better usability
+ *                             for better usability
+ *   Martin Erich Jobst - refactored type proposals and add support for FQN
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.editparts.StructInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.AbstractStructManipulatorEditPart;
+import org.eclipse.fordiac.ide.application.editparts.StructInterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget;
 import org.eclipse.fordiac.ide.model.AbstractStructTreeNode;
@@ -32,13 +31,14 @@ import org.eclipse.fordiac.ide.model.CheckableStructTree;
 import org.eclipse.fordiac.ide.model.StructTreeContentProvider;
 import org.eclipse.fordiac.ide.model.StructTreeLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.nat.StructuredTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
+import org.eclipse.fordiac.ide.model.ui.widgets.StructuredTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.GraphicalViewer;
@@ -125,14 +125,13 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	}
 
 	public boolean newStructSelected(final String newStructName) {
-		return !newStructName.contentEquals(getType().getStructType().getName())
-				&& getDataTypeLib().getStructuredType(newStructName).getName().equals(newStructName);
+		return !newStructName.equalsIgnoreCase(PackageNameHelper.getFullTypeName(getType().getStructType()))
+				&& getDataTypeLib().getStructuredType(newStructName) != null;
 	}
 
 	protected static void updateStructManipulatorFB(final StructManipulator newMux) {
 		final EditorPart activeEditor = (EditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-				.getActivePage()
-				.getActiveEditor();
+				.getActivePage().getActiveEditor();
 		final GraphicalViewer viewer = activeEditor.getAdapter(GraphicalViewer.class);
 		if (null != viewer) {
 			viewer.flush();
@@ -162,7 +161,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 		createContextMenu(memberVarViewer.getControl());
 	}
 
-	@SuppressWarnings("static-method")  // allow subclasses to provide different treeviewers
+	@SuppressWarnings("static-method") // allow subclasses to provide different treeviewers
 	protected TreeViewer createTreeViewer(final Composite parent) {
 		return new TreeViewer(parent);
 	}
@@ -255,7 +254,8 @@ public class StructManipulatorSection extends AbstractSection implements Command
 			initTree(getType(), memberVarViewer);
 		}
 
-		typeSelectionWidget.initialize(getType(), new StructuredTypeSelectionContentProvider());
+		typeSelectionWidget.initialize(getType(), StructuredTypeSelectionContentProvider.INSTANCE,
+				StructuredTypeSelectionTreeContentProvider.INSTANCE);
 
 		if (commandStack != null) {
 			commandStack.addCommandStackEventListener(this);
@@ -309,12 +309,5 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	@Override
 	protected void setInputInit() {
 		// Currently nothing needs to be done here
-	}
-
-	private class StructuredTypeSelectionContentProvider implements ITypeSelectionContentProvider {
-		@Override
-		public List<DataType> getTypes() {
-			return getDataTypeLib().getStructuredTypesSorted().stream().collect(Collectors.toList());
-		}
 	}
 }

@@ -19,6 +19,10 @@ public final class ContractConstants {
 
 	}
 
+	enum ContractState {
+		VALID, INVALID, UNKNOWN
+	}
+
 	public static final int DEFAULT_NUMBER_TIMES = 5;
 
 }

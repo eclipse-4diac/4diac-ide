@@ -16,7 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.VarContentProvider;
@@ -27,12 +26,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.nat.EventTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.EventTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -132,6 +133,11 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 
 	@Override
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
-		return () -> new ArrayList<>(EventTypeLibrary.getInstance().getEventTypes());
+		return EventTypeSelectionContentProvider.INSTANCE;
+	}
+
+	@Override
+	protected ITreeContentProvider getTypeSelectionTreeContentProvider() {
+		return EventTypeSelectionTreeContentProvider.INSTANCE;
 	}
 }

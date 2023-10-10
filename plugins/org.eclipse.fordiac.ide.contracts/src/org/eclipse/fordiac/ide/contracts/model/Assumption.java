@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.contracts.exceptions.AssumptionExeption;
+import org.eclipse.fordiac.ide.contracts.exceptions.ContractExeption;
 import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -30,7 +31,15 @@ public class Assumption extends ContractElement {
 	private static final int ASSUMPTION_LENGTH = 5;
 	private static final int POSITION_NO = 4;
 
-	static Assumption createAssumption(final String line) {
+	Assumption() {
+		// reduced visibility
+	}
+
+	Assumption(final String inputEvent, final Interval interval) {
+		super(inputEvent, interval);
+	}
+
+	static Assumption createAssumption(final String line) throws ContractExeption {
 		if (line.contains(ContractKeywords.OFFSET)) {
 			return AssumptionWithOffset.createAssumptionWithOffset(line);
 		}
@@ -48,9 +57,8 @@ public class Assumption extends ContractElement {
 			assumption.setRangeFromInterval(parts, POSITION_NO);
 			return assumption;
 		}
-		assumption.setMax(-1);
-		assumption.setMin(Integer.parseInt(
-				parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length())));
+		assumption.setTime(new Instant(Integer.parseInt(parts[POSITION_NO].substring(0,
+				parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length()))));
 		return assumption;
 	}
 
@@ -106,13 +114,13 @@ public class Assumption extends ContractElement {
 			}
 
 		}
-		return ContractElement.isTimeConsistent(assumptions);
+		return Contract.isTimeConsistent(assumptions);
 	}
 
 	@Override
-	public String createComment() {
+	public String asString() {
 		if (this instanceof final AssumptionWithOffset withOffset) {
-			return withOffset.createComment();
+			return withOffset.asString();
 		}
 		final StringBuilder comment = new StringBuilder();
 		if (getMax() == -1 || getMax() == getMin()) {

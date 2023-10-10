@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmInitialValueEditedResourceProvider;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
 import org.eclipse.swt.SWT;
@@ -22,13 +22,13 @@ import org.eclipse.xtext.ui.editor.embedded.IEditedResourceProvider;
 
 @SuppressWarnings("restriction")
 public class InitialValueCellEditor extends XtextStyledTextCellEditor {
-	private final IRowDataProvider<VarDeclaration> dataProvider;
+	private final IRowDataProvider<? extends ITypedElement> dataProvider;
 
-	public InitialValueCellEditor(final IRowDataProvider<VarDeclaration> dataProvider) {
+	public InitialValueCellEditor(final IRowDataProvider<? extends ITypedElement> dataProvider) {
 		this.dataProvider = dataProvider;
 	}
 
-	public InitialValueCellEditor(final IRowDataProvider<VarDeclaration> dataProvider,
+	public InitialValueCellEditor(final IRowDataProvider<? extends ITypedElement> dataProvider,
 			final boolean moveSelectionOnEnter) {
 		super(moveSelectionOnEnter);
 		this.dataProvider = dataProvider;

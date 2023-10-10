@@ -42,5 +42,11 @@
             debugModel="org.eclipse.fordiac.ide.debug.model"
             delegateClass="org.eclipse.fordiac.ide.debug.EvaluatorWatchExpressionDelegate">
       </watchExpressionDelegate>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.debug.preferences.FordiacDebugPreferenceInitializer">
+      </initializer>
    </extension> 
 </plugin>

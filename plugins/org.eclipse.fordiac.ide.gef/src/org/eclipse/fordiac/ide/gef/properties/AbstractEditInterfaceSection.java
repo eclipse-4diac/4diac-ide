@@ -23,11 +23,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
@@ -35,21 +30,16 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
-import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
@@ -72,8 +62,6 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 	protected NatTable outputTable;
 	private AddDeleteReorderListWidget outputButtons;
 
-	protected Map<String, List<String>> typeSelection = new HashMap<>();
-
 	protected abstract CreationCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
 	protected abstract CreationCommand newInsertCommand(IInterfaceElement selection, boolean isInput, int index);
@@ -81,8 +69,6 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);
 
 	protected abstract ChangeInterfaceOrderCommand newOrderCommand(IInterfaceElement selection, boolean moveUp);
-
-	protected abstract String[] fillTypeCombo();
 
 	protected abstract void setupOutputTable(Group outputsGroup);
 
@@ -131,11 +117,6 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 				ref -> newOrderCommand((IInterfaceElement) ref, false));
 	}
 
-	// can be overridden by subclasses to use a different type dropdown
-	protected CellEditor createTypeCellEditor(final TableViewer viewer) {
-		return ComboBoxWidgetFactory.createComboBoxCellEditor(viewer.getTable(), fillTypeCombo(), SWT.READ_ONLY);
-	}
-
 	@Override
 	protected void setInputCode() {
 		// nothing to be done here
@@ -164,9 +145,6 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 			inputButtons.setCreateButtonEnablement(isEditable());
 			outputButtons.setCreateButtonEnablement(isEditable());
 		}
-		if (isEditable()) {
-			initTypeSelection(getDataTypeLib());
-		}
 	}
 
 	protected abstract void setTableInput(final InterfaceList il);
@@ -189,18 +167,6 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 		executeCommand(cmd);
 		inputTable.refresh();
 		outputTable.refresh();
-	}
-
-	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
-		final List<String> elementaryTypes = new ArrayList<>();
-		dataTypeLib.getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
-				.forEach(type -> elementaryTypes.add(type.getName()));
-		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
-
-		final List<String> structuredTypes = new ArrayList<>();
-		dataTypeLib.getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
-				.forEach(type -> structuredTypes.add(type.getName()));
-		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
 
 	private final Adapter interfaceAdapter = new EContentAdapter() {

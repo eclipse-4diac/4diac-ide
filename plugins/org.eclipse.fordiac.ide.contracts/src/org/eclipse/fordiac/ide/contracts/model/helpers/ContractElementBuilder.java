@@ -22,12 +22,41 @@ public class ContractElementBuilder {
 		contractElement = new StringBuilder();
 	}
 
-	public String getString() {
-		return contractElement.toString();
-	}
-
 	public ContractElementBuilder addAssumption() {
 		contractElement.append(ContractKeywords.ASSUMPTION);
+		contractElement.append(" "); //$NON-NLS-1$
+		return this;
+	}
+
+	public ContractElementBuilder addComma() {
+		contractElement.append(ContractKeywords.COMMA);
+		return this;
+	}
+
+	public ContractElementBuilder addEClose() {
+		contractElement.append(ContractKeywords.EVENTS_CLOSE);
+		contractElement.append(" "); //$NON-NLS-1$
+		return this;
+	}
+
+	public ContractElementBuilder addEOpen() {
+		contractElement.append(ContractKeywords.EVENTS_OPEN);
+		return this;
+	}
+
+	public ContractElementBuilder addEvent() {
+		contractElement.append(ContractKeywords.EVENT);
+		contractElement.append(" "); //$NON-NLS-1$
+		return this;
+	}
+
+	public ContractElementBuilder addEvent(final String event) {
+		contractElement.append(event);
+		return this;
+	}
+
+	public ContractElementBuilder addEvents() {
+		contractElement.append(ContractKeywords.EVENTS);
 		contractElement.append(" "); //$NON-NLS-1$
 		return this;
 	}
@@ -38,8 +67,21 @@ public class ContractElementBuilder {
 		return this;
 	}
 
-	public ContractElementBuilder addEvent(final String event) {
-		contractElement.append(event);
+	public ContractElementBuilder addEvery() {
+		contractElement.append(ContractKeywords.EVERY);
+		contractElement.append(" "); //$NON-NLS-1$
+		return this;
+	}
+
+	public ContractElementBuilder addGuarantee() {
+		contractElement.append(ContractKeywords.GUARANTEE);
+		contractElement.append(" "); //$NON-NLS-1$
+		return this;
+	}
+
+	public ContractElementBuilder addOccur() {
+		contractElement.append(ContractKeywords.OCCUR);
+		contractElement.append(" "); //$NON-NLS-1$
 		return this;
 	}
 
@@ -49,8 +91,31 @@ public class ContractElementBuilder {
 		return this;
 	}
 
-	public ContractElementBuilder addEvery() {
-		contractElement.append(ContractKeywords.EVERY);
+	public ContractElementBuilder addOccursComma() {
+		contractElement.append(ContractKeywords.OCCURS);
+		contractElement.append(ContractKeywords.COMMA);
+		contractElement.append(" "); //$NON-NLS-1$
+		return this;
+	}
+
+	public ContractElementBuilder addOffet() {
+		contractElement.append(ContractKeywords.OFFSET);
+		return this;
+	}
+
+	public ContractElementBuilder addReaction() {
+		contractElement.append(ContractKeywords.REACTION);
+		contractElement.append(" "); //$NON-NLS-1$
+		return this;
+	}
+
+	public ContractElementBuilder addSpace() {
+		contractElement.append(" "); //$NON-NLS-1$
+		return this;
+	}
+
+	public ContractElementBuilder addThen() {
+		contractElement.append(ContractKeywords.THEN);
 		contractElement.append(" "); //$NON-NLS-1$
 		return this;
 	}
@@ -65,47 +130,15 @@ public class ContractElementBuilder {
 		return this;
 	}
 
+	public ContractElementBuilder addWhenever() {
+		contractElement.append(ContractKeywords.WHENEVER);
+		contractElement.append(" "); //$NON-NLS-1$
+		return this;
+	}
+
 	public ContractElementBuilder addWith() {
 		contractElement.append(ContractKeywords.WITH);
 		contractElement.append(" "); //$NON-NLS-1$
-		return this;
-	}
-
-	public ContractElementBuilder addSpace() {
-		contractElement.append(" "); //$NON-NLS-1$
-		return this;
-	}
-
-	public ContractElementBuilder addOffet() {
-		contractElement.append(ContractKeywords.OFFSET);
-		return this;
-	}
-
-	public ContractElementBuilder addGuarantee() {
-		contractElement.append(ContractKeywords.GUARANTEE);
-		contractElement.append(" "); //$NON-NLS-1$
-		return this;
-	}
-
-	public ContractElementBuilder addReaction() {
-		contractElement.append(ContractKeywords.REACTION);
-		contractElement.append(" "); //$NON-NLS-1$
-		return this;
-	}
-
-	public ContractElementBuilder addEOpen() {
-		contractElement.append(ContractKeywords.EVENTS_OPEN);
-		return this;
-	}
-
-	public ContractElementBuilder addEClose() {
-		contractElement.append(ContractKeywords.EVENTS_CLOSE);
-		contractElement.append(" "); //$NON-NLS-1$
-		return this;
-	}
-
-	public ContractElementBuilder addComma() {
-		contractElement.append(ContractKeywords.COMMA);
 		return this;
 	}
 
@@ -115,40 +148,7 @@ public class ContractElementBuilder {
 		return this;
 	}
 
-	public ContractElementBuilder addWhenever() {
-		contractElement.append(ContractKeywords.WHENEVER);
-		contractElement.append(" "); //$NON-NLS-1$
-		return this;
-	}
-
-	public ContractElementBuilder addOccursComma() {
-		contractElement.append(ContractKeywords.OCCURS);
-		contractElement.append(ContractKeywords.COMMA);
-		contractElement.append(" "); //$NON-NLS-1$
-		return this;
-	}
-
-	public ContractElementBuilder addThen() {
-		contractElement.append(ContractKeywords.THEN);
-		contractElement.append(" "); //$NON-NLS-1$
-		return this;
-	}
-
-	public ContractElementBuilder addEvent() {
-		contractElement.append(ContractKeywords.EVENT);
-		contractElement.append(" "); //$NON-NLS-1$
-		return this;
-	}
-
-	public ContractElementBuilder addEvents() {
-		contractElement.append(ContractKeywords.EVENTS);
-		contractElement.append(" "); //$NON-NLS-1$
-		return this;
-	}
-
-	public ContractElementBuilder addOccur() {
-		contractElement.append(ContractKeywords.OCCUR);
-		contractElement.append(" "); //$NON-NLS-1$
-		return this;
+	public String getString() {
+		return contractElement.toString();
 	}
 }

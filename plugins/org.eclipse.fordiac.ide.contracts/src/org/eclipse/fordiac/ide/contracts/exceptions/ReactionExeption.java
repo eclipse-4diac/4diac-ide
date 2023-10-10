@@ -13,12 +13,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.exceptions;
 
+import org.eclipse.fordiac.ide.contracts.model.Reaction;
+
 public class ReactionExeption extends ContractExeption {
 
-	private static final long serialVersionUID = -3108833470457929397L;
+	private static final long serialVersionUID = -7391480053584045054L;
+	private final Reaction reaction;
+
+	public ReactionExeption(final Reaction reaction, final String errorMessage) {
+		super(errorMessage);
+		this.reaction = reaction;
+	}
 
 	public ReactionExeption(final String errorMessage) {
-		super(errorMessage);
+		this(null, errorMessage);
+	}
+
+	public Reaction getReaction() {
+		return reaction;
 	}
 
 }

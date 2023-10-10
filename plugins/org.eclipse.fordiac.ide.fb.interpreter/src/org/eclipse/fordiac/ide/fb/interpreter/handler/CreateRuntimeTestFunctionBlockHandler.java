@@ -20,12 +20,12 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.fb.interpreter.Messages;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.TestFbGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.CompositeFBGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.RunAllFBGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.MatchFBGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.MuxFBGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.TestSuite;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.CompositeTestFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.MatchFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.MuxFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.RunAllFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.TestFbGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -42,36 +42,43 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 		// user should have a service sequence editor open
 		if (type == null) {
 			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
-					Messages.RecordExecutionTraceHandler_Incorrect_Selection, "Please open a Service model");
+					Messages.RecordExecutionTraceHandler_Incorrect_Selection,
+					Messages.CreateRuntimeTestFunctionBlockHandler_Select_Service_Model);
 			return Status.CANCEL_STATUS;
 		}
 
 		final TestSuite testSuite = new TestSuite(type.getService().getServiceSequence());
-		testSuite.getTestCases().removeIf(n -> (n.getdataSource().getServiceSequenceType().equals("FORBIDDEN")));
+		testSuite.getTestCases().removeIf(n -> (n.getdataSource().getServiceSequenceType().equals("FORBIDDEN"))); //$NON-NLS-1$
 		if (testSuite.getTestCases().isEmpty()) {
 			return Status.OK_STATUS;
 		}
 
-		final FBType testtype = new TestFbGenerator(type, testSuite).generateTestFb();
-		testtype.getTypeEntry().save();
+		// testsignal generator block
+		final FBType testType = new TestFbGenerator(type, testSuite).generateTestFb();
+		testType.getTypeEntry().save();
 
-		final FBType matchtype = new MatchFBGenerator(type, testSuite).generateMatchFB();
-		matchtype.getTypeEntry().save();
+		// matches the expected with the actual behaviour
+		final FBType matchType = new MatchFBGenerator(type, testSuite).generateMatchFB();
+		matchType.getTypeEntry().save();
 
+		// sends the outcome of the test and the testname to the outputs of the
+		// composite
 		final FBType muxType = new MuxFBGenerator(type, testSuite).generateMuxFB();
 		muxType.getTypeEntry().save();
 
-		final FBType demuxType = new RunAllFBGenerator(type, testSuite).generateDemuxFB();
-		demuxType.getTypeEntry().save();
+		// generates the signals for the testsignal and mux fb
+		final FBType runAllType = new RunAllFBGenerator(type, testSuite).generateRunAllFB();
+		runAllType.getTypeEntry().save();
 
+		// don't change order, generateCompositeFB won't work then
 		final List<FBType> list = new ArrayList<>();
-		list.add(testtype);
+		list.add(testType);
 		list.add(type);
-		list.add(matchtype);
+		list.add(matchType);
 		list.add(muxType);
-		list.add(demuxType);
+		list.add(runAllType);
 
-		final CompositeFBType compositeType = new CompositeFBGenerator(type, testSuite, list).generateCompositeFB();
+		final CompositeFBType compositeType = new CompositeTestFBGenerator(type, testSuite, list).generateCompositeFB();
 		compositeType.getTypeEntry().save();
 
 		return Status.OK_STATUS;

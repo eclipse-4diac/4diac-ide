@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="2.0.1.qualifier" useFeatures="true" includeLaunchers="true" autoIncludeRequirements="true">
+<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="2.0.1.qualifier" type="features" includeLaunchers="true" autoIncludeRequirements="true">
 
    <aboutInfo>
       <image path="/org.eclipse.fordiac.ide.images/images/dialog.png"/>
@@ -77,8 +77,6 @@
       <feature id="org.eclipse.emf.edit.ui"/>
       <feature id="org.eclipse.emf.mapping"/>
       <feature id="org.eclipse.emf.mapping.ecore"/>
-      <feature id="org.eclipse.emf.mapping.ecore.editor"/>
-      <feature id="org.eclipse.emf.mapping.ui"/>
       <feature id="org.eclipse.emf.common.ui"/>
       <feature id="org.eclipse.emf.ecore.editor"/>
       <feature id="org.eclipse.ecf.core.feature"/>
@@ -86,14 +84,7 @@
       <feature id="org.eclipse.ecf.filetransfer.feature"/>
       <feature id="org.eclipse.ecf.filetransfer.httpclient5.feature"/>
       <feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
-      <feature id="org.eclipse.xtext.ui"/>
       <feature id="org.eclipse.emf.databinding"/>
-      <feature id="org.eclipse.xtext.redist"/>
-      <feature id="org.eclipse.xtext.xbase.lib"/>
-      <feature id="org.eclipse.emf.mwe2.runtime.sdk"/>
-      <feature id="org.eclipse.xtext.runtime"/>
-      <feature id="org.eclipse.xtext.xbase"/>
-      <feature id="org.eclipse.jdt"/>
       <feature id="org.eclipse.egit" installMode="root"/>
       <feature id="org.eclipse.jgit" installMode="root"/>
       <feature id="org.eclipse.jgit.http.apache" installMode="root"/>
