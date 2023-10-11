@@ -42,10 +42,11 @@ public final class FordiacErrorMarker {
 	public static final String VALIDATION_MARKER = "org.eclipse.fordiac.ide.model.validation"; //$NON-NLS-1$
 	public static final String INITIAL_VALUE_MARKER = "org.eclipse.fordiac.ide.model.initialValue"; //$NON-NLS-1$
 	public static final String TYPE_DECLARATION_MARKER = "org.eclipse.fordiac.ide.model.typeDeclaration"; //$NON-NLS-1$
+	public static final String IMPORT_MARKER = "org.eclipse.fordiac.ide.model.import"; //$NON-NLS-1$
 	public static final String TYPE_LIBRARY_MARKER = "org.eclipse.fordiac.ide.model.typeLibrary"; //$NON-NLS-1$
 
 	private static final Set<String> MODEL_MARKER_TYPES = Set.of(IEC61499_MARKER, VALIDATION_MARKER,
-			INITIAL_VALUE_MARKER, TYPE_DECLARATION_MARKER, TYPE_LIBRARY_MARKER);
+			INITIAL_VALUE_MARKER, TYPE_DECLARATION_MARKER, IMPORT_MARKER, TYPE_LIBRARY_MARKER);
 
 	public static final String TARGET_URI = "org.eclipse.fordiac.ide.model.iec61499.targetUri"; //$NON-NLS-1$
 	public static final String TARGET_TYPE = "org.eclipse.fordiac.ide.model.iec61499.targetType"; //$NON-NLS-1$

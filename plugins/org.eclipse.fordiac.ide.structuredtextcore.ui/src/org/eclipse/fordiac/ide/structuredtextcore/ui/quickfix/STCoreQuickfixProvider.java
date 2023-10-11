@@ -54,6 +54,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBl
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreImportValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
@@ -254,7 +255,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		}
 		final STCoreTypeUsageCollector collector = typeUsageCollectorProvider.get();
 		final Set<QualifiedName> imported = new HashSet<>(collector.collectUsedTypes(source));
-		imported.removeIf(imp -> STCoreValidator.isImplicitImport(imp, packageName));
+		imported.removeIf(imp -> STCoreImportValidator.isImplicitImport(imp, packageName));
 		imports.removeIf(imp -> shouldRemoveImport(imp, imported));
 		imported.stream().map(nameConverter::toString).map(STCoreQuickfixProvider::createImport)
 				.forEachOrdered(imports::add);
@@ -357,7 +358,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		final QualifiedName packageName = nameProvider.getFullyQualifiedName(state.getContents().get(0));
 		for (final IEObjectDescription description : scope.getAllElements()) {
 			if (!isAliased(description) && Objects.equals(issueString, description.getQualifiedName().getLastSegment())
-					&& !STCoreValidator.isImplicitImport(description.getQualifiedName(), packageName)
+					&& !STCoreImportValidator.isImplicitImport(description.getQualifiedName(), packageName)
 					&& isVisible(description, target)) {
 				createImportProposal(issue, description.getQualifiedName(), acceptor);
 			}

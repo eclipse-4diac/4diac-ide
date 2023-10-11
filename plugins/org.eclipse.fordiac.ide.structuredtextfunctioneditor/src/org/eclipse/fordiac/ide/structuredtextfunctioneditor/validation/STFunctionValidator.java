@@ -22,6 +22,8 @@ import java.text.MessageFormat;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreControlFlowValidator;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreImportValidator;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.Messages;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.resource.STFunctionResource;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
@@ -37,6 +39,7 @@ import org.eclipse.xtext.validation.Check;
 
 import com.google.common.base.Objects;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 public class STFunctionValidator extends AbstractSTFunctionValidator {
 
@@ -46,6 +49,12 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 	@Inject
 	private IContainer.Manager containerManager;
 
+	@Inject
+	private Provider<STCoreTypeUsageCollector> typeUsageCollectorProvider;
+
+	@Inject
+	private STCoreImportValidator importValidator;
+
 	public static final String ISSUE_CODE_PREFIX = "org.eclipse.fordiac.ide.structuredtextfunction."; //$NON-NLS-1$
 	public static final String DUPLICATE_FUNCTION_NAME = ISSUE_CODE_PREFIX + "duplicateFunctionName"; //$NON-NLS-1$
 	public static final String FUNCTION_NAME_MISMATCH = ISSUE_CODE_PREFIX + "functionNameMismatch"; //$NON-NLS-1$
@@ -53,7 +62,10 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 
 	@Check
 	public void checkImports(final STFunctionSource source) {
-		checkImports(source, source.getName(), source.getImports());
+		if (!source.getImports().isEmpty()) {
+			importValidator.validateImports(source.getName(), source.getImports(),
+					typeUsageCollectorProvider.get().collectUsedTypes(source), this);
+		}
 	}
 
 	@Check
@@ -63,7 +75,10 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 		controlFlowValidator.validateStatements(function.getCode());
 	}
 
-	/** Check on duplicate names in self-defined functions. Standard functions are already checked in STCore */
+	/**
+	 * Check on duplicate names in self-defined functions. Standard functions are
+	 * already checked in STCore
+	 */
 	@Check
 	public void checkDuplicateFunctionNames(final STFunction function) {
 		final IResourceDescriptions resourceDescriptions = resourceDescriptionsProvider

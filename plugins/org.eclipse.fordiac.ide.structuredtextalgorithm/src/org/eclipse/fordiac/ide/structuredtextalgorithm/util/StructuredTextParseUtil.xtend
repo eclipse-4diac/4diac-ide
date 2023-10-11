@@ -101,19 +101,19 @@ class StructuredTextParseUtil {
 			rootASTElement as STAlgorithmSource
 	}
 
-	def static void validate(String expression, URI uri, INamedElement expectedType, LibraryElement type,
+	def static STInitializerExpressionSource validate(String expression, URI uri, INamedElement expectedType, LibraryElement type,
 		Collection<? extends EObject> additionalContent, List<Issue> issues) {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		expression.parse(parser.grammarAccess.STInitializerExpressionSourceRule, uri, expectedType, type,
-			additionalContent, issues)
+			additionalContent, issues).rootASTElement as STInitializerExpressionSource
 	}
 
-	def static void validateType(VarDeclaration decl, List<Issue> issues) {
+	def static STTypeDeclaration validateType(VarDeclaration decl, List<Issue> issues) {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		// use context from FB type since the type declaration is in the context of the FB type (and not an instance)
 		val typeVariable = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name) ?: decl
 		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, typeVariable?.eResource?.URI, null,
-			typeVariable.getContainerOfType(LibraryElement), null, issues)
+			typeVariable.getContainerOfType(LibraryElement), null, issues).rootASTElement as STTypeDeclaration
 	}
 
 	def static STExpressionSource parse(String expression, INamedElement expectedType, LibraryElement type,

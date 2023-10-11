@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.builder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
@@ -31,8 +32,11 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -41,23 +45,35 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.ModelIssueListValidationMesageAcceptor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.ValidationUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreImportValidator;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.diagnostics.Severity;
+import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IResourceDescription;
 import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
 import org.eclipse.xtext.validation.Issue;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderParticipant {
 
 	@Inject
 	private MarkerCreator markerCreator;
+
+	@Inject
+	private Provider<STCoreTypeUsageCollector> typeUsageCollectorProvider;
+
+	@Inject
+	private STCoreImportValidator importValidator;
 
 	@Override
 	public void build(final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
@@ -79,6 +95,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final IProgressMonitor monitor) throws CoreException {
 		try {
 			final IFile file = getFile(delta.getNew().getURI());
+			final STCoreTypeUsageCollector typeUsageCollector = typeUsageCollectorProvider.get();
 			final boolean ignoreWarnings = ValidationUtil.isIgnoreWarnings(file);
 			final Resource resource = context.getResourceSet().getResource(delta.getUri(), true);
 			final TreeIterator<EObject> allContents = EcoreUtil.getAllContents(resource, true);
@@ -90,8 +107,15 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				if (target instanceof SystemConfiguration) {
 					allContents.prune();
 				} else if (target instanceof final VarDeclaration varDeclaration) {
-					validateType(varDeclaration, delta, ignoreWarnings, monitor);
-					validateValue(varDeclaration, delta, ignoreWarnings, monitor);
+					validateType(varDeclaration, delta, typeUsageCollector, ignoreWarnings, monitor);
+					validateValue(varDeclaration, delta, typeUsageCollector, ignoreWarnings, monitor);
+				} else if (target instanceof STSource) {
+					typeUsageCollector.collectUsedTypes(target);
+				}
+			}
+			for (final EObject object : resource.getContents()) {
+				if (object instanceof final LibraryElement libraryElement) {
+					validateImports(libraryElement, delta, typeUsageCollector.getUsedTypes(), ignoreWarnings, monitor);
 				}
 			}
 		} catch (final OperationCanceledException e) {
@@ -107,14 +131,16 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		if (file != null && file.exists()) {
 			file.deleteMarkers(FordiacErrorMarker.INITIAL_VALUE_MARKER, true, IResource.DEPTH_INFINITE);
 			file.deleteMarkers(FordiacErrorMarker.TYPE_DECLARATION_MARKER, true, IResource.DEPTH_INFINITE);
+			file.deleteMarkers(FordiacErrorMarker.IMPORT_MARKER, true, IResource.DEPTH_INFINITE);
 		}
 	}
 
 	protected void validateType(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
-			final boolean ignoreWarnings, final IProgressMonitor monitor) throws CoreException {
+			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
+			final IProgressMonitor monitor) throws CoreException {
 		final List<Issue> issues = new ArrayList<>();
 		if (varDeclaration.isArray()) {
-			StructuredTextParseUtil.validateType(varDeclaration, issues);
+			typeUsageCollector.collectUsedTypes(StructuredTextParseUtil.validateType(varDeclaration, issues));
 		}
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
@@ -133,12 +159,14 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	}
 
 	protected void validateValue(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
-			final boolean ignoreWarnings, final IProgressMonitor monitor) throws CoreException {
+			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
+			final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(varDeclaration);
 		final List<Issue> issues = new ArrayList<>();
 		if (!value.isBlank()) { // do not parse value if blank
-			StructuredTextParseUtil.validate(value, delta.getUri(), STCoreUtil.getFeatureType(varDeclaration),
-					EcoreUtil2.getContainerOfType(varDeclaration, LibraryElement.class), null, issues);
+			typeUsageCollector.collectUsedTypes(
+					StructuredTextParseUtil.validate(value, delta.getUri(), STCoreUtil.getFeatureType(varDeclaration),
+							EcoreUtil2.getContainerOfType(varDeclaration, LibraryElement.class), null, issues));
 		}
 		validateGenericValue(varDeclaration, value, issues);
 		if (monitor.isCanceled()) {
@@ -170,6 +198,25 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				issues.add(ValidationUtil.createModelIssue(Severity.WARNING,
 						Messages.STAlgorithmInitialValueBuilderParticipant_SpecifiedValueForGenericTypeVariable,
 						varDeclaration));
+			}
+		}
+	}
+
+	protected void validateImports(final LibraryElement element, final IResourceDescription.Delta delta,
+			final Set<QualifiedName> usedTypes, final boolean ignoreWarnings, final IProgressMonitor monitor)
+			throws CoreException {
+		final List<Import> imports = ImportHelper.getImports(element);
+		if (imports.isEmpty()) {
+			return;
+		}
+
+		final String packageName = PackageNameHelper.getPackageName(element);
+		final ModelIssueListValidationMesageAcceptor acceptor = new ModelIssueListValidationMesageAcceptor();
+		importValidator.validateImports(packageName, imports, usedTypes, acceptor);
+		if (!acceptor.isEmpty()) {
+			final IFile file = getFile(delta.getUri());
+			if (file != null && file.exists()) {
+				createMarkers(file, FordiacErrorMarker.IMPORT_MARKER, acceptor.getIssues(), ignoreWarnings, monitor);
 			}
 		}
 	}

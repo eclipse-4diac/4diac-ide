@@ -18,15 +18,21 @@ import org.eclipse.fordiac.ide.globalconstantseditor.Messages;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGrammarAccess;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreImportValidator;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
 import org.eclipse.xtext.Keyword;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.validation.Check;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
-/** This class contains custom validation rules.
+/**
+ * This class contains custom validation rules.
  *
- * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation */
+ * See
+ * https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
+ */
 public class GlobalConstantsValidator extends AbstractGlobalConstantsValidator {
 
 	public static final String ISSUE_CODE_PREFIX = "org.eclipse.fordiac.ide.globalconstseditor."; //$NON-NLS-1$
@@ -35,9 +41,18 @@ public class GlobalConstantsValidator extends AbstractGlobalConstantsValidator {
 	@Inject
 	GlobalConstantsGrammarAccess grammarAccess;
 
+	@Inject
+	private Provider<STCoreTypeUsageCollector> typeUsageCollectorProvider;
+
+	@Inject
+	private STCoreImportValidator importValidator;
+
 	@Check
 	public void checkImports(final STGlobalConstsSource source) {
-		checkImports(source, source.getName(), source.getImports());
+		if (!source.getImports().isEmpty()) {
+			importValidator.validateImports(source.getName(), source.getImports(),
+					typeUsageCollectorProvider.get().collectUsedTypes(source), this);
+		}
 	}
 
 	@Check
