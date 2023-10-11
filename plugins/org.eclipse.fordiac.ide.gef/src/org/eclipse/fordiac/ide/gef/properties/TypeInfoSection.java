@@ -62,7 +62,7 @@ public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createTypeAndCommentSection(getLeftComposite());
-		typeInfo = new PackageInfoWidget(getWidgetFactory());
+		typeInfo = new PackageInfoWidget(getWidgetFactory(), this::getAnnotationModel);
 		typeInfo.createControls(getLeftComposite(), getRightComposite());
 	}
 

@@ -14,7 +14,9 @@
 package org.eclipse.fordiac.ide.gef.widgets;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.provider.PackageContentProvider;
 import org.eclipse.fordiac.ide.gef.provider.PackageLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeImportNamespaceCommand;
@@ -31,6 +33,7 @@ import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -50,6 +53,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class PackageInfoWidget extends TypeInfoWidget {
 
+	private final Supplier<GraphicalAnnotationModel> annotationModelSupplier;
 	private TableViewer packageViewer;
 	private Text nameText;
 	private AddDeleteWidget buttons;
@@ -58,8 +62,10 @@ public class PackageInfoWidget extends TypeInfoWidget {
 
 	private static final String IMPORTED_NAMESPACE = "imported namespace"; //$NON-NLS-1$
 
-	public PackageInfoWidget(final FormToolkit widgetFactory) {
+	public PackageInfoWidget(final FormToolkit widgetFactory,
+			final Supplier<GraphicalAnnotationModel> annotationModelSupplier) {
 		super(widgetFactory);
+		this.annotationModelSupplier = annotationModelSupplier;
 	}
 
 	@Override
@@ -99,7 +105,8 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		table = packageViewer.getTable();
 		configureTableLayout(table);
 		packageViewer.setContentProvider(new PackageContentProvider());
-		packageViewer.setLabelProvider(new PackageLabelProvider());
+		packageViewer.setLabelProvider(
+				new DelegatingStyledCellLabelProvider(new PackageLabelProvider(annotationModelSupplier)));
 		packageViewer.setCellEditors(new CellEditor[] { new TextCellEditor(table) });
 		packageViewer.setColumnProperties(new String[] { IMPORTED_NAMESPACE });
 
