@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -119,7 +120,8 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 		}
 		if (dataType instanceof final ErrorMarkerDataType errorMarkerDataType) {
 			getErrorMarkerUpdateCmds().add(FordiacMarkerCommandHelper.newCreateMarkersCommand(ErrorMarkerBuilder
-					.createErrorMarkerBuilder(errorMarkerDataType.getErrorMessage()).setTarget(getInterfaceElement())));
+					.createErrorMarkerBuilder(errorMarkerDataType.getErrorMessage()).setTarget(getInterfaceElement())
+					.setFeature(LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type())));
 		}
 		additionalCommands.execute();
 	}

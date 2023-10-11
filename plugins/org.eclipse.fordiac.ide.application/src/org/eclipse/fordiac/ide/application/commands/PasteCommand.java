@@ -49,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -79,11 +80,14 @@ public class PasteCommand extends Command {
 	private Point pasteRefPos;
 	private final TypeLibrary dstTypeLib;
 
-	/** Instantiates a new paste command.
+	/**
+	 * Instantiates a new paste command.
 	 *
 	 * @param copyPasteData the elements that should be copied to the destination
-	 * @param destination   the destination fbnetwork where the elements should be copied to
-	 * @param pasteRefPos   the reference position for pasting the elements */
+	 * @param destination   the destination fbnetwork where the elements should be
+	 *                      copied to
+	 * @param pasteRefPos   the reference position for pasting the elements
+	 */
 	public PasteCommand(final CopyPasteData copyPasteData, final FBNetwork destination, final Point pasteRefPos) {
 		this.copyPasteData = copyPasteData;
 		this.dstFBNetwork = destination;
@@ -388,7 +392,8 @@ public class PasteCommand extends Command {
 				final ErrorMarkerBuilder builder = ErrorMarkerBuilder
 						.createErrorMarkerBuilder(MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", //$NON-NLS-1$
 								fbnEl.getTypeName(), fbnEl.getName()))
-						.setTarget(fbnEl);
+						.setTarget(fbnEl)
+						.setFeature(LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_TypeEntry());
 				createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(builder));
 			} else if (fbnEl.getTypeEntry() != null) {
 				// we only need to update the type if we have a type entry

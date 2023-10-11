@@ -246,7 +246,8 @@ class FBNetworkImporter extends CommonElementImporter {
 			errorMarkerBuilders.add(ErrorMarkerBuilder
 					.createErrorMarkerBuilder(MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", //$NON-NLS-1$
 							typeFbElement, fb.getName()))
-					.setTarget(fb).setLineNumber(getLineNumber()));
+					.setTarget(fb).setFeature(LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_TypeEntry())
+					.setLineNumber(getLineNumber()));
 		}
 	}
 
@@ -276,7 +277,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	protected void handleNameCollision(final FBNetworkElement fbne) {
 		final String errorMessage = MessageFormat.format(Messages.FBNetworkImporter_NameCollision, fbne.getName());
 		errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(fbne)
-				.setLineNumber(getLineNumber()));
+				.setFeature(LibraryElementPackage.eINSTANCE.getINamedElement_Name()).setLineNumber(getLineNumber()));
 		fbne.setErrorMessage(errorMessage);
 	}
 

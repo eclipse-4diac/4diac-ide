@@ -74,6 +74,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -426,7 +427,7 @@ public abstract class CommonElementImporter {
 		final DataType dataType = typeName != null ? getDataTypeLibrary().getType(typeName) : ElementaryTypes.STRING;
 		if (dataType instanceof final ErrorMarkerDataType errorMarkerDataType) {
 			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMarkerDataType.getErrorMessage())
-					.setTarget(attribute));
+					.setTarget(attribute).setFeature(LibraryElementPackage.eINSTANCE.getAttribute_Type()));
 		}
 		attribute.setType(dataType);
 

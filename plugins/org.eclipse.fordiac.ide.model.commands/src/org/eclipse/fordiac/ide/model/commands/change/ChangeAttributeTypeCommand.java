@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
@@ -60,7 +61,8 @@ public class ChangeAttributeTypeCommand extends AbstractChangeAttributeCommand {
 		}
 		if (dataType instanceof final ErrorMarkerDataType errorMarkerDataType) {
 			getErrorMarkerUpdateCmds().add(FordiacMarkerCommandHelper.newCreateMarkersCommand(ErrorMarkerBuilder
-					.createErrorMarkerBuilder(errorMarkerDataType.getErrorMessage()).setTarget(getAttribute())));
+					.createErrorMarkerBuilder(errorMarkerDataType.getErrorMessage()).setTarget(getAttribute())
+					.setFeature(LibraryElementPackage.eINSTANCE.getAttribute_Type())));
 		}
 	}
 

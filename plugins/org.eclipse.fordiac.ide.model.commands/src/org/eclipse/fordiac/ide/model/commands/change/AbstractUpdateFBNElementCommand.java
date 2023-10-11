@@ -49,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -332,7 +333,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 					entry.getFullTypeName(), newElement.getName());
 			((ErrorMarkerRef) newElement).setErrorMessage(errorMessage);
 			createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(
-					ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(newElement)));
+					ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(newElement)
+							.setFeature(LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_TypeEntry())));
 		}
 
 		if ((oldElement instanceof ErrorMarkerFBNElement) && (newElement instanceof ErrorMarkerFBNElement)) {

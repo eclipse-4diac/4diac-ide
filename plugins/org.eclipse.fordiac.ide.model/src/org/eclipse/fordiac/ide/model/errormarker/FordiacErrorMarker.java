@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -43,6 +44,7 @@ public final class FordiacErrorMarker {
 
 	public static final String TARGET_URI = "org.eclipse.fordiac.ide.model.iec61499.targetUri"; //$NON-NLS-1$
 	public static final String TARGET_TYPE = "org.eclipse.fordiac.ide.model.iec61499.targetType"; //$NON-NLS-1$
+	public static final String TARGET_FEATURE = "org.eclipse.fordiac.ide.model.iec61499.targetFeature"; //$NON-NLS-1$
 
 	public static URI getTargetUri(final IMarker marker) throws CoreException, IllegalArgumentException {
 		final String targetUriAttribute = (String) marker.getAttribute(TARGET_URI);
@@ -61,6 +63,23 @@ public final class FordiacErrorMarker {
 				final Resource eResource = ePackage.eResource();
 				if (eResource != null) {
 					return (EClass) eResource.getEObject(targetTypeUri.fragment());
+				}
+			}
+		}
+		return null;
+	}
+
+	public static EStructuralFeature getTargetFeature(final IMarker marker)
+			throws CoreException, IllegalArgumentException {
+		final String targetFeatureAttribute = (String) marker.getAttribute(TARGET_FEATURE);
+		if (targetFeatureAttribute != null) {
+			final URI targetFeatureUri = URI.createURI(targetFeatureAttribute);
+			final EPackage ePackage = EPackage.Registry.INSTANCE
+					.getEPackage(targetFeatureUri.trimFragment().toString());
+			if (ePackage != null) {
+				final Resource eResource = ePackage.eResource();
+				if (eResource != null) {
+					return (EStructuralFeature) eResource.getEObject(targetFeatureUri.fragment());
 				}
 			}
 		}
