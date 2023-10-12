@@ -21,7 +21,6 @@
 package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.draw2d.FigureCanvas;
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.Messages;
@@ -33,11 +32,10 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEdi
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
+import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalViewerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.ui.FordiacClipboard;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -75,7 +73,9 @@ public class PasteEditPartsAction extends SelectionAction {
 		final FBNetwork fbNetwork = getFBNetwork();
 
 		if (null != fbNetwork) {
-			final AbstractContainerContentEditPart editPart = findAbstractContainerContentEditPartUnderMouse(fbNetwork);
+			final AbstractContainerContentEditPart editPart = GetEditPartFromGraficalViewerHelper
+					.findAbstractContainerContentEditPartAtPosition((IEditorPart) getWorkbenchPart(),
+							new org.eclipse.draw2d.geometry.Point(pasteRefPosition.x, pasteRefPosition.y), fbNetwork);
 			if (editPart != null) {
 				Command cmd = null;
 				if ((editPart instanceof final GroupContentEditPart groupEP)
@@ -107,21 +107,6 @@ public class PasteEditPartsAction extends SelectionAction {
 		final PasteCommand pasteCommand = new PasteCommand(getClipboardContents(),
 				group.getModel().getGroup().getFbNetwork(), pasteRefPosition);
 		return new CopyElementsToGroupCommand(group.getModel().getGroup(), pasteCommand, getOffsetPosition(group));
-	}
-
-	private AbstractContainerContentEditPart findAbstractContainerContentEditPartUnderMouse(final FBNetwork fbNetwork) {
-		final GraphicalViewer graphicalViewer = getWorkbenchPart().getAdapter(GraphicalViewer.class);
-		final Object object = graphicalViewer.getEditPartRegistry().get(fbNetwork);
-		if (object instanceof final GraphicalEditPart gep) {
-			final IFigure figure = gep.getFigure().findFigureAt(pasteRefPosition.x, pasteRefPosition.y);
-			if (figure != null) {
-				final Object targetObject = graphicalViewer.getVisualPartMap().get(figure);
-				if (targetObject instanceof final AbstractContainerContentEditPart contContentEP) {
-					return contContentEP;
-				}
-			}
-		}
-		return null;
 	}
 
 	private static org.eclipse.draw2d.geometry.Point getOffsetPosition(final GroupContentEditPart group) {
@@ -186,7 +171,6 @@ public class PasteEditPartsAction extends SelectionAction {
 		}
 		pasteRefPosition = null;
 	}
-
 
 	private FBNetwork getFBNetwork() {
 		if (getWorkbenchPart() instanceof IEditorPart) {

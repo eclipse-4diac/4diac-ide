@@ -60,7 +60,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createText(parent);
-		nameText.addModifyListener(e -> executeCommand(ChangeNameCommand.forName(type, nameText.getText())));
+		nameText.addModifyListener(e -> onNameChange(nameText));
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createText(parent);
@@ -174,9 +174,12 @@ public class PinInfoBasicWidget implements CommandExecutor {
 		}
 	}
 
+	protected void onNameChange(final Text name) {
+		executeCommand(ChangeNameCommand.forName(type, name.getText()));
+	}
+
 	private boolean isSubappPin() {
 		final IInterfaceElement ie = getType();
 		return (ie != null) && (ie.getFBNetworkElement() instanceof SubApp);
 	}
-
 }
