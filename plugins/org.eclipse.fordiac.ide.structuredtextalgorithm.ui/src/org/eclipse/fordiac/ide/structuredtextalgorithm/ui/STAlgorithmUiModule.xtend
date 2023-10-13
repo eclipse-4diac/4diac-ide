@@ -47,6 +47,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceUISe
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreMarkerCreator
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreMarkerTypeProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreResourceUIValidatorExtension
 import org.eclipse.ui.PlatformUI
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
@@ -74,10 +76,12 @@ import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor
 import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy
 import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration
+import org.eclipse.xtext.ui.editor.validation.MarkerCreator
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider
 import org.eclipse.xtext.ui.shared.Access
 import org.eclipse.xtext.ui.validation.IResourceUIValidatorExtension
+import org.eclipse.xtext.ui.validation.MarkerTypeProvider
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
@@ -209,6 +213,14 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	def Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {
 		return STCoreResourceUIServiceProvider
+	}
+
+	def Class<? extends MarkerCreator> bindMarkerCreator() {
+		return STCoreMarkerCreator;
+	}
+
+	override Class<? extends MarkerTypeProvider> bindMarkerTypeProvider() {
+		return STCoreMarkerTypeProvider;
 	}
 
 	def Class<? extends IResourceUIValidatorExtension> bindIResourceUIValidatorExtension() {

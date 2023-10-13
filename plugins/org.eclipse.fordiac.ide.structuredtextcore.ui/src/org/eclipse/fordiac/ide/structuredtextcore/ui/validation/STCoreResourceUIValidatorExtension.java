@@ -12,19 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.validation;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
-import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.xtext.ui.validation.DefaultResourceUIValidatorExtension;
 import org.eclipse.xtext.validation.CheckMode;
 import org.eclipse.xtext.validation.Issue;
@@ -36,15 +30,7 @@ public class STCoreResourceUIValidatorExtension extends DefaultResourceUIValidat
 			throws CoreException {
 		final boolean ignoreWarnings = ValidationUtil.isIgnoreWarnings(file);
 		super.createMarkers(file,
-				list.stream().filter(
-						issue -> ValidationUtil.shouldProcess(issue, ignoreWarnings) && !isModelValidationIssue(issue))
-						.toList(),
-				monitor);
-		for (final Issue issue : list) {
-			if (ValidationUtil.shouldProcess(issue, ignoreWarnings) && isModelValidationIssue(issue)) {
-				createMarker(file, FordiacErrorMarker.VALIDATION_MARKER, issue);
-			}
-		}
+				list.stream().filter(issue -> ValidationUtil.shouldProcess(issue, ignoreWarnings)).toList(), monitor);
 	}
 
 	@Override
@@ -52,41 +38,5 @@ public class STCoreResourceUIValidatorExtension extends DefaultResourceUIValidat
 			throws CoreException {
 		super.deleteMarkers(file, checkMode, monitor);
 		file.deleteMarkers(FordiacErrorMarker.VALIDATION_MARKER, true, IResource.DEPTH_ZERO);
-	}
-
-	protected static void createMarker(final IFile file, final String type, final Issue issue) throws CoreException {
-		ErrorMarkerBuilder.createErrorMarkerBuilder(issue.getMessage()).setType(type)
-				.setSeverity(getMarkerSeverity(issue)).addAdditionalAttributes(getMarkerAttributes(issue))
-				.createMarker(file);
-	}
-
-	protected static int getMarkerSeverity(final Issue issue) {
-		return switch (issue.getSeverity()) {
-		case ERROR -> IMarker.SEVERITY_ERROR;
-		case WARNING -> IMarker.SEVERITY_WARNING;
-		case INFO -> IMarker.SEVERITY_INFO;
-		default -> throw new IllegalArgumentException(String.valueOf(issue.getSeverity()));
-		};
-	}
-
-	protected static Map<String, Object> getMarkerAttributes(final Issue issue) {
-		final URI canonicalURI = getCanonicalURI(issue.getUriToProblem());
-		final String[] data = issue.getData();
-		if (canonicalURI == null || data == null || data.length < 3) {
-			return Collections.emptyMap();
-		}
-		return Map.of(IMarker.LOCATION, data[0], FordiacErrorMarker.TARGET_URI, canonicalURI.toString(),
-				FordiacErrorMarker.TARGET_TYPE, data[2]);
-	}
-
-	protected static URI getCanonicalURI(final URI uri) {
-		if (uri != null && uri.hasFragment() && uri.fragment().startsWith("/1")) { //$NON-NLS-1$
-			return uri.trimFragment().appendFragment("/" + uri.fragment().substring(2)); //$NON-NLS-1$
-		}
-		return uri;
-	}
-
-	protected static boolean isModelValidationIssue(final Issue issue) {
-		return issue.getCode() != null && issue.getCode().startsWith(LibraryElementValidator.DIAGNOSTIC_SOURCE);
 	}
 }

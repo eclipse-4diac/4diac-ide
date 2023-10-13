@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.errormarker;
 
+import java.util.Set;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -42,9 +44,16 @@ public final class FordiacErrorMarker {
 	public static final String TYPE_DECLARATION_MARKER = "org.eclipse.fordiac.ide.model.typeDeclaration"; //$NON-NLS-1$
 	public static final String TYPE_LIBRARY_MARKER = "org.eclipse.fordiac.ide.model.typeLibrary"; //$NON-NLS-1$
 
+	private static final Set<String> MODEL_MARKER_TYPES = Set.of(IEC61499_MARKER, VALIDATION_MARKER,
+			INITIAL_VALUE_MARKER, TYPE_DECLARATION_MARKER, TYPE_LIBRARY_MARKER);
+
 	public static final String TARGET_URI = "org.eclipse.fordiac.ide.model.iec61499.targetUri"; //$NON-NLS-1$
 	public static final String TARGET_TYPE = "org.eclipse.fordiac.ide.model.iec61499.targetType"; //$NON-NLS-1$
 	public static final String TARGET_FEATURE = "org.eclipse.fordiac.ide.model.iec61499.targetFeature"; //$NON-NLS-1$
+
+	public static boolean isModelMarkerType(final String markerType) {
+		return MODEL_MARKER_TYPES.contains(markerType);
+	}
 
 	public static URI getTargetUri(final IMarker marker) throws CoreException, IllegalArgumentException {
 		final String targetUriAttribute = (String) marker.getAttribute(TARGET_URI);

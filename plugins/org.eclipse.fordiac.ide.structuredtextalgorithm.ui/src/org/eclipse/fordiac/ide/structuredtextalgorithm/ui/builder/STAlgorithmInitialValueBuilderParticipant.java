@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -31,7 +30,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
@@ -51,11 +49,15 @@ import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.resource.IResourceDescription;
-import org.eclipse.xtext.validation.CheckType;
+import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
 import org.eclipse.xtext.validation.Issue;
-import org.eclipse.xtext.validation.Issue.IssueImpl;
+
+import com.google.inject.Inject;
 
 public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderParticipant {
+
+	@Inject
+	private MarkerCreator markerCreator;
 
 	@Override
 	public void build(final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
@@ -123,8 +125,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			if (!issues.isEmpty()) {
 				final IFile file = getFile(delta.getUri());
 				if (file != null && file.exists()) {
-					createMarkers(file, canonicalArraySize, FordiacErrorMarker.TYPE_DECLARATION_MARKER, issues,
-							ignoreWarnings, monitor);
+					createMarkers(file, FordiacErrorMarker.TYPE_DECLARATION_MARKER,
+							ValidationUtil.convertToModelIssues(issues, canonicalArraySize), ignoreWarnings, monitor);
 				}
 			}
 		}
@@ -148,41 +150,31 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			if (!issues.isEmpty()) {
 				final IFile file = getFile(delta.getUri());
 				if (file != null && file.exists()) {
-					createMarkers(file, canonicalValue, FordiacErrorMarker.INITIAL_VALUE_MARKER, issues, ignoreWarnings,
-							monitor);
+					createMarkers(file, FordiacErrorMarker.INITIAL_VALUE_MARKER,
+							ValidationUtil.convertToModelIssues(issues, canonicalValue), ignoreWarnings, monitor);
 				}
 			}
 		}
 	}
 
-	@SuppressWarnings("static-method")
-	protected void validateGenericValue(final VarDeclaration varDeclaration, final String value,
+	protected static void validateGenericValue(final VarDeclaration varDeclaration, final String value,
 			final List<Issue> issues) {
 		if (varDeclaration.isIsInput() && GenericTypes.isAnyType(varDeclaration.getType())) {
 			if (varDeclaration.getFBNetworkElement() != null) {
 				if (varDeclaration.getInputConnections().isEmpty() && value.isBlank()) {
-					issues.add(createIssue(
+					issues.add(ValidationUtil.createModelIssue(Severity.WARNING,
 							Messages.STAlgorithmInitialValueBuilderParticipant_MissingValueForGenericInstanceVariable,
-							Severity.WARNING));
+							varDeclaration));
 				}
 			} else if (!value.isBlank()) {
-				issues.add(createIssue(
+				issues.add(ValidationUtil.createModelIssue(Severity.WARNING,
 						Messages.STAlgorithmInitialValueBuilderParticipant_SpecifiedValueForGenericTypeVariable,
-						Severity.WARNING));
+						varDeclaration));
 			}
 		}
 	}
 
-	protected static Issue createIssue(final String message, final Severity severity) {
-		final IssueImpl issue = new IssueImpl();
-		issue.setMessage(message);
-		issue.setSeverity(severity);
-		issue.setType(CheckType.FAST);
-		return issue;
-	}
-
-	@SuppressWarnings("static-method")
-	protected void updateErrorMessage(final ErrorMarkerRef object, final List<Issue> issues) {
+	protected static void updateErrorMessage(final ErrorMarkerRef object, final List<Issue> issues) {
 		final String errorMessage = issues.stream().filter(issue -> issue.getSeverity() == Severity.ERROR)
 				.map(Issue::getMessage).collect(Collectors.joining(", ")); //$NON-NLS-1$
 		// when ran through an ANT task the workbench is not started
@@ -194,23 +186,16 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		}
 	}
 
-	protected void createMarkers(final IFile file, final EObject object, final String type, final List<Issue> issues,
+	protected void createMarkers(final IFile file, final String type, final List<Issue> issues,
 			final boolean ignoreWarnings, final IProgressMonitor monitor) throws CoreException {
 		for (final Issue issue : issues) {
 			if (monitor.isCanceled()) {
 				throw new OperationCanceledException();
 			}
 			if (ValidationUtil.shouldProcess(issue, ignoreWarnings)) {
-				createMarker(file, object, type, issue);
+				markerCreator.createMarker(issue, file, type);
 			}
 		}
-	}
-
-	@SuppressWarnings("static-method")
-	protected void createMarker(final IFile file, final EObject object, final String type, final Issue issue)
-			throws CoreException {
-		ErrorMarkerBuilder.createErrorMarkerBuilder(issue.getMessage()).setType(type)
-				.setSeverity(getMarkerSeverity(issue)).setTarget(object).createMarker(file);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -230,15 +215,6 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			return null;
 		}
 		return object;
-	}
-
-	protected static int getMarkerSeverity(final Issue issue) {
-		return switch (issue.getSeverity()) {
-		case ERROR -> IMarker.SEVERITY_ERROR;
-		case WARNING -> IMarker.SEVERITY_WARNING;
-		case INFO -> IMarker.SEVERITY_INFO;
-		default -> throw new IllegalArgumentException(String.valueOf(issue.getSeverity()));
-		};
 	}
 
 	protected static String getValue(final VarDeclaration varDeclaration) {
