@@ -117,6 +117,18 @@
         	id="org.eclipse.fordiac.ide.typemanagement.openType"
         	name="Open Type">
     	</command>
+		<category
+            description="Rename a type and search for affected references"
+            id="org.eclipse.refactoring.category"
+            name="Refactoring"/>
+      	<command
+            categoryId="org.eclipse.refactoring.category"
+            description="Renames a iec 61499 type"
+            id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
+            name="Rename Type"
+            defaultHandler="org.eclipse.fordiac.ide.typemanagement.handlers.RenameTypeHandler">                       
+            
+        </command>    
 	</extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -655,38 +667,13 @@
             class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeRefactoringContribution"
             id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"/>
    </extension>
-    
-    <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            description="4diac action set"
-            id="org.eclipse.refactoring.actionSet"
-            label="4diac"
-            visible="true">
-         <action
-               class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeAction"
-               definitionId="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
-               enablesFor="1"
-               helpContextId="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
-               id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
-               label="Rename Type..."
-               menubarPath="org.eclipse.4diac.ide.refactor.menu/typeGroup"
-               style="push"
-               tooltip="Rename Type"/>
-      </actionSet>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <category
-            description="Rename a type and search for affected references"
-            id="org.eclipse.refactoring.category"
-            name="Refactoring"/>
-      <command
-            categoryId="org.eclipse.refactoring.category"
-            description="Renames a iec 61499 type"
-            id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
-            name="Rename Type"/>
-   </extension>
+   
+   	<extension point="org.eclipse.ui.menus">
+   		<menuContribution locationURI="menu:org.eclipse.4diac.ide.refactor.menu?after=typeGroup">
+   			<command commandId="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype" />
+    	</menuContribution>
+	</extension>
+
    <extension
          point="org.eclipse.ui.activities">
     <activity
