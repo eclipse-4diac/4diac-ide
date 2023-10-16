@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -115,7 +116,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch Variable<?> findVariable(VarDeclaration variable) {
-		(context as FBVariable)?.value?.members?.get(variable.name) ?: variable.evaluateFBConstantInitialization
+		(context as FBVariable)?.value?.members?.get(variable.name) ?: variable.evaluateConstantInitialization
 	}
 
 	def protected dispatch Variable<?> findVariable(AdapterDeclaration variable) {
@@ -149,8 +150,9 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		variable.evaluateInitializerExpression(decl.defaultValue)
 	}
 
-	def protected Variable<?> evaluateFBConstantInitialization(VarDeclaration decl) {
+	def protected Variable<?> evaluateConstantInitialization(VarDeclaration decl) {
 		switch (container : decl.eContainer) {
+			GlobalConstants case container.constants.contains(decl),
 			BaseFBType case container.internalConstVars.contains(decl): newVariable(decl)
 			default: throw new NoSuchElementException('''Cannot find FB variable «decl.qualifiedName»''')
 		}

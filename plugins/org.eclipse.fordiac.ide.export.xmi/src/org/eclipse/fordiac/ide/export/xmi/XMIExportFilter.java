@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.export.ExportFilter;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.resource.GlobalConstantsResourceSetInitializer;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceSetInitializer;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
@@ -49,6 +50,7 @@ import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclarations;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
 
@@ -140,7 +142,9 @@ public class XMIExportFilter extends ExportFilter {
 
 	protected STInitializerExpressionSource parseInitialValue(final VarDeclaration varDeclaration) {
 		return StructuredTextParseUtil.parse(varDeclaration.getValue().getValue(), varDeclaration.eResource().getURI(),
-				STCoreUtil.getFeatureType(varDeclaration), null, null, getErrors(), getWarnings(), getInfos());
+				STCoreUtil.getFeatureType(varDeclaration),
+				EcoreUtil2.getContainerOfType(varDeclaration, LibraryElement.class), null, getErrors(), getWarnings(),
+				getInfos());
 	}
 
 	protected String evaluateInitialValue(final VarDeclaration varDeclaration) {
