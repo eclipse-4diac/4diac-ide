@@ -332,12 +332,10 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 						throws Exception {
 					try {
 						final EObject target = state.getEObject(issue.getUriToProblem().fragment());
-						if (getImports(EcoreUtil2.getContainerOfType(target, STSource.class)) != null) {
-							final EReference reference = getUnresolvedEReference(issue, target);
-							if (reference != null && reference.getEReferenceType() != null) {
-								createLinkingIssueQuickfixes(issue, getCancelableAcceptor(acceptor, cancelIndicator),
-										xtextDocument, state, target, reference);
-							}
+						final EReference reference = getUnresolvedEReference(issue, target);
+						if (reference != null && reference.getEReferenceType() != null) {
+							createLinkingIssueQuickfixes(issue, getCancelableAcceptor(acceptor, cancelIndicator),
+									xtextDocument, state, target, reference);
 						}
 					} catch (final WrappedException e) {
 						// issue information seems to be out of sync, e.g. there is no
@@ -383,6 +381,12 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		final String label = MessageFormat.format(Messages.STCoreQuickfixProvider_CreateImport,
 				qualifiedName.getLastSegment(), nameConverter.toString(qualifiedName.skipLast(1)));
 		final String importedNamespace = nameConverter.toString(qualifiedName);
+		createImportProposal(issue, label, importedNamespace, acceptor);
+	}
+
+	@SuppressWarnings("static-method") // subclasses may override
+	protected void createImportProposal(final Issue issue, final String label, final String importedNamespace,
+			final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, label, label, null, (element, context) -> {
 			final EList<STImport> imports = getImports(EcoreUtil2.getContainerOfType(element, STSource.class));
 			if (imports != null) {
