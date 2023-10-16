@@ -139,5 +139,22 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator implements Variabl
 			type
 	}
 
+	override getDependencies() {
+		(typeDependencies + initialValueDependencies).toSet
+	}
+
+	def protected getTypeDependencies() {
+		if (varDeclaration.FBNetworkElement === null) {
+			prepareResultType
+			parseResultType?.collectUsedTypes ?: emptySet // only collect types if we have a type variable
+		} else
+			emptySet
+	}
+
+	def protected getInitialValueDependencies() {
+		prepareInitialValue
+		parseResult?.collectUsedTypes ?: emptySet
+	}
+
 	override getSourceElement() { varDeclaration }
 }

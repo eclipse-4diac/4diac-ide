@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ *                    Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,10 +11,12 @@
  * Contributors:
  *   Fabio Gandolfi
  *     - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst
+ *     - add initial imported namespace
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -27,43 +30,32 @@ public class AddNewImportCommand extends CreationCommand {
 	private Import importer;
 
 	private final LibraryElement type;
+	private final String importedNamespace;
 
 	public AddNewImportCommand(final LibraryElement type) {
-		this.type = type;
-		if (type.getCompilerInfo() == null) {
-			type.setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());
-		}
+		this(type, FordiacMessages.Unknown);
 	}
 
-	/* (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.commands.Command#execute() */
+	public AddNewImportCommand(final LibraryElement type, final String importedNamespace) {
+		this.type = type;
+		this.importedNamespace = importedNamespace;
+	}
+
 	@Override
 	public void execute() {
 		importer = LibraryElementFactory.eINSTANCE.createImport();
-		importer.setImportedNamespace(FordiacMessages.Unknown);
-
+		importer.setImportedNamespace(importedNamespace);
 		redo();
 	}
 
-	/* (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.commands.Command#undo() */
 	@Override
 	public void undo() {
-		getCompilerInfo().getImports().remove(importer);
+		ImportHelper.getMutableImports(type).remove(importer);
 	}
 
-	/* (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.commands.Command#redo() */
 	@Override
 	public void redo() {
-		getCompilerInfo().getImports().add(importer);
-	}
-
-	private CompilerInfo getCompilerInfo() {
-		return type.getCompilerInfo();
+		ImportHelper.getMutableImports(type).add(importer);
 	}
 
 	@Override

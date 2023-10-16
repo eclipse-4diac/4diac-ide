@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ *                    Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Fabio Gandolfi
  *     - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst
+ *     - add organize imports button
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.widgets;
 
@@ -21,6 +24,7 @@ import org.eclipse.fordiac.ide.gef.provider.PackageContentProvider;
 import org.eclipse.fordiac.ide.gef.provider.PackageLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeImportNamespaceCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangePackageNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.OrganizeImportsCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteImportCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
@@ -31,6 +35,7 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
@@ -39,8 +44,10 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
@@ -49,6 +56,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class PackageInfoWidget extends TypeInfoWidget {
@@ -57,6 +66,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 	private TableViewer packageViewer;
 	private Text nameText;
 	private AddDeleteWidget buttons;
+	private Button organizeImportsButton;
 	private Table table;
 	Composite composite;
 
@@ -101,6 +111,16 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		buttons = new AddDeleteWidget();
 		buttons.createControls(compositeBottom, getWidgetFactory());
 
+		organizeImportsButton = getWidgetFactory().createButton(buttons.getControl(), "", SWT.PUSH);
+		organizeImportsButton.setToolTipText(FordiacMessages.PackageInfoWidget_OrganizeImports);
+		organizeImportsButton
+				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_SYNCED));
+		organizeImportsButton.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		organizeImportsButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(ev -> {
+			executeCommand(new OrganizeImportsCommand(getType()));
+			packageViewer.refresh();
+		}));
+
 		packageViewer = TableWidgetFactory.createPropertyTableViewer(compositeBottom);
 		table = packageViewer.getTable();
 		configureTableLayout(table);
@@ -136,6 +156,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 			nameText.setEnabled(!isReadonly());
 			buttons.setButtonEnablement(!isReadonly());
 			buttons.setCreateButtonEnablement(!isReadonly());
+			organizeImportsButton.setEnabled(!isReadonly());
 			table.setEnabled(!isReadonly());
 
 			if (null != getType().getCompilerInfo()) {

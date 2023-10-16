@@ -254,7 +254,8 @@ public class AddDeleteWidget {
 						pos--;
 					}
 					viewer.getTable().forceFocus();
-					// the selection has to be set again via the table viewer for the widgets to recognize it
+					// the selection has to be set again via the table viewer for the widgets to
+					// recognize it
 					viewer.getTable().setSelection(pos);
 				}
 			}
@@ -323,5 +324,9 @@ public class AddDeleteWidget {
 			return viewer.getStructuredSelection().toList().get(viewer.getStructuredSelection().size() - 1);
 		}
 		return null;
+	}
+
+	public Composite getControl() {
+		return container;
 	}
 }

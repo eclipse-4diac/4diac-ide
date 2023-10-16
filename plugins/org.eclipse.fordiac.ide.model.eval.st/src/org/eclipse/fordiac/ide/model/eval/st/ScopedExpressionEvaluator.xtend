@@ -76,4 +76,9 @@ class ScopedExpressionEvaluator extends StructuredTextEvaluator {
 	override String getSourceElement() {
 		expression
 	}
+
+	override getDependencies() {
+		prepare
+		parseResult?.collectUsedTypes
+	}
 }

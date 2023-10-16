@@ -13,14 +13,19 @@
 package org.eclipse.fordiac.ide.model.helpers;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
+import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 public final class ImportHelper {
 
@@ -37,6 +42,15 @@ public final class ImportHelper {
 			}
 		}
 		return Collections.emptyList();
+	}
+
+	public static EList<Import> getMutableImports(final LibraryElement libraryElement) {
+		CompilerInfo compilerInfo = libraryElement.getCompilerInfo();
+		if (compilerInfo == null) {
+			compilerInfo = LibraryElementFactory.eINSTANCE.createCompilerInfo();
+			libraryElement.setCompilerInfo(compilerInfo);
+		}
+		return compilerInfo.getImports();
 	}
 
 	public static List<Import> getContainerImports(final EObject object) {
@@ -91,6 +105,31 @@ public final class ImportHelper {
 		}
 
 		return fallbackTypeResolver.apply(name);
+	}
+
+	public static void organizeImports(final LibraryElement libraryElement, final Set<String> imported) {
+		final String packageName = PackageNameHelper.getPackageName(libraryElement);
+		final EList<Import> imports = getMutableImports(libraryElement);
+		imported.removeIf(imp -> ImportHelper.isImplicitImport(imp, packageName));
+		imports.removeIf(imp -> shouldRemoveImport(imp, imported));
+		imported.stream().map(ImportHelper::createImport).forEachOrdered(imports::add);
+		ECollections.sort(imports, Comparator.comparing(Import::getImportedNamespace));
+	}
+
+	protected static boolean shouldRemoveImport(final Import imp, final Set<String> imported) {
+		final String importedNamespace = imp.getImportedNamespace();
+		return importedNamespace == null || importedNamespace.isEmpty() || !imported.remove(importedNamespace);
+	}
+
+	public static boolean isImplicitImport(final String imported, final String packageName) {
+		final int lastDelimiterIndex = imported.lastIndexOf(PACKAGE_NAME_DELIMITER);
+		return lastDelimiterIndex < 0 || imported.substring(0, lastDelimiterIndex).equals(packageName);
+	}
+
+	protected static Import createImport(final String importedNamespace) {
+		final Import result = LibraryElementFactory.eINSTANCE.createImport();
+		result.setImportedNamespace(importedNamespace);
+		return result;
 	}
 
 	private ImportHelper() {

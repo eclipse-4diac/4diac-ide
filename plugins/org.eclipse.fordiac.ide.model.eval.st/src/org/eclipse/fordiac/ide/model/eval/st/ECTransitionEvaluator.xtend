@@ -63,4 +63,9 @@ class ECTransitionEvaluator extends StructuredTextEvaluator {
 	override ECTransition getSourceElement() {
 		transition
 	}
+
+	override getDependencies() {
+		prepare
+		parseResult?.collectUsedTypes
+	}
 }

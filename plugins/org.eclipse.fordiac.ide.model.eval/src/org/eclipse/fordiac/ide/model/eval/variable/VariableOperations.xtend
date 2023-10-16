@@ -12,11 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
+import java.util.Set
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 import org.eclipse.fordiac.ide.model.data.AnyType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
+import org.eclipse.fordiac.ide.model.eval.EvaluatorCache
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -26,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 import static extension org.eclipse.fordiac.ide.model.eval.EvaluatorFactory.*
-import org.eclipse.fordiac.ide.model.eval.EvaluatorCache
 
 final class VariableOperations {
 	private new() {
@@ -164,6 +166,25 @@ final class VariableOperations {
 			type = dataType
 			value = LibraryElementFactory.eINSTANCE.createValue => [value = initialValue]
 		]).newVariable.value
+	}
+
+	def static Set<String> getDependencies(VarDeclaration decl) {
+		if (decl.array || decl.hasDeclaredInitialValue) {
+			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				evaluator.dependencies
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+		} else
+			emptySet
+	}
+
+	def static Set<String> getAllDependencies(EObject object) {
+		val evaluator = object.createEvaluator(object.eClass.instanceClass, null, emptySet, null);
+		if (evaluator !== null)
+			evaluator.dependencies
+		else
+			object.eAllContents.filter(VarDeclaration).flatMap[dependencies.iterator].toSet
 	}
 
 	def static boolean hasInitialValue(VarDeclaration decl) {
