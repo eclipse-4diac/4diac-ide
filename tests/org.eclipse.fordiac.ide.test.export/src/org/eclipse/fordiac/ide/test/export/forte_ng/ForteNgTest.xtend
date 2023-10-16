@@ -224,7 +224,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 		for (export : exports) {
 			switch export.getName() {
-				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h''': {
+				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h''': {
 					headerfileFound = true
 
 					assertEquals('''
@@ -283,7 +283,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 					assertNoErrors(export.warnings)
 					assertNoErrors(export.infos)
 				}
-				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».cpp''': {
+				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.cpp''': {
 					cppfileFound = true
 
 					assertEquals('''
@@ -297,9 +297,9 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						 *** Version:
 						 *************************************************************************/
 						
-						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h"
+						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
 						#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_gen.cpp"
+						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt_gen.cpp"
 						#endif
 						
 						#include "criticalregion.h"
