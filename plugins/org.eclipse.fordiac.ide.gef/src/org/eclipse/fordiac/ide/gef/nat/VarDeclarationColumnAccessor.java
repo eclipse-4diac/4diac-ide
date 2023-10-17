@@ -20,7 +20,6 @@ import java.util.Objects;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
@@ -32,8 +31,6 @@ import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 
 public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDeclaration, VarDeclarationTableColumn> {
-
-	private static final String NULL_DEFAULT = ""; //$NON-NLS-1$
 
 	public VarDeclarationColumnAccessor(final CommandExecutor commandExecutor) {
 		this(commandExecutor, VarDeclarationTableColumn.DEFAULT_COLUMNS);
@@ -61,7 +58,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
 			final Object newValue) {
 		return switch (column) {
-		case NAME -> ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+		case NAME -> onNameChange(rowObject, newValue);
 		case TYPE -> ChangeDataTypeCommand.forTypeDeclaration(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case COMMENT -> new ChangeCommentCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case INITIAL_VALUE -> new ChangeValueCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
