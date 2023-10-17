@@ -131,7 +131,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		}));
 	}
 
-	private void parseUntypedSubappAttributes(final SubApp subApp) throws XMLStreamException {
+	private void parseUntypedSubappAttributes(final SubApp subApp) throws XMLStreamException, TypeImportException {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		if (name != null) {
 			switch (name) {

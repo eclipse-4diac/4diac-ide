@@ -27,8 +27,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData.ConnectionLayoutData;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
-import org.eclipse.fordiac.ide.model.commands.change.AttributeChangeCommand;
-import org.eclipse.fordiac.ide.model.commands.create.AttributeCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeValueCommand;
+import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -61,6 +61,7 @@ public class LayoutCommand extends AbstractLayoutCommand {
 			pinPositionAttrCommand.execute();
 		}
 	}
+
 	@Override
 	public void redo() {
 		updateModelElements();
@@ -82,7 +83,8 @@ public class LayoutCommand extends AbstractLayoutCommand {
 	private void saveDataForUndo() {
 		data.getPositions().keySet().forEach(elem -> oldPositions.put(elem, EcoreUtil.copy(elem.getPosition())));
 		saveRoutingDataForUndo(data.getConnectionPoints(), oldRoutingData);
-		data.getGroups().keySet().forEach(group -> oldGroupSizes.put(group, new SimpleEntry<>(Integer.valueOf(group.getHeight()), Integer.valueOf(group.getWidth()))));
+		data.getGroups().keySet().forEach(group -> oldGroupSizes.put(group,
+				new SimpleEntry<>(Integer.valueOf(group.getHeight()), Integer.valueOf(group.getWidth()))));
 	}
 
 	private void updateModelElements() {
@@ -105,9 +107,9 @@ public class LayoutCommand extends AbstractLayoutCommand {
 		final String attrValue = y.toString();
 		final Attribute attr = ie.getAttribute(FordiacKeywords.INTERFACE_Y_POSITION);
 		if (attr == null) {
-			cmd = new AttributeCreateCommand(ie, FordiacKeywords.INTERFACE_Y_POSITION, "", attrValue); //$NON-NLS-1$
+			cmd = CreateAttributeCommand.forValues(ie, FordiacKeywords.INTERFACE_Y_POSITION, "", null, attrValue, -1); //$NON-NLS-1$
 		} else {
-			cmd = new AttributeChangeCommand(attr, attrValue);
+			cmd = new ChangeAttributeValueCommand(attr, attrValue);
 		}
 		pinPositionAttrCommand.add(cmd);
 	}

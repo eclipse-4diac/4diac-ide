@@ -62,7 +62,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -105,7 +105,8 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private static final Logger logger = Logger.getLogger(DynamicTypeLoadDeploymentExecutor.class);
 	private final ResponseMapping respMapping = new ResponseMapping();
 
-	public DynamicTypeLoadDeploymentExecutor(final Device dev, final IDeviceManagementCommunicationHandler overrideHandler) {
+	public DynamicTypeLoadDeploymentExecutor(final Device dev,
+			final IDeviceManagementCommunicationHandler overrideHandler) {
 		super(dev, overrideHandler);
 		// nothing to do here
 	}
@@ -222,9 +223,9 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private static void setAttribute(final Device device, final String string, final Set<String> hashSet) {
-		Display.getDefault().asyncExec(
-				() -> device.setAttribute(string, IecTypes.ElementaryTypes.STRING.getName(), String.join(", ", hashSet), //$NON-NLS-1$
-						"created during deployment")  //$NON-NLS-1$
+		Display.getDefault()
+				.asyncExec(() -> device.setAttribute(string, ElementaryTypes.STRING, String.join(", ", hashSet), //$NON-NLS-1$
+						"created during deployment") //$NON-NLS-1$
 				);
 	}
 
@@ -258,8 +259,8 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	public void queryResourcesWithNetwork(final Device dev) {
 		try {
 			for (final org.eclipse.fordiac.ide.deployment.devResponse.Resource resource : queryResources()) {
-				final ResourceCreateCommand cmd = new ResourceCreateCommand(getResourceType(dev, resource.getType()), dev,
-						false);
+				final ResourceCreateCommand cmd = new ResourceCreateCommand(getResourceType(dev, resource.getType()),
+						dev, false);
 				cmd.execute();
 				cmd.getResource().setName(resource.getName());
 				dev.getResource().add(cmd.getResource());
@@ -321,7 +322,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 					.getConnection()) {
 				final String[] src = connection.getSource().split("\\."); //$NON-NLS-1$
 				final FB srcFB;
-				if(src.length > 2) {
+				if (src.length > 2) {
 					final SubApp srcSubapp = findSubAppOfFB(
 							Arrays.asList(src).subList(0, src.length - 2).stream().collect(Collectors.joining(".")),
 							res.getFBNetwork());
@@ -347,7 +348,8 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private static void createConnectionCommand(final FBNetwork fbNet, final IInterfaceElement srcIE, final IInterfaceElement dstIE) {
+	private static void createConnectionCommand(final FBNetwork fbNet, final IInterfaceElement srcIE,
+			final IInterfaceElement dstIE) {
 		final Command cmd = CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(srcIE, dstIE);
 		if (null != cmd && cmd.canExecute()) {
 			cmd.execute();
@@ -402,8 +404,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				if (fbresult.getName().contains(".")) {
 					final SubApp parent = findSubAppOfFB(
 							fbresult.getName().substring(0, fbresult.getName().lastIndexOf(".")), res.getFBNetwork());
-					fbcmd = new FBCreateCommand(entry, parent.getSubAppNetwork(),
-							10, 10);
+					fbcmd = new FBCreateCommand(entry, parent.getSubAppNetwork(), 10, 10);
 				} else {
 					fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
 				}
@@ -419,8 +420,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 				if (fbcmd.getFB() instanceof StructManipulator && getStructFromMultiplexer(res, fbresult) != null) {
 					final ChangeStructCommand changeStructCmd = new ChangeStructCommand(
-							(StructManipulator) fbcmd.getFB(),
-							getStructFromMultiplexer(res, fbresult));
+							(StructManipulator) fbcmd.getFB(), getStructFromMultiplexer(res, fbresult));
 					if (changeStructCmd.canExecute()) {
 						changeStructCmd.execute();
 					}
@@ -433,7 +433,8 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private static String getPlainType(final org.eclipse.fordiac.ide.deployment.devResponse.FB fb) {
 		if (fb.getType().contains(LibraryElementTags.FB_TYPE_STRUCT_MUX)) {
 			return LibraryElementTags.FB_TYPE_STRUCT_MUX;
-		} else if (fb.getType().contains(LibraryElementTags.FB_TYPE_STRUCT_DEMUX)) {
+		}
+		if (fb.getType().contains(LibraryElementTags.FB_TYPE_STRUCT_DEMUX)) {
 			return LibraryElementTags.FB_TYPE_STRUCT_DEMUX;
 		}
 		return fb.getType();
@@ -450,7 +451,8 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		return null;
 	}
 
-	private void addTypeToTypelib(final Resource res, final String typeName, final String extension, final String messageType) {
+	private void addTypeToTypelib(final Resource res, final String typeName, final String extension,
+			final String messageType) {
 		final String request = MessageFormat.format(messageType, getNextId(), typeName);
 		try {
 			String result = sendREQ(res.getName(), request);
@@ -551,8 +553,8 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			throws IOException, ParserConfigurationException, SAXException {
 		final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 		final SAXParser saxParser = saxParserFactory.newSAXParser();
-		saxParser.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");  //$NON-NLS-1$
-		saxParser.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");  //$NON-NLS-1$
+		saxParser.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, ""); //$NON-NLS-1$
+		saxParser.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); //$NON-NLS-1$
 		final QueryResponseHandler handler = new QueryResponseHandler();
 		final String response = sendREQ(destination, request);
 		saxParser.parse(new InputSource(new StringReader(response)), handler);

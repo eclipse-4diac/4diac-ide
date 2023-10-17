@@ -41,7 +41,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.PreferenceConstants;
-import org.eclipse.fordiac.ide.model.data.BaseType1;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.WstringType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -252,26 +253,26 @@ public class CommonElementExporter {
 		if (null != colElement.getColor()) {
 			final String colorValue = colElement.getColor().getRed() + "," + colElement.getColor().getGreen() + "," //$NON-NLS-1$ //$NON-NLS-2$
 					+ colElement.getColor().getBlue();
-			addAttributeElement(LibraryElementTags.COLOR, IecTypes.ElementaryTypes.STRING.getName(), colorValue, null);
+			addAttributeElement(LibraryElementTags.COLOR, IecTypes.ElementaryTypes.STRING, colorValue, null);
 		}
 	}
 
-	protected void addAttributeElement(final String name, final String type, final String value, final String comment)
+	protected void addAttributeElement(final String name, final DataType type, final String value, final String comment)
 			throws XMLStreamException {
-		if (BaseType1.WSTRING.getName().equals(type)) {
+		if (type instanceof WstringType) {
 			addStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
 		} else {
 			addEmptyStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
 		}
 		getWriter().writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
-		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, type);
-		if (!BaseType1.WSTRING.getName().equals(type)) {
+		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, PackageNameHelper.getFullTypeName(type));
+		if (!(type instanceof WstringType)) {
 			getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
 		}
 		if ((null != comment) && (!comment.isBlank())) {
 			getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
 		}
-		if (BaseType1.WSTRING.getName().equals(type)) {
+		if (type instanceof WstringType) {
 			writeCDataSection(value);
 			addInlineEndElement();
 		}
@@ -369,8 +370,7 @@ public class CommonElementExporter {
 
 	protected void addAttributes(final EList<Attribute> attributes) throws XMLStreamException {
 		for (final Attribute attribute : attributes) {
-			addAttributeElement(attribute.getName(), attribute.getType().getName(), attribute.getValue(),
-					attribute.getComment());
+			addAttributeElement(attribute.getName(), attribute.getType(), attribute.getValue(), attribute.getComment());
 		}
 	}
 
@@ -467,7 +467,7 @@ public class CommonElementExporter {
 			for (final Attribute attribute : ie.getAttributes()) {
 				if (!(attribute.getName().equals(LibraryElementTags.VAR_CONFIG)
 						&& (ie instanceof final VarDeclaration varDecl) && !varDecl.isVarConfig())) {
-					addAttributeElement(attribute.getName(), attribute.getType().getName(), attribute.getValue(),
+					addAttributeElement(attribute.getName(), attribute.getType(), attribute.getValue(),
 							attribute.getComment());
 				}
 			}

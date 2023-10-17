@@ -37,6 +37,13 @@
 							<version>2.0.1-SNAPSHOT</version>
 						</artifact>
 					</target>
+					<filters>
+						<filter>
+							<type>eclipse-plugin</type>
+							<id>org.eclipse.jdt.core</id>
+							<removeAll />
+						</filter>
+					</filters>
 				</configuration>
 			</plugin>
 			<plugin>

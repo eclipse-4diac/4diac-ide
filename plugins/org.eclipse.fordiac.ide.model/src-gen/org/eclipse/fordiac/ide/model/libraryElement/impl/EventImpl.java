@@ -467,7 +467,7 @@ public class EventImpl extends EObjectImpl implements Event {
 	 * @generated
 	 */
 	@Override
-	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
+	public void setAttribute(final String attributeName, final DataType type, final String value, final String comment) {
 		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
 	}
 

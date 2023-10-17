@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
@@ -119,8 +120,9 @@ public class MonitoringSwitch<T> extends Switch<T> {
 				if (result == null) result = caseEvent(adapterMonitoringEvent);
 				if (result == null) result = caseIInterfaceElement(adapterMonitoringEvent);
 				if (result == null) result = caseICallable(adapterMonitoringEvent);
-				if (result == null) result = caseINamedElement(adapterMonitoringEvent);
+				if (result == null) result = caseITypedElement(adapterMonitoringEvent);
 				if (result == null) result = caseHiddenElement(adapterMonitoringEvent);
+				if (result == null) result = caseINamedElement(adapterMonitoringEvent);
 				if (result == null) result = caseConfigurableObject(adapterMonitoringEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -131,8 +133,9 @@ public class MonitoringSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIEditPartCreator(adapterMonitoringVarDeclaration);
 				if (result == null) result = caseVarDeclaration(adapterMonitoringVarDeclaration);
 				if (result == null) result = caseIInterfaceElement(adapterMonitoringVarDeclaration);
-				if (result == null) result = caseINamedElement(adapterMonitoringVarDeclaration);
+				if (result == null) result = caseITypedElement(adapterMonitoringVarDeclaration);
 				if (result == null) result = caseHiddenElement(adapterMonitoringVarDeclaration);
+				if (result == null) result = caseINamedElement(adapterMonitoringVarDeclaration);
 				if (result == null) result = caseConfigurableObject(adapterMonitoringVarDeclaration);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -322,6 +325,21 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseINamedElement(INamedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ITyped Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ITyped Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseITypedElement(ITypedElement object) {
 		return null;
 	}
 

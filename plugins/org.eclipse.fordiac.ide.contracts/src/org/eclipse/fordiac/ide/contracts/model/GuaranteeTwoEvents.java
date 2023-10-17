@@ -29,12 +29,7 @@ public class GuaranteeTwoEvents extends Guarantee {
 	private static final int POS_WITHIN = 9;
 	private static final int POS_OCCUR = 8;
 	private static final int POS_EVENTS = 6;
-	private static final int POS_THEN = 5;
-	private static final int POS_OCCURS = 4;
-	private static final int POS_EVENT = 2;
-	private static final int POS_WHENEVER = 1;
 	private static final int POS_MS = 10;
-	private static final int GUARANTEE_LENGTH = 11;
 	private static final int POSITION_OUTPUT_EVENT = 7;
 	private static final int POSITION_INPUT_EVENT = 3;
 	private static final int POSITION_NO = 10;
@@ -42,11 +37,11 @@ public class GuaranteeTwoEvents extends Guarantee {
 	private String secondOutputEvent;
 
 	GuaranteeTwoEvents() {
-		throw new ExceptionInInitializerError("GuaranteeTwoEvents not Implemented"); //$NON-NLS-1$
-		// remove when class is correctly evaluated in contract
+		throw new UnsupportedOperationException("GuaranteeTwoEvents not Implemented"); //$NON-NLS-1$
+		// TODO remove when class is correctly evaluated in contract
 	}
 
-	String getSecondOutputEvent() {
+	public String getSecondOutputEvent() {
 		return secondOutputEvent;
 	}
 
@@ -54,7 +49,7 @@ public class GuaranteeTwoEvents extends Guarantee {
 		this.secondOutputEvent = secondOutputEvent;
 	}
 
-	static Guarantee createGuaranteeTwoEvents(final String line) {
+	static Guarantee createGuaranteeTwoEvents(final String line) throws GuaranteeTwoEventsExeption {
 		final String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectGuarantee(parts)) {
 			throw new GuaranteeTwoEventsExeption("Error with Guarantee: " + line); //$NON-NLS-1$
@@ -69,9 +64,8 @@ public class GuaranteeTwoEvents extends Guarantee {
 			guarantee.setRangeFromInterval(parts, POSITION_NO);
 			return guarantee;
 		}
-		guarantee.setMax(Integer.parseInt(
-				parts[POSITION_NO].substring(0, parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length())));
-		guarantee.setMin(0);
+		guarantee.setTime(new Interval(0, Integer.parseInt(parts[POSITION_NO].substring(0,
+				parts[POSITION_NO].length() - ContractKeywords.UNIT_OF_TIME.length()))));
 		return guarantee;
 
 	}
@@ -121,19 +115,7 @@ public class GuaranteeTwoEvents extends Guarantee {
 	}
 
 	private static boolean isCorrectGuarantee(final String[] parts) {
-		if (parts.length != GUARANTEE_LENGTH) {
-			return false;
-		}
-		if (!ContractKeywords.WHENEVER.equals(parts[POS_WHENEVER])) {
-			return false;
-		}
-		if (!ContractKeywords.EVENT.equals(parts[POS_EVENT])) {
-			return false;
-		}
-		if (!(ContractKeywords.OCCURS + ContractKeywords.COMMA).equals(parts[POS_OCCURS])) {
-			return false;
-		}
-		if (!ContractKeywords.THEN.equals(parts[POS_THEN])) {
+		if (!Guarantee.hasCorrectBeginning(parts)) {
 			return false;
 		}
 		if (!ContractKeywords.EVENTS.equals(parts[POS_EVENTS])) {
@@ -150,7 +132,7 @@ public class GuaranteeTwoEvents extends Guarantee {
 	}
 
 	@Override
-	public String createComment() {
+	public String asString() {
 		final StringBuilder comment = new StringBuilder();
 		if (getMin() == 0 || getMin() == getMax()) {
 			comment.append(ContractUtils.createGuaranteeTwoEvents(getInputEvent(), getOutputEvent(),

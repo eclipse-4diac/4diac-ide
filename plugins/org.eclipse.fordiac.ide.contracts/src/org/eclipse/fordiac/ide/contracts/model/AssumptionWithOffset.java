@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -33,15 +34,22 @@ public class AssumptionWithOffset extends Assumption {
 	private static final int POS_EVERY = 3;
 	private static final int POSITION_NO2 = 6;
 	private static final int POSITION_NO1 = 4;
-	private int minOffset;
-	private int maxOffset;
+	private AbstractTime offSet;
 
 	AssumptionWithOffset() {
-		throw new ExceptionInInitializerError("AssumptionWithOffset not Implemented"); //$NON-NLS-1$
-		// remove when class is correctly evaluated in contracts
+		throw new UnsupportedOperationException("AssumptionWithOffset not Implemented"); //$NON-NLS-1$
+		// TODO remove when class is correctly evaluated in contracts
 	}
 
-	static Assumption createAssumptionWithOffset(final String line) {
+	AbstractTime getOffSet() {
+		return offSet;
+	}
+
+	void setOffSet(final AbstractTime offSet) {
+		this.offSet = offSet;
+	}
+
+	static Assumption createAssumptionWithOffset(final String line) throws AssumptionWithOffsetExeption {
 		final String[] parts = line.split(" "); //$NON-NLS-1$
 		if (!isCorrectAssumtion(parts)) {
 			throw new AssumptionWithOffsetExeption("Error with Assumption: " + line); //$NON-NLS-1$
@@ -52,19 +60,18 @@ public class AssumptionWithOffset extends Assumption {
 		if (ContractUtils.isInterval(parts, POSITION_NO1, ContractKeywords.INTERVAL_DIVIDER)) {
 			assumption.setRangeFromInterval(parts, POSITION_NO1);
 		} else {
-			assumption.setMax(-1);
-			assumption.setMin(Integer.parseInt(parts[POSITION_NO1].substring(0,
-					parts[POSITION_NO1].length() - ContractKeywords.UNIT_OF_TIME.length())));
+			assumption.setTime(new Instant(Integer.parseInt(parts[POSITION_NO1].substring(0,
+					parts[POSITION_NO1].length() - ContractKeywords.UNIT_OF_TIME.length()))));
 		}
 		if (ContractUtils.isInterval(parts, POSITION_NO2, ContractKeywords.INTERVAL_DIVIDER)) {
 			String[] number = parts[POSITION_NO2].split(ContractKeywords.INTERVAL_DIVIDER);
-			assumption.setMinOffset(Integer.parseInt(number[0].substring(1)));
+			final int minOffset = Integer.parseInt(number[0].substring(1));
 			number = number[1].split(ContractKeywords.INTERVAL_CLOSE);
-			assumption.setMaxOffset(Integer.parseInt(number[0]));
+			final int maxOffset = Integer.parseInt(number[0]);
+			assumption.setOffSet(new Interval(minOffset, maxOffset));
 		} else {
-			assumption.setMaxOffset(-1);
-			assumption.setMinOffset(Integer.parseInt(parts[POSITION_NO2].substring(0,
-					parts[POSITION_NO2].length() - ContractKeywords.UNIT_OF_TIME.length())));
+			assumption.setOffSet(new Instant(Integer.parseInt(parts[POSITION_NO2].substring(0,
+					parts[POSITION_NO2].length() - ContractKeywords.UNIT_OF_TIME.length()))));
 		}
 
 		return assumption;
@@ -95,19 +102,23 @@ public class AssumptionWithOffset extends Assumption {
 	}
 
 	public int getMinOffset() {
-		return minOffset;
+		if (getOffSet() instanceof final Instant instant) {
+			return instant.getMin();
+		}
+		if (getOffSet() instanceof final Interval interval) {
+			return interval.getMin();
+		}
+		return Integer.MIN_VALUE;
 	}
 
 	public int getMaxOffset() {
-		return maxOffset;
-	}
-
-	void setMinOffset(final int minOffset) {
-		this.minOffset = minOffset;
-	}
-
-	void setMaxOffset(final int maxOffset) {
-		this.maxOffset = maxOffset;
+		if (getOffSet() instanceof final Instant instant) {
+			return instant.getMin();
+		}
+		if (getOffSet() instanceof final Interval interval) {
+			return interval.getMax();
+		}
+		return Integer.MIN_VALUE;
 	}
 
 	public static boolean isCompatibleWithOffset(final Iterable<Assumption> assumptions) {
@@ -190,21 +201,20 @@ public class AssumptionWithOffset extends Assumption {
 		return true;
 	}
 
-	private static void simplifyAssumptionWithOffset(final AssumptionWithOffset toRemove, final int mini,
-			final int maxi, final int miniOffest, final int maxiOffset) {
+	private static void simplifyAssumptionWithOffset(final AssumptionWithOffset toRemove, final int min, final int max,
+			final int minOffest, final int maxOffset) {
 		toRemove.getContract().getAssumptions().removeIf(
 				a -> ((a.getInputEvent().equals(toRemove.getInputEvent())) && (a instanceof AssumptionWithOffset)));
 		final AssumptionWithOffset toAdd = new AssumptionWithOffset();
 		toAdd.setInputEvent(toRemove.getInputEvent());
-		toAdd.setMax(maxi);
-		toAdd.setMin(mini);
-		toAdd.setMaxOffset(maxiOffset);
-		toAdd.setMinOffset(miniOffest);
+		toAdd.setTime(new Interval(min, max));
+		toAdd.setOffSet(new Interval(minOffest, maxOffset));
+
 		toRemove.getContract().add(toAdd, toRemove.getContract());
 	}
 
 	@Override
-	public String createComment() {
+	public String asString() {
 		final StringBuilder comment = new StringBuilder();
 		if (getMax() == -1 || getMax() == getMin()) {
 			comment.append(ContractUtils.createAssumptionString(getInputEvent(), String.valueOf(getMin())));
@@ -232,14 +242,59 @@ public class AssumptionWithOffset extends Assumption {
 	}
 
 	@Override
-	List<AbstractTime> getTimestamp(final int number) {
-		// TODO implement
-		return Collections.emptyList();
+	List<AbstractTime> getOccurrences(final int number) {
+		if (number < 1) {
+			return Collections.emptyList();
+		}
+		final List<AbstractTime> timestamps = new ArrayList<>();
+		timestamps.add(getFirstTime());
+		for (int i = 0; i < number - 1; i++) {
+			timestamps.add(timestamps.get(i).add(getBounds()));
+		}
+		return timestamps;
 	}
 
 	@Override
-	List<AbstractTime> getTimestamp(final Interval range) {
-		// TODO implement
-		return Collections.emptyList();
+	List<AbstractTime> getOccurrences(final Interval range) {
+		final List<AbstractTime> timestamps = new ArrayList<>();
+		final AbstractTime toAdd = getFirstTime();
+		if (toAdd instanceof Instant instant) {
+			while (instant.getMin() <= range.getMax()) {
+				if (instant.getMin() >= range.getMin()) {
+					timestamps.add(instant);
+				}
+				instant = new Instant(instant.getMin() + getMin());
+			}
+		} else {
+			Interval interval = (Interval) toAdd;
+			while (interval.getMax() <= range.getMax()) {
+				if (interval.getMin() >= range.getMin()) {
+					timestamps.add(interval);
+				}
+				interval = interval.add(getBounds());
+			}
+		}
+		return timestamps;
 	}
+
+	private AbstractTime getFirstTime() {
+		if (getMax() == -1 && getMaxOffset() == -1) {
+			return new Instant(getMin() + getMinOffset());
+		}
+		final int min = getMin() + getMinOffset();
+		int max = 0;
+		if (getMax() == -1) {
+			max += getMin();
+		} else {
+			max += getMax();
+		}
+		if (getMaxOffset() == -1) {
+			max += getMinOffset();
+		} else {
+			max += getMaxOffset();
+		}
+		return new Interval(min, max);
+
+	}
+
 }

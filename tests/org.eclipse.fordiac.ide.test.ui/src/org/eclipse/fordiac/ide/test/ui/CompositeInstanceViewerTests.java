@@ -129,9 +129,9 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(E_DEMUX));
-		editor.click(E_DEMUX);
-		final SWTBotGefEditPart parent = editor.getEditPart(E_DEMUX).parent();
+		assertNotNull(editor.getEditPart(E_DEMUX_FB));
+		editor.click(E_DEMUX_FB);
+		final SWTBotGefEditPart parent = editor.getEditPart(E_DEMUX_FB).parent();
 		assertNotNull(parent);
 		parent.click();
 

@@ -164,16 +164,16 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.ATTRIBUTE: {
 				Attribute attribute = (Attribute)theEObject;
 				T result = caseAttribute(attribute);
+				if (result == null) result = caseITypedElement(attribute);
 				if (result == null) result = caseINamedElement(attribute);
-				if (result == null) result = caseTypedElement(attribute);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION: {
 				AttributeDeclaration attributeDeclaration = (AttributeDeclaration)theEObject;
 				T result = caseAttributeDeclaration(attributeDeclaration);
+				if (result == null) result = caseITypedElement(attributeDeclaration);
 				if (result == null) result = caseINamedElement(attributeDeclaration);
-				if (result == null) result = caseTypedElement(attributeDeclaration);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -972,12 +972,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseITypedElement(typedConfigureableObject);
 				if (result == null) result = caseConfigurableObject(typedConfigureableObject);
 				if (result == null) result = caseINamedElement(typedConfigureableObject);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.TYPED_ELEMENT: {
-				TypedElement typedElement = (TypedElement)theEObject;
-				T result = caseTypedElement(typedElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -2482,21 +2476,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTypedConfigureableObject(TypedConfigureableObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Typed Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Typed Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseTypedElement(TypedElement object) {
 		return null;
 	}
 

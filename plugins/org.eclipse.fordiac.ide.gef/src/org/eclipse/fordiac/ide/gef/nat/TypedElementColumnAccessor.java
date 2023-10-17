@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -24,14 +23,11 @@ import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
 
-public class TypedElementColumnAccessor<T extends ITypedElement> implements IColumnPropertyAccessor<T> {
+public class TypedElementColumnAccessor<T extends ITypedElement>
+		extends AbstractColumnAccessor<T, TypedElementTableColumn> {
 
 	private static final String NULL_DEFAULT = ""; //$NON-NLS-1$
-
-	private final CommandExecutor commandExecutor;
-	private final List<TypedElementTableColumn> columns;
 
 	protected TypedElementColumnAccessor(final CommandExecutor commandExecutor) {
 		this(commandExecutor, TypedElementTableColumn.DEFAULT_COLUMNS);
@@ -39,23 +35,10 @@ public class TypedElementColumnAccessor<T extends ITypedElement> implements ICol
 
 	protected TypedElementColumnAccessor(final CommandExecutor commandExecutor,
 			final List<TypedElementTableColumn> columns) {
-		this.commandExecutor = commandExecutor;
-		this.columns = columns;
-	}
-
-	protected CommandExecutor getCommandExecutor() {
-		return commandExecutor;
-	}
-
-	public List<TypedElementTableColumn> getColumns() {
-		return columns;
+		super(commandExecutor, columns);
 	}
 
 	@Override
-	public Object getDataValue(final T rowObject, final int columnIndex) {
-		return getDataValue(rowObject, columns.get(columnIndex));
-	}
-
 	public Object getDataValue(final T rowObject, final TypedElementTableColumn column) {
 		return switch (column) {
 		case NAME -> rowObject.getName();
@@ -66,13 +49,6 @@ public class TypedElementColumnAccessor<T extends ITypedElement> implements ICol
 	}
 
 	@Override
-	public void setDataValue(final T rowObject, final int columnIndex, final Object newValue) {
-		final Command cmd = createCommand(rowObject, columns.get(columnIndex), newValue);
-		if (cmd.canExecute()) {
-			commandExecutor.executeCommand(cmd);
-		}
-	}
-
 	public Command createCommand(final T rowObject, final TypedElementTableColumn column, final Object newValue) {
 		return switch (column) {
 		case NAME -> ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
@@ -80,21 +56,5 @@ public class TypedElementColumnAccessor<T extends ITypedElement> implements ICol
 		case COMMENT -> new ChangeCommentCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
-	}
-
-	@Override
-	public String getColumnProperty(final int columnIndex) {
-		return columns.get(columnIndex).toString();
-	}
-
-	@Override
-	public int getColumnIndex(final String propertyName) {
-		return IntStream.range(0, getColumnCount()).filter(i -> columns.get(i).toString().equals(propertyName))
-				.findFirst().orElse(-1);
-	}
-
-	@Override
-	public int getColumnCount() {
-		return columns.size();
 	}
 }

@@ -475,10 +475,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createTypedConfigureableObjectAdapter();
 			}
 			@Override
-			public Adapter caseTypedElement(TypedElement object) {
-				return createTypedElementAdapter();
-			}
-			@Override
 			public Adapter caseValue(Value object) {
 				return createValueAdapter();
 			}
@@ -1887,20 +1883,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTypedConfigureableObjectAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedElement <em>Typed Element</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedElement
-	 * @generated
-	 */
-	public Adapter createTypedElementAdapter() {
 		return null;
 	}
 

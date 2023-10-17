@@ -13,12 +13,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.exceptions;
 
+import org.eclipse.fordiac.ide.contracts.model.GuaranteeTwoEvents;
+
 public class GuaranteeTwoEventsExeption extends ContractExeption {
 
-	private static final long serialVersionUID = 6281845666676546961L;
+	private static final long serialVersionUID = -790314629454634243L;
+	private final GuaranteeTwoEvents guarantee;
+
+	public GuaranteeTwoEventsExeption(final GuaranteeTwoEvents guarantee, final String errorMessage) {
+		super(errorMessage);
+		this.guarantee = guarantee;
+	}
 
 	public GuaranteeTwoEventsExeption(final String errorMessage) {
-		super(errorMessage);
+		this(null, errorMessage);
+	}
+
+	public GuaranteeTwoEvents getGuarantee() {
+		return guarantee;
 	}
 
 }

@@ -18,16 +18,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
@@ -37,15 +31,16 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -56,8 +51,14 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.edit.event.DataUpdateEvent;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
+import org.eclipse.nebula.widgets.nattable.selection.command.ClearAllSelectionsCommand;
+import org.eclipse.nebula.widgets.nattable.selection.event.RowSelectionEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -67,12 +68,14 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class StructViewingComposite extends Composite
 		implements CommandExecutor, I4diacNatTableUtil, ISelectionProvider {
-	protected Map<String, List<String>> typeSelection = new HashMap<>();
 	private NatTable natTable;
 	private final CommandStack cmdStack;
 	private final IWorkbenchPart part;
 	private final DataTypeEntry dataTypeEntry;
 	private IChangeableRowDataProvider<VarDeclaration> structMemberProvider;
+
+	private ConfigurableObject currentConfigurableObject = null;
+	private ConfigurablObjectListener configObjectListener = null;
 
 	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack,
 			final DataTypeEntry dataTypeEntry, final IWorkbenchPart part) {
@@ -90,6 +93,13 @@ public class StructViewingComposite extends Composite
 
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(parent, widgetFactory);
+		parent.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(final MouseEvent e) {
+				natTable.doCommand(new ClearAllSelectionsCommand());
+				fireConfigurablObjectChanged(getType());
+			}
+		});
 
 		createNatTable(parent);
 
@@ -113,12 +123,38 @@ public class StructViewingComposite extends Composite
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(structMemberProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(structMemberProvider));
-		initTypeSelection(getType().getTypeLibrary().getDataTypeLibrary());
-		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),
-				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
+		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer,
+				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,
+				null, this, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
 		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(structMemberProvider));
 		natTable.configure();
+		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
+		selectionLayer.addLayerListener(event -> {
+			if (event instanceof final DataUpdateEvent dataUpdateEvent && dataUpdateEvent.getColumnPosition() == 0
+					&& currentConfigurableObject instanceof final VarDeclaration varDecl) {
+				fireConfigurablObjectChanged(varDecl);
+			} else if (event instanceof final RowSelectionEvent rowSelectionEvent
+					&& rowSelectionEvent.getSelectionLayer().getSelectedRowCount() == 1) {
+				final int row = rowSelectionEvent.getRowPositionToMoveIntoViewport();
+				fireConfigurablObjectChanged(structMemberProvider.getRowObject(row));
+			}
+		});
+	}
+
+	public ConfigurableObject setConfigurablObjectListener(final ConfigurablObjectListener listener) {
+		configObjectListener = listener;
+		if (currentConfigurableObject == null) {
+			currentConfigurableObject = getStruct();
+		}
+		return currentConfigurableObject;
+	}
+
+	private void fireConfigurablObjectChanged(final ConfigurableObject newObject) {
+		currentConfigurableObject = newObject;
+		if (configObjectListener != null) {
+			configObjectListener.handleObjectChanged(newObject);
+		}
 	}
 
 	private DataType getDataType() {
@@ -174,6 +210,10 @@ public class StructViewingComposite extends Composite
 		return entry;
 	}
 
+	public TypeLibrary getTypeLibrary() {
+		return getType().getTypeLibrary();
+	}
+
 	public DataType getStruct() {
 		return getType();
 	}
@@ -184,29 +224,14 @@ public class StructViewingComposite extends Composite
 
 	@Override
 	public ISelection getSelection() {
-		// for now return the whole object so that property sheets and other stuff can filter on it.
+		// for now return the whole object so that property sheets and other stuff can
+		// filter on it.
 		return new StructuredSelection(this);
 	}
 
 	@Override
 	public boolean isEditable() {
 		return true;
-	}
-
-	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
-		final List<String> elementaryTypes = new ArrayList<>();
-		dataTypeLib.getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
-				.forEach(type -> elementaryTypes.add(type.getName()));
-		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
-
-		final List<String> structuredTypes = new ArrayList<>();
-		dataTypeLib.getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
-				.forEach(type -> structuredTypes.add(type.getName()));
-		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
-	}
-
-	public void refresh() {
-		natTable.refresh();
 	}
 
 	@Override
@@ -226,8 +251,12 @@ public class StructViewingComposite extends Composite
 
 	@Override
 	public void removeEntry(final Object entry, final CompoundCommand cmd) {
-		if (entry instanceof VarDeclaration) {
-			cmd.add(new DeleteMemberVariableCommand(getType(), (VarDeclaration) entry));
+		if (entry instanceof final VarDeclaration varDecl) {
+			cmd.add(new DeleteMemberVariableCommand(getType(), varDecl));
 		}
+	}
+
+	public interface ConfigurablObjectListener {
+		void handleObjectChanged(ConfigurableObject newObject);
 	}
 }

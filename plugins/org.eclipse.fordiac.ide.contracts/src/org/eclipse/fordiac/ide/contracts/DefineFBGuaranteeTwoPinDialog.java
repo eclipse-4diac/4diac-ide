@@ -15,10 +15,8 @@ package org.eclipse.fordiac.ide.contracts;
 
 import org.eclipse.fordiac.ide.application.utilities.IntervalVerifyListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -28,33 +26,20 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class DefineFBGuaranteeTwoPinDialog extends MessageDialog {
+public class DefineFBGuaranteeTwoPinDialog extends ContractElementDialog {
 	private static final int NUM_COLUMNS = 4;
-	private Text inputTime;
-	private final Event pinFrom;
+
 	private final Event pinTo;
-	private String inputTimeText;
 
 	public DefineFBGuaranteeTwoPinDialog(final Shell parentShell, final Event pinFrom, final Event pinTo) {
-		super(parentShell, Messages.DefineFBReactionTwoPinDialog_Title, null,
-				Messages.DefineFBReactionTwoPinDialog_Info, MessageDialog.INFORMATION, 0,
-				Messages.DefineFBReactionTwoPinDialog_Button);
-		this.pinFrom = pinFrom;
+		super(parentShell, pinFrom, Messages.DefineFBReactionTwoPinDialog_Title,
+				Messages.DefineFBReactionTwoPinDialog_Info);
 		this.pinTo = pinTo;
-	}
-
-	public String getTime() {
-		return inputTimeText;
 	}
 
 	@Override
 	protected Control createCustomArea(final Composite parent) {
-		parent.setLayout(new FillLayout());
-		final Composite dialogArea = new Composite(parent, SWT.FILL);
-		dialogArea.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
-		final GridLayout layout = new GridLayout(2, false);
-		dialogArea.setLayout(layout);
-
+		final Composite dialogArea = (Composite) super.createCustomArea(parent);
 		final Group group = new Group(dialogArea, SWT.FILL);
 
 		group.setText(Messages.DefineFBReactionThreePinDialog_DefineGuarantee);
@@ -69,9 +54,9 @@ public class DefineFBGuaranteeTwoPinDialog extends MessageDialog {
 		label = new Label(group, SWT.None);
 		label.setText("occurs within"); //$NON-NLS-1$
 
-		inputTime = new Text(group, SWT.RIGHT);
-		inputTime.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTime));
-		inputTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		inputTimeText = new Text(group, SWT.RIGHT);
+		inputTimeText.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTimeText));
+		inputTimeText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		label = new Label(group, SWT.None);
 		label.setText(" ms"); //$NON-NLS-1$
@@ -79,15 +64,4 @@ public class DefineFBGuaranteeTwoPinDialog extends MessageDialog {
 		return dialogArea;
 	}
 
-	@Override
-	protected void buttonPressed(final int buttonId) {
-		inputTimeText = inputTime.getText();
-		final String[] s = DefineContractUtils.getTimeIntervalFromString(inputTime.getText());
-		if (inputTimeText.isBlank() || (s.length == 2 && (Integer.parseInt(s[0]) > Integer.parseInt(s[1])))) {
-			MessageDialog.openError(this.getShell(), Messages.DefineFBReactionOnePinDialog_Error,
-					Messages.DefineFBReactionOnePinDialog_PleaseFill);
-		} else {
-			super.buttonPressed(buttonId);
-		}
-	}
 }

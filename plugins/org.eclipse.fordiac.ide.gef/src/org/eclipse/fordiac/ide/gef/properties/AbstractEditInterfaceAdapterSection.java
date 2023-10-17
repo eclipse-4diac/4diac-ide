@@ -15,41 +15,30 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.InterfaceElementColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.TypedElementColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementTableColumn;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.nat.AdapterSelectionTreeContentProvider;
-import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
+import org.eclipse.fordiac.ide.model.ui.nat.AdapterTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
+import org.eclipse.fordiac.ide.model.ui.widgets.AdapterTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditInterfaceSection<AdapterDeclaration> {
-
-	@Override
-	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
-		final List<String> adapterTypes = new ArrayList<>();
-		if ((null != getType()) && (null != getTypeLibrary())) {
-			getTypeLibrary().getAdapterTypesSorted().forEach(adpType -> adapterTypes.add(adpType.getTypeName()));
-		}
-		typeSelection.put("Adapter Types", adapterTypes); //$NON-NLS-1$
-	}
-
-	@Override
-	protected String[] fillTypeCombo() {
-		return new String[0];
-	}
 
 	protected AdapterType getLastUsedAdapterType(final InterfaceList interfaceList,
 			final IInterfaceElement interfaceElement, final boolean isInput) {
@@ -96,8 +85,8 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		final DataLayer outputDataLayer = new DataLayer(outputProvider);
 		outputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(outputProvider));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new TypedElementColumnProvider(), getSectionEditableRule(),
-				new DataTypeSelectionButton(typeSelection, new AdapterSelectionTreeContentProvider()), this, false);
+				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(),
+				createTypeSelectionButton(), this, false);
 	}
 
 	@Override
@@ -106,14 +95,36 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		final DataLayer inputDataLayer = new DataLayer(inputProvider);
 		inputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(inputProvider));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new TypedElementColumnProvider(), getSectionEditableRule(),
-				new DataTypeSelectionButton(typeSelection, new AdapterSelectionTreeContentProvider()), this, true);
+				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(),
+				createTypeSelectionButton(), this, true);
 	}
 
 	@Override
 	public void setTableInput(final InterfaceList il) {
 		inputProvider.setInput(il.getSockets());
 		outputProvider.setInput(il.getPlugs());
+	}
+
+	private TypeSelectionButton createTypeSelectionButton() {
+		return new TypeSelectionButton(this::getTypeLibrary, AdapterTypeSelectionContentProvider.INSTANCE,
+				AdapterTypeSelectionTreeContentProvider.INSTANCE, AdapterTreeNodeLabelProvider.INSTANCE);
+	}
+
+	public static class AdapterTreeNodeLabelProvider extends DataTypeTreeSelectionDialog.TreeNodeLabelProvider {
+
+		public static final AdapterTreeNodeLabelProvider INSTANCE = new AdapterTreeNodeLabelProvider();
+
+		@Override
+		public Image getImage(final Object element) {
+			if (element instanceof final TypeNode node && node.getType() != null) {
+				final LibraryElement type = node.getType();
+
+				if (type instanceof AdapterType) {
+					return FordiacImage.ICON_ADAPTER_TYPE.getImage();
+				}
+			}
+			return super.getImage(element);
+		}
 	}
 
 }

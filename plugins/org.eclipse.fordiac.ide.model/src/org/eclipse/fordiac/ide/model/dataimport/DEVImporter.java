@@ -26,7 +26,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -92,7 +91,8 @@ public class DEVImporter extends TypeImporter {
 				getElement().getResource().add(parseResource());
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				final ResDevFBNetworkImporter resNetworkImporter = new ResDevFBNetworkImporter(this, getElement().getVarDeclaration());
+				final ResDevFBNetworkImporter resNetworkImporter = new ResDevFBNetworkImporter(this,
+						getElement().getVarDeclaration());
 				getElement().setFBNetwork(resNetworkImporter.getFbNetwork());
 				resNetworkImporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 				break;
@@ -154,7 +154,8 @@ public class DEVImporter extends TypeImporter {
 		attributeDeclaration.setName(getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE));
 		attributeDeclaration.setComment(getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE));
 		attributeDeclaration.setInitialValue(getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE));
-		attributeDeclaration.setType(BaseType1.getByName(getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE)));
+		attributeDeclaration
+				.setType(getDataTypeLibrary().getType(getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE)));
 		getElement().getAttributeDeclarations().add(attributeDeclaration);
 	}
 

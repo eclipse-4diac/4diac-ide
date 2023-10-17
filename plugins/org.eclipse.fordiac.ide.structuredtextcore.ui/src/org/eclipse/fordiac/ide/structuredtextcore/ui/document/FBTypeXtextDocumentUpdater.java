@@ -23,7 +23,7 @@ public class FBTypeXtextDocumentUpdater extends LibraryElementXtextDocumentUpdat
 
 	@Inject
 	public FBTypeXtextDocumentUpdater(@Named(Constants.LANGUAGE_NAME) final String name) {
-		super(name);
+		super(name, new DefaultLibraryElementChangeAdapterFilter());
 	}
 
 	@Override

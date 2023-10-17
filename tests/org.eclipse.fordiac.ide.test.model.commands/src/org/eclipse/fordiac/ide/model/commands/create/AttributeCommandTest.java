@@ -17,18 +17,23 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.commands.change.AttributeChangeCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.AttributeDeleteCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeValueCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class AttributeCommandTest extends FBNetworkTestBase {
 
-	private static final String ATTRIBUTE_DEFAULT_NAME = "name"; //$NON-NLS-1$
-	private static final String ATTRIBUTE_DEFAULT_VALUE = "value"; //$NON-NLS-1$
-	private static final String ATTRIBUTE_DEFAULT_COMMENT = "comment"; //$NON-NLS-1$
+	private static final String ATTRIBUTE_DEFAULT_NAME = "Attribute1"; //$NON-NLS-1$
+	private static final String ATTRIBUTE_DEFAULT_NAME2 = "Attribute2"; //$NON-NLS-1$
+	private static final String ATTRIBUTE_DEFAULT_VALUE = "''"; //$NON-NLS-1$
+	private static final String ATTRIBUTE_DEFAULT_COMMENT = ""; //$NON-NLS-1$
 
 	private static final String ATTRIBUTE_NAME = "testattribute"; //$NON-NLS-1$
 	private static final String ATTRIBUTE_VALUE = "set to a specific value"; //$NON-NLS-1$
@@ -43,7 +48,7 @@ public class AttributeCommandTest extends FBNetworkTestBase {
 	}
 
 	public static State executeCreateCommand(final State state) {
-		state.setCommand(new AttributeCreateCommand(state.getFbNetwork().getNetworkElements().get(0)));
+		state.setCommand(CreateAttributeCommand.withDefaults(state.getFbNetwork().getNetworkElements().get(0)));
 
 		return commandExecution(state);
 	}
@@ -62,8 +67,14 @@ public class AttributeCommandTest extends FBNetworkTestBase {
 
 	public static State executeChangeCommand(final State state) {
 		final FBNetworkElement networkElement = state.getFbNetwork().getNetworkElements().get(0);
-		state.setCommand(new AttributeChangeCommand(networkElement.getAttributes().get(0), ATTRIBUTE_NAME,
-				ATTRIBUTE_VALUE, null, ATTRIBUTE_COMMENT));
+		final Attribute attribute = networkElement.getAttributes().get(0);
+
+		final CompoundCommand command = new CompoundCommand();
+		command.add(ChangeNameCommand.forName(attribute, ATTRIBUTE_NAME));
+		command.add(new ChangeCommentCommand(attribute, ATTRIBUTE_COMMENT));
+		command.add(ChangeAttributeTypeCommand.forDataType(attribute, null));
+		command.add(new ChangeAttributeValueCommand(attribute, ATTRIBUTE_VALUE));
+		state.setCommand(command);
 
 		return commandExecution(state);
 	}
@@ -82,7 +93,7 @@ public class AttributeCommandTest extends FBNetworkTestBase {
 
 	public static State executeDeleteCommand(final State state) {
 		final FBNetworkElement networkElement = state.getFbNetwork().getNetworkElements().get(0);
-		state.setCommand(new AttributeDeleteCommand(networkElement, networkElement.getAttributes().get(0)));
+		state.setCommand(new DeleteAttributeCommand(networkElement, networkElement.getAttributes().get(0)));
 
 		return commandExecution(state);
 	}
@@ -106,7 +117,7 @@ public class AttributeCommandTest extends FBNetworkTestBase {
 		t.test(attributes.get(0).getName(), ATTRIBUTE_DEFAULT_NAME);
 		t.test(attributes.get(0).getValue(), ATTRIBUTE_DEFAULT_VALUE);
 		t.test(attributes.get(0).getComment(), ATTRIBUTE_DEFAULT_COMMENT);
-		t.test(attributes.get(1).getName(), ATTRIBUTE_DEFAULT_NAME);
+		t.test(attributes.get(1).getName(), ATTRIBUTE_DEFAULT_NAME2);
 		t.test(attributes.get(1).getValue(), ATTRIBUTE_DEFAULT_VALUE);
 		t.test(attributes.get(1).getComment(), ATTRIBUTE_DEFAULT_COMMENT);
 	}
@@ -119,9 +130,9 @@ public class AttributeCommandTest extends FBNetworkTestBase {
 		t.test(networkElement.getAttribute(ATTRIBUTE_NAME).getName(), ATTRIBUTE_NAME);
 		t.test(networkElement.getAttribute(ATTRIBUTE_NAME).getValue(), ATTRIBUTE_VALUE);
 		t.test(networkElement.getAttribute(ATTRIBUTE_NAME).getComment(), ATTRIBUTE_COMMENT);
-		t.test(networkElement.getAttribute(ATTRIBUTE_DEFAULT_NAME).getName(), ATTRIBUTE_DEFAULT_NAME);
-		t.test(networkElement.getAttribute(ATTRIBUTE_DEFAULT_NAME).getValue(), ATTRIBUTE_DEFAULT_VALUE);
-		t.test(networkElement.getAttribute(ATTRIBUTE_DEFAULT_NAME).getComment(), ATTRIBUTE_DEFAULT_COMMENT);
+		t.test(networkElement.getAttribute(ATTRIBUTE_DEFAULT_NAME2).getName(), ATTRIBUTE_DEFAULT_NAME2);
+		t.test(networkElement.getAttribute(ATTRIBUTE_DEFAULT_NAME2).getValue(), ATTRIBUTE_DEFAULT_VALUE);
+		t.test(networkElement.getAttribute(ATTRIBUTE_DEFAULT_NAME2).getComment(), ATTRIBUTE_DEFAULT_COMMENT);
 	}
 
 	public static void verifyDeleted2State(final State state, final State oldState, final TestFunction t) {
@@ -129,7 +140,7 @@ public class AttributeCommandTest extends FBNetworkTestBase {
 		final EList<Attribute> attributes = networkElement.getAttributes();
 		t.test(attributes);
 		t.test(attributes.size(), 1);
-		t.test(networkElement.getAttribute(ATTRIBUTE_DEFAULT_NAME), attributes.get(0));
+		t.test(networkElement.getAttribute(ATTRIBUTE_DEFAULT_NAME2), attributes.get(0));
 		t.test(networkElement.getAttribute(ATTRIBUTE_NAME), (Attribute) null);
 	}
 

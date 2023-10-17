@@ -135,7 +135,6 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	public void stackChanged(final CommandStackEvent event) {
 		updateActions(stackActions);
 		firePropertyChange(IEditorPart.PROP_DIRTY);
-		structComposite.refresh();
 	}
 
 	@Override

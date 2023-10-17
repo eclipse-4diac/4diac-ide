@@ -18,10 +18,8 @@ import java.util.List;
 import org.eclipse.fordiac.ide.application.utilities.IntervalVerifyListener;
 import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -31,35 +29,21 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class DefineFBReactionThreePinDialog extends MessageDialog {
+public class DefineFBReactionThreePinDialog extends ContractElementDialog {
 	private static final int NUM_COLUMNS = 3;
-	Event inputEvent;
 	List<Event> outputEvents;
-	private Text inputTime;
-	private String inputTimeText;
 
 	public DefineFBReactionThreePinDialog(final Shell parentShell, final Event inputEvent,
 			final List<Event> outputEvents) {
-		super(parentShell, Messages.DefineFBReactionOnePinDialog_Title, null,
-				Messages.DefineFBReactionOnePinDialog_Info, MessageDialog.INFORMATION, 0,
-				Messages.DefineFBReactionOnePinDialog_Button);
-		this.inputEvent = inputEvent;
+		super(parentShell, inputEvent, Messages.DefineFBReactionOnePinDialog_Title,
+				Messages.DefineFBReactionOnePinDialog_Info);
 		this.outputEvents = outputEvents;
 
 	}
 
-	public String getTime() {
-		return inputTimeText;
-	}
-
 	@Override
 	protected Control createCustomArea(final Composite parent) {
-		parent.setLayout(new FillLayout());
-		final Composite dialogArea = new Composite(parent, SWT.FILL);
-		dialogArea.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
-		final GridLayout layout = new GridLayout(2, false);
-		dialogArea.setLayout(layout);
-
+		final Composite dialogArea = (Composite) super.createCustomArea(parent);
 		final Group group = new Group(dialogArea, SWT.FILL);
 
 		group.setText(Messages.DefineFBReactionThreePinDialog_DefineGuarantee);
@@ -68,7 +52,7 @@ public class DefineFBReactionThreePinDialog extends MessageDialog {
 
 		Label label = new Label(group, SWT.None);
 
-		label.setText("After " + inputEvent.getName() + " the events " + ContractKeywords.EVENTS_OPEN //$NON-NLS-1$//$NON-NLS-2$
+		label.setText("After " + pinFrom.getName() + " the events " + ContractKeywords.EVENTS_OPEN //$NON-NLS-1$//$NON-NLS-2$
 				+ outputEvents.get(0).getName() + " "  //$NON-NLS-1$
 				+ outputEvents.get(0).getName() + ContractKeywords.EVENTS_CLOSE);
 		label.setLayoutData(GridDataFactory.fillDefaults().span(NUM_COLUMNS, 1).grab(true, true).create());
@@ -76,9 +60,9 @@ public class DefineFBReactionThreePinDialog extends MessageDialog {
 		label = new Label(group, SWT.None);
 		label.setText(ContractKeywords.OCCURS + " " + ContractKeywords.WITHIN); //$NON-NLS-1$
 
-		inputTime = new Text(group, SWT.RIGHT);
-		inputTime.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTime));
-		inputTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		inputTimeText = new Text(group, SWT.RIGHT);
+		inputTimeText.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTimeText));
+		inputTimeText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		label = new Label(group, SWT.None);
 		label.setText(" " + ContractKeywords.UNIT_OF_TIME); //$NON-NLS-1$
@@ -86,15 +70,4 @@ public class DefineFBReactionThreePinDialog extends MessageDialog {
 		return dialogArea;
 	}
 
-	@Override
-	protected void buttonPressed(final int buttonId) {
-		inputTimeText = inputTime.getText();
-		final String[] s = DefineContractUtils.getTimeIntervalFromString(inputTime.getText());
-		if (inputTimeText.isBlank() || (s.length == 2 && (Integer.parseInt(s[0]) > Integer.parseInt(s[1])))) {
-			MessageDialog.openError(this.getShell(), Messages.DefineFBReactionOnePinDialog_Error,
-					Messages.DefineFBReactionOnePinDialog_PleaseFill);
-		} else {
-			super.buttonPressed(buttonId);
-		}
-	}
 }

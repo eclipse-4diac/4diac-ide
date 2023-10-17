@@ -89,7 +89,7 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 			if (dialog.open() != CANCEL) {
 				time = dialog.getTime();
 
-				final UpdateContractCommand uccmd = UpdateContractCommand.createContractReaction(eventPins, time, true);
+				final UpdateContractCommand uccmd = UpdateContractCommand.createContractGuarantee(eventPins, time);
 				if (uccmd.canExecute()) {
 					uccmd.execute();
 				}

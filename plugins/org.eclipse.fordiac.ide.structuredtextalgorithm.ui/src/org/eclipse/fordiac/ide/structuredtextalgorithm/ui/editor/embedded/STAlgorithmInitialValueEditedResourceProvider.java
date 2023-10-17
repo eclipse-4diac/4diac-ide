@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
@@ -20,9 +21,9 @@ import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.ParserRule;
 
 public class STAlgorithmInitialValueEditedResourceProvider extends STAlgorithmEditedResourceProvider {
-	private final INamedElement element;
+	private final ITypedElement element;
 
-	public STAlgorithmInitialValueEditedResourceProvider(final INamedElement element) {
+	public STAlgorithmInitialValueEditedResourceProvider(final ITypedElement element) {
 		super(EcoreUtil2.getContainerOfType(element, LibraryElement.class));
 		this.element = element;
 	}
@@ -30,7 +31,7 @@ public class STAlgorithmInitialValueEditedResourceProvider extends STAlgorithmEd
 	@Override
 	public STAlgorithmResource createResource() {
 		final STAlgorithmResource resource = super.createResource();
-		final LibraryElement featureType = STCoreUtil.getFeatureType(element);
+		final INamedElement featureType = STCoreUtil.getFeatureType(element);
 		resource.getDefaultLoadOptions().put(STCoreUtil.OPTION_EXPECTED_TYPE, featureType);
 		resource.getResourceSet().getLoadOptions().put(STCoreUtil.OPTION_EXPECTED_TYPE, featureType);
 		return resource;

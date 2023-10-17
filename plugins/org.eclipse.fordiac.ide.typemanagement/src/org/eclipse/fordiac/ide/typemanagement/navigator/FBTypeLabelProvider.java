@@ -57,11 +57,11 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	@Override
 	public Image getImage(final Object element) {
-		if (element instanceof IFile && ((IFile) element).exists()) {
+		if (element instanceof final IFile file && file.exists()) {
 			ImageDescriptor imageDescriptor = getImageForFile((IFile) element);
 			if (imageDescriptor != null) {
 				imageDescriptor = decorateImage((IFile) element, imageDescriptor);
-				return (Image) resourceManager.get(imageDescriptor);
+				return resourceManager.get(imageDescriptor);
 			}
 			return null;
 		}
@@ -128,10 +128,13 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		return null;
 	}
 
-	/** If the file has a problem an error/warning overlay is created
+	/**
+	 * If the file has a problem an error/warning overlay is created
 	 *
-	 * This code is based on org.eclipse.ui.internal.navigator.resources.workbench.ResourceExtensionLabelProvider, which
-	 * can not directly be used as this class is an Eclipse internal class. */
+	 * This code is based on
+	 * org.eclipse.ui.internal.navigator.resources.workbench.ResourceExtensionLabelProvider,
+	 * which can not directly be used as this class is an Eclipse internal class.
+	 */
 	private static ImageDescriptor decorateImage(final IResource element, final ImageDescriptor imageDescriptor) {
 		final ImageDescriptor overlay = getErrorOverlay(element);
 		if (overlay != null) {
@@ -151,11 +154,11 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 				switch (problemSeverity) {
 				case IMarker.SEVERITY_ERROR:
 					overlay = PlatformUI.getWorkbench().getSharedImages()
-					.getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR);
+							.getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR);
 					break;
 				case IMarker.SEVERITY_WARNING:
 					overlay = PlatformUI.getWorkbench().getSharedImages()
-					.getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING);
+							.getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING);
 					break;
 				default:
 					break;
@@ -169,8 +172,8 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	@Override
 	public String getText(final Object element) {
-		if (element instanceof IFile) {
-			return getTextForFBFile((IFile) element);
+		if (element instanceof final IFile file) {
+			return getTextForFBFile(file);
 		}
 		return super.getText(element);
 	}
@@ -188,8 +191,8 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	@Override
 	public String getDescription(final Object anElement) {
-		if (anElement instanceof IFile) {
-			return getDescriptionForFBFile((IFile) anElement);
+		if (anElement instanceof final IFile file) {
+			return getDescriptionForFBFile(file);
 		}
 		return null;
 	}
@@ -219,16 +222,16 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	private static FBType getAdapterTypeForFile(final IFile file) {
 		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		if (entry instanceof AdapterTypeEntry) {
-			return ((AdapterTypeEntry) entry).getType().getAdapterFBType();
+		if (entry instanceof final AdapterTypeEntry adpEntry) {
+			return adpEntry.getType().getAdapterFBType();
 		}
 		return null;
 	}
 
 	private static FBType getFBTypeFromFile(final IFile file) {
 		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		if (entry instanceof FBTypeEntry) {
-			return ((FBTypeEntry) entry).getType();
+		if (entry instanceof final FBTypeEntry fbEntry) {
+			return fbEntry.getType();
 		}
 		return null;
 	}

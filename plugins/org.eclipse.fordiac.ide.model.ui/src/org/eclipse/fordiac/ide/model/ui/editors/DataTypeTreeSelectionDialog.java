@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH,
+ * Copyright (c) 2020, 2023 Primetals Technologies Germany GmbH,
  *                          Primetals Technologies Austria GmbH,
  *                          Johannes Kepler University Linz
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,18 +12,21 @@
  *
  * Contributors:
  *   Dunja Životin - extracted out of the DataTypeDropdown class
+ *   Martin Erich Jobst - show FQN in type node labels
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.editors;
 
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.ui.provider.DelegatingStyledCellLabelProvider;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
-import org.eclipse.fordiac.ide.model.ui.nat.TypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuEvent;
@@ -38,13 +42,14 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
 public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
-	public DataTypeTreeSelectionDialog(final Shell parent) {
-		super(parent, createTreeLabelProvider(), new TypeSelectionTreeContentProvider());
+
+	public DataTypeTreeSelectionDialog(final Shell parent, final ITreeContentProvider contentProvider) {
+		this(parent, contentProvider, new TreeNodeLabelProvider());
 	}
 
-	public DataTypeTreeSelectionDialog(final Shell parent,
-			final TypeSelectionTreeContentProvider typeSelectionTreeContentProvider) {
-		super(parent, createTreeLabelProvider(), typeSelectionTreeContentProvider);
+	public DataTypeTreeSelectionDialog(final Shell parent, final ITreeContentProvider contentProvider,
+			final IStyledLabelProvider labelProvider) {
+		super(parent, new DelegatingStyledCellLabelProvider(labelProvider), contentProvider);
 	}
 
 	@Override
@@ -83,37 +88,39 @@ public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 	}
 
 	private StructuredType getSelectedStructuredType() {
-		final Object selected = ((TreeSelection) getTreeViewer().getSelection()).getFirstElement();
-		if (selected instanceof TypeNode) {
-			final EObject dtp = ((TypeNode) selected).getType();
-			if (dtp instanceof StructuredType) {
-				return (StructuredType) dtp;
+		return ((TreeSelection) getTreeViewer().getSelection()).getFirstElement() instanceof final TypeNode typeNode
+				&& typeNode.getType() instanceof final StructuredType structType ? structType : null;
+	}
+
+	public static class TreeNodeLabelProvider extends LabelProvider implements IStyledLabelProvider {
+
+		@Override
+		public String getText(final Object element) {
+			if (element instanceof final TypeNode typeNode) {
+				return typeNode.getName();
 			}
+			return element.toString();
 		}
-		return null;
-	}
 
-	protected static LabelProvider createTreeLabelProvider() {
-		return new LabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				if (element instanceof TypeNode) {
-					return ((TypeNode) element).getName();
-				}
-				return element.toString();
+		@Override
+		public StyledString getStyledText(final Object element) {
+			if (element instanceof final TypeNode typeNode && !typeNode.isDirectory()
+					&& !typeNode.getPackageName().isEmpty()) {
+				return new StyledString(typeNode.getName()).append(" - " + typeNode.getPackageName(), //$NON-NLS-1$
+						StyledString.QUALIFIER_STYLER);
 			}
+			return new StyledString(getText(element));
+		}
 
-			@Override
-			public Image getImage(final Object element) {
-				if (element instanceof final TypeNode node) {
-					if (node.isDirectory()) {
-						return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
-					}
-					return FordiacImage.ICON_DATA_TYPE.getImage();
+		@Override
+		public Image getImage(final Object element) {
+			if (element instanceof final TypeNode node) {
+				if (node.isDirectory()) {
+					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER);
 				}
-				return super.getImage(element);
+				return FordiacImage.ICON_DATA_TYPE.getImage();
 			}
-		};
+			return super.getImage(element);
+		}
 	}
-
 }

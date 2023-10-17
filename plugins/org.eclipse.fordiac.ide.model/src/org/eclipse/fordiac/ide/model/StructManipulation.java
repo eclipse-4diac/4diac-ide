@@ -23,7 +23,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -34,7 +34,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
-/** Helper class for methods that will be - accessed from the model or - used directly as static helper methods */
+/**
+ * Helper class for methods that will be - accessed from the model or - used
+ * directly as static helper methods
+ */
 public final class StructManipulation {
 
 	public static final String STRUCT_ATTRIBUTE = "StructuredType"; //$NON-NLS-1$
@@ -54,8 +57,8 @@ public final class StructManipulation {
 		if (null == struct) {
 			muxer.deleteAttribute(STRUCT_ATTRIBUTE);
 		} else {
-			muxer.setAttribute(STRUCT_ATTRIBUTE, IecTypes.ElementaryTypes.STRING.getName(),
-					PackageNameHelper.getFullTypeName(struct), null);
+			muxer.setAttribute(STRUCT_ATTRIBUTE, ElementaryTypes.STRING, PackageNameHelper.getFullTypeName(struct),
+					null);
 		}
 	}
 

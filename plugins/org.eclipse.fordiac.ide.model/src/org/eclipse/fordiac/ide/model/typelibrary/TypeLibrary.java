@@ -31,6 +31,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -300,14 +302,17 @@ public final class TypeLibrary {
 		checkDeletionsForTypeGroup(getSubAppTypes().values());
 		checkDeletionsForTypeGroup(getSystems().values());
 		checkDeletionsForTypeGroup(getGlobalConstants().values());
-		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes());
-		fileMap.values().removeIf(entry -> !entry.getFile().exists()
-				|| !BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent());
+		dataTypeLib.getDerivedDataTypes().stream().filter(Predicate.not(this::exists))
+				.forEachOrdered(dataTypeLib::removeTypeEntry);
+		fileMap.values().removeIf(Predicate.not(this::exists));
 	}
 
 	private void checkDeletionsForTypeGroup(final Collection<? extends TypeEntry> typeEntries) {
-		typeEntries.removeIf(entry -> !entry.getFile().exists()
-				|| !BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent());
+		typeEntries.removeIf(Predicate.not(this::exists));
+	}
+
+	private boolean exists(final TypeEntry entry) {
+		return entry.getFile().exists() && BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent();
 	}
 
 	private void checkAdditions(final IContainer container) {
@@ -350,6 +355,15 @@ public final class TypeLibrary {
 		}
 
 		return getAdapterTypeEntry(name);
+	}
+
+	public List<TypeEntry> findUnqualified(final String name) {
+		final String unqualifiedName = PackageNameHelper.extractPlainTypeName(name);
+		return Stream
+				.of(getSubAppTypes().values(), getFbTypes().values(), dataTypeLib.getDerivedDataTypes(),
+						getAdapterTypes().values())
+				.<TypeEntry>flatMap(Collection::stream).filter(entry -> unqualifiedName.equals(entry.getTypeName()))
+				.toList();
 	}
 
 	private boolean addBlockTypeEntry(final TypeEntry entry) {

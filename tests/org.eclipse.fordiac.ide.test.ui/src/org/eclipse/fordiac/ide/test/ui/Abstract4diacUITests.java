@@ -15,14 +15,18 @@ package org.eclipse.fordiac.ide.test.ui;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
+import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
@@ -42,6 +46,8 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -56,16 +62,24 @@ public class Abstract4diacUITests {
 	protected static final String DELETE_RESOURCES = "Delete Resources"; //$NON-NLS-1$
 	protected static final String EDIT = "Edit"; //$NON-NLS-1$
 	protected static final String EVENTS_NODE = "events"; //$NON-NLS-1$
-	protected static final String E_CTUD_TREE_ITEM = "E_CTUD [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
+	protected static final String E_CTUD_FB = "E_CTUD"; //$NON-NLS-1$
+	protected static final String E_CTUD_TREE_ITEM = E_CTUD_FB + " [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
 	protected static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
 	protected static final String E_CYCLE_TREE_ITEM = "E_CYCLE [Peroidic event generator]"; //$NON-NLS-1$
 	protected static final String E_DELAY_FB = "E_DELAY"; //$NON-NLS-1$
-	protected static final String E_DEMUX = "E_DEMUX"; //$NON-NLS-1$
-	protected static final String E_D_FF_TREE_ITEM = "E_D_FF [Data latch (d) flip flop]"; //$NON-NLS-1$
+	protected static final String E_DEMUX_FB = "E_DEMUX"; //$NON-NLS-1$
+	protected static final String E_DEMUX_TREE_ITEM = E_DEMUX_FB + " [Event demultiplexor]"; //$NON-NLS-1$
+	protected static final String E_D_FF_FB = "E_D_FF"; //$NON-NLS-1$
+	protected static final String E_D_FF_TREE_ITEM = E_D_FF_FB + " [Data latch (d) flip flop]"; //$NON-NLS-1$
 	protected static final String E_N_TABLE_FB = "E_N_TABLE"; //$NON-NLS-1$
 	protected static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
-	protected static final String E_SWITCH_FB = "E_SWITCH";
-	protected static final String E_SWITCH_TREE_ITEM = "E_SWITCH [Switching (demultiplexing) an event based on boolean input G]";
+	protected static final String E_SELECT_FB = "E_SELECT"; //$NON-NLS-1$
+	protected static final String E_SELECT_TREE_ITEM = E_SELECT_FB
+			+ " [selection between two events based on boolean input G]";
+	protected static final String E_SR_FB = "E_SR"; //$NON-NLS-1$
+	protected static final String E_SR_TREE_ITEM = E_SR_FB + " [Event-driven bistable]"; //$NON-NLS-1$
+	protected static final String E_SWITCH_FB = "E_SWITCH"; //$NON-NLS-1$
+	protected static final String E_SWITCH_TREE_ITEM = "E_SWITCH [Switching (demultiplexing) an event based on boolean input G]"; //$NON-NLS-1$
 	protected static final String E_TABLE_CTRL_FB = "E_TABLE_CTRL"; //$NON-NLS-1$
 	protected static final String E_TABLE_CTRL_TREE_ITEM = "E_TABLE_CTRL [Support function block for E_TABLE]"; //$NON-NLS-1$
 	protected static final String FILE = "File"; //$NON-NLS-1$
@@ -89,8 +103,10 @@ public class Abstract4diacUITests {
 	protected static final String START = "START"; //$NON-NLS-1$
 	protected static final String STOP = "STOP"; //$NON-NLS-1$
 	protected static final String D = "D"; //$NON-NLS-1$
+	protected static final String G = "G"; //$NON-NLS-1$
 	protected static final String N = "N"; //$NON-NLS-1$
 	protected static final String Q = "Q"; //$NON-NLS-1$
+	protected static final String R = "R"; //$NON-NLS-1$
 	protected static final String CD = "CD"; //$NON-NLS-1$
 	protected static final String CV = "CV"; //$NON-NLS-1$
 	protected static final String DT = "DT"; //$NON-NLS-1$
@@ -124,6 +140,7 @@ public class Abstract4diacUITests {
 		bot = new SWT4diacGefBot();
 		bot.viewByTitle("Welcome").close(); //$NON-NLS-1$
 		SWTBotPreferences.TIMEOUT = 10000;
+		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US"; //$NON-NLS-1$
 		createProject();
 	}
 
@@ -177,6 +194,20 @@ public class Abstract4diacUITests {
 
 		assertNotNull(canvas);
 		eCycleNode.dragAndDrop(canvas, point);
+	}
+
+	/**
+	 * Deletes a FB from the editing area.
+	 *
+	 * @param editor         The SWTBot4diacGefEditor from which a FB with given
+	 *                       instance name should be deleted.
+	 * @param FbInstanceName The instance name of the FB
+	 */
+	protected static void deleteFB(final SWTBot4diacGefEditor editor, final String FbInstanceName) {
+		editor.setFocus();
+		final SWTBotGefEditPart fb = editor.getEditPart(FbInstanceName).parent();
+		fb.select().click();
+		bot.menu(EDIT).menu(DELETE).click();
 	}
 
 	/**
@@ -250,6 +281,55 @@ public class Abstract4diacUITests {
 			}
 			return null;
 		});
+	}
+
+	protected static Rectangle getAbsolutePosition(final SWTBotGefEditor editor, final String fb) {
+		final SWTBotGefEditPart parent = editor.getEditPart(fb).parent();
+		assertNotNull(parent);
+		final IFigure figurePos = ((GraphicalEditPart) parent.part()).getFigure();
+		assertNotNull(figurePos);
+		final Rectangle fbBounds = figurePos.getBounds().getCopy();
+		assertNotNull(fbBounds);
+		figurePos.translateToAbsolute(fbBounds);
+		return fbBounds;
+	}
+
+	/**
+	 * Checks if FB is selected by searching selectedEditParts list and returns the
+	 * corresponding boolean value.
+	 *
+	 * @param selectedEditParts The List of selected EditParts.
+	 * @param fbName            The FB that is searched for.
+	 * @return true is fbName is in the List, otherwise false.
+	 */
+	protected static boolean isFbSelected(final List<SWTBotGefEditPart> selectedEditParts, final String fbName) {
+		return selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
+				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
+	}
+
+	/**
+	 * Checks if given FB instance name can be found on the editing area.
+	 *
+	 * @param editor The SWTBot4diacGefEditor in which the FB instance name is
+	 *               searched
+	 * @param fbName The String of the FB instance name searched for
+	 * @return true if FB is onto editing area, false if not
+	 */
+	protected static boolean isFBNamePresendOnEditingArea(final SWTBot4diacGefEditor editor, final String fbName) {
+		final List<SWTBotGefEditPart> editParts = editor.editParts(new BaseMatcher<EditPart>() {
+			@Override
+			public boolean matches(final Object item) {
+				return item instanceof FBEditPart;
+			}
+
+			@Override
+			public void describeTo(final Description description) {
+				// method must be implemented but empty since not needed
+			}
+		});
+		assertFalse(editParts.isEmpty());
+		return editParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
+				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
 	}
 
 	/**

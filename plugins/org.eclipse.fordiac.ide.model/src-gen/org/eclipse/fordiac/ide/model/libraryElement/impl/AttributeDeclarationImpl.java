@@ -22,14 +22,12 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
-import org.eclipse.fordiac.ide.model.data.BaseType1;
-
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -89,24 +87,14 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	protected String comment = COMMENT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * The cached value of the '{@link #getType() <em>Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getType()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final BaseType1 TYPE_EDEFAULT = BaseType1.STRING;
-
-	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getType()
-	 * @generated
-	 * @ordered
-	 */
-	protected BaseType1 type = TYPE_EDEFAULT;
+	protected DataType type;
 
 	/**
 	 * The default value of the '{@link #getInitialValue() <em>Initial Value</em>}' attribute.
@@ -219,7 +207,24 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	 * @generated
 	 */
 	@Override
-	public BaseType1 getType() {
+	public DataType getType() {
+		if (type != null && type.eIsProxy()) {
+			InternalEObject oldType = (InternalEObject)type;
+			type = (DataType)eResolveProxy(oldType);
+			if (type != oldType) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE, oldType, type));
+			}
+		}
+		return type;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DataType basicGetType() {
 		return type;
 	}
 
@@ -229,9 +234,9 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	 * @generated
 	 */
 	@Override
-	public void setType(BaseType1 newType) {
-		BaseType1 oldType = type;
-		type = newType == null ? TYPE_EDEFAULT : newType;
+	public void setType(DataType newType) {
+		DataType oldType = type;
+		type = newType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE, oldType, type));
 	}
@@ -265,6 +270,30 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	 * @generated
 	 */
 	@Override
+	public String getTypeName() {
+		org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();
+		if(type != null){
+			return type.getName();
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getFullTypeName() {
+		return getTypeName();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__NAME:
@@ -272,7 +301,8 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__COMMENT:
 				return getComment();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE:
-				return getType();
+				if (resolve) return getType();
+				return basicGetType();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 				return getInitialValue();
 			default:
@@ -295,7 +325,7 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 				setComment((String)newValue);
 				return;
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE:
-				setType((BaseType1)newValue);
+				setType((DataType)newValue);
 				return;
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 				setInitialValue((String)newValue);
@@ -321,7 +351,7 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 				setComment(COMMENT_EDEFAULT);
 				return;
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE:
-				setType(TYPE_EDEFAULT);
+				setType((DataType)null);
 				return;
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 				setInitialValue(INITIAL_VALUE_EDEFAULT);
@@ -345,44 +375,12 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__COMMENT:
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE:
-				return type != TYPE_EDEFAULT;
+				return type != null;
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__INITIAL_VALUE:
 				return INITIAL_VALUE_EDEFAULT == null ? initialValue != null : !INITIAL_VALUE_EDEFAULT.equals(initialValue);
 			default:
 				return super.eIsSet(featureID);
 		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == TypedElement.class) {
-			switch (derivedFeatureID) {
-				case LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE: return LibraryElementPackage.TYPED_ELEMENT__TYPE;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == TypedElement.class) {
-			switch (baseFeatureID) {
-				case LibraryElementPackage.TYPED_ELEMENT__TYPE: return LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**
@@ -399,8 +397,6 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 		result.append(name);
 		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
-		result.append(", type: "); //$NON-NLS-1$
-		result.append(type);
 		result.append(", initialValue: "); //$NON-NLS-1$
 		result.append(initialValue);
 		result.append(')');

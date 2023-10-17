@@ -60,8 +60,7 @@ public class UpdateContractCommand extends Command {
 				ContractUtils.createReactionString(eventPins.get(0).getName(), eventPins.get(1).getName(), time));
 	}
 
-	public static UpdateContractCommand createContractReaction(final List<Event> eventPins, final String time,
-			final boolean dummy) {
+	public static UpdateContractCommand createContractGuarantee(final List<Event> eventPins, final String time) {
 		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(),
 				ContractUtils.createGuaranteeString(eventPins.get(0).getName(), eventPins.get(1).getName(), time));
 	}

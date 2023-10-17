@@ -128,14 +128,15 @@ public class SystemExporter extends AbstractTypeExporter {
 	private void addDeviceProfile(final Device device) throws XMLStreamException {
 		final String profileName = device.getProfile();
 		if ((null != profileName) && !"".equals(profileName)) { //$NON-NLS-1$
-			addAttributeElement(LibraryElementTags.DEVICE_PROFILE, IecTypes.ElementaryTypes.STRING.getName(),
-					profileName, null);
+			addAttributeElement(LibraryElementTags.DEVICE_PROFILE, IecTypes.ElementaryTypes.STRING, profileName, null);
 		}
 	}
 
-	/** Adds the resource.
+	/**
+	 * Adds the resource.
 	 *
-	 * @param resourceList the list of resource to add to the MXL file */
+	 * @param resourceList the list of resource to add to the MXL file
+	 */
 	private void addResources(final EList<Resource> resourceList) throws XMLStreamException {
 		for (final Resource resource : resourceList) {
 			if (!resource.isDeviceTypeResource()) {

@@ -14,11 +14,12 @@ package org.eclipse.fordiac.ide.fb.interpreter;
 
 import org.eclipse.osgi.util.NLS;
 
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
 	public static String RecordExecutionTraceHandler_Incorrect_Selection;
 	public static String RecordExecutionTraceHandler_Select_FB_input_event;
+	public static String CreateRuntimeTestFunctionBlockHandler_Select_Service_Model;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

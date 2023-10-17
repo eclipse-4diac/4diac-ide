@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -484,9 +485,9 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 */
 	@Override
 	public String getTypeName() {
-		DataType dataType = getType();
-		if(dataType != null){
-			return dataType.getName();
+		org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();
+		if(type != null){
+			return type.getName();
 		}
 		return null;
 	}
@@ -557,7 +558,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	 * @generated
 	 */
 	@Override
-	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
+	public void setAttribute(final String attributeName, final DataType type, final String value, final String comment) {
 		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
 	}
 
@@ -819,6 +820,11 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				default: return -1;
 			}
 		}
+		if (baseClass == ITypedElement.class) {
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
+		}
 		if (baseClass == ConfigurableObject.class) {
 			switch (derivedFeatureID) {
 				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES: return LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
@@ -860,6 +866,11 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 			switch (baseFeatureID) {
 				case LibraryElementPackage.INAMED_ELEMENT__NAME: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME;
 				case LibraryElementPackage.INAMED_ELEMENT__COMMENT: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT;
+				default: return -1;
+			}
+		}
+		if (baseClass == ITypedElement.class) {
+			switch (baseFeatureID) {
 				default: return -1;
 			}
 		}

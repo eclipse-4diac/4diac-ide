@@ -29,6 +29,7 @@ import org.eclipse.nebula.widgets.nattable.edit.action.KeyEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.action.MouseEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.command.DeleteSelectionCommandHandler;
 import org.eclipse.nebula.widgets.nattable.edit.config.DefaultEditConfiguration;
+import org.eclipse.nebula.widgets.nattable.edit.editor.ICellEditor;
 import org.eclipse.nebula.widgets.nattable.grid.GridRegion;
 import org.eclipse.nebula.widgets.nattable.grid.data.DefaultCornerDataProvider;
 import org.eclipse.nebula.widgets.nattable.grid.layer.ColumnHeaderLayer;
@@ -106,7 +107,7 @@ public final class NatTableWidgetFactory {
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider, final IEditableRule editableRule,
-			final AbstractSelectionButton proposalButton) {
+			final ICellEditor proposalCellEditor) {
 
 		setColumnWidths(dataLayer);
 
@@ -135,7 +136,7 @@ public final class NatTableWidgetFactory {
 
 		compositeLayer.addConfiguration(new DefaultEditConfiguration());
 		compositeLayer.addConfiguration(new DefaultUiBindingConfiguration());
-		compositeLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalButton));
+		compositeLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalCellEditor));
 
 		addEditDisabledLabel(dataLayer, editableRule, false);
 
@@ -148,7 +149,7 @@ public final class NatTableWidgetFactory {
 
 	public static NatTable createRowNatTable(final Composite parent, final DataLayer bodyDataLayer,
 			final IDataProvider columnHeaderProvider, final IEditableRule editableRule,
-			final AbstractSelectionButton proposalButton, final I4diacNatTableUtil section, final boolean isInput) {
+			final ICellEditor proposalCellEditor, final I4diacNatTableUtil section, final boolean isInput) {
 
 		setColumnWidths(bodyDataLayer);
 
@@ -201,7 +202,7 @@ public final class NatTableWidgetFactory {
 				addConfiguration(new DefaultRowStyleConfiguration());
 			}
 		});
-		gridLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalButton));
+		gridLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalCellEditor));
 
 		addEditDisabledLabel(bodyDataLayer, editableRule, false);
 
@@ -233,7 +234,10 @@ public final class NatTableWidgetFactory {
 	}
 
 	public static SelectionLayer getSelectionLayer(final NatTable table) {
-		final ILayer viewportLayer = table.getLayer().getUnderlyingLayerByPosition(1, 1);
+		ILayer viewportLayer = null;
+		if (table.getLayer() instanceof final GridLayer gridLayer) {
+			viewportLayer = gridLayer.getBodyLayer();
+		}
 
 		if (viewportLayer != null) {
 			return (SelectionLayer) viewportLayer.getUnderlyingLayerByPosition(0, 0);

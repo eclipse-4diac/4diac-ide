@@ -71,9 +71,11 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Attribute">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Attribute/attributeDeclaration"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Attribute/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Attribute/value"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AttributeDeclaration">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AttributeDeclaration/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AttributeDeclaration/initialValue"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//BaseFBType">
@@ -674,9 +676,6 @@
           body="return org.eclipse.fordiac.ide.model.Annotations.getTypeLibrary(this);"/>
       <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getFullTypeName"
           body="return (getTypeEntry() != null) ? getTypeEntry().getFullTypeName() : null;"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="lib.ecore#//TypedElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TypedElement/type"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Value">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Value/value"/>
