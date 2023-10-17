@@ -81,7 +81,16 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 
 	@Override
 	public void setupOutputTable(final Group outputsGroup) {
-		outputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this));
+		outputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this) {
+			@Override
+			public org.eclipse.gef.commands.Command onNameChange(final IInterfaceElement rowObject,
+					final Object newValue) {
+				if (newValue instanceof final String text) {
+					return AbstractEditInterfaceAdapterSection.this.onNameChange(rowObject, text);
+				}
+				return null;
+			}
+		});
 		final DataLayer outputDataLayer = new DataLayer(outputProvider);
 		outputDataLayer.setConfigLabelAccumulator(
 				new TypedElementConfigLabelAccumulator(outputProvider, this::getAnnotationModel));
@@ -92,7 +101,16 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 
 	@Override
 	public void setupInputTable(final Group inputsGroup) {
-		inputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this));
+		inputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this) {
+			@Override
+			public org.eclipse.gef.commands.Command onNameChange(final IInterfaceElement rowObject,
+					final Object newValue) {
+				if (newValue instanceof final String text) {
+					return AbstractEditInterfaceAdapterSection.this.onNameChange(rowObject, text);
+				}
+				return null;
+			}
+		});
 		final DataLayer inputDataLayer = new DataLayer(inputProvider);
 		inputDataLayer.setConfigLabelAccumulator(
 				new TypedElementConfigLabelAccumulator(inputProvider, this::getAnnotationModel));
