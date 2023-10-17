@@ -283,31 +283,6 @@
                contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
             <propertyTab
                   category="systemInfo"
-                  id="property.tab.systeminfo"
-                  image="fordiacimage://ICON_SYSTEM"
-                  label="System Info">
-            </propertyTab>
-            <propertyTab
-                  category="systemInfo"
-                  id="property.tab.system.fbtypeinfo"
-                  image="fordiacimage://ICON_FB_TYPE"
-                  label="Type Info">
-            </propertyTab>
-            <propertyTab
-                  category="systemInfo"
-                  id="property.tab.system.deviceInfo"
-                  label="Instance">
-            </propertyTab>
-            <propertyTab
-                  afterTab="property.tab.system.deviceInfo"
-                  category="systemInfo"
-                  id="property.tab.system.attributeInfo"
-                  indented="true"
-                  label="Attributes">
-            </propertyTab>
-            <propertyTab
-                  afterTab="property.tab.system.attributeInfo"
-                  category="systemInfo"
                   id="property.tab.system.appearance"
                   label="Appearance">
             </propertyTab>
@@ -316,15 +291,7 @@
       <extension
             point="org.eclipse.ui.views.properties.tabbed.propertySections">
          <propertySections
-               contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">           
-            <propertySection
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.SystemInfoSection"
-                  id="property.section.systemInfo"
-                  tab="property.tab.systeminfo">
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-               </input>
-            </propertySection>
+               contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
             <propertySection
                   class="org.eclipse.fordiac.ide.gef.properties.AppearancePropertySection"
                   id="org.eclipse.fordiac.ide.systemmanagement.properties.AppearancePropertySection"
