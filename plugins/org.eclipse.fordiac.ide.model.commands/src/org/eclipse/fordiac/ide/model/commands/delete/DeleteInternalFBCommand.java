@@ -24,7 +24,7 @@ public class DeleteInternalFBCommand extends Command {
 	private final BaseFBType baseFbtype;
 
 	/** The variable that is deleted */
-	private FB fbToDelete;
+	private final FB fbToDelete;
 
 	/** The old index. */
 	private int oldIndex;
@@ -35,24 +35,29 @@ public class DeleteInternalFBCommand extends Command {
 	}
 
 	private EList<FB> getInteralFBList() {
-		BaseFBType type = baseFbtype;
+		final BaseFBType type = baseFbtype;
 		return type.getInternalFbs();
 	}
 
 	@Override
 	public void execute() {
-		oldIndex = getInteralFBList().indexOf(fbToDelete);
+		oldIndex = getIndexOfFBtoDelete();
 		redo();
 	}
 
 	@Override
 	public void redo() {
-		getInteralFBList().remove(fbToDelete);
+		getInteralFBList().remove(oldIndex);
 	}
 
 	@Override
 	public void undo() {
 		getInteralFBList().add(oldIndex, fbToDelete);
+	}
+
+	private int getIndexOfFBtoDelete() {
+		return getInteralFBList().indexOf(getInteralFBList().stream()
+				.filter(fb -> fb.getTypeEntry().equals(fbToDelete.getTypeEntry())).findFirst().orElse(fbToDelete));
 	}
 
 }
