@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPr
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCorePrefixMatcher
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater.LibraryElementChangeAdapterFilter
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentProvider
@@ -60,6 +61,7 @@ import org.eclipse.xtext.ui.editor.IXtextEditorCallback
 import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.editor.XtextSourceViewer
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities
+import org.eclipse.xtext.ui.editor.contentassist.PrefixMatcher
 import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorActions
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider
@@ -205,6 +207,10 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 		.to(STCoreContentAssistPreferences.Initializer);
 		binder.bind(String).annotatedWith(Names.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS)).
 			toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider);
+	}
+
+	override Class<? extends PrefixMatcher> bindPrefixMatcher() {
+		return STCorePrefixMatcher
 	}
 
 	def Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {
