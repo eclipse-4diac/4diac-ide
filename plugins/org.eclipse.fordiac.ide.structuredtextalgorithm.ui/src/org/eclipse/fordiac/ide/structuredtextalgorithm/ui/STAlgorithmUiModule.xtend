@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui
 
 import com.google.inject.Binder
 import com.google.inject.name.Names
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.contentassist.STAlgorithmReferenceProposalCreator
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocument
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentPartitioner
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentUpdaterChangeAdapterFilter
@@ -61,6 +62,7 @@ import org.eclipse.xtext.ui.editor.IURIEditorOpener
 import org.eclipse.xtext.ui.editor.IXtextEditorCallback
 import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.editor.XtextSourceViewer
+import org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.ReferenceProposalCreator
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities
 import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorActions
@@ -209,6 +211,10 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 		.to(STCoreContentAssistPreferences.Initializer);
 		binder.bind(String).annotatedWith(Names.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS)).
 			toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider);
+	}
+
+	def Class<? extends ReferenceProposalCreator> bindAbstractJavaBasedContentProposalProvider$ReferenceProposalCreator() {
+		return STAlgorithmReferenceProposalCreator
 	}
 
 	def Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {

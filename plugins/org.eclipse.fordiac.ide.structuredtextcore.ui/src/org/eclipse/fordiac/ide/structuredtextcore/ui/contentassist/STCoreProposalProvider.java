@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
@@ -37,12 +38,18 @@ import org.eclipse.xtext.CrossReference;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
+import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.resource.impl.AliasedEObjectDescription;
+import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
+import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal.IReplacementTextApplier;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 import org.eclipse.xtext.util.ITextRegion;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.inject.Inject;
 
 /**
  * See
@@ -135,7 +142,7 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 
 		private final ContentAssistContext contentAssistContext;
 
-		public STCoreProposalCreator(final ContentAssistContext contentAssistContext, final String ruleName,
+		protected STCoreProposalCreator(final ContentAssistContext contentAssistContext, final String ruleName,
 				final IQualifiedNameConverter qualifiedNameConverter) {
 			super(contentAssistContext, ruleName, qualifiedNameConverter);
 			this.contentAssistContext = contentAssistContext;
@@ -185,7 +192,7 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 					configurableResult.setSelectionStart(firstRegion.getOffset());
 					configurableResult.setSelectionLength(firstRegion.getLength());
 					configurableResult.setCustomLinkedMode(contentAssistContext.getViewer(), parameterProposalRegions,
-							')');
+							replacementOffset + proposal.length(), ')');
 				}
 			}
 			return result;
@@ -194,6 +201,78 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 		protected boolean isCallableDescription(final IEObjectDescription description) {
 			return description != null && description.getEClass() != null
 					&& LibraryElementPackage.eINSTANCE.getICallable().isSuperTypeOf(description.getEClass());
+		}
+	}
+
+	public static class STCoreReferenceProposalCreator extends ReferenceProposalCreator {
+
+		@Inject
+		private IQualifiedNameConverter qualifiedNameConverter;
+
+		@Override
+		public void lookupCrossReference(final IScope scope, final EObject model, final EReference reference,
+				final ICompletionProposalAcceptor acceptor, final Predicate<IEObjectDescription> filter,
+				final Function<IEObjectDescription, ICompletionProposal> proposalFactory) {
+			final Function<IEObjectDescription, ICompletionProposal> wrappedFactory = getWrappedFactory(model,
+					reference, proposalFactory);
+			final Function<IEObjectDescription, ICompletionProposal> wrappedImportingFactory = getWrappedImportingFactory(
+					model, reference, proposalFactory);
+			final Iterable<IEObjectDescription> candidates = queryScope(scope, model, reference, filter);
+			for (final IEObjectDescription candidate : candidates) {
+				if (!acceptor.canAcceptMoreProposals()) {
+					return;
+				}
+				if (filter.apply(candidate)) {
+					if (isImportableDescription(candidate) && !hasConflictingName(scope, candidate)) {
+						acceptor.accept(wrappedImportingFactory.apply(candidate));
+					} else {
+						acceptor.accept(wrappedFactory.apply(candidate));
+					}
+				}
+			}
+		}
+
+		@SuppressWarnings("static-method") // subclasses may override
+		protected boolean isImportableDescription(final IEObjectDescription description) {
+			return description != null && description.getName().getSegmentCount() > 1 && description.getEClass() != null
+					&& (LibraryElementPackage.eINSTANCE.getLibraryElement().isSuperTypeOf(description.getEClass())
+							|| isGlobalVariable(description));
+		}
+
+		@SuppressWarnings("static-method") // subclasses may override
+		protected boolean hasConflictingName(final IScope scope, final IEObjectDescription description) {
+			return scope.getSingleElement(getSimpleName(description)) != null;
+		}
+
+		protected Function<IEObjectDescription, ICompletionProposal> getWrappedImportingFactory(final EObject model,
+				final EReference reference, final Function<IEObjectDescription, ICompletionProposal> proposalFactory) {
+			return description -> {
+				final ICompletionProposal proposal = proposalFactory.apply(createImportedDescription(description));
+				if (proposal instanceof final ConfigurableCompletionProposal configurableProposal) {
+					configurableProposal.setTextApplier(getImportReplacementTextApplier(model, description));
+				}
+				return proposal;
+			};
+		}
+
+		protected IReplacementTextApplier getImportReplacementTextApplier(final EObject model,
+				final IEObjectDescription candidate) {
+			return getImportReplacementTextApplier((XtextResource) model.eResource(),
+					qualifiedNameConverter.toString(candidate.getQualifiedName()));
+		}
+
+		@SuppressWarnings("static-method") // subclasses may override
+		protected IReplacementTextApplier getImportReplacementTextApplier(final XtextResource resource,
+				final String importedNamespace) {
+			return new STCoreImportReplacementTextApplier(resource, importedNamespace);
+		}
+
+		protected static AliasedEObjectDescription createImportedDescription(final IEObjectDescription description) {
+			return new AliasedEObjectDescription(getSimpleName(description), description);
+		}
+
+		protected static QualifiedName getSimpleName(final IEObjectDescription description) {
+			return QualifiedName.create(description.getQualifiedName().getLastSegment());
 		}
 	}
 }

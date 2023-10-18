@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPr
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreProposalProvider.STCoreReferenceProposalCreator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreURIEditorOpener;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
@@ -49,6 +50,7 @@ import org.eclipse.xtext.ui.editor.IURIEditorOpener;
 import org.eclipse.xtext.ui.editor.IXtextEditorCallback;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.XtextSourceViewer;
+import org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.ReferenceProposalCreator;
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities;
 import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
@@ -177,6 +179,10 @@ public class STCoreUiModule extends AbstractSTCoreUiModule {
 
 	public Class<? extends MarkerCreator> bindMarkerCreator() {
 		return STCoreMarkerCreator.class;
+	}
+
+	public Class<? extends ReferenceProposalCreator> bindAbstractJavaBasedContentProposalProvider$ReferenceProposalCreator() {
+		return STCoreReferenceProposalCreator.class;
 	}
 
 	@Override
