@@ -71,7 +71,7 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 	protected void fillUserData(final EObject eObject, final ImmutableMap.Builder<String, String> builder) {
 		final EObject container = eObject.eContainer();
 		if (container != null) {
-			builder.put(CONTAINER_ECLASS_NAME, eObject.eClass().getName());
+			builder.put(CONTAINER_ECLASS_NAME, container.eClass().getName());
 		}
 		if (eObject instanceof final ICallable callable) {
 			builder.put(DISPLAY_STRING, getCallableDisplayString(callable));
