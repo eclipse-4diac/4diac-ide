@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH, Johannes Kepler University Linz
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2023 Primetals Technologies Germany GmbH,
+ *                          Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -36,6 +37,8 @@ import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppIns
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -84,6 +87,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	private AutomationSystem system;
 	private DiagramOutlinePage outlinePage;
 	private final EditorTabCommandStackListener subEditorCommandStackListener;
+	private GraphicalAnnotationModel annotationModel;
 
 	public AutomationSystemEditor() {
 		subEditorCommandStackListener = new EditorTabCommandStackListener(this);
@@ -93,6 +97,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		loadSystem();
+		if (system != null) {
+			annotationModel = new FordiacMarkerGraphicalAnnotationModel(system.getTypeEntry().getFile());
+		}
 	}
 
 	@Override
@@ -310,6 +317,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		if (adapter == AutomationSystem.class) {
 			return adapter.cast(system);
 		}
+		if (adapter == GraphicalAnnotationModel.class) {
+			return adapter.cast(annotationModel);
+		}
 		return super.getAdapter(adapter);
 	}
 
@@ -335,7 +345,13 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		if (null != getCommandStack()) {
 			getCommandStack().removeCommandStackEventListener(subEditorCommandStackListener);
 		}
+
+		if (annotationModel != null) {
+			annotationModel.dispose();
+		}
+
 		super.dispose();
+
 		if (dirty && system != null) {
 			((SystemEntry) system.getTypeEntry()).setSystem(null);
 			system = null;

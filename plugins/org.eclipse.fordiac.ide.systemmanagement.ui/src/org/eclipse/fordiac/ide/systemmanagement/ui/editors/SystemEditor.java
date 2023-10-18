@@ -26,7 +26,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
@@ -69,6 +68,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.part.MultiPageEditorSite;
 
 public class SystemEditor extends EditorPart
 		implements CommandStackEventListener, ISelectionListener, ISelectionProvider {
@@ -130,7 +130,7 @@ public class SystemEditor extends EditorPart
 			system.getSystemConfiguration().eAdapters().remove(sysConfListener);
 		}
 		if (annotationModel != null) {
-			annotationModel.dispose();
+			annotationModel.removeAnnotationModelListener(annotationModelListener);
 		}
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		getActionRegistry().dispose();
@@ -169,8 +169,10 @@ public class SystemEditor extends EditorPart
 				setActionHandlers(site);
 				system.eAdapters().add(appListener);
 				system.getSystemConfiguration().eAdapters().add(sysConfListener);
-				annotationModel = new FordiacMarkerGraphicalAnnotationModel(fileEditorInput.getFile());
 			}
+		}
+		if (site instanceof final MultiPageEditorSite multiPageEditorSite) {
+			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 		}
 	}
 

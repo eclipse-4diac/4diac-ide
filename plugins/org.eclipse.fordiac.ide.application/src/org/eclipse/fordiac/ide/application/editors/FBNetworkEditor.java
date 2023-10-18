@@ -35,10 +35,6 @@ import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.application.tools.FBNetworkPanningSelectionTool;
 import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropTargetListener;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
-import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationModelEventDispatcher;
-import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -61,10 +57,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 
 /**
@@ -78,19 +70,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 			"FBNetworkPalette.State"); //$NON-NLS-1$
 
 	private FBNetwork model;
-	private GraphicalAnnotationModel annotationModel;
-	private GraphicalAnnotationModelListener annotationModelEventDispatcher;
-
-	@Override
-	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		super.init(site, input);
-		if (input instanceof final IFileEditorInput fileEditorInput) {
-			annotationModel = new FordiacMarkerGraphicalAnnotationModel(fileEditorInput.getFile());
-		} else if (input instanceof final ApplicationEditorInput applicationEditorInput) {
-			annotationModel = new FordiacMarkerGraphicalAnnotationModel(
-					applicationEditorInput.getAutomationSystem().getTypeEntry().getFile());
-		}
-	}
 
 	protected void setModel(final FBNetwork model) {
 		this.model = model;
@@ -152,15 +131,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	}
 
 	@Override
-	protected void initializeGraphicalViewer() {
-		super.initializeGraphicalViewer();
-		if (annotationModel != null) {
-			annotationModelEventDispatcher = new FordiacAnnotationModelEventDispatcher(getGraphicalViewer());
-			annotationModel.addAnnotationModelListener(annotationModelEventDispatcher, true);
-		}
-	}
-
-	@Override
 	public AutomationSystem getSystem() {
 		return getModel().getAutomationSystem();
 	}
@@ -218,9 +188,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@Override
 	public void dispose() {
-		if (annotationModel != null) {
-			annotationModel.dispose();
-		}
 		super.dispose();
 		getEditDomain().setPaletteViewer(null);
 	}
@@ -274,9 +241,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == FBNetwork.class) {
 			return adapter.cast(getModel());
-		}
-		if (adapter == GraphicalAnnotationModel.class) {
-			return adapter.cast(annotationModel);
 		}
 		return super.getAdapter(adapter);
 	}
