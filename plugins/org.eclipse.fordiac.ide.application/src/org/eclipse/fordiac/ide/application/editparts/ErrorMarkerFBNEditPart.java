@@ -19,8 +19,6 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.figures.ErrorMarkerFBNeworkElementFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 
 public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 
@@ -34,8 +32,6 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 	@Override
 	protected IFigure createFigureForModel() {
 		errorMarkerFBNeworkElementFigure = new ErrorMarkerFBNeworkElementFigure(getModel(), this);
-		errorMarkerFBNeworkElementFigure.setOpaque(false);
-		errorMarkerFBNeworkElementFigure.setBackgroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
 		updateErrorText();
 		return errorMarkerFBNeworkElementFigure;
 	}
@@ -56,7 +52,6 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 
 		setText(errorText.toString());
 	}
-
 
 	public void setText(final String text) {
 		if (errorMarkerFBNeworkElementFigure != null) {

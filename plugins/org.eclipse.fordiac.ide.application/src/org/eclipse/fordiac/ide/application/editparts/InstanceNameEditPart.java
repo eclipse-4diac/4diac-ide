@@ -42,7 +42,6 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.IEditorPart;
 
 public class InstanceNameEditPart extends AbstractGraphicalEditPart
@@ -88,15 +87,8 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart
 
 	@Override
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
-		setAnnotationColor(GraphicalAnnotationStyles.getAnnotationColor(
-				event.getModel().getAnnotations(getModel().getRefElement()), FordiacAnnotationUtil::showOnTarget));
-	}
-
-	private void setAnnotationColor(final Color color) {
-		getFigure().setOpaque(color != null);
-		if (color != null) {
-			getFigure().setBackgroundColor(color);
-		}
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel().getRefElement(), event,
+				FordiacAnnotationUtil::showOnTarget);
 	}
 
 	@Override

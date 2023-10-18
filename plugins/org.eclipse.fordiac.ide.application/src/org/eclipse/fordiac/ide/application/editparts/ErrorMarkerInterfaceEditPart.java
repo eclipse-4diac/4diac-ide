@@ -13,8 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationFeedbackBorder;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteErrorMarkerCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -26,9 +27,6 @@ import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
 
 public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
-
-	public ErrorMarkerInterfaceEditPart() {
-	}
 
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
@@ -61,8 +59,7 @@ public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
 	@Override
 	protected IFigure createFigure() {
 		final IFigure figure = super.createFigure();
-		figure.setBackgroundColor(ColorConstants.red);
-		figure.setOpaque(true);
+		figure.setBorder(new AnnotationFeedbackBorder(GraphicalAnnotationStyles.ERROR_RED));
 		return figure;
 	}
 

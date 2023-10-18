@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023 Martin Erich Jobst, Primetals Technologies GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,13 +9,18 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Alois Zoitl  - added annotation style for GEF Figures
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.annotation;
 
 import java.util.Set;
 import java.util.function.Predicate;
 
-import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -26,6 +31,9 @@ import org.eclipse.ui.PlatformUI;
 
 public final class GraphicalAnnotationStyles {
 
+	public static final Color WARNING_YELLOW = new Color(246, 211, 89);
+	public static final Color ERROR_RED = new Color(255, 42, 69);
+
 	public static Color getAnnotationColor(final Set<GraphicalAnnotation> annotations) {
 		return getAnnotationColor(annotations, annotation -> true);
 	}
@@ -33,20 +41,20 @@ public final class GraphicalAnnotationStyles {
 	public static Color getAnnotationColor(final Set<GraphicalAnnotation> annotations,
 			final Predicate<GraphicalAnnotation> filter) {
 		if (containsType(annotations, filter, GraphicalAnnotation.TYPE_ERROR)) {
-			return ColorConstants.red;
+			return ERROR_RED;
 		}
 		if (containsType(annotations, filter, GraphicalAnnotation.TYPE_WARNING)) {
-			return ColorConstants.yellow;
+			return WARNING_YELLOW;
 		}
 		return null;
 	}
 
 	public static Color getAnnotationColor(final GraphicalAnnotation annotation) {
 		if (annotation.getType().equals(GraphicalAnnotation.TYPE_ERROR)) {
-			return ColorConstants.red;
+			return ERROR_RED;
 		}
 		if (annotation.getType().equals(GraphicalAnnotation.TYPE_WARNING)) {
-			return ColorConstants.yellow;
+			return WARNING_YELLOW;
 		}
 		return null;
 	}
@@ -107,6 +115,22 @@ public final class GraphicalAnnotationStyles {
 		return null;
 	}
 
+	public static void updateAnnotationFeedback(final IFigure annonFigure, final Object target,
+			final GraphicalAnnotationModelEvent event) {
+		updateAnnotationFeedback(annonFigure, target, event, annotation -> true);
+	}
+
+	public static void updateAnnotationFeedback(final IFigure annonFigure, final Object target,
+			final GraphicalAnnotationModelEvent event, final Predicate<GraphicalAnnotation> filter) {
+		final Color annotationColor = GraphicalAnnotationStyles
+				.getAnnotationColor(event.getModel().getAnnotations(target), filter);
+		if (annotationColor != null) {
+			annonFigure.setBorder(new AnnotationFeedbackBorder(annotationColor));
+		} else {
+			annonFigure.setBorder(null);
+		}
+	}
+
 	private static boolean containsType(final Set<GraphicalAnnotation> annotations,
 			final Predicate<GraphicalAnnotation> filter, final String type) {
 		return annotations.stream().filter(filter).anyMatch(annotation -> annotation.getType().equals(type));
@@ -114,8 +138,8 @@ public final class GraphicalAnnotationStyles {
 
 	private static class ErrorStyler extends Styler {
 
-		private static final Styler ERROR_STYLE = new ErrorStyler(ColorConstants.red);
-		private static final Styler WARNING_STYLE = new ErrorStyler(ColorConstants.yellow);
+		private static final Styler ERROR_STYLE = new ErrorStyler(ERROR_RED);
+		private static final Styler WARNING_STYLE = new ErrorStyler(WARNING_YELLOW);
 
 		private final Color underlineColor;
 
@@ -128,6 +152,38 @@ public final class GraphicalAnnotationStyles {
 			textStyle.underline = true;
 			textStyle.underlineColor = underlineColor;
 			textStyle.underlineStyle = SWT.UNDERLINE_ERROR;
+		}
+	}
+
+	public static final class AnnotationFeedbackBorder extends LineBorder {
+		private static final Insets INSETS = new Insets();
+		private static final int FEEDBACK_BORDER_LINE_WIDTH = 2;
+		public static final int ANNOTATION_FILL_ALPHA = 90;
+
+		public AnnotationFeedbackBorder(final Color color) {
+			super(color, FEEDBACK_BORDER_LINE_WIDTH);
+		}
+
+		@Override
+		public Insets getInsets(final IFigure figure) {
+			// we want 0 insets so that the feedback border is not changing the size of the
+			// annotated figure
+			return INSETS;
+		}
+
+		@Override
+		public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
+			tempRect.setBounds(getPaintRectangle(figure, insets));
+			tempRect.expand(1, 1);
+			graphics.setClip(tempRect.getExpanded(getWidth(), getWidth()));
+			graphics.setLineStyle(Graphics.LINE_SOLID);
+			graphics.setLineWidth(getWidth());
+			graphics.setXORMode(false);
+			graphics.setForegroundColor(getColor());
+			graphics.setBackgroundColor(getColor());
+			graphics.drawRoundRectangle(tempRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
+			graphics.setAlpha(ANNOTATION_FILL_ALPHA);
+			graphics.fillRoundRectangle(tempRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
 		}
 	}
 

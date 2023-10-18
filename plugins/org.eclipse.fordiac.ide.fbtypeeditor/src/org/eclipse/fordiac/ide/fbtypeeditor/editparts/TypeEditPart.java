@@ -56,7 +56,6 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.graphics.Color;
 
 public class TypeEditPart extends AbstractInterfaceElementEditPart implements AnnotableGraphicalEditPart {
 
@@ -149,16 +148,8 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements An
 
 	@Override
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
-		setAnnotationColor(GraphicalAnnotationStyles.getAnnotationColor(
-				event.getModel().getAnnotations(getModel().getReferencedElement()),
-				FordiacAnnotationUtil::showOnTargetType));
-	}
-
-	public void setAnnotationColor(final Color color) {
-		getFigure().setOpaque(color != null);
-		if (color != null) {
-			getFigure().setBackgroundColor(color);
-		}
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel().getReferencedElement(), event,
+				FordiacAnnotationUtil::showOnTargetType);
 	}
 
 	private String getTypeName() {

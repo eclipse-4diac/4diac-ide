@@ -72,7 +72,6 @@ import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.swt.graphics.Color;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart, AnnotableGraphicalEditPart {
@@ -571,14 +570,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	@Override
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
-		setAnnotationColor(GraphicalAnnotationStyles.getAnnotationColor(event.getModel().getAnnotations(getModel())));
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event);
 		getFigure().setToolTip(new ToolTipFigure(getModel(), event.getModel()));
 	}
 
-	private void setAnnotationColor(final Color color) {
-		getFigure().setOpaque(color != null);
-		if (color != null) {
-			getFigure().setBackgroundColor(color);
-		}
-	}
 }

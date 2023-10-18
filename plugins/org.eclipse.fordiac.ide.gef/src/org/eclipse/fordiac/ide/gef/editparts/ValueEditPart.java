@@ -59,7 +59,6 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
@@ -222,7 +221,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	@Override
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
-		setAnnotationColor(GraphicalAnnotationStyles.getAnnotationColor(event.getModel().getAnnotations(getModel())));
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event);
 		getFigure().setToolTip(new ValueToolTipFigure(getIInterfaceElement(), getModel(), event.getModel()));
 	}
 
@@ -273,13 +272,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			return model.getInputConnections();
 		}
 		return model.getOutputConnections();
-	}
-
-	private void setAnnotationColor(final Color color) {
-		getFigure().setOpaque(color != null);
-		if (color != null) {
-			getFigure().setBackgroundColor(color);
-		}
 	}
 
 	/*

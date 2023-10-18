@@ -53,7 +53,6 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.swt.graphics.Color;
 
 public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 		implements NodeEditPart, AnnotableGraphicalEditPart {
@@ -139,8 +138,8 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 
 	@Override
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
-		setAnnotationColor(GraphicalAnnotationStyles.getAnnotationColor(event.getModel().getAnnotations(getModel()),
-				FordiacAnnotationUtil::showOnTarget));
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event,
+				FordiacAnnotationUtil::showOnTarget);
 		final CommentTypeEditPart commentTypeEditPart = findAssociatedCommentTypeEP();
 		if (commentTypeEditPart != null) {
 			commentTypeEditPart.updateAnnotations(event);
@@ -158,13 +157,6 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 		}
 		if ((getCastedModel() instanceof VarDeclaration) && (getFigure() instanceof InterfaceFigure)) {
 			((InterfaceFigure) getFigure()).updateConnectorColor();
-		}
-	}
-
-	private void setAnnotationColor(final Color color) {
-		getFigure().setOpaque(color != null);
-		if (color != null) {
-			getFigure().setBackgroundColor(color);
 		}
 	}
 
