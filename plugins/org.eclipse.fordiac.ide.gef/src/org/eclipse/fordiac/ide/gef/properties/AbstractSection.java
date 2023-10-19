@@ -113,7 +113,9 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			notifiyRefresh();
+			if (!notification.isTouch()) {
+				notifiyRefresh();
+			}
 		}
 	};
 
