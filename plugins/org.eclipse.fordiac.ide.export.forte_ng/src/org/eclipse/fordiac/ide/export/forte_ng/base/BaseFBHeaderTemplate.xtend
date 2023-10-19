@@ -47,44 +47,44 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		«generateFBClassHeader»
 		  «generateFBDeclaration»
 		
-		private:
-		  «generateFBInterfaceDeclaration»
+		  private:
+		    «generateFBInterfaceDeclaration»
 		
-		  «generateFBInterfaceSpecDeclaration»
+		    «generateFBInterfaceSpecDeclaration»
 		
-		  «IF !type.internalFbs.empty»
-		  	static const size_t csmAmountOfInternalFBs = «type.internalFbs.size»;
-		  	TFunctionBlockPtr *mInternalFBs = createInternalFBs(csmAmountOfInternalFBs, scmInternalFBDefinitions, getResourcePtr());
-		  	«generateInternalFbDefinition»
-		  	
-		  «ENDIF»
-		  «generateInternalVarDeclaration(type)»
-		  «type.internalVars.generateVariableDeclarations(false)»
-		  «type.internalConstVars.generateVariableDeclarations(true)»
-		  «generateAccessorDeclaration("getVarInternal", false)»
+		    «IF !type.internalFbs.empty»
+		    	static const size_t csmAmountOfInternalFBs = «type.internalFbs.size»;
+		    	TFunctionBlockPtr *mInternalFBs = createInternalFBs(csmAmountOfInternalFBs, scmInternalFBDefinitions, getResourcePtr());
+		    	«generateInternalFbDefinition»
+		    	
+		    «ENDIF»
+		    «generateInternalVarDeclaration(type)»
+		    «type.internalVars.generateVariableDeclarations(false)»
+		    «type.internalConstVars.generateVariableDeclarations(true)»
+		    «generateAccessorDeclaration("getVarInternal", false)»
 		
-		  «type.internalFbs.generateInternalFBAccessors»
-		  «generateAlgorithms»
-		  «generateMethods»
-		  «generateAdditionalDeclarations»
-		  void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
+		    «type.internalFbs.generateInternalFBAccessors»
+		    «generateAlgorithms»
+		    «generateMethods»
+		    «generateAdditionalDeclarations»
+		    void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 		
-		  «generateReadInputDataDeclaration»
-		  «generateWriteOutputDataDeclaration»
-		  «(type.internalVars + type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
+		    «generateReadInputDataDeclaration»
+		    «generateWriteOutputDataDeclaration»
+		    «(type.internalVars + type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
-		public:
-		  «FBClassName»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
-		«IF !type.internalFbs.empty»
-			
-			  EMGMResponse changeFBExecutionState(EMGMCommandType paCommand) override;
-			
-			  ~«FBClassName»() override {
-			    deleteInternalFBs(csmAmountOfInternalFBs, mInternalFBs);
-			  };
-		«ENDIF»
+		  public:
+		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
+		    «IF !type.internalFbs.empty»
+		    	
+		    	EMGMResponse changeFBExecutionState(EMGMCommandType paCommand) override;
+		    	
+		    	~«FBClassName»() override {
+		    	  deleteInternalFBs(csmAmountOfInternalFBs, mInternalFBs);
+		    	};
+		    «ENDIF»
 		
-		  «generateInterfaceDeclarations»
+		    «generateInterfaceDeclarations»
 		};
 		
 		«generateIncludeGuardEnd»

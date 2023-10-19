@@ -43,24 +43,24 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 		«generateFBClassHeader»
 		  «generateFBDeclaration»
 		
-		private:
-		  «generateFBInterfaceDeclaration»
+		  private:
+		    «generateFBInterfaceDeclaration»
 		
-		  «generateFBInterfaceSpecDeclaration»
+		    «generateFBInterfaceSpecDeclaration»
 		
-		  «generateReadInputDataDeclaration»
-		  «generateWriteOutputDataDeclaration»
-		public:
-		  «type.interfaceList.inputVars.generateAccessors("getDI", "getDO")»
-		  «type.interfaceList.outputVars.generateAccessors("getDO", "getDI")»
-		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
-		  «type.interfaceList.eventInputs.generateEventAccessors»
-		  «type.interfaceList.eventOutputs.generateEventAccessors»
-		  «FBClassName»(CStringDictionary::TStringId paAdapterInstanceName, CResource *paSrcRes, bool paIsPlug) :
-		      «baseClass»(paSrcRes, &scmFBInterfaceSpecSocket, paAdapterInstanceName, &scmFBInterfaceSpecPlug, paIsPlug) {	
-		  };
+		    «generateReadInputDataDeclaration»
+		    «generateWriteOutputDataDeclaration»
+		  public:
+		    «type.interfaceList.inputVars.generateAccessors("getDI", "getDO")»
+		    «type.interfaceList.outputVars.generateAccessors("getDO", "getDI")»
+		    «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
+		    «type.interfaceList.eventInputs.generateEventAccessors»
+		    «type.interfaceList.eventOutputs.generateEventAccessors»
+		    «FBClassName»(CStringDictionary::TStringId paAdapterInstanceName, CResource *paSrcRes, bool paIsPlug) :
+		        «baseClass»(paSrcRes, &scmFBInterfaceSpecSocket, paAdapterInstanceName, &scmFBInterfaceSpecPlug, paIsPlug) {	
+		    };
 		
-		  virtual ~«FBClassName»() = default;
+		    virtual ~«FBClassName»() = default;
 		};
 		
 		«generateIncludeGuardEnd»

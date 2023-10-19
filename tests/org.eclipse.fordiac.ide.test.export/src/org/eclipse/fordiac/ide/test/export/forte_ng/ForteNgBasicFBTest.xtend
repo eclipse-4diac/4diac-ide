@@ -66,31 +66,31 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						class «EXPORTED_FUNCTIONBLOCK_NAME» final : public CBasicFB {
 						  DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
 						
-						private:
+						  private:
 						
-						  static const SFBInterfaceSpec scmFBInterfaceSpec;
+						    static const SFBInterfaceSpec scmFBInterfaceSpec;
 						
-						  CIEC_ANY *getVarInternal(size_t) override;
+						    CIEC_ANY *getVarInternal(size_t) override;
 						
-						  void «EXPORTED_ALGORITHM_NAME»(void);
+						    void «EXPORTED_ALGORITHM_NAME»(void);
 						
-						  static const TForteInt16 scmStateINIT = 0;
+						    static const TForteInt16 scmStateINIT = 0;
 						
-						  void enterStateINIT(CEventChainExecutionThread *const paECET);
+						    void enterStateINIT(CEventChainExecutionThread *const paECET);
 						
-						  void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
+						    void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 						
-						  void readInputData(TEventID paEIID) override;
-						  void writeOutputData(TEventID paEIID) override;
+						    void readInputData(TEventID paEIID) override;
+						    void writeOutputData(TEventID paEIID) override;
 						
-						public:
-						  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
+						  public:
+						    «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
 						
-						  CIEC_ANY *getDI(size_t) override;
-						  CIEC_ANY *getDO(size_t) override;
-						  CEventConnection *getEOConUnchecked(TPortId) override;
-						  CDataConnection **getDIConUnchecked(TPortId) override;
-						  CDataConnection *getDOConUnchecked(TPortId) override;
+						    CIEC_ANY *getDI(size_t) override;
+						    CIEC_ANY *getDO(size_t) override;
+						    CEventConnection *getEOConUnchecked(TPortId) override;
+						    CDataConnection **getDIConUnchecked(TPortId) override;
+						    CDataConnection *getDOConUnchecked(TPortId) override;
 						};
 						
 					'''.toString(), export.data.toString())

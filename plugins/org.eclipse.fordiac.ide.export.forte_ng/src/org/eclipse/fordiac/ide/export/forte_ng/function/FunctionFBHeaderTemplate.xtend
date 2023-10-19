@@ -40,21 +40,21 @@ class FunctionFBHeaderTemplate extends ForteFBTemplate<FunctionFBType> {
 		«generateFBClassHeader»
 		  «generateFBDeclaration»
 		
-		private:
-		  «generateFBInterfaceDeclaration»
+		  private:
+		    «generateFBInterfaceDeclaration»
 		
-		  «generateFBInterfaceSpecDeclaration»
+		    «generateFBInterfaceSpecDeclaration»
 		
-		  void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
+		    void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 		
-		  «generateReadInputDataDeclaration»
-		  «generateWriteOutputDataDeclaration»
-		  «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
+		    «generateReadInputDataDeclaration»
+		    «generateWriteOutputDataDeclaration»
+		    «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
-		public:
-		  «FBClassName»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
+		  public:
+		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
 		
-		  «generateInterfaceDeclarations»
+		    «generateInterfaceDeclarations»
 		};
 		
 		«generateBody»
