@@ -56,7 +56,7 @@ public class STCoreURIEditorOpener extends LanguageSpecificURIEditorOpener {
 				final IStorage storage = storages.next().getFirst();
 				final IEditorInput editorInput = EditorUtils.createEditorInput(storage);
 				final IWorkbenchPage activePage = workbench.getActiveWorkbenchWindow().getActivePage();
-				final IEditorPart editor = IDE.openEditor(activePage, editorInput, getEditorId(uri));
+				final IEditorPart editor = IDE.openEditor(activePage, editorInput, getEditorId(uri), select);
 				selectAndReveal(editor, uri, crossReference, indexInList, select);
 				return EditorUtils.getXtextEditor(editor);
 			} catch (final WrappedException e) {
