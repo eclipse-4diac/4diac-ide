@@ -44,10 +44,13 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.model.ui.widgets.PackageSelectionProposalProvider;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -70,6 +73,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+import org.eclipse.ui.fieldassist.ContentAssistCommandAdapter;
 
 public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private static final Pattern NAME_PATTERN = Pattern.compile("Name=\"\\w+\""); //$NON-NLS-1$
@@ -261,6 +265,10 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		packageNameText.addListener(SWT.Modify, this);
 		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).hint(250, SWT.DEFAULT)
 				.applyTo(packageNameText);
+
+		final ContentAssistCommandAdapter packageNameProposalAdapter = new ContentAssistCommandAdapter(packageNameText,
+				new TextContentAdapter(), new PackageSelectionProposalProvider(this::getTypeLibrary), null, null, true);
+		packageNameProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 	}
 
 	private void createTemplateTypeSelection(final Composite parent) {
@@ -377,18 +385,33 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	}
 
 	public String getInitialPackageName() {
-		final IPath containerFullPath = getContainerFullPath();
-		if (containerFullPath != null && containerFullPath.segmentCount() > 0) {
-			final IContainer container = containerFullPath.segmentCount() == 1
-					? ResourcesPlugin.getWorkspace().getRoot().getProject(containerFullPath.segment(0))
-					: ResourcesPlugin.getWorkspace().getRoot().getFolder(containerFullPath);
+		final IContainer container = getSelectedContainer();
+		if (container != null) {
 			final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(container.getProject());
 			final IPath relativePath = BuildpathUtil.findRelativePath(typeLibrary.getBuildpath(), container)
-					.orElse(containerFullPath);
+					.orElse(container.getFullPath());
 			return Stream.of(relativePath.segments())
 					.collect(Collectors.joining(PackageNameHelper.PACKAGE_NAME_DELIMITER));
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	public TypeLibrary getTypeLibrary() {
+		final IContainer container = getSelectedContainer();
+		if (container != null) {
+			return TypeLibraryManager.INSTANCE.getTypeLibrary(container.getProject());
+		}
+		return null;
+	}
+
+	public IContainer getSelectedContainer() {
+		final IPath containerFullPath = getContainerFullPath();
+		if (containerFullPath != null && containerFullPath.segmentCount() > 0) {
+			return containerFullPath.segmentCount() == 1
+					? ResourcesPlugin.getWorkspace().getRoot().getProject(containerFullPath.segment(0))
+					: ResourcesPlugin.getWorkspace().getRoot().getFolder(containerFullPath);
+		}
+		return null;
 	}
 
 	public String getPackageName() {
