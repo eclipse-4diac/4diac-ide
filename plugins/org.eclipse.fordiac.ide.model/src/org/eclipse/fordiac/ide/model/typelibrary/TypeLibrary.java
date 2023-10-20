@@ -30,7 +30,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -74,6 +76,7 @@ public final class TypeLibrary {
 	private final Map<String, GlobalConstantsEntry> globalConstants = new ConcurrentHashMap<>();
 	private final Map<String, TypeEntry> errorTypes = new ConcurrentHashMap<>();
 	private final Map<IFile, TypeEntry> fileMap = new ConcurrentHashMap<>();
+	private final Map<String, AtomicInteger> packages = new ConcurrentHashMap<>();
 
 	public Map<String, AdapterTypeEntry> getAdapterTypes() {
 		return adapterTypes;
@@ -111,6 +114,10 @@ public final class TypeLibrary {
 
 	public Map<String, GlobalConstantsEntry> getGlobalConstants() {
 		return globalConstants;
+	}
+
+	public Set<String> getPackages() {
+		return Collections.unmodifiableSet(packages.keySet());
 	}
 
 	public List<CompositeFBType> getCompositeFBTypes() {
@@ -170,6 +177,7 @@ public final class TypeLibrary {
 		getGlobalConstants().clear();
 		dataTypeLib.clear();
 		fileMap.clear();
+		packages.clear();
 		deleteTypeLibraryMarkers(project);
 		buildpath = BuildpathUtil.loadBuildpath(project);
 		checkAdditions(project);
@@ -253,6 +261,7 @@ public final class TypeLibrary {
 				handleDuplicateTypeName(entry);
 			}
 		}
+		addPackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
 	}
 
 	private static void handleDuplicateTypeName(final TypeEntry entry) {
@@ -278,7 +287,20 @@ public final class TypeLibrary {
 		} else {
 			removeBlockTypeEntry(entry);
 		}
+		removePackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
 		deleteTypeLibraryMarkers(entry.getFile());
+	}
+
+	protected void addPackageNameReference(final String packageName) {
+		if (packageName != null && !packageName.isEmpty()) {
+			packages.computeIfAbsent(packageName, key -> new AtomicInteger()).incrementAndGet();
+		}
+	}
+
+	protected void removePackageNameReference(final String packageName) {
+		if (packageName != null && !packageName.isEmpty()) {
+			packages.computeIfPresent(packageName, (key, value) -> value.decrementAndGet() > 0 ? value : null);
+		}
 	}
 
 	void refresh() {
@@ -302,13 +324,12 @@ public final class TypeLibrary {
 		checkDeletionsForTypeGroup(getSubAppTypes().values());
 		checkDeletionsForTypeGroup(getSystems().values());
 		checkDeletionsForTypeGroup(getGlobalConstants().values());
-		dataTypeLib.getDerivedDataTypes().stream().filter(Predicate.not(this::exists))
-				.forEachOrdered(dataTypeLib::removeTypeEntry);
+		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes());
 		fileMap.values().removeIf(Predicate.not(this::exists));
 	}
 
 	private void checkDeletionsForTypeGroup(final Collection<? extends TypeEntry> typeEntries) {
-		typeEntries.removeIf(Predicate.not(this::exists));
+		typeEntries.stream().filter(Predicate.not(this::exists)).forEachOrdered(this::removeTypeEntry);
 	}
 
 	private boolean exists(final TypeEntry entry) {
