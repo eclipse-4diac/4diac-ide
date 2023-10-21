@@ -339,7 +339,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						  } while(true);
 						}
 						
-						void FORTE_functionblock::enterStateINIT(CEventChainExecutionThread *const paECET) {
+						void FORTE_functionblock::enterStateINIT(CEventChainExecutionThread *const) {
 						  mECCState = scmStateINIT;
 						}
 						

@@ -156,7 +156,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						  } while(true);
 						}
 						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::enterStateINIT(CEventChainExecutionThread *const paECET) {
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::enterStateINIT(CEventChainExecutionThread *const) {
 						  mECCState = scmStateINIT;
 						}
 						

@@ -53,7 +53,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	'''
 
 	def protected generateState(ECState state) '''
-		void «FBClassName»::enterState«state.name»(CEventChainExecutionThread *const paECET) {
+		void «FBClassName»::enterState«state.name»(CEventChainExecutionThread *const«IF hasOutputEvent(state)» paECET«ENDIF») {
 		  mECCState = «state.generateStateName»;
 		  «FOR action : state.ECAction»
 		  	«IF action.algorithm !== null»
@@ -65,6 +65,10 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 		  «ENDFOR»
 		}
 	'''
+	
+	def private static hasOutputEvent(ECState state) {
+		return state.ECAction.exists[it.output !== null];
+	}
 
 	override generateExecuteEvent() '''
 		void «FBClassName»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
