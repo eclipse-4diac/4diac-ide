@@ -20,6 +20,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.ImportCellEditor;
 import org.eclipse.fordiac.ide.gef.provider.PackageContentProvider;
 import org.eclipse.fordiac.ide.gef.provider.PackageLabelProvider;
@@ -28,6 +29,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangePackageNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.OrganizeImportsCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteImportCommand;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
@@ -38,17 +40,19 @@ import org.eclipse.fordiac.ide.model.ui.widgets.PackageSelectionProposalProvider
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
+import org.eclipse.fordiac.ide.ui.widget.StyledTextContentAdapter;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
-import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -58,7 +62,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.fieldassist.ContentAssistCommandAdapter;
@@ -68,7 +71,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 
 	private final Supplier<GraphicalAnnotationModel> annotationModelSupplier;
 	private TableViewer packageViewer;
-	private Text nameText;
+	private StyledText nameText;
 	private ContentProposalAdapter nameTextProposalAdapter;
 	private AddDeleteWidget buttons;
 	private Button organizeImportsButton;
@@ -95,13 +98,13 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		getWidgetFactory().createLabel(composite, FordiacMessages.Name + ":"); //$NON-NLS-1$
-		nameText = createGroupText(composite, true);
+		nameText = createGroupStyledText(composite, true);
 		nameText.addModifyListener(e -> {
 			if (!blockListeners) {
 				executeCommand(new ChangePackageNameCommand(getType(), nameText.getText()));
 			}
 		});
-		nameTextProposalAdapter = new ContentAssistCommandAdapter(nameText, new TextContentAdapter(),
+		nameTextProposalAdapter = new ContentAssistCommandAdapter(nameText, new StyledTextContentAdapter(),
 				new PackageSelectionProposalProvider(this::getTypeLibrary), null, null, true);
 		nameTextProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 
@@ -149,6 +152,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 	@Override
 	public void refresh() {
 		super.refresh();
+		final GraphicalAnnotationModel annotationModel = annotationModelSupplier.get();
 		final Consumer<Command> commandExecutorBuffer = getCommandExecutor();
 		setCommandExecutor(null);
 		if ((getType() != null)) {
@@ -160,10 +164,13 @@ public class PackageInfoWidget extends TypeInfoWidget {
 			organizeImportsButton.setEnabled(!isReadonly());
 			packageViewer.getTable().setEnabled(!isReadonly());
 
-			if (null != getType().getCompilerInfo()) {
-				final CompilerInfo compilerInfo = getType().getCompilerInfo();
-				nameText.setText(null != compilerInfo.getPackageName() ? compilerInfo.getPackageName() : ""); //$NON-NLS-1$
-			}
+			final CompilerInfo compilerInfo = getType().getCompilerInfo();
+			final StyledString nameStyledString = new StyledString(PackageNameHelper.getPackageName(getType()),
+					annotationModel != null && compilerInfo != null
+							? GraphicalAnnotationStyles.getAnnotationStyle(annotationModel.getAnnotations(compilerInfo))
+							: null);
+			nameText.setText(nameStyledString.toString());
+			nameText.setStyleRanges(nameStyledString.getStyleRanges());
 			packageViewer.setInput(getType());
 		}
 		setCommandExecutor(commandExecutorBuffer);
