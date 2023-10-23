@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -128,6 +129,9 @@ public class STCoreRegionString implements CharSequence {
 	public static List<ITextRegion> parseRegions(final String string, final int offset) {
 		if (string.length() < 2 || string.charAt(0) != '[' || string.charAt(string.length() - 1) != ']') {
 			throw new IllegalArgumentException("Invalid regions string: " + string); //$NON-NLS-1$
+		}
+		if (string.length() == 2) { // must be "[]" due to check above
+			return Collections.emptyList();
 		}
 		return REGION_SPLIT.splitAsStream(string.substring(1, string.length() - 1)).map(s -> parseRegion(s, offset))
 				.toList();
