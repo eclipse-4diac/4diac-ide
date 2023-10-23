@@ -18,9 +18,14 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.QualifiedName;
+import org.eclipse.xtext.scoping.IScope;
+import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.util.Strings;
 import org.eclipse.xtext.validation.ValidationMessageAcceptor;
 
@@ -33,6 +38,9 @@ public class STCoreImportValidator {
 	@Inject
 	private IQualifiedNameConverter nameConverter;
 
+	@Inject
+	private IScopeProvider scopeProvider;
+
 	public void validateImports(final String packageName, final List<? extends Import> imports,
 			final Set<QualifiedName> usedTypes, final ValidationMessageAcceptor acceptor) {
 		if (imports.isEmpty()) {
@@ -42,11 +50,14 @@ public class STCoreImportValidator {
 		final QualifiedName packageQualifiedName = Strings.isEmpty(packageName) ? QualifiedName.EMPTY
 				: nameConverter.toQualifiedName(packageName);
 
-		imports.stream().forEach(imp -> validateImport(imp, packageQualifiedName, usedTypes, acceptor));
+		final IScope scope = scopeProvider.getScope(imports.get(0),
+				STCorePackage.eINSTANCE.getSTFeatureExpression_Feature());
+
+		imports.stream().forEach(imp -> validateImport(imp, packageQualifiedName, usedTypes, scope, acceptor));
 	}
 
 	protected void validateImport(final Import imp, final QualifiedName packageName, final Set<QualifiedName> usedTypes,
-			final ValidationMessageAcceptor acceptor) {
+			final IScope scope, final ValidationMessageAcceptor acceptor) {
 		final String importedNamespace = imp.getImportedNamespace();
 		if (Strings.isEmpty(importedNamespace)) {
 			return;
@@ -58,9 +69,17 @@ public class STCoreImportValidator {
 		}
 
 		if (WILDCARD.equals(qualifiedName.getLastSegment())) {
+			final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(imp);
 			if (qualifiedName.getSegmentCount() <= 1) {
 				acceptor.acceptError(
 						MessageFormat.format(Messages.STCoreValidator_InvalidWildcardImport, importedNamespace), imp,
+						LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(),
+						ValidationMessageAcceptor.INSIGNIFICANT_INDEX, STCoreValidator.INVALID_IMPORT,
+						importedNamespace);
+			} else if (typeLibrary != null
+					&& !typeLibrary.getPackages().contains(nameConverter.toString(qualifiedName.skipLast(1)))) {
+				acceptor.acceptError(
+						MessageFormat.format(Messages.STCoreImportValidator_ImportNotFound, importedNamespace), imp,
 						LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(),
 						ValidationMessageAcceptor.INSIGNIFICANT_INDEX, STCoreValidator.INVALID_IMPORT,
 						importedNamespace);
@@ -71,6 +90,10 @@ public class STCoreImportValidator {
 						ValidationMessageAcceptor.INSIGNIFICANT_INDEX, STCoreValidator.WILDCARD_IMPORT,
 						importedNamespace);
 			}
+		} else if (scope.getSingleElement(qualifiedName) == null) {
+			acceptor.acceptError(MessageFormat.format(Messages.STCoreImportValidator_ImportNotFound, importedNamespace),
+					imp, LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(),
+					ValidationMessageAcceptor.INSIGNIFICANT_INDEX, STCoreValidator.INVALID_IMPORT, importedNamespace);
 		} else if (isImplicitImport(qualifiedName, packageName) || !usedTypes.contains(qualifiedName)) {
 			acceptor.acceptWarning(MessageFormat.format(Messages.STCoreValidator_UnusedImport, importedNamespace), imp,
 					LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(),
