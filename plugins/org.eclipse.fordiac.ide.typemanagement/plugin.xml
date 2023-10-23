@@ -731,6 +731,7 @@
          <enablement>
          <or>
          <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeInterfaceChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeStructDeletionChange$DeleteMemberVariableChange"/>  
          </or>
          </enablement>
       </changePreviewViewer>
