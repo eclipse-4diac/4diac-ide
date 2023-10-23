@@ -24,8 +24,11 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix;
 import java.text.MessageFormat;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.common.util.ECollections;
@@ -37,6 +40,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
@@ -253,13 +257,45 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		if (imports == null) {
 			return;
 		}
-		final STCoreTypeUsageCollector collector = typeUsageCollectorProvider.get();
-		final Set<QualifiedName> imported = new HashSet<>(collector.collectUsedTypes(source));
-		imported.removeIf(imp -> STCoreImportValidator.isImplicitImport(imp, packageName));
-		imports.removeIf(imp -> shouldRemoveImport(imp, imported));
+		final Set<QualifiedName> usedTypes = typeUsageCollectorProvider.get().collectUsedTypes(source);
+		final Set<QualifiedName> imported = new HashSet<>(usedTypes.stream()
+				// skip implicit imports
+				.filter(imp -> !STCoreImportValidator.isImplicitImport(imp, packageName))
+				// create map with simple names as keys and merge imported types
+				// (avoids ambiguous imports)
+				.collect(Collectors.toMap(QualifiedName::getLastSegment, Function.identity(), //
+						(a, b) -> mergeImportedTypes(a, b, imports)))
+				// construct new set from values
+				.values());
+		// remove unnecessary imports (and existing imports from imported)
+		imports.removeIf(imp -> !imported.remove(getQualifiedName(imp)));
+		// create and add new imports based on imported
 		imported.stream().map(nameConverter::toString).map(STCoreQuickfixProvider::createImport)
 				.forEachOrdered(imports::add);
+		// sort imports
 		ECollections.sort(imports, Comparator.comparing(STImport::getImportedNamespace));
+	}
+
+	protected QualifiedName mergeImportedTypes(final QualifiedName first, final QualifiedName second,
+			final List<STImport> imports) {
+		if (matchesImports(first, imports)) {
+			return first;
+		}
+		if (matchesImports(second, imports)) {
+			return second;
+		}
+		return null; // skip colliding names
+	}
+
+	protected boolean matchesImports(final QualifiedName name, final List<STImport> imports) {
+		return imports.stream().anyMatch(imp -> matchesImport(name, imp));
+	}
+
+	protected boolean matchesImport(final QualifiedName name, final STImport imp) {
+		final QualifiedName importedNamespace = getQualifiedName(imp);
+		return importedNamespace.equals(name)
+				|| (importedNamespace.getLastSegment().equals(ImportHelper.WILDCARD_IMPORT)
+						&& importedNamespace.skipLast(1).equals(name.skipLast(1)));
 	}
 
 	protected QualifiedName getPackageName(final STSource source) {
@@ -287,18 +323,12 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		return null; // NOSONAR
 	}
 
-	protected boolean shouldRemoveImport(final STImport imp, final Set<QualifiedName> imported) {
+	protected QualifiedName getQualifiedName(final STImport imp) {
 		final String importedNamespace = imp.getImportedNamespace();
 		if (Strings.isEmpty(importedNamespace)) {
-			return true;
+			return QualifiedName.EMPTY;
 		}
-
-		final QualifiedName qualifiedName = nameConverter.toQualifiedName(importedNamespace);
-		if (qualifiedName == null || qualifiedName.isEmpty()) {
-			return true;
-		}
-
-		return !imported.remove(qualifiedName);
+		return nameConverter.toQualifiedName(importedNamespace);
 	}
 
 	protected static STImport createImport(final String importedNamespace) {

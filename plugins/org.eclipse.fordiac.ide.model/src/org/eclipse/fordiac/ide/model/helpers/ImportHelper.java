@@ -14,9 +14,11 @@ package org.eclipse.fordiac.ide.model.helpers;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
@@ -107,18 +109,46 @@ public final class ImportHelper {
 		return fallbackTypeResolver.apply(name);
 	}
 
-	public static void organizeImports(final LibraryElement libraryElement, final Set<String> imported) {
+	public static void organizeImports(final LibraryElement libraryElement, final Set<String> usedTypes) {
 		final String packageName = PackageNameHelper.getPackageName(libraryElement);
 		final EList<Import> imports = getMutableImports(libraryElement);
-		imported.removeIf(imp -> ImportHelper.isImplicitImport(imp, packageName));
-		imports.removeIf(imp -> shouldRemoveImport(imp, imported));
+
+		final Set<String> imported = new HashSet<>(usedTypes.stream()
+				// skip implicit imports
+				.filter(imp -> !isImplicitImport(imp, packageName))
+				// create map with simple names as keys and merge imported types
+				// (avoids ambiguous imports)
+				.collect(Collectors.toMap(PackageNameHelper::extractPlainTypeName, Function.identity(), //
+						(a, b) -> mergeImportedTypes(a, b, imports)))
+				// construct new set from values
+				.values());
+		// remove unnecessary imports (and existing imports from imported)
+		imports.removeIf(imp -> !imported.remove(imp.getImportedNamespace()));
+		// create and add new imports based on imported
 		imported.stream().map(ImportHelper::createImport).forEachOrdered(imports::add);
+		// sort imports
 		ECollections.sort(imports, Comparator.comparing(Import::getImportedNamespace));
 	}
 
-	protected static boolean shouldRemoveImport(final Import imp, final Set<String> imported) {
+	private static String mergeImportedTypes(final String first, final String second, final List<Import> imports) {
+		if (matchesImports(first, imports)) {
+			return first;
+		}
+		if (matchesImports(second, imports)) {
+			return second;
+		}
+		return null; // skip colliding names
+	}
+
+	private static boolean matchesImports(final String name, final List<Import> imports) {
+		return imports.stream().anyMatch(imp -> matchesImport(name, imp));
+	}
+
+	private static boolean matchesImport(final String name, final Import imp) {
 		final String importedNamespace = imp.getImportedNamespace();
-		return importedNamespace == null || importedNamespace.isEmpty() || !imported.remove(importedNamespace);
+		return importedNamespace.equals(name)
+				|| (importedNamespace.endsWith(WILDCARD_IMPORT_SUFFIX) && PackageNameHelper
+						.extractPackageName(importedNamespace).equals(PackageNameHelper.extractPackageName(name)));
 	}
 
 	public static boolean isImplicitImport(final String imported, final String packageName) {
