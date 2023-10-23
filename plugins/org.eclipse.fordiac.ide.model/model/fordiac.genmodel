@@ -149,6 +149,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//CompilerInfo/header"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//CompilerInfo/packageName"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//CompilerInfo/imports"/>
+      <genOperations ecoreOperation="lib.ecore#//CompilerInfo/validatePackageName"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoAnnotations.validatePackageName(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//CompilerInfo/validatePackageName/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//CompilerInfo/validatePackageName/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CompositeFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompositeFBType/fBNetwork"/>
