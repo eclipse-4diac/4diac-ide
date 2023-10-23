@@ -52,5 +52,5 @@ class LWordValue implements AnyBitValue {
 
 	override hashCode() { Long.hashCode(value) }
 
-	override toString() { NumericValueConverter.INSTANCE_LWORD.toString(intValue) }
+	override toString() { NumericValueConverter.INSTANCE_LWORD.toString(longValue) }
 }
