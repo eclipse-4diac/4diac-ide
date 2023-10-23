@@ -26,8 +26,10 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartService;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.menus.WorkbenchWindowControlContribution;
 
@@ -111,7 +113,7 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 			}
 		});
 
-		setZoomManager(getWorkbenchWindow().getActivePage().getActiveEditor().getAdapter(ZoomManager.class));
+		setZoomManager(getInitialZoomManager());
 
 		return combo;
 	}
@@ -143,6 +145,17 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 		return zoomManager;
 	}
 
+	private ZoomManager getInitialZoomManager() {
+		final IWorkbenchPage activePage = getWorkbenchWindow().getActivePage();
+		if (activePage != null) {
+			final IEditorPart activeEditor = activePage.getActiveEditor();
+			if (activeEditor != null) {
+				return activeEditor.getAdapter(ZoomManager.class);
+			}
+		}
+		return null;
+	}
+
 	private void setZoomManager(final ZoomManager zm) {
 		if (zoomManager == zm) {
 			return;
@@ -164,7 +177,7 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 	}
 
 	private void refresh() {
-		if (combo == null || combo.isDisposed()) {
+		if (combo == null || combo.isDisposed() || zoomManager == null) {
 			return;
 		}
 
