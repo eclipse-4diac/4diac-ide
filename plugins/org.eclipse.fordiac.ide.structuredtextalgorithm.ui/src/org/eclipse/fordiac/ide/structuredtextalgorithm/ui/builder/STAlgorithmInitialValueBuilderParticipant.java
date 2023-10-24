@@ -29,13 +29,18 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -99,6 +104,9 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				final EObject target = allContents.next();
 				if (target instanceof SystemConfiguration) {
 					allContents.prune();
+				} else if (target instanceof final Attribute attribute) {
+					validateType(attribute, delta, typeUsageCollector, ignoreWarnings, monitor);
+					validateValue(attribute, delta, typeUsageCollector, ignoreWarnings, monitor);
 				} else if (target instanceof final VarDeclaration varDeclaration) {
 					validateType(varDeclaration, delta, typeUsageCollector, ignoreWarnings, monitor);
 					validateValue(varDeclaration, delta, typeUsageCollector, ignoreWarnings, monitor);
@@ -175,6 +183,45 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		}
 	}
 
+	@SuppressWarnings("unused")
+	protected static void validateType(final Attribute attribute, final IResourceDescription.Delta delta,
+			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
+			final IProgressMonitor monitor) {
+		if (attribute.getAttributeDeclaration() != null) {
+			typeUsageCollector.addUsedType(attribute.getAttributeDeclaration());
+		} else if (attribute.getType() instanceof AnyType) {
+			typeUsageCollector.addUsedType(attribute.getType());
+		}
+	}
+
+	protected void validateValue(final Attribute attribute, final IResourceDescription.Delta delta,
+			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
+			final IProgressMonitor monitor) throws CoreException {
+		final String value = getValue(attribute);
+		final List<Issue> issues = new ArrayList<>();
+		if (!value.isBlank() && attribute.getType() instanceof AnyType
+				&& !InternalAttributeDeclarations.isInternalAttribue(attribute.getAttributeDeclaration())) {
+			final DataType featureType = getActualType(attribute);
+			try {
+				new TypedValueConverter(featureType, true).toValue(value);
+			} catch (final Exception e) {
+				typeUsageCollector.collectUsedTypes(StructuredTextParseUtil.validate(value, delta.getUri(), featureType,
+						EcoreUtil2.getContainerOfType(attribute, LibraryElement.class), null, issues));
+				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, attribute,
+						LibraryElementPackage.Literals.ATTRIBUTE__VALUE));
+			}
+		}
+		if (monitor.isCanceled()) {
+			throw new OperationCanceledException();
+		}
+		if (!issues.isEmpty()) {
+			final IFile file = getFile(delta.getUri());
+			if (file != null && file.exists()) {
+				createMarkers(file, FordiacErrorMarker.INITIAL_VALUE_MARKER, issues, ignoreWarnings, monitor);
+			}
+		}
+	}
+
 	protected void validateImports(final LibraryElement element, final IResourceDescription.Delta delta,
 			final Set<QualifiedName> usedTypes, final boolean ignoreWarnings, final IProgressMonitor monitor)
 			throws CoreException {
@@ -211,6 +258,20 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			return varDeclaration.getValue().getValue();
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	protected static String getValue(final Attribute attribute) {
+		if (attribute.getValue() != null) {
+			return attribute.getValue();
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	protected static DataType getActualType(final Attribute attribute) {
+		if (attribute.getType() instanceof final DirectlyDerivedType directlyDerivedType) {
+			return directlyDerivedType.getBaseType();
+		}
+		return attribute.getType();
 	}
 
 	protected List<IResourceDescription.Delta> getRelevantDeltas(final IBuildContext context) {
