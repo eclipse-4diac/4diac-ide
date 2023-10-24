@@ -22,6 +22,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -129,6 +130,14 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		handleConnections();
 		reconnCmds.execute();
 
+		// set Visible attribute after reconnect, to not hide connected In/Outputs
+		// transfer attributes from type first (for new vars), then override them from
+		// old instance
+		transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getInputVars());
+		transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getOutputVars());
+		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getInputVars());
+		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getOutputVars());
+
 		if (network != null) {
 			network.getNetworkElements().remove(oldElement);
 		}
@@ -204,6 +213,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	public void setInterface() {
 		newElement.setInterface(newElement.getType().getInterfaceList().copy());
+
 		if (newElement instanceof final Multiplexer multiplexer) {
 			multiplexer.setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
 					.getInterfaceList().getOutputVars().get(0).getType());
@@ -212,6 +222,19 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			demultiplexer.setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
 					.getInterfaceList().getInputVars().get(0).getType());
 		}
+	}
+
+	private void transferVisibleAndVarConfigAttributes(final EList<VarDeclaration> varDeclList) {
+		varDeclList.forEach(varDecl -> {
+			if (newElement.getInterfaceElement(varDecl.getName()) instanceof final VarDeclaration newDecl) {
+				if ((newDecl.isIsInput() && newDecl.getInputConnections().isEmpty())
+						|| (!newDecl.isIsInput() && newDecl.getOutputConnections().isEmpty())) {
+					newDecl.setVisible(varDecl.isVisible());
+				}
+
+				newDecl.setVarConfig(varDecl.isVarConfig());
+			}
+		});
 	}
 
 	protected void recreateResourceConns(final List<ConnData> resourceConns) {
@@ -284,17 +307,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 					if (newIE != null) {
 						newIE.setComment(ie.getComment());
 					}
-				});
-	}
-
-	protected void transferVarDeclarationAttributes() {
-		newElement.getInterface().getAllInterfaceElements().stream().filter(VarDeclaration.class::isInstance)
-				.map(VarDeclaration.class::cast)
-				.map(varDeclaration -> new VarDeclaration[] { varDeclaration,
-						((VarDeclaration) oldElement.getInterfaceElement(varDeclaration.getName())) })
-				.filter(varDecPair -> varDecPair[1] != null).forEach(varDecPair -> { // 0 is new, 1 is old
-					varDecPair[0].setVisible(varDecPair[1].isVisible());
-					varDecPair[0].setVarConfig(varDecPair[1].isVarConfig());
 				});
 	}
 
