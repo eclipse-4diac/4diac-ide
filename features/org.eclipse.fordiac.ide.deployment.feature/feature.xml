@@ -168,6 +168,10 @@ Java and all Java-based trademarks are trademarks of Oracle Corporation in the
 United States, other countries, or both.\n
    </license>
 
+   <includes
+         id="org.eclipse.fordiac.ide.milo"
+         version="0.0.0"/>
+
    <requires>
       <import feature="org.eclipse.fordiac.ide.workbench.feature"/>
       <import feature="org.eclipse.fordiac.ide.typeeditor.feature"/>
@@ -217,6 +221,13 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.deployment.bootfile"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.deployment.opcua"
          download-size="0"
          install-size="0"
          version="0.0.0"
