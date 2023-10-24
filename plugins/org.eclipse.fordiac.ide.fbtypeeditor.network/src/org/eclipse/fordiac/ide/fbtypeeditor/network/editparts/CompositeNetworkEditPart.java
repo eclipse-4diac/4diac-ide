@@ -15,6 +15,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.network.editparts;
 
+import java.util.List;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -23,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
@@ -74,27 +77,40 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 				@Override
 				public void notifyChanged(final Notification notification) {
 					super.notifyChanged(notification);
-					switch (notification.getEventType()) {
-					case Notification.ADD:
-					case Notification.ADD_MANY:
-						refreshChildren();
-						break;
-					case Notification.MOVE:
-						if (notification.getNewValue() instanceof IInterfaceElement) {
+					// if the notification is from the out_mapped In Out vars we are in the middle
+					// of an in out var change, ignore it!
+					if (notification.getFeatureID(
+							InterfaceList.class) != LibraryElementPackage.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS) {
+						switch (notification.getEventType()) {
+						case Notification.ADD, Notification.ADD_MANY:
 							refreshChildren();
+							break;
+						case Notification.MOVE:
+							if (notification.getNewValue() instanceof IInterfaceElement) {
+								refreshChildren();
+							}
+							break;
+						case Notification.REMOVE, Notification.REMOVE_MANY:
+							refreshChildren();
+							break;
+						default:
+							break;
 						}
-						break;
-					case Notification.REMOVE:
-					case Notification.REMOVE_MANY:
-						refreshChildren();
-						break;
-					default:
-						break;
 					}
 				}
 			};
 		}
 		return adapter;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected List<?> getModelChildren() {
+		final List<Object> modelChildren = (List<Object>) super.getModelChildren();
+		if (getModel() != null) {
+			modelChildren.addAll(getInterfaceList().getInOutVars());
+		}
+		return modelChildren;
 	}
 
 	/**
