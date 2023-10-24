@@ -48,7 +48,8 @@ public class HidePinCommand extends Command {
 	public boolean canExecute() {
 		return hiddenElement instanceof final IInterfaceElement interfaceElement
 				&& (interfaceElement instanceof VarDeclaration || interfaceElement instanceof AdapterDeclaration)
-				&& interfaceElement.isIsInput() && interfaceElement.getInputConnections().isEmpty()
+				&& (interfaceElement.isIsInput() && interfaceElement.getInputConnections().isEmpty()
+						|| !interfaceElement.isIsInput() && interfaceElement.getOutputConnections().isEmpty())
 				&& !isExpandedSubAppPinAndConnected(interfaceElement);
 	}
 
