@@ -16,6 +16,8 @@ package org.eclipse.fordiac.ide.gef.annotation;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import org.eclipse.draw2d.Border;
+import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LineBorder;
@@ -125,9 +127,31 @@ public final class GraphicalAnnotationStyles {
 		final Color annotationColor = GraphicalAnnotationStyles
 				.getAnnotationColor(event.getModel().getAnnotations(target), filter);
 		if (annotationColor != null) {
+			setAnnotationBorder(annonFigure, annotationColor);
+		} else {
+			removeAnnotationBorder(annonFigure);
+		}
+	}
+
+	private static void setAnnotationBorder(final IFigure annonFigure, final Color annotationColor) {
+		var border = annonFigure.getBorder();
+		if (border == null || border instanceof AnnotationFeedbackBorder) {
 			annonFigure.setBorder(new AnnotationFeedbackBorder(annotationColor));
 		} else {
+			if (border instanceof final AnnotationCompoundBorder compBorder) {
+				// we are updating the annotation border of an annotated figure
+				border = compBorder.getOuterBorder();
+			}
+			annonFigure.setBorder(new AnnotationCompoundBorder(border, annotationColor));
+		}
+	}
+
+	private static void removeAnnotationBorder(final IFigure annonFigure) {
+		final var border = annonFigure.getBorder();
+		if (border instanceof AnnotationFeedbackBorder) {
 			annonFigure.setBorder(null);
+		} else if (border instanceof final AnnotationCompoundBorder compBorder) {
+			annonFigure.setBorder(compBorder.getOuterBorder());
 		}
 	}
 
@@ -184,6 +208,28 @@ public final class GraphicalAnnotationStyles {
 			graphics.drawRoundRectangle(tempRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
 			graphics.setAlpha(ANNOTATION_FILL_ALPHA);
 			graphics.fillRoundRectangle(tempRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
+		}
+	}
+
+	public static final class AnnotationCompoundBorder extends CompoundBorder {
+
+		public AnnotationCompoundBorder(final Border outer, final Color annotationColor) {
+			super(outer, new AnnotationFeedbackBorder(annotationColor));
+		}
+
+		@Override
+		public void paint(final IFigure figure, final Graphics g, final Insets insets) {
+			// the paint method of the CompoundBorder reduces the size for the inner by the
+			// size of the outer border. As we want to draw the outer on top of everything
+			// for visual consistency we need an own paint method
+			if (outer != null) {
+				g.pushState();
+				outer.paint(figure, g, insets);
+				g.popState();
+			}
+			if (inner != null) {
+				inner.paint(figure, g, insets);
+			}
 		}
 	}
 

@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationFeedbackBorder;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationCompoundBorder;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteErrorMarkerCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -59,7 +59,7 @@ public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
 	@Override
 	protected IFigure createFigure() {
 		final IFigure figure = super.createFigure();
-		figure.setBorder(new AnnotationFeedbackBorder(GraphicalAnnotationStyles.ERROR_RED));
+		figure.setBorder(new AnnotationCompoundBorder(figure.getBorder(), GraphicalAnnotationStyles.ERROR_RED));
 		return figure;
 	}
 

@@ -20,7 +20,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.draw2d.AncestorListener;
+import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.ChopboxAnchor;
+import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -91,7 +93,13 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 		}
 
 		public void updateConnectorColor() {
-			((ConnectorBorder) getBorder()).updateColor();
+			Border curBorder = getBorder();
+			if (curBorder instanceof final CompoundBorder comBorder) {
+				curBorder = comBorder.getOuterBorder();
+			}
+			if (curBorder instanceof final ConnectorBorder conBorder) {
+				conBorder.updateColor();
+			}
 		}
 	}
 

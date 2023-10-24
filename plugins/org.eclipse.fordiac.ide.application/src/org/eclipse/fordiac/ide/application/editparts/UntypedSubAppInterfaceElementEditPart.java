@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.Border;
+import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -62,12 +63,14 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		}
 
 		private void updateConnectorBorderColor() {
-			final Border border = getFigure().getBorder();
-			if (border instanceof ConnectorBorder) {
-				((ConnectorBorder) border).updateColor();
+			Border border = getFigure().getBorder();
+			if (border instanceof final CompoundBorder comBorder) {
+				border = comBorder.getOuterBorder();
+			}
+			if (border instanceof final ConnectorBorder conBorder) {
+				conBorder.updateColor();
 				getFigure().repaint();
 			}
-
 		}
 
 		public UntypedSubAppInterfaceElementEditPart getUntypedSubAppInterfaceElementEditPart() {
