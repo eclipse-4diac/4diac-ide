@@ -24,7 +24,7 @@ public final class FBNetworkElementHelper {
 		EObject obj = element;
 		while (obj.eContainer() != null) {
 			obj = obj.eContainer();
-			if (((obj instanceof SubApp) && ((SubApp) obj).isTyped()) || (obj instanceof CFBInstance)) {
+			if ((obj instanceof final SubApp subApp && subApp.isTyped()) || (obj instanceof CFBInstance)) {
 				return true;
 			}
 		}
@@ -32,8 +32,8 @@ public final class FBNetworkElementHelper {
 	}
 
 	public static SubApp getContainerSubappOfFB(final FB fb) {
-		if (fb instanceof final FBNetworkElement fbNelement && fbNelement.isNestedInSubApp()
-				&& fbNelement.getOuterFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped()) {
+		if (fb.isNestedInSubApp() && fb.getOuterFBNetworkElement() instanceof final SubApp subapp
+				&& !subapp.isTyped()) {
 			return subapp;
 		}
 		return null;
