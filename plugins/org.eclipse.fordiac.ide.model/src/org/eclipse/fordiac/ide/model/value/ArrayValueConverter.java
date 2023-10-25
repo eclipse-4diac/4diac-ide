@@ -41,7 +41,6 @@ public class ArrayValueConverter<T> implements ValueConverter<List<T>> {
 			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_ARRAY_MISSES_BRACKETS, string));
 		}
 		final var inner = trimmed.substring(1, trimmed.length() - 1);
-		return Stream.of(ARRAY_PATTERN.split(inner)).map(String::trim).map(elementValueConverter::toValue)
-				.collect(Collectors.toList());
+		return Stream.of(ARRAY_PATTERN.split(inner)).map(String::trim).map(elementValueConverter::toValue).toList();
 	}
 }

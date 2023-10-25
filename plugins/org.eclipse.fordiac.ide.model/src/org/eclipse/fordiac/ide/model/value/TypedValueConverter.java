@@ -85,7 +85,7 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 			LTIME_OF_DAY_SHORT_FORM, ElementaryTypes.LTIME_OF_DAY, // LTIME_OF_DAY
 			DATE_AND_TIME_SHORT_FORM, ElementaryTypes.DATE_AND_TIME, // DATE_AND_TIME
 			LDATE_AND_TIME_SHORT_FORM, ElementaryTypes.LDATE_AND_TIME // LDATE_AND_TIME
-			);
+	);
 
 	private final DataType type;
 
@@ -140,19 +140,26 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 	private static String getPrefixFromType(final DataType type) throws IllegalArgumentException {
 		if (type instanceof TimeType) {
 			return TIME_SHORT_FORM;
-		} else if (type instanceof LtimeType) {
+		}
+		if (type instanceof LtimeType) {
 			return LTIME_SHORT_FORM;
-		} else if (type instanceof DateType) {
+		}
+		if (type instanceof DateType) {
 			return DATE_SHORT_FORM;
-		} else if (type instanceof LdateType) {
+		}
+		if (type instanceof LdateType) {
 			return LDATE_SHORT_FORM;
-		} else if (type instanceof TimeOfDayType) {
+		}
+		if (type instanceof TimeOfDayType) {
 			return TIME_OF_DAY_SHORT_FORM;
-		} else if (type instanceof LtodType) {
+		}
+		if (type instanceof LtodType) {
 			return LTIME_OF_DAY_SHORT_FORM;
-		} else if (type instanceof DateAndTimeType) {
+		}
+		if (type instanceof DateAndTimeType) {
 			return DATE_AND_TIME_SHORT_FORM;
-		} else if (type instanceof LdtType) {
+		}
+		if (type instanceof LdtType) {
 			return LDATE_AND_TIME_SHORT_FORM;
 		}
 		return ""; //$NON-NLS-1$
@@ -179,45 +186,63 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 	}
 
 	private static boolean isNumericValueValid(final DataType type, final Object value) {
+
 		if (value instanceof Boolean) {
 			return type instanceof BoolType;
-		} else if (value instanceof BigDecimal) {
+		}
+		if (value instanceof final BigDecimal bigDecimal) {
 			if (type instanceof RealType) {
-				return Float.isFinite(((BigDecimal) value).floatValue());
-			} else if (type instanceof LrealType) {
-				return Double.isFinite(((BigDecimal) value).doubleValue());
+				return Float.isFinite(bigDecimal.floatValue());
 			}
-		} else if (value instanceof BigInteger) {
+			if (type instanceof LrealType) {
+				return Double.isFinite(bigDecimal.doubleValue());
+			}
+		}
+		if (value instanceof final BigInteger bigInteger) {
 			if (type instanceof RealType) {
-				return Float.isFinite(((BigInteger) value).floatValue());
-			} else if (type instanceof LrealType) {
-				return Double.isFinite(((BigInteger) value).doubleValue());
-			} else if (type instanceof SintType) {
-				return checkRange((BigInteger) value, Byte.MIN_VALUE, Byte.MAX_VALUE);
-			} else if (type instanceof IntType) {
-				return checkRange((BigInteger) value, Short.MIN_VALUE, Short.MAX_VALUE);
-			} else if (type instanceof DintType) {
-				return checkRange((BigInteger) value, Integer.MIN_VALUE, Integer.MAX_VALUE);
-			} else if (type instanceof LintType) {
-				return checkRange((BigInteger) value, Long.MIN_VALUE, Long.MAX_VALUE);
-			} else if (type instanceof UsintType) {
-				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffL));
-			} else if (type instanceof UintType) {
-				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffffL));
-			} else if (type instanceof UdintType) {
-				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffffffffL));
-			} else if (type instanceof UlintType) {
-				return checkRangeUnsigned((BigInteger) value, new BigInteger("ffffffffffffffff", 16)); //$NON-NLS-1$
-			} else if (type instanceof BoolType) {
-				return checkRangeUnsigned((BigInteger) value, BigInteger.ONE);
-			} else if (type instanceof ByteType) {
-				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffL));
-			} else if (type instanceof WordType) {
-				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffffL));
-			} else if (type instanceof DwordType) {
-				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffffffffL));
-			} else if (type instanceof LwordType) {
-				return checkRangeUnsigned((BigInteger) value, new BigInteger("ffffffffffffffff", 16)); //$NON-NLS-1$
+				return Float.isFinite(bigInteger.floatValue());
+			}
+			if (type instanceof LrealType) {
+				return Double.isFinite(bigInteger.doubleValue());
+			}
+			if (type instanceof SintType) {
+				return checkRange(bigInteger, Byte.MIN_VALUE, Byte.MAX_VALUE);
+			}
+			if (type instanceof IntType) {
+				return checkRange(bigInteger, Short.MIN_VALUE, Short.MAX_VALUE);
+			}
+			if (type instanceof DintType) {
+				return checkRange(bigInteger, Integer.MIN_VALUE, Integer.MAX_VALUE);
+			}
+			if (type instanceof LintType) {
+				return checkRange(bigInteger, Long.MIN_VALUE, Long.MAX_VALUE);
+			}
+			if (type instanceof UsintType) {
+				return checkRangeUnsigned(bigInteger, BigInteger.valueOf(0xffL));
+			}
+			if (type instanceof UintType) {
+				return checkRangeUnsigned(bigInteger, BigInteger.valueOf(0xffffL));
+			}
+			if (type instanceof UdintType) {
+				return checkRangeUnsigned(bigInteger, BigInteger.valueOf(0xffffffffL));
+			}
+			if (type instanceof UlintType) {
+				return checkRangeUnsigned(bigInteger, new BigInteger("ffffffffffffffff", 16)); //$NON-NLS-1$
+			}
+			if (type instanceof BoolType) {
+				return checkRangeUnsigned(bigInteger, BigInteger.ONE);
+			}
+			if (type instanceof ByteType) {
+				return checkRangeUnsigned(bigInteger, BigInteger.valueOf(0xffL));
+			}
+			if (type instanceof WordType) {
+				return checkRangeUnsigned(bigInteger, BigInteger.valueOf(0xffffL));
+			}
+			if (type instanceof DwordType) {
+				return checkRangeUnsigned(bigInteger, BigInteger.valueOf(0xffffffffL));
+			}
+			if (type instanceof LwordType) {
+				return checkRangeUnsigned(bigInteger, new BigInteger("ffffffffffffffff", 16)); //$NON-NLS-1$
 			}
 		}
 		return false;
