@@ -43,9 +43,9 @@ public class CheckableStructTree extends AbstractStructTree<CheckableStructTreeN
 				treeNode.check(true);
 			}
 
-			if ((memberVariable.getType() instanceof StructuredType)
+			if ((memberVariable.getType() instanceof final StructuredType structuredtype)
 					&& (memberVariable.getType() != GenericTypes.ANY_STRUCT)) {
-				buildTree(struct, (StructuredType) memberVariable.getType(), treeNode);
+				buildTree(struct, structuredtype, treeNode);
 			} else if (treeNode.isChecked()) {
 				CheckableStructTreeNode.greyParents(treeNode);
 			}

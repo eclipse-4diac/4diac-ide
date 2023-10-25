@@ -117,10 +117,10 @@ public final class FBNetworkHelper {
 
 	private static void checkForAdapterFBs(final FBNetwork dstNetwork, final InterfaceList destInterface) {
 		for (final FBNetworkElement elem : dstNetwork.getNetworkElements()) {
-			if (elem instanceof AdapterFB) {
+			if (elem instanceof final AdapterFB adapterfb) {
 				final AdapterDeclaration adapter = destInterface.getAdapter(elem.getName());
 				if (null != adapter) {
-					((AdapterFB) elem).setAdapterDecl(adapter);
+					adapterfb.setAdapterDecl(adapter);
 				}
 			}
 		}
