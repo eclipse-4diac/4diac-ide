@@ -18,6 +18,8 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 
+import javax.xml.stream.XMLStreamException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -31,6 +33,7 @@ import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
+import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -78,7 +81,11 @@ public class TypeFromTemplateCreator {
 				@Override
 				protected void execute(final IProgressMonitor monitor)
 						throws CoreException, InvocationTargetException, InterruptedException {
-					importer.loadElement();
+					try {
+						importer.loadElement();
+					} catch (IOException | XMLStreamException | TypeImportException e) {
+						throw new InvocationTargetException(e);
+					}
 					final LibraryElement type = importer.getElement();
 					type.setName(TypeEntry.getTypeNameFromFile(targetTypeFile));
 					PackageNameHelper.setPackageName(type, packageName);

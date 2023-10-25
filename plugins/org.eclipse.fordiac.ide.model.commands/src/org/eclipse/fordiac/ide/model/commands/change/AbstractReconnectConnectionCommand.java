@@ -98,17 +98,15 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	}
 
 	public void handleErrorConnection(final Connection con) {
-		if (con.hasError()) {
-			final IInterfaceElement newSource = getNewSource();
-			final IInterfaceElement newDestination = getNewDestination();
-			if (newSource instanceof ErrorMarkerInterface && !(newDestination instanceof ErrorMarkerInterface)
-					&& ((ErrorMarkerInterface) newSource).getRepairedEndpoint() != null) {
-				connectionCreateCmd.setSource(((ErrorMarkerInterface) newSource).getRepairedEndpoint());
-			}
-			if (!(newSource instanceof ErrorMarkerInterface) && newDestination instanceof ErrorMarkerInterface
-					&& ((ErrorMarkerInterface) newDestination).getRepairedEndpoint() != null) {
-				connectionCreateCmd.setDestination(((ErrorMarkerInterface) newDestination).getRepairedEndpoint());
-			}
+		final IInterfaceElement newSource = getNewSource();
+		final IInterfaceElement newDestination = getNewDestination();
+		if (newSource instanceof ErrorMarkerInterface && !(newDestination instanceof ErrorMarkerInterface)
+				&& ((ErrorMarkerInterface) newSource).getRepairedEndpoint() != null) {
+			connectionCreateCmd.setSource(((ErrorMarkerInterface) newSource).getRepairedEndpoint());
+		}
+		if (!(newSource instanceof ErrorMarkerInterface) && newDestination instanceof ErrorMarkerInterface
+				&& ((ErrorMarkerInterface) newDestination).getRepairedEndpoint() != null) {
+			connectionCreateCmd.setDestination(((ErrorMarkerInterface) newDestination).getRepairedEndpoint());
 		}
 	}
 

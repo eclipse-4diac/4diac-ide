@@ -22,14 +22,8 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -37,10 +31,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -50,19 +43,14 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -74,7 +62,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -91,7 +78,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /** The Class CommonElementImporter. */
 public abstract class CommonElementImporter {
@@ -109,7 +95,7 @@ public abstract class CommonElementImporter {
 		}
 
 		@Override
-		public void close() throws Exception {
+		public void close() throws IOException, XMLStreamException {
 			reader.close();
 			inputStream.close();
 		}
@@ -120,7 +106,6 @@ public abstract class CommonElementImporter {
 	private InputStream inputStream = null;
 	private final TypeLibrary typeLibrary;
 	private LibraryElement element;
-	protected final List<ErrorMarkerBuilder> errorMarkerBuilders;
 
 	protected IFile getFile() {
 		return file;
@@ -153,14 +138,12 @@ public abstract class CommonElementImporter {
 		Assert.isNotNull(inputStream);
 		this.inputStream = inputStream;
 		this.typeLibrary = typeLibrary;
-		errorMarkerBuilders = new ArrayList<>();
 	}
 
 	protected CommonElementImporter(final IFile file) {
 		Assert.isNotNull(file);
 		this.file = file;
 		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
-		errorMarkerBuilders = new ArrayList<>();
 	}
 
 	protected CommonElementImporter(final CommonElementImporter importer) {
@@ -168,48 +151,25 @@ public abstract class CommonElementImporter {
 		reader = importer.reader;
 		file = importer.file;
 		typeLibrary = importer.typeLibrary;
-		errorMarkerBuilders = importer.errorMarkerBuilders;
 	}
 
-	public void loadElement() {
+	public void loadElement() throws IOException, XMLStreamException, TypeImportException {
 		element = createRootModelElement();
 		try (ImporterStreams streams = createInputStreams(getInputStream())) {
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());
-			restorePersistedErrorMessages();
-		} catch (final Exception e) {
-			FordiacLogHelper.logWarning("Type Loading issue", e);//$NON-NLS-1$
-			createErrorMarker(e.getMessage());
-		} finally {
-			FordiacMarkerHelper.updateMarkers(file, errorMarkerBuilders);
 		}
 	}
 
-	protected InputStream getInputStream() throws Exception {
+	protected InputStream getInputStream() throws IOException {
 		if (inputStream != null) {
 			return inputStream;
 		}
-		return file.getContents();
-	}
-
-	protected void createErrorMarker(final String message) {
-		errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(message).setLineNumber(getLineNumber()));
-	}
-
-	protected void restorePersistedErrorMessages() {
-		FordiacMarkerHelper.findAllMarkers(file, element, FordiacErrorMarker.INITIAL_VALUE_MARKER,
-				CommonElementImporter::restorePersistedErrorMessage);
-		FordiacMarkerHelper.findAllMarkers(file, element, FordiacErrorMarker.TYPE_DECLARATION_MARKER,
-				CommonElementImporter::restorePersistedErrorMessage);
-	}
-
-	protected static void restorePersistedErrorMessage(final EObject target, final IMarker marker) {
-		if (target instanceof final ErrorMarkerRef errorMarkerRef
-				&& marker.getAttribute(IMarker.SEVERITY, 0) == IMarker.SEVERITY_ERROR) {
-			final String message = marker.getAttribute(IMarker.MESSAGE, null);
-			errorMarkerRef.setErrorMessage(Stream.of(errorMarkerRef.getErrorMessage(), message).filter(Objects::nonNull)
-					.filter(Predicate.not(String::isBlank)).collect(Collectors.joining(", "))); //$NON-NLS-1$
+		try {
+			return file.getContents();
+		} catch (final CoreException e) {
+			throw new IOException(e);
 		}
 	}
 
@@ -425,10 +385,6 @@ public abstract class CommonElementImporter {
 
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		final DataType dataType = typeName != null ? getDataTypeLibrary().getType(typeName) : ElementaryTypes.STRING;
-		if (dataType instanceof final ErrorMarkerDataType errorMarkerDataType) {
-			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMarkerDataType.getErrorMessage())
-					.setTarget(attribute).setFeature(LibraryElementPackage.eINSTANCE.getAttribute_Type()));
-		}
 		attribute.setType(dataType);
 
 		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
@@ -690,7 +646,8 @@ public abstract class CommonElementImporter {
 		});
 	}
 
-	public IInterfaceElement getInterfaceElement(final FBNetworkElement block, final String name, final Value val) {
+	public static IInterfaceElement getInterfaceElement(final FBNetworkElement block, final String name,
+			final Value val) {
 		IInterfaceElement ie = block.getInterfaceElement(name);
 		if (null == ie) {
 			ie = createParameterErrorMarker(block, name, val);
@@ -698,15 +655,11 @@ public abstract class CommonElementImporter {
 		return ie;
 	}
 
-	protected ErrorMarkerInterface createParameterErrorMarker(final FBNetworkElement block, final String name,
+	protected static ErrorMarkerInterface createParameterErrorMarker(final FBNetworkElement block, final String name,
 			final Value value) {
-		final String errorMessage = MessageFormat.format(Messages.CommonElementImporter_ERROR_MissingPinForParameter,
-				name, block.getName());
 		final ErrorMarkerInterface errorMarkerInterface = FordiacErrorMarkerInterfaceHelper
-				.createErrorMarkerInterface(IecTypes.GenericTypes.ANY, name, true, block.getInterface(), errorMessage);
+				.createErrorMarkerInterface(IecTypes.GenericTypes.ANY, name, true, block.getInterface());
 		errorMarkerInterface.setValue(value);
-		errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
-				.setTarget(errorMarkerInterface).setLineNumber(getLineNumber()));
 		return errorMarkerInterface;
 	}
 

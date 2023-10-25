@@ -14,15 +14,10 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.Objects;
 
-import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
@@ -55,15 +50,6 @@ public class ChangeAttributeTypeCommand extends AbstractChangeAttributeCommand {
 	public void doExecute() {
 		oldDataType = getAttribute().getType();
 		getAttribute().setType(dataType);
-		if (oldDataType instanceof ErrorMarkerDataType) {
-			getErrorMarkerUpdateCmds().add(FordiacMarkerCommandHelper
-					.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(getAttribute())));
-		}
-		if (dataType instanceof final ErrorMarkerDataType errorMarkerDataType) {
-			getErrorMarkerUpdateCmds().add(FordiacMarkerCommandHelper.newCreateMarkersCommand(ErrorMarkerBuilder
-					.createErrorMarkerBuilder(errorMarkerDataType.getErrorMessage()).setTarget(getAttribute())
-					.setFeature(LibraryElementPackage.eINSTANCE.getAttribute_Type())));
-		}
 	}
 
 	@Override

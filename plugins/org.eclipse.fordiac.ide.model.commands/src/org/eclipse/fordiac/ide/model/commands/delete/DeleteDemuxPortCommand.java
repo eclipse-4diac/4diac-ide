@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.commands.Command;
 
@@ -69,7 +69,7 @@ public class DeleteDemuxPortCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return (variable != null) && !(variable instanceof ErrorMarkerRef);
+		return (variable != null) && !(variable instanceof ErrorMarkerInterface);
 	}
 
 	@Override
