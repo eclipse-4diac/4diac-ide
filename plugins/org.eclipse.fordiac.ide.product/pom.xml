@@ -89,7 +89,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
+				<version>3.3.1</version>
 				<executions>
 					<execution>
 						<id>copy-resources</id>
@@ -120,7 +120,7 @@
 					<plugin>
 						<groupId>org.eclipse.cbi.maven.plugins</groupId>
 						<artifactId>eclipse-winsigner-plugin</artifactId>
-						<version>1.3.2</version>
+						<version>${eclipse.cbi.version}</version>
 						<executions>
 							<execution>
 								<id>sign</id>
@@ -129,10 +129,12 @@
 								</goals>
 								<phase>package</phase>
 								<configuration>
-									<signFiles>
-										<signFile>${project.build.directory}/products/org.eclipse.fordiac.ide.product/win32/win32/x86_64/4diac-ide/4diac-ide.exe</signFile>
-										<signFile>${project.build.directory}/products/org.eclipse.fordiac.ide.product/win32/win32/x86_64/4diac-ide/4diac-idec.exe</signFile>
-									</signFiles>
+              						<baseSearchDir>${project.build.directory}/products/org.eclipse.fordiac.ide.product/win32/win32/x86_64/4diac-ide</baseSearchDir>
+                  					<fileNames>
+                    					<fileName>4diac-ide.exe</fileName>
+                    					<fileName>4diac-idec.exe</fileName>
+    	              				</fileNames>
+	                				<timeoutMillis>120000</timeoutMillis> <!-- 2 min -->
 								</configuration>
 							</execution>
 						</executions>
@@ -141,7 +143,7 @@
 					<plugin>
 						<groupId>org.eclipse.cbi.maven.plugins</groupId>
 						<artifactId>eclipse-macsigner-plugin</artifactId>
-						<version>1.3.2</version>
+						<version>${eclipse.cbi.version}</version>
 						<executions>
 							<execution>
 								<id>sign</id>
@@ -150,10 +152,12 @@
 								</goals>
 								<phase>package</phase>
 								<configuration>
-									<signFiles>
-										<signFile>${project.build.directory}/products/org.eclipse.fordiac.ide.product/macosx/cocoa/x86_64/4diac-ide.app</signFile>
-										<signFile>${project.build.directory}/products/org.eclipse.fordiac.ide.product/macosx/cocoa/aarch64/4diac-ide.app</signFile>
-									</signFiles>
+				                  <baseSearchDir>${project.build.directory}/products/${project.artifactId}</baseSearchDir>
+				                  <fileNames>
+				                    <fileName>4diac-ide.app</fileName>
+				                  </fileNames>
+			    	              <timeoutMillis>300000</timeoutMillis> <!-- 5 min -->
+			        	          <entitlements>${project.build.directory}/../macos/product.entitlements</entitlements>
 								</configuration>
 							</execution>
 						</executions>
@@ -162,36 +166,37 @@
 					<plugin>
 						<groupId>org.eclipse.cbi.maven.plugins</groupId>
 						<artifactId>eclipse-dmg-packager</artifactId>
-						<version>1.3.2</version>
 						<executions>
 							<execution>
-								<phase>pre-integration-test</phase>
-								<id>sign_x86</id>
-								<goals>
-									<goal>package-dmg</goal>
-								</goals>
-								<configuration>
+                				<id>dmg-package-platform-x86_64</id>
+				                <goals>
+				                	<goal>package-dmg</goal>
+				                </goals>
+				                <phase>pre-integration-test</phase>
+				                <configuration>
+				                  	<serviceUrl>https://cbi.eclipse.org/macos/packager/dmg/create</serviceUrl>
 									<volumeName>4diac-ide</volumeName>
 									<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>
 									<source>${project.build.directory}/products/4diac-ide_${unqualifiedVersion}-macosx.cocoa.x86_64.tar.gz</source>
-									<dmgFilename>4diac-ide.dmg</dmgFilename>
-									<sign>true</sign>
-								</configuration>
-							</execution>
-							<execution>
-								<phase>pre-integration-test</phase>
-								<id>sign_aarch64</id>
-								<goals>
-									<goal>package-dmg</goal>
-								</goals>
-								<configuration>
+				                  	<sign>${eclipse-sign-dmg-property}</sign>
+					                <timeoutMillis>600000</timeoutMillis>
+				                </configuration>
+			              	</execution>
+						 	<execution>
+				                <phase>pre-integration-test</phase>
+				                <id>dmg-package-platform-aarch64</id>
+				                <goals>
+				                  <goal>package-dmg</goal>
+				                </goals>
+				                <configuration>
 									<volumeName>4diac-ide</volumeName>
 									<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>
+					                <serviceUrl>https://cbi.eclipse.org/macos/packager/dmg/create</serviceUrl>
 									<source>${project.build.directory}/products/4diac-ide_${unqualifiedVersion}-macosx.cocoa.aarch64.tar.gz</source>
-									<dmgFilename>4diac-ide.dmg</dmgFilename>
-									<sign>true</sign>
-								</configuration>
-							</execution>
+				                  	<sign>${eclipse-sign-dmg-property}</sign>
+				                  	<timeoutMillis>600000</timeoutMillis>
+				                </configuration>
+		              		</execution>
 						</executions>
 					</plugin>
 				</plugins>
