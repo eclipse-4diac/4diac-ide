@@ -30,6 +30,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
@@ -181,6 +183,7 @@ public final class DataTypeLibrary {
 						final AnyStringType type = (AnyStringType) DataFactory.eINSTANCE.create(plainType.eClass());
 						type.setName(name);
 						type.setMaxLength(maxLength);
+						encloseInResource(type);
 						return type;
 					});
 				}
@@ -198,8 +201,13 @@ public final class DataTypeLibrary {
 			final ErrorMarkerDataType type = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
 			type.setName(typeName);
 			type.setErrorMessage(message);
+			encloseInResource(type);
 			return type;
 		});
+	}
+
+	private static void encloseInResource(final DataType type) {
+		new ResourceImpl(URI.createFileURI(type.getName() + ".datalib.dtp")).getContents().add(type); //$NON-NLS-1$
 	}
 
 	public StructuredType getStructuredType(final String name) {
