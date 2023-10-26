@@ -67,7 +67,7 @@ public interface Attribute extends ITypedElement {
 	 * @return the value of the '<em>Type</em>' reference.
 	 * @see #setType(DataType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAttribute_Type()
-	 * @model transient="true"
+	 * @model
 	 * @generated
 	 */
 	DataType getType();

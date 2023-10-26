@@ -43,7 +43,7 @@ public interface AttributeDeclaration extends ITypedElement, LibraryElement {
 	 * @return the value of the '<em>Type</em>' containment reference.
 	 * @see #setType(AnyDerivedType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAttributeDeclaration_Type()
-	 * @model containment="true" resolveProxies="true" transient="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	AnyDerivedType getType();
