@@ -79,7 +79,7 @@ class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 	def checkUniquenessOfVariableNamesInAFunctionBlock(STVarDeclaration varDeclaration) {
 		val container = EcoreUtil2.getContainerOfType(varDeclaration, STAlgorithmSource)
 		val resource = container?.eResource
-		val libraryElement = (resource as STAlgorithmResource)?.libraryElement 
+		val libraryElement = (resource as STAlgorithmResource)?.internalLibraryElement 
 		if (libraryElement instanceof BaseFBType) {
 			val baseFBType = libraryElement
 			if (baseFBType.interfaceList.eventInputs.stream.anyMatch[it.name.equalsIgnoreCase(varDeclaration.name)]) {
@@ -159,7 +159,7 @@ class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 	def checkAlgorithmForInputEvent(STAlgorithmSource source) {
 		val resource = source.eResource
 		if (resource instanceof STAlgorithmResource) {
-			val libraryElement = resource.libraryElement
+			val libraryElement = resource.internalLibraryElement
 			if (libraryElement instanceof SimpleFBType) {
 				libraryElement.interfaceList.eventInputs.reject [ event |
 					libraryElement.algorithm.exists[alg|alg.name == event.name] || source.elements.filter(STAlgorithm).exists [ alg |
@@ -178,7 +178,7 @@ class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 	def checkUnusedAlgorithm(STAlgorithm algorithm) {
 		val resource = algorithm.eResource
 		if (resource instanceof STAlgorithmResource) {
-			val libraryElement = resource.libraryElement
+			val libraryElement = resource.internalLibraryElement
 			if (libraryElement instanceof SimpleFBType) {
 				if (!libraryElement.interfaceList.eventInputs.exists[name == algorithm.name]) {
 					warning(MessageFormat.format(Messages.STAlgorithmValidator_UnusedAlgorithm, algorithm.name),

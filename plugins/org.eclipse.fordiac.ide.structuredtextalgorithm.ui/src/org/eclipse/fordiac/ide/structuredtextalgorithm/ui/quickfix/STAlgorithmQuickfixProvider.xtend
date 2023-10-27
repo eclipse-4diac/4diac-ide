@@ -82,7 +82,7 @@ class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 			if (container instanceof STAlgorithmSource) {
 				val resource = container.eResource
 				if (resource instanceof STAlgorithmResource) {
-					val libraryElement = resource.libraryElement
+					val libraryElement = resource.internalLibraryElement
 					if (libraryElement instanceof SimpleFBType) {
 						container.elements.removeIf [ sourceElement |
 							sourceElement instanceof STAlgorithm && !libraryElement.interfaceList.eventInputs.exists [ event |
@@ -117,7 +117,7 @@ class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 			]
 
 			val resource = varContainer.eResource
-			val libraryElement = resource instanceof STAlgorithmResource ? resource.libraryElement : null // As we are in an Algorithm editor, we are always in a BaseFBType (Simple or Basic)
+			val libraryElement = resource instanceof STAlgorithmResource ? resource.internalLibraryElement : null // As we are in an Algorithm editor, we are always in a BaseFBType (Simple or Basic)
 			if (libraryElement instanceof BaseFBType) {
 				val iList = libraryElement.interfaceList
 				val fbVarCandidates = Iterables.concat(iList.inputVars, iList.outputVars, libraryElement.internalVars)
