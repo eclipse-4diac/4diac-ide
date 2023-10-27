@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
@@ -112,23 +111,13 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 	}
 
 	protected EList<? extends IInterfaceElement> getInterfaceListContainer() {
-		if (isInput) {
-			if (dataType instanceof EventType) {
-				return targetInterfaceList.getEventInputs();
-			}
-			if (dataType instanceof AdapterType) {
-				return targetInterfaceList.getSockets();
-			}
-			return targetInterfaceList.getInputVars();
-		}
-
 		if (dataType instanceof EventType) {
-			return targetInterfaceList.getEventOutputs();
+			return isInput ? targetInterfaceList.getEventInputs() : targetInterfaceList.getEventOutputs();
 		}
 		if (dataType instanceof AdapterType) {
-			return targetInterfaceList.getPlugs();
+			return isInput ? targetInterfaceList.getSockets() : targetInterfaceList.getPlugs();
 		}
-		return targetInterfaceList.getOutputVars();
+		return isInput ? targetInterfaceList.getInputVars() : targetInterfaceList.getOutputVars();
 	}
 
 	@Override
@@ -197,8 +186,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 	}
 
 	private void createAdapterFBCreateCommand() {
-		final EObject targetElement = targetInterfaceList.eContainer();
-		if (dataType instanceof AdapterType && targetElement instanceof final FBType fbType
+		if (dataType instanceof AdapterType && targetInterfaceList.eContainer() instanceof final FBType fbType
 				&& !(fbType instanceof SubAppType)) {
 			final int xyPos = 10;
 			adapterCreateCmd = new AdapterFBCreateCommand(xyPos, xyPos, (AdapterDeclaration) newInterfaceElement,

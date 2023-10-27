@@ -19,7 +19,7 @@
  *               - forwarding the getDragDracker request to the parent edit parts
  *                 as with the new interface bar this didn't happen automatically
  *   Daniel Lindhuber - instance comment
- *   Alois Zoitl - fixed layout of interface bars, cleaned cration code for these
+ *   Alois Zoitl - fixed layout of interface bars, cleaned creation code for these
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -248,14 +248,12 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	private void createCommentContainer(final IFigure mainFigure) {
 		commentContainer = new Figure();
 		final Border border = new SingleLineBorder() {
-
 			private final Insets insets = new Insets(5); // spacing
 
 			@Override
 			public Insets getInsets(final IFigure figure) {
 				return insets;
 			}
-
 		};
 		commentContainer.setBorder(border);
 		final ToolbarLayout layout = new ToolbarLayout();
@@ -394,7 +392,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 			container.remove(child);
 		} else if (childEditPart.getModel() instanceof VarDeclaration
 				&& child.getParent() == getLeftVarInOutInterfaceContainer()) {
-			// we loose information on var in out status with this check we know that we
+			// we lose information on var in out status with this check we know that we
 			// need to remove the figure from the var in out container
 			getLeftVarInOutInterfaceContainer().remove(child);
 		} else {
@@ -403,26 +401,37 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	}
 
 	protected Figure getChildVisualContainer(final InterfaceEditPart childEditPart) {
-		if (childEditPart.getModel().isIsInput()) {
-			if (childEditPart.isEvent()) {
-				return getLeftEventInterfaceContainer();
-			}
-			if (childEditPart.isAdapter()) {
-				return (showAdapterPorts()) ? getLeftAdapterInterfaceContainer() : getLeftInterfaceContainer();
-			}
-			if (childEditPart.getModel() instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
-				return getLeftVarInOutInterfaceContainer();
-			}
-			return getLeftVarInterfaceContainer();
-		}
 		if (childEditPart.isEvent()) {
-			return getRightEventInterfaceContainer();
+			return getEventVisualContainer(childEditPart);
 		}
 		if (childEditPart.isAdapter()) {
-			return (showAdapterPorts()) ? getRightAdapterInterfaceContainer() : getRightInterfaceContainer();
+			return getAdapterVisualContainer(childEditPart);
 		}
-		return getRightVarInterfaceContainer();
+		return getVarVisualContainer(childEditPart);
+	}
 
+	private Figure getVarVisualContainer(final InterfaceEditPart childEditPart) {
+		if (childEditPart.getModel() instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
+			return getLeftVarInOutInterfaceContainer();
+		}
+		return childEditPart.getModel().isIsInput() ? getLeftVarInterfaceContainer() : getRightVarInterfaceContainer();
+	}
+
+	private Figure getAdapterVisualContainer(final InterfaceEditPart childEditPart) {
+		return childEditPart.getModel().isIsInput() ? getLeftAdapterVisualContainer() : getRighAdapterVisualContainer();
+	}
+
+	private Figure getEventVisualContainer(final InterfaceEditPart childEditPart) {
+		return childEditPart.getModel().isIsInput() ? getLeftEventInterfaceContainer()
+				: getRightEventInterfaceContainer();
+	}
+
+	private Figure getLeftAdapterVisualContainer() {
+		return (showAdapterPorts()) ? getLeftAdapterInterfaceContainer() : getLeftInterfaceContainer();
+	}
+
+	private Figure getRighAdapterVisualContainer() {
+		return (showAdapterPorts()) ? getRightAdapterInterfaceContainer() : getRightInterfaceContainer();
 	}
 
 	public void addChildVisualInterfaceElement(final InterfaceEditPart childEditPart) {
@@ -437,26 +446,18 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	private int getIEIndex(final InterfaceEditPart childEditPart) {
 		final var model = childEditPart.getModel();
 		final InterfaceList ifList = getInterfaceList();
-		int index = 0;
-		if (model.isIsInput()) { // use model isInput! because EditPart.isInput treats inputs as
-			// outputs for visual appearance
-			if (childEditPart.isEvent()) {
-				index = ifList.getEventInputs().indexOf(model);
-			} else if (childEditPart.isAdapter()) {
-				index = ifList.getSockets().indexOf(model);
-			} else if (model instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
-				index = ifList.getInOutVars().indexOf(varDecl);
-			} else {
-				index = ifList.getInputVars().indexOf(model);
-			}
-		} else if (childEditPart.isEvent()) {
-			index = ifList.getEventOutputs().indexOf(model);
-		} else if (childEditPart.isAdapter()) {
-			index = ifList.getPlugs().indexOf(model);
-		} else {
-			index = ifList.getOutputVars().indexOf(model);
+		// use model isInput! because EditPart.isInput treats inputs as
+		// outputs for visual appearance
+		if (childEditPart.isEvent()) {
+			return model.isIsInput() ? ifList.getEventInputs().indexOf(model) : ifList.getEventOutputs().indexOf(model);
 		}
-		return index;
+		if (childEditPart.isAdapter()) {
+			return model.isIsInput() ? ifList.getSockets().indexOf(model) : ifList.getPlugs().indexOf(model);
+		}
+		if (model instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
+			return ifList.getInOutVars().indexOf(varDecl);
+		}
+		return model.isIsInput() ? ifList.getInputVars().indexOf(model) : ifList.getOutputVars().indexOf(model);
 	}
 
 	private static IFigure createSideBarFigure(final InterfaceEditPart ep) {
@@ -475,11 +476,9 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 
 	private static int getYPositionFromAttribute(final IInterfaceElement ie) {
 		final Attribute attribute = ie.getAttribute(FordiacKeywords.INTERFACE_Y_POSITION);
-
 		if (attribute != null) {
 			return Integer.parseInt(attribute.getValue());
 		}
-
 		return 0;
 	}
 
@@ -492,7 +491,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	@Override
 	public void performRequest(final Request request) {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
-		// REQ_OPEN -> doubleclick
+		// REQ_OPEN -> double click
 
 		if (((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 				|| (request.getType() == RequestConstants.REQ_OPEN))
@@ -511,16 +510,14 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	@Override
 	public void refresh() {
 		super.refresh();
-		for (final Object ep : getChildren()) {
-			if (ep instanceof final IContainerEditPart container) {
-				final GraphicalEditPart contentEP = container.getContentEP();
-				container.refresh();
-				// unfolded subapps and groups do have a content network
-				if (contentEP != null) {
-					contentEP.refresh();
-				}
-			}
-		}
+		getChildren().stream().filter(IContainerEditPart.class::isInstance).map(IContainerEditPart.class::cast)
+				.forEach(container -> {
+					container.refresh();
+					final GraphicalEditPart contentEP = container.getContentEP();
+					if (contentEP != null) {
+						contentEP.refresh();
+					}
+				});
 	}
 
 }
