@@ -583,6 +583,16 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	@Override
+	public boolean validateVarInOutConnectionsFormsNoLoop(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateVarInOutConnectionsFormsNoLoop(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean hasError() {
 		return getErrorMessage() != null && !getErrorMessage().isBlank();
 	}

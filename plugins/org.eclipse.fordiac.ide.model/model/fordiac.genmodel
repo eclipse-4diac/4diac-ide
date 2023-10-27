@@ -221,6 +221,11 @@
         <genParameters ecoreParameter="lib.ecore#//Connection/validateVarInOutsAreNotConnectedToOuts/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//Connection/validateVarInOutsAreNotConnectedToOuts/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//Connection/validateVarInOutConnectionsFormsNoLoop"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateVarInOutConnectionsFormsNoLoop(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//Connection/validateVarInOutConnectionsFormsNoLoop/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//Connection/validateVarInOutConnectionsFormsNoLoop/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ConnectionRoutingData">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx1"/>

@@ -14,7 +14,9 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -114,23 +116,60 @@ public class ConnectionAnnotations {
 		return true;
 	}
 
+	public static boolean validateVarInOutConnectionsFormsNoLoop(final Connection connection,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if ((connection.getDestination() instanceof final VarDeclaration connectionDestinationVar
+				&& connectionDestinationVar.isInOutVar()) && hasVarInOutConnectionALoop(connection)) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONNECTION__VALIDATE_VAR_IN_OUT_CONNECTIONS_FORMS_NO_LOOP,
+						Messages.ConnectionValidator_VarInOutConnectionsIsALoop,
+						FordiacMarkerHelper.getDiagnosticData(connection)));
+			}
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Get the VarDeclaration of the first FB in a chain of VAR_IN_OUT connections
 	 *
-	 * @param connection a connection to start from
+	 * @param connection a VAR_IN_OUT connection to start from
 	 * @return The source VarDeclaration
 	 */
 	private static VarDeclaration getVarInOutSourceVarDeclaration(@NonNull final Connection connection) {
 		if (connection.getSource() instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()) {
 			VarDeclaration sourcePin = sourceVar;
 			VarDeclaration inputVarInOut = sourcePin.getInOutVarOpposite();
+			final Set<VarDeclaration> visitedPins = new HashSet<>();
+			visitedPins.add(sourcePin);
 			while (!inputVarInOut.getInputConnections().isEmpty()) {
 				sourcePin = (VarDeclaration) inputVarInOut.getInputConnections().get(0).getSource();
 				inputVarInOut = sourcePin.getInOutVarOpposite();
+				if (visitedPins.add(sourcePin)) {
+					return null; // We revisited an already visited pin
+				}
 			}
 			return inputVarInOut;
 		}
 		return null;
+	}
+
+	private static boolean hasVarInOutConnectionALoop(@NonNull final Connection connection) {
+		if (connection.getSource() instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()) {
+			VarDeclaration sourcePin = sourceVar;
+			VarDeclaration inputVarInOut = sourcePin.getInOutVarOpposite();
+			final Set<VarDeclaration> visitedPins = new HashSet<>();
+			visitedPins.add(sourcePin);
+			while (!inputVarInOut.getInputConnections().isEmpty()) {
+				sourcePin = (VarDeclaration) inputVarInOut.getInputConnections().get(0).getSource();
+				inputVarInOut = sourcePin.getInOutVarOpposite();
+				if (visitedPins.add(sourcePin)) {
+					return true; // We revisited an already visited pin
+				}
+			}
+		}
+		return false;
 	}
 
 	private ConnectionAnnotations() {

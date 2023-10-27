@@ -206,12 +206,20 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final int CONNECTION__VALIDATE_VAR_IN_OUTS_ARE_NOT_CONNECTED_TO_OUTS = 5;
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Connections Forms No Loop' of 'Connection'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int CONNECTION__VALIDATE_VAR_IN_OUT_CONNECTIONS_FORMS_NO_LOOP = 6;
+
+	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'IInterface Element'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int IINTERFACE_ELEMENT__VALIDATE_NAME = 6;
+	public static final int IINTERFACE_ELEMENT__VALIDATE_NAME = 7;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'INamed Element'.
@@ -219,7 +227,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int INAMED_ELEMENT__VALIDATE_NAME = 7;
+	public static final int INAMED_ELEMENT__VALIDATE_NAME = 8;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Source Type Is Well Defined' of 'Var Declaration'.
@@ -227,7 +235,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 8;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 9;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Is Withed' of 'Var Declaration'.
@@ -235,7 +243,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 9;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 10;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -243,7 +251,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 9;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 10;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -528,6 +536,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutArraySizesAreCompatible(adapterConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutStringLengthsMatch(adapterConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutsAreNotConnectedToOuts(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateVarInOutConnectionsFormsNoLoop(adapterConnection, diagnostics, context);
 		return result;
 	}
 
@@ -937,6 +946,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutArraySizesAreCompatible(connection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutStringLengthsMatch(connection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutsAreNotConnectedToOuts(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateVarInOutConnectionsFormsNoLoop(connection, diagnostics, context);
 		return result;
 	}
 
@@ -981,6 +991,16 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
+	 * Validates the validateVarInOutConnectionsFormsNoLoop constraint of '<em>Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConnection_validateVarInOutConnectionsFormsNoLoop(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return connection.validateVarInOutConnectionsFormsNoLoop(diagnostics, context);
+	}
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1008,6 +1028,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutArraySizesAreCompatible(dataConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutStringLengthsMatch(dataConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutsAreNotConnectedToOuts(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateVarInOutConnectionsFormsNoLoop(dataConnection, diagnostics, context);
 		return result;
 	}
 
@@ -1218,6 +1239,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutArraySizesAreCompatible(eventConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutStringLengthsMatch(eventConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutsAreNotConnectedToOuts(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateVarInOutConnectionsFormsNoLoop(eventConnection, diagnostics, context);
 		return result;
 	}
 

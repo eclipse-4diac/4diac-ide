@@ -287,6 +287,7 @@ public final class Messages extends NLS {
 	public static String ConnectionValidator_VarInOutArraySizeMismatch;
 	public static String ConnectionValidator_VarInOutStringSizeMismatch;
 	public static String ConnectionValidator_OutputsCannotBeConnectedToVarInOuts;
+	public static String ConnectionValidator_VarInOutConnectionsIsALoop;
 
 	static {
 		// initialize resource bundle
