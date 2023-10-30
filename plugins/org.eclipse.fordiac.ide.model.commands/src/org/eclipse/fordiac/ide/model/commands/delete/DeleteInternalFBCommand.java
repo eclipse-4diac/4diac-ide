@@ -10,6 +10,8 @@
  * Contributors:
  *   Martin Melik Merkumians
  *     - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi
+ *     - fixed command to search for correct object and save it for later redo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
@@ -24,12 +26,15 @@ public class DeleteInternalFBCommand extends Command {
 	private final BaseFBType baseFbtype;
 
 	/** The variable that is deleted */
-	private final FB fbToDelete;
+	private FB fbToDelete;
 
 	/** The old index. */
 	private int oldIndex;
 
 	public DeleteInternalFBCommand(final BaseFBType baseFbtype, final FB fb) {
+		if (fb == null) {
+			throw new IllegalArgumentException("fb can't be null"); //$NON-NLS-1$
+		}
 		this.baseFbtype = baseFbtype;
 		this.fbToDelete = fb;
 	}
@@ -47,7 +52,7 @@ public class DeleteInternalFBCommand extends Command {
 
 	@Override
 	public void redo() {
-		getInteralFBList().remove(oldIndex);
+		fbToDelete = getInteralFBList().remove(oldIndex);
 	}
 
 	@Override
@@ -57,7 +62,7 @@ public class DeleteInternalFBCommand extends Command {
 
 	private int getIndexOfFBtoDelete() {
 		return getInteralFBList().indexOf(getInteralFBList().stream()
-				.filter(fb -> fb.getTypeEntry().equals(fbToDelete.getTypeEntry())).findFirst().orElse(fbToDelete));
+				.filter(fb -> fb.getName().equals(fbToDelete.getName())).findFirst().orElse(fbToDelete));
 	}
 
 }
