@@ -46,7 +46,7 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		«ENDIF»
 		
 		CStringDictionary::TStringId «className»::getStructTypeNameID() const {
-		  return «type.name.FORTEStringId»;
+		  return «type.generateTypeSpec»;
 		}
 		
 		«generateSetValue»
