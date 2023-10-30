@@ -27,6 +27,10 @@ public final class TypeLibraryTags {
 
 	public static final String ADAPTER_TYPE_FILE_ENDING_WITH_DOT = "." + ADAPTER_TYPE_FILE_ENDING; //$NON-NLS-1$
 
+	public static final String ATTRIBUTE_TYPE_FILE_ENDING = "ATP"; //$NON-NLS-1$
+
+	public static final String ATTRIBUTE_TYPE_FILE_ENDING_WITH_DOT = "." + ATTRIBUTE_TYPE_FILE_ENDING; //$NON-NLS-1$
+
 	public static final String DEVICE_TYPE_FILE_ENDING = "DEV"; //$NON-NLS-1$
 
 	public static final String DEVICE_TYPE_FILE_ENDING_WITH_DOT = "." + DEVICE_TYPE_FILE_ENDING; //$NON-NLS-1$

@@ -40,6 +40,11 @@
    </extension>   
    <extension point="org.eclipse.fordiac.ide.model.TypeEntryCreator">
       <TypeEntryCreator
+            class="org.eclipse.fordiac.ide.model.typelibrary.impl.CreateAttributeTypeEntry">
+      </TypeEntryCreator>
+   </extension> 
+   <extension point="org.eclipse.fordiac.ide.model.TypeEntryCreator">
+      <TypeEntryCreator
             class="org.eclipse.fordiac.ide.model.typelibrary.impl.CreateDeviceTypeEntry">
       </TypeEntryCreator>
    </extension>   
