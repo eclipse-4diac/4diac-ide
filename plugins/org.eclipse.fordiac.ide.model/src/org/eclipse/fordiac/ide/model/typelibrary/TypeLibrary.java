@@ -21,6 +21,7 @@
  *  Martin Jobst - migrate system handling to typelib
  *               - add function FB type
  *               - add global constants
+ *  Sebastian Hollersbacher - add attribute
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -67,6 +68,7 @@ public final class TypeLibrary {
 	private Buildpath buildpath;
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private final Map<String, AdapterTypeEntry> adapterTypes = new ConcurrentHashMap<>();
+	private final Map<String, AttributeTypeEntry> attributeTypes = new ConcurrentHashMap<>();
 	private final Map<String, DeviceTypeEntry> deviceTypes = new ConcurrentHashMap<>();
 	private final Map<String, FBTypeEntry> fbTypes = new ConcurrentHashMap<>();
 	private final Map<String, ResourceTypeEntry> resourceTypes = new ConcurrentHashMap<>();
@@ -86,6 +88,10 @@ public final class TypeLibrary {
 		return getAdapterTypes().values().stream()
 				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getFullTypeName(), o2.getFullTypeName()))
 				.toList();
+	}
+
+	public Map<String, AttributeTypeEntry> getAttributeTypes() {
+		return attributeTypes;
 	}
 
 	public Map<String, DeviceTypeEntry> getDeviceTypes() {
@@ -129,6 +135,10 @@ public final class TypeLibrary {
 		return getAdapterTypes().get(typeName);
 	}
 
+	public AttributeTypeEntry getAttributeTypeEntry(final String typeName) {
+		return getAttributeTypes().get(typeName);
+	}
+
 	public DeviceTypeEntry getDeviceTypeEntry(final String typeName) {
 		return getDeviceTypes().get(typeName);
 	}
@@ -168,6 +178,7 @@ public final class TypeLibrary {
 
 	public void reload() {
 		getAdapterTypes().clear();
+		getAttributeTypes().clear();
 		getDeviceTypes().clear();
 		getFbTypes().clear();
 		getResourceTypes().clear();
@@ -317,6 +328,7 @@ public final class TypeLibrary {
 
 	private void checkDeletions() {
 		checkDeletionsForTypeGroup(getAdapterTypes().values());
+		checkDeletionsForTypeGroup(getAttributeTypes().values());
 		checkDeletionsForTypeGroup(getDeviceTypes().values());
 		checkDeletionsForTypeGroup(getFbTypes().values());
 		checkDeletionsForTypeGroup(getResourceTypes().values());
@@ -391,6 +403,9 @@ public final class TypeLibrary {
 		if (entry instanceof final AdapterTypeEntry adpEntry) {
 			return getAdapterTypes().putIfAbsent(entry.getFullTypeName(), adpEntry) == null;
 		}
+		if (entry instanceof final AttributeTypeEntry atpEntry) {
+			return getAttributeTypes().putIfAbsent(entry.getFullTypeName(), atpEntry) == null;
+		}
 		if (entry instanceof final DeviceTypeEntry devEntry) {
 			return getDeviceTypes().putIfAbsent(entry.getFullTypeName(), devEntry) == null;
 		}
@@ -419,6 +434,8 @@ public final class TypeLibrary {
 	private void removeBlockTypeEntry(final TypeEntry entry) {
 		if (entry instanceof AdapterTypeEntry) {
 			getAdapterTypes().remove(entry.getFullTypeName(), entry);
+		} else if (entry instanceof AttributeTypeEntry) {
+			getAttributeTypes().remove(entry.getFullTypeName(), entry);
 		} else if (entry instanceof DeviceTypeEntry) {
 			getDeviceTypes().remove(entry.getFullTypeName(), entry);
 		} else if (entry instanceof FBTypeEntry) {
