@@ -76,7 +76,6 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AttributeDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AttributeDeclaration/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AttributeDeclaration/initialValue"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//BaseFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalVars"/>

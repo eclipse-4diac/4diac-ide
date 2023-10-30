@@ -173,7 +173,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				AttributeDeclaration attributeDeclaration = (AttributeDeclaration)theEObject;
 				T result = caseAttributeDeclaration(attributeDeclaration);
 				if (result == null) result = caseITypedElement(attributeDeclaration);
+				if (result == null) result = caseLibraryElement(attributeDeclaration);
 				if (result == null) result = caseINamedElement(attributeDeclaration);
+				if (result == null) result = caseConfigurableObject(attributeDeclaration);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

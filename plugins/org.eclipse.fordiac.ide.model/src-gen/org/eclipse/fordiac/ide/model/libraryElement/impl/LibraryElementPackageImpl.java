@@ -1148,16 +1148,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EAttribute getAttributeDeclaration_InitialValue() {
-		return (EAttribute)attributeDeclarationEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getBaseFBType() {
 		return baseFBTypeEClass;
 	}
@@ -4033,7 +4023,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		attributeDeclarationEClass = createEClass(ATTRIBUTE_DECLARATION);
 		createEReference(attributeDeclarationEClass, ATTRIBUTE_DECLARATION__TYPE);
-		createEAttribute(attributeDeclarationEClass, ATTRIBUTE_DECLARATION__INITIAL_VALUE);
 
 		baseFBTypeEClass = createEClass(BASE_FB_TYPE);
 		createEReference(baseFBTypeEClass, BASE_FB_TYPE__INTERNAL_VARS);
@@ -4457,6 +4446,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		arraySizeEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		attributeEClass.getESuperTypes().add(this.getITypedElement());
 		attributeDeclarationEClass.getESuperTypes().add(this.getITypedElement());
+		attributeDeclarationEClass.getESuperTypes().add(this.getLibraryElement());
 		baseFBTypeEClass.getESuperTypes().add(this.getFBType());
 		basicFBTypeEClass.getESuperTypes().add(this.getBaseFBType());
 		automationSystemEClass.getESuperTypes().add(this.getLibraryElement());
@@ -4607,8 +4597,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEAttribute(getAttribute_Value(), theXMLTypePackage.getString(), "value", null, 1, 1, Attribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(attributeDeclarationEClass, AttributeDeclaration.class, "AttributeDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getAttributeDeclaration_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, AttributeDeclaration.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getAttributeDeclaration_InitialValue(), theXMLTypePackage.getString(), "initialValue", null, 0, 1, AttributeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getAttributeDeclaration_Type(), theDataPackage.getAnyDerivedType(), null, "type", null, 0, 1, AttributeDeclaration.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(baseFBTypeEClass, BaseFBType.class, "BaseFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getBaseFBType_InternalVars(), this.getVarDeclaration(), null, "internalVars", null, 0, -1, BaseFBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

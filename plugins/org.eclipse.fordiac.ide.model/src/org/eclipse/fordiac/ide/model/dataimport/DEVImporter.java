@@ -26,7 +26,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -99,9 +98,6 @@ public class DEVImporter extends TypeImporter {
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseDeviceTypeAttribute();
 				break;
-			case LibraryElementTags.ATTRIBUTE_DECLARATION_ELEMENT:
-				parseDeviceTypeAttributeDeclaration();
-				break;
 			default:
 				return false;
 			}
@@ -147,16 +143,6 @@ public class DEVImporter extends TypeImporter {
 
 		return references;
 
-	}
-
-	private void parseDeviceTypeAttributeDeclaration() {
-		final AttributeDeclaration attributeDeclaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
-		attributeDeclaration.setName(getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE));
-		attributeDeclaration.setComment(getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE));
-		attributeDeclaration.setInitialValue(getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE));
-		attributeDeclaration
-				.setType(getDataTypeLibrary().getType(getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE)));
-		getElement().getAttributeDeclarations().add(attributeDeclaration);
 	}
 
 	private void parseDeviceTypeAttribute() {
