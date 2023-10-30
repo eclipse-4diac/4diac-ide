@@ -169,17 +169,17 @@
 						<version>${eclipse.cbi.version}</version>
 						<executions>
 							<execution>
+				                <phase>pre-integration-test</phase>
                 				<id>dmg-package-platform-x86_64</id>
 				                <goals>
 				                	<goal>package-dmg</goal>
 				                </goals>
-				                <phase>pre-integration-test</phase>
 				                <configuration>
 									<volumeName>4diac-ide</volumeName>
-									<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>
+									<!--<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>-->
 				                  	<serviceUrl>https://cbi.eclipse.org/macos/packager/dmg/create</serviceUrl>
 									<source>${project.build.directory}/products/4diac-ide_${unqualifiedVersion}-macosx.cocoa.x86_64.tar.gz</source>
-				                  	<sign>${eclipse-sign-dmg-property}</sign>
+				                  	<sign>true</sign>
 					                <timeoutMillis>600000</timeoutMillis>
 				                </configuration>
 			              	</execution>
@@ -191,10 +191,10 @@
 				                </goals>
 				                <configuration>
 									<volumeName>4diac-ide</volumeName>
-									<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>
+									<!--<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>-->
 					                <serviceUrl>https://cbi.eclipse.org/macos/packager/dmg/create</serviceUrl>
 									<source>${project.build.directory}/products/4diac-ide_${unqualifiedVersion}-macosx.cocoa.aarch64.tar.gz</source>
-				                  	<sign>${eclipse-sign-dmg-property}</sign>
+				                  	<sign>true</sign>
 				                  	<timeoutMillis>600000</timeoutMillis>
 				                </configuration>
 		              		</execution>
