@@ -166,6 +166,7 @@
 					<plugin>
 						<groupId>org.eclipse.cbi.maven.plugins</groupId>
 						<artifactId>eclipse-dmg-packager</artifactId>
+						<version>${eclipse.cbi.version}</version>
 						<executions>
 							<execution>
                 				<id>dmg-package-platform-x86_64</id>
@@ -174,9 +175,9 @@
 				                </goals>
 				                <phase>pre-integration-test</phase>
 				                <configuration>
-				                  	<serviceUrl>https://cbi.eclipse.org/macos/packager/dmg/create</serviceUrl>
 									<volumeName>4diac-ide</volumeName>
 									<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>
+				                  	<serviceUrl>https://cbi.eclipse.org/macos/packager/dmg/create</serviceUrl>
 									<source>${project.build.directory}/products/4diac-ide_${unqualifiedVersion}-macosx.cocoa.x86_64.tar.gz</source>
 				                  	<sign>${eclipse-sign-dmg-property}</sign>
 					                <timeoutMillis>600000</timeoutMillis>
