@@ -92,7 +92,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 	public static boolean hasOpenEditor(final EObject modelObj) {
 		final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(modelObj));
 		if (rootContainer instanceof final LibraryElement elem) {
-			editorNames.contains(elem.getName());
+			return editorNames.contains(elem.getName());
 		}
 		return true;
 	}
