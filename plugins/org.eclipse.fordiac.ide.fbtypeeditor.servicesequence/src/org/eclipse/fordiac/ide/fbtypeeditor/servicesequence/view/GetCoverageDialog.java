@@ -13,8 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.fb.interpreter.api.CoverageCalculator;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
@@ -31,11 +31,11 @@ import org.eclipse.swt.widgets.Shell;
 
 public class GetCoverageDialog extends MessageDialog {
 
-	HashMap<String, Integer> visitedStates;
-	HashMap<ArrayList<String>, Integer> visitedPaths;
+	Map<String, Integer> visitedStates;
+	Map<List<String>, Integer> visitedPaths;
 
-	public GetCoverageDialog(final Shell parentShell, final HashMap<String, Integer> visitedStates,
-			final HashMap<ArrayList<String>, Integer> visitedPaths) {
+	public GetCoverageDialog(final Shell parentShell, final Map<String, Integer> visitedStates,
+			final Map<List<String>, Integer> visitedPaths) {
 		super(parentShell, Messages.Coverage_NAME, null, "Shows the Coverage of the given Tests:", //$NON-NLS-1$
 				MessageDialog.INFORMATION, 0, "OK"); //$NON-NLS-1$
 		this.visitedStates = visitedStates;

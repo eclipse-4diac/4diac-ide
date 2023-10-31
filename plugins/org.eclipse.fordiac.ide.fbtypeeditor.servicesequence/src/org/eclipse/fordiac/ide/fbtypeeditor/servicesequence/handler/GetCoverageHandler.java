@@ -13,9 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -46,8 +46,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class GetCoverageHandler extends AbstractHandler {
-	HashMap<String, Integer> visitedStates = new HashMap<>();
-	HashMap<ArrayList<String>, Integer> visitedPaths = new HashMap<>();
+	Map<String, Integer> visitedStates = new HashMap<>();
+	Map<List<String>, Integer> visitedPaths = new HashMap<>();
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {

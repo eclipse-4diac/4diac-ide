@@ -14,9 +14,8 @@
 
 package org.eclipse.fordiac.ide.fb.interpreter.api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -35,7 +34,7 @@ public class CoverageCalculator {
 		return -1;
 	}
 
-	public static float calculateNodeCoverageOfSuiteBy(final HashMap<String, Integer> visitedStates) {
+	public static float calculateNodeCoverageOfSuiteBy(final Map<String, Integer> visitedStates) {
 
 		final Integer allPossibleStates = visitedStates.size();
 
@@ -44,7 +43,7 @@ public class CoverageCalculator {
 		return visitedStatesNumber / (float) allPossibleStates;
 	}
 
-	public static float calculatePathCoverageOfSuiteBy(final HashMap<ArrayList<String>, Integer> visitedPaths) {
+	public static float calculatePathCoverageOfSuiteBy(final Map<List<String>, Integer> visitedPaths) {
 
 		final Integer allPossiblePaths = visitedPaths.size();
 
