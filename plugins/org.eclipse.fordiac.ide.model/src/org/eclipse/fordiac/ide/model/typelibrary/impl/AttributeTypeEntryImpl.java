@@ -13,6 +13,8 @@
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AttributeTypeExporter;
+import org.eclipse.fordiac.ide.model.dataimport.AttributeTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -53,12 +55,11 @@ public class AttributeTypeEntryImpl extends AbstractTypeEntryImpl implements Att
 
 	@Override
 	protected CommonElementImporter getImporter() {
-		return null; // TODO add Importer, new AttributeTypeImporter(getFile());
+		return new AttributeTypeImporter(getFile());
 	}
 
 	@Override
 	protected AbstractTypeExporter getExporter() {
-		return null; // TODO add Exporter, new AttributeTypeExporter(getTypeEditable());
+		return new AttributeTypeExporter(getTypeEditable());
 	}
-
 }

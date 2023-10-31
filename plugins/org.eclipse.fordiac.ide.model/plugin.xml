@@ -117,6 +117,10 @@
 		</parser>
 		<parser
 			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="atp">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
 			type="sub">
 		</parser>
 		<parser
@@ -150,6 +154,10 @@
 		<parser
 			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
 			type="ADP">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="ATP">
 		</parser>
 		<parser
 			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"

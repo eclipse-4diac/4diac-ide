@@ -37,6 +37,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
+import org.eclipse.fordiac.ide.model.dataimport.AttributeTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
@@ -121,6 +122,7 @@ public class FordiacTypeResource extends ResourceImpl {
 		case TypeLibraryTags.FB_TYPE_FILE_ENDING -> new FBTImporter(inputStream, typeLib);
 		case TypeLibraryTags.FC_TYPE_FILE_ENDING -> new FCTImporter(inputStream, typeLib);
 		case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING -> new ADPImporter(inputStream, typeLib);
+		case TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING -> new AttributeTypeImporter(inputStream, typeLib);
 		case TypeLibraryTags.DATA_TYPE_FILE_ENDING -> new DataTypeImporter(inputStream, typeLib);
 		case TypeLibraryTags.DEVICE_TYPE_FILE_ENDING -> new DEVImporter(inputStream, typeLib);
 		case TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING -> new RESImporter(inputStream, typeLib);
