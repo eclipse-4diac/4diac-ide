@@ -136,16 +136,10 @@ public class EccTraceHelper {
 	}
 
 	public List<ECState> getAllPossibleEndStates() {
-		final List<ECState> allPossibleStates = getAllPossibleStates();
-		for (final ECState state : allPossibleStates) {
-			for (final ECTransition trans : state.getOutTransitions()) {
-				if (trans.getConditionEvent() == null && trans.getConditionExpression().equals("1")) {
-					allPossibleStates.remove(state);
-					break;
-				}
-			}
-		}
-		return allPossibleStates;
+		final var endStates = getAllPossibleStates();
+		endStates.removeIf(state -> state.getOutTransitions().stream()
+				.anyMatch(trans -> trans.getConditionEvent() == null && "1".equals(trans.getConditionExpression()))); //$NON-NLS-1$
+		return endStates;
 	}
 
 	public List<ArrayList<String>> getAllPossiblePaths() {
