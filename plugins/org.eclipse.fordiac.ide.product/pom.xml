@@ -176,7 +176,6 @@
 				                </goals>
 				                <configuration>
 									<volumeName>4diac-ide</volumeName>
-									<!--<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>-->
 				                  	<serviceUrl>https://cbi.eclipse.org/macos/packager/dmg/create</serviceUrl>
 									<source>${project.build.directory}/products/4diac-ide_${unqualifiedVersion}-macosx.cocoa.x86_64.tar.gz</source>
 				                  	<sign>true</sign>
@@ -191,7 +190,6 @@
 				                </goals>
 				                <configuration>
 									<volumeName>4diac-ide</volumeName>
-									<!--<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>-->
 					                <serviceUrl>https://cbi.eclipse.org/macos/packager/dmg/create</serviceUrl>
 									<source>${project.build.directory}/products/4diac-ide_${unqualifiedVersion}-macosx.cocoa.aarch64.tar.gz</source>
 				                  	<sign>true</sign>
