@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
@@ -30,9 +31,9 @@ public class FBNElementSelectionPolicy extends SelectionEditPolicy {
 
 	@Override
 	protected void hideSelection() {
-		for (Object object : getHost().getChildren()) {
-			if (object instanceof InterfaceEditPart) {
-				((InterfaceEditPart) object).setInOutConnectionsWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
+		for (final EditPart object : getHost().getChildren()) {
+			if (object instanceof final InterfaceEditPart iep) {
+				iep.setInOutConnectionsWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 
 			}
 		}
@@ -40,10 +41,9 @@ public class FBNElementSelectionPolicy extends SelectionEditPolicy {
 
 	@Override
 	protected void showSelection() {
-		for (Object object : getHost().getChildren()) {
-			if (object instanceof InterfaceEditPart) {
-				((InterfaceEditPart) object)
-						.setInOutConnectionsWidth(ConnectionPreferenceValues.HIGHLIGTHED_LINE_WIDTH);
+		for (final EditPart object : getHost().getChildren()) {
+			if (object instanceof final InterfaceEditPart iep) {
+				iep.setInOutConnectionsWidth(ConnectionPreferenceValues.HIGHLIGTHED_LINE_WIDTH);
 
 			}
 		}
@@ -53,10 +53,10 @@ public class FBNElementSelectionPolicy extends SelectionEditPolicy {
 	 * @see org.eclipse.gef.EditPolicy#getCommand(org.eclipse.gef.Request)
 	 */
 	@Override
-	public Command getCommand(Request request) {
-		Object type = request.getType();
-		if (REQ_ALIGN.equals(type) && request instanceof AlignmentRequest) {
-			return getAlignCommand((AlignmentRequest) request);
+	public Command getCommand(final Request request) {
+		final Object type = request.getType();
+		if (REQ_ALIGN.equals(type) && request instanceof final AlignmentRequest ar) {
+			return getAlignCommand(ar);
 		}
 		return null;
 	}
@@ -67,8 +67,8 @@ public class FBNElementSelectionPolicy extends SelectionEditPolicy {
 	 * @param request the alignment request
 	 * @return the contribution to the alignment
 	 */
-	protected Command getAlignCommand(AlignmentRequest request) {
-		AlignmentRequest req = new AlignmentRequest(REQ_ALIGN_CHILDREN);
+	protected Command getAlignCommand(final AlignmentRequest request) {
+		final AlignmentRequest req = new AlignmentRequest(REQ_ALIGN_CHILDREN);
 		req.setEditParts(getHost());
 		req.setAlignment(request.getAlignment());
 		req.setAlignmentRectangle(request.getAlignmentRectangle());

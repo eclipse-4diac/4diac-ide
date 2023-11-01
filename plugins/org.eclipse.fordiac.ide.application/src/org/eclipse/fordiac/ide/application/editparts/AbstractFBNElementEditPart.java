@@ -558,7 +558,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	@Override
 	public void setTransparency(final int value) {
-		for (final Object ep : getChildren()) {
+		for (final GraphicalEditPart ep : getChildren()) {
 			if (ep instanceof final AbstractViewEditPart avep) {
 				avep.setTransparency(value);
 			}

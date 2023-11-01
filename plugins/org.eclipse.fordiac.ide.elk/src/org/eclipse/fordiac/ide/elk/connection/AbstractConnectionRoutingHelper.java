@@ -148,7 +148,7 @@ public abstract class AbstractConnectionRoutingHelper {
 		// save for connection processing (ports need to know their parent)
 		mapping.getReverseMapping().put(block, node);
 
-		for (final Object child : block.getChildren()) {
+		for (final GraphicalEditPart child : block.getChildren()) {
 			if (child instanceof final InterfaceEditPart ie) {
 				addPort(ie, mapping, false);
 				// target connections would be inside the subapp and does not need to be saved

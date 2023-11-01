@@ -133,10 +133,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		for (final Object element : getGraphicalViewer().getRootEditPart().getChildren()) {
-			final EditPart ep = (EditPart) element;
-			ep.refresh();
-		}
+		getGraphicalViewer().getRootEditPart().getChildren().forEach(EditPart::refresh);
 	}
 
 	private RulerComposite rulerComp;
