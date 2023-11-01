@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -73,21 +72,20 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 		setBaseEnabled(!getSelectedSequences(selection).isEmpty());
 	}
 
-	@SuppressWarnings("unchecked")
 	private static List<ServiceSequence> getSelectedSequences(final ISelection selection) {
-		if (selection instanceof StructuredSelection) {
-			return (List<ServiceSequence>) ((StructuredSelection) selection).toList().stream()
-					.map(RunServiceSequenceHandler::getSequence).filter(Objects::nonNull).collect(Collectors.toList());
+		if (selection instanceof final StructuredSelection structSel) {
+			return structSel.toList().stream().map(RunServiceSequenceHandler::getSequence).filter(Objects::nonNull)
+					.toList();
 		}
 		return Collections.emptyList();
 	}
 
 	private static ServiceSequence getSequence(Object selected) {
-		if (selected instanceof EditPart) {
-			selected = ((EditPart) selected).getModel();
+		if (selected instanceof final EditPart ep) {
+			selected = ep.getModel();
 		}
-		if (selected instanceof ServiceSequence) {
-			return (ServiceSequence) selected;
+		if (selected instanceof final ServiceSequence serviceSeq) {
+			return serviceSeq;
 		}
 		return null;
 	}

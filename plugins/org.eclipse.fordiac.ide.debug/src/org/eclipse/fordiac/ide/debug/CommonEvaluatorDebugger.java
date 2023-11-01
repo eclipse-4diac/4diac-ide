@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IResource;
@@ -106,8 +105,8 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 					}
 					case DebugEvent.STEP_RETURN: {
 						final Object resumeSource = request.getSource();
-						final Object resumeSourceParent = resumeSource instanceof EvaluatorDebugStackFrame
-								? ((EvaluatorDebugStackFrame) resumeSource).getParent()
+						final Object resumeSourceParent = resumeSource instanceof final EvaluatorDebugStackFrame edsf
+								? edsf.getParent()
 								: frame.getParent();
 						final Object suspendSource = resumeSourceParent != null ? resumeSourceParent : debugTarget;
 						thread.request(suspendSource, DebugEvent.SUSPEND, DebugEvent.STEP_END);
@@ -137,11 +136,11 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 				if (source instanceof EvaluatorDebugThread) { // requested on thread (STEP_INTO)
 					return true;
 				}
-				if (source instanceof EvaluatorDebugStackFrame) { // requested on stack frame and:
+				if (source instanceof final EvaluatorDebugStackFrame edsf) { // requested on stack frame and:
 					if (source == frame) { // we reached the requested frame (STEP_OVER or STEP_RETURN)
 						return true;
 					}
-					if (!((EvaluatorDebugStackFrame) source).isAncestorOf(frame)) { // we are above the requested frame
+					if (!edsf.isAncestorOf(frame)) { // we are above the requested frame
 						return true;
 					}
 				}
@@ -195,8 +194,8 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 	}
 
 	public IResource getResource(final Object context) {
-		if (context instanceof EObject) {
-			final EObject root = EcoreUtil.getRootContainer((EObject) context);
+		if (context instanceof final EObject eo) {
+			final EObject root = EcoreUtil.getRootContainer(eo);
 			if (root instanceof final FBType fbType) {
 				return fbType.getTypeEntry().getFile();
 			}
@@ -214,8 +213,8 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 
 	@SuppressWarnings("static-method")
 	public int getLineNumber(final Object context) {
-		if (context instanceof EObject) {
-			final ICompositeNode node = NodeModelUtils.findActualNodeFor((EObject) context);
+		if (context instanceof final EObject eo) {
+			final ICompositeNode node = NodeModelUtils.findActualNodeFor(eo);
 			if (context instanceof ICallable) {
 				return node.getEndLine();
 			}
@@ -242,7 +241,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 		final ThreadGroup threadGroup = this.debugTarget.getProcess().getThreadGroup();
 		final Thread[] activeThreads = new Thread[threadGroup.activeCount()];
 		final int count = threadGroup.enumerate(activeThreads);
-		return Arrays.stream(activeThreads, 0, count).map(this::getThread).collect(Collectors.toList());
+		return Arrays.stream(activeThreads, 0, count).map(this::getThread).toList();
 	}
 
 	protected EvaluatorDebugThread getThread(final Thread thread) {

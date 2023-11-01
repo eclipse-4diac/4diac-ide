@@ -41,7 +41,7 @@ public class ErrorMessageHandler {
 
 	public synchronized void setHover(final boolean hovering) {
 		this.hovering = hovering;
-		if(!hovering) {
+		if (!hovering) {
 			messages.stream().forEach(ErrorMessage::setInvalid);
 			closeAllDialogs();
 		}
@@ -103,8 +103,9 @@ public class ErrorMessageHandler {
 	}
 
 	private void removeInvalidMessages() {
-		final List<ErrorMessage> toRemove = messages.stream().filter((final ErrorMessage m) -> !m.isStillValid()).collect(Collectors.toList());
-		for(final ErrorMessage m: toRemove) {
+		final List<ErrorMessage> toRemove = messages.stream().filter((final ErrorMessage m) -> !m.isStillValid())
+				.toList();
+		for (final ErrorMessage m : toRemove) {
 			ErrorMessenger.hashCleared(m.hashCode());
 		}
 		messages.removeAll(toRemove);
@@ -146,8 +147,9 @@ public class ErrorMessageHandler {
 	}
 
 	private void showMessages(final ErrorMessage m) {
-		if(!messages.isEmpty()) {
-			final String dialogContent = messages.stream().map(ErrorMessage::getMessage).collect(Collectors.joining("\n")); //$NON-NLS-1$
+		if (!messages.isEmpty()) {
+			final String dialogContent = messages.stream().map(ErrorMessage::getMessage)
+					.collect(Collectors.joining("\n")); //$NON-NLS-1$
 
 			final ErrorMessageDialog dialog = new ErrorMessageDialog(getShell(), this, dialogContent, m.getTimeout());
 			dialog.open();
@@ -165,8 +167,8 @@ public class ErrorMessageHandler {
 
 	private final EventHandler receiver = (final Event event) -> {
 		final Object data = event.getProperty(IEventBroker.DATA);
-		if (eventsRegistered && data instanceof ErrorMessage) {
-			showErrorMessageDialog((ErrorMessage)data);
+		if (eventsRegistered && data instanceof final ErrorMessage em) {
+			showErrorMessageDialog(em);
 		}
 	};
 

@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -47,9 +46,9 @@ public final class ECCContentAndLabelProvider {
 		if (null != type) {
 			events.addAll(type.getInterfaceList().getEventOutputs());
 			type.getInterfaceList().getSockets().stream()
-			.forEach(socket -> events.addAll(socket.getAdapterFB().getInterface().getEventInputs()));
+					.forEach(socket -> events.addAll(socket.getAdapterFB().getInterface().getEventInputs()));
 			type.getInterfaceList().getPlugs().stream()
-			.forEach(plug -> events.addAll(plug.getAdapterFB().getInterface().getEventInputs()));
+					.forEach(plug -> events.addAll(plug.getAdapterFB().getInterface().getEventInputs()));
 			Collections.sort(events, NamedElementComparator.INSTANCE);
 		}
 
@@ -67,9 +66,9 @@ public final class ECCContentAndLabelProvider {
 		if (null != type) {
 			events.addAll(type.getInterfaceList().getEventInputs());
 			type.getInterfaceList().getSockets().stream()
-			.forEach(socket -> events.addAll(socket.getAdapterFB().getInterface().getEventOutputs()));
+					.forEach(socket -> events.addAll(socket.getAdapterFB().getInterface().getEventOutputs()));
 			type.getInterfaceList().getPlugs().stream()
-			.forEach(plug -> events.addAll(plug.getAdapterFB().getInterface().getEventOutputs()));
+					.forEach(plug -> events.addAll(plug.getAdapterFB().getInterface().getEventOutputs()));
 			Collections.sort(events, NamedElementComparator.INSTANCE);
 		}
 		return events;
@@ -97,7 +96,7 @@ public final class ECCContentAndLabelProvider {
 	}
 
 	public static List<String> getAlgorithmNames(final BasicFBType type) {
-		final List<String> algNames = getAlgorithms(type).stream().map(Algorithm::getName).collect(Collectors.toList());
+		final List<String> algNames = getAlgorithms(type).stream().map(Algorithm::getName).toList();
 		algNames.add(EMPTY_FIELD);
 		return algNames;
 	}
@@ -114,11 +113,11 @@ public final class ECCContentAndLabelProvider {
 	}
 
 	public static List<String> getStateNames(final BasicFBType type) {
-		return getStates(type).stream().map(ECState::getName).collect(Collectors.toList());
+		return getStates(type).stream().map(ECState::getName).toList();
 	}
 
 	private static List<String> getEventNames(final List<Event> eventList) {
-		return eventList.stream().map(ECCContentAndLabelProvider::getEventName).collect(Collectors.toList());
+		return eventList.stream().map(ECCContentAndLabelProvider::getEventName).toList();
 	}
 
 	public static String getEventName(final Event event) {

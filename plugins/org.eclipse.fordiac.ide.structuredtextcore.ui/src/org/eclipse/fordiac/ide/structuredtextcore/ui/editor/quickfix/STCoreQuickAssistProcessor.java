@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix;
 
-import java.util.stream.Collectors;
-
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.ui.editor.model.edit.IModificationContext;
@@ -27,18 +25,18 @@ public class STCoreQuickAssistProcessor extends XtextQuickAssistProcessor {
 	public Iterable<IssueResolution> getResolutions(final Issue issue, final IXtextDocument document) {
 		return getResolutionProvider().getResolutions(issue).stream().map(input -> new IssueResolution(input.getLabel(),
 				input.getDescription(), input.getImage(), new IModificationContext() {
-			@Override
-			public IXtextDocument getXtextDocument(final URI uri) {
-				if (uri.trimFragment().equals(document.getResourceURI())) {
-					return document;
-				}
-				return input.getModificationContext().getXtextDocument(uri);
-			}
+					@Override
+					public IXtextDocument getXtextDocument(final URI uri) {
+						if (uri.trimFragment().equals(document.getResourceURI())) {
+							return document;
+						}
+						return input.getModificationContext().getXtextDocument(uri);
+					}
 
-			@Override
-			public IXtextDocument getXtextDocument() {
-				return document;
-			}
-		}, input.getModification(), input.getRelevance())).collect(Collectors.toList());
+					@Override
+					public IXtextDocument getXtextDocument() {
+						return document;
+					}
+				}, input.getModification(), input.getRelevance())).toList();
 	}
 }

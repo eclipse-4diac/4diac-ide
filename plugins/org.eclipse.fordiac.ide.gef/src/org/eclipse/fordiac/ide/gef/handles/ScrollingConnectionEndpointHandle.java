@@ -16,7 +16,6 @@
 package org.eclipse.fordiac.ide.gef.handles;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Graphics;
@@ -88,7 +87,7 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 		tracker.setDefaultCursor(getCursor());
 	}
 
-	@SuppressWarnings("static-method")  // allow sub-classes to provide special versions
+	@SuppressWarnings("static-method") // allow sub-classes to provide special versions
 	protected ConnectionEndpointTracker createConnectionEndPointTracker(
 			final List<ConnectionEditPart> coSelectedConnections) {
 		return new ScrollingConnectionEndpointTracker(coSelectedConnections.get(0));
@@ -114,7 +113,7 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 		paintHandleCenter(g, r);
 	}
 
-	@SuppressWarnings("static-method")  // allow sub-classes to provide a different radius
+	@SuppressWarnings("static-method") // allow sub-classes to provide a different radius
 	protected int getCornerRadius() {
 		return (int) (ConnectionPreferenceValues.HANDLE_SIZE * 0.45);
 	}
@@ -133,14 +132,11 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 		return shrinkVal;
 	}
 
-	@SuppressWarnings("unchecked")
 	private List<ConnectionEditPart> getCoSelectedConnections() {
 		final EditPart refEndPoint = getEndPoint(getOwner());
 		final List<Object> selectedEditParts = getOwner().getViewer().getSelectedEditParts();
-		return selectedEditParts.stream()
-				.filter(ConnectionEditPart.class::isInstance)
-				.map(ConnectionEditPart.class::cast).filter(ep -> sameTarget(ep, refEndPoint))
-				.collect(Collectors.toList());
+		return selectedEditParts.stream().filter(ConnectionEditPart.class::isInstance)
+				.map(ConnectionEditPart.class::cast).filter(ep -> sameTarget(ep, refEndPoint)).toList();
 
 	}
 

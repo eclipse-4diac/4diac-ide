@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.model.commands.util;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
@@ -84,13 +83,13 @@ public abstract class AbstractMarkersCommand extends AbstractWorkspaceCommand {
 
 	protected List<IResource> getResources() {
 		return Stream.concat(markers.stream().map(IMarker::getResource),
-				markerDescriptions.stream().map(MarkerDescription::getResource)).collect(Collectors.toList());
+				markerDescriptions.stream().map(MarkerDescription::getResource)).toList();
 	}
 
 	@Override
 	protected ISchedulingRule getSchedulingRule() {
 		final List<ISchedulingRule> rules = getResources().stream().map(getWorkspace().getRuleFactory()::markerRule)
-				.collect(Collectors.toList());
+				.toList();
 		return MultiRule.combine(rules.toArray(new ISchedulingRule[rules.size()]));
 	}
 

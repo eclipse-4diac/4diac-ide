@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.commands.create;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
@@ -38,8 +37,8 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		return commandExecution(state);
 	}
 
-	private static void verifyInterfaceListWithName(final InterfaceList interfacelist, final String element, final String type,
-			final TestFunction t) {
+	private static void verifyInterfaceListWithName(final InterfaceList interfacelist, final String element,
+			final String type, final TestFunction t) {
 		t.test(!interfacelist.getInputVars().isEmpty());
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
@@ -100,16 +99,16 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 				new ExecutionDescription<>("Add Input without name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandInputsTest::executeCommandInputWithoutName, //
 						CreateInterfaceElementCommandInputsTest::verifyStateInputWithoutName //
-						), //
+				), //
 				new ExecutionDescription<>("Add Input with name \"" + ELEMENT2_NAME + "\"", // //$NON-NLS-1$ //$NON-NLS-2$
 						CreateInterfaceElementCommandInputsTest::executeCommandInputWithName, //
 						CreateInterfaceElementCommandInputsTest::verifyStateInputWithName //
-						), //
+				), //
 				new ExecutionDescription<>("Add Input with null as name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandInputsTest::executeCommandInputWithNameNull, //
 						CreateInterfaceElementCommandInputsTest::verifyStateInputWithNameNull //
-						) //
-				);
+				) //
+		);
 
 		final Collection<ExecutionDescription<State>> reordering = createReordering(
 				(final State s) -> getTypeInterfaceList(s).getInputVars(), ELEMENT1_NAME, ELEMENT3_NAME, ELEMENT2_NAME);
@@ -129,7 +128,7 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 						executionDescriptions.stream(), //
 						reordering.stream()), //
 				updateFBandValidate.stream() //
-				).collect(Collectors.toList()));
+		).toList());
 	}
 
 }

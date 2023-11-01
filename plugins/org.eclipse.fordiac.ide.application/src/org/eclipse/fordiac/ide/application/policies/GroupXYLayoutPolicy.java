@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -38,9 +37,8 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 		if (null != request) {
 			final Object childClass = request.getNewObjectType();
 			final Point refPoint = ((Rectangle) getConstraintFor(request)).getTopLeft();
-			if (childClass instanceof TypeEntry) {
-				return new CreateFBElementInGroupCommand((TypeEntry) childClass, getParentModel(), refPoint.x,
-						refPoint.y);
+			if (childClass instanceof final TypeEntry typeEntry) {
+				return new CreateFBElementInGroupCommand(typeEntry, getParentModel(), refPoint.x, refPoint.y);
 			}
 		}
 		return null;
@@ -69,9 +67,9 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 
 	private static List<FBNetworkElement> collectDraggedFBs(final List<EditPart> editParts, final Group dropGroup) {
 		// only allow to add FBs to the group that are in the same FBNetwork
-		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
-				.map(ep -> (FBNetworkElement) ep.getModel())
-				.filter(el -> dropGroup.getFbNetwork().equals(el.getFbNetwork())).collect(Collectors.toList());
+		return editParts.stream().map(EditPart::getModel).filter(FBNetworkElement.class::isInstance)
+				.map(FBNetworkElement.class::cast).filter(el -> dropGroup.getFbNetwork().equals(el.getFbNetwork()))
+				.toList();
 	}
 
 	public static boolean isDragAndDropRequestForGroup(final Request generic, final EditPart targetEditPart) {

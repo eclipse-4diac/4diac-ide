@@ -20,7 +20,6 @@ package org.eclipse.fordiac.ide.application.commands;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
@@ -80,7 +79,7 @@ public class FlattenSubAppCommand extends Command {
 	@Override
 	public void execute() {
 		elements.addAll(subapp.getSubAppNetwork().getNetworkElements());
-		elementsToMove.addAll(elements.stream().filter(el -> !el.isInGroup()).collect(Collectors.toList()));
+		elementsToMove.addAll(elements.stream().filter(el -> !el.isInGroup()).toList());
 		// add elements to parent
 		FBNetworkHelper.moveFBNetworkByOffset(elementsToMove, -getOriginalPositionX(), -getOriginalPositionY());
 

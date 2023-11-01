@@ -20,7 +20,6 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FigureCanvas;
@@ -42,8 +41,10 @@ import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-/** This policy creates an AddFBToSubAppCommand when user moves selected FBs over a subapp. When this is possible the
- * subapp is marked as selected. */
+/**
+ * This policy creates an AddFBToSubAppCommand when user moves selected FBs over
+ * a subapp. When this is possible the subapp is marked as selected.
+ */
 public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 
 	private Figure moveHandle;
@@ -66,12 +67,10 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 		return super.getAddCommand(request);
 	}
 
-	private static List<FBNetworkElement> collectDraggedFBs(final List<EditPart> editParts,
-			final SubApp dropSubApp) {
-		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
-				.map(ep -> (FBNetworkElement) ep.getModel())
-				.filter(el -> el.isNestedInSubApp() && isChildFromDropTarget(el, dropSubApp))
-				.collect(Collectors.toList());
+	private static List<FBNetworkElement> collectDraggedFBs(final List<EditPart> editParts, final SubApp dropSubApp) {
+		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement).map(EditPart::getModel)
+				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
+				.filter(el -> el.isNestedInSubApp() && isChildFromDropTarget(el, dropSubApp)).toList();
 	}
 
 	public static boolean isDragAndDropRequestFromSubAppToSubApp(final Request generic, final EditPart targetEditPart) {

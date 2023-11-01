@@ -21,7 +21,6 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -38,8 +37,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-/** This policy creates an AddFBToSubAppCommand when user moves selected FBs over a subapp. When this is possible the
- * subapp is marked as selected. */
+/**
+ * This policy creates an AddFBToSubAppCommand when user moves selected FBs over
+ * a subapp. When this is possible the subapp is marked as selected.
+ */
 public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy {
 
 	@Override
@@ -53,10 +54,9 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 			if (!moveFrom.isEmpty()) {
 				final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
 				final List<FBNetworkElement> fbWithoutGroup = moveFrom.stream()
-						.map(ep -> (FBNetworkElement) ep.getModel()).filter(ep -> !ep.isInGroup())
-						.collect(Collectors.toList());
+						.map(ep -> (FBNetworkElement) ep.getModel()).filter(ep -> !ep.isInGroup()).toList();
 				final List<FBNetworkElement> fbWithGroup = moveFrom.stream().map(ep -> (FBNetworkElement) ep.getModel())
-						.filter(FBNetworkElement::isInGroup).collect(Collectors.toList());
+						.filter(FBNetworkElement::isInGroup).toList();
 
 				if (!fbWithoutGroup.isEmpty()) {
 					cmd.add(new MoveElementsFromSubAppCommand(fbWithoutGroup,
@@ -99,8 +99,8 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 	}
 
 	private List<EditPart> collectMoveFromElements(final List<EditPart> editParts) {
-		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
-				.filter(ep -> isInChild((FBNetworkElement) ep.getModel())).collect(Collectors.toList());
+		return editParts.stream().filter(ep -> ep.getModel() instanceof final FBNetworkElement fbel && isInChild(fbel))
+				.toList();
 	}
 
 	private boolean isInChild(final FBNetworkElement fbne) {
@@ -117,8 +117,7 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 	private List<EditPart> collectAddToElements(final List<EditPart> editParts) {
 		final EObject outerFBN = getParentModel().eContainer();
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
-				.filter(ep -> outerFBN.equals(((FBNetworkElement) ep.getModel()).getFbNetwork()))
-				.collect(Collectors.toList());
+				.filter(ep -> outerFBN.equals(((FBNetworkElement) ep.getModel()).getFbNetwork())).toList();
 	}
 
 }

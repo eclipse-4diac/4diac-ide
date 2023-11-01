@@ -17,7 +17,6 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -67,17 +66,16 @@ public class SafeStructDeletionChange extends CompositeChange {
 	private static List<String> loadOpenEditorNames() {
 		// @formatter:off
 		final var wrapper = new Object() { IEditorReference[] refs; };
-		Display.getDefault().syncExec(() -> {
-			wrapper.refs = PlatformUI.getWorkbench()
+		Display.getDefault().syncExec(() ->
+				wrapper.refs = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow()
 				.getActivePage()
-				.getEditorReferences();
-		});
+				.getEditorReferences());
 
 		return Arrays.stream(wrapper.refs)
 			.map(IEditorReference::getName)
 			.map(SafeStructDeletionChange::removeFileEnding)
-			.collect(Collectors.toList());
+			.toList();
 		// @formatter:on
 	}
 
@@ -164,9 +162,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 		final var fbInstances = new FBInstanceSearch(fbType)
 				.performProjectSearch(fbType.getTypeEntry().getFile().getProject());
 
-		fbInstances.forEach(fbn -> {
-			updateFBTypeChange.add(new UpdateInstancesChange((FBNetworkElement) fbn));
-		});
+		fbInstances.forEach(fbn -> updateFBTypeChange.add(new UpdateInstancesChange((FBNetworkElement) fbn)));
 
 		parentChange.add(updateFBTypeChange);
 

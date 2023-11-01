@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -41,8 +40,7 @@ public class ChangeSubAppBoundsCommand extends AbstractChangeContainerBoundsComm
 	}
 
 	public static List<FBNetworkElement> getDirectSubappChildren(final SubApp subapp) {
-		return subapp.getSubAppNetwork().getNetworkElements().stream().filter(el -> !el.isInGroup())
-				.collect(Collectors.toList());
+		return subapp.getSubAppNetwork().getNetworkElements().stream().filter(el -> !el.isInGroup()).toList();
 	}
 
 }

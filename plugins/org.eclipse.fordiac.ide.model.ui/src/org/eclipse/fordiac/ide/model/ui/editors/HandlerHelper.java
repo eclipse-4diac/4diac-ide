@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -63,8 +62,8 @@ public final class HandlerHelper {
 			final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
 			if (null != editPart) {
 				viewer.flush(); // ensure that the viewer is ready
-				if (viewer instanceof AdvancedScrollingGraphicalViewer) {
-					((AdvancedScrollingGraphicalViewer) viewer).selectAndRevealEditPart(editPart);
+				if (viewer instanceof final AdvancedScrollingGraphicalViewer asgv) {
+					asgv.selectAndRevealEditPart(editPart);
 				} else {
 					viewer.select(editPart);
 					viewer.reveal(editPart);
@@ -78,7 +77,7 @@ public final class HandlerHelper {
 	}
 
 	public static IEditorPart openParentEditor(final FBNetworkElement model) {
-		final EObject parentModel = model.eContainer().eContainer();  // use eContainer here so that it also works for
+		final EObject parentModel = model.eContainer().eContainer(); // use eContainer here so that it also works for
 		// types
 		return OpenListenerManager.openEditor(parentModel);
 	}
@@ -99,11 +98,10 @@ public final class HandlerHelper {
 	}
 
 	public static List<FBNetworkElement> getSelectedFBNElements(final ISelection selection) {
-		if ((selection instanceof IStructuredSelection) && !selection.isEmpty()) {
-			final IStructuredSelection sel = (IStructuredSelection) selection;
-			return ((List<?>) sel.toList()).stream().filter(EditPart.class::isInstance)
-					.filter(ep -> ((EditPart) ep).getModel() instanceof FBNetworkElement)
-					.map(ep -> (FBNetworkElement) ((EditPart) ep).getModel()).collect(Collectors.toList());
+		if ((selection instanceof final IStructuredSelection sel) && !sel.isEmpty()) {
+			return ((List<?>) sel.toList()).stream().filter(EditPart.class::isInstance).map(EditPart.class::cast)
+					.map(EditPart::getModel).filter(FBNetworkElement.class::isInstance)
+					.map(FBNetworkElement.class::cast).toList();
 		}
 		return Collections.emptyList();
 	}
