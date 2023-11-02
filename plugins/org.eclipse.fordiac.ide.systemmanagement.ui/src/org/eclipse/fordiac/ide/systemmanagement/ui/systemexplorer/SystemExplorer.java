@@ -14,12 +14,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.internal.views.helpers.EmptyWorkspaceHelper;
 import org.eclipse.ui.navigator.CommonNavigator;
+import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
+@SuppressWarnings("restriction") // The SystemExplorer uses EmptyWorkspaceHelper which is currently eclipse
+									// internal api
 public class SystemExplorer extends CommonNavigator implements ITabbedPropertySheetPageContributor {
+
+	private EmptyWorkspaceHelper emptyWorkspaceHelper;
 
 	@Override
 	public String getContributorId() {
@@ -27,10 +34,38 @@ public class SystemExplorer extends CommonNavigator implements ITabbedPropertySh
 	}
 
 	@Override
-	public <T> T getAdapter(Class<T> adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == IPropertySheetPage.class) {
 			return adapter.cast(new TabbedPropertySheetPage(this));
 		}
 		return super.getAdapter(adapter);
 	}
+
+	@Override
+	public void createPartControl(final Composite aParent) {
+		emptyWorkspaceHelper = new EmptyWorkspaceHelper();
+		final Composite displayAreas = emptyWorkspaceHelper.getComposite(aParent);
+		removeCreateProjectLink(displayAreas);
+		super.createPartControl(displayAreas);
+	}
+
+	@Override
+	protected CommonViewer createCommonViewer(final Composite aParent) {
+		final CommonViewer viewer = super.createCommonViewer(aParent);
+		emptyWorkspaceHelper.setNonEmptyControl(viewer.getControl());
+		return viewer;
+	}
+
+	private static void removeCreateProjectLink(final Composite displayAreas) {
+		final Composite emptyArea = (Composite) ((Composite) displayAreas.getChildren()[0]).getChildren()[0];
+		final Composite optionsArea = (Composite) emptyArea.getChildren()[1];
+		if (optionsArea.getChildren().length >= 4) {
+			final var createProjectlabel = optionsArea.getChildren()[optionsArea.getChildren().length - 4];
+			final var createProjektLink = optionsArea.getChildren()[optionsArea.getChildren().length - 3];
+			createProjectlabel.dispose();
+			createProjektLink.dispose();
+			optionsArea.pack();
+		}
+	}
+
 }
