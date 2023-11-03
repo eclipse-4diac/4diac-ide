@@ -46,9 +46,9 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 	@Override
 	protected Command getAddCommand(final Request request) {
 		if (isDragAndDropRequestForSubapp(request)) {
-			final List<EditPart> editParts = ((ChangeBoundsRequest) request).getEditParts();
-			final List<EditPart> moveFrom = collectMoveFromElements(editParts);
-			final List<EditPart> addTo = collectAddToElements(editParts);
+			final List<? extends EditPart> editParts = ((ChangeBoundsRequest) request).getEditParts();
+			final List<? extends EditPart> moveFrom = collectMoveFromElements(editParts);
+			final List<? extends EditPart> addTo = collectAddToElements(editParts);
 
 			final CompoundCommand cmd = new CompoundCommand();
 			if (!moveFrom.isEmpty()) {
@@ -98,7 +98,7 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 		return (request instanceof ChangeBoundsRequest) && (getHost() == getTargetEditPart(request));
 	}
 
-	private List<EditPart> collectMoveFromElements(final List<EditPart> editParts) {
+	private List<? extends EditPart> collectMoveFromElements(final List<? extends EditPart> editParts) {
 		return editParts.stream().filter(ep -> ep.getModel() instanceof final FBNetworkElement fbel && isInChild(fbel))
 				.toList();
 	}
@@ -114,7 +114,7 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 		return false;
 	}
 
-	private List<EditPart> collectAddToElements(final List<EditPart> editParts) {
+	private List<? extends EditPart> collectAddToElements(final List<? extends EditPart> editParts) {
 		final EObject outerFBN = getParentModel().eContainer();
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
 				.filter(ep -> outerFBN.equals(((FBNetworkElement) ep.getModel()).getFbNetwork())).toList();

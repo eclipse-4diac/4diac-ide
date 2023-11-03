@@ -65,8 +65,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
 		final Object model = child.getModel();
-		if ((model instanceof Group)
-				|| (model instanceof final SubApp subApp && subApp.isUnfolded())) {
+		if ((model instanceof Group) || (model instanceof final SubApp subApp && subApp.isUnfolded())) {
 			return new ContainerResizePolicy();
 		}
 
@@ -107,12 +106,10 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	public static AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final FBNetworkElement container,
 			final Dimension sizeDelta, final Point moveDelta) {
 		if (container instanceof final Group group) {
-			return new ChangeGroupBoundsCommand(group, moveDelta.x, moveDelta.y, sizeDelta.width,
-					sizeDelta.height);
+			return new ChangeGroupBoundsCommand(group, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
 		}
 		if (container instanceof final SubApp subApp) {
-			return new ChangeSubAppBoundsCommand(subApp, moveDelta.x, moveDelta.y, sizeDelta.width,
-					sizeDelta.height);
+			return new ChangeSubAppBoundsCommand(subApp, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
 		}
 		if (container instanceof final Comment comment) {
 			return new ChangeCommentBoundsCommand(comment, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
@@ -125,7 +122,8 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		if (null != request) {
 			final Object childClass = request.getNewObjectType();
 			final Rectangle constraint = (Rectangle) getConstraintFor(request);
-			if ((getHost().getModel() instanceof final FBNetwork fbNetwork) && (childClass instanceof final TypeEntry typeEntry)) {
+			if ((getHost().getModel() instanceof final FBNetwork fbNetwork)
+					&& (childClass instanceof final TypeEntry typeEntry)) {
 				return AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, fbNetwork,
 						constraint.getLocation().x, constraint.getLocation().y);
 			}
@@ -141,13 +139,12 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
-
 	protected ZoomManager getZoomManager() {
 		return ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();
 	}
 
 	private Command handleDragToRootRequest(final ChangeBoundsRequest request) {
-		final List<EditPart> editParts = request.getEditParts();
+		final List<? extends EditPart> editParts = request.getEditParts();
 		final Point destination = getTranslatedAndZoomedPoint(request);
 		final List<FBNetworkElement> fbEls = collectFromSubappDraggedFBs(editParts, getFBNetwork());
 		if (!fbEls.isEmpty()) {
@@ -157,7 +154,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return createRemoveFromGroup(editParts, request);
 	}
 
-	private Command createRemoveFromGroup(final List<EditPart> editParts, final ChangeBoundsRequest request) {
+	private Command createRemoveFromGroup(final List<? extends EditPart> editParts, final ChangeBoundsRequest request) {
 		final GroupContentEditPart groupContent = getGroupContentEditPart(editParts);
 		if (groupContent != null) {
 			final List<FBNetworkElement> fbEls = collectFromGroupDraggedFBs(editParts);
@@ -178,21 +175,21 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 				request.getLocation().y + location.y).scale(1.0 / getZoomManager().getZoom());
 	}
 
-	private static List<FBNetworkElement> collectFromSubappDraggedFBs(final List<EditPart> editParts,
+	private static List<FBNetworkElement> collectFromSubappDraggedFBs(final List<? extends EditPart> editParts,
 			final FBNetwork fbNetwork) {
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
 				.map(ep -> (FBNetworkElement) ep.getModel()).filter(FBNetworkElement::isNestedInSubApp)
-				.filter(el -> !el.getFbNetwork().equals(fbNetwork))   // only take fbentworkelements that are not in the
+				.filter(el -> !el.getFbNetwork().equals(fbNetwork)) // only take fbentworkelements that are not in the
 				// same subapp
 				.toList();
 	}
 
-	private static GroupContentEditPart getGroupContentEditPart(final List<EditPart> editParts) {
+	private static GroupContentEditPart getGroupContentEditPart(final List<? extends EditPart> editParts) {
 		return (GroupContentEditPart) editParts.stream().filter(ep -> ep.getParent() instanceof GroupContentEditPart)
 				.map(EditPart::getParent).findFirst().orElse(null);
 	}
 
-	private static List<FBNetworkElement> collectFromGroupDraggedFBs(final List<EditPart> editParts) {
+	private static List<FBNetworkElement> collectFromGroupDraggedFBs(final List<? extends EditPart> editParts) {
 		return editParts.stream().filter(ep -> ep.getParent() instanceof GroupContentEditPart)
 				.map(ep -> (FBNetworkElement) ep.getModel()).toList();
 	}
@@ -231,8 +228,8 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	private Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request,
 			final Object constraint) {
-		final Point moveDelta = (isAlignRequest(request)) ? getAlignmentDelta(model, constraint) :
-			getScaledMoveDelta(request);
+		final Point moveDelta = (isAlignRequest(request)) ? getAlignmentDelta(model, constraint)
+				: getScaledMoveDelta(request);
 		if (model instanceof final FBNetworkElement fbnEl) {
 			return new FBNetworkElementSetPositionCommand(fbnEl, moveDelta.x, moveDelta.y);
 		}

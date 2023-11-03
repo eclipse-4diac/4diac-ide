@@ -53,7 +53,7 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 	protected Command getAddCommand(final Request request) {
 
 		if (isDragAndDropRequestFromSubAppToSubApp(request, getTargetEditPart(request))) {
-			final List<EditPart> editParts = ((ChangeBoundsRequest) request).getEditParts();
+			final List<? extends EditPart> editParts = ((ChangeBoundsRequest) request).getEditParts();
 			final SubApp dropSubApp = (SubApp) getTargetEditPart(request).getModel();
 			final List<FBNetworkElement> fbEls = collectDraggedFBs(editParts, dropSubApp);
 			final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
@@ -67,7 +67,8 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 		return super.getAddCommand(request);
 	}
 
-	private static List<FBNetworkElement> collectDraggedFBs(final List<EditPart> editParts, final SubApp dropSubApp) {
+	private static List<FBNetworkElement> collectDraggedFBs(final List<? extends EditPart> editParts,
+			final SubApp dropSubApp) {
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement).map(EditPart::getModel)
 				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
 				.filter(el -> el.isNestedInSubApp() && isChildFromDropTarget(el, dropSubApp)).toList();
