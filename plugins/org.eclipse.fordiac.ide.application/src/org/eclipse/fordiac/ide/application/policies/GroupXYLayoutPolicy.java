@@ -51,7 +51,7 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 
 		if (isDragAndDropRequestForGroup(request, getTargetEditPart(request))) {
 			final ChangeBoundsRequest changeBoundsRequest = (ChangeBoundsRequest) request;
-			final List<EditPart> editParts = changeBoundsRequest.getEditParts();
+			final List<? extends EditPart> editParts = changeBoundsRequest.getEditParts();
 			final Group dropGroup = ((GroupContentNetwork) getTargetEditPart(request).getModel()).getGroup();
 			final List<FBNetworkElement> fbEls = collectDraggedFBs(editParts, dropGroup);
 			if (containsOnlyFbsAndSubapps(fbEls)) {
@@ -67,7 +67,8 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 		return !fbEls.isEmpty() && !(fbEls.stream().anyMatch(Group.class::isInstance));
 	}
 
-	private static List<FBNetworkElement> collectDraggedFBs(final List<EditPart> editParts, final Group dropGroup) {
+	private static List<FBNetworkElement> collectDraggedFBs(final List<? extends EditPart> editParts,
+			final Group dropGroup) {
 		// only allow to add FBs to the group that are in the same FBNetwork
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
 				.map(ep -> (FBNetworkElement) ep.getModel())
