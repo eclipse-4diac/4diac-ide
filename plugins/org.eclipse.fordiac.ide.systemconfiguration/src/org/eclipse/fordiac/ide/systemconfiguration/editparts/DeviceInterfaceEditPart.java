@@ -79,13 +79,13 @@ public class DeviceInterfaceEditPart extends InterfaceEditPart {
 			@Override
 			protected Command getAddCommand(final Request generic) {
 				final ChangeBoundsRequest request = (ChangeBoundsRequest) generic;
-				final List<EditPart> editParts = request.getEditParts();
+				final List<? extends EditPart> editParts = request.getEditParts();
 				final CompoundCommand command = new CompoundCommand();
 
 				for (final EditPart child : editParts) {
-					if (child instanceof ResourceEditPart) {
+					if (child instanceof final ResourceEditPart resourceEditPart) {
 						final Device targetDevice = (Device) ((InterfaceEditPart) getHost()).getModel().eContainer();
-						return new ResourceMoveCommand(((ResourceEditPart) child).getModel(), targetDevice,
+						return new ResourceMoveCommand(resourceEditPart.getModel(), targetDevice,
 								targetDevice.getResource().size());
 					}
 				}
