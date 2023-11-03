@@ -52,7 +52,12 @@ public class ServiceSequenceSaveAndLoadHelper {
 		}
 		final IFile file = folder.getFile(fbtype.getQualifiedName() + FILE_EXTENSION);
 		if (file.exists()) {
-			seqs.addAll(loadServiceSequencesFromFile(fbtype));
+			final ArrayList<ServiceSequence> seqsFromFile = loadServiceSequencesFromFile(fbtype);
+			seqs.forEach(seq -> {
+				if (!seqsFromFile.contains(seq)) {
+					seqsFromFile.add(seq);
+				}
+			});
 		}
 
 		saveServiceSequenceToFile(fbtype, seqs);

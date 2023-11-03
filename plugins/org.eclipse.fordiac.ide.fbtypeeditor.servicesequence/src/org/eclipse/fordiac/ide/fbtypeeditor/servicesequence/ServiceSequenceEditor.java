@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimi
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPartFactory;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.ServiceSequenceSaveAndLoadHelper;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
@@ -69,13 +70,13 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInputWithNotify(input);
-		if (input instanceof FBTypeEditorInput) {
-			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+		if (input instanceof final FBTypeEditorInput untypedInput) {
 			fbType = untypedInput.getContent();
 		}
 		super.init(site, input);
 		setPartName(Messages.ServiceSequenceEditor_Service);
 		setTitleImage(FordiacImage.ICON_SERVICE_SEQUENCE.getImage());
+		setServiceSequences();
 	}
 
 	@Override
@@ -89,8 +90,7 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 		// If not in FBTypeEditor ignore selection changed
 		if (part.getSite().getPage().getActiveEditor() instanceof FBTypeEditor) {
 			updateActions(getSelectionActions());
-			if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
-				final IStructuredSelection sel = (IStructuredSelection) selection;
+			if (!selection.isEmpty() && selection instanceof final IStructuredSelection sel) {
 				if (sel.getFirstElement() instanceof SequenceRootEditPart) {
 					((FBType) ((SequenceRootEditPart) sel.getFirstElement()).getModel()).getService();
 				} else if (sel.getFirstElement() instanceof OutputPrimitiveEditPart) {
@@ -228,5 +228,11 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 			return adapter.cast(fbType.getService());
 		}
 		return super.getAdapter(adapter);
+	}
+
+	void setServiceSequences() {
+		fbType.getService().getServiceSequence()
+				.addAll(ServiceSequenceSaveAndLoadHelper.loadServiceSequencesFromFile(fbType));
+
 	}
 }
