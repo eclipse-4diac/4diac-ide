@@ -56,7 +56,7 @@ public final class ECCContentAndLabelProvider {
 	}
 
 	public static List<String> getOutputEventNames(final BasicFBType type) {
-		final List<String> eventNames = getEventNames(getOutputEvents(type));
+		final List<String> eventNames = new ArrayList<>(getEventNames(getOutputEvents(type)));
 		eventNames.add(EMPTY_FIELD);
 		return eventNames;
 	}
@@ -75,7 +75,7 @@ public final class ECCContentAndLabelProvider {
 	}
 
 	public static List<String> getInputEventNames(final BasicFBType type) {
-		final List<String> inputEventNames = getEventNames(getInputEvents(type));
+		final List<String> inputEventNames = new ArrayList<>(getEventNames(getInputEvents(type)));
 		inputEventNames.add(EMPTY_FIELD);
 		return inputEventNames;
 	}
@@ -88,15 +88,13 @@ public final class ECCContentAndLabelProvider {
 	}
 
 	public static List<Algorithm> getAlgorithms(final BaseFBType type) {
-		final List<Algorithm> algorithms = new ArrayList<>();
-		algorithms.addAll(type.getAlgorithm());
-
+		final List<Algorithm> algorithms = new ArrayList<>(type.getAlgorithm());
 		Collections.sort(algorithms, NamedElementComparator.INSTANCE);
 		return algorithms;
 	}
 
 	public static List<String> getAlgorithmNames(final BasicFBType type) {
-		final List<String> algNames = getAlgorithms(type).stream().map(Algorithm::getName).toList();
+		final List<String> algNames = new ArrayList<>(getAlgorithms(type).stream().map(Algorithm::getName).toList());
 		algNames.add(EMPTY_FIELD);
 		return algNames;
 	}
