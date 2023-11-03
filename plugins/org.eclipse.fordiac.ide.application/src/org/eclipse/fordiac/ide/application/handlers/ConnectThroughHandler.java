@@ -60,20 +60,17 @@ public class ConnectThroughHandler extends AbstractHandler {
 			final List<IInterfaceElement> ieList = ((List<?>) structSel.toList()).stream()
 					.filter(InterfaceEditPartForFBNetwork.class::isInstance)
 					.map(InterfaceEditPartForFBNetwork.class::cast).map(InterfaceEditPartForFBNetwork::getModel)
-					.toList();
-			if (!ieList.isEmpty()) {
-				ieList.sort((arg0, arg1) -> {
-					if (arg0.isIsInput() && !arg1.isIsInput()) {
-						return -1;
-					}
-					if (arg1.isIsInput() && !arg0.isIsInput()) {
-						return 1;
-					}
-					return 0;
-				});
-				if ((ieList.size() == 2) && (checkSelectedIEs(ieList.get(0), ieList.get(1)))) {
-					return ieList;
-				}
+					.sorted((arg0, arg1) -> {
+						if (arg0.isIsInput() && !arg1.isIsInput()) {
+							return -1;
+						}
+						if (arg1.isIsInput() && !arg0.isIsInput()) {
+							return 1;
+						}
+						return 0;
+					}).toList();
+			if ((ieList.size() == 2) && (checkSelectedIEs(ieList.get(0), ieList.get(1)))) {
+				return ieList;
 			}
 		}
 		return Collections.emptyList();
