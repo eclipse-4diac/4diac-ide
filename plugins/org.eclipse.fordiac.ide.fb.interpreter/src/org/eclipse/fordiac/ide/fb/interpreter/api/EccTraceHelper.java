@@ -16,6 +16,8 @@
 
 package org.eclipse.fordiac.ide.fb.interpreter.api;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -91,15 +93,15 @@ public class EccTraceHelper {
 				.filter(Objects::nonNull).map(transaction -> transaction.getTransitions(ecc)).flatMap(List::stream)
 				.filter(trans -> trans.getECC() != null && trans.getECC().getECState() != null).findAny();
 
-		return transition.map(trans -> (List<ECState>) trans.getECC().getECState()).orElse(List.of());
+		return transition.map(trans -> Collections.unmodifiableList((trans.getECC().getECState()))).orElse(List.of());
 		// List.of() most efficient but secretly immutable
 	}
 
 	public List<ECState> getAllPossibleEndStates() {
-		final var endStates = getAllPossibleStates();
+		final var endStates = new ArrayList<>(getAllPossibleStates());
 		endStates.removeIf(state -> state.getOutTransitions().stream()
 				.anyMatch(trans -> trans.getConditionEvent() == null && "1".equals(trans.getConditionExpression()))); //$NON-NLS-1$
-		return endStates;
+		return Collections.unmodifiableList(endStates);
 	}
 
 	public List<List<String>> getAllPossiblePaths() {
