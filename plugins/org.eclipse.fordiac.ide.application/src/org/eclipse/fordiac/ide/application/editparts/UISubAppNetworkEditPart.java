@@ -34,11 +34,8 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			switch (notification.getEventType()) {
-			case Notification.ADD:
-			case Notification.ADD_MANY:
-			case Notification.MOVE:
-			case Notification.REMOVE:
-			case Notification.REMOVE_MANY:
+			case Notification.ADD, Notification.ADD_MANY, Notification.MOVE, Notification.REMOVE,
+					Notification.REMOVE_MANY:
 				refreshChildren();
 				break;
 			case Notification.SET:
@@ -62,10 +59,7 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 					break;
 				}
 				//$FALL-THROUGH$
-			case Notification.ADD_MANY:
-			case Notification.MOVE:
-			case Notification.REMOVE:
-			case Notification.REMOVE_MANY:
+			case Notification.ADD_MANY, Notification.MOVE, Notification.REMOVE, Notification.REMOVE_MANY:
 				refreshChildren();
 				break;
 			default:
