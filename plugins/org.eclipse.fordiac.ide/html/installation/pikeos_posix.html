@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2018, 2021 SYSGO GmbH
+
+ This program and the accompanying materials are made available under the
+ terms of the Eclipse Public License 2.0 which is available at
+ http://www.eclipse.org/legal/epl-2.0.
+
+ SPDX-License-Identifier: EPL-2.0
+ 
+ Contributors:
+   Agostino Mascitti - adaption to PikeOS 4.2 arm v7hf
+   Thomas Wagner -     adaption to PikeOS >=5.0 architecture independent
+-->
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Setting up 4diac FORTE for Posix PikeOS 5.x</title>
+	<link rel="stylesheet" type="text/css" href="../help.css">
+</head>
+
+<body>
+
+<h1 id="topOfPage">4diac FORTE for Posix PikeOS 5.x</h1>
+
+<p>This instruction assumes you have a Linux system with a PikeOS 5.x installation and a CODOE installation matching to the installed PikeOS Version. <br />
+(CODEO is the Eclipse-based IDE for developing PikeOS projects shipped with the PikeOS product.)
+Also CMAKE and CMAKE-GUI are installed.</p>
+
+<p>Assumming you are familar with PikeOS basics explained in the "pikeos-tutorial.pdf".</p>
+
+<p>Assuming you have a CODEO workspace with 4 projects:</p>
+
+<ul>
+<li><strong>/home/user/workspace</strong> <br />
+CODEO workspace
+<ul>
+<li><strong>🗁 pool</strong> <br />
+"CUSTOM POOL" for all PikeOS Projects</li>
+<li><strong>🗁 forte-incubation</strong> <br />
+4diac FORTE source code <br />
+Imported project using CODEOs (Eclipse) import wizard  (<code>File → Import → General → Projects from Folder or Archive</code>).
+After importing the project was renamed to "forte-incubation". <br />
+The import source may be a cloned git repository
+(<code>git://git.eclipse.org/gitroot/4diac/org.eclipse.4diac.forte.git</code>) or the
+ZIP-File "4diac FORTE Source" downloaded from <a href="https://www.eclipse.org/4diac/en_dow.php">eclipse.org/4diac</a>.</li>
+<li><strong>🗁 lwip.app</strong> <br />
+PikeOS 5.x Application Project of type <em>Posix Project / lwip-build</em>.</li>
+<li><strong>🗁 forteserver.int</strong> <br />
+PikeOS 5.x Integration Project of type <em>Integration Project / devel-posix</em>.</li>
+</ul></li>
+</ul>
+
+<h2>Patching "lwip.app"</h2>
+
+<p>The <code>lwip.app</code> application project will build a library (<code>iblwip.a</code>) that is required by 4diac FORTE.
+So we will <em>abuse</em> this project to build 4diac FORTE (binary name: <code>forte</code>) together with <code>iblwip.a</code>. <br />
+Apply patch <code>forte-incubation/src/arch/pikeos_posix/lwip.patch</code> to the <code>lwip.app</code>. <br />
+This will adapt the Makefile and the <code>lwip.app/lwipopts.h</code> file as required for building 4diac FORTE. Patching  <code>lwip.app/lwipopts.h</code> enables multicast which 4diac FORTE uses when multiple instances are communicating with each other.
+In addition, a folder <code>lwip.app/4diac-forte</code>. This folder will be used by the <code>forte-incubation</code> project to store the required source and Make-files into for building the <code>forte</code> binary.</p>
+
+<h2>Running CMAKE for "forte-incubation"</h2>
+
+<p>The "PikeOS Posix" target of the <code>forte-incubation</code> project needs the environment variables exported by <code>lwip.app/PikeOS.sh</code>.</p>
+
+<p>Open a shell
+(e.g. on selecting <code>lwip.app</code> in CODEO and pushing <kbd>⇧</kbd>+<kbd>Alt</kbd>+<kbd>W</kbd> and selecting <em>Terminal</em>)
+and execute:</p>
+
+<p><code>console
+source /home/user/workspace/lwip.app/PikeOS.sh
+cd ../forte-incubation
+cmake-gui
+</code></p>
+
+<p><em>Alternatively, you can right-click on "forte-incubation" project and select "Properties".</em> <br />
+<em>Select "C/C++-Build" and click on "Manage Configurations...".</em>
+<em>Rename "RELEASE" to "CMAKE", remove all other existing configurations and press the "OK" button.</em> <br />
+<em>Uncheck "Use default build command" and set it to:</em> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>bash -c "source ${workspace_loc:/lwip.app/PikeOS.sh};cd ${workspace_loc:/forte-incubation};cmake-gui"</em> <br />
+<em>Uncheck "Generate Makefiles automatically" and set "Build directory" to:</em> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>${workspace_loc:/forte-incubation}/</em> <br />
+<em>Now you can run CMAKE-GUI by right-click on "forte-incubation" project and selecting "Build Project".</em></p>
+
+<p>CMAKE-GUI shows a dialog. First set <code>forte-incubation</code> as source folder and <code>lwip.app</code> binary folder:</p>
+
+<blockquote>
+  <p><img src="../../html/installation/img/set_src_bin.svg" alt="source code: /home/user/workspace/forte-incubation, binaries: /home/user/workspace/lwip.app/4diac-forte" title="Setting path to src and bin" /></p>
+</blockquote>
+
+<p>Push <kbd>Configure</kbd> and select "Unix Makefiles" and "Specify options for cross-compiling":</p>
+
+<blockquote>
+  <p><img src="../../html/installation/img/set_crossc.svg" alt="Unix Makefiles + cross-compiling options" title="Setting cross-compiling" /></p>
+</blockquote>
+
+<p>Push <kbd>Next</kbd>, set "Operating System" to "Generic" and leave all other fields blank.</p>
+
+<blockquote>
+  <p><img src="../../html/installation/img/set_os.svg" alt="OS: Generic" title="Setting OS" /></p>
+</blockquote>
+
+<p>After that press <kbd>Finish</kbd> which will occur an expected error dialog. Close the dialog and set parameter "FORTE<em>ARCHITECTURE" to "PikeOS</em>Posix".</p>
+
+<blockquote>
+  <p><img src="../../html/installation/img/set_forte_arch.svg" alt="FORTE<em>ARCHITECTURE=PikeOS</em>Posix" title="Setting FORTE_ARCHITECTURE" /></p>
+</blockquote>
+
+<p>Push <kbd>Configure</kbd> twice. Now no error should be present any more. This means that no parameter is highlighted with light-red color any more.</p>
+
+<h2>Building "forte" binary for PikeOS</h2>
+
+<p>In the <code>lwip.app</code> project Make-target "all" will build <code>lwip.a</code> together with the <code>forte</code> binary.
+Make-target "install" additionally will copy <code>forte</code> to <code>$PIKEOS_CUSTOM_POOL_DIR/posix</code>.</p>
+
+<h2>PikeOS Integration Project "forteserver.int"</h2>
+
+<p>Select <code>posix-devel/Application/Posix Process</code> and change <code>Host file</code> to <code>CUSTOM_POOL/posix/forte</code>.
+Now click the <kbd>Add...</kbd> button (under the <em>Project Structure</em> heading), add template <code>posix / lwIP Ethernet interface</code> to <code>Posix Process</code> and configure it:</p>
+
+<p>| Key | Value | Example for QEMU with Usermode NW | Example for QEMU with TUN/TAP NW |
+|:----|:------|:---------------------------------:|:--------------------------------:|
+|Interface Address | e.g. MUXA Target IP +1 | 10.0.2.16 | 192.168.0.3                |
+|Netmask | 255.x.x.x | 255.255.255.0              | 255.255.255.0                    |
+|Gateway address | Gateway in target NW to reach the host | 10.0.2.2 | 192.168.0.1    |</p>
+
+<p>The Project looks like this:</p>
+
+<ul>
+<li>posix-devel
+<ul>
+<li>▢ Application
+<ul>
+<li>◘ POSIX Partition</li>
+<li>◙ POSIX Process</li>
+<li>... lwIP Ethernet ...</li>
+</ul></li>
+<li>▢ Default</li>
+<li>▢ Development Tools</li>
+<li>▢ qemu-...</li>
+</ul></li>
+</ul>
+
+<p>Assuming we use QEMU with user mode network. This will let 4diac FORTE run on <code>10.0.2.16:61499</code> as <code>61499</code> is 4DIAC FORTE's default port.</p>
+
+<blockquote>
+  <p><em>NOTE: If you want to use a different port you have to add template</em> <code>posix / Environment variables</code> <em>to</em> <code>Posix Process</code> <em>(similar behavior like adding</em> <code>posix / lwIP Ethernet interface</code><em>).</em> <br />
+        <em>Parameter</em> <code>-c IP:PORT</code> <em>will start 4diac FORTE on an other port.</em></p>
+</blockquote>
+
+<p>Right-click on <code>POSIX Partition</code> and click "copy". Right-click on <code>Application</code> and click on <code>insert</code>. Rename "partition name" and "partition id" eg. to "posix2" and "3" as they have to be unique. <br />
+Repeat this procedure for <code>POSIX Process</code>. Click on <code>POSIX Partition (2)</code> and assign process <code>POSIX Process (2)</code>. Click on <code>POSIX Process (2) / ... lwIP Ethernet ...</code> and change "DEPEND: LW<em>IP</em>DEVICE_IF" to "...-vchan2". <br />
+Configure <code>POSIX Process (2) / ... lwIP Ethernet ...</code>:</p>
+
+<p>| Key | Value | Example for QEMU with Usermode NW | Example for QEMU with TUN/TAP NW |
+|:----|:------|:---------------------------------:|:--------------------------------:|
+|Interface Address | e.g. "POSIX Process" +1 | 10.0.2.17 | 192.168.0.4               |
+|Netmask | 255.x.x.x | 255.255.255.0              | 255.255.255.0                    |
+|Gateway address | Gateway in target NW to reach the host | 10.0.2.2 | 192.168.0.1    |</p>
+
+<p>Now the project looks like this:</p>
+
+<ul>
+<li>posix-devel
+<ul>
+<li>▢ Application
+<ul>
+<li>◘ POSIX Partition</li>
+<li>◙ POSIX Process</li>
+<li>◘ POSIX Partition (2)</li>
+<li>◙ POSIX Process (2)</li>
+</ul></li>
+<li>▢ Default</li>
+<li>▢ Development Tools
+<ul>
+<li>◙ muxa
+<ul>
+<li>channels</li>
+</ul></li>
+</ul></li>
+<li>▢ qemu-...
+<ul>
+<li>▢ Monitor Kernel Drivers</li>
+<li>▢ ... Serial User Level Driver</li>
+<li>▢ ... Ethernet User Level Driver
+<ul>
+<li>▢ ...-net-device</li>
+<li>▢ ...-net-vchan0</li>
+<li>▢ ...-net-vchan1</li>
+<li>▢ ...-net-vchan2</li>
+<li>▢ ...-net-vchan3</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>Open <code>Development Tools / muxa / channels</code> and delete the assignment of "POSIX Process (2)". Rename channel 4 to e.g. "posix2-stdio". <br />
+Assign "POSIX Process (2)" to this channel.</p>
+
+<p>Go to <code>qemu-... / ... Ethernet User Level Driver</code> and set "Enable Multicast Communication" to true for <code>...-net-device</code>,  <code>...-net-vchan0</code> and <code>...-net-vchan1</code>.</p>
+
+<p>Now you are able to test the partitions by starting QEMU and perform the <a href="https://www.eclipse.org/4diac/en_help.php?helppage=html/4diacIDE/overview.html">4DIAC-step-by-step tutorial</a>.</p>
+
+<p>On using user mode network you have to start QEMU by selecting "Start QEMU with custom commandline" and defining portforwarding:</p>
+
+<p><code>
+-net user,hostfwd=udp::21500-:1500,hostfwd=tcp:127.0.0.1:61499-10.0.2.16:61499,hostfwd=tcp:127.0.0.1:61500-10.0.2.17:61499,host=10.0.2.2,net=10.0.2.0/255.255.255.0
+</code></p>
+
+<p>"Start QEMU with custom commandline" does not overwrite "muxa.xml"s Target IP and port as it would be by selecting "Start QEMU with user mode network".
+This Make-target stub allows to adapt the generated "muxa.xml" to user mode networking:</p>
+
+<p><code>make
+boot: all
+    $(eval HOSTIP := 127.0.0.1)
+    $(eval TARGETPORT := 21500)
+    @sed -ie "s/^.*TargetIP.*$$/    &lt;Parameter Name=\"TargetIP\" Value=\"$(HOSTIP)\"\/&gt;/" muxa.xml
+    @sed -ie "s/^.*HostIP.*$$/    &lt;Parameter Name=\"HostIP\" Value=\"$(HOSTIP)\"\/&gt;/" muxa.xml
+    @sed -ie "s/^.*TargetPort.*$$/    &lt;Parameter Name=\"TargetPort\" Value=\"$(TARGETPORT)\"\/&gt;/" muxa.xml
+</code></p>
+
+</body>
+</html>

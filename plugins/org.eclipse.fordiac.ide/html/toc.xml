@@ -67,6 +67,7 @@
         	<topic href="html/installation/raspberrySPS.html" label="4diac FORTE for RaspberryPi-SPS"/>
         	<topic href="html/installation/wago.html" label="4diac FORTE for WagoPFCs"/>
         	<topic href="html/installation/freeRTOSLwIP.html" label="4diac FORTE for freeRTOS + LwIP"/>
+        	<topic href="html/installation/pikeos_posix.html" label="4diac FORTE for Posix PikeOS 5.x"/>
         </topic>
         <topic label="4diac FORTE for Windows and Unix based systems">
           <topic href="html/installation/visualStudio.html" label="Use Visual Studio"/>
