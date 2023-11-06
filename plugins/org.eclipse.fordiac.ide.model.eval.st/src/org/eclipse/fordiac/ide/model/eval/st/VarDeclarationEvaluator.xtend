@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.eval.variable.VariableEvaluator
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -146,7 +147,7 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator implements Variabl
 	def protected getTypeDependencies() {
 		if (varDeclaration.FBNetworkElement === null) {
 			prepareResultType
-			parseResultType?.collectUsedTypes ?: emptySet // only collect types if we have a type variable
+			parseResultType?.collectUsedTypes ?: #{PackageNameHelper.getFullTypeName(varDeclaration.type)}
 		} else
 			emptySet
 	}

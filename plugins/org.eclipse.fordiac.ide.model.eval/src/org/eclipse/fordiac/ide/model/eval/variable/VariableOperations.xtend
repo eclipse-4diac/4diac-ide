@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.eval.EvaluatorCache
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -176,7 +177,7 @@ final class VariableOperations {
 			} else
 				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
 		} else
-			emptySet
+			#{PackageNameHelper.getFullTypeName(decl.type)}
 	}
 
 	def static Set<String> getAllDependencies(EObject object) {

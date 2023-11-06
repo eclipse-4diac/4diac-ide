@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.structuredtextcore.validation;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.TreeIterator;
@@ -35,6 +34,7 @@ public class STCoreTypeUsageCollector {
 	private final Set<QualifiedName> usedTypes = new HashSet<>();
 
 	public Set<QualifiedName> collectUsedTypes(final EObject object) {
+		collectUsedTypesFrom(object);
 		final TreeIterator<EObject> iter = EcoreUtil.getAllProperContents(object, true);
 		while (iter.hasNext()) {
 			collectUsedTypesFrom(iter.next());
@@ -44,14 +44,21 @@ public class STCoreTypeUsageCollector {
 
 	protected void collectUsedTypesFrom(final EObject object) {
 		object.eCrossReferences().stream().filter(target -> isExternalReference(object, target))
-				.map(this::resolveImportedType).filter(Objects::nonNull).map(nameProvider).forEach(usedTypes::add);
+				.forEachOrdered(this::addUsedType);
 	}
 
 	protected static boolean isExternalReference(final EObject source, final EObject target) {
 		return source.eResource() != target.eResource();
 	}
 
-	protected INamedElement resolveImportedType(final EObject object) {
+	public void addUsedType(final EObject object) {
+		final INamedElement importedType = resolveImportedType(object);
+		if (importedType != null) {
+			usedTypes.add(nameProvider.apply(importedType));
+		}
+	}
+
+	protected static INamedElement resolveImportedType(final EObject object) {
 		if (object.eIsProxy()) {
 			return null;
 		}

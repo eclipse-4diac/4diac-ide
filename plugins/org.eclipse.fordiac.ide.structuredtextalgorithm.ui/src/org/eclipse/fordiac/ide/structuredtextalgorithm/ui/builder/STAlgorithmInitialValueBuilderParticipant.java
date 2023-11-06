@@ -141,6 +141,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		final List<Issue> issues = new ArrayList<>();
 		if (varDeclaration.isArray()) {
 			typeUsageCollector.collectUsedTypes(StructuredTextParseUtil.validateType(varDeclaration, issues));
+		} else {
+			typeUsageCollector.addUsedType(varDeclaration.getType());
 		}
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
