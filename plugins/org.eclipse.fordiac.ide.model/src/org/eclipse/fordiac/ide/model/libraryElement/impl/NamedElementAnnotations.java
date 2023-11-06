@@ -22,14 +22,17 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 
 public final class NamedElementAnnotations {
 	private static final String QUALIFIED_NAME_DELIMITER = "."; //$NON-NLS-1$
 
-	/** Do not call directly! Use {@link INamedElement#getQualifiedName()} instead.
+	/**
+	 * Do not call directly! Use {@link INamedElement#getQualifiedName()} instead.
 	 *
-	 * Must be accessible from derived models. */
+	 * Must be accessible from derived models.
+	 */
 	public static String getQualifiedName(final INamedElement element) {
 		final INamedElement namedContainer = getNamedContainer(element);
 		if (namedContainer != null) {
@@ -56,7 +59,8 @@ public final class NamedElementAnnotations {
 				if (diagnostics != null) {
 					diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 							LibraryElementValidator.INAMED_ELEMENT__VALIDATE_NAME, errorMessage.get(),
-							FordiacMarkerHelper.getDiagnosticData(element)));
+							FordiacMarkerHelper.getDiagnosticData(element,
+									LibraryElementPackage.Literals.INAMED_ELEMENT__NAME)));
 				}
 				return false;
 			}

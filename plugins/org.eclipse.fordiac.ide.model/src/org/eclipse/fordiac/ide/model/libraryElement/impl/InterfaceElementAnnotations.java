@@ -86,7 +86,8 @@ public final class InterfaceElementAnnotations {
 						LibraryElementValidator.IINTERFACE_ELEMENT__VALIDATE_NAME,
 						MessageFormat.format(Messages.InterfaceElementAnnotations_MemberNameCollidesWithDataType,
 								element.getQualifiedName()),
-						FordiacMarkerHelper.getDiagnosticData(element)));
+						FordiacMarkerHelper.getDiagnosticData(element,
+								LibraryElementPackage.Literals.INAMED_ELEMENT__NAME)));
 			}
 			return false;
 		}

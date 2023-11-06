@@ -96,13 +96,18 @@ public final class FordiacMarkerHelper {
 	}
 
 	public static Object[] getDiagnosticData(final EObject object) {
+		return getDiagnosticData(object, null);
+	}
+
+	public static Object[] getDiagnosticData(final EObject object, final EStructuralFeature feature) {
 		if (object == null) {
 			return new Object[0];
 		}
 		return new Object[] { object, // [0] object itself (per EMF convention)
 				getLocation(object), // [1] LOCATION
 				getTargetUriString(null, object), // [2] TARGET_URI
-				EcoreUtil.getURI(object.eClass()).toString() // [3] TARGET_TYPE
+				EcoreUtil.getURI(object.eClass()).toString(), // [3] TARGET_TYPE
+				feature != null ? EcoreUtil.getURI(feature).toString() : null, // [4] TARGET_FEATURE
 		};
 	}
 

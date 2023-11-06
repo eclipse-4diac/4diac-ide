@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 
 public final class CompilerInfoAnnotations {
@@ -31,7 +32,8 @@ public final class CompilerInfoAnnotations {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.COMPILER_INFO__VALIDATE_PACKAGE_NAME, errorMessage.get(),
-						FordiacMarkerHelper.getDiagnosticData(compilerInfo)));
+						FordiacMarkerHelper.getDiagnosticData(compilerInfo,
+								LibraryElementPackage.Literals.COMPILER_INFO__PACKAGE_NAME)));
 			}
 			return false;
 		}
