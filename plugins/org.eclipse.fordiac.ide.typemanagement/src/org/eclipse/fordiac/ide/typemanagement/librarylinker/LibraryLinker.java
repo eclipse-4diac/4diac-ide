@@ -42,15 +42,17 @@ import org.eclipse.jface.viewers.StructuredSelection;
 public class LibraryLinker {
 
 	private static final String LIB_TYPELIB_FOLDER_NAME = "typelib"; //$NON-NLS-1$
-	private static final String WORKSPACE_ROOT = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
-			.toPortableString();
+	private static final String WORKSPACE_ROOT = ResourcesPlugin.getWorkspace()
+	        .getRoot()
+	        .getRawLocation()
+	        .toPortableString();
 	private static final String EXTRACTED_LIB_DIRECTORY = ".lib"; //$NON-NLS-1$
 	private static final String PACKAGE_DOWNLOAD_DIRECTORY = ".download"; //$NON-NLS-1$
 	private static final String ZIP_SUFFIX = ".zip"; //$NON-NLS-1$
 	private static final File[] EMPTY_ARRAY = new File[0];
 	private static final String TYPE_LIB = "Type Library"; //$NON-NLS-1$
 	private static final IPath WORKSPACE_REL_EXTRACTED_LIB_DIR = new Path("WORKSPACE_LOC") //$NON-NLS-1$
-			.append(EXTRACTED_LIB_DIRECTORY);
+	        .append(EXTRACTED_LIB_DIRECTORY);
 	private IProject selectedProject;
 	final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 	final IWorkspaceRoot workspaceRoot = workspace.getRoot();
@@ -61,7 +63,7 @@ public class LibraryLinker {
 			ZipEntry entry = zipInputStream.getNextEntry();
 			while (entry != null) {
 				final File newFile = newFile(new File(Paths.get(WORKSPACE_ROOT, EXTRACTED_LIB_DIRECTORY).toString()),
-						entry);
+				        entry);
 				if (entry.isDirectory()) {
 					if (!newFile.isDirectory() && !newFile.mkdirs()) {
 						throw new IOException("Failed to create directory " + newFile); //$NON-NLS-1$
@@ -105,7 +107,7 @@ public class LibraryLinker {
 				return project.getName();
 			}
 			if ((selection.getFirstElement() instanceof final IFolder folder)
-					&& (folder.getParent() instanceof final IProject project)) {
+			        && (folder.getParent() instanceof final IProject project)) {
 				selectedProject = project;
 				return folder.getParent().getName();
 			}
@@ -123,20 +125,21 @@ public class LibraryLinker {
 
 	public void importLibrary(final String directory, final String projectName) {
 		// Make a folder inside of the Type Library
-		final IFolder directoryForExtraction = workspaceRoot.getProject(projectName).getFolder(TYPE_LIB)
-				.getFolder(directory);
+		final IFolder directoryForExtraction = workspaceRoot.getProject(projectName)
+		        .getFolder(TYPE_LIB)
+		        .getFolder(directory);
 		if (!directoryForExtraction.exists()) {
 			final java.nio.file.Path path = Paths.get(WORKSPACE_ROOT, EXTRACTED_LIB_DIRECTORY, directory,
-					LIB_TYPELIB_FOLDER_NAME);
+			        LIB_TYPELIB_FOLDER_NAME);
 			if (Files.exists(path)) {
 				try {
 					final IPath libPath = WORKSPACE_REL_EXTRACTED_LIB_DIR.append(directory)
-							.append(LIB_TYPELIB_FOLDER_NAME);
+					        .append(LIB_TYPELIB_FOLDER_NAME);
 					differentVersion(findLinkedLibs(), directory, projectName);
 					directoryForExtraction.createLink(libPath, IResource.BACKGROUND_REFRESH, null);
 				} catch (final CoreException e) {
 					MessageDialog.openWarning(null, Messages.Warning,
-							MessageFormat.format(Messages.ImportFailedOnLinkCreation, e.getMessage()));
+					        MessageFormat.format(Messages.ImportFailedOnLinkCreation, e.getMessage()));
 				}
 			} else {
 				MessageDialog.openWarning(null, Messages.Warning, Messages.ImportFailed);
@@ -147,14 +150,15 @@ public class LibraryLinker {
 	}
 
 	private void differentVersion(final List<String> importedLibs, final String newDirectoryName,
-			final String projectName) {
+	        final String projectName) {
 		for (final String nameOfImportedLib : importedLibs) {
 			final String[] nameAndVersionSplit = nameOfImportedLib.split("-"); //$NON-NLS-1$
 			if (newDirectoryName.contains(nameAndVersionSplit[0])) {
 				MessageDialog.openWarning(null, Messages.Warning,
-						Messages.NewVersionOf + nameAndVersionSplit[0] + " " + Messages.WillBeImported); //$NON-NLS-1$
-				final IFolder oldFolder = workspaceRoot.getProject(projectName).getFolder(TYPE_LIB)
-						.getFolder(nameOfImportedLib);
+				        Messages.NewVersionOf + nameAndVersionSplit[0] + " " + Messages.WillBeImported); //$NON-NLS-1$
+				final IFolder oldFolder = workspaceRoot.getProject(projectName)
+				        .getFolder(TYPE_LIB)
+				        .getFolder(nameOfImportedLib);
 				try {
 					// Should only remove the link but keep the resource on disk
 					oldFolder.delete(true, null);
@@ -171,12 +175,13 @@ public class LibraryLinker {
 		}
 		final LinkedList<IResource> resources = new LinkedList<>();
 		try {
-			selectedProject.accept(resource -> {
-				if (resource.isLinked() && !resource.isVirtual()) {
-					resources.add(resource);
-				}
-				return true;
-			});
+			selectedProject.accept(resource ->
+				{
+					if (resource.isLinked() && !resource.isVirtual()) {
+						resources.add(resource);
+					}
+					return true;
+				});
 		} catch (final CoreException e) {
 			e.printStackTrace();
 		}
@@ -185,8 +190,12 @@ public class LibraryLinker {
 
 	public static File[] listDirectoriesContainingArchives() {
 		final File[] directory = listLibDirectories(PACKAGE_DOWNLOAD_DIRECTORY);
-		return Stream.of(directory).filter(file -> file.isDirectory() && !Stream.of(file.listFiles())
-				.filter(child -> child.getName().endsWith(ZIP_SUFFIX)).toList().isEmpty()).toArray(File[]::new);
+		return Stream.of(directory)
+		        .filter(file -> file.isDirectory() && !Stream.of(file.listFiles())
+		                .filter(child -> child.getName().endsWith(ZIP_SUFFIX))
+		                .toList()
+		                .isEmpty())
+		        .toArray(File[]::new);
 	}
 
 	public static File[] listExtractedFiles() {

@@ -33,23 +33,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 
-public class DeleteFBTypeInterfaceChange extends CompositeChange {
-
-	public enum ChangeState {
-		DELETE_PIN(Messages.DeleteStructChange_DeleteChoice),
-		CHANGE_TO_ANY(Messages.DeleteStructChange_ChangeToAnyStruct);
-
-		private final String descriptor;
-
-		ChangeState(final String desc) {
-			this.descriptor = desc;
-		}
-
-		@Override
-		public String toString() {
-			return this.descriptor;
-		}
-	}
+public class DeleteFBTypeInterfaceChange extends CompositeChange implements IFordiacPreviewChange {
 
 	final FBType type;
 	final StructuredType struct;
@@ -85,7 +69,7 @@ public class DeleteFBTypeInterfaceChange extends CompositeChange {
 				cmd = ChangeDataTypeCommand.forDataType(varDec, IecTypes.GenericTypes.ANY_STRUCT);
 			}
 
-			if (state.contains(ChangeState.DELETE_PIN)) {
+			if (state.contains(ChangeState.DELETE)) {
 				cmd = new DeleteInterfaceCommand(varDec);
 			}
 
@@ -98,12 +82,13 @@ public class DeleteFBTypeInterfaceChange extends CompositeChange {
 		return type;
 	}
 
-	public void addState(final ChangeState state) {
-		this.state.add(state);
-	}
-
+	@Override
 	public EnumSet<ChangeState> getState() {
 		return state;
 	}
 
+	@Override
+	public void addState(final ChangeState newState) {
+		state.add(newState);
+	}
 }

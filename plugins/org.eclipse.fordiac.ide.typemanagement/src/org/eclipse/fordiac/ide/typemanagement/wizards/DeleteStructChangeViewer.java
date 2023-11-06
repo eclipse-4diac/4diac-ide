@@ -18,8 +18,8 @@ package org.eclipse.fordiac.ide.typemanagement.wizards;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeInterfaceChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeInterfaceChange.ChangeState;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.ui.refactoring.ChangePreviewViewerInput;
 import org.eclipse.ltk.ui.refactoring.IChangePreviewViewer;
@@ -34,7 +34,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class DeleteStructChangeViewer implements IChangePreviewViewer {
 	private Composite control;
-	private DeleteFBTypeInterfaceChange change;
+	private IFordiacPreviewChange change;
 
 	private Table table;
 	private final Map<TableItem, ChangeState> choices = new HashMap<>();
@@ -67,8 +67,10 @@ public class DeleteStructChangeViewer implements IChangePreviewViewer {
 					}
 					change.addState(cs);
 					change.getState().removeIf(state -> !state.equals(cs));
-					choices.keySet().stream().filter(anyItem -> !anyItem.equals(item))
-							.forEach(otherItem -> otherItem.setChecked(false));
+					choices.keySet()
+					        .stream()
+					        .filter(anyItem -> !anyItem.equals(item))
+					        .forEach(otherItem -> otherItem.setChecked(false));
 				}
 			}
 		});
@@ -83,14 +85,15 @@ public class DeleteStructChangeViewer implements IChangePreviewViewer {
 	@Override
 	public void setInput(final ChangePreviewViewerInput input) {
 		final Change change = input.getChange();
-		if (change instanceof final DeleteFBTypeInterfaceChange deleteChange) {
+		if (change instanceof final IFordiacPreviewChange deleteChange) {
 			choices.keySet().stream().forEach(i -> i.setChecked(false));
 			this.change = deleteChange;
 			// initialize UI from change state
-			choices.entrySet().stream().filter(entry -> deleteChange.getState().contains(entry.getValue()))
-					.forEach(entry -> entry.getKey().setChecked(true));
+			choices.entrySet()
+			        .stream()
+			        .filter(entry -> deleteChange.getState().contains(entry.getValue()))
+			        .forEach(entry -> entry.getKey().setChecked(true));
 		}
-
 	}
 
 }

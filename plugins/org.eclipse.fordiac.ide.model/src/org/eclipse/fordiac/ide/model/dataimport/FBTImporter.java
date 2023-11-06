@@ -76,7 +76,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /** Managing class for importing *.fbt files */
@@ -897,16 +899,16 @@ public class FBTImporter extends TypeImporter {
 		final FB fb = LibraryElementFactory.eINSTANCE.createFB();
 		readNameCommentAttributes(fb);
 		final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		fb.setTypeEntry(getTypeEntry(typeFbElement));
-		if (fb.getTypeEntry() != null) {
-			fb.setInterface(fb.getType().getInterfaceList().copy());
-		} else {
-			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		TypeEntry entry = getTypeEntry(typeFbElement);
+		if (entry == null) {
+			entry = getTypeLibrary().createErrorTypeEntry(typeFbElement, LibraryElementPackage.eINSTANCE.getFBType());
 		}
+		fb.setTypeEntry(entry);
+		fb.setInterface(fb.getType().getInterfaceList().copy());
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 		type.getInternalFbs().add(fb);
 
-		if (fb.getTypeEntry() == null) {
+		if (entry instanceof ErrorTypeEntry) {
 			final String errorMessage = MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", //$NON-NLS-1$
 					typeFbElement, fb.getName());
 			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(fb)

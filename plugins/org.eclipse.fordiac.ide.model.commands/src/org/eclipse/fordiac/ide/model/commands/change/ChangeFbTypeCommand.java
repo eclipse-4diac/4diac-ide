@@ -14,19 +14,28 @@
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.text.MessageFormat;
+
+import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 
 public class ChangeFbTypeCommand extends Command {
 
-	final FB fb;
-	FBTypeEntry oldEntry;
-	final FBTypeEntry newType;
+	private final FB fb;
+	private FBTypeEntry oldEntry;
+	private final FBTypeEntry newType;
+	private final CompoundCommand additionalCommands = new CompoundCommand();
 
 	protected ChangeFbTypeCommand(final FB fb, final FBTypeEntry newType) {
 		this.fb = fb;
@@ -44,7 +53,19 @@ public class ChangeFbTypeCommand extends Command {
 	}
 
 	public static ChangeFbTypeCommand forDataType(final FB fb, final FBTypeEntry typeEntry) {
-		return new ChangeFbTypeCommand(fb, typeEntry);
+		final ChangeFbTypeCommand result = new ChangeFbTypeCommand(fb, typeEntry);
+		if (fb.getTypeEntry() instanceof ErrorTypeEntry) {
+			result.getAdditionalCommands()
+					.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(fb)));
+		}
+		if (typeEntry instanceof ErrorTypeEntry) {
+			result.getAdditionalCommands()
+					.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(ErrorMarkerBuilder.createErrorMarkerBuilder(
+							MessageFormat.format(Messages.ChangeFbTypeCommand_TypeNotFound, typeEntry.getTypeName(),
+									fb.getName()))
+							.setTarget(fb)));
+		}
+		return result;
 	}
 
 	@Override
@@ -56,6 +77,7 @@ public class ChangeFbTypeCommand extends Command {
 	public void execute() {
 		oldEntry = (FBTypeEntry) fb.getType().getTypeEntry();
 		setFBType(newType);
+		additionalCommands.execute();
 	}
 
 	private void setFBType(final FBTypeEntry entry) {
@@ -66,10 +88,16 @@ public class ChangeFbTypeCommand extends Command {
 	@Override
 	public void redo() {
 		setFBType(newType);
+		additionalCommands.redo();
 	}
 
 	@Override
 	public void undo() {
+		additionalCommands.undo();
 		setFBType(oldEntry);
+	}
+
+	public CompoundCommand getAdditionalCommands() {
+		return additionalCommands;
 	}
 }

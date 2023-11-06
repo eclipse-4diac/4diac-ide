@@ -24,6 +24,7 @@ public final class Messages extends NLS {
 	public static String UpdateFBTypeCommand_type_mismatch;
 	public static String AdapterConnectionNotAllowed;
 	public static String ChangeBackgroundcolorCommand_LABEL_ChangeColor;
+	public static String ChangeFbTypeCommand_TypeNotFound;
 	public static String ChangeValueCommand_LABEL_ChangeValue;
 	public static String ChangeValueCommand_ConstantValuesNoAllowedOnAny;
 	public static String CreateSubAppInstanceCommand_CreateSubapplicationInstance;
