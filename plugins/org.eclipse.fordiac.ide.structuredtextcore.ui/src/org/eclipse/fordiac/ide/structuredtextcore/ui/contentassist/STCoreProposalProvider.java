@@ -125,6 +125,9 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 				STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, acceptor,
 				getCrossReferenceProposalCreator()::isImportableDescription,
 				getProposalFactory(grammarAccess.getQualifiedNameWithWildcardRule().getName(), context));
+		getCrossReferenceProposalCreator().lookupCrossReference(model, STCorePackage.Literals.ST_VAR_DECLARATION__TYPE,
+				acceptor, getCrossReferenceProposalCreator()::isImportableDescription,
+				getProposalFactory(grammarAccess.getQualifiedNameWithWildcardRule().getName(), context));
 	}
 
 	protected void createWildcardImportProposals(final EObject model, final ContentAssistContext context,
