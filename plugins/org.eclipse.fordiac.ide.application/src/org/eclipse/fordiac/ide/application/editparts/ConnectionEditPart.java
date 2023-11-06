@@ -25,6 +25,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.util.List;
+
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.Shape;
@@ -142,25 +144,22 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 					|| LibraryElementPackage.eINSTANCE.getFBNetworkElement_Group().equals(feature)) {
 				if ((getSource() instanceof final InterfaceEditPartForFBNetwork editPart
 						&& !editPart.getModel().isIsInput())) {
-					for (final Object o : editPart.getSourceConnections()) {
-						if (o instanceof final ConnectionEditPart connEditPart) {
-							connEditPart.getFigure().updateConLabels();
-						}
-					}
+					updateConnectionLables(editPart.getSourceConnections());
 				}
 				if ((getTargetEP() instanceof final InterfaceEditPartForFBNetwork editPart
 						&& editPart.getModel().isIsInput())) {
-					for (final Object o : editPart.getTargetConnections()) {
-						if (o instanceof final ConnectionEditPart connEditPart) {
-							connEditPart.getFigure().updateConLabels();
-						}
-					}
+					updateConnectionLables(editPart.getTargetConnections());
 				}
 			}
 			if (LibraryElementPackage.eINSTANCE.getFBNetworkElement_Group().equals(feature)) {
 				getFigure().handleVisibilityChange(getFigure().isHidden()); // triggers new label creation
 			}
 		}
+	}
+
+	private static void updateConnectionLables(final List<?> editPartConnections) {
+		editPartConnections.stream().filter(ConnectionEditPart.class::isInstance).map(ConnectionEditPart.class::cast)
+				.map(ConnectionEditPart::getFigure).forEach(FBNetworkConnection::updateConLabels);
 	}
 
 	private EditPart getTargetEP() {
