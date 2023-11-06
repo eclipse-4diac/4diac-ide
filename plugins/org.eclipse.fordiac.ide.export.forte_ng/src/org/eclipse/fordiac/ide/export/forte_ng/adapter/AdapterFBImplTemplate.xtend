@@ -93,7 +93,6 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterFBType> {
 			switch(paEIID) {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
-			  	  RES_DATA_CON_CRITICAL_REGION();
 			  	  «FOR variable : event.with.map[withVariable]»
 			  	  	«val index = variable.interfaceElementIndex»readData(«index», *mDIs[«index»], mDIConns[«index»]);
 			  	  «ENDFOR»
@@ -123,7 +122,6 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterFBType> {
 			switch(paEIID) {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
-			  	  RES_DATA_CON_CRITICAL_REGION();
 			  	  «FOR variable : event.with.map[withVariable]»
 			  	  	«val index = variable.interfaceElementIndex»writeData(«index», *mDOs[«index»], mDOConns[«index»]);
 			  	  «ENDFOR»

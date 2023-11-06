@@ -265,7 +265,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			switch(paEIID) {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
-			  	  RES_DATA_CON_CRITICAL_REGION();
 			  	  «FOR variable : event.with.map[withVariable]»
 			  	  	readData(«variable.interfaceElementIndex», «variable.generateName», «IF variable.inOutVar»&«ENDIF»«variable.generateNameAsConnection»);
 			  	  «ENDFOR»
@@ -295,7 +294,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			switch(paEIID) {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
-			  	  RES_DATA_CON_CRITICAL_REGION();
 			  	  «FOR variable : event.with.map[withVariable]»
 			  	  	writeData(«variable.interfaceElementIndex», «variable.generateName», «variable.generateNameAsConnection»);
 			  	  «ENDFOR»

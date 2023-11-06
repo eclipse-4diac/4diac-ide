@@ -81,7 +81,6 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 			switch(paEOID) {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
-			  	  RES_DATA_CON_CRITICAL_REGION();
 			  	  «FOR variable : event.with.map[withVariable]»
 			  	  	if(CDataConnection *conn = getIn2IfConUnchecked(«variable.interfaceElementIndex»); conn) { conn->readData(«variable.generateName»); }
 			  	  «ENDFOR»
