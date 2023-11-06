@@ -24,8 +24,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.QualifiedName;
+import org.eclipse.xtext.scoping.IGlobalScopeProvider;
 import org.eclipse.xtext.scoping.IScope;
-import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.util.Strings;
 import org.eclipse.xtext.validation.ValidationMessageAcceptor;
 
@@ -39,7 +39,7 @@ public class STCoreImportValidator {
 	private IQualifiedNameConverter nameConverter;
 
 	@Inject
-	private IScopeProvider scopeProvider;
+	private IGlobalScopeProvider globalScopeProvider;
 
 	public void validateImports(final String packageName, final List<? extends Import> imports,
 			final Set<QualifiedName> usedTypes, final ValidationMessageAcceptor acceptor) {
@@ -50,8 +50,8 @@ public class STCoreImportValidator {
 		final QualifiedName packageQualifiedName = Strings.isEmpty(packageName) ? QualifiedName.EMPTY
 				: nameConverter.toQualifiedName(packageName);
 
-		final IScope scope = scopeProvider.getScope(imports.get(0),
-				STCorePackage.eINSTANCE.getSTFeatureExpression_Feature());
+		final IScope scope = globalScopeProvider.getScope(imports.get(0).eResource(),
+				STCorePackage.eINSTANCE.getSTFeatureExpression_Feature(), null);
 
 		imports.stream().forEach(imp -> validateImport(imp, packageQualifiedName, usedTypes, scope, acceptor));
 	}
