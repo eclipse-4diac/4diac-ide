@@ -75,7 +75,7 @@ public class FBUpdateDialog extends MessageDialog {
 	private static final int CHECK_BOX_COL_WIDTH = 60;
 	private boolean selectAll = true;
 
-	private final Set<Object> collectedElements;
+	private final Set<INamedElement> collectedElements;
 	private static TreeViewer treeViewer;
 	private final Map<String, Set<INamedElement>> children = new HashMap<>();
 	private ColumnLabelProvider labelElement;
@@ -91,7 +91,7 @@ public class FBUpdateDialog extends MessageDialog {
 		collectedElements = new HashSet<>();
 	}
 
-	public Set<Object> getCollectedFBs() {
+	public Set<INamedElement> getCollectedFBs() {
 		return collectedElements;
 	}
 
@@ -359,14 +359,14 @@ public class FBUpdateDialog extends MessageDialog {
 
 	private void clickTypeItem(final TreeItem item) {
 		if (item.getChecked()) {
-			collectedElements.add(item.getData());
+			collectedElements.add((INamedElement) item.getData());
 			if (!item.getExpanded()) {
 				item.setExpanded(true);
 				treeViewer.refresh();
 			}
 			Arrays.asList(item.getItems()).stream().forEach(e -> {
 				e.setChecked(true);
-				collectedElements.add(e.getData());
+				collectedElements.add((INamedElement) e.getData());
 			});
 		} else {
 			collectedElements.remove(item.getData());
@@ -382,9 +382,9 @@ public class FBUpdateDialog extends MessageDialog {
 		if (item.getChecked()) {
 			if (parent != null) {
 				parent.setChecked(true);
-				collectedElements.add(parent.getData());
+				collectedElements.add((INamedElement) parent.getData());
 			}
-			collectedElements.add(item.getData());
+			collectedElements.add((INamedElement) item.getData());
 		} else {
 			collectedElements.remove(item.getData());
 		}
@@ -407,7 +407,7 @@ public class FBUpdateDialog extends MessageDialog {
 			if (tableItem.getData() instanceof StructuredType || tableItem.getData() instanceof FBNetworkElement
 					|| tableItem.getData() instanceof FBType) {
 				if (state) {
-					collectedElements.add(tableItem.getData());
+					collectedElements.add((INamedElement) tableItem.getData());
 				} else {
 					collectedElements.remove(tableItem.getData());
 				}
