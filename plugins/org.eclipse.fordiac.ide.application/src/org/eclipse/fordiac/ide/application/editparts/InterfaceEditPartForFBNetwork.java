@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
@@ -27,6 +28,8 @@ import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationCompoundBorder;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationFeedbackBorder;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -62,7 +65,7 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 
 		@Override
 		public Point getLocation(final Point reference) {
-			if (valueHasError()) {
+			if (valueHasAnnotation()) {
 				final IFigure fig = getValueFigure();
 				if (fig != null) {
 					final Rectangle bounds = fig.getBounds().getCopy();
@@ -73,8 +76,9 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 			return super.getLocation(reference);
 		}
 
-		private boolean valueHasError() {
-			return getValue().hasError();
+		private boolean valueHasAnnotation() {
+			final Border border = getValueFigure().getBorder();
+			return border instanceof AnnotationFeedbackBorder || border instanceof AnnotationCompoundBorder;
 		}
 
 		private Value getValue() {

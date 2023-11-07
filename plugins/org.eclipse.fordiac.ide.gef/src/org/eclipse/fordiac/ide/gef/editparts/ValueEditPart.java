@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.draw2d.AncestorListener;
+import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.FigureUtilities;
@@ -34,6 +35,8 @@ import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationCompoundBorder;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationFeedbackBorder;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
@@ -223,13 +226,14 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
 		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event);
 		getFigure().setToolTip(new ValueToolTipFigure(getIInterfaceElement(), getModel(), event.getModel()));
+		refreshValue(); // necessary since annotations determine if value is shown for connected pins
 	}
 
 	/** Refresh value. */
 	void refreshValue() {
 		if (getModel().getValue() != null) {
 			setVisible(true);
-			if (getOuterConnections().isEmpty() || getModel().hasError()) {
+			if (getOuterConnections().isEmpty() || valueHasAnnotation()) {
 				if (!getModel().getValue().isBlank()) {
 					getFigure().setText(getModel().getValue());
 					getFigure().setFont(null);
@@ -250,6 +254,11 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		}
 		getFigure().setToolTip(new ValueToolTipFigure(getIInterfaceElement(), getModel(),
 				FordiacAnnotationUtil.getAnnotationModel(this)));
+	}
+
+	private boolean valueHasAnnotation() {
+		final Border border = getFigure().getBorder();
+		return border instanceof AnnotationFeedbackBorder || border instanceof AnnotationCompoundBorder;
 	}
 
 	protected void updateDefaultValue(final String value) {
