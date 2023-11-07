@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.tools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.gef.ConnectionEditPart;
@@ -24,7 +25,7 @@ public class MultiFBNScrollingconnectionEndpointTracker extends FBNScrollingConn
 
 	public MultiFBNScrollingconnectionEndpointTracker(final List<ConnectionEditPart> coSelectedConnections) {
 		super(coSelectedConnections.get(0));
-		this.coSelectedConnections = coSelectedConnections;
+		this.coSelectedConnections = new ArrayList<>(coSelectedConnections);
 		this.coSelectedConnections.remove(0);
 	}
 
@@ -41,7 +42,7 @@ public class MultiFBNScrollingconnectionEndpointTracker extends FBNScrollingConn
 
 	@Override
 	protected void eraseSourceFeedback() {
-		final ReconnectRequest targetRequest = (ReconnectRequest)getTargetRequest();
+		final ReconnectRequest targetRequest = (ReconnectRequest) getTargetRequest();
 		coSelectedConnections.forEach(con -> {
 			targetRequest.setConnectionEditPart(con);
 			con.eraseSourceFeedback(getTargetRequest());
