@@ -28,5 +28,5 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * @model
  * @generated
  */
-public interface ErrorMarkerDataType extends DataType, ErrorMarkerRef {
+public interface ErrorMarkerDataType extends DataType {
 } // ErrorMarkerDataType

@@ -40,7 +40,7 @@ import org.eclipse.emf.common.util.DiagnosticChain;
  * @model abstract="true"
  * @generated
  */
-public interface Connection extends ConfigurableObject, ErrorMarkerRef, HiddenElement {
+public interface Connection extends ConfigurableObject, HiddenElement {
 	/**
 	 * Returns the value of the '<em><b>Broken Connection</b></em>' attribute.
 	 * <!-- begin-user-doc -->

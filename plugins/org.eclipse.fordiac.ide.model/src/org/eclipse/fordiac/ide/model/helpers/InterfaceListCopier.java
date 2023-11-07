@@ -77,7 +77,6 @@ public final class InterfaceListCopier {
 		if ((copyValues) && (null != src.getValue())) {
 			final Value varInitialization = LibraryElementFactory.eINSTANCE.createValue();
 			varInitialization.setValue(src.getValue().getValue());
-			varInitialization.setErrorMessage(src.getValue().getErrorMessage());
 			copy.setValue(varInitialization);
 		}
 
@@ -109,7 +108,6 @@ public final class InterfaceListCopier {
 		final Value varInitialization = LibraryElementFactory.eINSTANCE.createValue();
 		if ((copyValues) && (null != variable.getValue())) {
 			varInitialization.setValue(variable.getValue().getValue());
-			varInitialization.setErrorMessage(variable.getValue().getErrorMessage());
 		}
 		copy.setValue(varInitialization); // ensure that all vars have a value, reduces null checks
 

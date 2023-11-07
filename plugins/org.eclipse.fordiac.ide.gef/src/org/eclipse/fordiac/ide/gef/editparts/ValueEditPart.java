@@ -63,7 +63,6 @@ import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart, AnnotableGraphicalEditPart {
@@ -184,17 +183,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
 				refreshValue();
 				refreshPosition();
-			} else if (LibraryElementPackage.eINSTANCE.getErrorMarkerRef_ErrorMessage().equals(feature)) {
-				Display.getDefault().asyncExec(() -> {
-					refreshValue();
-					if (parentPart != null) {
-						for (final Object ep : parentPart.getTargetConnections()) {
-							if (ep instanceof final GraphicalEditPart gep) {
-								gep.refresh();
-							}
-						}
-					}
-				});
 			}
 			super.notifyChanged(notification);
 		}

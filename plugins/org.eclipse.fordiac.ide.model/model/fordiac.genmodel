@@ -334,10 +334,6 @@
         <genParameters ecoreParameter="lib.ecore#//ErrorMarkerInterface/validateValue/context"/>
       </genOperations>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//ErrorMarkerRef">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ErrorMarkerRef/errorMessage"/>
-      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerRef/hasError" body="return getErrorMessage() != null &amp;&amp; !getErrorMessage().isBlank();"/>
-    </genClasses>
     <genClasses ecoreClass="lib.ecore#//Event">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>
       <genOperations ecoreOperation="lib.ecore#//Event/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>

@@ -33,7 +33,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface ErrorMarkerFBNElement extends FBNetworkElement, ErrorMarkerRef {
+public interface ErrorMarkerFBNElement extends FBNetworkElement {
 	/**
 	 * Returns the value of the '<em><b>Repaired Element</b></em>' reference.
 	 * <!-- begin-user-doc -->

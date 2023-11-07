@@ -37,7 +37,7 @@ import org.eclipse.emf.common.util.DiagnosticChain;
  * @model
  * @generated
  */
-public interface ErrorMarkerInterface extends IInterfaceElement, ErrorMarkerRef {
+public interface ErrorMarkerInterface extends IInterfaceElement {
 	/**
 	 * Returns the value of the '<em><b>Repaired Endpoint</b></em>' reference.
 	 * <!-- begin-user-doc -->

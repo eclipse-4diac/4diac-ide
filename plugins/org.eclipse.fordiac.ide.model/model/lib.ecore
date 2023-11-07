@@ -117,7 +117,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ArraySize" eSuperTypes="#//ErrorMarkerRef">
+  <eClassifiers xsi:type="ecore:EClass" name="ArraySize">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral=""/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclaration" eType="#//VarDeclaration"
@@ -420,7 +420,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
         eType="#//Attribute" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//ConfigurableObject #//ErrorMarkerRef #//HiddenElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//ConfigurableObject #//HiddenElement">
     <eOperations name="getSourceElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);"/>
@@ -840,11 +840,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCC" lowerBound="1" eType="#//ECC"
         eOpposite="#//ECC/eCTransition"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerDataType" eSuperTypes="data.ecore#//DataType #//ErrorMarkerRef"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerFBNElement" eSuperTypes="#//FBNetworkElement #//ErrorMarkerRef">
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerDataType" eSuperTypes="data.ecore#//DataType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerFBNElement" eSuperTypes="#//FBNetworkElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repairedElement" eType="#//FBNetworkElement"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerInterface" eSuperTypes="#//IInterfaceElement #//ErrorMarkerRef">
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerInterface" eSuperTypes="#//IInterfaceElement">
     <eOperations name="validateValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
         <details key="invariant" value="true"/>
@@ -864,14 +864,6 @@
         transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Value"
         containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerRef">
-    <eOperations name="hasError" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getErrorMessage() != null &amp;&amp; !getErrorMessage().isBlank();"/>
-      </eAnnotations>
-    </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorMessage" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//IInterfaceElement #//ICallable">
     <eOperations name="getInputParameters" upperBound="-1" eType="#//INamedElement">
@@ -1055,7 +1047,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FBNetworkElement" eSuperTypes="#//TypedConfigureableObject #//PositionableElement #//ErrorMarkerRef">
+  <eClassifiers xsi:type="ecore:EClass" name="FBNetworkElement" eSuperTypes="#//TypedConfigureableObject #//PositionableElement">
     <eOperations name="getResource" lowerBound="1" eType="#//Resource">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getResource(this);"/>
@@ -1943,7 +1935,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeEntry" eType="#//TypeEntry"
         transient="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Value" eSuperTypes="#//ErrorMarkerRef">
+  <eClassifiers xsi:type="ecore:EClass" name="Value">
     <eOperations name="getParentIE" lowerBound="1" eType="#//IInterfaceElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return (IInterfaceElement) eContainer();"/>

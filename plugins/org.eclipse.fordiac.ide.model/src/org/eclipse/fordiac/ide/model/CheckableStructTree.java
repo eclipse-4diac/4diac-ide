@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model;
 
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -39,7 +39,7 @@ public class CheckableStructTree extends AbstractStructTree<CheckableStructTreeN
 			final CheckableStructTreeNode treeNode = parent.addChild(memberVariable);
 
 			final IInterfaceElement variablePin = struct.getInterfaceElement(treeNode.getPinName());
-			if ((variablePin != null) && !(variablePin instanceof ErrorMarkerRef)) {
+			if ((variablePin != null) && !(variablePin instanceof ErrorMarkerInterface)) {
 				treeNode.check(true);
 			}
 

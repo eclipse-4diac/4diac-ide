@@ -66,7 +66,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -454,8 +453,6 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateErrorMarkerFBNElement((ErrorMarkerFBNElement)value, diagnostics, context);
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE:
 				return validateErrorMarkerInterface((ErrorMarkerInterface)value, diagnostics, context);
-			case LibraryElementPackage.ERROR_MARKER_REF:
-				return validateErrorMarkerRef((ErrorMarkerRef)value, diagnostics, context);
 			case LibraryElementPackage.EVENT:
 				return validateEvent((Event)value, diagnostics, context);
 			case LibraryElementPackage.EVENT_CONNECTION:
@@ -1378,15 +1375,6 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateErrorMarkerInterface_validateValue(ErrorMarkerInterface errorMarkerInterface, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return errorMarkerInterface.validateValue(diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateErrorMarkerRef(ErrorMarkerRef errorMarkerRef, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(errorMarkerRef, diagnostics, context);
 	}
 
 	/**

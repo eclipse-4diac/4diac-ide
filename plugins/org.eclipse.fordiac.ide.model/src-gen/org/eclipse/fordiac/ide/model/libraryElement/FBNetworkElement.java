@@ -38,7 +38,7 @@ import org.eclipse.emf.common.util.DiagnosticChain;
  * @model
  * @generated
  */
-public interface FBNetworkElement extends TypedConfigureableObject, PositionableElement, ErrorMarkerRef {
+public interface FBNetworkElement extends TypedConfigureableObject, PositionableElement {
 	/**
 	 * Returns the value of the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

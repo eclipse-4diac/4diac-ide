@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -61,7 +60,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getErrorMessage <em>Error Message</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getRepairedEndpoint <em>Repaired Endpoint</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getValue <em>Value</em>}</li>
  * </ul>
@@ -168,26 +166,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 * @ordered
 	 */
 	protected DataType type;
-
-	/**
-	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getErrorMessage()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String ERROR_MESSAGE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getErrorMessage()
-	 * @generated
-	 * @ordered
-	 */
-	protected String errorMessage = ERROR_MESSAGE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getRepairedEndpoint() <em>Repaired Endpoint</em>}' reference.
@@ -436,29 +414,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 * @generated
 	 */
 	@Override
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setErrorMessage(String newErrorMessage) {
-		String oldErrorMessage = errorMessage;
-		errorMessage = newErrorMessage;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE, oldErrorMessage, errorMessage));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public IInterfaceElement getRepairedEndpoint() {
 		if (repairedEndpoint != null && repairedEndpoint.eIsProxy()) {
 			InternalEObject oldRepairedEndpoint = (InternalEObject)repairedEndpoint;
@@ -569,16 +524,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	@Override
 	public boolean validateValue(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceAnnotations.validateValue(this, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean hasError() {
-		return getErrorMessage() != null && !getErrorMessage().isBlank();
 	}
 
 	/**
@@ -713,8 +658,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
-				return getErrorMessage();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
 				if (resolve) return getRepairedEndpoint();
 				return basicGetRepairedEndpoint();
@@ -759,9 +702,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
 				setType((DataType)newValue);
 				return;
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
-				setErrorMessage((String)newValue);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
 				setRepairedEndpoint((IInterfaceElement)newValue);
 				return;
@@ -803,9 +743,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
 				setType((DataType)null);
 				return;
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
-				setErrorMessage(ERROR_MESSAGE_EDEFAULT);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
 				setRepairedEndpoint((IInterfaceElement)null);
 				return;
@@ -840,8 +777,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 				return outputConnections != null && !outputConnections.isEmpty();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
 				return type != null;
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
-				return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
 				return repairedEndpoint != null;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__VALUE:
@@ -869,12 +804,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 				default: return -1;
 			}
 		}
-		if (baseClass == ErrorMarkerRef.class) {
-			switch (derivedFeatureID) {
-				case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE: return LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE;
-				default: return -1;
-			}
-		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -893,12 +822,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 		}
 		if (baseClass == HiddenElement.class) {
 			switch (baseFeatureID) {
-				default: return -1;
-			}
-		}
-		if (baseClass == ErrorMarkerRef.class) {
-			switch (baseFeatureID) {
-				case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE: return LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE;
 				default: return -1;
 			}
 		}
@@ -921,8 +844,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 		result.append(comment);
 		result.append(", isInput: "); //$NON-NLS-1$
 		result.append(isInput);
-		result.append(", errorMessage: "); //$NON-NLS-1$
-		result.append(errorMessage);
 		result.append(')');
 		return result.toString();
 	}

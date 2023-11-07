@@ -85,7 +85,6 @@ public class ErrorMarkerInterfaceItemProvider
 			addInputConnectionsPropertyDescriptor(object);
 			addOutputConnectionsPropertyDescriptor(object);
 			addTypePropertyDescriptor(object);
-			addErrorMessagePropertyDescriptor(object);
 			addRepairedEndpointPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -224,28 +223,6 @@ public class ErrorMarkerInterfaceItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Error Message feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addErrorMessagePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ErrorMarkerRef_errorMessage_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerRef_errorMessage_feature", "_UI_ErrorMarkerRef_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.ERROR_MARKER_REF__ERROR_MESSAGE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Repaired Endpoint feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -339,7 +316,6 @@ public class ErrorMarkerInterfaceItemProvider
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__COMMENT:
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ATTRIBUTES:
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__IS_INPUT:
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__VALUE:

@@ -201,7 +201,6 @@ public final class DataTypeLibrary {
 			FordiacLogHelper.logInfo(message);
 			final ErrorMarkerDataType type = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
 			PackageNameHelper.setFullTypeName(type, typeName);
-			type.setErrorMessage(message);
 			encloseInResource(type);
 			return type;
 		});

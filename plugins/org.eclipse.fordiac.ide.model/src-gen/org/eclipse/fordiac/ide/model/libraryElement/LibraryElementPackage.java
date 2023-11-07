@@ -121,22 +121,13 @@ public interface LibraryElementPackage extends EPackage {
 	int CONNECTION__ATTRIBUTES = CONFIGURABLE_OBJECT__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONNECTION__ERROR_MESSAGE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Broken Connection</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION__BROKEN_CONNECTION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
+	int CONNECTION__BROKEN_CONNECTION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' reference.
@@ -145,7 +136,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION__SOURCE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
+	int CONNECTION__SOURCE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Destination</b></em>' reference.
@@ -154,7 +145,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION__DESTINATION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 3;
+	int CONNECTION__DESTINATION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Routing Data</b></em>' containment reference.
@@ -163,7 +154,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION__ROUTING_DATA = CONFIGURABLE_OBJECT_FEATURE_COUNT + 4;
+	int CONNECTION__ROUTING_DATA = CONFIGURABLE_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -172,7 +163,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION__COMMENT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 5;
+	int CONNECTION__COMMENT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Connection</em>' class.
@@ -181,7 +172,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 6;
+	int CONNECTION_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterConnectionImpl <em>Adapter Connection</em>}' class.
@@ -201,15 +192,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
-
-	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_CONNECTION__ERROR_MESSAGE = CONNECTION__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Broken Connection</b></em>' attribute.
@@ -282,7 +264,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getINamedElement()
 	 * @generated
 	 */
-	int INAMED_ELEMENT = 54;
+	int INAMED_ELEMENT = 53;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -319,7 +301,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getITypedElement()
 	 * @generated
 	 */
-	int ITYPED_ELEMENT = 57;
+	int ITYPED_ELEMENT = 56;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -356,7 +338,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIInterfaceElement()
 	 * @generated
 	 */
-	int IINTERFACE_ELEMENT = 52;
+	int IINTERFACE_ELEMENT = 51;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -538,7 +520,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedConfigureableObject()
 	 * @generated
 	 */
-	int TYPED_CONFIGUREABLE_OBJECT = 97;
+	int TYPED_CONFIGUREABLE_OBJECT = 96;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -593,7 +575,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBNetworkElement()
 	 * @generated
 	 */
-	int FB_NETWORK_ELEMENT = 42;
+	int FB_NETWORK_ELEMENT = 41;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -641,22 +623,13 @@ public interface LibraryElementPackage extends EPackage {
 	int FB_NETWORK_ELEMENT__POSITION = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FB_NETWORK_ELEMENT__ERROR_MESSAGE = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FB_NETWORK_ELEMENT__INTERFACE = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
+	int FB_NETWORK_ELEMENT__INTERFACE = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Mapping</b></em>' reference.
@@ -665,7 +638,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FB_NETWORK_ELEMENT__MAPPING = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
+	int FB_NETWORK_ELEMENT__MAPPING = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Group</b></em>' reference.
@@ -674,7 +647,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FB_NETWORK_ELEMENT__GROUP = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 4;
+	int FB_NETWORK_ELEMENT__GROUP = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>FB Network Element</em>' class.
@@ -683,7 +656,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FB_NETWORK_ELEMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 5;
+	int FB_NETWORK_ELEMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl <em>FB</em>}' class.
@@ -693,7 +666,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFB()
 	 * @generated
 	 */
-	int FB = 40;
+	int FB = 39;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -739,15 +712,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB__POSITION = FB_NETWORK_ELEMENT__POSITION;
-
-	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FB__ERROR_MESSAGE = FB_NETWORK_ELEMENT__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -841,15 +805,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_FB__POSITION = FB__POSITION;
 
 	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_FB__ERROR_MESSAGE = FB__ERROR_MESSAGE;
-
-	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -902,7 +857,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLibraryElement()
 	 * @generated
 	 */
-	int LIBRARY_ELEMENT = 59;
+	int LIBRARY_ELEMENT = 58;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -984,7 +939,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBType()
 	 * @generated
 	 */
-	int FB_TYPE = 43;
+	int FB_TYPE = 42;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1284,7 +1239,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getICallable()
 	 * @generated
 	 */
-	int ICALLABLE = 50;
+	int ICALLABLE = 49;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1523,7 +1478,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMappingTarget()
 	 * @generated
 	 */
-	int MAPPING_TARGET = 63;
+	int MAPPING_TARGET = 62;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationMappingTargetImpl <em>Communication Mapping Target</em>}' class.
@@ -1593,7 +1548,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStructManipulator()
 	 * @generated
 	 */
-	int STRUCT_MANIPULATOR = 90;
+	int STRUCT_MANIPULATOR = 89;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl <em>Demultiplexer</em>}' class.
@@ -1663,7 +1618,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPositionableElement()
 	 * @generated
 	 */
-	int POSITIONABLE_ELEMENT = 71;
+	int POSITIONABLE_ELEMENT = 70;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ECTransitionImpl <em>EC Transition</em>}' class.
@@ -1706,34 +1661,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_INTERFACE = 36;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl <em>Error Marker Ref</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getErrorMarkerRef()
-	 * @generated
-	 */
-	int ERROR_MARKER_REF = 37;
-
-	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ERROR_MARKER_REF__ERROR_MESSAGE = 0;
-
-	/**
-	 * The number of structural features of the '<em>Error Marker Ref</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ERROR_MARKER_REF_FEATURE_COUNT = 1;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ArraySizeImpl <em>Array Size</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1744,22 +1671,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ARRAY_SIZE = 7;
 
 	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ARRAY_SIZE__ERROR_MESSAGE = ERROR_MARKER_REF__ERROR_MESSAGE;
-
-	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_SIZE__VALUE = ERROR_MARKER_REF_FEATURE_COUNT + 0;
+	int ARRAY_SIZE__VALUE = 0;
 
 	/**
 	 * The feature id for the '<em><b>Var Declaration</b></em>' container reference.
@@ -1768,7 +1686,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_SIZE__VAR_DECLARATION = ERROR_MARKER_REF_FEATURE_COUNT + 1;
+	int ARRAY_SIZE__VAR_DECLARATION = 1;
 
 	/**
 	 * The number of structural features of the '<em>Array Size</em>' class.
@@ -1777,7 +1695,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_SIZE_FEATURE_COUNT = ERROR_MARKER_REF_FEATURE_COUNT + 2;
+	int ARRAY_SIZE_FEATURE_COUNT = 2;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2365,15 +2283,6 @@ public interface LibraryElementPackage extends EPackage {
 	int CFB_INSTANCE__POSITION = FB__POSITION;
 
 	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CFB_INSTANCE__ERROR_MESSAGE = FB__ERROR_MESSAGE;
-
-	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2518,15 +2427,6 @@ public interface LibraryElementPackage extends EPackage {
 	int COMMENT__POSITION = FB_NETWORK_ELEMENT__POSITION;
 
 	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMENT__ERROR_MESSAGE = FB_NETWORK_ELEMENT__ERROR_MESSAGE;
-
-	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2624,15 +2524,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMMUNICATION_CHANNEL__POSITION = FB__POSITION;
-
-	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMUNICATION_CHANNEL__ERROR_MESSAGE = FB__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -2995,15 +2886,6 @@ public interface LibraryElementPackage extends EPackage {
 	int DATA_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATA_CONNECTION__ERROR_MESSAGE = CONNECTION__ERROR_MESSAGE;
-
-	/**
 	 * The feature id for the '<em><b>Broken Connection</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3112,15 +2994,6 @@ public interface LibraryElementPackage extends EPackage {
 	int STRUCT_MANIPULATOR__POSITION = FB__POSITION;
 
 	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int STRUCT_MANIPULATOR__ERROR_MESSAGE = FB__ERROR_MESSAGE;
-
-	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3209,15 +3082,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int DEMULTIPLEXER__POSITION = STRUCT_MANIPULATOR__POSITION;
-
-	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEMULTIPLEXER__ERROR_MESSAGE = STRUCT_MANIPULATOR__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -3796,22 +3660,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_DATA_TYPE__TYPE_ENTRY = DataPackage.DATA_TYPE__TYPE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ERROR_MARKER_DATA_TYPE__ERROR_MESSAGE = DataPackage.DATA_TYPE_FEATURE_COUNT + 0;
-
-	/**
 	 * The number of structural features of the '<em>Error Marker Data Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_DATA_TYPE_FEATURE_COUNT = DataPackage.DATA_TYPE_FEATURE_COUNT + 1;
+	int ERROR_MARKER_DATA_TYPE_FEATURE_COUNT = DataPackage.DATA_TYPE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3857,15 +3712,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ERROR_MARKER_FBN_ELEMENT__POSITION = FB_NETWORK_ELEMENT__POSITION;
-
-	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE = FB_NETWORK_ELEMENT__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -3976,22 +3822,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_INTERFACE__TYPE = IINTERFACE_ELEMENT__TYPE;
 
 	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ERROR_MARKER_INTERFACE__ERROR_MESSAGE = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Repaired Endpoint</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
+	int ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
@@ -4000,7 +3837,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_INTERFACE__VALUE = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
+	int ERROR_MARKER_INTERFACE__VALUE = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Error Marker Interface</em>' class.
@@ -4009,7 +3846,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
+	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl <em>Event</em>}' class.
@@ -4019,7 +3856,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getEvent()
 	 * @generated
 	 */
-	int EVENT = 38;
+	int EVENT = 37;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4110,7 +3947,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getEventConnection()
 	 * @generated
 	 */
-	int EVENT_CONNECTION = 39;
+	int EVENT_CONNECTION = 38;
 
 	/**
 	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
@@ -4120,15 +3957,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int EVENT_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
-
-	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT_CONNECTION__ERROR_MESSAGE = CONNECTION__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Broken Connection</b></em>' attribute.
@@ -4201,7 +4029,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBNetwork()
 	 * @generated
 	 */
-	int FB_NETWORK = 41;
+	int FB_NETWORK = 40;
 
 	/**
 	 * The feature id for the '<em><b>Network Elements</b></em>' containment reference list.
@@ -4256,7 +4084,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFunction()
 	 * @generated
 	 */
-	int FUNCTION = 44;
+	int FUNCTION = 43;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4293,7 +4121,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFunctionBody()
 	 * @generated
 	 */
-	int FUNCTION_BODY = 45;
+	int FUNCTION_BODY = 44;
 
 	/**
 	 * The number of structural features of the '<em>Function Body</em>' class.
@@ -4312,7 +4140,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFunctionFBType()
 	 * @generated
 	 */
-	int FUNCTION_FB_TYPE = 46;
+	int FUNCTION_FB_TYPE = 45;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4421,7 +4249,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getGlobalConstants()
 	 * @generated
 	 */
-	int GLOBAL_CONSTANTS = 47;
+	int GLOBAL_CONSTANTS = 46;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4521,7 +4349,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getGroup()
 	 * @generated
 	 */
-	int GROUP = 48;
+	int GROUP = 47;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.HiddenElementImpl <em>Hidden Element</em>}' class.
@@ -4531,7 +4359,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getHiddenElement()
 	 * @generated
 	 */
-	int HIDDEN_ELEMENT = 49;
+	int HIDDEN_ELEMENT = 48;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl <em>Identification</em>}' class.
@@ -4541,7 +4369,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIdentification()
 	 * @generated
 	 */
-	int IDENTIFICATION = 51;
+	int IDENTIFICATION = 50;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl <em>Primitive</em>}' class.
@@ -4551,7 +4379,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPrimitive()
 	 * @generated
 	 */
-	int PRIMITIVE = 72;
+	int PRIMITIVE = 71;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InputPrimitiveImpl <em>Input Primitive</em>}' class.
@@ -4561,7 +4389,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInputPrimitive()
 	 * @generated
 	 */
-	int INPUT_PRIMITIVE = 55;
+	int INPUT_PRIMITIVE = 54;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl <em>Interface List</em>}' class.
@@ -4571,7 +4399,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceList()
 	 * @generated
 	 */
-	int INTERFACE_LIST = 56;
+	int INTERFACE_LIST = 55;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4617,15 +4445,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int GROUP__POSITION = FB_NETWORK_ELEMENT__POSITION;
-
-	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GROUP__ERROR_MESSAGE = FB_NETWORK_ELEMENT__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -4788,7 +4607,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getImport()
 	 * @generated
 	 */
-	int IMPORT = 53;
+	int IMPORT = 52;
 
 	/**
 	 * The feature id for the '<em><b>Imported Namespace</b></em>' attribute.
@@ -4978,7 +4797,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIVarElement()
 	 * @generated
 	 */
-	int IVAR_ELEMENT = 58;
+	int IVAR_ELEMENT = 57;
 
 	/**
 	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
@@ -5006,7 +4825,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLink()
 	 * @generated
 	 */
-	int LINK = 60;
+	int LINK = 59;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5070,7 +4889,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclaration()
 	 * @generated
 	 */
-	int VAR_DECLARATION = 99;
+	int VAR_DECLARATION = 98;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5179,7 +4998,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLocalVariable()
 	 * @generated
 	 */
-	int LOCAL_VARIABLE = 61;
+	int LOCAL_VARIABLE = 60;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5306,7 +5125,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMapping()
 	 * @generated
 	 */
-	int MAPPING = 62;
+	int MAPPING = 61;
 
 	/**
 	 * The feature id for the '<em><b>From</b></em>' reference.
@@ -5343,7 +5162,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMethod()
 	 * @generated
 	 */
-	int METHOD = 64;
+	int METHOD = 63;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5380,7 +5199,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMultiplexer()
 	 * @generated
 	 */
-	int MULTIPLEXER = 65;
+	int MULTIPLEXER = 64;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5426,15 +5245,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int MULTIPLEXER__POSITION = STRUCT_MANIPULATOR__POSITION;
-
-	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULTIPLEXER__ERROR_MESSAGE = STRUCT_MANIPULATOR__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -5489,7 +5299,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOriginalSource()
 	 * @generated
 	 */
-	int ORIGINAL_SOURCE = 66;
+	int ORIGINAL_SOURCE = 65;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -5517,7 +5327,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextAlgorithm()
 	 * @generated
 	 */
-	int TEXT_ALGORITHM = 93;
+	int TEXT_ALGORITHM = 92;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5563,7 +5373,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherAlgorithm()
 	 * @generated
 	 */
-	int OTHER_ALGORITHM = 67;
+	int OTHER_ALGORITHM = 66;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5618,7 +5428,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextMethod()
 	 * @generated
 	 */
-	int TEXT_METHOD = 96;
+	int TEXT_METHOD = 95;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5700,7 +5510,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherMethod()
 	 * @generated
 	 */
-	int OTHER_METHOD = 68;
+	int OTHER_METHOD = 67;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5791,7 +5601,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOutputPrimitive()
 	 * @generated
 	 */
-	int OUTPUT_PRIMITIVE = 69;
+	int OUTPUT_PRIMITIVE = 68;
 
 	/**
 	 * The feature id for the '<em><b>Event</b></em>' attribute.
@@ -5837,7 +5647,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPosition()
 	 * @generated
 	 */
-	int POSITION = 70;
+	int POSITION = 69;
 
 	/**
 	 * The feature id for the '<em><b>X</b></em>' attribute.
@@ -5874,7 +5684,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResource()
 	 * @generated
 	 */
-	int RESOURCE = 73;
+	int RESOURCE = 72;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5983,7 +5793,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeName()
 	 * @generated
 	 */
-	int RESOURCE_TYPE_NAME = 74;
+	int RESOURCE_TYPE_NAME = 73;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6011,7 +5821,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceType()
 	 * @generated
 	 */
-	int RESOURCE_TYPE = 75;
+	int RESOURCE_TYPE = 74;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6120,7 +5930,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeFB()
 	 * @generated
 	 */
-	int RESOURCE_TYPE_FB = 76;
+	int RESOURCE_TYPE_FB = 75;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6168,15 +5978,6 @@ public interface LibraryElementPackage extends EPackage {
 	int RESOURCE_TYPE_FB__POSITION = FB__POSITION;
 
 	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESOURCE_TYPE_FB__ERROR_MESSAGE = FB__ERROR_MESSAGE;
-
-	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6220,7 +6021,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegment()
 	 * @generated
 	 */
-	int SEGMENT = 77;
+	int SEGMENT = 76;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6329,7 +6130,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegmentType()
 	 * @generated
 	 */
-	int SEGMENT_TYPE = 78;
+	int SEGMENT_TYPE = 77;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6420,7 +6221,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getService()
 	 * @generated
 	 */
-	int SERVICE = 79;
+	int SERVICE = 78;
 
 	/**
 	 * The feature id for the '<em><b>Right Interface</b></em>' containment reference.
@@ -6466,7 +6267,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceSequence()
 	 * @generated
 	 */
-	int SERVICE_SEQUENCE = 80;
+	int SERVICE_SEQUENCE = 79;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6548,7 +6349,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceTransaction()
 	 * @generated
 	 */
-	int SERVICE_TRANSACTION = 81;
+	int SERVICE_TRANSACTION = 80;
 
 	/**
 	 * The feature id for the '<em><b>Input Primitive</b></em>' containment reference.
@@ -6585,7 +6386,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterface()
 	 * @generated
 	 */
-	int SERVICE_INTERFACE = 82;
+	int SERVICE_INTERFACE = 81;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6622,7 +6423,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterfaceFBType()
 	 * @generated
 	 */
-	int SERVICE_INTERFACE_FB_TYPE = 83;
+	int SERVICE_INTERFACE_FB_TYPE = 82;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6722,7 +6523,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSimpleFBType()
 	 * @generated
 	 */
-	int SIMPLE_FB_TYPE = 84;
+	int SIMPLE_FB_TYPE = 83;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6876,7 +6677,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTAlgorithm()
 	 * @generated
 	 */
-	int ST_ALGORITHM = 85;
+	int ST_ALGORITHM = 84;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6922,7 +6723,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextFunction()
 	 * @generated
 	 */
-	int TEXT_FUNCTION = 94;
+	int TEXT_FUNCTION = 93;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7004,7 +6805,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTFunction()
 	 * @generated
 	 */
-	int ST_FUNCTION = 86;
+	int ST_FUNCTION = 85;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7086,7 +6887,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextFunctionBody()
 	 * @generated
 	 */
-	int TEXT_FUNCTION_BODY = 95;
+	int TEXT_FUNCTION_BODY = 94;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -7114,7 +6915,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTFunctionBody()
 	 * @generated
 	 */
-	int ST_FUNCTION_BODY = 87;
+	int ST_FUNCTION_BODY = 86;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -7142,7 +6943,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTMethod()
 	 * @generated
 	 */
-	int ST_METHOD = 88;
+	int ST_METHOD = 87;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7224,7 +7025,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubApp()
 	 * @generated
 	 */
-	int SUB_APP = 89;
+	int SUB_APP = 88;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7270,15 +7071,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int SUB_APP__POSITION = FB_NETWORK_ELEMENT__POSITION;
-
-	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUB_APP__ERROR_MESSAGE = FB_NETWORK_ELEMENT__ERROR_MESSAGE;
 
 	/**
 	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
@@ -7351,7 +7143,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubAppType()
 	 * @generated
 	 */
-	int SUB_APP_TYPE = 91;
+	int SUB_APP_TYPE = 90;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7460,7 +7252,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSystemConfiguration()
 	 * @generated
 	 */
-	int SYSTEM_CONFIGURATION = 92;
+	int SYSTEM_CONFIGURATION = 91;
 
 	/**
 	 * The feature id for the '<em><b>Devices</b></em>' containment reference list.
@@ -7506,16 +7298,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getValue()
 	 * @generated
 	 */
-	int VALUE = 98;
-
-	/**
-	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE__ERROR_MESSAGE = ERROR_MARKER_REF__ERROR_MESSAGE;
+	int VALUE = 97;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -7524,7 +7307,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VALUE__VALUE = ERROR_MARKER_REF_FEATURE_COUNT + 0;
+	int VALUE__VALUE = 0;
 
 	/**
 	 * The number of structural features of the '<em>Value</em>' class.
@@ -7533,7 +7316,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VALUE_FEATURE_COUNT = ERROR_MARKER_REF_FEATURE_COUNT + 1;
+	int VALUE_FEATURE_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl <em>Version Info</em>}' class.
@@ -7543,7 +7326,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVersionInfo()
 	 * @generated
 	 */
-	int VERSION_INFO = 100;
+	int VERSION_INFO = 99;
 
 	/**
 	 * The feature id for the '<em><b>Author</b></em>' attribute.
@@ -7607,7 +7390,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getWith()
 	 * @generated
 	 */
-	int WITH = 101;
+	int WITH = 100;
 
 	/**
 	 * The feature id for the '<em><b>Variables</b></em>' reference.
@@ -7635,7 +7418,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 102;
+	int LANGUAGE = 101;
 
 	/**
 	 * The meta object id for the '<em>Command Stack</em>' data type.
@@ -7645,7 +7428,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
 	 * @generated
 	 */
-	int COMMAND_STACK = 103;
+	int COMMAND_STACK = 102;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -7655,7 +7438,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 104;
+	int IFILE = 103;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
@@ -7665,7 +7448,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 105;
+	int IPROJECT = 104;
 
 	/**
 	 * The meta object id for the '<em>Point</em>' data type.
@@ -7675,7 +7458,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPoint()
 	 * @generated
 	 */
-	int POINT = 106;
+	int POINT = 105;
 
 	/**
 	 * The meta object id for the '<em>Type Entry</em>' data type.
@@ -7685,7 +7468,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeEntry()
 	 * @generated
 	 */
-	int TYPE_ENTRY = 107;
+	int TYPE_ENTRY = 106;
 
 	/**
 	 * The meta object id for the '<em>Type Library</em>' data type.
@@ -7695,7 +7478,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeLibrary()
 	 * @generated
 	 */
-	int TYPE_LIBRARY = 108;
+	int TYPE_LIBRARY = 107;
 
 	/**
 	 * The meta object id for the '<em>Var Decl List</em>' data type.
@@ -7705,7 +7488,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclList()
 	 * @generated
 	 */
-	int VAR_DECL_LIST = 109;
+	int VAR_DECL_LIST = 108;
 
 
 	/**
@@ -8979,27 +8762,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getErrorMarkerInterface_Value();
-
-	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef <em>Error Marker Ref</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Error Marker Ref</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef
-	 * @generated
-	 */
-	EClass getErrorMarkerRef();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getErrorMessage <em>Error Message</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Error Message</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getErrorMessage()
-	 * @see #getErrorMarkerRef()
-	 * @generated
-	 */
-	EAttribute getErrorMarkerRef_ErrorMessage();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Event <em>Event</em>}'.
@@ -12007,24 +11769,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ERROR_MARKER_INTERFACE__VALUE = eINSTANCE.getErrorMarkerInterface_Value();
-
-		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl <em>Error Marker Ref</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl
-		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getErrorMarkerRef()
-		 * @generated
-		 */
-		EClass ERROR_MARKER_REF = eINSTANCE.getErrorMarkerRef();
-
-		/**
-		 * The meta object literal for the '<em><b>Error Message</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ERROR_MARKER_REF__ERROR_MESSAGE = eINSTANCE.getErrorMarkerRef_ErrorMessage();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl <em>Event</em>}' class.
