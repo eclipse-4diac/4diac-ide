@@ -281,15 +281,15 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	}
 
 	private void addListenerToDataTypeObj() {
-		if (dataTypeEntry != null && dataTypeEntry.getType() != null) {
-			dataTypeEntry.getType().eAdapters().add(adapter);
+		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null) {
+			dataTypeEntry.getTypeEditable().eAdapters().add(adapter);
 		}
 	}
 
 	private void removeListenerFromDataTypeObj() {
-		if (dataTypeEntry != null && dataTypeEntry.getType() != null
-				&& dataTypeEntry.getType().eAdapters().contains(adapter)) {
-			dataTypeEntry.getType().eAdapters().remove(adapter);
+		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null
+				&& dataTypeEntry.getTypeEditable().eAdapters().contains(adapter)) {
+			dataTypeEntry.getTypeEditable().eAdapters().remove(adapter);
 		}
 	}
 
