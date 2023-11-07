@@ -14,8 +14,12 @@
  *     - change canvas, fix problem with size calculation when dragging elements
  *   Felix Roithmayr
  *     - added support for new commands and context menu items
+ *   Fabio Gandolfi
+ *     - added Listener to load Service Sequences on tabswitch
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
+
+import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,6 +28,7 @@ import org.eclipse.draw2d.RangeModel;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
@@ -37,6 +42,7 @@ import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
@@ -45,6 +51,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -58,8 +65,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
@@ -76,7 +86,41 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 		super.init(site, input);
 		setPartName(Messages.ServiceSequenceEditor_Service);
 		setTitleImage(FordiacImage.ICON_SERVICE_SEQUENCE.getImage());
-		setServiceSequences();
+
+		createPartListener();
+	}
+
+	protected void createPartListener() {
+		getPartService().addPartListener(new IPartListener() {
+			@Override
+			public void partActivated(final IWorkbenchPart part) {
+				if (part instanceof final FBTypeEditor fbTypeEditor
+						&& fbTypeEditor.getActiveEditor() instanceof final ServiceSequenceEditor servSeq) {
+					getPartService().removePartListener(this);
+					setServiceSequences();
+				}
+			}
+
+			@Override
+			public void partOpened(final IWorkbenchPart part) {
+				// do nothing
+			}
+
+			@Override
+			public void partDeactivated(final IWorkbenchPart part) {
+				// do nothing
+			}
+
+			@Override
+			public void partBroughtToTop(final IWorkbenchPart part) {
+				// do nothing
+			}
+
+			@Override
+			public void partClosed(final IWorkbenchPart part) {
+				// do nothing
+			}
+		});
 	}
 
 	@Override
@@ -230,9 +274,23 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 		return super.getAdapter(adapter);
 	}
 
+	private static IPartService getPartService() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService();
+	}
+
 	void setServiceSequences() {
-		fbType.getService().getServiceSequence()
-				.addAll(ServiceSequenceSaveAndLoadHelper.loadServiceSequencesFromFile(fbType));
+
+		final ArrayList<ServiceSequence> serviceSeqs = ServiceSequenceSaveAndLoadHelper
+				.loadServiceSequencesFromFile(fbType);
+
+		final CompoundCommand cmds = new CompoundCommand();
+		for (final ServiceSequence seq : serviceSeqs) {
+			cmds.add(new CreateServiceSequenceCommand(fbType.getService(), seq));
+		}
+
+		if (cmds.canExecute()) {
+			cmds.execute();
+		}
 
 	}
 }
