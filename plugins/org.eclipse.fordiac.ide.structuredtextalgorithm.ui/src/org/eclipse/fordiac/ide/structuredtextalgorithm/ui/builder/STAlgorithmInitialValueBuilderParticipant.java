@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.builder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -35,15 +34,11 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages;
@@ -54,8 +49,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.ModelIssueListVa
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.ValidationUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreImportValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.diagnostics.Severity;
@@ -144,21 +137,17 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		final List<Issue> issues = new ArrayList<>();
 		if (varDeclaration.isArray()) {
 			typeUsageCollector.collectUsedTypes(StructuredTextParseUtil.validateType(varDeclaration, issues));
+			issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getArraySize()));
 		} else {
 			typeUsageCollector.addUsedType(varDeclaration.getType());
 		}
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
 		}
-		final ArraySize canonicalArraySize = getCanonicalObject(varDeclaration.getArraySize());
-		if (canonicalArraySize != null) {
-			updateErrorMessage(canonicalArraySize, issues);
-			if (!issues.isEmpty()) {
-				final IFile file = getFile(delta.getUri());
-				if (file != null && file.exists()) {
-					createMarkers(file, FordiacErrorMarker.TYPE_DECLARATION_MARKER,
-							ValidationUtil.convertToModelIssues(issues, canonicalArraySize), ignoreWarnings, monitor);
-				}
+		if (!issues.isEmpty()) {
+			final IFile file = getFile(delta.getUri());
+			if (file != null && file.exists()) {
+				createMarkers(file, FordiacErrorMarker.TYPE_DECLARATION_MARKER, issues, ignoreWarnings, monitor);
 			}
 		}
 	}
@@ -175,21 +164,17 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			} catch (final Exception e) {
 				typeUsageCollector.collectUsedTypes(StructuredTextParseUtil.validate(value, delta.getUri(), featureType,
 						EcoreUtil2.getContainerOfType(varDeclaration, LibraryElement.class), null, issues));
+				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getValue()));
 			}
 		}
 		validateGenericValue(varDeclaration, value, issues);
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
 		}
-		final Value canonicalValue = getCanonicalObject(varDeclaration.getValue());
-		if (canonicalValue != null) {
-			updateErrorMessage(canonicalValue, issues);
-			if (!issues.isEmpty()) {
-				final IFile file = getFile(delta.getUri());
-				if (file != null && file.exists()) {
-					createMarkers(file, FordiacErrorMarker.INITIAL_VALUE_MARKER,
-							ValidationUtil.convertToModelIssues(issues, canonicalValue), ignoreWarnings, monitor);
-				}
+		if (!issues.isEmpty()) {
+			final IFile file = getFile(delta.getUri());
+			if (file != null && file.exists()) {
+				createMarkers(file, FordiacErrorMarker.INITIAL_VALUE_MARKER, issues, ignoreWarnings, monitor);
 			}
 		}
 	}
@@ -230,18 +215,6 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		}
 	}
 
-	protected static void updateErrorMessage(final ErrorMarkerRef object, final List<Issue> issues) {
-		final String errorMessage = issues.stream().filter(issue -> issue.getSeverity() == Severity.ERROR)
-				.map(Issue::getMessage).collect(Collectors.joining(", ")); //$NON-NLS-1$
-		// when ran through an ANT task the workbench is not started
-		final Display display = PlatformUI.isWorkbenchRunning() ? PlatformUI.getWorkbench().getDisplay() : null;
-		if (display != null && !display.isDisposed()) {
-			display.asyncExec(() -> object.setErrorMessage(errorMessage));
-		} else {
-			object.setErrorMessage(errorMessage);
-		}
-	}
-
 	protected void createMarkers(final IFile file, final String type, final List<Issue> issues,
 			final boolean ignoreWarnings, final IProgressMonitor monitor) throws CoreException {
 		for (final Issue issue : issues) {
@@ -252,25 +225,6 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				markerCreator.createMarker(issue, file, type);
 			}
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	protected static <T extends EObject> T getCanonicalObject(final T object) {
-		final EObject root = EcoreUtil.getRootContainer(object);
-		if (root instanceof final LibraryElement libraryElement) {
-			final TypeEntry typeEntry = libraryElement.getTypeEntry();
-			if (typeEntry != null) {
-				final LibraryElement typeEditable = typeEntry.getTypeEditable();
-				if (typeEditable != null) {
-					final String fragment = EcoreUtil.getRelativeURIFragmentPath(root, object);
-					return (T) EcoreUtil.getEObject(typeEditable, fragment);
-				}
-			}
-			// do not return target unless it could be resolved to typeEditable
-			// if it is a LibraryElement
-			return null;
-		}
-		return object;
 	}
 
 	protected static String getValue(final VarDeclaration varDeclaration) {
