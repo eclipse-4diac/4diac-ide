@@ -298,6 +298,16 @@ public class TypedConfigureableObjectImpl extends EObjectImpl implements TypedCo
 	 * @generated
 	 */
 	@Override
+	public boolean validateType(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectAnnotations.validateType(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void setAttribute(final String attributeName, final DataType type, final String value, final String comment) {
 		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
 	}

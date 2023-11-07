@@ -618,6 +618,16 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	 * @generated
 	 */
 	@Override
+	public boolean validateType(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__NAME:

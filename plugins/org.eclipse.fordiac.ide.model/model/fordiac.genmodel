@@ -384,6 +384,10 @@
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isContainedInTypedInstance"
           body="return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isInGroup" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.isInGroup(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/validateName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementAnnotations.validateName(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/validateName/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/validateName/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/interfaceList"/>
@@ -496,6 +500,10 @@
       <genOperations ecoreOperation="lib.ecore#//ITypedElement/getType"/>
       <genOperations ecoreOperation="lib.ecore#//ITypedElement/getTypeName" body="org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();&#xA;if(type != null){&#xA;&#x9;return type.getName();&#xA;}&#xA;return null;"/>
       <genOperations ecoreOperation="lib.ecore#//ITypedElement/getFullTypeName" body="return getTypeName();"/>
+      <genOperations ecoreOperation="lib.ecore#//ITypedElement/validateType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//ITypedElement/validateType/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//ITypedElement/validateType/context"/>
+      </genOperations>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//IVarElement">
       <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//IVarElement/varDeclarations"/>
@@ -685,6 +693,11 @@
           body="return org.eclipse.fordiac.ide.model.Annotations.getTypeLibrary(this);"/>
       <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getFullTypeName"
           body="return (getTypeEntry() != null) ? getTypeEntry().getFullTypeName() : null;"/>
+      <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/validateType"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectAnnotations.validateType(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//TypedConfigureableObject/validateType/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//TypedConfigureableObject/validateType/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Value">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Value/value"/>

@@ -16,11 +16,13 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.Map;
 import org.eclipse.draw2d.geometry.Point;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -530,6 +532,16 @@ public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implement
 	@Override
 	public boolean isInGroup() {
 		return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.isInGroup(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementAnnotations.validateName(this, diagnostics, context);
 	}
 
 	/**

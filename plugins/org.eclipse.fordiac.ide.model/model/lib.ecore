@@ -1007,6 +1007,21 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.isInGroup(this);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="validateName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementAnnotations.validateName(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//InterfaceList"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" eType="#//Mapping"/>
@@ -1354,6 +1369,21 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return getTypeName();"/>
       </eAnnotations>
+    </eOperations>
+    <eOperations name="validateType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IVarElement" abstract="true" interface="true">
@@ -1789,6 +1819,21 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return (getTypeEntry() != null) ? getTypeEntry().getFullTypeName() : null;"/>
       </eAnnotations>
+    </eOperations>
+    <eOperations name="validateType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectAnnotations.validateType(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeEntry" eType="#//TypeEntry"
         transient="true"/>

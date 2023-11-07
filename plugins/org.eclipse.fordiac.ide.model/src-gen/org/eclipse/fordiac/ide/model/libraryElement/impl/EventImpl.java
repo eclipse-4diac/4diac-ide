@@ -447,6 +447,16 @@ public class EventImpl extends EObjectImpl implements Event {
 	 * @generated
 	 */
 	@Override
+	public boolean validateType(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void setVisible(final boolean visible) {
 		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);
 	}

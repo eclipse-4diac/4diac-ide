@@ -4961,6 +4961,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(fbNetworkElementEClass, theXMLTypePackage.getBoolean(), "isInGroup", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		op = addEOperation(fbNetworkElementEClass, ecorePackage.getEBoolean(), "validateName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(fbTypeEClass, FBType.class, "FBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getFBType_InterfaceList(), this.getInterfaceList(), null, "interfaceList", null, 1, 1, FBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getFBType_Service(), this.getService(), null, "service", null, 0, 1, FBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -5105,6 +5114,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(iTypedElementEClass, ecorePackage.getEString(), "getTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(iTypedElementEClass, ecorePackage.getEString(), "getFullTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(iTypedElementEClass, ecorePackage.getEBoolean(), "validateType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(iVarElementEClass, IVarElement.class, "IVarElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getIVarElement_VarDeclarations(), this.getVarDeclaration(), null, "varDeclarations", null, 0, -1, IVarElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -5315,6 +5333,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(typedConfigureableObjectEClass, this.getTypeLibrary(), "getTypeLibrary", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(typedConfigureableObjectEClass, ecorePackage.getEString(), "getFullTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(typedConfigureableObjectEClass, ecorePackage.getEBoolean(), "validateType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(valueEClass, Value.class, "Value", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getValue_Value(), ecorePackage.getEString(), "value", "", 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
@@ -6041,6 +6068,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
+		  (fbNetworkElementEClass.getEOperations().get(11),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
 		  (iInterfaceElementEClass.getEOperations().get(1),
 		   source,
 		   new String[] {
@@ -6048,6 +6081,18 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   });
 		addAnnotation
 		  (iNamedElementEClass.getEOperations().get(1),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (iTypedElementEClass.getEOperations().get(3),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (typedConfigureableObjectEClass.getEOperations().get(4),
 		   source,
 		   new String[] {
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$

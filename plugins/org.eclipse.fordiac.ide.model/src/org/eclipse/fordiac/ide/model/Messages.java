@@ -215,6 +215,10 @@ public final class Messages extends NLS {
 
 	public static String NameRepository_NameReservedKeyWord;
 
+	public static String TypedElementAnnotations_TypeNotFound;
+
+	public static String TypedElementAnnotations_TypeNotSet;
+
 	public static String TypeLibrary_ImportDataTypeFileDialogTitle;
 
 	public static String TypeLibrary_LoadReferencedFile_DialogTitle;
