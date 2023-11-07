@@ -32,6 +32,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -204,6 +206,13 @@ public final class TypeLibrary {
 
 	public Buildpath getBuildpath() {
 		return buildpath;
+	}
+
+	public Optional<TypeEntry> getTypeFromLinkedFile(final String filename) {
+		return fileMap.entrySet().stream()
+				.filter(entry -> entry.getKey().getName().equals(filename))
+				.map(Entry::getValue)
+				.findFirst();
 	}
 
 	/** Instantiates a new fB type library. */

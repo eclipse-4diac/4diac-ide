@@ -22,6 +22,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -35,6 +36,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -54,6 +57,7 @@ public class LibraryLinker {
 	private static final IPath WORKSPACE_REL_EXTRACTED_LIB_DIR = new Path("WORKSPACE_LOC") //$NON-NLS-1$
 	        .append(EXTRACTED_LIB_DIRECTORY);
 	private IProject selectedProject;
+	private List<Optional<TypeEntry>> cashedTypes;
 	final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 	final IWorkspaceRoot workspaceRoot = workspace.getRoot();
 
@@ -160,6 +164,7 @@ public class LibraryLinker {
 				        .getFolder(TYPE_LIB)
 				        .getFolder(nameOfImportedLib);
 				try {
+					cashedTypes = cashOldTypes(nameOfImportedLib);
 					// Should only remove the link but keep the resource on disk
 					oldFolder.delete(true, null);
 				} catch (final CoreException e) {
@@ -167,6 +172,19 @@ public class LibraryLinker {
 				}
 			}
 		}
+	}
+
+	private List<Optional<TypeEntry>> cashOldTypes(final String oldVersion) {
+		try (final Stream<java.nio.file.Path> stream = Files.list(
+				Paths.get(WORKSPACE_ROOT, EXTRACTED_LIB_DIRECTORY, oldVersion, LIB_TYPELIB_FOLDER_NAME, "Logic"))) {
+			return stream
+					.map(path -> TypeLibraryManager.INSTANCE.getTypeFromLinkedFile(selectedProject,
+							path.getFileName().toString()))
+					.peek(optional -> System.out.println(optional.get().getFullTypeName())).toList();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+		return Collections.emptyList();
 	}
 
 	private List<String> findLinkedLibs() {
