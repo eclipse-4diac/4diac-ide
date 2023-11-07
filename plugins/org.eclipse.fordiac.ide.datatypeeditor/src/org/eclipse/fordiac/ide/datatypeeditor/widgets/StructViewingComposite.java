@@ -18,6 +18,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -62,6 +65,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
@@ -76,6 +80,26 @@ public class StructViewingComposite extends Composite
 
 	private ConfigurableObject currentConfigurableObject = null;
 	private ConfigurablObjectListener configObjectListener = null;
+	private boolean blockRefresh;
+
+	private final Adapter adapter = new AdapterImpl() {
+
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			if (!notification.isTouch() && !blockRefresh) {
+				notifyRefresh();
+			}
+		}
+
+		private void notifyRefresh() {
+			Display.getDefault().syncExec(() -> {
+				if (null != dataTypeEntry && !natTable.isDisposed()) {
+					natTable.refresh();
+				}
+			});
+		}
+	};
 
 	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack,
 			final DataTypeEntry dataTypeEntry, final IWorkbenchPart part) {
@@ -110,6 +134,7 @@ public class StructViewingComposite extends Composite
 				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, false));
 
 		part.getSite().setSelectionProvider(this);
+		dataTypeEntry.getTypeEditable().eAdapters().add(adapter);
 	}
 
 	private static void showLabel(final Composite parent) {
@@ -184,12 +209,18 @@ public class StructViewingComposite extends Composite
 	}
 
 	public void reload() {
+		dataTypeEntry.getTypeEditable().eAdapters().remove(adapter);
 		structMemberProvider.setInput(getType().getMemberVariables());
+		dataTypeEntry.getTypeEditable().eAdapters().add(adapter);
 	}
 
 	@Override
 	public void executeCommand(final Command cmd) {
-		cmdStack.execute(cmd);
+		if ((null != dataTypeEntry) && (null != cmdStack) && (null != cmd) && cmd.canExecute()) {
+			blockRefresh = true;
+			cmdStack.execute(cmd);
+			blockRefresh = false;
+		}
 	}
 
 	@Override
@@ -258,5 +289,11 @@ public class StructViewingComposite extends Composite
 
 	public interface ConfigurablObjectListener {
 		void handleObjectChanged(ConfigurableObject newObject);
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		dataTypeEntry.getTypeEditable().eAdapters().remove(adapter);
 	}
 }
