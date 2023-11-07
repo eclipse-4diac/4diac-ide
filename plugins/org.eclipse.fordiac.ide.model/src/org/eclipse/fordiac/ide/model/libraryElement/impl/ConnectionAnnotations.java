@@ -118,8 +118,7 @@ public class ConnectionAnnotations {
 
 	public static boolean validateVarInOutConnectionsFormsNoLoop(final Connection connection,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		if ((connection.getDestination() instanceof final VarDeclaration connectionDestinationVar
-				&& connectionDestinationVar.isInOutVar()) && hasVarInOutConnectionALoop(connection)) {
+		if (hasConnectionAVarInOutLoop(connection)) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.CONNECTION__VALIDATE_VAR_IN_OUT_CONNECTIONS_FORMS_NO_LOOP,
@@ -138,35 +137,37 @@ public class ConnectionAnnotations {
 	 * @return The source VarDeclaration
 	 */
 	private static VarDeclaration getVarInOutSourceVarDeclaration(@NonNull final Connection connection) {
+		// Reverse search
 		if (connection.getSource() instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()) {
-			VarDeclaration sourcePin = sourceVar;
-			VarDeclaration inputVarInOut = sourcePin.getInOutVarOpposite();
+			VarDeclaration outputVarInOut = sourceVar;
+			VarDeclaration inputVarInOut = outputVarInOut.getInOutVarOpposite();
 			final Set<VarDeclaration> visitedPins = new HashSet<>();
-			visitedPins.add(sourcePin);
-			while (!inputVarInOut.getInputConnections().isEmpty()) {
-				sourcePin = (VarDeclaration) inputVarInOut.getInputConnections().get(0).getSource();
-				inputVarInOut = sourcePin.getInOutVarOpposite();
-				if (visitedPins.add(sourcePin)) {
+			visitedPins.add(outputVarInOut);
+			while (!inputVarInOut.getInputConnections().isEmpty()) { // no fan in possible
+				outputVarInOut = (VarDeclaration) inputVarInOut.getInputConnections().get(0).getSource();
+				if (!visitedPins.add(outputVarInOut)) {
 					return null; // We revisited an already visited pin
 				}
+				inputVarInOut = outputVarInOut.getInOutVarOpposite();
 			}
 			return inputVarInOut;
 		}
 		return null;
 	}
 
-	private static boolean hasVarInOutConnectionALoop(@NonNull final Connection connection) {
+	private static boolean hasConnectionAVarInOutLoop(@NonNull final Connection connection) {
+		// Reverse search
 		if (connection.getSource() instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()) {
-			VarDeclaration sourcePin = sourceVar;
-			VarDeclaration inputVarInOut = sourcePin.getInOutVarOpposite();
+			VarDeclaration outputVarInOut = sourceVar;
+			VarDeclaration inputVarInOut = outputVarInOut.getInOutVarOpposite();
 			final Set<VarDeclaration> visitedPins = new HashSet<>();
-			visitedPins.add(sourcePin);
-			while (!inputVarInOut.getInputConnections().isEmpty()) {
-				sourcePin = (VarDeclaration) inputVarInOut.getInputConnections().get(0).getSource();
-				inputVarInOut = sourcePin.getInOutVarOpposite();
-				if (visitedPins.add(sourcePin)) {
+			visitedPins.add(outputVarInOut);
+			while (!inputVarInOut.getInputConnections().isEmpty()) { // no fan in possible
+				outputVarInOut = (VarDeclaration) inputVarInOut.getInputConnections().get(0).getSource();
+				if (!visitedPins.add(outputVarInOut)) {
 					return true; // We revisited an already visited pin
 				}
+				inputVarInOut = outputVarInOut.getInOutVarOpposite();
 			}
 		}
 		return false;
