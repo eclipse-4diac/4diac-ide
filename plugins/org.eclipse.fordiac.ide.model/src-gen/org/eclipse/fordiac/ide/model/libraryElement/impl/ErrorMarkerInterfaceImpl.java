@@ -567,6 +567,16 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 * @generated
 	 */
 	@Override
+	public boolean validateValue(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceAnnotations.validateValue(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean hasError() {
 		return getErrorMessage() != null && !getErrorMessage().isBlank();
 	}

@@ -174,12 +174,60 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final int COMPILER_INFO__VALIDATE_PACKAGE_NAME = 1;
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Missing Source' of 'Connection'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int CONNECTION__VALIDATE_MISSING_SOURCE = 2;
+
+	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Missing Source Endpoint' of 'Connection'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int CONNECTION__VALIDATE_MISSING_SOURCE_ENDPOINT = 3;
+
+	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Missing Destination' of 'Connection'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int CONNECTION__VALIDATE_MISSING_DESTINATION = 4;
+
+	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Missing Destination Endpoint' of 'Connection'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int CONNECTION__VALIDATE_MISSING_DESTINATION_ENDPOINT = 5;
+
+	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Duplicate' of 'Connection'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int CONNECTION__VALIDATE_DUPLICATE = 6;
+
+	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Type Mismatch' of 'Connection'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int CONNECTION__VALIDATE_TYPE_MISMATCH = 7;
+
+	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Mapped Var In Outs Do Not Cross Resource Boundaries' of 'Connection'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int CONNECTION__VALIDATE_MAPPED_VAR_IN_OUTS_DO_NOT_CROSS_RESOURCE_BOUNDARIES = 2;
+	public static final int CONNECTION__VALIDATE_MAPPED_VAR_IN_OUTS_DO_NOT_CROSS_RESOURCE_BOUNDARIES = 8;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Array Sizes Are Compatible' of 'Connection'.
@@ -187,7 +235,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int CONNECTION__VALIDATE_VAR_IN_OUT_ARRAY_SIZES_ARE_COMPATIBLE = 3;
+	public static final int CONNECTION__VALIDATE_VAR_IN_OUT_ARRAY_SIZES_ARE_COMPATIBLE = 9;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out String Lengths Match' of 'Connection'.
@@ -195,7 +243,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int CONNECTION__VALIDATE_VAR_IN_OUT_STRING_LENGTHS_MATCH = 4;
+	public static final int CONNECTION__VALIDATE_VAR_IN_OUT_STRING_LENGTHS_MATCH = 10;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Outs Are Not Connected To Outs' of 'Connection'.
@@ -203,7 +251,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int CONNECTION__VALIDATE_VAR_IN_OUTS_ARE_NOT_CONNECTED_TO_OUTS = 5;
+	public static final int CONNECTION__VALIDATE_VAR_IN_OUTS_ARE_NOT_CONNECTED_TO_OUTS = 11;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Connections Forms No Loop' of 'Connection'.
@@ -211,7 +259,15 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int CONNECTION__VALIDATE_VAR_IN_OUT_CONNECTIONS_FORMS_NO_LOOP = 6;
+	public static final int CONNECTION__VALIDATE_VAR_IN_OUT_CONNECTIONS_FORMS_NO_LOOP = 12;
+
+	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Value' of 'Error Marker Interface'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int ERROR_MARKER_INTERFACE__VALIDATE_VALUE = 13;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'FB Network Element'.
@@ -219,7 +275,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int FB_NETWORK_ELEMENT__VALIDATE_NAME = 7;
+	public static final int FB_NETWORK_ELEMENT__VALIDATE_NAME = 14;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'IInterface Element'.
@@ -227,7 +283,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int IINTERFACE_ELEMENT__VALIDATE_NAME = 8;
+	public static final int IINTERFACE_ELEMENT__VALIDATE_NAME = 15;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'INamed Element'.
@@ -235,7 +291,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int INAMED_ELEMENT__VALIDATE_NAME = 9;
+	public static final int INAMED_ELEMENT__VALIDATE_NAME = 16;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Type' of 'ITyped Element'.
@@ -243,7 +299,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int ITYPED_ELEMENT__VALIDATE_TYPE = 10;
+	public static final int ITYPED_ELEMENT__VALIDATE_TYPE = 17;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Type' of 'Typed Configureable Object'.
@@ -251,7 +307,15 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE = 11;
+	public static final int TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE = 18;
+
+	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Multiple Input Connections' of 'Var Declaration'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int VAR_DECLARATION__VALIDATE_MULTIPLE_INPUT_CONNECTIONS = 19;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Source Type Is Well Defined' of 'Var Declaration'.
@@ -259,7 +323,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 12;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 20;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Is Withed' of 'Var Declaration'.
@@ -267,7 +331,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 13;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 21;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -275,7 +339,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 13;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 21;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -556,6 +620,12 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(adapterConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(adapterConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingSource(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingSourceEndpoint(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingDestination(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingDestinationEndpoint(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateDuplicate(adapterConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateTypeMismatch(adapterConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(adapterConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutArraySizesAreCompatible(adapterConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutStringLengthsMatch(adapterConnection, diagnostics, context);
@@ -973,12 +1043,78 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(connection, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(connection, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingSource(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingSourceEndpoint(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingDestination(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingDestinationEndpoint(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateDuplicate(connection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateTypeMismatch(connection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(connection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutArraySizesAreCompatible(connection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutStringLengthsMatch(connection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutsAreNotConnectedToOuts(connection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutConnectionsFormsNoLoop(connection, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * Validates the validateMissingSource constraint of '<em>Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConnection_validateMissingSource(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return connection.validateMissingSource(diagnostics, context);
+	}
+
+	/**
+	 * Validates the validateMissingSourceEndpoint constraint of '<em>Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConnection_validateMissingSourceEndpoint(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return connection.validateMissingSourceEndpoint(diagnostics, context);
+	}
+
+	/**
+	 * Validates the validateMissingDestination constraint of '<em>Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConnection_validateMissingDestination(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return connection.validateMissingDestination(diagnostics, context);
+	}
+
+	/**
+	 * Validates the validateMissingDestinationEndpoint constraint of '<em>Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConnection_validateMissingDestinationEndpoint(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return connection.validateMissingDestinationEndpoint(diagnostics, context);
+	}
+
+	/**
+	 * Validates the validateDuplicate constraint of '<em>Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConnection_validateDuplicate(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return connection.validateDuplicate(diagnostics, context);
+	}
+
+	/**
+	 * Validates the validateTypeMismatch constraint of '<em>Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConnection_validateTypeMismatch(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return connection.validateTypeMismatch(diagnostics, context);
 	}
 
 	/**
@@ -1055,6 +1191,12 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(dataConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(dataConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingSource(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingSourceEndpoint(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingDestination(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingDestinationEndpoint(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateDuplicate(dataConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateTypeMismatch(dataConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(dataConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutArraySizesAreCompatible(dataConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutStringLengthsMatch(dataConnection, diagnostics, context);
@@ -1224,7 +1366,18 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorMarkerInterface, diagnostics, context);
 		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(errorMarkerInterface, diagnostics, context);
 		if (result || diagnostics != null) result &= validateITypedElement_validateType(errorMarkerInterface, diagnostics, context);
+		if (result || diagnostics != null) result &= validateErrorMarkerInterface_validateValue(errorMarkerInterface, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * Validates the validateValue constraint of '<em>Error Marker Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateErrorMarkerInterface_validateValue(ErrorMarkerInterface errorMarkerInterface, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return errorMarkerInterface.validateValue(diagnostics, context);
 	}
 
 	/**
@@ -1271,6 +1424,12 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(eventConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(eventConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingSource(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingSourceEndpoint(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingDestination(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateMissingDestinationEndpoint(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateDuplicate(eventConnection, diagnostics, context);
+		if (result || diagnostics != null) result &= validateConnection_validateTypeMismatch(eventConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(eventConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutArraySizesAreCompatible(eventConnection, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConnection_validateVarInOutStringLengthsMatch(eventConnection, diagnostics, context);
@@ -1660,6 +1819,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateITypedElement_validateType(localVariable, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateMultipleInputConnections(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(localVariable, diagnostics, context);
 		return result;
@@ -2272,9 +2432,20 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateITypedElement_validateType(varDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateMultipleInputConnections(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(varDeclaration, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * Validates the validateMultipleInputConnections constraint of '<em>Var Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateVarDeclaration_validateMultipleInputConnections(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return varDeclaration.validateMultipleInputConnections(diagnostics, context);
 	}
 
 	/**

@@ -267,8 +267,24 @@ public final class Messages extends NLS {
 
 	public static String VALIDATOR_InvalidTimeUnit;
 
+	public static String VarDeclarationAnnotations_MultipleInputConnections;
+
 	public static String Error_SelfInsertion;
 	public static String Error_RecursiveType;
+
+	public static String ErrorMarkerInterfaceAnnotations_MissingVariableForValue;
+
+	public static String ConnectionAnnotations_DestinationElementMissing;
+
+	public static String ConnectionAnnotations_DestinationEndpointMissing;
+
+	public static String ConnectionAnnotations_DuplicateConnection;
+
+	public static String ConnectionAnnotations_SourceElementMissing;
+
+	public static String ConnectionAnnotations_SourceEndpointMissing;
+
+	public static String ConnectionAnnotations_TypeMismatch;
 
 	public static String ConnectionHelper_ErrorMarker_Source_Missing;
 	public static String ConnectionHelper_ErrorMarker_Dest_Missing;

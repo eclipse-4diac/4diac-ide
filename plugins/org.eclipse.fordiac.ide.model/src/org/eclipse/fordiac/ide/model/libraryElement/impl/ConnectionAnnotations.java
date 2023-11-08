@@ -25,11 +25,108 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
+import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.jdt.annotation.NonNull;
 
 public class ConnectionAnnotations {
+
+	public static boolean validateMissingSource(@NonNull final Connection connection, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		if (connection.getSourceElement() instanceof final ErrorMarkerFBNElement element) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_SOURCE,
+						MessageFormat.format(Messages.ConnectionAnnotations_SourceElementMissing, element.getName()),
+						FordiacMarkerHelper.getDiagnosticData(connection,
+								LibraryElementPackage.Literals.CONNECTION__SOURCE)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateMissingSourceEndpoint(@NonNull final Connection connection,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (connection.getSource() instanceof final ErrorMarkerInterface endpoint) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_SOURCE_ENDPOINT,
+						MessageFormat.format(Messages.ConnectionAnnotations_SourceEndpointMissing, endpoint.getName()),
+						FordiacMarkerHelper.getDiagnosticData(connection,
+								LibraryElementPackage.Literals.CONNECTION__SOURCE)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateMissingDestination(@NonNull final Connection connection,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (connection.getDestinationElement() instanceof final ErrorMarkerFBNElement element) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_DESTINATION,
+						MessageFormat.format(Messages.ConnectionAnnotations_DestinationElementMissing, element.getName()),
+						FordiacMarkerHelper.getDiagnosticData(connection,
+								LibraryElementPackage.Literals.CONNECTION__DESTINATION)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateMissingDestinationEndpoint(@NonNull final Connection connection,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (connection.getDestination() instanceof final ErrorMarkerInterface endpoint) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_DESTINATION_ENDPOINT,
+						MessageFormat.format(Messages.ConnectionAnnotations_DestinationEndpointMissing, endpoint.getName()),
+						FordiacMarkerHelper.getDiagnosticData(connection,
+								LibraryElementPackage.Literals.CONNECTION__DESTINATION)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateDuplicate(@NonNull final Connection connection, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		if (isDuplicateConnection(connection)) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_DESTINATION_ENDPOINT,
+						MessageFormat.format(Messages.ConnectionAnnotations_DuplicateConnection,
+								connection.getSource().getQualifiedName(),
+								connection.getDestination().getQualifiedName()),
+						FordiacMarkerHelper.getDiagnosticData(connection)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateTypeMismatch(@NonNull final Connection connection, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		if (!LinkConstraints.typeCheck(connection.getSource(), connection.getDestination())) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_DESTINATION_ENDPOINT,
+						MessageFormat.format(Messages.ConnectionAnnotations_TypeMismatch,
+								connection.getSource().getQualifiedName(), connection.getSource().getFullTypeName(),
+								connection.getDestination().getQualifiedName(),
+								connection.getDestination().getFullTypeName()),
+						FordiacMarkerHelper.getDiagnosticData(connection)));
+			}
+			return false;
+		}
+		return true;
+	}
 
 	public static boolean validateMappedVarInOutsDoNotCrossResourceBoundaries(@NonNull final Connection connection,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
@@ -171,6 +268,11 @@ public class ConnectionAnnotations {
 			}
 		}
 		return false;
+	}
+
+	private static boolean isDuplicateConnection(@NonNull final Connection connection) {
+		return connection.getSource().getOutputConnections().stream().anyMatch(
+				candidate -> candidate != connection && candidate.getDestination() == connection.getDestination());
 	}
 
 	private ConnectionAnnotations() {

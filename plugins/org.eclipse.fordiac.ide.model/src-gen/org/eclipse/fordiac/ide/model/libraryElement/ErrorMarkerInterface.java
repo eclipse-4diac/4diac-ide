@@ -16,6 +16,9 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import java.util.Map;
+import org.eclipse.emf.common.util.DiagnosticChain;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -78,5 +81,13 @@ public interface ErrorMarkerInterface extends IInterfaceElement, ErrorMarkerRef 
 	 * @generated
 	 */
 	void setValue(Value value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateValue(DiagnosticChain diagnostics, Map<Object, Object> context);
 
 } // ErrorMarkerInterface
