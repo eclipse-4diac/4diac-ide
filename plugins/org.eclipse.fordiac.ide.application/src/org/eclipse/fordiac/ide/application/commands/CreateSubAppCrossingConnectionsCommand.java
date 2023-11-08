@@ -79,7 +79,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 
 		// equal types for source and dest
 		if (!source.getClass().equals(destination.getClass())) {
-			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
+			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
 
