@@ -38,7 +38,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
-import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
+import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.SaveTypeEntryCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
@@ -96,7 +96,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListener {
 
 	private final CommandStack commandStack = new CommandStack();
-	private StructViewingComposite structComposite;
+	private StructEditingComposite structComposite;
 	private Composite errorComposite;
 	private boolean importFailed;
 	private boolean outsideWorkspace;
@@ -343,9 +343,10 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null && (!importFailed)) {
-			structComposite = new StructViewingComposite(parent, 1, commandStack, dataTypeEntry, this);
-			structComposite.createPartControl(parent);
+		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() instanceof final StructuredType structType
+				&& (!importFailed)) {
+			structComposite = new StructEditingComposite(parent, commandStack, structType);
+			getSite().setSelectionProvider(structComposite);
 		} else if (importFailed) {
 			createErrorComposite(parent, Messages.ErrorCompositeMessage);
 			if (outsideWorkspace) {
@@ -447,7 +448,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			removeListenerFromDataTypeObj();
 			dataTypeEntry.setTypeEditable(null);
 			importType(getEditorInput());
-			structComposite.reload();
+			if (dataTypeEntry.getTypeEditable() instanceof final StructuredType structType) {
+				structComposite.setStructType(structType);
+			}
 			addListenerToDataTypeObj();
 		} catch (final PartInitException e) {
 			FordiacLogHelper

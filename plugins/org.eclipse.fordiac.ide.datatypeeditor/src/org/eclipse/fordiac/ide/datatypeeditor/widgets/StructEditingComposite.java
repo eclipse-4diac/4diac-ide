@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University, Linz
- * 				 2020 Primetals Technologies Germany GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2020, 2023 Johannes Kepler University, Linz,
+ *                          Primetals Technologies Germany GmbH,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
@@ -48,6 +47,7 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -67,16 +67,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class StructViewingComposite extends Composite
+public class StructEditingComposite extends Composite
 		implements CommandExecutor, I4diacNatTableUtil, ISelectionProvider {
+
 	private NatTable natTable;
 	private final CommandStack cmdStack;
-	private final IWorkbenchPart part;
-	private final DataTypeEntry dataTypeEntry;
-	private IChangeableRowDataProvider<VarDeclaration> structMemberProvider;
+	private StructuredType structType;
+	private final IChangeableRowDataProvider<VarDeclaration> structMemberProvider;
 
 	private ConfigurableObject currentConfigurableObject = null;
 	private ConfigurablObjectListener configObjectListener = null;
@@ -94,30 +93,31 @@ public class StructViewingComposite extends Composite
 
 		private void notifyRefresh() {
 			Display.getDefault().syncExec(() -> {
-				if (null != dataTypeEntry && !natTable.isDisposed()) {
+				if (null != structType && natTable != null && !natTable.isDisposed()) {
 					natTable.refresh();
 				}
 			});
 		}
 	};
 
-	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack,
-			final DataTypeEntry dataTypeEntry, final IWorkbenchPart part) {
-		super(parent, style);
+	public StructEditingComposite(final Composite parent, final CommandStack cmdStack,
+			final StructuredType structType) {
+		super(parent, SWT.NONE);
+		structMemberProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
 		this.cmdStack = cmdStack;
-		this.dataTypeEntry = dataTypeEntry;
-		this.part = part;
+		setStructType(structType);
+		createPartControl();
 	}
 
-	public void createPartControl(final Composite parent) {
+	private void createPartControl() {
 		final TabbedPropertySheetWidgetFactory widgetFactory = new TabbedPropertySheetWidgetFactory();
-		parent.setLayout(new GridLayout(2, false));
-		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		showLabel(parent);
+		setLayout(new GridLayout(2, false));
+		setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		showLabel(this);
 
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
-		buttons.createControls(parent, widgetFactory);
-		parent.addMouseListener(new MouseAdapter() {
+		buttons.createControls(this, widgetFactory);
+		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(final MouseEvent e) {
 				natTable.doCommand(new ClearAllSelectionsCommand());
@@ -125,30 +125,26 @@ public class StructViewingComposite extends Composite
 			}
 		});
 
-		createNatTable(parent);
+		createNatTable();
 
 		buttons.bindToTableViewer(natTable, this,
 				ref -> new CreateMemberVariableCommand(getType(), getInsertionIndex(), getVarName(), getDataType()),
 				ref -> new DeleteMemberVariableCommand(getType(), (VarDeclaration) ref),
 				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, true),
 				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, false));
-
-		part.getSite().setSelectionProvider(this);
-		dataTypeEntry.getTypeEditable().eAdapters().add(adapter);
 	}
 
 	private static void showLabel(final Composite parent) {
-		final Label label = new Label(parent, SWT.CENTER);
+		final Label label = new Label(parent, SWT.LEFT);
 		label.setText(Messages.StructViewingComposite_Headline);
+		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).span(2, 1).applyTo(label);
 	}
 
-	private void createNatTable(final Composite parent) {
-		structMemberProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
-		structMemberProvider.setInput(getType().getMemberVariables());
+	private void createNatTable() {
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(structMemberProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(structMemberProvider));
-		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer,
+		natTable = NatTableWidgetFactory.createRowNatTable(this, inputDataLayer,
 				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,
 				null, this, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
@@ -205,18 +201,25 @@ public class StructViewingComposite extends Composite
 	}
 
 	private StructuredType getType() {
-		return (StructuredType) dataTypeEntry.getTypeEditable();
+		return structType;
 	}
 
-	public void reload() {
-		dataTypeEntry.getTypeEditable().eAdapters().remove(adapter);
-		structMemberProvider.setInput(getType().getMemberVariables());
-		dataTypeEntry.getTypeEditable().eAdapters().add(adapter);
+	public final void setStructType(final StructuredType newStructType) {
+		if (structType != newStructType) {
+			if (structType != null) {
+				structType.eAdapters().remove(adapter);
+			}
+			structType = newStructType;
+			if (structType != null) {
+				structMemberProvider.setInput(structType.getMemberVariables());
+				structType.eAdapters().add(adapter);
+			}
+		}
 	}
 
 	@Override
 	public void executeCommand(final Command cmd) {
-		if ((null != dataTypeEntry) && (null != cmdStack) && (null != cmd) && cmd.canExecute()) {
+		if ((null != getType()) && (null != cmdStack) && (null != cmd) && cmd.canExecute()) {
 			blockRefresh = true;
 			cmdStack.execute(cmd);
 			blockRefresh = false;
@@ -294,6 +297,8 @@ public class StructViewingComposite extends Composite
 	@Override
 	public void dispose() {
 		super.dispose();
-		dataTypeEntry.getTypeEditable().eAdapters().remove(adapter);
+		if (getType() != null) {
+			getType().eAdapters().remove(adapter);
+		}
 	}
 }
