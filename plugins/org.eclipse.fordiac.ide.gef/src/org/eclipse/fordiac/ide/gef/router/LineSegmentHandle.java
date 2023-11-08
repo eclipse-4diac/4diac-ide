@@ -62,12 +62,12 @@ public class LineSegmentHandle extends BendpointCreationHandle {
 
 	@Override
 	public void paintFigure(final Graphics g) {
-		final Rectangle r = getBounds().getShrinked(1, 1);
 		g.setLineStyle(Graphics.LINE_SOLID);
 		g.setLineWidth((ModifiedMoveHandle.SELECTION_BORDER_WIDTH));
 		g.setXORMode(false);
 		g.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
 		final int radius = (int) (ConnectionPreferenceValues.HANDLE_SIZE * 0.45);
+		final Rectangle r = Rectangle.SINGLETON.setBounds(getBounds()).shrink(1, 1);
 		g.drawRoundRectangle(r, radius, radius);
 	}
 

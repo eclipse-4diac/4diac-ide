@@ -22,7 +22,6 @@ public class UnderlineAlphaLabel extends SetableAlphaLabel {
 	private boolean drawUnderline = false;
 
 	public UnderlineAlphaLabel() {
-		super();
 	}
 
 	public UnderlineAlphaLabel(final String text) {
@@ -41,13 +40,11 @@ public class UnderlineAlphaLabel extends SetableAlphaLabel {
 	@Override
 	protected void paintFigure(final Graphics graphics) {
 		super.paintFigure(graphics);
-		final Rectangle bounds = getBounds();
 		if (drawUnderline) {
-			graphics.translate(bounds.x, bounds.y);
-			final Point loc = new Point(getTextLocation());
-			loc.y += bounds.height - 2;
-			graphics.drawLine(loc.x(), loc.y(), bounds.width() - loc.x(), loc.y());
-			graphics.translate(-bounds.x, -bounds.y);
+			final Rectangle bounds = getBounds();
+			final Point loc = getTextLocation();
+			graphics.drawLine(bounds.x + loc.x(), bounds.x + loc.y() + bounds.height - 2, bounds.width() - loc.x(),
+					loc.y());
 		}
 	}
 }

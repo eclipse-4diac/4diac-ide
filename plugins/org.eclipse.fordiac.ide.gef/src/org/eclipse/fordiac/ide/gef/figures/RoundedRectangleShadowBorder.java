@@ -27,15 +27,17 @@ public class RoundedRectangleShadowBorder extends AbstractShadowBorder {
 		graphics.pushState();
 		graphics.setBackgroundColor(figure.getForegroundColor());
 
-		if (figure instanceof RoundedRectangle) {
-			cornerRadius = ((RoundedRectangle) figure).getCornerDimensions().getExpanded(2, 2);
+		if (figure instanceof final RoundedRectangle roundRect) {
+			cornerRadius.setSize(roundRect.getCornerDimensions());
+			cornerRadius.expand(2, 2);
 		}
 
-		final Rectangle shadowRect = figure.getClientArea().getExpanded(2, 2);
-		final Rectangle clipRect = shadowRect.getCopy();
-		clipRect.width += SHADOW_SIZE;
-		clipRect.height += SHADOW_SIZE;
-		graphics.setClip(clipRect);
+		final Rectangle shadowRect = getPaintRectangle(figure, SHADOW_INSETS).expand(2, 2);
+		shadowRect.width += SHADOW_SIZE;
+		shadowRect.height += SHADOW_SIZE;
+		graphics.setClip(shadowRect);
+		shadowRect.width -= SHADOW_SIZE;
+		shadowRect.height -= SHADOW_SIZE;
 
 		drawShadowHalo(graphics, shadowRect);
 
@@ -54,7 +56,7 @@ public class RoundedRectangleShadowBorder extends AbstractShadowBorder {
 
 	private void drawDropShadow(final Graphics graphics, final Rectangle shadowRect) {
 		graphics.setAlpha(SHADOW_ALPHA);
-		final double horInc = 0.7;  // emulate a roughly 30° shadow angle
+		final double horInc = 0.7; // emulate a roughly 30° shadow angle
 		double horI = 0;
 		for (int i = 0; i < SHADOW_SIZE; i++) {
 			horI += horInc;
@@ -69,6 +71,5 @@ public class RoundedRectangleShadowBorder extends AbstractShadowBorder {
 	private void drawShadowFigure(final Graphics graphics, final Rectangle shadowRect) {
 		graphics.fillRoundRectangle(shadowRect, cornerRadius.width, cornerRadius.height);
 	}
-
 
 }
