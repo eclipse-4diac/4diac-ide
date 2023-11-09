@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,7 +21,9 @@ import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -66,6 +70,90 @@ public final class NamedElementAnnotations {
 			}
 		}
 		return true;
+	}
+
+	public static boolean validateDuplicateName(final INamedElement element, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context, final String key) {
+		final Map<String, INamedElement> namedContents = getNamedContents(context, key);
+		// update siblings map
+		// - if the map does not contain the name -> put name and element into the map
+		// (so we get the element and add a diagnostic on it when we actually have a
+		// duplicate)
+		// - if the map does contain the name -> put the null element into the map
+		// (so we do not add a diagnostic on it twice but still retain the key in the
+		// map for more duplicates)
+		final INamedElement duplicate = putConditional(namedContents, element.getQualifiedName(), element,
+				NullNamedElement.INSTANCE);
+		if (duplicate != null) { // we have a collision
+			// add diagnostics
+			if (diagnostics != null) {
+				// add diagnostic for sibling (only once)
+				if (!(duplicate instanceof NullNamedElement)) {
+					diagnostics.add(createDuplicateNameDiagnostic(duplicate));
+				}
+				// add diagnostic for current element
+				diagnostics.add(createDuplicateNameDiagnostic(element));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	private static Diagnostic createDuplicateNameDiagnostic(final INamedElement element) {
+		return new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+				LibraryElementValidator.INAMED_ELEMENT__VALIDATE_NAME,
+				MessageFormat.format(Messages.InterfaceElementAnnotations_DuplicateName, element.getName()),
+				FordiacMarkerHelper.getDiagnosticData(element, LibraryElementPackage.Literals.INAMED_ELEMENT__NAME));
+	}
+
+	private static <K, V> V putConditional(final Map<K, V> map, final K key, final V valueIfAbsent,
+			final V valueIfPresent) {
+		V v = map.get(key);
+		if (v == null) {
+			v = map.put(key, valueIfAbsent);
+		} else {
+			v = map.put(key, valueIfPresent);
+		}
+		return v;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Map<String, INamedElement> getNamedContents(final Map<Object, Object> context, final String key) {
+		return (Map<String, INamedElement>) context.computeIfAbsent(key, k -> new HashMap<>());
+	}
+
+	private static class NullNamedElement extends EObjectImpl implements INamedElement {
+		private static final NullNamedElement INSTANCE = new NullNamedElement();
+
+		@Override
+		public String getName() {
+			return null;
+		}
+
+		@Override
+		public void setName(final String value) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public String getComment() {
+			return null;
+		}
+
+		@Override
+		public void setComment(final String value) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public String getQualifiedName() {
+			return null;
+		}
+
+		@Override
+		public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+			return false;
+		}
 	}
 
 	private NamedElementAnnotations() {

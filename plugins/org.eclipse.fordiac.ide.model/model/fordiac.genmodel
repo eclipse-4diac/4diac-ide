@@ -441,7 +441,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//IInterfaceElement/type"/>
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getFBNetworkElement"
           body="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/validateName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.validateName(this, diagnostics, context) &amp;&amp; org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);">
+      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/validateName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);">
         <genParameters ecoreParameter="lib.ecore#//IInterfaceElement/validateName/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//IInterfaceElement/validateName/context"/>
       </genOperations>

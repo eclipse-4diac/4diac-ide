@@ -295,7 +295,7 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	 */
 	@Override
 	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.validateName(this, diagnostics, context) && org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);
 	}
 
 	/**

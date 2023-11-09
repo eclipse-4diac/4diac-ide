@@ -16,19 +16,16 @@ import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize
 
 import java.text.MessageFormat;
 import java.util.Map;
-import java.util.Objects;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -37,6 +34,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public final class InterfaceElementAnnotations {
+	private static final String NAMED_ELEMENTS_KEY = InterfaceElementAnnotations.class.getName() + ".NAMED_ELEMENTS"; //$NON-NLS-1$
 
 	public static String getFullTypeName(final IInterfaceElement element) {
 		return element.getTypeName();
@@ -69,14 +67,11 @@ public final class InterfaceElementAnnotations {
 		if (isErrorMarker(element)) {
 			return true; // do not check error markers
 		}
-		if (hasDuplicateSibling(element)) {
-			if (diagnostics != null) {
-				diagnostics
-						.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-								LibraryElementValidator.IINTERFACE_ELEMENT__VALIDATE_NAME, MessageFormat
-										.format(Messages.InterfaceElementAnnotations_DuplicateName, element.getName()),
-								FordiacMarkerHelper.getDiagnosticData(element)));
-			}
+		if (!NamedElementAnnotations.validateName(element, diagnostics, context)) {
+			return false;
+		}
+		if (!isOutMappedInOutVar(element)
+				&& !NamedElementAnnotations.validateDuplicateName(element, diagnostics, context, NAMED_ELEMENTS_KEY)) {
 			return false;
 		}
 		if (!FordiacKeywords.DT.equals(element.getName()) // allow "DT" for IEC 61499 standard blocks
@@ -94,33 +89,13 @@ public final class InterfaceElementAnnotations {
 		return true;
 	}
 
-	static boolean hasDuplicateSibling(final IInterfaceElement element) {
-		final INamedElement container = NamedElementAnnotations.getNamedContainer(element);
-		if (container != null) {
-			final var contents = container.eAllContents();
-			while (contents.hasNext()) {
-				final EObject next = contents.next();
-				if (next instanceof final IInterfaceElement sibling && sibling != element
-						&& Objects.equals(sibling.getName(), element.getName()) && !isErrorMarker(sibling)
-						&& !isVarInOutOppositeSiblings(element, sibling)) {
-					return true;
-				}
-				if (next instanceof INamedElement) {
-					contents.prune();
-				}
-			}
-		}
-		return false;
-	}
-
 	static boolean isErrorMarker(final IInterfaceElement element) {
 		return element instanceof ErrorMarkerInterface;
 	}
 
-	static boolean isVarInOutOppositeSiblings(final IInterfaceElement element, final IInterfaceElement sibling) {
-		return element instanceof final VarDeclaration varElement && sibling instanceof final VarDeclaration varSibling
-				&& varElement.isInOutVar() && varSibling.isInOutVar()
-				&& varElement.isIsInput() != varSibling.isIsInput();
+	static boolean isOutMappedInOutVar(final IInterfaceElement element) {
+		return element instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
+				&& !varDeclaration.isIsInput();
 	}
 
 	static boolean existsDataType(final DataTypeLibrary dataTypeLibrary, final String name) {
