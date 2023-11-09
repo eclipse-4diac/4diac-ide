@@ -62,7 +62,11 @@ public final class GlobalConstantsParseUtil {
 		resourceSet.getLoadOptions().put(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS, Boolean.TRUE);
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("gcf", //$NON-NLS-1$
 				SERVICE_PROVIDER_GCF.get(IResourceFactory.class));
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("GCF", //$NON-NLS-1$
+				SERVICE_PROVIDER_GCF.get(IResourceFactory.class));
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("fct", //$NON-NLS-1$
+				SERVICE_PROVIDER_FCT.get(IResourceFactory.class));
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("FCT", //$NON-NLS-1$
 				SERVICE_PROVIDER_FCT.get(IResourceFactory.class));
 		final GlobalConstantsResource resource = (GlobalConstantsResource) SERVICE_PROVIDER_GCF
 				.get(XtextResource.class);

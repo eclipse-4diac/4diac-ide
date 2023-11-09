@@ -29,6 +29,7 @@ public class STAlgorithmResourceSetInitializer implements IResourceSetInitialize
 		if (has4diacProjectNature(project)) {
 			final IResourceFactory resourceFactory = getInjector().getInstance(IResourceFactory.class);
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("fbt", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("FBT", resourceFactory); //$NON-NLS-1$
 		}
 	}
 

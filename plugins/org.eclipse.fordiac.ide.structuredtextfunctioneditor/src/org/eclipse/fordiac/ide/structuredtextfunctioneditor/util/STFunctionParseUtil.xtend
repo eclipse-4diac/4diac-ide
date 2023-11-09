@@ -90,7 +90,9 @@ final class STFunctionParseUtil {
 	def private static IParseResult parseInternal(String text, URI uri, LibraryElement type, List<Issue> issues) {
 		val resourceSet = SERVICE_PROVIDER_FCT.get(ResourceSet) as XtextResourceSet
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("fct", SERVICE_PROVIDER_FCT.get(IResourceFactory))
+		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("FCT", SERVICE_PROVIDER_FCT.get(IResourceFactory))
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("gcf", SERVICE_PROVIDER_GCF.get(IResourceFactory))
+		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("GCF", SERVICE_PROVIDER_GCF.get(IResourceFactory))
 		SERVICE_PROVIDER_FCT.parse(resourceSet, text, null, type, null, issues, uri ?: SYNTHETIC_URI_FCT, #{
 			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
 			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE,

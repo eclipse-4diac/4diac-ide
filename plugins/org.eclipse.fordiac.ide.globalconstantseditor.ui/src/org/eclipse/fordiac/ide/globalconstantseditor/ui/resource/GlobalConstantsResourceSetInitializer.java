@@ -29,6 +29,7 @@ public class GlobalConstantsResourceSetInitializer implements IResourceSetInitia
 		if (has4diacProjectNature(project)) {
 			final IResourceFactory resourceFactory = getInjector().getInstance(IResourceFactory.class);
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("gcf", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("GCF", resourceFactory); //$NON-NLS-1$
 		}
 	}
 

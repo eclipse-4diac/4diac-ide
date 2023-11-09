@@ -29,6 +29,7 @@ public class STFunctionResourceSetInitializer implements IResourceSetInitializer
 		if (has4diacProjectNature(project)) {
 			final IResourceFactory resourceFactory = getInjector().getInstance(IResourceFactory.class);
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("fct", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("FCT", resourceFactory); //$NON-NLS-1$
 		}
 	}
 
