@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -88,9 +88,15 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 	);
 
 	private final DataType type;
+	private final boolean strict;
 
 	public TypedValueConverter(final DataType type) {
+		this(type, false);
+	}
+
+	public TypedValueConverter(final DataType type, final boolean strict) {
 		this.type = type;
+		this.strict = strict;
 	}
 
 	@Override
@@ -111,7 +117,7 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 					MessageFormat.format(Messages.VALIDATOR_DatatypeRequiresTypeSpecifier, type.getName()));
 		}
 		final ValueConverter<?> delegate = getValueConverter(valueType);
-		return checkValue(valueType, string, delegate.toValue(value));
+		return checkValue(valueType, string, delegate.toValue(value), strict);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -178,15 +184,15 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 		return IecTypes.GenericTypes.isAnyType(type) || type instanceof AnyDurationType || type instanceof AnyDateType;
 	}
 
-	private static Object checkValue(final DataType type, final String string, final Object value) {
-		if ((type instanceof AnyNumType || type instanceof AnyBitType) && !isNumericValueValid(type, value)) {
+	private static Object checkValue(final DataType type, final String string, final Object value,
+			final boolean strict) {
+		if ((type instanceof AnyNumType || type instanceof AnyBitType) && !isNumericValueValid(type, value, strict)) {
 			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_INVALID_NUMBER_LITERAL, string));
 		}
 		return value;
 	}
 
-	private static boolean isNumericValueValid(final DataType type, final Object value) {
-
+	private static boolean isNumericValueValid(final DataType type, final Object value, final boolean strict) {
 		if (value instanceof Boolean) {
 			return type instanceof BoolType;
 		}
@@ -199,10 +205,10 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 			}
 		}
 		if (value instanceof final BigInteger bigInteger) {
-			if (type instanceof RealType) {
+			if (type instanceof RealType && !strict) {
 				return Float.isFinite(bigInteger.floatValue());
 			}
-			if (type instanceof LrealType) {
+			if (type instanceof LrealType && !strict) {
 				return Double.isFinite(bigInteger.doubleValue());
 			}
 			if (type instanceof SintType) {

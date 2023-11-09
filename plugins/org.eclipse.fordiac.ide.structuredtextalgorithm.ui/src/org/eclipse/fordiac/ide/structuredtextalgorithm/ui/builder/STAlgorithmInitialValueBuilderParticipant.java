@@ -30,12 +30,14 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -43,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
@@ -166,9 +169,13 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		final String value = getValue(varDeclaration);
 		final List<Issue> issues = new ArrayList<>();
 		if (!value.isBlank()) { // do not parse value if blank
-			typeUsageCollector.collectUsedTypes(
-					StructuredTextParseUtil.validate(value, delta.getUri(), STCoreUtil.getFeatureType(varDeclaration),
-							EcoreUtil2.getContainerOfType(varDeclaration, LibraryElement.class), null, issues));
+			final INamedElement featureType = STCoreUtil.getFeatureType(varDeclaration);
+			try {
+				new TypedValueConverter((DataType) featureType, true).toValue(value);
+			} catch (final Exception e) {
+				typeUsageCollector.collectUsedTypes(StructuredTextParseUtil.validate(value, delta.getUri(), featureType,
+						EcoreUtil2.getContainerOfType(varDeclaration, LibraryElement.class), null, issues));
+			}
 		}
 		validateGenericValue(varDeclaration, value, issues);
 		if (monitor.isCanceled()) {
