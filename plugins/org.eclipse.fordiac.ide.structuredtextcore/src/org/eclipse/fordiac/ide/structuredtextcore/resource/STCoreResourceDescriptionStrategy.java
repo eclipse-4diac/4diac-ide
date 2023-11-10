@@ -30,7 +30,9 @@ import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
@@ -44,6 +46,20 @@ import org.eclipse.xtext.util.IAcceptor;
 
 import com.google.common.collect.ImmutableMap;
 
+/**
+ * Resource description strategy for ST core and derivatives.
+ * <p>
+ * This class overrides the default Xtext resource description strategy to adapt
+ * it to the specific requirements of the ST core language and its derivatives:
+ * <p>
+ * <ul>
+ * <li>provide additional information in the index for code completion,
+ * <li>provide a signature hash and type information to detect changes in
+ * exported descriptions,
+ * <li>filter reference descriptions to immutable built-in or error placeholder
+ * types.
+ * </ul>
+ */
 public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptionStrategy {
 
 	private static final Logger LOG = Logger.getLogger(STCoreResourceDescriptionStrategy.class);
@@ -174,6 +190,15 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 
 	public static String getTypedElementDisplayString(final ITypedElement typedElement) {
 		return typedElement.getName() + " : " + typedElement.getTypeName(); //$NON-NLS-1$
+	}
+
+	@Override
+	protected boolean isResolvedAndExternal(final EObject from, final EObject to) {
+		if (to instanceof final LibraryElement libraryElement
+				&& (libraryElement.getTypeEntry() == null || libraryElement.getTypeEntry() instanceof ErrorTypeEntry)) {
+			return false;
+		}
+		return super.isResolvedAndExternal(from, to);
 	}
 
 	public static class SignatureHashBuilder {
