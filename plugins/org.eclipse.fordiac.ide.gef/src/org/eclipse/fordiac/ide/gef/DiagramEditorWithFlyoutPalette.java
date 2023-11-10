@@ -509,7 +509,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	@Override
 	public void dispose() {
 		outlinePage = null;
-		if (annotationModel != null) {
+		if (annotationModel != null && annotationModelEventDispatcher != null) {
 			annotationModel.removeAnnotationModelListener(annotationModelEventDispatcher);
 		}
 		super.dispose();

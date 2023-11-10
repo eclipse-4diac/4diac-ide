@@ -457,7 +457,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 	@Override
 	public void dispose() {
 		outlinePage = null;
-		if (annotationModel != null) {
+		if (annotationModel != null && annotationModelEventDispatcher != null) {
 			annotationModel.removeAnnotationModelListener(annotationModelEventDispatcher);
 		}
 		super.dispose();
