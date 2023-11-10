@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 - 2023 Primetals Technologies Austria GmbH
- *               2022 - 2023 Martin Erich Jobst
+ * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,9 +14,10 @@
  *       - adds check for trailing underscore on identifiers
  *       - validation for unqualified FB calls (exactly one input event)
  *       - validation for partial bit access
- *       - validaton for array access
- *       - validaton for string access
+ *       - validation for array access
+ *       - validation for string access
  *       - validation for assignability (cannot assign to consts/inputs)
+ *       - validation that array access operator is only applicable to vars
  *   Ulzii Jargalsaikhan
  *       - custom validation for identifiers
  *   Martin Jobst
@@ -151,6 +152,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String MAX_LENGTH_TYPE_INVALID = ISSUE_CODE_PREFIX + "maxLengthTypeInvalid"; //$NON-NLS-1$
 	public static final String TOO_MANY_INDICES_GIVEN = ISSUE_CODE_PREFIX + "tooManyIndicesGiven"; //$NON-NLS-1$
 	public static final String ARRAY_ACCESS_INVALID = ISSUE_CODE_PREFIX + "arrayAccessInvalid"; //$NON-NLS-1$
+	public static final String ARRAY_ACCESS_RECEIVER_INVALID = ISSUE_CODE_PREFIX + "arrayAccessReceiverInvalid"; //$NON-NLS-1$
 	public static final String ARRAY_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "arrayIndexOutOfBounds"; //$NON-NLS-1$
 	public static final String TRUNCATED_LITERAL = ISSUE_CODE_PREFIX + "truncatedLiteral"; //$NON-NLS-1$
 	public static final String STRING_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "stringIndexOutOfBounds"; //$NON-NLS-1$
@@ -310,6 +312,17 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				}
 			}
 		}
+	}
+
+	@Check
+	public void checkArrayAccessReceiverIsAVariable(final STArrayAccessExpression accessExpression) {
+		if (accessExpression.getReceiver() instanceof final STFeatureExpression featureExpression
+				&& !(featureExpression.getFeature() instanceof STVarDeclaration
+						|| featureExpression.getFeature() instanceof VarDeclaration)) {
+			error(Messages.STCoreValidator_ArrayAccessReceiverIsInvalid,
+					STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__RECEIVER, ARRAY_ACCESS_RECEIVER_INVALID);
+		}
+
 	}
 
 	@Check
