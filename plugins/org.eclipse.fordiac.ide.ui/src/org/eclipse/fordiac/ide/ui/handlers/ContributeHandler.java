@@ -26,7 +26,7 @@ import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class ContributeHandler extends AbstractHandler {
-	private static final String FORDIAC_CONTRIBUTION_URL = "https://www.eclipse.org/4diac/en_contribute.php"; //$NON-NLS-1$
+	private static final String FORDIAC_CONTRIBUTION_URL = "https://eclipse.dev/4diac/en_contribute.php"; //$NON-NLS-1$
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {

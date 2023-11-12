@@ -36,10 +36,10 @@ Be sure to search for existing bugs before you create another one. Remember that
 contributions are always welcome!
 
 An overview on what kinds of contributions are possible can be found here:
-* https://www.eclipse.org/4diac/en_contribute.php
+* https://eclipse.dev/4diac/en_contribute.php
 
 A detailed decomentation of the contribution process here:
-* https://www.eclipse.org/4diac/en_help.php?helppage=html/development/contribute.html
+* https://eclipse.dev/4diac/en_help.php?helppage=html/development/contribute.html
 
 
 ## Eclipse Development Process
