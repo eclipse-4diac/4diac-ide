@@ -29,6 +29,8 @@ public final class TypeDeclarationParser {
 
 	private static final Pattern SIMPLE_SUBRANGE_PATTERN = Pattern
 			.compile("([\\+\\-]?\\d+)\\s*\\.\\.\\s*([\\+\\-]?\\d+)"); //$NON-NLS-1$
+	private static final Pattern SIMPLE_ARRAY_SIZE_PATTERN = Pattern
+			.compile(SIMPLE_SUBRANGE_PATTERN + "(?:\\s*,\\s*" + SIMPLE_SUBRANGE_PATTERN + ")*"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	public static DataType parseTypeDeclaration(final DataType baseType, final String arraySize) {
 		final DataType result = parseLegacyTypeDeclaration(baseType, arraySize);
@@ -58,6 +60,11 @@ public final class TypeDeclarationParser {
 		final List<Subrange> subranges = subrangeStrings.stream().map(TypeDeclarationParser::parseSimpleSubrange)
 				.toList();
 		return newArrayType(baseType, subranges);
+	}
+
+	public static boolean isSimpleTypeDeclaration(final String arraySize) {
+		return arraySize == null || arraySize.isEmpty()
+				|| SIMPLE_ARRAY_SIZE_PATTERN.matcher(arraySize.trim()).matches();
 	}
 
 	private static Subrange parseSimpleSubrange(final String text) {
@@ -93,7 +100,7 @@ public final class TypeDeclarationParser {
 				if (!string) {
 					depth++;
 				}
-			break;
+				break;
 			case ')', ']', '}':
 				if (!string) {
 					if (depth == 0) { // unbalanced
@@ -101,7 +108,7 @@ public final class TypeDeclarationParser {
 					}
 					depth--;
 				}
-			break;
+				break;
 			case ',':
 				if (!string && depth == 0) {
 					result.add(text.substring(lastSplitIndex + 1, i).trim());

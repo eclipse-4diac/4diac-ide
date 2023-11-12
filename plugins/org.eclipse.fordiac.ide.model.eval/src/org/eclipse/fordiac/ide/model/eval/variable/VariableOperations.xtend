@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.data.AnyType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
+import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser
 import org.eclipse.fordiac.ide.model.eval.EvaluatorCache
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
@@ -28,7 +29,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 
+import static extension org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser.isSimpleTypeDeclaration
 import static extension org.eclipse.fordiac.ide.model.eval.EvaluatorFactory.*
 
 final class VariableOperations {
@@ -89,10 +92,8 @@ final class VariableOperations {
 					} else
 						throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
 				])
-			} else if (decl.array)
+			} else
 				newVariable(decl.name, decl.evaluateResultType)
-			else
-				newVariable(decl.name, decl.type)
 		}
 	}
 
@@ -112,11 +113,15 @@ final class VariableOperations {
 		if (decl.array) {
 			try(val cache = EvaluatorCache.open()) {
 				cache.computeResultTypeIfAbsent(decl) [
-					val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
-					if (evaluator instanceof VariableEvaluator) {
-						evaluator.evaluateResultType
-					} else
-						throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+					if (decl.arraySize?.value.simpleTypeDeclaration)
+						TypeDeclarationParser.parseSimpleTypeDeclaration(decl.type, decl.arraySize.value)
+					else {
+						val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
+						if (evaluator instanceof VariableEvaluator) {
+							evaluator.evaluateResultType
+						} else
+							throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+					}
 				]
 			}
 		} else
@@ -124,17 +129,20 @@ final class VariableOperations {
 	}
 
 	def static String validateValue(VarDeclaration decl) {
-		val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
-		try {
-			evaluator?.prepare
+		if (!decl.simpleInitialValue) {
+			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
+			try {
+				evaluator?.prepare
+				""
+			} catch (Exception e) {
+				e.message;
+			}
+		} else
 			""
-		} catch (Exception e) {
-			e.message;
-		}
 	}
 
 	def static String validateType(VarDeclaration decl) {
-		if (decl.array) {
+		if (!decl.arraySize?.value.simpleTypeDeclaration) {
 			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
 			if (evaluator instanceof VariableEvaluator) {
 				try {
@@ -170,7 +178,7 @@ final class VariableOperations {
 	}
 
 	def static Set<String> getDependencies(VarDeclaration decl) {
-		if (decl.array || decl.hasDeclaredInitialValue) {
+		if (!decl.arraySize?.value.simpleTypeDeclaration || !decl.simpleInitialValue) {
 			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
 			if (evaluator instanceof VariableEvaluator) {
 				evaluator.dependencies
@@ -225,5 +233,19 @@ final class VariableOperations {
 			new ResourceImpl(decl.eResource.URI).contents.add(copy)
 		}
 		copy
+	}
+
+	def private static isSimpleInitialValue(VarDeclaration decl) {
+		if (!decl.hasDeclaredInitialValue)
+			true
+		else if (decl.array)
+			false
+		else
+			try {
+				new TypedValueConverter(decl.type).toValue(decl.declaredInitialValue)
+				true
+			} catch (Exception e) {
+				false
+			}
 	}
 }
