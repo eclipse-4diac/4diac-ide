@@ -121,9 +121,11 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
 				switch (notification.getEventType()) {
-				case Notification.ADD, Notification.ADD_MANY, Notification.MOVE, Notification.REMOVE, Notification.REMOVE_MANY:
+				case Notification.ADD, Notification.ADD_MANY, Notification.MOVE, Notification.REMOVE,
+						Notification.REMOVE_MANY:
 					refreshChildren();
-					// this ensure that parameters are correctly updated when pins are added or removed (e.g.,
+					// this ensure that parameters are correctly updated when pins are added or
+					// removed (e.g.,
 					// errormarkerpins are deleted)
 					getParent().refresh();
 					break;
@@ -208,7 +210,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	public boolean isOnlyThisOrNothingSelected() {
-		final List<EditPart> selection = getViewer().getSelectedEditParts();
+		final List<? extends EditPart> selection = getViewer().getSelectedEditParts();
 		if (selection.size() > 1) {
 			return false;
 		}
@@ -258,10 +260,13 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	private HiddenPinIndicator inputPinIndicator;
 	private HiddenPinIndicator outputPinIndicator;
 
-	/** Returns an <code>IPropertyChangeListener</code> with implemented <code>propertyChange()</code>. e.g. a color
-	 * change event repaints the FunctionBlock.
+	/**
+	 * Returns an <code>IPropertyChangeListener</code> with implemented
+	 * <code>propertyChange()</code>. e.g. a color change event repaints the
+	 * FunctionBlock.
 	 *
-	 * @return the preference change listener */
+	 * @return the preference change listener
+	 */
 	@Override
 	public org.eclipse.jface.util.IPropertyChangeListener getPreferenceChangeListener() {
 		if (null == listener) {

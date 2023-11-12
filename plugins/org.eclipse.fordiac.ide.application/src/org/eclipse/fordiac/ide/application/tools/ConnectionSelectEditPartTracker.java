@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.tools;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.tools.SelectEditPartTracker;
 import org.eclipse.swt.SWT;
@@ -39,10 +40,10 @@ public class ConnectionSelectEditPartTracker extends SelectEditPartTracker {
 		final EditPartViewer viewer = getCurrentViewer();
 		final List<ConnectionEditPart> connections = ColLocatedConnectionFinder
 				.getCoLocatedConnections(getSourceEditPart(), viewer, getLocation());
-		final List<Object> selectedObjects = viewer.getSelectedEditParts();
+		final List<? extends EditPart> selectedObjects = viewer.getSelectedEditParts();
 
 		boolean first = true;
-		for (final ConnectionEditPart con : connections){
+		for (final ConnectionEditPart con : connections) {
 			if (getCurrentInput().isModKeyDown(SWT.MOD1)) {
 				if (selectedObjects.contains(con)) {
 					viewer.deselect(con);
@@ -51,13 +52,11 @@ public class ConnectionSelectEditPartTracker extends SelectEditPartTracker {
 				}
 			} else if (getCurrentInput().isShiftKeyDown()) {
 				viewer.appendSelection(con);
+			} else if (first) {
+				viewer.select(con);
+				first = false;
 			} else {
-				if (first) {
-					viewer.select(con);
-					first = false;
-				} else {
-					viewer.appendSelection(con);
-				}
+				viewer.appendSelection(con);
 			}
 		}
 

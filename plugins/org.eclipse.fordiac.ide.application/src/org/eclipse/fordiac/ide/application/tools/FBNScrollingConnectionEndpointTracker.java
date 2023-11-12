@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.gef.tools.ScrollingConnectionEndpointTracker;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
@@ -44,11 +45,13 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 		return super.handleButtonDown(button);
 	}
 
-
-	/** This selection updater is based on perform selection from {@link org.eclipse.gef.tools.SelectEditPartTracker} */
+	/**
+	 * This selection updater is based on perform selection from
+	 * {@link org.eclipse.gef.tools.SelectEditPartTracker}
+	 */
 	protected void performSelection() {
 		final EditPartViewer viewer = getCurrentViewer();
-		final List<Object> selectedObjects = viewer.getSelectedEditParts();
+		final List<? extends EditPart> selectedObjects = viewer.getSelectedEditParts();
 
 		if (getCurrentInput().isModKeyDown(SWT.MOD1)) {
 			if (selectedObjects.contains(getConnectionEditPart())) {
@@ -87,7 +90,8 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 			conn.getRoutingData().setNeedsValidation(true);
 			if (conn.getRoutingData().is3SegementData()
 					&& RequestConstants.REQ_RECONNECT_SOURCE.equals(getCommandName())) {
-				// if we have a 3 segment connection and we are dragging the destination we need to take the first
+				// if we have a 3 segment connection and we are dragging the destination we need
+				// to take the first
 				// segment into account for the border
 				final Insets adjustedBorder = new Insets(super.getCanvasBorder());
 				adjustedBorder.right += conn.getRoutingData().getDx1();
@@ -119,23 +123,21 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 		final Connection con = get4diacConnection();
 		if (con != null) {
 			final Command curCommand = getCurrentCommand();
-			if (curCommand != null && curCommand.canExecute()) {
-				if (curCommand instanceof AbstractReconnectConnectionCommand) {
-					final AbstractReconnectConnectionCommand cmd = (AbstractReconnectConnectionCommand) curCommand;
-					return con.getSource().equals(cmd.getNewSource())
-							&& con.getDestination().equals(cmd.getNewDestination());
-				}
-
-			} else {
+			if ((curCommand == null) || !curCommand.canExecute()) {
 				return true;
+			}
+			if (curCommand instanceof final AbstractReconnectConnectionCommand cmd) {
+				return con.getSource().equals(cmd.getNewSource())
+						&& con.getDestination().equals(cmd.getNewDestination());
 			}
 		}
 		return false;
 	}
 
 	protected Connection get4diacConnection() {
-		if (getConnectionEditPart().getModel() instanceof org.eclipse.fordiac.ide.model.libraryElement.Connection) {
-			return (Connection) getConnectionEditPart().getModel();
+		if (getConnectionEditPart()
+				.getModel() instanceof final org.eclipse.fordiac.ide.model.libraryElement.Connection conn) {
+			return conn;
 		}
 		return null;
 	}

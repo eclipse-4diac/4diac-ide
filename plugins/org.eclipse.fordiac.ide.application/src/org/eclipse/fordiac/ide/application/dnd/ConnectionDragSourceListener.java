@@ -17,13 +17,13 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.AbstractTransferDragSourceListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DragSourceEvent;
 
 public class ConnectionDragSourceListener extends AbstractTransferDragSourceListener {
-
 
 	public ConnectionDragSourceListener(final EditPartViewer viewer) {
 		super(viewer, ConnSourceTransfer.getInstance());
@@ -53,9 +53,9 @@ public class ConnectionDragSourceListener extends AbstractTransferDragSourceList
 	}
 
 	private InterfaceEditPart getSelectedInterfaceEditPart() {
-		final List<Object> selectedEditParts = getViewer().getSelectedEditParts();
-		if (selectedEditParts.size() == 1 && selectedEditParts.get(0) instanceof InterfaceEditPart) {
-			return (InterfaceEditPart) selectedEditParts.get(0);
+		final List<? extends EditPart> selectedEditParts = getViewer().getSelectedEditParts();
+		if (selectedEditParts.size() == 1 && selectedEditParts.get(0) instanceof final InterfaceEditPart iep) {
+			return iep;
 		}
 		return null;
 	}
