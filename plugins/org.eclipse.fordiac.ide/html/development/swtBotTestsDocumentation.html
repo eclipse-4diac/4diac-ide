@@ -22,7 +22,7 @@ Copyright (c) 2023 Andrea Zoitl
 <body>
 SWTBot Tests Documentation
 <ul>
-	<li><a href="#ImprovementThroughAutomatedTesting">Eclipse 4diac IDE User Interface Quality Improvement Through Automated Testing</a>
+	<li><a href="#ImprovementThroughAutomatedTesting">Eclipse 4diac&nbsp;IDE User Interface Quality Improvement Through Automated Testing</a>
 		<ul>
 			<li><a href="#WhatIsEclipseSWTBot">What is Eclipse SWTBot</a>
 			<li><a href="#Requirement">Requirement</a>
@@ -47,11 +47,11 @@ SWTBot Tests Documentation
 
 <h1 id="topOfPage">SWTBot Tests Documentation</h1>
 
-<h2 id="ImprovementThroughAutomatedTesting">Eclipse 4diac IDE User Interface Quality Improvement Through Automated Testing</h2>
+<h2 id="ImprovementThroughAutomatedTesting">Eclipse 4diac&nbsp;IDE User Interface Quality Improvement Through Automated Testing</h2>
 <p>Often open source projects have only a few contributors. These try to bring in all new ideas and improvements. However, this leaves
 little time for testing, which means that the quality of the software suffers. Since Eclipse 4diac, testing is also still done manually,
 which on the one hand is inefficient and on the other hand is often not done completely due to time constraints. For this reason, an
-automated test set for the 4diac IDE user interface would be a good improvement.</p>
+automated test set for the 4diac&nbsp;IDE user interface would be a good improvement.</p>
 
 <h3 id="WhatIsEclipseSWTBot">What is Eclipse SWTBot</h3>
 <p>from <a href="https://wiki.eclipse.org/SWTBot">https://wiki.eclipse.org/SWTBot</a>:<br/>
@@ -62,12 +62,12 @@ assertion framework with SWTBot. SWTBot can record and playback tests and integr
 make it easy to use in Continuous Integration.</p>
 
 <h3 id="Requirement">Requirement</h3>
-<p>All SWTBot related files can be found in the <b>4diac IDE source code</b> in the folder <b>org.eclipse.fordiac.ide.test.ui</b>.</p>
+<p>All SWTBot related files can be found in the <b>4diac&nbsp;IDE source code</b> in the folder <b>org.eclipse.fordiac.ide.test.ui</b>.</p>
 <p>In order to be able to perform advanced tests, the provided SWTBot classes were extended. For example, it became clear that with the standard classes 
-of Eclipse SWTBot it is not possible to create connections in 4diac IDE. By default, drag and drop works by selecting the 1st pin and then
-jumping to the 2nd pin and selecting it. 4diac IDE unfortunately doesn't work like that, mouse movement between selections is needed. 
+of Eclipse SWTBot it is not possible to create connections in 4diac&nbsp;IDE. By default, drag and drop works by selecting the 1st pin and then
+jumping to the 2nd pin and selecting it. 4diac&nbsp;IDE unfortunately doesn't work like that, mouse movement between selections is needed. 
 </p>
-<p>Therefore 4 extension classes were created, which can be found in the 4diac IDE source folder <i>org.eclipse.fordiac.ide.test.ui.swtbot</i>. They are 
+<p>Therefore 4 extension classes were created, which can be found in the 4diac&nbsp;IDE source folder <i>org.eclipse.fordiac.ide.test.ui.swtbot</i>. They are 
 the classes SWT4diacGefBot, SWTBot4diacGefViewer, SWTBot4diacGefEditor SWTBot4diacFigureCanvas.</p>
 
 <h3 id="Settings">Settings to run SWTBot tests</h3>
@@ -109,8 +109,8 @@ In this case, repeat the above steps.</p>
 
 <h3 id="SettingsBeforeAll">Settings that have to be executed in @BeforeAll</h3>
 <p>The test classes Basic1FBNetworkEditingTests and future test classes are structured in
-such a way that 4diac IDE is started first. The beforeAll() method with the @BeforeAll annotation creates the bot and it closes the
-welcome window that appears when 4diac starts. This closing is important, otherwise the tests cannot be executed.</p>
+such a way that 4diac&nbsp;IDE is started first. The beforeAll() method with the @BeforeAll annotation creates the bot and it closes the
+welcome window that appears when 4diac&nbsp;IDE starts. This closing is important, otherwise the tests cannot be executed.</p>
 <p>Settings such as timeout and playback speed are also set here.</p> 
 <p><img src="../../html/development/img/SWTBot/BeforeAll.png" width="450"; height=auto, alt="@BeforeAll settings"/></p>
 

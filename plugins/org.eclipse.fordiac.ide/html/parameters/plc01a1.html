@@ -25,7 +25,7 @@
 
 	<ol>
 		<li><a href="#board">Run Linux on the Board</a></li>
-		<li><a href="#forte">Run FORTE on the Board</a></li>
+		<li><a href="#forte">Run 4diac&nbsp;FORTE on the Board</a></li>
 		<li><a href="#dts">Enable SPI in the board</a></li>
 		<li><a href="#misc">Some good info</a></li>
 	</ol>
@@ -40,13 +40,13 @@
 
 
 
-	<h1 id="forte">Run FORTE on the Board</h1>
+	<h1 id="forte">Run 4diac&nbsp;FORTE on the Board</h1>
 
 
 	<ol>
 		<li>Follow the instruction <a href="https://wiki.st.com/stm32mpu/wiki/Getting_started/STM32MP1_boards/STM32MP157x-DK2/Develop_on_Arm%C2%AE_Cortex%C2%AE-A7" target="_blank">here</a> to download the SDK to a Ubuntu machine, and set the cross-compilers as default for the terminal session.</li>
 
-		<li>Clone the FORTE repository and compile as usual.</li>
+		<li>Clone the 4diac&nbsp;FORTE repository and compile as usual.</li>
 
 		<li>Change the IP of the board by executing:
 
@@ -55,7 +55,7 @@
 			which will set the ip according to what you use in the XXX and the YY, which is a two-digit number representing the mask.
 		</li>
 
-		<li>Test with a simple application without IOs, and monitor it from the IDE.</li>
+		<li>Test with a simple application without IOs, and monitor it from 4diac&nbsp;IDE.</li>
 
 	</ol>	
 
@@ -138,16 +138,16 @@ Retrieving file: /mmc0_stm32mp157a-dk1_extlinux/extlinux.conf</div>
 
 
 
-	 <li>To access the IOs, you need to use the special FB called PLC01A1 in the IDE.</li>
+	 <li>To access the IOs, you need to use the special FB called PLC01A1 in 4diac&nbsp;IDE.</li>
 
 </ol>
 
 	<h1 id="misc">Some good info</h1>
 
 	<ul>
-		<li>Start forte at boot: Make sure that you can start your forte manually, and then create a script file that executes it and put it in the folder <span class="specicificText">/usr/local/weston-start-at-startup</span> and give this file execution permissions.
+		<li>Start 4diac&nbsp;FORTE at boot: Make sure that you can start your 4diac&nbsp;FORTE manually, and then create a script file that executes it and put it in the folder <span class="specicificText">/usr/local/weston-start-at-startup</span> and give this file execution permissions.
 
-		An example of the script to start forte, assuming the forte file is in /home/root/
+		An example of the script to start 4diac&nbsp;FORTE, assuming the 4diac&nbsp;FORTE file is in /home/root/
 
 		<div class="code">#!/bin/bash
 
@@ -158,7 +158,7 @@ sleep 5
 # Enable output
 gpioset gpiochip4 9=1
 
-# Execute forte
+# Execute 4diac&nbsp;FORTE
 cd ${FOLDER}
 
 if [ -f ./currentLog.txt ];

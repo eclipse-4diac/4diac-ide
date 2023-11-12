@@ -27,7 +27,7 @@
 <p>This page is part of a guide that gives a walk-through of the major 4diac&nbsp;IDE features.</p>
 
     <ol start="0">
-      <li><a href="../../html/4diacIDE/overview.html">4diac IDE Overview</a></li>
+      <li><a href="../../html/4diacIDE/overview.html">4diac&nbsp;IDE Overview</a></li>
       <li><a href="../../html/4diacIDE/use4diacLocally.html">Use 4diac Locally (Blinking tutorial)</a></li>
       <li><a href="../../html/4diacIDE/distribute4diac.html">Distribute 4diac Applications</a></li>
       <li><a href="../../html/4diacIDE/use4diacRemotely.html">Deploy Applications Remotely</a></li>
@@ -37,22 +37,22 @@
       <li>Deploying new FBs with the Dynamic Type Loader (YOU ARE HERE!)</li>
     </ol>
 
-<p>In this tutorial, you will learn how to deploy and test your function blocks, without compiling and adding them to the 4diac FORTE .</p>
+<p>In this tutorial, you will learn how to deploy and test your function blocks, without compiling and adding them to 4diac&nbsp;FORTE .</p>
 
-<p>Each time you created new function blocks, a new 4diac FORTE has to be compiled.
+<p>Each time you created new function blocks, a new 4diac&nbsp;FORTE has to be compiled.
 This takes time, which is wasted just for compiling.
 Therefore, we have a feature called "Dynamic Type Loader".  
 With this feature, new functions blocks can be deployed and tested without the need to compile them. 
-Instead of directly compiled into the 4diac FORTE, the FBs are downloaded as LUA Code and a Lua-Interpreter, running inside the FORTE, interprets this code then.</p>
+Instead of directly compiled into 4diac&nbsp;FORTE, the FBs are downloaded as LUA Code and a Lua-Interpreter, running inside 4diac&nbsp;FORTE, interprets this code then.</p>
 
 
 <!--********************************************************************************************-->
 
 <h2 id="getCCompiler">Downloading the Compiler</h2>
 
-<p>Before we can use the Dynamic Type Loader, we have to compile a new FORTE with the Lua JIT (Just-In-Time Compiler). 
+<p>Before we can use the Dynamic Type Loader, we have to compile a new 4diac&nbsp;FORTE with the Lua JIT (Just-In-Time Compiler). 
 Therefore we are going to need a c-compiler. 
-If you have done the tutorial, on how to create your own forte, everything you need should already be installed. 
+If you have done the tutorial, on how to create your own 4diac&nbsp;FORTE, everything you need should already be installed. 
 Otherwise, follow the steps <a href="../../html/installation/install.html" target="_blank"> here</a>.</p>
 
 <p> We recommend using the minGW compiler.</p>
@@ -72,15 +72,15 @@ $ make
 
 <img src="../../html/4diacIDE/img/Step7/LuaJitCompiled.png" alt="Compile Lua Jit"/>
 
-<h2 id="CompileForte"> Compiling Forte with the LuaJit</h2>
+<h2 id="CompileForte"> Compiling 4diac&nbsp;Forte with the LuaJit</h2>
 
-<p> At first download the 4diac FORTE source from <a href="https://www.eclipse.org/4diac/en_dow.php" target="_blank"> here</a> or clone the 4diac FORTE repository.</p>
+<p> At first download the 4diac&nbsp;FORTE source code from <a href="https://eclipse.dev/4diac/en_dow.php" target="_blank"> here</a> or clone the 4diac&nbsp;FORTE repository.</p>
 
 <div class="code">$ git clone git://git.eclipse.org/gitroot/4diac/org.eclipse.4diac.forte.git</div>
 
-<p>Then create an folder where we are going to build our 4diac FORTE in. 
-Open CMake and set the source folder, to the folder where your  4diac FORTE source files are in. 
-Then set the build folder, to folder where you want to build the 4diac FORTE in.</p>
+<p>Then create an folder where we are going to build our 4diac&nbsp;FORTE in. 
+Open CMake and set the source folder, to the folder where your  4diac&nbsp;FORTE source files are in. 
+Then set the build folder, to folder where you want to build 4diac&nbsp;FORTE in.</p>
 
 <p> Before configuring the Lua options, please enable all options, shown in this <a href="../../html/installation/install.html#generateFilesForCompiling" target="_blank"> tutorial</a>. 
 Before pressing generate, we have to configure all Lua options. </p>
@@ -91,18 +91,18 @@ Before pressing generate, we have to configure all Lua options. </p>
 	<li> Press Configure. All red marked lines should be gone. At last press generate, open Git Bash in your build folder and enter <div class="code"> make</div></li>
 </ol>
 
-<p>You should have now successfully built your 4diac FORTE with the integration of the Lua JIT compiler.</p>
+<p>You should have now successfully built your 4diac&nbsp;FORTE with the integration of the Lua JIT compiler.</p>
 
-<img src="../../html/4diacIDE/img/Step7/FORTECompiled.png" alt="Compile Forte"/>
+<img src="../../html/4diacIDE/img/Step7/FORTECompiled.png" alt="Compile 4diac&nbsp;FORTE"/>
 
 <h2 id="enableDTL"> Enabling the Dynamic Type Loader</h2>
 
-<p>Before you can use theDynamic Type Loader, you have to enable it in the 4diac IDE.</p>
+<p>Before you can use theDynamic Type Loader, you have to enable it in the 4diac&nbsp;IDE.</p>
 <ol>
 	<li>Then choose your system application, where you can see all your resources</li>
-	<li>Then choose the FORTE resources, where you want to deploy the new FBs to</li>
+	<li>Then choose the 4diac&nbsp;FORTE resources, where you want to deploy the new FBs to</li>
 	<li>In the properties tab, change the profile above the "Inputs" of the tab, to "DynamicTypeLoad"</li>
 </ol>
 <img src="../../html/4diacIDE/img/Step7/EnabledDTL.png" alt="Enable DTL"/>
 
-<p>Everthing should be set up and you can deploy your FBs, like you learned earlier in the tutorial, without compiling a new FORTE.</p>
+<p>Everthing should be set up and you can deploy your FBs, like you learned earlier in the tutorial, without compiling a new 4diac&nbsp;FORTE.</p>

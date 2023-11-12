@@ -23,7 +23,7 @@
 <body>
 <h1 id="topOfPage">Modbus</h1>
 <h2>Installation Instructions</h2>
-<p>The Modbus com interface need the <a href="http://libmodbus.org/" target="_blank">libmodbus</a> library to work. Follow the steps below to set up your environment before compiling FORTE.</p>
+<p>The Modbus com interface need the <a href="http://libmodbus.org/" target="_blank">libmodbus</a> library to work. Follow the steps below to set up your environment before compiling 4diac&nbsp;FORTE.</p>
 
 <ol>
 	<li>libmodbus files should be placed in the following folder structure:
@@ -32,7 +32,7 @@
 			<li><span class="fileLocation">[libmodbushome]/lib: libmodbus.lib</span> (windows) or <span class="fileLocation">libmodbus.so</span> (posix)</li>
 		</ul>
 	</li>
-	<li>When configuring FORTE project with CMake choose <span class="specificText">[ibmodbushome]</span> as <span class="specificText">FORTE_COM_MODBUS_LIB_DIR</span></li>
+	<li>When configuring 4diac&nbsp;FORTE project with CMake choose <span class="specificText">[ibmodbushome]</span> as <span class="specificText">FORTE_COM_MODBUS_LIB_DIR</span></li>
 	<li><span class="fileLocation">forte.exe</span> must be able to find the dynamic libmodbus library after build. Therefore copy <span class="fileLocation">libmodbus.dll/so</span> to folder with <span class="fileLocation">forte.exe</span> or add <span class="fileLocation">libmodbus.dll/so</span> to library include path.</li>
 </ol>
 

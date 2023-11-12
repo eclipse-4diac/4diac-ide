@@ -22,13 +22,13 @@
 
 <body>
 <h1 id="topOfPage">External Event SIFB</h1>
-<p>External Events are events in FORTE, which are hidden and can not be seen in 4DIAC. They do not appear as red event lines. They are usually used for Communication between Hardware and Function Blocks. E.g. <span class="element4diac">E_CYCLE</span> is a Function Block that uses this functionality. It registers to the <span class="element4diac">CTimerHandler</span> Class to get External Events in a periodic time.</p>
+<p>External Events are events in 4diac&nbsp;FORTE, which are hidden and can not be seen in 4diac&nbsp;IDE. They do not appear as red event lines. They are usually used for Communication between Hardware and Function Blocks. E.g. <span class="element4diac">E_CYCLE</span> is a Function Block that uses this functionality. It registers to the <span class="element4diac">CTimerHandler</span> Class to get External Events in a periodic time.</p>
 
 <h2>Recieving External Events</h2>
 <p>This is an advanced example showing how to make your own timed T-Flip-Flop Service Interface Function Block. It is based on the <span class="element4diac">E_CYCLE</span> Block and works quite the same way. This tutorial shows you how to build it from scratch. Consider that this is just an example that does not follow the IEC 61499 standard.</p> 
 
 <h3>The Interface</h3>
-<p>T Flip-Flop as SIFB with integrated Timer. <a href="../../html/4diacIDE/createOwnTypes.html#exportTypes">Export the interface to FORTE</a> (*.h and *.cpp files) and <a href="../../html/installation/install.html#externalModules">include them to your build</a>.</p>
+<p>T Flip-Flop as SIFB with integrated Timer. <a href="../../html/4diacIDE/createOwnTypes.html#exportTypes">Export the interface to 4diac&nbsp;FORTE</a> (*.h and *.cpp files) and <a href="../../html/installation/install.html#externalModules">include them to your build</a>.</p>
 <img src="../../html/development/img/flipFlop_integratedTimer.jpg" alt="Interface of the T Flip-Flop as SIFB with integrated Timer"/>
 
 <h3>Edit the Headerfile</h3>
@@ -86,7 +86,7 @@
   }
 }</div>
 
-<p>Compile FORTE and run it. Test your new Function Block with the tester. If something went wrong, compare your code with the following files.</p>
+<p>Compile 4diac&nbsp;FORTE and run it. Test your new Function Block with the tester. If something went wrong, compare your code with the following files.</p>
 
 <h2>Sending External Events</h2>
 <p>To send External Events your Class must inherit from <span class="specificText">CExternalEventHandler</span>. In the Constructor you must register this class:</p>

@@ -8,14 +8,14 @@
 </head>
 
 <body>
-<h1 id="topOfPage">How to use 4DIAC's ROS Communication Interface</h1>
+<h1 id="topOfPage">How to use Eclipse 4diac's ROS Communication Interface</h1>
 <p>
 
-4DIAC supports ROS communication for ROS topics, services and actions. ROS
-topics have been implemented as a communication layer in FORTE, whereas
+Eclipse 4diac supports ROS communication for ROS topics, services and actions. ROS
+topics have been implemented as a communication layer in 4diac&nbsp;FORTE, whereas
 services and actions require customized ROS function blocks. The implementation
 was tested with ROS indigo and on Ubuntu 14.04. Other versions (ROS or Ubuntu)
-might cause problems during the execution of the ROS 4DIAC communication interface.
+might cause problems during the execution of the ROS Eclipse 4diac communication interface.
 
 The Example service and action FBs can be used to implement your own IEC 61499
 compliant communication FBs for the datatypes you need. The ROS communication layer
@@ -27,16 +27,16 @@ datatypes.
 <p>Prerequisites:</p>
 <ol>
 	<li>ROS indigo installed on Ubuntu 14.04.</li>
-	<li>4DIAC-IDE installed</li>
+	<li>4diac&nbsp;IDE installed</li>
 	<li>CMake</li>
 </ol>
 
 
-<h2 id="build">How to Build FORTE with ROS Functionalities</h2>
+<h2 id="build">How to Build 4diac&nbsp;FORTE with ROS Functionalities</h2>
 <!--TODO remove setup_posix script and show all cmake variables that have to be set
-Perform the following steps to build forte with ROS communication support:-->
+Perform the following steps to build 4diac&nbsp;FORTE with ROS communication support:-->
 <ol>
-<li> Clone forte and switch to the develop branch
+<li> Clone 4diac&nbsp;FORTE and switch to the develop branch
 <div class="code">$ git clone git://git.eclipse.org/gitroot/4diac/org.eclipse.4diac.forte.git
 $ cd org.eclipse.4diac.forte
 $ git checkout develop</div></li>
@@ -49,15 +49,15 @@ CMAKE_BUILD_TYPE=Debug
 FORTE_MODULE_ROS=On
 FORTE_RTTI_AND_EXCEPTIONS=TRUE
 </div></li>
-<li>After that press "configure" again until the red fields disappear and then press "generate" and build forte with:
+<li>After that press "configure" again until the red fields disappear and then press "generate" and build 4diac&nbsp;FORTE with:
 <div class="code">$ cd "/path/to/your/forte/build/directory"
 $ make
 </div></li>
-<li>Source your workspace (in the command line where you want to start forte) and start a ROS core (on a different command line):
+<li>Source your workspace (in the command line where you want to start 4diac&nbsp;FORTE) and start a ROS core (on a different command line):
 <div class="code">$ source "/path/to/your/forte/build/directory"/devel/setup.bash
 
 $ roscore</div></li>
-<li> Start forte:
+<li> Start 4diac&nbsp;FORTE:
 <div class="code">$ cd [/path/to/your/forte/build/directory]/src
 $ ./forte</div>
 </li>
@@ -67,7 +67,7 @@ $ ./forte</div>
 <h2 id="topics">ROS Topics</h2>
 
 <p>
-4DIAC implements a Communication Layer for standard ROS topics. Use the
+4diac&nbsp;FORTE implements a Communication Layer for standard ROS topics. Use the
 PUBLISH_0 / SUBSCRIBE_0 and PUBLISH_1 / SUBSCRIBE_1 function blocks with the
 following datatypes:
 
@@ -114,7 +114,7 @@ general the ID for a ROS publish or subscribe function block looks like this:</p
 
 <pre>ros[topic_name:message_name]</pre>
 
-<p>An example of a ROS publish and subscribe connection within FORTE is shown next.</p>
+<p>An example of a ROS publish and subscribe connection within 4diac&nbsp;FORTE is shown next.</p>
 
 <img src="../../html/communication/img/topics_example.PNG" alt="Example Application using publish and subscribe to send and receive ROS topics"/>
 
@@ -227,7 +227,7 @@ ROS function blocks.
 
 <h2 id="actions">ROS Actions</h2>
 <p>
-The ROS action type which is currently supported by 4DIAC is reapp_msgs/Execute.action. Its definition
+The ROS action type which is currently supported by Eclipse 4diac is reapp_msgs/Execute.action. Its definition
 is shown next.
 </p>
 
@@ -399,7 +399,7 @@ synchronized at the RESULT and ID data outputs of the function block and a posit
 is triggered (CNF+).
 
 Testing and debugging of the action server and client can easily be done with the axserver/
-axclient provided by ROS. An axserver that connects to an execute action client within 4DIAC
+axclient provided by ROS. An axserver that connects to an execute action client within Eclipse 4diac
 with the configuration
 
 <pre>ACTIONNAMESPACE=test_execute

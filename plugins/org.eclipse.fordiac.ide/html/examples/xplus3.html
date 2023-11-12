@@ -25,12 +25,12 @@
 
 <body>
 <h1 id="topOfPage">Explore an Existing System</h1>
-<p>This example gives you an overview of how to work with 4diac by examining and deploying the <span class="element61499">System</span> <span class="element4diac">Xplus3</span> and <span class="element61499">Application</span> <span class="element4diac">Xplus3Application</span>.
+<p>This example gives you an overview of how to work with Eclipse 4diac by examining and deploying the <span class="element61499">System</span> <span class="element4diac">Xplus3</span> and <span class="element61499">Application</span> <span class="element4diac">Xplus3Application</span>.
 The <span class="element61499">System</span> consists of two <span class="element61499">Devices</span>, after examining the mapping of the <span class="element61499">Application</span> parts to the <span class="element61499">Resources</span>, we will set the preferences required and test it.</p> 
 
 <ul>
 	<li>Task of the X+3 example: calculate and display X+3.</li>
-	<li>The <span class="element4diac">Xplus3 System</span> is included with the 4diac-IDE release, alternatively you can get it with mercurial <span class="inlineCode">hg clone http://hg.code.sf.net/p/fordiac/fordiac-systems</span> 
+	<li>The <span class="element4diac">Xplus3 System</span> is included with the 4diac&nbsp;IDE release, alternatively you can get it with mercurial <span class="inlineCode">hg clone http://hg.code.sf.net/p/fordiac/fordiac-systems</span> 
 	<li>Examines a simple IEC 61499 <span class="element61499">Application</span> with 2 <span class="element61499">Devices</span>.</li> 
 	<li>The communication between the different <span class="element61499">Devices</span> is integrated within the <span class="element61499">Resource</span>.</li>
 </ul>
@@ -62,7 +62,7 @@ The <span class="element61499">System</span> consists of two <span class="elemen
 
 <p>There are two <span class="element4diac">Devices</span> connected via an Ethernet segment. You have to know what <span class="element4diac">Devices</span> you are using. Here it is:
 <ol>
-	<li><span class="specificText">MICROCONTROLLER</span> remote device (<span class="element4diac">RMT_DEV</span>) (uses FORTE). The IEC 61499 system used by this <span class="element61499">Application</span> <span class="element4diac">Xplus3Application</span> is Posix FORTE on a PC, but it could be a real microcontroller like ARM7 in Lego Mindstorms as well.</li>
+	<li><span class="specificText">MICROCONTROLLER</span> remote device (<span class="element4diac">RMT_DEV</span>) (uses 4diac&nbsp;FORTE). The IEC 61499 system used by this <span class="element61499">Application</span> <span class="element4diac">Xplus3Application</span> is Posix FORTE on a PC, but it could be a real microcontroller like ARM7 in Lego Mindstorms as well.</li>
 	<li><span class="specificText">PC</span> remote frame (<span class="element4diac">RMT_FRAME</span>) (uses FBDK). The IEC 61499 <span class="element61499">System</span> used by this <span class="element61499">Application</span> <span class="element4diac">Xplus3Application</span> is FBDK via its runtime, FBRT.</li>
 </ol> 
 
@@ -89,10 +89,11 @@ The <span class="element61499">System</span> consists of two <span class="elemen
 
 
 <h2 id="deployment">Deploy Your Application</h2>
-<p>Switch to the <span class="view4diac">Deployment perspective</span> and set the runtime preferences. The following settings are under <span class="menu4diac">Window &rarr; Preferences &rarr; 4DIAC</span>. For further details on setting these locations see <a href="../../html/4diacIDE/overview.html#properties">4diac-IDE Properties</a>. To run the test, the locations of the IEC 61499 executables for the <span class="element61499">Devices</span> used are required.</p> 
+<p>Switch to the <span class="view4diac">Deployment perspective</span> and set the runtime preferences. 
+The following settings are under <span class="menu4diac">Window &rarr; Preferences &rarr; 4diac&nbsp;IDE</span>. For further details on setting these locations see <a href="../../html/4diacIDE/overview.html#properties">4diac&nbsp;IDE Properties</a>. To run the test, the locations of the IEC 61499 executables for the <span class="element61499">Devices</span> used are required.</p> 
 
 <ul>
-	<li><span class="element4diac">MICROCONTROLLER.CALC</span> uses FORTE. Therefore, the location of <span class="fileLocation">forte.exe</span> must be set within the FORTE preferences. Typically, this is somewhere below .<span class="folderLocation">/runtime/FORTE/</span>. Relative paths do not work in all setups, it is recommended to specify an absolute path here.</li>
+	<li><span class="element4diac">MICROCONTROLLER.CALC</span> uses 4diac&nbsp;FORTE. Therefore, the location of <span class="fileLocation">forte.exe</span> must be set within the 4diac&nbsp;FORTE preferences. Typically, this is somewhere below .<span class="folderLocation">/runtime/FORTE/</span>. Relative paths do not work in all setups, it is recommended to specify an absolute path here.</li>
 	<li><span class="element4diac">PC.VIS</span> uses FBRT. Therefore, the location of <span class="fileLocation">fbrt.jar</span> must be set in FBRT preferences. Typically, this path is <span class="fileLocation">./runtime/FBRT/fbrt.jar</span>.</li>
 </ul>
 
@@ -105,8 +106,8 @@ The <span class="element61499">System</span> consists of two <span class="elemen
 <ol>
 	<li>Check the <span class="element4diac">System Xplus3</span> and notice the <span class="element61499">Devices</span> show up under the <span class="element61499">System</span>, but not the <span class="element61499">Application</span> mapped to the <span class="element61499">Devices</span>.</li>
 	<li>Press the Launch FBRT button. Note that the <span class="element61499">Device</span> and port number match the properties of the <span class="element61499">Device</span> using FBRT (i.e., <span class="element4diac">PC</span>) in <span class="element4diac">System Configuration</span>. The console output from the FBRT is shown on the bottom right and an empty Java window will open.</li>
-	<li>Press the Launch FORTE button. Note that the host and port number match the properties of the <span class="element61499">Device</span> using FORTE (i.e., <span class="element4diac">MICROCONTROLLER</span>) in <span class="element4diac">System Configuration</span>. Again, console output is shown on the bottom right. The console output of FORTE is dependent on the log-level that has been configured with CMake. The default configuration is LOGDEBUG. It lists debug information.</li>
-	<li>When launching FBRT or FORTE for the first time, a system firewall configuration window may pop up. You should allow network access that the 2 <span class="element61499">Devices</span> are able to communicate with each other over Ethernet.</li>
+	<li>Press the Launch FORTE button. Note that the host and port number match the properties of the <span class="element61499">Device</span> using 4diac&nbsp;FORTE (i.e., <span class="element4diac">MICROCONTROLLER</span>) in <span class="element4diac">System Configuration</span>. Again, console output is shown on the bottom right. The console output of 4diac&nbsp;FORTE is dependent on the log-level that has been configured with CMake. The default configuration is LOGDEBUG. It lists debug information.</li>
+	<li>When launching FBRT or 4diac&nbsp;FORTE for the first time, a system firewall configuration window may pop up. You should allow network access that the 2 <span class="element61499">Devices</span> are able to communicate with each other over Ethernet.</li>
 	<li>Press Download and notice the Deployment Console output on the right. Click on the Java application window (<span class="element4diac">RMT-FRAME</span>). Resize it if necessary to see the contents. Enter an integer in the top field and press the enter key. The result is shown in the bottom field: It should be the value you entered plus three.</li>
 </ol>
 

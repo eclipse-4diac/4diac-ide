@@ -16,13 +16,13 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Setting up 4diac FORTE for Posix PikeOS 5.x</title>
+	<title>Setting up 4diac&nbsp;FORTE for Posix PikeOS 5.x</title>
 	<link rel="stylesheet" type="text/css" href="../help.css">
 </head>
 
 <body>
 
-<h1 id="topOfPage">4diac FORTE for Posix PikeOS 5.x</h1>
+<h1 id="topOfPage">4diac&nbsp;FORTE for Posix PikeOS 5.x</h1>
 
 <p>This instruction assumes you have a Linux system with a PikeOS 5.x installation and a CODOE installation matching to the installed PikeOS Version. <br />
 (CODEO is the Eclipse-based IDE for developing PikeOS projects shipped with the PikeOS product.)
@@ -39,12 +39,12 @@ CODEO workspace
 <li><strong>🗁 pool</strong> <br />
 "CUSTOM POOL" for all PikeOS Projects</li>
 <li><strong>🗁 forte-incubation</strong> <br />
-4diac FORTE source code <br />
+4diac&nbsp;FORTE source code <br />
 Imported project using CODEOs (Eclipse) import wizard  (<code>File → Import → General → Projects from Folder or Archive</code>).
 After importing the project was renamed to "forte-incubation". <br />
 The import source may be a cloned git repository
 (<code>git://git.eclipse.org/gitroot/4diac/org.eclipse.4diac.forte.git</code>) or the
-ZIP-File "4diac FORTE Source" downloaded from <a href="https://www.eclipse.org/4diac/en_dow.php">eclipse.org/4diac</a>.</li>
+ZIP-File "4diac&nbsp;FORTE Source" downloaded from <a href="https://eclipse.dev/4diac/en_dow.php">eclipse.org/4diac</a>.</li>
 <li><strong>🗁 lwip.app</strong> <br />
 PikeOS 5.x Application Project of type <em>Posix Project / lwip-build</em>.</li>
 <li><strong>🗁 forteserver.int</strong> <br />
@@ -54,10 +54,10 @@ PikeOS 5.x Integration Project of type <em>Integration Project / devel-posix</em
 
 <h2>Patching "lwip.app"</h2>
 
-<p>The <code>lwip.app</code> application project will build a library (<code>iblwip.a</code>) that is required by 4diac FORTE.
-So we will <em>abuse</em> this project to build 4diac FORTE (binary name: <code>forte</code>) together with <code>iblwip.a</code>. <br />
+<p>The <code>lwip.app</code> application project will build a library (<code>iblwip.a</code>) that is required by 4diac&nbsp;FORTE.
+So we will <em>abuse</em> this project to build 4diac&nbsp;FORTE (binary name: <code>forte</code>) together with <code>iblwip.a</code>. <br />
 Apply patch <code>forte-incubation/src/arch/pikeos_posix/lwip.patch</code> to the <code>lwip.app</code>. <br />
-This will adapt the Makefile and the <code>lwip.app/lwipopts.h</code> file as required for building 4diac FORTE. Patching  <code>lwip.app/lwipopts.h</code> enables multicast which 4diac FORTE uses when multiple instances are communicating with each other.
+This will adapt the Makefile and the <code>lwip.app/lwipopts.h</code> file as required for building 4diac&nbsp;FORTE. Patching  <code>lwip.app/lwipopts.h</code> enables multicast which 4diac&nbsp;FORTE uses when multiple instances are communicating with each other.
 In addition, a folder <code>lwip.app/4diac-forte</code>. This folder will be used by the <code>forte-incubation</code> project to store the required source and Make-files into for building the <code>forte</code> binary.</p>
 
 <h2>Running CMAKE for "forte-incubation"</h2>
@@ -142,11 +142,11 @@ Now click the <kbd>Add...</kbd> button (under the <em>Project Structure</em> hea
 </ul></li>
 </ul>
 
-<p>Assuming we use QEMU with user mode network. This will let 4diac FORTE run on <code>10.0.2.16:61499</code> as <code>61499</code> is 4DIAC FORTE's default port.</p>
+<p>Assuming we use QEMU with user mode network. This will let 4diac&nbsp;FORTE run on <code>10.0.2.16:61499</code> as <code>61499</code> is 4diac&nbsp;FORTE's default port.</p>
 
 <blockquote>
   <p><em>NOTE: If you want to use a different port you have to add template</em> <code>posix / Environment variables</code> <em>to</em> <code>Posix Process</code> <em>(similar behavior like adding</em> <code>posix / lwIP Ethernet interface</code><em>).</em> <br />
-        <em>Parameter</em> <code>-c IP:PORT</code> <em>will start 4diac FORTE on an other port.</em></p>
+        <em>Parameter</em> <code>-c IP:PORT</code> <em>will start 4diac&nbsp;FORTE on an other port.</em></p>
 </blockquote>
 
 <p>Right-click on <code>POSIX Partition</code> and click "copy". Right-click on <code>Application</code> and click on <code>insert</code>. Rename "partition name" and "partition id" eg. to "posix2" and "3" as they have to be unique. <br />
@@ -200,7 +200,7 @@ Assign "POSIX Process (2)" to this channel.</p>
 
 <p>Go to <code>qemu-... / ... Ethernet User Level Driver</code> and set "Enable Multicast Communication" to true for <code>...-net-device</code>,  <code>...-net-vchan0</code> and <code>...-net-vchan1</code>.</p>
 
-<p>Now you are able to test the partitions by starting QEMU and perform the <a href="https://www.eclipse.org/4diac/en_help.php?helppage=html/4diacIDE/overview.html">4DIAC-step-by-step tutorial</a>.</p>
+<p>Now you are able to test the partitions by starting QEMU and perform the <a href="https://eclipse.dev/4diac/en_help.php?helppage=html/4diacIDE/overview.html">4DIAC-step-by-step tutorial</a>.</p>
 
 <p>On using user mode network you have to start QEMU by selecting "Start QEMU with custom commandline" and defining portforwarding:</p>
 
