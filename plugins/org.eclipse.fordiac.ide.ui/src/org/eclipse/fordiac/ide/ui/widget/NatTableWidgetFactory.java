@@ -80,6 +80,7 @@ public final class NatTableWidgetFactory {
 	public static final String WARNING_CELL = "WARNING_CELL"; //$NON-NLS-1$
 	public static final String DISABLED_CELL = "DISABLED_CELL"; //$NON-NLS-1$ $
 	public static final String PROPOSAL_CELL = "PROPOSAL_CELL"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_PROPOSAL_CELL = "ATTRIBUTE_PROPOSAL_CELL"; //$NON-NLS-1$
 	public static final String DISABLED_HEADER = "DISABLED_HEADER"; //$NON-NLS-1$
 	public static final String VISIBILITY_CELL = "VISIBILITY_CELL"; //$NON-NLS-1$
 	public static final String LEFT_ALIGNMENT = "LEFT_ALIGNMENT"; //$NON-NLS-1$

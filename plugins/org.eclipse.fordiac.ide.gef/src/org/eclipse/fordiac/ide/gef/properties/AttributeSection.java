@@ -31,8 +31,10 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteAttributeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
+import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -41,9 +43,16 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
+import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
+import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -79,6 +88,19 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 						DataTypeSelectionTreeContentProvider.INSTANCE),
 				this, false);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
+
+		final TextCellEditor attributeNameCellEditor = new TextCellEditor();
+		attributeNameCellEditor.enableContentProposal(new TextContentAdapter(),
+				new TypeSelectionProposalProvider(this::getTypeLibrary, AttributeSelectionContentProvider.INSTANCE),
+				KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
+		table.addConfiguration(new AbstractRegistryConfiguration() {
+			@Override
+			public void configureRegistry(final IConfigRegistry configRegistry) {
+				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, attributeNameCellEditor,
+						DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
+			}
+		});
+
 		table.configure();
 
 		buttons.bindToTableViewer(table, this,

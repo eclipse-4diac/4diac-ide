@@ -51,6 +51,7 @@ public class AttributeConfigLabelAccumulator extends AbstractAnnotatedConfigLabe
 		final Attribute rowItem = getDataProvider().getRowObject(rowPosition);
 		switch (columns.get(columnPosition)) {
 		case NAME:
+			configLabels.addLabel(NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTarget);
 			break;
