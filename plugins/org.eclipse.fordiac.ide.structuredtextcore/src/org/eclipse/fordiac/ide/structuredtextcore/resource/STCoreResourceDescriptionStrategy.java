@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
@@ -39,7 +40,7 @@ import com.google.common.collect.ImmutableMap;
 
 public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptionStrategy {
 
-	private final static Logger LOG = Logger.getLogger(STCoreResourceDescriptionStrategy.class);
+	private static final Logger LOG = Logger.getLogger(STCoreResourceDescriptionStrategy.class);
 
 	public static final String CONTAINER_ECLASS_NAME = STCoreResourceDescriptionStrategy.class.getName()
 			+ ".containerEClassName"; //$NON-NLS-1$
@@ -78,6 +79,8 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 			final STCoreRegionString regionString = getCallableParameterProposal(callable);
 			builder.put(PARAMETER_PROPOSAL, regionString.toString());
 			builder.put(PARAMETER_PROPOSAL_REGIONS, regionString.getRegions().toString());
+		} else if (eObject instanceof final ITypedElement typedElement) {
+			builder.put(DISPLAY_STRING, getTypedElementDisplayString(typedElement));
 		}
 	}
 
@@ -88,13 +91,13 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 						callable.getInOutParameters().stream().map(param -> getCallableDisplayString(param, "&&"))) //$NON-NLS-1$
 						.flatMap(Function.identity())
 						.collect(Collectors.joining(", ", "(", STCoreUtil.isCallableVarargs(callable) ? " ...)" : ")")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				+ (callable.getReturnType() != null ? callable.getReturnType().getName() : ""); //$NON-NLS-1$
+				+ (callable.getReturnType() != null ? " : " + callable.getReturnType().getName() : ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected static String getCallableDisplayString(final INamedElement parameter, final String typePrefix) {
 		final INamedElement type = STCoreUtil.getFeatureType(parameter);
 		if (type != null) {
-			return parameter.getName() + ": " + typePrefix + type.getName(); //$NON-NLS-1$
+			return parameter.getName() + " : " + typePrefix + type.getName(); //$NON-NLS-1$
 		}
 		return parameter.getName();
 	}
@@ -140,5 +143,9 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 		} catch (final Exception e) {
 			return ""; //$NON-NLS-1$
 		}
+	}
+
+	public static String getTypedElementDisplayString(final ITypedElement typedElement) {
+		return typedElement.getName() + " : " + typedElement.getTypeName(); //$NON-NLS-1$
 	}
 }
