@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -60,6 +61,10 @@ public final class ChangeNameCommand extends Command implements ConnectionLayout
 		}
 		if (element instanceof final AdapterFB adapterFB) {
 			result.getAdditionalCommands().add(new ChangeNameCommand(adapterFB.getAdapterDecl(), name));
+		}
+		if (element instanceof final Attribute attribute
+				&& ChangeAttributeDeclarationCommand.attributeDeclarationChanged(attribute, name)) {
+			result.getAdditionalCommands().add(ChangeAttributeDeclarationCommand.forName(attribute, name));
 		}
 		return result;
 	}
