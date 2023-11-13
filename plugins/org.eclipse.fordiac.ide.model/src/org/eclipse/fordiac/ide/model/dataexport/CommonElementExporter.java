@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.data.WstringType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -265,7 +266,9 @@ public class CommonElementExporter {
 			addEmptyStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
 		}
 		getWriter().writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
-		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, PackageNameHelper.getFullTypeName(type));
+		if (type != null && !(type.eContainer() instanceof AttributeDeclaration)) {
+			getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, PackageNameHelper.getFullTypeName(type));
+		}
 		if (!(type instanceof WstringType)) {
 			getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
 		}

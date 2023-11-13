@@ -41,11 +41,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -74,6 +72,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -403,8 +402,15 @@ public abstract class CommonElementImporter {
 		readNameCommentAttributes(attribute);
 
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		final DataType dataType = typeName != null ? getDataTypeLibrary().getType(typeName) : ElementaryTypes.STRING;
-		attribute.setType(dataType);
+		if (typeName != null) {
+			attribute.setType(getDataTypeLibrary().getType(typeName));
+		} else {
+			final AttributeTypeEntry attributeTypeEntry = getTypeLibrary().getAttributeTypeEntry(attribute.getName());
+			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
+				attribute.setAttributeDeclaration(attributeTypeEntry.getType());
+				attribute.setType(attributeTypeEntry.getType().getType());
+			}
+		}
 
 		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (null == value) { // we don't have a value attribute check for a CData value
