@@ -13,7 +13,7 @@
 
 package org.eclipse.fordiac.ide.datatypeeditor.properties;
 
-import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
+import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
 import org.eclipse.fordiac.ide.gef.properties.AttributeSection;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -55,7 +55,7 @@ public class StructAttributeSection extends AttributeSection {
 			return configurableObject;
 		}
 
-		if (input instanceof final StructViewingComposite structViewingComposite) {
+		if (input instanceof final StructEditingComposite structViewingComposite) {
 			return structViewingComposite.setConfigurablObjectListener(this::setType);
 		}
 		return null;

@@ -45,9 +45,11 @@ import org.eclipse.swt.events.MouseEvent;
 
 public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool {
 
-	/** Key to indicate that connection creation mode should be activated.
+	/**
+	 * Key to indicate that connection creation mode should be activated.
 	 *
-	 * The current default is on most system the Ctrl key. */
+	 * The current default is on most system the Ctrl key.
+	 */
 	private static final int CONNECTION_CREATION_MOD_KEY = SWT.MOD1;
 
 	private static final int LEFT_MOUSE = 1;
@@ -96,7 +98,8 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 
 	@Override
 	public void mouseMove(final MouseEvent me, final EditPartViewer viewer) {
-		// the super call has to be first so that the target editpart is updated accordingly
+		// the super call has to be first so that the target editpart is updated
+		// accordingly
 		super.mouseMove(me, viewer);
 		if (checkConnCreationState(me.stateMask)) {
 			connectionCreationTool.mouseDrag(me, viewer);
@@ -113,16 +116,16 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 
 	@Override
 	protected void showTargetFeedback() {
-		if (getTargetEditPart() instanceof ConnectionEditPart) {
-			showConnectionTargetFeedback((ConnectionEditPart) getTargetEditPart());
+		if (getTargetEditPart() instanceof final ConnectionEditPart connEP) {
+			showConnectionTargetFeedback(connEP);
 		}
 		super.showTargetFeedback();
 	}
 
 	@Override
 	protected void eraseTargetFeedback() {
-		if (getTargetEditPart() instanceof ConnectionEditPart) {
-			eraseConnectionTargetFeedback((ConnectionEditPart) getTargetEditPart());
+		if (getTargetEditPart() instanceof final ConnectionEditPart connEP) {
+			eraseConnectionTargetFeedback(connEP);
 		}
 		super.eraseTargetFeedback();
 	}
@@ -137,17 +140,15 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 	private void eraseConnectionTargetFeedback(final ConnectionEditPart targetEditPart) {
 		final EditPartViewer viewer = getCurrentViewer();
 		final List<ConnectionEditPart> connections = ColLocatedConnectionFinder
-				.getLeftCoLocatedConnections(targetEditPart,
-						viewer, getLocation());
+				.getLeftCoLocatedConnections(targetEditPart, viewer, getLocation());
 		connections.forEach(con -> con.eraseTargetFeedback(getTargetRequest()));
 	}
 
-
 	private void activateConnectionCreation(final EditPartViewer viewer) {
-		final List<Object> editParts = viewer.getSelectedEditParts();
+		final List<? extends EditPart> editParts = viewer.getSelectedEditParts();
 		if ((editParts.size() == 1) && (editParts.get(0) instanceof InterfaceEditPart)) {
-			connectionCreationTool = InlineConnectionCreationTool.createInlineConnCreationTool(
-					(EditPart) editParts.get(0), getDomain(), viewer, getLocation());
+			connectionCreationTool = InlineConnectionCreationTool.createInlineConnCreationTool(editParts.get(0),
+					getDomain(), viewer, getLocation());
 		}
 	}
 
@@ -156,18 +157,15 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 		connectionCreationTool = null;
 	}
 
-
 	private boolean checkConnCreationState(final int stateMask) {
 		if (connectionCreationTool != null) {
 			if (((stateMask & CONNECTION_CREATION_MOD_KEY) == 0)
 					|| (!isConnectionCreationTarget(getTargetEditPart()))) {
 				deactivateConnectionCreation();
 			}
-		} else {
-			if (((stateMask & CONNECTION_CREATION_MOD_KEY) == CONNECTION_CREATION_MOD_KEY)
-					&& (isConnectionCreationTarget(getTargetEditPart()))) {
-				activateConnectionCreation(getCurrentViewer());
-			}
+		} else if (((stateMask & CONNECTION_CREATION_MOD_KEY) == CONNECTION_CREATION_MOD_KEY)
+				&& (isConnectionCreationTarget(getTargetEditPart()))) {
+			activateConnectionCreation(getCurrentViewer());
 		}
 		return connectionCreationTool != null;
 	}

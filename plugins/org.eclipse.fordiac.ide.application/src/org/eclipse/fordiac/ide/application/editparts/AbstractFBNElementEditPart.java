@@ -125,8 +125,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				if (!notification.isTouch()) {
 					refreshChildren();
 					// this ensure that parameters are correctly updated when pins are added or
-					// removed (e.g.,
-					// errormarkerpins are deleted)
+					// removed (e.g., errormarkerpins are deleted)
 					getParent().refresh();
 				}
 			}
@@ -207,7 +206,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	public boolean isOnlyThisOrNothingSelected() {
-		final List<EditPart> selection = getViewer().getSelectedEditParts();
+		final List<? extends EditPart> selection = getViewer().getSelectedEditParts();
 		if (selection.size() > 1) {
 			return false;
 		}

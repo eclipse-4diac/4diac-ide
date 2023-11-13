@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructManipulatorSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -135,7 +136,14 @@ public class FBUpdateDialog extends MessageDialog {
 					if (s instanceof StructManipulator || (s instanceof final SubApp subApp && !subApp.isTyped())) {
 						inputElements.add(s);
 					} else {
-						children.get(s.getTypeName()).add(s);
+						try {
+							children.get(s.getTypeName()).add(s);
+						} catch (final Exception e) {
+							FordiacLogHelper.logError("FBUPDATE Dialog cant find TypeName: " + s.getTypeName()
+									+ " of FBNE: " + s.getName() + " of class: " + s.getClass().getName()
+									+ " in children List: " + children.toString());
+							children.get(s.getTypeName()).add(s);
+						}
 					}
 				});
 		// add structmanipulators and untyped subapps to input

@@ -174,8 +174,11 @@ class StructuredTextParseUtil {
 		LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues) {
 		val resourceSet = SERVICE_PROVIDER_FBT.get(ResourceSet) as XtextResourceSet
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("fbt", SERVICE_PROVIDER_FBT.get(IResourceFactory))
+		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("FBT", SERVICE_PROVIDER_FBT.get(IResourceFactory))
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("fct", SERVICE_PROVIDER_FCT.get(IResourceFactory))
+		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("FCT", SERVICE_PROVIDER_FCT.get(IResourceFactory))
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("gcf", SERVICE_PROVIDER_GCF.get(IResourceFactory))
+		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("GCF", SERVICE_PROVIDER_GCF.get(IResourceFactory))
 		resourceSet.loadOptions.putAll(#{
 			STCoreUtil.OPTION_EXPECTED_TYPE -> expectedType
 		})

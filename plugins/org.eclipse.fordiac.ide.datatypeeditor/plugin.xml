@@ -49,7 +49,7 @@
                id="org.eclipse.fordiac.ide.datatypeeditor.properties.DataTypeInfoSection"
                tab="org.eclipse.fordiac.ide.datatypeeditor.propertyDataTypeInfoTab">
    		<input
-                  type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite">
+                  type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite">
         </input>  
          </propertySection>
          <propertySection
@@ -57,7 +57,7 @@
                id="org.eclipse.fordiac.ide.datatypeeditor.properties.StructAttributeSection"
                tab="org.eclipse.fordiac.ide.datatypeeditor.propertyStructAttributeTab">
    		<input
-                  type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite">
+                  type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite">
         </input>  
          </propertySection>
       </propertySections>

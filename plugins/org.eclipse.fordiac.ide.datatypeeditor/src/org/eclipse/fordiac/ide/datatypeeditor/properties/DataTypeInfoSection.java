@@ -15,7 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.properties;
 
-import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
+import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
 import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
@@ -80,7 +80,7 @@ public class DataTypeInfoSection extends AbstractSection {
 
 	@Override
 	protected Object getInputType(final Object input) {
-		if (input instanceof final StructViewingComposite structViewingComposite) {
+		if (input instanceof final StructEditingComposite structViewingComposite) {
 			return structViewingComposite.getStruct();
 		}
 		return null;

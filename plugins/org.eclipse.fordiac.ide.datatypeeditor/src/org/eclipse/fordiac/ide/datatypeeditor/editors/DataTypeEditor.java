@@ -39,7 +39,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
-import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
+import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
@@ -103,7 +103,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
-	private StructViewingComposite structComposite;
+	private StructEditingComposite structComposite;
 	private Composite errorComposite;
 	private boolean importFailed;
 	private boolean outsideWorkspace;
@@ -313,15 +313,15 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	}
 
 	private void addListenerToDataTypeObj() {
-		if (dataTypeEntry != null && dataTypeEntry.getType() != null) {
-			dataTypeEntry.getType().eAdapters().add(adapter);
+		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null) {
+			dataTypeEntry.getTypeEditable().eAdapters().add(adapter);
 		}
 	}
 
 	private void removeListenerFromDataTypeObj() {
-		if (dataTypeEntry != null && dataTypeEntry.getType() != null
-				&& dataTypeEntry.getType().eAdapters().contains(adapter)) {
-			dataTypeEntry.getType().eAdapters().remove(adapter);
+		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null
+				&& dataTypeEntry.getTypeEditable().eAdapters().contains(adapter)) {
+			dataTypeEntry.getTypeEditable().eAdapters().remove(adapter);
 		}
 	}
 
@@ -375,9 +375,13 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null && (!importFailed)) {
-			structComposite = new StructViewingComposite(parent, 1, commandStack, annotationModel, dataTypeEntry, this);
-			structComposite.createPartControl(parent);
+//		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null && (!importFailed)) {
+//			structComposite = new StructViewingComposite(parent, 1, commandStack, annotationModel, dataTypeEntry, this);
+//			structComposite.createPartControl(parent);
+		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() instanceof final StructuredType structType
+				&& (!importFailed)) {
+			structComposite = new StructEditingComposite(parent, commandStack, structType, annotationModel);
+			getSite().setSelectionProvider(structComposite);
 		} else if (importFailed) {
 			createErrorComposite(parent, Messages.ErrorCompositeMessage);
 			if (outsideWorkspace) {
@@ -482,7 +486,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			removeListenerFromDataTypeObj();
 			dataTypeEntry.setTypeEditable(null);
 			importType(getEditorInput());
-			structComposite.reload();
+			if (dataTypeEntry.getTypeEditable() instanceof final StructuredType structType) {
+				structComposite.setStructType(structType);
+			}
 			addListenerToDataTypeObj();
 		} catch (final PartInitException e) {
 			FordiacLogHelper

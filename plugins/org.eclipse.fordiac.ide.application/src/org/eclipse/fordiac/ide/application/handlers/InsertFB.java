@@ -46,20 +46,21 @@ public class InsertFB extends AbstractHandler {
 
 	@Override
 	public void setEnabled(final Object evaluationContext) {
-		final IWorkbenchPart part = (IWorkbenchPart) HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_EDITOR_NAME);
+		final IWorkbenchPart part = (IWorkbenchPart) HandlerUtil.getVariable(evaluationContext,
+				ISources.ACTIVE_EDITOR_NAME);
 		setBaseEnabled((part != null) && (part.getAdapter(FBNetwork.class) != null));
 	}
 
 	private static Point getInsertPoint(final GraphicalViewer viewer) {
-		if (viewer.getContextMenu() instanceof FBNetworkContextMenuProvider) {
-			return new Point(((FBNetworkContextMenuProvider) viewer.getContextMenu()).getPoint());
+		if (viewer.getContextMenu() instanceof final FBNetworkContextMenuProvider fbnContextMenuProvider) {
+			return new Point(fbnContextMenuProvider.getPoint());
 		}
 		return new Point(0, 0);
 	}
 
 	private static EditPart getTargetEditPart(final GraphicalViewer viewer) {
-		return (EditPart) viewer.getSelectedEditParts().stream().filter(FBNetworkEditPart.class::isInstance).findAny()
-				.orElse(viewer.getRootEditPart());
+		return viewer.getSelectedEditParts().stream().filter(FBNetworkEditPart.class::isInstance)
+				.map(EditPart.class::cast).findAny().orElse(viewer.getRootEditPart());
 	}
 
 	private static SelectionRequest createSelectionRequest(final GraphicalViewer viewer) {
@@ -69,5 +70,3 @@ public class InsertFB extends AbstractHandler {
 		return request;
 	}
 }
-
-

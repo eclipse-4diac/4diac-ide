@@ -22,7 +22,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.xtext.linking.lazy.LazyLinkingResource;
-import org.eclipse.xtext.util.CancelIndicator;
 
 public class LibraryElementXtextResource extends LazyLinkingResource {
 	private LibraryElement libraryElement;
@@ -37,7 +36,6 @@ public class LibraryElementXtextResource extends LazyLinkingResource {
 			}
 			contents.addAll(EcoreUtil.copyAll(additionalContent));
 			relink();
-			resolveLazyCrossReferences(CancelIndicator.NullImpl);
 		}
 	}
 
