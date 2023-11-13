@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.xtext.resource.FileExtensionProvider;
-import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
 import org.eclipse.xtext.util.LazyStringInputStream;
 
 import com.google.inject.Inject;
@@ -41,7 +40,7 @@ public class STCoreResource extends LibraryElementXtextResource {
 	@Override
 	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
 		final Map<?, ?> actualOptions = Objects.requireNonNullElse(options, getDefaultLoadOptions());
-		if (isLoadPlainST(actualOptions) || isLoadLiveScope(actualOptions, inputStream)) {
+		if (isLoadPlainST(actualOptions, inputStream)) {
 			super.doLoad(inputStream, actualOptions);
 			updateInternalLibraryElement();
 		} else { // inputStream contains full XML for library element
@@ -67,14 +66,9 @@ public class STCoreResource extends LibraryElementXtextResource {
 		}
 	}
 
-	protected boolean isLoadPlainST(final Map<?, ?> options) {
+	protected boolean isLoadPlainST(final Map<?, ?> options, final InputStream inputStream) {
 		return fileExtensionProvider.getPrimaryFileExtension().equalsIgnoreCase(uri.fileExtension())
-				|| Boolean.TRUE.equals(options.get(OPTION_PLAIN_ST));
-	}
-
-	protected static boolean isLoadLiveScope(final Map<?, ?> options, final InputStream inputStream) {
-		return options.containsKey(ResourceDescriptionsProvider.LIVE_SCOPE)
-				&& inputStream instanceof LazyStringInputStream;
+				|| Boolean.TRUE.equals(options.get(OPTION_PLAIN_ST)) || inputStream instanceof LazyStringInputStream;
 	}
 
 	public Map<Object, Object> getDefaultLoadOptions() {
