@@ -7773,11 +7773,11 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             if ( (LA2_0==LeftSquareBracket) ) {
                 int LA2_1 = input.LA(2);
 
-                if ( (LA2_1==Asterisk) ) {
-                    alt2=2;
-                }
-                else if ( (LA2_1==LDATE_AND_TIME||LA2_1==DATE_AND_TIME||LA2_1==LTIME_OF_DAY||LA2_1==TIME_OF_DAY||LA2_1==WSTRING||LA2_1==STRING||LA2_1==DWORD||LA2_1==FALSE||(LA2_1>=LDATE && LA2_1<=LWORD)||(LA2_1>=UDINT && LA2_1<=ULINT)||(LA2_1>=USINT && LA2_1<=WCHAR)||(LA2_1>=BOOL && LA2_1<=BYTE)||(LA2_1>=CHAR && LA2_1<=DINT)||(LA2_1>=LINT && LA2_1<=LTOD)||(LA2_1>=REAL && LA2_1<=SINT)||(LA2_1>=THIS && LA2_1<=TRUE)||LA2_1==UINT||LA2_1==WORD||LA2_1==AND||(LA2_1>=INT && LA2_1<=NOT)||LA2_1==TOD||LA2_1==XOR||LA2_1==DT||(LA2_1>=LD && LA2_1<=LT)||LA2_1==OR||LA2_1==LeftParenthesis||LA2_1==PlusSign||LA2_1==HyphenMinus||(LA2_1>=D && LA2_1<=T)||(LA2_1>=RULE_NON_DECIMAL && LA2_1<=RULE_DECIMAL)||(LA2_1>=RULE_ID && LA2_1<=RULE_STRING)) ) {
+                if ( (LA2_1==LDATE_AND_TIME||LA2_1==DATE_AND_TIME||LA2_1==LTIME_OF_DAY||LA2_1==TIME_OF_DAY||LA2_1==WSTRING||LA2_1==STRING||LA2_1==DWORD||LA2_1==FALSE||(LA2_1>=LDATE && LA2_1<=LWORD)||(LA2_1>=UDINT && LA2_1<=ULINT)||(LA2_1>=USINT && LA2_1<=WCHAR)||(LA2_1>=BOOL && LA2_1<=BYTE)||(LA2_1>=CHAR && LA2_1<=DINT)||(LA2_1>=LINT && LA2_1<=LTOD)||(LA2_1>=REAL && LA2_1<=SINT)||(LA2_1>=THIS && LA2_1<=TRUE)||LA2_1==UINT||LA2_1==WORD||LA2_1==AND||(LA2_1>=INT && LA2_1<=NOT)||LA2_1==TOD||LA2_1==XOR||LA2_1==DT||(LA2_1>=LD && LA2_1<=LT)||LA2_1==OR||LA2_1==LeftParenthesis||LA2_1==PlusSign||LA2_1==HyphenMinus||(LA2_1>=D && LA2_1<=T)||(LA2_1>=RULE_NON_DECIMAL && LA2_1<=RULE_DECIMAL)||(LA2_1>=RULE_ID && LA2_1<=RULE_STRING)) ) {
                     alt2=1;
+                }
+                else if ( (LA2_1==Asterisk) ) {
+                    alt2=2;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return ;}
@@ -8652,14 +8652,17 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
                 {
                 int LA7_3 = input.LA(2);
 
-                if ( (LA7_3==RULE_ID) ) {
+                if ( (LA7_3==LDATE_AND_TIME||LA7_3==DATE_AND_TIME||LA7_3==LTIME_OF_DAY||LA7_3==TIME_OF_DAY||LA7_3==WSTRING||LA7_3==STRING||LA7_3==DWORD||LA7_3==FALSE||(LA7_3>=LDATE && LA7_3<=LWORD)||(LA7_3>=UDINT && LA7_3<=ULINT)||(LA7_3>=USINT && LA7_3<=WCHAR)||(LA7_3>=BOOL && LA7_3<=BYTE)||(LA7_3>=CHAR && LA7_3<=DINT)||(LA7_3>=LINT && LA7_3<=LTOD)||(LA7_3>=REAL && LA7_3<=SINT)||(LA7_3>=THIS && LA7_3<=TRUE)||LA7_3==UINT||LA7_3==WORD||LA7_3==AND||(LA7_3>=INT && LA7_3<=NOT)||LA7_3==TOD||LA7_3==XOR||LA7_3==DT||(LA7_3>=LD && LA7_3<=LT)||LA7_3==OR||LA7_3==LeftParenthesis||LA7_3==PlusSign||LA7_3==HyphenMinus||(LA7_3>=D && LA7_3<=T)||(LA7_3>=RULE_NON_DECIMAL && LA7_3<=RULE_DECIMAL)||LA7_3==RULE_STRING) ) {
+                    alt7=1;
+                }
+                else if ( (LA7_3==RULE_ID) ) {
                     int LA7_6 = input.LA(3);
 
-                    if ( (LA7_6==EqualsSignGreaterThanSign) ) {
-                        alt7=3;
-                    }
-                    else if ( (LA7_6==EOF||LA7_6==AND||LA7_6==MOD||LA7_6==XOR||(LA7_6>=AsteriskAsterisk && LA7_6<=ColonColon)||(LA7_6>=LessThanSignEqualsSign && LA7_6<=LessThanSignGreaterThanSign)||LA7_6==GreaterThanSignEqualsSign||LA7_6==OR||(LA7_6>=Ampersand && LA7_6<=Solidus)||(LA7_6>=LessThanSign && LA7_6<=GreaterThanSign)||LA7_6==LeftSquareBracket) ) {
+                    if ( (LA7_6==EOF||LA7_6==AND||LA7_6==MOD||LA7_6==XOR||(LA7_6>=AsteriskAsterisk && LA7_6<=ColonColon)||(LA7_6>=LessThanSignEqualsSign && LA7_6<=LessThanSignGreaterThanSign)||LA7_6==GreaterThanSignEqualsSign||LA7_6==OR||(LA7_6>=Ampersand && LA7_6<=Solidus)||(LA7_6>=LessThanSign && LA7_6<=GreaterThanSign)||LA7_6==LeftSquareBracket) ) {
                         alt7=1;
+                    }
+                    else if ( (LA7_6==EqualsSignGreaterThanSign) ) {
+                        alt7=3;
                     }
                     else {
                         if (state.backtracking>0) {state.failed=true; return ;}
@@ -8668,9 +8671,6 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
 
                         throw nvae;
                     }
-                }
-                else if ( (LA7_3==LDATE_AND_TIME||LA7_3==DATE_AND_TIME||LA7_3==LTIME_OF_DAY||LA7_3==TIME_OF_DAY||LA7_3==WSTRING||LA7_3==STRING||LA7_3==DWORD||LA7_3==FALSE||(LA7_3>=LDATE && LA7_3<=LWORD)||(LA7_3>=UDINT && LA7_3<=ULINT)||(LA7_3>=USINT && LA7_3<=WCHAR)||(LA7_3>=BOOL && LA7_3<=BYTE)||(LA7_3>=CHAR && LA7_3<=DINT)||(LA7_3>=LINT && LA7_3<=LTOD)||(LA7_3>=REAL && LA7_3<=SINT)||(LA7_3>=THIS && LA7_3<=TRUE)||LA7_3==UINT||LA7_3==WORD||LA7_3==AND||(LA7_3>=INT && LA7_3<=NOT)||LA7_3==TOD||LA7_3==XOR||LA7_3==DT||(LA7_3>=LD && LA7_3<=LT)||LA7_3==OR||LA7_3==LeftParenthesis||LA7_3==PlusSign||LA7_3==HyphenMinus||(LA7_3>=D && LA7_3<=T)||(LA7_3>=RULE_NON_DECIMAL && LA7_3<=RULE_DECIMAL)||LA7_3==RULE_STRING) ) {
-                    alt7=1;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return ;}
@@ -9200,11 +9200,11 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
                 {
                 int LA11_4 = input.LA(2);
 
-                if ( (LA11_4==EOF||LA11_4==END_REPEAT||LA11_4==THEN||LA11_4==AND||LA11_4==MOD||LA11_4==XOR||(LA11_4>=AsteriskAsterisk && LA11_4<=FullStopFullStop)||(LA11_4>=ColonEqualsSign && LA11_4<=LessThanSignGreaterThanSign)||LA11_4==GreaterThanSignEqualsSign||(LA11_4>=BY && LA11_4<=DO)||LA11_4==OF||(LA11_4>=OR && LA11_4<=TO)||(LA11_4>=Ampersand && LA11_4<=GreaterThanSign)||(LA11_4>=LeftSquareBracket && LA11_4<=RightSquareBracket)) ) {
-                    alt11=2;
-                }
-                else if ( (LA11_4==NumberSign) ) {
+                if ( (LA11_4==NumberSign) ) {
                     alt11=4;
+                }
+                else if ( (LA11_4==EOF||LA11_4==END_REPEAT||LA11_4==THEN||LA11_4==AND||LA11_4==MOD||LA11_4==XOR||(LA11_4>=AsteriskAsterisk && LA11_4<=FullStopFullStop)||(LA11_4>=ColonEqualsSign && LA11_4<=LessThanSignGreaterThanSign)||LA11_4==GreaterThanSignEqualsSign||(LA11_4>=BY && LA11_4<=DO)||LA11_4==OF||(LA11_4>=OR && LA11_4<=TO)||(LA11_4>=Ampersand && LA11_4<=GreaterThanSign)||(LA11_4>=LeftSquareBracket && LA11_4<=RightSquareBracket)) ) {
+                    alt11=2;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return ;}
@@ -10337,13 +10337,13 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
 
 
     // $ANTLR start "rule__STAnyType__Alternatives"
-    // InternalSTFunctionParser.g:2884:1: rule__STAnyType__Alternatives : ( ( RULE_ID ) | ( ruleSTAnyBuiltinType ) );
+    // InternalSTFunctionParser.g:2884:1: rule__STAnyType__Alternatives : ( ( ruleQualifiedName ) | ( ruleSTAnyBuiltinType ) );
     public final void rule__STAnyType__Alternatives() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTFunctionParser.g:2888:1: ( ( RULE_ID ) | ( ruleSTAnyBuiltinType ) )
+            // InternalSTFunctionParser.g:2888:1: ( ( ruleQualifiedName ) | ( ruleSTAnyBuiltinType ) )
             int alt18=2;
             int LA18_0 = input.LA(1);
 
@@ -10362,17 +10362,21 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             }
             switch (alt18) {
                 case 1 :
-                    // InternalSTFunctionParser.g:2889:2: ( RULE_ID )
+                    // InternalSTFunctionParser.g:2889:2: ( ruleQualifiedName )
                     {
-                    // InternalSTFunctionParser.g:2889:2: ( RULE_ID )
-                    // InternalSTFunctionParser.g:2890:3: RULE_ID
+                    // InternalSTFunctionParser.g:2889:2: ( ruleQualifiedName )
+                    // InternalSTFunctionParser.g:2890:3: ruleQualifiedName
                     {
                     if ( state.backtracking==0 ) {
-                       before(grammarAccess.getSTAnyTypeAccess().getIDTerminalRuleCall_0()); 
+                       before(grammarAccess.getSTAnyTypeAccess().getQualifiedNameParserRuleCall_0()); 
                     }
-                    match(input,RULE_ID,FOLLOW_2); if (state.failed) return ;
+                    pushFollow(FOLLOW_2);
+                    ruleQualifiedName();
+
+                    state._fsp--;
+                    if (state.failed) return ;
                     if ( state.backtracking==0 ) {
-                       after(grammarAccess.getSTAnyTypeAccess().getIDTerminalRuleCall_0()); 
+                       after(grammarAccess.getSTAnyTypeAccess().getQualifiedNameParserRuleCall_0()); 
                     }
 
                     }

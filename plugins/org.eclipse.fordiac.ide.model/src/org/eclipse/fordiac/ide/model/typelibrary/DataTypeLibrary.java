@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -199,7 +200,7 @@ public final class DataTypeLibrary {
 		return errorTypes.computeIfAbsent(typeName.toUpperCase(), name -> {
 			FordiacLogHelper.logInfo(message);
 			final ErrorMarkerDataType type = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
-			type.setName(typeName);
+			PackageNameHelper.setFullTypeName(type, typeName);
 			type.setErrorMessage(message);
 			encloseInResource(type);
 			return type;

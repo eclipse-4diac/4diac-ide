@@ -24,7 +24,6 @@ public class SetableAlphaLabel extends Label implements ITransparencyFigure {
 	private int alpha = 255;
 
 	public SetableAlphaLabel() {
-		super();
 	}
 
 	public SetableAlphaLabel(final String text) {
@@ -75,24 +74,23 @@ public class SetableAlphaLabel extends Label implements ITransparencyFigure {
 	 */
 	@Override
 	protected void paintFigure(final Graphics graphics) {
-		graphics.setAlpha(getAlpha());
-		if (isOpaque()) {
-			graphics.fillRectangle(getBounds());
-		}
 		final Rectangle bounds = getBounds();
-		graphics.translate(bounds.x, bounds.y);
-		if (getIcon() != null) {
-			graphics.drawImage(getIcon(), getIconLocation());
+		if (isOpaque()) {
+			graphics.fillRectangle(bounds);
 		}
+		if (getIcon() != null) {
+			final var iconLocation = getIconLocation();
+			graphics.drawImage(getIcon(), iconLocation.x + bounds.x, iconLocation.y + bounds.y);
+		}
+		final var textLocation = getTextLocation();
+		final int tx = bounds.x + textLocation.x;
+		final int ty = bounds.y + textLocation.y;
 		if (!isEnabled()) {
-			graphics.translate(1, 1);
 			graphics.setForegroundColor(ColorConstants.buttonLightest);
-			graphics.drawText(getSubStringText(), getTextLocation());
-			graphics.translate(-1, -1);
+			graphics.drawText(getSubStringText(), tx + 1, ty + 1);
 			graphics.setForegroundColor(ColorConstants.buttonDarker);
 		}
-		graphics.drawText(getSubStringText(), getTextLocation());
-		graphics.translate(-bounds.x, -bounds.y);
+		graphics.drawText(getSubStringText(), tx, ty);
 	}
 
 	@Override

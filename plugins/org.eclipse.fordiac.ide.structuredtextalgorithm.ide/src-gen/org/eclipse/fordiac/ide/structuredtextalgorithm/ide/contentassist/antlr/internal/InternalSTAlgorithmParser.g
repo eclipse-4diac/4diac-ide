@@ -2951,9 +2951,9 @@ rule__STAnyType__Alternatives
 	}
 :
 	(
-		{ before(grammarAccess.getSTAnyTypeAccess().getIDTerminalRuleCall_0()); }
-		RULE_ID
-		{ after(grammarAccess.getSTAnyTypeAccess().getIDTerminalRuleCall_0()); }
+		{ before(grammarAccess.getSTAnyTypeAccess().getQualifiedNameParserRuleCall_0()); }
+		ruleQualifiedName
+		{ after(grammarAccess.getSTAnyTypeAccess().getQualifiedNameParserRuleCall_0()); }
 	)
 	|
 	(

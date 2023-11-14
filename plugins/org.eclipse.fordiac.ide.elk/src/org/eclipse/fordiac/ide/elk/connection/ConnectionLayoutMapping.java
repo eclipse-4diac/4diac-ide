@@ -109,8 +109,15 @@ public class ConnectionLayoutMapping extends LayoutMapping {
 		getLayoutGraph().setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.alg.libavoid"); //$NON-NLS-1$
 		getLayoutGraph().setProperty(LibavoidMetaDataProvider.SHAPE_BUFFER_DISTANCE, Double.valueOf(10));
 		getLayoutGraph().setProperty(LibavoidMetaDataProvider.IDEAL_NUDGING_DISTANCE, Double.valueOf(5));
+		getLayoutGraph().setProperty(LibavoidMetaDataProvider.CROSSING_PENALTY, Double.valueOf(10));
+		getLayoutGraph().setProperty(LibavoidMetaDataProvider.CLUSTER_CROSSING_PENALTY, Double.valueOf(10));
 		getLayoutGraph().setProperty(LibavoidMetaDataProvider.NUDGE_SHARED_PATHS_WITH_COMMON_END_POINT,
 				Boolean.valueOf(false));
+		getLayoutGraph().setProperty(LibavoidMetaDataProvider.ENABLE_HYPEREDGES_FROM_COMMON_SOURCE,
+				Boolean.valueOf(true));
+		getLayoutGraph().setProperty(
+				LibavoidMetaDataProvider.IMPROVE_HYPEREDGE_ROUTES_MOVING_ADDING_AND_DELETING_JUNCTIONS,
+				Boolean.valueOf(true));
 	}
 
 	private void createGraphRoot(final AbstractFBNetworkEditPart networkEditPart) {
@@ -124,14 +131,10 @@ public class ConnectionLayoutMapping extends LayoutMapping {
 	private static void setGraphBounds(final ElkNode graph, final AbstractFBNetworkEditPart networkEditPart) {
 		Rectangle bounds = null;
 		if (networkEditPart instanceof EditorWithInterfaceEditPart) {
-			@SuppressWarnings("unchecked")
-			final Object figure = ((IFigure) networkEditPart.getFigure().getChildren().get(0)).getChildren()
-			.stream()
-			.filter(FreeformLayer.class::isInstance)
-			.findFirst()
-			.orElse(null);
-			if (figure instanceof IFigure) {
-				bounds = ((IFigure) figure).getBounds();
+			final IFigure figure = networkEditPart.getFigure().getChildren().get(0).getChildren().stream()
+					.filter(FreeformLayer.class::isInstance).findFirst().orElse(null);
+			if (figure != null) {
+				bounds = figure.getBounds();
 			}
 		} else {
 			bounds = networkEditPart.getFigure().getBounds();
@@ -144,10 +147,8 @@ public class ConnectionLayoutMapping extends LayoutMapping {
 	}
 
 	private static AbstractFBNetworkEditPart findRootEditPart(final IWorkbenchPart workbenchPart) {
-		return (AbstractFBNetworkEditPart) workbenchPart.getAdapter(GraphicalViewer.class)
-				.getRootEditPart()
-				.getChildren()
-				.get(0);
+		return (AbstractFBNetworkEditPart) workbenchPart.getAdapter(GraphicalViewer.class).getRootEditPart()
+				.getChildren().get(0);
 	}
 
 }

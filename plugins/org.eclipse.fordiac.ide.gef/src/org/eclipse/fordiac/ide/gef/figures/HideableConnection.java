@@ -86,9 +86,9 @@ public class HideableConnection extends PolylineConnection {
 	@Override
 	protected void outlineShape(final Graphics g) {
 		if (isAdapterOrStructConnection()) {
-			drawDoublePolyline(g, getBeveledPoints());
+			drawDoublePolyline(g);
 		} else {
-			g.drawPolyline(getBeveledPoints());
+			g.drawPolyline(getPoints());
 		}
 	}
 
@@ -107,23 +107,25 @@ public class HideableConnection extends PolylineConnection {
 		if (null == refElement) {
 			refElement = model.getDestination();
 		}
-		if (refElement != null) {   // during reconnect or delete both sides could be null see Bug 579040 for details
+		if (refElement != null) { // during reconnect or delete both sides could be null see Bug 579040 for
+									// details
 			final DataType dataType = refElement.getType();
 			if ((dataType instanceof AnyType) && (dataType == IecTypes.GenericTypes.ANY)
 					&& (refElement == model.getSource())) {
-				// if source is of any type change to destination so that source any target struct are shown correctly
+				// if source is of any type change to destination so that source any target
+				// struct are shown correctly
 				refElement = getModel().getDestination();
 			}
 		}
 		return refElement;
 	}
 
-	private void drawDoublePolyline(final Graphics g, final PointList beveledPoints) {
-		g.drawPolyline(beveledPoints);
+	private void drawDoublePolyline(final Graphics g) {
+		g.drawPolyline(getPoints());
 		g.setLineWidth(getLineWidth() / NORMAL_DOUBLE_LINE_WIDTH);
 		if (g.getAbsoluteScale() >= 1) {
 			g.setForegroundColor(lighterColor);
-			g.drawPolyline(beveledPoints);
+			g.drawPolyline(getPoints());
 		}
 	}
 
@@ -147,14 +149,19 @@ public class HideableConnection extends PolylineConnection {
 		return Geometry.polylineContainsPoint(getPoints(), x, y, getLineWidth() + CONNECTION_SELECTION_TOLERANCE);
 	}
 
-	private PointList getBeveledPoints() {
+	@Override
+	public void setPoints(final PointList points) {
+		super.setPoints(getBeveledPoints(points));
+	}
+
+	private static PointList getBeveledPoints(final PointList srcPoints) {
 		final PointList beveledPoints = new PointList();
 
-		beveledPoints.addPoint(getPoints().getFirstPoint());
+		beveledPoints.addPoint(srcPoints.getFirstPoint());
 
-		for (int i = 1; i < (getPoints().size() - 1); i++) {
-			final Point before = getPoints().getPoint(i - 1);
-			final Point after = getPoints().getPoint(i + 1);
+		for (int i = 1; i < (srcPoints.size() - 1); i++) {
+			final Point before = srcPoints.getPoint(i - 1);
+			final Point after = srcPoints.getPoint(i + 1);
 
 			final int verDistance = Math.abs(before.y - after.y);
 			final int horDistance = Math.abs(before.y - after.y);
@@ -166,11 +173,11 @@ public class HideableConnection extends PolylineConnection {
 				bevelSize = horDistance / 2;
 			}
 
-			beveledPoints.addPoint(calculatedBeveledPoint(getPoints().getPoint(i), before, bevelSize));
-			beveledPoints.addPoint(calculatedBeveledPoint(getPoints().getPoint(i), after, bevelSize));
+			beveledPoints.addPoint(calculatedBeveledPoint(srcPoints.getPoint(i), before, bevelSize));
+			beveledPoints.addPoint(calculatedBeveledPoint(srcPoints.getPoint(i), after, bevelSize));
 		}
 
-		beveledPoints.addPoint(getPoints().getLastPoint());
+		beveledPoints.addPoint(srcPoints.getLastPoint());
 		return beveledPoints;
 	}
 

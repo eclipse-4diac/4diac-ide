@@ -662,9 +662,9 @@ public abstract class CommonElementImporter {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterNotSet);
 		}
 
-		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (null == value) {
-			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterValueNotSet);
+			value = ""; //$NON-NLS-1$
 		}
 		final Value val = LibraryElementFactory.eINSTANCE.createValue();
 		val.setValue(value);

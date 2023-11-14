@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.elk.handlers;
 
+import java.text.MessageFormat;
+
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
@@ -44,7 +46,7 @@ public class ConnectionLayoutHandler extends AbstractLayoutHandler {
 				executeCommand(event, part, data);
 			} catch (final LibavoidServerException e) {
 				MessageDialog.openWarning(HandlerUtil.getActiveShell(event), Messages.ConnectionLayout_TimeoutTitle,
-						Messages.ConnectionLayout_TimeoutMessage);
+						MessageFormat.format(Messages.ConnectionLayout_TimeoutMessage, e.getMessage()));
 			}
 		}
 		return Status.OK_STATUS;

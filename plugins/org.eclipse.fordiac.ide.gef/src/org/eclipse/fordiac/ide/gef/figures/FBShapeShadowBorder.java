@@ -20,6 +20,11 @@ import org.eclipse.draw2d.geometry.Rectangle;
 
 public class FBShapeShadowBorder extends AbstractShadowBorder {
 
+	private static Rectangle topShadowRect = new Rectangle();
+	private static Rectangle middleShadowRect = new Rectangle();
+	private static Rectangle bottomShadowRect = new Rectangle();
+	private static Rectangle clipRect = new Rectangle();
+
 	@Override
 	public void paintBackground(final IFigure figure, final Graphics graphics, final Insets insets) {
 		Assert.isTrue(figure instanceof FBShape);
@@ -28,11 +33,11 @@ public class FBShapeShadowBorder extends AbstractShadowBorder {
 		graphics.pushState();
 		graphics.setBackgroundColor(figure.getForegroundColor());
 
-		final Rectangle topShadowRect = fbShape.getTop().getBounds().getExpanded(2, 2);
-		final Rectangle middleShadowRect = fbShape.getMiddle().getBounds().getExpanded(2, 0);
-		final Rectangle bottomShadowRect = fbShape.getBottom().getBounds().getExpanded(2, 2);
+		topShadowRect.setBounds(fbShape.getTop().getBounds()).expand(2, 2);
+		middleShadowRect.setBounds(fbShape.getMiddle().getBounds()).expand(2, 0);
+		bottomShadowRect.setBounds(fbShape.getBottom().getBounds()).expand(2, 2);
 
-		final Rectangle clipRect = topShadowRect.getCopy();
+		clipRect.setBounds(topShadowRect);
 		clipRect.union(middleShadowRect);
 		clipRect.union(bottomShadowRect);
 		clipRect.width += SHADOW_SIZE;
@@ -60,7 +65,7 @@ public class FBShapeShadowBorder extends AbstractShadowBorder {
 	private static void drawDropShadow(final Graphics graphics, final Rectangle topShadowRect,
 			final Rectangle middleShadowRect, final Rectangle bottomShadowRect) {
 		graphics.setAlpha(SHADOW_ALPHA);
-		final double horInc = 0.7;  // emulate a roughly 30° shadow angle
+		final double horInc = 0.7; // emulate a roughly 30° shadow angle
 		double horI = 0;
 		for (int i = 0; i < SHADOW_SIZE; i++) {
 			horI += horInc;
@@ -80,6 +85,5 @@ public class FBShapeShadowBorder extends AbstractShadowBorder {
 		graphics.fillRectangle(middleShadowRect);
 		graphics.fillRoundRectangle(bottomShadowRect, SHADOW_CORNER_RADIUS, SHADOW_CORNER_RADIUS);
 	}
-
 
 }
