@@ -23,7 +23,9 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEdi
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
+import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
@@ -76,6 +78,7 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 			GraphicalEditPart parent = getTargetContainerEP();
 			while (parent != null) {
 				addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent, fbnetworkElements));
+				addChangeContainerBoundCommand(checkAndCreateResizeInterfaceContentCommand(parent));
 				parent = findNestedGraphicalEditPart(parent);
 				this.fbnetworkElements = null;
 			}
@@ -149,8 +152,9 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 			List<FBNetworkElement> children) {
 		getViewer().flush();
 
-		if (children == null) {
-			children = ((AbstractContainerContentEditPart) containerEP).getModel().getNetworkElements();
+		if ((children == null)
+				&& (containerEP instanceof final AbstractContainerContentEditPart abstractContainerContentEditPart)) {
+			children = abstractContainerContentEditPart.getModel().getNetworkElements();
 		}
 
 		final Rectangle fbBounds = getFBBounds(children);
@@ -165,12 +169,38 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 		return null;
 	}
 
+	private static AbstractChangeContainerBoundsCommand checkAndCreateResizeInterfaceContentCommand(
+			final GraphicalEditPart containerEP) {
+		if (containerEP.getParent() instanceof final GraphicalEditPart fullContentGraphicalEditPart
+				&& fullContentGraphicalEditPart.getFigure() instanceof final SubAppForFbNetworkFigure subappFigure) {
+			final Rectangle fullContainerBounds = ContainerContentLayoutPolicy
+					.getContainerAreaBounds(fullContentGraphicalEditPart);
+			final Rectangle mainFig = subappFigure.getExpandedContentArea().getBounds();
+			final Rectangle leftFig = subappFigure.getExpandedInputFigure().getBounds();
+			final Rectangle rightFig = subappFigure.getExpandedOutputFigure().getBounds();
+			final Rectangle newFig1 = fullContainerBounds.getCopy();
+			newFig1.width = mainFig.width + leftFig.width + rightFig.width + 20;
+			if (fullContainerBounds.width != newFig1.width) {
+				final FBNetworkElement container = getSubappContainer(fullContentGraphicalEditPart);
+				return ContainerContentLayoutPolicy.createChangeBoundsCommand(container, fullContainerBounds, newFig1);
+			}
+		}
+		return null;
+	}
+
 	private static FBNetworkElement getContainer(final GraphicalEditPart containerEP) {
 		if (containerEP instanceof final UnfoldedSubappContentEditPart unfoldedSubappContentEP) {
 			return unfoldedSubappContentEP.getModel().getSubapp();
 		}
 		if (containerEP instanceof final GroupContentEditPart groupContentEp) {
 			return groupContentEp.getModel().getGroup();
+		}
+		return null;
+	}
+
+	private static FBNetworkElement getSubappContainer(final GraphicalEditPart containerEP) {
+		if (containerEP instanceof final SubAppForFBNetworkEditPart subAppForFBNetworkEditPart) {
+			return subAppForFBNetworkEditPart.getModel();
 		}
 		return null;
 	}

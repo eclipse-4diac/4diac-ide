@@ -30,6 +30,7 @@ import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.options.NodeLabelPlacement;
+import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.service.LayoutMapping;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkGraphElement;
@@ -57,18 +58,19 @@ public final class FordiacGraphBuilder {
 	private static final PrecisionPoint END_POINT = new PrecisionPoint();
 
 	public static void build(final FordiacLayoutMapping mapping) {
-		buildGraphRecursively(mapping, mapping.getLayoutGraph(), (GraphicalEditPart) mapping.getParentElement());
+		buildGraphRecursively(mapping, mapping.getLayoutGraph(), (GraphicalEditPart) mapping.getParentElement(), 0);
 		processConnections(mapping);
 		processHierarchyCrossingConnections(mapping);
 	}
 
-	private static void buildGraphRecursively(final LayoutMapping mapping, final ElkNode parentLayoutNode, final GraphicalEditPart currentEditPart) {
-		for (final Object child : currentEditPart.getChildren()) {
+	private static void buildGraphRecursively(final LayoutMapping mapping, final ElkNode parentLayoutNode,
+			final GraphicalEditPart currentEditPart, final int yOffset) {
+		for (final GraphicalEditPart child : currentEditPart.getChildren()) {
 			if (child instanceof GroupEditPart) {
 				processGroup(mapping, parentLayoutNode, child);
 			}
 			if (child instanceof AbstractFBNElementEditPart) {
-				processFB(mapping, parentLayoutNode, child);
+				processFB(mapping, parentLayoutNode, child, yOffset);
 			}
 			if (child instanceof InterfaceEditPart) {
 				processInterface(mapping, child);
@@ -80,10 +82,11 @@ public final class FordiacGraphBuilder {
 	}
 
 	// creates graph elements for normal FBs and subapps
-	private static void processFB(final LayoutMapping mapping, final ElkNode parentLayoutNode, final Object child) {
+	private static void processFB(final LayoutMapping mapping, final ElkNode parentLayoutNode, final Object child,
+			final int yOffset) {
 		final AbstractFBNElementEditPart childEditPart = (AbstractFBNElementEditPart) child;
-		final ElkNode node = createNode(mapping, childEditPart, parentLayoutNode);
-		buildGraphRecursively(mapping, node, childEditPart);
+		final ElkNode node = createNode(mapping, childEditPart, parentLayoutNode, yOffset);
+		buildGraphRecursively(mapping, node, childEditPart, yOffset);
 	}
 
 	// creates a group node and DIRECTLY passes the group content to the recursion
@@ -91,8 +94,10 @@ public final class FordiacGraphBuilder {
 	private static void processGroup(final LayoutMapping mapping, final ElkNode parentLayoutNode, final Object child) {
 		final GroupEditPart group = (GroupEditPart) child;
 		final ElkNode node = createGroupNode(mapping, group, parentLayoutNode);
-		final GraphicalEditPart content = (GraphicalEditPart) group.getChildren().get(0);
-		buildGraphRecursively(mapping, node, content);
+		// TODO get rid of magic number
+		// don't yet know how to calculate the exact offset but 7 seems to do the trick
+		final int offset = group.getCommentBounds().height + 7;
+		buildGraphRecursively(mapping, node, group.getContentEP(), offset);
 	}
 
 	private static void processValue(final LayoutMapping mapping, final ValueEditPart valueEditPart) {
@@ -115,14 +120,20 @@ public final class FordiacGraphBuilder {
 			return;
 		}
 
-		// since we iterate over every interface its enough to only save target connections
+		// since we iterate over every interface its enough to only save target
+		// connections
 		ep.getTargetConnections().stream().filter(ConnectionEditPart.class::isInstance)
-		.filter(con -> isVisible((ConnectionEditPart) con))
-		.forEach(conn -> saveConnection(mapping, (ConnectionEditPart) conn));
+				.filter(con -> isVisible((ConnectionEditPart) con))
+				.forEach(conn -> saveConnection(mapping, (ConnectionEditPart) conn));
 
-		// add all editor interfaces to the elk graph to ensure the right order in the sidebar
+		// add all editor interfaces to the elk graph to ensure the right order in the
+		// sidebar
 		if (ep.getParent() instanceof EditorWithInterfaceEditPart) {
-			getPort(new Point(0, 0), ep, mapping); // point is irrelevant since the interface element gets moved along the graph border (sidebar)
+			final ElkPort port = getPort(new Point(0, 0), ep, mapping); // point is irrelevant since the interface
+																		// element gets moved along the graph border
+																		// (sidebar)
+			// override the port side because isInput() is negated for internal subapp pins
+			port.setProperty(CoreOptions.PORT_SIDE, !ep.isInput() ? PortSide.WEST : PortSide.EAST);
 		}
 	}
 
@@ -153,7 +164,8 @@ public final class FordiacGraphBuilder {
 		}
 	}
 
-	private static ElkNode createGroupNode(final LayoutMapping mapping, final GroupEditPart editPart, final ElkNode parent) {
+	private static ElkNode createGroupNode(final LayoutMapping mapping, final GroupEditPart editPart,
+			final ElkNode parent) {
 		final ElkNode node = FordiacLayoutFactory.createFordiacLayoutNode(editPart, parent);
 
 		final Rectangle bounds = editPart.getFigure().getBounds();
@@ -164,7 +176,8 @@ public final class FordiacGraphBuilder {
 		final Rectangle commentBounds = editPart.getCommentBounds();
 		if (commentBounds != null) {
 			final int BORDER_THICKNESS = 2;
-			label.setDimensions(commentBounds.preciseWidth() + BORDER_THICKNESS, commentBounds.preciseHeight() + BORDER_THICKNESS);
+			label.setDimensions(commentBounds.preciseWidth() + BORDER_THICKNESS,
+					commentBounds.preciseHeight() + BORDER_THICKNESS);
 		}
 
 		// position properties
@@ -177,11 +190,12 @@ public final class FordiacGraphBuilder {
 		return node;
 	}
 
-	private static ElkNode createNode(final LayoutMapping mapping, final AbstractFBNElementEditPart editPart, final ElkNode parent) {
+	private static ElkNode createNode(final LayoutMapping mapping, final AbstractFBNElementEditPart editPart,
+			final ElkNode parent, final int yOffset) {
 		final ElkNode node = FordiacLayoutFactory.createFordiacLayoutNode(editPart, parent);
 
 		final Rectangle bounds = editPart.getFigure().getFBBounds();
-		node.setLocation(bounds.x, bounds.y);
+		node.setLocation(bounds.x, bounds.y - yOffset);
 		node.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
 
 		final ElkLabel label = ElkGraphUtil.createLabel(editPart.getModel().getName(), node);
@@ -198,7 +212,8 @@ public final class FordiacGraphBuilder {
 		for (final ConnectionEditPart conn : mapping.getProperty(CONNECTIONS)) {
 			final org.eclipse.draw2d.Connection connFig = conn.getFigure();
 
-			START_POINT.setLocation(connFig.getSourceAnchor().getLocation(connFig.getSourceAnchor().getReferencePoint()));
+			START_POINT
+					.setLocation(connFig.getSourceAnchor().getLocation(connFig.getSourceAnchor().getReferencePoint()));
 			END_POINT.setLocation(connFig.getTargetAnchor().getLocation(connFig.getTargetAnchor().getReferencePoint()));
 
 			connFig.translateToRelative(START_POINT);
@@ -207,7 +222,8 @@ public final class FordiacGraphBuilder {
 			final ElkPort sourcePort = getPort(START_POINT, (InterfaceEditPart) conn.getSource(), mapping);
 			final ElkPort destinationPort = getPort(END_POINT, (InterfaceEditPart) conn.getTarget(), mapping);
 
-			final ElkEdge edge = FordiacLayoutFactory.createFordiacLayoutEdge(conn, mapping.getLayoutGraph(), sourcePort, destinationPort);
+			final ElkEdge edge = FordiacLayoutFactory.createFordiacLayoutEdge(conn, mapping.getLayoutGraph(),
+					sourcePort, destinationPort);
 			mapping.getGraphMap().put(edge, conn);
 			mapping.getProperty(REVERSE_MAPPING).put(conn, edge);
 		}
@@ -215,18 +231,20 @@ public final class FordiacGraphBuilder {
 
 	private static void processHierarchyCrossingConnections(final LayoutMapping mapping) {
 		/*
-		 * The idea for hierarchy crossing connections (in the context of groups) is to split
-		 * the connection and connect them with a dummy port on the group node.
-		 * All connections that share a source/destination are connected to the same dummy port.
-		 * This leads to more straight lines inside of groups and reduces the problems
-		 * that arise from too many bendpoints. (max. 5 segment connections)
+		 * The idea for hierarchy crossing connections (in the context of groups) is to
+		 * split the connection and connect them with a dummy port on the group node.
+		 * All connections that share a source/destination are connected to the same
+		 * dummy port. This leads to more straight lines inside of groups and reduces
+		 * the problems that arise from too many bendpoints. (max. 5 segment
+		 * connections)
 		 */
 		for (final ConnectionEditPart conn : mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS)) {
 			final Object sourceContainer = conn.getSource().getParent().getParent();
 			final Object targetContainer = conn.getTarget().getParent().getParent();
 
 			final org.eclipse.draw2d.Connection connFig = conn.getFigure();
-			START_POINT.setLocation(connFig.getSourceAnchor().getLocation(connFig.getSourceAnchor().getReferencePoint()));
+			START_POINT
+					.setLocation(connFig.getSourceAnchor().getLocation(connFig.getSourceAnchor().getReferencePoint()));
 			END_POINT.setLocation(connFig.getTargetAnchor().getLocation(connFig.getTargetAnchor().getReferencePoint()));
 			connFig.translateToRelative(START_POINT);
 			connFig.translateToRelative(END_POINT);
@@ -246,7 +264,8 @@ public final class FordiacGraphBuilder {
 
 	private static void process2PartConnection(final LayoutMapping mapping, final ConnectionEditPart conn,
 			final Object sourceContainer, final Object targetContainer, final boolean incoming) {
-		final EditPart group = incoming ? ((EditPart)targetContainer).getParent() : ((EditPart)sourceContainer).getParent();
+		final EditPart group = incoming ? ((EditPart) targetContainer).getParent()
+				: ((EditPart) sourceContainer).getParent();
 		final ElkGraphElement groupNode = mapping.getProperty(REVERSE_MAPPING).get(group);
 
 		final ElkPort sourcePort = getPort(START_POINT, (InterfaceEditPart) conn.getSource(), mapping);
@@ -259,8 +278,10 @@ public final class FordiacGraphBuilder {
 			mapping.getProperty(DUMMY_PORTS).put(incoming ? targetPort : sourcePort, dummyPort);
 		}
 
-		final ElkEdge edge1 = FordiacLayoutFactory.createFordiacLayoutEdge(conn, mapping.getLayoutGraph(), sourcePort, dummyPort);
-		final ElkEdge edge2 = FordiacLayoutFactory.createFordiacLayoutEdge(conn, mapping.getLayoutGraph(), dummyPort, targetPort);
+		final ElkEdge edge1 = FordiacLayoutFactory.createFordiacLayoutEdge(conn, mapping.getLayoutGraph(), sourcePort,
+				dummyPort);
+		final ElkEdge edge2 = FordiacLayoutFactory.createFordiacLayoutEdge(conn, mapping.getLayoutGraph(), dummyPort,
+				targetPort);
 
 		mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS_REVERSE_MAPPING).put(edge1, conn);
 		mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS_REVERSE_MAPPING).put(edge2, conn);
@@ -273,8 +294,8 @@ public final class FordiacGraphBuilder {
 
 	private static void process3PartConnection(final LayoutMapping mapping, final ConnectionEditPart conn,
 			final Object sourceContainer, final Object targetContainer) {
-		final EditPart sourceGroup = ((EditPart)sourceContainer).getParent();
-		final EditPart targetGroup = ((EditPart)targetContainer).getParent();
+		final EditPart sourceGroup = ((EditPart) sourceContainer).getParent();
+		final EditPart targetGroup = ((EditPart) targetContainer).getParent();
 
 		final ElkGraphElement sourceGroupNode = mapping.getProperty(REVERSE_MAPPING).get(sourceGroup);
 		final ElkGraphElement targetGroupNode = mapping.getProperty(REVERSE_MAPPING).get(targetGroup);
@@ -296,9 +317,12 @@ public final class FordiacGraphBuilder {
 			mapping.getProperty(DUMMY_PORTS).put(targetPort, targetGroupDummyPort);
 		}
 
-		final ElkEdge edge1 = FordiacLayoutFactory.createFordiacLayoutEdge(conn, mapping.getLayoutGraph(), sourcePort, sourceGroupDummyPort);
-		final ElkEdge edge2 = FordiacLayoutFactory.createFordiacLayoutEdge(conn, mapping.getLayoutGraph(), sourceGroupDummyPort, targetGroupDummyPort);
-		final ElkEdge edge3 = FordiacLayoutFactory.createFordiacLayoutEdge(conn, mapping.getLayoutGraph(), targetGroupDummyPort, targetPort);
+		final ElkEdge edge1 = FordiacLayoutFactory.createFordiacLayoutEdge(conn, mapping.getLayoutGraph(), sourcePort,
+				sourceGroupDummyPort);
+		final ElkEdge edge2 = FordiacLayoutFactory.createFordiacLayoutEdge(conn, mapping.getLayoutGraph(),
+				sourceGroupDummyPort, targetGroupDummyPort);
+		final ElkEdge edge3 = FordiacLayoutFactory.createFordiacLayoutEdge(conn, mapping.getLayoutGraph(),
+				targetGroupDummyPort, targetPort);
 
 		mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS_REVERSE_MAPPING).put(edge1, conn);
 		mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS_REVERSE_MAPPING).put(edge2, conn);
@@ -311,11 +335,14 @@ public final class FordiacGraphBuilder {
 		mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS_MAPPING).put(conn, list);
 	}
 
-	private static ElkPort getPort(final Point point, final InterfaceEditPart interfaceEditPart, final LayoutMapping mapping) {
-		return (ElkPort) mapping.getProperty(REVERSE_MAPPING).computeIfAbsent(interfaceEditPart, ie -> createPort(point, interfaceEditPart, mapping));
+	private static ElkPort getPort(final Point point, final InterfaceEditPart interfaceEditPart,
+			final LayoutMapping mapping) {
+		return (ElkPort) mapping.getProperty(REVERSE_MAPPING).computeIfAbsent(interfaceEditPart,
+				ie -> createPort(point, interfaceEditPart, mapping));
 	}
 
-	private static ElkPort createPort(final Point point, final InterfaceEditPart interfaceEditPart, final LayoutMapping mapping) {
+	private static ElkPort createPort(final Point point, final InterfaceEditPart interfaceEditPart,
+			final LayoutMapping mapping) {
 		final EditPart parent = interfaceEditPart.getParent();
 		final ElkNode parentNode = (ElkNode) mapping.getProperty(REVERSE_MAPPING).get(parent);
 		final ElkPort port = FordiacLayoutFactory.createFordiacLayoutPort(interfaceEditPart, parentNode, point);
@@ -324,7 +351,6 @@ public final class FordiacGraphBuilder {
 	}
 
 	private FordiacGraphBuilder() {
-		super();
 	}
 
 }

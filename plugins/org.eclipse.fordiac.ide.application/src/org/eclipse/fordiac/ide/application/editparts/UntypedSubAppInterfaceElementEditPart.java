@@ -24,6 +24,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.figures.UntypedSubappConnectorBorder;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
@@ -35,6 +36,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
@@ -42,7 +44,7 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
-	protected class UntypedSubappIEAdapter extends EContentAdapter {
+	public class UntypedSubappIEAdapter extends EContentAdapter {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
@@ -66,6 +68,10 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			}
 
 		}
+
+		public UntypedSubAppInterfaceElementEditPart getUntypedSubAppInterfaceElementEditPart() {
+			return UntypedSubAppInterfaceElementEditPart.this;
+		}
 	}
 
 	@Override
@@ -74,8 +80,9 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof UntypedSubAppInterfaceElementEditPart) {
-					return ChangeNameCommand.forName(getModel(), (String) request.getCellEditor().getValue());
+				if (getHost() instanceof final UntypedSubAppInterfaceElementEditPart editPart) {
+					return new ResizeGroupOrSubappCommand((GraphicalEditPart) editPart.getParent(),
+							ChangeNameCommand.forName(getModel(), (String) request.getCellEditor().getValue()));
 				}
 				return null;
 			}

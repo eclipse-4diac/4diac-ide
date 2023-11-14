@@ -10,11 +10,16 @@
  * Contributors:
  *   Michael Oberlehner
  *     - initial API and implementation and/or initial documentation
+ *   Dario Romano
+ *     - add correct preservation of selection and ui initialization from change state
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
-import org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeInterfaceChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeInterfaceChange.ChangeState;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.ui.refactoring.ChangePreviewViewerInput;
 import org.eclipse.ltk.ui.refactoring.IChangePreviewViewer;
@@ -28,22 +33,23 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
 public class DeleteStructChangeViewer implements IChangePreviewViewer {
-	private static final String DELETE_PIN = "Delete Pin ";
-	private static final String CHANGE_TO_ANY_STRUCT = "Change to ANY_STRUCT";
 	private Composite control;
-	private DeleteFBTypeInterfaceChange change;
+	private IFordiacPreviewChange change;
+
+	private Table table;
+	private final Map<TableItem, ChangeState> choices = new HashMap<>();
 
 	@Override
 	public void createControl(final Composite parent) {
 		control = new Composite(parent, SWT.NONE);
 		control.setLayout(new FillLayout());
 
-		final Table table = new Table(control, SWT.CHECK | SWT.BORDER);
-
-		final TableItem deletePinItem = new TableItem(table, SWT.NONE);
-		deletePinItem.setText(DELETE_PIN);
-		final TableItem changeItem = new TableItem(table, SWT.NONE);
-		changeItem.setText(CHANGE_TO_ANY_STRUCT);
+		table = new Table(control, SWT.CHECK | SWT.BORDER);
+		for (final ChangeState s : ChangeState.values()) {
+			final TableItem ti = new TableItem(table, SWT.NONE);
+			ti.setText(s.toString());
+			choices.put(ti, s);
+		}
 
 		table.setSize(100, 100);
 
@@ -53,20 +59,16 @@ public class DeleteStructChangeViewer implements IChangePreviewViewer {
 			public void widgetSelected(final SelectionEvent e) {
 				if (e.detail == SWT.CHECK) {
 					final TableItem item = (TableItem) e.item;
-					switch (item.getText()) {
-					case DELETE_PIN:
-						change.addState(ChangeState.DELETE_PIN);
-						change.getState().remove(ChangeState.CHANGE_TO_ANY);
-						changeItem.setChecked(false);
-						break;
-					case CHANGE_TO_ANY_STRUCT:
-						change.addState(ChangeState.CHANGE_TO_ANY);
-						change.getState().remove(ChangeState.DELETE_PIN);
-						deletePinItem.setChecked(false);
-						break;
-					default:
-						break;
+					final ChangeState cs = choices.get(item);
+					if (change.getState().contains(cs)) {
+						change.getState().clear();
+						item.setChecked(false);
+						return;
 					}
+					change.addState(cs);
+					change.getState().removeIf(state -> !state.equals(cs));
+					choices.keySet().stream().filter(anyItem -> !anyItem.equals(item))
+							.forEach(otherItem -> otherItem.setChecked(false));
 				}
 			}
 		});
@@ -75,18 +77,19 @@ public class DeleteStructChangeViewer implements IChangePreviewViewer {
 
 	@Override
 	public Control getControl() {
-		// TODO Auto-generated method stub
 		return control;
 	}
 
 	@Override
 	public void setInput(final ChangePreviewViewerInput input) {
 		final Change change = input.getChange();
-		if (change instanceof final DeleteFBTypeInterfaceChange deleteChange) {
+		if (change instanceof final IFordiacPreviewChange deleteChange) {
+			choices.keySet().stream().forEach(i -> i.setChecked(false));
 			this.change = deleteChange;
-			this.change.getState().clear();
+			// initialize UI from change state
+			choices.entrySet().stream().filter(entry -> deleteChange.getState().contains(entry.getValue()))
+					.forEach(entry -> entry.getKey().setChecked(true));
 		}
-
 	}
 
 }

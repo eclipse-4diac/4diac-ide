@@ -140,6 +140,10 @@
 		</parser>
 		<parser
 			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="FCT">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
 			type="SYS">
 		</parser>
 		<parser

@@ -20,8 +20,11 @@ import static org.eclipse.fordiac.ide.elk.FordiacLayoutMapping.HIERARCHY_CROSSIN
 import static org.eclipse.fordiac.ide.elk.FordiacLayoutMapping.LAYOUT_DATA;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
@@ -210,26 +213,42 @@ public class FordiacGraphDataHelper {
 			final InterfaceList interfaceList = (InterfaceList) ((IInterfaceElement) mapping.getGraphMap()
 					.get(mapping.getLayoutGraph().getPorts().get(0))).eContainer();
 
-			final List<IInterfaceElement> allIEs = interfaceList.getAllInterfaceElements();
+			final Map<Boolean, List<ElkPort>> ports = mapping.getLayoutGraph().getPorts().stream()
+					.sorted(Comparator.comparing(ElkPort::getY))
+					.collect(Collectors.partitioningBy(FordiacGraphDataHelper::isLeftPort));
 
-			mapping.getLayoutGraph().getPorts().forEach(port -> {
-				final IInterfaceElement pin = (IInterfaceElement) mapping.getGraphMap().get(port);
-				final int index = allIEs.indexOf(pin);
-				int padding = (int) port.getY();
-				if (index > 0 && pin.isIsInput() == allIEs.get(index - 1).isIsInput()) {
-					final IInterfaceElement abovePin = allIEs.get(index - 1);
-					final ElkPort abovePort = (ElkPort) mapping.getGraphMap().inverse().get(abovePin);
-					padding -= (int) abovePort.getY() + port.getHeight(); // the port height represents the edit parts
-				}
-				/* For the first input var, additional padding has to be added. This results in "ugly" adapter
-				 * connections but fixes data connections. The exact reason for this additional offset is not yet
-				 * known. */
-				if (isFirstInputVar(interfaceList, pin)) {
-					padding += 8;
-				}
-				mapping.getProperty(LAYOUT_DATA).addPin(pin, Integer.valueOf(padding));
-			});
+			final Map<Boolean, List<IInterfaceElement>> pins = interfaceList.getAllInterfaceElements().stream()
+					.collect(Collectors.partitioningBy(IInterfaceElement::isIsInput));
+
+			calculatePins(mapping, interfaceList, ports.get(true), pins.get(true));
+			calculatePins(mapping, interfaceList, ports.get(false), pins.get(false));
 		}
+	}
+
+	private static void calculatePins(final LayoutMapping mapping, final InterfaceList interfaceList, final List<ElkPort> ports, final List<IInterfaceElement> pins) {
+		ElkPort abovePort = null;
+
+		for (int i = 0; i < ports.size(); i++) {
+			final ElkPort port = ports.get(i);
+			int padding = (int) port.getY();
+
+			// TODO get rid of all the magic numbers
+			if (abovePort != null) {
+				padding -= (int) abovePort.getY() - (port.getHeight() - 1);
+			}
+
+			final IInterfaceElement pin = pins.get(i);
+			if (isFirstInputVar(interfaceList, pin)) {
+				padding -= 9;
+			}
+			mapping.getProperty(LAYOUT_DATA).addPin(pin, Integer.valueOf(padding));
+
+			abovePort = port;
+		}
+	}
+
+	private static boolean isLeftPort(final ElkPort port) {
+		return port.getX() <= 0;
 	}
 
 	private static boolean isFirstInputVar(final InterfaceList interfaceList, final IInterfaceElement pin) {

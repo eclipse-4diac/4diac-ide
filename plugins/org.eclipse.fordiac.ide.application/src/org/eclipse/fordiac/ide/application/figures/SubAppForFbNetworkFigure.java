@@ -83,6 +83,14 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		return expandedContentArea;
 	}
 
+	public IFigure getExpandedInputFigure() {
+		return expandedInputFigure;
+	}
+
+	public IFigure getExpandedOutputFigure() {
+		return expandedOutputFigure;
+	}
+
 	public void refreshComment() {
 		if (commentFigure != null) {
 			commentFigure.setText(getModel().getComment());

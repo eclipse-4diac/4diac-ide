@@ -95,13 +95,13 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 
 	@Override
 	public void paintFigure(final Graphics g) {
-		final Rectangle r = getBounds().getShrinked(1, 1);
 		g.setLineStyle(Graphics.LINE_SOLID);
 		g.setLineWidth((ModifiedMoveHandle.SELECTION_BORDER_WIDTH));
 		g.setXORMode(false);
 		g.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
 		g.setBackgroundColor(ModifiedMoveHandle.getSelectionColor());
 		final int radius = getCornerRadius();
+		final Rectangle r = Rectangle.SINGLETON.setBounds(getBounds()).shrink(1, 1);
 		if (isPrimary()) {
 			// only draw the border for the primary connection selection
 			g.drawRoundRectangle(r, radius, radius);
@@ -109,7 +109,6 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 		g.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 		g.fillRoundRectangle(r, radius, radius);
 		g.setAlpha(255);
-
 		paintHandleCenter(g, r);
 	}
 
@@ -137,7 +136,6 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 		return getOwner().getViewer().getSelectedEditParts().stream() //
 				.filter(ConnectionEditPart.class::isInstance).map(ConnectionEditPart.class::cast) //
 				.filter(ep -> sameTarget(ep, refEndPoint)).toList();
-
 	}
 
 	private boolean sameTarget(final ConnectionEditPart ep, final EditPart refEndPoint) {

@@ -47,8 +47,8 @@ public class GroupFigure extends Figure {
 		mainFigure.add(commentFigure, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 
 		final GridLayout rootLayout = new GridLayout(1, false);
-		rootLayout.verticalSpacing = -1;  // this brings a slight overlap between name and main area to avoid drawing
-										  // artifacts on certain scaling factors
+		rootLayout.verticalSpacing = -1; // this brings a slight overlap between name and main area to avoid drawing
+											// artifacts on certain scaling factors
 		rootLayout.horizontalSpacing = 0;
 		rootLayout.marginHeight = 0;
 		rootLayout.marginWidth = 0;
@@ -109,6 +109,10 @@ public class GroupFigure extends Figure {
 
 	private static class GroupShadowBorder extends AbstractShadowBorder {
 
+		private static Rectangle nameShadowRect = new Rectangle();
+		private static Rectangle mainShadowRect = new Rectangle();
+		private static Rectangle clipRect = new Rectangle();
+
 		@Override
 		public void paintBackground(final IFigure figure, final Graphics graphics, final Insets insets) {
 			Assert.isTrue(figure instanceof GroupFigure);
@@ -117,10 +121,10 @@ public class GroupFigure extends Figure {
 			graphics.pushState();
 			graphics.setBackgroundColor(figure.getForegroundColor());
 
-			final Rectangle nameShadowRect = groupFigure.getNameFigure().getBounds().getExpanded(2, 2);
-			final Rectangle mainShadowRect = groupFigure.getMainFigure().getBounds().getExpanded(2, 2);
+			nameShadowRect.setBounds(groupFigure.getNameFigure().getBounds()).expand(2, 2);
+			mainShadowRect.setBounds(groupFigure.getMainFigure().getBounds()).expand(2, 2);
 
-			final Rectangle clipRect = nameShadowRect.getCopy();
+			clipRect.setBounds(nameShadowRect);
 			clipRect.union(mainShadowRect);
 			clipRect.width += SHADOW_SIZE;
 			clipRect.height += SHADOW_SIZE;

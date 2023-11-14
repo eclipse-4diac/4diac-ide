@@ -18,16 +18,14 @@ import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 
 public class TypedElementColumnAccessor<T extends ITypedElement>
 		extends AbstractColumnAccessor<T, TypedElementTableColumn> {
-
-	private static final String NULL_DEFAULT = ""; //$NON-NLS-1$
 
 	protected TypedElementColumnAccessor(final CommandExecutor commandExecutor) {
 		this(commandExecutor, TypedElementTableColumn.DEFAULT_COLUMNS);
@@ -51,7 +49,7 @@ public class TypedElementColumnAccessor<T extends ITypedElement>
 	@Override
 	public Command createCommand(final T rowObject, final TypedElementTableColumn column, final Object newValue) {
 		return switch (column) {
-		case NAME -> ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+		case NAME -> onNameChange((IInterfaceElement) rowObject, newValue);
 		case TYPE -> throw new UnsupportedOperationException("Cannot change type"); //$NON-NLS-1$
 		case COMMENT -> new ChangeCommentCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$

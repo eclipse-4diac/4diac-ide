@@ -40,6 +40,13 @@ public class ConnectorBorder extends AbstractBorder {
 	protected static final int LR_MARGIN = CONNECTOR_WIDTH + 1;
 	protected static final int LR_ADAPTER_MARGIN = 11;
 
+	private static final int[] TRIANGLE_POINTS = { 0, 0, CONNECTOR_WIDTH, CONNECTOR_HEIGHT_HALF, 0, CONNECTOR_HEIGHT };
+	private static final PointList TRIANGLE_POINT_LIST = new PointList(TRIANGLE_POINTS);
+
+	private static final int[] DIAMOND_POINTS = { 0, 0, CONNECTOR_WIDTH, -CONNECTOR_HEIGHT_HALF, 2 * CONNECTOR_WIDTH, 0,
+			CONNECTOR_WIDTH, CONNECTOR_HEIGHT_HALF };
+	private static final PointList DIAMOND_POINT_LIST = new PointList(DIAMOND_POINTS);
+
 	private final IInterfaceElement editPartModelOject;
 	private Color connectorColor;
 
@@ -111,37 +118,27 @@ public class ConnectorBorder extends AbstractBorder {
 			if (isAdapter()) {
 				createAdapterSymbolMiniFBrotated(graphics, where, 0, false);
 			} else if (isVarInOut()) {
-				createVarInOutSymbol(graphics, where.x, where.y + where.height / 2);
+				drawFilledPolygonAt(graphics, where.x, where.y + where.height / 2, DIAMOND_POINT_LIST);
 			} else {
-				final PointList pointList = getTrianglePoints(where.x, where.y + (where.height - CONNECTOR_HEIGHT) / 2);
-				graphics.fillPolygon(pointList);
+				drawFilledPolygonAt(graphics, where.x, where.y + (where.height - CONNECTOR_HEIGHT) / 2,
+						TRIANGLE_POINT_LIST);
 			}
 		} else if (isAdapter()) {
 			createAdapterSymbolMiniFBrotated(graphics, where, where.width - ADAPTER_SIZE + 1, true);
 		} else if (isVarInOut()) {
-			createVarInOutSymbol(graphics, where.width + where.x - CONNECTOR_WIDTH * 2, where.y + where.height / 2);
+			drawFilledPolygonAt(graphics, where.width + where.x - CONNECTOR_WIDTH * 2, where.y + where.height / 2,
+					DIAMOND_POINT_LIST);
 		} else {
-			final PointList pointList = getTrianglePoints(where.width + where.x - CONNECTOR_WIDTH,
-					where.y + (where.height - CONNECTOR_HEIGHT) / 2);
-			graphics.fillPolygon(pointList);
+			drawFilledPolygonAt(graphics, where.x + where.width - CONNECTOR_WIDTH,
+					where.y + (where.height - CONNECTOR_HEIGHT) / 2, TRIANGLE_POINT_LIST);
 		}
 	}
 
-	private static void createVarInOutSymbol(final Graphics graphics, final int x, final int y) {
-		final PointList pointList = new PointList(4);
-		pointList.addPoint(x, y);
-		pointList.addPoint(x + CONNECTOR_WIDTH, y - CONNECTOR_HEIGHT_HALF);
-		pointList.addPoint(x + 2 * CONNECTOR_WIDTH, y);
-		pointList.addPoint(x + CONNECTOR_WIDTH, y + CONNECTOR_HEIGHT_HALF);
-		graphics.fillPolygon(pointList);
-	}
-
-	private static PointList getTrianglePoints(final int startX, final int startY) {
-		final PointList pointList = new PointList(3);
-		pointList.addPoint(startX, startY);
-		pointList.addPoint(startX + CONNECTOR_WIDTH, startY + CONNECTOR_HEIGHT_HALF);
-		pointList.addPoint(startX, startY + CONNECTOR_HEIGHT);
-		return pointList;
+	private static void drawFilledPolygonAt(final Graphics graphics, final int startX, final int startY,
+			final PointList points) {
+		graphics.translate(startX, startY);
+		graphics.fillPolygon(points);
+		graphics.translate(-startX, -startY);
 	}
 
 	@Override

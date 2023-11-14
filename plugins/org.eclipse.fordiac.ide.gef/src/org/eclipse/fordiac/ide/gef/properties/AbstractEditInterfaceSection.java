@@ -29,6 +29,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -38,6 +39,7 @@ import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -213,6 +215,10 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 
 	protected IEditableRule getSectionEditableRule() {
 		return sectionEditableRule;
+	}
+
+	public Command onNameChange(final IInterfaceElement rowObject, final String newValue) {
+		return ChangeNameCommand.forName(rowObject, newValue);
 	}
 
 	private final IEditableRule sectionEditableRule = new IEditableRule() {

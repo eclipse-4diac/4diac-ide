@@ -50,13 +50,12 @@ public class ModifiedMoveHandle extends MoveHandle {
 
 		@Override
 		public void paint(final IFigure figure, final Graphics g, final Insets insets) {
-			Rectangle rect = getPaintRectangle(figure, insets);
 			g.setLineStyle(Graphics.LINE_SOLID);
 			g.setLineWidth(SELECTION_BORDER_WIDTH);
 			g.setXORMode(false);
 			g.setForegroundColor(getSelectionColor());
 			g.setBackgroundColor(getSelectionColor());
-			rect = rect.getShrinked(1, 1);
+			final Rectangle rect = getPaintRectangle(figure, insets).shrink(1, 1);
 			g.drawRoundRectangle(rect, arc, arc);
 			g.setAlpha(SELECTION_FILL_ALPHA);
 			g.fillRoundRectangle(rect, arc, arc);

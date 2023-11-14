@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -181,10 +183,10 @@ public class SafeStructDeletionChange extends CompositeChange {
 		// @formatter:on
 	}
 
-	private static class DeleteMemberVariableChange extends CompositeChange {
-
-		final TypeEntry entry;
-		final String deleteName;
+	public static class DeleteMemberVariableChange extends CompositeChange implements IFordiacPreviewChange {
+		private final EnumSet<ChangeState> state = EnumSet.noneOf(ChangeState.class);
+		private final TypeEntry entry;
+		private final String deleteName;
 
 		public DeleteMemberVariableChange(final TypeEntry entry, final String deleteName) {
 			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteMemberVariable,
@@ -201,19 +203,37 @@ public class SafeStructDeletionChange extends CompositeChange {
 			final CompoundCommand cmd = new CompoundCommand();
 			final StructuredType type = (StructuredType) entry.getTypeEditable();
 			// @formatter:off
+			if(state.contains(ChangeState.DELETE)) {
 			type.getMemberVariables()
 				.stream()
 				.filter(decl -> decl.getTypeName().equals(deleteName))
 				.map(decl -> new DeleteMemberVariableCommand(type, decl))
 				.forEach(cmd::add);
+			}else if(state.contains(ChangeState.CHANGE_TO_ANY)) {
+				type.getMemberVariables()
+				.stream()
+				.filter(decl -> decl.getTypeName().equals(deleteName))
+				.map(decl -> ChangeDataTypeCommand.forDataType(decl, IecTypes.GenericTypes.ANY_STRUCT))
+				.forEach(cmd::add);
+			}
 			// @formatter:on
 			SafeStructDeletionChange.executeChange(cmd, type);
 			return super.perform(pm);
 		}
 
+		@Override
+		public EnumSet<ChangeState> getState() {
+			return state;
+		}
+
+		@Override
+		public void addState(final ChangeState newState) {
+			state.add(newState);
+		}
+
 	}
 
-	private static class DeleteUntypedSubappPinsChange extends CompositeChange {
+	public static class DeleteUntypedSubappPinsChange extends CompositeChange {
 
 		final SubApp subapp;
 		final StructuredType struct;
@@ -253,7 +273,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 	}
 
-	private static class UpdateManipulatorChange extends CompositeChange {
+	public static class UpdateManipulatorChange extends CompositeChange {
 
 		final StructManipulator manipulator;
 
@@ -280,7 +300,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 	}
 
-	private static class UpdateFBTypeChange extends CompositeChange {
+	public static class UpdateFBTypeChange extends CompositeChange {
 
 		public UpdateFBTypeChange(final FBType type) {
 			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateFBType, type.getName()));
@@ -291,7 +311,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 	}
 
-	private static class UpdateUntypedSubappChange extends CompositeChange {
+	public static class UpdateUntypedSubappChange extends CompositeChange {
 
 		final SubApp subapp;
 		final StructuredType struct;

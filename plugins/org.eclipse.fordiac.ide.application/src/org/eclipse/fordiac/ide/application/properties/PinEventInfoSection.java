@@ -13,10 +13,13 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
+import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalViewerHelper;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.gef.widgets.ConnectionDisplayWidget;
 import org.eclipse.fordiac.ide.gef.widgets.InternalConnectionsViewer;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.ui.nat.EventTypeSelectionTreeContentProvider;
@@ -28,6 +31,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class PinEventInfoSection extends AbstractDoubleColumnSection {
@@ -55,7 +59,16 @@ public class PinEventInfoSection extends AbstractDoubleColumnSection {
 	}
 
 	protected PinInfoBasicWidget pinInfoCreation(final Composite parent) {
-		return new PinInfoBasicWidget(parent, getWidgetFactory());
+		return new PinInfoBasicWidget(parent, getWidgetFactory()) {
+			@Override
+			protected void onNameChange(final Text name) {
+				executeCommand(
+						new ResizeGroupOrSubappCommand(
+								GetEditPartFromGraficalViewerHelper
+										.findAbstractContainerContentEditFromInterfaceElement(getType()),
+								ChangeNameCommand.forName(getType(), name.getText())));
+			}
+		};
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPr
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCorePrefixMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreURIEditorOpener;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
@@ -48,6 +49,7 @@ import org.eclipse.xtext.ui.editor.IXtextEditorCallback;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.XtextSourceViewer;
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities;
+import org.eclipse.xtext.ui.editor.contentassist.PrefixMatcher;
 import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
@@ -165,6 +167,11 @@ public class STCoreUiModule extends AbstractSTCoreUiModule {
 				.annotatedWith(com.google.inject.name.Names
 						.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS))
 				.toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider.class);
+	}
+
+	@Override
+	public Class<? extends PrefixMatcher> bindPrefixMatcher() {
+		return STCorePrefixMatcher.class;
 	}
 
 	public Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {

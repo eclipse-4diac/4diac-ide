@@ -21,7 +21,10 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.swt.SWT;
 
-/** The Class AdvancedLineBorder: Allows selecting the directions, where a border is required */
+/**
+ * The Class AdvancedLineBorder: Allows selecting the directions, where a border
+ * is required
+ */
 public class AdvancedLineBorder extends LineBorder {
 
 	private static final int ALPHA_MAX_VALUE = 255;
@@ -44,7 +47,6 @@ public class AdvancedLineBorder extends LineBorder {
 	 * @param side the side
 	 */
 	public AdvancedLineBorder(final int side) {
-		super();
 		this.side = side;
 	}
 
@@ -72,7 +74,6 @@ public class AdvancedLineBorder extends LineBorder {
 	 * @param style the style
 	 */
 	public AdvancedLineBorder(final int side, final int style) {
-		super();
 		this.side = side;
 		this.style = style;
 	}
@@ -81,7 +82,6 @@ public class AdvancedLineBorder extends LineBorder {
 	 * A line border with no line ! see {@see AdvancedLineBorder(int side)}.
 	 */
 	public AdvancedLineBorder() {
-		super();
 	}
 
 	@Override
@@ -109,8 +109,7 @@ public class AdvancedLineBorder extends LineBorder {
 	@Override
 	public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
 		graphics.setAlpha(alpha);
-		getPaintRectangle(figure, insets).width -= getWidth();
-		tempRect.height -= getWidth();
+		getPaintRectangle(figure, insets).translate(-getWidth(), -getWidth());
 
 		graphics.setLineWidth(getWidth());
 		if (getColor() != null) {
