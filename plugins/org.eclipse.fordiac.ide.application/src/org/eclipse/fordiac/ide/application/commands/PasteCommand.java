@@ -79,11 +79,14 @@ public class PasteCommand extends Command {
 	private Point pasteRefPos;
 	private final TypeLibrary dstTypeLib;
 
-	/** Instantiates a new paste command.
+	/**
+	 * Instantiates a new paste command.
 	 *
 	 * @param copyPasteData the elements that should be copied to the destination
-	 * @param destination   the destination fbnetwork where the elements should be copied to
-	 * @param pasteRefPos   the reference position for pasting the elements */
+	 * @param destination   the destination fbnetwork where the elements should be
+	 *                      copied to
+	 * @param pasteRefPos   the reference position for pasting the elements
+	 */
 	public PasteCommand(final CopyPasteData copyPasteData, final FBNetwork destination, final Point pasteRefPos) {
 		this.copyPasteData = copyPasteData;
 		this.dstFBNetwork = destination;
@@ -151,6 +154,8 @@ public class PasteCommand extends Command {
 				.removeIf(element -> copyPasteData.elements().stream().filter(SubApp.class::isInstance)
 						.map(SubApp.class::cast).filter(subapp -> !subapp.isTyped())
 						.anyMatch(subapp -> subapp.getSubAppNetwork().getNetworkElements().contains(element)));
+		copyPasteData.elements().removeIf(element -> copyPasteData.elements().stream().filter(Group.class::isInstance)
+				.map(Group.class::cast).anyMatch(group -> group.getGroupElements().contains(element)));
 	}
 
 	private void updateDelta() {
