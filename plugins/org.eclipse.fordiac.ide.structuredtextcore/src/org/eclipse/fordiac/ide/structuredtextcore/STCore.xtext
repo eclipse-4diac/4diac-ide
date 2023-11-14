@@ -302,7 +302,7 @@ STStringLiteral:
 	(type=[datatype::DataType|STAnyCharsType] '#')? value=STRING;
 
 STAnyType:
-	ID | STAnyBuiltinType;
+	QualifiedName | STAnyBuiltinType;
 
 STAnyBuiltinType:
 	STAnyBitType | STAnyNumType | STAnyDurationType | STAnyDateType | STAnyCharsType;
