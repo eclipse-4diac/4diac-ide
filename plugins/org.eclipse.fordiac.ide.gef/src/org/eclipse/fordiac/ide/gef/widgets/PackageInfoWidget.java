@@ -127,8 +127,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		if ((getType() != null)) {
 			nameText.setEditable(!isReadonly());
 			nameText.setEnabled(!isReadonly());
-			buttons.setButtonEnablement(!isReadonly());
-			buttons.setCreateButtonEnablement(!isReadonly());
+			buttons.setEnabled(!isReadonly());
 			table.setEnabled(!isReadonly());
 
 			if (null != getType().getCompilerInfo()) {

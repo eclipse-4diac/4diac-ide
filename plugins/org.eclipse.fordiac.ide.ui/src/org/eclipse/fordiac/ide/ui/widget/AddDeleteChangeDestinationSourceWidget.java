@@ -55,7 +55,7 @@ public class AddDeleteChangeDestinationSourceWidget extends AddDeleteWidget {
 	}
 
 	@Override
-	public void setButtonEnablement(final boolean enable) {
+	protected void setButtonEnablement(final boolean enable) {
 		changeDestinationSourceButton.setEnabled(enable);
 		super.setButtonEnablement(enable);
 	}

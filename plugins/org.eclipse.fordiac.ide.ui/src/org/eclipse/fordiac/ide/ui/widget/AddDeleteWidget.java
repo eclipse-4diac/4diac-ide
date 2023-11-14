@@ -27,7 +27,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
-import org.eclipse.nebula.widgets.nattable.edit.command.EditUtils;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -47,6 +46,8 @@ public class AddDeleteWidget {
 	private static final int EDIT_COLUMN = 0;
 	private Button createButton;
 	private Button deleteButton;
+	private boolean enabled = true;
+	private boolean createEnabled = true;
 	protected Composite container;
 
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
@@ -105,14 +106,14 @@ public class AddDeleteWidget {
 		return container;
 	}
 
-	public void setButtonEnablement(final boolean enable) {
+	protected void setButtonEnablement(final boolean enable) {
 		deleteButton.setEnabled(enable);
 		deleteButton
 				.setImage((enable) ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE)
 						: PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
 
-	public void setCreateButtonEnablement(final boolean enable) {
+	protected void setCreateButtonEnablement(final boolean enable) {
 		createButton.setEnabled(enable);
 	}
 
@@ -150,7 +151,7 @@ public class AddDeleteWidget {
 		addCreateListener(createListener);
 		addDeleteListener(deleteListener);
 
-		viewer.addSelectionChangedListener(ev -> setButtonEnablement(!viewer.getSelection().isEmpty()));
+		viewer.addSelectionChangedListener(ev -> setButtonEnablement(!viewer.getSelection().isEmpty() && enabled));
 
 		viewer.getTable().addKeyListener(new KeyListener() {
 
@@ -176,8 +177,7 @@ public class AddDeleteWidget {
 		table.addListener(SWT.Selection, event -> {
 			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
 			final int[] rows = selectionLayer.getFullySelectedRowPositions();
-			setButtonEnablement(
-					rows.length > 0 && EditUtils.allCellsEditable(selectionLayer, table.getConfigRegistry()));
+			setButtonEnablement(rows.length > 0 && enabled);
 		});
 
 		table.addKeyListener(new KeyAdapter() {
@@ -254,7 +254,8 @@ public class AddDeleteWidget {
 						pos--;
 					}
 					viewer.getTable().forceFocus();
-					// the selection has to be set again via the table viewer for the widgets to recognize it
+					// the selection has to be set again via the table viewer for the widgets to
+					// recognize it
 					viewer.getTable().setSelection(pos);
 				}
 			}
@@ -323,5 +324,24 @@ public class AddDeleteWidget {
 			return viewer.getStructuredSelection().toList().get(viewer.getStructuredSelection().size() - 1);
 		}
 		return null;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(final boolean enabled) {
+		this.enabled = enabled;
+		setButtonEnablement(false); // initially nothing should be selected therefore deactivate the buttons
+		setCreateButtonEnablement(createEnabled && enabled);
+	}
+
+	public boolean isCreateEnabled() {
+		return createEnabled;
+	}
+
+	public void setCreateEnabled(final boolean createEnabled) {
+		this.createEnabled = createEnabled;
+		setCreateButtonEnablement(createEnabled && enabled);
 	}
 }

@@ -70,8 +70,7 @@ public class ActionEditingComposite {
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof ECAction) {
-				final ECAction ecAction = (ECAction) element;
+			if (element instanceof final ECAction ecAction) {
 				switch (columnIndex) {
 				case ACTION_COLUMN_ALGORITHM:
 					return (ecAction.getAlgorithm() != null) ? ecAction.getAlgorithm().getName()
@@ -79,7 +78,7 @@ public class ActionEditingComposite {
 				case ACTION_COLUMN_EVENT:
 					return (ecAction.getOutput() != null)
 							? ECCContentAndLabelProvider.getEventName(ecAction.getOutput())
-									: ECCContentAndLabelProvider.EMPTY_FIELD;
+							: ECCContentAndLabelProvider.EMPTY_FIELD;
 				default:
 					break;
 				}
@@ -97,19 +96,20 @@ public class ActionEditingComposite {
 		@Override
 		public Object getValue(final Object element, final String property) {
 			final ECAction selectedAction = (ECAction) element;
-			switch (property) {
-			case ACTION_ALGORITHM:
+			return switch (property) {
+			case ACTION_ALGORITHM -> {
 				final List<Algorithm> algorithms = ECCContentAndLabelProvider.getAlgorithms(getBasicFBType());
 				final Algorithm alg = selectedAction.getAlgorithm();
-				return Integer.valueOf((alg != null) ? algorithms.indexOf(alg) : algorithms.size());
-			case ACTION_EVENT:
+				yield Integer.valueOf((alg != null) ? algorithms.indexOf(alg) : algorithms.size());
+			}
+			case ACTION_EVENT -> {
 				final List<String> events = ECCContentAndLabelProvider.getOutputEventNames(getBasicFBType());
 				final Event oe = selectedAction.getOutput();
-				return Integer.valueOf(
-						(oe != null) ? events.indexOf(ECCContentAndLabelProvider.getEventName(oe)) : events.size());
-			default:
-				return ""; //$NON-NLS-1$
+				yield Integer.valueOf(
+										(oe != null) ? events.indexOf(ECCContentAndLabelProvider.getEventName(oe)) : events.size());
 			}
+			default -> ""; //$NON-NLS-1$
+			};
 		}
 
 		@Override
@@ -223,7 +223,7 @@ public class ActionEditingComposite {
 		this.commandStack = commandStack;
 
 		// if the selected state is the start state disable adding actions
-		actionMgmButtons.setCreateButtonEnablement(!type.isStartState());
+		actionMgmButtons.setCreateEnabled(!type.isStartState());
 
 		// have to do that here, because now we have a valid type
 		actionViewer.setCellEditors(createActionViewerCellEditors(actionViewer.getTable()));

@@ -316,7 +316,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		functionText.setEnabled(enablement);
 		typeText.setEnabled(enablement);
 		descriptionText.setEnabled(enablement);
-		addDeleteVersionInfoButtons.setButtonEnablement(enablement);
+		addDeleteVersionInfoButtons.setEnabled(enablement);
 		versionViewer.setCellModifier(null);
 	}
 
