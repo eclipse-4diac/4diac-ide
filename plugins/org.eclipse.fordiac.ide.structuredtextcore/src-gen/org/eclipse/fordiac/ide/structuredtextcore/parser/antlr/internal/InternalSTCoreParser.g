@@ -4056,12 +4056,15 @@ ruleSTAnyType returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken
 	leaveRule();
 }:
 	(
-		this_ID_0=RULE_ID
 		{
-			$current.merge(this_ID_0);
+			newCompositeNode(grammarAccess.getSTAnyTypeAccess().getQualifiedNameParserRuleCall_0());
+		}
+		this_QualifiedName_0=ruleQualifiedName
+		{
+			$current.merge(this_QualifiedName_0);
 		}
 		{
-			newLeafNode(this_ID_0, grammarAccess.getSTAnyTypeAccess().getIDTerminalRuleCall_0());
+			afterParserOrEnumRuleCall();
 		}
 		    |
 		{

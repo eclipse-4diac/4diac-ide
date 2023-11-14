@@ -2790,18 +2790,18 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	public class STAnyTypeElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STAnyType");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final RuleCall cQualifiedNameParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
 		private final RuleCall cSTAnyBuiltinTypeParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		
 		//STAnyType:
-		//    ID | STAnyBuiltinType;
+		//    QualifiedName | STAnyBuiltinType;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//ID | STAnyBuiltinType
+		//QualifiedName | STAnyBuiltinType
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
-		//ID
-		public RuleCall getIDTerminalRuleCall_0() { return cIDTerminalRuleCall_0; }
+		//QualifiedName
+		public RuleCall getQualifiedNameParserRuleCall_0() { return cQualifiedNameParserRuleCall_0; }
 		
 		//STAnyBuiltinType
 		public RuleCall getSTAnyBuiltinTypeParserRuleCall_1() { return cSTAnyBuiltinTypeParserRuleCall_1; }
@@ -5037,7 +5037,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STAnyType:
-	//    ID | STAnyBuiltinType;
+	//    QualifiedName | STAnyBuiltinType;
 	public STAnyTypeElements getSTAnyTypeAccess() {
 		return pSTAnyType;
 	}

@@ -1055,7 +1055,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STAnyType:
-	//    ID | STAnyBuiltinType;
+	//    QualifiedName | STAnyBuiltinType;
 	public STCoreGrammarAccess.STAnyTypeElements getSTAnyTypeAccess() {
 		return gaSTCore.getSTAnyTypeAccess();
 	}

@@ -997,7 +997,7 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	}
 	
 	//STAnyType:
-	//    ID | STAnyBuiltinType;
+	//    QualifiedName | STAnyBuiltinType;
 	public STCoreGrammarAccess.STAnyTypeElements getSTAnyTypeAccess() {
 		return gaSTCore.getSTAnyTypeAccess();
 	}
