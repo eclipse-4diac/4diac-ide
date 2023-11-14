@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University, Linz
- *               2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2023 Johannes Kepler University, Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,9 +18,11 @@
  *     - keep a copy of the datatype object in the view, otherwise the content of the file is changed even the save button was not pressed
  *   Lukas Wais
  *     - enabled Save As
+ *   Sebastian Hollersbacher
+ *     - Changed from DataTypeEditor to AttributeTypeEditor
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.datatypeeditor.editors;
+package org.eclipse.fordiac.ide.attributetypeeditor.editors;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -36,34 +38,20 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
-import org.eclipse.fordiac.ide.datatypeeditor.Messages;
+import org.eclipse.fordiac.ide.attributetypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.SaveTypeEntryCommand;
-import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.search.dialog.FBUpdateDialog;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
-import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
@@ -72,7 +60,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -97,7 +84,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class DataTypeEditor extends EditorPart implements CommandStackEventListener,
+public class AttributeTypeEditor extends EditorPart implements CommandStackEventListener,
 		ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListener {
 
 	private final CommandStack commandStack = new CommandStack();
@@ -106,20 +93,15 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	private Composite errorComposite;
 	private boolean importFailed;
 	private boolean outsideWorkspace;
-	private FBUpdateDialog structSaveDialog;
-	private static final int DEFAULT_BUTTON_INDEX = 0; // This would be the "Save" button
-	private static final int SAVE_AS_BUTTON_INDEX = 1;
-	private static final int CANCEL_BUTTON_INDEX = 2;
 
 	private ActionRegistry actionRegistry;
 	private final List<String> selectionActions = new ArrayList<>();
 	private final List<String> stackActions = new ArrayList<>();
 	private final List<String> propertyActions = new ArrayList<>();
 
-	private DataTypeEntry dataTypeEntry;
+	private AttributeTypeEntry attributeTypeEntry;
 
 	private final Adapter adapter = new AdapterImpl() {
-
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -127,10 +109,10 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			if ((null != feature)
 					&& (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass()))) {
 				Display.getDefault().asyncExec(() -> {
-					if (null != dataTypeEntry) {
+					if (null != attributeTypeEntry) {
 						// input should be set before the partname
-						setInput(new FileEditorInput(dataTypeEntry.getFile()));
-						setPartName(dataTypeEntry.getFile().getName());
+						setInput(new FileEditorInput(attributeTypeEntry.getFile()));
+						setPartName(attributeTypeEntry.getFile().getName());
 					}
 				});
 			}
@@ -145,7 +127,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	@Override
 	public String getContributorId() {
-		return "org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor"; //$NON-NLS-1$
+		return "org.eclipse.fordiac.ide.attributetypeeditor.editors.AttributeTypeEditor"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -156,15 +138,15 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		getCommandStack().removeCommandStackEventListener(this);
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		getActionRegistry().dispose();
-		removeListenerFromDataTypeObj();
+		removeListenerFromAttributeDeclaration();
 		if (annotationModel != null) {
 			annotationModel.dispose();
 		}
 		super.dispose();
-		if (dirty && dataTypeEntry != null) {
+		if (dirty && attributeTypeEntry != null) {
 			// purge editable type from type entry after super.dispose() so that no
 			// notifiers will be called
-			dataTypeEntry.setTypeEditable(null);
+			attributeTypeEntry.setTypeEditable(null);
 		}
 	}
 
@@ -176,43 +158,20 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		removeListenerFromDataTypeObj();
+		removeListenerFromAttributeDeclaration();
 		loadAllOpenEditors();
-		createSaveDialog(monitor);
-	}
-
-	private void createSaveDialog(final IProgressMonitor monitor) {
-		final String[] labels = { Messages.StructAlteringButton_SaveAndUpdate, Messages.StructAlteringButton_SaveAs,
-				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
-
-		structSaveDialog = new FBUpdateDialog(null, Messages.StructViewingComposite_Headline, null, "", //$NON-NLS-1$
-				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, dataTypeEntry);
-
-		// Depending on the button clicked:
-		switch (structSaveDialog.open()) {
-		case DEFAULT_BUTTON_INDEX:
-			doSaveInternal(monitor, structSaveDialog.getCollectedFBs());
-			break;
-		case SAVE_AS_BUTTON_INDEX:
-			doSaveAs();
-			break;
-		case CANCEL_BUTTON_INDEX:
-			MessageDialog.openInformation(null, Messages.StructViewingComposite_Headline,
-					Messages.WarningDialog_StructNotSaved);
-			break;
-		default:
-			break;
-		}
+		doSaveInternal(monitor, null);
 	}
 
 	private void doSaveInternal(final IProgressMonitor monitor, final Set<INamedElement> set) {
 		commandStack.markSaveLocation();
-		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(dataTypeEntry.getFile().getParent()) {
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(
+				attributeTypeEntry.getFile().getParent()) {
 
 			@Override
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
-				dataTypeEntry.save(monitor);
+				attributeTypeEntry.save(monitor);
 			}
 		};
 		try {
@@ -223,64 +182,13 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			FordiacLogHelper.logError(e.getMessage(), e);
 			Thread.currentThread().interrupt();
 		}
-		addListenerToDataTypeObj();
+		addListenerToAttributeDeclaration();
 		firePropertyChange(IEditorPart.PROP_DIRTY);
-		updateFB(set);
 	}
 
 	@Override
 	public void doSaveAs() {
-		if (dataTypeEntry.getTypeEditable() instanceof final StructuredType structuredType) {
-			new WizardDialog(null, new SaveAsStructTypeWizard(structuredType, this)).open();
-		}
-	}
-
-	private void updateFB(final Set<INamedElement> set) {
-		Command cmd = new CompoundCommand();
-		cmd = cmd.chain(getUpdateStructManipulatorsCommand(set));
-		cmd = cmd.chain(getUpdateTypesCommand(set));
-		cmd = cmd.chain(getUpdateInstancesCommand(set));
-		Display.getDefault().asyncExec(cmd::execute);
-	}
-
-	private Command getUpdateTypesCommand(final Set<INamedElement> set) {
-		final List<FBType> fbTypes = set.stream().filter(FBType.class::isInstance).map(FBType.class::cast).toList();
-		return FBUpdater.createUpdatePinInTypeDeclarationCommand(fbTypes,
-				structSaveDialog.getDataTypeOfElementList(fbTypes), null);
-	}
-
-	private Command getUpdateInstancesCommand(final Set<INamedElement> set) {
-		final List<Command> commands = new ArrayList<>();
-		set.stream().forEach(instance -> {
-			if (instance instanceof final FBNetworkElement s) {
-				if (s instanceof final SubApp subApp && !subApp.isTyped()) {
-					commands.add(new UpdateUntypedSubAppInterfaceCommand(s, structSaveDialog.getDataTypeOfElement(s)));
-				} else {
-					commands.add(new UpdateFBTypeCommand(s, structSaveDialog.getDataTypeOfElement(s)));
-				}
-			} else if (instance instanceof final StructuredType st) {
-				for (final VarDeclaration varDeclaration : st.getMemberVariables()) {
-					final String typeName = varDeclaration.getTypeName();
-					if (typeName.equals(structSaveDialog.getDataTypeOfElement(st).getTypeName())) {
-						commands.add(ChangeDataTypeCommand.forDataType(varDeclaration,
-								structSaveDialog.getDataTypeOfElement(st).getTypeEditable()));
-					}
-				}
-				commands.add(new SaveTypeEntryCommand(st));
-			}
-		});
-		Command cmd = new CompoundCommand();
-		for (final Command subCmd : commands) {
-			cmd = cmd.chain(subCmd);
-		}
-		return cmd;
-	}
-
-	private Command getUpdateStructManipulatorsCommand(final Set<INamedElement> set) {
-		final List<StructManipulator> muxes = set.stream().filter(StructManipulator.class::isInstance)
-				.map(StructManipulator.class::cast).toList();
-
-		return FBUpdater.createStructManipulatorsUpdateCommand(muxes, structSaveDialog.getDataTypeOfElementList(muxes));
+		// nothing here yet
 	}
 
 	private static void loadAllOpenEditors() {
@@ -296,7 +204,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		importType(input);
 		setInput(input);
 		setSite(site);
-		addListenerToDataTypeObj();
+		addListenerToAttributeDeclaration();
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		getCommandStack().addCommandStackEventListener(this);
 		initializeActionRegistry();
@@ -308,20 +216,20 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	@Override
 	public String getTitleToolTip() {
-		final String tooltip = (dataTypeEntry != null) ? dataTypeEntry.getFullTypeName() + "\n" : ""; //$NON-NLS-1$ //$NON-NLS-2$
+		final String tooltip = (attributeTypeEntry != null) ? attributeTypeEntry.getFullTypeName() + "\n" : ""; //$NON-NLS-1$ //$NON-NLS-2$
 		return tooltip + super.getTitleToolTip();
 	}
 
-	private void addListenerToDataTypeObj() {
-		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null) {
-			dataTypeEntry.getTypeEditable().eAdapters().add(adapter);
+	private void addListenerToAttributeDeclaration() {
+		if (attributeTypeEntry != null && attributeTypeEntry.getTypeEditable() != null) {
+			attributeTypeEntry.getTypeEditable().eAdapters().add(adapter);
 		}
 	}
 
-	private void removeListenerFromDataTypeObj() {
-		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null
-				&& dataTypeEntry.getTypeEditable().eAdapters().contains(adapter)) {
-			dataTypeEntry.getTypeEditable().eAdapters().remove(adapter);
+	private void removeListenerFromAttributeDeclaration() {
+		if (attributeTypeEntry != null && attributeTypeEntry.getTypeEditable() != null
+				&& attributeTypeEntry.getTypeEditable().eAdapters().contains(adapter)) {
+			attributeTypeEntry.getTypeEditable().eAdapters().remove(adapter);
 		}
 	}
 
@@ -344,9 +252,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		file.refreshLocal(IResource.DEPTH_ONE, new NullProgressMonitor());
 		// exist anymore!
 		if (file.exists()) {
-			dataTypeEntry = (DataTypeEntry) TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-			setPartName(dataTypeEntry.getFile().getName());
-			return !(dataTypeEntry.getTypeEditable() instanceof StructuredType);
+			attributeTypeEntry = (AttributeTypeEntry) TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+			setPartName(attributeTypeEntry.getFile().getName());
+			return attributeTypeEntry.getTypeEditable() == null;
 		}
 		return true; // import failed
 	}
@@ -370,16 +278,14 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	@Override
 	public boolean isSaveAsAllowed() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
-//		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null && (!importFailed)) {
-//			structComposite = new StructViewingComposite(parent, 1, commandStack, annotationModel, dataTypeEntry, this);
-//			structComposite.createPartControl(parent);
-		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() instanceof final StructuredType structType
-				&& (!importFailed)) {
+		if (attributeTypeEntry != null
+				&& attributeTypeEntry.getTypeEditable().getType() instanceof final StructuredType structType
+				&& !importFailed) {
 			structComposite = new StructEditingComposite(parent, commandStack, structType, annotationModel);
 			getSite().setSelectionProvider(structComposite);
 			structComposite.setTitel(Messages.StructViewingComposite_Headline);
@@ -484,13 +390,14 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	@Override
 	public void reloadFile() {
 		try {
-			removeListenerFromDataTypeObj();
-			dataTypeEntry.setTypeEditable(null);
+			removeListenerFromAttributeDeclaration();
+			attributeTypeEntry.setTypeEditable(null);
 			importType(getEditorInput());
-			if (dataTypeEntry.getTypeEditable() instanceof final StructuredType structType) {
+			if (attributeTypeEntry.getTypeEditable() != null
+					&& attributeTypeEntry.getTypeEditable().getType() instanceof final StructuredType structType) {
 				structComposite.setStructType(structType);
 			}
-			addListenerToDataTypeObj();
+			addListenerToAttributeDeclaration();
 		} catch (final PartInitException e) {
 			FordiacLogHelper
 					.logError("Error during refreshing struct table after file change detection: " + e.toString(), e); //$NON-NLS-1$

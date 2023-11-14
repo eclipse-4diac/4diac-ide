@@ -21,7 +21,6 @@ package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -82,6 +81,7 @@ public class StructEditingComposite extends Composite
 	private ConfigurableObject currentConfigurableObject = null;
 	private ConfigurablObjectListener configObjectListener = null;
 	private boolean blockRefresh;
+	private Label titleLabel;
 
 	private final Adapter adapter = new AdapterImpl() {
 
@@ -137,10 +137,13 @@ public class StructEditingComposite extends Composite
 				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, false));
 	}
 
-	private static void showLabel(final Composite parent) {
-		final Label label = new Label(parent, SWT.LEFT);
-		label.setText(Messages.StructViewingComposite_Headline);
-		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).span(2, 1).applyTo(label);
+	private void showLabel(final Composite parent) {
+		titleLabel = new Label(parent, SWT.LEFT);
+		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).span(2, 1).applyTo(titleLabel);
+	}
+
+	public void setTitel(final String title) {
+		titleLabel.setText(title);
 	}
 
 	private void createNatTable() {
