@@ -28,6 +28,7 @@ import static org.eclipse.fordiac.ide.model.LibraryElementTags.FB_TYPE_COMM_MESS
 import static org.eclipse.fordiac.ide.model.LibraryElementTags.FB_TYPE_STRUCT_DEMUX;
 import static org.eclipse.fordiac.ide.model.LibraryElementTags.FB_TYPE_STRUCT_MUX;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -66,6 +67,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -313,7 +315,9 @@ class FBNetworkImporter extends CommonElementImporter {
 		if (builder.isEmptyConnection()) {
 			// if 4diac should be capable of seeing the error marker in the FBNetworkEditor
 			// then error marker blocks need to be created at this location
-			throw new TypeImportException("Connection parse error at line: " + getLineNumber()); //$NON-NLS-1$
+			getErrors().add(new TypeImportDiagnostic("Connection missing both source and destination element", //$NON-NLS-1$
+					MessageFormat.format("{0} -> {1}", sourceElement, destinationElement), getLineNumber())); //$NON-NLS-1$
+			return null;
 		}
 
 		return connection;

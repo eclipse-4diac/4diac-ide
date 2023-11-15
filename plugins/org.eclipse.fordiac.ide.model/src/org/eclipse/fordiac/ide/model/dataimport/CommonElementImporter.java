@@ -24,6 +24,8 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -34,6 +36,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -106,6 +109,8 @@ public abstract class CommonElementImporter {
 	private InputStream inputStream = null;
 	private final TypeLibrary typeLibrary;
 	private LibraryElement element;
+	private final List<Diagnostic> errors;
+	private final List<Diagnostic> warnings;
 
 	protected IFile getFile() {
 		return file;
@@ -134,16 +139,28 @@ public abstract class CommonElementImporter {
 		this.element = element;
 	}
 
+	public List<Diagnostic> getErrors() {
+		return errors;
+	}
+
+	public List<Diagnostic> getWarnings() {
+		return warnings;
+	}
+
 	protected CommonElementImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
 		Assert.isNotNull(inputStream);
 		this.inputStream = inputStream;
 		this.typeLibrary = typeLibrary;
+		errors = new ArrayList<>();
+		warnings = new ArrayList<>();
 	}
 
 	protected CommonElementImporter(final IFile file) {
 		Assert.isNotNull(file);
 		this.file = file;
 		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
+		errors = new ArrayList<>();
+		warnings = new ArrayList<>();
 	}
 
 	protected CommonElementImporter(final CommonElementImporter importer) {
@@ -151,6 +168,8 @@ public abstract class CommonElementImporter {
 		reader = importer.reader;
 		file = importer.file;
 		typeLibrary = importer.typeLibrary;
+		errors = importer.errors;
+		warnings = importer.warnings;
 	}
 
 	public void loadElement() throws IOException, XMLStreamException, TypeImportException {

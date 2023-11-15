@@ -27,7 +27,10 @@ package org.eclipse.fordiac.ide.model.resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.MessageFormat;
 import java.util.Map;
+
+import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -35,6 +38,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.AttributeTypeImporter;
@@ -48,6 +52,7 @@ import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
+import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -68,21 +73,35 @@ public class FordiacTypeResource extends ResourceImpl {
 			typeFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toFileString()));
 			if (!typeFile.exists()) {
 				throw new IOException(
-						"Could not load file " + uri.toString() + ", because its not part of the Resource"); //$NON-NLS-1$ //$NON-NLS-2$
+						MessageFormat.format(Messages.FordiacTypeResource_NotInWorkspace, uri.toString()));
 			}
 		} else {
-			throw new IOException("Cannot load type from unsupported URI " + uri.toString()); //$NON-NLS-1$
+			throw new IOException(
+					MessageFormat.format(Messages.FordiacTypeResource_LoadFromUnsupportedURI, uri.toString()));
 		}
 
 		try {
 			final CommonElementImporter importer = createImporterByFileExtensions(inputStream, typeFile);
 			importer.loadElement();
+			getErrors().addAll(importer.getErrors());
+			getWarnings().addAll(importer.getWarnings());
 			final LibraryElement element = importer.getElement();
-			final var typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile);
-			if (typeEntryForFile != null) {
-				element.setTypeEntry(typeEntryForFile);
+			if (element != null) {
+				final var typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile);
+				if (typeEntryForFile != null) {
+					element.setTypeEntry(typeEntryForFile);
+				}
+				getContents().add(element);
 			}
-			getContents().add(element);
+		} catch (final TypeImportException e) {
+			getErrors().add(new TypeImportDiagnostic(e.getMessage(), Messages.FordiacTypeResource_TypeImportError));
+		} catch (final XMLStreamException e) {
+			if (e.getLocation() != null) {
+				getErrors().add(new TypeImportDiagnostic(e.getMessage(), Messages.FordiacTypeResource_XMLError,
+						e.getLocation().getLineNumber()));
+			} else {
+				getErrors().add(new TypeImportDiagnostic(e.getMessage(), Messages.FordiacTypeResource_XMLError));
+			}
 		} catch (final IOException e) {
 			throw e;
 		} catch (final Exception e) {
@@ -93,7 +112,8 @@ public class FordiacTypeResource extends ResourceImpl {
 	@Override
 	protected void doSave(final OutputStream outputStream, final Map<?, ?> options) throws IOException {
 		if (!uri.isPlatformResource()) {
-			throw new IOException("Cannot save type to non-workspace URI: " + uri.toString()); //$NON-NLS-1$
+			throw new IOException(
+					MessageFormat.format(Messages.FordiacTypeResource_SaveToUnsupportedURI, uri.toString()));
 		}
 		try {
 			final var fbtFile = ResourcesPlugin.getWorkspace().getRoot()
@@ -131,7 +151,8 @@ public class FordiacTypeResource extends ResourceImpl {
 		case TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING -> new SEGImporter(inputStream, typeLib);
 		case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING -> new SubAppTImporter(inputStream, typeLib);
 		case TypeLibraryTags.GLOBAL_CONST_FILE_ENDING -> new GlobalConstantsImporter(inputStream, typeLib);
-		default -> throw new IOException("Could not load/import file: " + typeFile.toString()); //$NON-NLS-1$
+		default ->
+			throw new IOException(MessageFormat.format(Messages.FordiacTypeResource_UnsupportedFileType, typeFile));
 		};
 	}
 }

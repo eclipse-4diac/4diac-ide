@@ -22,6 +22,8 @@ import java.util.Objects;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
+import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
+import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.xtext.resource.FileExtensionProvider;
 import org.eclipse.xtext.util.LazyStringInputStream;
@@ -49,9 +51,15 @@ public class STCoreResource extends LibraryElementXtextResource {
 			try {
 				final FordiacTypeResource typeResource = new FordiacTypeResource(uri);
 				typeResource.load(inputStream, Collections.emptyMap());
+				getErrors().addAll(typeResource.getErrors());
+				getWarnings().addAll(typeResource.getWarnings());
+				if (typeResource.getContents().isEmpty()) {
+					return;
+				}
 				libraryElement = (LibraryElement) typeResource.getContents().get(0);
 			} catch (final Exception e) {
-				throw new IOException("Couldn't load library element", e); //$NON-NLS-1$
+				handleTypeLoadException(e);
+				return;
 			}
 			// then load from combined source
 			final String text = partitioner.combine(libraryElement);
@@ -69,6 +77,10 @@ public class STCoreResource extends LibraryElementXtextResource {
 	protected boolean isLoadPlainST(final Map<?, ?> options, final InputStream inputStream) {
 		return fileExtensionProvider.getPrimaryFileExtension().equalsIgnoreCase(uri.fileExtension())
 				|| Boolean.TRUE.equals(options.get(OPTION_PLAIN_ST)) || inputStream instanceof LazyStringInputStream;
+	}
+
+	protected void handleTypeLoadException(final Throwable e) {
+		getErrors().add(new TypeImportDiagnostic(e.getMessage(), Messages.STCoreResource_TypeLoadError));
 	}
 
 	public Map<Object, Object> getDefaultLoadOptions() {

@@ -29,6 +29,7 @@ public final class Messages extends NLS {
 	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedVariable;
 	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedVariableForType;
 	public static String STCoreLinkingDiagnosticMessageProvider_UnknownType;
+	public static String STCoreResource_TypeLoadError;
 	public static String STCoreValidator_Consecutive_Underscores_In_Identifier;
 	public static String STCoreValidator_Identifier_Is_Reserved;
 	public static String STCoreValidator_Implicit_Conversion_In_Literal;

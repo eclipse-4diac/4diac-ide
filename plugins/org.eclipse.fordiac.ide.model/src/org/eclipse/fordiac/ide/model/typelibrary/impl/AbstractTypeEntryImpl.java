@@ -252,7 +252,7 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 			retval.setTypeEntry(this);
 			return retval;
 		} catch (IOException | XMLStreamException | TypeImportException e) {
-			FordiacLogHelper.logError("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
+			FordiacLogHelper.logWarning("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
 			return null;
 		}
 	}
