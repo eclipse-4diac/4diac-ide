@@ -139,7 +139,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		parentChange.add(new UpdateTypeEntryChange(file, typeEntry, newName, oldName));
 		Set<INamedElement> allFBs;
 		final CompositeChange change = new CompositeChange(Messages.Refactoring_AffectedInstancesOfFB);
-		IProject project = type.getTypeEntry().getFile().getProject();
+		final IProject project = type.getTypeEntry().getFile().getProject();
 		allFBs = InstanceSearch.performProjectSearch(project, FBTypeSearch.createFBTypeSearch(type));
 		change.add(new UpdateInstancesChange(allFBs.stream().map(FBNetworkElement.class::cast).toList(), typeEntry));
 		if (!allFBs.isEmpty()) {

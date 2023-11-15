@@ -33,12 +33,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
 import org.eclipse.emf.common.notify.impl.NotificationImpl;
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.notify.impl.NotifierImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
@@ -51,7 +48,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements TypeEntry {
+public abstract class AbstractTypeEntryImpl extends NotifierImpl implements TypeEntry {
 
 	private static class TypeEntryNotificationImpl extends NotificationImpl {
 		protected final TypeEntry notifier;
@@ -89,8 +86,6 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	private SoftReference<LibraryElement> typeEditableRef;
 
 	private TypeLibrary typeLibrary;
-
-	private BasicEList<Adapter> eAdapters;
 
 	private boolean updateTypeOnSave = true;
 
@@ -306,19 +301,6 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 		result.append(lastModificationTimestamp);
 		result.append(')');
 		return result.toString();
-	}
-
-	@Override
-	public EList<Adapter> eAdapters() {
-		if (eAdapters == null) {
-			eAdapters = new EAdapterList<>(this);
-		}
-		return eAdapters;
-	}
-
-	@Override
-	protected BasicEList<Adapter> eBasicAdapters() {
-		return eAdapters;
 	}
 
 	protected final void setUpdateTypeOnSave(final boolean updateTypeOnSave) {

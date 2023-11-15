@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.dialog.FBUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
@@ -125,7 +126,8 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			super.notifyChanged(notification);
 			final Object feature = notification.getFeature();
 			if ((null != feature)
-					&& (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass()))) {
+					&& ((LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass()))
+							|| TypeEntry.TYPE_ENTRY_FILE_FEATURE.equals(feature))) {
 				Display.getDefault().asyncExec(() -> {
 					if (null != dataTypeEntry) {
 						// input should be set before the partname
@@ -314,14 +316,20 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	private void addListenerToDataTypeObj() {
 		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null) {
+			dataTypeEntry.eAdapters().add(adapter);
 			dataTypeEntry.getTypeEditable().eAdapters().add(adapter);
 		}
 	}
 
 	private void removeListenerFromDataTypeObj() {
-		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null
-				&& dataTypeEntry.getTypeEditable().eAdapters().contains(adapter)) {
-			dataTypeEntry.getTypeEditable().eAdapters().remove(adapter);
+		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null) {
+			if (dataTypeEntry.eAdapters().contains(adapter)) {
+				dataTypeEntry.eAdapters().remove(adapter);
+			}
+
+			if (dataTypeEntry.getTypeEditable().eAdapters().contains(adapter)) {
+				dataTypeEntry.getTypeEditable().eAdapters().remove(adapter);
+			}
 		}
 	}
 

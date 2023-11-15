@@ -26,6 +26,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -49,6 +52,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.model.ui.listeners.EditorTabCommandStackListener;
@@ -93,12 +97,29 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		subEditorCommandStackListener = new EditorTabCommandStackListener(this);
 	}
 
+	private final Adapter adapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			if (TypeEntry.TYPE_ENTRY_FILE_FEATURE.equals(notification.getFeature())) {
+				Display.getDefault().asyncExec(() -> {
+					if (null != system) {
+						// the input should be set before the title is updated
+						setInput(new FileEditorInput(system.getTypeEntry().getFile()));
+						setPartName(system.getName());
+					}
+				});
+			}
+		}
+	};
+
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		loadSystem();
 		if (system != null) {
 			annotationModel = new FordiacMarkerGraphicalAnnotationModel(system.getTypeEntry().getFile());
+			system.getTypeEntry().eAdapters().add(adapter);
 		}
 	}
 
@@ -340,6 +361,10 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public void dispose() {
+		if (system != null && system.getTypeEntry() != null && system.getTypeEntry().eAdapters().contains(adapter)) {
+			system.getTypeEntry().eAdapters().remove(adapter);
+		}
+
 		// get these values here before calling super dispose
 		final boolean dirty = isDirty();
 		if (null != getCommandStack()) {
@@ -366,10 +391,16 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		final String path = getBreadcrumb().serializePath();
 
 		final SystemEntry typeEntry = (SystemEntry) system.getTypeEntry();
+
+		if (typeEntry.eAdapters().contains(adapter)) {
+			typeEntry.eAdapters().remove(adapter);
+		}
+
 		typeEntry.setSystem(null);
 		system = typeEntry.getSystem();
 		system.setCommandStack(commandStack);
 		getCommandStack().flush();
+		typeEntry.eAdapters().add(adapter);
 		setPartName(system.getName());
 
 		if (!getBreadcrumb().openPath(path, system)) {

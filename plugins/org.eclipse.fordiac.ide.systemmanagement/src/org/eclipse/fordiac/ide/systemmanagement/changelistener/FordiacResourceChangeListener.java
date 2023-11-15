@@ -623,7 +623,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private static FordiacEditorMatchingStrategy editorMatching = new FordiacEditorMatchingStrategy();
 
-	public static void updateEditorInput(final IFile src, final IFile dst) {
+	private static void updateEditorInput(final IFile src, final IFile dst) {
 		Display.getDefault().syncExec(() -> {
 			final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			final IEditorReference[] editorReferences = activePage.getEditorReferences();

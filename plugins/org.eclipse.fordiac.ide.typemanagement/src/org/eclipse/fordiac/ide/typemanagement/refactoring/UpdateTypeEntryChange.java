@@ -98,8 +98,6 @@ public class UpdateTypeEntryChange extends Change {
 		if (newFile != null) {
 			FordiacResourceChangeListener.updateTypeEntryByRename(newFile, typeEntry);
 
-			FordiacResourceChangeListener.updateEditorInput(file, newFile);
-
 			return new UpdateTypeEntryChange(newFile, typeEntry, oldName, newName);
 		}
 		return null;
