@@ -26,10 +26,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * This is the item provider adapter for a
- * {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement}
- * object. <!-- begin-user-doc --> <!-- end-user-doc -->
- *
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement} object.
+ * <!-- begin-user-doc --> <!-- end-user-doc -->
  * @generated
  */
 public class ErrorMarkerFBNElementItemProvider extends FBNetworkElementItemProvider {
@@ -39,7 +37,7 @@ public class ErrorMarkerFBNElementItemProvider extends FBNetworkElementItemProvi
 	 *
 	 * @generated
 	 */
-	public ErrorMarkerFBNElementItemProvider(final AdapterFactory adapterFactory) {
+	public ErrorMarkerFBNElementItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -50,10 +48,11 @@ public class ErrorMarkerFBNElementItemProvider extends FBNetworkElementItemProvi
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addRepairedElementPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -64,62 +63,68 @@ public class ErrorMarkerFBNElementItemProvider extends FBNetworkElementItemProvi
 	 *
 	 * @generated
 	 */
-	protected void addRepairedElementPropertyDescriptor(final Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_ErrorMarkerFBNElement_repairedElement_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", //$NON-NLS-1$
-								"_UI_ErrorMarkerFBNElement_repairedElement_feature", "_UI_ErrorMarkerFBNElement_type"), //$NON-NLS-1$ //$NON-NLS-2$
-						LibraryElementPackage.Literals.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT, true, false, true,
-						null, null, null));
+	protected void addRepairedElementPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ErrorMarkerFBNElement_repairedElement_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerFBNElement_repairedElement_feature", "_UI_ErrorMarkerFBNElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
-	 * This returns ErrorMarkerFBNElement.gif. <!-- begin-user-doc --> <!--
+	 * This returns ErrorMarkerFBNElement.gif.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public Object getImage(final Object object) {
+	public Object getImage(Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/ErrorMarkerFBNElement")); //$NON-NLS-1$
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public String getText(final Object object) {
-		final String label = ((ErrorMarkerFBNElement) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_ErrorMarkerFBNElement_type") : //$NON-NLS-1$
-				getString("_UI_ErrorMarkerFBNElement_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+	public String getText(Object object) {
+		String label = ((ErrorMarkerFBNElement)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_ErrorMarkerFBNElement_type") : //$NON-NLS-1$
+			getString("_UI_ErrorMarkerFBNElement_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

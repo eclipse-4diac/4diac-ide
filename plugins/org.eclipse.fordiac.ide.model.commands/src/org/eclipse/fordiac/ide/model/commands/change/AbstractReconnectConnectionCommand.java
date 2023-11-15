@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.commands.Command;
@@ -88,26 +87,12 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 		connectionCreateCmd = createConnectionCreateCommand(parent);
 		connectionCreateCmd.setSource(getNewSource());
 		connectionCreateCmd.setDestination(getNewDestination());
-		handleErrorConnection(con);
 		connectionCreateCmd.setArrangementConstraints(con.getRoutingData());
 		connectionCreateCmd.setVisible(con.isVisible());
 		connectionCreateCmd.execute(); // perform adding the connection first to preserve any error markers
 		deleteConnectionCmd.execute();
 		copyAttributes(connectionCreateCmd.getConnection(), deleteConnectionCmd.getConnection());
 
-	}
-
-	public void handleErrorConnection(final Connection con) {
-		final IInterfaceElement newSource = getNewSource();
-		final IInterfaceElement newDestination = getNewDestination();
-		if (newSource instanceof ErrorMarkerInterface && !(newDestination instanceof ErrorMarkerInterface)
-				&& ((ErrorMarkerInterface) newSource).getRepairedEndpoint() != null) {
-			connectionCreateCmd.setSource(((ErrorMarkerInterface) newSource).getRepairedEndpoint());
-		}
-		if (!(newSource instanceof ErrorMarkerInterface) && newDestination instanceof ErrorMarkerInterface
-				&& ((ErrorMarkerInterface) newDestination).getRepairedEndpoint() != null) {
-			connectionCreateCmd.setDestination(((ErrorMarkerInterface) newDestination).getRepairedEndpoint());
-		}
 	}
 
 	@Override

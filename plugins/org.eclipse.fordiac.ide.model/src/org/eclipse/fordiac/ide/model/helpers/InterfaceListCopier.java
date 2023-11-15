@@ -69,10 +69,6 @@ public final class InterfaceListCopier {
 			final boolean copyComments) {
 		final ErrorMarkerInterface copy = LibraryElementFactory.eINSTANCE.createErrorMarkerInterface();
 		copyInterfaceElement(src, copy, copyComments);
-		final IInterfaceElement repairedEndpoint = copy.getRepairedEndpoint();
-		if (repairedEndpoint != null) {
-			copy.setRepairedEndpoint(repairedEndpoint);
-		}
 
 		if ((copyValues) && (null != src.getValue())) {
 			final Value varInitialization = LibraryElementFactory.eINSTANCE.createValue();

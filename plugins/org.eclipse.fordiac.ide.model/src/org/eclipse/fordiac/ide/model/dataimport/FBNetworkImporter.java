@@ -46,9 +46,7 @@ import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -56,7 +54,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -409,10 +406,6 @@ class FBNetworkImporter extends CommonElementImporter {
 				: connectionBuilder.getSourcePinName();
 		final ErrorMarkerInterface errorMarkerInterface = FordiacErrorMarkerInterfaceHelper
 				.createErrorMarkerInterface(type, pinName, isInput, ieList);
-		final IInterfaceElement repairedEndpoint = createRepairInterfaceElement(oppositeEndpoint, pinName);
-		if (repairedEndpoint != null) {
-			errorMarkerInterface.setRepairedEndpoint(repairedEndpoint);
-		}
 
 		if (isInput) {
 			connection.setSource(oppositeEndpoint);
@@ -422,23 +415,6 @@ class FBNetworkImporter extends CommonElementImporter {
 			connection.setDestination(oppositeEndpoint);
 		}
 		return errorMarkerInterface;
-	}
-
-	private static IInterfaceElement createRepairInterfaceElement(final IInterfaceElement ie, final String name) {
-		IInterfaceElement repairIE = null;
-		if (ie instanceof final AdapterDeclaration adp) {
-			repairIE = InterfaceListCopier.copyAdapter(adp, true);
-		} else if (ie instanceof final VarDeclaration varDecl) {
-			repairIE = InterfaceListCopier.copyVar(varDecl, true, true);
-		} else if (ie instanceof final Event event) {
-			repairIE = InterfaceListCopier.copyEvent(event, true);
-		}
-
-		if (null != repairIE) {
-			repairIE.setIsInput(!ie.isIsInput()); // this needs to be inverted for the dummy connection
-			repairIE.setName(name);
-		}
-		return repairIE;
 	}
 
 	protected static <T extends Connection> void handleMissingConnectionDestinationEnpoint(final T connection,

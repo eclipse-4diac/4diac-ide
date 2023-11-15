@@ -3822,22 +3822,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_INTERFACE__TYPE = IINTERFACE_ELEMENT__TYPE;
 
 	/**
-	 * The feature id for the '<em><b>Repaired Endpoint</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_INTERFACE__VALUE = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
+	int ERROR_MARKER_INTERFACE__VALUE = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Error Marker Interface</em>' class.
@@ -3846,7 +3837,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
+	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.EventImpl <em>Event</em>}' class.
@@ -8742,17 +8733,6 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getErrorMarkerInterface();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface#getRepairedEndpoint <em>Repaired Endpoint</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Repaired Endpoint</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface#getRepairedEndpoint()
-	 * @see #getErrorMarkerInterface()
-	 * @generated
-	 */
-	EReference getErrorMarkerInterface_RepairedEndpoint();
-
-	/**
 	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11753,14 +11733,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ERROR_MARKER_INTERFACE = eINSTANCE.getErrorMarkerInterface();
-
-		/**
-		 * The meta object literal for the '<em><b>Repaired Endpoint</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = eINSTANCE.getErrorMarkerInterface_RepairedEndpoint();
 
 		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.

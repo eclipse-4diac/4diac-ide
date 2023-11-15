@@ -41,7 +41,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
@@ -60,7 +59,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getInputConnections <em>Input Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getRepairedEndpoint <em>Repaired Endpoint</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
@@ -166,16 +164,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 * @ordered
 	 */
 	protected DataType type;
-
-	/**
-	 * The cached value of the '{@link #getRepairedEndpoint() <em>Repaired Endpoint</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRepairedEndpoint()
-	 * @generated
-	 * @ordered
-	 */
-	protected IInterfaceElement repairedEndpoint;
 
 	/**
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
@@ -414,46 +402,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getRepairedEndpoint() {
-		if (repairedEndpoint != null && repairedEndpoint.eIsProxy()) {
-			InternalEObject oldRepairedEndpoint = (InternalEObject)repairedEndpoint;
-			repairedEndpoint = (IInterfaceElement)eResolveProxy(oldRepairedEndpoint);
-			if (repairedEndpoint != oldRepairedEndpoint) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT, oldRepairedEndpoint, repairedEndpoint));
-			}
-		}
-		return repairedEndpoint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public IInterfaceElement basicGetRepairedEndpoint() {
-		return repairedEndpoint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setRepairedEndpoint(IInterfaceElement newRepairedEndpoint) {
-		IInterfaceElement oldRepairedEndpoint = repairedEndpoint;
-		repairedEndpoint = newRepairedEndpoint;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT, oldRepairedEndpoint, repairedEndpoint));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Value getValue() {
 		if (value != null && value.eIsProxy()) {
 			InternalEObject oldValue = (InternalEObject)value;
@@ -658,9 +606,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
-				if (resolve) return getRepairedEndpoint();
-				return basicGetRepairedEndpoint();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__VALUE:
 				if (resolve) return getValue();
 				return basicGetValue();
@@ -702,9 +647,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
 				setType((DataType)newValue);
 				return;
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
-				setRepairedEndpoint((IInterfaceElement)newValue);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__VALUE:
 				setValue((Value)newValue);
 				return;
@@ -743,9 +685,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
 				setType((DataType)null);
 				return;
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
-				setRepairedEndpoint((IInterfaceElement)null);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__VALUE:
 				setValue((Value)null);
 				return;
@@ -777,8 +716,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 				return outputConnections != null && !outputConnections.isEmpty();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
 				return type != null;
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
-				return repairedEndpoint != null;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__VALUE:
 				return value != null;
 			default:

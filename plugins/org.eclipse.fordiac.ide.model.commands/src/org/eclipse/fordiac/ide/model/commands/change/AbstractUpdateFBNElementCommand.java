@@ -392,14 +392,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			destination = updateSelectedInterface(destination, newElement);
 		}
 
-		// set repaired endpoints
-		if (source instanceof final ErrorMarkerInterface errorMarkerInterface) {
-			errorMarkerInterface.setRepairedEndpoint(destination);
-		}
-		if (destination instanceof final ErrorMarkerInterface errorMarkerInterface) {
-			errorMarkerInterface.setRepairedEndpoint(source);
-		}
-
 		// reconnect/replace connection
 		replaceConnection(connection, source, destination);
 	}

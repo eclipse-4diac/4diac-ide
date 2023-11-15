@@ -85,7 +85,6 @@ public class ErrorMarkerInterfaceItemProvider
 			addInputConnectionsPropertyDescriptor(object);
 			addOutputConnectionsPropertyDescriptor(object);
 			addTypePropertyDescriptor(object);
-			addRepairedEndpointPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -214,28 +213,6 @@ public class ErrorMarkerInterfaceItemProvider
 				 getString("_UI_IInterfaceElement_type_feature"), //$NON-NLS-1$
 				 getString("_UI_PropertyDescriptor_description", "_UI_IInterfaceElement_type_feature", "_UI_IInterfaceElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.IINTERFACE_ELEMENT__TYPE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Repaired Endpoint feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRepairedEndpointPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ErrorMarkerInterface_repairedEndpoint_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerInterface_repairedEndpoint_feature", "_UI_ErrorMarkerInterface_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT,
 				 true,
 				 false,
 				 true,
