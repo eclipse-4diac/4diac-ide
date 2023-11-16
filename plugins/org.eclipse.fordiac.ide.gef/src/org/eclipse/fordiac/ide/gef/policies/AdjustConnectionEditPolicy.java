@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.gef.commands.AdjustConnectionCommand;
+import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.router.LineSegmentHandle;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.gef.commands.Command;
@@ -67,9 +68,17 @@ public class AdjustConnectionEditPolicy extends BendpointEditPolicy {
 		if (connection.isVisible()) {
 			final AbstractConnectionEditPart connEP = (AbstractConnectionEditPart) getHost();
 			final PointList points = getConnection().getPoints();
-			for (int i = 1; i < points.size() - 2; i++) {
-				list.add(new LineSegmentHandle(connEP, i));
+			if (getConnection() instanceof HideableConnection) {
+				// The HideableConnection has bevel points there fore we take every second pair
+				for (int i = 2; i < points.size() - 2; i += 2) {
+					list.add(new LineSegmentHandle(connEP, i));
+				}
+			} else {
+				for (int i = 1; i < points.size() - 2; i++) {
+					list.add(new LineSegmentHandle(connEP, i));
+				}
 			}
+
 		}
 		return list;
 	}
