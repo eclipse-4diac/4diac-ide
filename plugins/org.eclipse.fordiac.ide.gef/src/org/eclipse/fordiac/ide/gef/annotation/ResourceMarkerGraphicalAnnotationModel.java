@@ -37,8 +37,16 @@ public abstract class ResourceMarkerGraphicalAnnotationModel extends AbstractGra
 		Objects.requireNonNull(resource);
 		this.resource = resource;
 		resource.getWorkspace().addResourceChangeListener(resourceChangeListener);
-		findMarkers().forEach(marker -> markerAnnotations.computeIfAbsent(marker, this::createMarkerAnnotation));
-		markerAnnotations.values().forEach(this::addAnnotationInternal);
+		reload();
+	}
+
+	public void reload() {
+		final Set<IMarker> markers = findMarkers();
+		final Set<GraphicalAnnotation> added = new HashSet<>();
+		final Set<GraphicalAnnotation> removed = new HashSet<>();
+		markerAnnotations.keySet().forEach(marker -> markerRemoved(marker, removed));
+		markers.forEach(marker -> markerAdded(marker, added));
+		updateAnnotations(added, removed, Collections.emptySet());
 	}
 
 	@Override
@@ -68,40 +76,47 @@ public abstract class ResourceMarkerGraphicalAnnotationModel extends AbstractGra
 
 		for (final IMarkerDelta delta : deltas) {
 			switch (delta.getKind()) {
-			case IResourceDelta.ADDED: {
-				final GraphicalMarkerAnnotation annotation = markerAnnotations.computeIfAbsent(delta.getMarker(),
-						this::createMarkerAnnotation);
-				if (annotation != null) {
-					added.add(annotation);
-				}
-				break;
+			case IResourceDelta.ADDED -> markerAdded(delta.getMarker(), added);
+			case IResourceDelta.REMOVED -> markerRemoved(delta.getMarker(), removed);
+			case IResourceDelta.CHANGED -> markerChanged(delta, added, removed, changed);
+			default -> {
+				// empty
 			}
-			case IResourceDelta.REMOVED:
-				markerAnnotations.computeIfPresent(delta.getMarker(), (marker, annotation) -> {
-					removed.add(annotation);
-					return null;
-				});
-				break;
-			case IResourceDelta.CHANGED:
-				markerAnnotations.computeIfPresent(delta.getMarker(), (marker, annotation) -> {
-					if (isTargetChanged(delta)) {
-						removed.add(annotation);
-						annotation = createMarkerAnnotation(marker);
-						if (annotation != null) {
-							added.add(annotation);
-						}
-					} else {
-						changed.add(annotation);
-					}
-					return annotation;
-				});
-				break;
-			default:
-				break;
 			}
 		}
 
 		updateAnnotations(added, removed, changed);
+	}
+
+	protected void markerAdded(final IMarker marker, final Set<GraphicalAnnotation> added) {
+		final GraphicalMarkerAnnotation annotation = markerAnnotations.computeIfAbsent(marker,
+				this::createMarkerAnnotation);
+		if (annotation != null) {
+			added.add(annotation);
+		}
+	}
+
+	protected void markerRemoved(final IMarker marker, final Set<GraphicalAnnotation> removed) {
+		markerAnnotations.computeIfPresent(marker, (unused, annotation) -> {
+			removed.add(annotation);
+			return null;
+		});
+	}
+
+	protected void markerChanged(final IMarkerDelta delta, final Set<GraphicalAnnotation> added,
+			final Set<GraphicalAnnotation> removed, final Set<GraphicalAnnotation> changed) {
+		markerAnnotations.computeIfPresent(delta.getMarker(), (marker, annotation) -> {
+			if (isTargetChanged(delta)) {
+				removed.add(annotation);
+				annotation = createMarkerAnnotation(marker);
+				if (annotation != null) {
+					added.add(annotation);
+				}
+			} else {
+				changed.add(annotation);
+			}
+			return annotation;
+		});
 	}
 
 	protected abstract GraphicalMarkerAnnotation createMarkerAnnotation(IMarker marker);

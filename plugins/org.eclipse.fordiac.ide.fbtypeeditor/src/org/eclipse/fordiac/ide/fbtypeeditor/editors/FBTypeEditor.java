@@ -47,6 +47,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -104,6 +105,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	private FBTypeContentOutline contentOutline = null;
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
+	private ValidationJob validationJob;
 
 	private final Adapter adapter = new AdapterImpl() {
 
@@ -221,6 +223,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		getCommandStack().addCommandStackEventListener(this);
 
 		annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEntry.getFile());
+		validationJob = new ValidationJob(getPartName(), commandStack, annotationModel);
 
 		super.init(site, editorInput);
 	}
@@ -259,6 +262,9 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			if (typeEntry.eAdapters().contains(adapter)) {
 				typeEntry.eAdapters().remove(adapter);
 			}
+		}
+		if (validationJob != null) {
+			validationJob.dispose();
 		}
 		if (annotationModel != null) {
 			annotationModel.dispose();

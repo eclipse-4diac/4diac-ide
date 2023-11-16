@@ -103,6 +103,9 @@ public final class Messages extends NLS {
 	public static String PrintPreview_LABEL_Scale;
 	public static String PrintPreview_LABEL_Tile;
 	public static String SetProfileCommand_LABEL_SetProfile;
+
+	public static String ValidationJob_ValidationJobName;
+
 	public static String ViewRenameCommand_LABEL_RenameView;
 
 	public static String InterfaceElementSection_ConnectionGroup;

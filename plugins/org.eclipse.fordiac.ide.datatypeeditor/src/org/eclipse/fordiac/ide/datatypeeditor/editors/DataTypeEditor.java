@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.SaveTypeEntryCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
@@ -103,6 +104,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
+	private ValidationJob validationJob;
 	private StructEditingComposite structComposite;
 	private Composite errorComposite;
 	private boolean importFailed;
@@ -159,6 +161,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		getActionRegistry().dispose();
 		removeListenerFromDataTypeObj();
+		if (validationJob != null) {
+			validationJob.dispose();
+		}
 		if (annotationModel != null) {
 			annotationModel.dispose();
 		}
@@ -305,6 +310,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		setActionHandlers(site);
 		if (input instanceof final IFileEditorInput fileEditorInput) {
 			annotationModel = new FordiacMarkerGraphicalAnnotationModel(fileEditorInput.getFile());
+			validationJob = new ValidationJob(getPartName(), commandStack, annotationModel);
 		}
 	}
 

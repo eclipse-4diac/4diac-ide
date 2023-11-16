@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -67,12 +68,13 @@ public abstract class AbstractGraphicalAnnotationModel implements GraphicalAnnot
 	}
 
 	@Override
-	public boolean hasAnnotation(final Object target, final Predicate<GraphicalAnnotation> filter) {
+	public boolean hasAnnotation(final Object target, final Predicate<? super GraphicalAnnotation> filter) {
 		return annotations.getOrDefault(target, Collections.emptySet()).stream().anyMatch(filter);
 	}
 
 	@Override
-	public boolean hasAnnotation(final Object target, final String type, final Predicate<GraphicalAnnotation> filter) {
+	public boolean hasAnnotation(final Object target, final String type,
+			final Predicate<? super GraphicalAnnotation> filter) {
 		return annotations.getOrDefault(target, Collections.emptySet()).stream()
 				.filter(annotation -> annotation.getType().equals(type)).anyMatch(filter);
 	}
@@ -103,6 +105,17 @@ public abstract class AbstractGraphicalAnnotationModel implements GraphicalAnnot
 	}
 
 	@Override
+	public GraphicalAnnotationModelEvent removeAnnotationIf(final Predicate<? super GraphicalAnnotation> filter) {
+		final Set<GraphicalAnnotation> remove = new HashSet<>();
+		forEach(annotation -> {
+			if (filter.test(annotation)) {
+				remove.add(annotation);
+			}
+		});
+		return updateAnnotations(Collections.emptySet(), remove, Collections.emptySet());
+	}
+
+	@Override
 	public boolean changedAnnotation(final GraphicalAnnotation annotation) {
 		if (containsAnnotation(annotation)) {
 			fireModelChanged(new GraphicalAnnotationModelEvent(this, Collections.emptySet(), Collections.emptySet(),
@@ -118,8 +131,13 @@ public abstract class AbstractGraphicalAnnotationModel implements GraphicalAnnot
 	}
 
 	@Override
-	public GraphicalAnnotationModelEvent updateAnnotations(final Set<GraphicalAnnotation> add,
-			final Set<GraphicalAnnotation> remove, final Set<GraphicalAnnotation> changed) {
+	public void forEach(final Consumer<? super GraphicalAnnotation> action) {
+		annotations.forEach((unused, values) -> values.forEach(annotation -> action.accept(annotation)));
+	}
+
+	@Override
+	public GraphicalAnnotationModelEvent updateAnnotations(final Set<? extends GraphicalAnnotation> add,
+			final Set<? extends GraphicalAnnotation> remove, final Set<? extends GraphicalAnnotation> changed) {
 		final Set<GraphicalAnnotation> added = new HashSet<>();
 		final Set<GraphicalAnnotation> removed = new HashSet<>();
 		for (final GraphicalAnnotation annotation : remove) {

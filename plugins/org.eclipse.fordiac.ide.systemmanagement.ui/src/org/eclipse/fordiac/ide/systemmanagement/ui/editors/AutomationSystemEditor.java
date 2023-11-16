@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -92,6 +93,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	private DiagramOutlinePage outlinePage;
 	private final EditorTabCommandStackListener subEditorCommandStackListener;
 	private GraphicalAnnotationModel annotationModel;
+	private ValidationJob validationJob;
 
 	public AutomationSystemEditor() {
 		subEditorCommandStackListener = new EditorTabCommandStackListener(this);
@@ -119,6 +121,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		loadSystem();
 		if (system != null) {
 			annotationModel = new FordiacMarkerGraphicalAnnotationModel(system.getTypeEntry().getFile());
+			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
 			system.getTypeEntry().eAdapters().add(adapter);
 		}
 	}
@@ -370,7 +373,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		if (null != getCommandStack()) {
 			getCommandStack().removeCommandStackEventListener(subEditorCommandStackListener);
 		}
-
+		if (validationJob != null) {
+			validationJob.dispose();
+		}
 		if (annotationModel != null) {
 			annotationModel.dispose();
 		}
