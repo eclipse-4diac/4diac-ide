@@ -106,7 +106,7 @@ public class ActionEditingComposite {
 				final List<String> events = ECCContentAndLabelProvider.getOutputEventNames(getBasicFBType());
 				final Event oe = selectedAction.getOutput();
 				yield Integer.valueOf(
-										(oe != null) ? events.indexOf(ECCContentAndLabelProvider.getEventName(oe)) : events.size());
+						(oe != null) ? events.indexOf(ECCContentAndLabelProvider.getEventName(oe)) : events.size());
 			}
 			default -> ""; //$NON-NLS-1$
 			};
@@ -223,7 +223,7 @@ public class ActionEditingComposite {
 		this.commandStack = commandStack;
 
 		// if the selected state is the start state disable adding actions
-		actionMgmButtons.setCreateEnabled(!type.isStartState());
+		actionMgmButtons.setEnabled(!type.isStartState());
 
 		// have to do that here, because now we have a valid type
 		actionViewer.setCellEditors(createActionViewerCellEditors(actionViewer.getTable()));

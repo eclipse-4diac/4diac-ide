@@ -47,7 +47,6 @@ public class AddDeleteWidget {
 	private Button createButton;
 	private Button deleteButton;
 	private boolean enabled = true;
-	private boolean createEnabled = true;
 	protected Composite container;
 
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
@@ -333,15 +332,6 @@ public class AddDeleteWidget {
 	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 		setButtonEnablement(false); // initially nothing should be selected therefore deactivate the buttons
-		setCreateButtonEnablement(createEnabled && enabled);
-	}
-
-	public boolean isCreateEnabled() {
-		return createEnabled;
-	}
-
-	public void setCreateEnabled(final boolean createEnabled) {
-		this.createEnabled = createEnabled;
-		setCreateButtonEnablement(createEnabled && enabled);
+		createButton.setEnabled(enabled);
 	}
 }
