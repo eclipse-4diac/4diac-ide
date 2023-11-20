@@ -15,20 +15,25 @@ package org.eclipse.fordiac.ide.typemanagement.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdatePinInTypeDeclarationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -98,6 +103,26 @@ public final class FBUpdater {
 		Command cmd = new CompoundCommand();
 		for (final Command subCmd : commands) {
 			cmd = cmd.chain(subCmd);
+		}
+		return cmd;
+	}
+
+	public static Command updateAllInstances(final FBNetwork fbNetwork, final List<Optional<TypeEntry>> cashedTypes,
+			final TypeLibrary typeLib) {
+		final List<Command> commands = new ArrayList<>();
+		fbNetwork.getNetworkElements().forEach(fbNetworkElement -> {
+			if (fbNetworkElement.getType() != null) {
+				cashedTypes.forEach(cashedType -> {
+					if (cashedType.get().getFullTypeName().equalsIgnoreCase(fbNetworkElement.getFullTypeName())) {
+						commands.add(new UpdateFBTypeCommand(fbNetworkElement,
+								typeLib.getFBTypeEntry(fbNetworkElement.getFullTypeName())));
+					}
+				});
+			}
+		});
+		final CompoundCommand cmd = new CompoundCommand();
+		for (final Command subCmd : commands) {
+			cmd.add(subCmd);
 		}
 		return cmd;
 	}

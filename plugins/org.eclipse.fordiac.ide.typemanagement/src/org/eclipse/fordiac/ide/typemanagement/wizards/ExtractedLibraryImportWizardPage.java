@@ -35,7 +35,8 @@ public class ExtractedLibraryImportWizardPage extends LibraryImportWizardPage {
 	}
 
 	public void importLib() {
-		libraryLinker.importLibrary(selectedFile.getName(), libraryLinker.getProjectName(selection));
+		libraryLinker.setSelectedProject(selection);
+		libraryLinker.importLibrary(selectedFile.getName());
 	}
 
 	@Override

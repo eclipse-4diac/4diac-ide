@@ -34,6 +34,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
@@ -75,6 +76,7 @@ public enum SystemManager {
 	public static final String SYSTEM_FILE_ENDING_WITH_DOT = ".sys"; //$NON-NLS-1$
 
 	public static final String TYPE_LIB_FOLDER_NAME = "Type Library"; //$NON-NLS-1$
+	private final IResourceChangeListener fordiacListener = new FordiacResourceChangeListener(this);
 
 	/** The listeners. */
 	private final List<DistributedSystemListener> listeners = new ArrayList<>();
@@ -91,7 +93,7 @@ public enum SystemManager {
 		// Correctly setup the tool library needs to be done before loading any systems
 		// and adding the resource change listener
 		TypeLibraryManager.INSTANCE.loadToolLibrary();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
+		addFordiacChangeListener();
 		ValidateProject.checkTypeLibraryInProjectsInWorkspaceJob();
 	}
 
@@ -235,6 +237,14 @@ public enum SystemManager {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
+	}
+
+	public void removeFordiacChangeListener() {
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(fordiacListener);
+	}
+
+	public void addFordiacChangeListener() {
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(fordiacListener);
 	}
 
 }
