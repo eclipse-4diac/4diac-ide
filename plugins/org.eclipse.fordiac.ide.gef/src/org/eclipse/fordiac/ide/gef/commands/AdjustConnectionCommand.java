@@ -38,7 +38,6 @@ public class AdjustConnectionCommand extends Command {
 
 	public AdjustConnectionCommand(final Connection connection, final Point p, final int index,
 			final org.eclipse.fordiac.ide.model.libraryElement.Connection modelConnection, final double zoom) {
-		super();
 		this.connection = connection;
 		this.point = p;
 		this.index = index;
@@ -75,7 +74,7 @@ public class AdjustConnectionCommand extends Command {
 		final int scaledMinDistance = (int) Math.floor(MoveableRouter.MIN_CONNECTION_FB_DISTANCE * zoom);
 
 		switch (index) {
-		case 1:
+		case 2:
 			int newDx1 = Math.max(point.x - sourceP.x, scaledMinDistance);
 			if (0 == newRoutingData.getDx2()) {
 				// we have three segment connection check that we are not beyond the input
@@ -83,10 +82,10 @@ public class AdjustConnectionCommand extends Command {
 			}
 			newRoutingData.setDx1((int) Math.floor(newDx1 / zoom));
 			break;
-		case 2:
+		case 4:
 			newRoutingData.setDy((int) Math.floor((point.y - sourceP.y) / zoom));
 			break;
-		case 3:
+		case 6:
 			final int newDx2 = Math.max(destP.x - point.x, scaledMinDistance);
 			newRoutingData.setDx2((int) Math.floor(newDx2 / zoom));
 			break;
@@ -111,6 +110,5 @@ public class AdjustConnectionCommand extends Command {
 	private Point getSourcePoint() {
 		return connection.getSourceAnchor().getLocation(connection.getSourceAnchor().getReferencePoint()).getCopy();
 	}
-
 
 }
