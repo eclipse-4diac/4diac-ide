@@ -21,7 +21,6 @@ import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.ConnectionEditPart;
@@ -45,10 +44,10 @@ public class LineSegmentHandle extends BendpointCreationHandle {
 
 		if (Math.abs(pt1.x - pt2.x) < Math.abs(pt1.y - pt2.y)) {
 			setCursor(Cursors.SIZEWE);
-			setPreferredSize(handleSize, getHandleLenght(Math.abs(pt1.y - pt2.y)));
+			setPreferredSize(handleSize, Math.abs(pt1.y - pt2.y));
 		} else {
 			setCursor(Cursors.SIZENS);
-			setPreferredSize(getHandleLenght(Math.abs(pt1.x - pt2.x)), handleSize);
+			setPreferredSize(Math.abs(pt1.x - pt2.x), handleSize);
 		}
 	}
 
@@ -69,10 +68,6 @@ public class LineSegmentHandle extends BendpointCreationHandle {
 		final int radius = (int) (ConnectionPreferenceValues.HANDLE_SIZE * 0.45);
 		final Rectangle r = Rectangle.SINGLETON.setBounds(getBounds()).shrink(1, 1);
 		g.drawRoundRectangle(r, radius, radius);
-	}
-
-	private static int getHandleLenght(final int len) {
-		return len - 2 * HideableConnection.BEND_POINT_BEVEL_SIZE;
 	}
 
 }

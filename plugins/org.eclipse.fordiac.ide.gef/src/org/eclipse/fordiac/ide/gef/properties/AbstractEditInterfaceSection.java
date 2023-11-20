@@ -144,8 +144,8 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 	protected void setTableInput() {
 		setTableInput(getInterface());
 		if (isShowTableEditButtons()) {
-			inputButtons.setCreateButtonEnablement(isEditable());
-			outputButtons.setCreateButtonEnablement(isEditable());
+			inputButtons.setEnabled(isEditable());
+			outputButtons.setEnabled(isEditable());
 		}
 	}
 

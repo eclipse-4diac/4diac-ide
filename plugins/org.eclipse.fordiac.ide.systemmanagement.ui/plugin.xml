@@ -363,6 +363,7 @@
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.mux"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.fb"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.typedSubapp"/>
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.comment"/>
               <!-- <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.navigator.filters.showonly61499Types"/> -->
                <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.fbTypeContent">
                		</contentExtension> 
@@ -577,6 +578,15 @@
             class="org.eclipse.fordiac.ide.systemmanagement.ui.filters.TypedSubappFilter"
             id="org.eclipse.fordiac.ide.systemmanagement.filters.typedSubapp"
             name="Hide Subapplication instances">
+      </commonFilter>
+      <commonFilter
+            activeByDefault="true"
+            id="org.eclipse.fordiac.ide.systemmanagement.filters.comment"
+            name="Hide comments">
+         <filterExpression>
+         	<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Comment">
+            </instanceof>
+         </filterExpression>
       </commonFilter>
   </extension>  
     <extension point="org.eclipse.ui.navigator.linkHelper">    

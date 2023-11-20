@@ -155,6 +155,8 @@ public class PasteCommand extends Command {
 				.removeIf(element -> copyPasteData.elements().stream().filter(SubApp.class::isInstance)
 						.map(SubApp.class::cast).filter(subapp -> !subapp.isTyped())
 						.anyMatch(subapp -> subapp.getSubAppNetwork().getNetworkElements().contains(element)));
+		copyPasteData.elements().removeIf(element -> copyPasteData.elements().stream().filter(Group.class::isInstance)
+				.map(Group.class::cast).anyMatch(group -> group.getGroupElements().contains(element)));
 	}
 
 	private void updateDelta() {

@@ -159,8 +159,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 			nameText.setEditable(!isReadonly());
 			nameText.setEnabled(!isReadonly());
 			nameTextProposalAdapter.refresh();
-			buttons.setButtonEnablement(!isReadonly());
-			buttons.setCreateButtonEnablement(!isReadonly());
+			buttons.setEnabled(!isReadonly());
 			organizeImportsButton.setEnabled(!isReadonly());
 			packageViewer.getTable().setEnabled(!isReadonly());
 

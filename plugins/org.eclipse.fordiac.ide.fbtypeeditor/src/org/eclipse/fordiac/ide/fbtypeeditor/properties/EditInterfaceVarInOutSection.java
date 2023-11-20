@@ -131,11 +131,10 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 		inputTable.refresh();
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void setTableInput() {
 		inputProvider.setInput(getType().getInterfaceList().getInOutVars());
 		if (isShowTableEditButtons()) {
-			inputButtons.setCreateButtonEnablement(isEditable());
+			inputButtons.setEnabled(isEditable());
 		}
 	}
 
