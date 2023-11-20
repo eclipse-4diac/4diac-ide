@@ -32,13 +32,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
@@ -54,6 +53,7 @@ import org.eclipse.ui.PlatformUI;
 
 public class LibraryLinker {
 
+	private static final SystemManager SYSTEM_MANAGER = SystemManager.INSTANCE;
 	private static final String LOGIC = "Logic"; //$NON-NLS-1$
 	private static final String LIB_TYPELIB_FOLDER_NAME = "typelib"; //$NON-NLS-1$
 	private static final String WORKSPACE_ROOT = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
@@ -67,9 +67,9 @@ public class LibraryLinker {
 			.append(EXTRACTED_LIB_DIRECTORY);
 
 	private IProject selectedProject;
-	private List<Optional<TypeEntry>> cashedTypes;
-	final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-	final IWorkspaceRoot workspaceRoot = workspace.getRoot();
+	private List<TypeEntry> cashedTypes;
+	private TypeLibrary typeLibrary;
+	private boolean isNewVersion;
 
 	public void extractLibrary(final File file, final StructuredSelection selection) throws IOException {
 		final byte[] buffer = new byte[1024];
@@ -98,8 +98,8 @@ public class LibraryLinker {
 			}
 		}
 		setSelectedProject(selection);
-		// Parent's name because we want package-version name when importing
 
+		// Parent's name because we want package-version name when importing
 		importLibrary(file.getParentFile().getName());
 
 	}
@@ -120,10 +120,12 @@ public class LibraryLinker {
 		if (!selection.isEmpty()) {
 			if (selection.getFirstElement() instanceof final IProject project) {
 				selectedProject = project;
+				typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject);
 			}
 			if ((selection.getFirstElement() instanceof final IFolder folder)
 					&& (folder.getParent() instanceof final IProject project)) {
 				selectedProject = project;
+				typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject);
 			}
 		}
 	}
@@ -137,20 +139,24 @@ public class LibraryLinker {
 	}
 
 	public void importLibrary(final String directory) {
-		SystemManager.INSTANCE.removeFordiacChangeListener();
+		SYSTEM_MANAGER.removeFordiacChangeListener();
 		// Make a folder inside of the Type Library
-		final IFolder directoryForExtraction = selectedProject.getFolder(TYPE_LIB).getFolder(directory);
-		if (!directoryForExtraction.exists()) {
+		final IFolder directoryForNewLibVersion = selectedProject.getFolder(TYPE_LIB).getFolder(directory);
+		if (!directoryForNewLibVersion.exists()) {
 			final java.nio.file.Path path = Paths.get(WORKSPACE_ROOT, EXTRACTED_LIB_DIRECTORY, directory,
 					LIB_TYPELIB_FOLDER_NAME);
 			if (Files.exists(path)) {
 				try {
 					final IPath libPath = WORKSPACE_REL_EXTRACTED_LIB_DIR.append(directory)
 							.append(LIB_TYPELIB_FOLDER_NAME);
-					differentVersion(findLinkedLibs(), directory);
-					directoryForExtraction.createLink(libPath, IResource.NONE, null); // remove the refresh
-					updateInstanceTypes(directoryForExtraction);
-					SystemManager.INSTANCE.addFordiacChangeListener();
+					removeOldLibVersion(findLinkedLibs(), directory);
+					directoryForNewLibVersion.createLink(libPath, IResource.NONE, null);
+					createTypeEntriesManually(directoryForNewLibVersion);
+					if (isNewVersion) {
+						// We can only update if there was a version before
+						updateFBInstancesWithNewTypeVersion();
+					}
+					SYSTEM_MANAGER.addFordiacChangeListener();
 				} catch (final CoreException e) {
 					MessageDialog.openWarning(null, Messages.Warning,
 							MessageFormat.format(Messages.ImportFailedOnLinkCreation, e.getMessage()));
@@ -163,10 +169,11 @@ public class LibraryLinker {
 		}
 	}
 
-	private void differentVersion(final List<String> importedLibs, final String newDirectoryName) {
+	private void removeOldLibVersion(final List<String> importedLibs, final String newDirectoryName) {
 		for (final String nameOfImportedLib : importedLibs) {
 			final String[] nameAndVersionSplit = nameOfImportedLib.split("-"); //$NON-NLS-1$
 			if (newDirectoryName.contains(nameAndVersionSplit[0])) {
+				isNewVersion = true;
 				MessageDialog.openWarning(null, Messages.Warning,
 						Messages.NewVersionOf + nameAndVersionSplit[0] + " " + Messages.WillBeImported); //$NON-NLS-1$
 				final IFolder oldFolder = selectedProject.getFolder(TYPE_LIB).getFolder(nameOfImportedLib);
@@ -175,11 +182,10 @@ public class LibraryLinker {
 					// Should only remove the link but keep the resource on disk
 					oldFolder.delete(true, null);
 
-					// remove the shit from the type lib manually
-					cashedTypes.forEach(optional -> {
-						TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject).removeTypeEntry(optional.get());
-					});
-					SystemManager.INSTANCE.notifyListeners();
+					// Remove the entries manually
+					cashedTypes.forEach(typeEntry -> TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject)
+							.removeTypeEntry(typeEntry));
+					SYSTEM_MANAGER.notifyListeners();
 
 				} catch (final CoreException e) {
 					MessageDialog.openWarning(null, Messages.Warning, Messages.OldTypeLibVersionCouldNotBeDeleted);
@@ -188,16 +194,15 @@ public class LibraryLinker {
 		}
 	}
 
-	private void checkAdditions(final IContainer container) {
+	private void createTypeEntriesManually(final IContainer container) {
 		try {
 			final IResource[] members = container.members();
 			for (final IResource resource : members) {
 				if (resource instanceof final IFolder folder) {
-					checkAdditions(folder);
+					createTypeEntriesManually(folder);
 				}
 				if (resource instanceof final IFile file) {
-					TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject).createTypeEntry(file); // TODO extract
-																										// into a field
+					typeLibrary.createTypeEntry(file);
 				}
 			}
 		} catch (final CoreException e) {
@@ -206,15 +211,11 @@ public class LibraryLinker {
 
 	}
 
-	private void updateInstanceTypes(final IFolder folder) {
-
+	private void updateFBInstancesWithNewTypeVersion() {
 		Display.getDefault().syncExec(() -> {
-			checkAdditions(folder);
-			SystemManager.INSTANCE.getProjectSystems(selectedProject)
+			SYSTEM_MANAGER.getProjectSystems(selectedProject)
 					.forEach(autoSys -> autoSys.getApplication().forEach(app -> {
-						final Command cmd = FBUpdater.updateAllInstances(app.getFBNetwork(), cashedTypes,
-								TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject));
-						// may eclipse gods have mercy on our souls
+						final Command cmd = FBUpdater.updateAllInstances(app.getFBNetwork(), cashedTypes, typeLibrary);
 						final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 								.getActiveEditor();
 						if (editor == null) {
@@ -226,11 +227,11 @@ public class LibraryLinker {
 		});
 	}
 
-	private List<Optional<TypeEntry>> cashOldTypes(final String oldVersion) {
+	private List<TypeEntry> cashOldTypes(final String oldVersion) {
 		try (final Stream<java.nio.file.Path> stream = Files
 				.list(Paths.get(WORKSPACE_ROOT, EXTRACTED_LIB_DIRECTORY, oldVersion, LIB_TYPELIB_FOLDER_NAME, LOGIC))) {
 			return stream.map(path -> TypeLibraryManager.INSTANCE.getTypeFromLinkedFile(selectedProject,
-					path.getFileName().toString())).toList(); // filter with isPresent() and remove the optional
+					path.getFileName().toString())).filter(Optional::isPresent).map(Optional::get).toList();
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}

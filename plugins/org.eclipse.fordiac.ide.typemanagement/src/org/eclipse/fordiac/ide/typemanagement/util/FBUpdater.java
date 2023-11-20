@@ -9,13 +9,13 @@
  *
  * Contributors:
  *   Dario Romano - initial implementation
+ *   Dunja Životin - added updateAllInstances for type lib import
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
@@ -107,13 +107,13 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static Command updateAllInstances(final FBNetwork fbNetwork, final List<Optional<TypeEntry>> cashedTypes,
+	public static Command updateAllInstances(final FBNetwork fbNetwork, final List<TypeEntry> cashedTypes,
 			final TypeLibrary typeLib) {
 		final List<Command> commands = new ArrayList<>();
 		fbNetwork.getNetworkElements().forEach(fbNetworkElement -> {
 			if (fbNetworkElement.getType() != null) {
 				cashedTypes.forEach(cashedType -> {
-					if (cashedType.get().getFullTypeName().equalsIgnoreCase(fbNetworkElement.getFullTypeName())) {
+					if (cashedType.getFullTypeName().equalsIgnoreCase(fbNetworkElement.getFullTypeName())) {
 						commands.add(new UpdateFBTypeCommand(fbNetworkElement,
 								typeLib.getFBTypeEntry(fbNetworkElement.getFullTypeName())));
 					}
