@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -135,7 +136,7 @@ public class FBUpdateDialog extends MessageDialog {
 				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).forEach(s -> {
 					if (s instanceof StructManipulator || (s instanceof final SubApp subApp && !subApp.isTyped())) {
 						inputElements.add(s);
-					} else {
+					} else if (!(s instanceof ErrorMarkerFBNElement)) {
 						try {
 							children.get(s.getTypeName()).add(s);
 						} catch (final Exception e) {
