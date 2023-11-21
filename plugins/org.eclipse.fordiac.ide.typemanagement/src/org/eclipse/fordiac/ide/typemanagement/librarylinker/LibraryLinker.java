@@ -215,6 +215,10 @@ public class LibraryLinker {
 								FBUpdater.updateAllInstancesCommand(app.getFBNetwork(), cashedTypes, typeLibrary));
 					}));
 		});
+		final InstanceUpdateDialog updateDialog = new InstanceUpdateDialog(null, Messages.InstanceUpdate, null,
+				Messages.UpdatedInstances, MessageDialog.NONE, new String[] { Messages.Confirm }, 0, null,
+				FBUpdater.getUpdatedElements());
+		updateDialog.open();
 	}
 
 	private Set<TypeEntry> cashOldTypes(final String oldVersion) {

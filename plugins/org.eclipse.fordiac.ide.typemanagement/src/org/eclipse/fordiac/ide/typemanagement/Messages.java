@@ -58,6 +58,8 @@ public final class Messages extends NLS {
 
 	public static String BuildPathPropertyPage_Toggle;
 
+	public static String Confirm;
+
 	public static String DeleteFBTypeParticipant_Name;
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
 	public static String DeleteFBTypeParticipant_Change_DeleteFBTypeInterface;
@@ -76,6 +78,7 @@ public final class Messages extends NLS {
 	public static String ImportExtractedFiles;
 	public static String ImportFailed;
 	public static String ImportFailedOnLinkCreation;
+	public static String InstanceUpdate;
 	public static String NewFBTypeWizard_TemplateNotAvailable;
 	public static String NewFBTypeWizardPage_TypeAlreadyExists;
 	public static String NewFBTypeWizardPage_CreateNewType;
@@ -108,6 +111,8 @@ public final class Messages extends NLS {
 	public static String Refactoring_RenameFromTo;
 	public static String Refactoring_AffectedStruct;
 	public static String Refactoring_AffectedInstancesOfFB;
+
+	public static String UpdatedInstances;
 
 	public static String DeleteStructChange_DeleteChoice;
 	public static String DeleteStructChange_ChangeToAnyStruct;

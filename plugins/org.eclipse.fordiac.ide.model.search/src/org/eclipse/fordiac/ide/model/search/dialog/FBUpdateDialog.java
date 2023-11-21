@@ -72,7 +72,7 @@ public class FBUpdateDialog extends MessageDialog {
 	protected final DataTypeEntry dataTypeEntry;
 
 	private static final int NUMBER_OF_COLLUMNS = 1;
-	private static final int TABLE_COL_WIDTH = 150;
+	protected static final int TABLE_COL_WIDTH = 150;
 	private static final int CHECK_BOX_COL_WIDTH = 60;
 	private boolean selectAll = true;
 
@@ -120,7 +120,7 @@ public class FBUpdateDialog extends MessageDialog {
 		return parent;
 	}
 
-	private Set<INamedElement> createInputSet() {
+	protected Set<INamedElement> createInputSet() {
 		final Set<INamedElement> inputElements = new HashSet<>();
 		// find SubAppTypes
 		InstanceSearch search = StructDataTypeSearch
@@ -218,7 +218,7 @@ public class FBUpdateDialog extends MessageDialog {
 		return new TreeViewer(parent, SWT.CHECK);
 	}
 
-	private void configureTableViewer(final TreeViewer viewer) {
+	protected void configureTableViewer(final TreeViewer viewer) {
 		collectedElements.clear();
 		createLabelProviders();
 		viewer.setContentProvider(new ITreeContentProvider() {
@@ -398,7 +398,7 @@ public class FBUpdateDialog extends MessageDialog {
 		}
 	}
 
-	private static TableLayout createTableLayout() {
+	protected TableLayout createTableLayout() {
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(CHECK_BOX_COL_WIDTH, true));
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
