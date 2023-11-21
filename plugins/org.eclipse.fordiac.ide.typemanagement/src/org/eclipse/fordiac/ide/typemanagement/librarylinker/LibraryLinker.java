@@ -20,9 +20,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -43,13 +46,9 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
 
 public class LibraryLinker {
 
@@ -67,7 +66,7 @@ public class LibraryLinker {
 			.append(EXTRACTED_LIB_DIRECTORY);
 
 	private IProject selectedProject;
-	private List<TypeEntry> cashedTypes;
+	private Set<TypeEntry> cashedTypes;
 	private TypeLibrary typeLibrary;
 	private boolean isNewVersion;
 
@@ -181,12 +180,9 @@ public class LibraryLinker {
 					cashedTypes = cashOldTypes(nameOfImportedLib);
 					// Should only remove the link but keep the resource on disk
 					oldFolder.delete(true, null);
-
 					// Remove the entries manually
 					cashedTypes.forEach(typeEntry -> TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject)
 							.removeTypeEntry(typeEntry));
-					SYSTEM_MANAGER.notifyListeners();
-
 				} catch (final CoreException e) {
 					MessageDialog.openWarning(null, Messages.Warning, Messages.OldTypeLibVersionCouldNotBeDeleted);
 				}
@@ -215,27 +211,23 @@ public class LibraryLinker {
 		Display.getDefault().syncExec(() -> {
 			SYSTEM_MANAGER.getProjectSystems(selectedProject)
 					.forEach(autoSys -> autoSys.getApplication().forEach(app -> {
-						final Command cmd = FBUpdater.updateAllInstances(app.getFBNetwork(), cashedTypes, typeLibrary);
-						final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-								.getActiveEditor();
-						if (editor == null) {
-							cmd.execute();
-						} else {
-							editor.getAdapter(CommandStack.class).execute(cmd);
-						}
+						FBUpdater.executeCommand(
+								FBUpdater.updateAllInstancesCommand(app.getFBNetwork(), cashedTypes, typeLibrary));
 					}));
 		});
 	}
 
-	private List<TypeEntry> cashOldTypes(final String oldVersion) {
+	private Set<TypeEntry> cashOldTypes(final String oldVersion) {
 		try (final Stream<java.nio.file.Path> stream = Files
 				.list(Paths.get(WORKSPACE_ROOT, EXTRACTED_LIB_DIRECTORY, oldVersion, LIB_TYPELIB_FOLDER_NAME, LOGIC))) {
-			return stream.map(path -> TypeLibraryManager.INSTANCE.getTypeFromLinkedFile(selectedProject,
-					path.getFileName().toString())).filter(Optional::isPresent).map(Optional::get).toList();
+			return stream
+					.map(path -> TypeLibraryManager.INSTANCE.getTypeFromLinkedFile(selectedProject,
+							path.getFileName().toString()))
+					.filter(Optional::isPresent).map(Optional::get).collect(Collectors.toCollection(HashSet::new));
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-		return Collections.emptyList();
+		return Collections.emptySet();
 	}
 
 	private List<String> findLinkedLibs() {

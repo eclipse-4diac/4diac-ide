@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.typemanagement.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
@@ -107,13 +109,13 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static Command updateAllInstances(final FBNetwork fbNetwork, final List<TypeEntry> cashedTypes,
+	public static Command updateAllInstancesCommand(final FBNetwork fbNetwork, final Set<TypeEntry> typeEntries,
 			final TypeLibrary typeLib) {
 		final List<Command> commands = new ArrayList<>();
 		fbNetwork.getNetworkElements().forEach(fbNetworkElement -> {
 			if (fbNetworkElement.getType() != null) {
-				cashedTypes.forEach(cashedType -> {
-					if (cashedType.getFullTypeName().equalsIgnoreCase(fbNetworkElement.getFullTypeName())) {
+				typeEntries.forEach(typeEntry -> {
+					if (typeEntry.getFullTypeName().equalsIgnoreCase(fbNetworkElement.getFullTypeName())) {
 						commands.add(new UpdateFBTypeCommand(fbNetworkElement,
 								typeLib.getFBTypeEntry(fbNetworkElement.getFullTypeName())));
 					}
@@ -125,6 +127,16 @@ public final class FBUpdater {
 			cmd.add(subCmd);
 		}
 		return cmd;
+	}
+
+	public static void executeCommand(final Command cmd) {
+		final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor();
+		if (editor == null) {
+			cmd.execute();
+		} else {
+			editor.getAdapter(CommandStack.class).execute(cmd);
+		}
 	}
 
 }
