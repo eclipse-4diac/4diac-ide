@@ -17,7 +17,9 @@
 package org.eclipse.fordiac.ide.model;
 
 import java.text.MessageFormat;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Assert;
@@ -108,7 +110,7 @@ public final class NameRepository {
 	 */
 	public static String createUniqueName(final INamedElement element, final String nameProposal) {
 		if (element instanceof Comment) {
-			return null;
+			return ""; //$NON-NLS-1$ comments should have empty strings as name
 		}
 		// currently this method should only be used for non comments
 		String retVal = nameProposal;
@@ -219,7 +221,7 @@ public final class NameRepository {
 		}
 
 		return elementsList.stream().filter(element -> element != refElement).map(INamedElement::getName)
-				.collect(Collectors.toSet());
+				.filter(Objects::nonNull).filter(Predicate.not(String::isBlank)).collect(Collectors.toSet());
 	}
 
 	/**
