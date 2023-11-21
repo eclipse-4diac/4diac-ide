@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
 public final class FBNetworkElementAnnotations {
@@ -22,8 +24,15 @@ public final class FBNetworkElementAnnotations {
 
 	public static boolean validateName(final FBNetworkElement element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
+		if (isErrorMarkerOrComment(element)) {
+			return true; // do not check error markers or comments
+		}
 		return NamedElementAnnotations.validateName(element, diagnostics, context)
 				&& NamedElementAnnotations.validateDuplicateName(element, diagnostics, context, NAMED_ELEMENTS_KEY);
+	}
+
+	static boolean isErrorMarkerOrComment(final FBNetworkElement element) {
+		return element instanceof ErrorMarkerFBNElement || element instanceof Comment;
 	}
 
 	private FBNetworkElementAnnotations() {
