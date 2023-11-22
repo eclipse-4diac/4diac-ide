@@ -120,7 +120,13 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static Command updateAllInstancesCommand(final FBNetwork fbNetwork, final Set<TypeEntry> typeEntries,
+	public static void updateAllInstances(final FBNetwork fbNetwork, final Set<TypeEntry> typeEntries,
+			final TypeLibrary typeLib) {
+		final Command cmd = collectUpdateInstanceCommands(fbNetwork, typeEntries, typeLib);
+		executeCommand(cmd);
+	}
+
+	private static Command collectUpdateInstanceCommands(final FBNetwork fbNetwork, final Set<TypeEntry> typeEntries,
 			final TypeLibrary typeLib) {
 		final List<Command> commands = new ArrayList<>();
 		updatedElements = new HashSet<>();
@@ -141,7 +147,7 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static void executeCommand(final Command cmd) {
+	private static void executeCommand(final Command cmd) {
 		final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		if (editor == null) {

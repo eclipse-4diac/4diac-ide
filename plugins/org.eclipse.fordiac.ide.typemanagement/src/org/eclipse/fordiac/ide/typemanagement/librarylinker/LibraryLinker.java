@@ -211,8 +211,7 @@ public class LibraryLinker {
 		Display.getDefault().syncExec(() -> {
 			SYSTEM_MANAGER.getProjectSystems(selectedProject)
 					.forEach(autoSys -> autoSys.getApplication().forEach(app -> {
-						FBUpdater.executeCommand(
-								FBUpdater.updateAllInstancesCommand(app.getFBNetwork(), cashedTypes, typeLibrary));
+						FBUpdater.updateAllInstances(app.getFBNetwork(), cashedTypes, typeLibrary);
 					}));
 		});
 		final InstanceUpdateDialog updateDialog = new InstanceUpdateDialog(null, Messages.InstanceUpdate, null,
