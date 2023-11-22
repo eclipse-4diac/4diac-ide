@@ -53,8 +53,8 @@ public class StructTreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		if (element instanceof AbstractStructTreeNode) {
-			return ((AbstractStructTreeNode) element).hasChildren();
+		if (element instanceof final AbstractStructTreeNode abstractstructtreenode) {
+			return abstractstructtreenode.hasChildren();
 		}
 		return false;
 	}

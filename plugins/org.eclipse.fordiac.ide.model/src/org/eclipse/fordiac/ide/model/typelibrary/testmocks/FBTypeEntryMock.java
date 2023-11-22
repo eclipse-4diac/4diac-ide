@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.typelibrary.testmocks;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -98,7 +99,7 @@ public final class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEn
 	}
 
 	@Override
-	public void save() {
+	public void save(final IProgressMonitor monitor) {
 		// currently not needed in mock
 	}
 

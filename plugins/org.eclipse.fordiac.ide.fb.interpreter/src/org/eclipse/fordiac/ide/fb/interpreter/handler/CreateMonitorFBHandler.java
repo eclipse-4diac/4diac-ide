@@ -13,12 +13,15 @@
 
 package org.eclipse.fordiac.ide.fb.interpreter.handler;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.fb.interpreter.Messages;
 import org.eclipse.fordiac.ide.fb.interpreter.monitorgen.CompositeMonitorFBGenerator;
@@ -33,6 +36,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class CreateMonitorFBHandler extends AbstractHandler {
@@ -51,6 +55,27 @@ public class CreateMonitorFBHandler extends AbstractHandler {
 			return Status.CANCEL_STATUS;
 		}
 		final TestSuite testSuite = new TestSuite(type);
+
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(
+				type.getTypeEntry().getFile().getProject()) {
+
+			@Override
+			protected void execute(final IProgressMonitor monitor)
+					throws CoreException, InvocationTargetException, InterruptedException {
+				perform(selection, type, testSuite, monitor);
+			}
+		};
+		try {
+			editor.getSite().getWorkbenchWindow().run(true, false, operation);
+		} catch (final Exception e) {
+			return Status.error(e.getMessage(), e);
+		}
+
+		return Status.OK_STATUS;
+	}
+
+	private static void perform(final IStructuredSelection selection, final FBType type, final TestSuite testSuite,
+			final IProgressMonitor monitor) throws CoreException {
 		FBType testtype;
 
 		// if a service sequence is selected only the monitorFB for this sequence is
@@ -67,7 +92,7 @@ public class CreateMonitorFBHandler extends AbstractHandler {
 			}
 			if (testCase != null) {
 				testtype = new MonitorFBGenerator(type, testSuite, testCase).generateTestFb();
-				testtype.getTypeEntry().save();
+				testtype.getTypeEntry().save(monitor);
 
 			}
 		}
@@ -77,14 +102,13 @@ public class CreateMonitorFBHandler extends AbstractHandler {
 			for (final TestCase testCase : testSuite.getTestCases()) {
 				if (testCase.getdataSource().getServiceSequenceType().equals("FORBIDDEN")) { //$NON-NLS-1$
 					testtype = new MonitorFBGenerator(type, testSuite, testCase).generateTestFb();
-					testtype.getTypeEntry().save();
+					testtype.getTypeEntry().save(monitor);
 					monitorFBs.add(testtype);
 				}
 			}
 			final CompositeFBType compositeType = new CompositeMonitorFBGenerator(type, monitorFBs)
 					.generateCompositeFB();
-			compositeType.getTypeEntry().save();
+			compositeType.getTypeEntry().save(monitor);
 		}
-		return Status.OK_STATUS;
 	}
 }

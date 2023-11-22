@@ -35,22 +35,22 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		«generateFBClassHeader»
 		  «generateFBDeclaration»
 		
-		private:
-		  «generateFBInterfaceDeclaration»
+		  private:
+		    «generateFBInterfaceDeclaration»
 		
-		  «generateFBInterfaceSpecDeclaration»
+		    «generateFBInterfaceSpecDeclaration»
 		
-		  «generateFBNetwork»
+		    «generateFBNetwork»
 		
-		  «generateReadInputDataDeclaration»
-		  «generateWriteOutputDataDeclaration»
-		  «generateReadInternal2InterfaceOutputDataDeclaration»
-		  «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
+		    «generateReadInputDataDeclaration»
+		    «generateWriteOutputDataDeclaration»
+		    «generateReadInternal2InterfaceOutputDataDeclaration»
+		    «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
-		public:
-		  «FBClassName»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
+		  public:
+		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
 		
-		  «generateInterfaceDeclarations»
+		    «generateInterfaceDeclarations»
 		};
 		
 		«generateIncludeGuardEnd»

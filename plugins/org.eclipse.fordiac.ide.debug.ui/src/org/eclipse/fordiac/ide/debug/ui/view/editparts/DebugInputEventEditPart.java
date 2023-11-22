@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorEventQueue;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorExternalEventQueue;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RootEditPart;
 
 public class DebugInputEventEditPart extends InterfaceEditPart {
@@ -55,9 +56,9 @@ public class DebugInputEventEditPart extends InterfaceEditPart {
 	private FBDebugViewRootEditPart getDebugViewRoot() {
 		final RootEditPart root = getRoot();
 		if (root != null) {
-			for (final Object child : root.getChildren()) {
-				if (child instanceof FBDebugViewRootEditPart) {
-					return (FBDebugViewRootEditPart) child;
+			for (final EditPart child : root.getChildren()) {
+				if (child instanceof final FBDebugViewRootEditPart fbDebugRootEP) {
+					return fbDebugRootEP;
 				}
 			}
 		}
@@ -68,8 +69,8 @@ public class DebugInputEventEditPart extends InterfaceEditPart {
 		final FBDebugViewRootEditPart debugViewRoot = getDebugViewRoot();
 		if (debugViewRoot != null) {
 			final FBEvaluatorEventQueue eventQueue = debugViewRoot.getFBEvaluator().getEventQueue();
-			if (eventQueue instanceof FBEvaluatorExternalEventQueue) {
-				return (FBEvaluatorExternalEventQueue) eventQueue;
+			if (eventQueue instanceof final FBEvaluatorExternalEventQueue fbQueue) {
+				return fbQueue;
 			}
 		}
 		return null;

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 - 2023 Primetals Technologies Austria GmbH
- *               2022 - 2023 Martin Erich Jobst
+ * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,9 +14,10 @@
  *       - adds check for trailing underscore on identifiers
  *       - validation for unqualified FB calls (exactly one input event)
  *       - validation for partial bit access
- *       - validaton for array access
- *       - validaton for string access
+ *       - validation for array access
+ *       - validation for string access
  *       - validation for assignability (cannot assign to consts/inputs)
+ *       - validation that array access operator is only applicable to vars
  *   Ulzii Jargalsaikhan
  *       - custom validation for identifiers
  *   Martin Jobst
@@ -40,7 +41,6 @@ import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.
 import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.StreamSupport;
@@ -62,7 +62,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter;
@@ -89,7 +88,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpressio
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
@@ -103,16 +101,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.AccessMode;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.diagnostics.Severity;
-import org.eclipse.xtext.naming.IQualifiedNameConverter;
-import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
-import org.eclipse.xtext.util.Strings;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ValidationMessageAcceptor;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 public class STCoreValidator extends AbstractSTCoreValidator {
 
@@ -121,12 +115,6 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Inject
 	private STStringValueConverter stringValueConverter;
-
-	@Inject
-	private IQualifiedNameConverter nameConverter;
-
-	@Inject
-	private Provider<STCoreTypeUsageCollector> typeUsageCollectorProvider;
 
 	public static final String ISSUE_CODE_PREFIX = "org.eclipse.fordiac.ide.structuredtextcore."; //$NON-NLS-1$
 	public static final String CONSECUTIVE_UNDERSCORE_IN_IDENTIFIER_ERROR = ISSUE_CODE_PREFIX
@@ -164,6 +152,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String MAX_LENGTH_TYPE_INVALID = ISSUE_CODE_PREFIX + "maxLengthTypeInvalid"; //$NON-NLS-1$
 	public static final String TOO_MANY_INDICES_GIVEN = ISSUE_CODE_PREFIX + "tooManyIndicesGiven"; //$NON-NLS-1$
 	public static final String ARRAY_ACCESS_INVALID = ISSUE_CODE_PREFIX + "arrayAccessInvalid"; //$NON-NLS-1$
+	public static final String ARRAY_ACCESS_RECEIVER_INVALID = ISSUE_CODE_PREFIX + "arrayAccessReceiverInvalid"; //$NON-NLS-1$
 	public static final String ARRAY_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "arrayIndexOutOfBounds"; //$NON-NLS-1$
 	public static final String TRUNCATED_LITERAL = ISSUE_CODE_PREFIX + "truncatedLiteral"; //$NON-NLS-1$
 	public static final String STRING_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "stringIndexOutOfBounds"; //$NON-NLS-1$
@@ -189,52 +178,6 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String UNUSED_IMPORT = ISSUE_CODE_PREFIX + "unusedImport"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
-
-	private static final String WILDCARD = "*"; //$NON-NLS-1$
-
-	protected void checkImports(final STSource source, final String packageName, final List<? extends Import> imports) {
-		if (imports.isEmpty()) {
-			return;
-		}
-
-		final QualifiedName packageQualifiedName = Strings.isEmpty(packageName) ? QualifiedName.EMPTY
-				: nameConverter.toQualifiedName(packageName);
-
-		final STCoreTypeUsageCollector collector = typeUsageCollectorProvider.get();
-		final Set<QualifiedName> usedTypes = collector.collectUsedTypes(source);
-		imports.stream().forEach(imp -> checkImport(imp, packageQualifiedName, usedTypes));
-	}
-
-	protected void checkImport(final Import imp, final QualifiedName packageName, final Set<QualifiedName> usedTypes) {
-		final String importedNamespace = imp.getImportedNamespace();
-		if (Strings.isEmpty(importedNamespace)) {
-			return;
-		}
-
-		final QualifiedName qualifiedName = nameConverter.toQualifiedName(importedNamespace);
-		if (qualifiedName == null || qualifiedName.isEmpty()) {
-			return;
-		}
-
-		if (WILDCARD.equals(qualifiedName.getLastSegment())) {
-			if (qualifiedName.getSegmentCount() <= 1) {
-				error(MessageFormat.format(Messages.STCoreValidator_InvalidWildcardImport, importedNamespace), imp,
-						LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(), INVALID_IMPORT,
-						importedNamespace);
-			} else {
-				warning(MessageFormat.format(Messages.STCoreValidator_WildcardImportDiscouraged, importedNamespace),
-						imp, LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(), WILDCARD_IMPORT,
-						importedNamespace);
-			}
-		} else if (isImplicitImport(qualifiedName, packageName) || !usedTypes.contains(qualifiedName)) {
-			warning(MessageFormat.format(Messages.STCoreValidator_UnusedImport, importedNamespace), imp,
-					LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(), UNUSED_IMPORT, importedNamespace);
-		}
-	}
-
-	public static boolean isImplicitImport(final QualifiedName imported, final QualifiedName packageName) {
-		return imported.getSegmentCount() <= 1 || imported.skipLast(1).equals(packageName);
-	}
 
 	private void checkRangeOnValidity(final STExpression expression) {
 		if (expression instanceof final STBinaryExpression subRangeExpression) {
@@ -369,6 +312,17 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				}
 			}
 		}
+	}
+
+	@Check
+	public void checkArrayAccessReceiverIsAVariable(final STArrayAccessExpression accessExpression) {
+		if (accessExpression.getReceiver() instanceof final STFeatureExpression featureExpression
+				&& !(featureExpression.getFeature() instanceof STVarDeclaration
+						|| featureExpression.getFeature() instanceof VarDeclaration)) {
+			error(Messages.STCoreValidator_ArrayAccessReceiverIsInvalid,
+					STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__RECEIVER, ARRAY_ACCESS_RECEIVER_INVALID);
+		}
+
 	}
 
 	@Check

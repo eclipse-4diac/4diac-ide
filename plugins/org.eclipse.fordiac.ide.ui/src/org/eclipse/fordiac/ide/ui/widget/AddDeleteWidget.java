@@ -325,6 +325,10 @@ public class AddDeleteWidget {
 		return null;
 	}
 
+	public Composite getControl() {
+		return container;
+	}
+
 	public boolean isEnabled() {
 		return enabled;
 	}

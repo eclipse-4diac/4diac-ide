@@ -24,17 +24,11 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
-
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ViewerNotification;
-
 import org.eclipse.fordiac.ide.model.data.provider.DataTypeItemProvider;
 import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType} object.
@@ -64,31 +58,8 @@ public class ErrorMarkerDataTypeItemProvider extends DataTypeItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addErrorMessagePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Error Message feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addErrorMessagePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ErrorMarkerRef_errorMessage_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerRef_errorMessage_feature", "_UI_ErrorMarkerRef_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.ERROR_MARKER_REF__ERROR_MESSAGE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -127,15 +98,7 @@ public class ErrorMarkerDataTypeItemProvider extends DataTypeItemProvider {
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
-
-		switch (notification.getFeatureID(ErrorMarkerDataType.class)) {
-			case LibraryElementPackage.ERROR_MARKER_DATA_TYPE__ERROR_MESSAGE:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			default:
-				super.notifyChanged(notification);
-				return;
-			}
+		super.notifyChanged(notification);
 	}
 
 	/**

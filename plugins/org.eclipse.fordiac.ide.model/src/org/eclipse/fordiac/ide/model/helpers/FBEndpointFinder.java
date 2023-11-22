@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.EList;
@@ -50,12 +49,18 @@ public class FBEndpointFinder {
 		public final Set<IInterfaceElement> connections;
 
 		/**
-		 * @param plexStack a stack of visited (De)Multiplexer-Interfaces (muxers interfaces get pushed onto the stack demuxers pop that interface from the stack)
-		 * @param ifElem the {@link IInterfaceElement} to traverse to the next destination (until the destination is a "regular" FB)
-		 * @param inputSide true if skipping should be done through inputs (find left side FBs of the supplied connection), false otherwise
-		 * @param connections a set of destination interfaces from the initial starting point to that destinations
+		 * @param plexStack   a stack of visited (De)Multiplexer-Interfaces (muxers
+		 *                    interfaces get pushed onto the stack demuxers pop that
+		 *                    interface from the stack)
+		 * @param ifElem      the {@link IInterfaceElement} to traverse to the next
+		 *                    destination (until the destination is a "regular" FB)
+		 * @param inputSide   true if skipping should be done through inputs (find left
+		 *                    side FBs of the supplied connection), false otherwise
+		 * @param connections a set of destination interfaces from the initial starting
+		 *                    point to that destinations
 		 */
-		public RecursionState(final Deque<String> plexStack, final boolean inputSide, final IInterfaceElement ifElem, final Set<IInterfaceElement> connections) {
+		public RecursionState(final Deque<String> plexStack, final boolean inputSide, final IInterfaceElement ifElem,
+				final Set<IInterfaceElement> connections) {
 			this.plexStack = plexStack;
 			this.inputSide = inputSide;
 			this.ifElem = ifElem;
@@ -94,28 +99,31 @@ public class FBEndpointFinder {
 	}
 
 	/**
-	 * find the interfaces of the connected atomic FBs which are the destinations for the supplied interface
-	 * (De)Multiplexer and SubApps between atomic FBs are ignored
-	 * if the supplied interface is an input the sources are traced
-	 * else the destinations are traced
+	 * find the interfaces of the connected atomic FBs which are the destinations
+	 * for the supplied interface (De)Multiplexer and SubApps between atomic FBs are
+	 * ignored if the supplied interface is an input the sources are traced else the
+	 * destinations are traced
 	 *
 	 * @param ifElem the interface to find the destinations/sources from
 	 * @return a Set of end-point interfaces/pins
 	 */
-	public static Set<IInterfaceElement> findConnectedInterfaceElements(final IInterfaceElement ifElem){
+	public static Set<IInterfaceElement> findConnectedInterfaceElements(final IInterfaceElement ifElem) {
 		final Set<IInterfaceElement> connectedInt = new HashSet<>();
-		for (final Connection con: (ifElem.isIsInput()) ? ifElem.getInputConnections() : ifElem.getOutputConnections()) {
-			trace(new RecursionState(new ArrayDeque<>(), ifElem.isIsInput(), ifElem.isIsInput() ? con.getSource() : con.getDestination(), connectedInt));
+		for (final Connection con : (ifElem.isIsInput()) ? ifElem.getInputConnections()
+				: ifElem.getOutputConnections()) {
+			trace(new RecursionState(new ArrayDeque<>(), ifElem.isIsInput(),
+					ifElem.isIsInput() ? con.getSource() : con.getDestination(), connectedInt));
 		}
 		return connectedInt;
 	}
 
 	/**
-	 * find all connected interfaces for the supplied FB
-	 * (only checks the output side so far, input side for this function was not needed)
+	 * find all connected interfaces for the supplied FB (only checks the output
+	 * side so far, input side for this function was not needed)
 	 *
 	 * @param fb the FB to find other interfaces to this FBs interfaces
-	 * @return a Map of the source interfaces and a set of their destination interfaces
+	 * @return a Map of the source interfaces and a set of their destination
+	 *         interfaces
 	 */
 	public static Map<IInterfaceElement, Set<IInterfaceElement>> findConnectedInterfaces(final FBNetworkElement fb) {
 		final Map<IInterfaceElement, Set<IInterfaceElement>> results = new HashMap<>();
@@ -125,60 +133,62 @@ public class FBEndpointFinder {
 		outInt.addAll(fb.getInterface().getOutputVars());
 		outInt.addAll(fb.getInterface().getPlugs());
 		flattenConnections(outInt, false)
-		.forEach(con -> results.put(con.getSource(), findConnectedInterfaceElements(con.getSource())));
+				.forEach(con -> results.put(con.getSource(), findConnectedInterfaceElements(con.getSource())));
 
 		return results;
 	}
 
 	/**
-	 * find all possible connected FBs, from one given FB. SubApps, Multiplexer and Demultiplexer between 2 FBs are ignored.
+	 * find all possible connected FBs, from one given FB. SubApps, Multiplexer and
+	 * Demultiplexer between 2 FBs are ignored.
 	 *
-	 * @param fb the FB to search for connected FBs
-	 * @param includeInputs true if destinations to the input side of the FB should be included
-	 * @param includeOutputs true if destinations to the output side of the FB should be included
-	 * @param traverseParent if true the search will extend to higher levels of the hierarchy,
-	 * otherwise the parent of the supplied FB will be the top limit, it will still search lower parts of the hierarchy
-	 * @return a Set of unique FB as destinations including the number of connections to that FB from the given start point
+	 * @param fb             the FB to search for connected FBs
+	 * @param includeInputs  true if destinations to the input side of the FB should
+	 *                       be included
+	 * @param includeOutputs true if destinations to the output side of the FB
+	 *                       should be included
+	 * @param traverseParent if true the search will extend to higher levels of the
+	 *                       hierarchy, otherwise the parent of the supplied FB will
+	 *                       be the top limit, it will still search lower parts of
+	 *                       the hierarchy
+	 * @return a Set of unique FB as destinations including the number of
+	 *         connections to that FB from the given start point
 	 */
-	public static Map<FBNetworkElement, Integer> findConnectedElements(
-			final FBNetworkElement fb,
-			final boolean includeInputs,
-			final boolean includeOutputs,
-			final boolean traverseParent) {
+	public static Map<FBNetworkElement, Integer> findConnectedElements(final FBNetworkElement fb,
+			final boolean includeInputs, final boolean includeOutputs, final boolean traverseParent) {
 
 		final List<IInterfaceElement> ifs = new ArrayList<>();
-		//include sources to the input side of the given FB
+		// include sources to the input side of the given FB
 		if (includeInputs) {
-			//gather interfaces
+			// gather interfaces
 			ifs.addAll(fb.getInterface().getEventInputs());
 			ifs.addAll(fb.getInterface().getInputVars());
 			ifs.addAll(fb.getInterface().getSockets());
 		}
 
-		//include destinations to the output side of the given FB
+		// include destinations to the output side of the given FB
 		if (includeOutputs) {
-			//gather interfaces
+			// gather interfaces
 			ifs.addAll(fb.getInterface().getEventOutputs());
 			ifs.addAll(fb.getInterface().getOutputVars());
 			ifs.addAll(fb.getInterface().getPlugs());
 		}
 
-		//trace connections
+		// trace connections
 		final Set<IInterfaceElement> connectedIfs = new HashSet<>();
-		ifs.stream().forEach(ifElem -> (ifElem.isIsInput() ? ifElem.getInputConnections() : ifElem.getOutputConnections())
-				.forEach(con -> trace(new RecursionState(
-						new ArrayDeque<>(),
-						ifElem.isIsInput(),
-						(ifElem.isIsInput() ? con.getSource() : con.getDestination()),
-						connectedIfs))));
+		ifs.stream()
+				.forEach(ifElem -> (ifElem.isIsInput() ? ifElem.getInputConnections() : ifElem.getOutputConnections())
+						.forEach(con -> trace(new RecursionState(new ArrayDeque<>(), ifElem.isIsInput(),
+								(ifElem.isIsInput() ? con.getSource() : con.getDestination()), connectedIfs))));
 
-		//count connections between blocks
+		// count connections between blocks
 		final Map<FBNetworkElement, Integer> result = new HashMap<>();
 		connectedIfs.stream().map(IInterfaceElement::getFBNetworkElement)
-		.forEach(destFB -> result.put(destFB, result.containsKey(destFB) ? result.get(destFB)+1 : 1));
+				.forEach(destFB -> result.put(destFB, result.containsKey(destFB) ? result.get(destFB) + 1 : 1));
 
-		//if parent should not be traversed
-		//remove connected elements that share a parent with the outer parents of this block
+		// if parent should not be traversed
+		// remove connected elements that share a parent with the outer parents of this
+		// block
 		if (!(traverseParent || fb.getOuterFBNetworkElement() == null)) {
 			final List<FBNetworkElement> parents = new ArrayList<>();
 			FBNetworkElement parent = fb.getOuterFBNetworkElement();
@@ -223,7 +233,7 @@ public class FBEndpointFinder {
 				}
 			}
 		}
-		return connectedElements.stream().distinct().collect(Collectors.toList());
+		return connectedElements.stream().distinct().toList();
 	}
 
 	/**
@@ -244,20 +254,21 @@ public class FBEndpointFinder {
 				connectedElements.add(con.getDestinationElement());
 			}
 		}
-
-		return connectedElements.stream().distinct().collect(Collectors.toList());
-
+		return connectedElements.stream().distinct().toList();
 	}
 
 	/**
-	 * helper method to avoid duplicated code in {@link #findConnectedElements(FBNetworkElement, boolean, boolean)}
+	 * helper method to avoid duplicated code in
+	 * {@link #findConnectedElements(FBNetworkElement, boolean, boolean)}
 	 *
-	 * @param fbInt Interface list
+	 * @param fbInt  Interface list
 	 * @param inputs true if interface is a list of inputs
 	 * @return Stream of {@link Connection}
 	 */
-	private static Stream<Connection> flattenConnections(final List<? extends IInterfaceElement> fbInt, final boolean inputs) {
-		return fbInt.stream().flatMap(e -> inputs ? e.getInputConnections().stream() : e.getOutputConnections().stream());
+	private static Stream<Connection> flattenConnections(final List<? extends IInterfaceElement> fbInt,
+			final boolean inputs) {
+		return fbInt.stream()
+				.flatMap(e -> inputs ? e.getInputConnections().stream() : e.getOutputConnections().stream());
 	}
 
 	/**
@@ -274,27 +285,28 @@ public class FBEndpointFinder {
 			return;
 		}
 
-		//trace an event interface -> handled differently to regular connections since (de)muxer just forward that event
+		// trace an event interface -> handled differently to regular connections since
+		// (de)muxer just forward that event
 		if (state.ifElem instanceof Event) {
 			traceEvent(state);
 			return;
 		}
-		//fb is a SubApp traverse down over the interface connections of the subapp
-		if (fb instanceof SubApp && !((SubApp) fb).isTyped()) {
+		// fb is a SubApp traverse down over the interface connections of the subapp
+		if (fb instanceof final SubApp subapp && !subapp.isTyped()) {
 			traceSubApp(state);
 		}
-		//fb is mux/demux
-		else if(fb instanceof StructManipulator) {
-			//from left into mux or from right into demux
+		// fb is mux/demux
+		else if (fb instanceof StructManipulator) {
+			// from left into mux or from right into demux
 			if ((state.inputSide && fb instanceof Demultiplexer) || (!state.inputSide && fb instanceof Multiplexer)) {
 				traceTrunk(state);
 			}
-			//from right into mux or from left into demux
+			// from right into mux or from left into demux
 			else {
 				traceFan(state);
 			}
 		}
-		//FBs, CFBs, typed SubApps
+		// FBs, CFBs, typed SubApps
 		else {
 			state.connections.add(state.ifElem);
 		}
@@ -308,17 +320,20 @@ public class FBEndpointFinder {
 	private static void traceEvent(final RecursionState state) {
 		final FBNetworkElement fb = state.ifElem.getFBNetworkElement();
 
-		if (fb instanceof SubApp && !((SubApp) fb).isTyped()) {
-			final EList<Connection> subCons = state.inputSide ? state.ifElem.getInputConnections() : state.ifElem.getOutputConnections();
-			subCons.forEach(subInt -> traceEvent(new RecursionState(null, state.inputSide, state.inputSide ? subInt.getSource() : subInt.getDestination(), state.connections)));
+		if (fb instanceof final SubApp subapp && !subapp.isTyped()) {
+			final EList<Connection> subCons = state.inputSide ? state.ifElem.getInputConnections()
+					: state.ifElem.getOutputConnections();
+			subCons.forEach(subInt -> traceEvent(new RecursionState(null, state.inputSide,
+					state.inputSide ? subInt.getSource() : subInt.getDestination(), state.connections)));
 			return;
 		}
 		if (fb instanceof StructManipulator) {
-			final EList<Connection> plexCons = state.inputSide ?
-					fb.getInterface().getEventInputs().get(0).getInputConnections() :
-						fb.getInterface().getEventOutputs().get(0).getOutputConnections();
+			final EList<Connection> plexCons = state.inputSide
+					? fb.getInterface().getEventInputs().get(0).getInputConnections()
+					: fb.getInterface().getEventOutputs().get(0).getOutputConnections();
 
-			plexCons.forEach(nextInt -> traceEvent(new RecursionState(null, state.inputSide, state.inputSide ? nextInt.getSource() : nextInt.getDestination(), state.connections)));
+			plexCons.forEach(nextInt -> traceEvent(new RecursionState(null, state.inputSide,
+					state.inputSide ? nextInt.getSource() : nextInt.getDestination(), state.connections)));
 			return;
 		}
 
@@ -331,72 +346,82 @@ public class FBEndpointFinder {
 	 * @param state the current state of the recursion
 	 */
 	private static void traceSubApp(final RecursionState state) {
-		final EList<Connection> subCons = state.inputSide ? state.ifElem.getInputConnections() : state.ifElem.getOutputConnections();
-		for (final Connection subInt: subCons) {
-			trace(new RecursionState(state.plexStack, state.inputSide, state.inputSide ? subInt.getSource() : subInt.getDestination(), state.connections));
+		final EList<Connection> subCons = state.inputSide ? state.ifElem.getInputConnections()
+				: state.ifElem.getOutputConnections();
+		for (final Connection subInt : subCons) {
+			trace(new RecursionState(state.plexStack, state.inputSide,
+					state.inputSide ? subInt.getSource() : subInt.getDestination(), state.connections));
 		}
 	}
 
 	/**
-	 * trace connections of the given interface from left into mux or from right into demux
-	 * in other words trace the trunk connection (the side with only one connections) of either a mux or demux
+	 * trace connections of the given interface from left into mux or from right
+	 * into demux in other words trace the trunk connection (the side with only one
+	 * connections) of either a mux or demux
 	 *
 	 * @param state the current state of the recursion
 	 */
 	private static void traceTrunk(final RecursionState state) {
 		final FBNetworkElement fb = state.ifElem.getFBNetworkElement();
-		//get single in/output
-		final EList<VarDeclaration> vars = (state.inputSide) ? fb.getInterface().getInputVars() : fb.getInterface().getOutputVars();
+		// get single in/output
+		final EList<VarDeclaration> vars = (state.inputSide) ? fb.getInterface().getInputVars()
+				: fb.getInterface().getOutputVars();
 		if (vars.isEmpty()) {
 			return;
 		}
-		final EList<Connection> varCons = (state.inputSide) ? vars.get(0).getInputConnections() : vars.get(0).getOutputConnections();
+		final EList<Connection> varCons = (state.inputSide) ? vars.get(0).getInputConnections()
+				: vars.get(0).getOutputConnections();
 		if (varCons.isEmpty()) {
 			return;
 		}
 
-		//push interface onto the stack
+		// push interface onto the stack
 		state.plexStack.push(state.ifElem.getName());
-		//next item to skip through the only in/output of the plexer
-		trace(new RecursionState(state.plexStack, state.inputSide, state.inputSide ? varCons.get(0).getSource() : varCons.get(0).getDestination(), state.connections));
+		// next item to skip through the only in/output of the plexer
+		trace(new RecursionState(state.plexStack, state.inputSide,
+				state.inputSide ? varCons.get(0).getSource() : varCons.get(0).getDestination(), state.connections));
 	}
 
 	/**
-	 * trace connection of the given interface from right into mux or from left into demux
-	 * in other words trace all the connections of the fan side (side where more the multiple connections are) of either the mux or demux
+	 * trace connection of the given interface from right into mux or from left into
+	 * demux in other words trace all the connections of the fan side (side where
+	 * more the multiple connections are) of either the mux or demux
 	 *
 	 * @param state the current state of the recursion
 	 */
 	private static void traceFan(final RecursionState state) {
 		final FBNetworkElement fb = state.ifElem.getFBNetworkElement();
 
-		//trace find right interface from the interface stack
-		for (final IInterfaceElement structMem:
-			((StructManipulator)fb).getStructType().getMemberVariables().stream()
-			.filter(mem -> fb.getInterfaceElement(mem.getName()) != null)
-			.collect(Collectors.toList()))
-		{
+		// trace find right interface from the interface stack
+		for (final IInterfaceElement structMem : ((StructManipulator) fb).getStructType().getMemberVariables().stream()
+				.filter(mem -> fb.getInterfaceElement(mem.getName()) != null).toList()) {
 			final IInterfaceElement realInt = fb.getInterfaceElement(structMem.getName());
 
 			Deque<String> subStack;
-			/* case stack empty: occurs when a FB has a struct as output data type which is connected to a demux first
-			 * all of the inputs therefore have to be traversed */
+			/*
+			 * case stack empty: occurs when a FB has a struct as output data type which is
+			 * connected to a demux first all of the inputs therefore have to be traversed
+			 */
 			if (state.plexStack.isEmpty()) {
 				subStack = new ArrayDeque<>();
 			}
-			/* case stack is not empty: first destination plexer was a mux
-			 * -> go to last added interface from the stack */
+			/*
+			 * case stack is not empty: first destination plexer was a mux -> go to last
+			 * added interface from the stack
+			 */
 			else if (structMem.getName().equals(state.plexStack.peek())) {
 				subStack = ((ArrayDeque<String>) state.plexStack).clone();
 				subStack.pop();
-			}
-			else {
+			} else {
 				continue;
 			}
 
-			//find destinations (skip plexers between) from the interface of the plexer according to the previously updated interface-stack
-			for (final Connection next: (state.inputSide) ? realInt.getInputConnections() : realInt.getOutputConnections()) {
-				trace(new RecursionState(subStack, state.inputSide, state.inputSide ? next.getSource() : next.getDestination(), state.connections));
+			// find destinations (skip plexers between) from the interface of the plexer
+			// according to the previously updated interface-stack
+			for (final Connection next : (state.inputSide) ? realInt.getInputConnections()
+					: realInt.getOutputConnections()) {
+				trace(new RecursionState(subStack, state.inputSide,
+						state.inputSide ? next.getSource() : next.getDestination(), state.connections));
 			}
 		}
 	}

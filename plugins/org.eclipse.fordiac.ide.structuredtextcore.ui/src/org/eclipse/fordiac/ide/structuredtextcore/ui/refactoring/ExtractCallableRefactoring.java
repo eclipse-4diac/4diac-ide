@@ -204,8 +204,7 @@ public class ExtractCallableRefactoring extends Refactoring {
 	protected RefactoringStatus checkReturnVariableAccess() {
 		final RefactoringStatus result = new RefactoringStatus();
 		switch (referencedReturnVariable) {
-		case READ:
-		case READ_WRITE:
+		case READ, READ_WRITE:
 			result.merge(RefactoringStatus
 					.createFatalErrorStatus(Messages.ExtractCallableRefactoring_InvalidReturnVariableAccess));
 			break;
@@ -305,7 +304,7 @@ public class ExtractCallableRefactoring extends Refactoring {
 						.map(parameter -> parameter.getName() + " := " + parameter.getName()), //$NON-NLS-1$
 				// outputs
 				outputParameters.stream().map(parameter -> parameter.getName() + " => " + parameter.getName()) //$NON-NLS-1$
-		).collect(Collectors.joining(", ")));  //$NON-NLS-1$
+		).collect(Collectors.joining(", "))); //$NON-NLS-1$
 		callExpression.append(")"); //$NON-NLS-1$
 		if (getSelectedSingleExpression().isEmpty()) {
 			callExpression.append(";"); //$NON-NLS-1$
@@ -460,7 +459,7 @@ public class ExtractCallableRefactoring extends Refactoring {
 
 	protected List<STVarDeclaration> calculateParameters(final AccessMode mode) {
 		return referencedLocalVariables.entrySet().stream().filter(entry -> entry.getValue() == mode).map(Entry::getKey)
-				.sorted(NamedElementComparator.INSTANCE).collect(Collectors.toList());
+				.sorted(NamedElementComparator.INSTANCE).toList();
 	}
 
 	public void setName(final String name) {

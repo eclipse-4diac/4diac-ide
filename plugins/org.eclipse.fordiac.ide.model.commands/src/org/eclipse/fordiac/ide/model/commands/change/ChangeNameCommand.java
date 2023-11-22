@@ -19,9 +19,9 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementErrorMarkerCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -42,13 +42,8 @@ public final class ChangeNameCommand extends Command implements ConnectionLayout
 
 	public static ChangeNameCommand forName(final INamedElement element, final String name) {
 		final ChangeNameCommand result = new ChangeNameCommand(element, name);
-		if (element instanceof final FBNetworkElement fbne) {
-			if (fbne.isMapped()) {
-				result.getAdditionalCommands().add(new ChangeNameCommand(fbne.getOpposite(), name));
-			}
-			if (fbne.hasError()) {
-				result.getAdditionalCommands().add(new DeleteFBNetworkElementErrorMarkerCommand(fbne));
-			}
+		if ((element instanceof final FBNetworkElement fbne) && fbne.isMapped()) {
+			result.getAdditionalCommands().add(new ChangeNameCommand(fbne.getOpposite(), name));
 		}
 		if (element instanceof final IInterfaceElement interfaceElement
 				&& interfaceElement.getFBNetworkElement() instanceof final SubApp subApp && subApp.isMapped()) {
@@ -66,6 +61,10 @@ public final class ChangeNameCommand extends Command implements ConnectionLayout
 		}
 		if (element instanceof final AdapterFB adapterFB) {
 			result.getAdditionalCommands().add(new ChangeNameCommand(adapterFB.getAdapterDecl(), name));
+		}
+		if (element instanceof final Attribute attribute
+				&& ChangeAttributeDeclarationCommand.attributeDeclarationChanged(attribute, name)) {
+			result.getAdditionalCommands().add(ChangeAttributeDeclarationCommand.forName(attribute, name));
 		}
 		return result;
 	}

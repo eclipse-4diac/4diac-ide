@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
@@ -31,7 +30,6 @@ import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
 
 public final class SubAppPortHelper {
-
 
 	public static IInterfaceElement findAnchorInterfaceElement(final IInterfaceElement subappPin) {
 
@@ -82,12 +80,10 @@ public final class SubAppPortHelper {
 
 			}
 
-
 		} while ((currentIe.getFBNetworkElement() instanceof SubApp));
 
 		return null;
 	}
-
 
 	public static List<MonitoringElement> findConnectedElements(final IInterfaceElement interfaceElement) {
 		final List<MonitoringElement> elements = new ArrayList<>();
@@ -105,7 +101,6 @@ public final class SubAppPortHelper {
 
 	}
 
-
 	public static void findConnectedElements(final List<MonitoringElement> elements,
 			final IInterfaceElement interfaceElement) {
 		final boolean searchDirection = interfaceElement.isIsInput();
@@ -113,8 +108,7 @@ public final class SubAppPortHelper {
 	}
 
 	public static void findConnectedElements(final List<MonitoringElement> elements,
-			final IInterfaceElement interfaceElement,
-			final boolean searchDirection) {
+			final IInterfaceElement interfaceElement, final boolean searchDirection) {
 		IInterfaceElement currentIe = interfaceElement;
 
 		final EList<Connection> connections = getConnections(currentIe, searchDirection);
@@ -142,9 +136,8 @@ public final class SubAppPortHelper {
 
 	public static List<IInterfaceElement> assignNextInterfaceElement(final boolean isInput,
 			final Collection<Connection> connections) {
-		return connections.stream()
-				.map(connection -> isInput ? connection.getDestination() : connection.getSource())
-				.collect(Collectors.toList());
+		return connections.stream().map(connection -> isInput ? connection.getDestination() : connection.getSource())
+				.toList();
 	}
 
 	public static boolean hasEmptyConnections(final IInterfaceElement ie, final boolean isInput) {
@@ -153,8 +146,7 @@ public final class SubAppPortHelper {
 	}
 
 	public static EList<Connection> getConnections(final IInterfaceElement ie, final boolean isInput) {
-		return isInput ? ie.getOutputConnections()
-				: ie.getInputConnections();
+		return isInput ? ie.getOutputConnections() : ie.getInputConnections();
 	}
 
 	public static String searchSubappAnchor(final PortElement createPortElement) {

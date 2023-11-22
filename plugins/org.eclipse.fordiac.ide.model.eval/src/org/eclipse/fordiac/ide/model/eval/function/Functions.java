@@ -279,6 +279,40 @@ public interface Functions {
 	}
 
 	/**
+	 * Infer the expected parameter type (i.e., resolve generic type) for a function
+	 * and expected return type
+	 *
+	 * @param method             The method reference corresponding to the function
+	 * @param expectedReturnType The expected return type used to infer the expected
+	 *                           parameter type (may be null)
+	 * @param index              The parameter index
+	 * @return The expected parameter type of the function based on the expected
+	 *         return type
+	 */
+	static Class<?> inferExpectedParameterType(final Method method, final Class<?> expectedReturnType,
+			final int index) {
+		try {
+			final Type parameterType = getGenericParameterValueType(method, index);
+			if (parameterType instanceof final TypeVariable<?> parameterTypeVariable) {
+				final var parameterTypeBound = getCommonTypeBound(parameterTypeVariable);
+				if (parameterTypeBound != null) {
+					final Type returnType = method.getGenericReturnType();
+					if (returnType instanceof TypeVariable<?> && parameterType.equals(returnType)
+							&& expectedReturnType != null && parameterTypeBound.isAssignableFrom(expectedReturnType)) {
+						return expectedReturnType;
+					}
+					return parameterTypeBound;
+				}
+			} else if (parameterType instanceof final Class<?> parameterClass) {
+				return parameterClass;
+			}
+		} catch (final Exception e) {
+			// ignore
+		}
+		return getParameterValueType(method, index);
+	}
+
+	/**
 	 * Find a function from {@code clazz} with the given name that is applicable for
 	 * the concrete argument types
 	 *
@@ -474,6 +508,40 @@ public interface Functions {
 	}
 
 	/**
+	 * Infer the expected parameter type (i.e., resolve generic type) for a function
+	 * and expected return type
+	 *
+	 * @param method             The method reference corresponding to the function
+	 * @param expectedReturnType The expected return type used to infer the expected
+	 *                           parameter type (may be null)
+	 * @param index              The parameter index
+	 * @return The expected parameter type of the function based on the expected
+	 *         return type
+	 */
+	static DataType inferExpectedParameterTypeFromDataType(final Method method, final DataType expectedReturnType,
+			final int index) {
+		try {
+			final Type parameterType = getGenericParameterValueType(method, index);
+			if (parameterType instanceof final TypeVariable<?> parameterTypeVariable) {
+				final var parameterTypeBound = ValueOperations.dataType(getCommonTypeBound(parameterTypeVariable));
+				if (parameterTypeBound != null) {
+					final Type returnType = method.getGenericReturnType();
+					if (returnType instanceof TypeVariable<?> && parameterType.equals(returnType)
+							&& expectedReturnType != null && parameterTypeBound.isAssignableFrom(expectedReturnType)) {
+						return expectedReturnType;
+					}
+					return parameterTypeBound;
+				}
+			} else if (parameterType instanceof final Class<?> parameterClass) {
+				return ValueOperations.dataType(parameterClass);
+			}
+		} catch (final Exception e) {
+			// ignore
+		}
+		return ValueOperations.dataType(getParameterValueType(method, index));
+	}
+
+	/**
 	 * Get the generic parameter value type
 	 *
 	 * @param method The method reference corresponding to the function
@@ -501,11 +569,11 @@ public interface Functions {
 			final Type varargsType = method.getGenericParameterTypes()[method.getParameterCount() - 1];
 			if (varargsType instanceof Class<?>) {
 				return ((Class<?>) varargsType).getComponentType();
-			} else if (varargsType instanceof final GenericArrayType genericArrayType) {
-				return genericArrayType.getGenericComponentType();
-			} else {
-				throw new IllegalStateException("Unsupported varargs type"); //$NON-NLS-1$
 			}
+			if (varargsType instanceof final GenericArrayType genericArrayType) {
+				return genericArrayType.getGenericComponentType();
+			}
+			throw new IllegalStateException("Unsupported varargs type"); //$NON-NLS-1$
 		}
 		if (index < method.getParameterCount()) {
 			return method.getGenericParameterTypes()[index];
@@ -634,9 +702,11 @@ public interface Functions {
 		}
 		if (clazz2 == null) {
 			return clazz1;
-		} else if (clazz1.isAssignableFrom(clazz2)) {
+		}
+		if (clazz1.isAssignableFrom(clazz2)) {
 			return clazz1;
-		} else if (clazz2.isAssignableFrom(clazz1)) {
+		}
+		if (clazz2.isAssignableFrom(clazz1)) {
 			return clazz2;
 		}
 		final DataType type1 = ValueOperations.dataType(clazz1);
@@ -650,9 +720,11 @@ public interface Functions {
 		}
 		if (type2 == null) {
 			return type1;
-		} else if (type1.isAssignableFrom(type2)) {
+		}
+		if (type1.isAssignableFrom(type2)) {
 			return type1;
-		} else if (type2.isAssignableFrom(type1)) {
+		}
+		if (type2.isAssignableFrom(type1)) {
 			return type2;
 		}
 		return null;
@@ -664,9 +736,11 @@ public interface Functions {
 		}
 		if (clazz2 == null) {
 			return clazz1;
-		} else if (clazz1.isAssignableFrom(clazz2)) {
+		}
+		if (clazz1.isAssignableFrom(clazz2)) {
 			return clazz2;
-		} else if (clazz2.isAssignableFrom(clazz1)) {
+		}
+		if (clazz2.isAssignableFrom(clazz1)) {
 			return clazz1;
 		}
 		final DataType type1 = ValueOperations.dataType(clazz1);
@@ -680,9 +754,11 @@ public interface Functions {
 		}
 		if (type2 == null) {
 			return type1;
-		} else if (type1.isAssignableFrom(type2)) {
+		}
+		if (type1.isAssignableFrom(type2)) {
 			return type2;
-		} else if (type2.isAssignableFrom(type1)) {
+		}
+		if (type2.isAssignableFrom(type1)) {
 			return type1;
 		}
 		return null;

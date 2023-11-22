@@ -25,6 +25,7 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -89,6 +90,10 @@ public enum TypeLibraryManager {
 		synchronized (typeLibraryList) {
 			return typeLibraryList.get(proj) != null;
 		}
+	}
+
+	public Optional<TypeEntry> getTypeFromLinkedFile(final IProject project, final String filename) {
+		return getTypeLibrary(project).getTypeFromLinkedFile(filename);
 	}
 
 	public void removeProject(final IProject project) {

@@ -69,7 +69,7 @@ public final class ServiceSequenceUtils {
 	}
 
 	private static String removeSemicolon(final String s) {
-		return s.replace(";", " ");  //$NON-NLS-1$//$NON-NLS-2$
+		return s.replace(";", " "); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	public static List<String> splitList(final String parameters) {
@@ -114,10 +114,11 @@ public final class ServiceSequenceUtils {
 				transaction.getInputEventOccurrence().getEvent(), transaction.getInputVariables());
 		final List<OutputPrimitive> ops = new ArrayList<>();
 		for (final EventOccurrence outputEvent : transaction.getOutputEventOccurrences()) {
-			final FBType type = getFbTypeFromRuntime(outputEvent);
-			if (type != null) {
-				ops.add(ServiceFactory.createOutputPrimitiveFrom(type.getService().getLeftInterface(),
-						outputEvent.getEvent(), type.getInterfaceList().getOutputVars()));
+			final FBType typeInterface = seq.getService().getFBType();
+			final FBType typeRuntime = getFbTypeFromRuntime(outputEvent);
+			if (typeInterface != null && typeRuntime != null) {
+				ops.add(ServiceFactory.createOutputPrimitiveFrom(typeInterface.getService().getLeftInterface(),
+						outputEvent.getEvent(), typeRuntime.getInterfaceList().getOutputVars()));
 			}
 		}
 		final ServiceTransaction serviceTransaction = ServiceFactory.createServiceTransactionFrom(ip, ops);

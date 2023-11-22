@@ -28,14 +28,12 @@ public interface IContainerEditPart extends GraphicalEditPart {
 
 	default Rectangle getMinContentBounds() {
 		Rectangle selectionExtent = null;
-		for (final Object child : getContentEP().getChildren()) {
-			if (child instanceof GraphicalEditPart) {
-				final Rectangle fbBounds = getBoundsForEditPart((GraphicalEditPart) child);
-				if (selectionExtent == null) {
-					selectionExtent = fbBounds.getCopy();
-				} else {
-					selectionExtent.union(fbBounds);
-				}
+		for (final GraphicalEditPart child : getContentEP().getChildren()) {
+			final Rectangle fbBounds = getBoundsForEditPart(child);
+			if (selectionExtent == null) {
+				selectionExtent = fbBounds.getCopy();
+			} else {
+				selectionExtent.union(fbBounds);
 			}
 		}
 		if (selectionExtent != null) {

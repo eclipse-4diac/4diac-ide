@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -57,6 +58,8 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	private CommandStack commandStack;
 
+	private GraphicalAnnotationModel annotationModel;
+
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		if (!(input instanceof FBTypeEditorInput)) {
@@ -65,8 +68,9 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 		IEditorSite siteToUse = site;
 		ISelectionProvider selProvider = null;
-		if (siteToUse instanceof MultiPageEditorSite) {
-			siteToUse = (IEditorSite) ((MultiPageEditorSite) siteToUse).getMultiPageEditor().getSite();
+		if (siteToUse instanceof final MultiPageEditorSite multiPageEditorSite) {
+			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
+			siteToUse = (IEditorSite) multiPageEditorSite.getMultiPageEditor().getSite();
 			selProvider = siteToUse.getSelectionProvider();
 		}
 
@@ -83,10 +87,10 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	@Override
 	public FBTypeEditorInput getEditorInput() {
-		return (FBTypeEditorInput)super.getEditorInput();
+		return (FBTypeEditorInput) super.getEditorInput();
 	}
 
-	private SubAppType getSubAppType (){
+	private SubAppType getSubAppType() {
 		return (SubAppType) getEditorInput().getContent();
 	}
 
@@ -114,8 +118,8 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	@Override
 	protected EditorPart createEditorPart(final Object model) {
-		if (model instanceof SubApp) {
-			if (((SubApp) model).isTyped()) {
+		if (model instanceof final SubApp subApp) {
+			if (subApp.isTyped()) {
 				return new SubappInstanceViewer();
 			}
 			final UnTypedSubAppNetworkEditor editor = new UnTypedSubAppNetworkEditor();
@@ -133,8 +137,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	@Override
 	protected IEditorInput createEditorInput(final Object model) {
-		if (model instanceof SubApp) {
-			final SubApp subApp = (SubApp) model;
+		if (model instanceof final SubApp subApp) {
 			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
 				return new CompositeAndSubAppInstanceViewerInput(subApp);
 			}
@@ -168,7 +171,6 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 		// currently nothing needs to be done here
 	}
 
-
 	@Override
 	public void doSaveAs() {
 		// currently not allowed
@@ -178,7 +180,6 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	public boolean isSaveAsAllowed() {
 		return false;
 	}
-
 
 	@Override
 	public CommandStack getCommandStack() {
@@ -198,16 +199,17 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	@Override
 	public boolean outlineSelectionChanged(Object selectedElement) {
-		if ((selectedElement instanceof EObject)
-				&& (EcoreUtil.isAncestor(getSubAppType().getFBNetwork(), (EObject) selectedElement))) {
-			// an selected element is only valid if it is a child of the FBNetwork of the subapp or the fbnetwork
-			if (selectedElement instanceof FBNetwork) {
-				selectedElement = ((FBNetwork) selectedElement).eContainer();
+		if ((selectedElement instanceof final EObject eObj)
+				&& (EcoreUtil.isAncestor(getSubAppType().getFBNetwork(), eObj))) {
+			// an selected element is only valid if it is a child of the FBNetwork of the
+			// subapp or the fbnetwork
+			if (selectedElement instanceof final FBNetwork fbn) {
+				selectedElement = fbn.eContainer();
 			}
 			if ((selectedElement instanceof FBNetworkElement) || (selectedElement instanceof SubAppType)) {
 				EObject refElement = null;
-				if (selectedElement instanceof FB) {
-					refElement = (FB) selectedElement;
+				if (selectedElement instanceof final FB fb) {
+					refElement = fb;
 					selectedElement = refElement.eContainer().eContainer();
 				}
 				getBreadcrumb().setInput(selectedElement);
@@ -234,12 +236,12 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	@Override
 	public void reloadType(final FBType type) {
-		if (type instanceof SubAppType) {
+		if (type instanceof final SubAppType subAppType) {
 			final String path = getBreadcrumb().serializePath();
 			getEditorInput().setFbType(type);
 			removePage(getActivePage());
 			createPages();
-			if (!getBreadcrumb().openPath(path, (SubAppType) type)) {
+			if (!getBreadcrumb().openPath(path, subAppType)) {
 				getBreadcrumb().setInput(type);
 				showReloadErrorMessage(path, "Showing subapp root.");
 			}
@@ -253,6 +255,14 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	public Object getSelectableEditPart() {
 		final GraphicalViewer viewer = getAdapter(GraphicalViewer.class);
 		return viewer.getRootEditPart();
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == GraphicalAnnotationModel.class) {
+			return adapter.cast(annotationModel);
+		}
+		return super.getAdapter(adapter);
 	}
 
 }

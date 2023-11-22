@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH, Johannes Kepler University Linz
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2023 Primetals Technologies Germany GmbH,
+ *                          Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,8 +19,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
@@ -33,6 +37,8 @@ import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppIns
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -68,6 +74,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
@@ -80,6 +87,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	private AutomationSystem system;
 	private DiagramOutlinePage outlinePage;
 	private final EditorTabCommandStackListener subEditorCommandStackListener;
+	private GraphicalAnnotationModel annotationModel;
 
 	public AutomationSystemEditor() {
 		subEditorCommandStackListener = new EditorTabCommandStackListener(this);
@@ -89,6 +97,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		loadSystem();
+		if (system != null) {
+			annotationModel = new FordiacMarkerGraphicalAnnotationModel(system.getTypeEntry().getFile());
+		}
 	}
 
 	@Override
@@ -202,7 +213,22 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		if (null != system) {
-			SystemManager.saveSystem(system);
+			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(getFile().getParent()) {
+
+				@Override
+				protected void execute(final IProgressMonitor monitor)
+						throws CoreException, InvocationTargetException, InterruptedException {
+					SystemManager.saveSystem(system, monitor);
+				}
+			};
+			try {
+				operation.run(monitor);
+			} catch (final InvocationTargetException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			} catch (final InterruptedException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+				Thread.currentThread().interrupt();
+			}
 			getCommandStack().markSaveLocation();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
@@ -254,7 +280,22 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return;
 		}
 		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-		SystemManager.saveSystem(system, file);
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(file.getParent()) {
+
+			@Override
+			protected void execute(final IProgressMonitor monitor)
+					throws CoreException, InvocationTargetException, InterruptedException {
+				SystemManager.saveSystem(system, file, monitor);
+			}
+		};
+		try {
+			getSite().getWorkbenchWindow().run(true, true, operation);
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	@Override
@@ -275,6 +316,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		}
 		if (adapter == AutomationSystem.class) {
 			return adapter.cast(system);
+		}
+		if (adapter == GraphicalAnnotationModel.class) {
+			return adapter.cast(annotationModel);
 		}
 		return super.getAdapter(adapter);
 	}
@@ -301,7 +345,13 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		if (null != getCommandStack()) {
 			getCommandStack().removeCommandStackEventListener(subEditorCommandStackListener);
 		}
+
+		if (annotationModel != null) {
+			annotationModel.dispose();
+		}
+
 		super.dispose();
+
 		if (dirty && system != null) {
 			((SystemEntry) system.getTypeEntry()).setSystem(null);
 			system = null;

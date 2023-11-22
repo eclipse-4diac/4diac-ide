@@ -20,8 +20,6 @@
 package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.fordiac.ide.model.commands.Messages;
-import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -39,7 +37,6 @@ public class DeleteConnectionCommand extends Command {
 	private boolean performMappingCheck;
 	private DeleteConnectionCommand deleteMapped = null;
 	private final CompoundCommand deleteInterfaceErrorMarkers = new CompoundCommand();
-	private final CompoundCommand deleteMarkersCmds = new CompoundCommand();
 	private FBNetworkElement errorFb;
 	private int elementIndex;
 
@@ -60,8 +57,8 @@ public class DeleteConnectionCommand extends Command {
 	public DeleteConnectionCommand(final Connection connection, final FBNetworkElement errorFb) {
 		super(Messages.DeleteConnectionCommand_DeleteConnection);
 		this.connection = connection;
-		if (this.connection.eContainer() instanceof FBNetwork) {
-			connectionParent = (FBNetwork) this.connection.eContainer();
+		if (this.connection.eContainer() instanceof final FBNetwork fbNetwork) {
+			connectionParent = fbNetwork;
 		} else {
 			connectionParent = null;
 		}
@@ -85,14 +82,12 @@ public class DeleteConnectionCommand extends Command {
 			}
 		}
 		checkErrorMarker();
-		deleteMarkersCmds.execute();
 		deleteConnection();
 		deleteInterfaceErrorMarkers.execute();
 	}
 
 	@Override
 	public void redo() {
-		deleteMarkersCmds.redo();
 		deleteConnection();
 		deleteInterfaceErrorMarkers.redo();
 	}
@@ -120,8 +115,6 @@ public class DeleteConnectionCommand extends Command {
 		if (null != deleteMapped) {
 			deleteMapped.undo();
 		}
-
-		deleteMarkersCmds.undo();
 	}
 
 	private DeleteConnectionCommand checkAndDeleteMirroredConnection() {
@@ -146,36 +139,11 @@ public class DeleteConnectionCommand extends Command {
 		if (isErrorMarkerToDelete(destination) && !keepMarker) {
 			deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
 		}
-
-		if (connection.hasError() && !keepMarker) {
-			deleteMarkersCmds.add(
-					FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(connection)));
-			if (errorFb != null && source instanceof ErrorMarkerInterface
-					&& destination instanceof ErrorMarkerInterface) {
-				deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
-				deleteInterfaceErrorMarkers
-				.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
-			} else {
-
-				// error on connection not on pins
-				removeDuplicationErrorMarker(connection);
-			}
-		}
-	}
-
-	private void removeDuplicationErrorMarker(final Connection connection) {
-		if (source.getOutputConnections().size() == 2) {
-			for (final Connection con : source.getOutputConnections()) {
-				if ((con.getSource() == source) && (con.getDestination() == destination) && con != connection) {
-					deleteMarkersCmds.add(
-							FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(con)));
-				}
-			}
-		}
 	}
 
 	private static boolean isErrorMarkerToDelete(final IInterfaceElement ie) {
-		// we only have to remove the error marker interface if it is one, if it is still in the model (i.e., has not
+		// we only have to remove the error marker interface if it is one, if it is
+		// still in the model (i.e., has not
 		// already been deleted by someone else) and it has no further connections
 		return ie instanceof ErrorMarkerInterface && ie.eContainer() != null && hasNoOtherConnections(ie);
 	}

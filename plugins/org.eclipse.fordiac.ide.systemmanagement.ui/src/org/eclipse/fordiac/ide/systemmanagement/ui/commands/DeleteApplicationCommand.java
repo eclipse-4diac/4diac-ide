@@ -13,29 +13,37 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.commands;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 /**
  * The Class NewAppCommand.
  */
 public class DeleteApplicationCommand extends Command {
 
-	private Application application;
+	private final Application application;
 	private AutomationSystem system;
 
 	// compound command to store all unmapp commands for FBNetwork elements to be
 	// unmapped
-	private CompoundCommand unmappApplicationElements = new CompoundCommand();
+	private final CompoundCommand unmappApplicationElements = new CompoundCommand();
 
-	public DeleteApplicationCommand(Application application) {
+	public DeleteApplicationCommand(final Application application) {
 		super("Delete Application");
 		this.application = application;
 		if (null != application) {
@@ -54,26 +62,50 @@ public class DeleteApplicationCommand extends Command {
 		unmappApplicationElements.execute();
 		closeApplicationEditor();
 		system.getApplication().remove(application);
-		SystemManager.saveSystem(system);
+		doSave();
 	}
 
 	@Override
 	public void redo() {
 		unmappApplicationElements.redo();
 		system.getApplication().remove(application);
-		SystemManager.saveSystem(system);
+		doSave();
 	}
 
 	@Override
 	public void undo() {
 		system.getApplication().add(application);
 		unmappApplicationElements.undo();
-		SystemManager.saveSystem(system);
+		doSave();
+	}
+
+	private void doSave() {
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(
+				system.getTypeEntry().getFile().getParent()) {
+
+			@Override
+			protected void execute(final IProgressMonitor monitor)
+					throws CoreException, InvocationTargetException, InterruptedException {
+				SystemManager.saveSystem(system, monitor);
+			}
+		};
+		try {
+			if (PlatformUI.isWorkbenchRunning()) {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().run(true, true, operation);
+			} else {
+				operation.run(new NullProgressMonitor());
+			}
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	private void getUnmappCommands() {
 		application.getFBNetwork().getNetworkElements().stream().forEach(element -> {
-			Mapping mapping = element.getMapping();
+			final Mapping mapping = element.getMapping();
 			if (null != mapping) {
 				unmappApplicationElements.add(new UnmapCommand(element));
 			}

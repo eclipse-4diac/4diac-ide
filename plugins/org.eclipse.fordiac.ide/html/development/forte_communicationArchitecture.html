@@ -105,7 +105,7 @@
   
   <p>The problem of the bottom layer is that the system has to generate an interrupt. A message from the network can be detected by an interrupt, polling or a system call which waits until new data is received. The execution thread of the function block cannot be used because that thread is used to execute the function blocks. If the function block thread was used, function blocks would not be executed while waiting for an event from the network.</p>
   
-  <p>To solve this, Forte implements an External Event Handler in charge of processing external interrupts and starting the event chain execution threads.</p>
+  <p>To solve this, 4diac&nbsp;FORTE implements an External Event Handler in charge of processing external interrupts and starting the event chain execution threads.</p>
   
   <p>An interrupt based receiving of data is shown in figure 6. First of all, the network triggers an interrupt at the External Event Handler. This communicates the event to the bottom 
   layer and starts an execution event chain. The bottom layer then invokes the function block thread by calling interruptCommFB(..). Once the Function Block receives the External Event it will call the processInterrupt function of the network layer. Process interrupt will be usually done at the bottom or middle layer depending on how the data is processed. Afterwards, the recvData(..) function will be called from lower to upper layer until the FunctionBlock receives the data and emits the CNF+/IND+ signal</p>

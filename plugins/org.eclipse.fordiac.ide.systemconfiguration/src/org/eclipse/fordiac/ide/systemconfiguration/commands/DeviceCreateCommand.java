@@ -50,8 +50,7 @@ public class DeviceCreateCommand extends Command {
 		return device;
 	}
 
-	public DeviceCreateCommand(final DeviceTypeEntry entry, final SystemConfiguration parent,
-			final Rectangle bounds) {
+	public DeviceCreateCommand(final DeviceTypeEntry entry, final SystemConfiguration parent, final Rectangle bounds) {
 		this.entry = entry;
 		this.parent = parent;
 		this.bounds = bounds;
@@ -83,7 +82,9 @@ public class DeviceCreateCommand extends Command {
 			final Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 			attribute.setName(attributeDeclaration.getName());
 			attribute.setComment(attributeDeclaration.getComment());
-			attribute.setValue(attributeDeclaration.getInitialValue());
+			// TODO re-add when initial value infrastructure of attribute declarations is
+			// defined:
+			// attribute.setValue(attributeDeclaration.getInitialValue());
 			attribute.setAttributeDeclaration(attributeDeclaration);
 			device.getAttributes().add(attribute);
 		}

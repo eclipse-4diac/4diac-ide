@@ -340,11 +340,6 @@ public class ServiceSequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
-				 LibraryElementFactory.eINSTANCE.createErrorMarkerRef()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
 				 LibraryElementFactory.eINSTANCE.createArraySize()));
 
 		newChildDescriptors.add

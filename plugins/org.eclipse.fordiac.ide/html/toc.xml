@@ -67,6 +67,7 @@
         	<topic href="html/installation/raspberrySPS.html" label="4diac FORTE for RaspberryPi-SPS"/>
         	<topic href="html/installation/wago.html" label="4diac FORTE for WagoPFCs"/>
         	<topic href="html/installation/freeRTOSLwIP.html" label="4diac FORTE for freeRTOS + LwIP"/>
+        	<topic href="html/installation/pikeos_posix.html" label="4diac FORTE for Posix PikeOS 5.x"/>
         </topic>
         <topic label="4diac FORTE for Windows and Unix based systems">
           <topic href="html/installation/visualStudio.html" label="Use Visual Studio"/>
@@ -196,7 +197,7 @@
          </topic>
          <topic href="html/4diacIDE/dynamicTypeLoader.html#getLua" label="Downloading Lua">
          </topic>
-         <topic href="html/4diacIDE/dynamicTypeLoader.html#CompileForte" label="Compiling FORTE with the LuaJit">
+         <topic href="html/4diacIDE/dynamicTypeLoader.html#CompileForte" label="Compiling 4diac FORTE with the LuaJit">
          </topic>
          <topic href="html/4diacIDE/dynamicTypeLoader.html#enableDTL" label="Enabling the Dynmic Type Loader">
          </topic>
@@ -249,7 +250,7 @@
 	
   <topic href="html/communication/communicationIndex.html" label="Supported Communication Protocols">
     <topic label="OPC UA"  href="html/communication/opc_ua_version1.html">
-      <topic label="Build FORTE with OPC UA" href="html/communication/opc_ua_version1.html#build" />
+      <topic label="Build 4diac FORTE with OPC UA" href="html/communication/opc_ua_version1.html#build" />
       <topic label="General Overview" href="html/communication/opc_ua_version1.html#general" />
       <topic label="OPC UA Variables" href="html/communication/opc_ua_version1.html#variables" />
       <topic label="OPC UA Methods" href="html/communication/opc_ua_version1.html#methods" />
@@ -279,7 +280,7 @@
     <topic href="html/communication/openPOWERLINK.html" label="openPOWERLINK">
     </topic>
     <topic href="html/communication/xqueries.html" label="Access BaseX Database with XQuery">
-       <topic href="html/communication/xqueries.html#build" label="Build 4diac-rte to run an Application which sends XQueries">
+       <topic href="html/communication/xqueries.html#build" label="Build 4diac&nbsp;FORTE to run an Application which sends XQueries">
        </topic>
        <topic href="html/communication/xqueries.html#basex" label="Setup your BaseX Database">
        </topic>
@@ -296,14 +297,14 @@
 <!--********************************************************************************************-->
 	
 	 <topic href="html/development/developmentIndex.html" label="Development Documentation"> 
-    <topic label="4DIAC-IDE">
-      <topic label="Building and Running 4DIAC-IDE from Source" href="html/development/building4diac.html#buildFromSource"> 
+    <topic label="4diac IDE">
+      <topic label="Building and Running 4diac IDE from Source" href="html/development/building4diac.html#buildFromSource"> 
       </topic>
-      <topic label="Building a Binary 4DIAC-IDE Package from Source" href="html/development/building4diac.html#buildBinary" /> 
+      <topic label="Building a Binary 4diac IDE Package from Source" href="html/development/building4diac.html#buildBinary" /> 
       <topic label="Updating 4diac IDE Target Platform" href="html/development/ideUpdateTargetPlatform.html" />
       <topic label="SWTBot testing" href="html/development/swtBotTestsDocumentation.html" />
     </topic>
-    <topic label="FORTE">
+    <topic label="4diac FORTE">
       <topic label="Structured Datatypes" href="html/development/forte_struct.html"/>
       <topic label="Monitoring" href="html/development/forte_monitoring.html"/>
       <topic href="html/development/forte_communicationArchitecture.html" label="Communication Architecture">
@@ -325,7 +326,7 @@
          </topic>
       </topic>
       <topic label="External Event SIFB" href="html/development/externalEvent_example.html"/>
-        <topic href="html/development/forte_codequality.html" label="Assuring FORTE Code Quality">
+        <topic href="html/development/forte_codequality.html" label="Assuring 4diac FORTE Code Quality">
            <topic href="html/development/forte_codequality.html#staticAnalysis" label="Static Code Analysis">
            </topic>
            <topic href="html/development/forte_codequality.html#dynamicAnalysis" label="Dynamic Analysis">

@@ -23,7 +23,7 @@
 
 		<h1 id="topOfPage">Run the controller of the traffic light example in the BeagleBoardBlack (BBB)</h1>
 
-			<p>A good practice to get used to the 4DIAC-IDE and the concept of distributed automation, is to apply the Traffic Light example, but instead of running completely in a computer or other platform, we will put the controller part of the Traffic Light example into the BBB, and the lights and Enable/Disable buttons will run in a normal computer using the FBRT runtime.</p>
+			<p>A good practice to get used to the 4diac&nbsp;IDE and the concept of distributed automation, is to apply the Traffic Light example, but instead of running completely in a computer or other platform, we will put the controller part of the Traffic Light example into the BBB, and the lights and Enable/Disable buttons will run in a normal computer using the FBRT runtime.</p>
 			
 			<h2>Getting the BBB ready</h2>
 			
@@ -52,36 +52,36 @@
 			
 			<img src="../../html/examples/img/bbbTrafficController/multicast.png" alt="Multicast allowed in both ethernet and usb interfafces"/>
 
-			<h2>Running FORTE in the BBB</h2>
+			<h2>Running 4diac&nbsp;FORTE in the BBB</h2>
 			
-			<p>In order to run FORTE on the BBB, you can either use a cross-compiler in your machine and then transfer the forte executable to the BBB, or you can transfer all the source files to the BBB and compile directly in it. This tutorial focuses on compiling directly in the BBB.</p>
+			<p>In order to run 4diac&nbsp;FORTE on the BBB, you can either use a cross-compiler in your machine and then transfer the 4diac&nbsp;FORTE executable to the BBB, or you can transfer all the source files to the BBB and compile directly in it. This tutorial focuses on compiling directly in the BBB.</p>
 			
-			<p>In either way, one more step that must be done is to tell the CMake that you want to include the IO in FORTE. To do that, find first the <span class="fieLocation">setup_posix.sh</span> file on the root folder of FORTE, and find the command <span class="specificText">cmake</span> almost at the bottom, and add the text <span class="specificText">-DFORTE_MODULE_SysFs=ON</span> (without quotes) just before <span class="specificText">-DFORTE_ARCHITECTURE=Posix</span> (leaving the blank spaces between them). </p>
+			<p>In either way, one more step that must be done is to tell the CMake that you want to include the IO in 4diac&nbsp;FORTE. To do that, find first the <span class="fieLocation">setup_posix.sh</span> file on the root folder of 4diac&nbsp;FORTE, and find the command <span class="specificText">cmake</span> almost at the bottom, and add the text <span class="specificText">-DFORTE_MODULE_SysFs=ON</span> (without quotes) just before <span class="specificText">-DFORTE_ARCHITECTURE=Posix</span> (leaving the blank spaces between them). </p>
 			
 			<h3>Transfering the source code to the BBB</h3>
 			
 			<p>To transfer the files from a windows machine to the BBB, an easy solution is the software <a target="_blank" href="https://winscp.net/eng/download.php">WinSCP</a> which allows to connect to the BBB and navigate the folders in it in a Graphic Interface. Connect to the BBB using the IP address in the same way as in SSH before. Once connected you will see two folder trees. The one on the left is your local machine and the one on the right is th BBB. In WinSCP, navigate on both trees to the desired folders and select the files to transfer and then click "Upload" to transfer from machine &rarr; BBB and "Download" to transfer BBB &rarr; machine.</p>
 			
 			<p>If you can't or don't want to use WinSCP, you can do it via the terminal. In order to do that you will need <a target="_blank" href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PSCP</a>, which does not have a Graphic Interface but it runs from the Command Windows (Terminal). Once you download it, you can append the folder name where the pscp.exe file is, in the PATH variable. If not, you can navigate in the terminal to the folder where the pscp.exe file is and execute there the following command:
-			<span class="inlineCode">pscp -r "[local FORTE path]" [BBB username]@[ip]:[remote FORTE folder]</span> where <span class="folderLocation">[local FORTE path]</span> is the folder on the windows machine where the source code of FORTE is, <span class="specificText">[BBB username]</span> 
-			is the login user for the BBB, <span class="address">[ip]</span> is the IP address of the BBB, and <span class="fileLocation">[remote FORTE folder]</span> is the folder where to copy the files in the BBB. 
+			<span class="inlineCode">pscp -r "[local 4diac&nbsp;FORTE path]" [BBB username]@[ip]:[remote 4diac&nbsp;FORTE folder]</span> where <span class="folderLocation">[local 4diac&nbsp;FORTE path]</span> is the folder on the windows machine where the source code of 4diac&nbsp;FORTE is, <span class="specificText">[BBB username]</span> 
+			is the login user for the BBB, <span class="address">[ip]</span> is the IP address of the BBB, and <span class="fileLocation">[remote 4diac&nbsp;FORTE folder]</span> is the folder where to copy the files in the BBB. 
 			The -r option indicates to copy recursively all the folders. An example of the command could be <span class="inlineCode">pscp.exe -r "c:\Users\JohnDoe\Documents\forte_repository" root@192.168.7.2:/root/bbb_forte_repository</span></p>
 		
-			<h3>Building FORTE in the BBB</h3>
+			<h3>Building 4diac&nbsp;FORTE in the BBB</h3>
 		
-			<p>For building FORTE in the BBB, you need to navigate to the folder where you copied all the files, and run: <span class="inlineCode">./setup_posix.sh</span> which will run CMake and prepare all files. Next go to the folder <span class="fileLocation">bin/posix</span> inside your forte folder, and there execute the command: <span class="inlineCode">make</span> This will take a while because the BBB is not as fast as a normal computer. That's why a cross-compiler might be a good idea. When the compilation is finished, you will find the forte executable in the folder <span class="fileLocation">bin/posix/src</span> inside your forte folder.</p>
+			<p>For building 4diac&nbsp;FORTE in the BBB, you need to navigate to the folder where you copied all the files, and run: <span class="inlineCode">./setup_posix.sh</span> which will run CMake and prepare all files. Next go to the folder <span class="fileLocation">bin/posix</span> inside your 4diac&nbsp;FORTE folder, and there execute the command: <span class="inlineCode">make</span> This will take a while because the BBB is not as fast as a normal computer. That's why a cross-compiler might be a good idea. When the compilation is finished, you will find the 4diac&nbsp;FORTE executable in the folder <span class="fileLocation">bin/posix/src</span> inside your 4diac&nbsp;FORTE folder.</p>
 
-			<p>If you have trouble with building FORTE, you can follow the steps as the <a target="_blank" href="../../html/installation/raspi.html#building">Raspberry Pi</a>. If some softwares are missing in the BBB, find more information in the <a target="_blank" href="../../html/installation/raspi.html#preparation">preparation</a> part of the Raspberry Pi.</p>
+			<p>If you have trouble with building 4diac&nbsp;FORTE, you can follow the steps as the <a target="_blank" href="../../html/installation/raspi.html#building">Raspberry Pi</a>. If some softwares are missing in the BBB, find more information in the <a target="_blank" href="../../html/installation/raspi.html#preparation">preparation</a> part of the Raspberry Pi.</p>
 		
-			<h2>Configure the system in 4DIAC-IDE</h2>
+			<h2>Configure the system in 4diac&nbsp;IDE</h2>
 
-			<p>Once FORTE can run on the BBB, we are going to use the 4DIAC-IDE to download part of the application on it, and the rest of the application will run in the computer. To do that, we open the Trafic Light application and configure the system where the two frame devices have the local IP address, and the Controller device has the IP address of the BBB. FORTE runs in the port 61499 by default, so be sure that the port of the controller device is set right. The ports of the two frame devices should be different from each other. Connect the devices with an Ethernet conection in the 4DIAC-IDE in case they are not connected. Save the application and you are ready to run it.</p>
+			<p>Once 4diac&nbsp;FORTE can run on the BBB, we are going to use the 4diac&nbsp;IDE to download part of the application on it, and the rest of the application will run in the computer. To do that, we open the Trafic Light application and configure the system where the two frame devices have the local IP address, and the Controller device has the IP address of the BBB. 4diac&nbsp;FORTE runs in the port 61499 by default, so be sure that the port of the controller device is set right. The ports of the two frame devices should be different from each other. Connect the devices with an Ethernet conection in the 4diac&nbsp;IDE in case they are not connected. Save the application and you are ready to run it.</p>
 
 			<img src="../../html/examples/img/bbbTrafficController/Traffic-light-system.jpg" alt="Traffic light system"/>
 			
 			<h2>Running the example</h2>
 			
-			<p>With the application properly configured, go to the Deployment view (1) in the 4DIAC-IDE and select the Trafic Light (2) on the left tree. In the Runtime Launcher tab below it, launch the FBRT runtime two times (3), each with the proper port configured as before, and two java windows will open. Run FORTE on the BBB (4). Click Download (5) and each part of the application should be downloaded to the BBB and the two instances of FBRT. Check on the Depployment Console tab that no errors have ocurred.</p>
+			<p>With the application properly configured, go to the Deployment view (1) in the 4diac&nbsp;IDE and select the Trafic Light (2) on the left tree. In the Runtime Launcher tab below it, launch the FBRT runtime two times (3), each with the proper port configured as before, and two java windows will open. Run 4diac&nbsp;FORTE on the BBB (4). Click Download (5) and each part of the application should be downloaded to the BBB and the two instances of FBRT. Check on the Depployment Console tab that no errors have ocurred.</p>
 			
 			<img src="../../html/examples/img/bbbTrafficController/Traffic-light-download.jpg" alt="Traffic light download"/>
 			
@@ -89,7 +89,7 @@
 			
 			<img src="../../html/examples/img/bbbTrafficController/Traffic-light-running.jpg" alt="Traffic light running"/>
 			
-			<p>This example should make clearer the idea behind of distributed automation and how easy it could be deployed using the 4DIAC-IDE.</p>
+			<p>This example should make clearer the idea behind of distributed automation and how easy it could be deployed using the 4diac&nbsp;IDE.</p>
 			
 			<h2 id="troubleshooting">Troubleshooting</h2>
 			

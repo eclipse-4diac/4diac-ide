@@ -35,8 +35,8 @@ public class GetResourcesHandler extends AbstractHandler {
 
 	private static List<Object> getDeviceList(final ExecutionEvent event) {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection instanceof StructuredSelection) {
-			return ((StructuredSelection) selection).toList();
+		if (selection instanceof final StructuredSelection structuredSelection) {
+			return structuredSelection.toList();
 		}
 		return Collections.emptyList();
 	}
@@ -44,14 +44,12 @@ public class GetResourcesHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		for (Object object : getDeviceList(event)) {
-			Device device = null;
-			if (object instanceof EditPart) {
-				object = ((EditPart) object).getModel();
+			if (object instanceof final EditPart editPart) {
+				object = editPart.getModel();
 			}
-			if (object instanceof Device) {
-				device = (Device) object;
+			if (object instanceof final Device device) {
+				fetchResources(device);
 			}
-			fetchResources(device);
 		}
 		return null;
 	}
@@ -59,11 +57,11 @@ public class GetResourcesHandler extends AbstractHandler {
 	private static void fetchResources(final Device device) {
 		final IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE
 				.getDeviceManagementInteractor(device);
-		if (interactor instanceof DynamicTypeLoadDeploymentExecutor) {
+		if (interactor instanceof final DynamicTypeLoadDeploymentExecutor dynamicTypeLoadDeploymentExecutor) {
 			DeploymentCoordinator.enableOutput(interactor);
 			try {
 				interactor.connect();
-				((DynamicTypeLoadDeploymentExecutor) interactor).queryResourcesWithNetwork(device);
+				dynamicTypeLoadDeploymentExecutor.queryResourcesWithNetwork(device);
 			} catch (final Exception e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			} finally {

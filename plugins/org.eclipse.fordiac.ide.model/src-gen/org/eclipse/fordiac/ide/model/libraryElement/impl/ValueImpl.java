@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -39,7 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
  *
  * @generated
  */
-public class ValueImpl extends ErrorMarkerRefImpl implements Value {
+public class ValueImpl extends EObjectImpl implements Value {
 	/**
 	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->

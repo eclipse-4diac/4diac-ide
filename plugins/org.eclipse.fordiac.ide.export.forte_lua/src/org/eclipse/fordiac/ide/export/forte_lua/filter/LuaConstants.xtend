@@ -46,6 +46,8 @@ class LuaConstants {
 	static final int FB_ADI_FLAG = 167772160; // 2^27 | 2^25
 	static final int FB_ADO_FLAG = 201326592; // 2^27 | 2^26
 	static final int FB_IN_FLAG = 268435456; // 2^28
+	
+	static final int WITH_DELIMITER = 65535;
 
 	def static luaTypeName(FBType type) '''FORTE_«type.name»'''
 
@@ -201,7 +203,7 @@ class LuaConstants {
 		for (With w : event.with) {
 			with.add(vars.indexOf(w.variables))
 		}
-		with.add(255)
+		with.add(WITH_DELIMITER)
 		return index
 	}
 

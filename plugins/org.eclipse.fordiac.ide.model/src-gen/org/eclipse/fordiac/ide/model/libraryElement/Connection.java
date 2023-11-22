@@ -40,7 +40,7 @@ import org.eclipse.emf.common.util.DiagnosticChain;
  * @model abstract="true"
  * @generated
  */
-public interface Connection extends ConfigurableObject, ErrorMarkerRef, HiddenElement {
+public interface Connection extends ConfigurableObject, HiddenElement {
 	/**
 	 * Returns the value of the '<em><b>Broken Connection</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -218,6 +218,54 @@ public interface Connection extends ConfigurableObject, ErrorMarkerRef, HiddenEl
 	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
 	 * @generated
 	 */
+	boolean validateMissingSource(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateMissingSourceEndpoint(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateMissingDestination(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateMissingDestinationEndpoint(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateDuplicate(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateTypeMismatch(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
 	boolean validateMappedVarInOutsDoNotCrossResourceBoundaries(DiagnosticChain diagnostics, Map<Object, Object> context);
 
 	/**
@@ -243,5 +291,13 @@ public interface Connection extends ConfigurableObject, ErrorMarkerRef, HiddenEl
 	 * @generated
 	 */
 	boolean validateVarInOutsAreNotConnectedToOuts(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateVarInOutConnectionsFormsNoLoop(DiagnosticChain diagnostics, Map<Object, Object> context);
 
 } // Connection

@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -47,14 +48,21 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class FordiacMarkerHelper {
 
-	public static String getLocation(EObject object) {
-		while (object != null) {
-			if (object instanceof final INamedElement namedElement) {
-				return namedElement.getQualifiedName();
-			}
-			object = object.eContainer();
+	public static String getLocation(final EObject object) {
+		if (object instanceof final INamedElement namedElement) {
+			return namedElement.getQualifiedName();
+		}
+		if (object != null) {
+			return getLocation(object.eContainer(), object.eContainingFeature());
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	public static String getLocation(final EObject object, final EStructuralFeature feature) {
+		if (feature != null) {
+			return getLocation(object) + "/" + feature.getName(); //$NON-NLS-1$
+		}
+		return getLocation(object);
 	}
 
 	public static IResource getResource(final EObject object) {
@@ -88,13 +96,18 @@ public final class FordiacMarkerHelper {
 	}
 
 	public static Object[] getDiagnosticData(final EObject object) {
+		return getDiagnosticData(object, null);
+	}
+
+	public static Object[] getDiagnosticData(final EObject object, final EStructuralFeature feature) {
 		if (object == null) {
 			return new Object[0];
 		}
 		return new Object[] { object, // [0] object itself (per EMF convention)
 				getLocation(object), // [1] LOCATION
 				getTargetUriString(null, object), // [2] TARGET_URI
-				EcoreUtil.getURI(object.eClass()).toString() // [3] TARGET_TYPE
+				EcoreUtil.getURI(object.eClass()).toString(), // [3] TARGET_TYPE
+				feature != null ? EcoreUtil.getURI(feature).toString() : null, // [4] TARGET_FEATURE
 		};
 	}
 

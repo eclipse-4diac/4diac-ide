@@ -12,6 +12,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 
@@ -47,10 +48,10 @@ public class DataTypeImporter extends TypeImporter {
 	}
 
 	@Override
-	public void loadElement() {
+	public void loadElement() throws IOException, XMLStreamException, TypeImportException {
 		super.loadElement();
 		if (!(getElement() instanceof StructuredType) && getFile() != null) {
-			createErrorMarker(
+			throw new TypeImportException(
 					MessageFormat.format(Messages.DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE, getFile().getName()));
 		}
 	}

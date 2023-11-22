@@ -28,22 +28,22 @@ The component is controlled by a specific function block, which produces XQuerie
 </p>
 
 <p>The section is devided into three parts. 
-The first part explains how to build the 4diac-rte to run an application which sends XQueries.
+The first part explains how to build the 4diac&nbsp;FORTE to run an application which sends XQueries.
 The second part explains how to setup your BaseX database.
-And the thrid part shows how to create an application within the 4diac-ide which sends XQueries.
+And the thrid part shows how to create an application within the 4diac&nbsp;IDE which sends XQueries.
 The exmple AutomationML file as well as this implementation has been realized as part of the <a href="https://www.basys40.de/">BaSys4.0 project</a>, which receives funding of the <a href="https://www.bmbf.de/en/index.html">Federal Ministry of Education and Research</a>.
 </p>
 
 <!-- ********************************************************************** -->
-<h2 id="build">Build 4diac-rte to run an Application which sends XQueries</h2>
+<h2 id="build">Build 4diac&nbsp;FORTE to run an Application which sends XQueries</h2>
 <p>At first checkout <a href="https://github.com/BaseXdb/basex">BaseX from GitHub</a> to get the C API from BaseX.
 In the downloaded folder you find the C API under <i>.../basex-api/src/main/c</i>.
 Please consider that with the officially available C API from BaseX the authentification to a BaseX database currently fails under Windows.</p>
 
 <div class="code">git clone https://github.com/BaseXdb/basex.git</div>
 
-<p>Then configure CMake to build the 4diac-rte.
-If you do not know how to build the 4diac-rte read the <a href="../../html/installation/install.html#ownFORTE">build instructions first</a>. 
+<p>Then configure CMake to build the 4diac&nbsp;FORTE.
+If you do not know how to build the 4diac&nbsp;FORTE read the <a href="../../html/installation/install.html#ownFORTE">build instructions first</a>. 
 Besides the usual configuration activate the Xquery Client.
 </p>
 
@@ -62,13 +62,13 @@ OPENSSL_LINK_DIR=path_to_openssl_libraries
 
 <p>Press the <i>Configure</i> button within the CMake GUI until none of the lines is red.
 Afterwards press the <i>Generate</i> button of the CMake GUI.
-Then build the 4diac-rte.</p>
+Then build the 4diac&nbsp;FORTE.</p>
 
 <!-- ********************************************************************** -->
 <h2 id="basex">Setup your BaseX Database</h2>
 <p>Get BaseX for your system from <a href="http://basex.org/download/">here</a>.
 After starting BaseX, load your AutomationML or XML file into BaseX by clicking <i>Database/open and manage</i>.
-As an example AutomationML file you can use the <a href="img/xquery/BaSys_PalletSystem_Model.aml"><i>Pallet System Model</i></a>.
+As an example AutomationML file you can use the <a href="../../html/communication/img/xquery/BaSys_PalletSystem_Model.aml"><i>Pallet System Model</i></a>.
 This example AutomationML file has been created during the <a href="https://www.basys40.de/">BaSys4.0 project</a>, which receives funding of the <a href="https://www.bmbf.de/en/index.html">Federal Ministry of Education and Research</a>.
 Within the <i>General</i> tab enter the path to your file and select the proper input format.
 In case you use an AutomationML file or XML, choose XML.
@@ -112,11 +112,11 @@ The following images show a possible interface and execution control chart for a
 <img src="../../html/communication/img/xquery/testFB_ECC.png" alt="Test function block to send XQueries"/>
 
 <p>The algorithm <i>getVMax</i> contains an XQuery which is supposed to calculate the maximum speed of a roller conveyor from values of the database.
-Since the 4diac-ide currently does not provide support for an XQuery algorithm language, you have to use <i>AnyText</i> as algorithm language.
+Since the 4diac&nbsp;IDE currently does not provide support for an XQuery algorithm language, you have to use <i>AnyText</i> as algorithm language.
 The <i>AnyText</i> language is interpreted as C++ code during export of your function block.
 Your XQuery is assigned to the desired STRING output of your basic function block, in this case <i>xVMax</i>.
 In case you also want to replace certain elements in your XQuery, maybe by values from your function block's interface, you have to split the String.
-The interface value is then added as parameter of the <i>append</i> method, supported by the 4diac-rte, e.g. <i>name().getValue()</i>.
+The interface value is then added as parameter of the <i>append</i> method, supported by the 4diac&nbsp;FORTE, e.g. <i>name().getValue()</i>.
 The rest of your XQuery is appended afterwards.
 This could look like the following algorithm code for <i>getVMax</i>.</p>
 
@@ -166,7 +166,7 @@ st_xSuccessor().append("' "
 
 <p>Please consider that your XQuery is dependent on the data structure of your database.
 In this case it is the structure of an AutomationML file for a <a href="img/xquery/BaSys_PalletSystem_Model.aml"><i>Pallet System</i></a>.
-After you have created your test function block, export it and build your 4diac-rte with it.
+After you have created your test function block, export it and build your 4diac&nbsp;FORTE with it.
 Please have a look at the <a href="../../html/installation/install.html#ownFORTE">build instructions</a> if you do not know how to build your own function block.
 
 <p>Now you can use your test function block wihtin an application.
@@ -186,9 +186,9 @@ For the example database running on your local machine, the <span class="inlineC
 
 <div class="code">xquery[127.0.0.1:1984; BaSys_PalletSystem_Model; admin; admin]</div>
 
-<p>After you have completed your application, mapp your application to a proper device and start the 4diac-rte you built before.
-Then deploy your application to the 4diac-rte you started.
-If everything worked correctly the 4diac-rte should produce something like that:</p>
+<p>After you have completed your application, mapp your application to a proper device and start the 4diac&nbsp;FORTE you built before.
+Then deploy your application to the 4diac&nbsp;FORTE you started.
+If everything worked correctly the 4diac&nbsp;FORTE should produce something like that:</p>
 
 <div class="code">INFO: T#00ms: FORTE is up and running
 INFO: T#00ms: Using default bootfile location: forte.fboot

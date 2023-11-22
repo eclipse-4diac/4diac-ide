@@ -65,8 +65,7 @@ public class UpdateAllFBTypesHandler extends AbstractHandler {
 				try {
 					dialog.run(true, false, monitor -> {
 						monitor.beginTask("Updating", getCommands().size()); //$NON-NLS-1$
-						for (final Object element : getCommands()) {
-							final Command cmd = (Command) element;
+						for (final Command cmd : getCommands()) {
 							Display.getDefault().syncExec(cmd::execute);
 							monitor.worked(1);
 						}

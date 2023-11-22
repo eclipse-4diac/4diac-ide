@@ -20,6 +20,7 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextcore.messages"; //$NON-NLS-1$
 	public static String STCoreControlFlowValidator_VariableUndefinedAfterForLoop;
+	public static String STCoreImportValidator_ImportNotFound;
 	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedCallable;
 	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedCallableForType;
 	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedDataType;
@@ -28,6 +29,7 @@ public final class Messages extends NLS {
 	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedVariable;
 	public static String STCoreLinkingDiagnosticMessageProvider_UndefinedVariableForType;
 	public static String STCoreLinkingDiagnosticMessageProvider_UnknownType;
+	public static String STCoreResource_TypeLoadError;
 	public static String STCoreValidator_Consecutive_Underscores_In_Identifier;
 	public static String STCoreValidator_Identifier_Is_Reserved;
 	public static String STCoreValidator_Implicit_Conversion_In_Literal;
@@ -83,6 +85,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_CallsCannotBeAssignedTo;
 	public static String STCoreValidator_VariableMaybeNotInitialized;
 	public static String STCoreValidator_ControlFlowStatementNeedsToBeInsideALoop;
+	public static String STCoreValidator_ArrayAccessReceiverIsInvalid;
 
 	static {
 		// initialize resource bundle

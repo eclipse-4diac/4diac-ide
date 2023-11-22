@@ -17,9 +17,12 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.quickfix
 
 import com.google.common.collect.Iterables
+import com.google.inject.Inject
 import java.text.MessageFormat
 import javax.swing.text.BadLocationException
+import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
@@ -31,15 +34,21 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages
 import org.eclipse.fordiac.ide.structuredtextalgorithm.validation.STAlgorithmValidator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.STCoreQuickfixProvider
+import org.eclipse.gef.commands.Command
+import org.eclipse.gef.commands.CommandStack
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.diagnostics.Diagnostic
 import org.eclipse.xtext.resource.XtextResource
+import org.eclipse.xtext.ui.editor.IURIEditorOpener
 import org.eclipse.xtext.ui.editor.quickfix.Fix
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor
 import org.eclipse.xtext.ui.editor.quickfix.ReplaceModification
 import org.eclipse.xtext.validation.Issue
 
 class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
+	@Inject
+	IURIEditorOpener editorOpener
+
 	@Fix(STAlgorithmValidator.NO_ALGORITHM_FOR_INPUT_EVENT)
 	def void fixNoAlgorithmForInputEvent(Issue issue, IssueResolutionAcceptor acceptor) {
 		val String eventName = issue.getData().get(0)
@@ -73,7 +82,7 @@ class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 			if (container instanceof STAlgorithmSource) {
 				val resource = container.eResource
 				if (resource instanceof STAlgorithmResource) {
-					val libraryElement = resource.libraryElement
+					val libraryElement = resource.internalLibraryElement
 					if (libraryElement instanceof SimpleFBType) {
 						container.elements.removeIf [ sourceElement |
 							sourceElement instanceof STAlgorithm && !libraryElement.interfaceList.eventInputs.exists [ event |
@@ -108,9 +117,7 @@ class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 			]
 
 			val resource = varContainer.eResource
-			val libraryElement = resource instanceof STAlgorithmResource
-					? resource.libraryElement
-					: null // As we are in an Algorithm editor, we are always in a BaseFBType (Simple or Basic)
+			val libraryElement = resource instanceof STAlgorithmResource ? resource.internalLibraryElement : null // As we are in an Algorithm editor, we are always in a BaseFBType (Simple or Basic)
 			if (libraryElement instanceof BaseFBType) {
 				val iList = libraryElement.interfaceList
 				val fbVarCandidates = Iterables.concat(iList.inputVars, iList.outputVars, libraryElement.internalVars)
@@ -122,6 +129,28 @@ class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 				]
 
 			}
+		}
+	}
+
+	override protected void createImportProposal(Issue issue, String label, String importedNamespace,
+		IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, label, label, null, [ element, context |
+			val resource = element.eResource
+			if(resource instanceof STAlgorithmResource) {
+				executeCommand(issue, new AddNewImportCommand(resource.libraryElement, importedNamespace))
+			}
+		], 100);
+	}
+	
+	def protected void executeCommand(Issue issue, Command command) {
+		executeCommand(issue.uriToProblem, command)
+	}
+	
+	def protected void executeCommand(URI uri, Command command) {
+		val editor = editorOpener.open(uri, false);
+		val commandStack = editor.getAdapter(CommandStack)
+		if (commandStack !== null) {
+			commandStack.execute(command)
 		}
 	}
 }

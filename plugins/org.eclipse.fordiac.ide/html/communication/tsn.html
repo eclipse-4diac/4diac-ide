@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<h1 id="topOfPage">How to use 4DIAC's Time Sensitive Networking Communication Interface</h1>
+<h1 id="topOfPage">How to use Eclipse 4diac's Time Sensitive Networking Communication Interface</h1>
 <p>
 
 <h2 id="intro">Introduction</h2>
@@ -45,10 +45,10 @@ The current implementation was tested on Beaglebone Blacks on debian with real-t
   eth0.2, .. , eth0.165, ..)</li>
 </ul> 
 
-<h2 id="build">How to Build FORTE with TSN Features</h2>
+<h2 id="build">How to Build 4diac&nbsp;FORTE with TSN Features</h2>
 
 <ol>
-<li> Checkout the develop branch of forte
+<li> Checkout the develop branch of 4diac&nbsp;FORTE
 <div class="code">$ git clone git://git.eclipse.org/gitroot/4diac/org.eclipse.4diac.forte.git
 $ cd org.eclipse.4diac.forte
 $ git checkout develop</div></li>
@@ -58,18 +58,18 @@ $ cd bin/posix/
 $ cmake ../.. -DCMAKE_BUILD_TYPE=Debug -DFORTE_ARCHITECTURE=Posix -DFORTE_COM_TSN=ON
 </div>
 </li>
-<li> Build forte with:
+<li> Build 4diac&nbsp;FORTE with:
 <div class="code">$ make</div>
 </li>
-<li> Run forte with:
+<li> Run 4diac&nbsp;FORTE with:
 <div class="code">$ cd src
 $ ./forte</div>
 </li>
 </ol>
 
-<h2 id="config">Configure 4diac's TSN Layer Using a Publish Function Block</h2>
+<h2 id="config">Configure 4diac&nbsp;FORTE's TSN Layer Using a Publish Function Block</h2>
 
-<p>The new 4diac TSN enabled IP communication layer maps a UDP stream to a specific VLAN interface. 
+<p>The 4diac&nbsp;FORTE TSN enabled IP communication layer maps a UDP stream to a specific VLAN interface. 
 It binds the stream to a virtual Ethernet adapter (e.g., eth0.x). The correct tagging with VLAN ID 
 and priority is used by the TSN enabled network to transmit packets according to their real-time 
 requirements. The different VLANs are related to different forwarding and scheduling strategies 

@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -349,7 +348,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 					res.setName(fb.getName());
 					res.setType(fb.getType());
 					return res;
-				}).collect(Collectors.toList());
+				}).toList();
 			}
 			return Collections.emptyList();
 		} catch (final IOException e) {

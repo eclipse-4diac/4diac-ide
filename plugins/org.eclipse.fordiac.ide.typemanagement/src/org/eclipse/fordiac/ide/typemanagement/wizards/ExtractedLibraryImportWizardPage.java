@@ -26,37 +26,38 @@ public class ExtractedLibraryImportWizardPage extends LibraryImportWizardPage {
 
 	private LibraryLinker libraryLinker;
 	private File selectedFile;
-	private StructuredSelection selection;
-	
-	protected ExtractedLibraryImportWizardPage(String pageName, StructuredSelection selection) {
+	private final StructuredSelection selection;
+
+	protected ExtractedLibraryImportWizardPage(final String pageName, final StructuredSelection selection) {
 		super(pageName);
 		this.selection = selection;
 		setColumnTitle(Messages.DirsWithUnzippedTypeLibs);
 	}
 
 	public void importLib() {
-		libraryLinker.importLibrary(selectedFile.getName(), libraryLinker.getProjectName(selection));
+		libraryLinker.setSelectedProject(selection);
+		libraryLinker.importLibrary(selectedFile.getName());
 	}
 
 	@Override
 	void configureSelectionListener() {
 		viewer.getTree().addSelectionListener(new SelectionAdapter() {
-        	@Override
-        	public void widgetSelected(SelectionEvent e) {
-        		TreeItem item = (TreeItem) e.item;
-        		if (item.getData() instanceof File file && file.isDirectory()) {
-        			selectedFile = file;
-        			setPageComplete(isComplete());
-        		}
-        	}
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final TreeItem item = (TreeItem) e.item;
+				if (item.getData() instanceof final File file && file.isDirectory()) {
+					selectedFile = file;
+					setPageComplete(isComplete());
+				}
+			}
 		});
 	}
-	
+
 	@Override
-	public void setVisible(boolean visible) {
+	public void setVisible(final boolean visible) {
 		libraryLinker = new LibraryLinker();
 		viewer.setContentProvider(new ExtractedLibraryImportContentProvider());
-        viewer.setInput(libraryLinker.listExtractedFiles());
+		viewer.setInput(libraryLinker.listExtractedFiles());
 		super.setVisible(visible);
 	}
 

@@ -19,6 +19,7 @@ Require-Bundle: org.eclipse.ui.views.properties.tabbed,
  org.eclipse.ui.navigator,
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.core.resources,
+ org.eclipse.ui.ide,
  org.eclipse.fordiac.ide.ui.errormessages,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.fordiac.ide.model.eval

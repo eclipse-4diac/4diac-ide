@@ -16,6 +16,7 @@
  *   Bianca Wiesmayr - create command now has enhanced guess
  *   Daniel Lindhuber - added insert command method
  *   Martin Melik Merkumians - add Var Config Column
+ *   Sebastian Hollersbacher - added Visible Column and Output table
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
@@ -51,15 +52,32 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
+	public void setupOutputTable(final Group outputsGroup) {
+		outputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputProvider,
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
+				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG),
+				getSectionEditableRule(), null, this, false);
+		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
+		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
+		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
+		outputTable.configure();
+	}
+
+	@Override
 	public void setupInputTable(final Group inputsGroup) {
-		inputProvider = new ChangeableListDataProvider<>(
-				new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
+		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG),
+				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG),
 				getSectionEditableRule(), null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));

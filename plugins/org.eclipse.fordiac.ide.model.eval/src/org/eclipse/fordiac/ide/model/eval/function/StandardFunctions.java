@@ -2796,7 +2796,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an LINT")
-	static <T extends AnyIntValue> LIntValue TO_LINT(final T value) {
+	static <T extends AnyNumValue> LIntValue TO_LINT(final T value) {
 		return LIntValue.toLIntValue(value);
 	}
 
@@ -2806,7 +2806,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an DINT")
-	static <T extends AnyIntValue> DIntValue TO_DINT(final T value) {
+	static <T extends AnyNumValue> DIntValue TO_DINT(final T value) {
 		return DIntValue.toDIntValue(value);
 	}
 
@@ -2816,7 +2816,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an INT")
-	static <T extends AnyIntValue> IntValue TO_INT(final T value) {
+	static <T extends AnyNumValue> IntValue TO_INT(final T value) {
 		return IntValue.toIntValue(value);
 	}
 
@@ -2826,7 +2826,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an SINT")
-	static <T extends AnyIntValue> SIntValue TO_SINT(final T value) {
+	static <T extends AnyNumValue> SIntValue TO_SINT(final T value) {
 		return SIntValue.toSIntValue(value);
 	}
 
@@ -2836,7 +2836,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an ULINT")
-	static <T extends AnyIntValue> ULIntValue TO_ULINT(final T value) {
+	static <T extends AnyNumValue> ULIntValue TO_ULINT(final T value) {
 		return ULIntValue.toULIntValue(value);
 	}
 
@@ -2846,7 +2846,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an UDINT")
-	static <T extends AnyIntValue> UDIntValue TO_UDINT(final T value) {
+	static <T extends AnyNumValue> UDIntValue TO_UDINT(final T value) {
 		return UDIntValue.toUDIntValue(value.intValue());
 	}
 
@@ -2856,7 +2856,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an UINT")
-	static <T extends AnyIntValue> UIntValue TO_UINT(final T value) {
+	static <T extends AnyNumValue> UIntValue TO_UINT(final T value) {
 		return UIntValue.toUIntValue(value);
 	}
 
@@ -2866,7 +2866,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an USINT")
-	static <T extends AnyIntValue> USIntValue TO_USINT(final T value) {
+	static <T extends AnyNumValue> USIntValue TO_USINT(final T value) {
 		return USIntValue.toUSIntValue(value);
 	}
 

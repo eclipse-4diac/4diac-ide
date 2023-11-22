@@ -17,7 +17,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,8 +33,6 @@ import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCom
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
@@ -70,7 +67,6 @@ public class PasteCommand extends Command {
 	private final Map<FBNetworkElement, FBNetworkElement> copiedElements = new HashMap<>();
 
 	private final CompoundCommand connCreateCmds = new CompoundCommand();
-	private final CompoundCommand createMarkersCmds = new CompoundCommand();
 	private final CompoundCommand updateTypeCmds = new CompoundCommand();
 
 	private int xDelta;
@@ -120,9 +116,8 @@ public class PasteCommand extends Command {
 			ElementSelector.selectViewObjects(copiedElements.values());
 
 			if (dstTypeLib != null) {
-				createUpdateTypeAndErrorMarkerCommands();
+				createUpdateTypeCommands();
 			}
-			createMarkersCmds.execute();
 			updateTypeCmds.execute();
 
 			if (!ErrorMessenger.unpauseMessages().isEmpty()) {
@@ -134,7 +129,6 @@ public class PasteCommand extends Command {
 	@Override
 	public void undo() {
 		updateTypeCmds.undo();
-		createMarkersCmds.undo();
 		connCreateCmds.undo();
 		dstFBNetwork.getNetworkElements().removeAll(copiedElements.values());
 	}
@@ -143,7 +137,6 @@ public class PasteCommand extends Command {
 	public void redo() {
 		dstFBNetwork.getNetworkElements().addAll(copiedElements.values());
 		connCreateCmds.redo();
-		createMarkersCmds.redo();
 		updateTypeCmds.redo();
 		ElementSelector.selectViewObjects(copiedElements.values());
 	}
@@ -387,15 +380,9 @@ public class PasteCommand extends Command {
 		return null;
 	}
 
-	private void createUpdateTypeAndErrorMarkerCommands() {
+	private void createUpdateTypeCommands() {
 		copiedElements.values().forEach(fbnEl -> {
-			if (fbnEl instanceof ErrorMarkerFBNElement) {
-				final ErrorMarkerBuilder builder = ErrorMarkerBuilder
-						.createErrorMarkerBuilder(MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", //$NON-NLS-1$
-								fbnEl.getTypeName(), fbnEl.getName()))
-						.setTarget(fbnEl);
-				createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(builder));
-			} else if (fbnEl.getTypeEntry() != null) {
+			if (fbnEl.getTypeEntry() != null && !(fbnEl instanceof ErrorMarkerFBNElement)) {
 				// we only need to update the type if we have a type entry
 				updateTypeCmds.add(new UpdateFBTypeCommand(fbnEl));
 			}

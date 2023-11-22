@@ -14,9 +14,8 @@
 
 package org.eclipse.fordiac.ide.fb.interpreter.api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -25,7 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 public class CoverageCalculator {
 
 	public static float calculateCoverageOfSequence(final List<Transaction> transactions, final FBType fbType) {
-
 		if (fbType instanceof final BasicFBType bfb) {
 			final EccTraceHelper eccTraceHelper = new EccTraceHelper(transactions, bfb.getECC());
 
@@ -35,21 +33,25 @@ public class CoverageCalculator {
 		return -1;
 	}
 
-	public static float calculateNodeCoverageOfSuiteBy(final HashMap<String, Integer> visitedStates) {
+	public static float calculateNodeCoverageOfSuiteBy(final Map<String, Integer> visitedStates) {
+		final int allPossibleStates = visitedStates.size();
 
-		final Integer allPossibleStates = visitedStates.size();
-
+		@SuppressWarnings("boxing")
 		final long visitedStatesNumber = visitedStates.entrySet().stream().filter(s -> s.getValue() > 0).count();
 
 		return visitedStatesNumber / (float) allPossibleStates;
 	}
 
-	public static float calculatePathCoverageOfSuiteBy(final HashMap<ArrayList<String>, Integer> visitedPaths) {
+	public static float calculatePathCoverageOfSuiteBy(final Map<List<String>, Integer> visitedPaths) {
+		final int allPossiblePaths = visitedPaths.size();
 
-		final Integer allPossiblePaths = visitedPaths.size();
-
+		@SuppressWarnings("boxing")
 		final long visitedPathNumber = visitedPaths.entrySet().stream().filter(s -> s.getValue() > 0).count();
 
 		return visitedPathNumber / (float) allPossiblePaths;
+	}
+
+	private CoverageCalculator() {
+		throw new IllegalStateException("Utility class"); //$NON-NLS-1$
 	}
 }

@@ -65,6 +65,8 @@ public final class FordiacMessages extends NLS {
 	public static String Organization; // NOSONAR
 	public static String Outputs; // NOSONAR
 	public static String Package; // NOSONAR
+
+	public static String PackageInfoWidget_OrganizeImports;
 	public static String Pin; // NOSONAR
 	public static String Product; // NOSONAR
 	public static String Properties; // NOSONAR

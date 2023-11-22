@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.naming;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource;
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameProvider;
@@ -40,8 +41,11 @@ public class STAlgorithmQualifiedNameProvider extends STCoreQualifiedNameProvide
 	}
 
 	protected QualifiedName getLibraryElementName(final EObject source) {
-		if (source.eResource() instanceof final STAlgorithmResource resource && resource.getLibraryElement() != null) {
-			return getFullyQualifiedName(resource.getLibraryElement());
+		if (source.eResource() instanceof final STAlgorithmResource resource) {
+			final LibraryElement libraryElement = resource.getInternalLibraryElement();
+			if (libraryElement != null) {
+				return getFullyQualifiedName(libraryElement);
+			}
 		}
 		return null;
 	}

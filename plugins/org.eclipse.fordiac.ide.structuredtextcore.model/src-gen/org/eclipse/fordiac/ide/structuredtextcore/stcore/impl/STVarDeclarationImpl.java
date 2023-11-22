@@ -498,6 +498,16 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 */
 	@Override
+	public boolean validateType(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getQualifiedName() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
 	}

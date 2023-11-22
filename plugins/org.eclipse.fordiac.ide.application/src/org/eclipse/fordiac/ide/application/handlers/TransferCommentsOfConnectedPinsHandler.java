@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.application.handlers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -50,17 +49,16 @@ public class TransferCommentsOfConnectedPinsHandler extends AbstractHandler {
 	private static Map<IInterfaceElement, List<IInterfaceElement>> findConnectedPins(final FBNetworkElement src) {
 		final Map<IInterfaceElement, List<IInterfaceElement>> commentsToCopy = new HashMap<>();
 
-		for(final IInterfaceElement outVar : src.getInterface().getOutputVars()) {
+		for (final IInterfaceElement outVar : src.getInterface().getOutputVars()) {
 			if (!outVar.getOutputConnections().isEmpty()) {
-				commentsToCopy.put(outVar, outVar.getOutputConnections().stream()
-						.map(Connection::getDestination).collect(Collectors.toList()));
+				commentsToCopy.put(outVar,
+						outVar.getOutputConnections().stream().map(Connection::getDestination).toList());
 			}
 		}
 
-		for (final IInterfaceElement evnt : src.getInterface().getEventOutputs()) {
-			if (!evnt.getOutputConnections().isEmpty()) {
-				commentsToCopy.put(evnt, evnt.getOutputConnections().stream().map(Connection::getDestination)
-						.collect(Collectors.toList()));
+		for (final IInterfaceElement event : src.getInterface().getEventOutputs()) {
+			if (!event.getOutputConnections().isEmpty()) {
+				commentsToCopy.put(event, event.getOutputConnections().stream().map(Connection::getDestination).toList());
 			}
 		}
 

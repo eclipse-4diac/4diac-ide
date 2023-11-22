@@ -117,7 +117,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ArraySize" eSuperTypes="#//ErrorMarkerRef">
+  <eClassifiers xsi:type="ecore:EClass" name="ArraySize">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral=""/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclaration" eType="#//VarDeclaration"
@@ -125,8 +125,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//ITypedElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeDeclaration" eType="#//AttributeDeclaration"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass data.ecore#//DataType"
-        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
@@ -134,10 +133,9 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AttributeDeclaration" eSuperTypes="#//ITypedElement">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass data.ecore#//DataType"
-        transient="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialValue" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeDeclaration" eSuperTypes="#//ITypedElement #//LibraryElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass data.ecore#//AnyDerivedType"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseFBType" eSuperTypes="#//FBType">
     <eOperations name="getAlgorithmNamed" lowerBound="1" eType="#//Algorithm">
@@ -334,6 +332,21 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompilerInfo">
+    <eOperations name="validatePackageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CompilerInfoAnnotations.validatePackageName(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="compiler" upperBound="-1"
         eType="#//Compiler" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -407,7 +420,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
         eType="#//Attribute" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//ConfigurableObject #//ErrorMarkerRef #//HiddenElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//ConfigurableObject #//HiddenElement">
     <eOperations name="getSourceElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);"/>
@@ -445,6 +458,96 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isInterfaceConnection(this);"/>
       </eAnnotations>
+    </eOperations>
+    <eOperations name="validateMissingSource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateMissingSource(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="validateMissingSourceEndpoint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateMissingSourceEndpoint(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="validateMissingDestination" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateMissingDestination(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="validateMissingDestinationEndpoint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateMissingDestinationEndpoint(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="validateDuplicate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateDuplicate(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="validateTypeMismatch" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateTypeMismatch(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
     </eOperations>
     <eOperations name="validateMappedVarInOutsDoNotCrossResourceBoundaries" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
@@ -497,6 +600,21 @@
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateVarInOutsAreNotConnectedToOuts(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="validateVarInOutConnectionsFormsNoLoop" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateVarInOutConnectionsFormsNoLoop(this, diagnostics, context);"/>
       </eAnnotations>
       <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
       <eParameters name="context">
@@ -722,23 +840,28 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCC" lowerBound="1" eType="#//ECC"
         eOpposite="#//ECC/eCTransition"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerDataType" eSuperTypes="data.ecore#//DataType #//ErrorMarkerRef"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerFBNElement" eSuperTypes="#//FBNetworkElement #//ErrorMarkerRef">
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerDataType" eSuperTypes="data.ecore#//DataType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerFBNElement" eSuperTypes="#//FBNetworkElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repairedElement" eType="#//FBNetworkElement"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerInterface" eSuperTypes="#//IInterfaceElement #//ErrorMarkerRef">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="repairedEndpoint" eType="#//IInterfaceElement"
-        transient="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerInterface" eSuperTypes="#//IInterfaceElement">
+    <eOperations name="validateValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceAnnotations.validateValue(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Value"
         containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerRef">
-    <eOperations name="hasError" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getErrorMessage() != null &amp;&amp; !getErrorMessage().isBlank();"/>
-      </eAnnotations>
-    </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorMessage" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//IInterfaceElement #//ICallable">
     <eOperations name="getInputParameters" upperBound="-1" eType="#//INamedElement">
@@ -922,7 +1045,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FBNetworkElement" eSuperTypes="#//TypedConfigureableObject #//PositionableElement #//ErrorMarkerRef">
+  <eClassifiers xsi:type="ecore:EClass" name="FBNetworkElement" eSuperTypes="#//TypedConfigureableObject #//PositionableElement">
     <eOperations name="getResource" lowerBound="1" eType="#//Resource">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getResource(this);"/>
@@ -978,6 +1101,21 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.isInGroup(this);"/>
       </eAnnotations>
+    </eOperations>
+    <eOperations name="validateName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementAnnotations.validateName(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//InterfaceList"
         containment="true"/>
@@ -1144,7 +1282,7 @@
         <details key="invariant" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.validateName(this, diagnostics, context) &amp;&amp; org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);"/>
       </eAnnotations>
       <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
       <eParameters name="context">
@@ -1159,8 +1297,7 @@
         eType="#//Connection" eOpposite="#//Connection/destination"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputConnections" upperBound="-1"
         eType="#//Connection" eOpposite="#//Connection/source"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass data.ecore#//DataType"
-        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass data.ecore#//DataType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Import">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="importedNamespace" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
@@ -1327,6 +1464,21 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return getTypeName();"/>
       </eAnnotations>
+    </eOperations>
+    <eOperations name="validateType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IVarElement" abstract="true" interface="true">
@@ -1763,10 +1915,25 @@
         <details key="body" value="return (getTypeEntry() != null) ? getTypeEntry().getFullTypeName() : null;"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="validateType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectAnnotations.validateType(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeEntry" eType="#//TypeEntry"
         transient="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Value" eSuperTypes="#//ErrorMarkerRef">
+  <eClassifiers xsi:type="ecore:EClass" name="Value">
     <eOperations name="getParentIE" lowerBound="1" eType="#//IInterfaceElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return (IInterfaceElement) eContainer();"/>
@@ -1802,6 +1969,26 @@
         <details key="body" value="return InterfaceElementAnnotations.isInOutVar(this);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getInOutVarOpposite" eType="#//VarDeclaration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.getInOutVarOpposite(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="validateMultipleInputConnections" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateMultipleInputConnections(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
     <eOperations name="validateVarInOutSourceTypeIsWellDefined" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
         <details key="invariant" value="true"/>
@@ -1816,11 +2003,6 @@
           <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
         </eGenericType>
       </eParameters>
-    </eOperations>
-    <eOperations name="getInOutVarOpposite" eType="#//VarDeclaration">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.getInOutVarOpposite(this);"/>
-      </eAnnotations>
     </eOperations>
     <eOperations name="validateVarInOutIsWithed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">

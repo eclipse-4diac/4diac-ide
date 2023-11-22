@@ -18,46 +18,42 @@ import java.util.List;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.jface.resource.JFaceResources;
 
-/** The Class ToolTipFigure.
+/**
+ * The Class ToolTipFigure.
  *
- * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at) */
+ * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
+ */
 public class ToolTipFigure extends Figure {
 
 	private final VerticalLineCompartmentFigure line;
 
-	/** Instantiates a new tool tip figure.
+	/**
+	 * Instantiates a new tool tip figure.
 	 *
-	 * @param element the element */
-	public ToolTipFigure(final INamedElement element) {
+	 * @param element the element
+	 */
+	public ToolTipFigure(final INamedElement element, final GraphicalAnnotationModel annotationModel) {
 		final ToolbarLayout mainLayout = new ToolbarLayout(false);
 		setLayoutManager(mainLayout);
 		mainLayout.setStretchMinorAxis(true);
 
 		String nameLine = element.getName();
 
-		if (element instanceof final IInterfaceElement ie && ie.getFullTypeName() != null) {
-			nameLine += " - " + ie.getFullTypeName(); //$NON-NLS-1$
+		if (element instanceof final ITypedElement typedElement && typedElement.getFullTypeName() != null) {
+			nameLine += " - " + typedElement.getFullTypeName(); //$NON-NLS-1$
 		}
 
-		if (element instanceof final ErrorMarkerRef emRef && emRef.hasError()) {
-			nameLine += System.lineSeparator() + emRef.getErrorMessage();
-		}
-
-		final Label nameLabel = new Label(nameLine);
-		if (element instanceof final ErrorMarkerRef emRef && emRef.hasError()) {
-			nameLabel.setIcon(JFaceResources.getImage("dialog_error_image")); //$NON-NLS-1$
-		}
-		add(nameLabel);
+		add(new Label(nameLine));
 
 		line = new VerticalLineCompartmentFigure();
 		add(line);
@@ -70,6 +66,11 @@ public class ToolTipFigure extends Figure {
 			addWiths(event);
 		} else if (element instanceof final VarDeclaration varDecl) {
 			addVarDefaultValue(varDecl);
+		}
+
+		if (annotationModel != null) {
+			annotationModel.getAnnotations(element).stream().forEach(annotation -> line
+					.add(new Label(annotation.getText(), GraphicalAnnotationStyles.getAnnotationImage(annotation))));
 		}
 	}
 

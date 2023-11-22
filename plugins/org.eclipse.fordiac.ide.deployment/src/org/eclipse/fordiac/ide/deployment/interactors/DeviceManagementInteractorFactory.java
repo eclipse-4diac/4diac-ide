@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.deployment.interactors;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -72,7 +71,7 @@ public enum DeviceManagementInteractorFactory {
 	 */
 	public List<String> getAvailableProfileNames() {
 		return getDeviceManagementInteractorList().stream().map(IDeviceManagementInteractorProvider::getProfileName)
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	private List<IDeviceManagementInteractorProvider> getDeviceManagementInteractorList() {
@@ -90,8 +89,8 @@ public enum DeviceManagementInteractorFactory {
 		for (final IConfigurationElement element : elems) {
 			try {
 				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IDeviceManagementInteractorProvider) {
-					interactors.add((IDeviceManagementInteractorProvider) object);
+				if (object instanceof final IDeviceManagementInteractorProvider iDeviceManagementInteractorProvider) {
+					interactors.add(iDeviceManagementInteractorProvider);
 				}
 			} catch (final CoreException corex) {
 				FordiacLogHelper.logError(Messages.DeploymentCoordinator_ERROR_Message, corex);

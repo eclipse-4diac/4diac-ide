@@ -16,6 +16,9 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import java.util.Map;
+import org.eclipse.emf.common.util.DiagnosticChain;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -35,7 +38,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface FBNetworkElement extends TypedConfigureableObject, PositionableElement, ErrorMarkerRef {
+public interface FBNetworkElement extends TypedConfigureableObject, PositionableElement {
 	/**
 	 * Returns the value of the '<em><b>Interface</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
@@ -191,5 +194,13 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * @generated
 	 */
 	boolean isInGroup();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateName(DiagnosticChain diagnostics, Map<Object, Object> context);
 
 } // FBNetworkElement

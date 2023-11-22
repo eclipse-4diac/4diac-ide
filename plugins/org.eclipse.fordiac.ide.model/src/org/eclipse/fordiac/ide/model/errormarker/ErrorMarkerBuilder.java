@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 public final class ErrorMarkerBuilder {
@@ -32,6 +33,7 @@ public final class ErrorMarkerBuilder {
 	private String message;
 	private String location;
 	private EObject target;
+	private EStructuralFeature feature;
 	private Map<String, Object> additionalAttributes;
 
 	protected ErrorMarkerBuilder() {
@@ -66,12 +68,15 @@ public final class ErrorMarkerBuilder {
 		if (location != null) {
 			attributes.put(IMarker.LOCATION, location);
 		} else if (target != null) {
-			attributes.put(IMarker.LOCATION, FordiacMarkerHelper.getLocation(target));
+			attributes.put(IMarker.LOCATION, FordiacMarkerHelper.getLocation(target, feature));
 		}
 		if (target != null) {
 			attributes.put(FordiacErrorMarker.TARGET_URI,
 					FordiacMarkerHelper.getTargetUri(resource, target).toString());
 			attributes.put(FordiacErrorMarker.TARGET_TYPE, EcoreUtil.getURI(target.eClass()).toString());
+		}
+		if (feature != null) {
+			attributes.put(FordiacErrorMarker.TARGET_FEATURE, EcoreUtil.getURI(feature).toString());
 		}
 		if (additionalAttributes != null) {
 			attributes.putAll(additionalAttributes);
@@ -143,6 +148,15 @@ public final class ErrorMarkerBuilder {
 
 	public ErrorMarkerBuilder setTarget(final EObject target) {
 		this.target = target;
+		return this;
+	}
+
+	public EStructuralFeature getFeature() {
+		return feature;
+	}
+
+	public ErrorMarkerBuilder setFeature(final EStructuralFeature feature) {
+		this.feature = feature;
 		return this;
 	}
 

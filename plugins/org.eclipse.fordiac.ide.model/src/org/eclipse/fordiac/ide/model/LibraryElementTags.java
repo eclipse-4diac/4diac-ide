@@ -113,7 +113,8 @@ public final class LibraryElementTags {
 	public static final String COMPILER_INFO_ELEMENT = "CompilerInfo"; //$NON-NLS-1$
 	public static final String VERSION_INFO_ELEMENT = "VersionInfo"; //$NON-NLS-1$
 	public static final String IDENTIFICATION_ELEMENT = "Identification"; //$NON-NLS-1$
-	// currently the comment element is duplicated to open the possibility to change the xml tag if needed
+	// currently the comment element is duplicated to open the possibility to change
+	// the xml tag if needed
 	public static final String COMMENT_ELEMENT = "Comment"; //$NON-NLS-1$
 	public static final String COMMENT_ATTRIBUTE = "Comment"; //$NON-NLS-1$
 	public static final String NAME_ATTRIBUTE = "Name"; //$NON-NLS-1$

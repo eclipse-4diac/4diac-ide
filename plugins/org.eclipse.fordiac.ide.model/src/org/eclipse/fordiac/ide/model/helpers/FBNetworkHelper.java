@@ -65,11 +65,14 @@ import org.eclipse.ui.PlatformUI;
 
 public final class FBNetworkHelper {
 
-	/** Take the src FBNetwork and copy it into a new network.
+	/**
+	 * Take the src FBNetwork and copy it into a new network.
 	 *
 	 * @param srcNetwork    the FBNetwork to copy
-	 * @param destInterface if not null the interface of the component the new FBNetwork should be contained in
-	 * @return the copied FBNetwork */
+	 * @param destInterface if not null the interface of the component the new
+	 *                      FBNetwork should be contained in
+	 * @return the copied FBNetwork
+	 */
 	public static FBNetwork copyFBNetWork(final FBNetwork srcNetwork, final InterfaceList destInterface) {
 		final FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		dstNetwork.getNetworkElements().addAll(EcoreUtil.copyAll(srcNetwork.getNetworkElements()));
@@ -78,11 +81,15 @@ public final class FBNetworkHelper {
 		return dstNetwork;
 	}
 
-	/** Take the src FBNetwork and copy it into a new network with the members of the srce network as resource type fbs.
+	/**
+	 * Take the src FBNetwork and copy it into a new network with the members of the
+	 * srce network as resource type fbs.
 	 *
 	 * @param srcNetwork    the FBNetwork to copy
-	 * @param destInterface if not null the interface of the component the new FBNetwork should be contained in
-	 * @return the copied FBNetwork */
+	 * @param destInterface if not null the interface of the component the new
+	 *                      FBNetwork should be contained in
+	 * @return the copied FBNetwork
+	 */
 	public static FBNetwork createResourceFBNetwork(final FBNetwork resourceTypeNetwork,
 			final InterfaceList destInterface) {
 		final FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
@@ -110,10 +117,10 @@ public final class FBNetworkHelper {
 
 	private static void checkForAdapterFBs(final FBNetwork dstNetwork, final InterfaceList destInterface) {
 		for (final FBNetworkElement elem : dstNetwork.getNetworkElements()) {
-			if (elem instanceof AdapterFB) {
+			if (elem instanceof final AdapterFB adapterfb) {
 				final AdapterDeclaration adapter = destInterface.getAdapter(elem.getName());
 				if (null != adapter) {
-					((AdapterFB) elem).setAdapterDecl(adapter);
+					adapterfb.setAdapterDecl(adapter);
 				}
 			}
 		}
@@ -157,7 +164,10 @@ public final class FBNetworkHelper {
 		return element.getInterfaceElement(ie.getName());
 	}
 
-	/** methods for updating position of FBNetwork after creating/flattening subapp/... */
+	/**
+	 * methods for updating position of FBNetwork after creating/flattening
+	 * subapp/...
+	 */
 
 	public static Point getTopLeftCornerOfFBNetwork(final List<?> selection) {
 		Assert.isNotNull(selection);
@@ -314,11 +324,15 @@ public final class FBNetworkHelper {
 		return ((networkElement instanceof SubApp) || (networkElement instanceof CFBInstance));
 	}
 
-	/** Got through the containment of the FB and generate a name for all containers the FB is contained in up to the
-	 * application or the device (e.g., app1.subapp2.fbname, dev1.res3.fb3name).
+	/**
+	 * Got through the containment of the FB and generate a name for all containers
+	 * the FB is contained in up to the application or the device (e.g.,
+	 * app1.subapp2.fbname, dev1.res3.fb3name).
 	 *
-	 * @param fbNetworkElement the FBNetworkElement for which the name should be generated
-	 * @return dot separated full name */
+	 * @param fbNetworkElement the FBNetworkElement for which the name should be
+	 *                         generated
+	 * @return dot separated full name
+	 */
 	public static String getFullHierarchicalName(final FBNetworkElement fbNetworkElement) {
 		final Deque<String> names = new ArrayDeque<>();
 
@@ -336,9 +350,9 @@ public final class FBNetworkHelper {
 				if (!(container instanceof INamedElement)) {
 					break;
 				}
-				if (container instanceof MappingTarget) {
+				if (container instanceof final MappingTarget mappingtarget) {
 					names.addFirst("."); //$NON-NLS-1$
-					names.addFirst(MappingAnnotations.getHierarchicalName((MappingTarget) container));
+					names.addFirst(MappingAnnotations.getHierarchicalName(mappingtarget));
 					break;
 				}
 				names.addFirst("."); //$NON-NLS-1$
@@ -359,12 +373,15 @@ public final class FBNetworkHelper {
 		return (runner instanceof CommunicationChannel) && (runner.getFbNetwork() == null);
 	}
 
-	/** Get the model from the hierarchical path
+	/**
+	 * Get the model from the hierarchical path
 	 *
 	 * @param fullHierarchicalName the complete path of the element separated by '.'
-	 * @param system               the {@link AutomationSystem} in which to find the item in
-	 * @return the model as an {@link EObject} (can also return the {@link Application} if the path does not include any
-	 *         other elements) */
+	 * @param system               the {@link AutomationSystem} in which to find the
+	 *                             item in
+	 * @return the model as an {@link EObject} (can also return the
+	 *         {@link Application} if the path does not include any other elements)
+	 */
 	public static EObject getModelFromHierarchicalName(final String fullHierarchicalName,
 			final AutomationSystem system) {
 		final String[] path = fullHierarchicalName.split("\\."); //$NON-NLS-1$

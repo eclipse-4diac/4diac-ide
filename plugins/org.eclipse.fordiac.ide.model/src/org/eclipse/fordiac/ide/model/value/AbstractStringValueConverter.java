@@ -33,7 +33,8 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 		final char quote = string.charAt(0);
 		if (quote != '\'' && quote != '"') {
 			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, string));
-		} else if (quote != string.charAt(string.length() - 1)) {
+		}
+		if (quote != string.charAt(string.length() - 1)) {
 			throw new IllegalArgumentException(
 					MessageFormat.format(Messages.VALIDATOR_UnevenlyQuotedStringLiteral, string));
 		}
@@ -66,19 +67,13 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 			return "\\$"; //$NON-NLS-1$
 		case '\'':
 			return "'"; //$NON-NLS-1$
-		case 'l':
-		case 'L':
-		case 'n':
-		case 'N':
+		case 'l', 'L', 'n', 'N':
 			return "\n"; //$NON-NLS-1$
-		case 'p':
-		case 'P':
+		case 'p', 'P':
 			return "\f"; //$NON-NLS-1$
-		case 'r':
-		case 'R':
+		case 'r', 'R':
 			return "\r"; //$NON-NLS-1$
-		case 't':
-		case 'T':
+		case 't', 'T':
 			return "\t"; //$NON-NLS-1$
 		case '"':
 			return "\""; //$NON-NLS-1$

@@ -15,7 +15,9 @@
 package org.eclipse.fordiac.ide.application.actions;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -45,6 +47,10 @@ public class DeleteFBNetworkAction extends DeleteAction {
 			return null;
 		}
 
+		final HashSet<Group> groups = ((List<?>) selObjects).stream().filter(EditPart.class::isInstance)
+				.map(EditPart.class::cast).map(EditPart::getModel).filter(Group.class::isInstance)
+				.map(Group.class::cast).collect(Collectors.toCollection(HashSet::new));
+
 		final List<EditPart> list = new ArrayList<>();
 
 		// Resort list such that the connects are before any other edit parts
@@ -55,7 +61,7 @@ public class DeleteFBNetworkAction extends DeleteAction {
 		}
 
 		for (final Object object : selObjects) {
-			if (!(object instanceof ConnectionEditPart) && !isInGroupToBeDeleted(object, selObjects)) {
+			if (!(object instanceof ConnectionEditPart) && !isInGroupToBeDeleted(object, groups)) {
 				list.add((EditPart) object);
 			}
 		}
@@ -63,20 +69,16 @@ public class DeleteFBNetworkAction extends DeleteAction {
 		return super.createDeleteCommand(list);
 	}
 
-	private static boolean isInGroupToBeDeleted(final Object object, final List<Object> selObjects) {
-		if (object instanceof EditPart && ((EditPart) object).getModel() instanceof FBNetworkElement) {
-			final FBNetworkElement el = (FBNetworkElement)((EditPart) object).getModel();
-			if(el.isInGroup()) {
-				final Group group = el.getGroup();
-				return selObjects.stream().anyMatch(ob -> isGroup(ob, group));
-			}
+	private static boolean isInGroupToBeDeleted(final Object object, final HashSet<Group> groups) {
+		if (!(object instanceof final EditPart editPart
+				&& editPart.getModel() instanceof final FBNetworkElement element)) {
+			return false;
 		}
-		return false;
-	}
 
-	private static boolean isGroup(final Object obj, final Group group) {
-		return (obj instanceof EditPart && ((EditPart) obj).getModel() instanceof Group
-				&& ((EditPart) obj).getModel().equals(group));
-	}
+		if (!element.isInGroup()) {
+			return false;
+		}
 
+		return groups.contains(element.getGroup());
+	}
 }

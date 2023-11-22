@@ -72,8 +72,7 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 		if (isFixed()) {
 			return null;
 		}
-		final List<ConnectionEditPart> coSelectedConnections = getCoSelectedConnections();
-		final ConnectionEndpointTracker tracker = createConnectionEndPointTracker(coSelectedConnections);
+		final ConnectionEndpointTracker tracker = createConnectionEndPointTracker(getCoSelectedConnections());
 		configureConnTracker(tracker);
 		return tracker;
 	}

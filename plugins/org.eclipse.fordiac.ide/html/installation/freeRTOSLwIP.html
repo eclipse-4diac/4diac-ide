@@ -26,9 +26,10 @@
 <!--********************************************************************************************-->
 
      <h1 id="topOfPage">Introduction</h1>
-      <p>This guide is for compiling 4diac&nbsp;FORTE for freeRTOS and LwIP. <a href="https://www.freertos.org/" target="_blank">freeRTOS</a> is a free real-time operative system which is not attached to a specific hardware, but it can run in many different ones. The operative system is very small and simple, and initially didn't have any TCP/IP support, that's why a common practice was to use it together with <a href="https://savannah.nongnu.org/projects/lwip/" target="_blank">LwIP</a>, a small TCP/IP stack. freeRTOS now also have an extra support for TCP/IP (see <a href="https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/index.html" target="_blank">here</a>) but for now FORTE is compiled using LwIP.</p>
+      <p>This guide is for compiling 4diac&nbsp;FORTE for freeRTOS and LwIP. <a href="https://www.freertos.org/" target="_blank">freeRTOS</a> is a free real-time operative system which is not attached to a specific hardware, but it can run in many different ones. The operative system is very small and simple, and initially didn't have any TCP/IP support, that's why a common practice was to use it together with <a href="https://savannah.nongnu.org/projects/lwip/" target="_blank">LwIP</a>, a small TCP/IP stack. freeRTOS now also have an extra support for TCP/IP (see <a href="https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/index.html" target="_blank">here</a>) but for now 4diac&nbsp;FORTE is compiled using LwIP.</p>
 
-      <p>This guide helps you make FORTE run on some hardware where freeRTOS and LwIP are already able to run. Since you can be using any hardware, no support for IO is provided here and this guide will help you compile FORTE as a static library that  you can later add to some project you already have working on your hardware, so the following points are assumed before starting this guide
+      <p>This guide helps you make 4diac&nbsp;FORTE run on some hardware where freeRTOS and LwIP are already able to run. 
+		  Since you can be using any hardware, no support for IO is provided here and this guide will help you compile 4diac&nbsp;FORTE as a static library that  you can later add to some project you already have working on your hardware, so the following points are assumed before starting this guide
         <ul>
           <li>You have and IDE  and a compiler installed in your computer that allows you to compile code to your hardware (from now on, cross-IDE and cross-compiler),</li>
           <li>You have an example using freeRTOS and LwIP running in your hardware, meaning that the freeRTOS and LwIP code are present in your computer, and</li>
@@ -82,7 +83,7 @@
               <li>It might be the case that you also need to set the CMAKE_C_FLAGS and CMAKE_CXX_FLAGS variables with the flags needed for your hardware. You can check which flags you need from the proeperties of your example project in your cross-IDE.</li>
               <li>Set FORTE_BUILD_EXECUTABLE to false and FORTE_BUILD_STATIC_LIBRARY to true.</li>
               <li>Click <span class="button4diac">Configure</span> and the variables that need revision will appear again in red and the rest in white. 
-              Check these variables and press <span class="button4diac">Configure</span> until no variable is shown in red. Here you can add the modules that you want FORTE to have, but from the freeRTOS point of view, there's nothing else you need.</li>
+              Check these variables and press <span class="button4diac">Configure</span> until no variable is shown in red. Here you can add the modules that you want 4diac&nbsp;FORTE to have, but from the freeRTOS point of view, there's nothing else you need.</li>
             </ol>
           </li>
           <li>Generate files
@@ -106,12 +107,12 @@ $ make</div>
 
 <!--********************************************************************************************-->
    
-  <h1>Add the FORTE library to your project</h1>
+  <h1>Add the 4diac&nbsp;FORTE library to your project</h1>
 
   <ol>
     <li>Add the recently compiled library (libforte-static.a) to your project, this step depends on the cross-IDE you have.</li>
     <li>Copy the file <span class="folderLocation">src/arch/freeRTOS/forte_Init.h</span> to your project.</li>
-    <li>In your file where your "main" function is located, you need to include forte_Init.h and add a task that will start the "forte_thread" task. A working example of the task running FORTE is as follow (PRINTF can cause problems, so change it to your logging function or delete it):
+    <li>In your file where your "main" function is located, you need to include forte_Init.h and add a task that will start the "forte_thread" task. A working example of the task running 4diac&nbsp;FORTE is as follow (PRINTF can cause problems, so change it to your logging function or delete it):
 <div class="code">static void forte_thread(void *arg)
 {
   forteGlobalInitialize();
@@ -128,11 +129,11 @@ $ make</div>
     </li>
   </ol>
 
-  <p>If everything is Ok, FORTE will start and you'll be able to deploy to it on port 61499. If you have some problems, read the following section</p>
+  <p>If everything is Ok, 4diac&nbsp;FORTE will start and you'll be able to deploy to it on port 61499. If you have some problems, read the following section</p>
 
   <h1>Troubleshooting</h1>
 
-  <p>It's probable that FORTE doesn't run in the first try. You should take care of the following:</p>
+  <p>It's probable that 4diac&nbsp;FORTE doesn't run in the first try. You should take care of the following:</p>
   <ul>
     <li>Make sure that you have a good amount of RAM available in your system for the stack and heap memory. To see if your system is running out of memory, in your  FreeRTOSConfig.h make sure you have:
 <div class="code">#define configCHECK_FOR_STACK_OVERFLOW 1
@@ -158,7 +159,7 @@ and put a breakpoint in both vTaskDelay. If the programs reaches one of these br
 
     </li>
 
-    <li>You should configure your hardware and start the LwIP task before FORTE.</li>
+    <li>You should configure your hardware and start the LwIP task before 4diac&nbsp;FORTE.</li>
     <li>A configuration of task creation that worked for some users is:
       <ol>
         <li>Create a Task called "stack_init"</li>
@@ -168,7 +169,7 @@ and put a breakpoint in both vTaskDelay. If the programs reaches one of these br
         <li>"stack_init" finishes with vTaskDelete(NULL);</li>
       </ol>
     </li>
-    <li>For C++ projects (like FORTE) a call to "__libc_init_array();" is needed. In some cases this is not done by default by the generated code of the example. Try adding this call right at the beginning of the main() function before any other call.</li>
+    <li>For C++ projects (like 4diac&nbsp;FORTE) a call to "__libc_init_array();" is needed. In some cases this is not done by default by the generated code of the example. Try adding this call right at the beginning of the main() function before any other call.</li>
   </ul>
 
 
@@ -182,7 +183,7 @@ and put a breakpoint in both vTaskDelay. If the programs reaches one of these br
 
 <p>Now that you installed the required tools, it's time to start using them. Take a look at the following tutorials:</p>
 
-<p><a href="../../html/4diacIDE/overview.html">Step 0 - 4diac IDE Overview</a></p>
+<p><a href="../../html/4diacIDE/overview.html">Step 0 - 4diac&nbsp;IDE Overview</a></p>
 
 <p>If you want to compile 4diac&nbsp;FORTE for another platform or want to know more about that, here's a quick link back:</p>
 

@@ -16,6 +16,8 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import org.eclipse.emf.ecore.EObject;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -33,7 +35,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface Value extends ErrorMarkerRef {
+public interface Value extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Value</b></em>' attribute.
 	 * The default value is <code>""</code>.

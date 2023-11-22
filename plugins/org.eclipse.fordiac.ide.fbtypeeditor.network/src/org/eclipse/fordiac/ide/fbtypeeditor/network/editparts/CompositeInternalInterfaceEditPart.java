@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInternalInterfaceEditPartRO;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.editparts.ConnCreateDirectEditDragTrackerProxy;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
@@ -88,7 +89,7 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 	@Override
 	protected void refreshVisuals() {
 		getNameLabel().setText(getModel().getName());
-		getFigure().setToolTip(new ToolTipFigure(getModel()));
+		getFigure().setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
 		super.refreshVisuals();
 	}
 

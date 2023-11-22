@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.debug;
 
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.debug.core.DebugEvent;
@@ -154,15 +153,13 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 	@Override
 	public IVariable[] getVariables() throws DebugException {
 		final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
-		final var debugVars = this.evaluator.getVariables().values().stream().map(debugger::getVariable)
-				.collect(Collectors.toList());
+		final var debugVars = this.evaluator.getVariables().values().stream().map(debugger::getVariable).toList();
 		// split all vars into this vars and other vars
 		final var thisVars = debugVars.stream().filter(variable -> Evaluator.CONTEXT_NAME.equals(variable.getName()));
 		final var otherVars = debugVars.stream().filter(variable -> !Evaluator.CONTEXT_NAME.equals(variable.getName()))
 				.sorted();
 		// Concat in a way that this is first, then others
-		final var variables = Stream.concat(thisVars, otherVars).collect(Collectors.toList());
-		return variables.toArray(new IVariable[variables.size()]);
+		return Stream.concat(thisVars, otherVars).toArray(IVariable[]::new);
 	}
 
 	@Override

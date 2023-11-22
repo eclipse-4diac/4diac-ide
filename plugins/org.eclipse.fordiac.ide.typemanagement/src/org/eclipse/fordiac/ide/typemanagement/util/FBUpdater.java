@@ -9,36 +9,52 @@
  *
  * Contributors:
  *   Dario Romano - initial implementation
+ *   Dunja Životin - added updateAllInstances for type lib import
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdatePinInTypeDeclarationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 public final class FBUpdater {
+
+	private static Set<FB> updatedElements;
+
 	private FBUpdater() {
 		// just a utility class, no instancing here, por favor
+	}
+
+	public static Set<FB> getUpdatedElements() {
+		return updatedElements;
 	}
 
 	public static Command createUpdateUntypedSubappInterfaceCommand(final SubApp subApp,
@@ -100,6 +116,37 @@ public final class FBUpdater {
 			cmd = cmd.chain(subCmd);
 		}
 		return cmd;
+	}
+
+	public static Command updateAllInstancesCommand(final FBNetwork fbNetwork, final Set<TypeEntry> typeEntries,
+			final TypeLibrary typeLib) {
+		final List<Command> commands = new ArrayList<>();
+		updatedElements = new HashSet<>();
+		fbNetwork.getNetworkElements().forEach(fbNetworkElement -> {
+			if (fbNetworkElement.getType() != null && fbNetworkElement instanceof final FB fb) {
+				typeEntries.forEach(typeEntry -> {
+					if (typeEntry.getFullTypeName().equalsIgnoreCase(fb.getFullTypeName())) {
+						commands.add(new UpdateFBTypeCommand(fb, typeLib.getFBTypeEntry(fb.getFullTypeName())));
+						updatedElements.add(fb);
+					}
+				});
+			}
+		});
+		final CompoundCommand cmd = new CompoundCommand();
+		for (final Command subCmd : commands) {
+			cmd.add(subCmd);
+		}
+		return cmd;
+	}
+
+	public static void executeCommand(final Command cmd) {
+		final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor();
+		if (editor == null) {
+			cmd.execute();
+		} else {
+			editor.getAdapter(CommandStack.class).execute(cmd);
+		}
 	}
 
 }

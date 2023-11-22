@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -30,6 +29,8 @@ import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.figures.GroupFigure;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
@@ -58,7 +59,8 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class GroupEditPart extends AbstractPositionableElementEditPart implements IContainerEditPart {
+public class GroupEditPart extends AbstractPositionableElementEditPart
+		implements IContainerEditPart, AnnotableGraphicalEditPart {
 	private GroupContentNetwork groupContents;
 	private InstanceName instanceName;
 
@@ -192,14 +194,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 
-		if (child instanceof InstanceNameFigure
-				&& childEditPart instanceof final InstanceNameEditPart instanceNameEditPart) {
-			if (instanceNameEditPart.getModel().hasErrorMarker()) {
-				child.setBackgroundColor(ColorConstants.red);
-				child.setOpaque(true);
-			} else {
-				child.setOpaque(false);
-			}
+		if (child instanceof InstanceNameFigure) {
 			getFigure().getNameFigure().add(child,
 					new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL));
 		} else {
@@ -334,4 +329,9 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 		return 0;
 	}
 
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		getChildren().stream().filter(InstanceNameEditPart.class::isInstance).map(InstanceNameEditPart.class::cast)
+				.forEach(child -> child.updateAnnotations(event));
+	}
 }

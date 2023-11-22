@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="174.436mm"
+   height="57.830353mm"
+   viewBox="0 0 174.43601 57.830352"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="set_forte_arch.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="425.73182"
+     inkscape:cy="126.39202"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="885"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:snap-text-baseline="false" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-3.4017856,-14.273808)">
+    <rect
+       id="rect3713"
+       width="174.436"
+       height="57.830353"
+       x="3.4017856"
+       y="14.273808"
+       style="fill:#cccccc;stroke-width:0.34621027" />
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.20202248;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3717"
+       width="74.890182"
+       height="5.6543388"
+       x="67.890854"
+       y="17.266123" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="69.28093"
+       y="21.279955"
+       id="text4666"><tspan
+         sodipodi:role="line"
+         x="69.28093"
+         y="21.279955"
+         id="tspan4664"
+         style="stroke-width:0.26458332"><tspan
+           x="69.28093"
+           y="21.279955"
+           id="tspan4662"
+           style="stroke-width:0.26458332">/home/user/workspace/forte-incubation</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="6.1210747"
+       y="21.204359"
+       id="text4660"><tspan
+         sodipodi:role="line"
+         x="6.1210747"
+         y="21.204359"
+         id="tspan4658"
+         style="stroke-width:0.26458332"><tspan
+           x="6.1210747"
+           y="21.204359"
+           id="tspan4656"
+           style="stroke-width:0.26458332">Where is the source code:</tspan></tspan></text>
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.20202248;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3717-2"
+       width="74.890182"
+       height="5.6543388"
+       x="67.691673"
+       y="24.486814" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="69.081749"
+       y="28.500647"
+       id="text4666-7"><tspan
+         sodipodi:role="line"
+         x="69.081749"
+         y="28.500647"
+         id="tspan4664-0"
+         style="stroke-width:0.26458332">/home/user/workspace/lwip.app/4diac-forte<tspan
+   x="69.081749"
+   y="28.500647"
+   id="tspan4662-9"
+   style="stroke-width:0.26458332" /></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="5.9218807"
+       y="28.425051"
+       id="text4660-3"><tspan
+         sodipodi:role="line"
+         x="5.9218807"
+         y="28.425051"
+         id="tspan4658-6"
+         style="stroke-width:0.26458332">Where up build the binaries:</tspan></text>
+    <rect
+       style="fill:#cccccc;stroke:#000000;stroke-width:0.12825647;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3717-6"
+       width="29.795794"
+       height="5.7281046"
+       x="144.58893"
+       y="17.192789" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="145.81999"
+       y="21.233513"
+       id="text4666-1"><tspan
+         sodipodi:role="line"
+         x="145.81999"
+         y="21.233513"
+         id="tspan4664-8"
+         style="stroke-width:0.26458332">Browse Source...<tspan
+   x="145.81999"
+   y="21.233513"
+   id="tspan4662-7"
+   style="stroke-width:0.26458332" /></tspan></text>
+    <rect
+       style="fill:#cccccc;stroke:#000000;stroke-width:0.12825647;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3717-6-9"
+       width="29.795794"
+       height="5.7281046"
+       x="144.64621"
+       y="24.525526" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="145.87727"
+       y="28.56625"
+       id="text4666-1-2"><tspan
+         sodipodi:role="line"
+         x="145.87727"
+         y="28.56625"
+         id="tspan4664-8-0"
+         style="stroke-width:0.26458332">Browse Build...</tspan></text>
+    <rect
+       style="fill:#ff8080;stroke:#000000;stroke-width:0.52299523;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3717-3"
+       width="168.30731"
+       height="16.861639"
+       x="5.8046803"
+       y="33.718727" />
+    <rect
+       style="fill:#cccccc;stroke:#000000;stroke-width:0.10074163;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3717-6-7"
+       width="18.295034"
+       height="5.7556195"
+       x="6.0282283"
+       y="53.653732" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="7.2730494"
+       y="57.708214"
+       id="text4666-1-5"><tspan
+         sodipodi:role="line"
+         x="7.2730494"
+         y="57.708214"
+         id="tspan4664-8-9"
+         style="stroke-width:0.26458332">Configure</tspan></text>
+    <rect
+       style="fill:#cccccc;stroke:#000000;stroke-width:0.09760521;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3717-6-7-2"
+       width="17.164242"
+       height="5.7587557"
+       x="25.768276"
+       y="53.652161" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="27.014668"
+       y="57.708214"
+       id="text4666-1-5-8"><tspan
+         sodipodi:role="line"
+         x="27.014668"
+         y="57.708214"
+         id="tspan4664-8-9-9"
+         style="stroke-width:0.26458332">Generate</tspan></text>
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.35093549;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3717-3-3"
+       width="168.47937"
+       height="7.5842938"
+       x="5.8320398"
+       y="61.810848" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="6.8005223"
+       y="35.105232"
+       id="text4666-74"><tspan
+         sodipodi:role="line"
+         x="6.8005223"
+         y="35.105232"
+         id="tspan4664-4"
+         style="stroke-width:0.26458332">...</tspan><tspan
+         sodipodi:role="line"
+         x="6.8005223"
+         y="39.514954"
+         style="stroke-width:0.26458332"
+         id="tspan5387">CMAKE_SYSTEM_NAME</tspan><tspan
+         sodipodi:role="line"
+         x="6.8005223"
+         y="43.924675"
+         style="stroke-width:0.26458332"
+         id="tspan5391">...</tspan><tspan
+         sodipodi:role="line"
+         x="6.8005223"
+         y="48.3344"
+         style="stroke-width:0.26458332"
+         id="tspan5429">FORTE_ARCHITECTURE</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="56.614174"
+       y="35.051765"
+       id="text4666-74-0"><tspan
+         sodipodi:role="line"
+         x="56.614174"
+         y="35.051765"
+         id="tspan4664-4-7"
+         style="stroke-width:0.26458332">...<tspan
+   x="56.614174"
+   y="35.051765"
+   id="tspan4662-3-8"
+   style="stroke-width:0.26458332" /></tspan><tspan
+         sodipodi:role="line"
+         x="56.614174"
+         y="39.461487"
+         style="stroke-width:0.26458332"
+         id="tspan5387-6">Generic</tspan><tspan
+         sodipodi:role="line"
+         x="56.614174"
+         y="43.871208"
+         style="stroke-width:0.26458332"
+         id="tspan5389-8">...</tspan><tspan
+         sodipodi:role="line"
+         x="56.614174"
+         y="48.280933"
+         style="stroke-width:0.26458332"
+         id="tspan5391-8">PikeOS_Posix</tspan></text>
+  </g>
+</svg>

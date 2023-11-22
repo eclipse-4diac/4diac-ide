@@ -17,11 +17,14 @@
 package org.eclipse.fordiac.ide.application.wizards;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
@@ -33,8 +36,10 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class ExtractStructTypeWizard extends AbstractSaveAsWizard {
 	private static final String SUBAPP_SECTION = "SUBAPP_SECTION"; //$NON-NLS-1$
@@ -43,7 +48,8 @@ public class ExtractStructTypeWizard extends AbstractSaveAsWizard {
 	private String datatypeName;
 	private boolean replaceSource;
 
-	public ExtractStructTypeWizard(final List<VarDeclaration> varDecl, final IProject project, final String windowTitle) {
+	public ExtractStructTypeWizard(final List<VarDeclaration> varDecl, final IProject project,
+			final String windowTitle) {
 		super(SUBAPP_SECTION);
 		setWindowTitle(windowTitle);
 		this.varDecl = varDecl;
@@ -54,25 +60,39 @@ public class ExtractStructTypeWizard extends AbstractSaveAsWizard {
 	public boolean performFinish() {
 		if (perform()) {
 			final IFile targetFile = getTargetTypeFile();
-			final TypeEntry entry = createTypeEntry(targetFile);
-			final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
-			entry.setType(type);
-			InterfaceListCopier.copyVarList(type.getMemberVariables(), varDecl, true);
+			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(targetFile.getParent()) {
 
-			TypeManagementPreferencesHelper.setupVersionInfo(type);
+				@Override
+				protected void execute(final IProgressMonitor monitor)
+						throws CoreException, InvocationTargetException, InterruptedException {
+					final TypeEntry entry = createTypeEntry(targetFile);
+					final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
+					entry.setType(type);
+					InterfaceListCopier.copyVarList(type.getMemberVariables(), varDecl, true);
 
-			datatypeName = TypeEntry.getTypeNameFromFile(targetFile);
-			type.setName(datatypeName);
-			entry.save();
+					TypeManagementPreferencesHelper.setupVersionInfo(type);
 
-			if (newFilePage.getOpenType()) {
-				OpenStructMenu.openStructEditor(targetFile);
+					datatypeName = TypeEntry.getTypeNameFromFile(targetFile);
+					type.setName(datatypeName);
+					entry.save(monitor);
+
+					if (newFilePage.getOpenType()) {
+						OpenStructMenu.openStructEditor(targetFile);
+					}
+
+					if (newFilePage.getReplaceSource()) {
+						replaceSource = true;
+					}
+				}
+			};
+			try {
+				getContainer().run(true, true, operation);
+			} catch (final InvocationTargetException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			} catch (final InterruptedException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+				Thread.currentThread().interrupt();
 			}
-
-			if (newFilePage.getReplaceSource()) {
-				replaceSource = true;
-			}
-
 		}
 		return true;
 	}
@@ -107,7 +127,7 @@ public class ExtractStructTypeWizard extends AbstractSaveAsWizard {
 	@Override
 	public IFile getTargetTypeFile() {
 		final Path path = new Path(newFilePage.getContainerFullPath() + File.separator + newFilePage.getFileName()
-		+ TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT);
+				+ TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT);
 		return ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 	}
 

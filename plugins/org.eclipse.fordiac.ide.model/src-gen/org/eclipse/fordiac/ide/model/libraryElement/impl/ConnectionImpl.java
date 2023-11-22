@@ -26,10 +26,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -41,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getErrorMessage <em>Error Message</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isBrokenConnection <em>Broken Connection</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getSource <em>Source</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getDestination <em>Destination</em>}</li>
@@ -52,26 +49,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * @generated
  */
 public abstract class ConnectionImpl extends ConfigurableObjectImpl implements Connection {
-	/**
-	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getErrorMessage()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String ERROR_MESSAGE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getErrorMessage()
-	 * @generated
-	 * @ordered
-	 */
-	protected String errorMessage = ERROR_MESSAGE_EDEFAULT;
-
 	/**
 	 * The default value of the '{@link #isBrokenConnection() <em>Broken Connection</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -182,29 +159,6 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		comment = newComment;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__COMMENT, oldComment, comment));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setErrorMessage(String newErrorMessage) {
-		String oldErrorMessage = errorMessage;
-		errorMessage = newErrorMessage;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__ERROR_MESSAGE, oldErrorMessage, errorMessage));
 	}
 
 	/**
@@ -543,6 +497,66 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	@Override
+	public boolean validateMissingSource(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateMissingSource(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateMissingSourceEndpoint(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateMissingSourceEndpoint(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateMissingDestination(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateMissingDestination(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateMissingDestinationEndpoint(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateMissingDestinationEndpoint(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateDuplicate(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateDuplicate(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateTypeMismatch(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateTypeMismatch(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean validateMappedVarInOutsDoNotCrossResourceBoundaries(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateMappedVarInOutsDoNotCrossResourceBoundaries(this, diagnostics, context);
 	}
@@ -583,8 +597,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	@Override
-	public boolean hasError() {
-		return getErrorMessage() != null && !getErrorMessage().isBlank();
+	public boolean validateVarInOutConnectionsFormsNoLoop(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateVarInOutConnectionsFormsNoLoop(this, diagnostics, context);
 	}
 
 	/**
@@ -635,8 +649,6 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
-				return getErrorMessage();
 			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
 				return isBrokenConnection();
 			case LibraryElementPackage.CONNECTION__SOURCE:
@@ -664,9 +676,6 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
-				setErrorMessage((String)newValue);
-				return;
 			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
 				setBrokenConnection((Boolean)newValue);
 				return;
@@ -696,9 +705,6 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
-				setErrorMessage(ERROR_MESSAGE_EDEFAULT);
-				return;
 			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
 				setBrokenConnection(BROKEN_CONNECTION_EDEFAULT);
 				return;
@@ -728,8 +734,6 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
-				return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
 			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
 				return brokenConnection != BROKEN_CONNECTION_EDEFAULT;
 			case LibraryElementPackage.CONNECTION__SOURCE:
@@ -751,55 +755,11 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == ErrorMarkerRef.class) {
-			switch (derivedFeatureID) {
-				case LibraryElementPackage.CONNECTION__ERROR_MESSAGE: return LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE;
-				default: return -1;
-			}
-		}
-		if (baseClass == HiddenElement.class) {
-			switch (derivedFeatureID) {
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == ErrorMarkerRef.class) {
-			switch (baseFeatureID) {
-				case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE: return LibraryElementPackage.CONNECTION__ERROR_MESSAGE;
-				default: return -1;
-			}
-		}
-		if (baseClass == HiddenElement.class) {
-			switch (baseFeatureID) {
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (errorMessage: "); //$NON-NLS-1$
-		result.append(errorMessage);
-		result.append(", brokenConnection: "); //$NON-NLS-1$
+		result.append(" (brokenConnection: "); //$NON-NLS-1$
 		result.append(brokenConnection);
 		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);

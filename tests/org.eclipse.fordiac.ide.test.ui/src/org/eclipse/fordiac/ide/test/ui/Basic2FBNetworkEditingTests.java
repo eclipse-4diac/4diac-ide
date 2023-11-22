@@ -148,7 +148,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 
 		// drag rectangle next to FBs, therefore FBs should not be selected
 		editor.drag(40, 40, 200, 200);
-		assertThrows(TimeoutException.class, () -> editor.waitForSelectedFBEditPart());
+		assertThrows(TimeoutException.class, editor::waitForSelectedFBEditPart);
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertTrue(selectedEditParts.isEmpty());
 		assertFalse(isFbSelected(selectedEditParts, E_N_TABLE_FB));
@@ -156,7 +156,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 
 		// drag rectangle over FBs, therefore FBs should be selected
 		editor.drag(50, 50, 500, 300);
-		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertTrue(isFbSelected(selectedEditParts, E_N_TABLE_FB));
@@ -272,7 +272,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 
 		// drag rectangle over FBs, therefore FBs should be selected
 		editor.drag(50, 50, 400, 400);
-		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertTrue(isFbSelected(selectedEditParts, E_CYCLE_FB));
@@ -284,7 +284,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final Point pointTo = new Point(285, 85);
 		editor.drag(pointFrom.x, pointFrom.y, pointTo.x, pointTo.y);
 
-		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertTrue(isFbSelected(selectedEditParts, E_CYCLE_FB));
@@ -361,8 +361,8 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 				.getFirstPoint();
 		final org.eclipse.draw2d.geometry.Point newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
 
-		assertEquals(startPointConnection.x + deltaX, newStartPointConnection.x);
-		assertEquals(startPointConnection.y + deltaY, newStartPointConnection.y);
+		assertEquals(startPointConnection.x + (long) deltaX, newStartPointConnection.x);
+		assertEquals(startPointConnection.y + (long) deltaY, newStartPointConnection.y);
 		assertEquals(endPointConnection, newEndPointConnection);
 	}
 
@@ -425,8 +425,8 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		org.eclipse.draw2d.geometry.Point newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
 
 		assertEquals(startPointConnection, newStartPointConnection);
-		assertEquals(endPointConnection.x + fb1DeltaX, newEndPointConnection.x);
-		assertEquals(endPointConnection.y + fb1DeltaY, newEndPointConnection.y);
+		assertEquals(endPointConnection.x + (long) fb1DeltaX, newEndPointConnection.x);
+		assertEquals(endPointConnection.y + (long) fb1DeltaY, newEndPointConnection.y);
 
 		// select E_CTUD
 		editor.click(E_CTUD_FB);
@@ -442,10 +442,10 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		newStartPointConnection = polyLineConnection.getPoints().getFirstPoint();
 		newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
 
-		assertEquals(startPointConnection.x + fb2DeltaX, newStartPointConnection.x);
-		assertEquals(startPointConnection.y + fb2DeltaY, newStartPointConnection.y);
-		assertEquals(endPointConnection.x + fb1DeltaX, newEndPointConnection.x);
-		assertEquals(endPointConnection.y + fb1DeltaY, newEndPointConnection.y);
+		assertEquals(startPointConnection.x + (long) fb2DeltaX, newStartPointConnection.x);
+		assertEquals(startPointConnection.y + (long) fb2DeltaY, newStartPointConnection.y);
+		assertEquals(endPointConnection.x + (long) fb1DeltaX, newEndPointConnection.x);
+		assertEquals(endPointConnection.y + (long) fb1DeltaY, newEndPointConnection.y);
 	}
 
 	/**
@@ -476,7 +476,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 
 		// drag rectangle over FBs, therefore FBs should be selected
 		editor.drag(30, 30, 400, 400);
-		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertTrue(isFbSelected(selectedEditParts, E_DEMUX_FB));
@@ -487,7 +487,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final Point pointTo = new Point(290, 230);
 		editor.drag(pointFrom.x, pointFrom.y, pointTo.x, pointTo.y);
 
-		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertTrue(isFbSelected(selectedEditParts, E_DEMUX_FB));
@@ -504,10 +504,10 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 				.getFirstPoint();
 		final org.eclipse.draw2d.geometry.Point newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
 
-		assertEquals(startPointConnection.x + translationX, newStartPointConnection.x);
-		assertEquals(startPointConnection.y + translationY, newStartPointConnection.y);
-		assertEquals(endPointConnection.x + translationX, newEndPointConnection.x);
-		assertEquals(endPointConnection.y + translationY, newEndPointConnection.y);
+		assertEquals(startPointConnection.x + (long) translationX, newStartPointConnection.x);
+		assertEquals(startPointConnection.y + (long) translationY, newStartPointConnection.y);
+		assertEquals(endPointConnection.x + (long) translationX, newEndPointConnection.x);
+		assertEquals(endPointConnection.y + (long) translationY, newEndPointConnection.y);
 
 	}
 }

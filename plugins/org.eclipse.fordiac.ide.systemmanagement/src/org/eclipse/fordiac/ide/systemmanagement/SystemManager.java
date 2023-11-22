@@ -34,6 +34,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
@@ -56,9 +57,11 @@ import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.ui.XtextProjectHelper;
 
-/** The Class SystemManager.
+/**
+ * The Class SystemManager.
  *
- * @author gebenh */
+ * @author gebenh
+ */
 public enum SystemManager {
 
 	INSTANCE;
@@ -73,6 +76,7 @@ public enum SystemManager {
 	public static final String SYSTEM_FILE_ENDING_WITH_DOT = ".sys"; //$NON-NLS-1$
 
 	public static final String TYPE_LIB_FOLDER_NAME = "Type Library"; //$NON-NLS-1$
+	private final IResourceChangeListener fordiacListener = new FordiacResourceChangeListener(this);
 
 	/** The listeners. */
 	private final List<DistributedSystemListener> listeners = new ArrayList<>();
@@ -89,7 +93,7 @@ public enum SystemManager {
 		// Correctly setup the tool library needs to be done before loading any systems
 		// and adding the resource change listener
 		TypeLibraryManager.INSTANCE.loadToolLibrary();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
+		addFordiacChangeListener();
 		ValidateProject.checkTypeLibraryInProjectsInWorkspaceJob();
 	}
 
@@ -131,7 +135,8 @@ public enum SystemManager {
 	}
 
 	@SuppressWarnings("static-method")
-	public synchronized AutomationSystem createNewSystem(final IContainer location, final String name) {
+	public synchronized AutomationSystem createNewSystem(final IContainer location, final String name,
+			final IProgressMonitor monitor) throws CoreException {
 		final IFile systemFile = location.getFile(new Path(name + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT));
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject());
 		SystemEntry entry = (SystemEntry) typeLibrary.getTypeEntry(systemFile);
@@ -141,7 +146,7 @@ public enum SystemManager {
 		final AutomationSystem system = SystemImporter.createAutomationSystem();
 		system.setName(name);
 		entry.setType(system);
-		saveSystem(entry.getSystem());
+		saveSystem(entry.getSystem(), monitor);
 		return system;
 	}
 
@@ -155,12 +160,14 @@ public enum SystemManager {
 		notifyListeners();
 	}
 
-	/** Load system.
+	/**
+	 * Load system.
 	 *
 	 *
 	 * systemFile xml file for the system
 	 *
-	 * @return the system entry */
+	 * @return the system entry
+	 */
 	private static SystemEntry initSystem(final IFile systemFile) {
 		if (systemFile.exists()) {
 			return (SystemEntry) TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject())
@@ -169,23 +176,27 @@ public enum SystemManager {
 		return null;
 	}
 
-	/** Save system.
+	/**
+	 * Save system.
 	 *
 	 * @param system the system
-	 * @param all    the all */
-	public static void saveSystem(final AutomationSystem system) {
+	 * @param all    the all
+	 * @throws CoreException
+	 */
+	public static void saveSystem(final AutomationSystem system, final IProgressMonitor monitor) throws CoreException {
 		final TypeEntry typeEntry = system.getTypeEntry();
 		Assert.isNotNull(typeEntry); // there should be no system without type entry
-		typeEntry.save();
+		typeEntry.save(monitor);
 	}
 
-	public static void saveSystem(final AutomationSystem system, final IFile file) {
+	public static void saveSystem(final AutomationSystem system, final IFile file, final IProgressMonitor monitor)
+			throws CoreException {
 		final TypeEntry typeEntry = system.getTypeEntry();
 		Assert.isNotNull(typeEntry); // there should be no system without type entry
 		typeEntry.getTypeLibrary().removeTypeEntry(typeEntry);
 		typeEntry.setFile(file);
 		TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject()).addTypeEntry(typeEntry);
-		typeEntry.save();
+		typeEntry.save(monitor);
 	}
 
 	@SuppressWarnings("static-method")
@@ -217,13 +228,23 @@ public enum SystemManager {
 		listeners.forEach(DistributedSystemListener::distributedSystemWorkspaceChanged);
 	}
 
-	/** Adds the workspace listener.
+	/**
+	 * Adds the workspace listener.
 	 *
-	 * @param listener the listener */
+	 * @param listener the listener
+	 */
 	public void addWorkspaceListener(final DistributedSystemListener listener) {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
+	}
+
+	public void removeFordiacChangeListener() {
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(fordiacListener);
+	}
+
+	public void addFordiacChangeListener() {
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(fordiacListener);
 	}
 
 }

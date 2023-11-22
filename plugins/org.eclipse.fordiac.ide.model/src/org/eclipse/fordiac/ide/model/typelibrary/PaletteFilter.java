@@ -79,6 +79,6 @@ public class PaletteFilter {
 				}
 			}
 		}
-		return Stream.of(exact, right, rest).flatMap(Collection::stream).collect(Collectors.toList());
+		return Stream.of(exact, right, rest).flatMap(Collection::stream).toList();
 	}
 }

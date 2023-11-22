@@ -21,17 +21,13 @@ package org.eclipse.fordiac.ide.model.commands.delete;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
-import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.gef.commands.Command;
@@ -41,7 +37,6 @@ public class DeleteFBNetworkElementCommand extends Command {
 	private FBNetwork fbParent;
 	private final FBNetworkElement element;
 	private final CompoundCommand cmds = new CompoundCommand();
-	private final CompoundCommand deleteMarkersCmds = new CompoundCommand();
 	private final Group group;
 	private int elementIndex;
 
@@ -57,7 +52,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		if ((element instanceof FB) && ((FB) element).isResourceTypeFB()) {
+		if (element instanceof final FB fb && fb.isResourceTypeFB()) {
 			return false;
 		}
 		return null != element && null != element.getFbNetwork();
@@ -70,9 +65,8 @@ public class DeleteFBNetworkElementCommand extends Command {
 			cmds.add(new UnmapCommand(element));
 		}
 		collectDeleteCommands(element);
-		handleErrorMarkers();
-		deleteMarkersCmds.execute();
-		// Before removing the fbnetwork element the connections, value error markers, and mapping should be removed
+		// Before removing the fbnetwork element the connections, value error markers,
+		// and mapping should be removed
 		if (cmds.canExecute()) {
 			cmds.execute();
 		}
@@ -81,8 +75,8 @@ public class DeleteFBNetworkElementCommand extends Command {
 		}
 		elementIndex = fbParent.getNetworkElements().indexOf(element);
 		fbParent.getNetworkElements().remove(element);
-		if (element instanceof SubApp) {
-			closeSubApplicationEditor((SubApp) element);
+		if (element instanceof final SubApp subapp) {
+			closeSubApplicationEditor(subapp);
 		}
 	}
 
@@ -95,7 +89,6 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (cmds.canUndo()) {
 			cmds.undo();
 		}
-		deleteMarkersCmds.undo();
 	}
 
 	@Override
@@ -103,7 +96,6 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (cmds.canRedo()) {
 			cmds.redo();
 		}
-		deleteMarkersCmds.redo();
 		if (group != null) {
 			element.setGroup(null);
 		}
@@ -121,26 +113,8 @@ public class DeleteFBNetworkElementCommand extends Command {
 	}
 
 	private static void closeSubApplicationEditor(final SubApp subapp) {
-		EditorUtils.closeEditorsFiltered(editor -> ((editor instanceof I4diacModelEditor)
-				&& (subapp.getSubAppNetwork() == ((I4diacModelEditor) editor).getModel())));
-	}
-
-	private void handleErrorMarkers() {
-		deleteMarkersCmds
-		.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(element)));
-
-		for (final VarDeclaration varIn : element.getInterface().getInputVars()) {
-			if ((varIn.getValue() != null) && (varIn.getValue().hasError())) {
-				deleteMarkersCmds.add(FordiacMarkerCommandHelper
-						.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(varIn.getValue())));
-				deleteMarkersCmds.add(FordiacMarkerCommandHelper
-						.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(varIn.getArraySize())));
-			}
-		}
-		for (final ErrorMarkerInterface errorMarkerInterf : element.getInterface().getErrorMarker()) {
-			deleteMarkersCmds.add(FordiacMarkerCommandHelper
-					.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(errorMarkerInterf)));
-		}
+		EditorUtils.closeEditorsFiltered(editor -> editor instanceof final I4diacModelEditor modelEditor
+				&& subapp.getSubAppNetwork() == modelEditor.getModel());
 	}
 
 	public FBNetwork getFbParent() {

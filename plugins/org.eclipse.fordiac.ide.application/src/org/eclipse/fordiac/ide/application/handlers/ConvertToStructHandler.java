@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -86,8 +85,8 @@ public class ConvertToStructHandler extends AbstractHandler {
 
 	private static IProject getProject(final FBNetworkElement fb) {
 		final EObject root = EcoreUtil.getRootContainer(fb);
-		if (root instanceof LibraryElement) {
-			return ((LibraryElement) root).getTypeLibrary().getProject();
+		if (root instanceof final LibraryElement libEl) {
+			return libEl.getTypeLibrary().getProject();
 		}
 		return null;
 	}
@@ -111,30 +110,22 @@ public class ConvertToStructHandler extends AbstractHandler {
 				Messages.ConvertToStructHandler_NotAllowedReasons);
 	}
 
-	@SuppressWarnings("unchecked")
 	private static List<VarDeclaration> collectSelectedVarDecls(final ISelection sel) {
-		if (sel instanceof StructuredSelection) {
-			return (List<VarDeclaration>) ((IStructuredSelection) sel).toList().stream()
-					.filter(EditPart.class::isInstance).map(ep -> ((EditPart) ep).getModel())
-					.filter(VarDeclaration.class::isInstance)
-					.collect(Collectors.toList());
+		if (sel instanceof final StructuredSelection structSel) {
+			return ((List<?>) structSel.toList()).stream().filter(EditPart.class::isInstance).map(EditPart.class::cast)
+					.map(EditPart::getModel).filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
+					.toList();
 		}
 		return Collections.emptyList();
 	}
 
 	private static FBNetworkElement getNetworkElementFromSelectedPins(final IStructuredSelection selectedPins) {
 		for (final Object pin : selectedPins) {
-			if (pin instanceof SubAppInternalInterfaceEditPart) {
-				final SubAppInternalInterfaceEditPart ep = (SubAppInternalInterfaceEditPart) pin;
-				if (ep.getModel() instanceof VarDeclaration) {
-					return ep.getModel().getFBNetworkElement();
-				}
+			if (pin instanceof final SubAppInternalInterfaceEditPart ep && ep.getModel() instanceof VarDeclaration) {
+				return ep.getModel().getFBNetworkElement();
 			}
-			if (pin instanceof InterfaceEditPartForFBNetwork) {
-				final InterfaceEditPartForFBNetwork ep = (InterfaceEditPartForFBNetwork) pin;
-				if (ep.getModel() instanceof VarDeclaration) {
-					return (FBNetworkElement) ep.getParent().getModel();
-				}
+			if (pin instanceof final InterfaceEditPartForFBNetwork ep && ep.getModel() instanceof VarDeclaration) {
+				return (FBNetworkElement) ep.getParent().getModel();
 			}
 		}
 		return null;

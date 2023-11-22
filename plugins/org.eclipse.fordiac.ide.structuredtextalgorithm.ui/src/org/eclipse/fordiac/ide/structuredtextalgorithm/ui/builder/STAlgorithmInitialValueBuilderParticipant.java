@@ -14,10 +14,9 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.builder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -30,32 +29,47 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
-import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.ModelIssueListValidationMesageAcceptor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.ValidationUtil;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreImportValidator;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.diagnostics.Severity;
+import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IResourceDescription;
-import org.eclipse.xtext.validation.CheckType;
+import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
 import org.eclipse.xtext.validation.Issue;
-import org.eclipse.xtext.validation.Issue.IssueImpl;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderParticipant {
+
+	@Inject
+	private MarkerCreator markerCreator;
+
+	@Inject
+	private Provider<STCoreTypeUsageCollector> typeUsageCollectorProvider;
+
+	@Inject
+	private STCoreImportValidator importValidator;
 
 	@Override
 	public void build(final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
@@ -77,6 +91,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final IProgressMonitor monitor) throws CoreException {
 		try {
 			final IFile file = getFile(delta.getNew().getURI());
+			final STCoreTypeUsageCollector typeUsageCollector = typeUsageCollectorProvider.get();
 			final boolean ignoreWarnings = ValidationUtil.isIgnoreWarnings(file);
 			final Resource resource = context.getResourceSet().getResource(delta.getUri(), true);
 			final TreeIterator<EObject> allContents = EcoreUtil.getAllContents(resource, true);
@@ -88,8 +103,15 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				if (target instanceof SystemConfiguration) {
 					allContents.prune();
 				} else if (target instanceof final VarDeclaration varDeclaration) {
-					validateType(varDeclaration, delta, ignoreWarnings, monitor);
-					validateValue(varDeclaration, delta, ignoreWarnings, monitor);
+					validateType(varDeclaration, delta, typeUsageCollector, ignoreWarnings, monitor);
+					validateValue(varDeclaration, delta, typeUsageCollector, ignoreWarnings, monitor);
+				} else if (target instanceof STSource) {
+					typeUsageCollector.collectUsedTypes(target);
+				}
+			}
+			for (final EObject object : resource.getContents()) {
+				if (object instanceof final LibraryElement libraryElement) {
+					validateImports(libraryElement, delta, typeUsageCollector.getUsedTypes(), ignoreWarnings, monitor);
 				}
 			}
 		} catch (final OperationCanceledException e) {
@@ -105,140 +127,104 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		if (file != null && file.exists()) {
 			file.deleteMarkers(FordiacErrorMarker.INITIAL_VALUE_MARKER, true, IResource.DEPTH_INFINITE);
 			file.deleteMarkers(FordiacErrorMarker.TYPE_DECLARATION_MARKER, true, IResource.DEPTH_INFINITE);
+			file.deleteMarkers(FordiacErrorMarker.IMPORT_MARKER, true, IResource.DEPTH_INFINITE);
 		}
 	}
 
 	protected void validateType(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
-			final boolean ignoreWarnings, final IProgressMonitor monitor) throws CoreException {
+			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
+			final IProgressMonitor monitor) throws CoreException {
 		final List<Issue> issues = new ArrayList<>();
 		if (varDeclaration.isArray()) {
-			StructuredTextParseUtil.validateType(varDeclaration, issues);
+			typeUsageCollector.collectUsedTypes(StructuredTextParseUtil.validateType(varDeclaration, issues));
+			issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getArraySize()));
+		} else {
+			typeUsageCollector.addUsedType(varDeclaration.getType());
 		}
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
 		}
-		final ArraySize canonicalArraySize = getCanonicalObject(varDeclaration.getArraySize());
-		if (canonicalArraySize != null) {
-			updateErrorMessage(canonicalArraySize, issues);
-			if (!issues.isEmpty()) {
-				final IFile file = getFile(delta.getUri());
-				if (file != null && file.exists()) {
-					createMarkers(file, canonicalArraySize, FordiacErrorMarker.TYPE_DECLARATION_MARKER, issues,
-							ignoreWarnings, monitor);
-				}
+		if (!issues.isEmpty()) {
+			final IFile file = getFile(delta.getUri());
+			if (file != null && file.exists()) {
+				createMarkers(file, FordiacErrorMarker.TYPE_DECLARATION_MARKER, issues, ignoreWarnings, monitor);
 			}
 		}
 	}
 
 	protected void validateValue(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
-			final boolean ignoreWarnings, final IProgressMonitor monitor) throws CoreException {
+			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
+			final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(varDeclaration);
 		final List<Issue> issues = new ArrayList<>();
 		if (!value.isBlank()) { // do not parse value if blank
-			StructuredTextParseUtil.validate(value, delta.getUri(), STCoreUtil.getFeatureType(varDeclaration),
-					EcoreUtil2.getContainerOfType(varDeclaration, LibraryElement.class), null, issues);
+			final INamedElement featureType = STCoreUtil.getFeatureType(varDeclaration);
+			try {
+				new TypedValueConverter((DataType) featureType, true).toValue(value);
+			} catch (final Exception e) {
+				typeUsageCollector.collectUsedTypes(StructuredTextParseUtil.validate(value, delta.getUri(), featureType,
+						EcoreUtil2.getContainerOfType(varDeclaration, LibraryElement.class), null, issues));
+				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getValue()));
+			}
 		}
 		validateGenericValue(varDeclaration, value, issues);
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
 		}
-		final Value canonicalValue = getCanonicalObject(varDeclaration.getValue());
-		if (canonicalValue != null) {
-			updateErrorMessage(canonicalValue, issues);
-			if (!issues.isEmpty()) {
-				final IFile file = getFile(delta.getUri());
-				if (file != null && file.exists()) {
-					createMarkers(file, canonicalValue, FordiacErrorMarker.INITIAL_VALUE_MARKER, issues, ignoreWarnings,
-							monitor);
-				}
+		if (!issues.isEmpty()) {
+			final IFile file = getFile(delta.getUri());
+			if (file != null && file.exists()) {
+				createMarkers(file, FordiacErrorMarker.INITIAL_VALUE_MARKER, issues, ignoreWarnings, monitor);
 			}
 		}
 	}
 
-	@SuppressWarnings("static-method")
-	protected void validateGenericValue(final VarDeclaration varDeclaration, final String value,
+	protected static void validateGenericValue(final VarDeclaration varDeclaration, final String value,
 			final List<Issue> issues) {
 		if (varDeclaration.isIsInput() && GenericTypes.isAnyType(varDeclaration.getType())) {
 			if (varDeclaration.getFBNetworkElement() != null) {
 				if (varDeclaration.getInputConnections().isEmpty() && value.isBlank()) {
-					issues.add(createIssue(
+					issues.add(ValidationUtil.createModelIssue(Severity.WARNING,
 							Messages.STAlgorithmInitialValueBuilderParticipant_MissingValueForGenericInstanceVariable,
-							Severity.WARNING));
+							varDeclaration));
 				}
 			} else if (!value.isBlank()) {
-				issues.add(createIssue(
+				issues.add(ValidationUtil.createModelIssue(Severity.WARNING,
 						Messages.STAlgorithmInitialValueBuilderParticipant_SpecifiedValueForGenericTypeVariable,
-						Severity.WARNING));
+						varDeclaration));
 			}
 		}
 	}
 
-	protected static Issue createIssue(final String message, final Severity severity) {
-		final IssueImpl issue = new IssueImpl();
-		issue.setMessage(message);
-		issue.setSeverity(severity);
-		issue.setType(CheckType.FAST);
-		return issue;
-	}
+	protected void validateImports(final LibraryElement element, final IResourceDescription.Delta delta,
+			final Set<QualifiedName> usedTypes, final boolean ignoreWarnings, final IProgressMonitor monitor)
+			throws CoreException {
+		final List<Import> imports = ImportHelper.getImports(element);
+		if (imports.isEmpty()) {
+			return;
+		}
 
-	@SuppressWarnings("static-method")
-	protected void updateErrorMessage(final ErrorMarkerRef object, final List<Issue> issues) {
-		final String errorMessage = issues.stream().filter(issue -> issue.getSeverity() == Severity.ERROR)
-				.map(Issue::getMessage).collect(Collectors.joining(", ")); //$NON-NLS-1$
-		// when ran through an ANT task the workbench is not started
-		final Display display = PlatformUI.isWorkbenchRunning() ? PlatformUI.getWorkbench().getDisplay() : null;
-		if (display != null && !display.isDisposed()) {
-			display.asyncExec(() -> object.setErrorMessage(errorMessage));
-		} else {
-			object.setErrorMessage(errorMessage);
+		final String packageName = PackageNameHelper.getPackageName(element);
+		final ModelIssueListValidationMesageAcceptor acceptor = new ModelIssueListValidationMesageAcceptor();
+		importValidator.validateImports(packageName, imports, usedTypes, acceptor);
+		if (!acceptor.isEmpty()) {
+			final IFile file = getFile(delta.getUri());
+			if (file != null && file.exists()) {
+				createMarkers(file, FordiacErrorMarker.IMPORT_MARKER, acceptor.getIssues(), ignoreWarnings, monitor);
+			}
 		}
 	}
 
-	protected void createMarkers(final IFile file, final EObject object, final String type, final List<Issue> issues,
+	protected void createMarkers(final IFile file, final String type, final List<Issue> issues,
 			final boolean ignoreWarnings, final IProgressMonitor monitor) throws CoreException {
 		for (final Issue issue : issues) {
 			if (monitor.isCanceled()) {
 				throw new OperationCanceledException();
 			}
 			if (ValidationUtil.shouldProcess(issue, ignoreWarnings)) {
-				createMarker(file, object, type, issue);
+				markerCreator.createMarker(issue, file, type);
 			}
 		}
-	}
-
-	@SuppressWarnings("static-method")
-	protected void createMarker(final IFile file, final EObject object, final String type, final Issue issue)
-			throws CoreException {
-		ErrorMarkerBuilder.createErrorMarkerBuilder(issue.getMessage()).setType(type)
-				.setSeverity(getMarkerSeverity(issue)).setTarget(object).createMarker(file);
-	}
-
-	@SuppressWarnings("unchecked")
-	protected static <T extends EObject> T getCanonicalObject(final T object) {
-		final EObject root = EcoreUtil.getRootContainer(object);
-		if (root instanceof final LibraryElement libraryElement) {
-			final TypeEntry typeEntry = libraryElement.getTypeEntry();
-			if (typeEntry != null) {
-				final LibraryElement typeEditable = typeEntry.getTypeEditable();
-				if (typeEditable != null) {
-					final String fragment = EcoreUtil.getRelativeURIFragmentPath(root, object);
-					return (T) EcoreUtil.getEObject(typeEditable, fragment);
-				}
-			}
-			// do not return target unless it could be resolved to typeEditable
-			// if it is a LibraryElement
-			return null;
-		}
-		return object;
-	}
-
-	protected static int getMarkerSeverity(final Issue issue) {
-		return switch (issue.getSeverity()) {
-		case ERROR -> IMarker.SEVERITY_ERROR;
-		case WARNING -> IMarker.SEVERITY_WARNING;
-		case INFO -> IMarker.SEVERITY_INFO;
-		default -> throw new IllegalArgumentException(String.valueOf(issue.getSeverity()));
-		};
 	}
 
 	protected static String getValue(final VarDeclaration varDeclaration) {

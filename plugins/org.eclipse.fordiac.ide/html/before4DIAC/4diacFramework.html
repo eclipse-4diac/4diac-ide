@@ -33,7 +33,7 @@ If you did not read the following page yet, go there now: <a href="../../html/be
 
 <!--********************************************************************************************-->
 
-<h1 id="iec61499Framework">4diac Framework</h1>
+<h1 id="iec61499Framework">Eclipse 4diac Framework</h1>
 
 <p>This section outlines the big picture from the design to actually controlling physical units.</p>
 
@@ -65,23 +65,23 @@ The devices normally have inputs and outputs which are accessed by the runtime e
 
 <p>Eclipse 4diac provides two main components for developing and executing distributed control systems compliant to the IEC&nbsp;61499 standard:</p>
 <ul>
-	<li><span class="inlineTitle">4diac FORTE</span> is a small portable C++ implementation of an IEC&nbsp;61499 runtime environment which supports executing IEC 61499 FB networks on small embedded devices. 
-	4diac FORTE typically runs on top of a (real-time) OS. 
-	4diac FORTE is a multi-threaded and low memory-consuming runtime environment. 
+	<li><span class="inlineTitle">4diac&nbsp;FORTE</span> is a small portable C++ implementation of an IEC&nbsp;61499 runtime environment which supports executing IEC 61499 FB networks on small embedded devices. 
+	4diac&nbsp;FORTE typically runs on top of a (real-time) OS. 
+	4diac&nbsp;FORTE is a multi-threaded and low memory-consuming runtime environment. 
 	It has been tested on several different operating systems, for example, Windows, Linux (i386, amd64, ppc, xScale, arm), NetOS, eCos, rcX from Hilscher, vxWorks, and freeRTOS.  
 	</li>
 	<li><span class="inlineTitle">4diac&nbsp;IDE:</span> is an integrated development environment written in Java, based on the Eclipse framework. 
 	   It provides an extensible engineering environment for modeling distributed control applications compliant to the IEC&nbsp;61499 standard. 
-	   You use 4diac IDE to create FBs, applications, configure the devices and other tasks related to IEC&nbsp;61499.
-	   Within 4diac IDE, these results can also be deployed to devices running 4diac FORTE or other compliant run-time environments.</li>
+	   You use 4diac&nbsp;IDE to create FBs, applications, configure the devices and other tasks related to IEC&nbsp;61499.
+	   Within 4diac&nbsp;IDE, these results can also be deployed to devices running 4diac&nbsp;FORTE or other compliant run-time environments.</li>
 </ul>
 
 <p>
 Because the development of systems according to IEC&nbsp;61499 and the runtime environment are decoupled, some things have to be taken into account. 
-As described, you can create FBs in the IDE. 
+As described, you can create FBs in 4diac&nbsp;IDE. 
 At this point, however, the runtime environment doesn't know that the FB exists nor how to execute it. 
-Within 4diac IDE, you therefore have the possibility to export your created FB into 4diac&nbsp;FORTE code (i.e., C++ files). 
-You then need to add your exported code to the source code of 4diac&nbsp;FORTE and compile all as explained in the <a href="../../html/installation/install.html#4DIAC-FORTE">Compile 4diac FORTE</a> section of the installation documentation.
+Within 4diac&nbsp;IDE, you therefore have the possibility to export your created FB into 4diac&nbsp;FORTE code (i.e., C++ files). 
+You then need to add your exported code to the source code of 4diac&nbsp;FORTE and compile all as explained in the <a href="../../html/installation/install.html#4DIAC-FORTE">Compile 4diac&nbsp;FORTE</a> section of the installation documentation.
 This is possible only for Basic and Composite Function Blocks (BFB and CFB), since both definitions are in the standard.
 However, for Service Function Blocks (SIFBs) only the interface is defined.
 The internal implementation of an SIFB has to be coded manually in C++, the language 4diac&nbsp;FORTE is written in.</p>
@@ -90,9 +90,9 @@ The internal implementation of an SIFB has to be coded manually in C++, the lang
 
 <h1>Human Machine Interface</h1>
 
-<p>4diac FORTE is intended to run in PLCs, so a Graphical User Interface (GUI) as Human Machine Interface (HMI) is not supported. 
+<p>4diac&nbsp;FORTE is intended to run in PLCs, so a Graphical User Interface (GUI) as Human Machine Interface (HMI) is not supported. 
 Therefore, for providing HMIs for your control solutions developed in Eclipse 4diac, you need external components. 
-4diac FORTE features a set of different communication protocols which allow to interact with such external HMI components.
+4diac&nbsp;FORTE features a set of different communication protocols which allow to interact with such external HMI components.
 Currently, the most commonly used protocols are MQTT or OPC UA.
 
 <!--********************************************************************************************-->

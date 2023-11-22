@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.gef,
+ org.eclipse.fordiac.ide.gef.annotation,
  org.eclipse.fordiac.ide.gef.commands,
  org.eclipse.fordiac.ide.gef.dnd,
  org.eclipse.fordiac.ide.gef.draw2d,

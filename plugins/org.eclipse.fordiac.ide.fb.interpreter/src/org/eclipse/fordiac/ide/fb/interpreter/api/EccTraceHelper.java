@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Fabio Gandolfi
+ * Copyright (c) 2023 Fabio Gandolfi, Martin Melik Merkumians
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,12 +10,17 @@
  * Contributors:
  *   Fabio Gandolfi
  *     - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians
+ *     - changed to a Stream based implementation
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fb.interpreter.api;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
@@ -37,79 +42,43 @@ public class EccTraceHelper {
 	}
 
 	public List<ECState> getAllStatesOfSequence() {
-		final List<ECState> states = new ArrayList<>();
-		for (final Transaction transac : transactions) {
-			if (getEccTrace((FBTransaction) transac) != null) {
-				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
-					states.add(transi.getDestination());
-				}
-			}
-		}
-		return states;
+		return getECTransitionsStream().map(ECTransition::getDestination).toList();
 	}
 
 	public List<ECState> getAllStatesOfSequenceUnique() {
-		final List<ECState> states = new ArrayList<>();
-		for (final Transaction transac : transactions) {
-			if (getEccTrace((FBTransaction) transac) != null) {
-				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
-					if (states.stream().filter(s -> s.getName().equals(transi.getDestination().getName())).findAny()
-							.isEmpty()) {
-						states.add(transi.getDestination());
-					}
-				}
-			}
-		}
-		return states;
+		return getAllStatesOfSequence().stream().distinct().toList();
 	}
 
-	public List<ArrayList<String>> getAllPathsOfSequence() {
-		final List<ArrayList<String>> paths = new ArrayList<>();
+	private Stream<ECTransition> getECTransitionsStream() {
+		return transactions.stream().filter(FBTransaction.class::isInstance).map(FBTransaction.class::cast)
+				.map(EccTraceHelper::getEccTrace).filter(Objects::nonNull).map(eccTrace -> eccTrace.getTransitions(ecc))
+				.flatMap(List::stream);
+	}
 
-		for (final Transaction transac : transactions) {
-			if (getEccTrace((FBTransaction) transac) != null) {
-				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
-					final ArrayList<String> path = new ArrayList<>();
-					path.add(transi.getSource().getName());
-					path.add(transi.getDestination().getName());
-					paths.add(path);
-				}
-			}
-		}
-
-		return paths;
+	public List<List<String>> getAllPathsOfSequence() {
+		return getECTransitionsStream()
+				.map(transi -> (Stream.of(transi.getSource().getName(), transi.getDestination().getName()).toList()))
+				.toList();
 	}
 
 	public ECState getStartState() {
-		if (!transactions.isEmpty() && getEccTrace((FBTransaction) transactions.get(0)) != null
-				&& !getEccTrace((FBTransaction) transactions.get(0)).getTransitions(ecc).isEmpty()) {
-			return getEccTrace((FBTransaction) transactions.get(0)).getTransitions(ecc).get(0).getSource();
+		if (!transactions.isEmpty() && transactions.get(0) instanceof final FBTransaction fbTransaction) {
+			final var trace = getEccTrace(fbTransaction);
+			if (trace != null && !trace.getTransitions(ecc).isEmpty()) {
+				return trace.getTransitions(ecc).get(0).getSource();
+			}
 		}
 		return null;
 	}
 
 	public List<ECAction> getAllOutputEvents() {
-		final List<ECAction> actions = new ArrayList<>();
-		for (final Transaction transac : transactions) {
-			if (getEccTrace((FBTransaction) transac) != null) {
-				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
-					actions.addAll(transi.getDestination().getECAction());
-				}
-			}
-		}
-		return actions;
+		return getECTransitionsStream().map(transi -> ((List<ECAction>) transi.getDestination().getECAction()))
+				.flatMap(List::stream).toList();
 	}
 
 	public List<Algorithm> getAllAlgorithms() {
-		final List<Algorithm> algos = new ArrayList<>();
-		for (final Transaction transac : transactions) {
-			if (getEccTrace((FBTransaction) transac) != null) {
-				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions(ecc)) {
-					transi.getDestination().getECAction().forEach(ac -> algos.add(ac.getAlgorithm()));
-				}
-			}
-		}
-		return algos;
+		return getECTransitionsStream().map(transi -> ((List<ECAction>) transi.getDestination().getECAction()))
+				.flatMap(List::stream).map(ECAction::getAlgorithm).toList();
 	}
 
 	private static EccTrace getEccTrace(final FBTransaction transaction) {
@@ -120,52 +89,30 @@ public class EccTraceHelper {
 	}
 
 	public List<ECState> getAllPossibleStates() {
-		if (!transactions.isEmpty()) {
-			for (final Transaction trans : transactions) {
-				if (getEccTrace((FBTransaction) trans) != null
-						&& !getEccTrace((FBTransaction) trans).getTransitions(ecc).isEmpty()) {
-					for (final ECTransition transi : getEccTrace((FBTransaction) trans).getTransitions(ecc)) {
-						if (transi.getECC() != null && transi.getECC().getECState() != null) {
-							return transi.getECC().getECState();
-						}
-					}
-				}
-			}
-		}
-		return new ArrayList<>();
+		final var transition = transactions.stream().map(FBTransaction.class::cast).map(EccTraceHelper::getEccTrace)
+				.filter(Objects::nonNull).map(transaction -> transaction.getTransitions(ecc)).flatMap(List::stream)
+				.filter(trans -> trans.getECC() != null && trans.getECC().getECState() != null).findAny();
+
+		return transition.map(trans -> Collections.unmodifiableList((trans.getECC().getECState()))).orElse(List.of());
+		// List.of() most efficient but secretly immutable
 	}
 
 	public List<ECState> getAllPossibleEndStates() {
-		final List<ECState> allPossibleStates = getAllPossibleStates();
-		for (final ECState state : allPossibleStates) {
-			for (final ECTransition trans : state.getOutTransitions()) {
-				if (trans.getConditionEvent() == null && trans.getConditionExpression().equals("1")) {
-					allPossibleStates.remove(state);
-					break;
-				}
-			}
-		}
-		return allPossibleStates;
+		final var endStates = new ArrayList<>(getAllPossibleStates());
+		endStates.removeIf(state -> state.getOutTransitions().stream()
+				.anyMatch(trans -> trans.getConditionEvent() == null && "1".equals(trans.getConditionExpression()))); //$NON-NLS-1$
+		return Collections.unmodifiableList(endStates);
 	}
 
-	public List<ArrayList<String>> getAllPossiblePaths() {
-		final List<ArrayList<String>> allPossiblePaths = new ArrayList<>();
-
-		for (final ECState state : getAllPossibleStates()) {
-			if (state.getOutTransitions().size() > 0) {
-				for (final ECTransition outTrans : state.getOutTransitions()) {
-					final ArrayList<String> path = new ArrayList<>();
-					path.add(state.getName());
-					path.add(outTrans.getDestination().getName());
-					allPossiblePaths.add(path);
-				}
-			} else {
-				// path of length 0 -> single node
-				final ArrayList<String> path = new ArrayList<>();
-				path.add(state.getName());
+	public List<List<String>> getAllPossiblePaths() {
+		return getAllPossibleStates().stream().map((final ECState state) -> {
+			final var stateName = state.getName();
+			if (!state.getOutTransitions().isEmpty()) {
+				return state.getOutTransitions().stream()
+						.map(outTrans -> Stream.of(stateName, outTrans.getDestination().getName()).toList()).toList();
 			}
-		}
-		return allPossiblePaths;
+			// path of length 0 -> single node
+			return Stream.of(Stream.of(stateName).toList()).toList();
+		}).flatMap(List::stream).toList();
 	}
-
 }

@@ -61,7 +61,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 			ImageDescriptor imageDescriptor = getImageForFile((IFile) element);
 			if (imageDescriptor != null) {
 				imageDescriptor = decorateImage((IFile) element, imageDescriptor);
-				return resourceManager.get(imageDescriptor);
+				return (Image) resourceManager.get(imageDescriptor);
 			}
 			return null;
 		}

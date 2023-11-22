@@ -88,7 +88,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		outputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
 		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
-		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputProvider));
+		outputDataLayer.setConfigLabelAccumulator(
+				new VarDeclarationConfigLabelAccumulator(outputProvider, this::getAnnotationModel));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(), null,
 				this, false);
@@ -102,7 +103,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
-		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider));
+		inputDataLayer.setConfigLabelAccumulator(
+				new VarDeclarationConfigLabelAccumulator(inputProvider, this::getAnnotationModel));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(), null,
 				this, true);

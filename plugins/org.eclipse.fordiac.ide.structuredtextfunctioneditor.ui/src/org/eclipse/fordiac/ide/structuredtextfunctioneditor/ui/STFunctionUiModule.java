@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMining
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCorePrefixMatcher;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreProposalProvider.STCoreReferenceProposalCreator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater.LibraryElementChangeAdapterFilter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentProvider;
@@ -40,6 +41,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceUISe
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreMarkerCreator;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreMarkerTypeProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreResourceUIValidatorExtension;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocument;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocumentPartitioner;
@@ -54,6 +57,7 @@ import org.eclipse.xtext.ui.editor.IURIEditorOpener;
 import org.eclipse.xtext.ui.editor.IXtextEditorCallback;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.XtextSourceViewer;
+import org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.ReferenceProposalCreator;
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities;
 import org.eclipse.xtext.ui.editor.contentassist.PrefixMatcher;
 import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor;
@@ -69,10 +73,12 @@ import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor;
 import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
+import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
 import org.eclipse.xtext.ui.shared.Access;
 import org.eclipse.xtext.ui.validation.IResourceUIValidatorExtension;
+import org.eclipse.xtext.ui.validation.MarkerTypeProvider;
 
 import com.google.inject.Binder;
 import com.google.inject.Provider;
@@ -205,6 +211,19 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {
 		return STCoreResourceUIServiceProvider.class;
+	}
+
+	public Class<? extends MarkerCreator> bindMarkerCreator() {
+		return STCoreMarkerCreator.class;
+	}
+
+	public Class<? extends ReferenceProposalCreator> bindAbstractJavaBasedContentProposalProvider$ReferenceProposalCreator() {
+		return STCoreReferenceProposalCreator.class;
+	}
+
+	@Override
+	public Class<? extends MarkerTypeProvider> bindMarkerTypeProvider() {
+		return STCoreMarkerTypeProvider.class;
 	}
 
 	public Class<? extends IResourceUIValidatorExtension> bindIResourceUIValidatorExtension() {

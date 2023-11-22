@@ -640,7 +640,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			// SIFB
 			// in
 			// the
-			// 4diac-RTE
+			// 4diac&nbsp;FORTE
 			return;
 		}
 
@@ -674,7 +674,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	private void handleCompositeFB(final CompositeFBType composite, final String previousNames, final String fbName) {
 		if (composite.getName().matches("E_CYCLE|E_F_TRIG|E_R_TRIG|E_TimeOut")) { // these FBs are //$NON-NLS-1$
 			// implemented as SIFB in the
-			// 4diac-RTE
+			// 4diac&nbsp;FORTE
 			return;
 		}
 

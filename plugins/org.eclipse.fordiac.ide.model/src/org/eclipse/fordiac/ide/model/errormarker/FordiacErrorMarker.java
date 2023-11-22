@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.errormarker;
 
+import java.util.Set;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -22,6 +24,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -39,10 +42,19 @@ public final class FordiacErrorMarker {
 	public static final String VALIDATION_MARKER = "org.eclipse.fordiac.ide.model.validation"; //$NON-NLS-1$
 	public static final String INITIAL_VALUE_MARKER = "org.eclipse.fordiac.ide.model.initialValue"; //$NON-NLS-1$
 	public static final String TYPE_DECLARATION_MARKER = "org.eclipse.fordiac.ide.model.typeDeclaration"; //$NON-NLS-1$
+	public static final String IMPORT_MARKER = "org.eclipse.fordiac.ide.model.import"; //$NON-NLS-1$
 	public static final String TYPE_LIBRARY_MARKER = "org.eclipse.fordiac.ide.model.typeLibrary"; //$NON-NLS-1$
+
+	private static final Set<String> MODEL_MARKER_TYPES = Set.of(IEC61499_MARKER, VALIDATION_MARKER,
+			INITIAL_VALUE_MARKER, TYPE_DECLARATION_MARKER, IMPORT_MARKER, TYPE_LIBRARY_MARKER);
 
 	public static final String TARGET_URI = "org.eclipse.fordiac.ide.model.iec61499.targetUri"; //$NON-NLS-1$
 	public static final String TARGET_TYPE = "org.eclipse.fordiac.ide.model.iec61499.targetType"; //$NON-NLS-1$
+	public static final String TARGET_FEATURE = "org.eclipse.fordiac.ide.model.iec61499.targetFeature"; //$NON-NLS-1$
+
+	public static boolean isModelMarkerType(final String markerType) {
+		return MODEL_MARKER_TYPES.contains(markerType);
+	}
 
 	public static URI getTargetUri(final IMarker marker) throws CoreException, IllegalArgumentException {
 		final String targetUriAttribute = (String) marker.getAttribute(TARGET_URI);
@@ -61,6 +73,23 @@ public final class FordiacErrorMarker {
 				final Resource eResource = ePackage.eResource();
 				if (eResource != null) {
 					return (EClass) eResource.getEObject(targetTypeUri.fragment());
+				}
+			}
+		}
+		return null;
+	}
+
+	public static EStructuralFeature getTargetFeature(final IMarker marker)
+			throws CoreException, IllegalArgumentException {
+		final String targetFeatureAttribute = (String) marker.getAttribute(TARGET_FEATURE);
+		if (targetFeatureAttribute != null) {
+			final URI targetFeatureUri = URI.createURI(targetFeatureAttribute);
+			final EPackage ePackage = EPackage.Registry.INSTANCE
+					.getEPackage(targetFeatureUri.trimFragment().toString());
+			if (ePackage != null) {
+				final Resource eResource = ePackage.eResource();
+				if (eResource != null) {
+					return (EStructuralFeature) eResource.getEObject(targetFeatureUri.fragment());
 				}
 			}
 		}

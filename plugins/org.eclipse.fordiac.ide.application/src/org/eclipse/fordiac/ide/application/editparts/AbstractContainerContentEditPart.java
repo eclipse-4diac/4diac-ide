@@ -36,8 +36,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
@@ -51,7 +51,6 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		private final AbstractContainerContentEditPart host;
 
 		public ContainerMarqueeDragTracker(final AbstractContainerContentEditPart host) {
-			super();
 			this.host = host;
 		}
 
@@ -66,7 +65,7 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)) {
-				getChildren().forEach(ep -> ((EditPart) ep).refresh());
+				getChildren().forEach(GraphicalEditPart::refresh);
 			}
 			super.notifyChanged(notification);
 		}
@@ -147,8 +146,8 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 	public void performRequest(final Request request) {
 		final Object type = request.getType();
 		if ((type == RequestConstants.REQ_DIRECT_EDIT || type == RequestConstants.REQ_OPEN)
-				&& (request instanceof SelectionRequest)) {
-			performDirectEdit((SelectionRequest) request);
+				&& (request instanceof final SelectionRequest selReq)) {
+			performDirectEdit(selReq);
 		} else {
 			super.performRequest(request);
 		}
@@ -162,8 +161,8 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 			directEditManager.show();
 		} else {
 			final Object key = request.getExtendedData().keySet().iterator().next();
-			if (key instanceof String) {
-				directEditManager.show((String) key);
+			if (key instanceof final String string) {
+				directEditManager.show(string);
 			}
 		}
 	}
@@ -174,7 +173,7 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 
 	private TypeLibrary getTypeLibrary() {
 		final EObject root = EcoreUtil.getRootContainer(getContainerElement());
-		return (root instanceof LibraryElement) ? ((LibraryElement) root).getTypeEntry().getTypeLibrary() : null;
+		return (root instanceof final LibraryElement le) ? le.getTypeEntry().getTypeLibrary() : null;
 	}
 
 	public abstract FBNetworkElement getContainerElement();

@@ -76,12 +76,11 @@ public abstract class AbstractMonitoringManager {
 		for (final IConfigurationElement element : elems) {
 			try {
 				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof AbstractMonitoringManager) {
-					return (AbstractMonitoringManager) object;
+				if (object instanceof final AbstractMonitoringManager abstractMonitoringManager) {
+					return abstractMonitoringManager;
 				}
 			} catch (final CoreException corex) {
-				FordiacLogHelper.logError(Messages.AbstractMonitoringManager_ErrorInCreatingMonitoringManager,
-						corex);
+				FordiacLogHelper.logError(Messages.AbstractMonitoringManager_ErrorInCreatingMonitoringManager, corex);
 			}
 		}
 		FordiacLogHelper.logError(Messages.AbstractMonitoringManager_NoMonitoringManagerProvided);

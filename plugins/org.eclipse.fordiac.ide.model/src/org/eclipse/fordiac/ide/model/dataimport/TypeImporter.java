@@ -34,8 +34,6 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -55,12 +53,14 @@ public abstract class TypeImporter extends CommonElementImporter {
 		super(importer);
 	}
 
-	/** This method parses VariableDeclaration.
+	/**
+	 * This method parses VariableDeclaration.
 	 *
 	 * @return v - the parsed VariableDeclaration
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	protected VarDeclaration parseVarDeclaration() throws TypeImportException, XMLStreamException {
 		final VarDeclaration v = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		readNameCommentAttributes(v);
@@ -71,11 +71,6 @@ public abstract class TypeImporter extends CommonElementImporter {
 		}
 		final DataType dataType = getDataTypeLibrary().getType(typeName);
 		v.setType(dataType);
-
-		if (dataType instanceof final ErrorMarkerDataType errorMarkerDataType) {
-			errorMarkerBuilders.add(
-					ErrorMarkerBuilder.createErrorMarkerBuilder(errorMarkerDataType.getErrorMessage()).setTarget(v));
-		}
 
 		final String arraySize = getAttributeValue(LibraryElementTags.ARRAYSIZE_ATTRIBUTE);
 		if (null != arraySize) {

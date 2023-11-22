@@ -16,30 +16,30 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Assuring FORTE Code Quality</title>
+	<title>Assuring 4diac&nbsp;FORTE Code Quality</title>
 	<link rel="stylesheet" type="text/css" href="../help.css">
 </head>
 
 <body>
 
-<h1 id="topOfPage">Assuring FORTE Code Quality</h1>
-<p>Reducing the number of bugs and keep a high code quality is a constant struggle. For FORTE we apply several means and tools which we summarize here as we think they can be helpful for users planing to extend FORTE.</p>
+<h1 id="topOfPage">Assuring 4diac&nbsp;FORTE Code Quality</h1>
+<p>Reducing the number of bugs and keep a high code quality is a constant struggle. For 4diac&nbsp;FORTE we apply several means and tools which we summarize here as we think they can be helpful for users planing to extend 4diac&nbsp;FORTE.</p>
 
 <h2 id="staticAnalysis">Static Code Analysis</h2>
-<p>Static code analyzers as the name implies perform an off-line analysis of your code and try to identify potential issues. For FORTE we are currently using the following two open source static code analyzers:</p>
+<p>Static code analyzers as the name implies perform an off-line analysis of your code and try to identify potential issues. For 4diac&nbsp;FORTE we are currently using the following two open source static code analyzers:</p>
 
 <ul>
 	<li><span class="inlineTitle">CPP Check</span>: is a tool you can directly use to check your code. However for Eclipse there also exists an Eclipse plugin you can install from the Eclipse market place. 
 		Which makes its use much more convenient. CPP Check helps for example to find if correct pairs of new/delete are used or also on potential memory leaks. 
 	</li>
 	<li><span class="inlineTitle">Clang's scan-build</span>: scan-build is a tool that comes with the C++ Compiler clang. It uses the clang compiler to perform the static analysis during compile time.
-		<p> To use it for checking FORTE you first need to change the C to clang's <span class="specificText">ccc-analyzer</span> and the C++ compiler to clang's <span class="specificText">c++-analyzer</span> during the CMake configuration of FORTE. Therefore it is recommended to use a separate build directory.</p>
+		<p> To use it for checking 4diac&nbsp;FORTE you first need to change the C to clang's <span class="specificText">ccc-analyzer</span> and the C++ compiler to clang's <span class="specificText">c++-analyzer</span> during the CMake configuration of 4diac&nbsp;FORTE. Therefore it is recommended to use a separate build directory.</p>
 
 		<p>Furthermore instead of running </p>
 		<div class="code">make all</div> 
 		<p>you need to invoke the comman.d</p>
 		<div class="code">scan-build -o ./static make</div>
-		<p>for building FORTE. The nice thing about scan-build is that it creates nice html files with explanations about the found problems.</p>
+		<p>for building 4diac&nbsp;FORTE. The nice thing about scan-build is that it creates nice html files with explanations about the found problems.</p>
 			 
 	</li>
 </ul>
@@ -97,7 +97,7 @@ Otherwise follow this summary for cygwin:
 	<div class="code">./b2 install --prefix=c:/installation/path toolset=gcc</div></li>
 </ol>
 
-<h3>Set CMake of the 4diac-rte</h3>
+<h3>Set CMake of the 4diac&nbsp;FORTE</h3>
 Set the following configuration in CMake:
 
 <div class="code">FORTE_TESTS=ON

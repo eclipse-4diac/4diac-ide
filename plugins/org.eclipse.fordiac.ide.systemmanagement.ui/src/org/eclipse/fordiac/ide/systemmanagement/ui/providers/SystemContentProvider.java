@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -60,32 +59,32 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 
 	@Override
 	public Object[] getChildren(final Object parentElement) {
-		if (parentElement instanceof IResource) {
-			return getResourceChildren((IResource) parentElement);
+		if (parentElement instanceof final IResource ires) {
+			return getResourceChildren(ires);
 		}
 		return super.getChildren(parentElement);
 	}
 
 	@Override
 	public Object getParent(final Object object) {
-		if (object instanceof IResource) {
-			return ((IResource) object).getParent();
+		if (object instanceof final IResource ires) {
+			return ires.getParent();
 		}
-		if (object instanceof Application) {
-			final Application app = (Application) object;
+		if (object instanceof final Application app) {
 			// the automation system can be null if the the app was just deleted
 			return (null != app.getAutomationSystem()) ? app.getAutomationSystem().getTypeEntry().getFile() : null;
 		}
-		if (object instanceof SystemConfiguration) {
-			return ((SystemConfiguration) object).getAutomationSystem().getTypeEntry().getFile();
+		if (object instanceof final SystemConfiguration sysConf) {
+			return sysConf.getAutomationSystem().getTypeEntry().getFile();
 		}
-		if (object instanceof AutomationSystem) {
-			return ((AutomationSystem) object).getTypeEntry().getFile();
+		if (object instanceof final AutomationSystem sys) {
+			return sys.getTypeEntry().getFile();
 		}
 		final Object parent = super.getParent(object);
-		if (parent instanceof FBType) {
-			// the FBType is not in the tree we have to immediately return the file it is contained in
-			return ((FBType) parent).getTypeEntry().getFile();
+		if (parent instanceof final FBType fbType) {
+			// the FBType is not in the tree we have to immediately return the file it is
+			// contained in
+			return fbType.getTypeEntry().getFile();
 		}
 		return parent;
 	}
@@ -93,8 +92,8 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	@Override
 	public boolean hasChildren(final Object element) {
 		if (element instanceof IResource) {
-			if (element instanceof IProject) {
-				return ((IProject) element).isAccessible();
+			if (element instanceof final IProject project) {
+				return project.isAccessible();
 			}
 			if (SystemManager.isSystemFile(element)) {
 				return true;
@@ -112,14 +111,14 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 
 	@Override
 	public void notifyChanged(final Notification notification) {
-		if (notification.getNotifier() instanceof AutomationSystem) {
+		if (notification.getNotifier() instanceof final AutomationSystem system) {
 			// as the automation system is changed we need to perform a special refresh here
-			final AutomationSystem system = (AutomationSystem) notification.getNotifier();
 			super.notifyChanged(new ViewerNotification(notification, system.getTypeEntry().getFile()));
 		} else {
 			super.notifyChanged(notification);
 			if (LibraryElementPackage.INAMED_ELEMENT == notification.getFeatureID(ConfigurableObject.class)
-					|| LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__NAME == notification.getFeatureID(TypedConfigureableObject.class)) {
+					|| LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__NAME == notification
+							.getFeatureID(TypedConfigureableObject.class)) {
 				// trigger a resorting
 				distributedSystemWorkspaceChanged();
 			}
@@ -138,14 +137,10 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	}
 
 	private Object[] getResourceChildren(final IResource resource) {
-		if (resource instanceof IWorkspaceRoot) {
-			// show only 4diac or closed projects
-			final IWorkspaceRoot root = (IWorkspaceRoot) resource;
-			return Arrays.stream(root.getProjects()).filter(SystemContentProvider::projectToShow)
-					.collect(Collectors.toList())
-					.toArray(new IProject[0]);
+		if (resource instanceof final IWorkspaceRoot root) {
+			return Arrays.stream(root.getProjects()).filter(SystemContentProvider::projectToShow).toArray();
 		}
-		if (((resource instanceof IProject) && ((IProject) resource).isOpen()) || (resource instanceof IFolder)) {
+		if (((resource instanceof final IProject project) && project.isOpen()) || (resource instanceof IFolder)) {
 			try {
 				return ((IContainer) resource).members();
 			} catch (final CoreException e) {
@@ -164,7 +159,8 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	private static boolean projectToShow(final IProject proj) {
 		// if the project is closed or a 4diac project return true
 		try {
-			return !proj.isOpen() || proj.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID) || proj.hasNature(SystemManager.ROBOT_PROJECT_NATURE_ID);
+			return !proj.isOpen() || proj.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID)
+					|| proj.hasNature(SystemManager.ROBOT_PROJECT_NATURE_ID);
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError("Could not read project nature", e); //$NON-NLS-1$
 		}

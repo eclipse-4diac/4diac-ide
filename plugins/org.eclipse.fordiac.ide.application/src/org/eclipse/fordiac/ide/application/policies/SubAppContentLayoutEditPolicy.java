@@ -21,7 +21,6 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -55,10 +54,9 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 			if (!moveFrom.isEmpty()) {
 				final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
 				final List<FBNetworkElement> fbWithoutGroup = moveFrom.stream()
-						.map(ep -> (FBNetworkElement) ep.getModel()).filter(ep -> !ep.isInGroup())
-						.collect(Collectors.toList());
+						.map(ep -> (FBNetworkElement) ep.getModel()).filter(ep -> !ep.isInGroup()).toList();
 				final List<FBNetworkElement> fbWithGroup = moveFrom.stream().map(ep -> (FBNetworkElement) ep.getModel())
-						.filter(FBNetworkElement::isInGroup).collect(Collectors.toList());
+						.filter(FBNetworkElement::isInGroup).toList();
 
 				if (!fbWithoutGroup.isEmpty()) {
 					cmd.add(new MoveElementsFromSubAppCommand(fbWithoutGroup,
@@ -119,8 +117,7 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 	private List<? extends EditPart> collectAddToElements(final List<? extends EditPart> editParts) {
 		final EObject outerFBN = getParentModel().eContainer();
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
-				.filter(ep -> outerFBN.equals(((FBNetworkElement) ep.getModel()).getFbNetwork()))
-				.collect(Collectors.toList());
+				.filter(ep -> outerFBN.equals(((FBNetworkElement) ep.getModel()).getFbNetwork())).toList();
 	}
 
 }

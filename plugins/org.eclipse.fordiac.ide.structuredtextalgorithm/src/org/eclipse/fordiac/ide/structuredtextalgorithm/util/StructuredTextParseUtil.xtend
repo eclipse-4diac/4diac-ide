@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.util
 
 import java.util.Collection
 import java.util.List
+import java.util.Set
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet
@@ -30,7 +31,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector
 import org.eclipse.xtext.ParserRule
+import org.eclipse.xtext.naming.IQualifiedNameConverter
 import org.eclipse.xtext.parser.IParseResult
 import org.eclipse.xtext.parser.IParser
 import org.eclipse.xtext.resource.IResourceFactory
@@ -101,19 +104,19 @@ class StructuredTextParseUtil {
 			rootASTElement as STAlgorithmSource
 	}
 
-	def static void validate(String expression, URI uri, INamedElement expectedType, LibraryElement type,
+	def static STInitializerExpressionSource validate(String expression, URI uri, INamedElement expectedType, LibraryElement type,
 		Collection<? extends EObject> additionalContent, List<Issue> issues) {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		expression.parse(parser.grammarAccess.STInitializerExpressionSourceRule, uri, expectedType, type,
-			additionalContent, issues)
+			additionalContent, issues).rootASTElement as STInitializerExpressionSource
 	}
 
-	def static void validateType(VarDeclaration decl, List<Issue> issues) {
+	def static STTypeDeclaration validateType(VarDeclaration decl, List<Issue> issues) {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		// use context from FB type since the type declaration is in the context of the FB type (and not an instance)
 		val typeVariable = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name) ?: decl
 		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, typeVariable?.eResource?.URI, null,
-			typeVariable.getContainerOfType(LibraryElement), null, issues)
+			typeVariable.getContainerOfType(LibraryElement), null, issues).rootASTElement as STTypeDeclaration
 	}
 
 	def static STExpressionSource parse(String expression, INamedElement expectedType, LibraryElement type,
@@ -145,7 +148,7 @@ class StructuredTextParseUtil {
 		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, typeVariable?.eResource?.URI, null, decl.name,
 			typeVariable.getContainerOfType(LibraryElement), null, errors, warnings, infos)?.rootASTElement as STTypeDeclaration
 	}
-
+	
 	def private static IParseResult parse(String text, ParserRule entryPoint, String name, LibraryElement type,
 		List<String> errors, List<String> warnings, List<String> infos) {
 		text.parse(entryPoint, type?.eResource?.URI, null, name, type, null, errors, warnings, infos)
@@ -186,5 +189,10 @@ class StructuredTextParseUtil {
 				STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
 				STCoreUtil.OPTION_EXPECTED_TYPE -> expectedType
 			})
+	}
+	
+	def static Set<String> collectUsedTypes(EObject object) {
+		val qualifiedNameConverter = SERVICE_PROVIDER_FBT.get(IQualifiedNameConverter)
+		SERVICE_PROVIDER_FBT.get(STCoreTypeUsageCollector).collectUsedTypes(object).map[qualifiedNameConverter.toString(it)].toSet
 	}
 }

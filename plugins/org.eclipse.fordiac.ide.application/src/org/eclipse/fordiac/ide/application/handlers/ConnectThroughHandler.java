@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -57,23 +56,19 @@ public class ConnectThroughHandler extends AbstractHandler {
 	}
 
 	private static List<IInterfaceElement> checkSelection(final ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structSel = (IStructuredSelection) selection;
-			@SuppressWarnings("unchecked")
-			final
-			List<IInterfaceElement> ieList = (List<IInterfaceElement>) structSel.toList().stream()
-			.filter(InterfaceEditPartForFBNetwork.class::isInstance)
-			.map(val -> ((InterfaceEditPartForFBNetwork) val).getModel()).collect(Collectors.toList());
-
-			ieList.sort((arg0, arg1) -> {
-				if (arg0.isIsInput() && !arg1.isIsInput()) {
-					return -1;
-				}
-				if (arg1.isIsInput() && !arg0.isIsInput()) {
-					return 1;
-				}
-				return 0;
-			});
+		if (selection instanceof final IStructuredSelection structSel) {
+			final List<IInterfaceElement> ieList = ((List<?>) structSel.toList()).stream()
+					.filter(InterfaceEditPartForFBNetwork.class::isInstance)
+					.map(InterfaceEditPartForFBNetwork.class::cast).map(InterfaceEditPartForFBNetwork::getModel)
+					.sorted((arg0, arg1) -> {
+						if (arg0.isIsInput() && !arg1.isIsInput()) {
+							return -1;
+						}
+						if (arg1.isIsInput() && !arg0.isIsInput()) {
+							return 1;
+						}
+						return 0;
+					}).toList();
 			if ((ieList.size() == 2) && (checkSelectedIEs(ieList.get(0), ieList.get(1)))) {
 				return ieList;
 			}

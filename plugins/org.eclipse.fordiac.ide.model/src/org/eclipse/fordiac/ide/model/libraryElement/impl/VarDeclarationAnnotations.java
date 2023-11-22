@@ -24,11 +24,27 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.jdt.annotation.NonNull;
 
 public class VarDeclarationAnnotations {
+
+	public static boolean validateMultipleInputConnections(@NonNull final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (varDeclaration.isIsInput() && varDeclaration.getInputConnections().size() > 1) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.VAR_DECLARATION__VALIDATE_MULTIPLE_INPUT_CONNECTIONS,
+						Messages.VarDeclarationAnnotations_MultipleInputConnections,
+						FordiacMarkerHelper.getDiagnosticData(varDeclaration,
+								LibraryElementPackage.Literals.IINTERFACE_ELEMENT__INPUT_CONNECTIONS)));
+			}
+			return false;
+		}
+		return true;
+	}
 
 	public static boolean validateVarInOutSourceTypeIsWellDefined(@NonNull final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {

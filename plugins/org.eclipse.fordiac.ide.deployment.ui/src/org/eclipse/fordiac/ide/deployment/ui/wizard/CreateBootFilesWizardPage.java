@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
@@ -117,7 +116,7 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 	private List<AutomationSystem> getSelectedSystems() {
 		final SystemManager manager = SystemManager.INSTANCE;
 		return ((List<IFile>) getSelectedResources()).stream().filter(SystemManager::isSystemFile)
-				.map(manager::getSystem).filter(Objects::nonNull).collect(Collectors.toList());
+				.map(manager::getSystem).filter(Objects::nonNull).toList();
 	}
 
 	@Override
@@ -179,16 +178,15 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 		return dcc.getDirectory();
 	}
 
-
 	private void checkSelectedElements() {
 		// first expand all selected elements
 		for (final Object obj : selection.toArray()) {
 			if (obj instanceof AutomationSystem) {
 				expandSystem(obj);
-			} else if (obj instanceof Device) {
-				expandDevice((Device) obj);
-			} else if (obj instanceof Resource) {
-				expandResource((Resource) obj);
+			} else if (obj instanceof final Device dev) {
+				expandDevice(dev);
+			} else if (obj instanceof final Resource res) {
+				expandResource(res);
 			}
 		}
 
@@ -221,10 +219,10 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 			if (SystemManager.isSystemFile(obj)) {
 				selectedASFiles.add((IFile) obj);
 			}
-			if (obj instanceof EObject) {
-				final EObject root = EcoreUtil.getRootContainer((EObject) obj);
-				if (root instanceof LibraryElement) {
-					selectedASFiles.add(((LibraryElement) root).getTypeEntry().getFile());
+			if (obj instanceof final EObject eo) {
+				final EObject root = EcoreUtil.getRootContainer(eo);
+				if (root instanceof final LibraryElement libEl) {
+					selectedASFiles.add(libEl.getTypeEntry().getFile());
 				}
 			}
 		});

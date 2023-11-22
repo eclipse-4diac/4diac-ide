@@ -38,6 +38,10 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
@@ -70,7 +74,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
-		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
+		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart, AnnotableGraphicalEditPart {
 	private int mouseState;
 	private static int minWidth = -1;
 	private static int maxWidth = -1;
@@ -211,7 +215,6 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 				setLabelAlignment(PositionConstants.RIGHT);
 				setTextAlignment(PositionConstants.RIGHT);
 			}
-			setToolTip(new ToolTipFigure(getModel()));
 
 			if (isAdapter()) {
 				// this mouse listener acquires the current mouse state including the modifier
@@ -262,7 +265,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		}
 
 		@Override
-		// Copied code from Label class, changed size calculation via subStringTextSize rather than TextSize.
+		// Copied code from Label class, changed size calculation via subStringTextSize
+		// rather than TextSize.
 		public Dimension getPreferredSize(final int wHint, final int hHint) {
 			if (prefSize == null) {
 				prefSize = calculateLabelSize(getSubStringTextSize());
@@ -297,7 +301,9 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	@Override
 	protected IFigure createFigure() {
-		return new InterfaceFigure();
+		final InterfaceFigure figure = new InterfaceFigure();
+		figure.setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
+		return figure;
 	}
 
 	@Override
@@ -522,7 +528,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	private void updateSourcePinAdapter() {
 		if (sourcePin != getSourcePin()) {
-			// the source pin has changed remove the adapters from the old source ping and add to the new
+			// the source pin has changed remove the adapters from the old source ping and
+			// add to the new
 			removeSourcePinAdapter();
 			addSourcePinAdapter();
 		}
@@ -559,6 +566,12 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 			return Integer.parseInt(attribute.getValue());
 		}
 		return 0;
+	}
+
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event);
+		getFigure().setToolTip(new ToolTipFigure(getModel(), event.getModel()));
 	}
 
 }

@@ -81,7 +81,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 
 		provider = new ChangeableListDataProvider<>(new FBColumnAccessor(this));
 		final DataLayer dataLayer = new DataLayer(provider);
-		dataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(provider));
+		dataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(provider, this::getAnnotationModel));
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
 				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,
 				new TypeSelectionButton(this::getTypeLibrary, FBTypeSelectionContentProvider.INSTANCE,

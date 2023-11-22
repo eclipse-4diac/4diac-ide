@@ -15,24 +15,24 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import javax.xml.stream.XMLStreamException;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
@@ -43,6 +43,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
@@ -244,16 +245,16 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	}
 
 	private LibraryElement loadType() {
-		final CommonElementImporter importer = getImporter();
-		importer.loadElement();
-		final LibraryElement retval = importer.getElement();
-
-		if (null == retval) {
-			FordiacLogHelper.logError("Error loading type: " + getFile().getName()); //$NON-NLS-1$
-		} else {
+		try {
+			final CommonElementImporter importer = getImporter();
+			importer.loadElement();
+			final LibraryElement retval = importer.getElement();
 			retval.setTypeEntry(this);
+			return retval;
+		} catch (IOException | XMLStreamException | TypeImportException e) {
+			FordiacLogHelper.logWarning("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
+			return null;
 		}
-		return retval;
 	}
 
 	protected abstract CommonElementImporter getImporter();
@@ -269,32 +270,17 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	}
 
 	@Override
-	public void save() {
+	public void save(final IProgressMonitor monitor) throws CoreException {
 		final AbstractTypeExporter exporter = getExporter();
 
 		if (null != exporter) {
 			final InputStream fileContent = exporter.getFileContent();
 			if (fileContent != null) {
-				final WorkspaceJob job = new WorkspaceJob("Save type file: " + getFile().getName()) {
-					@Override
-					public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-						try {
-							try (fileContent) {
-								writeToFile(fileContent, monitor);
-							} catch (final CoreException e) {
-								FordiacLogHelper.logError(e.getMessage(), e);
-							}
-						} catch (final Exception e) {
-							FordiacLogHelper.logError(e.getMessage(), e);
-						}
-						return Status.OK_STATUS;
-					}
-				};
-				job.setUser(false);
-				job.setSystem(true);
-				job.setPriority(Job.SHORT);
-				job.setRule(getRuleScope());
-				job.schedule();
+				try (fileContent) {
+					writeToFile(fileContent, monitor);
+				} catch (final IOException e) {
+					throw new CoreException(Status.error(e.getMessage(), e));
+				}
 			}
 		}
 	}
