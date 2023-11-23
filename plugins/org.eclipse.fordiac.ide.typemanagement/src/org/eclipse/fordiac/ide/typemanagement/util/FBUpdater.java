@@ -74,10 +74,11 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static Command createUpdatePinInTypeDeclarationCommand(final Collection<FBType> types,
-			final DataTypeEntry dataTypeEntry, final String oldName) {
+	public static Command createUpdatePinInTypeDeclarationCommand(final List<FBType> types,
+			final List<DataTypeEntry> dataTypeEntries, final String oldName) {
 		final List<Command> commands = new ArrayList<>();
-		types.forEach(type -> commands.add(createUpdatePinInTypeDeclarationCommand(type, dataTypeEntry, oldName)));
+		types.forEach(type -> commands
+				.add(createUpdatePinInTypeDeclarationCommand(type, dataTypeEntries.get(types.indexOf(type)), oldName)));
 		Command cmd = new CompoundCommand();
 		for (final Command subCmd : commands) {
 			cmd = cmd.chain(subCmd);
@@ -91,11 +92,12 @@ public final class FBUpdater {
 				: new UpdatePinInTypeDeclarationCommand(type, dataTypeEntry, oldName);
 	}
 
-	public static Command createStructManipulatorsUpdateCommand(final Collection<StructManipulator> muxes,
-			final DataTypeEntry dataTypeEntry) {
+	public static Command createStructManipulatorsUpdateCommand(final List<StructManipulator> muxes,
+			final List<DataTypeEntry> dataTypeEntries) {
 		final List<Command> commands = new ArrayList<>();
 		muxes.stream().forEach(mux -> {
-			final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
+			final StructuredType structuredType = (StructuredType) dataTypeEntries.get(muxes.indexOf(mux))
+					.getTypeEditable();
 			final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(mux));
 
 			if (rootContainer instanceof final AutomationSystem autoSys) {

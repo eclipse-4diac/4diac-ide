@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi - added functionality to update nested DataTypes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search.dialog;
 
@@ -80,9 +81,11 @@ public class FBUpdateDialog extends MessageDialog {
 	private final Set<INamedElement> collectedElements;
 	private static TreeViewer treeViewer;
 	private final Map<String, Set<INamedElement>> children = new HashMap<>();
+	private HashMap<INamedElement, DataTypeEntry> inputSet = new HashMap<>();
 	private ColumnLabelProvider labelElement;
 	private ColumnLabelProvider labelPath;
 	private ColumnLabelProvider labelType;
+	private ColumnLabelProvider labelDataType;
 
 	public FBUpdateDialog(final Shell parentShell, final String dialogTitle, final Image dialogTitleImage,
 			final String dialogMessage, final int dialogImageType, final String[] dialogButtonLabels,
@@ -97,6 +100,19 @@ public class FBUpdateDialog extends MessageDialog {
 		return collectedElements;
 	}
 
+	public DataTypeEntry getDataTypeOfElement(final Object element) {
+		if (element instanceof final INamedElement iNamedElement && inputSet.containsKey(iNamedElement)) {
+			return inputSet.get(iNamedElement);
+		}
+		return null;
+	}
+
+	public <T> List<DataTypeEntry> getDataTypeOfElementList(final List<T> elements) {
+		final List<DataTypeEntry> dataTypeEntries = new ArrayList<>();
+		elements.stream().forEach(e -> dataTypeEntries.add(getDataTypeOfElement(e)));
+		return dataTypeEntries;
+	}
+
 	@Override
 	protected Control createCustomArea(final Composite parent) {
 		parent.setLayout(new GridLayout(NUMBER_OF_COLLUMNS, true));
@@ -104,38 +120,44 @@ public class FBUpdateDialog extends MessageDialog {
 		final Composite searchResArea = WidgetFactory.composite(NONE).create(parent);
 		searchResArea.setLayout(new GridLayout(1, true));
 		searchResArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		final Set<INamedElement> result = createInputSet();
+		final HashMap<INamedElement, DataTypeEntry> result = createInputSet(dataTypeEntry);
 		if (result.isEmpty()) {
 			// No results - display just the info
 			final Label warningLabel = LabelFactory.newLabel(NONE).create(searchResArea);
 			warningLabel.setText("No additional function blocks or types have been affected by this change!"); //$NON-NLS-1$
 		} else {
+			inputSet = result;
 			createfilterButtons(parent);
 
 			treeViewer = createTreeViewer(searchResArea);
 			configureTableViewer(treeViewer);
-			treeViewer.setInput(result.toArray());
+			treeViewer.setInput(result.keySet());
 			GridLayoutFactory.fillDefaults().generateLayout(searchResArea);
 			changeSelectionState(treeViewer.getTree(), true); // check all elements per default
 		}
 		return parent;
 	}
 
-	protected Set<INamedElement> createInputSet() {
-		final Set<INamedElement> inputElements = new HashSet<>();
+	protected HashMap<INamedElement, DataTypeEntry> createInputSet(final DataTypeEntry inputDataTypeEntry) {
+		final HashMap<INamedElement, DataTypeEntry> inputElementsSet = new HashMap<>();
+
 		// find SubAppTypes
 		InstanceSearch search = StructDataTypeSearch
-				.createStructInterfaceSearch((StructuredType) dataTypeEntry.getTypeEditable());
+				.createStructInterfaceSearch((StructuredType) inputDataTypeEntry.getTypeEditable());
 		// add types to input
-		inputElements.addAll(search.performTypeLibBlockSearch(dataTypeEntry.getTypeLibrary()).stream()
-				.filter(FBType.class::isInstance).toList());
+		search.performTypeLibBlockSearch(inputDataTypeEntry.getTypeLibrary()).stream().filter(FBType.class::isInstance)
+				.forEach(fb -> inputElementsSet.put(fb, inputDataTypeEntry));
 		// initiate map with types
-		inputElements.stream().forEach(st -> children.put(st.getName(), new HashSet<>()));
+		inputElementsSet.keySet().stream().forEach(st -> children.put(st.getName(), new HashSet<>()));
+
 		// add typed subapp instances as children
-		InstanceSearch.performSearch(new FBInstanceSearch(dataTypeEntry)).stream()
-				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).forEach(s -> {
+		InstanceSearch.performSearch(new FBInstanceSearch(inputDataTypeEntry)).stream()
+				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
+				.filter(fb -> fb instanceof final StructManipulator structmanipulator
+						&& structmanipulator.getStructType().equals(dataTypeEntry.getTypeEditable()))
+				.forEach(s -> {
 					if (s instanceof StructManipulator || (s instanceof final SubApp subApp && !subApp.isTyped())) {
-						inputElements.add(s);
+						inputElementsSet.put(s, inputDataTypeEntry);
 					} else if (!(s instanceof ErrorMarkerFBNElement)) {
 						try {
 							children.get(s.getTypeName()).add(s);
@@ -148,13 +170,21 @@ public class FBUpdateDialog extends MessageDialog {
 					}
 				});
 		// add structmanipulators and untyped subapps to input
-		inputElements.addAll(InstanceSearch.performSearch(
-				StructDataTypeSearch.createStructMemberSearch((StructuredType) dataTypeEntry.getTypeEditable()),
-				new StructManipulatorSearch(dataTypeEntry)));
+		InstanceSearch
+				.performSearch(
+						StructDataTypeSearch
+								.createStructMemberSearch((StructuredType) inputDataTypeEntry.getTypeEditable()),
+						new StructManipulatorSearch(inputDataTypeEntry))
+				.forEach(st -> inputElementsSet.put(st, inputDataTypeEntry));
+
 		// add StructuredTypes
-		search = StructDataTypeSearch.createStructMemberSearch((StructuredType) dataTypeEntry.getTypeEditable());
-		inputElements.addAll(search.searchStructuredTypes(dataTypeEntry.getTypeLibrary()));
-		return inputElements;
+		search = StructDataTypeSearch.createStructMemberSearch((StructuredType) inputDataTypeEntry.getTypeEditable());
+		final List<StructuredType> stTypes = search.searchStructuredTypes(inputDataTypeEntry.getTypeLibrary()).stream()
+				.map(StructuredType.class::cast).toList();
+		stTypes.forEach(st -> inputElementsSet.put(st, (DataTypeEntry) st.getTypeEntry()));
+		stTypes.forEach(st -> inputElementsSet.putAll(createInputSet((DataTypeEntry) st.getTypeEntry())));
+
+		return inputElementsSet;
 	}
 
 	protected void createfilterButtons(final Composite parent) {
@@ -203,6 +233,15 @@ public class FBUpdateDialog extends MessageDialog {
 				}
 				return element.getClass().getSimpleName();
 
+			}
+		};
+		this.labelDataType = new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (getDataTypeOfElement(element) != null) {
+					return getDataTypeOfElement(element).getTypeEditable().getName();
+				}
+				return element.getClass().getSimpleName();
 			}
 		};
 	}
@@ -344,6 +383,12 @@ public class FBUpdateDialog extends MessageDialog {
 		colType.setLabelProvider(labelType);
 		colType.getColumn().addSelectionListener(sortListener);
 
+		// DataType name column
+		final TreeViewerColumn colDataType = new TreeViewerColumn(viewer, SWT.LEAD);
+		colDataType.getColumn().setText(FordiacMessages.DataType);
+		colDataType.setLabelProvider(labelDataType);
+		colDataType.getColumn().addSelectionListener(sortListener);
+
 		viewer.setComparator(new ViewerComparator() {
 			@Override
 			public int compare(final Viewer viewer, final Object e1, final Object e2) {
@@ -359,6 +404,9 @@ public class FBUpdateDialog extends MessageDialog {
 				} else if (sortCol.equals(colType.getColumn())) {
 					s1 = labelType.getText(e1);
 					s2 = labelType.getText(e2);
+				} else if (sortCol.equals(colDataType.getColumn())) {
+					s1 = labelDataType.getText(e1);
+					s2 = labelDataType.getText(e2);
 				}
 				return table.getSortDirection() == SWT.DOWN ? s1.compareTo(s2) : s2.compareTo(s1);
 			}
@@ -402,6 +450,7 @@ public class FBUpdateDialog extends MessageDialog {
 	protected TableLayout createTableLayout() {
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(CHECK_BOX_COL_WIDTH, true));
+		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
