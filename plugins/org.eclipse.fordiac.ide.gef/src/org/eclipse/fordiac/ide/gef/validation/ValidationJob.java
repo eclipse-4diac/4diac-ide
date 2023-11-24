@@ -71,7 +71,7 @@ public class ValidationJob extends UIJob {
 		queue.drainTo(queued);
 		final List<EObject> filtered = EcoreUtil.filterDescendants(queued);
 		try {
-			final CancelableDiagnostician diagnostician = new CancelableDiagnostician(monitorFor(monitor));
+			final CancelableDiagnostician diagnostician = new VariableDiagnostician(monitorFor(monitor));
 			final List<Diagnostic> diagnostics = filtered.stream().map(diagnostician::validate).toList();
 			updateAnnotations(diagnostics, monitor);
 		} catch (final OperationCanceledException e) {
