@@ -107,7 +107,7 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof final VarDeclaration varEntry) {
-			cmd.add(new InsertVariableCommand(getType().getInternalVars(), varEntry, index));
+			cmd.add(new InsertVariableCommand(getType(), getType().getInternalVars(), varEntry, index));
 		}
 	}
 

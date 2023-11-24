@@ -17,8 +17,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -29,14 +34,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public final class ChangeNameCommand extends Command implements ConnectionLayoutTagger {
+public final class ChangeNameCommand extends Command implements ConnectionLayoutTagger, ScopedCommand {
 	private final INamedElement element;
 	private final String name;
 	private String oldName;
 	private final CompoundCommand additionalCommands = new CompoundCommand();
 
 	private ChangeNameCommand(final INamedElement element, final String name) {
-		this.element = element;
+		this.element = Objects.requireNonNull(element);
 		this.name = name;
 	}
 
@@ -119,5 +124,18 @@ public final class ChangeNameCommand extends Command implements ConnectionLayout
 
 	public CompoundCommand getAdditionalCommands() {
 		return additionalCommands;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		// changed name affects all siblings in named container
+		EObject container = element;
+		do {
+			container = container.eContainer();
+			if (container instanceof final INamedElement namedContainer) {
+				return Set.of(namedContainer);
+			}
+		} while (container != null);
+		return Set.of(element);
 	}
 }

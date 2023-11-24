@@ -18,7 +18,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -26,7 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 
-public class CreateAttributeCommand extends CreationCommand {
+public class CreateAttributeCommand extends CreationCommand implements ScopedCommand {
 	private final ConfigurableObject configurableObject;
 	private Attribute attribute;
 
@@ -40,7 +45,7 @@ public class CreateAttributeCommand extends CreationCommand {
 
 	private CreateAttributeCommand(final ConfigurableObject configurableObject, final String name, final String comment,
 			final DataType dataType, final String value, final int index) {
-		this.configurableObject = configurableObject;
+		this.configurableObject = Objects.requireNonNull(configurableObject);
 		this.name = name;
 		this.comment = comment;
 		this.dataType = dataType;
@@ -70,11 +75,6 @@ public class CreateAttributeCommand extends CreationCommand {
 	}
 
 	@Override
-	public boolean canExecute() {
-		return null != configurableObject;
-	}
-
-	@Override
 	public void execute() {
 		attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 		attribute.setName(name);
@@ -98,5 +98,10 @@ public class CreateAttributeCommand extends CreationCommand {
 	@Override
 	public Object getCreatedElement() {
 		return attribute;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(configurableObject);
 	}
 }

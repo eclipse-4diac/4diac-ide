@@ -13,14 +13,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.insert;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.gef.commands.Command;
 
-public class InsertAlgorithmCommand extends Command {
+public class InsertAlgorithmCommand extends Command implements ScopedCommand {
 
 	private final BasicFBType fbType;
 	private STAlgorithm newAlgorithm;
@@ -28,8 +33,8 @@ public class InsertAlgorithmCommand extends Command {
 	private final int index;
 
 	public InsertAlgorithmCommand(final BasicFBType fbType, final Algorithm oldAlgorithm, final int index) {
-		this.fbType = fbType;
-		this.oldAlgorithm = oldAlgorithm;
+		this.fbType = Objects.requireNonNull(fbType);
+		this.oldAlgorithm = Objects.requireNonNull(oldAlgorithm);
 		this.index = index;
 	}
 
@@ -53,4 +58,8 @@ public class InsertAlgorithmCommand extends Command {
 		fbType.getCallables().add(index, newAlgorithm);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(fbType);
+	}
 }

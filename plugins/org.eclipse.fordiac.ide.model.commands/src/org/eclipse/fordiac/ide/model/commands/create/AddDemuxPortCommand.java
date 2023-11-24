@@ -19,9 +19,13 @@ import static org.eclipse.fordiac.ide.model.LibraryElementTags.VARIABLE_SEPARATO
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -31,7 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
-public class AddDemuxPortCommand extends Command {
+public class AddDemuxPortCommand extends Command implements ScopedCommand {
 
 	private Demultiplexer type;
 	private final String oldVisibleChildren;
@@ -43,8 +47,8 @@ public class AddDemuxPortCommand extends Command {
 	private final CheckableStructTreeNode node;
 
 	public AddDemuxPortCommand(final Demultiplexer type, final CheckableStructTreeNode node) {
-		this.node = node;
-		this.type = type;
+		this.node = Objects.requireNonNull(node);
+		this.type = Objects.requireNonNull(type);
 		this.varName = node.getPinName();
 		this.oldVisibleChildren = node.getTree().getRoot().visibleToString();
 	}
@@ -114,5 +118,13 @@ public class AddDemuxPortCommand extends Command {
 
 	public Demultiplexer getType() {
 		return type;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (type.getFbNetwork() != null) {
+			return Set.of(type.getFbNetwork());
+		}
+		return Set.of(type);
 	}
 }

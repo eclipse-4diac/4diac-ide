@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.application.commands;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -28,6 +29,7 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.actions.CopyPasteData;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -58,7 +60,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.graphics.Point;
 
 /** The Class PasteCommand. */
-public class PasteCommand extends Command {
+public class PasteCommand extends Command implements ScopedCommand {
 
 	private static final int DEFAULT_DELTA = 20;
 	private final CopyPasteData copyPasteData;
@@ -389,4 +391,11 @@ public class PasteCommand extends Command {
 		});
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (dstFBNetwork != null) {
+			return Set.of(dstFBNetwork);
+		}
+		return Set.of();
+	}
 }

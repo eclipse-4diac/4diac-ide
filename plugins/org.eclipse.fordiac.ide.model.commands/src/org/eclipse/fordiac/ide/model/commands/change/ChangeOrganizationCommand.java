@@ -16,25 +16,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.gef.commands.Command;
 
 /**
  * The Class ChangeOrganizationCommand.
  */
-public class ChangeOrganizationCommand extends Command {
+public class ChangeOrganizationCommand extends Command implements ScopedCommand {
 
-	private VersionInfo versionInfo;
+	private final VersionInfo versionInfo;
 
 	/** The new ApplicationDomain value. */
-	private String newOrganization;
+	private final String newOrganization;
 
 	/** The old ApplicationDomain value. */
 	private String oldOrganization;
 
 	public ChangeOrganizationCommand(final VersionInfo versionInfo, final String newOrganization) {
-		super();
-		this.versionInfo = versionInfo;
+		this.versionInfo = Objects.requireNonNull(versionInfo);
 		this.newOrganization = (newOrganization == null) ? "" : newOrganization; //$NON-NLS-1$
 	}
 
@@ -69,4 +73,8 @@ public class ChangeOrganizationCommand extends Command {
 		versionInfo.setOrganization(newOrganization);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(versionInfo);
+	}
 }

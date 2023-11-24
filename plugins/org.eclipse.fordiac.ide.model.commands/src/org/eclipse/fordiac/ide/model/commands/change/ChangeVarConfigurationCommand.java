@@ -13,16 +13,21 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
-public class ChangeVarConfigurationCommand extends Command {
+public class ChangeVarConfigurationCommand extends Command implements ScopedCommand {
 
 	private final VarDeclaration varDeclaration;
 	private final boolean config;
 
 	public ChangeVarConfigurationCommand(final VarDeclaration varDeclaration, final boolean config) {
-		this.varDeclaration = varDeclaration;
+		this.varDeclaration = Objects.requireNonNull(varDeclaration);
 		this.config = config;
 	}
 
@@ -41,4 +46,8 @@ public class ChangeVarConfigurationCommand extends Command {
 		varDeclaration.setVarConfig(!config);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(varDeclaration);
+	}
 }

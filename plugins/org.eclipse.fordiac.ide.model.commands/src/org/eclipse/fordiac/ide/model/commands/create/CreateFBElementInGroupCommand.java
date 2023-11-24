@@ -12,25 +12,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 
-public class CreateFBElementInGroupCommand extends Command {
+public class CreateFBElementInGroupCommand extends Command implements ScopedCommand {
 
 	private final Group group;
 	private final AbstractCreateFBNetworkElementCommand elementCreateCmd;
 
-	public CreateFBElementInGroupCommand(final TypeEntry typeEntry, final Group group, final int x,
-			final int y) {
-		this.group = group;
+	public CreateFBElementInGroupCommand(final TypeEntry typeEntry, final Group group, final int x, final int y) {
+		this.group = Objects.requireNonNull(group);
 		elementCreateCmd = AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, group.getFbNetwork(), x,
 				y);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return getGroup() != null && getElementCreateCmd() != null && getElementCreateCmd().canExecute();
+		return getElementCreateCmd() != null && getElementCreateCmd().canExecute();
 	}
 
 	@Override
@@ -59,4 +63,8 @@ public class CreateFBElementInGroupCommand extends Command {
 		return group;
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(group);
+	}
 }

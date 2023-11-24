@@ -15,6 +15,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteMappedCommunicationFbCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -24,26 +28,26 @@ import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.Command;
 
-public class UnmapCommand extends Command {
+public class UnmapCommand extends Command implements ScopedCommand {
 	private final Mapping mapping;
 	private final AutomationSystem system;
 
-	private DeleteFBNetworkElementCommand deleteMappedFBCmd;
+	private final DeleteFBNetworkElementCommand deleteMappedFBCmd;
 
 	public UnmapCommand(final FBNetworkElement element) {
 		super(FordiacMessages.Unmap);
 		mapping = element.getMapping();
 		system = mapping.getAutomationSystem();
+		deleteMappedFBCmd = getDeleteMappedFbCommand(mapping.getTo());
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (mapping != null) && (null != system);
+		return system != null;
 	}
 
 	@Override
 	public void execute() {
-		deleteMappedFBCmd = getDeleteMappedFbCommand(mapping.getTo());
 		mapping.getFrom().setMapping(null);
 		mapping.getTo().setMapping(null);
 		system.getMapping().remove(mapping);
@@ -70,10 +74,15 @@ public class UnmapCommand extends Command {
 		return deleteMappedFBCmd.getFBNetworkElement();
 	}
 
-	private DeleteFBNetworkElementCommand getDeleteMappedFbCommand(final FBNetworkElement fb) {
-		if (fb instanceof CommunicationChannel) {
-			return new DeleteMappedCommunicationFbCommand((CommunicationChannel) fb);
+	private static DeleteFBNetworkElementCommand getDeleteMappedFbCommand(final FBNetworkElement fb) {
+		if (fb instanceof final CommunicationChannel channel) {
+			return new DeleteMappedCommunicationFbCommand(channel);
 		}
-		return new DeleteFBNetworkElementCommand(mapping.getTo());
+		return new DeleteFBNetworkElementCommand(fb);
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(mapping.getFrom(), mapping.getTo().getResource());
 	}
 }

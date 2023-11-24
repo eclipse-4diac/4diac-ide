@@ -12,20 +12,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 
-public abstract class AbstractChangeInterfaceElementCommand extends Command {
+public abstract class AbstractChangeInterfaceElementCommand extends Command implements ScopedCommand {
 	private final IInterfaceElement interfaceElement;
 
 	protected AbstractChangeInterfaceElementCommand(final IInterfaceElement interfaceElement) {
-		this.interfaceElement = interfaceElement;
-	}
-
-	@Override
-	public boolean canExecute() {
-		return interfaceElement != null;
+		this.interfaceElement = Objects.requireNonNull(interfaceElement);
 	}
 
 	@Override
@@ -57,5 +57,10 @@ public abstract class AbstractChangeInterfaceElementCommand extends Command {
 		return interfaceElement.getFBNetworkElement() instanceof SubApp
 				&& (!interfaceElement.getInputConnections().isEmpty()
 						|| !interfaceElement.getOutputConnections().isEmpty());
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(interfaceElement);
 	}
 }

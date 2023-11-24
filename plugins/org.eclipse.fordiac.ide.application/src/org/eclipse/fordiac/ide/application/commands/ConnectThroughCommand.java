@@ -12,7 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
+import java.util.Objects;
+import java.util.Set;
+
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
@@ -26,17 +31,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class ConnectThroughCommand extends Command {
+public class ConnectThroughCommand extends Command implements ScopedCommand {
 
 	private final IInterfaceElement input;
 	private final IInterfaceElement output;
+	private final FBNetwork parent;
 
 	private final CompoundCommand deleteConnectionCommands = new CompoundCommand();
 	private final CompoundCommand createConnectionCommands = new CompoundCommand();
 
-	public ConnectThroughCommand(IInterfaceElement input, IInterfaceElement output) {
-		this.input = input;
-		this.output = output;
+	public ConnectThroughCommand(final IInterfaceElement input, final IInterfaceElement output) {
+		this.input = Objects.requireNonNull(input);
+		this.output = Objects.requireNonNull(output);
+		parent = Objects.requireNonNull(input.getFBNetworkElement().getFbNetwork());
 	}
 
 	@Override
@@ -62,14 +69,14 @@ public class ConnectThroughCommand extends Command {
 		createConnectionCommands.redo();
 	}
 
-	private void createDeleteCommands(EList<Connection> connectionList) {
+	private void createDeleteCommands(final EList<Connection> connectionList) {
 		connectionList.forEach(con -> deleteConnectionCommands.add(new DeleteConnectionCommand(con)));
 	}
 
 	private void createCreateCommands() {
-		for (Connection con : input.getInputConnections()) {
+		for (final Connection con : input.getInputConnections()) {
 			output.getOutputConnections().forEach(outconn -> {
-				AbstractConnectionCreateCommand cmd = getConnectionCreateCommand(input);
+				final AbstractConnectionCreateCommand cmd = getConnectionCreateCommand();
 				cmd.setSource(con.getSource());
 				cmd.setDestination(outconn.getDestination());
 				createConnectionCommands.add(cmd);
@@ -77,14 +84,18 @@ public class ConnectThroughCommand extends Command {
 		}
 	}
 
-	private static AbstractConnectionCreateCommand getConnectionCreateCommand(IInterfaceElement port) {
-		FBNetwork parent = port.getFBNetworkElement().getFbNetwork();
-		if (port instanceof Event) {
+	private AbstractConnectionCreateCommand getConnectionCreateCommand() {
+		if (input instanceof Event) {
 			return new EventConnectionCreateCommand(parent);
 		}
-		if (port instanceof AdapterDeclaration) {
+		if (input instanceof AdapterDeclaration) {
 			return new AdapterConnectionCreateCommand(parent);
 		}
 		return new DataConnectionCreateCommand(parent);
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(parent);
 	}
 }

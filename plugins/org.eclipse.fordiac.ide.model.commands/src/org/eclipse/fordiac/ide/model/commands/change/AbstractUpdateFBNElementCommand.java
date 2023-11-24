@@ -20,9 +20,13 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
@@ -51,7 +55,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public abstract class AbstractUpdateFBNElementCommand extends Command implements ConnectionLayoutTagger {
+public abstract class AbstractUpdateFBNElementCommand extends Command implements ConnectionLayoutTagger, ScopedCommand {
 	// Helper data class for storing connection data of resource connection as the
 	// connections are lost during the unmapping process
 	protected static class ConnData {
@@ -79,8 +83,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	protected TypeEntry entry;
 
 	protected AbstractUpdateFBNElementCommand(final FBNetworkElement oldElement) {
-		this.oldElement = oldElement;
-		this.network = this.oldElement.getFbNetwork();
+		this.oldElement = Objects.requireNonNull(oldElement);
+		this.network = Objects.requireNonNull(this.oldElement.getFbNetwork(), "Element not in a network"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -452,5 +456,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	public FBNetworkElement getNewElement() {
 		return newElement;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(network);
 	}
 }

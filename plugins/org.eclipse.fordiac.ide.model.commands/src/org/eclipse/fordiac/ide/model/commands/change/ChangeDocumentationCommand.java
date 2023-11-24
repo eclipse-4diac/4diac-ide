@@ -12,17 +12,22 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.gef.commands.Command;
 
-public class ChangeDocumentationCommand extends Command {
+public class ChangeDocumentationCommand extends Command implements ScopedCommand {
 
 	private final FBType type;
 	private final String newDocumentation;
 	private String oldDocumentation;
 
 	public ChangeDocumentationCommand(final FBType type, final String newDocumenation) {
-		this.type = type;
+		this.type = Objects.requireNonNull(type);
 		this.newDocumentation = (null == newDocumenation) ? "" : newDocumenation; //$NON-NLS-1$
 	}
 
@@ -46,5 +51,8 @@ public class ChangeDocumentationCommand extends Command {
 		type.setDocumentation(newValue);
 	}
 
-
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(type);
+	}
 }

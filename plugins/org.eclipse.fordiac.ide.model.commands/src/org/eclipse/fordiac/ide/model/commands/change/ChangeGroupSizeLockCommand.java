@@ -12,23 +12,23 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.gef.commands.Command;
 
-public class ChangeGroupSizeLockCommand extends Command {
+public class ChangeGroupSizeLockCommand extends Command implements ScopedCommand {
 
 	private final Group model;
 	private final boolean value;
 	private boolean oldValue;
 
 	public ChangeGroupSizeLockCommand(final Group model, final boolean value) {
-		this.model = model;
+		this.model = Objects.requireNonNull(model);
 		this.value = value;
-	}
-
-	@Override
-	public boolean canExecute() {
-		return model != null;
 	}
 
 	@Override
@@ -44,8 +44,13 @@ public class ChangeGroupSizeLockCommand extends Command {
 
 	@Override
 	public void undo() {
-		// don't just toggle for undo, otherwise writing the same value would result in wrong undos
+		// don't just toggle for undo, otherwise writing the same value would result in
+		// wrong undos
 		model.setLocked(oldValue);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(model);
+	}
 }

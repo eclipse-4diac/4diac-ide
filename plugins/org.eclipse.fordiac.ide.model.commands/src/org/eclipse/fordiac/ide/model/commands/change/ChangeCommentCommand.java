@@ -13,20 +13,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.commands.Command;
 
 /**
  * The Class ChangeCommentCommand.
  */
-public class ChangeCommentCommand extends Command {
+public class ChangeCommentCommand extends Command implements ScopedCommand {
 
 	/** The interface element. */
-	private INamedElement interfaceElement;
+	private final INamedElement namedElement;
 
 	/** The comment. */
-	private String comment;
+	private final String comment;
 
 	/** The old comment. */
 	private String oldComment;
@@ -34,40 +38,13 @@ public class ChangeCommentCommand extends Command {
 	/**
 	 * Instantiates a new change comment command.
 	 *
-	 * @param interfaceElement the interface element
-	 * @param comment          the comment
+	 * @param namedElement the named element
+	 * @param comment      the comment
 	 */
-	public ChangeCommentCommand(final INamedElement interfaceElement, final String comment) {
-		this.interfaceElement = interfaceElement;
+	public ChangeCommentCommand(final INamedElement namedElement, final String comment) {
+		this.namedElement = Objects.requireNonNull(namedElement);
 		// comment must not be null, ensure a correct value in all cases
 		this.comment = (comment != null) ? comment : ""; //$NON-NLS-1$
-	}
-
-	/**
-	 * Sets the interface element.
-	 *
-	 * @param interfaceElement the new interface element
-	 */
-	public void setInterfaceElement(final IInterfaceElement interfaceElement) {
-		this.interfaceElement = interfaceElement;
-	}
-
-	/**
-	 * Gets the comment.
-	 *
-	 * @return the comment
-	 */
-	public String getComment() {
-		return comment;
-	}
-
-	/**
-	 * Sets the comment.
-	 *
-	 * @param comment the new comment
-	 */
-	public void setComment(final String comment) {
-		this.comment = comment;
 	}
 
 	/*
@@ -77,8 +54,8 @@ public class ChangeCommentCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		oldComment = interfaceElement.getComment();
-		interfaceElement.setComment(comment);
+		oldComment = namedElement.getComment();
+		namedElement.setComment(comment);
 	}
 
 	/*
@@ -88,7 +65,7 @@ public class ChangeCommentCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		interfaceElement.setComment(oldComment);
+		namedElement.setComment(oldComment);
 
 	}
 
@@ -99,7 +76,11 @@ public class ChangeCommentCommand extends Command {
 	 */
 	@Override
 	public void redo() {
-		interfaceElement.setComment(comment);
+		namedElement.setComment(comment);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(namedElement);
+	}
 }

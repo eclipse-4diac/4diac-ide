@@ -18,7 +18,6 @@ import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.ValueCommandTestBase;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -28,12 +27,6 @@ public class ChangeArraySizeCommandTest extends ValueCommandTestBase {
 		state.setCommand(new ChangeArraySizeCommand(state.getVar(), newSize));
 
 		return commandExecution(state);
-	}
-
-	private static State executeCommandOnNull(final State state) {
-		state.setCommand(new ChangeArraySizeCommand(null, "123"));//$NON-NLS-1$
-
-		return disabledCommandExecution(state);
 	}
 
 	private static void verifyState(final State state, final TestFunction t, final String newSize) {
@@ -47,41 +40,25 @@ public class ChangeArraySizeCommandTest extends ValueCommandTestBase {
 				new ExecutionDescription<>("Change Array Size to empty String", // //$NON-NLS-1$
 						(final State s) -> executeCommand(s, ""), // //$NON-NLS-1$
 						(final State s, final State o, final TestFunction t) -> verifyState(s, t, "") // //$NON-NLS-1$
-						), //
+				), //
 				new ExecutionDescription<>("Change Array Size to 2", // //$NON-NLS-1$
 						(final State s) -> executeCommand(s, "2"), // //$NON-NLS-1$
 						(final State s, final State o, final TestFunction t) -> verifyState(s, t, "2") // //$NON-NLS-1$
-						), //
+				), //
 				new ExecutionDescription<>("Change Array Size to 0", // //$NON-NLS-1$
 						(final State s) -> executeCommand(s, "0"), // //$NON-NLS-1$
 						(final State s, final State o, final TestFunction t) -> verifyState(s, t, "0") // //$NON-NLS-1$
-						), //
+				), //
 				new ExecutionDescription<>("Change Array Size to -1", // //$NON-NLS-1$
 						(final State s) -> executeCommand(s, "-1"), // //$NON-NLS-1$
 						(final State s, final State o, final TestFunction t) -> verifyState(s, t, "-1") // //$NON-NLS-1$
-						), //
+				), //
 				new ExecutionDescription<>("Change Array Size to abc", // //$NON-NLS-1$
 						(final State s) -> executeCommand(s, "abc"), // //$NON-NLS-1$
 						(final State s, final State o, final TestFunction t) -> verifyState(s, t, "abc") // //$NON-NLS-1$
-						));
+				));
 
-		final Collection<Arguments> unexecutable = describeCommand("Start from default values", // //$NON-NLS-1$
-				State::new, //
-				(StateVerifier<State>) ChangeArraySizeCommandTest::verifyDefaultInitialValues, //
-				List.of(new ExecutionDescription<>("Unexecutable case: variable is null", // //$NON-NLS-1$
-						ChangeArraySizeCommandTest::executeCommandOnNull, //
-						CommandTestBase::verifyNothing //
-						) //
-						), //
-				CommandTestBase::disabledUndoCommand, //
-				CommandTestBase::disabledRedoCommand //
-				);
-
-		final Collection<Arguments> commands = createCommands(executionDescriptions);
-
-		commands.addAll(unexecutable);
-
-		return commands;
+		return createCommands(executionDescriptions);
 	}
 
 }

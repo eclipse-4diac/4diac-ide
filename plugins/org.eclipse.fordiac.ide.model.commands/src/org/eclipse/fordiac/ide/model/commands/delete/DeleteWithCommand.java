@@ -12,26 +12,30 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.gef.commands.Command;
 
-public class DeleteWithCommand extends Command {
+public class DeleteWithCommand extends Command implements ScopedCommand {
 	private final With with;
-	private VarDeclaration oldVarDecl;
-	private Event event;
+	private final VarDeclaration oldVarDecl;
+	private final Event event;
 
 	public DeleteWithCommand(final With with) {
-		this.with = with;
+		this.with = Objects.requireNonNull(with);
+		event = (Event) with.eContainer();
+		oldVarDecl = with.getVariables();
 	}
 
 	@Override
 	public void execute() {
-		event = (Event) with.eContainer();
-		oldVarDecl = with.getVariables();
-		with.setVariables(null);
-		event.getWith().remove(with);
+		redo();
 	}
 
 	@Override
@@ -46,4 +50,11 @@ public class DeleteWithCommand extends Command {
 		event.getWith().remove(with);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (event != null && oldVarDecl != null) {
+			return Set.of(event, oldVarDecl);
+		}
+		return Set.of();
+	}
 }

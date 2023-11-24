@@ -14,22 +14,17 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
-import org.eclipse.gef.commands.Command;
 
 /**
  * The Class ChangeCompilerVendorCommand.
  */
-public class ChangeCompilerVendorCommand extends Command {
-
-	/** The new Compiler value. */
-	private final Compiler compiler;
+public class ChangeCompilerVendorCommand extends AbstractChangeCompilerCommand {
 
 	private final String newVendor;
 	private String oldVendor;
 
 	public ChangeCompilerVendorCommand(final Compiler compiler, final String newVendor) {
-		super();
-		this.compiler = compiler;
+		super(compiler);
 		this.newVendor = (null == newVendor) ? "" : newVendor; //$NON-NLS-1$
 	}
 
@@ -40,7 +35,7 @@ public class ChangeCompilerVendorCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		oldVendor = compiler.getVendor();
+		oldVendor = getCompiler().getVendor();
 		redo();
 	}
 
@@ -51,7 +46,7 @@ public class ChangeCompilerVendorCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		compiler.setVendor(oldVendor);
+		getCompiler().setVendor(oldVendor);
 	}
 
 	/*
@@ -61,7 +56,7 @@ public class ChangeCompilerVendorCommand extends Command {
 	 */
 	@Override
 	public void redo() {
-		compiler.setVendor(newVendor);
+		getCompiler().setVendor(newVendor);
 	}
 
 }

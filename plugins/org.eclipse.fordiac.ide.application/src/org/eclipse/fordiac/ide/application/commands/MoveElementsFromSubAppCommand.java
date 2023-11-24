@@ -28,7 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
@@ -51,7 +53,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.graphics.Point;
 
-public class MoveElementsFromSubAppCommand extends Command {
+public class MoveElementsFromSubAppCommand extends Command implements ScopedCommand {
 
 	protected final SubApp sourceSubApp;
 	private Point destination;
@@ -354,5 +356,13 @@ public class MoveElementsFromSubAppCommand extends Command {
 
 	protected void setDestination(final Point destination) {
 		this.destination = destination;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (sourceSubApp != null && destinationNetwork != null) {
+			return Set.of(sourceSubApp, destinationNetwork);
+		}
+		return Set.of();
 	}
 }

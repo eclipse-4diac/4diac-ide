@@ -14,26 +14,30 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.gef.commands.Command;
 
-public class CopyElementsToGroupCommand extends Command {
+public class CopyElementsToGroupCommand extends Command implements ScopedCommand {
 
 	private final Group targetGroup;
 	private final PasteCommand pasteCommand;
 	private AddElementsToGroup addElements;
 	private final List<FBNetworkElement> elementsToAdd = new ArrayList<>();
-	private Point offset;
+	private final Point offset;
 
 	public CopyElementsToGroupCommand(final Group targetGroup, final PasteCommand pasteCommand, final Point offset) {
-		this.targetGroup = targetGroup;
-		this.pasteCommand = pasteCommand;
-		this.offset = offset;
+		this.targetGroup = Objects.requireNonNull(targetGroup);
+		this.pasteCommand = Objects.requireNonNull(pasteCommand);
+		this.offset = Objects.requireNonNull(offset);
 	}
 
 	@Override
@@ -69,9 +73,8 @@ public class CopyElementsToGroupCommand extends Command {
 		return offset;
 	}
 
-	public void setOffset(final Point offset) {
-		this.offset = offset;
-
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(targetGroup);
 	}
-
 }

@@ -28,26 +28,32 @@ public class ChangePackageNameCommand extends ChangeCompilerInfoCommand {
 		this.newName = newName;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Command#execute() */
+	 * @see org.eclipse.gef.commands.Command#execute()
+	 */
 	@Override
 	public void execute() {
 		oldName = getCompilerInfo().getPackageName();
 		getCompilerInfo().setPackageName(newName);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Command#undo() */
+	 * @see org.eclipse.gef.commands.Command#undo()
+	 */
 	@Override
 	public void undo() {
 		getCompilerInfo().setPackageName(oldName);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Command#redo() */
+	 * @see org.eclipse.gef.commands.Command#redo()
+	 */
 	@Override
 	public void redo() {
 		getCompilerInfo().setPackageName(newName);

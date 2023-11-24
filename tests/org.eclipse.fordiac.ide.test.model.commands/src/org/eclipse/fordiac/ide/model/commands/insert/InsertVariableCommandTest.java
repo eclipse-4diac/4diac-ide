@@ -38,7 +38,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 	private static State executeCommandVar1(final State state) {
 		final VarDeclaration varDec = createTestVarDec("first"); //$NON-NLS-1$
 		state.setVarDec(varDec);
-		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 0));
+		state.setCommand(new InsertVariableCommand(state.getLibraryElement(), state.getList(), varDec, 0));
 
 		return commandExecution(state);
 	}
@@ -47,7 +47,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 	private static State executeCommandVar2(final State state) {
 		final VarDeclaration varDec = createTestVarDec("second"); //$NON-NLS-1$
 		state.setVarDec(varDec);
-		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 0));
+		state.setCommand(new InsertVariableCommand(state.getLibraryElement(), state.getList(), varDec, 0));
 
 		return commandExecution(state);
 	}
@@ -56,7 +56,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 	private static State executeCommandVar3(final State state) {
 		final VarDeclaration varDec = createTestVarDec("third"); //$NON-NLS-1$
 		state.setVarDec(varDec);
-		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 1));
+		state.setCommand(new InsertVariableCommand(state.getLibraryElement(), state.getList(), varDec, 1));
 
 		return commandExecution(state);
 	}
@@ -65,12 +65,13 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 	private static State executeCommandVar4(final State state) {
 		final VarDeclaration varDec = createTestVarDec("fourth"); //$NON-NLS-1$
 		state.setVarDec(varDec);
-		state.setCommand(new InsertVariableCommand(state.getList(), varDec, 3));
+		state.setCommand(new InsertVariableCommand(state.getLibraryElement(), state.getList(), varDec, 3));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyStateVarWithIndex(final State state, final State oldState, final TestFunction t, final int index) {
+	private static void verifyStateVarWithIndex(final State state, final State oldState, final TestFunction t,
+			final int index) {
 		t.test(!state.getList().isEmpty());
 		t.test(state.getList().size(), (oldState.getList().size() + 1));
 		validateVarDeclaration(state.getList().get(index), state.getVarDec(), t);
@@ -78,7 +79,10 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 
 	private static void validateVarDeclaration(final VarDeclaration newVar, final VarDeclaration oldVar,
 			final TestFunction t) {
-		/* can not check the name because if it is already taken a unique one will be generated */
+		/*
+		 * can not check the name because if it is already taken a unique one will be
+		 * generated
+		 */
 		t.test(newVar.getType().getName(), oldVar.getType().getName());
 		t.test(newVar.getComment(), oldVar.getComment());
 		t.test(getArraySize(newVar), getArraySize(oldVar));
@@ -110,20 +114,20 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 				new ExecutionDescription<>("Insert an internal variable into an empty list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar1, //
 						InsertVariableCommandTest::verifyStateVar1 //
-						), //
+				), //
 				new ExecutionDescription<>("Insert an internal variable at the beginning of the list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar2, //
 						InsertVariableCommandTest::verifyStateVar2 //
-						), //
+				), //
 				new ExecutionDescription<>("Add an internal variable in the middle of the list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar3, //
 						InsertVariableCommandTest::verifyStateVar3 //
-						), //
+				), //
 				new ExecutionDescription<>("Add an internal variable at the end of the list", //$NON-NLS-1$
 						InsertVariableCommandTest::executeCommandVar4, //
 						InsertVariableCommandTest::verifyStateVar4 //
-						) //
-				);
+				) //
+		);
 
 		return createCommands(executionDescriptions);
 	}

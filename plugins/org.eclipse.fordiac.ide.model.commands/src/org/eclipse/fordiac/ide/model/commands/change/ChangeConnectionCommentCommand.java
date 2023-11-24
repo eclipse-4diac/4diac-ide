@@ -15,13 +15,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.gef.commands.Command;
 
 /**
  * The Class ChangeCommentCommand.
  */
-public class ChangeConnectionCommentCommand extends Command {
+public class ChangeConnectionCommentCommand extends Command implements ScopedCommand {
 
 	/** The interface element. */
 	private final Connection connection;
@@ -31,16 +36,18 @@ public class ChangeConnectionCommentCommand extends Command {
 	/** The old comment. */
 	private String oldComment;
 
-	/** Instantiates a new change connection comment command.
+	/**
+	 * Instantiates a new change connection comment command.
 	 *
-	 * @param connection the connection element for which the comment should be changed
-	 * @param comment    the comment */
+	 * @param connection the connection element for which the comment should be
+	 *                   changed
+	 * @param comment    the comment
+	 */
 	public ChangeConnectionCommentCommand(final Connection connection, final String comment) {
-		this.connection = connection;
+		this.connection = Objects.requireNonNull(connection);
 		// comment must not be null, ensure a correct value in all cases
 		this.newComment = (comment != null) ? comment : ""; //$NON-NLS-1$
 	}
-
 
 	/**
 	 * Gets the comment.
@@ -50,7 +57,6 @@ public class ChangeConnectionCommentCommand extends Command {
 	public String getComment() {
 		return newComment;
 	}
-
 
 	@Override
 	public void execute() {
@@ -69,4 +75,8 @@ public class ChangeConnectionCommentCommand extends Command {
 		connection.setComment(newComment);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(connection);
+	}
 }

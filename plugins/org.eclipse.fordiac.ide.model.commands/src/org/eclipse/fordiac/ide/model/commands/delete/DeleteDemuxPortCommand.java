@@ -15,10 +15,14 @@ import static org.eclipse.fordiac.ide.model.LibraryElementTags.DEMUX_VISIBLE_CHI
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -28,7 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.commands.Command;
 
-public class DeleteDemuxPortCommand extends Command {
+public class DeleteDemuxPortCommand extends Command implements ScopedCommand {
 
 	private Demultiplexer type;
 	private final IInterfaceElement variable;
@@ -39,10 +43,10 @@ public class DeleteDemuxPortCommand extends Command {
 	private final CheckableStructTreeNode node;
 
 	public DeleteDemuxPortCommand(final Demultiplexer type, final CheckableStructTreeNode node) {
+		this.type = Objects.requireNonNull(type);
+		this.node = Objects.requireNonNull(node);
 		this.variable = type.getInterfaceElement(node.getPinName());
 		this.oldVisibleChildren = node.getTree().getRoot().visibleToString();
-		this.type = type;
-		this.node = node;
 	}
 
 	@Override
@@ -96,4 +100,11 @@ public class DeleteDemuxPortCommand extends Command {
 		return type;
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (type.getFbNetwork() != null) {
+			return Set.of(type.getFbNetwork());
+		}
+		return Set.of(type);
+	}
 }

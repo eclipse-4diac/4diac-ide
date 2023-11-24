@@ -123,7 +123,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof final FB fb) {
-			cmd.add(new InsertFBCommand(getType().getInternalFbs(), fb, index));
+			cmd.add(new InsertFBCommand(getType(), fb, index));
 		}
 
 	}

@@ -259,7 +259,7 @@ public class StructEditingComposite extends Composite
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof final VarDeclaration varEntry) {
-			cmd.add(new InsertVariableCommand(getType().getMemberVariables(), varEntry, index));
+			cmd.add(new InsertVariableCommand(getType(), getType().getMemberVariables(), varEntry, index));
 		}
 	}
 
