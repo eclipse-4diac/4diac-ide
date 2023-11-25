@@ -13,13 +13,11 @@
 package org.eclipse.fordiac.ide.model.eval.fb
 
 import java.util.Map
-import java.util.Queue
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
-import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.Method
 import org.eclipse.xtend.lib.annotations.Accessors
 
@@ -28,15 +26,6 @@ abstract class BaseFBEvaluator<T extends BaseFBType> extends FBEvaluator<T> {
 
 	new(T type, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		super(type, context, variables, parent)
-		algorithmEvaluators = type.algorithm.toInvertedMap [
-			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends Algorithm>, this.context,
-				emptySet, this)
-		]
-	}
-
-	@Deprecated(forRemoval=true)
-	new(T type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue, Evaluator parent) {
-		super(type, context, variables, queue, parent)
 		algorithmEvaluators = type.algorithm.toInvertedMap [
 			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends Algorithm>, this.context,
 				emptySet, this)

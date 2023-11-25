@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.fb
 
-import java.util.Queue
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
@@ -23,7 +22,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	@Accessors final T type
@@ -32,12 +30,6 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	new(T type, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		super(new FBVariable(CONTEXT_NAME, type, variables), parent)
 		this.type = type
-	}
-
-	@Deprecated(forRemoval=true)
-	new(T type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue, Evaluator parent) {
-		this(type, context, variables, parent)
-		this.eventQueue = new FBEvaluatorEventQueueAdapter(queue, type)
 	}
 
 	override evaluate() {
@@ -75,24 +67,6 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 		super.context as FBVariable
 	}
 
-	/**
-	 * Get the FB instance of this evaluator
-	 * 
-	 * @deprecated Use {@link #getContext() getContext()} instead
-	 */
-	@Deprecated(forRemoval=true)
-	def getInstance() { context }
-
-	/**
-	 * Get the FB instance of this evaluator
-	 * 
-	 * @deprecated Use {@link #getContext() getContext()} instead
-	 */
-	@Deprecated(forRemoval=true)
-	def getQueue() {
-		switch (queue : eventQueue) { FBEvaluatorEventQueueAdapter: queue.delegate }
-	}
-
 	override getSourceElement() {
 		this.type
 	}
@@ -110,24 +84,5 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	override reset(Iterable<Variable<?>> variables) {
 		context.value = new FBVariable(CONTEXT_NAME, type, variables).value
 		update(context.value.members.values)
-	}
-
-	@Deprecated(forRemoval=true)
-	@FinalFieldsConstructor
-	protected static class FBEvaluatorEventQueueAdapter implements FBEvaluatorEventQueue {
-		@Accessors final Queue<Event> delegate
-		@Accessors final FBType type
-
-		override receiveInputEvent() throws InterruptedException {
-			if(delegate.peek.applicable) delegate.poll else null
-		}
-
-		override sendOutputEvent(Event event) {
-			delegate.offer(event)
-		}
-
-		def protected boolean isApplicable(Event event) {
-			event?.eContainer?.eContainer == type && event.isInput
-		}
 	}
 }

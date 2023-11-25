@@ -36,9 +36,6 @@ interface EvaluatorFactory {
 
 		def EvaluatorFactory registerFactory(String variant, Class<?> sourceClass, EvaluatorFactory factory)
 		
-		@Deprecated(forRemoval=true)
-		def Map<Class<?>, EvaluatorFactory> getClassToFactoryMap()
-
 		def Map<String, Map<Class<?>, EvaluatorFactory>> getVariantClassToFactoryMap()
 
 		Registry INSTANCE = new EvaluatorFactoryRegistryImpl

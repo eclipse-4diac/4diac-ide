@@ -30,8 +30,4 @@ class EvaluatorFactoryRegistryImpl implements EvaluatorFactory.Registry {
 			new ConcurrentHashMap
 		].put(sourceClass, factory)
 	}
-
-	override Map<Class<?>, EvaluatorFactory> getClassToFactoryMap() {
-		variantClassToFactoryMap.computeIfAbsent(EvaluatorFactory.DEFAULT_VARIANT)[new ConcurrentHashMap]
-	}
 }
