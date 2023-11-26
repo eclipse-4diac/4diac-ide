@@ -16,6 +16,7 @@ import java.util.List
 import java.util.Map
 import java.util.NoSuchElementException
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
+import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
@@ -606,7 +607,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch Variable<?> evaluateVariable(STMultibitPartialExpression expr, Variable<?> receiver) {
-		new PartialVariable(receiver, expr.resultType as DataType,
+		new PartialVariable(receiver, expr.resultType as AnyBitType,
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
 	}
 
