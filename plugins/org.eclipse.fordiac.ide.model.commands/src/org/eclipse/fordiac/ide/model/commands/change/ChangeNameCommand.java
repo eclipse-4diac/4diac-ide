@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public final class ChangeNameCommand extends Command implements ConnectionLayoutTagger, ScopedCommand {
+public class ChangeNameCommand extends Command implements ConnectionLayoutTagger, ScopedCommand {
 	private final INamedElement element;
 	private final String name;
 	private String oldName;
@@ -56,13 +56,7 @@ public final class ChangeNameCommand extends Command implements ConnectionLayout
 					new ChangeNameCommand(subApp.getOpposite().getInterfaceElement(interfaceElement.getName()), name));
 		}
 		if (element instanceof final AdapterDeclaration adapterDeclaration) {
-			if (adapterDeclaration.getAdapterFB() != null) {
-				result.getAdditionalCommands().add(new ChangeNameCommand(adapterDeclaration.getAdapterFB(), name));
-			}
-			if (adapterDeclaration.getAdapterNetworkFB() != null) {
-				result.getAdditionalCommands()
-						.add(new ChangeNameCommand(adapterDeclaration.getAdapterNetworkFB(), name));
-			}
+			handleAdapterDeclarationRename(name, result, adapterDeclaration);
 		}
 		if (element instanceof final AdapterFB adapterFB) {
 			result.getAdditionalCommands().add(new ChangeNameCommand(adapterFB.getAdapterDecl(), name));
@@ -72,6 +66,23 @@ public final class ChangeNameCommand extends Command implements ConnectionLayout
 			result.getAdditionalCommands().add(ChangeAttributeDeclarationCommand.forName(attribute, name));
 		}
 		return result;
+	}
+
+	private static void handleAdapterDeclarationRename(final String name, final ChangeNameCommand result,
+			AdapterDeclaration adapterDeclaration) {
+		if (adapterDeclaration.getAdapterFB() != null) {
+			result.getAdditionalCommands().add(new ChangeNameCommand(adapterDeclaration.getAdapterFB(), name) {
+				@Override
+				public boolean canExecute() {
+					// we don't need and we can't do a name check as the parent is not an fbnetwork
+					return true;
+				}
+			});
+		}
+		if (adapterDeclaration.getAdapterNetworkFB() != null) {
+			result.getAdditionalCommands()
+					.add(new ChangeNameCommand(adapterDeclaration.getAdapterNetworkFB(), name));
+		}
 	}
 
 	@Override
