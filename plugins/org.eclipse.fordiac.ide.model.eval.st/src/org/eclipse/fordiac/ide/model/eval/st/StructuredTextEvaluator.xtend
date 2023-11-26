@@ -234,7 +234,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch void evaluateStatement(STExpression stmt) {
-		stmt.evaluateExpression
+		stmt.trap.evaluateExpression
 	}
 
 	def protected dispatch void evaluateStatement(STIfStatement stmt) {
@@ -343,7 +343,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch Value evaluateExpression(STAssignment expr) {
-		val value = expr.right.trap.evaluateExpression
+		val value = expr.right.evaluateExpression
 		expr.left.evaluateVariable.value = value
 		value
 	}
