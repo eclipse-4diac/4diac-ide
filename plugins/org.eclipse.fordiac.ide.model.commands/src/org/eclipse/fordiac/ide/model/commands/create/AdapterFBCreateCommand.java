@@ -22,13 +22,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
-public class AdapterFBCreateCommand extends FBCreateCommand {
+class AdapterFBCreateCommand extends FBCreateCommand {
+	final AdapterDeclaration adapterDecl;
 
-	public AdapterFBCreateCommand(final int x, final int y, final AdapterDeclaration adapterDecl, final FBType parent) {
+	AdapterFBCreateCommand(final int x, final int y, final AdapterDeclaration adapterDecl, final FBType parent) {
 		super(getFBNetwork(parent), LibraryElementFactory.eINSTANCE.createAdapterFB(), x, y);
+		this.adapterDecl = adapterDecl;
 		getAdapterFB().setTypeEntry(adapterDecl.getType().getTypeEntry());
 		getAdapterFB().setAdapterDecl(adapterDecl);
-		adapterDecl.setAdapterFB(getAdapterFB());
 	}
 
 	private AdapterFB getAdapterFB() {
@@ -41,8 +42,19 @@ public class AdapterFBCreateCommand extends FBCreateCommand {
 	}
 
 	@Override
+	public void execute() {
+		if (getFBNetwork() != null) {
+			// we are creating the adapter FB in a CFB we need to set the adapter network fb
+			// field here, nothing needs to be done in undo or redo
+			adapterDecl.setAdapterNetworkFB(getAdapterFB());
+		}
+		super.execute();
+	}
+
+	@Override
 	protected void checkName() {
-		// for adapters we already have a correct name and do not want to change that. Also for basics, simples, and
+		// for adapters we already have a correct name and do not want to change that.
+		// Also for basics, simples, and
 		// SIFBs we are not in an fbnetwork and name checking wouldn't even work.
 		getAdapterFB().setName(getAdapterFB().getAdapterDecl().getName());
 	}
