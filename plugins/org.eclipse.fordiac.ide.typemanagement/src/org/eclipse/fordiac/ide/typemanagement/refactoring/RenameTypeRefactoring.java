@@ -135,7 +135,7 @@ public class RenameTypeRefactoring extends Refactoring {
 		InstanceSearch search = StructDataTypeSearch
 				.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable());
 
-		final Set<INamedElement> allFBWithStruct = InstanceSearch.performSearch(
+		final Set<INamedElement> allFBWithStruct = InstanceSearch.performProjectSearch(typeEntry.getFile().getProject(),
 				StructDataTypeSearch.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable()),
 				StructDataTypeSearch.createStructInterfaceSearch((StructuredType) typeEntry.getTypeEditable()),
 				new FBInstanceSearch((DataTypeEntry) typeEntry));
@@ -172,7 +172,8 @@ public class RenameTypeRefactoring extends Refactoring {
 					.add(new RenameTypeChange(typeEntry, getNewName() + TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT));
 		}
 		final CompositeChange change = new CompositeChange(Messages.Refactoring_AffectedInstancesOfFB);
-		allFBs = InstanceSearch.performSearch(FBTypeSearch.createFBTypeSearch(type));
+		allFBs = InstanceSearch.performProjectSearch(typeEntry.getFile().getProject(),
+				FBTypeSearch.createFBTypeSearch(type));
 		change.add(new UpdateInstancesChange(allFBs.stream().map(FBNetworkElement.class::cast).toList(), typeEntry));
 		if (!allFBs.isEmpty()) {
 			parentChange.add(change);

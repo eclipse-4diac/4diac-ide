@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -151,7 +152,8 @@ public class FBUpdateDialog extends MessageDialog {
 		inputElementsSet.keySet().stream().forEach(st -> children.put(st.getName(), new HashSet<>()));
 
 		// add typed subapp instances as children
-		InstanceSearch.performSearch(new FBInstanceSearch(inputDataTypeEntry)).stream()
+		final IProject project = dataTypeEntry.getFile().getProject();
+		new FBInstanceSearch(dataTypeEntry).performProjectSearch(project).stream()
 				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
 				.filter(fb -> fb instanceof final StructManipulator structmanipulator
 						&& structmanipulator.getStructType().equals(dataTypeEntry.getTypeEditable()))
@@ -171,7 +173,7 @@ public class FBUpdateDialog extends MessageDialog {
 				});
 		// add structmanipulators and untyped subapps to input
 		InstanceSearch
-				.performSearch(
+				.performProjectSearch(project,
 						StructDataTypeSearch
 								.createStructMemberSearch((StructuredType) inputDataTypeEntry.getTypeEditable()),
 						new StructManipulatorSearch(inputDataTypeEntry))
