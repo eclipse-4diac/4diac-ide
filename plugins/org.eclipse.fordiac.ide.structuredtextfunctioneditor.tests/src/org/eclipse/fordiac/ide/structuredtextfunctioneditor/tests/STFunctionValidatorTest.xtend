@@ -1345,41 +1345,148 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
-	def void testValidArrayAccessOperator() {
+	def void testValidArrayAccess() {
 		'''
 			FUNCTION ArrayTestDeclarationTest
-				VAR
-					arrayTest : ARRAY [0 .. 10] OF REAL;
-				END_VAR
+			VAR
+				arrayTest : ARRAY [0 .. 10] OF REAL;
+			END_VAR
 			arrayTest[0] := arrayTest[1];
 			END_FUNCTION
 		'''.parse.assertNoErrors
 	}
 
 	@Test
-	def void testOutOfBoundsArrayAccessOperator() {
+	def void testValidStringAccess() {
 		'''
 			FUNCTION ArrayTestDeclarationTest
 				VAR
-					arrayTest : ARRAY [0 .. 10] OF REAL;
+					stringTest : STRING;
+					wstringTest : STRING;
 				END_VAR
-			arrayTest[0] := arrayTest[11];
+			stringTest[1] := stringTest[1];
+			wstringTest[1] := wstringTest[1];
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
-			STCoreValidator.ARRAY_INDEX_OUT_OF_BOUNDS, "Index 11 out of array dimension bounds [0..10]")
+		'''.parse.assertNoErrors
 	}
 
 	@Test
-	def void testTooManyIndicesArrayAccessOperator() {
+	def void testValidStringReturnVariableAccess() {
+		'''
+			FUNCTION ArrayTestDeclarationTest : STRING
+			ArrayTestDeclarationTest[1] := 'I';
+			END_FUNCTION
+		'''.parse.assertNoErrors
+		'''
+			FUNCTION ArrayTestDeclarationTest : WSTRING
+			ArrayTestDeclarationTest[1] := "I";
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidReceiverArrayAccess() {
 		'''
 			FUNCTION ArrayTestDeclarationTest
-				VAR
-					arrayTest : ARRAY [0 .. 10] OF REAL;
-				END_VAR
-			arrayTest[0] := arrayTest[1,1];
+			VAR
+				intTest : INT;
+			END_VAR
+			intTest := intTest[1];
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
+			STCoreValidator.ARRAY_ACCESS_RECEIVER_INVALID)
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				intTest : INT;
+			END_VAR
+			intTest := 2.0[1];
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
+			STCoreValidator.ARRAY_ACCESS_RECEIVER_INVALID)
+	}
+
+	@Test
+	def void testInvalidIndexTypeArrayAccess() {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [0 .. 10] OF REAL;
+			END_VAR
+			arrayTest[0] := arrayTest['abc'];
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES, "Cannot convert from STRING to ANY_INT")
+	}
+
+	@Test
+	def void testOutOfBoundsArrayAccess() {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [0 .. 10] OF REAL;
+			END_VAR
+			arrayTest[0] := arrayTest[-1];
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
+			STCoreValidator.ARRAY_INDEX_OUT_OF_BOUNDS, "Index -1 out of array dimension bounds 0..10")
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [0 .. 10] OF REAL;
+			END_VAR
+			arrayTest[0] := arrayTest[11];
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
+			STCoreValidator.ARRAY_INDEX_OUT_OF_BOUNDS, "Index 11 out of array dimension bounds 0..10")
+	}
+
+	@Test
+	def void testOutOfBoundsStringAccess() {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				stringTest : STRING;
+			END_VAR
+			stringTest[1] := stringTest[0];
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STArrayAccessExpression,
+			STCoreValidator.STRING_INDEX_OUT_OF_BOUNDS, "Index 0 out of bounds for STRING")
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				stringTest : STRING[10];
+			END_VAR
+			stringTest[1] := stringTest[11];
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STArrayAccessExpression,
+			STCoreValidator.STRING_INDEX_OUT_OF_BOUNDS, "Index 11 out of bounds for STRING[10]")
+	}
+
+	@Test
+	def void testTooManyIndicesArrayAccess() {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [0 .. 10] OF REAL;
+			END_VAR
+			arrayTest[1] := arrayTest[1,1];
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression, STCoreValidator.TOO_MANY_INDICES_GIVEN,
-			"Too many indices given, 2 indices given, but only 1 specified for the variable")
+			"Too many indices in subscript access: 2 indices given, but only 1 allowed for ARRAY [0..10] OF REAL")
+	}
+
+	@Test
+	def void testTooManyIndicesStringAccess() {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				stringTest : STRING;
+			END_VAR
+			stringTest[1] := stringTest[1,1];
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression, STCoreValidator.TOO_MANY_INDICES_GIVEN,
+			"Too many indices in subscript access: 2 indices given, but only 1 allowed for STRING")
 	}
 
 	@Test
@@ -1663,7 +1770,7 @@ class STFunctionValidatorTest {
 		'''.parse.assertError(STCorePackage.eINSTANCE.STExit, STCoreValidator.EXIT_NOT_IN_LOOP,
 			"EXIT statement is only valid inside a loop statement (FOR/WHILE/REPEAT)")
 	}
-	
+
 	@Test
 	def void testContinueNotInALoopIsAnError() {
 		'''

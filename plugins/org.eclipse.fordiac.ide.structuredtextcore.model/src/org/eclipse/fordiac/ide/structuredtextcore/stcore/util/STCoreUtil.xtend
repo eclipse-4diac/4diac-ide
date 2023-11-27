@@ -315,23 +315,23 @@ final class STCoreUtil {
 			STUnaryExpression case op.logical:
 				expectedType.equivalentAnyBitType
 			STBinaryExpression case op.arithmetic || op.range:
-				(expression === left ? right?.declaredResultType : left.declaredResultType).equivalentAnyNumType ?:
+				(expression === left ? right?.declaredResultType : left?.declaredResultType).equivalentAnyNumType ?:
 					expectedType.equivalentAnyNumType
 			STBinaryExpression case op.logical:
-				(expression === left ? right?.declaredResultType : left.declaredResultType).equivalentAnyBitType ?:
+				(expression === left ? right?.declaredResultType : left?.declaredResultType).equivalentAnyBitType ?:
 					expectedType.equivalentAnyBitType
 			STBinaryExpression case op.comparison:
-				expression === left ? right?.declaredResultType : left.declaredResultType
+				expression === left ? right?.declaredResultType : left?.declaredResultType
 			STAssignment:
-				expression === left ? right.declaredResultType : left.declaredResultType
+				expression === left ? right?.declaredResultType : left?.declaredResultType
 			STIfStatement,
 			STWhileStatement,
 			STRepeatStatement:
 				ElementaryTypes.BOOL
 			STForStatement:
-				expression === variable ? GenericTypes.ANY_INT : variable.resultType
+				expression === variable ? GenericTypes.ANY_INT : variable?.resultType
 			STCaseCases:
-				statement.selector.declaredResultType
+				statement.selector?.declaredResultType
 			STInitializerExpression:
 				expectedType
 			STArrayInitElement:
@@ -556,10 +556,13 @@ final class STCoreUtil {
 	}
 
 	def static int asConstantInt(STExpression expr) {
-		switch (expr) {
-			STNumericLiteral: (expr.value as BigInteger).intValueExact
-			default: throw new ArithmeticException("Not a constant integer")
+		if (expr instanceof STNumericLiteral) {
+			val value = expr.value
+			if (value instanceof BigInteger) {
+				return value.intValueExact
+			}
 		}
+		throw new ArithmeticException("Not a constant integer")
 	}
 
 	def static newSubrange(int lower, int upper) {

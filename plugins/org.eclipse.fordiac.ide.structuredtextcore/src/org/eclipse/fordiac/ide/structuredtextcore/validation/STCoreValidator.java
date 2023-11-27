@@ -38,11 +38,11 @@ import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isNumericValueValid;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isStringValueValid;
 
-import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EObject;
@@ -53,6 +53,7 @@ import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
@@ -156,7 +157,6 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String ARRAY_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "arrayIndexOutOfBounds"; //$NON-NLS-1$
 	public static final String TRUNCATED_LITERAL = ISSUE_CODE_PREFIX + "truncatedLiteral"; //$NON-NLS-1$
 	public static final String STRING_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "stringIndexOutOfBounds"; //$NON-NLS-1$
-	public static final String STRING_INDEX_ZERO_OR_LESS_INVALID = ISSUE_CODE_PREFIX + "stringIndexZeroOrLessInvalid"; //$NON-NLS-1$
 	public static final String RETURNED_TYPE_IS_VOID = ISSUE_CODE_PREFIX + "returnedTypeIsVoid"; //$NON-NLS-1$
 	public static final String LITERAL_REQUIRES_TYPE_SPECIFIER = ISSUE_CODE_PREFIX + "literalRequiresTypeSpecifier"; //$NON-NLS-1$
 	public static final String INSUFFICIENT_ARRAY_DIMENSIONS = ISSUE_CODE_PREFIX + "insufficientArrayDimensions"; //$NON-NLS-1$
@@ -254,119 +254,83 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	@Check
-	public void checkStringIndexInBounds(final STArrayAccessExpression accessExpression) {
-		final var type = accessExpression.getReceiver().getResultType();
-		if (type instanceof final AnyStringType anyStringType) {
-			final var indexExpressions = accessExpression.getIndex();
-			if (indexExpressions.size() > 1) {
-				// too many indices for a string
-				error(MessageFormat.format(Messages.STCoreValidator_TooManyIndicesGivenForStringAccess,
-						Integer.valueOf(indexExpressions.size())), accessExpression,
-						STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, TOO_MANY_INDICES_GIVEN);
-			} else if (indexExpressions.size() == 1 && indexExpressions.get(0) instanceof STNumericLiteral) {
-				final var maxLength = anyStringType.getMaxLength();
-				final var index = (BigInteger) ((STNumericLiteral) indexExpressions.get(0)).getValue();
-				if (anyStringType.isSetMaxLength() && index.compareTo(BigInteger.valueOf(maxLength)) > 0) {
-					warning(MessageFormat.format(Messages.STCoreValidator_StringIndexOutOfBounds, index,
-							Integer.valueOf(maxLength)), accessExpression,
-							STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, STRING_INDEX_OUT_OF_BOUNDS);
-				}
-				if (index.compareTo(BigInteger.ONE) < 0) {
-					// Index is invalid, as less than 1
-					warning(MessageFormat.format(Messages.STCoreValidator_StringIndexZeroOrLess, index),
-							accessExpression, STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX,
-							STRING_INDEX_ZERO_OR_LESS_INVALID);
-				}
-			}
-			// No index at all, so no check needed
-		}
-	}
-
-	@Check
-	public void checkArrayAccessDimensions(final STArrayAccessExpression accessExpression) {
-		final var feature = accessExpression.getReceiver() instanceof final STFeatureExpression featureExpression
-				? featureExpression.getFeature()
-				: null;
-		if (feature instanceof final STVarDeclaration varDeclaration) {
-			if (varDeclaration.isArray()) {
-				final var indexExpressions = accessExpression.getIndex();
-				final var indexCounts = varDeclaration.getCount().size(); // unknown array dimensions [*]
-				final var indexRanges = varDeclaration.getRanges().size();
-				final var declaredArrayDimensions = Math.max(indexCounts, indexRanges);
-				if (indexExpressions.size() > declaredArrayDimensions) {
-					for (int i = 0; i < indexExpressions.size() - declaredArrayDimensions; i++) {
-						error(MessageFormat.format(Messages.STCoreValidator_TooManyIndicesGiven,
-								Integer.valueOf(accessExpression.getIndex().size()),
-								Integer.valueOf(declaredArrayDimensions)), accessExpression,
-								STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, declaredArrayDimensions + i,
-								TOO_MANY_INDICES_GIVEN);
-					}
-				}
-			} else if (!(varDeclaration.getType() instanceof AnyStringType)) {
-				// not an array in the first place, but exclude ANY_STRING as they are allowed
-				// this type of access for chars
-				final var indexExpressions = accessExpression.getIndex();
-				for (int i = 0; i < indexExpressions.size(); i++) {
-					error(Messages.STCoreValidator_ArrayAccessInvalidOnNonArrayVariable,
-							STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, i, ARRAY_ACCESS_INVALID);
-				}
-			}
-		}
-	}
-
-	@Check
-	public void checkArrayAccessReceiverIsAVariable(final STArrayAccessExpression accessExpression) {
-		if (accessExpression.getReceiver() instanceof final STFeatureExpression featureExpression
-				&& !(featureExpression.getFeature() instanceof STVarDeclaration
-						|| featureExpression.getFeature() instanceof VarDeclaration)) {
+	public void checkArrayAccessExpression(final STArrayAccessExpression accessExpression) {
+		final INamedElement receiverType = accessExpression.getReceiver().getResultType();
+		if (receiverType instanceof final ArrayType arrayType) {
+			checkArrayAccessIndices(accessExpression, arrayType);
+		} else if (receiverType instanceof final AnyStringType stringType) {
+			checkStringAccessIndices(accessExpression, stringType);
+		} else {
 			error(Messages.STCoreValidator_ArrayAccessReceiverIsInvalid,
 					STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__RECEIVER, ARRAY_ACCESS_RECEIVER_INVALID);
 		}
-
 	}
 
-	@Check
-	public void checkArrayAccessIndices(final STArrayAccessExpression accessExpression) {
-		final var type = accessExpression.getReceiver().getResultType();
-
-		if (type instanceof final ArrayType arrayType) {
-			final var indexExpressions = accessExpression.getIndex();
-			for (int i = 0; i < indexExpressions.size(); i++) {
-				final STExpression expression = indexExpressions.get(i);
-				checkArrayIndexInArrayDimensionBounds(accessExpression, arrayType, i, expression);
-				checkArrayAccessIndexType(accessExpression, i, expression);
-			}
-		}
-	}
-
-	private void checkArrayIndexInArrayDimensionBounds(final STArrayAccessExpression accessExpression,
-			final ArrayType arrayType, final int i, final STExpression expression) {
-		if (expression instanceof final STNumericLiteral numericLiteral
-				&& numericLiteral.getResultType() instanceof AnyIntType && arrayType.getSubranges() != null
-				&& arrayType.getSubranges().size() > i) {
-			final var indexValue = (BigInteger) numericLiteral.getValue();
-
-			final var subrange = arrayType.getSubranges().get(i);
-			if (subrange.isSetLowerLimit() && subrange.isSetUpperLimit()) {
-				final BigInteger lowerBound = BigInteger.valueOf(subrange.getLowerLimit());
-				final BigInteger upperBound = BigInteger.valueOf(subrange.getUpperLimit());
-
-				if (indexValue.compareTo(lowerBound) < 0 || indexValue.compareTo(upperBound) > 0) {
-					error(MessageFormat.format(Messages.STCoreValidator_ArrayIndexOutOfBounds, indexValue, lowerBound,
-							upperBound), accessExpression, STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, i,
-							ARRAY_INDEX_OUT_OF_BOUNDS);
+	protected void checkArrayAccessIndices(final STArrayAccessExpression accessExpression,
+			final ArrayType receiverType) {
+		IntStream.range(0, accessExpression.getIndex().size()).forEachOrdered(index -> {
+			final STExpression indexExpression = accessExpression.getIndex().get(index);
+			final INamedElement resultType = indexExpression.getResultType();
+			checkTypeCompatibility(GenericTypes.ANY_INT, resultType,
+					STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index);
+			if (index < receiverType.getSubranges().size()) {
+				try {
+					final int indexValue = STCoreUtil.asConstantInt(indexExpression);
+					final Subrange subrange = receiverType.getSubranges().get(index);
+					if (isArrayIndexOutOfBounds(indexValue, subrange)) {
+						error(MessageFormat.format(Messages.STCoreValidator_ArrayIndexOutOfBounds,
+								Integer.valueOf(indexValue), Integer.valueOf(subrange.getLowerLimit()),
+								Integer.valueOf(subrange.getUpperLimit())),
+								STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index,
+								ARRAY_INDEX_OUT_OF_BOUNDS);
+					}
+				} catch (final ArithmeticException e) {
+					// ignore (non-constant index)
 				}
+			} else {
+				error(MessageFormat.format(Messages.STCoreValidator_TooManyIndicesGiven,
+						Integer.valueOf(accessExpression.getIndex().size()),
+						Integer.valueOf(receiverType.getSubranges().size()), receiverType.getName()),
+						STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index, TOO_MANY_INDICES_GIVEN);
 			}
-		}
+		});
 	}
 
-	private void checkArrayAccessIndexType(final STArrayAccessExpression accessExpression, final int i,
-			final STExpression expression) {
-		if (!(expression.getResultType() instanceof AnyIntType)) {
-			error(MessageFormat.format(Messages.STCoreValidator_IndexAccessTypeInvalid,
-					expression.getResultType().getName()), accessExpression,
-					STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, i, INDEX_RANGE_TYPE_INVALID);
-		}
+	protected static boolean isArrayIndexOutOfBounds(final int indexValue, final Subrange subrange) {
+		return (subrange.isSetLowerLimit() && indexValue < subrange.getLowerLimit())
+				|| (subrange.isSetUpperLimit() && indexValue > subrange.getUpperLimit());
+	}
+
+	protected void checkStringAccessIndices(final STArrayAccessExpression accessExpression,
+			final AnyStringType receiverType) {
+		IntStream.range(0, accessExpression.getIndex().size()).forEachOrdered(index -> {
+			final STExpression indexExpression = accessExpression.getIndex().get(index);
+			final INamedElement resultType = indexExpression.getResultType();
+			checkTypeCompatibility(GenericTypes.ANY_INT, resultType,
+					STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index);
+			if (index < 1) {
+				try {
+					final int indexValue = STCoreUtil.asConstantInt(indexExpression);
+					if (isStringIndexOutOfBounds(indexValue, receiverType)) {
+						warning(MessageFormat.format(Messages.STCoreValidator_StringIndexOutOfBounds,
+								Integer.valueOf(indexValue), receiverType.getName()),
+								STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index,
+								STRING_INDEX_OUT_OF_BOUNDS);
+					}
+				} catch (final ArithmeticException e) {
+					// ignore (non-constant index)
+				}
+			} else {
+				error(MessageFormat.format(Messages.STCoreValidator_TooManyIndicesGiven,
+						Integer.valueOf(accessExpression.getIndex().size()), Integer.valueOf(1),
+						receiverType.getName()), STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index,
+						TOO_MANY_INDICES_GIVEN);
+			}
+		});
+	}
+
+	protected static boolean isStringIndexOutOfBounds(final int indexValue, final AnyStringType receiverType) {
+		return indexValue < 1 || (receiverType.isSetMaxLength() && indexValue > receiverType.getMaxLength());
 	}
 
 	@Check
