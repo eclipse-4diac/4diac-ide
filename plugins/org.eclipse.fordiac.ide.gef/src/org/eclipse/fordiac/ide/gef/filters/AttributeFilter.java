@@ -13,6 +13,7 @@
 
 package org.eclipse.fordiac.ide.gef.filters;
 
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -29,17 +30,22 @@ public class AttributeFilter implements IFilter {
 	}
 
 	public static Object parseObject(final Object input) {
-		Object inputHelper = (input instanceof final EditPart editpart) ? editpart.getModel() : input;
+		if (input instanceof final EditPart editpart) {
+			final Object inputHelper = editpart.getModel();
 
-		// handle exception: interface elements of functions
-		if (inputHelper instanceof final IInterfaceElement interfaceElement
-				&& interfaceElement.eContainer() instanceof final InterfaceList interfaceList
-				&& interfaceList.eContainer() instanceof FunctionFBType) {
-			return null;
+			// handle exception: interface elements of functions
+			if (inputHelper instanceof final IInterfaceElement interfaceElement
+					&& interfaceElement.eContainer() instanceof final InterfaceList interfaceList
+					&& interfaceList.eContainer() instanceof FunctionFBType) {
+				return null;
+			}
+
+			return (inputHelper instanceof final FBNetwork fbNetwork) ? fbNetwork.eContainer() : inputHelper;
 		}
-
-		inputHelper = (inputHelper instanceof final FBNetwork fbNetwork) ? fbNetwork.eContainer() : inputHelper;
-
-		return inputHelper;
+		if (input instanceof final AutomationSystem automationSystem) {
+			// handle exception: SystemEditor
+			return automationSystem;
+		}
+		return null;
 	}
 }
