@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
@@ -29,11 +30,11 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfac
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -74,10 +75,11 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static Command createUpdatePinInTypeDeclarationCommand(final Collection<FBType> types,
-			final DataTypeEntry dataTypeEntry, final String oldName) {
+	public static Command createUpdatePinInTypeDeclarationCommand(final List<FBType> types,
+			final List<DataTypeEntry> dataTypeEntries, final String oldName) {
 		final List<Command> commands = new ArrayList<>();
-		types.forEach(type -> commands.add(createUpdatePinInTypeDeclarationCommand(type, dataTypeEntry, oldName)));
+		types.forEach(type -> commands
+				.add(createUpdatePinInTypeDeclarationCommand(type, dataTypeEntries.get(types.indexOf(type)), oldName)));
 		Command cmd = new CompoundCommand();
 		for (final Command subCmd : commands) {
 			cmd = cmd.chain(subCmd);
@@ -91,11 +93,12 @@ public final class FBUpdater {
 				: new UpdatePinInTypeDeclarationCommand(type, dataTypeEntry, oldName);
 	}
 
-	public static Command createStructManipulatorsUpdateCommand(final Collection<StructManipulator> muxes,
-			final DataTypeEntry dataTypeEntry) {
+	public static Command createStructManipulatorsUpdateCommand(final List<StructManipulator> muxes,
+			final List<DataTypeEntry> dataTypeEntries) {
 		final List<Command> commands = new ArrayList<>();
 		muxes.stream().forEach(mux -> {
-			final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
+			final StructuredType structuredType = (StructuredType) dataTypeEntries.get(muxes.indexOf(mux))
+					.getTypeEditable();
 			final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(mux));
 
 			if (rootContainer instanceof final AutomationSystem autoSys) {
@@ -118,12 +121,19 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static Command updateAllInstancesCommand(final FBNetwork fbNetwork, final Set<TypeEntry> typeEntries,
+	public static void updateAllInstances(final IProject project, final Set<TypeEntry> typeEntries,
+			final TypeLibrary typeLib) {
+		final Command cmd = collectUpdateInstanceCommands(project, typeEntries, typeLib);
+		executeCommand(cmd);
+	}
+
+	private static Command collectUpdateInstanceCommands(final IProject project, final Set<TypeEntry> typeEntries,
 			final TypeLibrary typeLib) {
 		final List<Command> commands = new ArrayList<>();
 		updatedElements = new HashSet<>();
-		fbNetwork.getNetworkElements().forEach(fbNetworkElement -> {
-			if (fbNetworkElement.getType() != null && fbNetworkElement instanceof final FB fb) {
+		final InstanceSearch instanceSearch = new InstanceSearch(FB.class::isInstance);
+		instanceSearch.performProjectSearch(project).forEach(namedElem -> {
+			if (namedElem instanceof final FB fb) {
 				typeEntries.forEach(typeEntry -> {
 					if (typeEntry.getFullTypeName().equalsIgnoreCase(fb.getFullTypeName())) {
 						commands.add(new UpdateFBTypeCommand(fb, typeLib.getFBTypeEntry(fb.getFullTypeName())));
@@ -139,7 +149,7 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static void executeCommand(final Command cmd) {
+	private static void executeCommand(final Command cmd) {
 		final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		if (editor == null) {
