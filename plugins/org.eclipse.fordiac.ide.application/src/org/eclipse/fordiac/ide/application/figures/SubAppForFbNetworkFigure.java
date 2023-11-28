@@ -156,7 +156,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	private void createExpandedInputs() {
 		expandedInputFigure = new Figure();
 		expandedInputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(expandedInputFigure, createInputLayoutData(), -1);
+		expandedMainFigure.add(expandedInputFigure, new GridData(SWT.BEGINNING, SWT.TOP, false, true), -1);
 		expandedInputFigure.add(getEventInputs(), createInputLayoutData(), -1);
 		expandedInputFigure.add(getDataInputs(), createInputLayoutData(), -1);
 		expandedInputFigure.add(getVarInOutInputs(), createInputLayoutData(), -1);
@@ -175,7 +175,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	private void createExpandedOutputs() {
 		expandedOutputFigure = new Figure();
 		expandedOutputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(expandedOutputFigure, createOutputLayoutData(), -1);
+		expandedMainFigure.add(expandedOutputFigure, new GridData(SWT.BEGINNING, SWT.TOP, false, true), -1);
 		expandedOutputFigure.add(getEventOutputs(), createOutputLayoutData(), -1);
 		expandedOutputFigure.add(getDataOutputs(), createOutputLayoutData(), -1);
 		expandedOutputFigure.add(getVarInOutOutputs(), createOutputLayoutData(), -1);
