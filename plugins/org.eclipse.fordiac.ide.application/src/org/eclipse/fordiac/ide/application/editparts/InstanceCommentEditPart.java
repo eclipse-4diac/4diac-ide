@@ -44,11 +44,10 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 	private class InstanceCommentRenameEditPolicy extends AbstractViewRenameEditPolicy {
 		@Override
 		protected Command getDirectEditCommand(final DirectEditRequest request) {
-			if (getHost() instanceof InstanceCommentEditPart) {
+			if (getHost() instanceof final InstanceCommentEditPart instanceCommentEditPart) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ChangeCommentCommand(((InstanceCommentEditPart) getHost()).getModel().getRefElement(),
-							str);
+					return new ChangeCommentCommand(instanceCommentEditPart.getModel().getRefElement(), str);
 				}
 			}
 			return null;

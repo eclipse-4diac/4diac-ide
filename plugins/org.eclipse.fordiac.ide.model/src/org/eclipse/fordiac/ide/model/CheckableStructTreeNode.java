@@ -26,7 +26,6 @@ public class CheckableStructTreeNode extends AbstractStructTreeNode {
 	private boolean isChecked = false;
 	private boolean isGrey = false;
 
-
 	CheckableStructTreeNode(final VarDeclaration memberVariable, final CheckableStructTreeNode structTreeNode,
 			final CheckableStructTree tree) {
 		super(memberVariable, structTreeNode, tree);
@@ -34,7 +33,6 @@ public class CheckableStructTreeNode extends AbstractStructTreeNode {
 
 	// this is used by the tree to create the root
 	CheckableStructTreeNode(final CheckableStructTree tree) {
-		super();
 		setTree(tree);
 	}
 
@@ -45,10 +43,10 @@ public class CheckableStructTreeNode extends AbstractStructTreeNode {
 
 	@Override
 	public CheckableStructTreeNode addChild(final EObject memberVariable) {
-		if (memberVariable instanceof VarDeclaration) {
-			final CheckableStructTreeNode treeNode = new CheckableStructTreeNode((VarDeclaration) memberVariable, this, getTree());
+		if (memberVariable instanceof final VarDeclaration vardeclaration) {
+			final CheckableStructTreeNode treeNode = new CheckableStructTreeNode(vardeclaration, this, getTree());
 			getChildren().add(treeNode);
-			return treeNode;			
+			return treeNode;
 		}
 		return null;
 	}
@@ -158,7 +156,6 @@ public class CheckableStructTreeNode extends AbstractStructTreeNode {
 		return find(getTree().getRoot(), name);
 	}
 
-
 	private static void serializeTreeToString(final CheckableStructTreeNode parent, final StringBuilder stringBuilder) {
 		for (final AbstractStructTreeNode n : parent.getChildren()) {
 			final CheckableStructTreeNode node = (CheckableStructTreeNode) n;
@@ -182,9 +179,7 @@ public class CheckableStructTreeNode extends AbstractStructTreeNode {
 	}
 
 	public CheckboxTreeViewer getViewer() {
-		return getTree().getViewer() instanceof CheckboxTreeViewer 
-				? (CheckboxTreeViewer) getTree().getViewer() 
-				: null;
+		return getTree().getViewer() instanceof final CheckboxTreeViewer checkboxtreeviewer ? checkboxtreeviewer : null;
 	}
 
 	public boolean isGrey() {

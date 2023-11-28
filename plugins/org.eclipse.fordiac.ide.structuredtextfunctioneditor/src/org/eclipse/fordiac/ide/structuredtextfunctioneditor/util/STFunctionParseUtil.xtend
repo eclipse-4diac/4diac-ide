@@ -13,13 +13,17 @@
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.util
 
 import java.util.List
+import java.util.Set
 import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
+import org.eclipse.xtext.naming.IQualifiedNameConverter
 import org.eclipse.xtext.parser.IParseResult
 import org.eclipse.xtext.resource.IResourceFactory
 import org.eclipse.xtext.resource.IResourceServiceProvider
@@ -98,5 +102,10 @@ final class STFunctionParseUtil {
 			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE,
 			STCoreResource.OPTION_PLAIN_ST -> Boolean.TRUE
 		})
+	}
+	
+	def static Set<String> collectUsedTypes(EObject object) {
+		val qualifiedNameConverter = SERVICE_PROVIDER_FCT.get(IQualifiedNameConverter)
+		SERVICE_PROVIDER_FCT.get(STCoreTypeUsageCollector).collectUsedTypes(object).map[qualifiedNameConverter.toString(it)].toSet
 	}
 }

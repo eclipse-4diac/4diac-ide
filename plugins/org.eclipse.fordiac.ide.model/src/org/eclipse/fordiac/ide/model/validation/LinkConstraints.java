@@ -74,7 +74,7 @@ public final class LinkConstraints {
 			final FBNetwork parent, final Connection con) {
 
 		if (!isDataPin(source) || !isDataPin(target)) {
-			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
+			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
 
@@ -280,7 +280,7 @@ public final class LinkConstraints {
 	public static boolean canExistEventConnection(IInterfaceElement source, IInterfaceElement target,
 			final FBNetwork parent) {
 		if (!isEventPin(source) || !isEventPin(target)) {
-			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
+			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
 
@@ -320,7 +320,7 @@ public final class LinkConstraints {
 	public static boolean canExistAdapterConnection(IInterfaceElement source, IInterfaceElement target,
 			final FBNetwork parent, final Connection con) {
 		if (!isAdapterPin(source) || !isAdapterPin(target)) {
-			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
+			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
 		if (isSwapNeeded(source, parent)) {

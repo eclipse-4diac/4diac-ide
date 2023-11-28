@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -38,7 +37,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 	private List<IChildrenProvider> childProviders = null;
 
 	protected List<FBNetworkElement> getNetworkElements() {
-		return getModel().getNetworkElements().stream().filter(el -> !el.isInGroup()).collect(Collectors.toList());
+		return getModel().getNetworkElements().stream().filter(el -> !el.isInGroup()).toList();
 	}
 
 	@Override
@@ -108,7 +107,10 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 		super.removeChildVisual(childEditPart);
 	}
 
-	/** go through all fb network elements and find inputs with parameters to be shown. */
+	/**
+	 * go through all fb network elements and find inputs with parameters to be
+	 * shown.
+	 */
 	protected Collection<Value> getFBValues() {
 		final ArrayList<Value> valueElements = new ArrayList<>();
 		for (final FBNetworkElement element : getNetworkElements()) {

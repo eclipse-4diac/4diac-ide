@@ -49,6 +49,7 @@ class CompositeFBFilter {
 	  «type.luaFannedOutEventConnections»,
 	  «type.luaDataConnections»,
 	  «type.luaFannedOutDataConnections»,
+	  «type.luaAdapterConnections»,
 	  «type.FBNetwork.luaFbnData»
 	}'''
 	
@@ -146,6 +147,16 @@ class CompositeFBFilter {
 	  «ENDFOR»
 	}'''
 	
+	def static luaAdapterConnections(CompositeFBType type) '''
+	adapterConnections = {
+	  «val connections = type.FBNetwork.adapterConnections»
+	  «FOR con : connections SEPARATOR ','»  	
+		  «val sne = con.source.FBNetworkElement»
+		  «val dne = con.destination.FBNetworkElement»
+		  {«sne.luaConnectionString(con.source, type, "src")», «dne.luaConnectionString(con.destination, type, "dst")»}
+	  «ENDFOR»
+	}'''
+	
 	def static luaFannedOutDataConnections(CompositeFBType type) '''
 	fannedOutDataConnections = {
 	  «var allCons = type.FBNetwork.dataConnections»
@@ -167,6 +178,7 @@ class CompositeFBFilter {
 	numFECons = «fbn.eventConnections.filter(e| e.source.outputConnections.size > 1 && !e.source.outputConnections.get(0).equals(e)).size»,
 	numDCons = «fbn.dataConnections.filter(e| e.source.outputConnections.size == 1 || (e.source.outputConnections.size > 1 && e.source.outputConnections.get(0).equals(e))).size»,
 	numFDCons = «fbn.dataConnections.filter(e| e.source.outputConnections.size > 1 && !e.source.outputConnections.get(0).equals(e)).size»,
+	numAdpCons = «fbn.adapterConnections.size»,
 	numParams = «fbn.getNumParameter»
 	'''
 	

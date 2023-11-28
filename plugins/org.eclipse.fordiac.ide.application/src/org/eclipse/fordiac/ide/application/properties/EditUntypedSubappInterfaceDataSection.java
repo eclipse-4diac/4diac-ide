@@ -86,7 +86,8 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 		});
 		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
-		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputProvider));
+		outputDataLayer.setConfigLabelAccumulator(
+				new VarDeclarationConfigLabelAccumulator(outputProvider, this::getAnnotationModel));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS),
 				new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
@@ -112,7 +113,7 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG));
 		inputTable = NatTableWidgetFactory
 				.createRowNatTable(inputsGroup, inputDataLayer,
 						new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG),

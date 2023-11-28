@@ -14,8 +14,12 @@
  *     - change canvas, fix problem with size calculation when dragging elements
  *   Felix Roithmayr
  *     - added support for new commands and context menu items
+ *   Fabio Gandolfi
+ *     - added Listener to load Service Sequences on tabswitch
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
+
+import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,10 +28,12 @@ import org.eclipse.draw2d.RangeModel;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPartFactory;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.ServiceSequenceSaveAndLoadHelper;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
@@ -36,6 +42,7 @@ import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
@@ -44,6 +51,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -57,8 +65,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
@@ -69,13 +80,47 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInputWithNotify(input);
-		if (input instanceof FBTypeEditorInput) {
-			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+		if (input instanceof final FBTypeEditorInput untypedInput) {
 			fbType = untypedInput.getContent();
 		}
 		super.init(site, input);
 		setPartName(Messages.ServiceSequenceEditor_Service);
 		setTitleImage(FordiacImage.ICON_SERVICE_SEQUENCE.getImage());
+
+		createPartListener();
+	}
+
+	protected void createPartListener() {
+		getPartService().addPartListener(new IPartListener() {
+			@Override
+			public void partActivated(final IWorkbenchPart part) {
+				if (part instanceof final FBTypeEditor fbTypeEditor
+						&& fbTypeEditor.getActiveEditor() instanceof final ServiceSequenceEditor servSeq) {
+					getPartService().removePartListener(this);
+					setServiceSequences();
+				}
+			}
+
+			@Override
+			public void partOpened(final IWorkbenchPart part) {
+				// do nothing
+			}
+
+			@Override
+			public void partDeactivated(final IWorkbenchPart part) {
+				// do nothing
+			}
+
+			@Override
+			public void partBroughtToTop(final IWorkbenchPart part) {
+				// do nothing
+			}
+
+			@Override
+			public void partClosed(final IWorkbenchPart part) {
+				// do nothing
+			}
+		});
 	}
 
 	@Override
@@ -89,8 +134,7 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 		// If not in FBTypeEditor ignore selection changed
 		if (part.getSite().getPage().getActiveEditor() instanceof FBTypeEditor) {
 			updateActions(getSelectionActions());
-			if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
-				final IStructuredSelection sel = (IStructuredSelection) selection;
+			if (!selection.isEmpty() && selection instanceof final IStructuredSelection sel) {
 				if (sel.getFirstElement() instanceof SequenceRootEditPart) {
 					((FBType) ((SequenceRootEditPart) sel.getFirstElement()).getModel()).getService();
 				} else if (sel.getFirstElement() instanceof OutputPrimitiveEditPart) {
@@ -228,5 +272,25 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 			return adapter.cast(fbType.getService());
 		}
 		return super.getAdapter(adapter);
+	}
+
+	private static IPartService getPartService() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService();
+	}
+
+	void setServiceSequences() {
+
+		final ArrayList<ServiceSequence> serviceSeqs = ServiceSequenceSaveAndLoadHelper
+				.loadServiceSequencesFromFile(fbType);
+
+		final CompoundCommand cmds = new CompoundCommand();
+		for (final ServiceSequence seq : serviceSeqs) {
+			cmds.add(new CreateServiceSequenceCommand(fbType.getService(), seq));
+		}
+
+		if (cmds.canExecute()) {
+			cmds.execute();
+		}
+
 	}
 }

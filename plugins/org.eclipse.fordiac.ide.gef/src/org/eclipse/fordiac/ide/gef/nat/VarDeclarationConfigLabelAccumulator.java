@@ -13,27 +13,33 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
+import java.util.function.Supplier;
 
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 
-public class VarDeclarationConfigLabelAccumulator implements IConfigLabelAccumulator {
-	private final IRowDataProvider<VarDeclaration> dataProvider;
+public class VarDeclarationConfigLabelAccumulator extends AbstractAnnotatedConfigLabelAccumulator<VarDeclaration> {
 	private final List<VarDeclarationTableColumn> columns;
 
 	public VarDeclarationConfigLabelAccumulator(final IRowDataProvider<VarDeclaration> dataProvider) {
-		this(dataProvider, VarDeclarationTableColumn.DEFAULT_COLUMNS);
+		this(dataProvider, () -> null);
 	}
 
 	public VarDeclarationConfigLabelAccumulator(final IRowDataProvider<VarDeclaration> dataProvider,
+			final Supplier<GraphicalAnnotationModel> annotationModelSupplier) {
+		this(dataProvider, annotationModelSupplier, VarDeclarationTableColumn.DEFAULT_COLUMNS);
+	}
+
+	public VarDeclarationConfigLabelAccumulator(final IRowDataProvider<VarDeclaration> dataProvider,
+			final Supplier<GraphicalAnnotationModel> annotationModelSupplier,
 			final List<VarDeclarationTableColumn> columns) {
-		this.dataProvider = dataProvider;
+		super(dataProvider, annotationModelSupplier);
 		this.columns = columns;
 	}
 
@@ -43,16 +49,17 @@ public class VarDeclarationConfigLabelAccumulator implements IConfigLabelAccumul
 
 	@Override
 	public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition, final int rowPosition) {
-		final VarDeclaration rowItem = dataProvider.getRowObject(rowPosition);
+		final VarDeclaration rowItem = getDataProvider().getRowObject(rowPosition);
 		switch (columns.get(columnPosition)) {
 		case NAME:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTarget);
 			break;
 		case TYPE:
 			configLabels.addLabel(TypeDeclarationEditorConfiguration.TYPE_DECLARATION_CELL);
-			if (rowItem.getType() instanceof ErrorMarkerDataType
-					|| (rowItem.isArray() && rowItem.getArraySize().hasError())) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTargetType);
+			if (rowItem.isArray()) {
+				accumulateAttributeConfigLabels(configLabels, rowItem.getArraySize());
 			}
 			break;
 		case COMMENT:
@@ -63,9 +70,9 @@ public class VarDeclarationConfigLabelAccumulator implements IConfigLabelAccumul
 			break;
 		case INITIAL_VALUE:
 			configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
-			if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-			} else if (!InitialValueHelper.hasInitalValue(rowItem)) {
+			if (InitialValueHelper.hasInitalValue(rowItem)) {
+				accumulateAttributeConfigLabels(configLabels, rowItem.getValue());
+			} else {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
 			}
 			break;

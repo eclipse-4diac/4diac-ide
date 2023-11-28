@@ -93,7 +93,7 @@ public abstract class LibraryElementXtextDocumentProvider extends XtextDocumentP
 	}
 
 	public abstract void doSaveDocument(IProgressMonitor monitor, IFileEditorInput fileEditorInput,
-			LibraryElement element, XtextDocument document);
+			LibraryElement element, XtextDocument document) throws CoreException;
 
-	public abstract void setDocumentContent(IDocument document, LibraryElement element);
+	public abstract void setDocumentContent(IDocument document, LibraryElement element) throws CoreException;
 }

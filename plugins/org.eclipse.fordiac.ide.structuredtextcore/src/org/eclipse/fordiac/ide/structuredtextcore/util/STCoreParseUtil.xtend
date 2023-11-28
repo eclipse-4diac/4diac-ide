@@ -74,8 +74,10 @@ final class STCoreParseUtil {
 		resource.includeInternalLibraryElement = includeInternalLibraryElement
 		if(!additionalContent.nullOrEmpty) resource.additionalContent.addAll(additionalContent)
 		resource.load(new LazyStringInputStream(text), loadOptions ?: resourceSet.loadOptions)
-		val validator = resource.resourceServiceProvider.resourceValidator
-		issues.addAll(validator.validate(resource, CheckMode.FAST_ONLY, CancelIndicator.NullImpl))
+		if(issues !== null) {
+			val validator = resource.resourceServiceProvider.resourceValidator
+			issues.addAll(validator.validate(resource, CheckMode.FAST_ONLY, CancelIndicator.NullImpl))
+		}
 		return resource.parseResult
 	}
 

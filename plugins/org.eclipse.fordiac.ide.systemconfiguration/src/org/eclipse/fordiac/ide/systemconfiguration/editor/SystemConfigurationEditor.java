@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.SystemConfEditPartFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -29,7 +28,6 @@ import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 
 public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette implements ISystemEditor {
 	private SystemConfiguration sysConf;
@@ -57,8 +55,7 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 
 	@Override
 	protected void setModel(final IEditorInput input) {
-		if (input instanceof SystemConfigurationEditorInput) {
-			final SystemConfigurationEditorInput sysConfInput = (SystemConfigurationEditorInput) input;
+		if (input instanceof final SystemConfigurationEditorInput sysConfInput) {
 			sysConf = sysConfInput.getContent();
 		}
 		super.setModel(input);
@@ -71,10 +68,8 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		// TODO __gebenh error handling if save fails!
-		SystemManager.saveSystem(getSystem());
-		getCommandStack().markSaveLocation();
-		firePropertyChange(IEditorPart.PROP_DIRTY);
+		// with the breadcrumb based automation system editor this editor should not
+		// support a save method
 	}
 
 	@Override

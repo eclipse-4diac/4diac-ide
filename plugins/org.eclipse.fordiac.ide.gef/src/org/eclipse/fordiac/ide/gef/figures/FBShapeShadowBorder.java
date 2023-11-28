@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Johannes Kepler University Linz
+ * Copyright (c) 2021, 2023 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,32 +23,25 @@ public class FBShapeShadowBorder extends AbstractShadowBorder {
 	private static Rectangle topShadowRect = new Rectangle();
 	private static Rectangle middleShadowRect = new Rectangle();
 	private static Rectangle bottomShadowRect = new Rectangle();
-	private static Rectangle clipRect = new Rectangle();
 
 	@Override
 	public void paintBackground(final IFigure figure, final Graphics graphics, final Insets insets) {
 		Assert.isTrue(figure instanceof FBShape);
 		final FBShape fbShape = (FBShape) figure;
 
-		graphics.pushState();
+		final var backgroundColor = graphics.getBackgroundColor();
+		final var alpha = graphics.getAlpha();
 		graphics.setBackgroundColor(figure.getForegroundColor());
 
 		topShadowRect.setBounds(fbShape.getTop().getBounds()).expand(2, 2);
 		middleShadowRect.setBounds(fbShape.getMiddle().getBounds()).expand(2, 0);
 		bottomShadowRect.setBounds(fbShape.getBottom().getBounds()).expand(2, 2);
 
-		clipRect.setBounds(topShadowRect);
-		clipRect.union(middleShadowRect);
-		clipRect.union(bottomShadowRect);
-		clipRect.width += SHADOW_SIZE;
-		clipRect.height += SHADOW_SIZE;
-		graphics.setClip(clipRect);
-
 		drawShadowHalo(graphics, topShadowRect, middleShadowRect, bottomShadowRect);
-
 		drawDropShadow(graphics, topShadowRect, middleShadowRect, bottomShadowRect);
 
-		graphics.popState();
+		graphics.setBackgroundColor(backgroundColor);
+		graphics.setAlpha(alpha);
 	}
 
 	private static void drawShadowHalo(final Graphics graphics, final Rectangle topShadowRect,

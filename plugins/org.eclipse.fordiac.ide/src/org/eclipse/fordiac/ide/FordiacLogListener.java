@@ -17,9 +17,7 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
@@ -68,7 +66,8 @@ public class FordiacLogListener implements ILogListener {
 		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException())
 				&& !singleWindow.getAndSet(true)) {
 			// inform the user that an error has happened
-			// we currently only treat errors with exception and from a 4diac IDE plug-in as noteworthy
+			// we currently only treat errors with exception and from a 4diac IDE plug-in as
+			// noteworthy
 			// if a error dialog is already showing we will not show another one.
 			try {
 				showErrorDialog(createStatusWithStackTrace(status));
@@ -80,11 +79,11 @@ public class FordiacLogListener implements ILogListener {
 
 	private static IStatus createStatusWithStackTrace(final IStatus status) {
 		final String stackTrace = getStackTrace(status.getException());
-		final List<IStatus> stackList = Arrays.stream(stackTrace.split(System.getProperty("line.separator"))) //$NON-NLS-1$
-				.map(l -> new Status(IStatus.ERROR, status.getPlugin(), l)).collect(Collectors.toList());
+		final IStatus[] stackList = Arrays.stream(stackTrace.split(System.getProperty("line.separator"))) //$NON-NLS-1$
+				.map(l -> new Status(IStatus.ERROR, status.getPlugin(), l)).toArray(IStatus[]::new);
 
-		return new MultiStatus(status.getPlugin(), IStatus.ERROR, stackList.toArray(new IStatus[stackList.size()]),
-				status.getMessage(), status.getException());
+		return new MultiStatus(status.getPlugin(), IStatus.ERROR, stackList, status.getMessage(),
+				status.getException());
 	}
 
 	private static String getStackTrace(final Throwable exception) {

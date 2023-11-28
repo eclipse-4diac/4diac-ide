@@ -16,6 +16,7 @@ import java.util.Map
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
+import java.util.Set
 
 interface Evaluator {
 	/**
@@ -69,10 +70,15 @@ interface Evaluator {
 	def Object getSourceElement()
 
 	/**
+	 * Get the dependencies of the source element
+	 */
+	def Set<String> getDependencies()
+
+	/**
 	 * Get the variables this evaluator has in its scope.
 	 */
 	def Map<String, Variable<?>> getVariables()
-	
+
 	/**
 	 * Reset this evaluator to the given variables.
 	 * 

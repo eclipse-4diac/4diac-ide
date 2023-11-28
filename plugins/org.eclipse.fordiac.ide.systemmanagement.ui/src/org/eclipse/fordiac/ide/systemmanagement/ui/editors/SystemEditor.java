@@ -26,6 +26,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -66,6 +68,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.part.MultiPageEditorSite;
 
 public class SystemEditor extends EditorPart
 		implements CommandStackEventListener, ISelectionListener, ISelectionProvider {
@@ -73,6 +76,8 @@ public class SystemEditor extends EditorPart
 	private static final ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 
 	private AutomationSystem system;
+
+	private GraphicalAnnotationModel annotationModel;
 
 	private Form form;
 
@@ -105,6 +110,12 @@ public class SystemEditor extends EditorPart
 		}
 	};
 
+	private final GraphicalAnnotationModelListener annotationModelListener = event -> {
+		if (typeInfo != null && !form.isDisposed()) {
+			form.getDisplay().asyncExec(typeInfo::refresh);
+		}
+	};
+
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
 		updateActions(stackActions);
@@ -117,6 +128,9 @@ public class SystemEditor extends EditorPart
 			getCommandStack().removeCommandStackEventListener(this);
 			system.eAdapters().remove(appListener);
 			system.getSystemConfiguration().eAdapters().remove(sysConfListener);
+		}
+		if (annotationModel != null) {
+			annotationModel.removeAnnotationModelListener(annotationModelListener);
 		}
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		getActionRegistry().dispose();
@@ -131,16 +145,14 @@ public class SystemEditor extends EditorPart
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		if (null != system) {
-			SystemManager.saveSystem(system);
-			getCommandStack().markSaveLocation();
-			firePropertyChange(IEditorPart.PROP_DIRTY);
-		}
+		// with the breadcrumb based automation system editor this editor should not
+		// support a save method
 	}
 
 	@Override
 	public void doSaveAs() {
-		// with the breadcrumb based automation system editor this editor should not support a save as method
+		// with the breadcrumb based automation system editor this editor should not
+		// support a save as method
 	}
 
 	@Override
@@ -148,22 +160,19 @@ public class SystemEditor extends EditorPart
 		setInput(input);
 		setSite(site);
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
-		loadSystem();
-		if (system != null) {
-			initializeActionRegistry();
-			setActionHandlers(site);
-		}
-	}
-
-	private void loadSystem() {
-		if (getEditorInput() instanceof FileEditorInput) {
-			system = SystemManager.INSTANCE.getSystem(((FileEditorInput) getEditorInput()).getFile());
-			if (null != system) {
+		if (input instanceof final FileEditorInput fileEditorInput) {
+			system = SystemManager.INSTANCE.getSystem(fileEditorInput.getFile());
+			if (system != null) {
 				getCommandStack().addCommandStackEventListener(this);
 				setPartName(system.getName());
+				initializeActionRegistry();
+				setActionHandlers(site);
 				system.eAdapters().add(appListener);
 				system.getSystemConfiguration().eAdapters().add(sysConfListener);
 			}
+		}
+		if (site instanceof final MultiPageEditorSite multiPageEditorSite) {
+			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 		}
 	}
 
@@ -224,6 +233,9 @@ public class SystemEditor extends EditorPart
 			typeInfo.refresh();
 			appTreeViewer.setInput(system.getApplication());
 			sysConfTreeViewer.setInput(system.getSystemConfiguration());
+			if (annotationModel != null) {
+				annotationModel.addAnnotationModelListener(annotationModelListener);
+			}
 		}
 	}
 
@@ -231,7 +243,7 @@ public class SystemEditor extends EditorPart
 		final Section infoSection = createExpandableSection(toolkit, sash, "System Information:");
 		infoSection.setLayout(new GridLayout());
 
-		typeInfo = new PackageInfoWidget(toolkit);
+		typeInfo = new PackageInfoWidget(toolkit, () -> annotationModel);
 		final Composite composite = toolkit.createComposite(infoSection);
 		composite.setLayout(new GridLayout(2, true));
 		typeInfo.createControls(composite);
@@ -335,6 +347,9 @@ public class SystemEditor extends EditorPart
 		}
 		if (adapter == ActionRegistry.class) {
 			return adapter.cast(getActionRegistry());
+		}
+		if (adapter == GraphicalAnnotationModel.class) {
+			return adapter.cast(annotationModel);
 		}
 		return super.getAdapter(adapter);
 	}

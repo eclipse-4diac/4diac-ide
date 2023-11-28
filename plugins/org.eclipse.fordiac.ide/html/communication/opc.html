@@ -24,7 +24,8 @@
 
 <body>
 <h1 id="topOfPage">OPC DA</h1>
-<p>This section will show you how to create an OPC DA Client with 4DIAC and how to use it with FORTE. Download the following packages:</p> 
+<p>This section will show you how to create an OPC DA Client with 4diac&nbsp;IDE and how to use it with 44diac&nbsp;FORTE. 
+	Download the following packages:</p> 
 <ul>
 	<li><a href="https://github.com/Tibalt/OPC_DA.git" target="_blank">OPC Client library</a> release 0.4</li>
 	<li><a href="http://www.boost.org" target="_blank">Boost Lexical Cast</a></li>
@@ -41,7 +42,7 @@
 	</li>
 	<li>Clone OPC Client, check out to master branch and open the OPCClientToolKit project in Visual Studio Code, be noticed that Visual Studio Code should be started with visual studio tool chains awared, one way is that start Visual Studio Code in "Developer Command Prompt for VS 2019" shown as below</li>
 		<div><img src="../../html/communication/img/opc_startVSCode.png" alt="VS Properties"/></div>
-	<li>Build project with ctrl+shift+B and choose debug or release which is same with forte.</li>
+	<li>Build project with ctrl+shift+B and choose debug or release which is same with 4diac&nbsp;FORTE.</li>
 	<li>Create the following folder structure: 
 		<ul>
 			<li>[opcclientroot]/include - put header files from OPCClientToolKit project here </li>
@@ -50,9 +51,9 @@
 	</li>
 </ol>
 
-<h2>Compile FORTE with OPC DA Client Support</h2>
+<h2>Compile 4diac&nbsp;FORTE with OPC DA Client Support</h2>
 <ol>
-	<li>Create a MS Visual Studio Code Project of FORTE with CMake as described in <a href="../../html/installation/visualStudioCode.html">Compiling and Debugging FORTE with MS Visual Studio Code</a> and add the following variables in settings.json which are required for OPC Client support:
+	<li>Create a MS Visual Studio Code Project of 4diac&nbsp;FORTE with CMake as described in <a href="../../html/installation/visualStudioCode.html">Compiling and Debugging 4diac&nbsp;FORTE with MS Visual Studio Code</a> and add the following variables in settings.json which are required for OPC Client support:
 	<ul>
 		<li> "FORTE_COM_OPC":"ON",</li>
       <li>"FORTE_COM_OPC_LIB_ROOT": "Your path to opc lib root",</li>
@@ -60,12 +61,12 @@
       <li>"FORTE_COM_OPC_BOOST_ROOT": "Your path to boost root",</li>
 	</ul>
 	</li>
-	<li>Open FORTE Project with MS Visual Studio Code. </li>
-	<li><a href="../../html/installation/visualStudioCode.html">compile or debug</a> FORTE</li>
+	<li>Open the 4diac&nbsp;FORTE Project with MS Visual Studio Code. </li>
+	<li><a href="../../html/installation/visualStudioCode.html">compile or debug</a> 4diac&nbsp;FORTE</li>
 </ol>
 
 <h2>Create OPC Client</h2>
-<p>Start the 4DIAC-IDE and create a new <span class="element61499">System</span> with a new <span class="element61499">Application</span> for one <span class="element61499">Device</span>. Add a <span class="specificText">CLIENT_1</span> Function Block to the <span class="element61499">Application</span>, set the following input values, and map it to the hardware.</p>
+<p>Start the 4diac&nbsp;IDE and create a new <span class="element61499">System</span> with a new <span class="element61499">Application</span> for one <span class="element61499">Device</span>. Add a <span class="specificText">CLIENT_1</span> Function Block to the <span class="element61499">Application</span>, set the following input values, and map it to the hardware.</p>
 
 <ul>
 	<li>QI = 1</li> 
@@ -85,11 +86,11 @@
 	<li><span class="inlineTitle">fbInputItems/fbOutputItems</span>: items to be added, items should be separated with a comma e.g. </li>
 </ul>
 
-<p>Change to the <span class="view4diac">Deployment perspective</span>, start Forte and download the Application. Switch the System into online mode and start watching the in- and outputs. For further information about <a href="../../html/4diacIDE/use4diacLocally.html#monitoringApplication">Monitoring functionalities</a> follow the link.</p>
+<p>Change to the <span class="view4diac">Deployment perspective</span>, start 4diac&nbsp;FORTE and download the Application. Switch the System into online mode and start watching the in- and outputs. For further information about <a href="../../html/4diacIDE/use4diacLocally.html#monitoringApplication">Monitoring functionalities</a> follow the link.</p>
 
 <p>After triggering the INIT event, the OPC-client tries to connect with the OPC-server. In this example the OPC-server is "FestoDidactic.EzOPC.2". It is a tool from Festo and can be downloaded <a href="http://www.festo-didactic.com/de-de/service/software/vollversion-demos/ezopc.htm" target="_blank">here</a>.</p>
 
-<img src="../../html/communication/img/opc_fordiacTrigger.png" alt="4DIAC Trigger"/>
+<img src="../../html/communication/img/opc_fordiacTrigger.png" alt="4diac&nbsp;IDE Trigger OPC event"/>
 
 <p>When the connection is established, a window of the server pops up.</p>
 

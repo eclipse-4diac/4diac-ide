@@ -23,14 +23,10 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -113,14 +109,6 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 	protected void doExecute() {
 		oldDataType = getInterfaceElement().getType();
 		setNewType();
-		if (oldDataType instanceof ErrorMarkerDataType) {
-			getErrorMarkerUpdateCmds().add(FordiacMarkerCommandHelper
-					.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(getInterfaceElement())));
-		}
-		if (dataType instanceof final ErrorMarkerDataType errorMarkerDataType) {
-			getErrorMarkerUpdateCmds().add(FordiacMarkerCommandHelper.newCreateMarkersCommand(ErrorMarkerBuilder
-					.createErrorMarkerBuilder(errorMarkerDataType.getErrorMessage()).setTarget(getInterfaceElement())));
-		}
 		additionalCommands.execute();
 	}
 

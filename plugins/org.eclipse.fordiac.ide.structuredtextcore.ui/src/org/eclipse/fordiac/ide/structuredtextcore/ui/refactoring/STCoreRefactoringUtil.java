@@ -86,7 +86,8 @@ public final class STCoreRefactoringUtil {
 		final List<EObject> childSemanticObjects = findSelectedChildSemanticObjects(container, selection);
 		if (childSemanticObjects.stream().allMatch(filter::isInstance)) {
 			return childSemanticObjects.stream().map(filter::cast).collect(Collectors.toList());
-		} else if (filter.isInstance(container)) {
+		}
+		if (filter.isInstance(container)) {
 			return List.of(filter.cast(container));
 		}
 		return Collections.emptyList();
@@ -150,7 +151,7 @@ public final class STCoreRefactoringUtil {
 
 	private static boolean intersects(final ITextRegion region, final ITextSelection selection) {
 		return region.getOffset() < selection.getOffset() + selection.getLength()
-		&& region.getOffset() + region.getLength() > selection.getOffset();
+				&& region.getOffset() + region.getLength() > selection.getOffset();
 	}
 
 	private STCoreRefactoringUtil() {

@@ -72,7 +72,6 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
 		createValues();
 		transferInstanceComments();
-		transferVarDeclarationAttributes();
 	}
 
 	protected void setEntry(final TypeEntry entry) {

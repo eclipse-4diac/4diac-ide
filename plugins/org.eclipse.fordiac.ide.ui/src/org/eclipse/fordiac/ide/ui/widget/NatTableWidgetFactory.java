@@ -77,8 +77,10 @@ import org.eclipse.swt.widgets.Composite;
 public final class NatTableWidgetFactory {
 	public static final String DEFAULT_CELL = "DEFAULT_CELL"; //$NON-NLS-1$
 	public static final String ERROR_CELL = "ERROR_CELL"; //$NON-NLS-1$
+	public static final String WARNING_CELL = "WARNING_CELL"; //$NON-NLS-1$
 	public static final String DISABLED_CELL = "DISABLED_CELL"; //$NON-NLS-1$ $
 	public static final String PROPOSAL_CELL = "PROPOSAL_CELL"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_PROPOSAL_CELL = "ATTRIBUTE_PROPOSAL_CELL"; //$NON-NLS-1$
 	public static final String DISABLED_HEADER = "DISABLED_HEADER"; //$NON-NLS-1$
 	public static final String VISIBILITY_CELL = "VISIBILITY_CELL"; //$NON-NLS-1$
 	public static final String LEFT_ALIGNMENT = "LEFT_ALIGNMENT"; //$NON-NLS-1$
@@ -357,6 +359,16 @@ public final class NatTableWidgetFactory {
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.getColor(255, 100, 100));
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						ERROR_CELL);
+
+				cellStyle = new Style();
+				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_YELLOW);
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
+						WARNING_CELL);
+
+				cellStyle = new Style();
+				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.getColor(255, 255, 100));
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
+						WARNING_CELL);
 
 				cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.HORIZONTAL_ALIGNMENT, HorizontalAlignmentEnum.LEFT);

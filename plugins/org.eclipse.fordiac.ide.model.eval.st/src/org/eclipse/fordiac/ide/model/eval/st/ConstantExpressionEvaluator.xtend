@@ -44,4 +44,6 @@ final class ConstantExpressionEvaluator extends StructuredTextEvaluator {
 	override evaluate() throws EvaluatorException, InterruptedException { null }
 
 	override getSourceElement() { null }
+
+	override getDependencies() { emptySet }
 }

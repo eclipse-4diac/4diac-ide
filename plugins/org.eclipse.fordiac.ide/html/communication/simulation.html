@@ -31,14 +31,16 @@
 
 <p>The Functional Mockup Interface (FMI) is a standard which creates a common interface for simulation of systems from different areas. The idea behind it is to have a common language between different simulation tools in a way that they can communicate with each other. Each system that implements this interface is exported in a so called a Functional Mockup Unit (FMU). The standard is free and more information about it can be found <a href="https://fmi-standard.org/" target="_blank">here</a>.</p>
 
-<p>4DIAC has the capability to export each device of a system as a FMU. The idea behind this is to have in 4DIAC the controller of a physical system, and export it as an FMU. On the other side, the physical system itself can be modeled in a tool that's specialized in its area, and which also allows an FMU exportation of the system. With both FMUs in hand, a co-simulation tool can be used to connect the inputs and outputs of both systems together and co-simulate them and see how the system will behave with the implemented controller.</p>
+<p>Eclipse 4diac has the capability to export each device of a system as a FMU. 
+	The idea behind this is to have in Eclipse 4diac the controller of a physical system, and export it as an FMU. On the other side, the physical system itself can be modeled in a tool that's specialized in its area, and which also allows an FMU exportation of the system. With both FMUs in hand, a co-simulation tool can be used to connect the inputs and outputs of both systems together and co-simulate them and see how the system will behave with the implemented controller.</p>
 
-<h3>How to export and FMU in 4DIAC?</h3>
+<h3>How to export and FMU in 4diac&nbsp;IDE?</h3>
 
 <ol>
-  <li>First, a special 4diac-rte has to be compiled. Follow the <a href="../../html/installation/install.html#ownFORTE" target="_blank">steps to build your own FBs</a>. In the step 3 where the features to be compiled are selected, select also FORTE_ENABLE_FMU. The FORTE_FMU_INCLUDE variable should be set to the path where the headers files from the fmi standard are located. This will generate a dynamic library, whose name will depend on the operative system forte was compiled. This library must be renamed to one of the following supported ones: win32Forte.dll, win64Forte.dll, linux32Forte.so or linux64Forte.so (for windows 32 bits, windows 64 bits, linux 32 bits and linux 64 bits operative systems respectively). An FMU can have many different libraries, wich will allow the FMU to be simulated in these Operative Systems. </li>
+  <li>First, a special 4diac&nbsp;FORTE has to be compiled. Follow the <a href="../../html/installation/install.html#ownFORTE" target="_blank">steps to build your own FBs</a>. In the step 3 where the features to be compiled are selected, select also FORTE_ENABLE_FMU. The FORTE_FMU_INCLUDE variable should be set to the path where the headers files from the fmi standard are located. 
+  This will generate a dynamic library, whose name will depend on the operative system 4diac&nbsp;FORTE was compiled. This library must be renamed to one of the following supported ones: win32Forte.dll, win64Forte.dll, linux32Forte.so or linux64Forte.so (for windows 32 bits, windows 64 bits, linux 32 bits and linux 64 bits operative systems respectively). An FMU can have many different libraries, wich will allow the FMU to be simulated in these Operative Systems. </li>
 
-  <li>In the 4DIAC-IDE, go to Windows &rarr; Preferences &rarr; 4DIAC &rarr; FMU Preferences and in the "Binaries Location" field, select the path where the compiled forte (with the right new name) is located. Many libraries from the different OS can be placed in the same folder, wich will be detected by the preference, enabling the OS to be possibly included in the FMUs. Apply the changes and close.</li>
+  <li>In the 4diac&nbsp;IDE, go to Windows &rarr; Preferences &rarr; 4diac&nbsp;IDE &rarr; FMU Preferences and in the "Binaries Location" field, select the path where the compiled 4diac&nbsp;FORTE (with the right new name) is located. Many libraries from the different OS can be placed in the same folder, wich will be detected by the preference, enabling the OS to be possibly included in the FMUs. Apply the changes and close.</li>
 
   <li>Go to File &rarr; Export... &rarr; 4diac &rarr; Create FMU &rarr; Next. In the tree of projects, select the Devices with the resources to be exported as FMU. Remember, one FMU for each device will be exported. Choose the directory to export the FMU, the libraries to be included (only the libraries found in the step before will be enable to be selected). The last option allows the user to save the selected libraries for the next time. Click Finish and it's done.</li> 
 </ol>
@@ -82,7 +84,7 @@
 
 <p>In 4diac, the following PID controller was implemented. The main PID function block is a basic function block, which keeps the level of the tank to the desired position (ERROR_CALC.IN2). The tank is always loosing water (remember, just an example). TANK_LEVEL_IN (IW) and FILL_VALVE (QW) are the FBs that are the input and output of the exported FMU. </p>
 
-<img src="../../html/communication/img/fmi/application.png" alt="controller implemented in 4DIAC">
+<img src="../../html/communication/img/fmi/application.png" alt="controller implemented in Eclipse 4diac">
 
 <p>Once both system are exported as FMUs, they can be co-simulated using the <a href="https://github.com/into-cps/intocps-ui" target="_blank">INTO-CPS</a> tool. Inputs and outputs of both model are connected properly (sensor of the level of the tank to the input of the controller, and the output of the controller to the actuator of the valve of the tank). Since the Kp, Ki and Kd of the PID controller are literals, they're treated as parameters, which can be set in every co-simulation, making it easier to tune it.</p>
 
@@ -102,7 +104,7 @@
 
 <h2 id="matlab">Matlab</h2>
 
-<p>4diac user Marc Jakobi developed a communicating library in Matlab, which allows connecting IEC 61499 control applications with simulation models in Matlab. The library, which is available as open source, implements the Client/Server protocol defined in the <a href="http://www.holobloc.com/doc/ita/index.htm" target="_blank">IEC 61499 compliance profile for feasibility demonstrations</a>. Therefore, on the 4diac side you just need to insert a server communication function block. For detailed documentation as well as the library code, please have a look at the <a href="https://github.com/MrcJkb/tcpip4diac" target="_blank">tcpip4diac project on GitHub</a>.</p>
+<p>Eclipse 4diac user Marc Jakobi developed a communicating library in Matlab, which allows connecting IEC 61499 control applications with simulation models in Matlab. The library, which is available as open source, implements the Client/Server protocol defined in the <a href="http://www.holobloc.com/doc/ita/index.htm" target="_blank">IEC 61499 compliance profile for feasibility demonstrations</a>. Therefore, on the 4diac side you just need to insert a server communication function block. For detailed documentation as well as the library code, please have a look at the <a href="https://github.com/MrcJkb/tcpip4diac" target="_blank">tcpip4diac project on GitHub</a>.</p>
 
 <h1>Where to go from here?</h1>
 

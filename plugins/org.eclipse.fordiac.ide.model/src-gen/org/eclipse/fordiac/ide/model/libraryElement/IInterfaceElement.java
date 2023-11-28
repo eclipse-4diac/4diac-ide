@@ -99,7 +99,7 @@ public interface IInterfaceElement extends ITypedElement, ConfigurableObject, Hi
 	 * @return the value of the '<em>Type</em>' reference.
 	 * @see #setType(DataType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIInterfaceElement_Type()
-	 * @model transient="true"
+	 * @model
 	 * @generated
 	 */
 	DataType getType();

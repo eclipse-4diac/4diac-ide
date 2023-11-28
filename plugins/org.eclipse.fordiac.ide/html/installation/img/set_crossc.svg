@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg4860"
+   version="1.1"
+   viewBox="0 0 79.752967 43.467254"
+   height="43.467255mm"
+   width="79.752968mm"
+   sodipodi:docname="set_crossc.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="885"
+     id="namedview5330"
+     showgrid="false"
+     inkscape:zoom="1.2672987"
+     inkscape:cx="150.71427"
+     inkscape:cy="82.142843"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs4854" />
+  <metadata
+     id="metadata4857">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-9.5439053,-27.691965)"
+     id="layer1">
+    <rect
+       style="fill:#cccccc;stroke-width:0.20295441"
+       y="27.691965"
+       x="9.5439053"
+       height="43.467255"
+       width="79.752968"
+       id="rect3713" />
+    <rect
+       y="29.808634"
+       x="12.189736"
+       height="5.6543388"
+       width="74.890182"
+       id="rect3717"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.20202248;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <text
+       id="text4666"
+       y="33.822464"
+       x="13.579811"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.26458332"
+         id="tspan4664"
+         y="33.822464"
+         x="13.579811">Unix Makefiles<tspan
+   style="stroke-width:0.26458332"
+   id="tspan4662"
+   y="33.822464"
+   x="13.579811" /></tspan></text>
+    <ellipse
+       ry="2.0045214"
+       rx="2.0713389"
+       cy="41.223606"
+       cx="16.380405"
+       id="path4920-5"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.26499999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <text
+       id="text4666-6-0"
+       y="42.356247"
+       x="20.541428"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.26458332"
+         id="tspan4664-1-3"
+         y="42.356247"
+         x="20.541428">Use default native compilers</tspan></text>
+    <ellipse
+       ry="2.0045214"
+       rx="2.0713389"
+       cy="45.986111"
+       cx="16.380405"
+       id="path4920-1"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.26499999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <text
+       id="text4666-6-06"
+       y="47.118752"
+       x="20.541428"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.26458332"
+         id="tspan4664-1-32"
+         y="47.118752"
+         x="20.541428">Specify native compilers</tspan></text>
+    <ellipse
+       ry="2.0045214"
+       rx="2.0713389"
+       cy="50.748611"
+       cx="16.380405"
+       id="path4920-6"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.26499999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <text
+       id="text4666-6-1"
+       y="51.881256"
+       x="20.541428"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.26458332"
+         id="tspan4664-1-5"
+         y="51.881256"
+         x="20.541428">Specify toolchain file for cross-compiling</tspan></text>
+    <ellipse
+       ry="2.0045214"
+       rx="2.0713389"
+       cy="55.511116"
+       cx="16.380405"
+       id="path4920-47"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.26499999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <text
+       id="text4666-6-6"
+       y="56.643761"
+       x="20.541428"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.26458332"
+         id="tspan4664-1-56"
+         y="56.643761"
+         x="20.541428">Specify options for cross-compiling</tspan></text>
+    <ellipse
+       ry="1.3363476"
+       rx="1.2027128"
+       cy="55.640045"
+       cx="16.369545"
+       id="path5039"
+       style="fill:#000000;stroke:#000000;stroke-width:0.26499999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <rect
+       y="63.185085"
+       x="61.900131"
+       height="5.7556195"
+       width="18.295036"
+       id="rect3717-6-7"
+       style="fill:#cccccc;stroke:#000000;stroke-width:0.10074163;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <text
+       id="text4666-1-5"
+       y="67.239563"
+       x="63.144951"
+       style="font-style:normal;font-weight:normal;font-size:3.52777767px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.26458332"
+         id="tspan4664-8-9"
+         y="67.239563"
+         x="63.144951">Next  -&gt;</tspan></text>
+  </g>
+</svg>

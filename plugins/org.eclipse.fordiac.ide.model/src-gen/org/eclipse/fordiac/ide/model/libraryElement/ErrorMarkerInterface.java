@@ -16,6 +16,9 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import java.util.Map;
+import org.eclipse.emf.common.util.DiagnosticChain;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -26,7 +29,6 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface#getRepairedEndpoint <em>Repaired Endpoint</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface#getValue <em>Value</em>}</li>
  * </ul>
  *
@@ -34,29 +36,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface ErrorMarkerInterface extends IInterfaceElement, ErrorMarkerRef {
-	/**
-	 * Returns the value of the '<em><b>Repaired Endpoint</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Repaired Endpoint</em>' reference.
-	 * @see #setRepairedEndpoint(IInterfaceElement)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getErrorMarkerInterface_RepairedEndpoint()
-	 * @model transient="true"
-	 * @generated
-	 */
-	IInterfaceElement getRepairedEndpoint();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface#getRepairedEndpoint <em>Repaired Endpoint</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Repaired Endpoint</em>' reference.
-	 * @see #getRepairedEndpoint()
-	 * @generated
-	 */
-	void setRepairedEndpoint(IInterfaceElement value);
-
+public interface ErrorMarkerInterface extends IInterfaceElement {
 	/**
 	 * Returns the value of the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
@@ -78,5 +58,13 @@ public interface ErrorMarkerInterface extends IInterfaceElement, ErrorMarkerRef 
 	 * @generated
 	 */
 	void setValue(Value value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateValue(DiagnosticChain diagnostics, Map<Object, Object> context);
 
 } // ErrorMarkerInterface

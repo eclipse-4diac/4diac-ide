@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
@@ -31,8 +30,7 @@ final class ColLocatedConnectionFinder {
 		final Set<Connection> conns = getAllRelatedConnections(connEP);
 		final Point location = getRelativeLocation(connEP.getFigure(), loc);
 		return conns.stream().map(con -> (ConnectionEditPart) viewer.getEditPartRegistry().get(con))
-				.filter(Objects::nonNull)
-				.filter(ep -> ep.getFigure().findFigureAt(location) != null).collect(Collectors.toList());
+				.filter(Objects::nonNull).filter(ep -> ep.getFigure().findFigureAt(location) != null).toList();
 	}
 
 	public static List<ConnectionEditPart> getLeftCoLocatedConnections(final ConnectionEditPart connEP,
@@ -40,17 +38,16 @@ final class ColLocatedConnectionFinder {
 		final Set<Connection> conns = getAllRelatedConnections(connEP);
 		final Point location = getRelativeLocation(connEP.getFigure(), loc);
 		return conns.stream().map(con -> (ConnectionEditPart) viewer.getEditPartRegistry().get(con))
-				.filter(Objects::nonNull).filter(ep -> ep.getFigure().findFigureAt(location) == null)
-				.collect(Collectors.toList());
+				.filter(Objects::nonNull).filter(ep -> ep.getFigure().findFigureAt(location) == null).toList();
 	}
 
 	private static Set<Connection> getAllRelatedConnections(final ConnectionEditPart connEP) {
 		final Set<Connection> conns = new HashSet<>();
-		if(connEP.getModel() != null) {
-			if(connEP.getModel().getSource() != null) {
+		if (connEP.getModel() != null) {
+			if (connEP.getModel().getSource() != null) {
 				conns.addAll(connEP.getModel().getSource().getOutputConnections());
 			}
-			if(connEP.getModel().getDestination() != null) {
+			if (connEP.getModel().getDestination() != null) {
 				conns.addAll(connEP.getModel().getDestination().getInputConnections());
 			}
 		}

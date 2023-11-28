@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -27,12 +28,14 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
 import org.eclipse.xtext.util.ITextRegion;
+import org.eclipse.xtext.util.TextRegion;
 
 public class STCoreConfigurableCompletionProposal extends ConfigurableCompletionProposal {
 
 	private boolean customLinkedMode;
 	private ITextViewer viewer;
-	private List<ITextRegion> positions;
+	private List<ITextRegion> positions = Collections.emptyList();
+	private int exitPositionOffset = 0;
 	private char[] exitChars;
 
 	public STCoreConfigurableCompletionProposal(final String replacementString, final int replacementOffset,
@@ -43,11 +46,12 @@ public class STCoreConfigurableCompletionProposal extends ConfigurableCompletion
 	}
 
 	public void setCustomLinkedMode(final ITextViewer viewer, final List<ITextRegion> positions,
-			final char... exitChars) {
+			final int exitPositionOffset, final char... exitChars) {
 		setSimpleLinkedMode(viewer, exitChars);
 		this.customLinkedMode = true;
 		this.viewer = viewer;
 		this.positions = positions;
+		this.exitPositionOffset = exitPositionOffset;
 		this.exitChars = exitChars;
 	}
 
@@ -65,8 +69,7 @@ public class STCoreConfigurableCompletionProposal extends ConfigurableCompletion
 
 				final LinkedModeUI ui = new LinkedModeUI(model, viewer);
 				ui.setExitPolicy(new ExitPolicy(exitChars));
-				ui.setExitPosition(viewer, getReplacementOffset() + getReplacementString().length(), 0,
-						Integer.MAX_VALUE);
+				ui.setExitPosition(viewer, exitPositionOffset, 0, Integer.MAX_VALUE);
 				ui.enter();
 			} catch (final BadLocationException e) {
 				FordiacLogHelper.logWarning(e.getMessage(), e);
@@ -74,6 +77,15 @@ public class STCoreConfigurableCompletionProposal extends ConfigurableCompletion
 		} else {
 			super.setUpLinkedMode(document);
 		}
+	}
+
+	@Override
+	public void shiftOffset(final int deltaLength) {
+		super.shiftOffset(deltaLength);
+		positions = positions.stream()
+				.<ITextRegion>map(region -> new TextRegion(region.getOffset() + deltaLength, region.getLength()))
+				.toList();
+		exitPositionOffset += deltaLength;
 	}
 
 	@Override

@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -108,7 +109,7 @@ public class UpdateInstancesChange extends Change {
 				if (rootContainer instanceof final LibraryElement libElement) {
 					final Command command = getCommand(instance);
 					final IEditorPart editor = getEffectedEditor(instance);
-					executeCommand(libElement.getTypeEntry(), editor, command);
+					executeCommand(libElement.getTypeEntry(), editor, command, pm);
 				}
 			});
 
@@ -116,12 +117,18 @@ public class UpdateInstancesChange extends Change {
 		return null;
 	}
 
-	private static void executeCommand(final TypeEntry rootTypeEntry, final IEditorPart editor, final Command cmd) {
+	private static void executeCommand(final TypeEntry rootTypeEntry, final IEditorPart editor, final Command cmd,
+			final IProgressMonitor pm) {
 		if (editor == null) {
 			cmd.execute();
-			rootTypeEntry.save();
+			try {
+				rootTypeEntry.save(pm);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
 		} else {
 			editor.getAdapter(CommandStack.class).execute(cmd);
+			editor.doSave(pm);
 		}
 	}
 

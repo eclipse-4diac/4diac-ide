@@ -29,10 +29,10 @@
 
     <h1 id="topOfPage">Step 1 - Use 4diac Locally (Blinking Tutorial)</h1>
 
-    <p>This page is part of a guide that gives a walk-through over the major 4diac IDE features.</p>
+    <p>This page is part of a guide that gives a walk-through over the major 4diac&nbsp;IDE features.</p>
 
     <ol start="0">
-      <li><a href="../../html/4diacIDE/overview.html">4diac IDE Overview</a></li>
+      <li><a href="../../html/4diacIDE/overview.html">4diac&nbsp;IDE Overview</a></li>
       <li>Use 4diac Locally (YOU ARE HERE!)</li>
 	  <li><a href="../../html/4diacIDE/distribute4diac.html">Distribute 4diac Applications</a></li>
       <li><a href="../../html/4diacIDE/use4diacRemotely.html">Deploy Applications Remotely</a></li>
@@ -42,7 +42,7 @@
       <li><a href="../../html/4diacIDE/dynamicTypeLoader.html">Deploying new FBs with the Dynamic Type Loader</a></li>
     </ol>
     
-    <p>In this tutorial you create a simple Blinking application. It's the "Hello World" of automation programs, so it teaches the key aspects and workflow of 4diac IDE. The application will run locally, so no connection to any PLC or external hardware is needed. The architecture is shown below.</p>
+    <p>In this tutorial you create a simple Blinking application. It's the "Hello World" of automation programs, so it teaches the key aspects and workflow of 4diac&nbsp;IDE. The application will run locally, so no connection to any PLC or external hardware is needed. The architecture is shown below.</p>
 
     <img src="../../html/4diacIDE/img/locallyArchitecture.png" alt="architecture for the current step" />
 
@@ -53,7 +53,7 @@
 
      <ol>
        <li>In the upper left corner of the system perspective there is the main menu. Create a new project by selecting
-       <br><span class="menu4diac">File &rarr; New &rarr; 4diac IDE Project...</span></li>
+       <br><span class="menu4diac">File &rarr; New &rarr; 4diac&nbsp;IDE Project...</span></li>
        <li>Follow the instructions in the creation wizard. For this tutorial we name our new system <i>BlinkTest</i>.
        <div><img src="../../html/4diacIDE/img/Step1/newSystemWizard.png" alt="Create a new IEC 61499 System" /></div></li>
     </ol>
@@ -101,7 +101,7 @@
           <p>Here are some tips for editing the application:</p>
           <ul>
               <li>If you hover the mouse over a FB or Data or Event connection end, you'll get information about it.</li>
-              <li>If you try to connect Data connections that have incompatible types, you will see a red error in the status bar at the lowest part of 4diac-IDE.</li>
+              <li>If you try to connect Data connections that have incompatible types, you will see a red error in the status bar at the lowest part of 4diac&nbsp;IDE.</li>
               <li>Selected function blocks in the <span class="view4diac">Application Editor</span> can be parameterized using the <span class="view4diac">Properties View</span> typically located below.</li>
           	  <li>The colors of the connections may differ. Remember you can change them in <span class="menu4diac">Window &rarr; Preferences &rarr; 4diac&nbsp;IDE</span></li>
           </ul>
@@ -160,7 +160,7 @@
     
     <h3 id="deviceProfileConfiguration">Configuration of the Device's Configuration Profile</h3>
     <p>In order to support different device vendors' download mechanism you need to specify the device profile to be used for your device.
-    currently 4diac-IDE supports the following two device profiles:
+    currently 4diac&nbsp;IDE supports the following two device profiles:
     </p>
     <ul>
       <li><span class="specificText">HOLOBLOC</span> Device conforming to the <span class="specificText">"IEC 61499 Compliance Profile for Feasibility Demonstrations"</span>. 
@@ -244,18 +244,18 @@
 <!--********************************************************************************************-->
      <h2 id="deployingToForte">Deploying Application to 4diac&nbsp;FORTE</h2>
      
-     <p>In this step, the Blink application will be deployed to 4diac FORTE running locally on your computer.</p>
+     <p>In this step, the Blink application will be deployed to 4diac&nbsp;FORTE running locally on your computer.</p>
 
      <ol>
        <li>You have to select a 4diac&nbsp;FORTE. 
-       <br/>You can either build your own 4diac FORTE as <a href="../../html/installation/install.html#ownFORTE">shown here</a> or you can download the 4diac FORTE that is provided for you for this tutorial on <a href="https://www.eclipse.org/4diac/en_dow.php">our Homepage</a>. 
-       You can save the .exe wherever you like, we have chosen F:\4diac\4diac-ide\. 
-       Go to <span class="menu4diac">Windows &rarr; Preferences &rarr; 4diac IDE &rarr; FORTE Preferences</span>, and in <span class="addressDoc">FORTE Location</span> look for the 4diac FORTE and then click <i>Apply and Close</i>. 
-          <br><img src="../../html/4diacIDE/img/Step1/selectForte.png" width="600" alt="select your 4diac FORTE" /></li>
+       <br/>You can either build your own 4diac&nbsp;FORTE as <a href="../../html/installation/install.html#ownFORTE">shown here</a> or you can download the 4diac&nbsp;FORTE image that is provided for you for this tutorial on <a href="https://eclipse.dev/4diac/en_dow.php">our Homepage</a>. 
+       You can save the .exe wherever you like, we have chosen F:\4diac\4diac&nbsp;IDE\. 
+       Go to <span class="menu4diac">Windows &rarr; Preferences &rarr; 4diac&nbsp;IDE &rarr; FORTE Preferences</span>, and in <span class="addressDoc">FORTE Location</span> look for the 4diac&nbsp;FORTE executable and then click <i>Apply and Close</i>. 
+          <br><img src="../../html/4diacIDE/img/Step1/selectForte.png" width="600" alt="select your 4diac&nbsp;FORTE" /></li>
        <li>Change to the <i>Deployment Perspective</i> using the <img src="../../html/4diacIDE/img/perspective/deploymentButton.gif" alt="Deployment Perspective Button" class="inlineImg"/> button.</li>
        <li>Set the port to 61499 (the same define before, remember <span class="address">localhost:61499</span> in the System Configuration?)</li>
-       <li><span class="button4diac">Launch Local 4diac FORTE</span></li>
-       <li>You should see the the location of your 4diac FORTE and the <b>Terminate</b> button enabled in the Console.</li>
+       <li><span class="button4diac">Launch Local 4diac&nbsp;FORTE</span></li>
+       <li>You should see the the location of your 4diac&nbsp;FORTE and the <b>Terminate</b> button enabled in the Console.</li>
        <li>Select the elements to deploy. 
            For this tutorial select our device <i>Testee</i>. 
            In case you have many devices with many resources, you can select the devices to deploy and even which resources to deploy.</li>
@@ -272,7 +272,7 @@
    
     <p>By selecting a Device or Resource the corresponding IEC 61499 element can be cleaned. 
     This means that the Device or Resource configuration are cleaned and reset to the default configuration without any Function Block Network.</p>
-    <p><span class="menu4diac">Delete All Resources</span> leaves the Device empty, and <span class="menu4diac">Kill Device</span> stops 4diac FORTE. 
+    <p><span class="menu4diac">Delete All Resources</span> leaves the Device empty, and <span class="menu4diac">Kill Device</span> stops 4diac&nbsp;FORTE. 
     You can deploy again after cleaning the Device.</p>
     <p><span class="menu4diac">Delete Resource</span> deletes just the selected resource:</p>
     <img src="../../html/4diacIDE/img/Step1/cleanDeviceOrResource.png" width="1024" alt="Clean Devive or Resource" />

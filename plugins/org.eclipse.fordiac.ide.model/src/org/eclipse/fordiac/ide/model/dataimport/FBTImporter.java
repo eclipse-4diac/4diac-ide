@@ -23,7 +23,6 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +37,6 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -76,7 +74,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -907,13 +904,6 @@ public class FBTImporter extends TypeImporter {
 		fb.setInterface(fb.getType().getInterfaceList().copy());
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 		type.getInternalFbs().add(fb);
-
-		if (entry instanceof ErrorTypeEntry) {
-			final String errorMessage = MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", //$NON-NLS-1$
-					typeFbElement, fb.getName());
-			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(fb)
-					.setLineNumber(getLineNumber()));
-		}
 	}
 
 	/**

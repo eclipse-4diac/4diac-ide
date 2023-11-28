@@ -116,23 +116,29 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		setBorder(new FBShapeShadowBorder());
 	}
 
-	/** Gets the event inputs.
+	/**
+	 * Gets the event inputs.
 	 *
-	 * @return the event inputs */
+	 * @return the event inputs
+	 */
 	public Figure getEventInputs() {
 		return eventInputs;
 	}
 
-	/** Gets the event outputs.
+	/**
+	 * Gets the event outputs.
 	 *
-	 * @return the event outputs */
+	 * @return the event outputs
+	 */
 	public Figure getEventOutputs() {
 		return eventOutputs;
 	}
 
-	/** Gets the data inputs.
+	/**
+	 * Gets the data inputs.
 	 *
-	 * @return the data inputs */
+	 * @return the data inputs
+	 */
 	public Figure getDataInputs() {
 		return dataInputs;
 	}
@@ -145,9 +151,11 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		return sockets;
 	}
 
-	/** Gets the data outputs.
+	/**
+	 * Gets the data outputs.
 	 *
-	 * @return the data outputs */
+	 * @return the data outputs
+	 */
 	public Figure getDataOutputs() {
 		return dataOutputs;
 	}

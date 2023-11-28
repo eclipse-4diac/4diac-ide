@@ -46,9 +46,11 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		super(editor);
 	}
 
-	/** Maps an object to an EditPart.
+	/**
+	 * Maps an object to an EditPart.
 	 *
-	 * @throws RuntimeException if no match was found (programming error) */
+	 * @throws RuntimeException if no match was found (programming error)
+	 */
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		if (modelElement instanceof UnfoldedSubappContentNetwork) {
@@ -59,21 +61,29 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		}
 		if (modelElement instanceof final FBNetwork network) {
 			return getPartForFBNetwork(network);
-		} else if (modelElement instanceof final FBNetworkElement fbnel) {
+		}
+		if (modelElement instanceof final FBNetworkElement fbnel) {
 			return getPartForFBNetworkElement(fbnel);
-		} else if (modelElement instanceof StructuredType) {
+		}
+		if (modelElement instanceof StructuredType) {
 			return new StructuredTypeEditPart();
-		} else if (modelElement instanceof InstanceName) {
+		}
+		if (modelElement instanceof InstanceName) {
 			return new InstanceNameEditPart();
-		} else if (modelElement instanceof InstanceComment) {
+		}
+		if (modelElement instanceof InstanceComment) {
 			return new InstanceCommentEditPart();
-		} else if (modelElement instanceof Connection) {
+		}
+		if (modelElement instanceof Connection) {
 			return new ConnectionEditPart();
-		} else if (modelElement instanceof IInterfaceElement) {
+		}
+		if (modelElement instanceof IInterfaceElement) {
 			return createInterfaceEditPart(modelElement);
-		} else if (modelElement instanceof Value) {
+		}
+		if (modelElement instanceof Value) {
 			return new FBNValueEditPart();
-		} else if (modelElement instanceof HiddenPinIndicator) {
+		}
+		if (modelElement instanceof HiddenPinIndicator) {
 			return new HiddenPinIndicatorEditPart();
 		}
 
@@ -112,7 +122,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		throw createEditpartCreationException(element);
 	}
 
-	@SuppressWarnings("static-method")  // not static to allow subclasses to provide own elements
+	@SuppressWarnings("static-method") // not static to allow subclasses to provide own elements
 	protected EditPart getPartForFBNetwork(final FBNetwork fbNetwork) {
 		if (fbNetwork.eContainer() instanceof SubApp) {
 			return new UISubAppNetworkEditPart();
@@ -129,19 +139,14 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		final IInterfaceElement element = (IInterfaceElement) modelElement;
 
 		if ((element.getFBNetworkElement() instanceof StructManipulator)
-				&& (element.getType() instanceof StructuredType)) {
-			if (isMuxOutput(element) || isDemuxInput(element)) {
-				return new StructInterfaceEditPart();
-			}
+				&& (element.getType() instanceof StructuredType) && (isMuxOutput(element) || isDemuxInput(element))) {
+			return new StructInterfaceEditPart();
 		}
 
-		EditPart part;
 		if ((element.getFBNetworkElement() instanceof SubApp) && (null == element.getFBNetworkElement().getType())) {
-			part = new UntypedSubAppInterfaceElementEditPart();
-		} else {
-			part = new InterfaceEditPartForFBNetwork();
+			return new UntypedSubAppInterfaceElementEditPart();
 		}
-		return part;
+		return new InterfaceEditPartForFBNetwork();
 	}
 
 	public static boolean isDemuxInput(final IInterfaceElement element) {

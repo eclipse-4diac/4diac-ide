@@ -19,25 +19,25 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Building and Running 4diac IDE</title>
+	<title>Building and Running 4diac&nbsp;IDE</title>
 	<link rel="stylesheet" type="text/css" href="../help.css">
 </head>
 
 <body>
-<h1 id="topOfPage">Building and Running 4diac IDE</h1>
+<h1 id="topOfPage">Building and Running 4diac&nbsp;IDE</h1>
 
-<p>You have 2 options for building and running 4diac IDE:</p>
+<p>You have 2 options for building and running 4diac&nbsp;IDE:</p>
 <ol>
-	<li><a href="#buildFromSource">Building and Running 4diac IDE from Source</a></li>
-	<li><a href="#buildBinary">Building a Binary 4diac IDE Package from Source</a></li>
+	<li><a href="#buildFromSource">Building and Running 4diac&nbsp;IDE from Source</a></li>
+	<li><a href="#buildBinary">Building a Binary 4diac&nbsp;IDE Package from Source</a></li>
 </ol>
 
-<h2 id="buildFromSource">Building and Running 4diac IDE from Source</h2>
+<h2 id="buildFromSource">Building and Running 4diac&nbsp;IDE from Source</h2>
 
-<p>Run through the following steps to build and execute the 4diac IDE from source:</p>
+<p>Run through the following steps to build and execute the 4diac&nbsp;IDE from source:</p>
 <ol>
 	<li>Get the development environment</li>
-	<li>Check out the 4diac IDE repository</li>
+	<li>Check out the 4diac&nbsp;IDE repository</li>
 	<li>Import plug-ins into workspace</li>
 	<li>Set the target platform</li>
 	<li>Run in development mode</li>
@@ -49,8 +49,8 @@
 <p>Get the latest <a href="https://eclipse.org/downloads/eclipse-packages/" target="_blank">Eclipse IDE</a>. 
 Use <span class="specificText">Eclipse Modeling Tools</span> edition. 
 
-<h3 id="checkOutRepos">Check out the 4diac IDE Repository</h3>
-<p>This section shows how to check out (clone) the 4diac IDE repository. 
+<h3 id="checkOutRepos">Check out the 4diac&nbsp;IDE Repository</h3>
+<p>This section shows how to check out (clone) the 4diac&nbsp;IDE repository. 
 You will need <a href="https://git-scm.com/downloads" target="_blank">Git</a> to download it by using the <span class="inlineCode">clone</span> command from Git to the repository <span class="address"> https://git.eclipse.org/r/4diac/org.eclipse.4diac.ide</span>. 
 If you're using the terminal, do:</p>
 
@@ -109,38 +109,38 @@ $ git clone https://git.eclipse.org/r/4diac/org.eclipse.4diac.ide</div>
 		<div><img src="../../html/development/img/productConfigKepler.png" alt="Eclipse product configuration"/></div>
 	</li>
 	<li>In the <span class="menu4diac">Testing</span> Section of the <span class="tab4diac">Overview</span> tab press <span class="button4diac">Synchronize</span></li>
-	<li>To use 4diac IDE directly under this (development) Eclipse you need a type library and templates. 
-	    Both are part of the 4diac IDE repository and can be found in the <span class="folderLocation">data</span> directory.
-	    In order that your development 4diac IDE can find this they have to put into the directory where the target platform is stored.
+	<li>To use 4diac&nbsp;IDE directly under this (development) Eclipse you need a type library and templates. 
+	    Both are part of the 4diac&nbsp;IDE repository and can be found in the <span class="folderLocation">data</span> directory.
+	    In order that your development 4diac&nbsp;IDE can find this they have to put into the directory where the target platform is stored.
 	    For that copy the <span class="folderLocation">template</span> and the <span class="folderLocation">typelibrary</span> directory into the 
 	    <span class="folderLocation">.metadata/.plugins/org.eclipse.pde.core/.bundle_pool</span> directory.
 	</li> 
 	<li>Press <span class="button4diac">Launch an Eclipse Application</span> in the <span class="view4diac">Overview</span></li>
 </ol>
 
-<h3 id="buildingIDE">Building your own 4diac IDE</h3>
+<h3 id="buildingIDE">Building your own 4diac&nbsp;IDE</h3>
 
-<p>A big drawback for running 4diac IDE from source is that you need at least 2 Eclipse instances running. 
+<p>A big drawback for running 4diac&nbsp;IDE from source is that you need at least 2 Eclipse instances running. 
 Especially on systems with little memory this can be an issue. 
 If you still want to keep up with the developments performed in the Git repository it makes sense to build a binary package. 
-See <a href="#buildBinary">Building a binary 4diac IDE package from source</a> for details on how this can be achieved.</p>
+See <a href="#buildBinary">Building a binary 4diac&nbsp;IDE package from source</a> for details on how this can be achieved.</p>
 
 <p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 
-<h2 id="buildBinary">Building a Binary 4diac IDE Package from Source</h2>
+<h2 id="buildBinary">Building a Binary 4diac&nbsp;IDE Package from Source</h2>
 
-<p>For building a binary 4diac IDE package from the source code the best is to use the Maven configuration which is also used to build 4diac IDE on our build server.
+<p>For building a binary 4diac&nbsp;IDE package from the source code the best is to use the Maven configuration which is also used to build 4diac&nbsp;IDE on our build server.
 A modern Eclipse IDE comes with Maven integration out of the box. 
-Then the necessary steps for generating binary 4diac IDE packages are:</p>
+Then the necessary steps for generating binary 4diac&nbsp;IDE packages are:</p>
 
 <ol>
-	<li>Have the 4diac IDE source code in an Eclipse workspace as described in <a href="#buildFromSource">Building and Running 4diac IDE from Source</a></li>
+	<li>Have the 4diac&nbsp;IDE source code in an Eclipse workspace as described in <a href="#buildFromSource">Building and Running 4diac&nbsp;IDE from Source</a></li>
 	<li>Go to the root plugin <span class="inlineCode">org.eclipse.fordiac.ide</span> and right-click on the pom.xml</li>
 	<li>Invoke the <span class="menu4diac">Run As &rarr; Maven Install</span>.</li>	 
 	<li>After a successful build you will find the output in  <span class="folderLocation">plugins/org.eclipse.fordiac.ide.product/target/products</span> directory.</li>
 </ol>
 
-<p>Alternatively you can run <span class="mvn install"> on the command line in the root folder of 4diac IDE source code.</span>
+<p>Alternatively you can run <span class="mvn install"> on the command line in the root folder of 4diac&nbsp;IDE source code.</span>
 
 <h1>Where to go from here?</h1>
 

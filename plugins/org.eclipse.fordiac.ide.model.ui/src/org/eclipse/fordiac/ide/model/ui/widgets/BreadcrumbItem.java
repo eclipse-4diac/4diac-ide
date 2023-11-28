@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.ui.widgets;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -60,8 +59,8 @@ public class BreadcrumbItem {
 	private final BreadcrumbWidget parent;
 	private Shell shell;
 
-	BreadcrumbItem(final BreadcrumbWidget parent, final Object current,
-			final AdapterFactoryLabelProvider labelProvider, final AdapterFactoryContentProvider contentProvider) {
+	BreadcrumbItem(final BreadcrumbWidget parent, final Object current, final AdapterFactoryLabelProvider labelProvider,
+			final AdapterFactoryContentProvider contentProvider) {
 		this.current = current;
 		this.parent = parent;
 		this.labelProvider = labelProvider;
@@ -174,9 +173,8 @@ public class BreadcrumbItem {
 					.filter(obj -> (obj instanceof IFile) || (obj instanceof SystemConfiguration)
 							|| (obj instanceof Application) || (obj instanceof SubApp) || (obj instanceof CFBInstance)
 							|| (obj instanceof Device) || (obj instanceof Resource))
-					.sorted(new ChildrenSortComparator()).collect(Collectors.toList()).toArray();
+					.sorted(new ChildrenSortComparator()).toArray();
 		}
-
 
 		@Override
 		public Object getParent(final Object element) {
@@ -207,7 +205,8 @@ public class BreadcrumbItem {
 				final ImageData imageData = image.getImageData(zoom);
 				image.dispose();
 
-				final int whitePixel = imageData.palette.getPixel(display.getSystemColor(SWT.COLOR_LIST_BACKGROUND).getRGB());
+				final int whitePixel = imageData.palette
+						.getPixel(display.getSystemColor(SWT.COLOR_LIST_BACKGROUND).getRGB());
 				imageData.transparentPixel = whitePixel;
 
 				return imageData;
@@ -239,10 +238,11 @@ class ChildrenSortComparator implements Comparator<Object> {
 
 	@SuppressWarnings("static-method")
 	private String getName(final Object obj) {
-		if (obj instanceof IFile) {
-			return ((IFile) obj).getName();
-		} else if (obj instanceof INamedElement) {
-			return ((INamedElement) obj).getName();
+		if (obj instanceof final IFile file) {
+			return file.getName();
+		}
+		if (obj instanceof final INamedElement ne) {
+			return ne.getName();
 		}
 
 		// would not come here as already a filter in Arrays.stream

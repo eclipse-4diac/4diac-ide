@@ -17,6 +17,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -71,7 +72,7 @@ public class SystemImporter extends CommonElementImporter {
 	}
 
 	@Override
-	public void loadElement() {
+	public void loadElement() throws IOException, XMLStreamException, TypeImportException {
 		final long start = System.nanoTime();
 		super.loadElement();
 		final long elapsed = System.nanoTime() - start;

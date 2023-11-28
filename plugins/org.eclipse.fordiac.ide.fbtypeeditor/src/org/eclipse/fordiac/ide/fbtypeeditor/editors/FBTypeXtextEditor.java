@@ -29,7 +29,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
-public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEditorPart{
+public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEditorPart {
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -68,14 +68,27 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 	}
 
 	protected void revealEditor() {
-		final IEditorSite editorSite = getEditorSite();
-		if (editorSite instanceof MultiPageEditorSite) {
-			final MultiPageEditorSite multiPageEditorSite = (MultiPageEditorSite) editorSite;
+		if (getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
 			final MultiPageEditorPart multiPageEditor = multiPageEditorSite.getMultiPageEditor();
 			if (multiPageEditor.getSelectedPage() != this) {
 				multiPageEditor.setActiveEditor(this);
 			}
 		}
+	}
+
+	public CommandStack getCommandStack() {
+		if (getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
+			return multiPageEditorSite.getMultiPageEditor().getAdapter(CommandStack.class);
+		}
+		return null;
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == CommandStack.class) {
+			return adapter.cast(getCommandStack());
+		}
+		return super.getAdapter(adapter);
 	}
 
 	@Override

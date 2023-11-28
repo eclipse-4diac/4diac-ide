@@ -14,10 +14,11 @@
 package org.eclipse.fordiac.ide.gef.figures;
 
 import org.eclipse.draw2d.Label;
-import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 /**
  * The Class ToolTipFigure.
@@ -25,31 +26,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class ValueToolTipFigure extends ToolTipFigure {
-	/**
-	 * Instantiates a new tool tip figure.
-	 *
-	 * @param element the element
-	 */
 
-	private final Label valueLabel;
-	private final Label errorMsg;
-
-	public ValueToolTipFigure(final INamedElement element, final Value value) {
-		super(element);
-		valueLabel = new Label();
-		getLine().add(valueLabel);
-		errorMsg = new Label();
-		getLine().add(errorMsg);
-		setValue(element, value);
-	}
-
-	public void setValue(final INamedElement element, final Value value) {
-		valueLabel.setText(value.getValue());
-		if (element instanceof VarDeclaration) {
-			final String validationMsg = VariableOperations.validateValue((VarDeclaration) element, value.getValue());
-			if ((null != validationMsg) && !validationMsg.isBlank()) {
-				errorMsg.setText(validationMsg);
-			}
+	public ValueToolTipFigure(final IInterfaceElement element, final Value value,
+			final GraphicalAnnotationModel annotationModel) {
+		super(element, null); // pass null here to avoid showing annotations for element
+		getLine().add(new Label(FordiacMessages.Value + ": " + value.getValue())); //$NON-NLS-1$
+		if (annotationModel != null) {
+			annotationModel.getAnnotations(value).stream().forEach(annotation -> getLine()
+					.add(new Label(annotation.getText(), GraphicalAnnotationStyles.getAnnotationImage(annotation))));
 		}
 	}
 }

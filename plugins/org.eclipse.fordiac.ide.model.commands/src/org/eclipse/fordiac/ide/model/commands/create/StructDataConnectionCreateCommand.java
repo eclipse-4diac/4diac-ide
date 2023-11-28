@@ -87,7 +87,7 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 			final FBNetwork parent, final Connection con) {
 
 		if (!LinkConstraints.isDataPin(source) || !LinkConstraints.isDataPin(target)) {
-			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
+			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
 

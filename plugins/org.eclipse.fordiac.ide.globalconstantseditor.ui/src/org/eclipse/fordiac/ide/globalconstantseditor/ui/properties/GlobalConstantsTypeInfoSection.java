@@ -59,10 +59,13 @@ public class GlobalConstantsTypeInfoSection extends AbstractSection {
 		getWidgetFactory().createLabel(container, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createGroupText(container, true);
 		commentText.addModifyListener(e -> {
-			/* Without this if statement the editor would be "dirty" from the get-go: - editor listens for changes on
-			 * the type - first load also triggers refresh - refresh sets comment text (always, even if the comment is
-			 * empty) - the ChangeCommentCommand makes a change to the type Therefore, restricting command execution
-			 * does the trick. */
+			/*
+			 * Without this if statement the editor would be "dirty" from the get-go: -
+			 * editor listens for changes on the type - first load also triggers refresh -
+			 * refresh sets comment text (always, even if the comment is empty) - the
+			 * ChangeCommentCommand makes a change to the type Therefore, restricting
+			 * command execution does the trick.
+			 */
 			if (!commentText.getText().equals(getType().getComment())) {
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			}
@@ -71,7 +74,7 @@ public class GlobalConstantsTypeInfoSection extends AbstractSection {
 	}
 
 	private void createTypeInfoGroup(final Composite parent) {
-		typeInfoWidget = new PackageInfoWidget(getWidgetFactory());
+		typeInfoWidget = new PackageInfoWidget(getWidgetFactory(), this::getAnnotationModel);
 		typeInfoWidget.createControls(parent);
 	}
 

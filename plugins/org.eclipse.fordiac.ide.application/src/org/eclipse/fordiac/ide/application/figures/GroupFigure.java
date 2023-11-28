@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -111,31 +111,24 @@ public class GroupFigure extends Figure {
 
 		private static Rectangle nameShadowRect = new Rectangle();
 		private static Rectangle mainShadowRect = new Rectangle();
-		private static Rectangle clipRect = new Rectangle();
 
 		@Override
 		public void paintBackground(final IFigure figure, final Graphics graphics, final Insets insets) {
 			Assert.isTrue(figure instanceof GroupFigure);
 			final GroupFigure groupFigure = (GroupFigure) figure;
 
-			graphics.pushState();
+			final var backgroundColor = graphics.getBackgroundColor();
+			final var alpha = graphics.getAlpha();
 			graphics.setBackgroundColor(figure.getForegroundColor());
 
 			nameShadowRect.setBounds(groupFigure.getNameFigure().getBounds()).expand(2, 2);
 			mainShadowRect.setBounds(groupFigure.getMainFigure().getBounds()).expand(2, 2);
 
-			clipRect.setBounds(nameShadowRect);
-			clipRect.union(mainShadowRect);
-			clipRect.width += SHADOW_SIZE;
-			clipRect.height += SHADOW_SIZE;
-			graphics.setClip(clipRect);
-
 			drawShadowHalo(graphics, nameShadowRect, mainShadowRect);
-
 			drawDropShadow(graphics, nameShadowRect, mainShadowRect);
 
-			graphics.popState();
-
+			graphics.setBackgroundColor(backgroundColor);
+			graphics.setAlpha(alpha);
 		}
 
 		private static void drawShadowHalo(final Graphics graphics, final Rectangle nameShadowRect,

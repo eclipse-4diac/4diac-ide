@@ -20,8 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -40,12 +38,11 @@ public class DeleteInterfaceCommand extends Command {
 	private final List<? extends IInterfaceElement> targetList;
 	private final CompoundCommand cmds = new CompoundCommand();
 	private int oldIndex;
-	private final CompoundCommand deleteMarkersCmds = new CompoundCommand();
 
 	public DeleteInterfaceCommand(final IInterfaceElement interfaceElement) {
 		this.interfaceElement = interfaceElement;
 		parent = (InterfaceList) interfaceElement.eContainer();
-		targetList = getTargetList(this.interfaceElement);  // this has to be the adjust this.interfaceElement
+		targetList = getTargetList(this.interfaceElement); // this has to be the adjust this.interfaceElement
 	}
 
 	@Override
@@ -56,9 +53,6 @@ public class DeleteInterfaceCommand extends Command {
 				&& (parent.eContainer() instanceof CompositeFBType)) {
 			cmds.add(new DeleteFBNetworkElementCommand(adp.getAdapterNetworkFB()));
 		}
-		deleteMarkersCmds.add(
-				FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(interfaceElement)));
-		deleteMarkersCmds.execute();
 		performDeletion();
 		if (cmds.canExecute()) {
 			cmds.execute();
@@ -73,12 +67,10 @@ public class DeleteInterfaceCommand extends Command {
 		if (cmds.canUndo()) {
 			cmds.undo();
 		}
-		deleteMarkersCmds.undo();
 	}
 
 	@Override
 	public void redo() {
-		deleteMarkersCmds.redo();
 		targetList.remove(oldIndex);
 		if (cmds.canRedo()) {
 			cmds.redo();

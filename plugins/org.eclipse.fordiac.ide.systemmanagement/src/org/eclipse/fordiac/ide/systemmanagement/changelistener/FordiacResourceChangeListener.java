@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -40,6 +41,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -286,7 +288,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	}
 
-	private boolean handleResourceMovedFrom(final IResourceDelta delta) {
+	private boolean handleResourceMovedFrom(final IResourceDelta delta) throws CoreException {
 		final IProject project = delta.getResource().getProject();
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
 			return false;
@@ -305,7 +307,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	}
 
-	private boolean handleResourceCopy(final IResourceDelta delta) {
+	private boolean handleResourceCopy(final IResourceDelta delta) throws CoreException {
 		final IProject project = delta.getResource().getProject();
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
 			return false;
@@ -352,7 +354,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return filesToRename.stream().filter(entry -> entry.getTypeEntry().equals(palEntry)).findAny().orElse(null);
 	}
 
-	private void handleFileCopy(final IResourceDelta delta) {
+	private void handleFileCopy(final IResourceDelta delta) throws CoreException {
 		final IFile file = (IFile) delta.getResource();
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(file.getProject())) {
 			return;
@@ -422,7 +424,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		systemManager.renameProject(oldProject, newProject);
 	}
 
-	private void handleFileMove(final IResourceDelta delta) {
+	private void handleFileMove(final IResourceDelta delta) throws CoreException {
 		final IFile src = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getMovedFromPath());
 		final IFile dst = (IFile) delta.getResource();
 
@@ -466,12 +468,12 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private void handleFileRename(final IFile dst, final IFile src) {
+	private void handleFileRename(final IFile dst, final IFile src) throws CoreException {
 		handleTypeRename(src, dst);
 		systemManager.notifyListeners();
 	}
 
-	public static void handleTypeRename(final IFile src, final IFile file) {
+	public static void handleTypeRename(final IFile src, final IFile file) throws CoreException {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
 		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(src);
 		if (entry != null && src.equals(entry.getFile())) {
@@ -481,7 +483,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	public static void updateTypeEntry(final IFile newFile, final TypeEntry entry) {
+	public static void updateTypeEntry(final IFile newFile, final TypeEntry entry) throws CoreException {
 		if (entry == null) { // change to Assert ?
 			return;
 		}
@@ -504,11 +506,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		// TODO report on error
 				(!newTypeName.equals(type.getName()))) {
 			type.setName(newTypeName);
-			entry.save();
+			saveEntryWithWorkspaceJob(entry);
 		}
 	}
 
-	public static void updateTypeEntryByRename(final IFile newFile, final TypeEntry entry) {
+	public static void updateTypeEntryByRename(final IFile newFile, final TypeEntry entry) throws CoreException {
 		if (entry == null) { // change to Assert ?
 			return;
 		}
@@ -534,8 +536,33 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			if (typeLibrary != null) {
 				typeLibrary.addTypeEntry(entry);
 			}
-			entry.save();
+			saveEntryWithWorkspaceJob(entry);
 		}
+	}
+
+	private static void saveEntryWithWorkspaceJob(final TypeEntry entry) {
+		final WorkspaceJob job = new WorkspaceJob("Save type file: " + entry.getFile().getName()) {
+			@Override
+			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+				try {
+					entry.save(monitor);
+				} catch (final CoreException e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
+					return Status.CANCEL_STATUS;
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setUser(false);
+		job.setSystem(true);
+		job.setPriority(Job.SHORT);
+		IContainer parent = entry.getFile().getParent();
+		while (parent != null && !parent.exists()) {
+			parent = parent.getParent();
+		}
+		final ISchedulingRule rule = (parent != null) ? parent : ResourcesPlugin.getWorkspace().getRoot();
+		job.setRule(rule);
+		job.schedule();
 	}
 
 	private void handleProjectAdd(final IResourceDelta delta) {

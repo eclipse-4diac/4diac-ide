@@ -73,29 +73,24 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 				Set<INamedElement> elements = Collections.emptySet();
 
 				final EObject root = EcoreUtil.getRootContainer(struct.getModel());
-				if (root instanceof AutomationSystem) {
-					elements = structSearch.performApplicationSearch((AutomationSystem) root);
-				} else if (root instanceof SubAppType) {
-					elements = structSearch.performFBNetworkSearch(((SubAppType) root).getFBNetwork());
+				if (root instanceof final AutomationSystem sys) {
+					elements = structSearch.performApplicationSearch(sys);
+				} else if (root instanceof final SubAppType subAppType) {
+					elements = structSearch.performFBNetworkSearch(subAppType.getFBNetwork());
 				}
 				elements.removeIf(el -> el.equals(struct.getModel()) || isTypedOrContainedInTypedInstance(el));
 
 				// output connected elements only searchFilter
-				final List<INamedElement> elementsFilteredOut = new ArrayList<>();
 				if (outputConnectedOnlyBtn != null && !outputConnectedOnlyBtn.isDisposed()
 						&& outputConnectedOnlyBtn.getSelection()) {
 					final List<FBNetworkElement> connectedFbs = FBEndpointFinder.getConnectedFbs(new ArrayList<>(),
 							selectedItem);
-					elements.forEach(res -> {
-						if (res instanceof StructManipulator
-								&& (!((StructManipulator) res).getInterface().getEventInputs().isEmpty()
-										|| !((StructManipulator) res).getInterface().getInputVars().isEmpty())
-								&& !connectedFbs.contains(res)) {
-							elementsFilteredOut.add(res);
-						}
-					});
+					elements.removeIf(res -> (res instanceof final StructManipulator structMan
+							&& (!structMan.getInterface().getEventInputs().isEmpty()
+									|| !structMan.getInterface().getInputVars().isEmpty())
+							&& !connectedFbs.contains(res)));
+
 				}
-				elements.removeAll(elementsFilteredOut);
 				return elements;
 			}
 
@@ -124,7 +119,7 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		if (structUpdateDialog.open() == DEFAULT_BUTTON_INDEX) {
 			final TransferInstanceCommentsCommand cmd = new TransferInstanceCommentsCommand(struct.getModel(),
 					structUpdateDialog.getCollectedFBs().stream().filter(StructManipulator.class::isInstance)
-					.map(StructManipulator.class::cast).collect(Collectors.toSet()));
+							.map(StructManipulator.class::cast).collect(Collectors.toSet()));
 			commandStack.execute(cmd);
 		}
 		return null;
@@ -157,7 +152,7 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 			});
 		}
 
-		return connectedElements.stream().distinct().collect(Collectors.toList());
+		return connectedElements.stream().distinct().toList();
 	}
 
 	private static List<FBNetworkElement> getConnectedFbs(final IInterfaceElement srcPin) {
@@ -176,9 +171,8 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 	}
 
 	private static boolean isTypedOrContainedInTypedInstance(final INamedElement element) {
-		return element.eContainer() != null && element.eContainer().eContainer() instanceof SubApp
-				&& (((SubApp) element.eContainer().eContainer()).isContainedInTypedInstance()
-						|| ((SubApp) element.eContainer().eContainer()).isTyped());
+		return element.eContainer() != null && element.eContainer().eContainer() instanceof final SubApp subApp
+				&& (subApp.isContainedInTypedInstance() || subApp.isTyped());
 	}
 
 }

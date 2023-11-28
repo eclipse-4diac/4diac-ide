@@ -12,18 +12,27 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.resource;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
@@ -37,10 +46,26 @@ import org.eclipse.xtext.util.IAcceptor;
 
 import com.google.common.collect.ImmutableMap;
 
+/**
+ * Resource description strategy for ST core and derivatives.
+ * <p>
+ * This class overrides the default Xtext resource description strategy to adapt
+ * it to the specific requirements of the ST core language and its derivatives:
+ * <p>
+ * <ul>
+ * <li>provide additional information in the index for code completion,
+ * <li>provide a signature hash and type information to detect changes in
+ * exported descriptions,
+ * <li>filter reference descriptions to immutable built-in or error placeholder
+ * types.
+ * </ul>
+ */
 public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptionStrategy {
 
-	private final static Logger LOG = Logger.getLogger(STCoreResourceDescriptionStrategy.class);
+	private static final Logger LOG = Logger.getLogger(STCoreResourceDescriptionStrategy.class);
 
+	public static final String TYPE_URI = STCoreResourceDescriptionStrategy.class.getName() + ".TYPE_URI"; //$NON-NLS-1$
+	public static final String SIGNATURE_HASH = STCoreResourceDescriptionStrategy.class.getName() + ".SIGNATURE_HASH"; //$NON-NLS-1$
 	public static final String CONTAINER_ECLASS_NAME = STCoreResourceDescriptionStrategy.class.getName()
 			+ ".containerEClassName"; //$NON-NLS-1$
 	public static final String DISPLAY_STRING = STCoreResourceDescriptionStrategy.class.getName() + ".DISPLAY_STRING"; //$NON-NLS-1$
@@ -74,11 +99,32 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 			builder.put(CONTAINER_ECLASS_NAME, container.eClass().getName());
 		}
 		if (eObject instanceof final ICallable callable) {
+			builder.put(SIGNATURE_HASH, computeSignatureHash(callable));
 			builder.put(DISPLAY_STRING, getCallableDisplayString(callable));
 			final STCoreRegionString regionString = getCallableParameterProposal(callable);
 			builder.put(PARAMETER_PROPOSAL, regionString.toString());
 			builder.put(PARAMETER_PROPOSAL_REGIONS, regionString.getRegions().toString());
+		} else if (eObject instanceof final ITypedElement typedElement && typedElement.getType() != null) {
+			builder.put(TYPE_URI, EcoreUtil.getURI(typedElement.getType()).toString());
+			builder.put(DISPLAY_STRING, getTypedElementDisplayString(typedElement));
 		}
+	}
+
+	public static String computeSignatureHash(final ICallable callable) {
+		final SignatureHashBuilder builder = new SignatureHashBuilder();
+		Stream.of(callable.getInputParameters(), callable.getOutputParameters(), callable.getInOutParameters())
+				.flatMap(Collection::stream).forEachOrdered(builder::appendParameter);
+		if (callable.getReturnType() != null) {
+			builder.appendType(callable.getReturnType());
+		}
+		return builder.hash();
+	}
+
+	public static int computeParameterHash(final INamedElement parameter) {
+		if (parameter instanceof final ITypedElement typedElement) {
+			return Objects.hash(typedElement.getName(), typedElement.getType());
+		}
+		return parameter.getName().hashCode();
 	}
 
 	public static String getCallableDisplayString(final ICallable callable) {
@@ -88,13 +134,13 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 						callable.getInOutParameters().stream().map(param -> getCallableDisplayString(param, "&&"))) //$NON-NLS-1$
 						.flatMap(Function.identity())
 						.collect(Collectors.joining(", ", "(", STCoreUtil.isCallableVarargs(callable) ? " ...)" : ")")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				+ (callable.getReturnType() != null ? callable.getReturnType().getName() : ""); //$NON-NLS-1$
+				+ (callable.getReturnType() != null ? " : " + callable.getReturnType().getName() : ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected static String getCallableDisplayString(final INamedElement parameter, final String typePrefix) {
 		final INamedElement type = STCoreUtil.getFeatureType(parameter);
 		if (type != null) {
-			return parameter.getName() + ": " + typePrefix + type.getName(); //$NON-NLS-1$
+			return parameter.getName() + " : " + typePrefix + type.getName(); //$NON-NLS-1$
 		}
 		return parameter.getName();
 	}
@@ -139,6 +185,75 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 			return ValueOperations.defaultValue(type).toString();
 		} catch (final Exception e) {
 			return ""; //$NON-NLS-1$
+		}
+	}
+
+	public static String getTypedElementDisplayString(final ITypedElement typedElement) {
+		return typedElement.getName() + " : " + typedElement.getTypeName(); //$NON-NLS-1$
+	}
+
+	@Override
+	protected boolean isResolvedAndExternal(final EObject from, final EObject to) {
+		if (to instanceof final LibraryElement libraryElement
+				&& (libraryElement.getTypeEntry() == null || libraryElement.getTypeEntry() instanceof ErrorTypeEntry)) {
+			return false;
+		}
+		return super.isResolvedAndExternal(from, to);
+	}
+
+	public static class SignatureHashBuilder {
+
+		private final MessageDigest digest;
+		private final StringBuilder builder;
+
+		public SignatureHashBuilder() {
+			digest = createDigest();
+			builder = new StringBuilder();
+		}
+
+		protected static MessageDigest createDigest() {
+			try {
+				return MessageDigest.getInstance("MD5"); //$NON-NLS-1$
+			} catch (final NoSuchAlgorithmException e) {
+				LOG.error("Error creating message digest", e); //$NON-NLS-1$
+				return null;
+			}
+		}
+
+		protected void append(final String s) {
+			if (digest != null) {
+				digest.update(s.getBytes(StandardCharsets.UTF_8));
+			}
+			builder.append(s);
+		}
+
+		public SignatureHashBuilder appendType(final INamedElement type) {
+			append(EcoreUtil.getURI(type).toString());
+			return this;
+		}
+
+		public SignatureHashBuilder appendParameter(final INamedElement parameter) {
+			append(parameter.getName());
+			if (parameter instanceof final ITypedElement typedElement) {
+				appendType(typedElement.getType());
+			}
+			return this;
+		}
+
+		public String hash() {
+			if (digest != null) {
+				try {
+					return new BigInteger(digest.digest()).toString(16);
+				} catch (final Exception e) {
+					LOG.error("Error hashing signature", e); //$NON-NLS-1$
+				}
+			}
+			return builder.toString();
+		}
+
+		@Override
+		public String toString() {
+			return builder.toString();
 		}
 	}
 }

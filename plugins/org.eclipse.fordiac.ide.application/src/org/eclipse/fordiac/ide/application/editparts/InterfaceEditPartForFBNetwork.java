@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
@@ -27,6 +28,8 @@ import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationCompoundBorder;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationFeedbackBorder;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -62,7 +65,7 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 
 		@Override
 		public Point getLocation(final Point reference) {
-			if(valueHasError()) {
+			if (valueHasAnnotation()) {
 				final IFigure fig = getValueFigure();
 				if (fig != null) {
 					final Rectangle bounds = fig.getBounds().getCopy();
@@ -73,8 +76,9 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 			return super.getLocation(reference);
 		}
 
-		private boolean valueHasError() {
-			return getValue().hasError();
+		private boolean valueHasAnnotation() {
+			final Border border = getValueFigure().getBorder();
+			return border instanceof AnnotationFeedbackBorder || border instanceof AnnotationCompoundBorder;
 		}
 
 		private Value getValue() {
@@ -84,8 +88,8 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 		IFigure getValueFigure() {
 			if (valueFigure == null) {
 				final Object object = ieEP.getViewer().getEditPartRegistry().get(getValue());
-				if (object instanceof GraphicalEditPart) {
-					valueFigure = ((GraphicalEditPart) object).getFigure();
+				if (object instanceof final GraphicalEditPart graphicalEditPart) {
+					valueFigure = graphicalEditPart.getFigure();
 				}
 			}
 			return valueFigure;
@@ -148,7 +152,7 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 	protected void goInto() {
 		FBNetworkElement element = getModel().getFBNetworkElement();
 		IInterfaceElement selectionElement = getModel();
-		if ((element instanceof SubApp) && (needsOppositeSubapp((SubApp) element))) {
+		if ((element instanceof final SubApp subApp) && (needsOppositeSubapp(subApp))) {
 			// we are mapped and the mirrored subapp located in the resource, get the one
 			// from the application
 			element = element.getOpposite();
@@ -160,20 +164,17 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 	}
 
 	private static boolean needsOppositeSubapp(final SubApp subapp) {
-		//if a subapp is mapped and we are at the resource side we would like to get the opposite subapp
+		// if a subapp is mapped and we are at the resource side we would like to get
+		// the opposite subapp
 		return (subapp.isMapped() && EcoreUtil.isAncestor(subapp.getResource(), subapp));
 	}
 
 	protected boolean isUnfoldedSubapp() {
-		if (getModel().getFBNetworkElement() instanceof SubApp) {
-			final SubApp subapp = (SubApp) getModel().getFBNetworkElement();
-			if (subapp.isUnfolded()) {
-				return true;
-			}
+		if (getModel().getFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded()) {
+			return true;
 		}
 		return false;
 	}
-
 
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {

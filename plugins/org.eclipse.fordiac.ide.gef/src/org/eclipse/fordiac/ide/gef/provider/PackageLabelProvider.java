@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ *                    Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,39 +11,38 @@
  * Contributors:
  *   Fabio Gandolfi
  *     - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst
+ *     - convert to styled label provider to show annotations
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.provider;
 
+import java.util.function.Supplier;
+
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
-import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.jface.viewers.StyledString;
 
-/** The Class CompilerLabelProvider. */
-public class PackageLabelProvider extends LabelProvider implements ITableLabelProvider {
+public class PackageLabelProvider extends LabelProvider implements IStyledLabelProvider {
 
-	/* (non-Javadoc)
-	 *
-	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang. Object, int) */
-	@Override
-	public Image getColumnImage(final Object element, final int columnIndex) {
-		return null;
+	private final Supplier<GraphicalAnnotationModel> annotationModelSupplier;
+
+	public PackageLabelProvider(final Supplier<GraphicalAnnotationModel> annotationModelSupplier) {
+		this.annotationModelSupplier = annotationModelSupplier;
 	}
 
-	/* (non-Javadoc)
-	 *
-	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int) */
 	@Override
-	public String getColumnText(final Object element, final int columnIndex) {
-
-		if (element instanceof final Import importer) {
-			switch (columnIndex) {
-			case 0:
-				return ((Import) element).getImportedNamespace();
-			default:
-				break;
+	public StyledString getStyledText(final Object element) {
+		final GraphicalAnnotationModel annotationModel = annotationModelSupplier.get();
+		if (element instanceof final Import imp) {
+			if (annotationModel != null) {
+				return new StyledString(imp.getImportedNamespace(),
+						GraphicalAnnotationStyles.getAnnotationStyle(annotationModel.getAnnotations(imp)));
 			}
+			return new StyledString(imp.getImportedNamespace());
 		}
-		return element.toString();
+		return null;
 	}
 }

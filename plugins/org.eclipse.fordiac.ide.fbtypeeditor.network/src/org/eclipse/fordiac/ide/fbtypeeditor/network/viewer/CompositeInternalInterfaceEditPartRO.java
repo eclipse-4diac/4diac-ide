@@ -33,7 +33,7 @@ public class CompositeInternalInterfaceEditPartRO extends InterfaceEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		final InterfaceFigure figure = new InterfaceFigure();
+		final IFigure figure = super.createFigure();
 		figure.setBorder(new ConnectorBorder(getModel()) {
 			@Override
 			public boolean isInput() {

@@ -26,7 +26,7 @@ public class DeleteInternalFBCommand extends Command {
 	private final BaseFBType baseFbtype;
 
 	/** The variable that is deleted */
-	private FB fbToDelete;
+	private final FB fbToDelete;
 
 	/** The old index. */
 	private int oldIndex;
@@ -52,7 +52,7 @@ public class DeleteInternalFBCommand extends Command {
 
 	@Override
 	public void redo() {
-		fbToDelete = getInteralFBList().remove(oldIndex);
+		getInteralFBList().remove(oldIndex);
 	}
 
 	@Override

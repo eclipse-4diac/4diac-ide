@@ -16,6 +16,7 @@ import java.util.regex.Pattern
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType
@@ -36,6 +37,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
@@ -161,10 +164,14 @@ final class ForteNgExportUtil {
 				"forte_string"
 			WstringType:
 				"forte_wstring"
-			AdapterType: type.name
 			ArrayType: type.baseType.generateTypeBasename
+			AdapterType: type.name + "_adp"
+			AnyDerivedType: type.name + "_dtp"
 			DataType case GenericTypes.isAnyType(type): '''forte_«type.generateTypeNamePlain.toLowerCase»_variant'''
 			DataType: '''forte_«type.name.toLowerCase»'''
+			FunctionFBType: type.name + "_fct"
+			FBType: type.name + "_fbt"
+			GlobalConstants: type.name + "_gcf"
 			default:
 				type.name
 		}

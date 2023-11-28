@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -91,9 +90,9 @@ public class RenameTypeRefactoring extends Refactoring {
 		// depending if the in-place renaming is active we may not be in the display
 		// thread
 		Display.getDefault().syncExec(() -> {
-			final IEditorPart findEditor = EditorUtils
-					.findEditor((final IEditorPart editor) -> editor.getEditorInput() instanceof FileEditorInput
-							&& ((FileEditorInput) editor.getEditorInput()).getFile().equals(typeEntry.getFile()));
+			final IEditorPart findEditor = EditorUtils.findEditor(
+					(final IEditorPart editor) -> editor.getEditorInput() instanceof final FileEditorInput fei
+							&& fei.getFile().equals(typeEntry.getFile()));
 			if (findEditor != null && findEditor.isDirty()) {
 				if (shouldSaveFile(findEditor.getSite().getShell(), oldName)) {
 					findEditor.doSave(new NullProgressMonitor());
@@ -136,7 +135,7 @@ public class RenameTypeRefactoring extends Refactoring {
 		InstanceSearch search = StructDataTypeSearch
 				.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable());
 
-		final Set<INamedElement> allFBWithStruct = InstanceSearch.performSearch(
+		final Set<INamedElement> allFBWithStruct = InstanceSearch.performProjectSearch(typeEntry.getFile().getProject(),
 				StructDataTypeSearch.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable()),
 				StructDataTypeSearch.createStructInterfaceSearch((StructuredType) typeEntry.getTypeEditable()),
 				new FBInstanceSearch((DataTypeEntry) typeEntry));
@@ -173,9 +172,9 @@ public class RenameTypeRefactoring extends Refactoring {
 					.add(new RenameTypeChange(typeEntry, getNewName() + TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT));
 		}
 		final CompositeChange change = new CompositeChange(Messages.Refactoring_AffectedInstancesOfFB);
-		allFBs = InstanceSearch.performSearch(FBTypeSearch.createFBTypeSearch(type));
-		change.add(new UpdateInstancesChange(
-				allFBs.stream().map(FBNetworkElement.class::cast).collect(Collectors.toList()), typeEntry));
+		allFBs = InstanceSearch.performProjectSearch(typeEntry.getFile().getProject(),
+				FBTypeSearch.createFBTypeSearch(type));
+		change.add(new UpdateInstancesChange(allFBs.stream().map(FBNetworkElement.class::cast).toList(), typeEntry));
 		if (!allFBs.isEmpty()) {
 			parentChange.add(change);
 		}

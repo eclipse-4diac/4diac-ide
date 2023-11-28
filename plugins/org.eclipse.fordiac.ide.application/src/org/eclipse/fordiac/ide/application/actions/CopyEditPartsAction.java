@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
@@ -43,9 +44,11 @@ public class CopyEditPartsAction extends SelectionAction {
 
 	/** The templates. */
 
-	/** Instantiates a new copy edit parts action.
+	/**
+	 * Instantiates a new copy edit parts action.
 	 *
-	 * @param editor the editor */
+	 * @param editor the editor
+	 */
 	public CopyEditPartsAction(final IEditorPart editor) {
 		super(editor);
 		setId(ActionFactory.COPY.getId());
@@ -84,7 +87,22 @@ public class CopyEditPartsAction extends SelectionAction {
 				}
 			}
 		}
+		removeDuplicateElements(copyPasteData);
 		return copyPasteData;
+	}
+
+	/*
+	 * Remove elements, if they are already inside a selected top-level subapp. This
+	 * is especially important for Cut otherwise elements would be removed and
+	 * inserted wrongly.
+	 */
+	private static void removeDuplicateElements(final CopyPasteData copyPasteData) {
+		copyPasteData.elements()
+				.removeIf(element -> copyPasteData.elements().stream().filter(SubApp.class::isInstance)
+						.map(SubApp.class::cast).filter(subapp -> !subapp.isTyped())
+						.anyMatch(subapp -> subapp.getSubAppNetwork().getNetworkElements().contains(element)));
+		copyPasteData.elements().removeIf(element -> copyPasteData.elements().stream().filter(Group.class::isInstance)
+				.map(Group.class::cast).anyMatch(group -> group.getGroupElements().contains(element)));
 	}
 
 	private static Collection<ConnectionReference> getAllFBNElementConnections(final FBNetworkElement model,

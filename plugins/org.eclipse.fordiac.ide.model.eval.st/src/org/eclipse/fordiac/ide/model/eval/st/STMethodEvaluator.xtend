@@ -21,6 +21,8 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
+import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
+
 @FinalFieldsConstructor
 class STMethodEvaluator extends StructuredTextEvaluator {
 	final STMethod method
@@ -72,5 +74,9 @@ class STMethodEvaluator extends StructuredTextEvaluator {
 
 	override STMethod getSourceElement() {
 		method
+	}
+
+	override getDependencies() {
+		method.collectUsedTypes
 	}
 }

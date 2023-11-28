@@ -29,7 +29,7 @@
 
 	<p>In this tutorial, an implementation of a PID controller for an EV3 motor is presented. 
 	The position of the motor will be controlled using PWM. 
-	The implementation shows all the steps from creating a PID Functional Block in 4diac IDE, up to tuning the PID controller and printing the values in a graph.</p>
+	The implementation shows all the steps from creating a PID Functional Block in 4diac&nbsp;IDE, up to tuning the PID controller and printing the values in a graph.</p>
 
 	<p>A basic usage knowledge of Eclipse 4diac is necessary to follow through the steps.</p>
 
@@ -191,29 +191,29 @@ END_IF; </code></div>
  Information about anti-windup can for example be found <a target="_blank" href="https://pdfs.semanticscholar.org/9774/270fa07e4be5dbe77dc7bf2a285167b82b68.pdf">here.</a>
 	</p>
 
-	<p>With the algorithms done, the FB is ready to be exported and compiled with 4diac FORTE.</p>
+	<p>With the algorithms done, the FB is ready to be exported and compiled with 4diac&nbsp;FORTE.</p>
 
-	<h3>Exporting and compiling with FORTE for the EV3</h3>
+	<h3>Exporting and compiling with 4diac&nbsp;FORTE for the EV3</h3>
 
-	<p>Once the FB is ready, go to File &rarr; Export... and select 4diac IDE &rarr; 4diac IDE Type Export. 
+	<p>Once the FB is ready, go to File &rarr; Export... and select 4diac&nbsp;IDE &rarr; 4diac&nbsp;IDE Type Export. 
 	Then explore the folder tree on the left and select the PID FB created on the right. 
 	Choose where to export and then click Finish.</p>
 
-	<p>To get the source code ready for compiling your FORTE with the created FB, the generated .cpp and .h files have to be added to the CMake configuration. 
+	<p>To get the source code ready for compiling your 4diac&nbsp;FORTE with the created FB, the generated .cpp and .h files have to be added to the CMake configuration. 
 	The easiest way to do that is to put both files into the folder src/modules/lms_ev3 and add a file CMakeLists.txt in that folder, with the following line at the end:</p>
 
 	<div class="code">forte_add_sourcefile_hcpp(PID)</div>
 
 	<p>
- The next thing to do is to compile FORTE for the EV3. 
+ The next thing to do is to compile 4diac&nbsp;FORTE for the EV3. 
  The easiest way to do it is to copy all the code to the EV3, get the compiling tools inside the EV3 and compile it. 
  The process is really slow compared if it is done in a normal computer, but for compiling once it is much faster than setting all the cross-compiling environment explained <a target="_blank" href="http://www.ev3dev.org/docs/tutorials/using-brickstrap-to-cross-compile/">here.</a> 
  More details are presented in the <a href="../../html/installation/legoMindstormEv3.html#ev3_introduction">section</a> above.
 	</p>
 
-	<h3>Creating the PID Application in 4diac IDE</h3>
+	<h3>Creating the PID Application in 4diac&nbsp;IDE</h3>
 
-	<p>After FORTE with the PID runs in the EV3, is time to create the application that will run on it to control the motor position, and store the values. 
+	<p>After 4diac&nbsp;FORTE with the PID runs in the EV3, is time to create the application that will run on it to control the motor position, and store the values. 
 	The application will be shown in parts, for a better understanding.</p>
 
 	<h4>ON/OFF the controller</h4>
@@ -258,11 +258,11 @@ END_IF; </code></div>
 
 	<img src="../../html/examples/img/pidMotor/PIDPublish.png" alt="Publishing the data to the PC" />
 
-	<p>The configuration of the resource of the PC where the data will be stored, consists of a SUBSCRIBE_2 FB that will receive the information published by the EV3. The ID is the same as the publisher, and the outputs are converted using the STRING2STRING because the output is an ANY type. When both conversion are done, they are written in the file. Take in account that the CSV_WRITER FB doesn't flush inmediately the output, so the FORTE application must exit to read the information in the file.</p>
+	<p>The configuration of the resource of the PC where the data will be stored, consists of a SUBSCRIBE_2 FB that will receive the information published by the EV3. The ID is the same as the publisher, and the outputs are converted using the STRING2STRING because the output is an ANY type. When both conversion are done, they are written in the file. Take in account that the CSV_WRITER FB doesn't flush inmediately the output, so the 4diac&nbsp;FORTE application must exit to read the information in the file.</p>
 
 	<img src="../../html/examples/img/pidMotor/PIDSubscribe.png" alt="Subscribe to data from EV3" />
 
-	<p> NOTE: In Windows machines, the used Multicast address is not always detected and the packets from the EV3 don't arrive to the FORTE application in the PC. 
+	<p> NOTE: In Windows machines, the used Multicast address is not always detected and the packets from the EV3 don't arrive to the 4diac&nbsp;FORTE application in the PC. 
 	This happens often if the PC is connected to the EV3 through an ad-hoc connection. 
 	To overcome this, try adding the address route with gateway to your own machine in the as presented in the Troubleshooting part at the bottom of the <a href="../../html/examples/bbbTraficControl.html#troubleshooting">Traffic Control with BBB example</a></p>
 

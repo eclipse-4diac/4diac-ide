@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -62,9 +63,10 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 		try {
 			final WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 				@Override
-				protected void execute(final IProgressMonitor monitor) {
+				protected void execute(final IProgressMonitor monitor) throws CoreException {
 					final IProgressMonitor monitorToUse = (null == monitor) ? new NullProgressMonitor() : monitor;
-					final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(getSystemLocation(), page.getSystemName());
+					final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(getSystemLocation(),
+							page.getSystemName(), monitor);
 					TypeManagementPreferencesHelper.setupVersionInfo(system);
 					createInitialApplication(monitorToUse, system);
 				}

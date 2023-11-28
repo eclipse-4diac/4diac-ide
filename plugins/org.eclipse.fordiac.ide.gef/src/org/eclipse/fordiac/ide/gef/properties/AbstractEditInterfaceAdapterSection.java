@@ -92,7 +92,8 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 			}
 		});
 		final DataLayer outputDataLayer = new DataLayer(outputProvider);
-		outputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(outputProvider));
+		outputDataLayer.setConfigLabelAccumulator(
+				new TypedElementConfigLabelAccumulator(outputProvider, this::getAnnotationModel));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(),
 				createTypeSelectionButton(), this, false);
@@ -111,7 +112,8 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 			}
 		});
 		final DataLayer inputDataLayer = new DataLayer(inputProvider);
-		inputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(inputProvider));
+		inputDataLayer.setConfigLabelAccumulator(
+				new TypedElementConfigLabelAccumulator(inputProvider, this::getAnnotationModel));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(),
 				createTypeSelectionButton(), this, true);

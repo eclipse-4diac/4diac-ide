@@ -231,10 +231,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createErrorMarkerInterfaceAdapter();
 			}
 			@Override
-			public Adapter caseErrorMarkerRef(ErrorMarkerRef object) {
-				return createErrorMarkerRefAdapter();
-			}
-			@Override
 			public Adapter caseEvent(Event object) {
 				return createEventAdapter();
 			}
@@ -1029,20 +1025,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createErrorMarkerInterfaceAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef <em>Error Marker Ref</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef
-	 * @generated
-	 */
-	public Adapter createErrorMarkerRefAdapter() {
 		return null;
 	}
 

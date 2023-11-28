@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
@@ -44,7 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  * @generated
  */
-public class ArraySizeImpl extends ErrorMarkerRefImpl implements ArraySize {
+public class ArraySizeImpl extends EObjectImpl implements ArraySize {
 	/**
 	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->

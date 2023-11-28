@@ -23,7 +23,6 @@ import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.getFBNetwor
 import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.openEditor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -74,12 +73,11 @@ public class MoveToParentHandler extends AbstractHandler {
 	private static void selectElements(final IEditorPart editor, final List<FBNetworkElement> fbelements) {
 		final GraphicalViewer viewer = getViewer(fbelements.get(0).getFbNetwork(), editor);
 		final List<EditPart> eps = fbelements.stream().map(el -> (EditPart) viewer.getEditPartRegistry().get(el))
-				.collect(Collectors.toList());
+				.toList();
 		viewer.setSelection(new StructuredSelection(eps));
 	}
 
-	private static Rectangle getParentSubappBounds(final IEditorPart editor,
-			final List<FBNetworkElement> fbelements) {
+	private static Rectangle getParentSubappBounds(final IEditorPart editor, final List<FBNetworkElement> fbelements) {
 		final FBNetwork subappNetwork = getParentOfParent(fbelements.get(0));
 		final GraphicalViewer viewer = getViewer(subappNetwork, editor);
 		viewer.flush();
@@ -88,8 +86,7 @@ public class MoveToParentHandler extends AbstractHandler {
 		return ep.getFigure().getBounds();
 	}
 
-	private static GraphicalViewer getViewer(final FBNetwork subappNetwork,
-			final IEditorPart parent) {
+	private static GraphicalViewer getViewer(final FBNetwork subappNetwork, final IEditorPart parent) {
 		if (!getFBNetwork(parent).equals(subappNetwork)) {
 			// source subapp editor, subapp content is not open
 			return HandlerHelper.getViewer(openEditor(subappNetwork.eContainer()));
@@ -102,12 +99,11 @@ public class MoveToParentHandler extends AbstractHandler {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 
-		final List<FBNetworkElement> fbelements = HandlerHelper.getSelectedFBNElements(selection);
-		if ((!fbelements.isEmpty()) && (fbelements.get(0).getFbNetwork().eContainer() instanceof SubApp)) {
+		final List<FBNetworkElement> fbElements = HandlerHelper.getSelectedFBNElements(selection);
+		if ((!fbElements.isEmpty()) && (fbElements.get(0).getFbNetwork().eContainer() instanceof SubApp)) {
 			// we are inside of a subapp
-			final FBNetwork parent = fbelements.get(0).getFbNetwork();
-			final boolean sameParentNetwork = fbelements.stream()
-					.allMatch(el -> parent.equals(el.getFbNetwork()));
+			final FBNetwork parent = fbElements.get(0).getFbNetwork();
+			final boolean sameParentNetwork = fbElements.stream().allMatch(el -> parent.equals(el.getFbNetwork()));
 			setBaseEnabled(sameParentNetwork);
 			return;
 		}

@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.eval.variable.VariableEvaluator
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -137,6 +138,23 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator implements Variabl
 			)
 		else
 			type
+	}
+
+	override getDependencies() {
+		(typeDependencies + initialValueDependencies).toSet
+	}
+
+	def protected getTypeDependencies() {
+		if (varDeclaration.FBNetworkElement === null) {
+			prepareResultType
+			parseResultType?.collectUsedTypes ?: #{PackageNameHelper.getFullTypeName(varDeclaration.type)}
+		} else
+			emptySet
+	}
+
+	def protected getInitialValueDependencies() {
+		prepareInitialValue
+		parseResult?.collectUsedTypes ?: emptySet
 	}
 
 	override getSourceElement() { varDeclaration }

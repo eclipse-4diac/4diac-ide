@@ -24,7 +24,8 @@ public class RoundedRectangleShadowBorder extends AbstractShadowBorder {
 
 	@Override
 	public void paintBackground(final IFigure figure, final Graphics graphics, final Insets insets) {
-		graphics.pushState();
+		final var backgroundColor = graphics.getBackgroundColor();
+		final var alpha = graphics.getAlpha();
 		graphics.setBackgroundColor(figure.getForegroundColor());
 
 		if (figure instanceof final RoundedRectangle roundRect) {
@@ -33,17 +34,11 @@ public class RoundedRectangleShadowBorder extends AbstractShadowBorder {
 		}
 
 		final Rectangle shadowRect = getPaintRectangle(figure, SHADOW_INSETS).expand(2, 2);
-		shadowRect.width += SHADOW_SIZE;
-		shadowRect.height += SHADOW_SIZE;
-		graphics.setClip(shadowRect);
-		shadowRect.width -= SHADOW_SIZE;
-		shadowRect.height -= SHADOW_SIZE;
-
 		drawShadowHalo(graphics, shadowRect);
-
 		drawDropShadow(graphics, shadowRect);
 
-		graphics.popState();
+		graphics.setBackgroundColor(backgroundColor);
+		graphics.setAlpha(alpha);
 	}
 
 	private void drawShadowHalo(final Graphics graphics, final Rectangle shadowRect) {

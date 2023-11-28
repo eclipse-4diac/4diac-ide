@@ -28,12 +28,9 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.HideConnectionCommand;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -78,18 +75,20 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 		final Set<Boolean> visibility = new HashSet<>();
 		for (final EditPart obj : selection) {
 			if (obj instanceof final ConnectionEditPart conep) {
-				visibility.add(!conep.getFigure().isHidden());
+				visibility.add(Boolean.valueOf(!conep.getFigure().isHidden()));
 			} else if (obj instanceof final AbstractFBNElementEditPart fbEP) {
 				for (final IInterfaceElement element : fbEP.getModel().getInterface().getAllInterfaceElements()) {
 					if (element.isIsInput() && !element.getInputConnections().isEmpty()) {
-						element.getInputConnections().forEach(conn -> visibility.add(conn.isVisible()));
+						element.getInputConnections()
+								.forEach(conn -> visibility.add(Boolean.valueOf(conn.isVisible())));
 					}
 					if (!element.isIsInput() && !element.getOutputConnections().isEmpty()) {
-						element.getOutputConnections().forEach(conn -> visibility.add(conn.isVisible()));
+						element.getOutputConnections()
+								.forEach(conn -> visibility.add(Boolean.valueOf(conn.isVisible())));
 					}
 				}
 			} else if (obj instanceof final InterfaceEditPart iep) {
-				visibility.add(checkPinVisibility(iep.getModel()));
+				visibility.add(Boolean.valueOf(checkPinVisibility(iep.getModel())));
 			}
 		}
 
@@ -97,7 +96,7 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 			return true;
 		}
 
-		return visibility.contains(true);
+		return visibility.contains(Boolean.TRUE);
 	}
 
 	private static void toggleConnections(final CompoundCommand commands, final IStructuredSelection selection,
@@ -157,7 +156,7 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_EDITOR_NAME);
-		setBaseEnabled(selection != null && editor != null && selectionContainsConnectionsOrFbs(selection));
+		setBaseEnabled(selection != null && validEditor(editor) && selectionContainsConnectionsOrFbs(selection));
 	}
 
 	private static boolean selectionContainsConnectionsOrFbs(final ISelection selection) {
@@ -169,9 +168,6 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 
 	private static boolean hasConnection(final Object ep) {
 		if (ep instanceof final AbstractFBNElementEditPart fbEP) {
-			if (isInViewer(fbEP.getModel())) {
-				return false;
-			}
 			for (final IInterfaceElement ie : fbEP.getModel().getInterface().getAllInterfaceElements()) {
 				if (hasConnection(ie)) {
 					return true;
@@ -182,29 +178,12 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 	}
 
 	private static boolean hasConnection(final IInterfaceElement ie) {
-		if (ie.getFBNetworkElement() != null && isInViewer(ie.getFBNetworkElement())) {
-			return false;
-		}
 		return (ie.isIsInput() && !ie.getInputConnections().isEmpty()
 				|| !ie.isIsInput() && !ie.getOutputConnections().isEmpty());
 	}
 
 	private static boolean isConnection(final Object ep) {
-		return ep instanceof final ConnectionEditPart cep && cep.getFigure() != null && !isInViewer(cep.getModel());
-	}
-
-	private static boolean isInViewer(final Connection model) {
-		if (model.getFBNetwork().eContainer() instanceof final FBNetworkElement fbnEl) {
-			return isInViewer(fbnEl);
-		}
-		return false;
-	}
-
-	private static boolean isInViewer(final FBNetworkElement fbnEl) {
-		if (((fbnEl instanceof final SubApp subApp) && (subApp.isTyped())) || (fbnEl instanceof CFBInstance)) {
-			return true;
-		}
-		return FBNetworkElementHelper.isContainedInTypedInstance(fbnEl);
+		return ep instanceof final ConnectionEditPart cep && cep.getFigure() != null;
 	}
 
 	@Override
@@ -226,6 +205,12 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 		} else {
 			element.setText(isSingular ? Messages.ToggleConnections_Singular_Show : Messages.ToggleConnections_Show);
 		}
+	}
+
+	private static boolean validEditor(final IEditorPart editor) {
+		// only if the editor can adapt to an FBNetwork it is a valid editor, otherwise
+		// it is only a viewer
+		return editor != null && editor.getAdapter(FBNetwork.class) != null;
 	}
 
 }

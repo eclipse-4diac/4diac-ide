@@ -25,6 +25,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.util.List;
+
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.Shape;
@@ -39,6 +41,9 @@ import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNConnectionEndpointPolicy;
 import org.eclipse.fordiac.ide.application.tools.ConnectionSelectEditPartTracker;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
@@ -67,21 +72,18 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
-public class ConnectionEditPart extends AbstractConnectionEditPart {
+public class ConnectionEditPart extends AbstractConnectionEditPart implements AnnotableGraphicalEditPart {
 
 	private class ConnectionContentAdapter extends EContentAdapter {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
 
-			if (!LibraryElementPackage.eINSTANCE.getErrorMarkerRef_ErrorMessage().equals(feature)) {
-				refreshVisuals();
-			}
+			refreshVisuals();
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getErrorMarkerRef_ErrorMessage().equals(feature)) {
-				refreshComment();
+					|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
+				refreshTooltip();
 			}
 			if (LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
 				addSourceAdapters();
@@ -122,11 +124,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 				conEPPolicy.showSelection();
 			}
 		}
-
-		private void refreshComment() {
-			getFigure().setToolTip(new ConnectionTooltipFigure(getModel()));
-		}
-
 	}
 
 	private final class SrcDstAdapter extends AdapterImpl {
@@ -140,25 +137,22 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 					|| LibraryElementPackage.eINSTANCE.getFBNetworkElement_Group().equals(feature)) {
 				if ((getSource() instanceof final InterfaceEditPartForFBNetwork editPart
 						&& !editPart.getModel().isIsInput())) {
-					for (final Object o : editPart.getSourceConnections()) {
-						if (o instanceof final ConnectionEditPart connEditPart) {
-							connEditPart.getFigure().updateConLabels();
-						}
-					}
+					updateConnectionLables(editPart.getSourceConnections());
 				}
 				if ((getTargetEP() instanceof final InterfaceEditPartForFBNetwork editPart
 						&& editPart.getModel().isIsInput())) {
-					for (final Object o : editPart.getTargetConnections()) {
-						if (o instanceof final ConnectionEditPart connEditPart) {
-							connEditPart.getFigure().updateConLabels();
-						}
-					}
+					updateConnectionLables(editPart.getTargetConnections());
 				}
 			}
 			if (LibraryElementPackage.eINSTANCE.getFBNetworkElement_Group().equals(feature)) {
 				getFigure().handleVisibilityChange(getFigure().isHidden()); // triggers new label creation
 			}
 		}
+	}
+
+	private static void updateConnectionLables(final List<?> editPartConnections) {
+		editPartConnections.stream().filter(ConnectionEditPart.class::isInstance).map(ConnectionEditPart.class::cast)
+				.map(ConnectionEditPart::getFigure).forEach(FBNetworkConnection::updateConLabels);
 	}
 
 	private EditPart getTargetEP() {
@@ -223,7 +217,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		connectionFigure.setHidden(!getModel().isVisible());
 
 		performConnTypeConfiguration(connectionFigure);
-		connectionFigure.setToolTip(new ConnectionTooltipFigure(getModel()));
+		connectionFigure
+				.setToolTip(new ConnectionTooltipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
 		connectionFigure.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 		return connectionFigure;
 	}
@@ -402,4 +397,13 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		return (FBNConnectionEndpointPolicy) getEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE);
 	}
 
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		refreshTooltip();
+	}
+
+	private void refreshTooltip() {
+		getFigure().setToolTip(new ConnectionTooltipFigure(getModel(),
+				FordiacAnnotationUtil.getAnnotationModel(ConnectionEditPart.this)));
+	}
 }

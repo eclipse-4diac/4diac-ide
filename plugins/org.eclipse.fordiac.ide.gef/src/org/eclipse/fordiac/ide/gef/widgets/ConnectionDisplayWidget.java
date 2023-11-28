@@ -152,6 +152,7 @@ public class ConnectionDisplayWidget {
 
 	public void setEditable(final boolean edit) {
 		inputButtons.setVisible(edit);
+		inputButtons.setEnabled(edit);
 	}
 
 	private class ConnectionCellModifier implements ICellModifier {

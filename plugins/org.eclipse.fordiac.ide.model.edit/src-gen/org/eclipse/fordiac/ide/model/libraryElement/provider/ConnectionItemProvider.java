@@ -58,7 +58,6 @@ public class ConnectionItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addErrorMessagePropertyDescriptor(object);
 			addBrokenConnectionPropertyDescriptor(object);
 			addSourcePropertyDescriptor(object);
 			addDestinationPropertyDescriptor(object);
@@ -82,28 +81,6 @@ public class ConnectionItemProvider
 				 getString("_UI_Connection_comment_feature"), //$NON-NLS-1$
 				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_comment_feature", "_UI_Connection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 LibraryElementPackage.Literals.CONNECTION__COMMENT,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Error Message feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addErrorMessagePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ErrorMarkerRef_errorMessage_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerRef_errorMessage_feature", "_UI_ErrorMarkerRef_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.ERROR_MARKER_REF__ERROR_MESSAGE,
 				 true,
 				 false,
 				 false,
@@ -208,10 +185,8 @@ public class ConnectionItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Connection)object).getErrorMessage();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Connection_type") : //$NON-NLS-1$
-			getString("_UI_Connection_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		Connection connection = (Connection)object;
+		return getString("_UI_Connection_type") + " " + connection.isBrokenConnection(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 
@@ -227,7 +202,6 @@ public class ConnectionItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Connection.class)) {
-			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
 			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
 			case LibraryElementPackage.CONNECTION__COMMENT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

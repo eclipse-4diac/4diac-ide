@@ -20,27 +20,29 @@
 </head>
 <body>
 <h1 id="topOfPage">OPC UA with IEC 61499 Tutorial</h1>
-<p>This tutorial shows how you can use <a href="https://en.wikipedia.org/wiki/OPC_Unified_Architecture" target="_blank">OPC UA</a> in an IEC 61499 Application using available FBs. You should first complete the <a href="../../html/4diacIDE/use4diacLocally.html" target="_blank">First Steps in 4DIAC Tutorial</a> to get familiar with the 4diac IDE. FORTE uses the <a href="http://open62541.org/" target="_blank">open62541</a> OPC UA stack which is open source and can also be used in commercial projects free of charge.</p>
+<p>This tutorial shows how you can use <a href="https://en.wikipedia.org/wiki/OPC_Unified_Architecture" target="_blank">OPC UA</a> in an IEC 61499 Application using available FBs. 
+You should first complete the <a href="../../html/4diacIDE/use4diacLocally.html" target="_blank">First Steps in Eclipse 4diac Tutorial</a> to get familiar with the 4diac&nbsp;IDE.
+4diac&nbsp;FORTE uses the <a href="http://open62541.org/" target="_blank">open62541</a> OPC UA stack which is open source and can also be used in commercial projects free of charge.</p>
 
-<p>After version 1.11.0 of 4diac, the OPC UA module has changed its API, so applications developed before this version won't be compatible. The changes give more stability to 4diac FORTE and also brings new features. The OPC UA module can be used with v1.0 of open62541.</p>
+<p>After version 1.11.0 of 4diac&nbsp;FORTE, the OPC UA module has changed its API, so applications developed before this version won't be compatible. The changes give more stability to 4diac&nbsp;FORTE and also brings new features. The OPC UA module can be used with v1.0 of open62541.</p>
 
 <p>Tasks in this tutorial:</p>
 <ol>
-	<li><a href="#build">Build FORTE with open62541</a></li>
+	<li><a href="#build">Build 4diac&nbsp;FORTE with open62541</a></li>
 	<li><a href="#variables">Provide OPC UA variables to clients</a></li>
 	<li><a href="#methods">Offer an OPC UA method to be called by clients</a></li>
 	<li><a href="#client">Call a remote method from a IEC 61499 Application</a></li>
 	<li><a href="#subscriptions">Create an OPC UA subscription in an IEC 61499 Application</a></li>
 </ol>
 
-<h2 id="build">Build FORTE with open62541</h2>
-<p>OPC UA is not enabled by default in FORTE. To enable it, you need to build FORTE with the open62541 source code yourself.</p>
+<h2 id="build">Build 4diac&nbsp;FORTE with open62541</h2>
+<p>OPC UA is not enabled by default in 4diac&nbsp;FORTE. To enable it, you need to build 4diac&nbsp;FORTE with the open62541 source code yourself.</p>
 
 <p class="attention"><span class="inlineTitle">Attention</span>: You need <a href="https://www.python.org/" target="_blank">python</a> installed on your computer in order to compile the OPCUA library.</p>
 
 <h3>Linux</h3>
 <ol>
-	<li>Download the FORTE source from <a href="http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git" target="_blank">http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git</a>:
+	<li>Download the 4diac&nbsp;FORTE source from <a href="http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git" target="_blank">http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git</a>:
 		<div class="code">$ mkdir ~/4diac &amp;&amp; cd "$_"
 $ git clone -b develop https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte forte
 $ cd forte &amp;&amp; mkdir build</div>
@@ -54,7 +56,7 @@ $ git clone https://github.com/open62541/open62541.git --branch=v1.0  open62541<
 $ cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Debug -DUA_ENABLE_AMALGAMATION=ON ..
 $ make -j</div>
 	</li>
-	<li>Set FORTE to include open62541. If you are running the code on production devices we suggesst setting the build type to <span class="specificText">Release</span>.
+	<li>Set 4diac&nbsp;FORTE to include open62541. If you are running the code on production devices we suggesst setting the build type to <span class="specificText">Release</span>.
 	    <div class="code">$ cd ~/4diac/forte/build
 $ cmake -DCMAKE_BUILD_TYPE=Debug \
 -DFORTE_ARCHITECTURE=Posix \
@@ -71,7 +73,7 @@ $ make -j</div>
 
 <h3>Windows with Visual Studio</h3>
 <ol>
-	<li>Use a Git tool under Windows and download the FORTE source from <a href="http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git" target="_blank">http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git</a> and use the develop branch. The following steps show the commands for <a href="https://git-for-windows.github.io/" target="_blank">Git Bash</a>. 
+	<li>Use a Git tool under Windows and download the 4diac&nbsp;FORTE source from <a href="http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git" target="_blank">http://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git</a> and use the develop branch. The following steps show the commands for <a href="https://git-for-windows.github.io/" target="_blank">Git Bash</a>. 
 		<div class="code">$ mkdir "$HOME/4diac" &amp;&amp; cd "$HOME/4diac"
 $ git clone https://github.com/open62541/open62541.git --branch=v1.0 open62541
 $ mkdir build &amp;&amp; cd "build"</div>
@@ -91,7 +93,7 @@ $ mkdir build &amp;&amp; cd "build"</div>
 	<li>Press <span class="button4diac">Configure</span>, then <span class="button4diac">Generate</span> and then <span class="button4diac">Open Project</span></li>
 	<li>Go to <span class="menu4diac">Build &rarr; Build Solution</span>. You may need to execute the command multiple times until all projects are build successfully. This will create the open62541 library under <span class="folderLocation">$HOME/4diac/open62541/build/bin/Release</span> and the amalgamated header file <span class="fileLocation">open62541.h</span> in <span class="folderLocation">$HOME/4diac/open62541/build/</span>
 	</li>
-	<li>Switch to the FORTE CMake window to include open62541:
+	<li>Switch to the 4diac&nbsp;FORTE CMake window to include open62541:
 		<ul>
 			<li>FORTE_COM_OPC_UA=ON</li>
 			<li>FORTE_COM_OPC_UA_INCLUDE_DIR=C:\Users\USER\4diac\open62541\build</li>
@@ -101,7 +103,7 @@ $ mkdir build &amp;&amp; cd "build"</div>
 	<li>Press <span class="button4diac">Configure</span> and make sure that <span class="specificText">FORTE_COM_OPC_UA_LIB</span> is set to <span class="fileLocation">open62541.dll</span></li>
 	<li>Press <span class="button4diac">Configure</span>, then <span class="button4diac">Generate</span> and then <span class="button4diac">Open Project</span></li>
 	<li>Go to <span class="menu4diac">Build &rarr; Build Solution</span>. You may need to execute the command multiple times until all projects are built successfully. This will create <span class="folderLocation">$HOME/4diac/forte/build/Debug/forte.exe</span></li>
-	<li>In the forte VS Project, Set the PATH variable to include the path to the open62541.dll. Go to properties of <span class="specificText">forte</span>, <span class="specificText">Configuration Properties | Debugging | Environment</span> and add <span class="specificText">PATH=C:\Users\USER\4diac\open62541\build\bin\Release;%PATH%</span> (Set the correct user path!)
+	<li>In the 4diac&nbsp;FORTE VS Project, Set the PATH variable to include the path to the open62541.dll. Go to properties of <span class="specificText">forte</span>, <span class="specificText">Configuration Properties | Debugging | Environment</span> and add <span class="specificText">PATH=C:\Users\USER\4diac\open62541\build\bin\Release;%PATH%</span> (Set the correct user path!)
 	</li>
 </ol>
 
@@ -192,7 +194,7 @@ $ mkdir build &amp;&amp; cd "build"</div>
 		<li>opc_ua[READ;/Objects/test1] -> read the local node /Objects/test1. Create the node if it doesn't exist with a random nodeId</li>
 		<li>opc_ua[READ;/Objects/test1,i=1] -> read the local node /Objects/test1. Create the node if it doesn't exits with a numeric node id 1 and namespace 0. If the node already exist and it has other nodeId, it will fail.</li>
 		<li>opc_ua[WRITE;/Objects/test1;/Objects/test1] -> Write nodes /Objects/test1 and /Objects/test1 from values in SD_1 and SD_2. Will create the nodes if they don't exist with random nodeIds. If they exist, it will write to them when triggered.</li>
-	 	<li>opc_ua[WRITE;opc.tcp://192.168.0.100:4840#;/Objects/test1;/Objects/test1] -> Write nodes /Objects/test1 and /Objects/test1 on remote from values in SD_1 and SD_2. If nodes aren't found, 4diac FORTE will look for them after some seconds until it finds them. Remote creation is not supported</li>
+	 	<li>opc_ua[WRITE;opc.tcp://192.168.0.100:4840#;/Objects/test1;/Objects/test1] -> Write nodes /Objects/test1 and /Objects/test1 on remote from values in SD_1 and SD_2. If nodes aren't found, 4diac&nbsp;FORTE will look for them after some seconds until it finds them. Remote creation is not supported</li>
  	</ul>
 
 
@@ -348,18 +350,19 @@ $ mkdir build &amp;&amp; cd "build"</div>
 	<li>Open the System Editor and connect the COLD and WARM ports to the INIT port of SUBSCRIBE_1. So finally it should look like this:
 		<div><img src="../../html/communication/img/opc_ua_flipFlop_FB_full_2.png" alt="OPC UA Flip-Flop Application connected"/></div>
 	</li>
-	<li>Deploy the Application to FORTE</li>
-	<li>Open UaExpert (you can get it from <a href="https://www.unified-automation.com/de/downloads/opc-ua-clients.html" target="_blank">here</a>) and connect to the OPC UA server running on FORTE: <span class="address">opc.tcp://localhost:4840</span></li>
+	<li>Deploy the Application to 4diac&nbsp;FORTE</li>
+	<li>Open UaExpert (you can get it from <a href="https://www.unified-automation.com/de/downloads/opc-ua-clients.html" target="_blank">here</a>) and connect to the OPC UA server running on 4diac&nbsp;FORTE: <span class="address">opc.tcp://localhost:4840</span></li>
 	<li>You should see the two variables which have been created by the SUBSCRIBE and PUBLISH function blocks:
 		<div><img src="../../html/communication/img/opc_ua_flipFlop_uaExpert_2.png" alt="OPC UA Flip-Flop in UaExpert"/></div>
 		The two <span class="specificText">VariableNode</span>s <span class="specificText">Flip</span> and <span class="specificText">Flop</span> are created out of the SUBSCRIBE and PUBLISH function blcok. The data type of the variables is derived from the type of the connected FB's port datatype (E_SWITCH.G and E_SR.Q)<br/>
 	</li>
-	<li>Optionally you can now monitor the Application in FORTE, e.g., watch the values of SUBSCRIBE and PUBLISH FB. See <a href="../../html/4diacIDE/use4diacLocally.html#monitoringApplication" target="_blank">Use 4DIAC locally Tutorial - Monitor</a> on how to do that.
+	<li>Optionally you can now monitor the Application in 4diac&nbsp;FORTE, e.g., watch the values of SUBSCRIBE and PUBLISH FB. 
+		See <a href="../../html/4diacIDE/use4diacLocally.html#monitoringApplication" target="_blank">Use Eclipse 4diac locally Tutorial - Monitor</a> on how to do that.
 	</li>
 	<li>In UaExpert drag the two variables <span class="specificText">Flip</span> and <span class="specificText">Flop</span> into the Data Access View. Here you can now change the value of
-		<span class="specificText">Flip</span>. This will cause the IND port of SUBSCRIBE to fire an event and FORTE will read the new variable value, negate it and set <span class="specificText">Q</span> to the negated value. The REQ event of the PUBLISH FB has to be triggered to set the new value from SD_1 in the address model of OPC UA (<span class="specificText">Flop</span> variable). Note that in the beginning both values will be <span class="specificText">false</span> since no event has been triggered yet.
+		<span class="specificText">Flip</span>. This will cause the IND port of SUBSCRIBE to fire an event and 4diac&nbsp;FORTE will read the new variable value, negate it and set <span class="specificText">Q</span> to the negated value. The REQ event of the PUBLISH FB has to be triggered to set the new value from SD_1 in the address model of OPC UA (<span class="specificText">Flop</span> variable). Note that in the beginning both values will be <span class="specificText">false</span> since no event has been triggered yet.
 	</li>
-	<li>In FORTE check the monitored application to see what happens there if you change a variable.</li>
+	<li>In 4diac&nbsp;FORTE check the monitored application to see what happens there if you change a variable.</li>
 </ol>
 
 <h3 id="variables_adder">Adder Application using Variables</h3>
@@ -380,7 +383,10 @@ $ mkdir build &amp;&amp; cd "build"</div>
 
 	<p>This example shows you how you can use a <span class="element4diac">CLIENT</span> function block to write and read an OPC UA variable on a remote server</p>
 	
-	<p>Create a new System which includes two devices: One for the remote server and one for the local variable read/write. By running two FORTE instances on your local PC, it is possible to simulate the use-case where the server and client are in separate FORTE instances. The server could for example run on a device offering the variables, the client is then another device which requests information of the previous one.<br/>To start two FORTE instances on the same PC, you can pass the port on the command line, e.g., <span class="specificText">./forte -c localhost:61500</span></p>
+	<p>Create a new System which includes two devices: One for the remote server and one for the local variable read/write. 
+		By running two 4diac&nbsp;FORTE instances on your local PC, it is possible to simulate the use-case where the server and client are in separate 4diac&nbsp;FORTE instances. 
+		The server could for example run on a device offering the variables, the client is then another device which requests information of the previous one.<br/>
+		To start two 4diac&nbsp;FORTE instances on the same PC, you can pass the port on the command line, e.g., <span class="specificText">./forte -c localhost:61500</span></p>
 	<p>The system configuration should then look like this:</p>
 
 	<img src="../../html/communication/img/opc_ua_variable_read_write_system_2.png" alt="OPC UA Variable Read/Write System"/>
@@ -391,25 +397,25 @@ $ mkdir build &amp;&amp; cd "build"</div>
 
 	<img src="../../html/communication/img/opc_ua_variable_read_write_app_2.png" alt="OPC UA Variable Read/Write Application"/>
 
-<p>Deploy the application to two forte. You can access the server variables using UaExpert. For the client, you can monitor the system. When you trigger the InputValue.REQ event, the client will write the number 42, and will then read the Incremented value where the new value will be present. The changes will be seen also in UaExpert</p>
+<p>Deploy the application to two 4diac&nbsp;FORTE instances. You can access the server variables using UaExpert. For the client, you can monitor the system. When you trigger the InputValue.REQ event, the client will write the number 42, and will then read the Incremented value where the new value will be present. The changes will be seen also in UaExpert</p>
 
 <h2 id="methods">OPC UA Methods</h2>
 
 <p>In this step you will see how you can create OPC UA methods in an IEC 61499 application. It uses the SERVER function block which creates the corresponding OPC UA method automatically in the address model.</p>
-<p> Follow the steps in the <a href="../../html/4diacIDE/use4diacLocally.html" target="_blank">First Steps in 4DIAC Tutorial</a> to create a new System, Application, and Device. When you have created the empty Application, continue with the following steps.</p>
+<p> Follow the steps in the <a href="../../html/4diacIDE/use4diacLocally.html" target="_blank">First Steps in Eclipse 4diac Tutorial</a> to create a new System, Application, and Device. When you have created the empty Application, continue with the following steps.</p>
 
 <ol>
 	<li>Create the following application:
 		<div><img src="../../html/communication/img/opc_ua_method_full_2.png" alt="OPC UA Method Application"/></div>
 	</li>
 		
-	<li>Deploy the Application to FORTE</li>
+	<li>Deploy the Application to 4diac&nbsp;FORTE</li>
 	<li>Open UaExpert and you should see the following address model:
 		<div><img src="../../html/communication/img/opc_ua_method_uaExpert_2.png" alt="OPC UA Method in UaExpert"/></div>
 	</li>
 	<li>Optionally you can again monitor the application in 4diac</li>
 	<li>In UaExpert Right-Click on the Method Node <span class="specificText">AddValues</span> and select Call.</li>
-	<li>You can see that the name of the input and output arguments are the names of data outputs of the server FB. Enter values for <span class="specificText">RD_1</span> and <span class="specificText">RD_2</span> and press Call. FORTE will trigger the IND event of the SERVER FB, which causes the F_ADD FB to calculate the sum of the two numbers. When the sum is ready, the RSP event on SERVER is triggered and the result is returned to the calling OPC UA Client, which is in this case UaExpert.<br/>
+	<li>You can see that the name of the input and output arguments are the names of data outputs of the server FB. Enter values for <span class="specificText">RD_1</span> and <span class="specificText">RD_2</span> and press Call. 4diac&nbsp;FORTE will trigger the IND event of the SERVER FB, which causes the F_ADD FB to calculate the sum of the two numbers. When the sum is ready, the RSP event on SERVER is triggered and the result is returned to the calling OPC UA Client, which is in this case UaExpert.<br/>
 	<span class="inlineTitle">Note:</span> After the IND event is triggered, the result has to be ready (i.e., the RSP event has to be triggered) within 4 seconds. This is the default timeout for a method call. Otherwise the call will fail with a timeout error code.</li>
 </ol>
 
@@ -433,7 +439,7 @@ $ mkdir build &amp;&amp; cd "build"</div>
 		<div><img src="../../html/communication/img/opc_ua_subscriptions_2.png" alt="OPC UA Subscription Application"/></div>
 	</li>
 	<li>Note, that the <span class="element4diac">RD_1</span> port of the <span class="element4diac">SUBSCRIBE</span> is the current value of the subscribed node. Additionaly, you need to make sure that the data type of the <span class="element4diac">RD</span> port matches the types from the OPC UA variable you want to subscribe to. Use the corresponding <span class="element4diac">conv</span> FBs for that, as shown in this example.</li>
-	<li>Deploy the Application to FORTE</li>
+	<li>Deploy the Application to 4diac&nbsp;FORTE</li>
 	<li>If the value you subscribed for has changed on the server, an updated value will appear at <span class="element4diac">RD_1</span> port</li>
 </ol>
 
@@ -454,17 +460,17 @@ $ cmake -DENABLE_TESTING=Off ../
 $ make
 </div>
 	</li>
-	<li>With the mbedtls compile, you need to compile open62541 with security (remember that only v1.0 is supported to be used with security enabled in 4diac Forte). For that, you need to set the UA_ENABLE_ENCRYPTION to true, which will show some new variables in CMake (MBEDCRYPTO_LIBRARY, MBEDTLS_INCLUDE_DIRS, MBEDTLS_LIBRARY and MBEDX509_LIBRARY). Set them to library files and folders according to their name. After that, you compile open62541 as before.</li>
+	<li>With the mbedtls compile, you need to compile open62541 with security (remember that only v1.0 is supported to be used with security enabled in 4diac&nbsp;FORTE). For that, you need to set the UA_ENABLE_ENCRYPTION to true, which will show some new variables in CMake (MBEDCRYPTO_LIBRARY, MBEDTLS_INCLUDE_DIRS, MBEDTLS_LIBRARY and MBEDX509_LIBRARY). Set them to library files and folders according to their name. After that, you compile open62541 as before.</li>
 
-	<li>With open62541 compiled with encryption, you need now to compile forte with encryption. In CMake, set the variable FORTE_COM_OPC_UA_ENCRYPTION to true. This will also make appear new variables, similar as in open62541: 
+	<li>With open62541 compiled with encryption, you need now to compile 4diac&nbsp;FORTE with encryption. In CMake, set the variable FORTE_COM_OPC_UA_ENCRYPTION to true. This will also make appear new variables, similar as in open62541: 
 		<ul>
 			<li>FORTE_COM_OPC_UA_ENCRYPTION_INCLUDE_DIR: include folder in the mbedtls build directory</li>
 			<li>FORTE_COM_OPC_UA_ENCRYPTION_LIB_DIR: folder in build directory of mbedtls where the three libaries are. You could add many directories separated by a semicolon</li>
 		</ul>
-		After that, compile forte as usual.
+		After that, compile 4diac&nbsp;FORTE as usual.
 	</li>
 
-	<li>With forte compiled with encryption, you will need a CONFIG_FILE to write the security configurations for the endpoints to be connected by forte. The file must be written in a key=value way (no blank space between them). When trying to connect to a server, forte will read the file and look for an "ednpoint" key until it finds one whose value matches the one he's connecting to and read the following lines until the end of the file or until it finds another "endpoint" key. That means that to configure an endpoint, you write it first followed by the configurations for it. The allowed keys are:
+	<li>With 4diac&nbsp;FORTE compiled with encryption, you will need a CONFIG_FILE to write the security configurations for the endpoints to be connected by 4diac&nbsp;FORTE. The file must be written in a key=value way (no blank space between them). When trying to connect to a server, 4diac&nbsp;FORTE will read the file and look for an "ednpoint" key until it finds one whose value matches the one he's connecting to and read the following lines until the end of the file or until it finds another "endpoint" key. That means that to configure an endpoint, you write it first followed by the configurations for it. The allowed keys are:
 
 	<ul>
 		<li>endpoint: string where to connect to. Example opc.tcp://192.168.1.150:4840</li>
@@ -490,7 +496,7 @@ securityMode=1
 	<p>The username and password, in theory, be used without compling the encryption libraries, but even in some tests where the security was just username and password and the security mode was NONE, the certificate and private key were needed.</p>
 	</li>
 
-	<li>Once you have the file, you need to tell forte to look for it, and for that, you should start forte and pass the flag "-oc CONFIG_FILE"
+	<li>Once you have the file, you need to tell 4diac&nbsp;FORTE to look for it, and for that, you should start 4diac&nbsp;FORTE and pass the flag "-oc CONFIG_FILE"
 		<div class="code">$ ./forte -oc configSecurity.forte</div>
 	</li>
 </ol>

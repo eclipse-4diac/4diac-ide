@@ -20,7 +20,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.draw2d.AncestorListener;
+import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.ChopboxAnchor;
+import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -35,6 +37,10 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -50,7 +56,8 @@ import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 
-public class InterfaceEditPart extends AbstractInterfaceElementEditPart implements NodeEditPart {
+public class InterfaceEditPart extends AbstractInterfaceElementEditPart
+		implements NodeEditPart, AnnotableGraphicalEditPart {
 
 	public class InterfaceFigure extends Label implements InteractionStyleFigure {
 		public InterfaceFigure() {
@@ -86,7 +93,13 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		}
 
 		public void updateConnectorColor() {
-			((ConnectorBorder) getBorder()).updateColor();
+			Border curBorder = getBorder();
+			if (curBorder instanceof final CompoundBorder comBorder) {
+				curBorder = comBorder.getOuterBorder();
+			}
+			if (curBorder instanceof final ConnectorBorder conBorder) {
+				conBorder.updateColor();
+			}
 		}
 	}
 
@@ -132,6 +145,16 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	}
 
 	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event,
+				FordiacAnnotationUtil::showOnTarget);
+		final CommentTypeEditPart commentTypeEditPart = findAssociatedCommentTypeEP();
+		if (commentTypeEditPart != null) {
+			commentTypeEditPart.updateAnnotations(event);
+		}
+	}
+
+	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		if (getCastedModel() instanceof Event && null != sourceConnections) {
@@ -154,7 +177,8 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	public void activate() {
 		super.activate();
 		checkAssociatedCommentType();
-		// tell the root edipart that we are here and that it should add the type comment children
+		// tell the root edipart that we are here and that it should add the type
+		// comment children
 		refreshTypeRoot();
 	}
 
@@ -306,5 +330,4 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 				.filter(c -> this.getModel().equals(((CommentTypeEditPart) c).getInterfaceElement())).findAny()
 				.orElse(null);
 	}
-
 }

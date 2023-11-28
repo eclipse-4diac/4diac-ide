@@ -14,7 +14,9 @@
 package org.eclipse.fordiac.ide.elk.connection;
 
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.geometry.PointList;
@@ -51,7 +53,10 @@ public final class ConnectionRoutingHelper {
 
 	protected static ElkGraphFactory factory = ElkGraphFactory.eINSTANCE;
 
+	private static Set<GroupEditPart> groups = new HashSet<>();
+
 	public static void buildGraph(final ConnectionLayoutMapping mapping) {
+		groups.clear();
 		if (mapping.getParentElement() instanceof EditorWithInterfaceEditPart) {
 			addEditorPins(mapping);
 		} else if (mapping.isExpandedSubapp()) {
@@ -62,7 +67,14 @@ public final class ConnectionRoutingHelper {
 			handleChild(mapping, child);
 		}
 
+		for (final GroupEditPart group : groups) {
+			// add groups last to ensure non colliding ids with connections
+			final ElkNode node = createBasicNode(mapping, group);
+			node.setProperty(LibavoidMetaDataProvider.IS_CLUSTER, Boolean.TRUE);
+		}
+
 		processConnections(mapping);
+		groups.clear();
 	}
 
 	private static void addSubAppPins(final ConnectionLayoutMapping mapping) {
@@ -106,9 +118,7 @@ public final class ConnectionRoutingHelper {
 	}
 
 	private static void processGroup(final ConnectionLayoutMapping mapping, final GroupEditPart group) {
-		final ElkNode node = createBasicNode(mapping, group);
-		node.setProperty(LibavoidMetaDataProvider.IS_CLUSTER, Boolean.TRUE);
-
+		groups.add(group);
 		group.getContentEP().getChildren().forEach(child -> ConnectionRoutingHelper.handleChild(mapping, child));
 	}
 

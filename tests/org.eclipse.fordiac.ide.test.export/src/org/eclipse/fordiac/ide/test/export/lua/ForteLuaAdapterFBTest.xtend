@@ -34,11 +34,11 @@ class ForteLuaAdapterFBTest extends ExporterTestAdapterFBType {
 			local interfaceSpec = {
 			  numEIs = 1,
 			  EINames = {"«ADAPTER_EVENT_INPUT_NAME»"},
-			  EIWith = {0, 255},
+			  EIWith = {0, 65535},
 			  EIWithIndexes = {0},
 			  numEOs = 1,
 			  EONames = {"«ADAPTER_EVENT_OUTPUT_NAME»"},
-			  EOWith = {0, 255},
+			  EOWith = {0, 65535},
 			  EOWithIndexes = {0},
 			  numDIs = 1,
 			  DINames = {"«ADAPTER_DATA_INPUT_NAME»"},

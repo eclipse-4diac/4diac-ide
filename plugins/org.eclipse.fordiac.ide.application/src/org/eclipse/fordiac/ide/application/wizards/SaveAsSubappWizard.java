@@ -23,6 +23,7 @@
 package org.eclipse.fordiac.ide.application.wizards;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -43,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeFromTemplateCreator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -103,7 +105,15 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 						performTypeSetup((SubAppType) type);
 					}
 				};
-				final TypeEntry entry = creator.createTypeFromTemplate();
+				try {
+					getContainer().run(true, true, creator::createTypeFromTemplate);
+				} catch (final InvocationTargetException e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
+				} catch (final InterruptedException e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
+					Thread.currentThread().interrupt();
+				}
+				final TypeEntry entry = creator.getTypeEntry();
 				if (entry != null) {
 					// replace needs to be called before opening the type editor so that we get the correct command
 					// stack

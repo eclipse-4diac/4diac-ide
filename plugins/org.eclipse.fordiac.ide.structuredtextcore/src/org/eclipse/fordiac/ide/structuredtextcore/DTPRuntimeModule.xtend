@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies GmbH
+ * Copyright (c) 2022, 2023 Primetals Technologies GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,9 +11,14 @@
  * Contributors:
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst
+ *       - add qualified name bindings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore
 
+import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameConverter
+import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameProvider
+import org.eclipse.xtext.naming.IQualifiedNameConverter
 import org.eclipse.xtext.resource.generic.AbstractGenericResourceRuntimeModule
 
 class DTPRuntimeModule extends AbstractGenericResourceRuntimeModule {
@@ -26,7 +32,10 @@ class DTPRuntimeModule extends AbstractGenericResourceRuntimeModule {
 	}
 	
 	override bindIQualifiedNameProvider() {
-		DTPQualifiedNameProvider
+		STCoreQualifiedNameProvider
 	}
-	
+
+	def Class<? extends IQualifiedNameConverter> bindIQualifiedNameConverter() {
+		return STCoreQualifiedNameConverter
+	}
 }

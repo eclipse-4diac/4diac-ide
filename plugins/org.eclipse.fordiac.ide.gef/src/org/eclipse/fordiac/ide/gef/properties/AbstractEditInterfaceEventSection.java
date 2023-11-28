@@ -92,10 +92,11 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 			}
 		});
 		final DataLayer outputDataLayer = new DataLayer(outputProvider);
-		outputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(outputProvider));
+		outputDataLayer.setConfigLabelAccumulator(
+				new TypedElementConfigLabelAccumulator(outputProvider, this::getAnnotationModel));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
-				new NatTableColumnEditableRule(getSectionEditableRule(), TypedElementTableColumn.DEFAULT_COLUMNS,
+				new NatTableColumnEditableRule<>(getSectionEditableRule(), TypedElementTableColumn.DEFAULT_COLUMNS,
 						Set.of(TypedElementTableColumn.NAME, TypedElementTableColumn.COMMENT)),
 				new TypeSelectionButton(this::getTypeLibrary, EventTypeSelectionContentProvider.INSTANCE,
 						EventTypeSelectionTreeContentProvider.INSTANCE),
@@ -115,10 +116,11 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 			}
 		});
 		final DataLayer inputDataLayer = new DataLayer(inputProvider);
-		inputDataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(inputProvider));
+		inputDataLayer.setConfigLabelAccumulator(
+				new TypedElementConfigLabelAccumulator(inputProvider, this::getAnnotationModel));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
-				new NatTableColumnEditableRule(getSectionEditableRule(), TypedElementTableColumn.DEFAULT_COLUMNS,
+				new NatTableColumnEditableRule<>(getSectionEditableRule(), TypedElementTableColumn.DEFAULT_COLUMNS,
 						Set.of(TypedElementTableColumn.NAME, TypedElementTableColumn.COMMENT)),
 				new TypeSelectionButton(this::getTypeLibrary, EventTypeSelectionContentProvider.INSTANCE,
 						EventTypeSelectionTreeContentProvider.INSTANCE),

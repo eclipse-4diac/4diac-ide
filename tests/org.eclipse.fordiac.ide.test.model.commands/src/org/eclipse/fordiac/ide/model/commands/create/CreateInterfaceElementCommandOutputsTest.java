@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.commands.create;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
@@ -38,8 +37,8 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 		return commandExecution(state);
 	}
 
-	private static void verifyInterfaceListWithName(final InterfaceList interfacelist, final String element, final String type,
-			final TestFunction t) {
+	private static void verifyInterfaceListWithName(final InterfaceList interfacelist, final String element,
+			final String type, final TestFunction t) {
 		t.test(interfacelist.getInputVars().isEmpty());
 		t.test(!interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
@@ -100,19 +99,20 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 				new ExecutionDescription<>("Add Output without name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandOutputsTest::executeCommandOutputWithoutName, //
 						CreateInterfaceElementCommandOutputsTest::verifyStateOutputWithoutName //
-						), //
+				), //
 				new ExecutionDescription<>("Add Output with name \"" + ELEMENT2_NAME + "\"", // //$NON-NLS-1$ //$NON-NLS-2$
 						CreateInterfaceElementCommandOutputsTest::executeCommandOutputWithName, //
 						CreateInterfaceElementCommandOutputsTest::verifyStateOutputWithName //
-						), //
+				), //
 				new ExecutionDescription<>("Add Output with null as name", // //$NON-NLS-1$
 						CreateInterfaceElementCommandOutputsTest::executeCommandOutputWithNameNull, //
 						CreateInterfaceElementCommandOutputsTest::verifyStateOutputWithNameNull //
-						) //
-				);
+				) //
+		);
 
 		final Collection<ExecutionDescription<State>> reordering = createReordering(
-				(final State s) -> getTypeInterfaceList(s).getOutputVars(), ELEMENT1_NAME, ELEMENT3_NAME, ELEMENT2_NAME);
+				(final State s) -> getTypeInterfaceList(s).getOutputVars(), ELEMENT1_NAME, ELEMENT3_NAME,
+				ELEMENT2_NAME);
 
 		final Collection<ExecutionDescription<State>> updateFBandValidate = createUpdateAndValidate(
 				(final State s, final State o, final TestFunction t) -> {
@@ -129,7 +129,7 @@ public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceEle
 						executionDescriptions.stream(), //
 						reordering.stream()), //
 				updateFBandValidate.stream() //
-				).collect(Collectors.toList()));
+		).toList());
 	}
 
 }

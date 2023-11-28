@@ -56,7 +56,7 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 	}
 
 	@Override
-	public void setButtonEnablement(final boolean enable) {
+	protected void setButtonEnablement(final boolean enable) {
 		upButton.setEnabled(enable);
 		downButton.setEnabled(enable);
 		super.setButtonEnablement(enable);

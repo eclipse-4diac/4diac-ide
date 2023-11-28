@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.document;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
 import org.eclipse.jface.text.IDocument;
@@ -39,7 +39,7 @@ public class STCoreDocumentProvider extends LibraryElementXtextDocumentProvider 
 
 	@Override
 	public void doSaveDocument(final IProgressMonitor monitor, final IFileEditorInput fileEditorInput,
-			final LibraryElement element, final XtextDocument document) {
+			final LibraryElement element, final XtextDocument document) throws CoreException {
 		monitor.beginTask("Saving", 2); //$NON-NLS-1$
 		try {
 			monitor.subTask("Partitioning"); //$NON-NLS-1$
@@ -52,12 +52,14 @@ public class STCoreDocumentProvider extends LibraryElementXtextDocumentProvider 
 					// save type if opened directly from a file and not in an FB type editor,
 					// indicated by a FileEditorInput instead of a FBTypeEditorInput
 					if (fileEditorInput instanceof FileEditorInput) {
-						element.getTypeEntry().save();
+						try {
+							element.getTypeEntry().save(monitor);
+						} catch (final CoreException e) {
+							throw new RuntimeException(e);
+						}
 					}
 				});
 			}
-		} catch (final Exception e) {
-			Platform.getLog(getClass()).error("Error saving algorithms to FB type", e); //$NON-NLS-1$
 		} finally {
 			monitor.done();
 		}

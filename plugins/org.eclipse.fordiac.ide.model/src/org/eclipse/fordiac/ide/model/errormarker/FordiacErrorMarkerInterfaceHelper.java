@@ -18,54 +18,25 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.errormarker;
 
-import java.util.List;
-
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class FordiacErrorMarkerInterfaceHelper {
-	public static ErrorMarkerInterface createErrorMarkerInterfaceElement(final InterfaceList il,
-			final IInterfaceElement oldInterface, final String errorMessage,
-			final List<ErrorMarkerBuilder> errorMarkerBuilders) {
-		final boolean markerExists = il.getErrorMarker().stream().anyMatch(
-				e -> e.getName().equals(oldInterface.getName()) && (e.isIsInput() == oldInterface.isIsInput()));
-
-		final ErrorMarkerInterface interfaceElement = createErrorMarkerInterface(oldInterface.getType(),
-				oldInterface.getName(), oldInterface.isIsInput(), il, errorMessage);
-
-		if (oldInterface instanceof final VarDeclaration oldVarDecl && oldVarDecl.getValue() != null
-				&& !oldVarDecl.getValue().getValue().isBlank()) {
-			final Value value = LibraryElementFactory.eINSTANCE.createValue();
-			value.setValue(oldVarDecl.getValue().getValue());
-			value.setErrorMessage(oldVarDecl.getValue().getErrorMessage());
-			interfaceElement.setValue(value);
-		}
-
-		if (!markerExists && errorMarkerBuilders != null) {
-			errorMarkerBuilders
-			.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(interfaceElement));
-		}
-		return interfaceElement;
-	}
 
 	public static ErrorMarkerInterface createErrorMarkerInterface(final DataType type, final String name,
-			final boolean isInput, final InterfaceList ieList, final String errorMessage) {
+			final boolean isInput, final InterfaceList ieList) {
 		return ieList.getErrorMarker().stream().filter(e -> e.getName().equals(name) && isInput == e.isIsInput())
-				.findAny().orElseGet(() -> createErrorMarker(type, name, isInput, ieList, errorMessage));
+				.findAny().orElseGet(() -> createErrorMarker(type, name, isInput, ieList));
 	}
 
 	private static ErrorMarkerInterface createErrorMarker(final DataType type, final String name, final boolean isInput,
-			final InterfaceList ieList, final String errorMessage) {
+			final InterfaceList ieList) {
 		final ErrorMarkerInterface errorMarkerInterface = LibraryElementFactory.eINSTANCE.createErrorMarkerInterface();
 		errorMarkerInterface.setName(name);
 		errorMarkerInterface.setIsInput(isInput);
 		errorMarkerInterface.setType(type);
-		errorMarkerInterface.setErrorMessage(errorMessage);
 		ieList.getErrorMarker().add(errorMarkerInterface);
 		return errorMarkerInterface;
 	}

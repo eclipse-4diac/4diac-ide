@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -96,12 +95,13 @@ public class SystemMonitoringData {
 		} catch (final InvocationTargetException ex) {
 			MessageDialog.openError(shell, "Error", ex.getMessage());
 		} catch (final InterruptedException ex) {
-			Thread.currentThread().interrupt();  // mark interruption
+			Thread.currentThread().interrupt(); // mark interruption
 			MessageDialog.openInformation(shell, "Enable Monitoring Aborted", "Enable Monitoring Aborted");
 		}
 	}
 
-	public void enableSystemSynch(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+	public void enableSystemSynch(final IProgressMonitor monitor)
+			throws InvocationTargetException, InterruptedException {
 		final EnableSystemMonitoringRunnable enable = new EnableSystemMonitoringRunnable(this);
 		enable.run(monitor);
 		monitoringEnabled = true;
@@ -116,12 +116,13 @@ public class SystemMonitoringData {
 		} catch (final InvocationTargetException ex) {
 			MessageDialog.openError(shell, "Error", ex.getMessage());
 		} catch (final InterruptedException ex) {
-			Thread.currentThread().interrupt();  // mark interruption
+			Thread.currentThread().interrupt(); // mark interruption
 			MessageDialog.openInformation(shell, "Disable Monitoring Aborted", "Disable Monitoring Aborted");
 		}
 	}
 
-	public void disableSystemSynch(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+	public void disableSystemSynch(final IProgressMonitor monitor)
+			throws InvocationTargetException, InterruptedException {
 		final DisableSystemMonitoringRunnable disable = new DisableSystemMonitoringRunnable(this);
 		monitoringEnabled = false;
 		disable.run(monitor);
@@ -179,11 +180,10 @@ public class SystemMonitoringData {
 		if (subappElements.containsKey(port.getPortString())) {
 			removeSubappElement(element, port.getPortString());
 		}
-		if (element instanceof SubappMonitoringElement) {
-			removeSubappElement(element, ((SubappMonitoringElement) element).getAnchor().getPort().getPortString());
+		if (element instanceof final SubappMonitoringElement sme) {
+			removeSubappElement(element, sme.getAnchor().getPort().getPortString());
 		}
 	}
-
 
 	public void removeSubappElement(final MonitoringBaseElement element, final String portString) {
 		if (getSubappElements().containsKey(portString)) {
@@ -201,8 +201,8 @@ public class SystemMonitoringData {
 		monitoredElements.put(port.getInterfaceElement(), element);
 
 		if (port instanceof SubAppPortElement) {
-			final String portString = SubAppPortHelper
-					.findConnectedMonitoredSubappPort(port.getInterfaceElement(), getSubappElements());
+			final String portString = SubAppPortHelper.findConnectedMonitoredSubappPort(port.getInterfaceElement(),
+					getSubappElements());
 			if (portString != null) {
 				addToSubappGroup(element, portString);
 			}
@@ -217,7 +217,6 @@ public class SystemMonitoringData {
 			sendAddWatch(element);
 		}
 	}
-
 
 	public void addSubappMonitoringElement(final MonitoringBaseElement element) {
 		final PortElement anchor = ((SubappMonitoringElement) element).getAnchor().getPort();
@@ -292,19 +291,20 @@ public class SystemMonitoringData {
 		return null;
 	}
 
-	/** Check if all port strings are still the same as when they where added to the map.
+	/**
+	 * Check if all port strings are still the same as when they where added to the
+	 * map.
 	 *
-	 * Differences can occur when blocks or subapps are renamed and the application is redeployed. */
+	 * Differences can occur when blocks or subapps are renamed and the application
+	 * is redeployed.
+	 */
 	public void updatePortStringMapping() {
-		final List<Entry<String, MonitoringBaseElement>> updateEntries = monitoredElementsPerPortStrings.entrySet().stream()
-				.filter(entry -> !entry.getKey().equals(entry.getValue().getPort().getPortString()))
-				.collect(Collectors.toList());
-
-		updateEntries.forEach(entry -> {
-			final MonitoringBaseElement value = entry.getValue();
-			monitoredElementsPerPortStrings.remove(entry.getKey());
-			monitoredElementsPerPortStrings.put(value.getPort().getPortString(), value);
-		});
+		monitoredElementsPerPortStrings.entrySet().stream()
+				.filter(entry -> !entry.getKey().equals(entry.getValue().getPort().getPortString())).forEach(entry -> {
+					final MonitoringBaseElement value = entry.getValue();
+					monitoredElementsPerPortStrings.remove(entry.getKey());
+					monitoredElementsPerPortStrings.put(value.getPort().getPortString(), value);
+				});
 	}
 
 }

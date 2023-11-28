@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.deployment.ui.handlers;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
@@ -31,8 +30,7 @@ public class FullyCleanDeviceHandler extends AbstractDeviceDeploymentCommand {
 
 	@Override
 	protected void executeCommand(final IDeviceManagementInteractor executor) throws DeploymentException {
-		final List<String> resNames = executor.queryResources().stream().map(Resource::getName)
-				.collect(Collectors.toList());
+		final List<String> resNames = executor.queryResources().stream().map(Resource::getName).toList();
 
 		if (!resNames.isEmpty() && 0 == runDeleteQuestionDialog(resNames)) {
 			deleteResources(executor, resNames);

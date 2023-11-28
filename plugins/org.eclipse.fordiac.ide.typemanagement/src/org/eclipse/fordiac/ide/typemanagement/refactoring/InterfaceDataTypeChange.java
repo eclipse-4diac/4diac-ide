@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -64,12 +65,16 @@ public class InterfaceDataTypeChange extends Change {
 
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
-		// we have to execute async, otherwise SWT crashes if the editor of the type is opened
+		// we have to execute in UI thread, otherwise SWT crashes if the editor of the
+		// type is open
 		final Command cmd = getUpdatePinInTypeDelcarationCommand();
-		Display.getDefault().asyncExec(() -> {
+		Display.getDefault().syncExec(() -> {
 			cmd.execute();
-			final var typeEditable = fbType.getTypeEntry().getTypeEditable();
-			typeEditable.getTypeEntry().save();
+			try {
+				fbType.getTypeEntry().save(pm);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
 		});
 		return null;
 	}

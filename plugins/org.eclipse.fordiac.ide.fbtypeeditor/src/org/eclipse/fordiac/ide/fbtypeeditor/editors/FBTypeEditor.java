@@ -20,6 +20,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,6 +45,8 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -81,6 +84,7 @@ import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -99,6 +103,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	private FBType fbType;
 	private FBTypeContentOutline contentOutline = null;
 	private final CommandStack commandStack = new CommandStack();
+	private GraphicalAnnotationModel annotationModel;
 
 	private final Adapter adapter = new AdapterImpl() {
 
@@ -121,10 +126,27 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	public void doSave(final IProgressMonitor monitor) {
 		if ((null != typeEntry) && (checkTypeSaveAble())) {
 			performPresaveHooks();
-			// allow each editor to save back changes before saving to file
-			editors.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
 			getCommandStack().markSaveLocation();
-			typeEntry.save();
+
+			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(typeEntry.getFile().getParent()) {
+
+				@Override
+				protected void execute(final IProgressMonitor monitor)
+						throws CoreException, InvocationTargetException, InterruptedException {
+					// allow each editor to save back changes before saving to file
+					editors.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
+					typeEntry.save(monitor);
+				}
+			};
+			try {
+				operation.run(monitor);
+			} catch (final InvocationTargetException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			} catch (final InterruptedException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+				Thread.currentThread().interrupt();
+			}
+
 			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 	}
@@ -196,6 +218,8 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		getCommandStack().addCommandStackEventListener(this);
 
+		annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEntry.getFile());
+
 		super.init(site, editorInput);
 	}
 
@@ -228,6 +252,9 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	public void dispose() {
 		if ((fbType != null) && fbType.eAdapters().contains(adapter)) {
 			fbType.eAdapters().remove(adapter);
+		}
+		if (annotationModel != null) {
+			annotationModel.dispose();
 		}
 
 		// get these values here before calling super dispose
@@ -364,6 +391,9 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		}
 		if (adapter == IGotoMarker.class) {
 			return adapter.cast(this);
+		}
+		if (adapter == GraphicalAnnotationModel.class) {
+			return adapter.cast(annotationModel);
 		}
 
 		if (isEditorActive()) {

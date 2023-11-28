@@ -24,7 +24,7 @@
 </head>
 
 <body>
-<h1 id="topOfPage">4diac IDE FAQ</h1>
+<h1 id="topOfPage">4diac&nbsp;IDE FAQ</h1>
 	<ol>
 		<li><a href="#4diacfaq1">When I open a certain perspective, a view element is missing, how can I get it back?</a></li>
 		<li><a href="#4diacfaq2">Download not possible! Defined profile () for RMT_XXX.xxx not supported</a></li>
@@ -37,17 +37,17 @@
 		<li><a href="#4diacfaq9">What does <span class="command4diac">KILL Device</span> do?</a></li>
 	</ol>
 
-<h1 id="faqFORTE">4diac FORTE FAQ</h1>
+<h1 id="faqFORTE">4diac&nbsp;FORTE FAQ</h1>
 	<ol>
 		<li><a href="#fortefaq1">Windows/Cygwin: The setup script runs to completion but when building the target I get strange compile errors</a></li>
 		<li><a href="#fortefaq2">CMake/Cygwin: Can not find C and C++ compilers</a></li>
 		<li><a href="#fortefaq3">CMake/Cygwin: Can not find RC Compilers</a></li>
 		<li><a href="#fortefaq4">FORTE is C++, why are you then using the C-style include files for the standard C library instead of the C++ style include files?</a></li>
-		<li><a href="#fortefaq5">Within my FORTE console, I get <span class="errorMessage">UDP-Socket Send failed: Network is unreachable</span></a></li>
-		<li><a href="#fortefaq6">Within my FORTE console, I get <span class="errorMessage">connection closed by peer</span></a></li>
+		<li><a href="#fortefaq5">Within my 4diac&nbsp;FORTE console, I get <span class="errorMessage">UDP-Socket Send failed: Network is unreachable</span></a></li>
+		<li><a href="#fortefaq6">Within my 4diac&nbsp;FORTE console, I get <span class="errorMessage">connection closed by peer</span></a></li>
 	</ol>
 
-<h1>4diac IDE answers</h1>
+<h1>4diac&nbsp;IDE answers</h1>
 
 	<ol class="listWithH2">
 
@@ -83,9 +83,9 @@
 			<ul>
 				<li>Make sure that you have the source code (*.cpp, *.h) of all <span class="element4diac">Function Blocks</span> within your <span class="element4diac">Application</span>. 
 				    Also check if all source files are listed within a <span class="fileLocation">CMakeLists.txt</span> file.</li>
-				<li>Ensure that the missing Function Block is included in your built version of 4diac FORTE.
+				<li>Ensure that the missing Function Block is included in your built version of 4diac&nbsp;FORTE.
 					<ul>
-						<li>In IDE <span class="menu4diac">Window &rarr; Preferences &rarr; 4diac IDE &rarr; FORTE Preferences</span> the path to your correct <span class="fileLocation">forte.exe</span> has to be defined.</li>
+						<li>In 4diac&nbsp;IDE <span class="menu4diac">Window &rarr; Preferences &rarr; 4diac&nbsp;IDE &rarr; FORTE Preferences</span> the path to your correct <span class="fileLocation">forte.exe</span> has to be defined.</li>
 						<li>Or start your <span class="fileLocation">forte.exe</span> directly (development tool specific)</li>
 					</ul>
 				</li>
@@ -103,9 +103,9 @@
 
 		<li>
 			<h2 id="4diacfaq5">When I download my application, I get a <span class="errorMessage">Create FB Instance failed</span> error</h2>
-			<p>Verify that the interface of the Function Block you want to download is the same as those available on your FORTE executable. 
-			In case you download a Composite Function Block, please make sure that its Function Block Network matches the Function Block Network within your FORTE executable. 
-			When in doubt, export your Function Block and compile FORTE before you download again.</p>
+			<p>Verify that the interface of the Function Block you want to download is the same as those available on your 4diac&nbsp;FORTE executable. 
+			In case you download a Composite Function Block, please make sure that its Function Block Network matches the Function Block Network within your 4diac&nbsp;FORTE executable. 
+			When in doubt, export your Function Block and compile 4diac&nbsp;FORTE before you download again.</p>
 			
 			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 		</li>
@@ -115,8 +115,8 @@
 			<p>Examine the following topics:</p>
 			<ul>
 				<li>Make sure that the port numbers used in the <span class="view4diac">Runtime Launcher</span> of the <span class="view4diac">Deployment</span> view are the same as those used for the <span class="element4diac">MGR_ID</span> of the <span class="element4diac">Devices</span> in the <span class="view4diac">System Configuration</span>.</li>
-				<li>Check if FORTE runs on a different port</li>
-				<li>Check in Task Manager (Windows) if an "old" crashed FORTE blocks the port</li>
+				<li>Check if 4diac&nbsp;FORTE runs on a different port</li>
+				<li>Check in Task Manager (Windows) if an "old" crashed 4diac&nbsp;FORTE blocks the port</li>
 				<li>Check if Monitoring has been started before downloading (FORTE only supports a single connection at the management interface)</li>
 			</ul>
 			
@@ -143,14 +143,14 @@
 
 		<li>
 			<h2 id="4diacfaq9">What does <span class="command4diac">KILL Device</span> do?</h2>
-			<span class="command4diac">KILL Devices</span> terminates FORTE.
+			<span class="command4diac">KILL Devices</span> terminates 4diac&nbsp;FORTE.
 
 			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 		</li> 
 
 	</ol>
 
-<h1>4diac FORTE answers</h1>
+<h1>4diac&nbsp;FORTE answers</h1>
 
 	<ol class="listWithH2">
 
@@ -158,7 +158,7 @@
 			<h2 id="fortefaq1">Windows/Cygwin: The setup script runs to completion but when building the target, I get strange compile errors</h2>
 			<ul>
 				<li>First, check for any strange output of the setup script. Maybe your system misses something.</li>
-				<li>Do you have spaces in the path to your FORTE? Some Cygwin versions have problems with these.</li>
+				<li>Do you have spaces in the path to your 4diac&nbsp;FORTE? Some Cygwin versions have problems with these.</li>
 			</ul>
 			
 			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
@@ -200,7 +200,7 @@
 		</li>
 
 		<li>
-			<h2 id="fortefaq5">Within my FORTE console, I get <span class="errorMessage">UDP-Socket Send failed: Network is unreachable</span></h2>
+			<h2 id="fortefaq5">Within my 4diac&nbsp;FORTE console, I get <span class="errorMessage">UDP-Socket Send failed: Network is unreachable</span></h2>
 			<p>Consider to explicitly set up multicast IP routing in the kernel with the <span class="inlineCode">route</span> command. 
 			This has been an issue on Raspberry Pi, where executing the following command resolved the problem:</p>
 			<div class="code">route add -net 224.0.0.0 netmask 240.0.0.0 dev eth0</div> 
@@ -210,10 +210,10 @@
 		</li>
 
 		<li>
-			<h2 id="fortefaq6">Within my FORTE console, I get <span class="errorMessage">connection closed by peer</span></h2>
+			<h2 id="fortefaq6">Within my 4diac&nbsp;FORTE console, I get <span class="errorMessage">connection closed by peer</span></h2>
 			<p>The TCP port is opened by a server in the RMT_RES. 
 			This server handles the communication with the tool for download and monitoring. 
-			The message indicates the end of the download process when 4diac IDE disconnects.</p>
+			The message indicates the end of the download process when 4diac&nbsp;IDE disconnects.</p>
 
 			<p class="goToTop"><a href="#topOfPage">Go to top</a></p>
 		</li>

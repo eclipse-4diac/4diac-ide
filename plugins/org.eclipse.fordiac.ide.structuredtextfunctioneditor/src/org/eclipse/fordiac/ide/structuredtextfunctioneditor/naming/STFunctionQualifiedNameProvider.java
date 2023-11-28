@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.naming;
 
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameProvider;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.resource.STFunctionResource;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
@@ -20,8 +21,11 @@ import org.eclipse.xtext.naming.QualifiedName;
 public class STFunctionQualifiedNameProvider extends STCoreQualifiedNameProvider {
 
 	protected QualifiedName qualifiedName(final STFunctionSource source) {
-		if (source.eResource() instanceof final STFunctionResource resource && resource.getLibraryElement() != null) {
-			return getFullyQualifiedName(resource.getLibraryElement());
+		if (source.eResource() instanceof final STFunctionResource resource) {
+			final LibraryElement libraryElement = resource.getInternalLibraryElement();
+			if (libraryElement != null) {
+				return getFullyQualifiedName(libraryElement);
+			}
 		}
 		return null;
 	}

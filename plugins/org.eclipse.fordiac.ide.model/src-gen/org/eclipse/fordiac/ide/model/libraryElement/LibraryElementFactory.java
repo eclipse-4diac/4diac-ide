@@ -342,15 +342,6 @@ public interface LibraryElementFactory extends EFactory {
 	ErrorMarkerInterface createErrorMarkerInterface();
 
 	/**
-	 * Returns a new object of class '<em>Error Marker Ref</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Error Marker Ref</em>'.
-	 * @generated
-	 */
-	ErrorMarkerRef createErrorMarkerRef();
-
-	/**
 	 * Returns a new object of class '<em>Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

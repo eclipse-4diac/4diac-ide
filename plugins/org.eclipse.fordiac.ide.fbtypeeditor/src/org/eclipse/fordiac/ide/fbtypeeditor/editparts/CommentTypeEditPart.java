@@ -28,13 +28,15 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
-class CommentTypeEditPart extends AbstractGraphicalEditPart {
+class CommentTypeEditPart extends AbstractGraphicalEditPart implements AnnotableGraphicalEditPart {
 
 	private static final int WITH_SIZE = 10;
 	private static final int DISTANCE_TO_FB_BORDER = 15;
@@ -51,8 +53,10 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 		}
 	};
 
-	/** The Class CommentTypeContainerFigure for handling the layout of one comment and type label of an fb
-	 * interface. */
+	/**
+	 * The Class CommentTypeContainerFigure for handling the layout of one comment
+	 * and type label of an fb interface.
+	 */
 	private static class CommentTypeContainerFigure extends Figure {
 
 		/** Instantiates a new variable output container figure. */
@@ -113,6 +117,12 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 	public void refreshVisuals() {
 		super.refreshVisuals();
 		refreshPosition();
+	}
+
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		getChildren().stream().filter(AnnotableGraphicalEditPart.class::isInstance)
+				.map(AnnotableGraphicalEditPart.class::cast).forEach(child -> child.updateAnnotations(event));
 	}
 
 	public InterfaceEditPart getReferencedInterface() {

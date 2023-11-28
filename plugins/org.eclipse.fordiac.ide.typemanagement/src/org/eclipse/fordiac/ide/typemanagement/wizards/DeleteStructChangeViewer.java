@@ -67,8 +67,10 @@ public class DeleteStructChangeViewer implements IChangePreviewViewer {
 					}
 					change.addState(cs);
 					change.getState().removeIf(state -> !state.equals(cs));
-					choices.keySet().stream().filter(anyItem -> !anyItem.equals(item))
-							.forEach(otherItem -> otherItem.setChecked(false));
+					choices.keySet()
+					        .stream()
+					        .filter(anyItem -> !anyItem.equals(item))
+					        .forEach(otherItem -> otherItem.setChecked(false));
 				}
 			}
 		});
@@ -87,8 +89,10 @@ public class DeleteStructChangeViewer implements IChangePreviewViewer {
 			choices.keySet().stream().forEach(i -> i.setChecked(false));
 			this.change = deleteChange;
 			// initialize UI from change state
-			choices.entrySet().stream().filter(entry -> deleteChange.getState().contains(entry.getValue()))
-					.forEach(entry -> entry.getKey().setChecked(true));
+			choices.entrySet()
+			        .stream()
+			        .filter(entry -> deleteChange.getState().contains(entry.getValue()))
+			        .forEach(entry -> entry.getKey().setChecked(true));
 		}
 	}
 

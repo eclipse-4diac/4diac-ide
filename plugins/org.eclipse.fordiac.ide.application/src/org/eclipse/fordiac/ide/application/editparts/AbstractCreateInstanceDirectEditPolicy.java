@@ -27,8 +27,8 @@ abstract class AbstractCreateInstanceDirectEditPolicy extends DirectEditPolicy {
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
 		final Object value = request.getCellEditor().getValue();
 		final Point refPoint = getInsertionPoint(request);
-		if (value instanceof TypeEntry) {
-			return getElementCreateCommand((TypeEntry) value, refPoint);
+		if (value instanceof final TypeEntry typeEntry) {
+			return getElementCreateCommand(typeEntry, refPoint);
 		}
 		return null;
 	}
@@ -36,8 +36,7 @@ abstract class AbstractCreateInstanceDirectEditPolicy extends DirectEditPolicy {
 	protected abstract Command getElementCreateCommand(TypeEntry value, Point refPoint);
 
 	private Point getInsertionPoint(final DirectEditRequest request) {
-		final Point refPoint = new Point(
-				FBNetworkRootEditPart.getInsertPos(request, getHost().getViewer(), getZoom()));
+		final Point refPoint = new Point(FBNetworkRootEditPart.getInsertPos(request, getHost().getViewer(), getZoom()));
 		final Point topLeft = getHost().getFigure().getClientArea().getTopLeft();
 		refPoint.translate(-topLeft.x, -topLeft.y);
 		return refPoint;
@@ -45,8 +44,8 @@ abstract class AbstractCreateInstanceDirectEditPolicy extends DirectEditPolicy {
 
 	private double getZoom() {
 		final RootEditPart root = getHost().getRoot();
-		if (root instanceof ScalableFreeformRootEditPart) {
-			return ((ScalableFreeformRootEditPart) root).getZoomManager().getZoom();
+		if (root instanceof final ScalableFreeformRootEditPart scalableEditPart) {
+			return scalableEditPart.getZoomManager().getZoom();
 		}
 		return 1.0;
 	}

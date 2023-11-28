@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ *                    Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,56 +11,76 @@
  * Contributors:
  *   Fabio Gandolfi
  *     - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst
+ *     - add organize imports button
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.widgets;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
+import org.eclipse.fordiac.ide.gef.editparts.ImportCellEditor;
 import org.eclipse.fordiac.ide.gef.provider.PackageContentProvider;
 import org.eclipse.fordiac.ide.gef.provider.PackageLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeImportNamespaceCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangePackageNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.OrganizeImportsCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteImportCommand;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.widgets.PackageSelectionProposalProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
+import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
+import org.eclipse.fordiac.ide.ui.widget.StyledTextContentAdapter;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.fieldassist.ContentAssistCommandAdapter;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class PackageInfoWidget extends TypeInfoWidget {
 
+	private final Supplier<GraphicalAnnotationModel> annotationModelSupplier;
 	private TableViewer packageViewer;
-	private Text nameText;
+	private StyledText nameText;
+	private ContentProposalAdapter nameTextProposalAdapter;
 	private AddDeleteWidget buttons;
-	private Table table;
+	private Button organizeImportsButton;
 	Composite composite;
 
-	private static final String IMPORTED_NAMESPACE = "imported namespace"; //$NON-NLS-1$
-
-	public PackageInfoWidget(final FormToolkit widgetFactory) {
+	public PackageInfoWidget(final FormToolkit widgetFactory,
+			final Supplier<GraphicalAnnotationModel> annotationModelSupplier) {
 		super(widgetFactory);
+		this.annotationModelSupplier = annotationModelSupplier;
 	}
 
 	@Override
@@ -77,12 +98,15 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		getWidgetFactory().createLabel(composite, FordiacMessages.Name + ":"); //$NON-NLS-1$
-		nameText = createGroupText(composite, true);
+		nameText = createGroupStyledText(composite, true);
 		nameText.addModifyListener(e -> {
 			if (!blockListeners) {
 				executeCommand(new ChangePackageNameCommand(getType(), nameText.getText()));
 			}
 		});
+		nameTextProposalAdapter = new ContentAssistCommandAdapter(nameText, new StyledTextContentAdapter(),
+				new PackageSelectionProposalProvider(this::getTypeLibrary), null, null, true);
+		nameTextProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 
 		final Label importsLabel = new Label(packageGroup, SWT.NONE);
 		importsLabel.setText(FordiacMessages.Imports + ":"); //$NON-NLS-1$
@@ -95,46 +119,57 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		buttons = new AddDeleteWidget();
 		buttons.createControls(compositeBottom, getWidgetFactory());
 
+		organizeImportsButton = getWidgetFactory().createButton(buttons.getControl(), "", SWT.PUSH);
+		organizeImportsButton.setToolTipText(FordiacMessages.PackageInfoWidget_OrganizeImports);
+		organizeImportsButton
+				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_SYNCED));
+		organizeImportsButton.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		organizeImportsButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(ev -> {
+			executeCommand(new OrganizeImportsCommand(getType()));
+			packageViewer.refresh();
+		}));
+
 		packageViewer = TableWidgetFactory.createPropertyTableViewer(compositeBottom);
-		table = packageViewer.getTable();
-		configureTableLayout(table);
+		configureImportsTableLayout(packageViewer);
 		packageViewer.setContentProvider(new PackageContentProvider());
-		packageViewer.setLabelProvider(new PackageLabelProvider());
-		packageViewer.setCellEditors(new CellEditor[] { new TextCellEditor(table) });
-		packageViewer.setColumnProperties(new String[] { IMPORTED_NAMESPACE });
+		packageViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		buttons.bindToTableViewer(packageViewer, this, ref -> new AddNewImportCommand(getType()),
 				ref -> new DeleteImportCommand(getType().getCompilerInfo(), (Import) ref));
-
-		packageViewer.setCellModifier(new ImportsCellModifier());
 	}
 
-	private static void configureTableLayout(final Table table) {
-		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText(FordiacMessages.Name);
-
-		final TableLayout layout = new TableLayout(true);
-		layout.addColumnData(new ColumnWeightData(25, 200));
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		table.setLayout(layout);
+	private void configureImportsTableLayout(final TableViewer viewer) {
+		final TableViewerColumn nameColumn = new TableViewerColumn(viewer, SWT.NONE);
+		nameColumn.setLabelProvider(
+				new DelegatingStyledCellLabelProvider(new PackageLabelProvider(annotationModelSupplier)));
+		nameColumn.setEditingSupport(new ImportsEditingSupport(viewer, this::getTypeLibrary, this));
+		final TableColumn nameTableColumn = nameColumn.getColumn();
+		nameTableColumn.setText(FordiacMessages.Name);
+		nameTableColumn.setWidth(200);
+		nameTableColumn.setResizable(true);
 	}
 
 	@Override
 	public void refresh() {
 		super.refresh();
+		final GraphicalAnnotationModel annotationModel = annotationModelSupplier.get();
 		final Consumer<Command> commandExecutorBuffer = getCommandExecutor();
 		setCommandExecutor(null);
 		if ((getType() != null)) {
 			nameText.setEditable(!isReadonly());
 			nameText.setEnabled(!isReadonly());
-			buttons.setButtonEnablement(!isReadonly());
-			buttons.setCreateButtonEnablement(!isReadonly());
-			table.setEnabled(!isReadonly());
+			nameTextProposalAdapter.refresh();
+			buttons.setEnabled(!isReadonly());
+			organizeImportsButton.setEnabled(!isReadonly());
+			packageViewer.getTable().setEnabled(!isReadonly());
 
-			if (null != getType().getCompilerInfo()) {
-				final CompilerInfo compilerInfo = getType().getCompilerInfo();
-				nameText.setText(null != compilerInfo.getPackageName() ? compilerInfo.getPackageName() : ""); //$NON-NLS-1$
-			}
+			final CompilerInfo compilerInfo = getType().getCompilerInfo();
+			final StyledString nameStyledString = new StyledString(PackageNameHelper.getPackageName(getType()),
+					annotationModel != null && compilerInfo != null
+							? GraphicalAnnotationStyles.getAnnotationStyle(annotationModel.getAnnotations(compilerInfo))
+							: null);
+			nameText.setText(nameStyledString.toString());
+			nameText.setStyleRanges(nameStyledString.getStyleRanges());
 			packageViewer.setInput(getType());
 		}
 		setCommandExecutor(commandExecutorBuffer);
@@ -145,8 +180,9 @@ public class PackageInfoWidget extends TypeInfoWidget {
 	public void setEnabled(final boolean enablement) {
 		super.setEnabled(enablement);
 		nameText.setEnabled(enablement);
+		nameTextProposalAdapter.setEnabled(enablement);
 		buttons.setVisible(enablement);
-		table.setEnabled(enablement);
+		packageViewer.getTable().setEnabled(enablement);
 		packageViewer.setCellModifier(null);
 	}
 
@@ -154,39 +190,47 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		return getType() instanceof FunctionFBType || getType() instanceof GlobalConstants;
 	}
 
-	private class ImportsCellModifier implements ICellModifier {
-
-		@Override
-		public boolean canModify(final Object element, final String property) {
-			return true;
+	protected TypeLibrary getTypeLibrary() {
+		final LibraryElement type = getType();
+		if (type != null) {
+			return getType().getTypeLibrary();
 		}
-
-		@Override
-		public Object getValue(final Object element, final String property) {
-			if (property.equals(IMPORTED_NAMESPACE)) {
-				return ((Import) element).getImportedNamespace();
-			}
-			return null;
-		}
-
-		@Override
-		public void modify(final Object element, final String property, final Object value) {
-			final TableItem tableItem = (TableItem) element;
-			final Import data = (Import) tableItem.getData();
-			final Command cmd = getModificationCommand(property, value, data);
-			if (null != cmd) {
-				executeCommand(cmd);
-				packageViewer.refresh(data);
-			}
-		}
-
-		private Command getModificationCommand(final String property, final Object value, final Import data) {
-			Command cmd = null;
-			if (property.equals(IMPORTED_NAMESPACE)) {
-				cmd = new ChangeImportNamespaceCommand(data, value.toString());
-			}
-			return cmd;
-		}
+		return null;
 	}
 
+	protected static class ImportsEditingSupport extends EditingSupport {
+
+		private final CellEditor cellEditor;
+		private final CommandExecutor commandExecutor;
+
+		public ImportsEditingSupport(final TableViewer viewer, final Supplier<TypeLibrary> supplier,
+				final CommandExecutor commandExecutor) {
+			super(viewer);
+			this.commandExecutor = commandExecutor;
+			cellEditor = new ImportCellEditor(viewer.getTable(), supplier);
+		}
+
+		@Override
+		protected CellEditor getCellEditor(final Object element) {
+			return cellEditor;
+		}
+
+		@Override
+		protected boolean canEdit(final Object element) {
+			return element instanceof Import;
+		}
+
+		@Override
+		protected Object getValue(final Object element) {
+			return element instanceof final Import imp ? imp.getImportedNamespace() : null;
+		}
+
+		@Override
+		protected void setValue(final Object element, final Object value) {
+			if (element instanceof final Import imp && value instanceof final String importedNamespace) {
+				commandExecutor.executeCommand(new ChangeImportNamespaceCommand(imp, importedNamespace));
+				getViewer().refresh(element);
+			}
+		}
+	}
 }

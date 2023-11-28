@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies GmbH
+ * Copyright (c) 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,13 +8,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Martin Melik Merkumians
- *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextcore
+package org.eclipse.fordiac.ide.gef.annotation;
 
-import org.eclipse.xtext.naming.DefaultDeclarativeQualifiedNameProvider
+import org.eclipse.gef.GraphicalEditPart;
 
-class DTPQualifiedNameProvider extends DefaultDeclarativeQualifiedNameProvider {
-	
+public interface AnnotableGraphicalEditPart extends GraphicalEditPart {
+
+	void updateAnnotations(GraphicalAnnotationModelEvent event);
 }

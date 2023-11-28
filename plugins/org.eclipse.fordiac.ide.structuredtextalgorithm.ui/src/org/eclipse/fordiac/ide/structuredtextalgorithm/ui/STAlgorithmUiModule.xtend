@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui
 
 import com.google.inject.Binder
 import com.google.inject.name.Names
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.contentassist.STAlgorithmReferenceProposalCreator
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocument
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentPartitioner
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentUpdaterChangeAdapterFilter
@@ -48,6 +49,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceUISe
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreMarkerCreator
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreMarkerTypeProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreResourceUIValidatorExtension
 import org.eclipse.ui.PlatformUI
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
@@ -60,6 +63,7 @@ import org.eclipse.xtext.ui.editor.IURIEditorOpener
 import org.eclipse.xtext.ui.editor.IXtextEditorCallback
 import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.editor.XtextSourceViewer
+import org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.ReferenceProposalCreator
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities
 import org.eclipse.xtext.ui.editor.contentassist.PrefixMatcher
 import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor
@@ -76,10 +80,12 @@ import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor
 import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy
 import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration
+import org.eclipse.xtext.ui.editor.validation.MarkerCreator
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider
 import org.eclipse.xtext.ui.shared.Access
 import org.eclipse.xtext.ui.validation.IResourceUIValidatorExtension
+import org.eclipse.xtext.ui.validation.MarkerTypeProvider
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
@@ -209,12 +215,24 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 			toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider);
 	}
 
+	def Class<? extends ReferenceProposalCreator> bindAbstractJavaBasedContentProposalProvider$ReferenceProposalCreator() {
+		return STAlgorithmReferenceProposalCreator		
+	}
+
 	override Class<? extends PrefixMatcher> bindPrefixMatcher() {
 		return STCorePrefixMatcher
 	}
 
 	def Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {
 		return STCoreResourceUIServiceProvider
+	}
+
+	def Class<? extends MarkerCreator> bindMarkerCreator() {
+		return STCoreMarkerCreator;
+	}
+
+	override Class<? extends MarkerTypeProvider> bindMarkerTypeProvider() {
+		return STCoreMarkerTypeProvider;
 	}
 
 	def Class<? extends IResourceUIValidatorExtension> bindIResourceUIValidatorExtension() {

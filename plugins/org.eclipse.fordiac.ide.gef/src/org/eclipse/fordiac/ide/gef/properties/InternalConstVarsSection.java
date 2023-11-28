@@ -49,7 +49,8 @@ public class InternalConstVarsSection extends AbstractInternalVarsSection {
 
 		provider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
 		final DataLayer dataLayer = new VarDeclarationDataLayer(provider, VarDeclarationTableColumn.DEFAULT_COLUMNS);
-		dataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(provider));
+		dataLayer.setConfigLabelAccumulator(
+				new VarDeclarationConfigLabelAccumulator(provider, this::getAnnotationModel));
 
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
 				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,

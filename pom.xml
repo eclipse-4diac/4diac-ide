@@ -28,6 +28,7 @@
         <xtend-version>2.32.0</xtend-version>
         <eclipse.platform.version>4.29</eclipse.platform.version>
         <equinox.executable.version>3.8.2200</equinox.executable.version>
+        <eclipse.cbi.version>1.4.2</eclipse.cbi.version>
 	</properties>
 
 	<repositories>
@@ -182,7 +183,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.3.1</version>
 				<configuration>
 					<logViolationsToConsole>true</logViolationsToConsole>
 					<consoleOutput>true</consoleOutput>
@@ -221,7 +222,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
+				<version>3.3.1</version>
 				<executions>
 					<execution>
 						<id>copy-resources-splash</id>
@@ -249,12 +250,12 @@
 		<dependency>
 			<groupId>org.opentest4j</groupId>
 			<artifactId>opentest4j</artifactId>
-			<version>1.2.0</version>
+			<version>1.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.9.1</version>
+			<version>5.10.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.xtend</groupId>
@@ -298,7 +299,7 @@
 					<plugin>
 						<groupId>org.eclipse.cbi.maven.plugins</groupId>
 						<artifactId>eclipse-jarsigner-plugin</artifactId>
-						<version>1.3.2</version>
+						<version>${eclipse.cbi.version}</version>
 						<executions>
 							<execution>
 								<id>sign</id>

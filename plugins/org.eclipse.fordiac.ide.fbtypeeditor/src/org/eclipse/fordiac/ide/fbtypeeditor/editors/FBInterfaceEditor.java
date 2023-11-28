@@ -70,8 +70,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInput(input);
-		if (input instanceof FBTypeEditorInput) {
-			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+		if (input instanceof final FBTypeEditorInput untypedInput) {
 			fbType = untypedInput.getContent();
 			typeLib = untypedInput.getTypeEntry().getTypeLibrary();
 		}
@@ -126,8 +125,8 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	public boolean outlineSelectionChanged(final Object selectedElement) {
 		final Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
 		getGraphicalViewer().flush();
-		if (editpart instanceof EditPart && ((EditPart) editpart).isSelectable()) {
-			getGraphicalViewer().select((EditPart) editpart);
+		if (editpart instanceof final EditPart ep && ep.isSelectable()) {
+			getGraphicalViewer().select(ep);
 			return true;
 		}
 		return (selectedElement instanceof InterfaceList);
@@ -164,7 +163,8 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer, final ZoomManager zoomManager) {
+	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
+			final ZoomManager zoomManager) {
 		return new InterfaceContextMenuProvider(viewer, zoomManager, getActionRegistry(), typeLib.getDataTypeLibrary());
 	}
 

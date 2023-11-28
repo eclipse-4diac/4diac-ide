@@ -65,7 +65,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -204,7 +203,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.ERROR_MARKER_DATA_TYPE: return createErrorMarkerDataType();
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT: return createErrorMarkerFBNElement();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE: return createErrorMarkerInterface();
-			case LibraryElementPackage.ERROR_MARKER_REF: return createErrorMarkerRef();
 			case LibraryElementPackage.EVENT: return createEvent();
 			case LibraryElementPackage.EVENT_CONNECTION: return createEventConnection();
 			case LibraryElementPackage.FB: return createFB();
@@ -691,17 +689,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public ErrorMarkerInterface createErrorMarkerInterface() {
 		ErrorMarkerInterfaceImpl errorMarkerInterface = new ErrorMarkerInterfaceImpl();
 		return errorMarkerInterface;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ErrorMarkerRef createErrorMarkerRef() {
-		ErrorMarkerRefImpl errorMarkerRef = new ErrorMarkerRefImpl();
-		return errorMarkerRef;
 	}
 
 	/**

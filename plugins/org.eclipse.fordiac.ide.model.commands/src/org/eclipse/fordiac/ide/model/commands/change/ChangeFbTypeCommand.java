@@ -14,16 +14,9 @@
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import java.text.MessageFormat;
-
-import org.eclipse.fordiac.ide.model.commands.Messages;
-import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -53,19 +46,7 @@ public class ChangeFbTypeCommand extends Command {
 	}
 
 	public static ChangeFbTypeCommand forDataType(final FB fb, final FBTypeEntry typeEntry) {
-		final ChangeFbTypeCommand result = new ChangeFbTypeCommand(fb, typeEntry);
-		if (fb.getTypeEntry() instanceof ErrorTypeEntry) {
-			result.getAdditionalCommands()
-					.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(fb)));
-		}
-		if (typeEntry instanceof ErrorTypeEntry) {
-			result.getAdditionalCommands()
-					.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(ErrorMarkerBuilder.createErrorMarkerBuilder(
-							MessageFormat.format(Messages.ChangeFbTypeCommand_TypeNotFound, typeEntry.getTypeName(),
-									fb.getName()))
-							.setTarget(fb)));
-		}
-		return result;
+		return new ChangeFbTypeCommand(fb, typeEntry);
 	}
 
 	@Override

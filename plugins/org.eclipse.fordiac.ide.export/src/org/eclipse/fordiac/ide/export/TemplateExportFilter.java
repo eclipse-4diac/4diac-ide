@@ -68,7 +68,7 @@ public abstract class TemplateExportFilter extends ExportFilter {
 				? messages.stream()
 						.map(v -> MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
 								name, v))
-						.collect(Collectors.toList())
+						.toList()
 				: messages;
 	}
 
@@ -108,8 +108,8 @@ public abstract class TemplateExportFilter extends ExportFilter {
 			}
 
 			String name = "anonymous"; //$NON-NLS-1$
-			if (source instanceof INamedElement) {
-				name = ((INamedElement) source).getName();
+			if (source instanceof final INamedElement ne) {
+				name = ne.getName();
 			} else if (typeFile != null) {
 				name = typeFile.getFullPath().removeFileExtension().lastSegment();
 			}

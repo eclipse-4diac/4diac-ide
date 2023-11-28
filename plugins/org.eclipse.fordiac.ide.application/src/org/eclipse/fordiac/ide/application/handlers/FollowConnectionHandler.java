@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -59,7 +58,8 @@ public class FollowConnectionHandler extends AbstractHandler {
 		private final List<IInterfaceElement> opposites;
 		private final GraphicalViewer viewer;
 
-		public OppositeSelectionDialog(final Shell parent, final List<IInterfaceElement> opposites, final GraphicalViewer viewer) {
+		public OppositeSelectionDialog(final Shell parent, final List<IInterfaceElement> opposites,
+				final GraphicalViewer viewer) {
 			super(parent, INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false,
 					Messages.FBPaletteViewer_SelectConnectionEnd, null);
 			this.opposites = opposites;
@@ -99,8 +99,7 @@ public class FollowConnectionHandler extends AbstractHandler {
 
 				@Override
 				public String getText(final Object element) {
-					if (element instanceof IInterfaceElement) {
-						final IInterfaceElement iElem = (IInterfaceElement) element;
+					if (element instanceof final IInterfaceElement iElem) {
 						String retVal = ""; //$NON-NLS-1$
 						if (null != iElem.getFBNetworkElement()) {
 							retVal = iElem.getFBNetworkElement().getName() + "."; //$NON-NLS-1$
@@ -152,11 +151,11 @@ public class FollowConnectionHandler extends AbstractHandler {
 		if (null == network) {
 			// we have a viewer
 			final FBNetworkElement element = editor.getAdapter(FBNetworkElement.class);
-			if (element instanceof SubApp) {
-				return ((SubApp) element).getSubAppNetwork();
+			if (element instanceof final SubApp subApp) {
+				return subApp.getSubAppNetwork();
 			}
-			if (element instanceof CFBInstance) {
-				return ((CFBInstance) element).getCfbNetwork();
+			if (element instanceof final CFBInstance cfbInstance) {
+				return cfbInstance.getCfbNetwork();
 			}
 		}
 		return network;
@@ -164,31 +163,30 @@ public class FollowConnectionHandler extends AbstractHandler {
 
 	@Override
 	public void setEnabled(final Object evaluationContext) {
-		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_EDITOR_NAME);
+		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
+				ISources.ACTIVE_CURRENT_SELECTION_NAME);
+		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext,
+				ISources.ACTIVE_EDITOR_NAME);
 
 		if (selection != null && ((IStructuredSelection) selection).size() == 1) {
-			setBaseEnabled(editor != null && ((IStructuredSelection) selection).getFirstElement() instanceof InterfaceEditPart);
+			setBaseEnabled(editor != null
+					&& ((IStructuredSelection) selection).getFirstElement() instanceof InterfaceEditPart);
 		} else {
 			setBaseEnabled(false);
 		}
-
 
 	}
 
 	protected static List<IInterfaceElement> getConnectionOposites(final ISelection selection,
 			final FBNetwork fbNetwork) {
-		if (selection instanceof IStructuredSelection && !selection.isEmpty()) {
-			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			if ((structuredSelection.size() == 1)
-					&& (structuredSelection.getFirstElement() instanceof InterfaceEditPart)) {
-				// only if only one element is selected
-				final IInterfaceElement ie = ((InterfaceEditPart) structuredSelection.getFirstElement()).getModel();
-				final EList<Connection> connList = getConnectionList(ie, fbNetwork);
-				return connList.stream().map(
-						con -> (con.getSource().equals(ie) ? con.getDestination() : con.getSource()))
-						.collect(Collectors.toList());
-			}
+		if (selection instanceof final IStructuredSelection structuredSelection && !selection.isEmpty()
+				&& (structuredSelection.size() == 1)
+				&& (structuredSelection.getFirstElement() instanceof final InterfaceEditPart iep)) {
+			// only if only one element is selected
+			final IInterfaceElement ie = iep.getModel();
+			final EList<Connection> connList = getConnectionList(ie, fbNetwork);
+			return connList.stream().map(con -> (con.getSource().equals(ie) ? con.getDestination() : con.getSource()))
+					.toList();
 		}
 		return Collections.emptyList();
 	}
@@ -212,8 +210,7 @@ public class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	protected static void showOppositeSelectionDialog(final List<IInterfaceElement> opposites,
-			final ExecutionEvent event,
-			final GraphicalViewer viewer) throws ExecutionException {
+			final ExecutionEvent event, final GraphicalViewer viewer) throws ExecutionException {
 
 		final OppositeSelectionDialog dialog = new OppositeSelectionDialog(HandlerUtil.getActiveShellChecked(event),
 				opposites, viewer);
@@ -224,14 +221,13 @@ public class FollowConnectionHandler extends AbstractHandler {
 		final InterfaceEditPart pin = (InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement();
 
 		if (hasOpposites(pin)) {
-			if(pin.isEvent()) {
+			if (pin.isEvent()) {
 				return getInternalOppositeEventPin(pin);
 			}
-			else if (pin.isVariable() && !pin.isAdapter()) {
+			if (pin.isVariable() && !pin.isAdapter()) {
 				return getInternalOppositeVarPin(pin);
-			} else {
-				return getInternalOppositePlugOrSocketPin(pin);
 			}
+			return getInternalOppositePlugOrSocketPin(pin);
 		}
 		return null;
 	}

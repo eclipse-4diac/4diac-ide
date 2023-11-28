@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.export.ui.wizard;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -96,7 +95,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		try {
 			new ProgressMonitorDialog(getShell()).run(false, false, exporter);
 		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt();  // mark interruption
+			Thread.currentThread().interrupt(); // mark interruption
 			showExceptionErrorDialog(e);
 		} catch (final Exception e) {
 			showExceptionErrorDialog(e);
@@ -114,8 +113,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 
 	private final List<IFile> collectExportees() {
 		final List<Object> resources = page.getSelectedResources();
-		return resources.parallelStream().filter(IFile.class::isInstance).map(IFile.class::cast)
-				.collect(Collectors.toList());
+		return resources.parallelStream().filter(IFile.class::isInstance).map(IFile.class::cast).toList();
 	}
 
 	private static class Exporter implements IRunnableWithProgress {
@@ -163,8 +161,8 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 					filter.export(null, outputDirectory, overwriteWithoutWarning, source);
 				} else {
 					String name = "anonymous"; //$NON-NLS-1$
-					if (source instanceof INamedElement) {
-						name = ((INamedElement) source).getName();
+					if (source instanceof final INamedElement ne) {
+						name = ne.getName();
 					} else if (file != null) {
 						name = file.getFullPath().removeFileExtension().lastSegment();
 					}

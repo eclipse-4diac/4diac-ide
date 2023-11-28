@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2023 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,6 +21,9 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.zoom.MouseLocationZoomScrollPolicy;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationModelEventDispatcher;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
@@ -62,14 +66,17 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-/** A base editor for various graphical editors.
+/**
+ * A base editor for various graphical editors.
  *
- * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at) */
+ * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
+ */
 public abstract class DiagramEditor extends GraphicalEditor
 		implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
@@ -84,13 +91,19 @@ public abstract class DiagramEditor extends GraphicalEditor
 	/** The outline page. */
 	private DiagramOutlinePage outlinePage;
 
+	private GraphicalAnnotationModel annotationModel;
+	private GraphicalAnnotationModelListener annotationModelEventDispatcher;
+
 	/** Instantiates a new diagram editor. */
 	protected DiagramEditor() {
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util .EventObject) */
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util
+	 * .EventObject)
+	 */
 	@Override
 	public void commandStackChanged(final EventObject event) {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
@@ -118,9 +131,11 @@ public abstract class DiagramEditor extends GraphicalEditor
 		final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
 		if (canvas != null && !canvas.isDisposed()) {
 			viewer.flush();
-			// if an editpart is selected then the viewer has bee created with something to be shown centered
+			// if an editpart is selected then the viewer has bee created with something to
+			// be shown centered
 			// therefore we will not show the initial position
-			// do not use getSelection() here because it will return always at least one element
+			// do not use getSelection() here because it will return always at least one
+			// element
 			if (viewer.getSelectedEditParts().isEmpty()) {
 				final GraphicalEditPart rootEditPart = (GraphicalEditPart) viewer.getRootEditPart();
 				final Point scrollPos = getInitialScrollPos(rootEditPart);
@@ -132,7 +147,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 		}
 	}
 
-	@SuppressWarnings("static-method")  // allow subclases to override this method
+	@SuppressWarnings("static-method") // allow subclases to override this method
 	protected Point getInitialScrollPos(final GraphicalEditPart rootEditPart) {
 		final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
 		return new Point(drawingAreaBounds.x - DiagramEditor.INITIAL_SCROLL_OFFSET,
@@ -153,17 +168,21 @@ public abstract class DiagramEditor extends GraphicalEditor
 		rulerComp.setGraphicalViewer(getGraphicalViewer());
 	}
 
-	/** Create the root edit part used in this diagram editor. Editors which need special behavior should override this
-	 * function
+	/**
+	 * Create the root edit part used in this diagram editor. Editors which need
+	 * special behavior should override this function
 	 *
-	 * @return the new root edit part */
+	 * @return the new root edit part
+	 */
 	protected ScalableFreeformRootEditPart createRootEditPart() {
 		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#configureGraphicalViewer() */
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#configureGraphicalViewer()
+	 */
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
@@ -193,28 +212,36 @@ public abstract class DiagramEditor extends GraphicalEditor
 		return ((ScalableFreeformRootEditPart) (getGraphicalViewer().getRootEditPart())).getZoomManager();
 	}
 
-	/** Gets the edits the part factory.
+	/**
+	 * Gets the edits the part factory.
 	 *
-	 * @return the edits the part factory */
+	 * @return the edits the part factory
+	 */
 	protected abstract EditPartFactory getEditPartFactory();
 
-	/** Gets the context menu provider.
+	/**
+	 * Gets the context menu provider.
 	 *
 	 * @param viewer the viewer
 	 * @param root   the root
 	 *
-	 * @return the context menu provider */
+	 * @return the context menu provider
+	 */
 	protected abstract ContextMenuProvider getContextMenuProvider(ScrollingGraphicalViewer viewer,
 			ZoomManager zoomManager);
 
-	/** Creates the transfer drop target listener.
+	/**
+	 * Creates the transfer drop target listener.
 	 *
-	 * @return the transfer drop target listener */
+	 * @return the transfer drop target listener
+	 */
 	protected abstract TransferDropTargetListener createTransferDropTargetListener();
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#initializeGraphicalViewer() */
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#initializeGraphicalViewer()
+	 */
 	@Override
 	protected void initializeGraphicalViewer() {
 		final GraphicalViewer viewer = getGraphicalViewer();
@@ -227,20 +254,35 @@ public abstract class DiagramEditor extends GraphicalEditor
 		// enable drag from palette
 		getGraphicalViewer().addDropTargetListener(new TemplateTransferDropTargetListener(getGraphicalViewer()));
 		viewer.addDropTargetListener(new ParameterDropTargetListener(getGraphicalViewer()));
+
+		if (annotationModel != null) {
+			annotationModelEventDispatcher = new FordiacAnnotationModelEventDispatcher(getGraphicalViewer());
+			annotationModel.addAnnotationModelListener(annotationModelEventDispatcher, true);
+		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput) */
+	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite,
+	 * org.eclipse.ui.IEditorInput)
+	 */
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setModel(input);
+
+		if (site instanceof final MultiPageEditorSite multiPageEditorSite) {
+			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
+		}
+
 		super.init(site, input);
 	}
 
-	/** Sets the model.
+	/**
+	 * Sets the model.
 	 *
-	 * @param input the new model */
+	 * @param input the new model
+	 */
 	protected void setModel(final IEditorInput input) {
 		setEditDomain(createEditDomain());
 		getEditDomain().setDefaultTool(createDefaultTool());
@@ -261,41 +303,54 @@ public abstract class DiagramEditor extends GraphicalEditor
 		return new AdvancedPanningSelectionTool();
 	}
 
-	/** Gets the system.
+	/**
+	 * Gets the system.
 	 *
-	 * @return the system */
+	 * @return the system
+	 */
 	public abstract AutomationSystem getSystem();
 
-	/** Gets the file name.
+	/**
+	 * Gets the file name.
 	 *
-	 * @return the file name */
+	 * @return the file name
+	 */
 	public abstract String getFileName();
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @seeorg.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime. IProgressMonitor) */
+	 * @seeorg.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.
+	 * IProgressMonitor)
+	 */
 	@Override
 	public abstract void doSave(final IProgressMonitor monitor);
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#doSaveAs() */
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#doSaveAs()
+	 */
 	@Override
 	public void doSaveAs() {
 		// not implemented
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#isSaveAsAllowed() */
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#isSaveAsAllowed()
+	 */
 	@Override
 	public boolean isSaveAsAllowed() {
 		return false;
 	}
 
-	/** Gets the common key handler.
+	/**
+	 * Gets the common key handler.
 	 *
-	 * @return the common key handler */
+	 * @return the common key handler
+	 */
 	protected KeyHandler getCommonKeyHandler() {
 		if (sharedKeyHandler == null) {
 			sharedKeyHandler = new KeyHandler();
@@ -307,9 +362,12 @@ public abstract class DiagramEditor extends GraphicalEditor
 		return sharedKeyHandler;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter( java.lang.Class) */
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(
+	 * java.lang.Class)
+	 */
 	@Override
 	public <T> T getAdapter(final Class<T> type) {
 		if (type == ZoomManager.class) {
@@ -322,19 +380,26 @@ public abstract class DiagramEditor extends GraphicalEditor
 		if (type == IPropertySheetPage.class) {
 			return type.cast(new TabbedPropertySheetPage(this));
 		}
+		if (type == GraphicalAnnotationModel.class) {
+			return type.cast(annotationModel);
+		}
 		return super.getAdapter(type);
 	}
 
-	/** Gets the editor.
+	/**
+	 * Gets the editor.
 	 *
-	 * @return the editor */
+	 * @return the editor
+	 */
 	protected FigureCanvas getEditor() {
 		return (FigureCanvas) getGraphicalViewer().getControl();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#createActions() */
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#createActions()
+	 */
 	@Override
 	protected void createActions() {
 		final ActionRegistry registry = getActionRegistry();
@@ -384,26 +449,36 @@ public abstract class DiagramEditor extends GraphicalEditor
 		updateActions(getSelectionActions());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.ui.IWorkbenchPart#dispose() */
+	 * @see org.eclipse.ui.IWorkbenchPart#dispose()
+	 */
 	@Override
 	public void dispose() {
 		outlinePage = null;
+		if (annotationModel != null && annotationModelEventDispatcher != null) {
+			annotationModel.removeAnnotationModelListener(annotationModelEventDispatcher);
+		}
 		super.dispose();
-
 	}
 
-	/** Returns the GraphicalViewer of this Editor.
+	/**
+	 * Returns the GraphicalViewer of this Editor.
 	 *
-	 * @return the GraphicalViewer */
+	 * @return the GraphicalViewer
+	 */
 	public GraphicalViewer getViewer() {
 		return getGraphicalViewer();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor #getContributorId() */
+	 * @see
+	 * org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor
+	 * #getContributorId()
+	 */
 	@Override
 	public String getContributorId() {
 		return PROPERTY_CONTRIBUTOR_ID;

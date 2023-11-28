@@ -63,17 +63,17 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		}
 
 		private boolean isSubAppToggledToCollapsed(final Notification msg) {
-			return msg.getNewValue() == null && msg.getOldValue() instanceof Attribute
-					&& ((Attribute) msg.getOldValue()).getName()
-							.equals(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE)
-					&& "true".equals(((Attribute) msg.getOldValue()).getValue()); //$NON-NLS-1$
+			return msg.getNewValue() == null && msg.getOldValue() instanceof final Attribute attr
+					&& attr.getName().equals(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE)
+					&& "true".equals(attr.getValue()); //$NON-NLS-1$
 		}
 
 	};
 
 	private Adapter fbNetworkAdapter;
 
-	// subclasses need to override this method and return the fbnetwork contained in fbNetworkElement
+	// subclasses need to override this method and return the fbnetwork contained in
+	// fbNetworkElement
 	@Override
 	public abstract FBNetwork getModel();
 
@@ -101,8 +101,7 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 	protected void setModel(final IEditorInput input) {
 		super.setModel(input);
 
-		if (input instanceof CompositeAndSubAppInstanceViewerInput) {
-			final CompositeAndSubAppInstanceViewerInput untypedInput = (CompositeAndSubAppInstanceViewerInput) input;
+		if (input instanceof final CompositeAndSubAppInstanceViewerInput untypedInput) {
 			fbNetworkElement = untypedInput.getContent();
 			final String name = getNameHierarchy();
 			setPartName(name);
@@ -164,8 +163,8 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		// TODO mabye a nice helper function to be put into the fb model
 		final StringBuilder retVal = new StringBuilder(fbNetworkElement.getName());
 		final EObject cont = fbNetworkElement.eContainer().eContainer();
-		if (cont instanceof INamedElement) {
-			retVal.insert(0, ((INamedElement) cont).getName() + "."); //$NON-NLS-1$
+		if (cont instanceof final INamedElement namedEl) {
+			retVal.insert(0, namedEl.getName() + "."); //$NON-NLS-1$
 		}
 		return retVal.toString();
 	}
@@ -178,8 +177,8 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 			@Override
 			protected IFigure createFigure() {
 				final IFigure viewPort = super.createFigure();
-				final IFigure backGround = (IFigure) viewPort.getChildren().get(0);
-				final IFigure drawingAreaContainer = (IFigure) backGround.getChildren().get(0);
+				final IFigure backGround = viewPort.getChildren().get(0);
+				final IFigure drawingAreaContainer = backGround.getChildren().get(0);
 				final Color backGroundColor = backGround.getBackgroundColor();
 				backGround.setBackgroundColor(ColorHelper.lighter(backGroundColor));
 				drawingAreaContainer.setBackgroundColor(backGroundColor);

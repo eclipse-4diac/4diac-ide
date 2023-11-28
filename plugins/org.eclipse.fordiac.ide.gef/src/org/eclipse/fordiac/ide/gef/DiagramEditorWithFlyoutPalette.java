@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 				 2018 - 2019 Johannes Kepler University
+ * Copyright (c) 2008, 2023 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,6 +25,9 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.zoom.MouseLocationZoomScrollPolicy;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationModelEventDispatcher;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
@@ -79,6 +83,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
@@ -90,7 +95,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWithFlyoutPalette
-implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
+		implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
@@ -100,6 +105,9 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 	/** The outline page. */
 	private DiagramOutlinePage outlinePage;
+
+	private GraphicalAnnotationModel annotationModel;
+	private GraphicalAnnotationModelListener annotationModelEventDispatcher;
 
 	// needed for tabbed property sheets
 	@Override
@@ -125,10 +133,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		for (final Object element : getGraphicalViewer().getRootEditPart().getChildren()) {
-			final EditPart ep = (EditPart) element;
-			ep.refresh();
-		}
+		getGraphicalViewer().getRootEditPart().getChildren().forEach(EditPart::refresh);
 	}
 
 	private RulerComposite rulerComp;
@@ -147,9 +152,11 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
 		if (canvas != null && !canvas.isDisposed()) {
 			viewer.flush();
-			// if an editpart is selected then the viewer has bee created with something to be shown centered
+			// if an editpart is selected then the viewer has bee created with something to
+			// be shown centered
 			// therefore we will not show the initial position
-			// do not use getSelection() here because it will return always at least one element
+			// do not use getSelection() here because it will return always at least one
+			// element
 			if (viewer.getSelectedEditParts().isEmpty()) {
 				final GraphicalEditPart rootEditPart = (GraphicalEditPart) viewer.getRootEditPart();
 				final Point scrollPos = getInitialScrollPos(rootEditPart);
@@ -161,7 +168,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		}
 	}
 
-	@SuppressWarnings("static-method")  // allow subclasses to override this method
+	@SuppressWarnings("static-method") // allow subclasses to override this method
 	protected Point getInitialScrollPos(final GraphicalEditPart rootEditPart) {
 		final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
 		return new Point(drawingAreaBounds.x - DiagramEditor.INITIAL_SCROLL_OFFSET,
@@ -189,7 +196,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 		JFaceResources.getFontRegistry().addListener(fontChangeListener);
 		viewer.getControl()
-		.addDisposeListener(e -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
+				.addDisposeListener(e -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
 
 		rulerComp.setGraphicalViewer(getGraphicalViewer());
 	}
@@ -280,6 +287,10 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		// enable drag from palette
 		getGraphicalViewer().addDropTargetListener(new TemplateTransferDropTargetListener(getGraphicalViewer()));
 		viewer.addDropTargetListener(new ParameterDropTargetListener(getGraphicalViewer()));
+		if (annotationModel != null) {
+			annotationModelEventDispatcher = new FordiacAnnotationModelEventDispatcher(getGraphicalViewer());
+			annotationModel.addAnnotationModelListener(annotationModelEventDispatcher, true);
+		}
 	}
 
 	/*
@@ -291,6 +302,9 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setModel(input);
+		if (site instanceof final MultiPageEditorSite multiPageEditorSite) {
+			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
+		}
 		super.init(site, input);
 		setEditorPartName(input);
 		final ActionRegistry registry = getActionRegistry();
@@ -409,7 +423,9 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		if (type == IPropertySheetPage.class) {
 			return type.cast(new TabbedPropertySheetPage(this));
 		}
-
+		if (type == GraphicalAnnotationModel.class) {
+			return type.cast(annotationModel);
+		}
 		return super.getAdapter(type);
 	}
 
@@ -475,9 +491,11 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		updateActions(getSelectionActions());
 	}
 
-	/** Gets the selection actions list
+	/**
+	 * Gets the selection actions list
 	 *
-	 * @return the sel actions */
+	 * @return the sel actions
+	 */
 	@SuppressWarnings("rawtypes")
 	public List getSelActions() {
 		return getSelectionActions();
@@ -491,6 +509,9 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	@Override
 	public void dispose() {
 		outlinePage = null;
+		if (annotationModel != null && annotationModelEventDispatcher != null) {
+			annotationModel.removeAnnotationModelListener(annotationModelEventDispatcher);
+		}
 		super.dispose();
 	}
 

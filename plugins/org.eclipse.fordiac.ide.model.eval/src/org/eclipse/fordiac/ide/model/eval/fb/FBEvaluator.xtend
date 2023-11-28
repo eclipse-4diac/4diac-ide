@@ -17,9 +17,11 @@ import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
@@ -40,8 +42,8 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 
 	override evaluate() {
 		var Event event
-		while((event = eventQueue?.receiveInputEvent) !== null) {
-			if(!event.applicable) {
+		while ((event = eventQueue?.receiveInputEvent) !== null) {
+			if (!event.applicable) {
 				throw new UnsupportedOperationException('''The event «event.name» is not applicable for this evaluator''')
 			}
 			event.evaluate
@@ -58,7 +60,7 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	 * Determine if the event is applicable to the current evaluator
 	 */
 	def boolean isApplicable(Event event) {
-		switch(container: event?.eContainer?.eContainer) {
+		switch (container: event?.eContainer?.eContainer) {
 			case type: event.isInput
 			AdapterFB: container.adapterDecl?.eContainer?.eContainer == type && !event.isInput
 			default: false
@@ -88,11 +90,19 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	 */
 	@Deprecated(forRemoval=true)
 	def getQueue() {
-		switch(queue : eventQueue) { FBEvaluatorEventQueueAdapter: queue.delegate }
+		switch (queue : eventQueue) { FBEvaluatorEventQueueAdapter: queue.delegate }
 	}
 
 	override getSourceElement() {
 		this.type
+	}
+
+	override getDependencies() {
+		(type.eAllContents.toIterable.filter(VarDeclaration).flatMap [
+			VariableOperations.getDependencies(it)
+		] + children.values.flatMap [
+			dependencies
+		]).toSet
 	}
 
 	override getVariables() {

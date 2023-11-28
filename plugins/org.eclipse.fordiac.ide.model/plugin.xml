@@ -40,6 +40,11 @@
    </extension>   
    <extension point="org.eclipse.fordiac.ide.model.TypeEntryCreator">
       <TypeEntryCreator
+            class="org.eclipse.fordiac.ide.model.typelibrary.impl.CreateAttributeTypeEntry">
+      </TypeEntryCreator>
+   </extension> 
+   <extension point="org.eclipse.fordiac.ide.model.TypeEntryCreator">
+      <TypeEntryCreator
             class="org.eclipse.fordiac.ide.model.typelibrary.impl.CreateDeviceTypeEntry">
       </TypeEntryCreator>
    </extension>   
@@ -112,6 +117,10 @@
 		</parser>
 		<parser
 			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="atp">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
 			type="sub">
 		</parser>
 		<parser
@@ -149,6 +158,10 @@
 		<parser
 			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
 			type="ADP">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="ATP">
 		</parser>
 		<parser
 			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
@@ -222,6 +235,17 @@
  <extension
        id="typeDeclaration"
        name="4diac IDE Type Declaration Problem"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.model.problem">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
+ </extension> 
+ <extension
+       id="import"
+       name="4diac IDE Import Problem"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.model.problem">

@@ -89,7 +89,8 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
-		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider));
+		inputDataLayer.setConfigLabelAccumulator(
+				new VarDeclarationConfigLabelAccumulator(inputProvider, this::getAnnotationModel));
 		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer,
 				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(), null,
 				this, true);
@@ -130,11 +131,10 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 		inputTable.refresh();
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void setTableInput() {
 		inputProvider.setInput(getType().getInterfaceList().getInOutVars());
 		if (isShowTableEditButtons()) {
-			inputButtons.setCreateButtonEnablement(isEditable());
+			inputButtons.setEnabled(isEditable());
 		}
 	}
 

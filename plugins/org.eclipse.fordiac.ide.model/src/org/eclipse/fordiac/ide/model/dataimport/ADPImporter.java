@@ -16,7 +16,10 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.io.IOException;
 import java.io.InputStream;
+
+import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -46,7 +49,7 @@ public class ADPImporter extends TypeImporter {
 	}
 
 	@Override
-	public void loadElement() {
+	public void loadElement() throws IOException, XMLStreamException, TypeImportException {
 		super.loadElement();
 		// set adapterFB type to correctly set plug
 		getElement().setAdapterFBType(adapterFBType);

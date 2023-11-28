@@ -1877,29 +1877,6 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ErrorMarkerRefItemProvider errorMarkerRefItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createErrorMarkerRefAdapter() {
-		if (errorMarkerRefItemProvider == null) {
-			errorMarkerRefItemProvider = new ErrorMarkerRefItemProvider(this);
-		}
-
-		return errorMarkerRefItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.Group} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

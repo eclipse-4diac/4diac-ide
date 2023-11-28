@@ -12,13 +12,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
@@ -41,7 +44,8 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.IEditorPart;
 
-public class InstanceNameEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
+public class InstanceNameEditPart extends AbstractGraphicalEditPart
+		implements NodeEditPart, AnnotableGraphicalEditPart {
 
 	private DiagramFontChangeListener fontChangeListener;
 
@@ -78,13 +82,13 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 	};
 
 	void refreshValue() {
-		if (getModel().hasErrorMarker()) {
-			getFigure().setBackgroundColor(ColorConstants.red);
-			getFigure().setOpaque(true);
-		} else {
-			getFigure().setOpaque(false);
-		}
 		getFigure().setText(getModel().getInstanceName());
+	}
+
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel().getRefElement(), event,
+				FordiacAnnotationUtil::showOnTarget);
 	}
 
 	@Override

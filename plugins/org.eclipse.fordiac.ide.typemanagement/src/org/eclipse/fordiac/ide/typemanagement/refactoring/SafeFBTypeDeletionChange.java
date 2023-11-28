@@ -115,7 +115,7 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 			final TypeEntry typeEntry = baseFb.getTypeEntry();
 			final Command cmd = new DeleteInternalFBCommand((BaseFBType) typeEntry.getTypeEditable(), internalFb);
 			cmd.execute();
-			typeEntry.save();
+			typeEntry.save(pm);
 			return super.perform(pm);
 		}
 

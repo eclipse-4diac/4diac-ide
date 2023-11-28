@@ -39,7 +39,7 @@
 <p>The installation of 4diac&nbsp;IDE is independent of the operating system. 
 In order to run 4diac&nbsp;IDE, you require at least <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank">Java 11</a>.</p>
 
-<p>To install 4diac&nbsp;IDE, simply download the latest version for your operating system under <a href="https://www.eclipse.org/4diac/en_dow.php" target="_blank">downloads</a>. 
+<p>To install 4diac&nbsp;IDE, simply download the latest version for your operating system under <a href="https://eclipse.dev/4diac/en_dow.php" target="_blank">downloads</a>. 
 Unzip it to any desired folder and start the 4diac&nbsp;IDE. 
 It already contains a Function Block library. 
 If you only want to use available Function Blocks, you are ready to go.</p>
@@ -50,13 +50,13 @@ If you only want to use available Function Blocks, you are ready to go.</p>
 
 <p>Running 4diac&nbsp;IDE from source has the advantage that you can easily keep up with the developments performed in the Git repository. 
 If you want to run 4diac&nbsp;IDE from source, follow the <a href="../../html/development/building4diac.html#buildFromSource" target="_blank">installation steps</a>.
-This option aims mainly at 4diac IDE developers or people who wish to extend 4diac IDE.</p>
+This option aims mainly at 4diac&nbsp;IDE developers or people who wish to extend 4diac&nbsp;IDE.</p>
 
 <!--********************************************************************************************-->
 
 <h2 id="4DIAC-FORTE">4diac&nbsp;FORTE</h2>
 <p id="precompiledFORTE">4diac&nbsp;FORTE can be used in two ways: 
-For conducting first experiments with Eclipse 4diac, you can use the pre-built version of 4diac&nbsp;FORTE which is available as <a href="https://www.eclipse.org/4diac/en_dow.php" target="_blank">download</a> for Linux and Windows.  
+For conducting first experiments with Eclipse 4diac, you can use the pre-built version of 4diac&nbsp;FORTE which is available as <a href="https://eclipse.dev/4diac/en_dow.php" target="_blank">download</a> for Linux and Windows.  
 It can be used for applications unless you need own Function Blocks.
 
 The step by step tutorial will direct you to making a simple application with 4diac&nbsp;IDE and pre-built 4diac&nbsp;FORTE. 
@@ -75,7 +75,7 @@ For other platforms, links are provided <a href="#forteOtherPlatforms">here</a>.
 	<li> Install a compiler for <a href="#FORTEWindows">Windows</a> or <a href="#FORTEUnix">Unix-based systems</a> </li>
 	<li> Install <a href="#FORTEcmake">cmake</a></li>
 	<li> Create a <a href="#FORTEfolders">folder tree</a></li>
-	<li> Download the 4diac&nbsp;FORTE source code as zip-File <a href="https://www.eclipse.org/4diac/en_dow.php" target="_blank">here</a></li>
+	<li> Download the 4diac&nbsp;FORTE source code as zip-File <a href="https://eclipse.dev/4diac/en_dow.php" target="_blank">here</a></li>
 	<li> Extract the source code to your desired 4diac&nbsp;FORTE source folder</li>
 	<li> <a href="#generateFilesForCompiling">Build a project with CMake</a></li>
 	<li> <a href="#FORTEcompile">Compile</a> the project</li>
@@ -131,7 +131,7 @@ We recommend using a main folder <span class="specificText">C:/FORTE_dev</span> 
 Within that folder, use subfolders for the code (e.g., org.eclipse.forte), the built version (e.g., build) and your own modules (e.g., ext_modules).
  </p>
 
-<p>	The 4diac&nbsp;FORTE source code is available for download as zip-File <a href="https://www.eclipse.org/4diac/en_dow.php" target="_blank">here</a>.
+<p>	The 4diac&nbsp;FORTE source code is available for download as zip-File <a href="https://eclipse.dev/4diac/en_dow.php" target="_blank">here</a>.
 Extract the source code to your desired 4diac&nbsp;FORTE source folder, e.g. C:/FORTE_dev/org.eclipse.forte).
 
 
@@ -139,11 +139,11 @@ Extract the source code to your desired 4diac&nbsp;FORTE source folder, e.g. C:/
 
 <!--*********************-->
 
-<h4 id="generateFilesForCompiling">Generate 4diac FORTE Makefiles with CMake</h4>
+<h4 id="generateFilesForCompiling">Generate 4diac&nbsp;FORTE Makefiles with CMake</h4>
 
 <p>Once you have the 4diac&nbsp;FORTE code on your computer, you must generate Makefiles to be compiled. 
 Why? 
-Because FORTE is prepared for many platforms and many features can be enabled, disabled or tuned. 
+Because 4diac&nbsp;FORTE is prepared for many platforms and many features can be enabled, disabled or tuned. 
 In order to facilitate these settings, <a href="#FORTEcmake">CMake</a> is used. 
 For beginners, we recommend using the GUI tool that comes with CMake.</p>
 
@@ -202,7 +202,7 @@ For beginners, we recommend using the GUI tool that comes with CMake.</p>
 <h4 id="FORTEcompile">Compile the Project</h4>
 
 <p>The last step is compiling the generated project.
-It generates the 4diac FORTE executable.
+It generates the 4diac&nbsp;FORTE executable.
  This step depends on the project output you selected in the previous step. 
  For Windows with MinGW-w64, open the command prompt (cmd). 
  The command cd enters a certain directory. 
@@ -280,7 +280,6 @@ forte_add_sourcefile_hcpp(SimpleTest)</div>
 		<li><a href="../../html/installation/raspberrySPS.html">Setting up 4diac&nbsp;FORTE for RaspberryPi SPS</a></li>
 		<li><a href="../../html/installation/wago.html">Setting up 4diac&nbsp;FORTE for Wago PFCs SPS</a></li>
 		<li><a href="../../html/installation/legoMindstormEv3.html">Setting up 4diac&nbsp;FORTE for Lego Mindstorms EV3</a></li>
-		<li><a href="../../html/installation/mindstorms.html">Setting up 4diac&nbsp;FORTE for Lego Mindstorms</a></li>
 		<li><a href="../../html/installation/freeRTOSLwIP.html">Setting up 4diac&nbsp;FORTE for freeRTOS + LwIP</a></li>
 	</ul>
 
@@ -291,7 +290,7 @@ forte_add_sourcefile_hcpp(SimpleTest)</div>
 <p>Now that you installed the required tools, it's time to start using them. 
 Take a look at the tutorials - A step by step guide:</p>
 
-<p><a href="../../html/4diacIDE/overview.html">Step 0 - 4diac IDE Overview</a></p>
+<p><a href="../../html/4diacIDE/overview.html">Step 0 - 4diac&nbsp;IDE Overview</a></p>
 
 <p>If you want to go back to the Where to Start page, we leave you here a fast access:</p>
 

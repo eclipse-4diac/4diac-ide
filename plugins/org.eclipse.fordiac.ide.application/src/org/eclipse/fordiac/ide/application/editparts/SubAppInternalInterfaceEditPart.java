@@ -21,6 +21,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -65,7 +66,7 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 
 	@Override
 	protected void refreshVisuals() {
-		getFigure().setToolTip(new ToolTipFigure(getModel()));
+		getFigure().setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
 		super.refreshVisuals();
 	}
 

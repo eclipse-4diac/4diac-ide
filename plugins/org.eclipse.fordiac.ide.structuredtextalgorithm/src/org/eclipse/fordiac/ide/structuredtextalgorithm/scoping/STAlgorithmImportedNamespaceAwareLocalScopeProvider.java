@@ -46,7 +46,7 @@ public class STAlgorithmImportedNamespaceAwareLocalScopeProvider extends Importe
 
 	protected static CompilerInfo getCompilerInfo(final EObject context) {
 		if (context.eResource() instanceof final LibraryElementXtextResource libraryElementXtextResource) {
-			return getCompilerInfo(libraryElementXtextResource.getLibraryElement());
+			return getCompilerInfo(libraryElementXtextResource.getInternalLibraryElement());
 		}
 		return null;
 	}

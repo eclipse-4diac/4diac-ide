@@ -75,6 +75,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory
@@ -314,23 +315,23 @@ final class STCoreUtil {
 			STUnaryExpression case op.logical:
 				expectedType.equivalentAnyBitType
 			STBinaryExpression case op.arithmetic || op.range:
-				(expression === left ? right?.declaredResultType : left.declaredResultType).equivalentAnyNumType ?:
+				(expression === left ? right?.declaredResultType : left?.declaredResultType).equivalentAnyNumType ?:
 					expectedType.equivalentAnyNumType
 			STBinaryExpression case op.logical:
-				(expression === left ? right?.declaredResultType : left.declaredResultType).equivalentAnyBitType ?:
+				(expression === left ? right?.declaredResultType : left?.declaredResultType).equivalentAnyBitType ?:
 					expectedType.equivalentAnyBitType
 			STBinaryExpression case op.comparison:
-				expression === left ? right?.declaredResultType : left.declaredResultType
+				expression === left ? right?.declaredResultType : left?.declaredResultType
 			STAssignment:
-				expression === left ? right.declaredResultType : left.declaredResultType
+				expression === left ? right?.declaredResultType : left?.declaredResultType
 			STIfStatement,
 			STWhileStatement,
 			STRepeatStatement:
 				ElementaryTypes.BOOL
 			STForStatement:
-				expression === variable ? GenericTypes.ANY_INT : variable.resultType
+				expression === variable ? GenericTypes.ANY_INT : variable?.resultType
 			STCaseCases:
-				statement.selector.declaredResultType
+				statement.selector?.declaredResultType
 			STInitializerExpression:
 				expectedType
 			STArrayInitElement:
@@ -340,18 +341,8 @@ final class STCoreUtil {
 					ElementaryTypes.INT
 			STStructInitElement:
 				variable.featureType
-			STCallNamedInputArgument:
-				// get parameter (target) but don't resolve
-				switch (parameter: parameterNoresolve) {
-					VarDeclaration: parameter.type
-					STVarDeclaration: parameter.type
-				}
-			STCallUnnamedArgument:
-				// get parameter (target) but don't resolve
-				switch (parameter: parameterNoresolve) {
-					VarDeclaration: parameter.type
-					STVarDeclaration: parameter.type
-				}
+			STCallArgument:
+				expectedType
 			STExpressionSource:
 				eResource?.resourceSet?.loadOptions?.get(OPTION_EXPECTED_TYPE) as INamedElement
 		}
@@ -387,15 +378,37 @@ final class STCoreUtil {
 		}
 	}
 
-	def package static getParameterNoresolve(STCallNamedInputArgument argument) {
+	def static INamedElement getExpectedType(STCallArgument argument) {
+		val featureExpression = argument.eContainer
+		if (featureExpression instanceof STFeatureExpression) {
+			val feature = featureExpression.featureNoresolve
+			if (feature instanceof STStandardFunction) {
+				val expectedReturnType = switch (type: featureExpression.expectedType) { DataType: type }
+				val index = featureExpression.parameters.indexOf(argument)
+				if (index >= 0) {
+					feature.javaMethod.inferExpectedParameterTypeFromDataType(expectedReturnType, index)
+				}
+			} else {
+				argument.parameterNoresolve.featureType
+			}
+		}
+	}
+
+	def package static dispatch getParameterNoresolve(STCallNamedInputArgument argument) {
 		switch (target : argument.eGet(STCorePackage.eINSTANCE.STCallNamedInputArgument_Parameter, false)) {
 			INamedElement case !target.eIsProxy: target
 		}
 	}
 
-	def package static getParameterNoresolve(STCallUnnamedArgument argument) {
-		val featureExpression = argument.featureExpression
-		if (featureExpression !== null) {
+	def package static dispatch getParameterNoresolve(STCallNamedOutputArgument argument) {
+		switch (target : argument.eGet(STCorePackage.eINSTANCE.STCallNamedOutputArgument_Parameter, false)) {
+			INamedElement case !target.eIsProxy: target
+		}
+	}
+
+	def package static dispatch getParameterNoresolve(STCallUnnamedArgument argument) {
+		val featureExpression = argument.eContainer
+		if (featureExpression instanceof STFeatureExpression) {
 			val index = featureExpression.parameters.indexOf(argument)
 			if (index >= 0) {
 				val feature = featureExpression.featureNoresolve
@@ -420,10 +433,6 @@ final class STCoreUtil {
 		switch (feature : expr.eGet(STCorePackage.eINSTANCE.STFeatureExpression_Feature, false)) {
 			INamedElement case !feature.eIsProxy: feature
 		}
-	}
-
-	def package static getFeatureExpression(STCallUnnamedArgument argument) {
-		switch (container: argument.eContainer) { STFeatureExpression: container }
 	}
 
 	def static List<? extends INamedElement> computeInputParameters(ICallable callable,
@@ -547,10 +556,13 @@ final class STCoreUtil {
 	}
 
 	def static int asConstantInt(STExpression expr) {
-		switch (expr) {
-			STNumericLiteral: (expr.value as BigInteger).intValueExact
-			default: throw new ArithmeticException("Not a constant integer")
+		if (expr instanceof STNumericLiteral) {
+			val value = expr.value
+			if (value instanceof BigInteger) {
+				return value.intValueExact
+			}
 		}
+		throw new ArithmeticException("Not a constant integer")
 	}
 
 	def static newSubrange(int lower, int upper) {

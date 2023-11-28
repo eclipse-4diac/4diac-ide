@@ -16,12 +16,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -53,6 +55,10 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command impl
 	@Override
 	public void execute() {
 		element.setInterface(createInterfaceList());
+		if (element.getType() != null) {
+			transferVisibleAndVarConfigAttributes(element.getType().getInterfaceList().getInputVars());
+			transferVisibleAndVarConfigAttributes(element.getType().getInterfaceList().getOutputVars());
+		}
 		element.updatePosition(x, y);
 		insertFBNetworkElement();
 		checkName();
@@ -113,5 +119,13 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command impl
 		if (fbNetwork != null) {
 			fbNetwork.getNetworkElements().remove(element);
 		}
+	}
+
+	private void transferVisibleAndVarConfigAttributes(final EList<VarDeclaration> varDeclList) {
+		varDeclList.forEach(varDecl -> {
+			final VarDeclaration newDecl = (VarDeclaration) element.getInterfaceElement(varDecl.getName());
+			newDecl.setVisible(varDecl.isVisible());
+			newDecl.setVarConfig(varDecl.isVarConfig());
+		});
 	}
 }

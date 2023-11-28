@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -55,7 +54,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 
 			final List<List<Object>> allCombinationsSimple = getAllCombinationsOfEvents(
 					((FBType) ((EditPart) selection.getFirstElement()).getModel()).getInterfaceList().getEventInputs()
-					.stream().toArray());
+							.stream().toArray());
 
 			final EList<ECState> states = fbtype.getECC().getECState();
 
@@ -107,8 +106,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 
 		for (final List<Object> events : allCombinationsSimple) {
 			for (final ECState state : states) {
-				combinations.add(new InputObject(
-						(ArrayList<Event>) events.stream().map(Event.class::cast).collect(Collectors.toList()), state));
+				combinations.add(new InputObject(events.stream().map(Event.class::cast).toList(), state));
 			}
 		}
 
@@ -128,15 +126,15 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 	}
 
 	public static class InputObject {
-		private final ArrayList<Event> events;
+		private final List<Event> events;
 		private final ECState startState;
 
-		public InputObject(final ArrayList<Event> events, final ECState startState) {
+		public InputObject(final List<Event> events, final ECState startState) {
 			this.events = events;
 			this.startState = startState;
 		}
 
-		public ArrayList<Event> getEvents() {
+		public List<Event> getEvents() {
 			return events;
 		}
 

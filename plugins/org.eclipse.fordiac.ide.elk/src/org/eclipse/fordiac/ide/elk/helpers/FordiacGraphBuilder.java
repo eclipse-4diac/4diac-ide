@@ -43,7 +43,6 @@ import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutMapping;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -75,8 +74,8 @@ public final class FordiacGraphBuilder {
 			if (child instanceof InterfaceEditPart) {
 				processInterface(mapping, child);
 			}
-			if (child instanceof ValueEditPart) {
-				processValue(mapping, (ValueEditPart) child);
+			if (child instanceof final ValueEditPart vep) {
+				processValue(mapping, vep);
 			}
 		}
 	}
@@ -143,11 +142,7 @@ public final class FordiacGraphBuilder {
 	}
 
 	private static boolean isUnfoldedSubAppInterface(final InterfaceEditPart ep) {
-		if (ep.getParent() instanceof SubAppForFBNetworkEditPart) {
-			final SubApp model = ((SubAppForFBNetworkEditPart) ep.getParent()).getModel();
-			return model.isUnfolded();
-		}
-		return false;
+		return (ep.getParent().getModel() instanceof final SubApp subApp && subApp.isUnfolded());
 	}
 
 	private static void saveConnection(final LayoutMapping mapping, final ConnectionEditPart conn) {

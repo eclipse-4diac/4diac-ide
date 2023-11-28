@@ -65,4 +65,9 @@ class STAlgorithmEvaluator extends StructuredTextEvaluator {
 	override STAlgorithm getSourceElement() {
 		parseResult
 	}
+
+	override getDependencies() {
+		prepare
+		parseResult?.collectUsedTypes
+	}
 }

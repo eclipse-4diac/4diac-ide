@@ -53,10 +53,24 @@ public class InstanceSearch {
 
 	}
 
-	public static Set<INamedElement> performSearch(final InstanceSearch... searchers) {
+	/**
+	 * This search will search the whole workspace, only use this when needed.
+	 *
+	 * @param searchers
+	 * @return
+	 */
+	public static Set<INamedElement> performCompleteWorkspaceSearch(final InstanceSearch... searchers) {
 		final Set<INamedElement> results = new HashSet<>();
 		for (final InstanceSearch search : searchers) {
 			results.addAll(search.performCompleteSearch());
+		}
+		return results;
+	}
+
+	public static Set<INamedElement> performProjectSearch(final IProject project, final InstanceSearch... searchers) {
+		final Set<INamedElement> results = new HashSet<>();
+		for (final InstanceSearch search : searchers) {
+			results.addAll(search.performProjectSearch(project));
 		}
 		return results;
 	}
