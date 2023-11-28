@@ -22,33 +22,32 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class EvaluatorDebugVariable extends EvaluatorDebugElement
-implements IVariable, Comparable<EvaluatorDebugVariable> {
+		implements IVariable, Comparable<EvaluatorDebugVariable> {
 	private final Variable<?> variable;
 	private EvaluatorDebugValue cachedValue;
 
 	public EvaluatorDebugVariable(final Variable<?> variable, final EvaluatorDebugTarget debugTarget) {
 		super(debugTarget);
 		this.variable = variable;
-		this.cachedValue = new EvaluatorDebugValue(this.variable.getValue(), getDebugTarget());
+		cachedValue = new EvaluatorDebugValue(variable.getValue(), getDebugTarget());
 	}
 
 	@Override
 	public void setValue(final String expression) throws DebugException {
 		try {
-			this.variable.setValue(expression);
+			variable.setValue(expression);
 		} catch (final Exception e) {
 			throw new DebugException(Status.error(e.getMessage(), e));
 		}
-		this.fireChangeEvent(DebugEvent.CONTENT);
+		fireChangeEvent(DebugEvent.CONTENT);
 	}
 
 	@Override
 	public void setValue(final IValue value) throws DebugException {
-		if (value instanceof EvaluatorDebugValue) {
-			final EvaluatorDebugValue evaluatorValue = (EvaluatorDebugValue) value;
-			this.variable.setValue(evaluatorValue.getInternalValue());
-			this.cachedValue = evaluatorValue;
-			this.fireChangeEvent(DebugEvent.CONTENT);
+		if (value instanceof final EvaluatorDebugValue evaluatorValue) {
+			variable.setValue(evaluatorValue.getInternalValue());
+			cachedValue = evaluatorValue;
+			fireChangeEvent(DebugEvent.CONTENT);
 		} else {
 			this.setValue(value.getValueString());
 		}
@@ -61,16 +60,17 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 
 	@Override
 	public boolean verifyValue(final String expression) {
-		return this.variable.validateValue(expression);
+		return variable.validateValue(expression);
 	}
 
 	@Override
 	public boolean verifyValue(final IValue value) throws DebugException {
-		if (value instanceof EvaluatorDebugValue) {
-			final INamedElement variableType = this.variable.getType();
-			final INamedElement valueType = ((EvaluatorDebugValue) value).getInternalValue().getType();
-			if (variableType instanceof DataType && valueType instanceof DataType) {
-				return ((DataType) variableType).isAssignableFrom((DataType) valueType);
+		if (value instanceof final EvaluatorDebugValue evaluatorValue) {
+			final INamedElement variableType = variable.getType();
+			final INamedElement valueType = evaluatorValue.getInternalValue().getType();
+			if (variableType instanceof final DataType variableDataType
+					&& valueType instanceof final DataType valueDataType) {
+				return variableDataType.isAssignableFrom(valueDataType);
 			}
 			return variableType == valueType;
 		}
@@ -80,24 +80,24 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 	@Override
 	public EvaluatorDebugValue getValue() {
 		if (hasValueChanged()) {
-			this.cachedValue = new EvaluatorDebugValue(this.variable.getValue(), getDebugTarget());
+			cachedValue = new EvaluatorDebugValue(variable.getValue(), getDebugTarget());
 		}
-		return this.cachedValue;
+		return cachedValue;
 	}
 
 	@Override
 	public String getName() {
-		return this.variable.getName();
+		return variable.getName();
 	}
 
 	@Override
 	public String getReferenceTypeName() {
-		return this.variable.getType().getName();
+		return variable.getType().getName();
 	}
 
 	@Override
 	public boolean hasValueChanged() {
-		return !this.variable.getValue().equals(this.cachedValue.getInternalValue());
+		return !variable.getValue().equals(cachedValue.getInternalValue());
 	}
 
 	@Override
@@ -107,7 +107,7 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 
 	@Override
 	public int compareTo(final EvaluatorDebugVariable o) {
-		return this.variable.getName().compareTo(o.variable.getName());
+		return variable.getName().compareTo(o.variable.getName());
 	}
 
 	@Override
@@ -119,13 +119,13 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 			return false;
 		}
 		if (this.getClass() == obj.getClass()) {
-			return this.variable.equals(((EvaluatorDebugVariable) obj).variable);
+			return variable.equals(((EvaluatorDebugVariable) obj).variable);
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return this.variable.hashCode();
+		return variable.hashCode();
 	}
 }

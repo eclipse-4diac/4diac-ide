@@ -36,21 +36,21 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 	}
 
 	public Object getCurrentContext() {
-		return this.currentContext.get();
+		return currentContext.get();
 	}
 
 	public void setCurrentContext(final Object context) {
-		this.currentContext.set(context);
+		currentContext.set(context);
 	}
 
 	public Evaluator getEvaluator() {
-		return this.evaluator;
+		return evaluator;
 	}
 
 	public EvaluatorDebugStackFrame getParent() {
-		final Evaluator parent = this.evaluator.getParent();
+		final Evaluator parent = evaluator.getParent();
 		if (parent != null) {
-			final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
+			final CommonEvaluatorDebugger debugger = getDebugTarget().getDebugger();
 			return debugger.getStackFrame(parent, thread);
 		}
 		return null;
@@ -68,83 +68,83 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 
 	@Override
 	public boolean canResume() {
-		return this.thread.canResume();
+		return thread.canResume();
 	}
 
 	@Override
 	public boolean canSuspend() {
-		return this.thread.canSuspend();
+		return thread.canSuspend();
 	}
 
 	@Override
 	public boolean isSuspended() {
-		return this.thread.isSuspended();
+		return thread.isSuspended();
 	}
 
 	@Override
 	public void resume() throws DebugException {
-		this.thread.resume();
+		thread.resume();
 	}
 
 	@Override
 	public void suspend() throws DebugException {
-		this.thread.suspend();
+		thread.suspend();
 	}
 
 	@Override
 	public boolean canStepInto() {
-		return this.thread.canStepInto();
+		return thread.canStepInto();
 	}
 
 	@Override
 	public boolean canStepOver() {
-		return this.thread.canStepOver();
+		return thread.canStepOver();
 	}
 
 	@Override
 	public boolean canStepReturn() {
-		return this.thread.canStepReturn();
+		return thread.canStepReturn();
 	}
 
 	@Override
 	public boolean isStepping() {
-		return this.thread.isStepping();
+		return thread.isStepping();
 	}
 
 	@Override
 	public void stepInto() throws DebugException {
-		this.thread.request(this, DebugEvent.RESUME, DebugEvent.STEP_INTO);
+		thread.request(this, DebugEvent.RESUME, DebugEvent.STEP_INTO);
 	}
 
 	@Override
 	public void stepOver() throws DebugException {
-		this.thread.request(this, DebugEvent.RESUME, DebugEvent.STEP_OVER);
+		thread.request(this, DebugEvent.RESUME, DebugEvent.STEP_OVER);
 	}
 
 	@Override
 	public void stepReturn() throws DebugException {
-		this.thread.request(this, DebugEvent.RESUME, DebugEvent.STEP_RETURN);
+		thread.request(this, DebugEvent.RESUME, DebugEvent.STEP_RETURN);
 	}
 
 	@Override
 	public boolean canTerminate() {
-		return this.thread.canTerminate();
+		return thread.canTerminate();
 	}
 
 	@Override
 	public boolean isTerminated() {
-		return this.thread.isTerminated();
+		return thread.isTerminated();
 	}
 
 	@Override
 	public void terminate() throws DebugException {
-		this.thread.terminate();
+		thread.terminate();
 	}
 
 	public EvaluatorDebugVariable getVariable(final String name) {
-		final Variable<?> variable = this.evaluator.getVariables().get(name);
+		final Variable<?> variable = evaluator.getVariables().get(name);
 		if (variable != null) {
-			final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
+			final CommonEvaluatorDebugger debugger = getDebugTarget().getDebugger();
 			return debugger.getVariable(variable);
 		}
 		return null;
@@ -152,8 +152,8 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 
 	@Override
 	public IVariable[] getVariables() throws DebugException {
-		final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
-		final var debugVars = this.evaluator.getVariables().values().stream().map(debugger::getVariable).toList();
+		final CommonEvaluatorDebugger debugger = getDebugTarget().getDebugger();
+		final var debugVars = evaluator.getVariables().values().stream().map(debugger::getVariable).toList();
 		// split all vars into this vars and other vars
 		final var thisVars = debugVars.stream().filter(variable -> Evaluator.CONTEXT_NAME.equals(variable.getName()));
 		final var otherVars = debugVars.stream().filter(variable -> !Evaluator.CONTEXT_NAME.equals(variable.getName()))
@@ -164,13 +164,13 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 
 	@Override
 	public boolean hasVariables() throws DebugException {
-		return !this.evaluator.getVariables().isEmpty();
+		return !evaluator.getVariables().isEmpty();
 	}
 
 	@Override
 	public int getLineNumber() throws DebugException {
-		final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
-		final Object context = this.getCurrentContext();
+		final CommonEvaluatorDebugger debugger = getDebugTarget().getDebugger();
+		final Object context = getCurrentContext();
 		return debugger.getLineNumber(context);
 	}
 
@@ -186,7 +186,7 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 
 	@Override
 	public String getName() throws DebugException {
-		return this.evaluator.getName();
+		return evaluator.getName();
 	}
 
 	@Override
@@ -201,7 +201,7 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 
 	@Override
 	public EvaluatorDebugThread getThread() {
-		return this.thread;
+		return thread;
 	}
 
 	@Override

@@ -30,8 +30,8 @@ public class EvaluatorWatchExpressionDelegate implements IWatchExpressionDelegat
 	@Override
 	public void evaluateExpression(final String expression, final IDebugElement context,
 			final IWatchExpressionListener listener) {
-		if (context instanceof EvaluatorDebugStackFrame) {
-			final Evaluator evaluator = ((EvaluatorDebugStackFrame) context).getEvaluator();
+		if (context instanceof final EvaluatorDebugStackFrame edsf) {
+			final Evaluator evaluator = edsf.getEvaluator();
 			final Evaluator expressionEvaluator = EvaluatorFactory.createEvaluator(expression, String.class, null, null,
 					evaluator);
 			WatchExpressionResult watchResult;

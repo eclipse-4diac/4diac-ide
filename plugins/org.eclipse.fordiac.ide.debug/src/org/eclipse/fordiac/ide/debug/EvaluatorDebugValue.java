@@ -32,17 +32,17 @@ public class EvaluatorDebugValue extends EvaluatorDebugElement implements IIndex
 	}
 
 	public Value getInternalValue() {
-		return this.value;
+		return value;
 	}
 
 	@Override
 	public String getReferenceTypeName() throws DebugException {
-		return this.value.getType().getName();
+		return value.getType().getName();
 	}
 
 	@Override
 	public String getValueString() throws DebugException {
-		return this.value.toString();
+		return value.toString();
 	}
 
 	@Override
@@ -72,9 +72,11 @@ public class EvaluatorDebugValue extends EvaluatorDebugElement implements IIndex
 		final var debugger = getDebugTarget().getDebugger();
 		if (value instanceof final ArrayValue arrayValue) {
 			return arrayValue.getElements().stream().map(debugger::getVariable).toArray(IVariable[]::new);
-		} else if (value instanceof final StructValue structValue) {
+		}
+		if (value instanceof final StructValue structValue) {
 			return structValue.getMembers().values().stream().map(debugger::getVariable).toArray(IVariable[]::new);
-		} else if (value instanceof final FBValue fbValue) {
+		}
+		if (value instanceof final FBValue fbValue) {
 			return fbValue.getMembers().values().stream().map(debugger::getVariable).toArray(IVariable[]::new);
 		}
 		return new IVariable[0];

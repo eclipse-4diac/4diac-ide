@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,10 +13,12 @@
 package org.eclipse.fordiac.ide.debug;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugTarget;
@@ -35,15 +37,23 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 		super(null);
 		this.name = name;
 		this.launch = launch;
-		this.process = new EvaluatorProcess(name, evaluator, launch);
-		this.debugger = new CommonEvaluatorDebugger(this);
-		this.process.getThreadGroup().attachDebugger(debugger);
+		process = new EvaluatorProcess(name, evaluator, launch);
+		debugger = new CommonEvaluatorDebugger(this);
+		process.getExecutor().attachDebugger(debugger);
 		launch.addDebugTarget(this);
-		this.fireCreationEvent();
+		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
+		Stream.of(DebugPlugin.getDefault().getBreakpointManager().getBreakpoints())
+				.forEachOrdered(this::breakpointAdded);
+		fireCreationEvent();
 	}
 
 	public void start() {
-		this.process.start();
+		process.start();
+	}
+
+	public void terminated() {
+		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
+		fireTerminateEvent();
 	}
 
 	public CommonEvaluatorDebugger getDebugger() {
@@ -52,29 +62,29 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 	@Override
 	public boolean canResume() {
-		return this.debugger.getThreads().stream().anyMatch(EvaluatorDebugThread::canResume);
+		return debugger.getThreads().stream().anyMatch(EvaluatorDebugThread::canResume);
 	}
 
 	@Override
 	public boolean canSuspend() {
-		return this.debugger.getThreads().stream().anyMatch(EvaluatorDebugThread::canSuspend);
+		return debugger.getThreads().stream().anyMatch(EvaluatorDebugThread::canSuspend);
 	}
 
 	@Override
 	public boolean isSuspended() {
-		return this.debugger.getThreads().stream().anyMatch(EvaluatorDebugThread::isSuspended);
+		return debugger.getThreads().stream().anyMatch(EvaluatorDebugThread::isSuspended);
 	}
 
 	@Override
 	public void resume() throws DebugException {
-		for (final EvaluatorDebugThread thread : this.debugger.getThreads()) {
+		for (final EvaluatorDebugThread thread : debugger.getThreads()) {
 			thread.resume();
 		}
 	}
 
 	@Override
 	public void suspend() throws DebugException {
-		for (final EvaluatorDebugThread thread : this.debugger.getThreads()) {
+		for (final EvaluatorDebugThread thread : debugger.getThreads()) {
 			thread.suspend();
 		}
 	}
@@ -101,7 +111,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 	@Override
 	public String getName() throws DebugException {
-		return this.name;
+		return name;
 	}
 
 	@Override
@@ -111,7 +121,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 	@Override
 	public ILaunch getLaunch() {
-		return this.launch;
+		return launch;
 	}
 
 	@Override
@@ -156,17 +166,17 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 	@Override
 	public EvaluatorProcess getProcess() {
-		return this.process;
+		return process;
 	}
 
 	@Override
 	public IThread[] getThreads() throws DebugException {
-		final List<EvaluatorDebugThread> threads = this.debugger.getThreads();
+		final List<EvaluatorDebugThread> threads = debugger.getThreads();
 		return threads.toArray(new IThread[threads.size()]);
 	}
 
 	@Override
 	public boolean hasThreads() throws DebugException {
-		return this.process.getThreadGroup().activeCount() != 0;
+		return !debugger.getThreads().isEmpty();
 	}
 }

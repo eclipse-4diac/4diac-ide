@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -20,9 +20,9 @@ import org.eclipse.debug.core.sourcelookup.IPersistableSourceLocator2;
 public class EvaluatorSourceLocator implements IPersistableSourceLocator2 {
 
 	@Override
-	public Object getSourceElement(IStackFrame stackFrame) {
-		if (stackFrame instanceof EvaluatorDebugStackFrame) {
-			return ((EvaluatorDebugStackFrame) stackFrame).getEvaluator().getSourceElement();
+	public Object getSourceElement(final IStackFrame stackFrame) {
+		if (stackFrame instanceof final EvaluatorDebugStackFrame edsf) {
+			return edsf.getEvaluator().getSourceElement();
 		}
 		return null;
 	}
@@ -33,18 +33,23 @@ public class EvaluatorSourceLocator implements IPersistableSourceLocator2 {
 	}
 
 	@Override
-	public void initializeFromMemento(String memento) throws CoreException {
+	public void initializeFromMemento(final String memento) throws CoreException {
+		// do nothing
 	}
 
 	@Override
-	public void initializeDefaults(ILaunchConfiguration configuration) throws CoreException {
+	public void initializeDefaults(final ILaunchConfiguration configuration) throws CoreException {
+		// do nothing
 	}
 
 	@Override
-	public void initializeFromMemento(String memento, ILaunchConfiguration configuration) throws CoreException {
+	public void initializeFromMemento(final String memento, final ILaunchConfiguration configuration)
+			throws CoreException {
+		// do nothing
 	}
 
 	@Override
 	public void dispose() {
+		// do nothing
 	}
 }

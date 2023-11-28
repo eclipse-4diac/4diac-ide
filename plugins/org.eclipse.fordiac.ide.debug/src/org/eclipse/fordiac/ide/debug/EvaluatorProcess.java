@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -35,7 +35,8 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamsProxy;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorCache;
-import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadGroup;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 
 public class EvaluatorProcess extends PlatformObject implements IProcess, Callable<IStatus> {
@@ -44,8 +45,7 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 	private final Evaluator evaluator;
 	private final ILaunch launch;
 	private final FutureTask<IStatus> task;
-	private final Thread thread;
-	private final EvaluatorThreadGroup threadGroup;
+	private final EvaluatorThreadPoolExecutor executor;
 	private final EvaluatorStreamsProxy streamsProxy;
 	private final Map<String, String> attributes = new HashMap<>();
 
@@ -53,76 +53,72 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 		this.name = evaluator.getClass().getSimpleName();
 		this.evaluator = evaluator;
 		this.launch = launch;
-		this.task = new FutureTask<>(this);
-		this.threadGroup = new EvaluatorThreadGroup(name);
-		this.thread = new Thread(threadGroup, this.task, name);
-		this.streamsProxy = new EvaluatorStreamsProxy(this.threadGroup);
+		task = new FutureTask<>(this);
+		executor = new EvaluatorThreadPoolExecutor(name);
+		executor.addMonitor(new EvaluatorTerminationMonitor());
+		streamsProxy = new EvaluatorStreamsProxy(executor);
 		launch.addProcess(this);
-		this.fireCreationEvent();
+		fireCreationEvent();
 	}
 
-	@SuppressWarnings("boxing")
 	@Override
 	public IStatus call() throws Exception {
 		try (EvaluatorCache cache = EvaluatorCache.open()) {
-			this.evaluator.prepare();
+			evaluator.prepare();
 			final long start = System.nanoTime();
-			final Value result = this.evaluator.evaluate();
+			final Value result = evaluator.evaluate();
 			if (result != null) {
-				this.streamsProxy.getOutputStreamMonitor().info(String.format("Result: %s", result)); //$NON-NLS-1$
+				streamsProxy.getOutputStreamMonitor().info(String.format("Result: %s", result)); //$NON-NLS-1$
 			}
 			final long finish = System.nanoTime();
 			final Duration elapsed = Duration.ofNanos(finish - start);
-			this.streamsProxy.getOutputStreamMonitor().info(String.format("Elapsed: %d:%02d:%02d:%03d", //$NON-NLS-1$
-					elapsed.toHours(), elapsed.toMinutesPart(), elapsed.toSecondsPart(), elapsed.toMillisPart()));
+			streamsProxy.getOutputStreamMonitor().info(String.format("Elapsed: %d:%02d:%02d:%03d", //$NON-NLS-1$
+					Long.valueOf(elapsed.toHours()), Integer.valueOf(elapsed.toMinutesPart()),
+					Integer.valueOf(elapsed.toSecondsPart()), Integer.valueOf(elapsed.toMillisPart())));
 			return Status.OK_STATUS;
 		} catch (final InterruptedException e) {
-			this.streamsProxy.getErrorStreamMonitor().error("Terminated"); //$NON-NLS-1$
+			streamsProxy.getErrorStreamMonitor().error("Terminated"); //$NON-NLS-1$
 			Thread.currentThread().interrupt();
 			return Status.error("Terminated"); //$NON-NLS-1$
 		} catch (final Exception t) {
-			this.streamsProxy.getErrorStreamMonitor().error("Exception occurred", t); //$NON-NLS-1$
+			streamsProxy.getErrorStreamMonitor().error("Exception occurred", t); //$NON-NLS-1$
 			return Status.error("Exception occurred", t); //$NON-NLS-1$
 		} finally {
-			fireTerminateEvent();
+			executor.shutdown();
 		}
 	}
 
 	public void start() {
-		this.thread.start();
+		executor.execute(task);
 	}
 
 	public Evaluator getEvaluator() {
-		return this.evaluator;
+		return evaluator;
 	}
 
-	public EvaluatorThreadGroup getThreadGroup() {
-		return this.threadGroup;
-	}
-
-	public Thread getMainThread() {
-		return this.thread;
+	public EvaluatorThreadPoolExecutor getExecutor() {
+		return executor;
 	}
 
 	@Override
 	public boolean canTerminate() {
-		return !this.isTerminated();
+		return !isTerminated();
 	}
 
 	@Override
 	public boolean isTerminated() {
-		return this.thread.getState() == Thread.State.TERMINATED;
+		return executor.isTerminated();
 	}
 
 	@Override
 	public void terminate() throws DebugException {
-		this.threadGroup.interrupt();
+		executor.shutdownNow();
 	}
 
 	@Override
 	public int getExitValue() throws DebugException {
 		try {
-			return this.task.get(-1, TimeUnit.NANOSECONDS).getCode();
+			return task.get(-1, TimeUnit.NANOSECONDS).getCode();
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 			throw new DebugException(Status.error("Couldn't get exit code", e)); //$NON-NLS-1$
@@ -135,17 +131,17 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 
 	@Override
 	public String getLabel() {
-		return this.name;
+		return name;
 	}
 
 	@Override
 	public ILaunch getLaunch() {
-		return this.launch;
+		return launch;
 	}
 
 	@Override
 	public IStreamsProxy getStreamsProxy() {
-		return this.streamsProxy;
+		return streamsProxy;
 	}
 
 	protected void fireCreationEvent() {
@@ -170,12 +166,12 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 
 	@Override
 	public void setAttribute(final String key, final String value) {
-		this.attributes.put(key, value);
+		attributes.put(key, value);
 	}
 
 	@Override
 	public String getAttribute(final String key) {
-		return this.attributes.get(key);
+		return attributes.get(key);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -186,7 +182,7 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 		}
 		if (adapter.equals(IDebugTarget.class)) {
 			for (final IDebugTarget target : getLaunch().getDebugTargets()) {
-				if (this.equals(target.getProcess())) {
+				if (equals(target.getProcess())) {
 					return (T) target;
 				}
 			}
@@ -199,5 +195,13 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 			return (T) getLaunch().getLaunchConfiguration();
 		}
 		return super.getAdapter(adapter);
+	}
+
+	private class EvaluatorTerminationMonitor extends EvaluatorMonitor.NullEvaluatorMonitor {
+
+		@Override
+		public void terminated(final EvaluatorThreadPoolExecutor executor) {
+			fireTerminateEvent();
+		}
 	}
 }

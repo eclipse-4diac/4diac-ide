@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorCountingEventQueue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
@@ -51,9 +52,9 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.widgets.Display;
 
 public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
-implements EvaluatorMonitor, IDebugEventSetListener {
+		implements EvaluatorMonitor, IDebugEventSetListener {
 
-	private static final long MIN_UPDATE_INTERVAL = 100;  // the minimal update interval between two full refresh of
+	private static final long MIN_UPDATE_INTERVAL = 100; // the minimal update interval between two full refresh of
 	// the shown values
 
 	private final Map<String, InterfaceValueEntity> interfaceValues = new HashMap<>();
@@ -64,7 +65,6 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
 		return new ShortestPathConnectionRouter(figure);
 	}
-
 
 	@Override
 	protected void createEditPolicies() {
@@ -89,7 +89,7 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 	@Override
 	public void activate() {
 		super.activate();
-		getModel().getThreadGroup().addMonitor(this);
+		getModel().getExecutor().addMonitor(this);
 		DebugPlugin.getDefault().addDebugEventListener(this);
 		lastUpdate = System.currentTimeMillis();
 	}
@@ -97,7 +97,7 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		getModel().getThreadGroup().removeMonitor(this);
+		getModel().getExecutor().removeMonitor(this);
 		DebugPlugin.getDefault().removeDebugEventListener(this);
 	}
 
@@ -127,8 +127,7 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 
 	private void fillEventValues() {
 		final var eventQueue = getFBEvaluator().getEventQueue();
-		if (eventQueue instanceof FBEvaluatorCountingEventQueue) {
-			final FBEvaluatorCountingEventQueue countingEventQueue = (FBEvaluatorCountingEventQueue) eventQueue;
+		if (eventQueue instanceof final FBEvaluatorCountingEventQueue countingEventQueue) {
 			getFBType().getInterfaceList().getEventInputs().forEach(ev -> addEventEntry(countingEventQueue, ev));
 			getFBType().getInterfaceList().getEventOutputs().forEach(ev -> addEventEntry(countingEventQueue, ev));
 		}
@@ -185,12 +184,17 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 		}
 	}
 
+	@Override
+	public void terminated(final EvaluatorThreadPoolExecutor executor) {
+		updateAllValues();
+	}
+
 	private void updateValues(final Collection<? extends Variable<?>> variables) {
 		final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
 		if (shouldUpdate()) {
 			Display.getDefault().asyncExec(() -> {
 				variables
-				.forEach(variable -> updateVariable(editPartRegistry, variable.getName(), variable.getValue()));
+						.forEach(variable -> updateVariable(editPartRegistry, variable.getName(), variable.getValue()));
 				updateAllEvents(editPartRegistry);
 			});
 		}
@@ -228,7 +232,7 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 				}
 				break;
 			case DebugEvent.CHANGE:
-				if(ev.getSource() instanceof EvaluatorDebugVariable) {
+				if (ev.getSource() instanceof EvaluatorDebugVariable) {
 					final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
 					Display.getDefault().asyncExec(() -> {
 						final EvaluatorDebugVariable evaluatorDebugVariable = (EvaluatorDebugVariable) ev.getSource();

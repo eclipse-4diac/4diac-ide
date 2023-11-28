@@ -16,14 +16,87 @@ import java.util.Collection;
 
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
+/**
+ * A monitor for evaluator execution
+ */
 public interface EvaluatorMonitor {
+	/**
+	 * An info message occurred
+	 *
+	 * @param message The message
+	 */
 	void info(final String message);
 
+	/**
+	 * A warning message occurred
+	 *
+	 * @param message The message
+	 */
 	void warn(final String message);
 
+	/**
+	 * An error message occurred
+	 *
+	 * @param message The message
+	 */
 	void error(final String message);
 
+	/**
+	 * An error message occurred caused by an exception
+	 *
+	 * @param message The message
+	 * @param t       The throwable
+	 */
 	void error(final String message, final Throwable t);
 
+	/**
+	 * Variables have been updated by an evaluator
+	 *
+	 * @param variables The variables
+	 * @param evaluator The evaluator
+	 */
 	void update(final Collection<? extends Variable<?>> variables, final Evaluator evaluator);
+
+	/**
+	 * Execution in an evaluator thread pool executor has terminated
+	 *
+	 * @param executor The executor
+	 */
+	void terminated(EvaluatorThreadPoolExecutor executor);
+
+	/**
+	 * An empty monitor implementation
+	 */
+	class NullEvaluatorMonitor implements EvaluatorMonitor {
+
+		@Override
+		public void info(final String message) {
+			// empty default
+		}
+
+		@Override
+		public void warn(final String message) {
+			// empty default
+		}
+
+		@Override
+		public void error(final String message) {
+			// empty default
+		}
+
+		@Override
+		public void error(final String message, final Throwable t) {
+			// empty default
+		}
+
+		@Override
+		public void update(final Collection<? extends Variable<?>> variables, final Evaluator evaluator) {
+			// empty default
+		}
+
+		@Override
+		public void terminated(final EvaluatorThreadPoolExecutor executor) {
+			// empty default
+		}
+	}
 }

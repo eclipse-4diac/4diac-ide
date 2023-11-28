@@ -72,35 +72,31 @@ public abstract class AbstractEvaluator implements Evaluator {
 	}
 
 	public static EvaluatorDebugger currentDebugger() {
-		final ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
-		if (threadGroup instanceof final EvaluatorThreadGroup evaluatorThreadGroup) {
-			return evaluatorThreadGroup.getDebugger();
+		if (Thread.currentThread() instanceof final EvaluatorThread evaluatorThread) {
+			return evaluatorThread.getExecutor().getDebugger();
 		}
 		return DefaultEvaluatorDebugger.INSTANCE;
 	}
 
 	public static Set<EvaluatorMonitor> currentMonitors() {
-		final ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
-		if (threadGroup instanceof final EvaluatorThreadGroup evaluatorThreadGroup) {
-			return evaluatorThreadGroup.getMonitorSet();
+		if (Thread.currentThread() instanceof final EvaluatorThread evaluatorThread) {
+			return evaluatorThread.getExecutor().getMonitorSet();
 		}
 		return Collections.emptySet();
 	}
 
 	public static Clock currentClock() {
-		final ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
-		if (threadGroup instanceof final EvaluatorThreadGroup evaluatorThreadGroup) {
-			return evaluatorThreadGroup.getClock();
+		if (Thread.currentThread() instanceof final EvaluatorThread evaluatorThread) {
+			return evaluatorThread.getExecutor().getClock();
 		}
 		return AbstractEvaluator.MonotonicClock.UTC;
 	}
 
 	public static void setClock(final Clock clock) {
-		final ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
-		if (!(threadGroup instanceof final EvaluatorThreadGroup evaluatorThreadGroup)) {
-			throw new IllegalStateException("Cannot set clock without evaluator thread group"); //$NON-NLS-1$
+		if (!(Thread.currentThread() instanceof final EvaluatorThread evaluatorThread)) {
+			throw new IllegalStateException("Cannot set clock without evaluator thread"); //$NON-NLS-1$
 		}
-		evaluatorThreadGroup.setClock(clock);
+		evaluatorThread.getExecutor().setClock(clock);
 	}
 
 	public static class MonotonicClock extends Clock {

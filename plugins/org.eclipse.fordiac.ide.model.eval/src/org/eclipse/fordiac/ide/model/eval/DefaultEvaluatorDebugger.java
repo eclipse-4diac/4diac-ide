@@ -12,6 +12,9 @@
  */
 package org.eclipse.fordiac.ide.model.eval;
 
+/**
+ * A default evaluator debugger implementation only providing interrupt support.
+ */
 public class DefaultEvaluatorDebugger implements EvaluatorDebugger {
 	public static final DefaultEvaluatorDebugger INSTANCE = new DefaultEvaluatorDebugger();
 
@@ -20,5 +23,22 @@ public class DefaultEvaluatorDebugger implements EvaluatorDebugger {
 		if (Thread.interrupted()) {
 			throw new InterruptedException();
 		}
+	}
+
+	@Override
+	public void beforeExecute(final Thread thread, final Runnable runnable,
+			final EvaluatorThreadPoolExecutor executor) {
+		// empty default implementation
+	}
+
+	@Override
+	public void afterExecute(final Thread thread, final Runnable runnable, final Throwable throwable,
+			final EvaluatorThreadPoolExecutor executor) {
+		// empty default implementation
+	}
+
+	@Override
+	public void terminated(final EvaluatorThreadPoolExecutor executor) {
+		// empty default implementation
 	}
 }
