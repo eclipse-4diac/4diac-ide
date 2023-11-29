@@ -58,19 +58,26 @@ public abstract class AbstractChooserControl extends Composite {
 	 * @param style  the style
 	 * @param label  the label
 	 */
-	protected AbstractChooserControl(final Composite parent, final int style, final String label) {
+	protected AbstractChooserControl(final Composite parent, final int style, final String label,
+			final boolean labelInParent) {
 		super(parent, style);
-		initialize(label);
+		initialize(label, labelInParent);
 	}
 
 	/**
 	 * Initialize.
+	 *
+	 * @param labelInParent
 	 */
-	private void initialize(final String labelText) {
+	private void initialize(final String labelText, final boolean labelInParent) {
 		GridLayoutFactory.fillDefaults().numColumns(3).margins(0, 5).applyTo(this);
+		GridDataFactory.fillDefaults().align(GridData.FILL, GridData.CENTER).grab(true, false).applyTo(this);
 
-		final Label label = new Label(this, SWT.NONE);
+		final Label label = new Label(labelInParent ? getParent() : this, SWT.NONE);
 		label.setText(labelText);
+		if (labelInParent) {
+			label.moveAbove(this);
+		}
 
 		text = new Text(this, SWT.BORDER);
 		GridDataFactory.fillDefaults().align(GridData.FILL, GridData.CENTER).grab(true, false).applyTo(text);

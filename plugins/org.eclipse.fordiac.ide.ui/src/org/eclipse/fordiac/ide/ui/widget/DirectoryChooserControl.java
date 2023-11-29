@@ -33,7 +33,12 @@ public class DirectoryChooserControl extends AbstractChooserControl {
 	 * @param label  the label
 	 */
 	public DirectoryChooserControl(final Composite parent, final int style, final String label) {
-		super(parent, style, label);
+		super(parent, style, label, false);
+	}
+
+	public DirectoryChooserControl(final Composite parent, final int style, final String label,
+			final boolean labelInParent) {
+		super(parent, style, label, labelInParent);
 	}
 
 	@Override
