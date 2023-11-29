@@ -32,9 +32,11 @@ import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
+import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.OrderedLayout;
+import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
@@ -42,6 +44,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -58,8 +61,12 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.graphics.Color;
 
 public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditPart {
+	public static final Color INTERFACE_BAR_BG_COLOR = new Color(235, 245, 255);
+	public static final Color INTERFACE_BAR_BORDER_COLOR = new Color(190, 199, 225);
+
 	private static final int MIN_INTERFACE_BAR_WIDTH = 200;
 	private static final int TOP_BOTTOM_MARGIN = 1;
 	private static final int LEFT_RIGHT_MARGIN = 10;
@@ -190,7 +197,6 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 
 	private void createLeftInterface(final IFigure mainFigure) {
 		leftInterfaceContainer = createRootContainer(mainFigure, BorderLayout.LEFT);
-		configureLeftContainer(leftInterfaceContainer);
 
 		final Figure leftInnerContainer = createInnerContainer(leftInterfaceContainer, LEFT_LIST_BORDER_INSET);
 		configureLeftContainer(leftInnerContainer);
@@ -216,10 +222,15 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	}
 
 	private static Figure createRootContainer(final IFigure parent, final Integer layoutConstraint) {
-		final Figure rootContainer = new Figure();
-		rootContainer.setLayoutManager(new ToolbarLayout(false));
+		final RectangleFigure rootContainer = new RectangleFigure();
+		final var rootContLayout = new GridLayout(1, false);
+		rootContLayout.marginHeight = (int) (CoordinateConverter.INSTANCE.getLineHeight() * 1.75);
+		rootContLayout.marginWidth = 0;
+		rootContainer.setLayoutManager(rootContLayout);
 		rootContainer.setOpaque(true);
-		rootContainer.setBorder(new SingleLineBorder());
+		rootContainer.setOutline(false);
+		rootContainer.setBackgroundColor(INTERFACE_BAR_BG_COLOR);
+		rootContainer.setBorder(new SingleLineBorder(INTERFACE_BAR_BORDER_COLOR));
 		parent.add(rootContainer, layoutConstraint);
 		return rootContainer;
 	}
