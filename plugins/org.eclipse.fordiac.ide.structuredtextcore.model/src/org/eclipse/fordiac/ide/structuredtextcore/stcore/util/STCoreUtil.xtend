@@ -315,11 +315,11 @@ final class STCoreUtil {
 			STUnaryExpression case op.logical:
 				expectedType.equivalentAnyBitType
 			STBinaryExpression case op.arithmetic || op.range:
-				(expression === left ? right?.declaredResultType : left?.declaredResultType).equivalentAnyNumType ?:
-					expectedType.equivalentAnyNumType
+				(expression === left ? right?.declaredResultType : left?.declaredResultType).equivalentAnyNumType.
+					commonSubtype(expectedType.equivalentAnyNumType)
 			STBinaryExpression case op.logical:
-				(expression === left ? right?.declaredResultType : left?.declaredResultType).equivalentAnyBitType ?:
-					expectedType.equivalentAnyBitType
+				(expression === left ? right?.declaredResultType : left?.declaredResultType).equivalentAnyBitType.
+					commonSubtype(expectedType.equivalentAnyBitType)
 			STBinaryExpression case op.comparison:
 				expression === left ? right?.declaredResultType : left?.declaredResultType
 			STAssignment:
@@ -627,6 +627,19 @@ final class STCoreUtil {
 
 	def static boolean isInstanceofAnyLDateType(INamedElement type) {
 		return type instanceof LdateType || type instanceof LtodType || type instanceof LdtType
+	}
+
+	def static commonSubtype(DataType type1, DataType type2) {
+		if (type1 === null)
+			type2
+		else if (type2 === null)
+			type1
+		else if (type1.isAssignableFrom(type2))
+			type2
+		else if (type2.isAssignableFrom(type1))
+			type1
+		else
+			null
 	}
 
 	def static boolean isAnyType(INamedElement element) {
