@@ -46,18 +46,18 @@ public final class HandlerHelper {
 		return editor.getAdapter(FBNetwork.class);
 	}
 
-	public static void selectElement(final Object element, final IEditorPart editor) {
+	public static boolean selectElement(final Object element, final IEditorPart editor) {
 		if (null != editor) {
 			final GraphicalViewer viewer = getViewer(editor);
 			if (null != viewer) {
-				selectElement(element, viewer);
-			} else {
-				// TODO how other editor may want to handle selection
+				return selectElement(element, viewer);
 			}
+			// TODO how other editor may want to handle selection
 		}
+		return false;
 	}
 
-	public static void selectElement(final Object element, final GraphicalViewer viewer) {
+	public static boolean selectElement(final Object element, final GraphicalViewer viewer) {
 		if (viewer != null) {
 			final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
 			if (null != editPart) {
@@ -68,8 +68,10 @@ public final class HandlerHelper {
 					viewer.select(editPart);
 					viewer.reveal(editPart);
 				}
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public static IEditorPart openEditor(final EObject model) {
