@@ -20,11 +20,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -66,7 +65,7 @@ public class LibraryLinker {
 			.append(EXTRACTED_LIB_DIRECTORY);
 
 	private IProject selectedProject;
-	private Set<TypeEntry> cashedTypes;
+	private Map<String, TypeEntry> cashedTypes;
 	private TypeLibrary typeLibrary;
 	private boolean isNewVersion;
 
@@ -181,8 +180,8 @@ public class LibraryLinker {
 					// Should only remove the link but keep the resource on disk
 					oldFolder.delete(true, null);
 					// Remove the entries manually
-					cashedTypes.forEach(typeEntry -> TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject)
-							.removeTypeEntry(typeEntry));
+					cashedTypes.values().forEach(typeEntry -> TypeLibraryManager.INSTANCE
+							.getTypeLibrary(selectedProject).removeTypeEntry(typeEntry));
 				} catch (final CoreException e) {
 					MessageDialog.openWarning(null, Messages.Warning, Messages.OldTypeLibVersionCouldNotBeDeleted);
 				}
@@ -215,17 +214,18 @@ public class LibraryLinker {
 		updateDialog.open();
 	}
 
-	private Set<TypeEntry> cashOldTypes(final String oldVersion) {
+	private Map<String, TypeEntry> cashOldTypes(final String oldVersion) {
 		try (final Stream<java.nio.file.Path> stream = Files
 				.list(Paths.get(WORKSPACE_ROOT, EXTRACTED_LIB_DIRECTORY, oldVersion, LIB_TYPELIB_FOLDER_NAME, LOGIC))) {
 			return stream
 					.map(path -> TypeLibraryManager.INSTANCE.getTypeFromLinkedFile(selectedProject,
 							path.getFileName().toString()))
-					.filter(Optional::isPresent).map(Optional::get).collect(Collectors.toCollection(HashSet::new));
+					.filter(Optional::isPresent).map(Optional::get)
+					.collect(Collectors.toMap(TypeEntry::getFullTypeName, typeEntry -> typeEntry));
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-		return Collections.emptySet();
+		return Collections.emptyMap();
 	}
 
 	private List<String> findLinkedLibs() {

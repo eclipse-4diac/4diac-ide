@@ -32,7 +32,7 @@ public class FBInstanceSearch extends InstanceSearch {
 		super(new FBTypeInstanceSearchFilter(fbType));
 	}
 
-	private FBInstanceSearch(final SearchFilter filter) {
+	protected FBInstanceSearch(final SearchFilter filter) {
 		super(filter);
 	}
 
@@ -71,4 +71,5 @@ public class FBInstanceSearch extends InstanceSearch {
 		}
 
 	}
+
 }
