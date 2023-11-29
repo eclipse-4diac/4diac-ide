@@ -12,6 +12,9 @@
                type="org.eclipse.fordiac.ide.model.libraryElement.ECTransition">
          </source>
          <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.STMethod">
+         </source>
+         <source
                type="org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod">
          </source>
          <source
