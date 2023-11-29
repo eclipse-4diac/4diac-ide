@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -66,8 +67,8 @@ public class OpenTypeHandler extends AbstractHandler {
 		dialog.open();
 
 		final Object result = dialog.getFirstResult();
-		if (result instanceof TypeEntry) {
-			openEditor(((TypeEntry) result).getFile());
+		if (result instanceof final TypeEntry typeEntry) {
+			openEditor(typeEntry.getFile());
 		}
 		return null;
 	}
@@ -92,7 +93,8 @@ public class OpenTypeHandler extends AbstractHandler {
 
 	private ElementListSelectionDialog createDialog() {
 		final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		final ElementListSelectionDialog selDialog = new ElementListSelectionDialog(shell, new ResultListLabelProvider()) {
+		final ElementListSelectionDialog selDialog = new ElementListSelectionDialog(shell,
+				new ResultListLabelProvider()) {
 
 			@Override
 			protected Control createDialogArea(final Composite parent) {
@@ -103,8 +105,7 @@ public class OpenTypeHandler extends AbstractHandler {
 
 					@Override
 					public String getText(final Object element) {
-						if (element instanceof IProject) {
-							final IProject project = (IProject) element;
+						if (element instanceof final IProject project) {
 							return project.getName();
 						}
 						return "All Projects";
@@ -145,7 +146,7 @@ public class OpenTypeHandler extends AbstractHandler {
 			members = new IResource[0];
 		}
 		for (final IResource member : members) {
-			if (member instanceof IProject && !((IProject) member).isOpen()) {
+			if (member instanceof final IProject project && !project.isOpen()) {
 				continue;
 			}
 			projects.add((IContainer) member);
@@ -161,12 +162,13 @@ public class OpenTypeHandler extends AbstractHandler {
 			members = new IResource[0];
 		}
 		for (final IResource member : members) {
-			if (member instanceof IProject && !((IProject) member).isOpen()) {
+			if (member instanceof final IProject project && !project.isOpen()) {
 				continue;
 			}
-			if (member instanceof IContainer) {
-				processContainer((IContainer) member);
-			} else if (member instanceof IFile) {
+			if (member instanceof final IContainer cont) {
+				processContainer(cont);
+			} else if (member instanceof final IFile file
+					&& !TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension())) {
 				entries.add(TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) member));
 			}
 		}
@@ -179,13 +181,15 @@ public class OpenTypeHandler extends AbstractHandler {
 			final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 			if (activeWorkbenchWindow != null) {
 				final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-				final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+				final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
+						.getDefaultEditor(file.getName());
 				try {
 					activePage.openEditor(new FileEditorInput(file), desc.getId());
 				} catch (final PartInitException e1) {
 					FordiacLogHelper.logError(e1.getMessage(), e1);
 					final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-					MessageDialog.openError(shell, Messages.OpenTypeHandler_OPEN_TYPE_ERROR_TITLE, Messages.OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE);
+					MessageDialog.openError(shell, Messages.OpenTypeHandler_OPEN_TYPE_ERROR_TITLE,
+							Messages.OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE);
 				}
 			}
 		}
