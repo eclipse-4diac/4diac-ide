@@ -574,19 +574,17 @@ final class STCoreUtil {
 
 	def static getEquivalentAnyNumType(INamedElement type) {
 		switch (type) {
-			AnyNumType: type
 			BoolType: ElementaryTypes.SINT
 			ByteType: ElementaryTypes.USINT
 			WordType: ElementaryTypes.UINT
 			DwordType: ElementaryTypes.UDINT
 			LwordType: ElementaryTypes.ULINT
-			default: null
+			DataType: type
 		}
 	}
 
 	def static getEquivalentAnyBitType(INamedElement type) {
 		switch (type) {
-			AnyBitType: type
 			SintType,
 			UsintType: ElementaryTypes.BYTE
 			IntType,
@@ -595,17 +593,16 @@ final class STCoreUtil {
 			UdintType: ElementaryTypes.DWORD
 			LintType,
 			UlintType: ElementaryTypes.LWORD
-			default: null
+			DataType: type
 		}
 	}
 
 	def static getEquivalentAnyLDateType(INamedElement type) {
 		switch (type) {
-			case type.instanceofAnyLDateType: type
 			DateType: ElementaryTypes.LDATE
 			TimeOfDayType: ElementaryTypes.LTOD
 			DateAndTimeType: ElementaryTypes.LDT
-			default: null
+			DataType: type
 		}
 	}
 
