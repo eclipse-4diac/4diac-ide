@@ -30,6 +30,8 @@ class StructuredTextEvaluatorFactory implements EvaluatorFactory {
 			new ECTransitionEvaluator(source, context, variables, parent)
 		} else if (source instanceof STMethod) {
 			new STMethodEvaluator(source, context, variables, parent)
+		} else if (source instanceof org.eclipse.fordiac.ide.model.libraryElement.STMethod) {
+			new STMethodEvaluator(source, context, variables, parent)
 		} else if (source instanceof STFunction) {
 			new STFunctionEvaluator(source, context, variables, parent)
 		} else if (source instanceof STFunctionBody) {
@@ -46,6 +48,7 @@ class StructuredTextEvaluatorFactory implements EvaluatorFactory {
 		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, STAlgorithm, factory)
 		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, ECTransition, factory)
 		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, STMethod, factory)
+		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, org.eclipse.fordiac.ide.model.libraryElement.STMethod, factory)
 		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, STFunction, factory)
 		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, STFunctionBody, factory)
 		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, String, factory)

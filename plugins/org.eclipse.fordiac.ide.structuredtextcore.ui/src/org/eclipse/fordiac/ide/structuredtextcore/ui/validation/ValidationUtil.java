@@ -85,13 +85,15 @@ public final class ValidationUtil {
 		if (canonicalURI != null) {
 			if (isModelValidationIssue(issue)) {
 				final String[] data = issue.getData();
-				if (data != null && data.length >= 4) {
-					if (data[3] != null) {
+				if (data != null) {
+					if (data.length >= 4 && data[3] != null) {
 						return Map.of(IMarker.LOCATION, data[0], FordiacErrorMarker.TARGET_URI, canonicalURI.toString(),
 								FordiacErrorMarker.TARGET_TYPE, data[2], FordiacErrorMarker.TARGET_FEATURE, data[3]);
 					}
-					return Map.of(IMarker.LOCATION, data[0], FordiacErrorMarker.TARGET_URI, canonicalURI.toString(),
-							FordiacErrorMarker.TARGET_TYPE, data[2]);
+					if (data.length >= 3) {
+						return Map.of(IMarker.LOCATION, data[0], FordiacErrorMarker.TARGET_URI, canonicalURI.toString(),
+								FordiacErrorMarker.TARGET_TYPE, data[2]);
+					}
 				}
 			}
 			return Map.of(FordiacErrorMarker.TARGET_URI, canonicalURI.toString());

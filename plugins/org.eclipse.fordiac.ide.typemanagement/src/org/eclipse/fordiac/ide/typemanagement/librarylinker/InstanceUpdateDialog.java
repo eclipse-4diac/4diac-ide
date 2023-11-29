@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.typemanagement.librarylinker;
 
 import java.util.Set;
 
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.search.dialog.FBUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -38,11 +38,11 @@ import org.eclipse.swt.widgets.Shell;
 
 public class InstanceUpdateDialog extends FBUpdateDialog {
 
-	private final Set<FB> updatedInstances;
+	private final Set<FBNetworkElement> updatedInstances;
 
 	public InstanceUpdateDialog(final Shell parentShell, final String dialogTitle, final Image dialogTitleImage,
 			final String dialogMessage, final int dialogImageType, final String[] dialogButtonLabels,
-			final int defaultIndex, final DataTypeEntry dataTypeEntry, final Set<FB> updatedInstances) {
+			final int defaultIndex, final DataTypeEntry dataTypeEntry, final Set<FBNetworkElement> updatedInstances) {
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels,
 				defaultIndex, dataTypeEntry);
 		this.updatedInstances = updatedInstances;
@@ -92,8 +92,8 @@ public class InstanceUpdateDialog extends FBUpdateDialog {
 		return new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof final FB fb) {
-					return fb.getName();
+				if (element instanceof final FBNetworkElement fbnElem) {
+					return fbnElem.getName();
 				}
 				return super.getText(element);
 			}

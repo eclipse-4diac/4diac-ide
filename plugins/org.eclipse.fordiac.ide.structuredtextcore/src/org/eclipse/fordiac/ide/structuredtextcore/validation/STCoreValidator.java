@@ -714,7 +714,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE, INVALID_NUMERIC_LITERAL);
 		} else if (expectedType instanceof final DataType expectedDataType
 				&& IecTypes.GenericTypes.isAnyType(expectedDataType) && expression.getType() == null
-				&& !(expression.eContainer() instanceof STCallArgument)) {
+				&& STCoreUtil.isAncestor(STCorePackage.Literals.ST_ELEMENTARY_INITIALIZER_EXPRESSION, expression)) {
 			error(MessageFormat.format(Messages.STCoreValidator_Literal_Requires_Type_Specifier,
 					expectedDataType.getName()), STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE,
 					LITERAL_REQUIRES_TYPE_SPECIFIER);
@@ -736,7 +736,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					STCorePackage.Literals.ST_STRING_LITERAL__VALUE, INVALID_STRING_LITERAL);
 		} else if (expectedType instanceof final DataType expectedDataType
 				&& IecTypes.GenericTypes.isAnyType(expectedDataType) && expression.getType() == null
-				&& !(expression.eContainer() instanceof STCallArgument)) {
+				&& STCoreUtil.isAncestor(STCorePackage.Literals.ST_ELEMENTARY_INITIALIZER_EXPRESSION, expression)) {
 			error(MessageFormat.format(Messages.STCoreValidator_Literal_Requires_Type_Specifier,
 					expectedDataType.getName()), STCorePackage.Literals.ST_STRING_LITERAL__VALUE,
 					LITERAL_REQUIRES_TYPE_SPECIFIER);
