@@ -12,7 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.time.Clock;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.SynchronousQueue;
@@ -31,6 +34,8 @@ public class EvaluatorThreadPoolExecutor extends ThreadPoolExecutor {
 	private final AtomicReference<EvaluatorDebugger> debugger = new AtomicReference<>(
 			DefaultEvaluatorDebugger.INSTANCE);
 	private final Set<EvaluatorMonitor> monitorSet = ConcurrentHashMap.<EvaluatorMonitor>newKeySet();
+	private final Map<String, Object> context = new ConcurrentHashMap<>();
+	private final Map<String, Closeable> sharedResources = new ConcurrentHashMap<>();
 	private Clock clock = AbstractEvaluator.MonotonicClock.UTC;
 
 	/**
@@ -118,6 +123,26 @@ public class EvaluatorThreadPoolExecutor extends ThreadPoolExecutor {
 	}
 
 	/**
+	 * Get the shared evaluator context
+	 *
+	 * @return The shared context
+	 */
+	public Map<String, Object> getContext() {
+		return context;
+	}
+
+	/**
+	 * Get the shared resources
+	 *
+	 * @return The shared resources
+	 * @apiNote Any shared resources present when the executor terminates are
+	 *          automatically {@link Closeable#close() closed}.
+	 */
+	public Map<String, Closeable> getSharedResources() {
+		return sharedResources;
+	}
+
+	/**
 	 * Get the current clock for this executor
 	 *
 	 * @return The clock
@@ -147,6 +172,13 @@ public class EvaluatorThreadPoolExecutor extends ThreadPoolExecutor {
 
 	@Override
 	protected void terminated() {
+		sharedResources.forEach((key, value) -> {
+			try {
+				value.close();
+			} catch (final IOException e) {
+				monitorSet.forEach(monitor -> monitor.error("Exception closing shared resource " + key, e)); //$NON-NLS-1$
+			}
+		});
 		debugger.get().terminated(this);
 		monitorSet.forEach(monitor -> monitor.terminated(this));
 	}

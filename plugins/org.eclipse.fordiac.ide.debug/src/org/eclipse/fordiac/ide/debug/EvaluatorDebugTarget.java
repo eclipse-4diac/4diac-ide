@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -33,7 +34,8 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 	private final EvaluatorProcess process;
 	private final CommonEvaluatorDebugger debugger;
 
-	public EvaluatorDebugTarget(final String name, final Evaluator evaluator, final ILaunch launch) {
+	public EvaluatorDebugTarget(final String name, final Evaluator evaluator, final ILaunch launch)
+			throws CoreException {
 		super(null);
 		this.name = name;
 		this.launch = launch;

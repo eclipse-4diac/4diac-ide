@@ -22,6 +22,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.core.runtime.Status;
@@ -49,12 +50,13 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 	private final EvaluatorStreamsProxy streamsProxy;
 	private final Map<String, String> attributes = new HashMap<>();
 
-	public EvaluatorProcess(final String name, final Evaluator evaluator, final ILaunch launch) {
+	public EvaluatorProcess(final String name, final Evaluator evaluator, final ILaunch launch) throws CoreException {
 		this.name = evaluator.getClass().getSimpleName();
 		this.evaluator = evaluator;
 		this.launch = launch;
 		task = new FutureTask<>(this);
 		executor = new EvaluatorThreadPoolExecutor(name);
+		executor.getContext().putAll(launch.getLaunchConfiguration().getAttributes());
 		executor.addMonitor(new EvaluatorTerminationMonitor());
 		streamsProxy = new EvaluatorStreamsProxy(executor);
 		launch.addProcess(this);
