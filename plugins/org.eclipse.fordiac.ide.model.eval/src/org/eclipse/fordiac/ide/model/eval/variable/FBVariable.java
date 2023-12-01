@@ -137,6 +137,11 @@ public class FBVariable extends AbstractVariable<FBValue> {
 	}
 
 	@Override
+	public FBType getType() {
+		return (FBType) super.getType();
+	}
+
+	@Override
 	public FBValue getValue() {
 		return value;
 	}

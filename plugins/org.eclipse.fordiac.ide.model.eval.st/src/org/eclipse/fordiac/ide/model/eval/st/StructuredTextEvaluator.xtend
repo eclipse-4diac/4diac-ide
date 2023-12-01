@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
 import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
-import org.eclipse.fordiac.ide.model.eval.value.FBValue
 import org.eclipse.fordiac.ide.model.eval.value.StringValue
 import org.eclipse.fordiac.ide.model.eval.value.StructValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
@@ -94,6 +93,8 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 
 abstract class StructuredTextEvaluator extends AbstractEvaluator {
+	public static final String RETURN_VARIABLE_NAME = ""
+
 	@Accessors final String name
 	protected final Map<String, Variable<?>> variables
 	protected final Map<String, Variable<?>> cachedGlobalConstants = newHashMap
@@ -136,7 +137,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch Variable<?> findVariable(ICallable variable) {
-		variables.get(variable.name) ?: variables.get("")
+		variables.get(variable.name) ?: variables.get(RETURN_VARIABLE_NAME)
 	}
 
 	def protected Variable<?> evaluateVariableInitialization(STVarDeclaration decl) {
@@ -458,9 +459,10 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				StandardFunctions.invoke(feature.name, arguments)
 			}
 			FB case expr.call: {
-				val fb = feature.findVariable.value as FBValue
+				val fb = feature.findVariable as FBVariable
 				val event = fb.type.interfaceList.eventInputs.head
-				fb.evaluateFBCall(event, expr.mappedInputArguments, expr.mappedOutputArguments)
+				fb.evaluateFBCall(event, expr.mappedInputArguments, expr.mappedOutputArguments,
+					expr.mappedInOutArguments)
 			}
 			ICallable case expr.call:
 				context.evaluateCall(feature, expr.mappedInputArguments, expr.mappedOutputArguments,
@@ -476,9 +478,10 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		switch (expr.feature) {
 			case THIS:
 				if (expr.call) {
-					val fb = context.value as FBValue
+					val fb = context as FBVariable
 					val event = fb.type.interfaceList.eventInputs.head
-					fb.evaluateFBCall(event, expr.mappedInputArguments, expr.mappedOutputArguments)
+					fb.evaluateFBCall(event, expr.mappedInputArguments, expr.mappedOutputArguments,
+						expr.mappedInOutArguments)
 				} else
 					context.value
 		}
@@ -510,22 +513,24 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch Value evaluateExpression(STFeatureExpression expr, Variable<?> receiver) {
-		switch (value : receiver.value) {
-			StructValue:
-				value.get(expr.feature.name).value
-			FBValue:
+		switch (receiver) {
+			StructVariable:
+				receiver.members.get(expr.feature.name).value
+			FBVariable:
 				switch (feature : expr.feature) {
 					VarDeclaration,
 					AdapterDeclaration,
 					FB case !expr.call:
-						value.get(expr.feature.name).value
+						receiver.members.get(expr.feature.name).value
 					FB case expr.call: {
-						val fb = value.get(expr.feature.name).value as FBValue
+						val fb = receiver.members.get(expr.feature.name) as FBVariable
 						val event = fb.type.interfaceList.eventInputs.head
-						fb.evaluateFBCall(event, expr.mappedInputArguments, expr.mappedOutputArguments)
+						fb.evaluateFBCall(event, expr.mappedInputArguments, expr.mappedOutputArguments,
+							expr.mappedInOutArguments)
 					}
 					Event case expr.call:
-						value.evaluateFBCall(feature, expr.mappedInputArguments, expr.mappedOutputArguments)
+						receiver.evaluateFBCall(feature, expr.mappedInputArguments, expr.mappedOutputArguments,
+							expr.mappedInOutArguments)
 					ICallable case expr.call:
 						receiver.evaluateCall(feature, expr.mappedInputArguments, expr.mappedOutputArguments,
 							expr.mappedInOutArguments)
@@ -652,19 +657,23 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		result
 	}
 
-	def protected Value evaluateFBCall(FBValue fb, Event event, Map<INamedElement, STCallArgument> inputs,
-		Map<INamedElement, STCallArgument> outputs) {
-		inputs.forEach [ parameter, argument |
-			fb.get(parameter.name).value = argument?.argument?.evaluateExpression ?:
-				(parameter as VarDeclaration).type.defaultValue
-		]
-		val eval = EvaluatorFactory.createEvaluator(fb.type, fb.type.eClass.instanceClass as Class<? extends ICallable>,
-			context, fb.members.values, this) as FBEvaluator<?>
+	def protected Value evaluateFBCall(FBVariable receiver, Event event, Map<INamedElement, STCallArgument> inputs,
+		Map<INamedElement, STCallArgument> outputs, Map<INamedElement, STCallArgument> inouts) {
+		val eval = receiver.evaluator
 		if (eval === null) {
-			error('''Cannot create evaluator for callable «fb.type.eClass.name»''')
-			throw new UnsupportedOperationException('''Cannot create evaluator for callable «fb.type.eClass.name»''')
+			error('''Cannot create evaluator for callable «receiver.type.eClass.name»''')
+			throw new UnsupportedOperationException('''Cannot create evaluator for callable «receiver.type.eClass.name»''')
 		}
+		inputs.forEach [ parameter, argument |
+			if(argument !== null) eval.variables.get(parameter.name).value = argument.argument.evaluateExpression
+		]
+		inouts.forEach [ parameter, argument |
+			if(argument !== null) eval.variables.get(parameter.name).value = argument.argument.evaluateExpression
+		]
 		eval.evaluate(event)
+		inouts.forEach [ parameter, argument |
+			if(argument !== null) argument.argument.evaluateVariable.value = eval.variables.get(parameter.name).value
+		]
 		outputs.forEach [ parameter, argument |
 			switch (argument) {
 				STCallNamedOutputArgument case argument.not:
@@ -673,7 +682,21 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 					argument.argument.evaluateVariable.value = eval.variables.get(parameter.name).value
 			}
 		]
-		null
+		eval.variables.get(RETURN_VARIABLE_NAME)?.value
+	}
+
+	def protected FBEvaluator<?> getEvaluator(FBVariable receiver) {
+		if (parent instanceof FBEvaluator) {
+			if (receiver.name == CONTEXT_NAME) {
+				parent as FBEvaluator<?>
+			} else {
+				parent.children.entrySet.findFirst[key instanceof FB && key.name == receiver.name]?.
+					value as FBEvaluator<?>
+			}
+		} else
+			EvaluatorFactory.createEvaluator(receiver.type,
+				receiver.type.eClass.instanceClass as Class<? extends ICallable>, receiver, receiver.members.values,
+				this) as FBEvaluator<?>
 	}
 
 	static class StructuredTextException extends Exception {

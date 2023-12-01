@@ -12,12 +12,14 @@
  */
 package org.eclipse.fordiac.ide.model.eval;
 
+import java.io.Closeable;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -83,6 +85,20 @@ public abstract class AbstractEvaluator implements Evaluator {
 			return evaluatorThread.getExecutor().getMonitorSet();
 		}
 		return Collections.emptySet();
+	}
+
+	public static Map<String, Object> currentContext() {
+		if (Thread.currentThread() instanceof final EvaluatorThread evaluatorThread) {
+			return evaluatorThread.getExecutor().getContext();
+		}
+		return Collections.emptyMap();
+	}
+
+	public static Map<String, Closeable> getSharedResources() {
+		if (!(Thread.currentThread() instanceof final EvaluatorThread evaluatorThread)) {
+			throw new IllegalStateException("Cannot get shared resources without evaluator thread"); //$NON-NLS-1$
+		}
+		return evaluatorThread.getExecutor().getSharedResources();
 	}
 
 	public static Clock currentClock() {
