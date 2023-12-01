@@ -224,7 +224,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	private static Figure createRootContainer(final IFigure parent, final Integer layoutConstraint) {
 		final RectangleFigure rootContainer = new RectangleFigure();
 		final var rootContLayout = new GridLayout(1, false);
-		rootContLayout.marginHeight = (int) (CoordinateConverter.INSTANCE.getLineHeight() * 1.75);
+		rootContLayout.marginHeight = getInterfaceBarTopPadding();
 		rootContLayout.marginWidth = 0;
 		rootContainer.setLayoutManager(rootContLayout);
 		rootContainer.setOpaque(true);
@@ -233,6 +233,10 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		rootContainer.setBorder(new SingleLineBorder(INTERFACE_BAR_BORDER_COLOR));
 		parent.add(rootContainer, layoutConstraint);
 		return rootContainer;
+	}
+
+	public static int getInterfaceBarTopPadding() {
+		return (int) (CoordinateConverter.INSTANCE.getLineHeight() * 1.75);
 	}
 
 	private static void configureLeftContainer(final Figure container) {
