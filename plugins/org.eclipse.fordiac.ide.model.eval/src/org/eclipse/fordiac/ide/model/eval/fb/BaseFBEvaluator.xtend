@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.Method
 import org.eclipse.xtend.lib.annotations.Accessors
 
 abstract class BaseFBEvaluator<T extends BaseFBType> extends FBEvaluator<T> {
@@ -44,6 +45,17 @@ abstract class BaseFBEvaluator<T extends BaseFBType> extends FBEvaluator<T> {
 
 	override prepare() {
 		algorithmEvaluators.values.forEach[prepare]
+	}
+
+	override getDependencies() {
+		(super.dependencies + algorithmEvaluators.values.flatMap [
+			dependencies
+		] + type.methods.map [
+			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends Method>, this.context,
+				emptySet, this)
+		].flatMap [
+			dependencies
+		]).toSet
 	}
 
 	override getChildren() {

@@ -146,7 +146,8 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	}
 
 	protected IEditorPart getNavigationLocationProvider() {
-		// if the breadcrumb editor is embedded into an other editor part this should help
+		// if the breadcrumb editor is embedded into an other editor part this should
+		// help
 		if (getSite().getPart() instanceof final IEditorPart editorPart) {
 			return editorPart;
 		}
@@ -219,7 +220,8 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 			if (event.isPostChangeEvent()) {
 				if (event.getDetail() == CommandStack.POST_EXECUTE) {
 					final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
-					// running the layout without flushing the viewer results in a bad state of the libavoid process
+					// running the layout without flushing the viewer results in a bad state of the
+					// libavoid process
 					// -> do not allow auto layout if that is the case
 					if (viewer != null) {
 						viewer.flush();
@@ -268,7 +270,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		}
 	}
 
-	protected void selectElement(final EObject element) {
+	protected void selectElement(EObject element) {
 		if (element instanceof final Connection conn) {
 			// first select source or destination to move the viewport
 			if (conn.getSourceElement() != null) {
@@ -277,7 +279,10 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 				HandlerHelper.selectElement(conn.getDestinationElement(), this);
 			}
 		}
-		HandlerHelper.selectElement(element, this);
+		// try to select element (or one of its parents)
+		while (element != null && !HandlerHelper.selectElement(element, this)) {
+			element = element.eContainer();
+		}
 	}
 
 	static EObject getFBNetworkContainer(EObject object) {
@@ -330,7 +335,8 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	@Override
 	public void restoreState(final IMemento memento) {
-		// store memento to be used during create part control to setup the editor with the saved state
+		// store memento to be used during create part control to setup the editor with
+		// the saved state
 		this.memento = memento;
 	}
 
@@ -346,7 +352,8 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 			final Integer xLocation = memento.getInteger(TAG_GRAPHICAL_VIEWER_HOR_SCROLL);
 			final Integer yLocation = memento.getInteger(TAG_GRAPHICAL_VIEWER_VER_SCROLL);
 			if ((null != xLocation) && (yLocation != null)) {
-				// we have to wait to set the scroll position until the editor is drawn and the canvas is setup
+				// we have to wait to set the scroll position until the editor is drawn and the
+				// canvas is setup
 				Display.getDefault().asyncExec(() -> {
 					if (!canvas.isDisposed()) {
 						canvas.scrollTo(xLocation.intValue(), yLocation.intValue());
@@ -394,10 +401,14 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	protected abstract AdapterFactoryLabelProvider createBreadcrumbLabelProvider();
 
-	/** retrieve the model element that this bread crumb editor should how after creation
+	/**
+	 * retrieve the model element that this bread crumb editor should how after
+	 * creation
 	 *
-	 * @param itemPath a string representation that may point to an element in a model hierarchy if null then the root
-	 *                 model element should be provided
-	 * @return the model element for which the first editor should be shown. */
+	 * @param itemPath a string representation that may point to an element in a
+	 *                 model hierarchy if null then the root model element should be
+	 *                 provided
+	 * @return the model element for which the first editor should be shown.
+	 */
 	protected abstract Object getInitialModel(String itemPath);
 }

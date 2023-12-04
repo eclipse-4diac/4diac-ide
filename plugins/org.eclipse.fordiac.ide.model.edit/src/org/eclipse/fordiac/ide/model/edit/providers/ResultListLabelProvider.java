@@ -45,15 +45,15 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 	@Override
 	public StyledString getStyledText(final Object element) {
 		StyledString styledString = null;
-		if (element instanceof TypeEntry) {
-			final TypeEntry entry = (TypeEntry) element;
+		if (element instanceof final TypeEntry entry) {
 			styledString = new StyledString(entry.getTypeName());
 			styledString.append(" - " + entry.getType().getComment(), //$NON-NLS-1$
 					StyledString.QUALIFIER_STYLER);
 
 			int lastIndex = 0;
 			for (final String searchStringElement : searchString) {
-				final int offset = styledString.toString().toUpperCase().indexOf((searchStringElement.toUpperCase()), lastIndex);
+				final int offset = styledString.toString().toUpperCase().indexOf((searchStringElement.toUpperCase()),
+						lastIndex);
 				if (offset >= 0) {
 					styledString.setStyle(offset, searchStringElement.length(), BoldStyler.INSTANCE_DEFAULT);
 					lastIndex = offset + searchStringElement.length();
@@ -68,8 +68,7 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 
 	@Override
 	public Image getImage(final Object element) {
-		if (element instanceof TypeEntry) {
-			final TypeEntry entry = (TypeEntry) element;
+		if (element instanceof final TypeEntry entry) {
 			return getTypeImage(entry.getType());
 		}
 		return null;
@@ -78,9 +77,11 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 	public static Image getTypeImage(final LibraryElement type) {
 		if (type instanceof SubAppType) {
 			return FordiacImage.ICON_SUB_APP_TYPE.getImage();
-		} else if (type instanceof BasicFBType) {
+		}
+		if (type instanceof BasicFBType) {
 			return FordiacImage.ICON_BASIC_FB.getImage();
-		} else if (type instanceof SimpleFBType) {
+		}
+		if (type instanceof SimpleFBType) {
 			return FordiacImage.ICON_SIMPLE_FB.getImage();
 		} else if (type instanceof CompositeFBType) {
 			return FordiacImage.ICON_COMPOSITE_FB.getImage();
@@ -97,8 +98,8 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 
 	@Override
 	public String getText(final Object element) {
-		return (element instanceof TypeEntry) ? String.format("%s - %s", getStyledText(element).toString(), //$NON-NLS-1$
-				((TypeEntry) element).getFile().getFullPath()) : "-"; //$NON-NLS-1$
+		return (element instanceof final TypeEntry entry) ? String.format("%s - %s", getStyledText(element).toString(), //$NON-NLS-1$
+				entry.getFile().getFullPath()) : "-"; //$NON-NLS-1$
 	}
 
 	public void setSearchString(final String searchString) {
@@ -109,7 +110,7 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 	private void validateSearchString() {
 		searchString = searchString[0].split("[\\*\\?]+", -1); //$NON-NLS-1$
 		for (int i = 0; i < searchString.length; i++) {
-			searchString[i] = searchString[i].replaceAll("\\W", "");  //$NON-NLS-1$//$NON-NLS-2$
+			searchString[i] = searchString[i].replaceAll("\\W", ""); //$NON-NLS-1$//$NON-NLS-2$
 		}
 	}
 

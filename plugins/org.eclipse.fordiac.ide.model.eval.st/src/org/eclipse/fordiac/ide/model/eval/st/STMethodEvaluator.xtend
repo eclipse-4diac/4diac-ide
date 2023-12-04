@@ -15,49 +15,69 @@ package org.eclipse.fordiac.ide.model.eval.st
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 
-@FinalFieldsConstructor
 class STMethodEvaluator extends StructuredTextEvaluator {
-	final STMethod method
+	final org.eclipse.fordiac.ide.model.libraryElement.STMethod method
 
-	final Variable<?> returnVariable
+	STMethod parseResult
+	Variable<?> returnVariable
+
+	new(org.eclipse.fordiac.ide.model.libraryElement.STMethod method, Variable<?> context,
+		Iterable<Variable<?>> variables, Evaluator parent) {
+		super(method.name, context, variables, parent)
+		this.method = method
+	}
 
 	new(STMethod method, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		super(method.name, context, variables, parent)
-		this.method = method
-		method.body.varDeclarations.filter [
-			it instanceof STVarInputDeclarationBlock || it instanceof STVarInputDeclarationBlock
-		].flatMap[varDeclarations].reject [
-			this.variables.containsKey(name) || !count.empty
+		this.method = null
+		parseResult = method
+	}
+
+	override prepare() {
+		if (parseResult === null) {
+			val errors = newArrayList
+			val warnings = newArrayList
+			val infos = newArrayList
+			parseResult = method?.parse(errors, warnings, infos)
+			errors.forEach[error("Parse error: " + it)]
+			warnings.forEach[warn("Parse warning: " + it)]
+			infos.forEach[info("Parse info: " + it)]
+			if (parseResult === null) {
+				throw new Exception("Parse error: " + errors.join(", "))
+			}
+		}
+	}
+
+	override evaluate() {
+		prepare
+		parseResult.prepareStructuredTextMethod
+		parseResult.evaluateStructuredTextMethod
+		parseResult.trap
+		returnVariable?.value
+	}
+
+	def protected void prepareStructuredTextMethod(STMethod method) {
+		method.body.varDeclarations.filter[input].flatMap[varDeclarations].reject [
+			variables.containsKey(name) || !count.empty
 		].forEach [
 			evaluateVariableInitialization
 		]
 		if (method.returnType !== null) {
 			returnVariable = newVariable(method.name, method.returnType)
-			this.variables.put(returnVariable.name, returnVariable)
-		} else
-			returnVariable = null
-	}
-
-	override prepare() {
-	}
-
-	override evaluate() {
-		prepare();
-		method.evaluateStructuredTextMethod
-		method.trap
-		returnVariable?.value
+			variables.put(returnVariable.name, returnVariable)
+		}
 	}
 
 	def protected void evaluateStructuredTextMethod(STMethod method) {
-		method.body.varDeclarations.reject(STVarInputDeclarationBlock).reject(STVarInOutDeclarationBlock).flatMap [
+		method.body.varDeclarations.reject[input].flatMap [
 			varDeclarations
 		].forEach [
 			evaluateVariableInitialization
@@ -72,11 +92,16 @@ class STMethodEvaluator extends StructuredTextEvaluator {
 		}
 	}
 
+	def protected boolean isInput(STVarDeclarationBlock block) {
+		block instanceof STVarInputDeclarationBlock || block instanceof STVarInOutDeclarationBlock
+	}
+
 	override STMethod getSourceElement() {
-		method
+		parseResult
 	}
 
 	override getDependencies() {
-		method.collectUsedTypes
+		prepare
+		parseResult?.collectUsedTypes
 	}
 }

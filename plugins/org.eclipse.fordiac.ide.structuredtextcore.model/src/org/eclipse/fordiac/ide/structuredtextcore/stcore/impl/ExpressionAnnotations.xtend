@@ -141,7 +141,14 @@ final package class ExpressionAnnotations {
 		}
 	}
 
-	def package static INamedElement getResultType(STFeatureExpression expr) { getDeclaredResultType(expr) }
+	def package static INamedElement getResultType(STFeatureExpression expr) {
+		switch (feature : expr.feature) {
+			STStandardFunction:
+				feature.javaMethod.inferReturnTypeFromDataTypes(expr.parameters.map[resultType].filter(DataType).toList)
+			default:
+				getDeclaredResultType(expr)
+		}
+	}
 
 	def package static INamedElement getDeclaredResultType(STFeatureExpression expr) {
 		// mirror changes here in callaSTCoreScopeProvider.isApplicableForFeatureReference(IEObjectDescription)
@@ -151,8 +158,13 @@ final package class ExpressionAnnotations {
 			AdapterDeclaration,
 			FB:
 				feature.featureType
-			STStandardFunction:
-				feature.javaMethod.inferReturnTypeFromDataTypes(expr.parameters.map[resultType].filter(DataType).toList)
+			STStandardFunction: {
+				val argumentTypes = expr.parameters.map[declaredResultType].filter(DataType).toList
+				if (argumentTypes.size == expr.parameters.size) // all parameters have valid types
+					feature.javaMethod.inferReturnTypeFromDataTypes(argumentTypes)
+				else
+					feature.javaMethod.inferReturnTypeFromDataTypes(emptyList)
+			}
 			ICallable:
 				feature.returnType
 		}

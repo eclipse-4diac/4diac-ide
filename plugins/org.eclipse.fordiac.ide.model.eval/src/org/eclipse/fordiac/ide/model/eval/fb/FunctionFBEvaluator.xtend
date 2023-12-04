@@ -47,6 +47,10 @@ class FunctionFBEvaluator extends FBEvaluator<FunctionFBType> {
 		update(variables.values)
 	}
 
+	override getDependencies() {
+		(super.dependencies + functionEvaluator.dependencies).toSet
+	}
+
 	override getChildren() {
 		emptyMap
 	}

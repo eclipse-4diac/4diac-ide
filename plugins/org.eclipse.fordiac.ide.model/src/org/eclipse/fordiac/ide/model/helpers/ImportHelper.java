@@ -109,6 +109,44 @@ public final class ImportHelper {
 		return fallbackTypeResolver.apply(name);
 	}
 
+	public static String deresolveImport(final LibraryElement imported, final EObject context) {
+		if (imported == null) {
+			return null;
+		}
+		if (PackageNameHelper.getPackageName(imported).isEmpty()) {
+			return imported.getName();
+		}
+		final String importedName = PackageNameHelper.getFullTypeName(imported);
+		final String packageName = PackageNameHelper.getContainerPackageName(context);
+		final List<Import> imports = ImportHelper.getContainerImports(context);
+		return deresolveImport(importedName, packageName, imports);
+	}
+
+	public static String deresolveImport(final String importedName, final String packageName,
+			final List<Import> imports) {
+		final String name = PackageNameHelper.extractPlainTypeName(importedName);
+
+		// deresolve name in current package (if present)
+		if (packageName != null && !packageName.isEmpty()
+				&& importedName.equalsIgnoreCase(packageName + PACKAGE_NAME_DELIMITER + name)) {
+			return name;
+		}
+
+		// deresolve imports
+		for (final Import imp : imports) {
+			final String importedNamespace = imp.getImportedNamespace();
+			if (importedName.equalsIgnoreCase(importedNamespace) // exact match
+					|| (importedNamespace.endsWith(WILDCARD_IMPORT_SUFFIX) // or wildcard import
+							&& importedName
+									.equalsIgnoreCase(importedNamespace.substring(0, importedNamespace.length() - 3)
+											+ PACKAGE_NAME_DELIMITER + name))) { // and full name matches prefix
+				return name;
+			}
+		}
+
+		return importedName;
+	}
+
 	public static void organizeImports(final LibraryElement libraryElement, final Set<String> usedTypes) {
 		final String packageName = PackageNameHelper.getPackageName(libraryElement);
 		final EList<Import> imports = getMutableImports(libraryElement);

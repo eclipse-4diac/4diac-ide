@@ -179,8 +179,9 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 			final Rectangle leftFig = subappFigure.getExpandedInputFigure().getBounds();
 			final Rectangle rightFig = subappFigure.getExpandedOutputFigure().getBounds();
 			final Rectangle newFig1 = fullContainerBounds.getCopy();
-			newFig1.width = mainFig.width + leftFig.width + rightFig.width + 20;
-			if (fullContainerBounds.width != newFig1.width) {
+			newFig1.width = mainFig.width + leftFig.width + rightFig.width + subappFigure.getInsets().left
+					+ subappFigure.getInsets().right;
+			if (fullContainerBounds.width < newFig1.width) {
 				final FBNetworkElement container = getSubappContainer(fullContentGraphicalEditPart);
 				return ContainerContentLayoutPolicy.createChangeBoundsCommand(container, fullContainerBounds, newFig1);
 			}

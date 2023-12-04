@@ -29,7 +29,9 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdatePinInTypeDeclarationC
 import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -48,13 +50,13 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public final class FBUpdater {
 
-	private static Set<FB> updatedElements;
+	private static Set<FBNetworkElement> updatedElements;
 
 	private FBUpdater() {
 		// just a utility class, no instancing here, por favor
 	}
 
-	public static Set<FB> getUpdatedElements() {
+	public static Set<FBNetworkElement> getUpdatedElements() {
 		return updatedElements;
 	}
 
@@ -131,7 +133,7 @@ public final class FBUpdater {
 			final TypeLibrary typeLib) {
 		final List<Command> commands = new ArrayList<>();
 		updatedElements = new HashSet<>();
-		final InstanceSearch instanceSearch = new InstanceSearch(FB.class::isInstance);
+		final InstanceSearch instanceSearch = new InstanceSearch(FBNetworkElement.class::isInstance);
 		instanceSearch.performProjectSearch(project).forEach(namedElem -> {
 			if (namedElem instanceof final FB fb) {
 				typeEntries.forEach(typeEntry -> {
@@ -140,6 +142,11 @@ public final class FBUpdater {
 						updatedElements.add(fb);
 					}
 				});
+			} else if (namedElem instanceof final ErrorMarkerFBNElement errorMarker
+					&& typeLib.getFBTypeEntry(errorMarker.getFullTypeName()) != null) {
+				commands.add(
+						new UpdateFBTypeCommand(errorMarker, typeLib.getFBTypeEntry(errorMarker.getFullTypeName())));
+				updatedElements.add(errorMarker);
 			}
 		});
 		final CompoundCommand cmd = new CompoundCommand();

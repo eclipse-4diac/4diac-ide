@@ -37,6 +37,7 @@ public class STCoreResourceUIValidatorExtension extends DefaultResourceUIValidat
 	public void deleteMarkers(final IFile file, final CheckMode checkMode, final IProgressMonitor monitor)
 			throws CoreException {
 		super.deleteMarkers(file, checkMode, monitor);
+		file.deleteMarkers(FordiacErrorMarker.IEC61499_MARKER, true, IResource.DEPTH_ZERO);
 		file.deleteMarkers(FordiacErrorMarker.VALIDATION_MARKER, true, IResource.DEPTH_ZERO);
 	}
 }

@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -37,11 +38,11 @@ public final class InterfaceElementAnnotations {
 	private static final String NAMED_ELEMENTS_KEY = InterfaceElementAnnotations.class.getName() + ".NAMED_ELEMENTS"; //$NON-NLS-1$
 
 	public static String getFullTypeName(final IInterfaceElement element) {
-		return element.getTypeName();
+		return ImportHelper.deresolveImport(element.getType(), element);
 	}
 
 	public static String getFullTypeName(final VarDeclaration element) {
-		final String typeName = element.getTypeName();
+		final String typeName = ImportHelper.deresolveImport(element.getType(), element);
 		if (element.isArray() && typeName != null && !typeName.isBlank()) {
 			final String arraySize = getArraySize(element);
 			if (!arraySize.contains("..")) { //$NON-NLS-1$

@@ -100,8 +100,6 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	override getDependencies() {
 		(type.eAllContents.toIterable.filter(VarDeclaration).flatMap [
 			VariableOperations.getDependencies(it)
-		] + children.values.flatMap [
-			dependencies
 		]).toSet
 	}
 
