@@ -750,6 +750,16 @@
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateMultipleInputConnections/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateMultipleInputConnections/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateNoValueForGenericTypeVariable"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateNoValueForGenericTypeVariable(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateNoValueForGenericTypeVariable/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateNoValueForGenericTypeVariable/context"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateValueForGenericInstanceVariable"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateValueForGenericInstanceVariable(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateValueForGenericInstanceVariable/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateValueForGenericInstanceVariable/context"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateVarInOutSourceTypeIsWellDefined"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutSourceTypeIsWellDefined(this, diagnostics, context);">
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSourceTypeIsWellDefined/diagnostics"/>

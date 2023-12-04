@@ -169,6 +169,22 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
 	 * @generated
 	 */
+	boolean validateNoValueForGenericTypeVariable(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateValueForGenericInstanceVariable(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
 	boolean validateVarInOutIsWithed(DiagnosticChain diagnostics, Map<Object, Object> context);
 
 } // VarDeclaration

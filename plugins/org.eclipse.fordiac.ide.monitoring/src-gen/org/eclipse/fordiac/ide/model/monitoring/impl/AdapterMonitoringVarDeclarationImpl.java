@@ -54,16 +54,26 @@ import org.eclipse.gef.EditPart;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getComment <em>Comment</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getAttributes <em>Attributes</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#isIsInput <em>Is Input</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getInputConnections <em>Input Connections</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getOutputConnections <em>Output Connections</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getArraySize <em>Array Size</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getWiths <em>Withs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getValue <em>Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getName
+ * <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getComment
+ * <em>Comment</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getAttributes
+ * <em>Attributes</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#isIsInput
+ * <em>Is Input</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getInputConnections
+ * <em>Input Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getOutputConnections
+ * <em>Output Connections</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getType
+ * <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getArraySize
+ * <em>Array Size</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getWiths
+ * <em>Withs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringVarDeclarationImpl#getValue
+ * <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -92,6 +102,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -101,6 +112,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -108,9 +120,9 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	protected String comment = COMMENT_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getAttributes()
 	 * @generated
 	 * @ordered
@@ -120,6 +132,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	/**
 	 * The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered
@@ -129,6 +142,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	/**
 	 * The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered
@@ -168,8 +182,9 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	protected DataType type;
 
 	/**
-	 * The cached value of the '{@link #getArraySize() <em>Array Size</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getArraySize() <em>Array Size</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getArraySize()
 	 * @generated
 	 * @ordered
@@ -179,6 +194,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	/**
 	 * The cached value of the '{@link #getWiths() <em>Withs</em>}' reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getWiths()
 	 * @generated
 	 * @ordered
@@ -186,8 +202,9 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	protected EList<With> withs;
 
 	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -196,14 +213,15 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected AdapterMonitoringVarDeclarationImpl() {
-		super();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -213,6 +231,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -222,18 +241,22 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setName(String newName) {
-		String oldName = name;
+	public void setName(final String newName) {
+		final String oldName = name;
 		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME, oldName, name));
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME, oldName, name));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -243,31 +266,36 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setComment(String newComment) {
-		String oldComment = comment;
+	public void setComment(final String newComment) {
+		final String oldComment = comment;
 		comment = newComment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT, oldComment, comment));
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT, oldComment, comment));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<>(Attribute.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES);
+			attributes = new EObjectContainmentEList.Resolving<>(Attribute.class, this,
+					MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES);
 		}
 		return attributes;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -277,34 +305,46 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setIsInput(boolean newIsInput) {
-		boolean oldIsInput = isInput;
+	public void setIsInput(final boolean newIsInput) {
+		final boolean oldIsInput = isInput;
 		isInput = newIsInput;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT, oldIsInput, isInput));
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT, oldIsInput, isInput));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public Value getValue() {
 		if (value != null && value.eIsProxy()) {
-			InternalEObject oldValue = (InternalEObject)value;
-			value = (Value)eResolveProxy(oldValue);
+			final InternalEObject oldValue = (InternalEObject) value;
+			value = (Value) eResolveProxy(oldValue);
 			if (value != oldValue) {
-				InternalEObject newValue = (InternalEObject)value;
-				NotificationChain msgs = oldValue.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, null, null);
+				final InternalEObject newValue = (InternalEObject) value;
+				NotificationChain msgs = oldValue.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, null,
+						null);
 				if (newValue.eInternalContainer() == null) {
-					msgs = newValue.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, null, msgs);
+					msgs = newValue.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, null,
+							msgs);
 				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, oldValue, value));
+				if (msgs != null) {
+					msgs.dispatch();
+				}
+				if (eNotificationRequired()) {
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, oldValue, value));
+				}
 			}
 		}
 		return value;
@@ -312,6 +352,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public Value basicGetValue() {
@@ -320,87 +361,116 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetValue(Value newValue, NotificationChain msgs) {
-		Value oldValue = value;
+	public NotificationChain basicSetValue(final Value newValue, NotificationChain msgs) {
+		final Value oldValue = value;
 		value = newValue;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, oldValue, newValue);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, oldValue, newValue);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setValue(Value newValue) {
+	public void setValue(final Value newValue) {
 		if (newValue != value) {
 			NotificationChain msgs = null;
-			if (value != null)
-				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, null, msgs);
-			if (newValue != null)
-				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, null, msgs);
+			if (value != null) {
+				msgs = ((InternalEObject) value).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, null,
+						msgs);
+			}
+			if (newValue != null) {
+				msgs = ((InternalEObject) newValue).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, null,
+						msgs);
+			}
 			msgs = basicSetValue(newValue, msgs);
-			if (msgs != null) msgs.dispatch();
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, newValue, newValue));
 		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE, newValue, newValue));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
+			inputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this,
+					MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS,
+					LibraryElementPackage.CONNECTION__DESTINATION);
 		}
 		return inputConnections;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
+			outputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this,
+					MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS,
+					LibraryElementPackage.CONNECTION__SOURCE);
 		}
 		return outputConnections;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public ArraySize getArraySize() {
 		if (arraySize != null && arraySize.eIsProxy()) {
-			InternalEObject oldArraySize = (InternalEObject)arraySize;
-			arraySize = (ArraySize)eResolveProxy(oldArraySize);
+			final InternalEObject oldArraySize = (InternalEObject) arraySize;
+			arraySize = (ArraySize) eResolveProxy(oldArraySize);
 			if (arraySize != oldArraySize) {
-				InternalEObject newArraySize = (InternalEObject)arraySize;
-				NotificationChain msgs =  oldArraySize.eInverseRemove(this, LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, null);
+				final InternalEObject newArraySize = (InternalEObject) arraySize;
+				NotificationChain msgs = oldArraySize.eInverseRemove(this,
+						LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, null);
 				if (newArraySize.eInternalContainer() == null) {
-					msgs =  newArraySize.eInverseAdd(this, LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, msgs);
+					msgs = newArraySize.eInverseAdd(this, LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION,
+							ArraySize.class, msgs);
 				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, oldArraySize, arraySize));
+				if (msgs != null) {
+					msgs.dispatch();
+				}
+				if (eNotificationRequired()) {
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, oldArraySize, arraySize));
+				}
 			}
 		}
 		return arraySize;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public ArraySize basicGetArraySize() {
@@ -408,52 +478,65 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetArraySize(ArraySize newArraySize, NotificationChain msgs) {
-		ArraySize oldArraySize = arraySize;
+	public NotificationChain basicSetArraySize(final ArraySize newArraySize, NotificationChain msgs) {
+		final ArraySize oldArraySize = arraySize;
 		arraySize = newArraySize;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, oldArraySize, newArraySize);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, oldArraySize, newArraySize);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setArraySize(ArraySize newArraySize) {
+	public void setArraySize(final ArraySize newArraySize) {
 		if (newArraySize != arraySize) {
 			NotificationChain msgs = null;
-			if (arraySize != null)
-				msgs = ((InternalEObject)arraySize).eInverseRemove(this, LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, msgs);
-			if (newArraySize != null)
-				msgs = ((InternalEObject)newArraySize).eInverseAdd(this, LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, msgs);
+			if (arraySize != null) {
+				msgs = ((InternalEObject) arraySize).eInverseRemove(this,
+						LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, msgs);
+			}
+			if (newArraySize != null) {
+				msgs = ((InternalEObject) newArraySize).eInverseAdd(this,
+						LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, msgs);
+			}
 			msgs = basicSetArraySize(newArraySize, msgs);
-			if (msgs != null) msgs.dispatch();
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, newArraySize, newArraySize));
 		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, newArraySize, newArraySize));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public DataType getType() {
 		if (type != null && type.eIsProxy()) {
-			InternalEObject oldType = (InternalEObject)type;
-			type = (DataType)eResolveProxy(oldType);
-			if (type != oldType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE, oldType, type));
+			final InternalEObject oldType = (InternalEObject) type;
+			type = (DataType) eResolveProxy(oldType);
+			if ((type != oldType) && eNotificationRequired()) {
+				eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+						MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE, oldType, type));
 			}
 		}
 		return type;
@@ -461,6 +544,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public DataType basicGetType() {
@@ -469,63 +553,72 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setType(DataType newType) {
-		DataType oldType = type;
+	public void setType(final DataType newType) {
+		final DataType oldType = type;
 		type = newType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE, oldType, type));
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE, oldType, type));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getTypeName() {
-		org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();
-		if(type != null){
+		final org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();
+		if (type != null) {
 			return type.getName();
 		}
 		return null;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public boolean validateType(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics,
+				context);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this,
+				diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EList<With> getWiths() {
 		if (withs == null) {
-			withs = new EObjectWithInverseResolvingEList<>(With.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS, LibraryElementPackage.WITH__VARIABLES);
+			withs = new EObjectWithInverseResolvingEList<>(With.class, this,
+					MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS, LibraryElementPackage.WITH__VARIABLES);
 		}
 		return withs;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -535,6 +628,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -543,18 +637,18 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public void setVisible(final boolean visible) {
-		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);
+		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this, visible);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -563,18 +657,19 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setAttribute(final String attributeName, final DataType type, final String value, final String comment) {
+	public void setAttribute(final String attributeName, final DataType type, final String value,
+			final String comment) {
 		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -583,8 +678,8 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -593,8 +688,8 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -603,8 +698,8 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -614,316 +709,318 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseAdd(final InternalEObject otherEnd, final int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputConnections()).basicAdd(otherEnd, msgs);
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputConnections()).basicAdd(otherEnd, msgs);
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
-				if (arraySize != null)
-					msgs = ((InternalEObject)arraySize).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, null, msgs);
-				return basicSetArraySize((ArraySize)otherEnd, msgs);
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getWiths()).basicAdd(otherEnd, msgs);
-			default:
-				return super.eInverseAdd(otherEnd, featureID, msgs);
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
-				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
-				return ((InternalEList<?>)getInputConnections()).basicRemove(otherEnd, msgs);
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
-				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
-				return basicSetArraySize(null, msgs);
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
-				return ((InternalEList<?>)getWiths()).basicRemove(otherEnd, msgs);
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
-				return basicSetValue(null, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME:
-				return getName();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT:
-				return getComment();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
-				return getAttributes();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT:
-				return isIsInput();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
-				return getInputConnections();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
-				return getOutputConnections();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
-				if (resolve) return getType();
-				return basicGetType();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
-				if (resolve) return getArraySize();
-				return basicGetArraySize();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
-				return getWiths();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
-				if (resolve) return getValue();
-				return basicGetValue();
-			default:
-				return super.eGet(featureID, resolve, coreType);
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME:
-				setName((String)newValue);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT:
-				setComment((String)newValue);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
-				getAttributes().clear();
-				getAttributes().addAll((Collection<? extends Attribute>)newValue);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT:
-				setIsInput((Boolean)newValue);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
-				getInputConnections().clear();
-				getInputConnections().addAll((Collection<? extends Connection>)newValue);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
-				getOutputConnections().clear();
-				getOutputConnections().addAll((Collection<? extends Connection>)newValue);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
-				setType((DataType)newValue);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
-				setArraySize((ArraySize)newValue);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
-				getWiths().clear();
-				getWiths().addAll((Collection<? extends With>)newValue);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
-				setValue((Value)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void eUnset(int featureID) {
-		switch (featureID) {
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT:
-				setComment(COMMENT_EDEFAULT);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
-				getAttributes().clear();
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT:
-				setIsInput(IS_INPUT_EDEFAULT);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
-				getInputConnections().clear();
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
-				getOutputConnections().clear();
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
-				setType((DataType)null);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
-				setArraySize((ArraySize)null);
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
-				getWiths().clear();
-				return;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
-				setValue((Value)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT:
-				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
-				return attributes != null && !attributes.isEmpty();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT:
-				return isInput != IS_INPUT_EDEFAULT;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
-				return inputConnections != null && !inputConnections.isEmpty();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
-				return outputConnections != null && !outputConnections.isEmpty();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
-				return type != null;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
-				return arraySize != null;
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
-				return withs != null && !withs.isEmpty();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
-				return value != null;
-			default:
-				return super.eIsSet(featureID);
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == INamedElement.class) {
-			switch (derivedFeatureID) {
-				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME: return LibraryElementPackage.INAMED_ELEMENT__NAME;
-				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT: return LibraryElementPackage.INAMED_ELEMENT__COMMENT;
-				default: return -1;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getInputConnections()).basicAdd(otherEnd, msgs);
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getOutputConnections()).basicAdd(otherEnd,
+					msgs);
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
+			if (arraySize != null) {
+				msgs = ((InternalEObject) arraySize).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE, null,
+						msgs);
 			}
+			return basicSetArraySize((ArraySize) otherEnd, msgs);
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getWiths()).basicAdd(otherEnd, msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID,
+			final NotificationChain msgs) {
+		return switch (featureID) {
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES -> ((InternalEList<?>) getAttributes()).basicRemove(otherEnd, msgs);
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS -> ((InternalEList<?>) getInputConnections()).basicRemove(otherEnd, msgs);
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS -> ((InternalEList<?>) getOutputConnections()).basicRemove(otherEnd, msgs);
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE -> basicSetArraySize(null, msgs);
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS -> ((InternalEList<?>) getWiths()).basicRemove(otherEnd, msgs);
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE -> basicSetValue(null, msgs);
+		default -> super.eInverseRemove(otherEnd, featureID, msgs);
+		};
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+		switch (featureID) {
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME:
+			return getName();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT:
+			return getComment();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
+			return getAttributes();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT:
+			return isIsInput();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
+			return getInputConnections();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
+			return getOutputConnections();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
+			if (resolve) {
+				return getType();
+			}
+			return basicGetType();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
+			if (resolve) {
+				return getArraySize();
+			}
+			return basicGetArraySize();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
+			return getWiths();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
+			if (resolve) {
+				return getValue();
+			}
+			return basicGetValue();
+		default:
+			return super.eGet(featureID, resolve, coreType);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void eSet(final int featureID, final Object newValue) {
+		switch (featureID) {
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME:
+			setName((String) newValue);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT:
+			setComment((String) newValue);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
+			getAttributes().clear();
+			getAttributes().addAll((Collection<? extends Attribute>) newValue);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT:
+			setIsInput((Boolean) newValue);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
+			getInputConnections().clear();
+			getInputConnections().addAll((Collection<? extends Connection>) newValue);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
+			getOutputConnections().clear();
+			getOutputConnections().addAll((Collection<? extends Connection>) newValue);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
+			setType((DataType) newValue);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
+			setArraySize((ArraySize) newValue);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
+			getWiths().clear();
+			getWiths().addAll((Collection<? extends With>) newValue);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
+			setValue((Value) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public void eUnset(final int featureID) {
+		switch (featureID) {
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT:
+			setComment(COMMENT_EDEFAULT);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES:
+			getAttributes().clear();
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT:
+			setIsInput(IS_INPUT_EDEFAULT);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS:
+			getInputConnections().clear();
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS:
+			getOutputConnections().clear();
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE:
+			setType((DataType) null);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE:
+			setArraySize((ArraySize) null);
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS:
+			getWiths().clear();
+			return;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE:
+			setValue((Value) null);
+			return;
+		default:
+			super.eUnset(featureID);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public boolean eIsSet(final int featureID) {
+		return switch (featureID) {
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME -> NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT -> COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES -> attributes != null && !attributes.isEmpty();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT -> isInput != IS_INPUT_EDEFAULT;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS -> inputConnections != null && !inputConnections.isEmpty();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS -> outputConnections != null && !outputConnections.isEmpty();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE -> type != null;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE -> arraySize != null;
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS -> withs != null && !withs.isEmpty();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE -> value != null;
+		default -> super.eIsSet(featureID);
+		};
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(final int derivedFeatureID, final Class<?> baseClass) {
+		if (baseClass == INamedElement.class) {
+			return switch (derivedFeatureID) {
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME -> LibraryElementPackage.INAMED_ELEMENT__NAME;
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT -> LibraryElementPackage.INAMED_ELEMENT__COMMENT;
+			default -> -1;
+			};
 		}
 		if (baseClass == ITypedElement.class) {
-			switch (derivedFeatureID) {
-				default: return -1;
-			}
+			return switch (derivedFeatureID) {
+			default -> -1;
+			};
 		}
 		if (baseClass == ConfigurableObject.class) {
-			switch (derivedFeatureID) {
-				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES: return LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
-				default: return -1;
-			}
+			return switch (derivedFeatureID) {
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES -> LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
+			default -> -1;
+			};
 		}
 		if (baseClass == HiddenElement.class) {
-			switch (derivedFeatureID) {
-				default: return -1;
-			}
+			return switch (derivedFeatureID) {
+			default -> -1;
+			};
 		}
 		if (baseClass == IInterfaceElement.class) {
-			switch (derivedFeatureID) {
-				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT: return LibraryElementPackage.IINTERFACE_ELEMENT__IS_INPUT;
-				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS: return LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS;
-				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS: return LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
-				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE: return LibraryElementPackage.IINTERFACE_ELEMENT__TYPE;
-				default: return -1;
-			}
+			return switch (derivedFeatureID) {
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT -> LibraryElementPackage.IINTERFACE_ELEMENT__IS_INPUT;
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS -> LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS;
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS -> LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE -> LibraryElementPackage.IINTERFACE_ELEMENT__TYPE;
+			default -> -1;
+			};
 		}
 		if (baseClass == VarDeclaration.class) {
-			switch (derivedFeatureID) {
-				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE: return LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE;
-				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS: return LibraryElementPackage.VAR_DECLARATION__WITHS;
-				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE: return LibraryElementPackage.VAR_DECLARATION__VALUE;
-				default: return -1;
-			}
+			return switch (derivedFeatureID) {
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE -> LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE;
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS -> LibraryElementPackage.VAR_DECLARATION__WITHS;
+			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE -> LibraryElementPackage.VAR_DECLARATION__VALUE;
+			default -> -1;
+			};
 		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+	public int eDerivedStructuralFeatureID(final int baseFeatureID, final Class<?> baseClass) {
 		if (baseClass == INamedElement.class) {
-			switch (baseFeatureID) {
-				case LibraryElementPackage.INAMED_ELEMENT__NAME: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME;
-				case LibraryElementPackage.INAMED_ELEMENT__COMMENT: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT;
-				default: return -1;
-			}
+			return switch (baseFeatureID) {
+			case LibraryElementPackage.INAMED_ELEMENT__NAME -> MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__NAME;
+			case LibraryElementPackage.INAMED_ELEMENT__COMMENT -> MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__COMMENT;
+			default -> -1;
+			};
 		}
 		if (baseClass == ITypedElement.class) {
-			switch (baseFeatureID) {
-				default: return -1;
-			}
+			return switch (baseFeatureID) {
+			default -> -1;
+			};
 		}
 		if (baseClass == ConfigurableObject.class) {
-			switch (baseFeatureID) {
-				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES;
-				default: return -1;
-			}
+			return switch (baseFeatureID) {
+			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES -> MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES;
+			default -> -1;
+			};
 		}
 		if (baseClass == HiddenElement.class) {
-			switch (baseFeatureID) {
-				default: return -1;
-			}
+			return switch (baseFeatureID) {
+			default -> -1;
+			};
 		}
 		if (baseClass == IInterfaceElement.class) {
-			switch (baseFeatureID) {
-				case LibraryElementPackage.IINTERFACE_ELEMENT__IS_INPUT: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT;
-				case LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS;
-				case LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS;
-				case LibraryElementPackage.IINTERFACE_ELEMENT__TYPE: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE;
-				default: return -1;
-			}
+			return switch (baseFeatureID) {
+			case LibraryElementPackage.IINTERFACE_ELEMENT__IS_INPUT -> MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT;
+			case LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS -> MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS;
+			case LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS -> MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS;
+			case LibraryElementPackage.IINTERFACE_ELEMENT__TYPE -> MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__TYPE;
+			default -> -1;
+			};
 		}
 		if (baseClass == VarDeclaration.class) {
-			switch (baseFeatureID) {
-				case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE;
-				case LibraryElementPackage.VAR_DECLARATION__WITHS: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS;
-				case LibraryElementPackage.VAR_DECLARATION__VALUE: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE;
-				default: return -1;
-			}
+			return switch (baseFeatureID) {
+			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE -> MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ARRAY_SIZE;
+			case LibraryElementPackage.VAR_DECLARATION__WITHS -> MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS;
+			case LibraryElementPackage.VAR_DECLARATION__VALUE -> MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__VALUE;
+			default -> -1;
+			};
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(", comment: "); //$NON-NLS-1$
@@ -945,14 +1042,14 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	}
 
 	@Override
-	public void setVarConfig(boolean config) {
+	public void setVarConfig(final boolean config) {
 		// TODO Auto-generated method stub
 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -961,8 +1058,8 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -971,18 +1068,20 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean validateVarInOutSourceTypeIsWellDefined(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutSourceTypeIsWellDefined(this, diagnostics, context);
+	public boolean validateVarInOutSourceTypeIsWellDefined(final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations
+				.validateVarInOutSourceTypeIsWellDefined(this, diagnostics, context);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -991,23 +1090,50 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean validateMultipleInputConnections(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateMultipleInputConnections(this, diagnostics, context);
+	public boolean validateMultipleInputConnections(final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations
+				.validateMultipleInputConnections(this, diagnostics, context);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public boolean validateNoValueForGenericTypeVariable(final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations
+				.validateNoValueForGenericTypeVariable(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public boolean validateValueForGenericInstanceVariable(final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations
+				.validateValueForGenericInstanceVariable(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public boolean validateVarInOutIsWithed(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutIsWithed(this, diagnostics, context);
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations
+				.validateVarInOutIsWithed(this, diagnostics, context);
 	}
 
 } // AdapterMonitoringVarDeclarationImpl
