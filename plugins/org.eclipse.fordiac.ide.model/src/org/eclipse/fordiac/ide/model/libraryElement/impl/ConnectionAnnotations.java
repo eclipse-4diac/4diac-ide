@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
@@ -71,7 +72,8 @@ public class ConnectionAnnotations {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_DESTINATION,
-						MessageFormat.format(Messages.ConnectionAnnotations_DestinationElementMissing, element.getName()),
+						MessageFormat.format(Messages.ConnectionAnnotations_DestinationElementMissing,
+								element.getName()),
 						FordiacMarkerHelper.getDiagnosticData(connection,
 								LibraryElementPackage.Literals.CONNECTION__DESTINATION)));
 			}
@@ -86,7 +88,8 @@ public class ConnectionAnnotations {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_DESTINATION_ENDPOINT,
-						MessageFormat.format(Messages.ConnectionAnnotations_DestinationEndpointMissing, endpoint.getName()),
+						MessageFormat.format(Messages.ConnectionAnnotations_DestinationEndpointMissing,
+								endpoint.getName()),
 						FordiacMarkerHelper.getDiagnosticData(connection,
 								LibraryElementPackage.Literals.CONNECTION__DESTINATION)));
 			}
@@ -132,9 +135,7 @@ public class ConnectionAnnotations {
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		final var source = connection.getSource();
 		final var destination = connection.getDestination();
-		if (source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()
-				&& source.getFBNetworkElement().isMapped() && destination instanceof final VarDeclaration destinationVar
-				&& destinationVar.isInOutVar() && destination.getFBNetworkElement().isMapped()) {
+		if (isInOutVarOfMappedFB(source) && isInOutVarOfMappedFB(destination)) {
 			final var sourceResource = source.getFBNetworkElement().getResource();
 			final var destinationResource = destination.getFBNetworkElement().getResource();
 			if (sourceResource != destinationResource) { // Error, VarInOut crosses boundaries
@@ -148,6 +149,11 @@ public class ConnectionAnnotations {
 			}
 		}
 		return true;
+	}
+
+	private static boolean isInOutVarOfMappedFB(final IInterfaceElement ie) {
+		return ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && ie.getFBNetworkElement() != null
+				&& ie.getFBNetworkElement().isMapped();
 	}
 
 	public static boolean validateVarInOutArraySizesAreCompatible(@NonNull final Connection connection,
