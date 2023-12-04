@@ -44,6 +44,8 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -403,7 +405,11 @@ public abstract class CommonElementImporter {
 
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (typeName != null) {
-			attribute.setType(getDataTypeLibrary().getType(typeName));
+			if (typeName.equals(HelperTypes.CDATA.getName())) {
+				attribute.setType(HelperTypes.CDATA);
+			} else {
+				attribute.setType(getDataTypeLibrary().getType(typeName));
+			}
 		} else {
 			final AttributeTypeEntry attributeTypeEntry = getTypeLibrary().getAttributeTypeEntry(attribute.getName());
 			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
@@ -413,7 +419,11 @@ public abstract class CommonElementImporter {
 		}
 
 		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
-		if (null == value) { // we don't have a value attribute check for a CData value
+		if (value == null && attribute.getType() == ElementaryTypes.WSTRING) {
+			// old CDATA value
+			attribute.setType(HelperTypes.CDATA);
+		}
+		if (HelperTypes.CDATA == attribute.getType()) {
 			value = readCDataSection();
 		}
 		attribute.setValue(value);

@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.data.DateType;
 import org.eclipse.fordiac.ide.model.data.DintType;
 import org.eclipse.fordiac.ide.model.data.DwordType;
 import org.eclipse.fordiac.ide.model.data.IntType;
+import org.eclipse.fordiac.ide.model.data.InternalDataType;
 import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
 import org.eclipse.fordiac.ide.model.data.LintType;
@@ -253,6 +254,19 @@ public final class IecTypes {
 			throw new UnsupportedOperationException();
 		}
 
+	}
+
+	public static final class HelperTypes {
+		public static final InternalDataType CDATA = DataFactory.eINSTANCE.createInternalDataType();
+
+		static {
+			CDATA.setName("CDATA"); //$NON-NLS-1$
+			addTypeToResource(CDATA);
+		}
+
+		private HelperTypes() {
+			throw new UnsupportedOperationException();
+		}
 	}
 
 	private static final String IEC_DATA_LIB_URI = "data.lib"; //$NON-NLS-1$
