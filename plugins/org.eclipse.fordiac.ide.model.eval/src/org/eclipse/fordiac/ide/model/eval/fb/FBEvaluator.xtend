@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.fb
 
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
+import org.eclipse.fordiac.ide.model.eval.EvaluatorException
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
@@ -46,7 +47,7 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	/**
 	 * Evaluate a single event
 	 */
-	def abstract void evaluate(Event event)
+	def abstract void evaluate(Event event) throws EvaluatorException, InterruptedException
 
 	/**
 	 * Determine if the event is applicable to the current evaluator

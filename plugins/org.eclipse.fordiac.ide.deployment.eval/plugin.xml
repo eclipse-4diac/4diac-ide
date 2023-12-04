@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.fordiac.ide.model.eval.factory">
+      <factory
+            class="org.eclipse.fordiac.ide.deployment.eval.DeploymentEvaluatorFactory">
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType">
+         </source>
+      </factory>
+   </extension>
+
+</plugin>
