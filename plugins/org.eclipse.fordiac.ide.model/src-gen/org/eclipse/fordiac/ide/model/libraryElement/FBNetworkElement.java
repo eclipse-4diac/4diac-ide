@@ -203,4 +203,12 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 */
 	boolean validateName(DiagnosticChain diagnostics, Map<Object, Object> context);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getQualifiedName();
+
 } // FBNetworkElement

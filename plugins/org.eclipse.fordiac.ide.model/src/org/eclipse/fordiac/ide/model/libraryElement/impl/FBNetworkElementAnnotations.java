@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public final class FBNetworkElementAnnotations {
 	private static final String NAMED_ELEMENTS_KEY = FBNetworkElementAnnotations.class.getName() + ".NAMED_ELEMENTS"; //$NON-NLS-1$
@@ -37,5 +38,23 @@ public final class FBNetworkElementAnnotations {
 
 	private FBNetworkElementAnnotations() {
 		throw new UnsupportedOperationException();
+	}
+
+	public static String getQualifiedName(final FBNetworkElement element) {
+		final INamedElement namedContainer = NamedElementAnnotations.getNamedContainer(element);
+		if (namedContainer != null && namedContainer.eContainer() != null) {
+			return namedContainer.getQualifiedName() + NamedElementAnnotations.QUALIFIED_NAME_DELIMITER
+					+ getFBNetworkElementName(element);
+		}
+		return getFBNetworkElementName(element);
+	}
+
+	private static String getFBNetworkElementName(final FBNetworkElement element) {
+		if (element.isMapped() && element.getMapping().getTo() == element) {
+			// we are mapped and this FBNetworkelement is the resource mirror, return the
+			// opposites full qualified name (e.g., App1.Subapp1.FBName)
+			return element.getOpposite().getQualifiedName();
+		}
+		return element.getName();
 	}
 }

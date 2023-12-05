@@ -417,6 +417,8 @@
         <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/validateName/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/validateName/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getQualifiedName"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementAnnotations.getQualifiedName(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/interfaceList"/>

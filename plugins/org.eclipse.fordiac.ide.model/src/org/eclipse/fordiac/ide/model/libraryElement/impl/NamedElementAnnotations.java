@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 
 public final class NamedElementAnnotations {
-	private static final String QUALIFIED_NAME_DELIMITER = "."; //$NON-NLS-1$
+	static final String QUALIFIED_NAME_DELIMITER = "."; //$NON-NLS-1$
 
 	/**
 	 * Do not call directly! Use {@link INamedElement#getQualifiedName()} instead.
