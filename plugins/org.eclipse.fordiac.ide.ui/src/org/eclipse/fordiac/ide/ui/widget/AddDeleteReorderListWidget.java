@@ -116,7 +116,11 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 				Collections.reverse(rowObjects);
 				executeCompoundCommandForList(table, rowObjects, executor, commandProvider);
 				for (final int row : rows) {
-					selectionLayer.selectRow(0, row + 1, false, true);
+					if (row == dataProvider.getRowCount() - 1) {
+						selectionLayer.selectRow(0, row, false, true);
+					} else {
+						selectionLayer.selectRow(0, row + 1, false, true);
+					}
 				}
 			}
 		};

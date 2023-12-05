@@ -218,7 +218,11 @@ public class AddDeleteWidget {
 			if (!rowObjects.isEmpty()) {
 				executeCompoundCommandForList(table, rowObjects, executor, commandProvider);
 				for (final int row : rows) {
-					selectionLayer.selectRow(0, row - 1, false, true);
+					if (row == 0) {
+						selectionLayer.selectRow(0, row, false, true);
+					} else {
+						selectionLayer.selectRow(0, row - 1, false, true);
+					}
 				}
 			}
 		};

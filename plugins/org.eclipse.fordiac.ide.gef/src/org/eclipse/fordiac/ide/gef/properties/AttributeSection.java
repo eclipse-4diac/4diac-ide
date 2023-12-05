@@ -19,6 +19,7 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
@@ -27,9 +28,9 @@ import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.change.IndexUpDown;
 import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteAttributeCommand;
+import org.eclipse.fordiac.ide.model.data.InternalDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
@@ -43,6 +44,7 @@ import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.bindings.keys.KeyStroke;
@@ -110,8 +112,22 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		buttons.bindToTableViewer(table, this,
 				ref -> CreateAttributeCommand.forTemplate(getType(), getLastSelectedAttribute(), getInsertionIndex()),
 				ref -> new DeleteAttributeCommand(getType(), getLastSelectedAttribute()),
-				ref -> new ChangeAttributeOrderCommand(getType(), (Attribute) ref, IndexUpDown.UP),
-				ref -> new ChangeAttributeOrderCommand(getType(), (Attribute) ref, IndexUpDown.DOWN));
+				ref -> new ChangeAttributeOrderCommand(getType(), (Attribute) ref,
+						getNeighbourListItem((Attribute) ref, true)),
+				ref -> new ChangeAttributeOrderCommand(getType(), (Attribute) ref,
+						getNeighbourListItem((Attribute) ref, false)));
+	}
+
+	private Attribute getNeighbourListItem(final Attribute ref, final boolean above) {
+		final List<Attribute> filtered = getType().getAttributes().stream()
+				.filter(att -> !(att.getType() instanceof InternalDataType)).toList();
+		int idx = filtered.indexOf(ref);
+		if (above) {
+			idx = idx > 0 ? idx - 1 : 0;
+		} else {
+			idx = idx < filtered.size() - 1 ? idx + 1 : filtered.size() - 1;
+		}
+		return filtered.get(idx);
 	}
 
 	private int getInsertionIndex() {
@@ -126,6 +142,14 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		return (Attribute) NatTableWidgetFactory.getLastSelectedVariable(table);
 	}
 
+	private List<Attribute> getFilteredAttributeList() {
+		final ConfigurableObject confObject = getType();
+		return confObject != null
+				? confObject.getAttributes().stream().filter(att -> !(att.getType() instanceof InternalDataType))
+						.toList()
+				: Collections.emptyList();
+	}
+
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof final Attribute attribute) {
@@ -137,9 +161,15 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	public void refresh() {
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		provider.setInput(getType() != null ? getType().getAttributes() : Collections.emptyList());
+		provider.setInput(getFilteredAttributeList());
 		commandStack = commandStackBuffer;
 		table.refresh();
+	}
+
+	@Override
+	public void executeCommand(final Command cmd) {
+		super.executeCommand(cmd);
+		provider.setInput(getFilteredAttributeList());
 	}
 
 	@Override
@@ -167,8 +197,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 
 	@Override
 	protected void setInputInit() {
-		final ConfigurableObject currentType = getType();
-		provider.setInput(currentType != null ? currentType.getAttributes() : Collections.emptyList());
+		provider.setInput(getFilteredAttributeList());
 		table.refresh();
 	}
 
