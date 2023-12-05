@@ -490,6 +490,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			if (dataTypeEntry.getTypeEditable() instanceof final StructuredType structType) {
 				structComposite.setStructType(structType);
 			}
+			commandStack.flush();
 			addListenerToDataTypeObj();
 		} catch (final PartInitException e) {
 			FordiacLogHelper

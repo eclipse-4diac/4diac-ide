@@ -397,6 +397,7 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 					&& attributeTypeEntry.getTypeEditable().getType() instanceof final StructuredType structType) {
 				structComposite.setStructType(structType);
 			}
+			commandStack.flush();
 			addListenerToAttributeDeclaration();
 		} catch (final PartInitException e) {
 			FordiacLogHelper
