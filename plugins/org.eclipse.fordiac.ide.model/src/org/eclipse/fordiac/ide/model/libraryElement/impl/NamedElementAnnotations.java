@@ -39,7 +39,7 @@ public final class NamedElementAnnotations {
 	 */
 	public static String getQualifiedName(final INamedElement element) {
 		final INamedElement namedContainer = getNamedContainer(element);
-		if (namedContainer != null) {
+		if (namedContainer != null && namedContainer.eContainer() != null) {
 			return namedContainer.getQualifiedName() + QUALIFIED_NAME_DELIMITER + element.getName();
 		}
 		return element.getName();

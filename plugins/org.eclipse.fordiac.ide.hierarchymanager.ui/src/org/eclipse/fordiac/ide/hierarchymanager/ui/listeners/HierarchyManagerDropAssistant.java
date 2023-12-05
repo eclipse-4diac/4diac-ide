@@ -55,8 +55,7 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 		if ((getCurrentEvent().data instanceof final TreeSelection selection)
 				&& (selection.getFirstElement() instanceof final SubApp subapp)) {
 			final RootLevel root = (RootLevel) EcoreUtil.getRootContainer((Level) target);
-			if (root != null && root.getLevels().stream()
-					.anyMatch(l -> hasChild(l, CreateLeafOperation.getSubAppHierName(subapp)))) {
+			if (root != null && root.getLevels().stream().anyMatch(l -> hasChild(l, subapp.getQualifiedName()))) {
 				return Status.CANCEL_STATUS;
 			}
 		}
