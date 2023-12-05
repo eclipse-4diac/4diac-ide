@@ -24,10 +24,10 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -96,13 +96,12 @@ public class SystemExporter extends AbstractTypeExporter {
 
 	private void addMapping() throws XMLStreamException {
 		for (final Mapping mappingEntry : getType().getMapping()) {
-			final String fromString = FBNetworkHelper.getFullHierarchicalName(mappingEntry.getFrom());
-			final String toString = FBNetworkHelper.getFullHierarchicalName(mappingEntry.getTo());
-
-			if ((null != fromString) && (null != toString)) {
+			final var resource = mappingEntry.getTo().getResource();
+			if (resource != null) {
 				addEmptyStartElement(LibraryElementTags.MAPPING_ELEMENT);
-				getWriter().writeAttribute(LibraryElementTags.MAPPING_FROM_ATTRIBUTE, fromString);
-				getWriter().writeAttribute(LibraryElementTags.MAPPING_TO_ATTRIBUTE, toString);
+				getWriter().writeAttribute(LibraryElementTags.MAPPING_FROM_ATTRIBUTE,
+						mappingEntry.getFrom().getQualifiedName());
+				getWriter().writeAttribute(LibraryElementTags.MAPPING_TO_ATTRIBUTE, resource.getQualifiedName());
 			}
 		}
 	}
@@ -144,7 +143,16 @@ public class SystemExporter extends AbstractTypeExporter {
 				addNameTypeCommentAttribute(resource, resource.getType());
 				addXYAttributes(0, 0);
 				addParamsConfig(resource.getVarDeclarations());
-				new FBNetworkExporter(this).createFBNetworkElement(resource.getFBNetwork());
+				final var resNetworkExporter = new FBNetworkExporter(this) {
+					@Override
+					protected String getFBNElementName(final FBNetworkElement fbnElement) {
+						if (fbnElement.isMapped()) {
+							return fbnElement.getOpposite().getQualifiedName();
+						}
+						return super.getFBNElementName(fbnElement);
+					}
+				};
+				resNetworkExporter.createFBNetworkElement(resource.getFBNetwork());
 				addAttributes(resource.getAttributes());
 				addEndElement();
 			}
