@@ -17,6 +17,7 @@ import java.text.MessageFormat;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -106,8 +107,9 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 	private CompositeChange createStructDataChange(final StructuredType type) {
 		InstanceSearch search = StructDataTypeSearch
 				.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable());
+		final IProject project = typeEntry.getFile().getProject();
 
-		final Set<INamedElement> allFBWithStruct = InstanceSearch.performSearch(
+		final Set<INamedElement> allFBWithStruct = InstanceSearch.performProjectSearch(project,
 				StructDataTypeSearch.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable()),
 				StructDataTypeSearch.createStructInterfaceSearch((StructuredType) typeEntry.getTypeEditable()),
 				new FBInstanceSearch((DataTypeEntry) typeEntry));
@@ -137,7 +139,8 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		parentChange.add(new UpdateTypeEntryChange(file, typeEntry, newName, oldName));
 		Set<INamedElement> allFBs;
 		final CompositeChange change = new CompositeChange(Messages.Refactoring_AffectedInstancesOfFB);
-		allFBs = InstanceSearch.performSearch(FBTypeSearch.createFBTypeSearch(type));
+		IProject project = type.getTypeEntry().getFile().getProject();
+		allFBs = InstanceSearch.performProjectSearch(project, FBTypeSearch.createFBTypeSearch(type));
 		change.add(new UpdateInstancesChange(allFBs.stream().map(FBNetworkElement.class::cast).toList(), typeEntry));
 		if (!allFBs.isEmpty()) {
 			parentChange.add(change);
