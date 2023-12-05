@@ -28,6 +28,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.util.Collections;
+
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -85,9 +87,8 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 	@Override
 	protected void setInputInit() {
 		final BaseFBType currentType = getType();
-		if (currentType != null) {
-			provider.setInput(currentType.getInternalVars());
-		}
+		provider.setInput(currentType != null ? currentType.getInternalVars() : Collections.emptyList());
+		table.refresh();
 	}
 
 	private int getInsertionIndex() {
