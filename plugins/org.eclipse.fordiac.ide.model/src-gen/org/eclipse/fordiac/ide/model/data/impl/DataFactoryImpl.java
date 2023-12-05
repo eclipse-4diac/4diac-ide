@@ -126,6 +126,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 			case DataPackage.TIME_OF_DAY_TYPE: return createTimeOfDayType();
 			case DataPackage.LTOD_TYPE: return createLtodType();
 			case DataPackage.LDATE_TYPE: return createLdateType();
+			case DataPackage.INTERNAL_DATA_TYPE: return createInternalDataType();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -764,6 +765,17 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	public LdateType createLdateType() {
 		LdateTypeImpl ldateType = new LdateTypeImpl();
 		return ldateType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public InternalDataType createInternalDataType() {
+		InternalDataTypeImpl internalDataType = new InternalDataTypeImpl();
+		return internalDataType;
 	}
 
 	/**

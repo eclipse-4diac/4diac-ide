@@ -1105,6 +1105,7 @@
         <genParameters ecoreParameter="data.ecore#//LdateType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
+    <genClasses ecoreClass="data.ecore#//InternalDataType"/>
   </genPackages>
   <genPackages prefix="Buildpath" basePackage="org.eclipse.fordiac.ide.model" resource="XML"
       disposableProviderFactory="true" ecorePackage="buildpath.ecore#/">

@@ -310,6 +310,10 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 				return createLdateTypeAdapter();
 			}
 			@Override
+			public Adapter caseInternalDataType(InternalDataType object) {
+				return createInternalDataTypeAdapter();
+			}
+			@Override
 			public Adapter caseINamedElement(INamedElement object) {
 				return createINamedElementAdapter();
 			}
@@ -1122,6 +1126,20 @@ public class DataAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createLdateTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.data.InternalDataType <em>Internal Data Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.data.InternalDataType
+	 * @generated
+	 */
+	public Adapter createInternalDataTypeAdapter() {
 		return null;
 	}
 
