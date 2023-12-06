@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElemen
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -136,7 +137,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 	}
 
 	private static void addUpdateStructManipulatorChanges(final CompositeChange parentChange,
-	        final StructuredType struct) {
+			final StructuredType struct) {
 		// @formatter:off
 		final StructDataTypeSearch search = StructDataTypeSearch.createStructManipulatorSearch(struct);
 		SystemManager.INSTANCE.getProjectSystems(struct.getTypeEntry().getFile().getProject()).stream()
@@ -160,23 +161,22 @@ public class SafeStructDeletionChange extends CompositeChange {
 	}
 
 	private static void addFbTypeInstances(final DeleteFBTypeInterfaceChange updateFBTypeChange,
-	        final CompositeChange parentChange, final StructuredType struct) {
+			final CompositeChange parentChange, final StructuredType struct) {
 
 		final FBType fbType = updateFBTypeChange.getFBType();
 		final var fbInstances = new FBInstanceSearch(fbType)
-		        .performProjectSearch(fbType.getTypeEntry().getFile().getProject());
+				.performProjectSearch(fbType.getTypeEntry().getFile().getProject());
 
-		fbInstances.forEach(fbn ->
-			{
-				updateFBTypeChange.add(new UpdateInstancesChange((FBNetworkElement) fbn));
-			});
+		fbInstances.forEach(fbn -> {
+			updateFBTypeChange.add(new UpdateInstancesChange((FBNetworkElement) fbn));
+		});
 
 		parentChange.add(updateFBTypeChange);
 
 	}
 
 	private static void addUpdateUntypedSubappPinChanges(final CompositeChange parentChange,
-	        final StructuredType struct) {
+			final StructuredType struct) {
 		// @formatter:off
 		StructDataTypeSearch.createStructSubappPinSearch(struct).performCompleteSearch().stream()
 			.map(SubApp.class::cast)
@@ -192,7 +192,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 		public DeleteMemberVariableChange(final TypeEntry entry, final String deleteName) {
 			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteMemberVariable,
-			        entry.getTypeName()));
+					entry.getTypeName()));
 			this.entry = entry;
 			this.deleteName = deleteName;
 			if (!hasOpenEditor(entry.getType())) {
@@ -242,7 +242,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 		public DeleteUntypedSubappPinsChange(final SubApp subapp, final StructuredType struct) {
 			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteSubappPins,
-			        subapp.getQualifiedName()));
+					subapp.getQualifiedName()));
 			this.subapp = subapp;
 			this.struct = struct;
 			// could be problematic because as far as i know there is no "update FBs" dialog
@@ -263,9 +263,10 @@ public class SafeStructDeletionChange extends CompositeChange {
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
 			final CompoundCommand cmd = new CompoundCommand();
+			final String structFullName = PackageNameHelper.getFullTypeName(struct);
 			// @formatter:off
 			subapp.getInterface().getAllInterfaceElements().stream()
-				.filter(ie -> ie.getTypeName().equalsIgnoreCase(struct.getQualifiedName()))
+				.filter(ie -> PackageNameHelper.getFullTypeName(ie.getType()).equalsIgnoreCase(structFullName))
 				.map(DeleteSubAppInterfaceElementCommand::new)
 				.forEach(cmd::add);
 			// @formatter:on
@@ -281,7 +282,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 		public UpdateManipulatorChange(final StructManipulator manipulator) {
 			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateManipulator,
-			        manipulator.getQualifiedName()));
+					manipulator.getQualifiedName()));
 			this.manipulator = manipulator;
 		}
 
@@ -289,7 +290,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 		public Change perform(final IProgressMonitor pm) throws CoreException {
 			final DataTypeLibrary lib = manipulator.getType().getTypeLibrary().getDataTypeLibrary();
 			StructuredType updated = (StructuredType) lib
-			        .getTypeIfExists(manipulator.getStructType().getQualifiedName());
+					.getTypeIfExists(PackageNameHelper.getFullTypeName(manipulator.getStructType()));
 			if (updated == null) {
 				updated = GenericTypes.ANY_STRUCT;
 			}
@@ -320,7 +321,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 		public UpdateUntypedSubappChange(final SubApp subapp, final StructuredType struct) {
 			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateSubappPins,
-			        subapp.getQualifiedName()));
+					subapp.getQualifiedName()));
 			this.subapp = subapp;
 			this.struct = struct;
 			if (!hasOpenEditor(subapp)) {
@@ -354,25 +355,22 @@ public class SafeStructDeletionChange extends CompositeChange {
 	public static void executeChange(final Command cmd, final EObject modelObj, final IProgressMonitor pm) {
 		final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(modelObj));
 		if (rootContainer instanceof final LibraryElement elem) {
-			Display.getDefault().syncExec(() ->
-				{
-					final TypeEntry entry = elem.getTypeEntry();
-					final IEditorPart editor = PlatformUI.getWorkbench()
-					        .getActiveWorkbenchWindow()
-					        .getActivePage()
-					        .findEditor(new FileEditorInput(entry.getFile()));
-					if (editor == null) {
-						cmd.execute();
-						try {
-							entry.save(pm);
-						} catch (final CoreException e) {
-							FordiacLogHelper.logError(e.getMessage(), e);
-						}
-					} else {
-						editor.getAdapter(CommandStack.class).execute(cmd);
-						editor.doSave(pm);
+			Display.getDefault().syncExec(() -> {
+				final TypeEntry entry = elem.getTypeEntry();
+				final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						.findEditor(new FileEditorInput(entry.getFile()));
+				if (editor == null) {
+					cmd.execute();
+					try {
+						entry.save(pm);
+					} catch (final CoreException e) {
+						FordiacLogHelper.logError(e.getMessage(), e);
 					}
-				});
+				} else {
+					editor.getAdapter(CommandStack.class).execute(cmd);
+					editor.doSave(pm);
+				}
+			});
 		}
 	}
 
