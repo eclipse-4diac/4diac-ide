@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabs">
+      <tab
+            class="org.eclipse.fordiac.ide.deployment.debug.ui.runtime.RuntimeLaunchConfigurationTab"
+            group="org.eclipse.fordiac.ide.debug.ui.simpleFBLaunchConfigurationTabGroup"
+            id="org.eclipse.fordiac.ide.deployment.debug.ui.runtimeTab"
+            name="Runtime">
+         <placement
+               after="org.eclipse.fordiac.ide.debug.ui.mainTab">
+         </placement>
+      </tab>
+      <tab
+            class="org.eclipse.fordiac.ide.deployment.debug.ui.runtime.RuntimeLaunchConfigurationTab"
+            group="org.eclipse.fordiac.ide.debug.ui.basicFBLaunchConfigurationTabGroup"
+            id="org.eclipse.fordiac.ide.deployment.debug.ui.runtimeTab"
+            name="Runtime">
+         <placement
+               after="org.eclipse.fordiac.ide.debug.ui.mainTab">
+         </placement>
+      </tab>
+   </extension>
+
+</plugin>

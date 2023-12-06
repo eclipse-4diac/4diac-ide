@@ -29,6 +29,8 @@ public final class Messages extends NLS {
 	public static String OpenEditorAction_viewertext;
 	public static String OpenEditorProvider_OpenWithMenu_label;
 	public static String DataTypeDropdown_FB_Types;
+	public static String DeviceTypeSelectionTreeContentProvider_DeviceTypes;
+	public static String ResourceTypeSelectionTreeContentProvider_ResourceTypes;
 
 	static {
 		// initialize resource bundle
