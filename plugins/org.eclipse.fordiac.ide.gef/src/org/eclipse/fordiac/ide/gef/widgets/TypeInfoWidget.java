@@ -270,7 +270,7 @@ public class TypeInfoWidget implements CommandExecutor {
 	}
 
 	public void refresh() {
-		if (null != type) {
+		if (null != type && versionViewer != null && !versionViewer.getControl().isDisposed()) {
 			final Consumer<Command> commandExecutorBuffer = commandExecutor;
 			commandExecutor = null;
 			if (null != type.getIdentification()) {

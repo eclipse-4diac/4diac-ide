@@ -153,28 +153,30 @@ public class PackageInfoWidget extends TypeInfoWidget {
 	@Override
 	public void refresh() {
 		super.refresh();
-		final GraphicalAnnotationModel annotationModel = annotationModelSupplier.get();
-		final Consumer<Command> commandExecutorBuffer = getCommandExecutor();
-		setCommandExecutor(null);
-		if ((getType() != null)) {
-			nameText.setEditable(!isReadonly());
-			nameText.setEnabled(!isReadonly());
-			nameTextProposalAdapter.refresh();
-			buttons.setEnabled(!isReadonly());
-			organizeImportsButton.setEnabled(!isReadonly());
-			packageViewer.getTable().setEnabled(!isReadonly());
+		if (packageViewer != null && !packageViewer.getControl().isDisposed()) {
+			final GraphicalAnnotationModel annotationModel = annotationModelSupplier.get();
+			final Consumer<Command> commandExecutorBuffer = getCommandExecutor();
+			setCommandExecutor(null);
+			if ((getType() != null)) {
+				nameText.setEditable(!isReadonly());
+				nameText.setEnabled(!isReadonly());
+				nameTextProposalAdapter.refresh();
+				buttons.setEnabled(!isReadonly());
+				organizeImportsButton.setEnabled(!isReadonly());
+				packageViewer.getTable().setEnabled(!isReadonly());
 
-			final CompilerInfo compilerInfo = getType().getCompilerInfo();
-			final StyledString nameStyledString = new StyledString(PackageNameHelper.getPackageName(getType()),
-					annotationModel != null && compilerInfo != null
-							? GraphicalAnnotationStyles.getAnnotationStyle(annotationModel.getAnnotations(compilerInfo))
-							: null);
-			nameText.setText(nameStyledString.toString());
-			nameText.setStyleRanges(nameStyledString.getStyleRanges());
-			packageViewer.setInput(getType());
+				final CompilerInfo compilerInfo = getType().getCompilerInfo();
+				final StyledString nameStyledString = new StyledString(PackageNameHelper.getPackageName(getType()),
+						annotationModel != null && compilerInfo != null
+								? GraphicalAnnotationStyles
+										.getAnnotationStyle(annotationModel.getAnnotations(compilerInfo))
+								: null);
+				nameText.setText(nameStyledString.toString());
+				nameText.setStyleRanges(nameStyledString.getStyleRanges());
+				packageViewer.setInput(getType());
+			}
+			setCommandExecutor(commandExecutorBuffer);
 		}
-		setCommandExecutor(commandExecutorBuffer);
-
 	}
 
 	@Override
