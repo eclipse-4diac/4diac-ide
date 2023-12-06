@@ -19,7 +19,7 @@ package org.eclipse.fordiac.ide.gef;
 import org.eclipse.osgi.util.NLS;
 
 /** The Class Messages. */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.gef.messages"; //$NON-NLS-1$
 
@@ -67,6 +67,10 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_ShowPinName;
 	public static String DiagramPreferences_ShowPinComment;
 	public static String DiagramPreferences_ShowConnectedOutputPinName;
+
+	public static String DiagramPreferences_BlockMargins;
+	public static String DiagramPreferences_TopBottom;
+	public static String DiagramPreferences_LeftRight;
 
 	public static String DiagramPreferences_Restart;
 

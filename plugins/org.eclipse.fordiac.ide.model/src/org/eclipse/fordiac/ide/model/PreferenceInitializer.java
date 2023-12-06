@@ -25,5 +25,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 				"org.eclipse.fordiac.ide.model");//$NON-NLS-1$
 		store.setDefault(PreferenceConstants.P_ALLOCATION_SIZE, PreferenceConstants.P_ALLOCATION_SIZE_DEFAULT_VALUE);
+
+		store.setDefault(PreferenceConstants.MARGIN_TOP_BOTTOM, PreferenceConstants.MARGIN_TOP_BOTTOM_DEFAULT_VALUE);
+		store.setDefault(PreferenceConstants.MARGIN_LEFT_RIGHT, PreferenceConstants.MARGIN_LEFT_RIGHT_DEFAULT_VALUE);
 	}
 }
