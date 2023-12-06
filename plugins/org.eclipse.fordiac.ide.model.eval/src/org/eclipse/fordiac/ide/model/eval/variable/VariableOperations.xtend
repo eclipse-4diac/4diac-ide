@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
+import java.util.List
 import java.util.Set
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
@@ -141,6 +142,22 @@ final class VariableOperations {
 			""
 	}
 
+	def static boolean validateValue(VarDeclaration decl, List<String> errors, List<String> warnings,
+		List<String> infos) {
+		if (!decl.simpleInitialValue) {
+			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				try {
+					evaluator.validateVariable(errors, warnings, infos)
+				} catch (Exception e) {
+					false
+				}
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+		} else
+			true
+	}
+
 	def static String validateType(VarDeclaration decl) {
 		if (!decl.arraySize?.value.simpleTypeDeclaration) {
 			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
@@ -155,6 +172,22 @@ final class VariableOperations {
 				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
 		} else
 			""
+	}
+
+	def static boolean validateType(VarDeclaration decl, List<String> errors, List<String> warnings,
+		List<String> infos) {
+		if (!decl.arraySize?.value.simpleTypeDeclaration) {
+			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				try {
+					evaluator.validateResultType(errors, warnings, infos)
+				} catch (Exception e) {
+					false
+				}
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+		} else
+			true
 	}
 
 	def static String validateValue(VarDeclaration decl, String initialValue) {
@@ -242,7 +275,7 @@ final class VariableOperations {
 			false
 		else
 			try {
-				new TypedValueConverter(decl.type).toValue(decl.declaredInitialValue)
+				new TypedValueConverter(decl.type, true).toValue(decl.declaredInitialValue)
 				true
 			} catch (Exception e) {
 				false

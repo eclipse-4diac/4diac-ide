@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
+import java.util.List
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -27,6 +28,19 @@ interface VariableEvaluator extends Evaluator {
 	def Variable<?> evaluateVariable() throws EvaluatorException, InterruptedException
 
 	/**
+	 * Validate a variable
+	 * 
+	 * @param errors The errors
+	 * @param warnings The warnings
+	 * @param infos The infos
+	 * @return true on success, false otherwise
+	 * @throws EvaluatorException if an exception occurred during evaluation
+	 * @throws InterruptedException if the evaluation was interrupted
+	 */
+	def boolean validateVariable(List<String> errors, List<String> warnings,
+		List<String> infos) throws EvaluatorException, InterruptedException
+
+	/**
 	 * Evaluate the result type
 	 * 
 	 * @return The resulting type
@@ -34,4 +48,17 @@ interface VariableEvaluator extends Evaluator {
 	 * @throws InterruptedException if the evaluation was interrupted
 	 */
 	def INamedElement evaluateResultType() throws EvaluatorException, InterruptedException
+
+	/**
+	 * Validate the result type
+	 * 
+	 * @param errors The errors
+	 * @param warnings The warnings
+	 * @param infos The infos
+	 * @return true on success, false otherwise
+	 * @throws EvaluatorException if an exception occurred during evaluation
+	 * @throws InterruptedException if the evaluation was interrupted
+	 */
+	def boolean validateResultType(List<String> errors, List<String> warnings,
+		List<String> infos) throws EvaluatorException, InterruptedException
 }
