@@ -55,7 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
  *
  * @generated
  */
-public class FBNetworkElementImpl extends TypedConfigureableObjectImpl implements FBNetworkElement {
+public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl implements FBNetworkElement {
 	/**
 	 * The cached value of the '{@link #getPosition() <em>Position</em>}' containment reference.
 	 * <!-- begin-user-doc -->

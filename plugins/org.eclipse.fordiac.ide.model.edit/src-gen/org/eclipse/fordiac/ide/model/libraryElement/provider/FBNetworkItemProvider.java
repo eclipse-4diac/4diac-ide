@@ -136,9 +136,6 @@ public class FBNetworkItemProvider extends ItemProviderAdapter implements IEditi
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.FB_NETWORK__NETWORK_ELEMENTS,
-				LibraryElementFactory.eINSTANCE.createFBNetworkElement()));
-
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.FB_NETWORK__NETWORK_ELEMENTS,
 				LibraryElementFactory.eINSTANCE.createFB()));
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.FB_NETWORK__NETWORK_ELEMENTS,

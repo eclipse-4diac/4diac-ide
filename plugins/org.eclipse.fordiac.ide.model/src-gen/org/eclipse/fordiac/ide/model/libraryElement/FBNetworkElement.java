@@ -35,7 +35,7 @@ import org.eclipse.emf.common.util.DiagnosticChain;
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetworkElement()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface FBNetworkElement extends TypedConfigureableObject, PositionableElement {
