@@ -56,4 +56,20 @@ public interface ErrorMarkerFBNElement extends FBNetworkElement {
 	 */
 	void setRepairedElement(FBNetworkElement value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @generated
+	 */
+	int getWidth();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @generated
+	 */
+	int getHeight();
+
 } // ErrorMarkerFBNElement

@@ -324,6 +324,9 @@
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerDataType"/>
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerFBNElement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerFBNElement/repairedElement"/>
+      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerFBNElement/getWidth" body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerFBNElement/getHeight"
+          body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerInterface">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerInterface/value"/>
@@ -354,6 +357,8 @@
       <genOperations ecoreOperation="lib.ecore#//FB/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FB/getInOutParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FB/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/getWidth" body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/getHeight" body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBNetwork">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetwork/networkElements"/>
@@ -419,6 +424,8 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getQualifiedName"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementAnnotations.getQualifiedName(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getWidth" body="throw new UnsupportedOperationException();"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getHeight" body="throw new UnsupportedOperationException();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/interfaceList"/>
