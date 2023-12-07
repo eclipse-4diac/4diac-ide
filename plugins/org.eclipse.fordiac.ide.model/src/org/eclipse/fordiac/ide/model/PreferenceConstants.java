@@ -19,6 +19,8 @@ package org.eclipse.fordiac.ide.model;
  */
 public final class PreferenceConstants {
 
+	public static final String QUALIFIER = "org.eclipse.fordiac.ide.model"; //$NON-NLS-1$
+
 	/** Allocation block size used during xml file export. */
 	public static final String P_ALLOCATION_SIZE = "allocationSize"; //$NON-NLS-1$
 	public static final int P_ALLOCATION_SIZE_DEFAULT_VALUE = 100;

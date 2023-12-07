@@ -51,6 +51,8 @@ public final class Messages extends NLS {
 	public static String Error_RecursiveType;
 	public static String Error_SelfInsertion;
 	public static String ErrorMarkerInterfaceAnnotations_MissingVariableForValue;
+	public static String FBNetworkAnnotations_CollisionMessage;
+
 	public static String FBTImporter_ADAPTER_DECLARATION_TYPE_EXCEPTION;
 	public static String FBTImporter_ECTRANASITION_CONDITION_EXCEPTION;
 	public static String FBTImporter_ECTRANSITION_DEST_EXCEPTION;

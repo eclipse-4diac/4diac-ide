@@ -14,9 +14,11 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -38,8 +40,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
-/** The content of a group. This class mimics as much as possible the behavior of a FBNetwork so that we can utilize
- * common code between expanded subapps and groups. */
+/**
+ * The content of a group. This class mimics as much as possible the behavior of
+ * a FBNetwork so that we can utilize common code between expanded subapps and
+ * groups.
+ */
 public class GroupContentNetwork implements FBNetwork {
 
 	private final Group group;
@@ -227,18 +232,25 @@ public class GroupContentNetwork implements FBNetwork {
 
 	@Override
 	public SubApp getSubAppNamed(final String name) {
-		// SubApps of groups are contained in the parent framework therefore we can delegate
+		// SubApps of groups are contained in the parent framework therefore we can
+		// delegate
 		return group.getFbNetwork().getSubAppNamed(name);
 	}
 
 	@Override
 	public FBNetworkElement getElementNamed(final String name) {
-		// FBNetworkElements of groups are contained in the parent framework therefore we can delegate
+		// FBNetworkElements of groups are contained in the parent framework therefore
+		// we can delegate
 		return group.getFbNetwork().getElementNamed(name);
 	}
 
 	@Override
 	public int getConnectionIndex(final Connection connection) {
 		return -1;
+	}
+
+	@Override
+	public boolean validateCollisions(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return true;
 	}
 }

@@ -265,7 +265,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	private void createGroupBlockMargins() {
 		final Group group = createGroup(Messages.DiagramPreferences_BlockMargins);
 		final IPreferenceStore modelStore = new ScopedPreferenceStore(InstanceScope.INSTANCE,
-				"org.eclipse.fordiac.ide.model");
+				PreferenceConstants.QUALIFIER);
 
 		final IntegerFieldEditor integerFieldEditorTopBottom = new IntegerFieldEditor(
 				PreferenceConstants.MARGIN_TOP_BOTTOM, Messages.DiagramPreferences_TopBottom, group);

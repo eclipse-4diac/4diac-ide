@@ -395,6 +395,10 @@
       <genOperations ecoreOperation="lib.ecore#//FBNetwork/getConnectionIndex" body="return org.eclipse.fordiac.ide.model.Annotations.getConnectionIndex(this, connection);">
         <genParameters ecoreParameter="lib.ecore#//FBNetwork/getConnectionIndex/connection"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/validateCollisions" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkAnnotations.validateCollisions(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/validateCollisions/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/validateCollisions/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBNetworkElement">
       <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//FBNetworkElement/interface"/>
@@ -454,6 +458,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/height"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/locked"/>
       <genOperations ecoreOperation="lib.ecore#//Group/getInterface" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.EMPTY_INTERFACE_LIST;"/>
+      <genOperations ecoreOperation="lib.ecore#//Group/validateCollisions" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkAnnotations.validateCollisions(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//Group/validateCollisions/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//Group/validateCollisions/context"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//Comment/getInterface" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.EMPTY_INTERFACE_LIST;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//HiddenElement">
