@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -710,7 +711,8 @@ public abstract class CommonElementImporter {
 		}
 	}
 
-	protected Resource parseResource() throws TypeImportException, XMLStreamException {
+	protected Resource parseResource(final Map<String, FBNetworkElement> fbNetworkElementMap)
+			throws TypeImportException, XMLStreamException {
 		final Resource resource = LibraryElementFactory.eINSTANCE.createResource();
 		resource.setDeviceTypeResource(false); // TODO model refactoring - check if a resource of given name is already
 		// in the list then it would be a device type resource
@@ -722,7 +724,7 @@ public abstract class CommonElementImporter {
 		processChildren(LibraryElementTags.RESOURCE_ELEMENT, name -> {
 			switch (name) {
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				new ResDevFBNetworkImporter(this, fbNetwork, resource.getVarDeclarations())
+				new ResDevFBNetworkImporter(this, fbNetwork, resource.getVarDeclarations(), fbNetworkElementMap)
 						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
