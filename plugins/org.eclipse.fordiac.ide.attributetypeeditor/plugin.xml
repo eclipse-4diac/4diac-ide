@@ -10,7 +10,7 @@
             default="true"
             class="org.eclipse.fordiac.ide.attributetypeeditor.editors.AttributeTypeEditor"
             id="org.eclipse.fordiac.ide.model.attributetype.atp"
-            icon="fordiacimage://ICON_DATA_TYPE"
+            icon="fordiacimage://ICON_ATTRIBUTE_DECLARATION"
             matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy">
       </editor>
    </extension>
