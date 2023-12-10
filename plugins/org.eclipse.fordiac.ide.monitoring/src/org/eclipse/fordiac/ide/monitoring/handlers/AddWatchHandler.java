@@ -120,15 +120,15 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 			final StructuredSelection selection) {
 		final Set<IInterfaceElement> foundElements = new HashSet<>();
 		for (final Object selectedObject : selection) {
-			if((selectedObject instanceof EditPart) && (!(selectedObject instanceof MonitoringAdapterInterfaceEditPart))) {
+			if ((selectedObject instanceof EditPart)
+					&& (!(selectedObject instanceof MonitoringAdapterInterfaceEditPart))) {
 				final Object model = ((EditPart) selectedObject).getModel();
 
 				if (model instanceof FBNetworkElement) {
 					if (MonitoringManagerUtils.canBeMonitored((FBNetworkElement) model)) {
 						foundElements.addAll(((FBNetworkElement) model).getInterface().getAllInterfaceElements());
 					}
-				} else if (model instanceof IInterfaceElement) {
-					final IInterfaceElement ie = (IInterfaceElement) model;
+				} else if (model instanceof final IInterfaceElement ie) {
 					if (MonitoringManagerUtils.canBeMonitored(ie, false) && !manager.containsPort(ie)) {
 						foundElements.add(ie);
 					}
@@ -163,8 +163,7 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 	public static MonitoringBaseElement createSubappElement(final PortElement port, final MonitoringManager manager) {
 		final MonitoringBaseElement element = MonitoringFactory.eINSTANCE.createSubappMonitoringElement();
 		final MonitoringBaseElement anchor = MonitoringFactory.eINSTANCE.createMonitoringElement();
-		final PortElement anchorPort = MonitoringManagerUtils
-				.createPortElement(((SubAppPortElement) port).getAnchor());
+		final PortElement anchorPort = MonitoringManagerUtils.createPortElement(((SubAppPortElement) port).getAnchor());
 		anchor.setPort(anchorPort);
 		((SubappMonitoringElement) element).setAnchor(anchor);
 		final MonitoringBaseElement monitoringElement = manager.getMonitoringElement(anchorPort.getInterfaceElement());
@@ -194,7 +193,7 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 			newPort.setFb(port.getFb());
 			newPort.setInterfaceElement(io);
 			newPort.setResource(port.getResource());
-			newPort.getHierarchy().addAll(port.getHierarchy());
+			newPort.setHierarchy(port.getHierarchy());
 			ports.add(newPort);
 			childElements.add((MonitoringElement) createMonitoringElement(manager, newPort));
 		}
