@@ -234,6 +234,10 @@
         class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
         uriExtension="sys">
   </resourceServiceProvider>
+  <resourceServiceProvider
+        class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+        uriExtension="sub">
+  </resourceServiceProvider>
 	</extension>
 	<!-- Quick Outline -->
 	<extension
