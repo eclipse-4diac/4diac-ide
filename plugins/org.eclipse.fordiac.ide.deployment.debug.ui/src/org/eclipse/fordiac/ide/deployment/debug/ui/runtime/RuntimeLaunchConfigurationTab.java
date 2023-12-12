@@ -67,18 +67,18 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 	protected Composite createRuntimeComponent(final Composite parent) {
 		final Group group = new Group(parent, SWT.BORDER);
 		GridLayoutFactory.swtDefaults().applyTo(group);
-		group.setText(""); //$NON-NLS-1$
+		group.setText(Messages.RuntimeLaunchConfigurationTab_RuntimeGroup);
 
 		final Composite comp = new Composite(group, SWT.NONE);
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(comp);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(comp);
 
 		final Label locationLabel = new Label(comp, SWT.NONE);
-		locationLabel.setText(""); //$NON-NLS-1$
+		locationLabel.setText(Messages.RuntimeLaunchConfigurationTab_LocationLabel);
 		GridDataFactory.swtDefaults().applyTo(locationLabel);
 
 		runtimeText = new Text(comp, SWT.BORDER);
-		runtimeText.setMessage(""); //$NON-NLS-1$
+		runtimeText.setMessage(Messages.RuntimeLaunchConfigurationTab_LocationMessage);
 		runtimeText.addModifyListener(e -> scheduleUpdateJob());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(runtimeText);
 		return group;
@@ -87,14 +87,14 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 	protected Composite createOptionsComponent(final Composite parent) {
 		final Group group = new Group(parent, SWT.BORDER);
 		GridLayoutFactory.swtDefaults().applyTo(group);
-		group.setText(""); //$NON-NLS-1$
+		group.setText(Messages.RuntimeLaunchConfigurationTab_OptionsGroup);
 
 		final Composite comp = new Composite(group, SWT.NONE);
 		GridLayoutFactory.swtDefaults().numColumns(3).applyTo(comp);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(comp);
 
 		final Label profileLabel = new Label(comp, SWT.NONE);
-		profileLabel.setText(""); //$NON-NLS-1$
+		profileLabel.setText(Messages.RuntimeLaunchConfigurationTab_ProfileLabel);
 		GridDataFactory.swtDefaults().applyTo(profileLabel);
 
 		profileCombo = new Combo(comp, SWT.DROP_DOWN | SWT.READ_ONLY);
