@@ -430,6 +430,10 @@
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementAnnotations.getQualifiedName(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getWidth" body="throw new UnsupportedOperationException();"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getHeight" body="throw new UnsupportedOperationException();"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getVisibleWidth"
+          body="return getWidth();"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getVisibleHeight"
+          body="return getHeight();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/interfaceList"/>
@@ -685,6 +689,8 @@
       <genOperations ecoreOperation="lib.ecore#//SubApp/isUnfolded" body="org.eclipse.fordiac.ide.model.libraryElement.Attribute attr = this.getAttribute(org.eclipse.fordiac.ide.model.LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);&#xA;return (attr != null) &amp;&amp; &quot;true&quot;.equals(attr.getValue()); //$NON-NLS-1$&#xA;"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/isTyped" body="return (getType() != null);"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/loadSubAppNetwork" body="return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.loadSubAppNetwork(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/getVisibleWidth" body="return isUnfolded() ? getWidth() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/getVisibleHeight" body="return isUnfolded() ? getHeight() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//StructManipulator">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>

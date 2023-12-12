@@ -227,4 +227,20 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 */
 	int getHeight();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @generated
+	 */
+	int getVisibleWidth();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @generated
+	 */
+	int getVisibleHeight();
+
 } // FBNetworkElement

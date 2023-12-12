@@ -88,8 +88,8 @@ final class FBNetworkAnnotations {
 			final Position position = element.getPosition();
 			final int x1 = position.getX() - marginLeftRight;
 			final int y1 = position.getY() - marginTopBottom;
-			final int x2 = x1 + element.getWidth() + marginLeftRight;
-			final int y2 = y1 + element.getHeight() + marginTopBottom;
+			final int x2 = x1 + element.getVisibleWidth() + marginLeftRight;
+			final int y2 = y1 + element.getVisibleHeight() + marginTopBottom;
 			// check parent collision
 			final Optional<FBNetworkElement> parentCollision = parent
 					.filter(outer -> x1 < 0 || y1 < 0 || x2 > outer.getWidth() || y2 > outer.getHeight());

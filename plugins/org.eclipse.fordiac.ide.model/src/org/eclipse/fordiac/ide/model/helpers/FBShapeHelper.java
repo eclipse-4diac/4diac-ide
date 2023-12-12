@@ -51,8 +51,8 @@ public final class FBShapeHelper {
 	 * FBNetworkElementFigure.setupMouseListener(...).new MouseMotionListener(){...}
 	 * .mouseEntered(MouseEvent):
 	 *
-	 * System.out.println("entered: " + getBounds() + " - " + model.getWidth() +
-	 * ", " + model.getHeight());
+	 * System.out.println("entered: " + getBounds() + " - " +
+	 * model.getVisibleWidth() + ", " + model.getVisibleHeight());
 	 */
 
 	/**
