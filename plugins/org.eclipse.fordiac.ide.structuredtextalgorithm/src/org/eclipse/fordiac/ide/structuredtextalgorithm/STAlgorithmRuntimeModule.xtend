@@ -62,7 +62,7 @@ class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 
 	override void configureFileExtensions(Binder binder) {
 		if (properties === null || properties.getProperty(Constants.FILE_EXTENSIONS) === null) {
-			binder.bind(String).annotatedWith(Names.named(Constants.FILE_EXTENSIONS)).toInstance("stalg,fbt,sys")
+			binder.bind(String).annotatedWith(Names.named(Constants.FILE_EXTENSIONS)).toInstance("stalg,fbt,sys,sub")
 		}
 	}
 
