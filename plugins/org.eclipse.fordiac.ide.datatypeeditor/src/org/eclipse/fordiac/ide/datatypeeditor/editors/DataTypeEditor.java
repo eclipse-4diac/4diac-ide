@@ -294,7 +294,13 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		final IEditorReference[] openEditors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getEditorReferences();
 		for (final IEditorReference iEditorReference : openEditors) {
-			iEditorReference.getEditor(true);
+			try {
+				if (iEditorReference.getEditorInput().exists()) {
+					iEditorReference.getEditor(true);
+				}
+			} catch (final PartInitException e) {
+				FordiacLogHelper.logError("Error while loading Editor: " + e.getMessage()); //$NON-NLS-1$
+			}
 		}
 	}
 
