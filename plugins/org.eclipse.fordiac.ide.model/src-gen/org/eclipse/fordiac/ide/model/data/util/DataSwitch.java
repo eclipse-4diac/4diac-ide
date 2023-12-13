@@ -811,6 +811,16 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case DataPackage.INTERNAL_DATA_TYPE: {
+				InternalDataType internalDataType = (InternalDataType)theEObject;
+				T result = caseInternalDataType(internalDataType);
+				if (result == null) result = caseDataType(internalDataType);
+				if (result == null) result = caseLibraryElement(internalDataType);
+				if (result == null) result = caseINamedElement(internalDataType);
+				if (result == null) result = caseConfigurableObject(internalDataType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -1652,6 +1662,21 @@ public class DataSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseLdateType(LdateType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Internal Data Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Internal Data Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseInternalDataType(InternalDataType object) {
 		return null;
 	}
 

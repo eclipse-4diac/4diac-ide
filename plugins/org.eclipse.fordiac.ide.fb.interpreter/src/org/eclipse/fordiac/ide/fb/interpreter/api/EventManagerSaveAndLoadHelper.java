@@ -39,7 +39,7 @@ public class EventManagerSaveAndLoadHelper {
 				FordiacLogHelper.logError(e.getMessage());
 			}
 		}
-		final IFile file = folder.getFile(fbtype.getQualifiedName() + ".EvntMngr.opsem"); //$NON-NLS-1$
+		final IFile file = folder.getFile(fbtype.getName() + ".EvntMngr.opsem"); //$NON-NLS-1$
 		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		final Resource res = reset.createResource(uri);
 

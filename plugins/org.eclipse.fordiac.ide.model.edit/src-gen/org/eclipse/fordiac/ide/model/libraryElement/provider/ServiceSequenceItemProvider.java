@@ -300,11 +300,6 @@ public class ServiceSequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
-				 LibraryElementFactory.eINSTANCE.createFBNetworkElement()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
 				 LibraryElementFactory.eINSTANCE.createFB()));
 
 		newChildDescriptors.add
@@ -976,6 +971,11 @@ public class ServiceSequenceItemProvider
 			(createChildParameter
 				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
 				 DataFactory.eINSTANCE.createLdateType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createInternalDataType()));
 
 		newChildDescriptors.add
 			(createChildParameter

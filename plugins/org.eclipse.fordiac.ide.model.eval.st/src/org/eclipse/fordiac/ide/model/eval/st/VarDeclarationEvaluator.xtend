@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.st
 
+import java.util.List
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
@@ -70,20 +71,11 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator implements Variabl
 	}
 
 	def protected prepareInitialValue() {
-		evaluateResultType
 		if (parseResult === null && !varDeclaration.value?.value.nullOrEmpty) {
 			val errors = newArrayList
 			val warnings = newArrayList
 			val infos = newArrayList
-			parseResult = varDeclaration.value.value.parse(
-				varDeclaration.eResource?.URI,
-				resultType,
-				varDeclaration.getContainerOfType(LibraryElement),
-				null,
-				errors,
-				warnings,
-				infos
-			)
+			parseResult = parseInitialValue(errors, warnings, infos)
 			errors.forEach[error("Parse error: " + it)]
 			warnings.forEach[warn("Parse warning: " + it)]
 			infos.forEach[info("Parse info: " + it)]
@@ -93,22 +85,37 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator implements Variabl
 		}
 	}
 
+	def protected parseInitialValue(List<String> errors, List<String> warnings, List<String> infos) {
+		varDeclaration.value.value.parse(
+			varDeclaration.eResource?.URI,
+			evaluateResultType,
+			varDeclaration.getContainerOfType(LibraryElement),
+			null,
+			errors,
+			warnings,
+			infos
+		)
+	}
+
 	override evaluate() {
-		prepareInitialValue
-		val result = newVariable(varDeclaration.name, resultType)
-		if (parseResult?.initializerExpression !== null) {
-			result.evaluateInitializerExpression(parseResult.trap.initializerExpression)
-		}
-		result.value
+		evaluateVariable.value
 	}
 
 	override evaluateVariable() throws EvaluatorException, InterruptedException {
 		prepareInitialValue
-		val result = newVariable(varDeclaration.name, resultType)
+		val result = newVariable(varDeclaration.name, evaluateResultType)
 		if (parseResult?.initializerExpression !== null) {
 			result.evaluateInitializerExpression(parseResult.trap.initializerExpression)
 		}
 		result
+	}
+
+	override validateVariable(List<String> errors, List<String> warnings,
+		List<String> infos) throws EvaluatorException, InterruptedException {
+		if (!varDeclaration.value?.value.nullOrEmpty)
+			parseInitialValue(errors, warnings, infos) !== null
+		else
+			true
 	}
 
 	override evaluateResultType() throws EvaluatorException, InterruptedException {
@@ -120,6 +127,14 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator implements Variabl
 				varDeclaration.type
 		}
 		resultType
+	}
+
+	override validateResultType(List<String> errors, List<String> warnings,
+		List<String> infos) throws EvaluatorException, InterruptedException {
+		if (varDeclaration.array)
+			varDeclaration.parseType(errors, warnings, infos) !== null
+		else
+			true
 	}
 
 	def protected INamedElement evaluateTypeDeclaration(STTypeDeclaration declaration) {

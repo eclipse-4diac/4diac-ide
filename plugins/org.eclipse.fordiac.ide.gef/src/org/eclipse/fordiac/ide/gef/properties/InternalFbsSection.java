@@ -16,6 +16,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.util.Collections;
+
 import org.eclipse.fordiac.ide.gef.nat.FBColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementTableColumn;
@@ -121,7 +123,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof final FB fb) {
-			cmd.add(new InsertFBCommand(getType().getInternalFbs(), fb, index));
+			cmd.add(new InsertFBCommand(getType(), fb, index));
 		}
 
 	}
@@ -130,9 +132,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	public void refresh() {
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if (null != type) {
-			provider.setInput(getType().getInternalFbs());
-		}
+		provider.setInput(getType() != null ? getType().getInternalFbs() : Collections.emptyList());
 		commandStack = commandStackBuffer;
 		table.refresh();
 	}
@@ -162,9 +162,8 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	@Override
 	protected void setInputInit() {
 		final BaseFBType currentType = getType();
-		if (currentType != null) {
-			provider.setInput(currentType.getInternalFbs());
-		}
+		provider.setInput(currentType != null ? currentType.getInternalFbs() : Collections.emptyList());
+		table.refresh();
 	}
 
 	@Override

@@ -20,11 +20,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
@@ -49,7 +53,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.graphics.Point;
 
-public class AddElementsToSubAppCommand extends Command {
+public class AddElementsToSubAppCommand extends Command implements ScopedCommand {
 
 	private final SubApp targetSubApp;
 	private final List<FBNetworkElement> elementsToAdd = new ArrayList<>();
@@ -65,14 +69,13 @@ public class AddElementsToSubAppCommand extends Command {
 	private org.eclipse.swt.graphics.Point moveDelta;
 
 	public AddElementsToSubAppCommand(final SubApp targetSubApp, final List<?> selection) {
-		this.targetSubApp = targetSubApp;
+		this.targetSubApp = Objects.requireNonNull(targetSubApp);
 		fillElementList(selection);
 	}
 
 	public AddElementsToSubAppCommand(final SubApp targetSubApp, final List<?> selection, final Point moveDelta) {
-		this.targetSubApp = targetSubApp;
+		this(targetSubApp, selection);
 		this.moveDelta = moveDelta;
-		fillElementList(selection);
 	}
 
 	@Override
@@ -121,7 +124,8 @@ public class AddElementsToSubAppCommand extends Command {
 		final Point posOffset = getFBOffset();
 		for (final FBNetworkElement fbNetworkElement : elementsToAdd) {
 			final SetPositionCommand command = new SetPositionCommand(fbNetworkElement, posOffset.x, posOffset.y);
-			// the set position command needs to be executed before the connections are checked as there interface
+			// the set position command needs to be executed before the connections are
+			// checked as there interface
 			// elements are added which can result in container size changes
 			command.execute();
 			setPositionCommands.add(command);
@@ -250,11 +254,14 @@ public class AddElementsToSubAppCommand extends Command {
 
 	}
 
-	/** we have a connection that will cross the subapp interface. Check if an interface element needs to be created and
-	 * modify the connections accordingly
+	/**
+	 * we have a connection that will cross the subapp interface. Check if an
+	 * interface element needs to be created and modify the connections accordingly
 	 *
 	 * @param con the connection to be investigated
-	 * @param ie  the interface element on the inside of the subapp as reference for creating the */
+	 * @param ie  the interface element on the inside of the subapp as reference for
+	 *            creating the
+	 */
 	private void handleModifyConnection(final Connection con, final IInterfaceElement ie) {
 		final IInterfaceElement source = con.getSource();
 		// find a pin with matching source in the subapp
@@ -263,13 +270,15 @@ public class AddElementsToSubAppCommand extends Command {
 				.filter(pin -> pin.getInputConnections().get(0).getSource().equals(source)).findFirst();
 
 		final IInterfaceElement subAppIE;
-		// flag indicating if a pin is new and therefore both inside and outside connections need to be created
+		// flag indicating if a pin is new and therefore both inside and outside
+		// connections need to be created
 		final boolean isNewPin = !(reusablePin.isPresent() || sourceToSubAppPin.containsKey(source));
 		if (reusablePin.isPresent()) {
 			// pin already exists in the target subapp (prior to command execution)
 			subAppIE = reusablePin.get();
 		} else {
-			// pin has been created in the course of this command or is not present at all and needs to be created
+			// pin has been created in the course of this command or is not present at all
+			// and needs to be created
 			subAppIE = sourceToSubAppPin.computeIfAbsent(source, k -> createInterfaceElement(ie, source.getName()));
 		}
 		createConnModificationCommands(con, subAppIE, isNewPin);
@@ -331,5 +340,10 @@ public class AddElementsToSubAppCommand extends Command {
 		});
 		// for each entry in the map create one RemoveFromGroupCommand
 		groupMap.forEach((group, list) -> removeFromOtherGroups.add(new RemoveElementsFromGroup(list)));
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(targetSubApp);
 	}
 }

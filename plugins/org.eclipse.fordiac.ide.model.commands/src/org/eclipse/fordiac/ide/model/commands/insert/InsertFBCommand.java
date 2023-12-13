@@ -14,23 +14,28 @@
 
 package org.eclipse.fordiac.ide.model.commands.insert;
 
-import org.eclipse.emf.common.util.EList;
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.gef.commands.Command;
 
-public class InsertFBCommand extends Command {
+public class InsertFBCommand extends Command implements ScopedCommand {
 
+	private final BaseFBType baseFBType;
 	private final FB fb;
 	private FB internalFB;
-	private final EList<FB> internalFbs;
 	private final int index;
 
-	public InsertFBCommand(final EList<FB> internalFbs, final FB fb, final int index) {
-		this.internalFbs = internalFbs;
-		this.fb = fb;
+	public InsertFBCommand(final BaseFBType baseFBType, final FB fb, final int index) {
+		this.baseFBType = Objects.requireNonNull(baseFBType);
+		this.fb = Objects.requireNonNull(fb);
 		this.index = index;
 	}
 
@@ -49,16 +54,20 @@ public class InsertFBCommand extends Command {
 
 	@Override
 	public void redo() {
-		if (index > internalFbs.size()) {
-			internalFbs.add(internalFB);
+		if (index > baseFBType.getInternalFbs().size()) {
+			baseFBType.getInternalFbs().add(internalFB);
 		} else {
-			internalFbs.add(index, internalFB);
+			baseFBType.getInternalFbs().add(index, internalFB);
 		}
 	}
 
 	@Override
 	public void undo() {
-		internalFbs.remove(internalFB);
+		baseFBType.getInternalFbs().remove(internalFB);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(baseFBType);
+	}
 }

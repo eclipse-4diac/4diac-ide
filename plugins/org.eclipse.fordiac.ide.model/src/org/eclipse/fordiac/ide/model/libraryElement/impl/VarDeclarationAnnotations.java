@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -40,6 +41,38 @@ public class VarDeclarationAnnotations {
 						Messages.VarDeclarationAnnotations_MultipleInputConnections,
 						FordiacMarkerHelper.getDiagnosticData(varDeclaration,
 								LibraryElementPackage.Literals.IINTERFACE_ELEMENT__INPUT_CONNECTIONS)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateNoValueForGenericTypeVariable(@NonNull final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (GenericTypes.isAnyType(varDeclaration.getType()) && hasValue(varDeclaration)
+				&& varDeclaration.getFBNetworkElement() == null) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_GENERIC_TYPE_VARIABLE,
+						Messages.VarDeclarationAnnotations_ShouldNotSpecifyValueForGenericVariableInType,
+						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateValueForGenericInstanceVariable(@NonNull final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (varDeclaration.isIsInput() && varDeclaration.getInputConnections().isEmpty()
+				&& GenericTypes.isAnyType(varDeclaration.getType()) && !hasValue(varDeclaration)
+				&& varDeclaration.getFBNetworkElement() != null && varDeclaration.getFBNetworkElement()
+						.eContainingFeature() != LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.VAR_DECLARATION__VALIDATE_VALUE_FOR_GENERIC_INSTANCE_VARIABLE,
+						Messages.VarDeclarationAnnotations_ShouldSpecifyValueForGenericVariableInInstance,
+						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
 			}
 			return false;
 		}
@@ -94,6 +127,11 @@ public class VarDeclarationAnnotations {
 		}
 		// if no inout var return the given var as backup
 		return inOutVar;
+	}
+
+	static boolean hasValue(final VarDeclaration varDeclaration) {
+		return varDeclaration.getValue() != null && varDeclaration.getValue().getValue() != null
+				&& !varDeclaration.getValue().getValue().isEmpty();
 	}
 
 	private VarDeclarationAnnotations() {

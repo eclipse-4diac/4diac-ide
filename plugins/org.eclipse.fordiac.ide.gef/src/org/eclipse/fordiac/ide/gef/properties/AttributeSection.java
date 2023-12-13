@@ -18,6 +18,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.util.Collections;
+
 import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
@@ -133,9 +135,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	public void refresh() {
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if (null != getType()) {
-			provider.setInput(getType().getAttributes());
-		}
+		provider.setInput(getType() != null ? getType().getAttributes() : Collections.emptyList());
 		commandStack = commandStackBuffer;
 		table.refresh();
 	}
@@ -166,9 +166,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	@Override
 	protected void setInputInit() {
 		final ConfigurableObject currentType = getType();
-		if (currentType != null) {
-			provider.setInput(currentType.getAttributes());
-		}
+		provider.setInput(currentType != null ? currentType.getAttributes() : Collections.emptyList());
+		table.refresh();
 	}
 
 	@Override

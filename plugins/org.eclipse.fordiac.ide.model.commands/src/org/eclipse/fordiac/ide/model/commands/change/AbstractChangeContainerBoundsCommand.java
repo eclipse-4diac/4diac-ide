@@ -13,14 +13,19 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public abstract class AbstractChangeContainerBoundsCommand extends Command implements ConnectionLayoutTagger {
+public abstract class AbstractChangeContainerBoundsCommand extends Command
+		implements ConnectionLayoutTagger, ScopedCommand {
 
 	private final int dx;
 	private final int dy;
@@ -33,7 +38,7 @@ public abstract class AbstractChangeContainerBoundsCommand extends Command imple
 
 	protected AbstractChangeContainerBoundsCommand(final PositionableElement target, final int dx, final int dy,
 			final int dw, final int dh, final int oldWidth, final int oldHeight) {
-		this.target = target;
+		this.target = Objects.requireNonNull(target);
 		this.dx = dx;
 		this.dy = dy;
 		this.oldWidth = oldWidth;
@@ -67,7 +72,6 @@ public abstract class AbstractChangeContainerBoundsCommand extends Command imple
 		updateSize(newWidth, newHeight);
 	}
 
-
 	public PositionableElement getTarget() {
 		return target;
 	}
@@ -76,14 +80,21 @@ public abstract class AbstractChangeContainerBoundsCommand extends Command imple
 		if (dx != 0 || dy != 0) {
 			final CompoundCommand cmd = new CompoundCommand();
 			cmd.add(new SetPositionCommand(target, dx, dy));
-			// Ensure that the children stay at their position when the group grows or shrinks on the left/top side
-			// If the child is in a group we must only consider it if the group the child is contained in itself is
+			// Ensure that the children stay at their position when the group grows or
+			// shrinks on the left/top side
+			// If the child is in a group we must only consider it if the group the child is
+			// contained in itself is
 			// changed.
 			getChildren().stream().filter(el -> !el.isInGroup() || target.equals(el.getGroup()))
-			.forEach(el -> cmd.add(new SetPositionCommand(el, -dx, -dy)));
+					.forEach(el -> cmd.add(new SetPositionCommand(el, -dx, -dy)));
 			return cmd;
 		}
 		return null;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(target);
 	}
 
 	protected abstract void updateSize(int width, int height);

@@ -103,7 +103,7 @@ public interface MonitoringBasePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Offline</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -112,7 +112,7 @@ public interface MonitoringBasePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Element</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -139,7 +139,7 @@ public interface MonitoringBasePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Interface Element</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -148,7 +148,7 @@ public interface MonitoringBasePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Resource</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -157,7 +157,7 @@ public interface MonitoringBasePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Hierarchy</b></em>' attribute list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -166,7 +166,7 @@ public interface MonitoringBasePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Port Element</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -241,9 +241,9 @@ public interface MonitoringBasePackage extends EPackage {
 	EReference getPortElement_Resource();
 
 	/**
-	 * Returns the meta object for the attribute list '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getHierarchy <em>Hierarchy</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getHierarchy <em>Hierarchy</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Hierarchy</em>'.
+	 * @return the meta object for the attribute '<em>Hierarchy</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getHierarchy()
 	 * @see #getPortElement()
 	 * @generated
@@ -263,7 +263,7 @@ public interface MonitoringBasePackage extends EPackage {
 	/**
 	 * Returns the factory that creates the instances of the model. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
@@ -316,7 +316,7 @@ public interface MonitoringBasePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Fb</b></em>' reference feature. <!--
 		 * begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated
 		 */
 		EReference PORT_ELEMENT__FB = eINSTANCE.getPortElement_Fb();
@@ -336,7 +336,7 @@ public interface MonitoringBasePackage extends EPackage {
 		EReference PORT_ELEMENT__RESOURCE = eINSTANCE.getPortElement_Resource();
 
 		/**
-		 * The meta object literal for the '<em><b>Hierarchy</b></em>' attribute list feature.
+		 * The meta object literal for the '<em><b>Hierarchy</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @generated
 		 */

@@ -48,7 +48,6 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -265,22 +264,13 @@ public class TypeInfoWidget implements CommandExecutor {
 		return text;
 	}
 
-	protected StyledText createGroupStyledText(final Composite group, final boolean editable) {
-		final StyledText text = new StyledText(group, SWT.BORDER | getWidgetFactory().getOrientation());
-		getWidgetFactory().adapt(text, true, false);
-		text.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		text.setEditable(editable);
-		text.setEnabled(editable);
-		return text;
-	}
-
 	public void initialize(final LibraryElement type, final Consumer<Command> commandExecutor) {
 		this.commandExecutor = commandExecutor;
 		this.type = type;
 	}
 
 	public void refresh() {
-		if (null != type) {
+		if (null != type && versionViewer != null && !versionViewer.getControl().isDisposed()) {
 			final Consumer<Command> commandExecutorBuffer = commandExecutor;
 			commandExecutor = null;
 			if (null != type.getIdentification()) {

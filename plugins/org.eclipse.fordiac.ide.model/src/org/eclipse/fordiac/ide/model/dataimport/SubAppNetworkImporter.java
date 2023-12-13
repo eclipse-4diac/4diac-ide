@@ -14,6 +14,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.util.Map;
+
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
@@ -39,8 +41,9 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		super(importer, LibraryElementFactory.eINSTANCE.createFBNetwork(), interfaceList);
 	}
 
-	protected SubAppNetworkImporter(final CommonElementImporter importer, final FBNetwork fbNetwork) {
-		super(importer, fbNetwork);
+	protected SubAppNetworkImporter(final CommonElementImporter importer, final FBNetwork fbNetwork,
+			final Map<String, FBNetworkElement> fbNetworkElementMap) {
+		super(importer, fbNetwork, fbNetworkElementMap);
 	}
 
 	@Override
@@ -57,7 +60,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		final FBNetworkElement subApp = createSubapp(type);
 		readNameCommentAttributes(subApp);
 		getXandY(subApp);
-		getFbNetwork().getNetworkElements().add(subApp);
+		addFBNetworkElement(subApp);
 
 		if (type == null) {
 			parseUntypedSubapp((SubApp) subApp);
@@ -70,8 +73,6 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 				inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			}
 		}
-
-		fbNetworkElementMap.putIfAbsent(subApp.getName(), subApp);
 	}
 
 	public FBNetworkElement createSubapp(final String type) {

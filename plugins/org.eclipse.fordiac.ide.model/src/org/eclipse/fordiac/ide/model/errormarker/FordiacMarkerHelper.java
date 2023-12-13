@@ -19,7 +19,9 @@
 package org.eclipse.fordiac.ide.model.errormarker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 import org.eclipse.core.resources.IMarker;
@@ -32,6 +34,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -42,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -109,6 +113,30 @@ public final class FordiacMarkerHelper {
 				EcoreUtil.getURI(object.eClass()).toString(), // [3] TARGET_TYPE
 				feature != null ? EcoreUtil.getURI(feature).toString() : null, // [4] TARGET_FEATURE
 		};
+	}
+
+	public static EObject getDiagnosticTarget(final Diagnostic diagnostic) {
+		final List<?> data = diagnostic.getData();
+		if (data != null && !data.isEmpty() && data.get(0) instanceof final EObject target) {
+			return target;
+		}
+		return null;
+	}
+
+	public static Map<String, Object> getDiagnosticAttributes(final Diagnostic diagnostic) {
+		if (LibraryElementValidator.DIAGNOSTIC_SOURCE.equals(diagnostic.getSource())) {
+			final List<?> data = diagnostic.getData();
+			if (data != null && data.size() >= 5) {
+				if (data.get(4) != null) {
+					return Map.of(IMarker.LOCATION, data.get(1), FordiacErrorMarker.TARGET_URI, data.get(2),
+							FordiacErrorMarker.TARGET_TYPE, data.get(3), FordiacErrorMarker.TARGET_FEATURE,
+							data.get(4));
+				}
+				return Map.of(IMarker.LOCATION, data.get(1), FordiacErrorMarker.TARGET_URI, data.get(2),
+						FordiacErrorMarker.TARGET_TYPE, data.get(3));
+			}
+		}
+		return Collections.emptyMap();
 	}
 
 	public static List<IMarker> findMarkers(final EObject target) {

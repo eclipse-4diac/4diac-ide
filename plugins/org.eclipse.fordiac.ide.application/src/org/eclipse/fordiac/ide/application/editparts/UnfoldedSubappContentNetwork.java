@@ -15,9 +15,11 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
@@ -240,5 +242,10 @@ public class UnfoldedSubappContentNetwork implements FBNetwork {
 	@Override
 	public int getConnectionIndex(final Connection connection) {
 		return subappContent.getConnectionIndex(connection);
+	}
+
+	@Override
+	public boolean validateCollisions(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return subappContent.validateCollisions(diagnostics, context);
 	}
 }

@@ -69,7 +69,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
@@ -207,7 +206,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.EVENT_CONNECTION: return createEventConnection();
 			case LibraryElementPackage.FB: return createFB();
 			case LibraryElementPackage.FB_NETWORK: return createFBNetwork();
-			case LibraryElementPackage.FB_NETWORK_ELEMENT: return createFBNetworkElement();
 			case LibraryElementPackage.FB_TYPE: return createFBType();
 			case LibraryElementPackage.FUNCTION_FB_TYPE: return createFunctionFBType();
 			case LibraryElementPackage.GLOBAL_CONSTANTS: return createGlobalConstants();
@@ -733,17 +731,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public FBNetwork createFBNetwork() {
 		FBNetworkImpl fbNetwork = new FBNetworkImpl();
 		return fbNetwork;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public FBNetworkElement createFBNetworkElement() {
-		FBNetworkElementImpl fbNetworkElement = new FBNetworkElementImpl();
-		return fbNetworkElement;
 	}
 
 	/**

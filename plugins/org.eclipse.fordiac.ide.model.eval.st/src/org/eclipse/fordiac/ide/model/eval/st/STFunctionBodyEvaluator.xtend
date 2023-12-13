@@ -26,8 +26,6 @@ import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionParseUtil.*
 
 class STFunctionBodyEvaluator extends StructuredTextEvaluator {
-	static final String RETURN_VARIABLE_NAME = ""
-
 	final STFunctionBody body
 
 	STFunctionSource parseResult

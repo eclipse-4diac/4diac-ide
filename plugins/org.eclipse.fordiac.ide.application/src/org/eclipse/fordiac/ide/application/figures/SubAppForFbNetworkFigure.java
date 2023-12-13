@@ -150,18 +150,18 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure.setLayoutManager(createExpandedMainFigureLayout());
 		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-		getFbFigureContainer().add(expandedMainFigure, gridData, -1);
+		getFbFigureContainer().add(expandedMainFigure, gridData);
 	}
 
 	private void createExpandedInputs() {
 		expandedInputFigure = new Figure();
 		expandedInputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(expandedInputFigure, new GridData(SWT.BEGINNING, SWT.TOP, false, true), -1);
-		expandedInputFigure.add(getEventInputs(), createInputLayoutData(), -1);
-		expandedInputFigure.add(getDataInputs(), createInputLayoutData(), -1);
-		expandedInputFigure.add(getVarInOutInputs(), createInputLayoutData(), -1);
-		expandedInputFigure.add(getSockets(), createInputLayoutData(), -1);
-		expandedInputFigure.add(getErrorMarkerInput(), createInputLayoutData(), -1);
+		expandedMainFigure.add(expandedInputFigure, new GridData(SWT.BEGINNING, SWT.TOP, false, true));
+		expandedInputFigure.add(getEventInputs(), createInterfaceBarGroupLayoutData());
+		expandedInputFigure.add(getDataInputs(), createInterfaceBarGroupLayoutData());
+		expandedInputFigure.add(getVarInOutInputs(), createInterfaceBarGroupLayoutData());
+		expandedInputFigure.add(getSockets(), createInterfaceBarGroupLayoutData());
+		expandedInputFigure.add(getErrorMarkerInput(), createInterfaceBarGroupLayoutData());
 	}
 
 	private void createContentContainer() {
@@ -169,18 +169,18 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedContentArea.setLayoutManager(new GridLayout());
 		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-		expandedMainFigure.add(expandedContentArea, gridData, -1);
+		expandedMainFigure.add(expandedContentArea, gridData);
 	}
 
 	private void createExpandedOutputs() {
 		expandedOutputFigure = new Figure();
 		expandedOutputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(expandedOutputFigure, new GridData(SWT.BEGINNING, SWT.TOP, false, true), -1);
-		expandedOutputFigure.add(getEventOutputs(), createOutputLayoutData(), -1);
-		expandedOutputFigure.add(getDataOutputs(), createOutputLayoutData(), -1);
-		expandedOutputFigure.add(getVarInOutOutputs(), createOutputLayoutData(), -1);
-		expandedOutputFigure.add(getPlugs(), createOutputLayoutData(), -1);
-		expandedOutputFigure.add(getErrorMarkerOutput(), createOutputLayoutData(), -1);
+		expandedMainFigure.add(expandedOutputFigure, new GridData(SWT.BEGINNING, SWT.TOP, false, true));
+		expandedOutputFigure.add(getEventOutputs(), createInterfaceBarGroupLayoutData());
+		expandedOutputFigure.add(getDataOutputs(), createInterfaceBarGroupLayoutData());
+		expandedOutputFigure.add(getVarInOutOutputs(), createInterfaceBarGroupLayoutData());
+		expandedOutputFigure.add(getPlugs(), createInterfaceBarGroupLayoutData());
+		expandedOutputFigure.add(getErrorMarkerOutput(), createInterfaceBarGroupLayoutData());
 	}
 
 	private static GridData createExpandedIOLayoutData() {
@@ -246,5 +246,9 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		topLayout.verticalSpacing = 0;
 		topLayout.horizontalSpacing = 0;
 		return topLayout;
+	}
+
+	protected static GridData createInterfaceBarGroupLayoutData() {
+		return new GridData(SWT.FILL, SWT.TOP, true, false);
 	}
 }

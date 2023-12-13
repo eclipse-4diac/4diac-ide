@@ -42,8 +42,8 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.PreferenceConstants;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.WstringType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -260,7 +260,7 @@ public class CommonElementExporter {
 
 	protected void addAttributeElement(final String name, final DataType type, final String value, final String comment)
 			throws XMLStreamException {
-		if (type instanceof WstringType) {
+		if (HelperTypes.CDATA == type) {
 			addStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
 		} else {
 			addEmptyStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
@@ -269,13 +269,13 @@ public class CommonElementExporter {
 		if (type != null && !(type.eContainer() instanceof AttributeDeclaration)) {
 			getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, PackageNameHelper.getFullTypeName(type));
 		}
-		if (!(type instanceof WstringType)) {
+		if (HelperTypes.CDATA != type) {
 			getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
 		}
 		if ((null != comment) && (!comment.isBlank())) {
 			getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
 		}
-		if (type instanceof WstringType) {
+		if (HelperTypes.CDATA == type) {
 			writeCDataSection(value);
 			addInlineEndElement();
 		}

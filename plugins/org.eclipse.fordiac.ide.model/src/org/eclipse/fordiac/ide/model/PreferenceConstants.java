@@ -19,9 +19,16 @@ package org.eclipse.fordiac.ide.model;
  */
 public final class PreferenceConstants {
 
+	public static final String QUALIFIER = "org.eclipse.fordiac.ide.model"; //$NON-NLS-1$
+
 	/** Allocation block size used during xml file export. */
 	public static final String P_ALLOCATION_SIZE = "allocationSize"; //$NON-NLS-1$
 	public static final int P_ALLOCATION_SIZE_DEFAULT_VALUE = 100;
+
+	public static final String MARGIN_TOP_BOTTOM = "MarginTopBottom"; //$NON-NLS-1$
+	public static final String MARGIN_LEFT_RIGHT = "MarginLeftRight"; //$NON-NLS-1$
+	public static final int MARGIN_TOP_BOTTOM_DEFAULT_VALUE = 0;
+	public static final int MARGIN_LEFT_RIGHT_DEFAULT_VALUE = 0;
 
 	// Additional constants defined in
 	// org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants

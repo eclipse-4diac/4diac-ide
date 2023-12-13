@@ -65,6 +65,8 @@ import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigurationTab {
+	public static final String ID = "org.eclipse.fordiac.ide.debug.ui.mainTab"; //$NON-NLS-1$
+
 	private Text resourceText;
 	private Button stopOnFirstLineCheckbox;
 	private TreeViewer argumentsTable;
@@ -263,7 +265,8 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 	protected boolean filterTargetResource(final IResource resource) throws CoreException {
 		if (resource instanceof IFile) {
 			return false;
-		} else if (resource instanceof IContainer) {
+		}
+		if (resource instanceof IContainer) {
 			for (final IResource child : ((IContainer) resource).members()) {
 				if (filterTargetResource(child)) {
 					return true;
@@ -279,7 +282,12 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		return "Main"; //$NON-NLS-1$
 	}
 
-	protected IResource getResource() {
+	@Override
+	public String getId() {
+		return ID;
+	}
+
+	public IResource getResource() {
 		final String resourceString = resourceText.getText();
 		if (resourceString != null && !resourceString.isEmpty()) {
 			return ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(resourceString));
@@ -298,9 +306,11 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		public Object[] getChildren(final Object parentElement) {
 			if (parentElement instanceof ArrayVariable) {
 				return ((ArrayVariable) parentElement).getElements().toArray();
-			} else if (parentElement instanceof StructVariable) {
+			}
+			if (parentElement instanceof StructVariable) {
 				return ((StructVariable) parentElement).getMembers().values().toArray();
-			} else if (parentElement instanceof FBVariable) {
+			}
+			if (parentElement instanceof FBVariable) {
 				return ((FBVariable) parentElement).getMembers().values().toArray();
 			}
 			return new Object[0];
@@ -322,8 +332,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		@Override
 		public StyledString getStyledText(final Object element) {
-			if (element instanceof Variable<?>) {
-				final Variable<?> variable = (Variable<?>) element;
+			if (element instanceof final Variable<?> variable) {
 				return new StyledString(variable.getName());
 			}
 			return null;
@@ -335,8 +344,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		@Override
 		public StyledString getStyledText(final Object element) {
-			if (element instanceof Variable<?>) {
-				final Variable<?> variable = (Variable<?>) element;
+			if (element instanceof final Variable<?> variable) {
 				return new StyledString(variable.getValue().toString());
 			}
 			return null;
@@ -372,8 +380,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		@Override
 		protected void setValue(final Object element, final Object value) {
-			if (element instanceof Variable<?>) {
-				final Variable<?> variable = (Variable<?>) element;
+			if (element instanceof final Variable<?> variable) {
 				try {
 					variable.setValue(value.toString());
 				} catch (final Exception e) {
@@ -396,11 +403,11 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 				// update parent element (if exists)
 				MainLaunchConfigurationTab.this.arguments.stream().filter(
 						arg -> (arg instanceof ArrayVariable && ((ArrayVariable) arg).getElements().contains(element))
-						|| (arg instanceof StructVariable
-								&& ((StructVariable) arg).getMembers().values().contains(element))
-						|| (arg instanceof FBVariable
-								&& ((FBVariable) arg).getMembers().values().contains(element)))
-				.forEach(container -> getViewer().update(container, null));
+								|| (arg instanceof StructVariable
+										&& ((StructVariable) arg).getMembers().values().contains(element))
+								|| (arg instanceof FBVariable
+										&& ((FBVariable) arg).getMembers().values().contains(element)))
+						.forEach(container -> getViewer().update(container, null));
 				MainLaunchConfigurationTab.this.updateLaunchConfigurationDialog();
 			}
 		}

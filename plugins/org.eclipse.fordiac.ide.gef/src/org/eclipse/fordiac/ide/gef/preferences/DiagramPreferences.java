@@ -18,14 +18,18 @@
  *   				   - moved creating a group into a method
  *   Prankur Agarwal - added a field to input maximum hidden connection label size
  *   Martin Erich Jobst - added max default value length and externalized strings
+ *   Patrick Aigner - added group for Block margins
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
+import org.eclipse.fordiac.ide.model.PreferenceConstants;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -38,6 +42,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /** The Class DiagramPreferences. */
 public class DiagramPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
@@ -85,9 +90,12 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors() */
+	 * @see
+	 * org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
+	 */
 	@Override
 	public void createFieldEditors() {
 
@@ -105,6 +113,9 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to hold the virtual group interface fields
 		createGroupVirtualGroupInterfaceOptionsPins();
+
+		// Create a Group to hold the block margin fields
+		createGroupBlockMargins();
 	}
 
 	private Group createGroup(final String title) {
@@ -249,6 +260,26 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 						{ Messages.DiagramPreferences_ShowPinComment, PIN_LABEL_STYLE_PIN_COMMENT },
 						{ Messages.DiagramPreferences_ShowConnectedOutputPinName, PIN_LABEL_STYLE_SRC_PIN_NAME } },
 				getFieldEditorParent(), true));
+	}
+
+	private void createGroupBlockMargins() {
+		final Group group = createGroup(Messages.DiagramPreferences_BlockMargins);
+		final IPreferenceStore modelStore = new ScopedPreferenceStore(InstanceScope.INSTANCE,
+				PreferenceConstants.QUALIFIER);
+
+		final IntegerFieldEditor integerFieldEditorTopBottom = new IntegerFieldEditor(
+				PreferenceConstants.MARGIN_TOP_BOTTOM, Messages.DiagramPreferences_TopBottom, group);
+		integerFieldEditorTopBottom.setValidRange(0, 1000);
+		integerFieldEditorTopBottom.setPreferenceStore(modelStore);
+		addField(integerFieldEditorTopBottom);
+
+		final IntegerFieldEditor integerFieldEditorLeftRight = new IntegerFieldEditor(
+				PreferenceConstants.MARGIN_LEFT_RIGHT, Messages.DiagramPreferences_LeftRight, group);
+		integerFieldEditorLeftRight.setValidRange(0, 1000);
+		integerFieldEditorLeftRight.setPreferenceStore(modelStore);
+		addField(integerFieldEditorLeftRight);
+
+		configGroup(group);
 	}
 
 	@Override

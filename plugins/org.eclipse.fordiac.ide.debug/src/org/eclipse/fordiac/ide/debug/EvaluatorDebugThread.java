@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -36,7 +36,7 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 	public EvaluatorDebugThread(final Thread thread, final EvaluatorDebugTarget debugTarget) {
 		super(debugTarget);
 		this.thread = thread;
-		this.fireCreationEvent();
+		fireCreationEvent();
 	}
 
 	protected void request(final int kind, final int detail) {
@@ -44,51 +44,56 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 	}
 
 	protected void request(final Object source, final int kind, final int detail) {
-		synchronized (this.request) {
-			this.request.set(new DebugEvent(source, kind, detail));
-			this.request.notifyAll();
+		synchronized (request) {
+			request.set(new DebugEvent(source, kind, detail));
+			request.notifyAll();
 		}
 	}
 
 	public DebugEvent peekRequest() {
-		return this.request.get();
+		return request.get();
 	}
 
 	public DebugEvent awaitResumeRequest() throws InterruptedException {
 		DebugEvent resultingRequest = null;
-		synchronized (this.request) {
-			while ((resultingRequest = this.request.getAndSet(null)) == null || resultingRequest.getKind() != DebugEvent.RESUME) {
-				this.request.wait(REQUEST_WAIT_TIME); // wake up every second in case we missed a notification
+		synchronized (request) {
+			while ((resultingRequest = request.getAndSet(null)) == null
+					|| resultingRequest.getKind() != DebugEvent.RESUME) {
+				request.wait(REQUEST_WAIT_TIME); // wake up every second in case we missed a notification
 			}
 		}
 		return resultingRequest;
 	}
 
+	public void terminated() {
+		fireTerminateEvent();
+	}
+
 	public Evaluator getCurrentEvaluator() {
-		return this.currentEvaluator.get();
+		return currentEvaluator.get();
 	}
 
 	public void setCurrentEvaluator(final Evaluator evaluator) {
-		this.currentEvaluator.set(evaluator);
+		currentEvaluator.set(evaluator);
 	}
 
 	public Thread getThread() {
-		return this.thread;
+		return thread;
 	}
 
 	@Override
 	public boolean canResume() {
-		return this.isSuspended();
+		return isSuspended();
 	}
 
 	@Override
 	public boolean canSuspend() {
-		return !this.isSuspended();
+		return !isSuspended();
 	}
 
 	@Override
 	public boolean isSuspended() {
-		return this.suspended.get();
+		return suspended.get();
 	}
 
 	public void setSuspended(final boolean suspended) {
@@ -96,12 +101,12 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 	}
 
 	@Override
-	public synchronized void resume() throws DebugException {
+	public synchronized void resume() {
 		this.request(DebugEvent.RESUME, DebugEvent.CLIENT_REQUEST);
 	}
 
 	@Override
-	public void suspend() throws DebugException {
+	public void suspend() {
 		this.request(DebugEvent.SUSPEND, DebugEvent.CLIENT_REQUEST);
 	}
 
@@ -122,54 +127,54 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 
 	@Override
 	public boolean isStepping() {
-		final DebugEvent req = this.request.get();
+		final DebugEvent req = request.get();
 		return req != null && req.isStepStart();
 	}
 
 	@Override
-	public void stepInto() throws DebugException {
+	public void stepInto() {
 		this.request(DebugEvent.RESUME, DebugEvent.STEP_INTO);
 	}
 
 	@Override
-	public void stepOver() throws DebugException {
+	public void stepOver() {
 		this.request(DebugEvent.RESUME, DebugEvent.STEP_OVER);
 	}
 
 	@Override
-	public void stepReturn() throws DebugException {
+	public void stepReturn() {
 		this.request(DebugEvent.RESUME, DebugEvent.STEP_RETURN);
 	}
 
 	@Override
 	public boolean canTerminate() {
-		return !this.isTerminated();
+		return !isTerminated();
 	}
 
 	@Override
 	public boolean isTerminated() {
-		return !this.thread.isAlive();
+		return !thread.isAlive();
 	}
 
 	@Override
-	public void terminate() throws DebugException {
-		this.thread.interrupt();
+	public void terminate() {
+		thread.interrupt();
 	}
 
 	@Override
 	public EvaluatorDebugStackFrame getTopStackFrame() throws DebugException {
-		final Evaluator evaluator = this.getCurrentEvaluator();
+		final Evaluator evaluator = getCurrentEvaluator();
 		if (evaluator == null) {
 			return null;
 		}
-		return this.getDebugTarget().getDebugger().getStackFrame(evaluator, this);
+		return getDebugTarget().getDebugger().getStackFrame(evaluator, this);
 	}
 
 	@Override
 	public IStackFrame[] getStackFrames() throws DebugException {
-		final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
+		final CommonEvaluatorDebugger debugger = getDebugTarget().getDebugger();
 		final List<EvaluatorDebugStackFrame> stackFrames = new ArrayList<>();
-		for (Evaluator evaluator = this.getCurrentEvaluator(); evaluator != null; evaluator = evaluator.getParent()) {
+		for (Evaluator evaluator = getCurrentEvaluator(); evaluator != null; evaluator = evaluator.getParent()) {
 			stackFrames.add(debugger.getStackFrame(evaluator, this));
 		}
 		return stackFrames.toArray(new IStackFrame[stackFrames.size()]);
@@ -182,12 +187,12 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 
 	@Override
 	public int getPriority() throws DebugException {
-		return this.thread.getPriority();
+		return thread.getPriority();
 	}
 
 	@Override
 	public String getName() throws DebugException {
-		return this.thread.getName();
+		return thread.getName();
 	}
 
 	@Override

@@ -563,4 +563,5 @@
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InternalDataType" eSuperTypes="#//DataType"/>
 </ecore:EPackage>

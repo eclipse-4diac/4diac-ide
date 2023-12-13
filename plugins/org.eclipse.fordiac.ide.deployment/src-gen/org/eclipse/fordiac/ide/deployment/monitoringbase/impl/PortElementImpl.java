@@ -16,15 +16,11 @@
  */
 package org.eclipse.fordiac.ide.deployment.monitoringbase.impl;
 
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -79,13 +75,23 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	protected Resource resource;
 
 	/**
-	 * The cached value of the '{@link #getHierarchy() <em>Hierarchy</em>}' attribute list.
+	 * The default value of the '{@link #getHierarchy() <em>Hierarchy</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHierarchy()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String HIERARCHY_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getHierarchy() <em>Hierarchy</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getHierarchy()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<String> hierarchy;
+	protected String hierarchy = HIERARCHY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -114,8 +120,9 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 			InternalEObject oldFb = (InternalEObject)fb;
 			fb = (FBNetworkElement)eResolveProxy(oldFb);
 			if (fb != oldFb) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringBasePackage.PORT_ELEMENT__FB, oldFb, fb));
+				}
 			}
 		}
 		return fb;
@@ -138,8 +145,9 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	public void setFb(FBNetworkElement newFb) {
 		FBNetworkElement oldFb = fb;
 		fb = newFb;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.PORT_ELEMENT__FB, oldFb, fb));
+		}
 	}
 
 	/**
@@ -152,8 +160,9 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 			InternalEObject oldInterfaceElement = (InternalEObject)interfaceElement;
 			interfaceElement = (IInterfaceElement)eResolveProxy(oldInterfaceElement);
 			if (interfaceElement != oldInterfaceElement) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT, oldInterfaceElement, interfaceElement));
+				}
 			}
 		}
 		return interfaceElement;
@@ -175,8 +184,9 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	public void setInterfaceElement(IInterfaceElement newInterfaceElement) {
 		IInterfaceElement oldInterfaceElement = interfaceElement;
 		interfaceElement = newInterfaceElement;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT, oldInterfaceElement, interfaceElement));
+		}
 	}
 
 	/**
@@ -189,8 +199,9 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 			InternalEObject oldResource = (InternalEObject)resource;
 			resource = (Resource)eResolveProxy(oldResource);
 			if (resource != oldResource) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringBasePackage.PORT_ELEMENT__RESOURCE, oldResource, resource));
+				}
 			}
 		}
 		return resource;
@@ -212,8 +223,9 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	public void setResource(Resource newResource) {
 		Resource oldResource = resource;
 		resource = newResource;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.PORT_ELEMENT__RESOURCE, oldResource, resource));
+		}
 	}
 
 	/**
@@ -221,11 +233,22 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 * @generated
 	 */
 	@Override
-	public EList<String> getHierarchy() {
-		if (hierarchy == null) {
-			hierarchy = new EDataTypeEList<>(String.class, this, MonitoringBasePackage.PORT_ELEMENT__HIERARCHY);
-		}
+	public String getHierarchy() {
 		return hierarchy;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHierarchy(String newHierarchy) {
+		String oldHierarchy = hierarchy;
+		hierarchy = newHierarchy;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.PORT_ELEMENT__HIERARCHY, oldHierarchy, hierarchy));
+		}
 	}
 
 	/**
@@ -234,27 +257,21 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 */
 	@Override
 	public String getPortString() {
-				StringBuilder portString = new StringBuilder(getResource().getDevice().getName());
+		StringBuilder portString = new StringBuilder(getResource().getDevice().getName());
 
-				portString.append("."); //$NON-NLS-1$
-				portString.append(resource.getName());
-				portString.append("."); //$NON-NLS-1$
+		portString.append("."); //$NON-NLS-1$
+		portString.append(resource.getName());
+		portString.append("."); //$NON-NLS-1$
 
-				for (String element : getHierarchy()) {
-					portString.append(element);
-					portString.append("."); //$NON-NLS-1$
-				}
+		portString.append(getHierarchy());
 
-				portString.append(fb.getName());
-				portString.append("."); //$NON-NLS-1$
+		if (interfaceElement.eContainer() != null && interfaceElement.eContainer().eContainer() instanceof AdapterFB) {
+			portString.append(((PortElementImpl) eContainer()).interfaceElement.getName());
+			portString.append("."); //$NON-NLS-1$
+		}
+		portString.append(interfaceElement.getName());
 
-				if (interfaceElement.eContainer() != null && interfaceElement.eContainer().eContainer() instanceof AdapterFB) {
-					portString.append(((PortElementImpl) eContainer()).interfaceElement.getName());
-					portString.append("."); //$NON-NLS-1$
-				}
-				portString.append(interfaceElement.getName());
-
-				return portString.toString();
+		return portString.toString();
 
 	}
 
@@ -284,13 +301,19 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case MonitoringBasePackage.PORT_ELEMENT__FB:
-				if (resolve) return getFb();
+				if (resolve) {
+					return getFb();
+				}
 				return basicGetFb();
 			case MonitoringBasePackage.PORT_ELEMENT__INTERFACE_ELEMENT:
-				if (resolve) return getInterfaceElement();
+				if (resolve) {
+					return getInterfaceElement();
+				}
 				return basicGetInterfaceElement();
 			case MonitoringBasePackage.PORT_ELEMENT__RESOURCE:
-				if (resolve) return getResource();
+				if (resolve) {
+					return getResource();
+				}
 				return basicGetResource();
 			case MonitoringBasePackage.PORT_ELEMENT__HIERARCHY:
 				return getHierarchy();
@@ -317,8 +340,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 				setResource((Resource)newValue);
 				return;
 			case MonitoringBasePackage.PORT_ELEMENT__HIERARCHY:
-				getHierarchy().clear();
-				getHierarchy().addAll((Collection<? extends String>)newValue);
+				setHierarchy((String)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -343,7 +365,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 				setResource((Resource)null);
 				return;
 			case MonitoringBasePackage.PORT_ELEMENT__HIERARCHY:
-				getHierarchy().clear();
+				setHierarchy(HIERARCHY_EDEFAULT);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -365,7 +387,7 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 			case MonitoringBasePackage.PORT_ELEMENT__RESOURCE:
 				return resource != null;
 			case MonitoringBasePackage.PORT_ELEMENT__HIERARCHY:
-				return hierarchy != null && !hierarchy.isEmpty();
+				return HIERARCHY_EDEFAULT == null ? hierarchy != null : !HIERARCHY_EDEFAULT.equals(hierarchy);
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -377,7 +399,9 @@ public class PortElementImpl extends EObjectImpl implements PortElement {
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (hierarchy: "); //$NON-NLS-1$

@@ -23,6 +23,7 @@ import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IFlushableStreamMonitor;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
 public class EvaluatorStreamMonitor implements IFlushableStreamMonitor, EvaluatorMonitor {
@@ -38,71 +39,76 @@ public class EvaluatorStreamMonitor implements IFlushableStreamMonitor, Evaluato
 
 	@Override
 	public String getContents() {
-		return this.messageBuffer.stream().collect(Collectors.joining("\n")); //$NON-NLS-1$
+		return messageBuffer.stream().collect(Collectors.joining("\n")); //$NON-NLS-1$
 	}
 
 	@Override
 	public void flushContents() {
-		this.messageBuffer.clear();
+		messageBuffer.clear();
 	}
 
 	@Override
 	public void setBuffered(final boolean buffer) {
-		this.buffered = buffer;
+		buffered = buffer;
 	}
 
 	@Override
 	public boolean isBuffered() {
-		return this.buffered;
+		return buffered;
 	}
 
 	@Override
 	public void addListener(final IStreamListener listener) {
-		this.listeners.add(listener);
+		listeners.add(listener);
 	}
 
 	@Override
 	public void removeListener(final IStreamListener listener) {
-		this.listeners.remove(listener);
+		listeners.remove(listener);
 	}
 
 	protected void message(final String message) {
-		if (this.buffered) {
-			this.messageBuffer.add(message);
+		if (buffered) {
+			messageBuffer.add(message);
 		}
-		this.listeners.forEach(l -> l.streamAppended(message, this));
+		listeners.forEach(l -> l.streamAppended(message, this));
 	}
 
 	@Override
 	public void info(final String message) {
-		if (!this.error) {
+		if (!error) {
 			message(message + "\n"); //$NON-NLS-1$
 		}
 	}
 
 	@Override
 	public void warn(final String message) {
-		if (this.error) {
+		if (error) {
 			message(message + "\n"); //$NON-NLS-1$
 		}
 	}
 
 	@Override
 	public void error(final String message) {
-		if (this.error) {
+		if (error) {
 			message(message + "\n"); //$NON-NLS-1$
 		}
 	}
 
 	@Override
 	public void error(final String message, final Throwable t) {
-		if (this.error) {
+		if (error) {
 			message(message + ": " + t + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	@Override
 	public void update(final Collection<? extends Variable<?>> variables, final Evaluator evaluator) {
+		// do nothing
+	}
+
+	@Override
+	public void terminated(final EvaluatorThreadPoolExecutor executor) {
 		// do nothing
 	}
 }

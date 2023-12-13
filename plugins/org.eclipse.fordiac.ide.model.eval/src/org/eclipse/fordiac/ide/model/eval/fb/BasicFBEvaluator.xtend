@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.eval.fb
 
 import java.util.Map
-import java.util.Queue
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.value.ECStateValue
@@ -31,15 +30,6 @@ class BasicFBEvaluator extends BaseFBEvaluator<BasicFBType> {
 
 	new(BasicFBType type, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		super(type, context, variables, parent)
-		transitionEvaluators = type.ECC.ECTransition.filter[!it.conditionExpression.nullOrEmpty].toInvertedMap [
-			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends ECTransition>, this.context,
-				emptySet, this)
-		]
-	}
-
-	@Deprecated(forRemoval=true)
-	new(BasicFBType type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue, Evaluator parent) {
-		super(type, context, variables, queue, parent)
 		transitionEvaluators = type.ECC.ECTransition.filter[!it.conditionExpression.nullOrEmpty].toInvertedMap [
 			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends ECTransition>, this.context,
 				emptySet, this)

@@ -13,6 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -21,7 +25,7 @@ import org.eclipse.gef.commands.Command;
 /**
  * The Class ChangeCommentCommand.
  */
-public abstract class ChangeIdentificationCommand extends Command {
+public abstract class ChangeIdentificationCommand extends Command implements ScopedCommand {
 
 	/** The identification of the type. */
 	private final Identification identification;
@@ -37,11 +41,14 @@ public abstract class ChangeIdentificationCommand extends Command {
 	 * @param comment the comment
 	 */
 	protected ChangeIdentificationCommand(final LibraryElement type) {
-		super();
 		if (null == type.getIdentification()) {
 			type.setIdentification(LibraryElementFactory.eINSTANCE.createIdentification());
 		}
 		identification = type.getIdentification();
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(identification);
+	}
 }

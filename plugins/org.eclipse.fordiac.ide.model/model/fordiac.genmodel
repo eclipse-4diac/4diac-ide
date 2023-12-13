@@ -324,6 +324,9 @@
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerDataType"/>
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerFBNElement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerFBNElement/repairedElement"/>
+      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerFBNElement/getWidth" body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerFBNElement/getHeight"
+          body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerInterface">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerInterface/value"/>
@@ -354,6 +357,8 @@
       <genOperations ecoreOperation="lib.ecore#//FB/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FB/getInOutParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FB/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/getWidth" body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/getHeight" body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBNetwork">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetwork/networkElements"/>
@@ -390,6 +395,10 @@
       <genOperations ecoreOperation="lib.ecore#//FBNetwork/getConnectionIndex" body="return org.eclipse.fordiac.ide.model.Annotations.getConnectionIndex(this, connection);">
         <genParameters ecoreParameter="lib.ecore#//FBNetwork/getConnectionIndex/connection"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/validateCollisions" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkAnnotations.validateCollisions(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/validateCollisions/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/validateCollisions/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBNetworkElement">
       <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//FBNetworkElement/interface"/>
@@ -417,6 +426,14 @@
         <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/validateName/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/validateName/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getQualifiedName"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementAnnotations.getQualifiedName(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getWidth" body="throw new UnsupportedOperationException();"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getHeight" body="throw new UnsupportedOperationException();"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getVisibleWidth"
+          body="return getWidth();"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getVisibleHeight"
+          body="return getHeight();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/interfaceList"/>
@@ -445,6 +462,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/height"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/locked"/>
       <genOperations ecoreOperation="lib.ecore#//Group/getInterface" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.EMPTY_INTERFACE_LIST;"/>
+      <genOperations ecoreOperation="lib.ecore#//Group/validateCollisions" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkAnnotations.validateCollisions(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//Group/validateCollisions/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//Group/validateCollisions/context"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//Comment/getInterface" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.EMPTY_INTERFACE_LIST;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//HiddenElement">
@@ -668,6 +689,8 @@
       <genOperations ecoreOperation="lib.ecore#//SubApp/isUnfolded" body="org.eclipse.fordiac.ide.model.libraryElement.Attribute attr = this.getAttribute(org.eclipse.fordiac.ide.model.LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);&#xA;return (attr != null) &amp;&amp; &quot;true&quot;.equals(attr.getValue()); //$NON-NLS-1$&#xA;"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/isTyped" body="return (getType() != null);"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/loadSubAppNetwork" body="return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.loadSubAppNetwork(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/getVisibleWidth" body="return isUnfolded() ? getWidth() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/getVisibleHeight" body="return isUnfolded() ? getHeight() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//StructManipulator">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>
@@ -749,6 +772,16 @@
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateMultipleInputConnections(this, diagnostics, context);">
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateMultipleInputConnections/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateMultipleInputConnections/context"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateNoValueForGenericTypeVariable"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateNoValueForGenericTypeVariable(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateNoValueForGenericTypeVariable/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateNoValueForGenericTypeVariable/context"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateValueForGenericInstanceVariable"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateValueForGenericInstanceVariable(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateValueForGenericInstanceVariable/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateValueForGenericInstanceVariable/context"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateVarInOutSourceTypeIsWellDefined"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutSourceTypeIsWellDefined(this, diagnostics, context);">
@@ -1105,6 +1138,7 @@
         <genParameters ecoreParameter="data.ecore#//LdateType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
+    <genClasses ecoreClass="data.ecore#//InternalDataType"/>
   </genPackages>
   <genPackages prefix="Buildpath" basePackage="org.eclipse.fordiac.ide.model" resource="XML"
       disposableProviderFactory="true" ecorePackage="buildpath.ecore#/">

@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.fb
 
-import java.util.Queue
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.Event
@@ -21,11 +20,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 class SimpleFBEvaluator extends BaseFBEvaluator<SimpleFBType> {
 	new(SimpleFBType type, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		super(type, context, variables, parent)
-	}
-
-	@Deprecated(forRemoval=true)
-	new(SimpleFBType type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue, Evaluator parent) {
-		super(type, context, variables, queue, parent)
 	}
 
 	override evaluate(Event event) {

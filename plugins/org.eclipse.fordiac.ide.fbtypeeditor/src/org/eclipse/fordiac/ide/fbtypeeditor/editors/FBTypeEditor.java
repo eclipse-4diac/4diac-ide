@@ -47,6 +47,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -104,13 +105,15 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	private FBTypeContentOutline contentOutline = null;
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
+	private ValidationJob validationJob;
 
 	private final Adapter adapter = new AdapterImpl() {
 
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(notification.getFeature())) {
+			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(notification.getFeature())
+					|| TypeEntry.TYPE_ENTRY_FILE_FEATURE.equals(notification.getFeature())) {
 				Display.getDefault().asyncExec(() -> {
 					if (null != typeEntry) {
 						// the input should be set before the title is updated
@@ -214,11 +217,13 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		setPartName(typeEntry.getTypeName());
 
 		fbType.eAdapters().add(adapter);
+		typeEntry.eAdapters().add(adapter);
 
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		getCommandStack().addCommandStackEventListener(this);
 
 		annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEntry.getFile());
+		validationJob = new ValidationJob(getPartName(), commandStack, annotationModel);
 
 		super.init(site, editorInput);
 	}
@@ -250,8 +255,16 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 
 	@Override
 	public void dispose() {
-		if ((fbType != null) && fbType.eAdapters().contains(adapter)) {
-			fbType.eAdapters().remove(adapter);
+		if ((fbType != null)) {
+			if (fbType.eAdapters().contains(adapter)) {
+				fbType.eAdapters().remove(adapter);
+			}
+			if (typeEntry.eAdapters().contains(adapter)) {
+				typeEntry.eAdapters().remove(adapter);
+			}
+		}
+		if (validationJob != null) {
+			validationJob.dispose();
 		}
 		if (annotationModel != null) {
 			annotationModel.dispose();
@@ -465,8 +478,13 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	public void reloadFile() {
 		final FBType newFBType = (FBType) typeEntry.getTypeEditable();
 		if (newFBType != fbType) {
-			if ((fbType != null) && fbType.eAdapters().contains(adapter)) {
-				fbType.eAdapters().remove(adapter);
+			if ((fbType != null)) {
+				if (fbType.eAdapters().contains(adapter)) {
+					fbType.eAdapters().remove(adapter);
+				}
+				if (typeEntry.eAdapters().contains(adapter)) {
+					typeEntry.eAdapters().remove(adapter);
+				}
 			}
 			fbType = newFBType;
 			editors.stream().forEach(e -> e.reloadType(fbType));
@@ -477,6 +495,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			}
 			getCommandStack().flush();
 			fbType.eAdapters().add(adapter);
+			typeEntry.eAdapters().add(adapter);
 			setPartName(typeEntry.getTypeName());
 		}
 	}

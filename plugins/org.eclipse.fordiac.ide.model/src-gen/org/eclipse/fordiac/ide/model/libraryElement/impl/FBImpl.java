@@ -129,4 +129,24 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getWidth() {
+		return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getHeight() {
+		return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);
+	}
+
 } //FBImpl

@@ -16,8 +16,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -26,7 +30,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class AddElementsToGroup extends Command {
+public class AddElementsToGroup extends Command implements ScopedCommand {
 
 	private final Group targetGroup;
 	private final List<FBNetworkElement> elementsToAdd;
@@ -34,7 +38,7 @@ public class AddElementsToGroup extends Command {
 	private Point offset;
 
 	public AddElementsToGroup(final Group targetGroup, final List<?> selection, final Point offset) {
-		this.targetGroup = targetGroup;
+		this.targetGroup = Objects.requireNonNull(targetGroup);
 		this.offset = offset.getCopy();
 		elementsToAdd = createElementList(selection);
 		identifyRemoveElements();
@@ -129,4 +133,8 @@ public class AddElementsToGroup extends Command {
 		return offset.y;
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(targetGroup);
+	}
 }

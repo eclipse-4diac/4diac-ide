@@ -21,7 +21,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
@@ -50,6 +53,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
 import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -57,6 +61,8 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.CommandStack;
 
 public class SystemImporter extends CommonElementImporter {
+
+	private final Map<Resource, Map<String, FBNetworkElement>> resFBNElementMapping = new HashMap<>();
 
 	public SystemImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
 		super(inputStream, typeLibrary);
@@ -243,7 +249,7 @@ public class SystemImporter extends CommonElementImporter {
 		final FBNetworkElement fromElement = findMappingTargetFromName(fromValue);
 		final FBNetworkElement toElement = (fromElement instanceof CommunicationChannel)
 				? findMappingTargetFromName(toValue, fromElement)
-				: findMappingTargetFromName(toValue);
+				: findMappingToElement(fromValue, toValue);
 		if (fromElement instanceof SubApp) {
 			FBNetworkHelper.loadSubappNetwork(fromElement);
 		}
@@ -254,6 +260,37 @@ public class SystemImporter extends CommonElementImporter {
 
 		// TODO perform some notificatin to the user that the mapping has an issue
 		proceedToEndElementNamed(LibraryElementTags.MAPPING_ELEMENT);
+	}
+
+	private FBNetworkElement findMappingToElement(final String fromValue, final String toValue) {
+		final var devResSeperator = toValue.indexOf('.');
+		if (devResSeperator == -1) {
+			getErrors().add(
+					new TypeImportDiagnostic("Wrong to mapping string", fromValue + "->" + toValue, getLineNumber()));//$NON-NLS-1$
+			return null;
+		}
+
+		final Device dev = getElement().getDeviceNamed(toValue.substring(0, devResSeperator));
+		if (dev == null) {
+			getErrors().add(
+					new TypeImportDiagnostic("Device missing in mapping", fromValue + "->" + toValue, getLineNumber()));//$NON-NLS-1$
+			return null;
+		}
+
+		final var resFBSeperator = toValue.indexOf('.', devResSeperator + 1);
+		final String resName = (resFBSeperator == -1) ? toValue.substring(devResSeperator + 1)
+				: toValue.substring(devResSeperator + 1, resFBSeperator);
+
+		final Resource res = dev.getResourceNamed(resName);
+		if (res == null) {
+			getErrors().add(new TypeImportDiagnostic("Resource missing in mapping", fromValue + "->" + toValue, //$NON-NLS-1$
+					getLineNumber()));
+			return null;
+		}
+
+		final String targetFBName = (resFBSeperator == -1) ? fromValue : toValue.substring(resFBSeperator + 1);
+
+		return resFBNElementMapping.getOrDefault(res, Collections.emptyMap()).get(targetFBName);
 	}
 
 	private static Mapping createMappingEntry(final FBNetworkElement toElement, final FBNetworkElement fromElement) {
@@ -267,32 +304,11 @@ public class SystemImporter extends CommonElementImporter {
 
 	private FBNetworkElement findMappingTargetFromName(final String targetName,
 			final FBNetworkElement copyCommunication) {
-		FBNetworkElement element = null;
 		if (null != targetName) {
-			Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); ////$NON-NLS-1$
+			final Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); ////$NON-NLS-1$
 			if (parts.size() >= 2) {
-				FBNetwork nw = null;
-				// first find out if the mapping points to a device/resource or application and
-				// get the appropriate starting fbnetwork
-				final Device dev = getElement().getDeviceNamed(parts.getFirst());
-				final Application application = getElement().getApplicationNamed(parts.getFirst());
 				final Segment segment = getElement().getSystemConfiguration().getSegmentNamed(parts.getFirst());
-				if (null != dev) {
-					parts.pollFirst();
-					final Resource res = dev.getResourceNamed(parts.pollFirst());
-					if (null != res) {
-						nw = res.getFBNetwork();
-						element = findMappingTargetInFBNetwork(nw, parts);
-					}
-				}
-				if ((null == element) && (null != application)) {
-					parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); //$NON-NLS-1$
-					parts.pollFirst();
-					nw = application.getFBNetwork();
-					element = findMappingTargetInFBNetwork(nw, parts);
-				}
-				if ((null == dev) && (null == application) && (null != segment)) {
-
+				if (null != segment) {
 					parts.pollFirst();
 					final String windowName = parts.pollFirst();
 					final Optional<CommunicationMappingTarget> findWindow = segment.getCommunication()
@@ -306,16 +322,26 @@ public class SystemImporter extends CommonElementImporter {
 						comm.setTypeEntry(copyCommunication.getTypeEntry());
 						comm.setInterface(copyCommunication.getType().getInterfaceList().copy());
 						channel.getMappedElements().add(comm);
-						element = comm;
+						return comm;
 					}
 				}
 			}
 		}
-		return element;
+		return null;
 	}
 
 	private FBNetworkElement findMappingTargetFromName(final String targetName) {
-		return findMappingTargetFromName(targetName, null);
+		if (null != targetName) {
+			final Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); ////$NON-NLS-1$
+			if (parts.size() >= 2) {
+				final Application application = getElement().getApplicationNamed(parts.getFirst());
+				if (null != application) {
+					parts.pollFirst();
+					return findMappingTargetInFBNetwork(application.getFBNetwork(), parts);
+				}
+			}
+		}
+		return null;
 	}
 
 	private static FBNetworkElement findMappingTargetInFBNetwork(final FBNetwork nw, final Deque<String> parts) {
@@ -326,9 +352,9 @@ public class SystemImporter extends CommonElementImporter {
 					// the list is empty this should be the entity we are looking for
 					return element;
 				}
-				if (element instanceof SubApp) {
+				if (element instanceof final SubApp subApp) {
 					// as there are more elements the current should be a subapp
-					findMappingTargetInFBNetwork(((SubApp) element).getFbNetwork(), parts);
+					findMappingTargetInFBNetwork(subApp.getSubAppNetwork(), parts);
 				}
 			}
 		}
@@ -356,7 +382,10 @@ public class SystemImporter extends CommonElementImporter {
 				}
 				break;
 			case LibraryElementTags.RESOURCE_ELEMENT:
-				device.getResource().add(parseResource());
+				final Map<String, FBNetworkElement> fbNetworkElementMap = new HashMap<>();
+				final var resource = parseResource(fbNetworkElementMap);
+				device.getResource().add(resource);
+				resFBNElementMapping.put(resource, fbNetworkElementMap);
 				break;
 			default:
 				return false;

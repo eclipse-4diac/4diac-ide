@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
+import org.eclipse.fordiac.ide.model.dataimport.AttributeTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
@@ -40,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -127,6 +129,14 @@ public class TypeFromTemplateCreator {
 	private TypeImporter getTypeImporter(final TypeEntry entry) {
 		if (entry instanceof AdapterTypeEntry) {
 			return new ADPImporter(entry.getFile()) {
+				@Override
+				protected InputStream getInputStream() throws IOException {
+					return Files.newInputStream(typeTemplate.toPath());
+				}
+			};
+		}
+		if (entry instanceof AttributeTypeEntry) {
+			return new AttributeTypeImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {
 					return Files.newInputStream(typeTemplate.toPath());

@@ -463,29 +463,6 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected FBNetworkElementItemProvider fbNetworkElementItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createFBNetworkElementAdapter() {
-		if (fbNetworkElementItemProvider == null) {
-			fbNetworkElementItemProvider = new FBNetworkElementItemProvider(this);
-		}
-
-		return fbNetworkElementItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.SubApp} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2018 Profactor GmbH, AIT, fortiss GmbH
- * 							 Johannes Kepler University,
- *				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2012, 2023 Profactor GmbH, AIT, fortiss GmbH,
+ * 							Johannes Kepler University,
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,6 +33,8 @@ import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 
 public final class MonitoringManagerUtils {
 
+	private static final String HIERARCHY_SEP = "."; //$NON-NLS-1$
+
 	private MonitoringManagerUtils() {
 		throw new AssertionError(); // class should not be instantiated
 	}
@@ -40,11 +42,9 @@ public final class MonitoringManagerUtils {
 	public static boolean canBeMonitored(final IInterfaceElement ie, final boolean showError) {
 		final FBNetworkElement fbNetworkElement = ie.getFBNetworkElement();
 
-		if (fbNetworkElement instanceof SubApp) {
-			checkSubAppNetwork((SubApp) fbNetworkElement);
-
+		if (fbNetworkElement instanceof final SubApp subApp) {
+			checkSubAppNetwork(subApp);
 			final IInterfaceElement anchor = SubAppPortHelper.findAnchorInterfaceElement(ie);
-
 			if (anchor == null) {
 				if (showError) {
 					ErrorMessenger.popUpErrorMessage(Messages.MonitoringManagerUtils_NoSubappAnchor);
@@ -87,7 +87,7 @@ public final class MonitoringManagerUtils {
 		if (ie instanceof AdapterDeclaration) {
 			p = MonitoringFactory.eINSTANCE.createAdapterPortElement();
 		} else if (fb instanceof SubApp) {
-			p = createrSubAppPort(ie);
+			p = createSubAppPort(ie);
 
 		} else {
 			p = MonitoringBaseFactory.eINSTANCE.createPortElement();
@@ -103,24 +103,27 @@ public final class MonitoringManagerUtils {
 		if (fb instanceof FB || fb instanceof SubApp) {
 			p.setFb(fb);
 		}
-		setupFBHierarchy(fb, p);
+		p.setHierarchy(createFBHierarchy(fb));
 		p.setInterfaceElement(ie);
 		return p;
 	}
 
-	public static PortElement createrSubAppPort(final IInterfaceElement ie) {
+	public static PortElement createSubAppPort(final IInterfaceElement ie) {
 		final SubAppPortElement subAppPort = MonitoringFactory.eINSTANCE.createSubAppPortElement();
 		final IInterfaceElement anchor = SubAppPortHelper.findAnchorInterfaceElement(ie);
 		subAppPort.setAnchor(anchor);
 		return subAppPort;
 	}
 
-	private static void setupFBHierarchy(final FBNetworkElement element, final PortElement p) {
-		if (!element.isMapped() && element.getFbNetwork().eContainer() instanceof SubApp) {
-			final SubApp subApp = (SubApp) element.getFbNetwork().eContainer();
-			setupFBHierarchy(subApp, p);
-			p.getHierarchy().add(subApp.getName());
+	private static String createFBHierarchy(final FBNetworkElement fb) {
+		final var parent = fb.eContainer().eContainer();
+		if (parent instanceof final SubApp subApp) {
+			return createFBHierarchy(subApp) + fb.getName() + HIERARCHY_SEP;
 		}
+		if (parent instanceof Resource) {
+			return ((fb.isMapped()) ? fb.getOpposite().getQualifiedName() : fb.getName()) + HIERARCHY_SEP;
+		}
+		return fb.getQualifiedName() + HIERARCHY_SEP;
 	}
 
 }

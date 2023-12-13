@@ -16,8 +16,9 @@ package org.eclipse.fordiac.ide.datatypeeditor.properties;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
 import org.eclipse.fordiac.ide.gef.properties.AttributeSection;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -31,7 +32,6 @@ public class StructAttributeSection extends AttributeSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		new Label(parent, SWT.NONE);
 		label = new Label(parent, SWT.NONE);
 		label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		label.setBackground(GUIHelper.COLOR_WHITE);
@@ -42,21 +42,24 @@ public class StructAttributeSection extends AttributeSection {
 	protected void setType(final Object input) {
 		super.setType(input);
 		refresh(); // refresh to update input of viewer
-		if (getType() instanceof final StructuredType structuredType) {
-			label.setText(structuredType.getName() + ":"); //$NON-NLS-1$
-		} else if (getType() instanceof final VarDeclaration varDecl) {
-			label.setText(varDecl.getName() + ":"); //$NON-NLS-1$
+		if (getType() instanceof final INamedElement namedElement) {
+			label.setText(namedElement.getName() + ":"); //$NON-NLS-1$
 		}
 	}
 
 	@Override
-	protected ConfigurableObject getInputType(final Object input) {
+	protected ConfigurableObject getInputType(Object input) {
+		if (input instanceof final StructEditingComposite structViewingComposite) {
+			input = structViewingComposite.setConfigurablObjectListener(this::setType);
+		}
+		if (input instanceof final StructuredType structuredType) {
+			if (structuredType.eContainer() instanceof final AttributeDeclaration attributeDeclaration) {
+				return attributeDeclaration;
+			}
+			return structuredType;
+		}
 		if (input instanceof final ConfigurableObject configurableObject) {
 			return configurableObject;
-		}
-
-		if (input instanceof final StructEditingComposite structViewingComposite) {
-			return structViewingComposite.setConfigurablObjectListener(this::setType);
 		}
 		return null;
 	}

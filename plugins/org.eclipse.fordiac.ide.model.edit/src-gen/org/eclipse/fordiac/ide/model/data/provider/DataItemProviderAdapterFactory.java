@@ -1123,6 +1123,29 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 		return ldateTypeItemProvider;
 	}
 
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.InternalDataType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected InternalDataTypeItemProvider internalDataTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.InternalDataType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createInternalDataTypeAdapter() {
+		if (internalDataTypeItemProvider == null) {
+			internalDataTypeItemProvider = new InternalDataTypeItemProvider(this);
+		}
+
+		return internalDataTypeItemProvider;
+	}
+
 	/** This returns the root adapter factory that contains this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */

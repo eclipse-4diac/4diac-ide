@@ -162,21 +162,9 @@ public class VarConfigurationSection extends AbstractSection {
 		@Override
 		public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
 			return switch (getColumns().get(columnIndex)) {
-			case NAME -> getQualifiedName(rowObject);
+			case NAME -> rowObject.getQualifiedName();
 			default -> super.getDataValue(rowObject, columnIndex);
 			};
-		}
-
-		private String getQualifiedName(final VarDeclaration rowObject) {
-			final INamedElement sectionType = getCommandExecutor().getType();
-			final String name = rowObject.getQualifiedName();
-			if (!(sectionType instanceof Application)) {
-				final String typeName = sectionType.getQualifiedName();
-				if (name.startsWith(typeName + ".")) { //$NON-NLS-1$
-					return name.substring(typeName.length() + 1);
-				}
-			}
-			return name;
 		}
 
 		@Override

@@ -18,11 +18,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
+import java.util.Collections;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -82,6 +84,7 @@ public class StructEditingComposite extends Composite
 	private ConfigurableObject currentConfigurableObject = null;
 	private ConfigurablObjectListener configObjectListener = null;
 	private boolean blockRefresh;
+	private Label titleLabel;
 
 	private final Adapter adapter = new AdapterImpl() {
 
@@ -92,15 +95,17 @@ public class StructEditingComposite extends Composite
 				notifyRefresh();
 			}
 		}
-
-		private void notifyRefresh() {
-			Display.getDefault().syncExec(() -> {
-				if (null != structType && natTable != null && !natTable.isDisposed()) {
-					natTable.refresh();
-				}
-			});
-		}
 	};
+
+	private void notifyRefresh() {
+		Display.getDefault().syncExec(() -> {
+			if (null != structType && natTable != null && !natTable.isDisposed()) {
+				natTable.refresh();
+			}
+		});
+	}
+
+	private final GraphicalAnnotationModelListener annotationModelListener = event -> notifyRefresh();
 
 	public StructEditingComposite(final Composite parent, final CommandStack cmdStack, final StructuredType structType,
 			final GraphicalAnnotationModel annotationModel) {
@@ -110,6 +115,7 @@ public class StructEditingComposite extends Composite
 		this.annotationModel = annotationModel;
 		setStructType(structType);
 		createPartControl();
+		addAnnotationModelListener();
 	}
 
 	private void createPartControl() {
@@ -137,10 +143,13 @@ public class StructEditingComposite extends Composite
 				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, false));
 	}
 
-	private static void showLabel(final Composite parent) {
-		final Label label = new Label(parent, SWT.LEFT);
-		label.setText(Messages.StructViewingComposite_Headline);
-		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).span(2, 1).applyTo(label);
+	private void showLabel(final Composite parent) {
+		titleLabel = new Label(parent, SWT.LEFT);
+		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).span(2, 1).applyTo(titleLabel);
+	}
+
+	public void setTitel(final String title) {
+		titleLabel.setText(title);
 	}
 
 	private void createNatTable() {
@@ -217,7 +226,24 @@ public class StructEditingComposite extends Composite
 			if (structType != null) {
 				structMemberProvider.setInput(structType.getMemberVariables());
 				structType.eAdapters().add(adapter);
+			} else {
+				structMemberProvider.setInput(Collections.emptyList());
 			}
+			if (natTable != null && !natTable.isDisposed()) {
+				natTable.refresh();
+			}
+		}
+	}
+
+	protected void removeAnnotationModelListener() {
+		if (annotationModel != null) {
+			annotationModel.removeAnnotationModelListener(annotationModelListener);
+		}
+	}
+
+	protected void addAnnotationModelListener() {
+		if (annotationModel != null) {
+			annotationModel.addAnnotationModelListener(annotationModelListener);
 		}
 	}
 
@@ -233,7 +259,7 @@ public class StructEditingComposite extends Composite
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof final VarDeclaration varEntry) {
-			cmd.add(new InsertVariableCommand(getType().getMemberVariables(), varEntry, index));
+			cmd.add(new InsertVariableCommand(getType(), getType().getMemberVariables(), varEntry, index));
 		}
 	}
 
@@ -305,6 +331,7 @@ public class StructEditingComposite extends Composite
 	@Override
 	public void dispose() {
 		super.dispose();
+		removeAnnotationModelListener();
 		if (getType() != null) {
 			getType().eAdapters().remove(adapter);
 		}

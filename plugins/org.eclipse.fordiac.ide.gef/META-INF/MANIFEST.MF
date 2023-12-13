@@ -20,6 +20,7 @@ Export-Package: org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.gef.ruler,
  org.eclipse.fordiac.ide.gef.tools,
  org.eclipse.fordiac.ide.gef.utilities,
+ org.eclipse.fordiac.ide.gef.validation,
  org.eclipse.fordiac.ide.gef.widgets
 Require-Bundle: org.eclipse.gef,
  org.eclipse.ui,

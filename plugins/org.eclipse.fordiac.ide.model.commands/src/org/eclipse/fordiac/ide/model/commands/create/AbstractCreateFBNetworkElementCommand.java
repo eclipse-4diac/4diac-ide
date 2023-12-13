@@ -16,9 +16,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.Set;
+
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -29,7 +33,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 
-public abstract class AbstractCreateFBNetworkElementCommand extends Command implements ConnectionLayoutTagger {
+public abstract class AbstractCreateFBNetworkElementCommand extends Command
+		implements ConnectionLayoutTagger, ScopedCommand {
 
 	private final FBNetworkElement element;
 	private final FBNetwork fbNetwork;
@@ -46,10 +51,8 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command impl
 
 	@Override
 	public boolean canExecute() {
-		if (FBNetworkHelper.isTypeInsertionSave(element.getType(), fbNetwork)) {
-			return fbNetwork != null;
-		}
-		return false;
+		return fbNetwork != null && element != null
+				&& FBNetworkHelper.isTypeInsertionSave(element.getType(), fbNetwork);
 	}
 
 	@Override
@@ -127,5 +130,13 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command impl
 			newDecl.setVisible(varDecl.isVisible());
 			newDecl.setVarConfig(varDecl.isVarConfig());
 		});
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (fbNetwork != null) {
+			return Set.of(fbNetwork);
+		}
+		return Set.of();
 	}
 }

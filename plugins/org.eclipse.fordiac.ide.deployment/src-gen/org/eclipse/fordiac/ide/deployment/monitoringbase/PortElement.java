@@ -16,7 +16,6 @@
  */
 package org.eclipse.fordiac.ide.deployment.monitoringbase;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -124,20 +123,30 @@ public interface PortElement extends EObject {
 	void setResource(Resource value);
 
 	/**
-	 * Returns the value of the '<em><b>Hierarchy</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.String}.
+	 * Returns the value of the '<em><b>Hierarchy</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Hierarchy</em>' attribute list isn't clear, there
 	 * really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Hierarchy</em>' attribute list.
+	 * @return the value of the '<em>Hierarchy</em>' attribute.
+	 * @see #setHierarchy(String)
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage#getPortElement_Hierarchy()
 	 * @model unique="false" dataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */
-	EList<String> getHierarchy();
+	String getHierarchy();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement#getHierarchy <em>Hierarchy</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hierarchy</em>' attribute.
+	 * @see #getHierarchy()
+	 * @generated
+	 */
+	void setHierarchy(String value);
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->

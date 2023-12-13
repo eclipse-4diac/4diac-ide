@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -95,7 +96,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		packageGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		composite = getWidgetFactory().createComposite(packageGroup, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
+		GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).margins(0, 0).applyTo(composite);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		getWidgetFactory().createLabel(composite, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupStyledText(composite, true);
@@ -152,28 +153,30 @@ public class PackageInfoWidget extends TypeInfoWidget {
 	@Override
 	public void refresh() {
 		super.refresh();
-		final GraphicalAnnotationModel annotationModel = annotationModelSupplier.get();
-		final Consumer<Command> commandExecutorBuffer = getCommandExecutor();
-		setCommandExecutor(null);
-		if ((getType() != null)) {
-			nameText.setEditable(!isReadonly());
-			nameText.setEnabled(!isReadonly());
-			nameTextProposalAdapter.refresh();
-			buttons.setEnabled(!isReadonly());
-			organizeImportsButton.setEnabled(!isReadonly());
-			packageViewer.getTable().setEnabled(!isReadonly());
+		if (packageViewer != null && !packageViewer.getControl().isDisposed()) {
+			final GraphicalAnnotationModel annotationModel = annotationModelSupplier.get();
+			final Consumer<Command> commandExecutorBuffer = getCommandExecutor();
+			setCommandExecutor(null);
+			if ((getType() != null)) {
+				nameText.setEditable(!isReadonly());
+				nameText.setEnabled(!isReadonly());
+				nameTextProposalAdapter.refresh();
+				buttons.setEnabled(!isReadonly());
+				organizeImportsButton.setEnabled(!isReadonly());
+				packageViewer.getTable().setEnabled(!isReadonly());
 
-			final CompilerInfo compilerInfo = getType().getCompilerInfo();
-			final StyledString nameStyledString = new StyledString(PackageNameHelper.getPackageName(getType()),
-					annotationModel != null && compilerInfo != null
-							? GraphicalAnnotationStyles.getAnnotationStyle(annotationModel.getAnnotations(compilerInfo))
-							: null);
-			nameText.setText(nameStyledString.toString());
-			nameText.setStyleRanges(nameStyledString.getStyleRanges());
-			packageViewer.setInput(getType());
+				final CompilerInfo compilerInfo = getType().getCompilerInfo();
+				final StyledString nameStyledString = new StyledString(PackageNameHelper.getPackageName(getType()),
+						annotationModel != null && compilerInfo != null
+								? GraphicalAnnotationStyles
+										.getAnnotationStyle(annotationModel.getAnnotations(compilerInfo))
+								: null);
+				nameText.setText(nameStyledString.toString());
+				nameText.setStyleRanges(nameStyledString.getStyleRanges());
+				packageViewer.setInput(getType());
+			}
+			setCommandExecutor(commandExecutorBuffer);
 		}
-		setCommandExecutor(commandExecutorBuffer);
-
 	}
 
 	@Override
@@ -196,6 +199,15 @@ public class PackageInfoWidget extends TypeInfoWidget {
 			return getType().getTypeLibrary();
 		}
 		return null;
+	}
+
+	private StyledText createGroupStyledText(final Composite group, final boolean editable) {
+		final StyledText text = new StyledText(group, SWT.BORDER | SWT.SINGLE | getWidgetFactory().getOrientation());
+		getWidgetFactory().adapt(text, true, false);
+		text.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+		text.setEditable(editable);
+		text.setEnabled(editable);
+		return text;
 	}
 
 	protected static class ImportsEditingSupport extends EditingSupport {

@@ -15,12 +15,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
+import java.util.Objects;
+import java.util.Set;
+
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.gef.commands.Command;
 
-public class DeleteInternalFBCommand extends Command {
+public class DeleteInternalFBCommand extends Command implements ScopedCommand {
 
 	/** The type to whose list the new variable is added. */
 	private final BaseFBType baseFbtype;
@@ -32,16 +37,12 @@ public class DeleteInternalFBCommand extends Command {
 	private int oldIndex;
 
 	public DeleteInternalFBCommand(final BaseFBType baseFbtype, final FB fb) {
-		if (fb == null) {
-			throw new IllegalArgumentException("fb can't be null"); //$NON-NLS-1$
-		}
-		this.baseFbtype = baseFbtype;
-		this.fbToDelete = fb;
+		this.baseFbtype = Objects.requireNonNull(baseFbtype);
+		this.fbToDelete = Objects.requireNonNull(fb);
 	}
 
 	private EList<FB> getInteralFBList() {
-		final BaseFBType type = baseFbtype;
-		return type.getInternalFbs();
+		return baseFbtype.getInternalFbs();
 	}
 
 	@Override
@@ -65,4 +66,8 @@ public class DeleteInternalFBCommand extends Command {
 				.filter(fb -> fb.getName().equals(fbToDelete.getName())).findFirst().orElse(fbToDelete));
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(baseFbtype);
+	}
 }

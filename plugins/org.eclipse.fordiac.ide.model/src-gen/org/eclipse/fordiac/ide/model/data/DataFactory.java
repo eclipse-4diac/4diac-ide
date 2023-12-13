@@ -531,6 +531,15 @@ public interface DataFactory extends EFactory {
 	LdateType createLdateType();
 
 	/**
+	 * Returns a new object of class '<em>Internal Data Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Internal Data Type</em>'.
+	 * @generated
+	 */
+	InternalDataType createInternalDataType();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

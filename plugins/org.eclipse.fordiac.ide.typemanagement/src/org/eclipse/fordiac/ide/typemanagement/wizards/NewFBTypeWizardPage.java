@@ -331,7 +331,8 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING_WITH_DOT)
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT)
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.GLOBAL_CONST_FILE_ENDING_WITH_DOT)
-				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
+				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT)
+				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING_WITH_DOT);
 	}
 
 	private static TemplateInfo createTemplateFileInfo(final File f) {
