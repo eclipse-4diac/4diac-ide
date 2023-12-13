@@ -45,15 +45,15 @@ public class STAlgorithmReconciler implements STCoreReconciler {
 			return; // don't even try to attempt this or risk screwing dest up
 		}
 		if (checkDuplicates(dest)) {
-			dest.clear(); // dest is broken
+			dest.removeIf(STAlgorithmReconciler::isSTElement); // dest is broken
 		}
 		// remove from dest if not in source
-		dest.removeIf(destAlg -> source.getCallables().stream()
+		dest.removeIf(destAlg -> isSTElement(destAlg) && source.getCallables().stream()
 				.noneMatch(sourceAlg -> Objects.equals(sourceAlg.getName(), destAlg.getName())));
 		// add or merge/move according to source
 		IntStream.range(0, source.getCallables().size()).forEach(index -> {
 			final ICallable sourceAlg = source.getCallables().get(index);
-			final Optional<ICallable> candidate = dest.stream()
+			final Optional<ICallable> candidate = dest.stream().filter(STAlgorithmReconciler::isSTElement)
 					.filter(destAlg -> Objects.equals(sourceAlg.getName(), destAlg.getName())).findFirst();
 			if (candidate.isPresent() && merge(candidate.get(), sourceAlg)) {
 				// move to position (dest must contain at least index algs since we insert as we
@@ -130,6 +130,11 @@ public class STAlgorithmReconciler implements STCoreReconciler {
 	}
 
 	protected static boolean checkDuplicates(final EList<? extends ICallable> list) {
-		return list.stream().map(INamedElement::getName).distinct().count() != list.size();
+		return list.stream().filter(STAlgorithmReconciler::isSTElement).map(INamedElement::getName).distinct()
+				.count() != list.stream().filter(STAlgorithmReconciler::isSTElement).count();
+	}
+
+	protected static boolean isSTElement(final ICallable callable) {
+		return callable instanceof STAlgorithm || callable instanceof STMethod;
 	}
 }
