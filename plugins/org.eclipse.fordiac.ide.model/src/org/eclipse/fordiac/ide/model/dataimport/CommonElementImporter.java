@@ -25,8 +25,10 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -78,9 +80,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
@@ -113,6 +117,7 @@ public abstract class CommonElementImporter {
 	private LibraryElement element;
 	private final List<Diagnostic> errors;
 	private final List<Diagnostic> warnings;
+	private final Set<TypeEntry> dependencies;
 
 	protected IFile getFile() {
 		return file;
@@ -124,7 +129,7 @@ public abstract class CommonElementImporter {
 
 	protected FBTypeEntry getTypeEntry(final String typeFbElement) {
 		if (null != typeFbElement) {
-			return getTypeLibrary().getFBTypeEntry(typeFbElement);
+			return addDependency(getTypeLibrary().getFBTypeEntry(typeFbElement));
 		}
 		return null;
 	}
@@ -149,12 +154,17 @@ public abstract class CommonElementImporter {
 		return warnings;
 	}
 
+	public Set<TypeEntry> getDependencies() {
+		return dependencies;
+	}
+
 	protected CommonElementImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
 		Assert.isNotNull(inputStream);
 		this.inputStream = inputStream;
 		this.typeLibrary = typeLibrary;
 		errors = new ArrayList<>();
 		warnings = new ArrayList<>();
+		dependencies = new HashSet<>();
 	}
 
 	protected CommonElementImporter(final IFile file) {
@@ -163,6 +173,7 @@ public abstract class CommonElementImporter {
 		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
 		errors = new ArrayList<>();
 		warnings = new ArrayList<>();
+		dependencies = new HashSet<>();
 	}
 
 	protected CommonElementImporter(final CommonElementImporter importer) {
@@ -172,6 +183,7 @@ public abstract class CommonElementImporter {
 		typeLibrary = importer.typeLibrary;
 		errors = importer.errors;
 		warnings = importer.warnings;
+		dependencies = importer.dependencies;
 	}
 
 	public void loadElement() throws IOException, XMLStreamException, TypeImportException {
@@ -409,10 +421,11 @@ public abstract class CommonElementImporter {
 			if (typeName.equals(HelperTypes.CDATA.getName())) {
 				attribute.setType(HelperTypes.CDATA);
 			} else {
-				attribute.setType(getDataTypeLibrary().getType(typeName));
+				attribute.setType(addDependency(getDataTypeLibrary().getType(typeName)));
 			}
 		} else {
-			final AttributeTypeEntry attributeTypeEntry = getTypeLibrary().getAttributeTypeEntry(attribute.getName());
+			final AttributeTypeEntry attributeTypeEntry = addDependency(
+					getTypeLibrary().getAttributeTypeEntry(attribute.getName()));
 			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
 				attribute.setAttributeDeclaration(attributeTypeEntry.getType());
 				attribute.setType(attributeTypeEntry.getType().getType());
@@ -437,8 +450,8 @@ public abstract class CommonElementImporter {
 
 	private void checkStructAttribute(final StructManipulator fb, final Attribute attribute) {
 		if (LibraryElementTags.STRUCTURED_TYPE_ELEMENT.equals(attribute.getName())) {
-			final StructuredType structType = getTypeLibrary().getDataTypeLibrary()
-					.getStructuredType(attribute.getValue());
+			final StructuredType structType = addDependency(
+					getTypeLibrary().getDataTypeLibrary().getStructuredType(attribute.getValue()));
 			fb.setStructTypeElementsAtInterface(structType);
 		} else if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(attribute.getName())) {
 			// reset type to get visible children configured
@@ -756,7 +769,7 @@ public abstract class CommonElementImporter {
 	private void parseResourceType(final Resource resource) {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (typeName != null) {
-			final ResourceTypeEntry entry = getTypeLibrary().getResourceTypeEntry(typeName);
+			final ResourceTypeEntry entry = addDependency(getTypeLibrary().getResourceTypeEntry(typeName));
 			if (null != entry) {
 				resource.setTypeEntry(entry);
 				createParameters(resource);
@@ -858,4 +871,17 @@ public abstract class CommonElementImporter {
 		return escapedValue;
 	}
 
+	protected <T extends TypeEntry> T addDependency(final T entry) {
+		if (entry != null && !(entry instanceof ErrorTypeEntry)) {
+			dependencies.add(entry);
+		}
+		return entry;
+	}
+
+	protected <T extends LibraryElement> T addDependency(final T libraryElement) {
+		if (libraryElement != null) {
+			addDependency(libraryElement.getTypeEntry());
+		}
+		return libraryElement;
+	}
 }
