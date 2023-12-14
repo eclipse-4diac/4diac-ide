@@ -83,6 +83,6 @@ public class UnmapCommand extends Command implements ScopedCommand {
 
 	@Override
 	public Set<EObject> getAffectedObjects() {
-		return Set.of(mapping.getFrom(), mapping.getTo().getResource());
+		return Set.of(mapping.getFrom(), deleteMappedFBCmd.getFbParent().eContainer());
 	}
 }
