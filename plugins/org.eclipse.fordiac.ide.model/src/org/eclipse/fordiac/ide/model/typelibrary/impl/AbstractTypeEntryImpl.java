@@ -35,9 +35,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.NotificationImpl;
-import org.eclipse.emf.common.notify.impl.NotifierImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.ConcurrentNotifierImpl;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
@@ -48,7 +48,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public abstract class AbstractTypeEntryImpl extends NotifierImpl implements TypeEntry {
+public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl implements TypeEntry {
 
 	private static class TypeEntryNotificationImpl extends NotificationImpl {
 		protected final TypeEntry notifier;
