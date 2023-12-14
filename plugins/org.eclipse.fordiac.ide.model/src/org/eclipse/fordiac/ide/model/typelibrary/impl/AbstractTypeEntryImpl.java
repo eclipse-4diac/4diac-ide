@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLStreamException;
@@ -35,7 +36,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.NotificationImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -50,7 +53,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl implements TypeEntry {
+public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl implements TypeEntry, Adapter.Internal {
 
 	private static class TypeEntryNotificationImpl extends NotificationImpl {
 		protected final TypeEntry notifier;
@@ -265,7 +268,42 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	private void updateDependencies(final Set<TypeEntry> dependencies) {
-		this.dependencies.set(Set.copyOf(dependencies));
+		final Set<TypeEntry> oldDependencies = this.dependencies.getAndSet(Set.copyOf(dependencies));
+		oldDependencies.stream().filter(Predicate.not(dependencies::contains))
+				.forEachOrdered(entry -> entry.eAdapters().remove(this));
+		dependencies.stream().filter(Predicate.not(oldDependencies::contains))
+				.forEachOrdered(entry -> entry.eAdapters().add(this));
+	}
+
+	@Override
+	public void notifyChanged(final Notification notification) {
+		if (notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_FEATURE
+				&& dependencies.get().contains(notification.getNotifier())) {
+			synchronized (this) {
+				setType(null);
+				setTypeEditable(null);
+			}
+		}
+	}
+
+	@Override
+	public boolean isAdapterForType(final Object type) {
+		return false;
+	}
+
+	@Override
+	public Notifier getTarget() {
+		return null;
+	}
+
+	@Override
+	public void setTarget(final Notifier newTarget) {
+		// do nothing
+	}
+
+	@Override
+	public void unsetTarget(final Notifier oldTarget) {
+		// do nothing
 	}
 
 	protected abstract CommonElementImporter getImporter();
