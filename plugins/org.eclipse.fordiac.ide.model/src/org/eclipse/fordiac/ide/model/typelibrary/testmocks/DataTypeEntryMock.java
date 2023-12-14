@@ -12,6 +12,9 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.testmocks;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
@@ -19,6 +22,7 @@ import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTypeEntry {
@@ -106,5 +110,10 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 	@Override
 	public void refresh() {
 		// currently not needed in mock
+	}
+
+	@Override
+	public Set<TypeEntry> getDependencies() {
+		return Collections.emptySet();
 	}
 }

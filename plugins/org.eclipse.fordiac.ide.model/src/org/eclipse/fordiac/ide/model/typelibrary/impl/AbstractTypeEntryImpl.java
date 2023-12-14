@@ -18,8 +18,11 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLStreamException;
@@ -28,7 +31,6 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -84,6 +86,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 	private SoftReference<LibraryElement> typeRef;
 	private SoftReference<LibraryElement> typeEditableRef;
+	private final AtomicReference<Set<TypeEntry>> dependencies = new AtomicReference<>(Collections.emptySet());
 
 	private TypeLibrary typeLibrary;
 
@@ -243,6 +246,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		try {
 			final CommonElementImporter importer = getImporter();
 			importer.loadElement();
+			updateDependencies(importer.getDependencies());
 			final LibraryElement retval = importer.getElement();
 			retval.setTypeEntry(this);
 			return retval;
@@ -250,6 +254,18 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			FordiacLogHelper.logWarning("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
 			return null;
 		}
+	}
+
+	@Override
+	public Set<TypeEntry> getDependencies() {
+		if (getType() != null) { // ensure type is loaded
+			return dependencies.get();
+		}
+		return Collections.emptySet();
+	}
+
+	private void updateDependencies(final Set<TypeEntry> dependencies) {
+		this.dependencies.set(Set.copyOf(dependencies));
 	}
 
 	protected abstract CommonElementImporter getImporter();
@@ -272,7 +288,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			final InputStream fileContent = exporter.getFileContent();
 			if (fileContent != null) {
 				try (fileContent) {
-					writeToFile(fileContent, monitor);
+					writeToFile(fileContent, exporter.getDependencies(), monitor);
 				} catch (final IOException e) {
 					throw new CoreException(Status.error(e.getMessage(), e));
 				}
@@ -307,24 +323,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		this.updateTypeOnSave = updateTypeOnSave;
 	}
 
-	/**
-	 * Search for the first directory parent which is existing. If none can be found
-	 * we will return the workspace root. This directory is then used as scheduling
-	 * rule for locking the workspace. The direct parent of the entry's file can not
-	 * be used as it may need to be created.
-	 *
-	 * @return the current folder or workspace root
-	 */
-	private IContainer getRuleScope() {
-		IContainer parent = getFile().getParent();
-		while (parent != null && !parent.exists()) {
-			parent = parent.getParent();
-		}
-		return (parent != null) ? parent : ResourcesPlugin.getWorkspace().getRoot();
-	}
-
-	private synchronized void writeToFile(final InputStream fileContent, final IProgressMonitor monitor)
-			throws CoreException {
+	private synchronized void writeToFile(final InputStream fileContent, final Set<TypeEntry> dependencies,
+			final IProgressMonitor monitor) throws CoreException {
 		// writing to the file and setting the time stamp need to be atomic
 		if (getFile().exists()) {
 			getFile().setContents(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
@@ -337,6 +337,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		// timestamp
 		// it is not necessary as the data is in memory
 		setLastModificationTimestamp(getFile().getModificationStamp());
+		updateDependencies(dependencies);
 		if (updateTypeOnSave) {
 			// make the edit result available for the reading entities
 			setType(EcoreUtil.copy(getTypeEditable()));
