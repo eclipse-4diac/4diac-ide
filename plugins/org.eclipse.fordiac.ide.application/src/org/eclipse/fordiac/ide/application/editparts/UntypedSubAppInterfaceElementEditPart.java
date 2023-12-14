@@ -17,9 +17,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.eclipse.draw2d.Border;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.ConnectionAnchor;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.GridData;
+import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
@@ -35,8 +42,11 @@ import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
@@ -44,8 +54,22 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.swt.SWT;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
+
+	public static class TargetInterfaceElement {
+		private final IInterfaceElement refElement;
+
+		public TargetInterfaceElement(final IInterfaceElement refElement) {
+			this.refElement = refElement;
+		}
+
+		public IInterfaceElement getRefElement() {
+			return refElement;
+		}
+	}
+
 	public class UntypedSubappIEAdapter extends EContentAdapter {
 		@Override
 		public void notifyChanged(final Notification notification) {
@@ -131,7 +155,22 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 	@Override
 	protected IFigure createFigure() {
-		final IFigure figure = super.createFigure();
+		final InterfaceFigure figure = new InterfaceFigure() {
+			@Override
+			public String getSubStringText() {
+				return (getChildren().isEmpty()) ? super.getSubStringText() : "";
+			}
+
+			@Override
+			protected void paintFigure(final Graphics graphics) {
+				if (!getChildren().isEmpty()) {
+					graphics.fillRoundRectangle(getBounds(), 8, 8);
+				}
+				super.paintFigure(graphics);
+			}
+		};
+		figure.setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
+
 		figure.setBorder(new UntypedSubappConnectorBorder(getModel()));
 		return figure;
 	}
@@ -152,6 +191,33 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			return new FixedAnchor(getFigure(), !isInput());
 		}
 		return super.getTargetConnectionAnchor(connection);
+	}
+
+	@Override
+	protected List getModelChildren() {
+		// TODO cash created elements and update them accordingly
+		return getTargetPins().map(TargetInterfaceElement::new).toList();
+	}
+
+	private Stream<IInterfaceElement> getTargetPins() {
+		// TODO Distinguish between expanded subapp pins, fbs, and container subapp pin
+		return getModel().getOutputConnections().stream().filter(con -> !con.isVisible())
+				.flatMap(con -> con.getDestination().getOutputConnections().stream()).map(Connection::getDestination);
+
+	}
+
+	@Override
+	protected void addChildVisual(final EditPart childEditPart, final int index) {
+		final var epFigure = getFigure();
+		if (epFigure.getLayoutManager() == null) {
+			final var tbLayout = new GridLayout(1, true);
+			tbLayout.marginHeight = 2;
+			tbLayout.verticalSpacing = 2;
+			epFigure.setLayoutManager(tbLayout);
+			epFigure.setBackgroundColor(ColorConstants.white);
+		}
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		getContentPane().add(child, new GridData(SWT.FILL, SWT.BEGINNING, true, false), index);
 	}
 
 }

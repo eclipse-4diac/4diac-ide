@@ -87,6 +87,10 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			return new HiddenPinIndicatorEditPart();
 		}
 
+		if (modelElement instanceof UntypedSubAppInterfaceElementEditPart.TargetInterfaceElement) {
+			return new TargetInterfaceElementEditPart();
+		}
+
 		throw createEditpartCreationException(modelElement);
 
 	}
