@@ -355,6 +355,7 @@ class FunctionsTest {
 	@Test
 	def void testGenericTypeStruct() {
 		val structType = DataFactory.eINSTANCE.createStructuredType => [
+			name = "GenericTypeStruct"
 			memberVariables.addAll(#[
 				LibraryElementFactory.eINSTANCE.createVarDeclaration => [name = "a" type = ElementaryTypes.INT],
 				LibraryElementFactory.eINSTANCE.createVarDeclaration => [name = "b" type = ElementaryTypes.INT]
