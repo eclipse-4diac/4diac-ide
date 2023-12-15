@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2019, 2023 fortiss GmbH, Johannes Kepler University
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +12,7 @@
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Fix connections and parameter generation
+ *   Martin Melik Merkumians - add code for export CFB internal VarInOut usage
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.composite
 
@@ -84,5 +86,17 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 			static const SCFB_FBConnectionData scmAdapterConnections[];
 		«ENDIF»
 		static const SCFB_FBNData scmFBNData;
+	'''
+	
+	override generateInterfaceVariableAndConnectionDeclarations() '''
+		«super.generateInterfaceVariableAndConnectionDeclarations»
+		«type.interfaceList.outMappedInOutVars.generateDataConnectionDeclarations(false, true)»
+	'''
+	
+	override generateAccessorDeclarations() '''
+		«super.generateAccessorDeclarations»
+		«IF (!type.interfaceList.inOutVars.empty)»
+			«generateConnectionAccessorsDeclaration("getDIOOutConInternalUnchecked", "CInOutDataConnection *")»
+		«ENDIF»
 	'''
 }
