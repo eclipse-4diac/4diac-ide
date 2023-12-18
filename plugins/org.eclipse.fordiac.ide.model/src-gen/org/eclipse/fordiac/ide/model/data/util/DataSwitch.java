@@ -119,8 +119,8 @@ public class DataSwitch<T> extends Switch<T> {
 			case DataPackage.DIRECTLY_DERIVED_TYPE: {
 				DirectlyDerivedType directlyDerivedType = (DirectlyDerivedType)theEObject;
 				T result = caseDirectlyDerivedType(directlyDerivedType);
-				if (result == null) result = caseDerivedType(directlyDerivedType);
-				if (result == null) result = caseValueType(directlyDerivedType);
+				if (result == null) result = caseAnyDerivedType(directlyDerivedType);
+				if (result == null) result = caseAnyType(directlyDerivedType);
 				if (result == null) result = caseDataType(directlyDerivedType);
 				if (result == null) result = caseLibraryElement(directlyDerivedType);
 				if (result == null) result = caseINamedElement(directlyDerivedType);
