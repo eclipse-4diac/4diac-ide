@@ -17,8 +17,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Map;
 
 import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.ColorConstants;
@@ -57,6 +58,8 @@ import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.swt.SWT;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
+
+	Map<IInterfaceElement, TargetInterfaceElement> targetPinChildren = new HashMap<>();
 
 	public static class TargetInterfaceElement {
 		private final IInterfaceElement refElement;
@@ -195,14 +198,27 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 	@Override
 	protected List getModelChildren() {
-		// TODO cash created elements and update them accordingly
-		return getTargetPins().map(TargetInterfaceElement::new).toList();
+		final List<IInterfaceElement> pins = isInput() ? getSourcePins() : getTargetPins();
+
+		// remove entries from our map if they are not in the list anymore
+		targetPinChildren.keySet().removeIf(key -> !pins.contains(key));
+
+		// add any missing entries
+		pins.forEach(pin -> targetPinChildren.computeIfAbsent(pin, TargetInterfaceElement::new));
+		return targetPinChildren.values().stream().toList();
 	}
 
-	private Stream<IInterfaceElement> getTargetPins() {
+	private List<IInterfaceElement> getTargetPins() {
 		// TODO Distinguish between expanded subapp pins, fbs, and container subapp pin
 		return getModel().getOutputConnections().stream().filter(con -> !con.isVisible())
-				.flatMap(con -> con.getDestination().getOutputConnections().stream()).map(Connection::getDestination);
+				.flatMap(con -> con.getDestination().getOutputConnections().stream()).map(Connection::getDestination)
+				.toList();
+	}
+
+	private List<IInterfaceElement> getSourcePins() {
+		// TODO Distinguish between expanded subapp pins, fbs, and container subapp pin
+		return getModel().getInputConnections().stream().filter(con -> !con.isVisible())
+				.flatMap(con -> con.getSource().getInputConnections().stream()).map(Connection::getSource).toList();
 
 	}
 
