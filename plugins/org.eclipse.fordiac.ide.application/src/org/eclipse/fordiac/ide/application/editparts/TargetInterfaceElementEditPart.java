@@ -16,14 +16,19 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.swt.graphics.Color;
 
 public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
@@ -41,14 +46,16 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		final var label = new Label() {
 			@Override
 			protected void paintFigure(final Graphics graphics) {
+				final int alpha = graphics.getAlpha();
+				graphics.setAlpha(150);
 				graphics.fillRoundRectangle(getBounds(), 8, 4);
+				graphics.setAlpha(alpha);
 				super.paintFigure(graphics);
 			}
 		};
 		label.setOpaque(false);
-		label.setBackgroundColor(EditorWithInterfaceEditPart.INTERFACE_BAR_BG_COLOR);
+		label.setBackgroundColor(getModelColor());
 		label.setText(getLabelText());
-
 		return label;
 	}
 
@@ -78,6 +85,17 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		} else {
 			super.performRequest(request);
 		}
+	}
+
+	private Color getModelColor() {
+		if (getRefElement() instanceof Event) {
+			return PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR);
+		}
+
+		if (getRefElement() instanceof AdapterDeclaration) {
+			return PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
+		}
+		return PreferenceGetter.getDataColor(getRefElement().getType().getName());
 	}
 
 }
