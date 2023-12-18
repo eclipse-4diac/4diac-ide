@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
@@ -77,7 +78,8 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 			final DataTypeLibrary lib = struct.getTypeLibrary().getDataTypeLibrary();
 			struct.getMemberVariables().stream().filter(varDecl -> varDecl.getType() instanceof StructuredType)
 					.forEach(varDecl -> {
-						final StructuredType updatedStruct = lib.getStructuredType(varDecl.getTypeName());
+						final StructuredType updatedStruct = lib
+								.getStructuredType(PackageNameHelper.getFullTypeName(varDecl.getType()));
 						if (updatedStruct != null) {
 							varDecl.setType(updatedStruct);
 						}

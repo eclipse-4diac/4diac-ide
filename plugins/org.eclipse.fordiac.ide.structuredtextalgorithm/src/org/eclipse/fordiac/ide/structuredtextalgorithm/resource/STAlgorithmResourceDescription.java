@@ -120,6 +120,7 @@ public class STAlgorithmResourceDescription extends DefaultResourceDescription {
 	}
 
 	protected static Set<QualifiedName> getImportedNames(final Resource resource) {
+		EcoreUtil.resolveAll(resource);
 		final ImportedNamesAdapter adapter = ImportedNamesAdapter.find(resource);
 		if (adapter != null) {
 			return adapter.getImportedNames();

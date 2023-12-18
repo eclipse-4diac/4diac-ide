@@ -80,7 +80,8 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 
 	@Override
 	public boolean canExecute() {
-		return !elementsToAdd.isEmpty() && FBNetworkHelper.targetSubappIsInSameFbNetwork(elementsToAdd, targetSubApp);
+		return !targetSubApp.isTyped() && targetSubApp.getSubAppNetwork() != null && !elementsToAdd.isEmpty()
+				&& FBNetworkHelper.targetSubappIsInSameFbNetwork(elementsToAdd, targetSubApp);
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -244,6 +245,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	private void updateFB(final Set<INamedElement> set) {
 		Command cmd = new CompoundCommand();
+		cmd = cmd.chain(getUpdateStructTypes(set));
 		cmd = cmd.chain(getUpdateStructManipulatorsCommand(set));
 		cmd = cmd.chain(getUpdateTypesCommand(set));
 		cmd = cmd.chain(getUpdateInstancesCommand(set));
@@ -256,16 +258,10 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 				structSaveDialog.getDataTypeOfElementList(fbTypes), null);
 	}
 
-	private Command getUpdateInstancesCommand(final Set<INamedElement> set) {
+	private Command getUpdateStructTypes(final Set<INamedElement> set) {
 		final List<Command> commands = new ArrayList<>();
-		set.stream().forEach(instance -> {
-			if (instance instanceof final FBNetworkElement s) {
-				if (s instanceof final SubApp subApp && !subApp.isTyped()) {
-					commands.add(new UpdateUntypedSubAppInterfaceCommand(s, structSaveDialog.getDataTypeOfElement(s)));
-				} else {
-					commands.add(new UpdateFBTypeCommand(s, structSaveDialog.getDataTypeOfElement(s)));
-				}
-			} else if (instance instanceof final StructuredType st) {
+		set.stream().filter(StructuredType.class::isInstance).forEach(instance -> {
+			if (instance instanceof final StructuredType st) {
 				for (final VarDeclaration varDeclaration : st.getMemberVariables()) {
 					final String typeName = varDeclaration.getTypeName();
 					if (typeName.equals(structSaveDialog.getDataTypeOfElement(st).getTypeName())) {
@@ -276,6 +272,23 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 				commands.add(new SaveTypeEntryCommand(st));
 			}
 		});
+		Command cmd = new CompoundCommand();
+		for (final Command subCmd : commands) {
+			cmd = cmd.chain(subCmd);
+		}
+		return cmd;
+	}
+
+	private Command getUpdateInstancesCommand(final Set<INamedElement> set) {
+		final List<Command> commands = new ArrayList<>();
+		set.stream().filter(FBNetworkElement.class::isInstance)
+				.filter(Predicate.not(StructManipulator.class::isInstance)).map(FBNetworkElement.class::cast).map(x -> {
+					if (x instanceof final SubApp subApp && !subApp.isTyped()) {
+						return new UpdateUntypedSubAppInterfaceCommand(x, structSaveDialog.getDataTypeOfElement(x));
+					}
+					return new UpdateFBTypeCommand(x, structSaveDialog.getDataTypeOfElement(x));
+				}).forEachOrdered(commands::add);
+
 		Command cmd = new CompoundCommand();
 		for (final Command subCmd : commands) {
 			cmd = cmd.chain(subCmd);

@@ -37,6 +37,7 @@ Export-Package: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.value
 Bundle-Vendor: %providerName
 Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclipse.fordiac.ide.model.ModelPlugin
 Bundle-ClassPath: .
 Bundle-Version: 2.0.1.qualifier
 Bundle-Localization: plugin

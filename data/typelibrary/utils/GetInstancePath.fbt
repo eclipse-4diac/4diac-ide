@@ -25,7 +25,7 @@
 		</OutputVars>
 	</InterfaceList>
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
-		<ServiceSequence Name="Normal operation" Comment="">
+		<ServiceSequence Name="Normal_Operation" Comment="">
 			<ServiceTransaction>
 				<InputPrimitive Interface="APPLICATION" Event="REQ" Parameters="Sep"/>
 				<OutputPrimitive Interface="RESOURCE" Event="acquire path information" Parameters="Sep"/>
