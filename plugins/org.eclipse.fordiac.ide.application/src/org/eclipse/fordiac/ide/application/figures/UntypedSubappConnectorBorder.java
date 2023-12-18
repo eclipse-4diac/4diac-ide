@@ -12,10 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
@@ -33,7 +37,10 @@ public class UntypedSubappConnectorBorder extends ConnectorBorder {
 
 	@Override
 	public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
-		super.paint(figure, graphics, insets);
+		if (!getSubapp().isUnfolded() || !allOutsideConnectionsAreHidden()) {
+			// only draw outside if there is a visible connection
+			super.paint(figure, graphics, insets);
+		}
 		if (getSubapp().isUnfolded()) {
 			secondPaint = true;
 			super.paint(figure, graphics, insets);
@@ -45,6 +52,12 @@ public class UntypedSubappConnectorBorder extends ConnectorBorder {
 	public Insets getInsets(final IFigure figure) {
 		if (getSubapp().isUnfolded()) {
 			final int lrMargin = (isAdapter()) ? LR_ADAPTER_MARGIN : LR_MARGIN;
+			if (allOutsideConnectionsAreHidden()) {
+				if (isInput()) {
+					return new Insets(0, 0, 0, lrMargin);
+				}
+				return new Insets(0, lrMargin, 0, 0);
+			}
 			return new Insets(0, lrMargin, 0, lrMargin);
 		}
 		return super.getInsets(figure);
@@ -54,6 +67,12 @@ public class UntypedSubappConnectorBorder extends ConnectorBorder {
 	public boolean isInput() {
 		final boolean input = super.isInput();
 		return (secondPaint) ? !input : input;
+	}
+
+	private boolean allOutsideConnectionsAreHidden() {
+		final List<Connection> conList = isInput() ? getEditPartModelOject().getInputConnections()
+				: getEditPartModelOject().getOutputConnections();
+		return !conList.isEmpty() && conList.stream().allMatch(Predicate.not(Connection::isVisible));
 	}
 
 }

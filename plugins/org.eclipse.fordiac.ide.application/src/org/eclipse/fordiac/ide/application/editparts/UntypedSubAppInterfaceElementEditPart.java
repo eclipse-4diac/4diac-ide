@@ -212,7 +212,9 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		if (epFigure.getLayoutManager() == null) {
 			final var tbLayout = new GridLayout(1, true);
 			tbLayout.marginHeight = 2;
+			tbLayout.marginWidth = 0;
 			tbLayout.verticalSpacing = 2;
+			tbLayout.horizontalSpacing = 0;
 			epFigure.setLayoutManager(tbLayout);
 			epFigure.setBackgroundColor(ColorConstants.white);
 		}
