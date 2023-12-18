@@ -283,7 +283,7 @@ public abstract class AbstractTypeEntryImpl extends NotifierImpl implements Type
 	protected abstract AbstractTypeExporter getExporter();
 
 	@Override
-	public void refresh() {
+	public synchronized void refresh() {
 		if (isFileContentChanged()) {
 			loadTypeNameFromFile();
 			setType(null);
