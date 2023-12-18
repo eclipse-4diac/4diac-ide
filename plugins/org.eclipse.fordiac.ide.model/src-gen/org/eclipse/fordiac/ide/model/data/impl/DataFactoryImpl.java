@@ -80,7 +80,6 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 			case DataPackage.SUBRANGE: return createSubrange();
 			case DataPackage.SUBRANGE_TYPE: return createSubrangeType();
 			case DataPackage.VALUE_TYPE: return createValueType();
-			case DataPackage.ELEMENTARY_TYPE: return createElementaryType();
 			case DataPackage.DERIVED_TYPE: return createDerivedType();
 			case DataPackage.EVENT_TYPE: return createEventType();
 			case DataPackage.ANY_TYPE: return createAnyType();
@@ -259,17 +258,6 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	public ValueType createValueType() {
 		ValueTypeImpl valueType = new ValueTypeImpl();
 		return valueType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ElementaryType createElementaryType() {
-		ElementaryTypeImpl elementaryType = new ElementaryTypeImpl();
-		return elementaryType;
 	}
 
 	/**

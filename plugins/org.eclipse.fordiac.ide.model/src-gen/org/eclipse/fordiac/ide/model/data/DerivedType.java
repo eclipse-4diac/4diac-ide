@@ -39,12 +39,12 @@ public interface DerivedType extends ValueType {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Base Type</em>' reference.
-	 * @see #setBaseType(ElementaryType)
+	 * @see #setBaseType(DataType)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDerivedType_BaseType()
 	 * @model required="true"
 	 * @generated
 	 */
-	ElementaryType getBaseType();
+	DataType getBaseType();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType <em>Base Type</em>}' reference.
@@ -54,7 +54,7 @@ public interface DerivedType extends ValueType {
 	 * @see #getBaseType()
 	 * @generated
 	 */
-	void setBaseType(ElementaryType value);
+	void setBaseType(DataType value);
 
 	/**
 	 * <!-- begin-user-doc -->

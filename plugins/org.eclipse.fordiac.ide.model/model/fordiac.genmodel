@@ -891,12 +891,6 @@
         <genParameters ecoreParameter="data.ecore#//ValueType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
-    <genClasses ecoreClass="data.ecore#//ElementaryType">
-      <genOperations ecoreOperation="data.ecore#//ElementaryType/isAssignableFrom"
-          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
-        <genParameters ecoreParameter="data.ecore#//ElementaryType/isAssignableFrom/other"/>
-      </genOperations>
-    </genClasses>
     <genClasses ecoreClass="data.ecore#//DerivedType">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference data.ecore#//DerivedType/baseType"/>
       <genOperations ecoreOperation="data.ecore#//DerivedType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">

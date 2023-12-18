@@ -241,25 +241,6 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 		return valueTypeItemProvider;
 	}
 
-	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.ElementaryType}
-	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	protected ElementaryTypeItemProvider elementaryTypeItemProvider;
-
-	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.ElementaryType}. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public Adapter createElementaryTypeAdapter() {
-		if (elementaryTypeItemProvider == null) {
-			elementaryTypeItemProvider = new ElementaryTypeItemProvider(this);
-		}
-
-		return elementaryTypeItemProvider;
-	}
-
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.DerivedType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -1246,8 +1227,6 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 			subrangeTypeItemProvider.dispose();
 		if (valueTypeItemProvider != null)
 			valueTypeItemProvider.dispose();
-		if (elementaryTypeItemProvider != null)
-			elementaryTypeItemProvider.dispose();
 		if (derivedTypeItemProvider != null)
 			derivedTypeItemProvider.dispose();
 		if (eventTypeItemProvider != null)

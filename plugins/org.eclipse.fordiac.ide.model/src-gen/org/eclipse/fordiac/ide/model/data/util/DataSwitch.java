@@ -185,17 +185,6 @@ public class DataSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DataPackage.ELEMENTARY_TYPE: {
-				ElementaryType elementaryType = (ElementaryType)theEObject;
-				T result = caseElementaryType(elementaryType);
-				if (result == null) result = caseValueType(elementaryType);
-				if (result == null) result = caseDataType(elementaryType);
-				if (result == null) result = caseLibraryElement(elementaryType);
-				if (result == null) result = caseINamedElement(elementaryType);
-				if (result == null) result = caseConfigurableObject(elementaryType);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case DataPackage.DERIVED_TYPE: {
 				DerivedType derivedType = (DerivedType)theEObject;
 				T result = caseDerivedType(derivedType);
@@ -972,21 +961,6 @@ public class DataSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseValueType(ValueType object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Elementary Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Elementary Type</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseElementaryType(ElementaryType object) {
 		return null;
 	}
 

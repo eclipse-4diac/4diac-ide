@@ -26,7 +26,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DerivedType;
-import org.eclipse.fordiac.ide.model.data.ElementaryType;
 
 /**
  * <!-- begin-user-doc -->
@@ -50,7 +49,7 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	 * @generated
 	 * @ordered
 	 */
-	protected ElementaryType baseType;
+	protected DataType baseType;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -77,10 +76,10 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	 * @generated
 	 */
 	@Override
-	public ElementaryType getBaseType() {
+	public DataType getBaseType() {
 		if (baseType != null && baseType.eIsProxy()) {
 			InternalEObject oldBaseType = (InternalEObject)baseType;
-			baseType = (ElementaryType)eResolveProxy(oldBaseType);
+			baseType = (DataType)eResolveProxy(oldBaseType);
 			if (baseType != oldBaseType) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DataPackage.DERIVED_TYPE__BASE_TYPE, oldBaseType, baseType));
@@ -94,7 +93,7 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ElementaryType basicGetBaseType() {
+	public DataType basicGetBaseType() {
 		return baseType;
 	}
 
@@ -104,8 +103,8 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	 * @generated
 	 */
 	@Override
-	public void setBaseType(ElementaryType newBaseType) {
-		ElementaryType oldBaseType = baseType;
+	public void setBaseType(DataType newBaseType) {
+		DataType oldBaseType = baseType;
 		baseType = newBaseType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.DERIVED_TYPE__BASE_TYPE, oldBaseType, baseType));
@@ -146,7 +145,7 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case DataPackage.DERIVED_TYPE__BASE_TYPE:
-				setBaseType((ElementaryType)newValue);
+				setBaseType((DataType)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -163,7 +162,7 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case DataPackage.DERIVED_TYPE__BASE_TYPE:
-				setBaseType((ElementaryType)null);
+				setBaseType((DataType)null);
 				return;
 			default:
 				super.eUnset(featureID);
