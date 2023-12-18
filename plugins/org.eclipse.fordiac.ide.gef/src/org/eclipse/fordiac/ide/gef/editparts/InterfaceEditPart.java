@@ -382,7 +382,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		// don't show any children
 	}
 
-	private Adapter getContentAdapter() {
+	protected Adapter getContentAdapter() {
 		if (null == contentAdapter) {
 			contentAdapter = createContentAdapter();
 		}
