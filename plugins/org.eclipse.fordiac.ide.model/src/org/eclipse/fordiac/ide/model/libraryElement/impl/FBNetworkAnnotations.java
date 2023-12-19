@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.util.SpatialHash;
 
@@ -60,8 +61,8 @@ final class FBNetworkAnnotations {
 		if (parent.filter(p -> p.getTypeEntry() != null).isPresent()) {
 			return true; // ignore typed parent
 		}
-		return validateCollisions(parent, network.getNetworkElements(), Predicate.not(FBNetworkElement::isInGroup),
-				diagnostics, context);
+		return validateCollisions(parent.filter(FBNetworkAnnotations::isUnfoldedSubapp), network.getNetworkElements(),
+				Predicate.not(FBNetworkElement::isInGroup), diagnostics, context);
 	}
 
 	static boolean validateCollisions(final Group group, final DiagnosticChain diagnostics,
@@ -122,6 +123,10 @@ final class FBNetworkAnnotations {
 	private static Integer internalGetIntPreference(final Object key) {
 		return Integer
 				.valueOf(Platform.getPreferencesService().getInt(PreferenceConstants.QUALIFIER, (String) key, 0, null));
+	}
+
+	private static boolean isUnfoldedSubapp(final FBNetworkElement parent) {
+		return parent instanceof final SubApp subApp && subApp.isUnfolded();
 	}
 
 	private FBNetworkAnnotations() {
