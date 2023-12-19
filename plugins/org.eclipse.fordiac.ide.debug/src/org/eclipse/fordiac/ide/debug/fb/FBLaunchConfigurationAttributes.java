@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.fb;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -29,6 +31,10 @@ public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttr
 	String REPEAT_EVENT = "org.eclipse.fordiac.ide.debug.repeatEvent"; //$NON-NLS-1$
 	String KEEP_RUNNING_WHEN_IDLE = "org.eclipse.fordiac.ide.debug.keepRunningWhenIdle"; //$NON-NLS-1$
 
+	String CLOCK_MODE = "org.eclipse.fordiac.ide.debug.clockMode"; //$NON-NLS-1$
+
+	String CLOCK_INTERVAL = "org.eclipse.fordiac.ide.debug.debugTime"; //$NON-NLS-1$
+
 	static Event getEvent(final ILaunchConfiguration configuration, final FBType type, final Event defaultEvent)
 			throws CoreException {
 		final String eventAttribute = configuration.getAttribute(EVENT, ""); //$NON-NLS-1$
@@ -41,8 +47,7 @@ public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttr
 					.concat(type.getInterfaceList().getSockets().stream(), type.getInterfaceList().getPlugs().stream())
 					.map(AdapterDeclaration::getAdapterFB).map(AdapterFB::getInterface)
 					.map(iface -> iface.getEvent(eventAttribute)).filter(Objects::nonNull)
-					.filter(Predicate.not(Event::isIsInput))
-					.findAny().orElse(defaultEvent);
+					.filter(Predicate.not(Event::isIsInput)).findAny().orElse(defaultEvent);
 		}
 		return defaultEvent;
 	}
@@ -51,8 +56,40 @@ public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttr
 		return configuration.getAttribute(REPEAT_EVENT, false);
 	}
 
-	static boolean isKeepRunningWhenIdle(final ILaunchConfiguration configuration)
-			throws CoreException {
+	static boolean isKeepRunningWhenIdle(final ILaunchConfiguration configuration) throws CoreException {
 		return configuration.getAttribute(KEEP_RUNNING_WHEN_IDLE, true);
+	}
+
+	static FBDebugClockMode getClockMode(final ILaunchConfiguration configuration) throws CoreException {
+		return FBDebugClockMode.fromString(configuration.getAttribute(CLOCK_MODE, (String) null));
+	}
+
+	static boolean isSystem(final ILaunchConfiguration configuration) throws CoreException {
+		return FBDebugClockMode.SYSTEM.equals(getClockMode(configuration));
+	}
+
+	static boolean isIncrement(final ILaunchConfiguration configuration) throws CoreException {
+		return FBDebugClockMode.INCREMENT.equals(getClockMode(configuration));
+	}
+
+	static boolean isManual(final ILaunchConfiguration configuration) throws CoreException {
+		return FBDebugClockMode.MANUAL.equals(getClockMode(configuration));
+	}
+
+	static Duration getClockInterval(final ILaunchConfiguration configuration) throws CoreException {
+		final var debugtime = getClockIntervalText(configuration);
+		if (debugtime != null) {
+			try {
+				final long value = Long.parseLong(debugtime);
+				return Duration.of(value, ChronoUnit.MILLIS);
+			} catch (final NumberFormatException | ArithmeticException e) {
+				throw new IllegalStateException("Debug clock interval is not accepted!"); //$NON-NLS-1$
+			}
+		}
+		return Duration.ZERO;
+	}
+
+	static String getClockIntervalText(final ILaunchConfiguration configuration) throws CoreException {
+		return configuration.getAttribute(CLOCK_INTERVAL, "0");
 	}
 }
