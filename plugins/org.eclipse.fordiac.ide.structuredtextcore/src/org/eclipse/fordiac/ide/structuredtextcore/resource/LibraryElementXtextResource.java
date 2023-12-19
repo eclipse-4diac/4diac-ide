@@ -28,7 +28,7 @@ public class LibraryElementXtextResource extends LazyLinkingResource {
 	private final List<EObject> additionalContent = new ArrayList<>();
 	private boolean includeInternalLibraryElement = true;
 
-	protected void updateInternalLibraryElement() {
+	public void updateInternalLibraryElement() {
 		clearInternalLibraryElement();
 		if (contents != null && !contents.isEmpty()) {
 			if (libraryElement != null) {
