@@ -186,6 +186,9 @@ public final class LibraryElementTags {
 	public static final String GLOBAL_CONSTANTS_ELEMENT = "GlobalConstants"; //$NON-NLS-1$
 	public static final String ORIGINAL_SOURCE_ELEMENT = "OriginalSource"; //$NON-NLS-1$
 
+	public static final String DIRECTLY_DERIVED_TYPE = "DirectlyDerivedType"; //$NON-NLS-1$
+	public static final String BASE_TYPE_ATTRIBUTE = "BaseType"; //$NON-NLS-1$
+
 	private LibraryElementTags() {
 		throw new UnsupportedOperationException("Class should not be instantiated!"); //$NON-NLS-1$
 	}
