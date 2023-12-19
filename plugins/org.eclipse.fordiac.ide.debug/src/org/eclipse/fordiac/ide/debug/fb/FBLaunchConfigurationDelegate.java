@@ -46,7 +46,13 @@ public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigur
 			final var defaultArguments = getDefaultArguments(type);
 			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
 			final var evaluator = createEvaluator(type, variables);
-			evaluator.setEventQueue(new FBLaunchEventQueue(event, repeatEvent, keepRunningWhenIdle));
+
+			final FBLaunchEventQueue fBLaunchEventQueue = new FBLaunchEventQueue(event, repeatEvent,
+					keepRunningWhenIdle);
+			fBLaunchEventQueue.setDebugTimeValue(FBLaunchConfigurationAttributes.getClockInterval(configuration));
+			fBLaunchEventQueue.setClockMode(FBLaunchConfigurationAttributes.getClockMode(configuration));
+
+			evaluator.setEventQueue(fBLaunchEventQueue);
 			launch(evaluator, configuration, mode, launch, monitor);
 		}
 	}
