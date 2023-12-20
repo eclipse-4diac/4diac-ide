@@ -54,7 +54,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		
 		    «IF !type.internalFbs.empty»
 		    	static const size_t csmAmountOfInternalFBs = «type.internalFbs.size»;
-		    	TFunctionBlockPtr *mInternalFBs = createInternalFBs(csmAmountOfInternalFBs, scmInternalFBDefinitions, getResource());
+		    	TFunctionBlockPtr *mInternalFBs = createInternalFBs(csmAmountOfInternalFBs, scmInternalFBDefinitions, getContainer());
 		    	«generateInternalFbDefinition»
 		    	
 		    «ENDIF»
