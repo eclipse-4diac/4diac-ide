@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Johannes Kepler University Linz,
- * 				            Primetals Technologies Germany GmbH
+ * Copyright (c) 2019, 2021, 2023 Johannes Kepler University Linz,
+ * 				                  Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@
  *   Daniel Lindhuber - MoveElementsFromSubappCommand integration
  *   				  - adjusted for unfolded subapps
  *   Bianca Wiesmayr, Alois Zoitl, Michael Oberlehner - refactor for breadcrumb
+ *   Fabio Gandolfi - fixed element selection with ReadOnly Editors
  ********************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -30,15 +31,15 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
@@ -71,10 +72,11 @@ public class MoveToParentHandler extends AbstractHandler {
 	}
 
 	private static void selectElements(final IEditorPart editor, final List<FBNetworkElement> fbelements) {
-		final GraphicalViewer viewer = getViewer(fbelements.get(0).getFbNetwork(), editor);
-		final List<EditPart> eps = fbelements.stream().map(el -> (EditPart) viewer.getEditPartRegistry().get(el))
-				.toList();
-		viewer.setSelection(new StructuredSelection(eps));
+
+		final INamedElement viewableNetwork = findNextViewableNetwork(fbelements.get(0));
+		final GraphicalViewer viewer = HandlerHelper.openEditor(viewableNetwork).getAdapter(GraphicalViewer.class);
+
+		HandlerHelper.selectElement(fbelements.get(0), viewer);
 	}
 
 	private static Rectangle getParentSubappBounds(final IEditorPart editor, final List<FBNetworkElement> fbelements) {
@@ -113,5 +115,18 @@ public class MoveToParentHandler extends AbstractHandler {
 
 	private static FBNetwork getParentOfParent(final FBNetworkElement fbNetworkElement) {
 		return (FBNetwork) fbNetworkElement.getFbNetwork().eContainer().eContainer();
+	}
+
+	private static INamedElement findNextViewableNetwork(final FBNetworkElement fbelement) {
+		if (fbelement.getFbNetwork().isApplicationNetwork()) {
+			return (Application) fbelement.getFbNetwork().eContainer();
+		}
+		if (fbelement.getFbNetwork().isSubApplicationNetwork()) {
+			if (fbelement.getFbNetwork().eContainer() instanceof final SubApp subapp && subapp.isUnfolded()) {
+				return findNextViewableNetwork((FBNetworkElement) fbelement.getFbNetwork().eContainer());
+			}
+			return (FBNetworkElement) fbelement.getFbNetwork().eContainer();
+		}
+		return null;
 	}
 }
