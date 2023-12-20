@@ -45,6 +45,9 @@ public class GitLabImportWizardPage extends WizardPage {
 	}
 
 	public String getUrl() {
+		if (!url.getText().endsWith("/")) { //$NON-NLS-1$
+			return url.getText() + "/"; //$NON-NLS-1$
+		}
 		return url.getText();
 	}
 
