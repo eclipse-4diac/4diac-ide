@@ -129,6 +129,12 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
+	public void refresh() {
+		super.refresh();
+		getFigure().getName().setText(getModel().getName());
+	}
+
+	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof DeviceInterfaceEditPart) {
