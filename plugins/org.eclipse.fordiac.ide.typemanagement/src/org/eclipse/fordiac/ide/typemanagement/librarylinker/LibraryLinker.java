@@ -8,7 +8,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Dunja Životin - initial API and implementation and/or initial documentation
+ *   Dunja Životin, Fabio Gandolfi -
+ *   	initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.librarylinker;
 
@@ -24,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -41,6 +43,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
@@ -52,7 +55,6 @@ import org.eclipse.swt.widgets.Display;
 public class LibraryLinker {
 
 	private static final SystemManager SYSTEM_MANAGER = SystemManager.INSTANCE;
-	private static final String LOGIC = "Logic"; //$NON-NLS-1$
 	private static final String LIB_TYPELIB_FOLDER_NAME = "typelib"; //$NON-NLS-1$
 	private static final String WORKSPACE_ROOT = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
 			.toPortableString();
@@ -216,8 +218,33 @@ public class LibraryLinker {
 
 	private Map<String, TypeEntry> cashOldTypes(final String oldVersion) {
 		try (final Stream<java.nio.file.Path> stream = Files
-				.list(Paths.get(WORKSPACE_ROOT, EXTRACTED_LIB_DIRECTORY, oldVersion, LIB_TYPELIB_FOLDER_NAME, LOGIC))) {
-			return stream
+				.walk(Paths.get(WORKSPACE_ROOT, EXTRACTED_LIB_DIRECTORY, oldVersion))) {
+
+			final Predicate<java.nio.file.Path> fbt = i -> i.getFileName().toString().toUpperCase()
+					.endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT);
+			final Predicate<java.nio.file.Path> adp = i -> i.getFileName().toString().toUpperCase()
+					.endsWith(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING_WITH_DOT);
+			final Predicate<java.nio.file.Path> atp = i -> i.getFileName().toString().toUpperCase()
+					.endsWith(TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING_WITH_DOT);
+			final Predicate<java.nio.file.Path> dev = i -> i.getFileName().toString().toUpperCase()
+					.endsWith(TypeLibraryTags.DEVICE_TYPE_FILE_ENDING_WITH_DOT);
+			final Predicate<java.nio.file.Path> dtp = i -> i.getFileName().toString().toUpperCase()
+					.endsWith(TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT);
+			final Predicate<java.nio.file.Path> res = i -> i.getFileName().toString().toUpperCase()
+					.endsWith(TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING_WITH_DOT);
+			final Predicate<java.nio.file.Path> seg = i -> i.getFileName().toString().toUpperCase()
+					.endsWith(TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING_WITH_DOT);
+			final Predicate<java.nio.file.Path> sub = i -> i.getFileName().toString().toUpperCase()
+					.endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
+			final Predicate<java.nio.file.Path> sys = i -> i.getFileName().toString().toUpperCase()
+					.endsWith(TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING_WITH_DOT);
+			final Predicate<java.nio.file.Path> fct = i -> i.getFileName().toString().toUpperCase()
+					.endsWith(TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT);
+			final Predicate<java.nio.file.Path> gcf = i -> i.getFileName().toString().toUpperCase()
+					.endsWith(TypeLibraryTags.GLOBAL_CONST_FILE_ENDING_WITH_DOT);
+
+			return stream.filter(Files::isRegularFile)
+					.filter(fbt.or(adp).or(atp).or(dev).or(dtp).or(res).or(seg).or(sub).or(sys).or(fct).or(gcf))
 					.map(path -> TypeLibraryManager.INSTANCE.getTypeFromLinkedFile(selectedProject,
 							path.getFileName().toString()))
 					.filter(Optional::isPresent).map(Optional::get)
