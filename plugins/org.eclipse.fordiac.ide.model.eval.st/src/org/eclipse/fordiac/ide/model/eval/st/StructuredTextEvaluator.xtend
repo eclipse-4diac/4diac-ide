@@ -693,10 +693,18 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				parent.children.entrySet.findFirst[key instanceof FB && key.name == receiver.name]?.
 					value as FBEvaluator<?>
 			}
+		} else if (parent instanceof StructuredTextEvaluator && parent.context === context) {
+			(parent as StructuredTextEvaluator).getEvaluator(receiver)
 		} else
-			EvaluatorFactory.createEvaluator(receiver.type,
-				receiver.type.eClass.instanceClass as Class<? extends ICallable>, receiver, receiver.members.values,
-				this) as FBEvaluator<?>
+			receiver.createEvaluator
+	}
+
+	def protected FBEvaluator<?> createEvaluator(FBVariable receiver) {
+		val result = EvaluatorFactory.createEvaluator(receiver.type,
+			receiver.type.eClass.instanceClass as Class<? extends ICallable>, receiver, receiver.members.values,
+			this) as FBEvaluator<?>
+		result.prepare // make sure evaluator is prepared
+		result
 	}
 
 	static class StructuredTextException extends Exception {
