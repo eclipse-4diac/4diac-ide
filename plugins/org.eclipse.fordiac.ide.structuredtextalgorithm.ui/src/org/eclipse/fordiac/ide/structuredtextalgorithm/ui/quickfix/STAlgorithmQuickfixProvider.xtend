@@ -17,10 +17,8 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.quickfix
 
 import com.google.common.collect.Iterables
-import com.google.inject.Inject
 import java.text.MessageFormat
 import javax.swing.text.BadLocationException
-import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -31,23 +29,20 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmFa
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.STAlgorithmEditorUtils
 import org.eclipse.fordiac.ide.structuredtextalgorithm.validation.STAlgorithmValidator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.STCoreQuickfixProvider
 import org.eclipse.gef.commands.Command
-import org.eclipse.gef.commands.CommandStack
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.diagnostics.Diagnostic
 import org.eclipse.xtext.resource.XtextResource
-import org.eclipse.xtext.ui.editor.IURIEditorOpener
 import org.eclipse.xtext.ui.editor.quickfix.Fix
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor
 import org.eclipse.xtext.ui.editor.quickfix.ReplaceModification
 import org.eclipse.xtext.validation.Issue
 
 class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
-	@Inject
-	IURIEditorOpener editorOpener
 
 	@Fix(STAlgorithmValidator.NO_ALGORITHM_FOR_INPUT_EVENT)
 	def void fixNoAlgorithmForInputEvent(Issue issue, IssueResolutionAcceptor acceptor) {
@@ -143,14 +138,6 @@ class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 	}
 	
 	def protected void executeCommand(Issue issue, Command command) {
-		executeCommand(issue.uriToProblem, command)
-	}
-	
-	def protected void executeCommand(URI uri, Command command) {
-		val editor = editorOpener.open(uri, false);
-		val commandStack = editor.getAdapter(CommandStack)
-		if (commandStack !== null) {
-			commandStack.execute(command)
-		}
+		STAlgorithmEditorUtils.executeCommand(issue.uriToProblem, command)
 	}
 }
