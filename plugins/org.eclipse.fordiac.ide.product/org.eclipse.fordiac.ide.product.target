@@ -16,7 +16,7 @@
 			<unit id="org.eclipse.nebula.feature.feature.group" version="3.0.0.202303072132"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/tools/gef/classic/latest/"/>
+			<repository location="https://download.eclipse.org/tools/gef/classic/nightly/latest/"/>
 			<unit id="org.eclipse.draw2d.examples" version="0.0.0"/>
 			<unit id="org.eclipse.draw2d.examples.source" version="0.0.0"/>
 			<unit id="org.eclipse.draw2d.feature.group" version="0.0.0"/>

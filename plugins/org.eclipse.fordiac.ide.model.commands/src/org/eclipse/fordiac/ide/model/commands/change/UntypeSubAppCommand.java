@@ -12,19 +12,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.gef.commands.Command;
 
-public class UntypeSubAppCommand extends Command {
+public class UntypeSubAppCommand extends Command implements ScopedCommand {
 	private final SubApp subapp;
 	private final SubAppTypeEntry typeEntry;
 
 	public UntypeSubAppCommand(final SubApp subapp) {
 		super(Messages.UntypeSubappCommand_Label);
-		this.subapp = subapp;
+		this.subapp = Objects.requireNonNull(subapp);
 		typeEntry = (SubAppTypeEntry) subapp.getTypeEntry();
 	}
 
@@ -40,7 +45,8 @@ public class UntypeSubAppCommand extends Command {
 	@Override
 	public void execute() {
 		if (subapp.getSubAppNetwork() == null) {
-			// the subapp network was not yet copied from the type, i.e., subapp was never shown in viewer
+			// the subapp network was not yet copied from the type, i.e., subapp was never
+			// shown in viewer
 			subapp.setSubAppNetwork(
 					FBNetworkHelper.copyFBNetWork(subapp.getType().getFBNetwork(), subapp.getInterface()));
 		}
@@ -61,4 +67,8 @@ public class UntypeSubAppCommand extends Command {
 		subapp.setTypeEntry(null);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(subapp);
+	}
 }

@@ -19,6 +19,7 @@ import java.util.List
 import java.util.Map
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
@@ -63,7 +64,6 @@ final class STCoreParseUtil {
 		ParserRule entryPoint, LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues,
 		URI uri, Map<?, ?> loadOptions, boolean includeInternalLibraryElement) {
 		resourceSet.loadOptions.putAll(#{
-			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
 			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
 		})
 		val resource = serviceProvider.get(XtextResource) as LibraryElementXtextResource
@@ -74,6 +74,7 @@ final class STCoreParseUtil {
 		resource.includeInternalLibraryElement = includeInternalLibraryElement
 		if(!additionalContent.nullOrEmpty) resource.additionalContent.addAll(additionalContent)
 		resource.load(new LazyStringInputStream(text), loadOptions ?: resourceSet.loadOptions)
+		EcoreUtil.resolveAll(resource)
 		if(issues !== null) {
 			val validator = resource.resourceServiceProvider.resourceValidator
 			issues.addAll(validator.validate(resource, CheckMode.FAST_ONLY, CancelIndicator.NullImpl))

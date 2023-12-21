@@ -19,7 +19,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -29,7 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class DeleteConnectionCommand extends Command {
+public class DeleteConnectionCommand extends Command implements ScopedCommand {
 	private IInterfaceElement source;
 	private IInterfaceElement destination;
 	private final Connection connection;
@@ -56,7 +61,7 @@ public class DeleteConnectionCommand extends Command {
 
 	public DeleteConnectionCommand(final Connection connection, final FBNetworkElement errorFb) {
 		super(Messages.DeleteConnectionCommand_DeleteConnection);
-		this.connection = connection;
+		this.connection = Objects.requireNonNull(connection);
 		if (this.connection.eContainer() instanceof final FBNetwork fbNetwork) {
 			connectionParent = fbNetwork;
 		} else {
@@ -164,4 +169,11 @@ public class DeleteConnectionCommand extends Command {
 		return connectionParent;
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (connectionParent != null) {
+			return Set.of(connectionParent);
+		}
+		return Set.of(connection);
+	}
 }

@@ -1,5 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2019 Johannes Kepler University, Linz
+ * Copyright (c) 2019, 2023 Johannes Kepler University, Linz
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *  Alois Zoitl
  *    - initial API and implementation and/or initial documentation
+ *  Martin Erich Jobst
+ *    - add average character width
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
@@ -17,6 +20,7 @@ import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -32,28 +36,37 @@ public enum CoordinateConverter {
 	 *
 	 * In general it the lineHeigth / 100 as defined in IEC 61499-2 Annex B.1
 	 */
-	private double transformationScale;
-	private double lineHeight;
+	private final double transformationScale;
+	private final double lineHeight;
+	private final double averageCharacterWidth;
 
 	private static class LineHeightRunnable implements Runnable {
 		private double lineHeight;
+		private double averageCharacterWidth;
 
 		public double getLineHeight() {
 			return lineHeight;
 		}
 
+		public double getAverageCharacterWidth() {
+			return averageCharacterWidth;
+		}
+
 		@Override
 		public void run() {
 			final Font diagramFont = JFaceResources.getFont(PreferenceConstants.DIAGRAM_FONT);
-			lineHeight = FigureUtilities.getFontMetrics(diagramFont).getHeight();
+			final FontMetrics fontMetrics = FigureUtilities.getFontMetrics(diagramFont);
+			lineHeight = fontMetrics.getHeight();
+			averageCharacterWidth = fontMetrics.getAverageCharacterWidth();
 		}
 	}
 
-	private CoordinateConverter() {
+	CoordinateConverter() {
 		final LineHeightRunnable lineHeightCalc = new LineHeightRunnable();
 
 		Display.getDefault().syncExec(lineHeightCalc);
 		lineHeight = lineHeightCalc.getLineHeight();
+		averageCharacterWidth = lineHeightCalc.getAverageCharacterWidth();
 		transformationScale = lineHeight / 100.0;
 	}
 
@@ -87,4 +100,7 @@ public enum CoordinateConverter {
 		return lineHeight;
 	}
 
+	public double getAverageCharacterWidth() {
+		return averageCharacterWidth;
+	}
 }

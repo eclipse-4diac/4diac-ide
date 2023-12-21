@@ -19,7 +19,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -95,7 +95,7 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 			@Override
 			public void partActivated(final IWorkbenchPart part) {
 				if (part instanceof final FBTypeEditor fbTypeEditor
-						&& fbTypeEditor.getActiveEditor() instanceof final ServiceSequenceEditor servSeq) {
+						&& fbTypeEditor.getActiveEditor() instanceof ServiceSequenceEditor) {
 					getPartService().removePartListener(this);
 					setServiceSequences();
 				}
@@ -137,10 +137,10 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 			if (!selection.isEmpty() && selection instanceof final IStructuredSelection sel) {
 				if (sel.getFirstElement() instanceof SequenceRootEditPart) {
 					((FBType) ((SequenceRootEditPart) sel.getFirstElement()).getModel()).getService();
-				} else if (sel.getFirstElement() instanceof OutputPrimitiveEditPart) {
-					((OutputPrimitiveEditPart) sel.getFirstElement()).getModel();
-				} else if (sel.getFirstElement() instanceof InputPrimitiveEditPart) {
-					((InputPrimitiveEditPart) sel.getFirstElement()).getModel();
+				} else if (sel.getFirstElement() instanceof final OutputPrimitiveEditPart opEP) {
+					opEP.getModel();
+				} else if (sel.getFirstElement() instanceof final InputPrimitiveEditPart ipEP) {
+					ipEP.getModel();
 				}
 			}
 		}
@@ -161,8 +161,8 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 		if (null != selectedElement) {
 			final Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
 			getGraphicalViewer().flush();
-			if (editpart instanceof EditPart && ((EditPart) editpart).isSelectable()) {
-				getGraphicalViewer().select((EditPart) editpart);
+			if (editpart instanceof final EditPart ep && ep.isSelectable()) {
+				getGraphicalViewer().select(ep);
 				return true;
 			}
 			if (selectedElement instanceof Service) {
@@ -279,9 +279,7 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 	}
 
 	void setServiceSequences() {
-
-		final ArrayList<ServiceSequence> serviceSeqs = ServiceSequenceSaveAndLoadHelper
-				.loadServiceSequencesFromFile(fbType);
+		final List<ServiceSequence> serviceSeqs = ServiceSequenceSaveAndLoadHelper.loadServiceSequencesFromFile(fbType);
 
 		final CompoundCommand cmds = new CompoundCommand();
 		for (final ServiceSequence seq : serviceSeqs) {

@@ -19,9 +19,14 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -36,27 +41,30 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
-public class CreateSubAppCrossingConnectionsCommand extends Command {
+public class CreateSubAppCrossingConnectionsCommand extends Command implements ScopedCommand {
 
-	final IInterfaceElement source;
-	final IInterfaceElement destination;
-	final FBNetwork match;
-	final List<FBNetwork> sourceNetworks;
-	final List<FBNetwork> destinationNetworks;
+	private final IInterfaceElement source;
+	private final IInterfaceElement destination;
+	private final FBNetwork match;
+	private final List<FBNetwork> sourceNetworks;
+	private final List<FBNetwork> destinationNetworks;
 
-	List<Command> commands = new ArrayList<>();
+	private final List<Command> commands = new ArrayList<>();
 
-	public CreateSubAppCrossingConnectionsCommand(final IInterfaceElement source, final IInterfaceElement destination,
-			final List<FBNetwork> sourceNetworks, final List<FBNetwork> destinationNetworks, final FBNetwork match) {
-		this.source = source;
-		this.destination = destination;
-		this.sourceNetworks = sourceNetworks;
-		this.destinationNetworks = destinationNetworks;
-		this.match = match;
+	protected CreateSubAppCrossingConnectionsCommand(final IInterfaceElement source,
+			final IInterfaceElement destination, final List<FBNetwork> sourceNetworks,
+			final List<FBNetwork> destinationNetworks, final FBNetwork match) {
+		this.source = Objects.requireNonNull(source);
+		this.destination = Objects.requireNonNull(destination);
+		this.sourceNetworks = Objects.requireNonNull(sourceNetworks);
+		this.destinationNetworks = Objects.requireNonNull(destinationNetworks);
+		this.match = Objects.requireNonNull(match);
 	}
 
 	public static Command createProcessBorderCrossingConnection(final IInterfaceElement source,
 			final IInterfaceElement destination) {
+		Objects.requireNonNull(source);
+		Objects.requireNonNull(destination);
 		final List<FBNetwork> sourceNetworks = buildHierarchy(source);
 		final List<FBNetwork> destinationNetworks = buildHierarchy(destination);
 		final FBNetwork match = findMostSpecificMatch(source, destination, sourceNetworks, destinationNetworks);
@@ -72,10 +80,6 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 	public boolean canExecute() {
 		// as not all checks of the createconnection command are valid we need to do our
 		// own checks
-		// first the generic checks
-		if (source == null || destination == null) {
-			return false;
-		}
 
 		// equal types for source and dest
 		if (!source.getClass().equals(destination.getClass())) {
@@ -307,4 +311,9 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 		return true;
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Stream.concat(sourceNetworks.stream(), destinationNetworks.stream())
+				.collect(Collectors.toUnmodifiableSet());
+	}
 }

@@ -111,6 +111,10 @@
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences">
       </handler> 
       <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.CreateMaxCoverageSequencesHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createMaxCoverageSequences">
+      </handler> 
+      <handler
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.GetCoverageHandler"
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.getCoverage">
       </handler> 
@@ -156,6 +160,10 @@
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences"
             name="Create all Service Sequences">
+      </command>
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createMaxCoverageSequences"
+            name="Create max Coverage Sequences">
       </command>
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.getCoverage"
@@ -328,7 +336,22 @@
        </command>
 	   <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences"
-            label="Create all Service Sequences"
+            label="create all Service Sequences"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createMaxCoverageSequences"
+            label="create max Coverage Sequences"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">

@@ -76,8 +76,7 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
-		final IFile file = folder.getFile(
-				triggerEvent.getFBNetworkElement().getQualifiedName() + "." + triggerEvent.getName() + ".opsem");  //$NON-NLS-1$//$NON-NLS-2$
+		final IFile file = folder.getFile(system.getName() + "." + triggerEvent.getQualifiedName() + ".opsem"); //$NON-NLS-1$//$NON-NLS-2$
 		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		final Resource res = reset.createResource(uri);
 		res.getContents().add(manager);

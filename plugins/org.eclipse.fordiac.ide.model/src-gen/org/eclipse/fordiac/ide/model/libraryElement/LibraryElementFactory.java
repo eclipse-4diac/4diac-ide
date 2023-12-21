@@ -378,15 +378,6 @@ public interface LibraryElementFactory extends EFactory {
 	FBNetwork createFBNetwork();
 
 	/**
-	 * Returns a new object of class '<em>FB Network Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>FB Network Element</em>'.
-	 * @generated
-	 */
-	FBNetworkElement createFBNetworkElement();
-
-	/**
 	 * Returns a new object of class '<em>FB Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

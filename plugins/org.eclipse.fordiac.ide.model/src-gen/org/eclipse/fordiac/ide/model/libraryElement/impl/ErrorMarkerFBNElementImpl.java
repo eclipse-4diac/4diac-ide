@@ -116,6 +116,26 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	 * @generated
 	 */
 	@Override
+	public int getWidth() {
+		return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getHeight() {
+		return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT:

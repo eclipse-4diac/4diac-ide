@@ -44,7 +44,9 @@ public enum FordiacImage {
 	// Icon Images
 	ICON_4DIAC_16, ICON_4DIAC_32,
 	ICON_ADAPTER_LIST,
-	ICON_ADAPTER_TYPE, ICON_ADD_STATE, ICON_ALGORITHM, ICON_APPLICATION, ICON_BASIC_FB,
+	ICON_ADAPTER_TYPE, ICON_ADD_STATE, ICON_ALGORITHM, ICON_APPLICATION,
+	ICON_ATTRIBUTE_DECLARATION,
+	ICON_BASIC_FB,
 	ICON_CLEAR_DEVICE, ICON_CLEAR_FORCE, ICON_COMPOSITE_FB, ICON_DATA, ICON_DATA_INPUT, ICON_DATA_TYPE,
 	ICON_DATA_OUTPUT, ICON_DELETE_RESOURCE, ICON_DEPLOYMENT_CONSOLE, ICON_DEPLOYMENT_PERSPECTIVE, ICON_DEVICE,
 	ICON_DISCOVER, ICON_DOWNLOAD, ICON_EC_ACTION, ICON_ECC, ICON_EC_STATE,
@@ -181,7 +183,8 @@ public enum FordiacImage {
 		return createOverlayImage(image, imageDescriptor, IDecoration.TOP_LEFT);
 	}
 
-	public static DecorationOverlayIcon createOverlayImage(final Image image, final ImageDescriptor imageDescriptor, final int quadrant) {
+	public static DecorationOverlayIcon createOverlayImage(final Image image, final ImageDescriptor imageDescriptor,
+			final int quadrant) {
 		return new DecorationOverlayIcon(image, imageDescriptor, quadrant);
 	}
 }

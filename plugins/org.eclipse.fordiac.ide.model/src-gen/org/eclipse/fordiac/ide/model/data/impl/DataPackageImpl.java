@@ -65,6 +65,7 @@ import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.IntType;
+import org.eclipse.fordiac.ide.model.data.InternalDataType;
 import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
 import org.eclipse.fordiac.ide.model.data.LintType;
@@ -491,6 +492,13 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	private EClass ldateTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass internalDataTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1258,6 +1266,16 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getInternalDataType() {
+		return internalDataTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getBaseType1() {
 		return baseType1EEnum;
 	}
@@ -1415,6 +1433,8 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 		ldateTypeEClass = createEClass(LDATE_TYPE);
 
+		internalDataTypeEClass = createEClass(INTERNAL_DATA_TYPE);
+
 		// Create enums
 		baseType1EEnum = createEEnum(BASE_TYPE1);
 	}
@@ -1509,6 +1529,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		timeOfDayTypeEClass.getESuperTypes().add(this.getAnyDateType());
 		ltodTypeEClass.getESuperTypes().add(this.getAnyDateType());
 		ldateTypeEClass.getESuperTypes().add(this.getAnyDateType());
+		internalDataTypeEClass.getESuperTypes().add(this.getDataType());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(anyDerivedTypeEClass, AnyDerivedType.class, "AnyDerivedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -1808,6 +1829,8 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 		op = addEOperation(ldateTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(internalDataTypeEClass, InternalDataType.class, "InternalDataType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(baseType1EEnum, BaseType1.class, "BaseType1"); //$NON-NLS-1$

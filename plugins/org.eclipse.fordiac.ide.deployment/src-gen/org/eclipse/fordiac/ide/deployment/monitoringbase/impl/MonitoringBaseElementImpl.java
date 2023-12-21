@@ -95,8 +95,9 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 			InternalEObject oldPort = (InternalEObject)port;
 			port = (PortElement)eResolveProxy(oldPort);
 			if (port != oldPort) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT, oldPort, port));
+				}
 			}
 		}
 		return port;
@@ -118,8 +119,9 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	public void setPort(PortElement newPort) {
 		PortElement oldPort = port;
 		port = newPort;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT, oldPort, port));
+		}
 	}
 
 	/**
@@ -139,8 +141,9 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	public void setOffline(boolean newOffline) {
 		boolean oldOffline = offline;
 		offline = newOffline;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE, oldOffline, offline));
+		}
 	}
 
 	/**
@@ -149,23 +152,18 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 */
 	@Override
 	public String getPortString() {
-				StringBuilder portString = new StringBuilder();
+		StringBuilder portString = new StringBuilder();
 
-				for (String element : getPort().getHierarchy()) {
-					portString.append(element);
-					portString.append("."); //$NON-NLS-1$
-				}
+		portString.append(getPort().getHierarchy());
 
-				portString.append(getPort().getFb().getName());
-				portString.append("."); //$NON-NLS-1$
 
-				if (getPort().getInterfaceElement().eContainer() != null && getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {
-					portString.append(((PortElementImpl) getPort().eContainer()).getInterfaceElement().getName());
-					portString.append("."); //$NON-NLS-1$
-				}
-				portString.append(getPort().getInterfaceElement().getName());
+		if (getPort().getInterfaceElement().eContainer() != null && getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {
+			portString.append(((PortElementImpl) getPort().eContainer()).getInterfaceElement().getName());
+			portString.append("."); //$NON-NLS-1$
+		}
+		portString.append(getPort().getInterfaceElement().getName());
 
-				return portString.toString();
+		return portString.toString();
 
 	}
 
@@ -204,7 +202,9 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__PORT:
-				if (resolve) return getPort();
+				if (resolve) {
+					return getPort();
+				}
 				return basicGetPort();
 			case MonitoringBasePackage.MONITORING_BASE_ELEMENT__OFFLINE:
 				return isOffline();
@@ -273,7 +273,9 @@ public abstract class MonitoringBaseElementImpl extends EObjectImpl implements M
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (offline: "); //$NON-NLS-1$

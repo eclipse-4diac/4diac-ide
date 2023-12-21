@@ -14,16 +14,20 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 
-public class CreateInternalFBCommand extends CreationCommand {
+public class CreateInternalFBCommand extends CreationCommand implements ScopedCommand {
 
 	/** The element where the internal FB is added to */
 	private final BaseFBType baseFbType;
@@ -44,7 +48,7 @@ public class CreateInternalFBCommand extends CreationCommand {
 
 	public CreateInternalFBCommand(final BaseFBType baseFbType, final int index, final String name,
 			final FBTypeEntry fbType) {
-		this.baseFbType = baseFbType;
+		this.baseFbType = Objects.requireNonNull(baseFbType);
 		this.fbType = fbType;
 		if (null == fbType) {
 			final Map<String, FBTypeEntry> typeLib = baseFbType.getTypeLibrary().getFbTypes();
@@ -84,4 +88,8 @@ public class CreateInternalFBCommand extends CreationCommand {
 		getInteralFBList().add(index, internalFB);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(baseFbType);
+	}
 }

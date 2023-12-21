@@ -14,22 +14,17 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
-import org.eclipse.gef.commands.Command;
 
 /**
  * The Class ChangeCompilerVersionCommand.
  */
-public class ChangeCompilerVersionCommand extends Command {
-
-	/** The new Compiler value. */
-	private final Compiler compiler;
+public class ChangeCompilerVersionCommand extends AbstractChangeCompilerCommand {
 
 	private final String newVersion;
 	private String oldVersion;
 
 	public ChangeCompilerVersionCommand(final Compiler compiler, final String newVersion) {
-		super();
-		this.compiler = compiler;
+		super(compiler);
 		this.newVersion = (null == newVersion) ? "" : newVersion; //$NON-NLS-1$
 	}
 
@@ -40,7 +35,7 @@ public class ChangeCompilerVersionCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		oldVersion = compiler.getVersion();
+		oldVersion = getCompiler().getVersion();
 		redo();
 	}
 
@@ -51,7 +46,7 @@ public class ChangeCompilerVersionCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		compiler.setVersion(oldVersion);
+		getCompiler().setVersion(oldVersion);
 	}
 
 	/*
@@ -61,7 +56,7 @@ public class ChangeCompilerVersionCommand extends Command {
 	 */
 	@Override
 	public void redo() {
-		compiler.setVersion(newVersion);
+		getCompiler().setVersion(newVersion);
 	}
 
 }

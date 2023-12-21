@@ -27,14 +27,6 @@ public class AutomationSystemItemProviderEmfCompare extends AutomationSystemProv
 	}
 
 	@Override
-	public Adapter createFBNetworkElementAdapter() {
-		if (fbNetworkElementItemProvider == null) {
-			fbNetworkElementItemProvider = new FbNetworkElementItemProviderEmfCompare(this);
-		}
-		return fbNetworkElementItemProvider;
-	}
-
-	@Override
 	public Adapter createSubAppAdapter() {
 		if (subAppItemProvider == null) {
 			subAppItemProvider = new SubAppItemProviderEmfCompare(this);

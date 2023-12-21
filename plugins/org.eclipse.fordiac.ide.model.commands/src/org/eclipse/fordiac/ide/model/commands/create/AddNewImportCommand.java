@@ -16,6 +16,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -24,7 +29,7 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 
 /** The Class AddNewCompilerCommand. */
-public class AddNewImportCommand extends CreationCommand {
+public class AddNewImportCommand extends CreationCommand implements ScopedCommand {
 
 	/** The new Compiler value. */
 	private Import importer;
@@ -37,7 +42,7 @@ public class AddNewImportCommand extends CreationCommand {
 	}
 
 	public AddNewImportCommand(final LibraryElement type, final String importedNamespace) {
-		this.type = type;
+		this.type = Objects.requireNonNull(type);
 		this.importedNamespace = importedNamespace;
 	}
 
@@ -63,4 +68,9 @@ public class AddNewImportCommand extends CreationCommand {
 		return importer;
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		// imports affect entire type
+		return Set.of(type);
+	}
 }

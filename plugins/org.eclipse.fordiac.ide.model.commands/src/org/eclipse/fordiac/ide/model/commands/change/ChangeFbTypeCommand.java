@@ -14,6 +14,11 @@
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -23,7 +28,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class ChangeFbTypeCommand extends Command {
+public class ChangeFbTypeCommand extends Command implements ScopedCommand {
 
 	private final FB fb;
 	private FBTypeEntry oldEntry;
@@ -31,8 +36,8 @@ public class ChangeFbTypeCommand extends Command {
 	private final CompoundCommand additionalCommands = new CompoundCommand();
 
 	protected ChangeFbTypeCommand(final FB fb, final FBTypeEntry newType) {
-		this.fb = fb;
-		this.newType = newType;
+		this.fb = Objects.requireNonNull(fb);
+		this.newType = Objects.requireNonNull(newType);
 	}
 
 	public static ChangeFbTypeCommand forTypeName(final FB fb, final String typeName) {
@@ -80,5 +85,10 @@ public class ChangeFbTypeCommand extends Command {
 
 	public CompoundCommand getAdditionalCommands() {
 		return additionalCommands;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(fb);
 	}
 }

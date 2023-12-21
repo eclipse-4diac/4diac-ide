@@ -14,6 +14,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -21,7 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.commands.Command;
 
-public abstract class AbstractReconnectConnectionCommand extends Command {
+public abstract class AbstractReconnectConnectionCommand extends Command implements ScopedCommand {
 	private FBNetwork parent;
 	private final Connection connection;
 	private final boolean isSourceReconnect;
@@ -32,7 +37,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	protected AbstractReconnectConnectionCommand(final String label, final Connection connection,
 			final boolean isSourceReconnect, final IInterfaceElement newTarget, final FBNetwork parent) {
 		super(label);
-		this.connection = connection;
+		this.connection = Objects.requireNonNull(connection);
 		this.isSourceReconnect = isSourceReconnect;
 		this.newTarget = newTarget;
 		this.parent = parent;
@@ -110,6 +115,14 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	private static void copyAttributes(final Connection dstCon, final Connection srcCon) {
 		srcCon.getAttributes().forEach(
 				attr -> dstCon.setAttribute(attr.getName(), attr.getType(), attr.getValue(), attr.getComment()));
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (parent != null) {
+			return Set.of(parent);
+		}
+		return Set.of(connection);
 	}
 
 	protected abstract AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent);

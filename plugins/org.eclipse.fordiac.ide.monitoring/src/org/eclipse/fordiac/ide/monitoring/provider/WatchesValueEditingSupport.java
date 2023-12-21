@@ -120,9 +120,10 @@ public class WatchesValueEditingSupport extends EditingSupport {
 
 	public static void writeOnlineValueToOffline(final MonitoringElement element, final String value) {
 		if (element.getPort() != null && element.getPort().getSystem() != null
-				&& element.getPort().getSystem().getCommandStack() != null) {
+				&& element.getPort().getSystem().getCommandStack() != null
+				&& element.getPort().getInterfaceElement() instanceof final VarDeclaration varDeclaration) {
 			final CommandStack cmdStack = element.getPort().getSystem().getCommandStack();
-			cmdStack.execute(new ChangeValueCommand((VarDeclaration) element.getPort().getInterfaceElement(), value));
+			cmdStack.execute(new ChangeValueCommand(varDeclaration, value));
 		}
 	}
 }

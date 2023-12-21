@@ -12,8 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
@@ -21,7 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
-public class OrganizeImportsCommand extends Command {
+public class OrganizeImportsCommand extends Command implements ScopedCommand {
 
 	private final LibraryElement libraryElement;
 
@@ -29,7 +34,7 @@ public class OrganizeImportsCommand extends Command {
 	private EList<Import> newImports;
 
 	public OrganizeImportsCommand(final LibraryElement libraryElement) {
-		this.libraryElement = libraryElement;
+		this.libraryElement = Objects.requireNonNull(libraryElement);
 	}
 
 	@Override
@@ -52,5 +57,10 @@ public class OrganizeImportsCommand extends Command {
 	@Override
 	public void undo() {
 		ECollections.setEList(ImportHelper.getMutableImports(libraryElement), oldImports);
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(libraryElement);
 	}
 }

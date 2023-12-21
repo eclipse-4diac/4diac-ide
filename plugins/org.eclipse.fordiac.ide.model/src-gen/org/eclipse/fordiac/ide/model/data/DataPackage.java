@@ -4683,6 +4683,88 @@ public interface DataPackage extends EPackage {
 	int LDATE_TYPE_FEATURE_COUNT = ANY_DATE_TYPE_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.InternalDataTypeImpl <em>Internal Data Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.data.impl.InternalDataTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getInternalDataType()
+	 * @generated
+	 */
+	int INTERNAL_DATA_TYPE = 56;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_DATA_TYPE__NAME = DATA_TYPE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_DATA_TYPE__COMMENT = DATA_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_DATA_TYPE__ATTRIBUTES = DATA_TYPE__ATTRIBUTES;
+
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_DATA_TYPE__VERSION_INFO = DATA_TYPE__VERSION_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_DATA_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_DATA_TYPE__COMPILER_INFO = DATA_TYPE__COMPILER_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_DATA_TYPE__TYPE_ENTRY = DATA_TYPE__TYPE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Internal Data Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_DATA_TYPE_FEATURE_COUNT = DATA_TYPE_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.BaseType1 <em>Base Type1</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4690,7 +4772,7 @@ public interface DataPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getBaseType1()
 	 * @generated
 	 */
-	int BASE_TYPE1 = 56;
+	int BASE_TYPE1 = 57;
 
 
 	/**
@@ -5386,6 +5468,16 @@ public interface DataPackage extends EPackage {
 	EClass getLdateType();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.InternalDataType <em>Internal Data Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Internal Data Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.data.InternalDataType
+	 * @generated
+	 */
+	EClass getInternalDataType();
+
+	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.data.BaseType1 <em>Base Type1</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6072,6 +6164,16 @@ public interface DataPackage extends EPackage {
 		 * @generated
 		 */
 		EClass LDATE_TYPE = eINSTANCE.getLdateType();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.InternalDataTypeImpl <em>Internal Data Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.data.impl.InternalDataTypeImpl
+		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getInternalDataType()
+		 * @generated
+		 */
+		EClass INTERNAL_DATA_TYPE = eINSTANCE.getInternalDataType();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.BaseType1 <em>Base Type1</em>}' enum.

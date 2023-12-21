@@ -1,6 +1,6 @@
-/*******************************************************************************
- * Copyright (c) 2019, 2023 fortiss GmbH, 2020 Johannes Kepler University Linz, 
- *                          Martin Erich Jobst
+/**********************************************************************************
+ * Copyright (c) 2019, 2023 fortiss GmbH, Johannes Kepler University Linz, 
+ *                          Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,8 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Alois Zoitl  - fixed adapter and fb number generation in connection lists
  *                - added adapter connection generation 
- *******************************************************************************/
+ *   Martin Melik Merkumians - add code for export CFB internal VarInOut usage
+ ********************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.composite
 
 import java.nio.file.Path
@@ -59,8 +60,8 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		«generateFBInterfaceDefinition»
 		«generateFBInterfaceSpecDefinition»
 		
-		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, CResource *const paSrcRes) :
-		    «baseClass»(paSrcRes, &scmFBInterfaceSpec, paInstanceNameId, &scmFBNData)«//no newline
+		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
+		    «baseClass»(paContainer, &scmFBInterfaceSpec, paInstanceNameId, scmFBNData)«//no newline
 			»«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«generateConnectionInitializer» {
 		};
 		
@@ -68,6 +69,13 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		«generateFBNetwork»
 		«generateReadInternal2InterfaceOutputDataDefinition»
 		«generateInterfaceDefinitions»
+	'''
+	
+	override protected generateInterfaceDefinitions() '''
+		«super.generateInterfaceDefinitions»
+		«IF (!type.interfaceList.inOutVars.empty)»
+			«type.interfaceList.outMappedInOutVars.generateConnectionAccessorsDefinition("getDIOOutConInternalUnchecked", "CInOutDataConnection *", true)»
+		«ENDIF»
 	'''
 
 	def protected generateReadInternal2InterfaceOutputDataDefinition() '''
@@ -81,7 +89,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 			switch(paEOID) {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
-			  	  «FOR variable : event.with.map[withVariable]»
+			  	  «FOR variable : event.with.map[withVariable].filter[!it.inOutVar]»
 			  	  	if(CDataConnection *conn = getIn2IfConUnchecked(«variable.interfaceElementIndex»); conn) { conn->readData(«variable.generateName»); }
 			  	  «ENDFOR»
 			  	  break;
@@ -98,7 +106,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	def protected generateFBNetwork() '''
 		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterFBType)]»
 			const SCFB_FBInstanceData «FBClassName»::scmInternalFBs[] = {
-			  «FOR elem : fbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.name.FORTEStringId»}«ENDFOR»
+			  «FOR elem : fbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.generateTypeSpec»}«ENDFOR»
 			};
 		«ENDIF»
 		
@@ -241,6 +249,10 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		'''  {«connNum», «con.destination.generateConnectionPortID(con.destinationElement)»},
 		'''
 	}
+	
+	override protected generateConnectionInitializer() //
+	'''«super.generateConnectionInitializer»«// no newline
+	   »«type.interfaceList.outMappedInOutVars.generateDataConnectionInitializer(true)»'''
 
 	def private getPrimaryDataConn(DataConnection dataConn) {
 		// if from the source one connection is target to the interface of the CFB we have to take this first

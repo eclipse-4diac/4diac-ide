@@ -20,10 +20,14 @@ package org.eclipse.fordiac.ide.application.commands;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -48,7 +52,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.graphics.Point;
 
-public class FlattenSubAppCommand extends Command {
+public class FlattenSubAppCommand extends Command implements ScopedCommand {
 	private final SubApp subapp;
 	private final FBNetwork parentNetwork;
 	private final List<FBNetworkElement> elements = new ArrayList<>();
@@ -65,8 +69,8 @@ public class FlattenSubAppCommand extends Command {
 
 	public FlattenSubAppCommand(final SubApp subapp) {
 		super(Messages.FlattenSubAppCommand_LABEL_FlattenSubAppCommand);
-		this.subapp = subapp;
-		parentNetwork = subapp.getFbNetwork();
+		this.subapp = Objects.requireNonNull(subapp);
+		parentNetwork = Objects.requireNonNull(subapp.getFbNetwork());
 		fbnetworkPosInSubapp = FBNetworkHelper
 				.getTopLeftCornerOfFBNetwork(subapp.getSubAppNetwork().getNetworkElements());
 	}
@@ -250,5 +254,10 @@ public class FlattenSubAppCommand extends Command {
 			cmd.setDestination(destination);
 		}
 		return cmd;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(parentNetwork);
 	}
 }

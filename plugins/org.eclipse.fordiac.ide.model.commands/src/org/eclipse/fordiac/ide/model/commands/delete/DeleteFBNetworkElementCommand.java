@@ -18,8 +18,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
+import java.util.Objects;
+import java.util.Set;
+
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -33,8 +38,8 @@ import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class DeleteFBNetworkElementCommand extends Command {
-	private FBNetwork fbParent;
+public class DeleteFBNetworkElementCommand extends Command implements ScopedCommand {
+	private final FBNetwork fbParent;
 	private final FBNetworkElement element;
 	private final CompoundCommand cmds = new CompoundCommand();
 	private final Group group;
@@ -42,8 +47,9 @@ public class DeleteFBNetworkElementCommand extends Command {
 
 	public DeleteFBNetworkElementCommand(final FBNetworkElement element) {
 		super(Messages.DeleteFBNetworkElementCommand_DeleteFBOrSubapplication);
-		this.element = element;
+		this.element = Objects.requireNonNull(element);
 		this.group = element.getGroup();
+		fbParent = element.getFbNetwork();
 	}
 
 	public FBNetworkElement getFBNetworkElement() {
@@ -52,15 +58,11 @@ public class DeleteFBNetworkElementCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		if (element instanceof final FB fb && fb.isResourceTypeFB()) {
-			return false;
-		}
-		return null != element && null != element.getFbNetwork();
+		return fbParent != null && !(element instanceof final FB fb && fb.isResourceTypeFB());
 	}
 
 	@Override
 	public void execute() {
-		fbParent = element.getFbNetwork();
 		if (element.isMapped()) {
 			cmds.add(new UnmapCommand(element));
 		}
@@ -121,4 +123,11 @@ public class DeleteFBNetworkElementCommand extends Command {
 		return fbParent;
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (fbParent != null) {
+			return Set.of(fbParent);
+		}
+		return Set.of(element);
+	}
 }

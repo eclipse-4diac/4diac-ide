@@ -6,7 +6,7 @@
       eSuperTypes="#//IEditPartCreator">
     <eOperations name="getPortString" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="&#x9;&#x9;StringBuilder portString = new StringBuilder();&#xA;&#xA;&#x9;&#x9;for (String element : getPort().getHierarchy()) {&#xA;&#x9;&#x9;&#x9;portString.append(element);&#xA;&#x9;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;}&#xA;&#xA;&#x9;&#x9;portString.append(getPort().getFb().getName());&#xA;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#xA;&#x9;&#x9;if (getPort().getInterfaceElement().eContainer() != null &amp;&amp; getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {&#xA;&#x9;&#x9;&#x9;portString.append(((PortElementImpl) getPort().eContainer()).getInterfaceElement().getName());&#xA;&#x9;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;portString.append(getPort().getInterfaceElement().getName());&#xA;&#xA;&#x9;&#x9;return portString.toString();&#xA;"/>
+        <details key="body" value="StringBuilder portString = new StringBuilder();&#xA;&#xA;portString.append(getPort().getHierarchy());&#xA;&#xA;&#xA;if (getPort().getInterfaceElement().eContainer() != null &amp;&amp; getPort().getInterfaceElement().eContainer().eContainer() instanceof AdapterFB) {&#xA;&#x9;portString.append(((PortElementImpl) getPort().eContainer()).getInterfaceElement().getName());&#xA;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;}&#xA;portString.append(getPort().getInterfaceElement().getName());&#xA;&#xA;return portString.toString();&#xA;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getResourceString" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
@@ -31,7 +31,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="PortElement">
     <eOperations name="getPortString" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="&#x9;&#x9;StringBuilder portString = new StringBuilder(getResource().getDevice().getName());&#xA;&#xA;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;portString.append(resource.getName());&#xA;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#xA;&#x9;&#x9;for (String element : getHierarchy()) {&#xA;&#x9;&#x9;&#x9;portString.append(element);&#xA;&#x9;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;}&#xA;&#xA;&#x9;&#x9;portString.append(fb.getName());&#xA;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#xA;&#x9;&#x9;if (interfaceElement.eContainer() != null &amp;&amp; interfaceElement.eContainer().eContainer() instanceof AdapterFB) {&#xA;&#x9;&#x9;&#x9;portString.append(((PortElementImpl) eContainer()).interfaceElement.getName());&#xA;&#x9;&#x9;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;portString.append(interfaceElement.getName());&#xA;&#xA;&#x9;&#x9;return portString.toString();&#xA;"/>
+        <details key="body" value="StringBuilder portString = new StringBuilder(getResource().getDevice().getName());&#xA;&#xA;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;portString.append(resource.getName());&#xA;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;&#xA;portString.append(getHierarchy());&#xA;&#xA;if (interfaceElement.eContainer() != null &amp;&amp; interfaceElement.eContainer().eContainer() instanceof AdapterFB) {&#xA;&#x9;portString.append(((PortElementImpl) eContainer()).interfaceElement.getName());&#xA;&#x9;portString.append(&quot;.&quot;); //$NON-NLS-1$&#xA;}&#xA;portString.append(interfaceElement.getName());&#xA;&#xA;return portString.toString();&#xA;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getDevice" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Device">
@@ -48,7 +48,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceElement" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//IInterfaceElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resource" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Resource"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hierarchy" unique="false"
-        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IEditPartCreator" instanceClassName="org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator"
       abstract="true" interface="true"/>

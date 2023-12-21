@@ -87,7 +87,7 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addFBNetworkElementXMLAttributes(final FBNetworkElement fbnElement) throws XMLStreamException {
-		addNameAttribute(fbnElement.getName());
+		addNameAttribute(getFBNElementName(fbnElement));
 		if (fbnElement.getType() != null) {
 			addTypeAttribute(fbnElement.getType());
 		}
@@ -96,6 +96,12 @@ class FBNetworkExporter extends CommonElementExporter {
 		if (fbnElement instanceof final Group group) {
 			addGroupAttributes(group);
 		}
+	}
+
+	@SuppressWarnings("static-method") // allow sub-classes to provide special implementations (e.g., full qualified
+										// names)
+	protected String getFBNElementName(final FBNetworkElement fbnElement) {
+		return fbnElement.getName();
 	}
 
 	private void addCommentElement(final Comment comment) throws XMLStreamException {
@@ -251,13 +257,13 @@ class FBNetworkExporter extends CommonElementExporter {
 		return !((fbNetworkElement instanceof ErrorMarkerFBNElement) && (fbNetworkElement.getTypeEntry() == null));
 	}
 
-	private static String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement,
+	private String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement,
 			final FBNetwork fbNetwork) {
 		String retVal = ""; //$NON-NLS-1$
 		if ((null != interfaceElement.getFBNetworkElement())
 				&& (interfaceElement.getFBNetworkElement().getFbNetwork() == fbNetwork)) {
 			// this is here to detect that interface elements of subapps
-			retVal = interfaceElement.getFBNetworkElement().getName() + "."; ////$NON-NLS-1$
+			retVal = getFBNElementName(interfaceElement.getFBNetworkElement()) + "."; ////$NON-NLS-1$
 		}
 
 		retVal += interfaceElement.getName();

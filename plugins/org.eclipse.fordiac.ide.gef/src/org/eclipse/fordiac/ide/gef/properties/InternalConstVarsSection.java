@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.util.Collections;
+
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -69,9 +71,8 @@ public class InternalConstVarsSection extends AbstractInternalVarsSection {
 	@Override
 	protected void setInputInit() {
 		final BaseFBType currentType = getType();
-		if (currentType != null) {
-			provider.setInput(currentType.getInternalConstVars());
-		}
+		provider.setInput(currentType != null ? currentType.getInternalConstVars() : Collections.emptyList());
+		table.refresh();
 	}
 
 	private int getInsertionIndex() {
@@ -90,7 +91,7 @@ public class InternalConstVarsSection extends AbstractInternalVarsSection {
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof final VarDeclaration varEntry) {
-			cmd.add(new InsertVariableCommand(getType().getInternalConstVars(), varEntry, index));
+			cmd.add(new InsertVariableCommand(getType(), getType().getInternalConstVars(), varEntry, index));
 		}
 	}
 

@@ -79,7 +79,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	// types interface
 	private final InterfaceList interfaceList;
 
-	protected final Map<String, FBNetworkElement> fbNetworkElementMap = new HashMap<>();
+	private final Map<String, FBNetworkElement> fbNetworkElementMap;
 
 	public FBNetworkImporter(final CommonElementImporter importer) {
 		// so we need an empty interface list
@@ -90,14 +90,21 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	public FBNetworkImporter(final CommonElementImporter importer, final FBNetwork fbNetwork,
 			final InterfaceList interfaceList) {
+		this(importer, fbNetwork, interfaceList, new HashMap<>());
+	}
+
+	protected FBNetworkImporter(final CommonElementImporter importer, final FBNetwork fbNetwork,
+			final Map<String, FBNetworkElement> fbNetworkElementMap) {
+		this(importer, fbNetwork, LibraryElementFactory.eINSTANCE.createInterfaceList(), fbNetworkElementMap);
+	}
+
+	private FBNetworkImporter(final CommonElementImporter importer, final FBNetwork fbNetwork,
+			final InterfaceList interfaceList, final Map<String, FBNetworkElement> fbNetworkElementMap) {
 		super(importer);
 		this.fbNetwork = fbNetwork;
 		this.interfaceList = interfaceList;
 		fbNetwork.getNetworkElements().forEach(element -> fbNetworkElementMap.put(element.getName(), element));
-	}
-
-	protected FBNetworkImporter(final CommonElementImporter importer, final FBNetwork fbNetwork) {
-		this(importer, fbNetwork, LibraryElementFactory.eINSTANCE.createInterfaceList());
+		this.fbNetworkElementMap = fbNetworkElementMap;
 	}
 
 	public FBNetwork getFbNetwork() {
@@ -168,8 +175,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		// add FB to FBnetwork so that parameter parsing can create error markers
 		// correctly.
-		fbNetwork.getNetworkElements().add(group);
-		fbNetworkElementMap.putIfAbsent(group.getName(), group);
+		addFBNetworkElement(group);
 
 		processChildren(LibraryElementTags.GROUP_ELEMENT, tagName -> {
 			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(tagName)) {
@@ -218,10 +224,14 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		// add FB to FBnetwork so that parameter parsing can create error markers
 		// correctly.
-		fbNetwork.getNetworkElements().add(fb);
-		fbNetworkElementMap.putIfAbsent(fb.getName(), fb);
+		addFBNetworkElement(fb);
 
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
+	}
+
+	protected void addFBNetworkElement(final FBNetworkElement fb) {
+		fbNetwork.getNetworkElements().add(fb);
+		fbNetworkElementMap.putIfAbsent(fb.getName(), fb);
 	}
 
 	private FBNetworkElement createFBInstance(final String typeFbElement) {
@@ -448,28 +458,29 @@ class FBNetworkImporter extends CommonElementImporter {
 		if (path == null) {
 			return null;
 		}
-		final String[] split = path.split("\\.", -1); //$NON-NLS-1$
+		final int separatorPos = path.lastIndexOf('.');
 
-		if (1 == split.length) {
+		if (separatorPos == -1) {
+			// we have a connection to the containing interface
 			if (isInput) {
 				builder.setDestInterfaceList(interfaceList);
 			} else {
 				builder.setSrcInterfaceList(interfaceList);
 			}
-
 			return getContainingInterfaceElement(path, conType, isInput);
 		}
-		if (split.length >= 2) {
-			final FBNetworkElement element = findFBNetworkElement(split[0]);
-			if (null != element) {
-				final InterfaceList ieList = element.getInterface();
-				if (isInput) {
-					builder.setDestInterfaceList(ieList);
-				} else {
-					builder.setSrcInterfaceList(ieList);
-				}
-				return getInterfaceElement(ieList, path.substring(split[0].length() + 1), conType, isInput);
+
+		final String elementName = path.substring(0, separatorPos);
+		final FBNetworkElement element = findFBNetworkElement(elementName);
+		if (null != element) {
+			final InterfaceList ieList = element.getInterface();
+			if (isInput) {
+				builder.setDestInterfaceList(ieList);
+			} else {
+				builder.setSrcInterfaceList(ieList);
 			}
+			final String pinName = path.substring(separatorPos + 1);
+			return getInterfaceElement(ieList, pinName, conType, isInput);
 		}
 		return null;
 	}
@@ -480,9 +491,8 @@ class FBNetworkImporter extends CommonElementImporter {
 	 */
 	protected IInterfaceElement getContainingInterfaceElement(final String interfaceElement, final EClass conType,
 			final boolean isInput) {
-		return getInterfaceElement(interfaceList, interfaceElement, conType, !isInput); // for connections to the
-		// interface inputs are the
-		// outputs of the FB
+		// for connections to the interface inputs are the outputs of the FB
+		return getInterfaceElement(interfaceList, interfaceElement, conType, !isInput);
 	}
 
 	private static IInterfaceElement getInterfaceElement(final InterfaceList il, final String interfaceElement,

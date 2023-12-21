@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -87,7 +88,7 @@ public class DEVImporter extends TypeImporter {
 				// TODO __gebenh import "supported Resourcetypes"
 				break;
 			case LibraryElementTags.RESOURCE_ELEMENT:
-				getElement().getResource().add(parseResource());
+				getElement().getResource().add(parseResource(new HashMap<>()));
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
 				final ResDevFBNetworkImporter resNetworkImporter = new ResDevFBNetworkImporter(this,

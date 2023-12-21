@@ -15,15 +15,18 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.commands.Command;
 
-public class RemoveElementsFromGroup extends Command {
+public class RemoveElementsFromGroup extends Command implements ScopedCommand {
 
 	private final Group sourceGroup;
 	private final Point offset;
@@ -85,5 +88,13 @@ public class RemoveElementsFromGroup extends Command {
 			return new Point(position.getX(), position.getY());
 		}
 		return new Point();
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (sourceGroup != null) {
+			return Set.of(sourceGroup);
+		}
+		return Set.of();
 	}
 }

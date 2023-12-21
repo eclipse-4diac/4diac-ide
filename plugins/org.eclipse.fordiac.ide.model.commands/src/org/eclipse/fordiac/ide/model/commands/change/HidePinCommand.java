@@ -12,26 +12,30 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
-public class HidePinCommand extends Command {
+public class HidePinCommand extends Command implements ScopedCommand {
 
-	private final HiddenElement hiddenElement; // The pin
+	private final IInterfaceElement interfaceElement; // The pin
 	private final boolean visible;
 
-	public HidePinCommand(final HiddenElement hiddenElement, final boolean visible) {
-		this.hiddenElement = hiddenElement;
+	public HidePinCommand(final IInterfaceElement interfaceElement, final boolean visible) {
+		this.interfaceElement = Objects.requireNonNull(interfaceElement);
 		this.visible = visible;
 	}
 
 	@Override
 	public void execute() {
-		hiddenElement.setVisible(visible);
+		interfaceElement.setVisible(visible);
 	}
 
 	@Override
@@ -41,13 +45,12 @@ public class HidePinCommand extends Command {
 
 	@Override
 	public void undo() {
-		hiddenElement.setVisible(!visible);
+		interfaceElement.setVisible(!visible);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return hiddenElement instanceof final IInterfaceElement interfaceElement
-				&& (interfaceElement instanceof VarDeclaration || interfaceElement instanceof AdapterDeclaration)
+		return (interfaceElement instanceof VarDeclaration || interfaceElement instanceof AdapterDeclaration)
 				&& (interfaceElement.isIsInput() && interfaceElement.getInputConnections().isEmpty()
 						|| !interfaceElement.isIsInput() && interfaceElement.getOutputConnections().isEmpty())
 				&& !isExpandedSubAppPinAndConnected(interfaceElement);
@@ -57,5 +60,10 @@ public class HidePinCommand extends Command {
 		return interfaceElement.getFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded()
 				&& !interfaceElement.getInputConnections().isEmpty()
 				&& !interfaceElement.getOutputConnections().isEmpty();
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(interfaceElement);
 	}
 }

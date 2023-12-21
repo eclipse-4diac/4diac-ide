@@ -30,7 +30,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
@@ -41,7 +40,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
@@ -51,7 +49,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreImportValidat
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
-import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IResourceDescription;
 import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
@@ -167,7 +164,6 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getValue()));
 			}
 		}
-		validateGenericValue(varDeclaration, value, issues);
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
 		}
@@ -175,23 +171,6 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final IFile file = getFile(delta.getUri());
 			if (file != null && file.exists()) {
 				createMarkers(file, FordiacErrorMarker.INITIAL_VALUE_MARKER, issues, ignoreWarnings, monitor);
-			}
-		}
-	}
-
-	protected static void validateGenericValue(final VarDeclaration varDeclaration, final String value,
-			final List<Issue> issues) {
-		if (varDeclaration.isIsInput() && GenericTypes.isAnyType(varDeclaration.getType())) {
-			if (varDeclaration.getFBNetworkElement() != null) {
-				if (varDeclaration.getInputConnections().isEmpty() && value.isBlank()) {
-					issues.add(ValidationUtil.createModelIssue(Severity.WARNING,
-							Messages.STAlgorithmInitialValueBuilderParticipant_MissingValueForGenericInstanceVariable,
-							varDeclaration));
-				}
-			} else if (!value.isBlank()) {
-				issues.add(ValidationUtil.createModelIssue(Severity.WARNING,
-						Messages.STAlgorithmInitialValueBuilderParticipant_SpecifiedValueForGenericTypeVariable,
-						varDeclaration));
 			}
 		}
 	}

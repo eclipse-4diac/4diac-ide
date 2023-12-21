@@ -30,4 +30,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: org.eclipse.fordiac.ide.model.monitoring,
  org.eclipse.fordiac.ide.model.monitoring.impl,
- org.eclipse.fordiac.ide.model.monitoring.util
+ org.eclipse.fordiac.ide.model.monitoring.util,
+ org.eclipse.fordiac.ide.monitoring

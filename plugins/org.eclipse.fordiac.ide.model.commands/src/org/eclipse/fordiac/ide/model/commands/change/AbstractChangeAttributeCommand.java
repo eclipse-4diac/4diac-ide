@@ -12,19 +12,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.gef.commands.Command;
 
-public abstract class AbstractChangeAttributeCommand extends Command {
+public abstract class AbstractChangeAttributeCommand extends Command implements ScopedCommand {
 	private final Attribute attribute;
 
 	protected AbstractChangeAttributeCommand(final Attribute attribute) {
-		this.attribute = attribute;
-	}
-
-	@Override
-	public boolean canExecute() {
-		return attribute != null;
+		this.attribute = Objects.requireNonNull(attribute);
 	}
 
 	@Override
@@ -50,5 +50,10 @@ public abstract class AbstractChangeAttributeCommand extends Command {
 
 	public Attribute getAttribute() {
 		return attribute;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(attribute);
 	}
 }

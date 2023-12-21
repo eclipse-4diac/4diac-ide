@@ -120,7 +120,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private void handleChangedFiles() {
-		Display.getDefault().syncExec(() -> {
+		Display.getDefault().asyncExec(() -> {
 			final List<IEditorPart> changedOpenedDirtyEditors = collectOpenedEditors(changedFiles);
 			final List<IEditorFileChangeListener> editorListener = changedOpenedDirtyEditors.stream()
 					.filter(IEditorFileChangeListener.class::isInstance).map(IEditorFileChangeListener.class::cast)
@@ -624,7 +624,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private static FordiacEditorMatchingStrategy editorMatching = new FordiacEditorMatchingStrategy();
 
 	private static void updateEditorInput(final IFile src, final IFile dst) {
-		Display.getDefault().syncExec(() -> {
+		Display.getDefault().asyncExec(() -> {
 			final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			final IEditorReference[] editorReferences = activePage.getEditorReferences();
 

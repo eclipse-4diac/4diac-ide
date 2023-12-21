@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -44,6 +45,8 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -403,7 +406,11 @@ public abstract class CommonElementImporter {
 
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (typeName != null) {
-			attribute.setType(getDataTypeLibrary().getType(typeName));
+			if (typeName.equals(HelperTypes.CDATA.getName())) {
+				attribute.setType(HelperTypes.CDATA);
+			} else {
+				attribute.setType(getDataTypeLibrary().getType(typeName));
+			}
 		} else {
 			final AttributeTypeEntry attributeTypeEntry = getTypeLibrary().getAttributeTypeEntry(attribute.getName());
 			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
@@ -413,7 +420,11 @@ public abstract class CommonElementImporter {
 		}
 
 		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
-		if (null == value) { // we don't have a value attribute check for a CData value
+		if (value == null && attribute.getType() == ElementaryTypes.WSTRING) {
+			// old CDATA value
+			attribute.setType(HelperTypes.CDATA);
+		}
+		if (HelperTypes.CDATA == attribute.getType()) {
 			value = readCDataSection();
 		}
 		attribute.setValue(value);
@@ -479,7 +490,9 @@ public abstract class CommonElementImporter {
 		final String pinNameAndVisibility = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String[] temp = pinNameAndVisibility.split(":"); //$NON-NLS-1$
 		final IInterfaceElement ie = block.getInterfaceElement(temp[0]);
-		ie.setVisible(IS_VISIBLE); // I know it's false since we save only hidden pins
+		if (ie != null) {
+			ie.setVisible(IS_VISIBLE); // I know it's false since we save only hidden pins
+		}
 	}
 
 	private boolean isPinVarConfigAttribute() {
@@ -700,7 +713,8 @@ public abstract class CommonElementImporter {
 		}
 	}
 
-	protected Resource parseResource() throws TypeImportException, XMLStreamException {
+	protected Resource parseResource(final Map<String, FBNetworkElement> fbNetworkElementMap)
+			throws TypeImportException, XMLStreamException {
 		final Resource resource = LibraryElementFactory.eINSTANCE.createResource();
 		resource.setDeviceTypeResource(false); // TODO model refactoring - check if a resource of given name is already
 		// in the list then it would be a device type resource
@@ -712,7 +726,7 @@ public abstract class CommonElementImporter {
 		processChildren(LibraryElementTags.RESOURCE_ELEMENT, name -> {
 			switch (name) {
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				new ResDevFBNetworkImporter(this, fbNetwork, resource.getVarDeclarations())
+				new ResDevFBNetworkImporter(this, fbNetwork, resource.getVarDeclarations(), fbNetworkElementMap)
 						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:

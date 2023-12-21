@@ -25,7 +25,7 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.systemmanagement.ValidateProject;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
 public class CheckTypeLibrary extends Task {
 
@@ -34,7 +34,6 @@ public class CheckTypeLibrary extends Task {
 	public void setProjectName(final String value) {
 		projectNameString = value;
 	}
-
 
 	@Override
 	public void execute() throws BuildException {
@@ -53,7 +52,7 @@ public class CheckTypeLibrary extends Task {
 			throw new BuildException("Project named '" + projectNameString + "' not in workspace in Workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		ValidateProject.clear(project);
+		clear(project);
 		Import4diacProject.waitBuilderJobsComplete();
 
 		runFullBuild(project);
@@ -88,8 +87,7 @@ public class CheckTypeLibrary extends Task {
 	}
 
 	public static void printMarkers(final Iterable<IMarker> markers, final ProjectComponent loggingTask)
-			throws CoreException
-	{
+			throws CoreException {
 		for (final IMarker marker : markers) {
 			loggingTask.log(markerToLogString(marker));
 		}
@@ -117,7 +115,7 @@ public class CheckTypeLibrary extends Task {
 				markerString += "PROBLEM: ";//$NON-NLS-1$
 			}
 
-			markerString += marker.getAttribute(IMarker.MESSAGE, "NO ERROR MESSAGE") + " | ";  //$NON-NLS-1$//$NON-NLS-2$
+			markerString += marker.getAttribute(IMarker.MESSAGE, "NO ERROR MESSAGE") + " | "; //$NON-NLS-1$//$NON-NLS-2$
 
 			if (marker.getResource().getLocation() != null) {
 				markerString += marker.getResource().getLocation().lastSegment() + " : "; //$NON-NLS-1$
@@ -133,6 +131,24 @@ public class CheckTypeLibrary extends Task {
 
 		}
 		return markerString;
+	}
+
+	private static void clear(final IProject project) {
+		if (isFordiacProject(project)) {
+			try {
+				project.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+			} catch (final CoreException e) {
+				throw new BuildException("Could not delete error marker", e); //$NON-NLS-1$
+			}
+		}
+	}
+
+	private static boolean isFordiacProject(final IProject project) {
+		try {
+			return project.isOpen() && project.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID);
+		} catch (final CoreException e) {
+			throw new BuildException("Could not read project nature", e); //$NON-NLS-1$
+		}
 	}
 
 }

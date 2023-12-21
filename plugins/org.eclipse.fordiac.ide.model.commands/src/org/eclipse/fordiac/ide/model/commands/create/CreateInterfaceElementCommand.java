@@ -13,11 +13,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.Set;
+
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
@@ -31,7 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 
-public class CreateInterfaceElementCommand extends CreationCommand {
+public class CreateInterfaceElementCommand extends CreationCommand implements ScopedCommand {
 	private IInterfaceElement newInterfaceElement;
 
 	private final String name;
@@ -203,4 +207,14 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 		return index;
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (targetInterfaceList != null) {
+			if (targetInterfaceList.eContainer() != null) {
+				return Set.of(targetInterfaceList.eContainer());
+			}
+			return Set.of(targetInterfaceList);
+		}
+		return Set.of();
+	}
 }

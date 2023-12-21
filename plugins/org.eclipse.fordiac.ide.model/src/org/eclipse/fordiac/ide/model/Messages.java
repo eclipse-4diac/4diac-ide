@@ -51,6 +51,8 @@ public final class Messages extends NLS {
 	public static String Error_RecursiveType;
 	public static String Error_SelfInsertion;
 	public static String ErrorMarkerInterfaceAnnotations_MissingVariableForValue;
+	public static String FBNetworkAnnotations_CollisionMessage;
+
 	public static String FBTImporter_ADAPTER_DECLARATION_TYPE_EXCEPTION;
 	public static String FBTImporter_ECTRANASITION_CONDITION_EXCEPTION;
 	public static String FBTImporter_ECTRANSITION_DEST_EXCEPTION;
@@ -109,6 +111,10 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_UnevenlyQuotedStringLiteral;
 	public static String VALIDATOR_UNKNOWN_LITERAL_TYPE;
 	public static String VarDeclarationAnnotations_MultipleInputConnections;
+
+	public static String VarDeclarationAnnotations_ShouldNotSpecifyValueForGenericVariableInType;
+
+	public static String VarDeclarationAnnotations_ShouldSpecifyValueForGenericVariableInInstance;
 
 	static {
 		// initialize resource bundle

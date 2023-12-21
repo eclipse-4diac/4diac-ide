@@ -20,7 +20,8 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
 import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -74,13 +75,17 @@ public class DataTypeInfoSection extends AbstractSection {
 	}
 
 	@Override
-	protected StructuredType getType() {
-		return (StructuredType) type;
+	protected LibraryElement getType() {
+		return (LibraryElement) type;
 	}
 
 	@Override
 	protected Object getInputType(final Object input) {
 		if (input instanceof final StructEditingComposite structViewingComposite) {
+			if (structViewingComposite.getStruct()
+					.eContainer() instanceof final AttributeDeclaration attributeDeclaration) {
+				return attributeDeclaration;
+			}
 			return structViewingComposite.getStruct();
 		}
 		return null;

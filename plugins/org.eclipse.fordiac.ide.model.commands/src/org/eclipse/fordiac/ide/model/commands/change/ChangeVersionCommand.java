@@ -16,25 +16,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.gef.commands.Command;
 
 /**
  * The Class ChangeCommentCommand.
  */
-public class ChangeVersionCommand extends Command {
+public class ChangeVersionCommand extends Command implements ScopedCommand {
 
-	private VersionInfo versionInfo;
+	private final VersionInfo versionInfo;
 
 	/** The new ApplicationDomain value. */
-	private String newVersion;
+	private final String newVersion;
 
 	/** The old ApplicationDomain value. */
 	private String oldVersion;
 
 	public ChangeVersionCommand(final VersionInfo versionInfo, final String newVersion) {
-		super();
-		this.versionInfo = versionInfo;
+		this.versionInfo = Objects.requireNonNull(versionInfo);
 		this.newVersion = (newVersion == null) ? "" : newVersion; //$NON-NLS-1$
 	}
 
@@ -69,4 +73,8 @@ public class ChangeVersionCommand extends Command {
 		versionInfo.setVersion(newVersion);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(versionInfo);
+	}
 }

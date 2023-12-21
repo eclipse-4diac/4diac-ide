@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -40,7 +41,7 @@ public class ServiceSequenceSaveAndLoadHelper {
 		saveServiceSequences(fbtype, new ArrayList<>(Arrays.asList(seq)));
 	}
 
-	public static void saveServiceSequences(final FBType fbtype, final ArrayList<ServiceSequence> seqs) {
+	public static void saveServiceSequences(final FBType fbtype, final List<ServiceSequence> seqs) {
 		final IProject project = fbtype.getTypeEntry().getFile().getProject();
 		final IFolder folder = project.getFolder(FOLDER_NAME);
 		if (!folder.exists()) {
@@ -50,9 +51,9 @@ public class ServiceSequenceSaveAndLoadHelper {
 				FordiacLogHelper.logError(e.getMessage());
 			}
 		}
-		final IFile file = folder.getFile(fbtype.getQualifiedName() + FILE_EXTENSION);
+		final IFile file = folder.getFile(fbtype.getName() + FILE_EXTENSION);
 		if (file.exists()) {
-			final ArrayList<ServiceSequence> seqsFromFile = loadServiceSequencesFromFile(fbtype);
+			final List<ServiceSequence> seqsFromFile = loadServiceSequencesFromFile(fbtype);
 			seqs.forEach(seq -> {
 				if (!seqsFromFile.contains(seq)) {
 					seqsFromFile.add(seq);
@@ -63,7 +64,7 @@ public class ServiceSequenceSaveAndLoadHelper {
 		saveServiceSequenceToFile(fbtype, seqs);
 	}
 
-	private static void saveServiceSequenceToFile(final FBType fbtype, final ArrayList<ServiceSequence> seqs) {
+	private static void saveServiceSequenceToFile(final FBType fbtype, final List<ServiceSequence> seqs) {
 		final ResourceSet reset = new ResourceSetImpl();
 		final IProject project = fbtype.getTypeEntry().getFile().getProject();
 		final IFolder folder = project.getFolder(FOLDER_NAME);
@@ -74,7 +75,7 @@ public class ServiceSequenceSaveAndLoadHelper {
 				FordiacLogHelper.logError(e.getMessage());
 			}
 		}
-		final IFile file = folder.getFile(fbtype.getQualifiedName() + FILE_EXTENSION);
+		final IFile file = folder.getFile(fbtype.getName() + FILE_EXTENSION);
 		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		final Resource res = reset.createResource(uri);
 
@@ -87,13 +88,13 @@ public class ServiceSequenceSaveAndLoadHelper {
 		}
 	}
 
-	public static ArrayList<ServiceSequence> loadServiceSequencesFromFile(final FBType fbtype) {
+	public static List<ServiceSequence> loadServiceSequencesFromFile(final FBType fbtype) {
 		final ResourceSet reset = new ResourceSetImpl();
 		final IProject project = fbtype.getTypeEntry().getFile().getProject();
 		final IFolder folder = project.getFolder(FOLDER_NAME);
 		final ArrayList<ServiceSequence> serviceSequences = new ArrayList<>();
 		if (folder.exists()) {
-			final IFile file = folder.getFile(fbtype.getQualifiedName() + FILE_EXTENSION);
+			final IFile file = folder.getFile(fbtype.getName() + FILE_EXTENSION);
 			if (file.exists()) {
 				final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 				final Resource res = reset.getResource(uri, true);
@@ -110,7 +111,7 @@ public class ServiceSequenceSaveAndLoadHelper {
 
 	public static EventManager loadEventManagerFromServiceSequenceFile(final FBType fbtype,
 			final ServiceSequence seqToFind) {
-		final ArrayList<ServiceSequence> seqs = loadServiceSequencesFromFile(fbtype);
+		final List<ServiceSequence> seqs = loadServiceSequencesFromFile(fbtype);
 
 		for (final ServiceSequence seq : seqs) {
 			if (seq.getName().equals(seqToFind.getName()) && seq.getEventManager() != null
@@ -123,7 +124,7 @@ public class ServiceSequenceSaveAndLoadHelper {
 	}
 
 	public static void removeServiceSequenceFromFile(final FBType fbtype, final ServiceSequence seq) {
-		final ArrayList<ServiceSequence> serviceSequences = loadServiceSequencesFromFile(fbtype);
+		final List<ServiceSequence> serviceSequences = loadServiceSequencesFromFile(fbtype);
 		serviceSequences.removeIf(s -> s.getName().equals(seq.getName()));
 		saveServiceSequenceToFile(fbtype, serviceSequences);
 	}

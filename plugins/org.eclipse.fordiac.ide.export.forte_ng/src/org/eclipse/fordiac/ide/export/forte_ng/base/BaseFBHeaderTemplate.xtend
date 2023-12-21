@@ -54,7 +54,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		
 		    «IF !type.internalFbs.empty»
 		    	static const size_t csmAmountOfInternalFBs = «type.internalFbs.size»;
-		    	TFunctionBlockPtr *mInternalFBs = createInternalFBs(csmAmountOfInternalFBs, scmInternalFBDefinitions, getResource());
+		    	TFunctionBlockPtr *mInternalFBs = createInternalFBs(csmAmountOfInternalFBs, scmInternalFBDefinitions, getContainer());
 		    	«generateInternalFbDefinition»
 		    	
 		    «ENDIF»
@@ -74,7 +74,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		    «(type.internalVars + type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
 		  public:
-		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, CResource *paSrcRes);
+		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
 		    «IF !type.internalFbs.empty»
 		    	
 		    	EMGMResponse changeFBExecutionState(EMGMCommandType paCommand) override;

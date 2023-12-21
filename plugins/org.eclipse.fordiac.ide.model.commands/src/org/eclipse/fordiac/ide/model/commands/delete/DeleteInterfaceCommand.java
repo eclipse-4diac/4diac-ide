@@ -18,8 +18,12 @@ package org.eclipse.fordiac.ide.model.commands.delete;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -32,7 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class DeleteInterfaceCommand extends Command {
+public class DeleteInterfaceCommand extends Command implements ScopedCommand {
 	private final IInterfaceElement interfaceElement;
 	private final InterfaceList parent;
 	private final List<? extends IInterfaceElement> targetList;
@@ -40,8 +44,8 @@ public class DeleteInterfaceCommand extends Command {
 	private int oldIndex;
 
 	public DeleteInterfaceCommand(final IInterfaceElement interfaceElement) {
-		this.interfaceElement = interfaceElement;
-		parent = (InterfaceList) interfaceElement.eContainer();
+		this.interfaceElement = Objects.requireNonNull(interfaceElement);
+		parent = (InterfaceList) Objects.requireNonNull(interfaceElement.eContainer(), "container is null"); //$NON-NLS-1$
 		targetList = getTargetList(this.interfaceElement); // this has to be the adjust this.interfaceElement
 	}
 
@@ -145,5 +149,13 @@ public class DeleteInterfaceCommand extends Command {
 			}
 		}
 		return Collections.emptyList();
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (parent.eContainer() != null) {
+			return Set.of(parent.eContainer());
+		}
+		return Set.of(parent);
 	}
 }

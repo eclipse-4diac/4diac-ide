@@ -12,13 +12,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 
-public class CreateConnectionAtSubappInterfaceCommand extends Command {
+public class CreateConnectionAtSubappInterfaceCommand extends Command implements ScopedCommand {
 
 	CreateInterfaceElementCommand createIECmdCommand;
 	AbstractConnectionCreateCommand createConCommand;
@@ -26,8 +31,8 @@ public class CreateConnectionAtSubappInterfaceCommand extends Command {
 	SubApp subApp;
 
 	public CreateConnectionAtSubappInterfaceCommand(final IInterfaceElement ie, final SubApp subApp) {
-		this.ie = ie;
-		this.subApp = subApp;
+		this.ie = Objects.requireNonNull(ie);
+		this.subApp = Objects.requireNonNull(subApp);
 	}
 
 	@Override
@@ -74,4 +79,8 @@ public class CreateConnectionAtSubappInterfaceCommand extends Command {
 		createConCommand.redo();
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(subApp);
+	}
 }

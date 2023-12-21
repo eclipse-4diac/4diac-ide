@@ -26,6 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -41,6 +42,7 @@ import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.SaveTypeEntryCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
@@ -55,6 +57,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.dialog.FBUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
@@ -102,6 +105,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
+	private ValidationJob validationJob;
 	private StructEditingComposite structComposite;
 	private Composite errorComposite;
 	private boolean importFailed;
@@ -125,7 +129,8 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			super.notifyChanged(notification);
 			final Object feature = notification.getFeature();
 			if ((null != feature)
-					&& (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass()))) {
+					&& ((LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass()))
+							|| TypeEntry.TYPE_ENTRY_FILE_FEATURE.equals(feature))) {
 				Display.getDefault().asyncExec(() -> {
 					if (null != dataTypeEntry) {
 						// input should be set before the partname
@@ -157,6 +162,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		getActionRegistry().dispose();
 		removeListenerFromDataTypeObj();
+		if (validationJob != null) {
+			validationJob.dispose();
+		}
 		if (annotationModel != null) {
 			annotationModel.dispose();
 		}
@@ -237,6 +245,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	private void updateFB(final Set<INamedElement> set) {
 		Command cmd = new CompoundCommand();
+		cmd = cmd.chain(getUpdateStructTypes(set));
 		cmd = cmd.chain(getUpdateStructManipulatorsCommand(set));
 		cmd = cmd.chain(getUpdateTypesCommand(set));
 		cmd = cmd.chain(getUpdateInstancesCommand(set));
@@ -249,16 +258,10 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 				structSaveDialog.getDataTypeOfElementList(fbTypes), null);
 	}
 
-	private Command getUpdateInstancesCommand(final Set<INamedElement> set) {
+	private Command getUpdateStructTypes(final Set<INamedElement> set) {
 		final List<Command> commands = new ArrayList<>();
-		set.stream().forEach(instance -> {
-			if (instance instanceof final FBNetworkElement s) {
-				if (s instanceof final SubApp subApp && !subApp.isTyped()) {
-					commands.add(new UpdateUntypedSubAppInterfaceCommand(s, structSaveDialog.getDataTypeOfElement(s)));
-				} else {
-					commands.add(new UpdateFBTypeCommand(s, structSaveDialog.getDataTypeOfElement(s)));
-				}
-			} else if (instance instanceof final StructuredType st) {
+		set.stream().filter(StructuredType.class::isInstance).forEach(instance -> {
+			if (instance instanceof final StructuredType st) {
 				for (final VarDeclaration varDeclaration : st.getMemberVariables()) {
 					final String typeName = varDeclaration.getTypeName();
 					if (typeName.equals(structSaveDialog.getDataTypeOfElement(st).getTypeName())) {
@@ -269,6 +272,23 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 				commands.add(new SaveTypeEntryCommand(st));
 			}
 		});
+		Command cmd = new CompoundCommand();
+		for (final Command subCmd : commands) {
+			cmd = cmd.chain(subCmd);
+		}
+		return cmd;
+	}
+
+	private Command getUpdateInstancesCommand(final Set<INamedElement> set) {
+		final List<Command> commands = new ArrayList<>();
+		set.stream().filter(FBNetworkElement.class::isInstance)
+				.filter(Predicate.not(StructManipulator.class::isInstance)).map(FBNetworkElement.class::cast).map(x -> {
+					if (x instanceof final SubApp subApp && !subApp.isTyped()) {
+						return new UpdateUntypedSubAppInterfaceCommand(x, structSaveDialog.getDataTypeOfElement(x));
+					}
+					return new UpdateFBTypeCommand(x, structSaveDialog.getDataTypeOfElement(x));
+				}).forEachOrdered(commands::add);
+
 		Command cmd = new CompoundCommand();
 		for (final Command subCmd : commands) {
 			cmd = cmd.chain(subCmd);
@@ -287,7 +307,13 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		final IEditorReference[] openEditors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getEditorReferences();
 		for (final IEditorReference iEditorReference : openEditors) {
-			iEditorReference.getEditor(true);
+			try {
+				if (iEditorReference.getEditorInput().exists()) {
+					iEditorReference.getEditor(true);
+				}
+			} catch (final PartInitException e) {
+				FordiacLogHelper.logError("Error while loading Editor: " + e.getMessage()); //$NON-NLS-1$
+			}
 		}
 	}
 
@@ -303,6 +329,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		setActionHandlers(site);
 		if (input instanceof final IFileEditorInput fileEditorInput) {
 			annotationModel = new FordiacMarkerGraphicalAnnotationModel(fileEditorInput.getFile());
+			validationJob = new ValidationJob(getPartName(), commandStack, annotationModel);
 		}
 	}
 
@@ -314,14 +341,20 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	private void addListenerToDataTypeObj() {
 		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null) {
+			dataTypeEntry.eAdapters().add(adapter);
 			dataTypeEntry.getTypeEditable().eAdapters().add(adapter);
 		}
 	}
 
 	private void removeListenerFromDataTypeObj() {
-		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null
-				&& dataTypeEntry.getTypeEditable().eAdapters().contains(adapter)) {
-			dataTypeEntry.getTypeEditable().eAdapters().remove(adapter);
+		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null) {
+			if (dataTypeEntry.eAdapters().contains(adapter)) {
+				dataTypeEntry.eAdapters().remove(adapter);
+			}
+
+			if (dataTypeEntry.getTypeEditable().eAdapters().contains(adapter)) {
+				dataTypeEntry.getTypeEditable().eAdapters().remove(adapter);
+			}
 		}
 	}
 
@@ -382,6 +415,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 				&& (!importFailed)) {
 			structComposite = new StructEditingComposite(parent, commandStack, structType, annotationModel);
 			getSite().setSelectionProvider(structComposite);
+			structComposite.setTitel(Messages.StructViewingComposite_Headline);
 		} else if (importFailed) {
 			createErrorComposite(parent, Messages.ErrorCompositeMessage);
 			if (outsideWorkspace) {
@@ -489,6 +523,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			if (dataTypeEntry.getTypeEditable() instanceof final StructuredType structType) {
 				structComposite.setStructType(structType);
 			}
+			commandStack.flush();
 			addListenerToDataTypeObj();
 		} catch (final PartInitException e) {
 			FordiacLogHelper

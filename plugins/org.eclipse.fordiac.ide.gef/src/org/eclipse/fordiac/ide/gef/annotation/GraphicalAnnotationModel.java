@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gef.annotation;
 
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public interface GraphicalAnnotationModel {
@@ -69,24 +70,24 @@ public interface GraphicalAnnotationModel {
 	 * Check whether a particular target has any associated annotations matching a
 	 * predicate
 	 *
-	 * @param target    The target
-	 * @param predicate The predicate
+	 * @param target The target
+	 * @param filter The filter
 	 * @return whether the target has any associated annotations matching the
 	 *         predicate
 	 */
-	boolean hasAnnotation(Object target, Predicate<GraphicalAnnotation> filter);
+	boolean hasAnnotation(Object target, Predicate<? super GraphicalAnnotation> filter);
 
 	/**
 	 * Check whether a particular target has any associated annotations of a
 	 * particular type and matching a predicate
 	 *
-	 * @param target    The target
-	 * @param type      The annotation type
-	 * @param predicate The predicate
+	 * @param target The target
+	 * @param type   The annotation type
+	 * @param filter The filter
 	 * @return whether the target has any associated annotations matching the
 	 *         predicate
 	 */
-	boolean hasAnnotation(Object target, String type, Predicate<GraphicalAnnotation> filter);
+	boolean hasAnnotation(Object target, String type, Predicate<? super GraphicalAnnotation> filter);
 
 	/**
 	 * Get the annotations for a particular target
@@ -114,6 +115,15 @@ public interface GraphicalAnnotationModel {
 	boolean removeAnnotation(GraphicalAnnotation annotation);
 
 	/**
+	 * Remove annotations matching the given filter.
+	 *
+	 * @param filter The filter
+	 * @return The event representing the change or {@code null} if no changes
+	 *         occurred and thus no event was fired
+	 */
+	GraphicalAnnotationModelEvent removeAnnotationIf(Predicate<? super GraphicalAnnotation> filter);
+
+	/**
 	 * Changed a single annotation.
 	 *
 	 * @param annotation The annotation that was changed
@@ -130,6 +140,13 @@ public interface GraphicalAnnotationModel {
 	boolean containsAnnotation(GraphicalAnnotation annotation);
 
 	/**
+	 * Perform the given action for each annotation.
+	 *
+	 * @param action The action to perform (must not be null)
+	 */
+	void forEach(Consumer<? super GraphicalAnnotation> action);
+
+	/**
 	 * Update annotations by first remoiving and then adding the supplied
 	 * annotations in a bulk operation.
 	 *
@@ -139,8 +156,8 @@ public interface GraphicalAnnotationModel {
 	 * @return The event representing the change or {@code null} if no changes
 	 *         occurred and thus no event was fired
 	 */
-	GraphicalAnnotationModelEvent updateAnnotations(Set<GraphicalAnnotation> add, Set<GraphicalAnnotation> remove,
-			Set<GraphicalAnnotation> changed);
+	GraphicalAnnotationModelEvent updateAnnotations(Set<? extends GraphicalAnnotation> add,
+			Set<? extends GraphicalAnnotation> remove, Set<? extends GraphicalAnnotation> changed);
 
 	/**
 	 * Get the (implementation-specific) modification stamp.
@@ -148,6 +165,14 @@ public interface GraphicalAnnotationModel {
 	 * @return The modification stamp
 	 */
 	long getModificationStamp();
+
+	/**
+	 * Reload the annotation model.
+	 * <p>
+	 * This removes and re-adds all annotations managed by the concrete
+	 * implementation.
+	 */
+	void reload();
 
 	/**
 	 * Dispose annotation model

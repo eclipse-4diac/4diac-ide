@@ -116,19 +116,7 @@
     	<command
         	id="org.eclipse.fordiac.ide.typemanagement.openType"
         	name="Open Type">
-    	</command>
-		<category
-            description="Rename a type and search for affected references"
-            id="org.eclipse.refactoring.category"
-            name="Refactoring"/>
-      	<command
-            categoryId="org.eclipse.refactoring.category"
-            description="Renames a iec 61499 type"
-            id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
-            name="Rename Type"
-            defaultHandler="org.eclipse.fordiac.ide.typemanagement.handlers.RenameTypeHandler">                       
-            
-        </command>    
+    	</command> 
 	</extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -144,33 +132,7 @@
         	class="org.eclipse.fordiac.ide.typemanagement.handlers.OpenTypeHandler"
         	commandId="org.eclipse.fordiac.ide.typemanagement.openType">
     	</handler>
-    	
-    	<handler class="org.eclipse.fordiac.ide.typemanagement.handlers.RenameTypeHandler"
-        		commandId="org.eclipse.ltk.ui.refactoring.commands.renameResource">
-			<activeWhen>
-		        <with variable="selection">
-		        	<iterate operator="or" ifEmpty="false">
-		        		<and>
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFile">
-                              </instanceof>
-                              <or>
-                              	<test property="org.eclipse.core.resources.extension"
-                                    value="adp" />
-                              	<test property="org.eclipse.core.resources.extension"
-                                    value="dtp" />
-                              	<test property="org.eclipse.core.resources.extension"
-                                    value="fbt" />
-                              	<test property="org.eclipse.core.resources.extension"
-                                    value="fct" />
-                              	<test property="org.eclipse.core.resources.extension"
-                                    value="sub" />
-                           	</or>
-                       	</and>
-		          </iterate>
-		    	</with>
-			</activeWhen>
-		</handler>
+
 	</extension>
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
@@ -488,7 +450,7 @@
    <extension
          point="org.eclipse.ltk.core.refactoring.renameParticipants">
       <renameParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameType"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeRefactoringParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.renameType"
             name="Rename Type handler">
          <enablement>
@@ -661,12 +623,6 @@
             type="org.eclipse.core.resources.IResource">
       </propertyTester>
    </extension>  
-    <extension
-         point="org.eclipse.ltk.core.refactoring.refactoringContributions">
-      <contribution
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeRefactoringContribution"
-            id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"/>
-   </extension>
    
    	<extension point="org.eclipse.ui.menus">
    		<menuContribution locationURI="menu:org.eclipse.4diac.ide.refactor.menu?after=typeGroup">

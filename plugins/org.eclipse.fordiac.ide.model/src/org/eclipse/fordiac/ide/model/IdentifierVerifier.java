@@ -28,7 +28,10 @@ import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 
-/** This class provides static methods to check whether a string is a valid IEC 61499 compliant identifier. */
+/**
+ * This class provides static methods to check whether a string is a valid IEC
+ * 61499 compliant identifier.
+ */
 public final class IdentifierVerifier {
 
 	private static final String IDENTIFIER_REGEX = "[_A-Za-z][_A-Za-z\\d]*"; //$NON-NLS-1$
@@ -44,21 +47,28 @@ public final class IdentifierVerifier {
 		throw new UnsupportedOperationException();
 	}
 
-	/** Checks if the identifier is valid, and returns an Optional error message.
+	/**
+	 * Checks if the identifier is valid, and returns an Optional error message.
 	 *
 	 * @param identifier the identifier
 	 *
-	 * @return Empty Optional if the identifier is valid, otherwise the error message is contained in the Optional */
+	 * @return Empty Optional if the identifier is valid, otherwise the error
+	 *         message is contained in the Optional
+	 */
 	public static Optional<String> verifyIdentifier(final String identifier) {
 		return verifyIdentifier(identifier, null);
 	}
 
-	/** Checks if the identifier is valid, and returns an Optional error message.
+	/**
+	 * Checks if the identifier is valid, and returns an Optional error message.
 	 *
 	 * @param identifier the identifier
-	 * @param context    The context in which the identifier has to be valid (may be {@code null})
+	 * @param context    The context in which the identifier has to be valid (may be
+	 *                   {@code null})
 	 *
-	 * @return Empty Optional if the identifier is valid, otherwise the error message is contained in the Optional */
+	 * @return Empty Optional if the identifier is valid, otherwise the error
+	 *         message is contained in the Optional
+	 */
 	public static Optional<String> verifyIdentifier(final String identifier, final Object context) {
 		if (identifier == null) {
 			return Optional.of(MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, identifier));
@@ -84,7 +94,7 @@ public final class IdentifierVerifier {
 	}
 
 	public static Optional<String> verifyPackageName(final String packageName) {
-		if (packageName == null || packageName.isBlank()) {
+		if (packageName == null || packageName.isEmpty()) {
 			return Optional.empty(); // allow empty package names
 		}
 		if (!PACKAGE_NAME_PATTERN.matcher(packageName).matches()) {

@@ -17,9 +17,12 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.List;
+import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
@@ -52,7 +55,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jdt.annotation.NonNull;
 
-public class MapToCommand extends Command {
+public class MapToCommand extends Command implements ScopedCommand {
 	protected final FBNetworkElement srcElement;
 	private final MappingTarget resource;
 	private UnmapCommand unmapFromExistingTarget;
@@ -67,22 +70,13 @@ public class MapToCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		if (srcElement == null) {
+		if (srcElement == null || resource == null) {
 			return false;
 		}
 		if ((srcElement.isMapped()) && (srcElement.getOpposite().getFbNetwork().equals(getTargetFBNetwork()))) {
 			ErrorMessenger.popUpErrorMessage(Messages.MapToCommand_STATUSMessage_AlreadyMapped);
 			return false; // already mapped to this resource -> nothing to do -> mapping not possible!
 		}
-
-		final boolean supports = deviceSupportsType();
-		if (!supports) {
-			ErrorMessenger.popUpErrorMessage(Messages.MapToCommand_STATUSMessage_TypeNotSupported);
-		}
-		return supports;
-	}
-
-	private static boolean deviceSupportsType() {
 		return true;
 	}
 
@@ -268,7 +262,6 @@ public class MapToCommand extends Command {
 			if (resource.equals(res)) {
 				// we need to create a connection in the target resource
 				// connections to error markers will not get mapped
-				final var destinationElement = targetElement;
 				IInterfaceElement destination = targetElement.getInterfaceElement(interfaceElement.getName());
 				if (destination instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& !varDeclaration.isIsInput()) {
@@ -417,4 +410,11 @@ public class MapToCommand extends Command {
 		return null;
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (srcElement != null && resource != null) {
+			return Set.of(srcElement, resource);
+		}
+		return Set.of();
+	}
 }

@@ -42,21 +42,22 @@ import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
  * <!-- begin-user-doc --> The <b>Adapter Factory</b> for the model. It provides
  * an adapter <code>createXXX</code> method for each class of the model. <!--
  * end-user-doc -->
+ *
  * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage
  * @generated
  */
 public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	/**
-	 * The cached model package.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The cached model package. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected static MonitoringPackage modelPackage;
 
 	/**
-	 * Creates an instance of the adapter factory.
-	 * <!-- begin-user-doc --> <!--
+	 * Creates an instance of the adapter factory. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public MonitoringAdapterFactory() {
@@ -75,12 +76,12 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	@Override
-	public boolean isFactoryForType(Object object) {
+	public boolean isFactoryForType(final Object object) {
 		if (object == modelPackage) {
 			return true;
 		}
 		if (object instanceof EObject) {
-			return ((EObject)object).eClass().getEPackage() == modelPackage;
+			return ((EObject) object).eClass().getEPackage() == modelPackage;
 		}
 		return false;
 	}
@@ -92,106 +93,127 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	protected MonitoringSwitch<Adapter> modelSwitch = new MonitoringSwitch<>() {
-			@Override
-			public Adapter caseMonitoringElement(MonitoringElement object) {
-				return createMonitoringElementAdapter();
-			}
-			@Override
-			public Adapter caseMonitoringAdapterElement(MonitoringAdapterElement object) {
-				return createMonitoringAdapterElementAdapter();
-			}
-			@Override
-			public Adapter caseAdapterPortElement(AdapterPortElement object) {
-				return createAdapterPortElementAdapter();
-			}
-			@Override
-			public Adapter caseAdapterMonitoringEvent(AdapterMonitoringEvent object) {
-				return createAdapterMonitoringEventAdapter();
-			}
-			@Override
-			public Adapter caseAdapterMonitoringVarDeclaration(AdapterMonitoringVarDeclaration object) {
-				return createAdapterMonitoringVarDeclarationAdapter();
-			}
-			@Override
-			public Adapter caseIEditPartCreator(IEditPartCreator object) {
-				return createIEditPartCreatorAdapter();
-			}
-			@Override
-			public Adapter caseSubAppPortElement(SubAppPortElement object) {
-				return createSubAppPortElementAdapter();
-			}
-			@Override
-			public Adapter caseSubappMonitoringElement(SubappMonitoringElement object) {
-				return createSubappMonitoringElementAdapter();
-			}
-			@Override
-			public Adapter caseMonitoringBase_IEditPartCreator(IEditPartCreator object) {
-				return createMonitoringBase_IEditPartCreatorAdapter();
-			}
-			@Override
-			public Adapter caseMonitoringBaseElement(MonitoringBaseElement object) {
-				return createMonitoringBaseElementAdapter();
-			}
-			@Override
-			public Adapter casePortElement(PortElement object) {
-				return createPortElementAdapter();
-			}
-			@Override
-			public Adapter caseINamedElement(INamedElement object) {
-				return createINamedElementAdapter();
-			}
-			@Override
-			public Adapter caseITypedElement(ITypedElement object) {
-				return createITypedElementAdapter();
-			}
-			@Override
-			public Adapter caseConfigurableObject(ConfigurableObject object) {
-				return createConfigurableObjectAdapter();
-			}
-			@Override
-			public Adapter caseHiddenElement(HiddenElement object) {
-				return createHiddenElementAdapter();
-			}
-			@Override
-			public Adapter caseIInterfaceElement(IInterfaceElement object) {
-				return createIInterfaceElementAdapter();
-			}
-			@Override
-			public Adapter caseICallable(ICallable object) {
-				return createICallableAdapter();
-			}
-			@Override
-			public Adapter caseEvent(Event object) {
-				return createEventAdapter();
-			}
-			@Override
-			public Adapter caseVarDeclaration(VarDeclaration object) {
-				return createVarDeclarationAdapter();
-			}
-			@Override
-			public Adapter defaultCase(EObject object) {
-				return createEObjectAdapter();
-			}
-		};
+		@Override
+		public Adapter caseMonitoringElement(final MonitoringElement object) {
+			return createMonitoringElementAdapter();
+		}
+
+		@Override
+		public Adapter caseMonitoringAdapterElement(final MonitoringAdapterElement object) {
+			return createMonitoringAdapterElementAdapter();
+		}
+
+		@Override
+		public Adapter caseAdapterPortElement(final AdapterPortElement object) {
+			return createAdapterPortElementAdapter();
+		}
+
+		@Override
+		public Adapter caseAdapterMonitoringEvent(final AdapterMonitoringEvent object) {
+			return createAdapterMonitoringEventAdapter();
+		}
+
+		@Override
+		public Adapter caseAdapterMonitoringVarDeclaration(final AdapterMonitoringVarDeclaration object) {
+			return createAdapterMonitoringVarDeclarationAdapter();
+		}
+
+		@Override
+		public Adapter caseIEditPartCreator(final IEditPartCreator object) {
+			return createIEditPartCreatorAdapter();
+		}
+
+		@Override
+		public Adapter caseSubAppPortElement(final SubAppPortElement object) {
+			return createSubAppPortElementAdapter();
+		}
+
+		@Override
+		public Adapter caseSubappMonitoringElement(final SubappMonitoringElement object) {
+			return createSubappMonitoringElementAdapter();
+		}
+
+		@Override
+		public Adapter caseMonitoringBase_IEditPartCreator(final IEditPartCreator object) {
+			return createMonitoringBase_IEditPartCreatorAdapter();
+		}
+
+		@Override
+		public Adapter caseMonitoringBaseElement(final MonitoringBaseElement object) {
+			return createMonitoringBaseElementAdapter();
+		}
+
+		@Override
+		public Adapter casePortElement(final PortElement object) {
+			return createPortElementAdapter();
+		}
+
+		@Override
+		public Adapter caseINamedElement(final INamedElement object) {
+			return createINamedElementAdapter();
+		}
+
+		@Override
+		public Adapter caseITypedElement(final ITypedElement object) {
+			return createITypedElementAdapter();
+		}
+
+		@Override
+		public Adapter caseConfigurableObject(final ConfigurableObject object) {
+			return createConfigurableObjectAdapter();
+		}
+
+		@Override
+		public Adapter caseHiddenElement(final HiddenElement object) {
+			return createHiddenElementAdapter();
+		}
+
+		@Override
+		public Adapter caseIInterfaceElement(final IInterfaceElement object) {
+			return createIInterfaceElementAdapter();
+		}
+
+		@Override
+		public Adapter caseICallable(final ICallable object) {
+			return createICallableAdapter();
+		}
+
+		@Override
+		public Adapter caseEvent(final Event object) {
+			return createEventAdapter();
+		}
+
+		@Override
+		public Adapter caseVarDeclaration(final VarDeclaration object) {
+			return createVarDeclarationAdapter();
+		}
+
+		@Override
+		public Adapter defaultCase(final EObject object) {
+			return createEObjectAdapter();
+		}
+	};
 
 	/**
-	 * Creates an adapter for the <code>target</code>.
-	 * <!-- begin-user-doc --> <!--
+	 * Creates an adapter for the <code>target</code>. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @param target the object to adapt.
 	 * @return the adapter for the <code>target</code>.
 	 * @generated
 	 */
 	@Override
-	public Adapter createAdapter(Notifier target) {
-		return modelSwitch.doSwitch((EObject)target);
+	public Adapter createAdapter(final Notifier target) {
+		return modelSwitch.doSwitch((EObject) target);
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement <em>Element</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement
+	 * <em>Element</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement
 	 * @generated
@@ -201,10 +223,12 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement <em>Element</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement
+	 * <em>Element</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringElement
 	 * @generated
@@ -214,11 +238,13 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement <em>Adapter Element</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement
+	 * <em>Adapter Element</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement
 	 * @generated
@@ -228,10 +254,12 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part Creator</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part
+	 * Creator</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator
 	 * @generated
@@ -241,11 +269,12 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement <em>Sub App Port Element</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement <em>Sub
+	 * App Port Element</em>}'. <!-- begin-user-doc --> This default implementation
+	 * returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement
 	 * @generated
@@ -255,11 +284,13 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement <em>Subapp Monitoring Element</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement
+	 * <em>Subapp Monitoring Element</em>}'. <!-- begin-user-doc --> This default
+	 * implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway. <!--
+	 * end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement
 	 * @generated
@@ -269,10 +300,12 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part Creator</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator <em>IEdit Part
+	 * Creator</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator
 	 * @generated
@@ -282,10 +315,12 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement <em>Port Element</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement
+	 * <em>Port Element</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement
 	 * @generated
@@ -295,11 +330,13 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement <em>Adapter Port Element</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement
+	 * <em>Adapter Port Element</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement
 	 * @generated
@@ -309,11 +346,13 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent <em>Adapter Monitoring Event</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent
+	 * <em>Adapter Monitoring Event</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent
 	 * @generated
@@ -323,11 +362,13 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration <em>Adapter Monitoring Var Declaration</em>}'.
-	 * <!-- begin-user-doc --> This
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration
+	 * <em>Adapter Monitoring Var Declaration</em>}'. <!-- begin-user-doc --> This
 	 * default implementation returns null so that we can easily ignore cases; it's
 	 * useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration
 	 * @generated
@@ -337,10 +378,12 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}'.
-	 * <!-- begin-user-doc --> This default implementation returns
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed
+	 * Element</em>}'. <!-- begin-user-doc --> This default implementation returns
 	 * null so that we can easily ignore cases; it's useful to ignore a case when
 	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 	 * @generated
@@ -350,11 +393,12 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement <em>ITyped Element</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement <em>ITyped
+	 * Element</em>}'. <!-- begin-user-doc --> This default implementation returns
+	 * null so that we can easily ignore cases; it's useful to ignore a case when
+	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
 	 * @generated
@@ -364,11 +408,13 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject <em>Configurable Object</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject
+	 * <em>Configurable Object</em>}'. <!-- begin-user-doc --> This default
+	 * implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway. <!--
+	 * end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject
 	 * @generated
@@ -378,11 +424,12 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.HiddenElement <em>Hidden Element</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.HiddenElement <em>Hidden
+	 * Element</em>}'. <!-- begin-user-doc --> This default implementation returns
+	 * null so that we can easily ignore cases; it's useful to ignore a case when
+	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.HiddenElement
 	 * @generated
@@ -392,11 +439,13 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement <em>IInterface Element</em>}'.
-	 * <!-- begin-user-doc --> This default
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
+	 * <em>IInterface Element</em>}'. <!-- begin-user-doc --> This default
 	 * implementation returns null so that we can easily ignore cases; it's useful
 	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 	 * @generated
@@ -406,11 +455,12 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ICallable <em>ICallable</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ICallable
+	 * <em>ICallable</em>}'. <!-- begin-user-doc --> This default implementation
+	 * returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ICallable
 	 * @generated
@@ -420,10 +470,12 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Event <em>Event</em>}'.
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.Event <em>Event</em>}'.
 	 * <!-- begin-user-doc --> This default implementation returns null so that we
 	 * can easily ignore cases; it's useful to ignore a case when inheritance will
 	 * catch all the cases anyway. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Event
 	 * @generated
@@ -433,10 +485,12 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration <em>Var Declaration</em>}'.
-	 * <!-- begin-user-doc --> This default implementation
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration <em>Var
+	 * Declaration</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
 	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 	 * @generated
@@ -446,9 +500,9 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for the default case.
-	 * <!-- begin-user-doc --> This
+	 * Creates a new adapter for the default case. <!-- begin-user-doc --> This
 	 * default implementation returns null. <!-- end-user-doc -->
+	 *
 	 * @return the new adapter.
 	 * @generated
 	 */

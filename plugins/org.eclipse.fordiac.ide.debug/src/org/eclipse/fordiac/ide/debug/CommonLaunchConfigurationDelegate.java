@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -35,7 +35,7 @@ public abstract class CommonLaunchConfigurationDelegate extends LaunchConfigurat
 			final EvaluatorDebugTarget debugTarget = new EvaluatorDebugTarget(configuration.getName(), evaluator,
 					launch);
 			if (LaunchConfigurationAttributes.isStopOnFirstLine(configuration)) {
-				debugTarget.getDebugger().getThread(debugTarget.getProcess().getMainThread()).suspend();
+				debugTarget.getDebugger().setSuspendOnFirstLine(true);
 			}
 			debugTarget.start();
 		} else {
