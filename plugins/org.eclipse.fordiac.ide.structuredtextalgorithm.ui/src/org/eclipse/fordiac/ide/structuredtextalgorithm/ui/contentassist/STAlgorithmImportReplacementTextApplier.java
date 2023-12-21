@@ -13,15 +13,12 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.contentassist;
 
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.STAlgorithmEditorUtils;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreImportReplacementTextApplier;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.xtext.resource.XtextResource;
-import org.eclipse.xtext.ui.editor.IURIEditorOpener;
 import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
 
 public class STAlgorithmImportReplacementTextApplier extends STCoreImportReplacementTextApplier {
@@ -34,20 +31,8 @@ public class STAlgorithmImportReplacementTextApplier extends STCoreImportReplace
 	protected void applyImport(final IDocument document, final ConfigurableCompletionProposal proposal)
 			throws BadLocationException {
 		if (getResource() instanceof final LibraryElementXtextResource libraryElementResource) {
-			executeCommand(new AddNewImportCommand(libraryElementResource.getLibraryElement(), getImportedNamespace()));
-		}
-	}
-
-	protected void executeCommand(final Command command) {
-		final IURIEditorOpener editorOpener = getResource().getResourceServiceProvider().get(IURIEditorOpener.class);
-		if (editorOpener != null) {
-			final IEditorPart editor = editorOpener.open(getResource().getURI(), false);
-			if (editor != null) {
-				final CommandStack commandStack = editor.getAdapter(CommandStack.class);
-				if (commandStack != null) {
-					commandStack.execute(command);
-				}
-			}
+			STAlgorithmEditorUtils.executeCommand(getResource().getURI(),
+					new AddNewImportCommand(libraryElementResource.getLibraryElement(), getImportedNamespace()));
 		}
 	}
 }

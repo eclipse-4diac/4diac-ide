@@ -69,6 +69,7 @@ public class ServiceInterfaceFBEvaluator extends FBEvaluator<ServiceInterfaceFBT
 					sharedState.getDeviceManagementInteractor().addWatch(element);
 				}
 				updateWatches(sharedState.readWatches());
+				outputEvent = false; // make sure output event is set to false after update
 			} catch (final DeploymentException e) {
 				throw new RuntimeException(e);
 			}

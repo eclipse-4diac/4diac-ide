@@ -490,7 +490,9 @@ public abstract class CommonElementImporter {
 		final String pinNameAndVisibility = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String[] temp = pinNameAndVisibility.split(":"); //$NON-NLS-1$
 		final IInterfaceElement ie = block.getInterfaceElement(temp[0]);
-		ie.setVisible(IS_VISIBLE); // I know it's false since we save only hidden pins
+		if (ie != null) {
+			ie.setVisible(IS_VISIBLE); // I know it's false since we save only hidden pins
+		}
 	}
 
 	private boolean isPinVarConfigAttribute() {

@@ -15,8 +15,8 @@ package org.eclipse.fordiac.ide.typemanagement.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -29,14 +29,13 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdatePinInTypeDeclarationC
 import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
+import org.eclipse.fordiac.ide.model.search.types.TypeLibraryUpdateInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -50,13 +49,13 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public final class FBUpdater {
 
-	private static Set<FBNetworkElement> updatedElements;
+	private static Set<INamedElement> updatedElements;
 
 	private FBUpdater() {
 		// just a utility class, no instancing here, por favor
 	}
 
-	public static Set<FBNetworkElement> getUpdatedElements() {
+	public static Set<INamedElement> getUpdatedElements() {
 		return updatedElements;
 	}
 
@@ -123,36 +122,18 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static void updateAllInstances(final IProject project, final Set<TypeEntry> typeEntries,
+	public static void updateAllInstances(final IProject project, final Map<String, TypeEntry> typeEntries,
 			final TypeLibrary typeLib) {
 		final Command cmd = collectUpdateInstanceCommands(project, typeEntries, typeLib);
 		executeCommand(cmd);
 	}
 
-	private static Command collectUpdateInstanceCommands(final IProject project, final Set<TypeEntry> typeEntries,
-			final TypeLibrary typeLib) {
-		final List<Command> commands = new ArrayList<>();
-		updatedElements = new HashSet<>();
-		final InstanceSearch instanceSearch = new InstanceSearch(FBNetworkElement.class::isInstance);
-		instanceSearch.performProjectSearch(project).forEach(namedElem -> {
-			if (namedElem instanceof final FB fb) {
-				typeEntries.forEach(typeEntry -> {
-					if (typeEntry.getFullTypeName().equalsIgnoreCase(fb.getFullTypeName())) {
-						commands.add(new UpdateFBTypeCommand(fb, typeLib.getFBTypeEntry(fb.getFullTypeName())));
-						updatedElements.add(fb);
-					}
-				});
-			} else if (namedElem instanceof final ErrorMarkerFBNElement errorMarker
-					&& typeLib.getFBTypeEntry(errorMarker.getFullTypeName()) != null) {
-				commands.add(
-						new UpdateFBTypeCommand(errorMarker, typeLib.getFBTypeEntry(errorMarker.getFullTypeName())));
-				updatedElements.add(errorMarker);
-			}
-		});
+	private static Command collectUpdateInstanceCommands(final IProject project,
+			final Map<String, TypeEntry> typeEntries, final TypeLibrary typeLib) {
 		final CompoundCommand cmd = new CompoundCommand();
-		for (final Command subCmd : commands) {
-			cmd.add(subCmd);
-		}
+		updatedElements = new TypeLibraryUpdateInstanceSearch(typeEntries, typeLib).performProjectSearch(project);
+		updatedElements.forEach(elem -> cmd.add(new UpdateFBTypeCommand((FBNetworkElement) elem,
+				typeEntries.get(((FBNetworkElement) elem).getFullTypeName()))));
 		return cmd;
 	}
 
