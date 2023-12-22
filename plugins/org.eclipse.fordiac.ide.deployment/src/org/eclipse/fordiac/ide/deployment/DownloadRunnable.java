@@ -50,7 +50,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
+public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 
 	private final List<DeviceDeploymentData> deploymentData;
 	private final IDeviceManagementCommunicationHandler overrideDevMgmCommHandler;
@@ -119,7 +119,8 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 		monitor.done();
 	}
 
-	private void deployDevice(final DeviceDeploymentData devData) throws InvocationTargetException, InterruptedException {
+	private void deployDevice(final DeviceDeploymentData devData)
+			throws InvocationTargetException, InterruptedException {
 		final IDeviceManagementInteractor executor = DeviceManagementInteractorFactory.INSTANCE
 				.getDeviceManagementInteractor(devData.getDevice(), overrideDevMgmCommHandler, profile);
 		if (executor != null) {
@@ -142,8 +143,8 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 
 	private void deployResources(final DeviceDeploymentData devData, final IDeviceManagementInteractor executor)
 			throws InterruptedException, DeploymentException {
-		final Set<String> resources = executor.queryResources().stream().map(org.eclipse.fordiac.ide.deployment.devResponse.Resource::getName)
-				.collect(Collectors.toSet());
+		final Set<String> resources = executor.queryResources().stream()
+				.map(org.eclipse.fordiac.ide.deployment.devResponse.Resource::getName).collect(Collectors.toSet());
 
 		for (final ResourceDeploymentData resData : devData.getResData()) {
 			if (curMonitor.isCanceled()) {
@@ -167,19 +168,17 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 	 * @throws DeploymentException
 	 * @throws InterruptedException
 	 */
-	private boolean checkResource(final Resource res, final Set<String> resourceNames, final IDeviceManagementInteractor executor)
-			throws DeploymentException, InterruptedException {
+	private boolean checkResource(final Resource res, final Set<String> resourceNames,
+			final IDeviceManagementInteractor executor) throws DeploymentException, InterruptedException {
 		if (resourceNames.contains(res.getName())) {
 			// the resource is in the device
 			if (overrideAll) {
 				executor.deleteResource(res.getName());
+			} else if (askOverrideForResource(res)) {
+				executor.deleteResource(res.getName());
 			} else {
-				if (askOverrideForResource(res)) {
-					executor.deleteResource(res.getName());
-				} else {
-					// the user has canceled to override this resource
-					return false;
-				}
+				// the user has canceled to override this resource
+				return false;
 			}
 		}
 
@@ -396,7 +395,6 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 					Messages.DownloadRunnable_DeploymentErrorWarningMessage);
 		});
 	}
-
 
 	@Override
 	public void connectionOpened(final Device dev) {

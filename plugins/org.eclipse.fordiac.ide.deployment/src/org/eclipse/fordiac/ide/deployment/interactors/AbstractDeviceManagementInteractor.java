@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
+import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener2;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
 public abstract class AbstractDeviceManagementInteractor implements IDeviceManagementInteractor {
@@ -55,13 +56,18 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 	}
 
 	public synchronized String sendREQ(final String destination, final String request) throws IOException {
+		final String info = commHandler.getInfo(destination);
 		final String response = commHandler.sendREQ(destination, request);
 		for (final IDeploymentListener listener : listeners) {
-			listener.postCommandSent(commHandler.getInfo(destination), destination, request); // do something with info
+			listener.postCommandSent(info, destination, request); // do something with info
 		}
 		if (0 != response.length()) {
 			for (final IDeploymentListener listener : listeners) {
-				listener.postResponseReceived(response, destination);
+				if (listener instanceof final IDeploymentListener2 listener2) {
+					listener2.postResponseReceived(info, request, response, destination);
+				} else {
+					listener.postResponseReceived(response, destination);
+				}
 			}
 		}
 		return response;
@@ -81,7 +87,8 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 		}
 	}
 
-	protected AbstractDeviceManagementInteractor(final Device dev, final IDeviceManagementCommunicationHandler overrideHandler) {
+	protected AbstractDeviceManagementInteractor(final Device dev,
+			final IDeviceManagementCommunicationHandler overrideHandler) {
 		this.device = dev;
 		resetTypes();
 		this.commHandler = (null != overrideHandler) ? overrideHandler : createCommunicationHandler(dev);
