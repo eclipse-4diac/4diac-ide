@@ -27,6 +27,8 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValue;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValues;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportFactory;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValues;
@@ -41,6 +43,20 @@ import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclarations;
  * @generated
  */
 public class XMIExportPackageImpl extends EPackageImpl implements XMIExportPackage {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass xmiExportAttributeValuesEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass xmiExportAttributeValueEClass = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -132,6 +148,66 @@ public class XMIExportPackageImpl extends EPackageImpl implements XMIExportPacka
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(XMIExportPackage.eNS_URI, theXMIExportPackage);
 		return theXMIExportPackage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getXMIExportAttributeValues() {
+		return xmiExportAttributeValuesEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getXMIExportAttributeValues_AttributeValues() {
+		return (EReference)xmiExportAttributeValuesEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getXMIExportAttributeValue() {
+		return xmiExportAttributeValueEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getXMIExportAttributeValue_Attribute() {
+		return (EReference)xmiExportAttributeValueEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getXMIExportAttributeValue_Expression() {
+		return (EReference)xmiExportAttributeValueEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getXMIExportAttributeValue_Value() {
+		return (EAttribute)xmiExportAttributeValueEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -283,6 +359,14 @@ public class XMIExportPackageImpl extends EPackageImpl implements XMIExportPacka
 		isCreated = true;
 
 		// Create classes and their features
+		xmiExportAttributeValuesEClass = createEClass(XMI_EXPORT_ATTRIBUTE_VALUES);
+		createEReference(xmiExportAttributeValuesEClass, XMI_EXPORT_ATTRIBUTE_VALUES__ATTRIBUTE_VALUES);
+
+		xmiExportAttributeValueEClass = createEClass(XMI_EXPORT_ATTRIBUTE_VALUE);
+		createEReference(xmiExportAttributeValueEClass, XMI_EXPORT_ATTRIBUTE_VALUE__ATTRIBUTE);
+		createEReference(xmiExportAttributeValueEClass, XMI_EXPORT_ATTRIBUTE_VALUE__EXPRESSION);
+		createEAttribute(xmiExportAttributeValueEClass, XMI_EXPORT_ATTRIBUTE_VALUE__VALUE);
+
 		xmiExportInitialValuesEClass = createEClass(XMI_EXPORT_INITIAL_VALUES);
 		createEReference(xmiExportInitialValuesEClass, XMI_EXPORT_INITIAL_VALUES__INITIAL_VALUES);
 
@@ -334,6 +418,14 @@ public class XMIExportPackageImpl extends EPackageImpl implements XMIExportPacka
 		// Add supertypes to classes
 
 		// Initialize classes and features; add operations and parameters
+		initEClass(xmiExportAttributeValuesEClass, XMIExportAttributeValues.class, "XMIExportAttributeValues", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getXMIExportAttributeValues_AttributeValues(), this.getXMIExportAttributeValue(), null, "attributeValues", null, 0, -1, XMIExportAttributeValues.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(xmiExportAttributeValueEClass, XMIExportAttributeValue.class, "XMIExportAttributeValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getXMIExportAttributeValue_Attribute(), theLibraryElementPackage.getAttribute(), null, "attribute", null, 0, 1, XMIExportAttributeValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getXMIExportAttributeValue_Expression(), theSTCorePackage.getSTInitializerExpression(), null, "expression", null, 0, 1, XMIExportAttributeValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getXMIExportAttributeValue_Value(), ecorePackage.getEString(), "value", null, 0, 1, XMIExportAttributeValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(xmiExportInitialValuesEClass, XMIExportInitialValues.class, "XMIExportInitialValues", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getXMIExportInitialValues_InitialValues(), this.getXMIExportInitialValue(), null, "initialValues", null, 0, -1, XMIExportInitialValues.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 

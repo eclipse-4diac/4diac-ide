@@ -81,6 +81,14 @@ public class XMIExportAdapterFactory extends AdapterFactoryImpl {
 	protected XMIExportSwitch<Adapter> modelSwitch =
 		new XMIExportSwitch<Adapter>() {
 			@Override
+			public Adapter caseXMIExportAttributeValues(XMIExportAttributeValues object) {
+				return createXMIExportAttributeValuesAdapter();
+			}
+			@Override
+			public Adapter caseXMIExportAttributeValue(XMIExportAttributeValue object) {
+				return createXMIExportAttributeValueAdapter();
+			}
+			@Override
 			public Adapter caseXMIExportInitialValues(XMIExportInitialValues object) {
 				return createXMIExportInitialValuesAdapter();
 			}
@@ -115,6 +123,34 @@ public class XMIExportAdapterFactory extends AdapterFactoryImpl {
 		return modelSwitch.doSwitch((EObject)target);
 	}
 
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValues <em>Attribute Values</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValues
+	 * @generated
+	 */
+	public Adapter createXMIExportAttributeValuesAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValue <em>Attribute Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValue
+	 * @generated
+	 */
+	public Adapter createXMIExportAttributeValueAdapter() {
+		return null;
+	}
 
 	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValues <em>Initial Values</em>}'.
