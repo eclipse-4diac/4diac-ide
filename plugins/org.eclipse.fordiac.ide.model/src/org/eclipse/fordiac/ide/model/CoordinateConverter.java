@@ -40,6 +40,14 @@ public enum CoordinateConverter {
 	private final double lineHeight;
 	private final double averageCharacterWidth;
 
+	/*
+	 * Default line height and chacater width if no Display and thus no font
+	 * information is available. These values are based on the default mono-space
+	 * font.
+	 */
+	private static final double DEFAULT_LINE_HEIGHT = 19.0;
+	private static final double DEFAULT_CHARACTER_WIDTH = 8.0;
+
 	private static class LineHeightRunnable implements Runnable {
 		private double lineHeight;
 		private double averageCharacterWidth;
@@ -64,9 +72,15 @@ public enum CoordinateConverter {
 	CoordinateConverter() {
 		final LineHeightRunnable lineHeightCalc = new LineHeightRunnable();
 
-		Display.getDefault().syncExec(lineHeightCalc);
-		lineHeight = lineHeightCalc.getLineHeight();
-		averageCharacterWidth = lineHeightCalc.getAverageCharacterWidth();
+		final Display display = Display.getDefault();
+		if (display != null) {
+			display.syncExec(lineHeightCalc);
+			lineHeight = lineHeightCalc.getLineHeight();
+			averageCharacterWidth = lineHeightCalc.getAverageCharacterWidth();
+		} else {
+			lineHeight = DEFAULT_LINE_HEIGHT;
+			averageCharacterWidth = DEFAULT_CHARACTER_WIDTH;
+		}
 		transformationScale = lineHeight / 100.0;
 	}
 
