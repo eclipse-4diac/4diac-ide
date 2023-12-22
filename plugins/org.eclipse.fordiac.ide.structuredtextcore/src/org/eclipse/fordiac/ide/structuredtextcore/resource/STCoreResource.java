@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,7 @@ import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
 import org.eclipse.xtext.resource.FileExtensionProvider;
 import org.eclipse.xtext.util.LazyStringInputStream;
 
@@ -38,6 +40,9 @@ public class STCoreResource extends LibraryElementXtextResource {
 
 	@Inject
 	private STCorePartitioner partitioner;
+
+	@Inject
+	private STCoreReconciler reconciler;
 
 	@Override
 	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
@@ -74,9 +79,43 @@ public class STCoreResource extends LibraryElementXtextResource {
 		}
 	}
 
+	@Override
+	public void doSave(final OutputStream outputStream, final Map<?, ?> options) throws IOException {
+		if (isSavePlainST(options)) {
+			super.doSave(outputStream, options);
+		} else { // outputStream shall contain full XML for library element
+			final LibraryElement libraryElement = getInternalLibraryElement();
+			// perform checks
+			if (getContents().isEmpty() || libraryElement == null) {
+				throw new IllegalStateException(
+						"The ST core resource must contain at least one element and have an associated library element"); //$NON-NLS-1$
+			}
+			// partition
+			final var partition = partitioner.partition(this);
+			if (partition.isEmpty()) {
+				throw new IOException("Cannot partition source"); //$NON-NLS-1$
+			}
+			// reconcile
+			reconciler.reconcile(libraryElement, partition);
+			// chain save library element to outputStream
+			try {
+				final FordiacTypeResource typeResource = new FordiacTypeResource(uri);
+				typeResource.getContents().add(EcoreUtil.copy(libraryElement));
+				typeResource.save(outputStream, Collections.emptyMap());
+			} catch (final Exception e) {
+				throw new IOException("Error saving to library element: " + e.getMessage(), e); //$NON-NLS-1$
+			}
+		}
+	}
+
 	protected boolean isLoadPlainST(final Map<?, ?> options, final InputStream inputStream) {
 		return fileExtensionProvider.getPrimaryFileExtension().equalsIgnoreCase(uri.fileExtension())
 				|| Boolean.TRUE.equals(options.get(OPTION_PLAIN_ST)) || inputStream instanceof LazyStringInputStream;
+	}
+
+	protected boolean isSavePlainST(final Map<?, ?> options) {
+		return fileExtensionProvider.getPrimaryFileExtension().equalsIgnoreCase(uri.fileExtension())
+				|| (options != null && Boolean.TRUE.equals(options.get(OPTION_PLAIN_ST)));
 	}
 
 	protected void handleTypeLoadException(final Throwable e) {
