@@ -36,6 +36,8 @@ import org.eclipse.swt.graphics.Color;
 
 public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
+	public static final int LABEL_ALPHA = 120;
+
 	private final Adapter nameChangeAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
@@ -89,8 +91,8 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 			@Override
 			protected void paintFigure(final Graphics graphics) {
 				final int alpha = graphics.getAlpha();
-				graphics.setAlpha(150);
-				graphics.fillRoundRectangle(getBounds(), 8, 4);
+				graphics.setAlpha(LABEL_ALPHA);
+				graphics.fillRoundRectangle(getBounds(), 8, 8);
 				graphics.setAlpha(alpha);
 				super.paintFigure(graphics);
 			}
