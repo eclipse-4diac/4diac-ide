@@ -17,12 +17,14 @@ import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
 public class SearchNameDictionary {
 
@@ -35,8 +37,12 @@ public class SearchNameDictionary {
 
 	public String hierarchicalName(final Object element) {
 		if (element instanceof final FBNetworkElement fbne) {
+			if (fbne.eContainer() instanceof BasicFBType || fbne.eContainer() instanceof SimpleFBType) {
+				// internal fbs
+				return hierarchicalName(fbne, true);
+			}
 			if (map.containsKey(fbne)) {
-				return hierarchicalName(fbne);
+				return hierarchicalName(fbne, false);
 			}
 			final FBType root = FBNetworkHelper.getRootType(fbne);
 			final StringBuilder sb = new StringBuilder();
@@ -65,7 +71,7 @@ public class SearchNameDictionary {
 	}
 
 	// resolves the elements path through typed composites to a proper name
-	private String hierarchicalName(final FBNetworkElement element) {
+	private String hierarchicalName(final FBNetworkElement element, final boolean isInternal) {
 		final List<FBNetworkElement> path = map.get(element).pop();
 		final FBNetworkElement first = path.get(0); // first element is always in an application
 		final String firstElementName = FBNetworkHelper.getFullHierarchicalName(first);
@@ -76,17 +82,21 @@ public class SearchNameDictionary {
 		sb.append("."); //$NON-NLS-1$
 		sb.append(firstElementName);
 		for (int i = 1; i < path.size(); i++) {
-			addNameToPath(path.get(i), sb);
+			addNameToPath(path.get(i), sb, false); // is never internal
 		}
-		addNameToPath(element, sb);
+		addNameToPath(element, sb, isInternal);
 		return sb.toString();
 	}
 
-	private static void addNameToPath(final FBNetworkElement element, final StringBuilder sb) {
+	private static void addNameToPath(final FBNetworkElement element, final StringBuilder sb,
+			final boolean isInternal) {
 		sb.append("."); //$NON-NLS-1$
-		String name = FBNetworkHelper.getFullHierarchicalName(element); // includes untyped subapps
+		String name = isInternal ? element.getName() : FBNetworkHelper.getFullHierarchicalName(element);
 		name = name.substring(name.indexOf('.') + 1); // remove type name as it is anyhow replaced by instance name
 		sb.append(name);
+		if (isInternal) {
+			sb.append("(internal)"); //$NON-NLS-1$
+		}
 	}
 
 }

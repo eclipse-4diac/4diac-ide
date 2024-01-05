@@ -29,8 +29,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -113,6 +115,15 @@ public class ModelSearchQuery implements ISearchQuery {
 					searchResult.getDictionary().addEntry(fbnetworkElement, path);
 				}
 				searchResult.addResult(fbnetworkElement);
+			}
+			if (fbnetworkElement.getType() instanceof final BaseFBType type) {
+				for (final FB fb : type.getInternalFbs()) {
+					if (matchEObject(fb)) {
+						// add the containing fb to the path in order to print the instance name
+						searchResult.getDictionary().addEntry(fb, allocatePathList(path, fbnetworkElement));
+						searchResult.addResult(fb);
+					}
+				}
 			}
 			if (fbnetworkElement instanceof final CFBInstance cfb) {
 				searchFBNetwork(cfb.getType().getFBNetwork(), allocatePathList(path, cfb));
