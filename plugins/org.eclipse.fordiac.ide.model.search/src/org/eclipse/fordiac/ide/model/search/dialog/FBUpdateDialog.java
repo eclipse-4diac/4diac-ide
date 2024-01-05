@@ -32,7 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.search.Messages;
-import org.eclipse.fordiac.ide.model.search.ModelSearchResultPage;
+import org.eclipse.fordiac.ide.model.search.SearchNameDictionary;
 import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
@@ -87,6 +87,8 @@ public class FBUpdateDialog extends MessageDialog {
 	private ColumnLabelProvider labelPath;
 	private ColumnLabelProvider labelType;
 	private ColumnLabelProvider labelDataType;
+
+	private static final SearchNameDictionary dictionary = new SearchNameDictionary();
 
 	public FBUpdateDialog(final Shell parentShell, final String dialogTitle, final Image dialogTitleImage,
 			final String dialogMessage, final int dialogImageType, final String[] dialogButtonLabels,
@@ -212,7 +214,7 @@ public class FBUpdateDialog extends MessageDialog {
 		this.labelPath = new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				return ModelSearchResultPage.hierarchicalName(element);
+				return dictionary.hierarchicalName(element);
 			}
 		};
 		this.labelType = new ColumnLabelProvider() {

@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -102,28 +103,46 @@ public class ModelSearchQuery implements ISearchQuery {
 		if (matchEObject(app)) {
 			searchResult.addResult(app);
 		}
-		searchFBNetwork(app.getFBNetwork());
+		searchFBNetwork(app.getFBNetwork(), new ArrayList<>());
 	}
 
-	private void searchFBNetwork(final FBNetwork network) {
+	private void searchFBNetwork(final FBNetwork network, final List<FBNetworkElement> path) {
 		for (final FBNetworkElement fbnetworkElement : network.getNetworkElements()) {
 			if (matchEObject(fbnetworkElement)) {
+				if (!path.isEmpty()) {
+					searchResult.getDictionary().addEntry(fbnetworkElement, path);
+				}
 				searchResult.addResult(fbnetworkElement);
 			}
-			// for typed subapps and subapps without content (i.e., mapped subapp) don't search further
-			if ((fbnetworkElement instanceof final SubApp subApp)
-					&& (!subApp.isTyped() && subApp.getSubAppNetwork() != null)) {
-				searchFBNetwork(subApp.getSubAppNetwork());
+			if (fbnetworkElement instanceof final CFBInstance cfb) {
+				searchFBNetwork(cfb.getType().getFBNetwork(), allocatePathList(path, cfb));
+			}
+			if (fbnetworkElement instanceof final SubApp subApp) {
+				if (subApp.isTyped()) {
+					searchFBNetwork(subApp.getType().getFBNetwork(), allocatePathList(path, subApp));
+				} else if (subApp.getSubAppNetwork() != null) {
+					searchFBNetwork(subApp.getSubAppNetwork(), path);
+				}
 			}
 			if (modelQuerySpec.isCheckedPinName() && fbnetworkElement.getInterface() != null) {
 				final List<EObject> matchingPins = fbnetworkElement.getInterface().getAllInterfaceElements().stream()
 						.filter(pin -> pin.getName() != null && compareStrings(pin.getName()))
 						.collect(Collectors.toList());
 				if (!matchingPins.isEmpty()) {
+					if (!path.isEmpty()) {
+						searchResult.getDictionary().addEntry(fbnetworkElement, path);
+					}
 					searchResult.addResults(matchingPins);
 				}
 			}
 		}
+	}
+
+	private static List<FBNetworkElement> allocatePathList(final List<FBNetworkElement> path,
+			final FBNetworkElement elem) {
+		final List<FBNetworkElement> list = new ArrayList<>(path);
+		list.add(elem);
+		return list;
 	}
 
 	private void searchResources(final AutomationSystem sys) {
@@ -208,7 +227,8 @@ public class ModelSearchQuery implements ISearchQuery {
 		return true;
 	}
 
-	// Has to return true so that NewSearchUI.runQueryInBackground(searchJob); in MSP can actually run
+	// Has to return true so that NewSearchUI.runQueryInBackground(searchJob); in
+	// MSP can actually run
 	@Override
 	public boolean canRunInBackground() {
 		return true;

@@ -30,9 +30,12 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 
 	private final List<EObject> results;
 
+	private final SearchNameDictionary dictionary;
+
 	public ModelSearchResult(final ISearchQuery job) {
 		this.modelSearchQuery = job;
 		this.results = new ArrayList<>();
+		this.dictionary = new SearchNameDictionary();
 	}
 
 	@Override
@@ -79,6 +82,10 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 
 	public List<EObject> getResults() {
 		return results;
+	}
+
+	public SearchNameDictionary getDictionary() {
+		return dictionary;
 	}
 
 	@Override
