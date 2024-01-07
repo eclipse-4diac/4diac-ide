@@ -63,6 +63,8 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 	Map<IInterfaceElement, TargetInterfaceElement> targetPinChildren = new HashMap<>();
 
+	TargetInterfaceAdapter targetInteraceAdapter = null;
+
 	public class UntypedSubappIEAdapter extends EContentAdapter {
 		@Override
 		public void notifyChanged(final Notification notification) {
@@ -92,6 +94,26 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 		public UntypedSubAppInterfaceElementEditPart getUntypedSubAppInterfaceElementEditPart() {
 			return UntypedSubAppInterfaceElementEditPart.this;
+		}
+	}
+
+	@Override
+	public void activate() {
+		if (!isActive()) {
+			super.activate();
+			if (isInExpandedSubapp()) {
+				targetInteraceAdapter = new TargetInterfaceAdapter(this);
+			}
+		}
+	}
+
+	@Override
+	public void deactivate() {
+		if (isActive()) {
+			if (targetInteraceAdapter != null) {
+				targetInteraceAdapter.deactivate();
+			}
+			super.deactivate();
 		}
 	}
 
@@ -188,7 +210,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 	@Override
 	protected List getModelChildren() {
-		if (((SubApp) getModel().getFBNetworkElement()).isUnfolded()) {
+		if (isInExpandedSubapp()) {
 			final List<IInterfaceElement> pins = isInput() ? getSourcePins() : getTargetPins();
 
 			// remove entries from our map if they are not in the list anymore
@@ -202,6 +224,10 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		return targetPinChildren.values().stream().sorted().toList();
 	}
 
+	private boolean isInExpandedSubapp() {
+		return ((SubApp) getModel().getFBNetworkElement()).isUnfolded();
+	}
+
 	private List<IInterfaceElement> getTargetPins() {
 		// TODO Distinguish between expanded subapp pins, fbs, and container subapp pin
 		return getModel().getOutputConnections().stream()
@@ -212,7 +238,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 	private List<IInterfaceElement> getSourcePins() {
 		// TODO Distinguish between expanded subapp pins, fbs, and container subapp pin
-		return getModel().getInputConnections().stream().filter(con -> !con.isVisible())
+		return getModel().getInputConnections().stream().filter(con -> (!con.isVisible() && con.getSource() != null))
 				.flatMap(con -> con.getSource().getInputConnections().stream()).map(Connection::getSource)
 				.filter(Objects::nonNull).toList();
 	}
