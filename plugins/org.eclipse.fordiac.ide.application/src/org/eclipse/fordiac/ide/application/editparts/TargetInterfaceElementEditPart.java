@@ -15,10 +15,15 @@ package org.eclipse.fordiac.ide.application.editparts;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
@@ -30,6 +35,44 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.graphics.Color;
 
 public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
+
+	private final Adapter nameChangeAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			final Object feature = notification.getFeature();
+			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
+				refreshVisuals();
+			}
+			super.notifyChanged(notification);
+		}
+	};
+
+	@Override
+	public void activate() {
+		if (!isActive()) {
+			super.activate();
+			getRefElement().eAdapters().add(nameChangeAdapter);
+			getRefElement().getFBNetworkElement().eAdapters().add(nameChangeAdapter);
+			getRefElement().getFBNetworkElement().getOuterFBNetworkElement().eAdapters().add(nameChangeAdapter);
+		}
+	}
+
+	@Override
+	public void deactivate() {
+		if (isActive()) {
+			getRefElement().eAdapters().remove(nameChangeAdapter);
+			final FBNetworkElement parent = getRefElement().getFBNetworkElement();
+			if (parent != null) {
+				parent.eAdapters().add(nameChangeAdapter);
+				final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
+				if (grandParent != null) {
+					grandParent.eAdapters().add(nameChangeAdapter);
+				}
+			}
+			super.deactivate();
+		}
+	}
 
 	@Override
 	public TargetInterfaceElement getModel() {
@@ -56,6 +99,17 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		label.setBackgroundColor(getModelColor());
 		label.setText(getLabelText());
 		return label;
+	}
+
+	@Override
+	public Label getFigure() {
+		return (Label) super.getFigure();
+	}
+
+	@Override
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+		getFigure().setText(getLabelText());
 	}
 
 	private String getLabelText() {
