@@ -18,7 +18,6 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
@@ -33,8 +32,8 @@ import org.eclipse.swt.graphics.Color;
 public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
 	@Override
-	public UntypedSubAppInterfaceElementEditPart.TargetInterfaceElement getModel() {
-		return (UntypedSubAppInterfaceElementEditPart.TargetInterfaceElement) super.getModel();
+	public TargetInterfaceElement getModel() {
+		return (TargetInterfaceElement) super.getModel();
 	}
 
 	private IInterfaceElement getRefElement() {
@@ -60,10 +59,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private String getLabelText() {
-		final var fbelement = getRefElement().getFBNetworkElement();
-		final FBNetworkElement parent = fbelement.getOuterFBNetworkElement();
-		return getRefElement().getComment() + "\n" + parent.getName() + "." + fbelement.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
-				+ getRefElement().getName();
+		return getRefElement().getComment() + "\n" + getModel().getRefPinFullName();
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 fortiss GmbH
- * 				 2018 - 2020 Johannes Kepler University
+ * Copyright (c) 2017, 2023 fortiss GmbH, Johannes Kepler University,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -60,18 +61,6 @@ import org.eclipse.swt.SWT;
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
 
 	Map<IInterfaceElement, TargetInterfaceElement> targetPinChildren = new HashMap<>();
-
-	public static class TargetInterfaceElement {
-		private final IInterfaceElement refElement;
-
-		public TargetInterfaceElement(final IInterfaceElement refElement) {
-			this.refElement = refElement;
-		}
-
-		public IInterfaceElement getRefElement() {
-			return refElement;
-		}
-	}
 
 	public class UntypedSubappIEAdapter extends EContentAdapter {
 		@Override
@@ -198,14 +187,18 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 	@Override
 	protected List getModelChildren() {
-		final List<IInterfaceElement> pins = isInput() ? getSourcePins() : getTargetPins();
+		if (((SubApp) getModel().getFBNetworkElement()).isUnfolded()) {
+			final List<IInterfaceElement> pins = isInput() ? getSourcePins() : getTargetPins();
 
-		// remove entries from our map if they are not in the list anymore
-		targetPinChildren.keySet().removeIf(key -> !pins.contains(key));
+			// remove entries from our map if they are not in the list anymore
+			targetPinChildren.keySet().removeIf(key -> !pins.contains(key));
 
-		// add any missing entries
-		pins.forEach(pin -> targetPinChildren.computeIfAbsent(pin, TargetInterfaceElement::new));
-		return targetPinChildren.values().stream().toList();
+			// add any missing entries
+			pins.forEach(pin -> targetPinChildren.computeIfAbsent(pin, TargetInterfaceElement::new));
+		} else {
+			targetPinChildren.clear();
+		}
+		return targetPinChildren.values().stream().sorted().toList();
 	}
 
 	private List<IInterfaceElement> getTargetPins() {
@@ -219,7 +212,6 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		// TODO Distinguish between expanded subapp pins, fbs, and container subapp pin
 		return getModel().getInputConnections().stream().filter(con -> !con.isVisible())
 				.flatMap(con -> con.getSource().getInputConnections().stream()).map(Connection::getSource).toList();
-
 	}
 
 	@Override
