@@ -51,6 +51,9 @@
 	   			<input
 	            	type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite">
 	        	</input> 
+        		<input
+                  	type="org.eclipse.fordiac.ide.model.data.DirectlyDerivedType">
+        		</input> 
          </propertySection>
          <propertySection
 	         	class="org.eclipse.fordiac.ide.datatypeeditor.properties.StructAttributeSection"
@@ -59,6 +62,9 @@
 	   			<input
 	            	type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite">
 	        	</input>  
+        		<input
+                  	type="org.eclipse.fordiac.ide.model.data.DirectlyDerivedType">
+        		</input> 
          </propertySection>
       </propertySections>
    </extension>
