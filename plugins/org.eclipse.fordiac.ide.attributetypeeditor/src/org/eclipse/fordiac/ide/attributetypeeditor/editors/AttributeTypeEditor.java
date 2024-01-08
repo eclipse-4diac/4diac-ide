@@ -27,7 +27,6 @@ package org.eclipse.fordiac.ide.attributetypeeditor.editors;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -39,11 +38,12 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.attributetypeeditor.Messages;
+import org.eclipse.fordiac.ide.attributetypeeditor.widgets.DirectlyDerivedTypeComposite;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -90,6 +90,7 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
 	private StructEditingComposite structComposite;
+	private DirectlyDerivedTypeComposite directlyDerivedTypeComposite;
 	private Composite errorComposite;
 	private boolean importFailed;
 	private boolean outsideWorkspace;
@@ -160,10 +161,10 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 	public void doSave(final IProgressMonitor monitor) {
 		removeListenerFromAttributeDeclaration();
 		loadAllOpenEditors();
-		doSaveInternal(monitor, null);
+		doSaveInternal(monitor);
 	}
 
-	private void doSaveInternal(final IProgressMonitor monitor, final Set<INamedElement> set) {
+	private void doSaveInternal(final IProgressMonitor monitor) {
 		commandStack.markSaveLocation();
 		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(
 				attributeTypeEntry.getFile().getParent()) {
@@ -289,6 +290,10 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 			structComposite = new StructEditingComposite(parent, commandStack, structType, annotationModel);
 			getSite().setSelectionProvider(structComposite);
 			structComposite.setTitel(Messages.StructViewingComposite_Headline);
+		} else if (attributeTypeEntry != null && attributeTypeEntry.getTypeEditable()
+				.getType() instanceof final DirectlyDerivedType directlyDerivedType && !importFailed) {
+			directlyDerivedTypeComposite = new DirectlyDerivedTypeComposite(parent, directlyDerivedType, commandStack);
+			getSite().setSelectionProvider(directlyDerivedTypeComposite);
 		} else if (importFailed) {
 			createErrorComposite(parent, Messages.ErrorCompositeMessage);
 			if (outsideWorkspace) {
@@ -310,10 +315,12 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 
 	@Override
 	public void setFocus() {
-		if (null == structComposite) {
-			errorComposite.setFocus();
-		} else {
+		if (structComposite != null) {
 			structComposite.setFocus();
+		} else if (directlyDerivedTypeComposite != null) {
+			directlyDerivedTypeComposite.setFocus();
+		} else if (errorComposite != null) {
+			errorComposite.setFocus();
 		}
 	}
 
@@ -396,6 +403,10 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 			if (attributeTypeEntry.getTypeEditable() != null
 					&& attributeTypeEntry.getTypeEditable().getType() instanceof final StructuredType structType) {
 				structComposite.setStructType(structType);
+			}
+			if (attributeTypeEntry.getTypeEditable() != null && attributeTypeEntry.getTypeEditable()
+					.getType() instanceof final DirectlyDerivedType directlyDerivedType) {
+				directlyDerivedTypeComposite.setDirectlyDerivedType(directlyDerivedType);
 			}
 			commandStack.flush();
 			addListenerToAttributeDeclaration();
