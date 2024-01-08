@@ -37,6 +37,8 @@ public final class TargetInterfaceAdapter extends AdapterImpl {
 
 	public void deactivate() {
 		refEditPart.getModel().eAdapters().remove(this);
+		secondaryTargets.forEach(target -> target.eAdapters().remove(TargetInterfaceAdapter.this));
+		secondaryTargets.clear();
 	}
 
 	@Override

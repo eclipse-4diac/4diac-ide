@@ -225,7 +225,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	}
 
 	private boolean isInExpandedSubapp() {
-		return ((SubApp) getModel().getFBNetworkElement()).isUnfolded();
+		return (getModel().getFBNetworkElement() instanceof final SubApp subApp) && subApp.isUnfolded();
 	}
 
 	private List<IInterfaceElement> getTargetPins() {
