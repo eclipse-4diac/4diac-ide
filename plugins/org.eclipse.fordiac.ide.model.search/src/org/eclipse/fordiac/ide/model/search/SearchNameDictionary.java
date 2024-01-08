@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -72,19 +73,30 @@ public class SearchNameDictionary {
 
 	// resolves the elements path through typed composites to a proper name
 	private String hierarchicalName(final FBNetworkElement element, final boolean isInternal) {
-		final List<FBNetworkElement> path = map.get(element).pop();
-		final FBNetworkElement first = path.get(0); // first element is always in an application
+		final var stack = map.get(element);
+		final List<FBNetworkElement> path = stack.pop();
+		if (stack.isEmpty()) {
+			map.remove(element);
+		}
+
+		final FBNetworkElement first = path.get(0);
 		final String firstElementName = FBNetworkHelper.getFullHierarchicalName(first);
-		final String sysName = first.getFbNetwork().getApplication().getAutomationSystem().getName();
+		final Application application = first.getFbNetwork().getApplication();
 
 		final StringBuilder sb = new StringBuilder();
-		sb.append(sysName);
-		sb.append("."); //$NON-NLS-1$
+
+		if (application != null) {
+			sb.append(application.getAutomationSystem().getName()).append("."); //$NON-NLS-1$
+		}
+
 		sb.append(firstElementName);
+
 		for (int i = 1; i < path.size(); i++) {
 			addNameToPath(path.get(i), sb, false); // is never internal
 		}
+
 		addNameToPath(element, sb, isInternal);
+
 		return sb.toString();
 	}
 

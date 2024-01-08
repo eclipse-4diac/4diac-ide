@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -180,9 +181,16 @@ public class ModelSearchQuery implements ISearchQuery {
 	}
 
 	private void searchTypeEntryList(final Collection<? extends TypeEntry> entries) {
-		final List<EObject> foundEntries = entries.stream().map(TypeEntry::getType).filter(Objects::nonNull)
-				.filter(this::matchEObject).collect(Collectors.toList());
-		searchResult.addResults(foundEntries);
+		final List<EObject> directMatches = entries.stream().map(TypeEntry::getType).filter(Objects::nonNull)
+				.filter(this::matchTypeEntry).collect(Collectors.toList());
+		searchResult.addResults(directMatches);
+	}
+
+	private boolean matchTypeEntry(final LibraryElement elem) {
+		if (elem instanceof final CompositeFBType comp) {
+			searchFBNetwork(comp.getFBNetwork(), new ArrayList<>());
+		}
+		return matchEObject(elem);
 	}
 
 	private boolean matchEObject(final EObject modelElement) {
