@@ -32,6 +32,7 @@ public final class FordiacMessages extends NLS {
 	public static String ApplicationDomain; // NOSONAR
 	public static String ApplicationName; // NOSONAR
 	public static String Author; // NOSONAR
+	public static String BaseType; // NOSONAR
 	public static String Classdef; // NOSONAR
 	public static String Classification; // NOSONAR
 	public static String Comment; // NOSONAR
