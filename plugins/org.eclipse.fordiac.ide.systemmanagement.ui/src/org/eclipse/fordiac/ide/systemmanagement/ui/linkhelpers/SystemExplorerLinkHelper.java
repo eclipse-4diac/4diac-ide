@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListener;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
@@ -73,8 +74,8 @@ public class SystemExplorerLinkHelper implements ILinkHelper {
 			return;
 		}
 		final Object sel = aSelection.getFirstElement();
-		if (sel instanceof EObject) {
-			handleModelElementSelection(aPage, (EObject) sel);
+		if (sel instanceof final EObject eObj) {
+			handleModelElementSelection(aPage, eObj);
 		}
 
 		if (sel instanceof IFile) {
@@ -98,7 +99,6 @@ public class SystemExplorerLinkHelper implements ILinkHelper {
 			return new StructuredSelection(ecc);
 		}
 
-
 		final FBNetwork fbNetwork = activeEditor.getAdapter(FBNetwork.class);
 		if (fbNetwork != null) {
 			if (fbNetwork.eContainer() instanceof FBType) {
@@ -109,7 +109,6 @@ public class SystemExplorerLinkHelper implements ILinkHelper {
 		// if we didn't find a suitable editor try to at least highlight the file
 		return defaultFileSelection(anInput);
 	}
-
 
 	private static void handleFileSelection(final IWorkbenchPage aPage, final IFile aFile) {
 		if (SystemManager.isSystemFile(aFile)) {
@@ -146,17 +145,22 @@ public class SystemExplorerLinkHelper implements ILinkHelper {
 
 	private static IFile getFileForModel(final EObject sel) {
 		final EObject root = EcoreUtil.getRootContainer(sel);
-		if (root instanceof LibraryElement) {
-			return ((LibraryElement) root).getTypeEntry().getFile();
+		if (root instanceof final LibraryElement libElem) {
+			return libElem.getTypeEntry().getFile();
 		}
 		return null;
 	}
 
 	private static EObject getBreadCrumbRefElement(final EObject sel) {
-		if ((sel instanceof FBNetworkElement && ((FBNetworkElement) sel).getType() != null) || (sel instanceof Group)) {
-			return sel.eContainer().eContainer();
+		EObject refElement = sel;
+		if ((sel instanceof final FBNetworkElement fbnEl && fbnEl.getType() != null) || (sel instanceof Group)) {
+			refElement = sel.eContainer().eContainer();
 		}
-		return sel;
+		// For unfolded subapps find the next parent that is not expanded as refElement
+		while (refElement instanceof final SubApp subApp && subApp.isUnfolded()) {
+			refElement = refElement.eContainer().eContainer();
+		}
+		return refElement;
 	}
 
 	private static IStructuredSelection defaultFileSelection(final IEditorInput anInput) {

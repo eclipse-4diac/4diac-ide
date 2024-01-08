@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
@@ -31,10 +32,10 @@ public class GoToHandler extends AbstractHandler {
 		final IStructuredSelection sel = HandlerUtil.getCurrentStructuredSelection(event);
 		if (sel != null) {
 			final Object obj = sel.getFirstElement();
-			if (obj instanceof FBNetworkElement) {
-				showFBInEditor((FBNetworkElement) obj);
-			} else if (obj instanceof Application) {
-				showApplication((Application) obj);
+			if (obj instanceof final FBNetworkElement fbnElement) {
+				showFBInEditor(fbnElement);
+			} else if (obj instanceof final Application app) {
+				showApplication(app);
 			}
 		}
 		return Status.OK_STATUS;
@@ -46,7 +47,11 @@ public class GoToHandler extends AbstractHandler {
 	}
 
 	private static void showFBInEditor(final FBNetworkElement el) {
-		final EObject toView = el.eContainer().eContainer();
+		EObject toView = el.eContainer().eContainer();
+		// For unfolded subapps find the next parent that is not expanded as refElement
+		while (toView instanceof final SubApp subApp && subApp.isUnfolded()) {
+			toView = subApp.eContainer().eContainer();
+		}
 		final IEditorPart editor = HandlerHelper.openEditor(toView);
 		HandlerHelper.selectElement(el, editor);
 	}
