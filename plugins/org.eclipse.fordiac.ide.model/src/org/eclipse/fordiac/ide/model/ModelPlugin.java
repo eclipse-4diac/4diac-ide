@@ -26,16 +26,21 @@ public class ModelPlugin extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		// defer initialization of CoordinateConverter until the DIAGRAM_FONT is loaded
-		JFaceResources.getFontRegistry().addListener(new IPropertyChangeListener() {
+		final Display display = Display.getDefault();
+		if (display != null) {
+			display.execute(() -> JFaceResources.getFontRegistry().addListener(new IPropertyChangeListener() {
 
-			@Override
-			public void propertyChange(final PropertyChangeEvent event) {
-				if (PreferenceConstants.DIAGRAM_FONT.equals(event.getProperty())) {
-					Display.getDefault().asyncExec(CoordinateConverter.INSTANCE::name);
-					// we need an anonymous class instead of a lambda to refer to 'this' here
-					JFaceResources.getFontRegistry().removeListener(this);
+				@Override
+				public void propertyChange(final PropertyChangeEvent event) {
+					if (PreferenceConstants.DIAGRAM_FONT.equals(event.getProperty())) {
+						Display.getDefault().asyncExec(CoordinateConverter.INSTANCE::name);
+						// we need an anonymous class instead of a lambda to refer to 'this' here
+						JFaceResources.getFontRegistry().removeListener(this);
+					}
 				}
-			}
-		});
+			}));
+		} else {
+			CoordinateConverter.INSTANCE.name();
+		}
 	}
 }

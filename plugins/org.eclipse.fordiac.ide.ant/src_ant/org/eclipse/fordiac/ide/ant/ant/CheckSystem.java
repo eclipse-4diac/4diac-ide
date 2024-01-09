@@ -42,13 +42,13 @@ public class CheckSystem extends Task {
 
 		final IFile systemFile = getSystemFile();
 		if (systemFile == null || !systemFile.exists() || !SystemManager.isSystemFile(systemFile)) {
-			throw new BuildException(
-					MessageFormat.format("System path {0} is not a valid system in workspace!", //$NON-NLS-1$
-							systemPathString));
+			throw new BuildException(MessageFormat.format("System path {0} is not a valid system in workspace!", //$NON-NLS-1$
+					systemPathString));
 		}
 
 		// load the system to get the error markers in place
 		SystemManager.INSTANCE.getSystem(systemFile);
+		Import4diacProject.runFullBuild(systemFile.getProject());
 		Import4diacProject.waitBuilderJobsComplete();
 
 		try {
@@ -56,10 +56,10 @@ public class CheckSystem extends Task {
 
 			// log Markers, only visible in console output
 			CheckTypeLibrary.printMarkers(markers, this);
-			if (!markers.isEmpty()) {
-				throw new BuildException(
-						String.format("The system %s has %d errors or warnings!", systemPathString, //$NON-NLS-1$
-								Integer.valueOf(markers.size())));
+			if (systemFile.findMaxProblemSeverity(IMarker.PROBLEM, true,
+					IResource.DEPTH_INFINITE) == IMarker.SEVERITY_ERROR) {
+				throw new BuildException(String.format("The system %s has %d errors or warnings!", systemPathString, //$NON-NLS-1$
+						Integer.valueOf(markers.size())));
 			}
 		} catch (final CoreException e) {
 			throw new BuildException("Cannot get markers", e); //$NON-NLS-1$
@@ -70,7 +70,5 @@ public class CheckSystem extends Task {
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		return workspace.getRoot().getFile(new Path(systemPathString));
 	}
-
-
 
 }
