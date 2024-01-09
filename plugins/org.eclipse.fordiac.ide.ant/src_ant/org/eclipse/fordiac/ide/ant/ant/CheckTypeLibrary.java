@@ -21,11 +21,9 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
 public class CheckTypeLibrary extends Task {
 
@@ -52,17 +50,11 @@ public class CheckTypeLibrary extends Task {
 			throw new BuildException("Project named '" + projectNameString + "' not in workspace in Workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		clear(project);
-		Import4diacProject.waitBuilderJobsComplete();
-
-		runFullBuild(project);
-		Import4diacProject.waitBuilderJobsComplete();
-
 		// log Markers, only visible in console output
 		try {
 			final var markers = Arrays.asList(project.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE))
-					.stream().filter(m -> !m.getResource().getLocation().getFileExtension()
-							.equalsIgnoreCase(TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING))
+					.stream().filter(m -> !TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING
+							.equalsIgnoreCase(m.getResource().getLocation().getFileExtension()))
 					.toList();
 
 			printMarkers(markers, this);
@@ -75,14 +67,6 @@ public class CheckTypeLibrary extends Task {
 			}
 		} catch (final CoreException e) {
 			throw new BuildException("Cannot get markers", e);//$NON-NLS-1$
-		}
-	}
-
-	private static void runFullBuild(final IProject project) {
-		try {
-			project.build(IncrementalProjectBuilder.FULL_BUILD, null);
-		} catch (final CoreException e) {
-			throw new BuildException(e);
 		}
 	}
 
@@ -131,24 +115,6 @@ public class CheckTypeLibrary extends Task {
 
 		}
 		return markerString;
-	}
-
-	private static void clear(final IProject project) {
-		if (isFordiacProject(project)) {
-			try {
-				project.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-			} catch (final CoreException e) {
-				throw new BuildException("Could not delete error marker", e); //$NON-NLS-1$
-			}
-		}
-	}
-
-	private static boolean isFordiacProject(final IProject project) {
-		try {
-			return project.isOpen() && project.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID);
-		} catch (final CoreException e) {
-			throw new BuildException("Could not read project nature", e); //$NON-NLS-1$
-		}
 	}
 
 }

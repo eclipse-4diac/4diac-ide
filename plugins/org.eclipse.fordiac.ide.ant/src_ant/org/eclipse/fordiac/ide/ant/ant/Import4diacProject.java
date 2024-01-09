@@ -22,6 +22,7 @@ import org.eclipse.ant.core.AntCorePlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -48,6 +49,12 @@ public class Import4diacProject extends Task {
 		}
 		try {
 			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+			final var desc = workspace.getDescription();
+			desc.setAutoBuilding(false);
+			workspace.setDescription(desc);
+			Job.getJobManager().cancel(null);
+
 			final IPath projectPath = getProjectPath();
 			final IProjectDescription description = loadProjectDescription(workspace, projectPath);
 			final IProject project = workspace.getRoot().getProject(description.getName());
@@ -59,6 +66,9 @@ public class Import4diacProject extends Task {
 			check4diacProject(project);
 			TypeLibraryManager.INSTANCE.getTypeLibrary(project).reload();
 			waitBuilderJobsComplete();
+			runFullBuild(project);
+			waitBuilderJobsComplete();
+
 		} catch (final CoreException e) {
 			throw new BuildException(e);
 		}
@@ -83,7 +93,8 @@ public class Import4diacProject extends Task {
 				return false;
 			}
 			throw new BuildException("Project with same name already exists in workspace!"); //$NON-NLS-1$
-		} else if (!Status.OK_STATUS.equals(project.getWorkspace().validateProjectLocation(project, projectPath))) {
+		}
+		if (!Status.OK_STATUS.equals(project.getWorkspace().validateProjectLocation(project, projectPath))) {
 			throw new BuildException(MessageFormat.format("Project location {0} is not valid in workspace!", //$NON-NLS-1$
 					projectPath.toPortableString()));
 		}
@@ -136,9 +147,18 @@ public class Import4diacProject extends Task {
 				|| job.getName().startsWith("Periodic workspace save."))); //$NON-NLS-1$
 	}
 
+	public static void runFullBuild(final IProject project) {
+		try {
+			project.build(IncrementalProjectBuilder.FULL_BUILD, null);
+		} catch (final CoreException e) {
+			throw new BuildException(e);
+		}
+	}
+
 	public static void waitJobsComplete(final Predicate<Job> isValidJob) {
 
-		// Minimum wait time is needed to ensure that jobs are started by the ResourceChangeListener
+		// Minimum wait time is needed to ensure that jobs are started by the
+		// ResourceChangeListener
 
 		final int MINIUM_WAIT_TIME_MS = 1000;
 		final int SLEEP_TIME_MS = 50;
