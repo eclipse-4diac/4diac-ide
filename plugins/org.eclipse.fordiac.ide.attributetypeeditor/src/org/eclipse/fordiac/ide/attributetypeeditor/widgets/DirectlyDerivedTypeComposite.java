@@ -42,6 +42,7 @@ import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -61,6 +62,8 @@ public class DirectlyDerivedTypeComposite extends Composite implements ISelectio
 
 	public void init() {
 		setLayout(new GridLayout(1, false));
+		setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
 		final IDataProvider prov = new IDataProvider() {
 			@Override
 			public void setDataValue(final int columnIndex, final int rowIndex, final Object newValue) {
