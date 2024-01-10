@@ -29,9 +29,9 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
-import org.eclipse.fordiac.ide.model.typelibrary.testmocks.DataTypeEntryMock
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup
+import org.eclipse.fordiac.ide.test.model.typelibrary.DataTypeEntryMock
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 

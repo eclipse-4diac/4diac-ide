@@ -244,7 +244,7 @@ public final class NameRepository {
 		return temp;
 	}
 
-	static String createUniqueName(final String nameProposal, final String temp) {
+	public static String createUniqueName(final String nameProposal, final String temp) {
 		final String digits = extractDigitsFromEnd(temp);
 		if (!"".equals(digits)) { //$NON-NLS-1$
 			try {

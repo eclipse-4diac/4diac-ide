@@ -10,7 +10,7 @@
  * Contributors:
  *    Alois Zoitl - initial API and implementation and/or initial documentation
  ********************************************************************************/
-package org.eclipse.fordiac.ide.model.typelibrary.testmocks;
+package org.eclipse.fordiac.ide.test.model.typelibrary;
 
 import java.util.Collections;
 import java.util.Set;
@@ -19,25 +19,25 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-public final class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
+public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubAppTypeEntry {
 
-	private FBType fbType;
+	private SubAppType subAppType;
 	private TypeLibrary typelib;
 	private IFile file;
 
-	public FBTypeEntryMock(final FBType fbType, final TypeLibrary typelib, final IFile file) {
-		this.fbType = fbType;
+	public SubAppTypeEntryMock(final SubAppType subAppType, final TypeLibrary typelib, final IFile file) {
+		this.subAppType = subAppType;
 		this.typelib = typelib;
 		this.file = file;
 	}
 
-	public FBTypeEntryMock(final FBTypeEntry typeEntry) {
+	public SubAppTypeEntryMock(final SubAppTypeEntry typeEntry) {
 		this(typeEntry.getType(), typeEntry.getTypeLibrary(), typeEntry.getFile());
 	}
 
@@ -63,7 +63,7 @@ public final class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEn
 
 	@Override
 	public void setType(final LibraryElement value) {
-		fbType = (FBType) value;
+		subAppType = (SubAppType) value;
 	}
 
 	@Override
@@ -82,12 +82,12 @@ public final class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEn
 	}
 
 	@Override
-	public FBType getType() {
-		return fbType;
+	public SubAppType getType() {
+		return subAppType;
 	}
 
 	@Override
-	public FBType getTypeEditable() {
+	public SubAppType getTypeEditable() {
 		// currently not needed in mock
 		return null;
 	}

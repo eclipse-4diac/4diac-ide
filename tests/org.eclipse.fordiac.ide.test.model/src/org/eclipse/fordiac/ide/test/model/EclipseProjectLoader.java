@@ -12,7 +12,7 @@
  *   - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.systemmanagement;
+package org.eclipse.fordiac.ide.test.model;
 
 import java.io.File;
 import java.io.IOException;
