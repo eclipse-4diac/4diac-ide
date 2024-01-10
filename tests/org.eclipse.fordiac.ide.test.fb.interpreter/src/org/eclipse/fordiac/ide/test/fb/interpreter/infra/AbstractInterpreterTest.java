@@ -38,7 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.systemmanagement.FordiacProjectLoader;
+import org.eclipse.fordiac.ide.test.model.FordiacProjectLoader;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
 

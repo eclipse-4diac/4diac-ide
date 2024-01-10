@@ -13,5 +13,8 @@ Import-Package: org.junit.jupiter.api,
  org.opentest4j
 Require-Bundle: org.eclipse.osgi,
  org.eclipse.core.runtime,
+ org.eclipse.core.resources,
  org.eclipse.fordiac.ide.model,
- org.eclipse.fordiac.ide.systemmanagement
+ org.eclipse.fordiac.ide.ui
+Export-Package: org.eclipse.fordiac.ide.test.model,
+ org.eclipse.fordiac.ide.test.model.typelibrary

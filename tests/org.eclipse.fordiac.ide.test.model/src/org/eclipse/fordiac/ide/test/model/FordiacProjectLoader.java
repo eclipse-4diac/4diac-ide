@@ -11,7 +11,7 @@
  *   Lukas Wais - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.systemmanagement;
+package org.eclipse.fordiac.ide.test.model;
 
 import java.io.IOException;
 
@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.osgi.framework.Bundle;
 
 public class FordiacProjectLoader extends EclipseProjectLoader {
@@ -27,7 +28,7 @@ public class FordiacProjectLoader extends EclipseProjectLoader {
 	}
 
 	public AutomationSystem getAutomationSystem(final String name) {
-		return SystemManager.INSTANCE.getSystem(getSysFile(name));
+		return (AutomationSystem) TypeLibraryManager.INSTANCE.getTypeEntryForFile(getSysFile(name)).getType();
 	}
 
 	private IFile getSysFile(final String systemName) {

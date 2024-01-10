@@ -10,7 +10,7 @@
  * Contributors:
  *    Alois Zoitl - initial API and implementation and/or initial documentation
  ********************************************************************************/
-package org.eclipse.fordiac.ide.model.typelibrary.testmocks;
+package org.eclipse.fordiac.ide.test.model.typelibrary;
 
 import java.util.Collections;
 import java.util.Set;
