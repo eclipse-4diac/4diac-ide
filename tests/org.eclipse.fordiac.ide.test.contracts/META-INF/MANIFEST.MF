@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Model Tests
-Bundle-SymbolicName: org.eclipse.fordiac.ide.test.model
+Bundle-Name: Contracts Tests
+Bundle-SymbolicName: org.eclipse.fordiac.ide.test.contracts
 Bundle-Version: 2.0.1.qualifier
-Fragment-Host: org.eclipse.fordiac.ide.model
-Automatic-Module-Name: org.eclipse.fordiac.ide.test.model
+Fragment-Host: org.eclipse.fordiac.ide.contracts
+Automatic-Module-Name: org.eclipse.fordiac.ide.test.contracts
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Eclipse 4diac
 Import-Package: org.junit.jupiter.api,
@@ -12,4 +12,3 @@ Import-Package: org.junit.jupiter.api,
  org.junit.jupiter.params,
  org.junit.jupiter.params.provider,
  org.opentest4j
-Require-Bundle: org.eclipse.fordiac.ide.systemmanagement
