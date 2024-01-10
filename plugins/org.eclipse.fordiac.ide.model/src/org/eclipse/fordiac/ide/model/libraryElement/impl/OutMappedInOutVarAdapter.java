@@ -21,11 +21,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-final class OutMappedInOutVarAdapter extends EContentAdapter {
+public final class OutMappedInOutVarAdapter extends EContentAdapter {
 
 	private VarDeclaration outMappedInOutVar;
 
-	static VarDeclaration adapt(final VarDeclaration varDeclaration) {
+	public static VarDeclaration adapt(final VarDeclaration varDeclaration) {
 		OutMappedInOutVarAdapter adapter = findAdapter(varDeclaration);
 		if (adapter == null) {
 			adapter = new OutMappedInOutVarAdapter();
@@ -39,7 +39,7 @@ final class OutMappedInOutVarAdapter extends EContentAdapter {
 		return outMappedInOutVar;
 	}
 
-	static VarDeclaration find(final VarDeclaration varDeclaration) {
+	public static VarDeclaration find(final VarDeclaration varDeclaration) {
 		final OutMappedInOutVarAdapter adapter = findAdapter(varDeclaration);
 		if (adapter != null) {
 			return adapter.getOutMappedInOutVar();
@@ -47,7 +47,7 @@ final class OutMappedInOutVarAdapter extends EContentAdapter {
 		return null;
 	}
 
-	static OutMappedInOutVarAdapter findAdapter(final VarDeclaration varDeclaration) {
+	public static OutMappedInOutVarAdapter findAdapter(final VarDeclaration varDeclaration) {
 		return (OutMappedInOutVarAdapter) varDeclaration.eAdapters().stream()
 				.filter(OutMappedInOutVarAdapter.class::isInstance).findFirst().orElse(null);
 	}
@@ -85,7 +85,8 @@ final class OutMappedInOutVarAdapter extends EContentAdapter {
 			outMappedInOutVar.setType(varDeclaration.getType());
 			break;
 		case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
-			// EcoreUtil copy correctly handles a null source value so we don't need to add an own check.
+			// EcoreUtil copy correctly handles a null source value so we don't need to add
+			// an own check.
 			outMappedInOutVar.setArraySize(EcoreUtil.copy(varDeclaration.getArraySize()));
 			break;
 		default:
