@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 - 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -29,6 +29,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
@@ -379,10 +380,12 @@ public interface Functions {
 	/**
 	 * Infer the concrete return type (i.e., resolve generic type) for a function
 	 *
-	 * @param clazz         The class defining a set of functions
-	 * @param name          The name of the function
-	 * @param argumentTypes The argument types used to select the function and infer
-	 *                      the return type
+	 * @param clazz              The class defining a set of functions
+	 * @param name               The name of the function
+	 * @param expectedReturnType The expected return type used to infer the return
+	 *                           type (may be null)
+	 * @param argumentTypes      The argument types used to select the function and
+	 *                           infer the return type
 	 * @return The concrete return type of the function based on the argument types
 	 * @throws SecurityException     if access to the method is denied
 	 * @throws NoSuchMethodException if no applicable method could be found
@@ -390,17 +393,20 @@ public interface Functions {
 	 */
 	static DataType inferReturnTypeFromDataTypes(final Class<? extends Functions> clazz, final String name,
 			final List<DataType> argumentTypes) throws NoSuchMethodException, SecurityException {
-		return inferReturnTypeFromDataTypes(findMethodFromDataTypes(clazz, name, argumentTypes), argumentTypes);
+		return inferReturnTypeFromDataTypes(findMethodFromDataTypes(clazz, name, argumentTypes), null, argumentTypes);
 	}
 
 	/**
 	 * Infer the concrete return type (i.e., resolve generic type) for a function
 	 *
-	 * @param method        The method reference corresponding to the function
-	 * @param argumentTypes The argument types used to infer the return type
+	 * @param method             The method reference corresponding to the function
+	 * @param expectedReturnType The expected return type used to infer the return
+	 *                           type (may be null)
+	 * @param argumentTypes      The argument types used to infer the return type
 	 * @return The concrete return type of the function based on the argument types
 	 */
-	static DataType inferReturnTypeFromDataTypes(final Method method, final List<DataType> argumentTypes) {
+	static DataType inferReturnTypeFromDataTypes(final Method method, final DataType expectedReturnType,
+			final List<DataType> argumentTypes) {
 		try {
 			final Type returnType = method.getGenericReturnType();
 			if (returnType instanceof TypeVariable<?>) {
@@ -414,6 +420,13 @@ public interface Functions {
 				if (result != null && ValueOperations.dataType(method.getReturnType()).isAssignableFrom(result)) {
 					return result;
 				}
+			} else if (returnType instanceof final Class<?> returnTypeClass && returnType != void.class) {
+				final DataType result = ValueOperations.dataType(returnTypeClass);
+				if (GenericTypes.isAnyType(result) && expectedReturnType != null
+						&& result.isAssignableFrom(expectedReturnType)) {
+					return expectedReturnType;
+				}
+				return result;
 			}
 		} catch (final Exception e) {
 			// ignore

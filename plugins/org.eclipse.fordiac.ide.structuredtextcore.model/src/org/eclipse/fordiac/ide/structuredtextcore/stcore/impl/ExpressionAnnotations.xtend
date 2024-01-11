@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -144,7 +144,8 @@ final package class ExpressionAnnotations {
 	def package static INamedElement getResultType(STFeatureExpression expr) {
 		switch (feature : expr.feature) {
 			STStandardFunction:
-				feature.javaMethod.inferReturnTypeFromDataTypes(expr.parameters.map[resultType].filter(DataType).toList)
+				feature.javaMethod.inferReturnTypeFromDataTypes(switch (type: expr.expectedType) { DataType: type },
+					expr.parameters.map[resultType].filter(DataType).toList)
 			default:
 				getDeclaredResultType(expr)
 		}
@@ -161,9 +162,9 @@ final package class ExpressionAnnotations {
 			STStandardFunction: {
 				val argumentTypes = expr.parameters.map[declaredResultType].filter(DataType).toList
 				if (argumentTypes.size == expr.parameters.size) // all parameters have valid types
-					feature.javaMethod.inferReturnTypeFromDataTypes(argumentTypes)
+					feature.javaMethod.inferReturnTypeFromDataTypes(null, argumentTypes)
 				else
-					feature.javaMethod.inferReturnTypeFromDataTypes(emptyList)
+					feature.javaMethod.inferReturnTypeFromDataTypes(null, emptyList)
 			}
 			ICallable:
 				feature.returnType
