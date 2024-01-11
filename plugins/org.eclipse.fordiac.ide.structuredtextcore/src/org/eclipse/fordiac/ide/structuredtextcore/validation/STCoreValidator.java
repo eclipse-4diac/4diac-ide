@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -916,8 +916,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	protected void checkTypeCompatibility(final DataType destination, final DataType source,
 			final EStructuralFeature feature, final int index) {
-		if (!(destination.isAssignableFrom(source)
-				|| (GenericTypes.isAnyType(source) && source.isAssignableFrom(destination)))) {
+		if (!destination.isAssignableFrom(source)) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
 					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
 					destination.getName());
