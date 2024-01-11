@@ -24,11 +24,6 @@
       point="org.eclipse.ui.commands">
    <command
          categoryId="org.eclipse.fordiac.ide.commands.category"
-         id="org.eclipse.fordiac.ide.deployment.ui.deploy"
-         name="%contributions.menus.run.Deploy">
-   </command>   
-   <command
-         categoryId="org.eclipse.fordiac.ide.commands.category"
          id="org.eclipse.fordiac.ide.deployment.ui.cleanDevice"
          name="Clean Device">
    </command>
@@ -50,13 +45,6 @@
 </extension>
 <extension
       point="org.eclipse.ui.handlers">
-   <handler
-         class="org.eclipse.fordiac.ide.deployment.ui.handlers.DeployHandler"
-         commandId="org.eclipse.fordiac.ide.deployment.ui.deploy">
-      <activeWhen>
-         <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.DeployDefinition" />
-      </activeWhen>
-   </handler>   
    <handler
          class="org.eclipse.fordiac.ide.deployment.ui.handlers.CleanDeviceHandler"
          commandId="org.eclipse.fordiac.ide.deployment.ui.cleanDevice">
@@ -90,13 +78,6 @@
    <menuContribution
          allPopups="false"
          locationURI="popup:org.eclipse.ui.popup.any?after=additions">
-      <command commandId="org.eclipse.fordiac.ide.deployment.ui.deploy"
-            icon="fordiacimage://ICON_DOWNLOAD">  
-         <visibleWhen
-               checkEnabled="false">
-            <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.DeployDefinition" />
-         </visibleWhen>
-      </command>  
       <separator name="deviceInteractions" visible="true"/>
       <command
             commandId="org.eclipse.fordiac.ide.deployment.ui.cleanDevice"
@@ -166,8 +147,6 @@
 	</menuContribution>
 	<menuContribution
             locationURI="menu:org.eclipse.ui.run?after=additions">
-        <command commandId="org.eclipse.fordiac.ide.deployment.ui.deploy"
-            icon="fordiacimage://ICON_DOWNLOAD"/>
         <separator
                   name="deviceInteractions"
                   visible="true">
@@ -241,41 +220,6 @@
                     <instanceof
                           value="org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart">
                     </instanceof>
-                  </or>
-               </iterate>
-         </with>  
-   </definition>
-   <definition
-         id="org.eclipse.fordiac.ide.deployment.ui.DeployDefinition">
-       <with variable="selection">
-               <iterate ifEmpty="false">
-                  <or>
-                    <instanceof
-                          value="org.eclipse.fordiac.ide.model.libraryElement.Device">
-                    </instanceof>
-                    <instanceof
-                          value="org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart">
-                    </instanceof>
-                     <instanceof
-                          value="org.eclipse.fordiac.ide.model.libraryElement.Resource">
-                    </instanceof>
-                    <instanceof
-                          value="org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart">
-                    </instanceof>
-                    <instanceof
-                          value="org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration">
-                    </instanceof>
-                    <instanceof
-                          value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-                    </instanceof>
-                    <and>
-                        <instanceof value="org.eclipse.core.resources.IFile" />
-                        <test
-                            forcePluginActivation="true"   
-                            property="org.eclipse.core.resources.extension"
-                            value="sys">
-                        </test>                   
-                    </and>
                   </or>
                </iterate>
          </with>  
