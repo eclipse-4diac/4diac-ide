@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.util;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -33,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.services.STFunctionGrammarAccess;
@@ -72,9 +75,62 @@ public class STFunctionPartitioner implements STCorePartitioner {
 	}
 
 	protected static String generateFunctionText(final FunctionFBType fbType) {
+		final StringBuilder builder = new StringBuilder();
 		final String packageName = PackageNameHelper.getPackageName(fbType);
-		final String packagePrefix = packageName.isBlank() ? "" : "PACKAGE %s;%n%n".formatted(packageName); //$NON-NLS-1$ //$NON-NLS-2$
-		return "%sFUNCTION %s%nEND_FUNCTION%n".formatted(packagePrefix, fbType.getName()); //$NON-NLS-1$
+		if (!packageName.isBlank()) {
+			builder.append("PACKAGE "); //$NON-NLS-1$
+			builder.append(packageName);
+			builder.append(";"); //$NON-NLS-1$
+			builder.append(System.lineSeparator());
+			builder.append(System.lineSeparator());
+		}
+		builder.append("FUNCTION "); //$NON-NLS-1$
+		builder.append(fbType.getName());
+		final DataType returnType = fbType.getReturnType();
+		if (returnType != null) {
+			builder.append(" : "); //$NON-NLS-1$
+			builder.append(returnType.getName());
+		}
+		builder.append(System.lineSeparator());
+		generateFunctionParameters("INPUT", fbType.getInputParameters(), builder); //$NON-NLS-1$
+		generateFunctionParameters("IN_OUT", fbType.getInOutParameters(), builder); //$NON-NLS-1$
+		generateFunctionParameters("OUTPUT", fbType.getOutputParameters(), builder); //$NON-NLS-1$
+		builder.append("END_FUNCTION"); //$NON-NLS-1$
+		builder.append(System.lineSeparator());
+		return builder.toString();
+	}
+
+	protected static void generateFunctionParameters(final String type, final List<INamedElement> parameters,
+			final StringBuilder builder) {
+		if (parameters.isEmpty()) {
+			return;
+		}
+		builder.append("VAR_"); //$NON-NLS-1$
+		builder.append(type);
+		builder.append(System.lineSeparator());
+		parameters.stream().forEach(param -> {
+			builder.append("    "); //$NON-NLS-1$
+			builder.append(param.getName());
+			builder.append(" : "); //$NON-NLS-1$
+			builder.append(STCoreUtil.getFeatureType(param).getName());
+			builder.append(";"); //$NON-NLS-1$
+			builder.append(System.lineSeparator());
+		});
+		builder.append("END_VAR"); //$NON-NLS-1$
+		builder.append(System.lineSeparator());
+	}
+
+	protected static String generateFunctionVariable(final VarDeclaration varDeclaration) {
+		final StringBuilder builder = new StringBuilder(varDeclaration.getName());
+		builder.append(" : "); //$NON-NLS-1$
+		builder.append(varDeclaration.getFullTypeName());
+		if (varDeclaration.getValue() != null && varDeclaration.getValue().getValue() != null
+				&& !varDeclaration.getValue().getValue().isBlank()) {
+			builder.append(" := "); //$NON-NLS-1$
+			builder.append(varDeclaration.getValue().getValue());
+		}
+		builder.append(";"); //$NON-NLS-1$
+		return builder.toString();
 	}
 
 	@Override
