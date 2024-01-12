@@ -10,15 +10,15 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.ui.handlers;
+package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
 import java.text.MessageFormat;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
-import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.PlatformUI;

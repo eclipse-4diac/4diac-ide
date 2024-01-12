@@ -12,7 +12,7 @@
  *   Jose Cabral - initial API and implementation and/or initial documentation
  *   Alois Zoitl - re-enabled monitoring after command execution
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.ui.handlers;
+package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -24,24 +24,21 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
+import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor.IDeviceManagementInteractorCloser;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.AbstractMonitoringManager;
-import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public abstract class AbstractDeploymentCommand extends AbstractHandler {
@@ -86,7 +83,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 		public void postResponseReceived(final String response, final String source) {
 			if (response.contains("Reason")) { //$NON-NLS-1$
 				showDeploymentError(response.substring(response.lastIndexOf("Reason") + 8, response.length() - 4), //$NON-NLS-1$
-						source, currentObject, false);
+						source, currentObject);
 			}
 		}
 
@@ -95,23 +92,19 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 			// nothing to do here
 		}
 
-		public void showDeploymentError(final String response, final String source, final AbstractDeploymentCommand currentElement,
-				final boolean showWithConsole) {
-			final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			final IViewPart view = page.findView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
-
+		public void showDeploymentError(final String response, final String source,
+				final AbstractDeploymentCommand currentElement) {
 			String currentMessage;
 
 			if (!lastCommand.equals("")) { //$NON-NLS-1$
 				currentMessage = MessageFormat.format(Messages.AbstractDeploymentCommand_ExtendedDeploymentErrorMessage,
 						currentElement.getCurrentElementName(), lastCommand, response, source);
-
 			} else {
 				currentMessage = MessageFormat.format(Messages.AbstractDeploymentCommand_SimpleDeploymentErrorMessage,
 						currentElement.getCurrentElementName(), response, source);
 			}
 
-			if ((null == view || showWithConsole) && (!lastMessage.equals(currentMessage))) {
+			if (!lastMessage.equals(currentMessage)) {
 				// when deleting Resources two messages are sent (KILL and delete Resource) and
 				// both failed creating two popups with the same information
 				final Shell shell = Display.getDefault().getActiveShell();
@@ -130,8 +123,8 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 				final IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE
 						.getDeviceManagementInteractor(device);
 				if (null != interactor) {
-					DeploymentCoordinator.enableOutput(interactor);
-					final OnlineDeploymentErrorCheckListener errorChecker = new OnlineDeploymentErrorCheckListener(this);
+					final OnlineDeploymentErrorCheckListener errorChecker = new OnlineDeploymentErrorCheckListener(
+							this);
 					interactor.addDeploymentListener(errorChecker);
 
 					checkAndSaveMonitoringState(device.getAutomationSystem());
@@ -140,11 +133,9 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 						interactor.connect();
 						executeCommand(interactor);
 					} catch (final DeploymentException e) {
-						errorChecker.showDeploymentError(e.getMessage(), DeploymentHelper.getMgrIDSafe(device), this,
-								true);
+						errorChecker.showDeploymentError(e.getMessage(), DeploymentHelper.getMgrIDSafe(device), this);
 					}
 					interactor.removeDeploymentListener(errorChecker);
-					DeploymentCoordinator.disableOutput(interactor);
 				} else {
 					manageExecutorError();
 				}
@@ -169,8 +160,8 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 
 	private static List<Object> getObjectSelectionArray(final ExecutionEvent event) {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection instanceof StructuredSelection) {
-			return ((StructuredSelection) selection).toList();
+		if (selection instanceof final IStructuredSelection structuredSelection) {
+			return structuredSelection.toList();
 		}
 		return Collections.emptyList();
 	}

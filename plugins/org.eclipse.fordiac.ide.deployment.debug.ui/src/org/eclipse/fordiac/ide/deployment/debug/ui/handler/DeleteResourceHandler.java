@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,16 +11,16 @@
  *   Jose Cabral, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.ui.handlers;
+package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
 import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
+import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
-import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart;
+import org.eclipse.gef.EditPart;
 
 /**
  * The Class DeleteResourceAction.
@@ -30,27 +30,21 @@ public class DeleteResourceHandler extends AbstractDeploymentCommand {
 	private Resource resource;
 
 	@Override
-	protected boolean prepareParametersToExecute(Object element) {
+	protected boolean prepareParametersToExecute(final Object element) {
 		setDevice(null);
-
-		if (element instanceof Resource) {
-			resource = (Resource) element;
-			setDevice(resource.getDevice());
-			if (null != getDevice()) {
-				return true;
-			}
-		} else if (element instanceof ResourceEditPart) {
-			resource = ((ResourceEditPart) element).getModel();
-			setDevice(resource.getDevice());
-			if (null != getDevice()) {
-				return true;
-			}
+		if (element instanceof final Resource resourceElement) {
+			this.resource = resourceElement;
+			setDevice(resourceElement.getDevice());
+			return getDevice() != null;
+		}
+		if (element instanceof final EditPart editPart) {
+			return prepareParametersToExecute(editPart.getModel());
 		}
 		return false;
 	}
 
 	@Override
-	protected void executeCommand(IDeviceManagementInteractor executor) throws DeploymentException {
+	protected void executeCommand(final IDeviceManagementInteractor executor) throws DeploymentException {
 		executor.deleteResource(resource.getName());
 	}
 

@@ -25,14 +25,6 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.ui.messages"; //$NON-NLS-1$
 
-	public static String AbstractDeploymentCommand_ExtendedDeploymentErrorMessage;
-
-	public static String AbstractDeploymentCommand_SimpleDeploymentErrorMessage;
-
-	public static String AbstractDeviceDeploymentCommand_DeviceName;
-
-	public static String CleanDeviceHandler_CleanDeviceError;
-
 	public static String CreateBootfilesWizard_GeneratingBootFilesForTheSelectedResources;
 
 	public static String CreateBootfilesWizard_IProgressMonitorMonitor;
@@ -46,10 +38,6 @@ public final class Messages extends NLS {
 	public static String CreateBootFilesWizardPage_NoSystemSelected;
 
 	public static String CreateBootFilesWizardPage_NothingSelectedForBootFileGeneration;
-
-	public static String DeleteResourceHandler_DeleteResourceError;
-
-	public static String DeleteResourceHandler_Resource;
 
 	public static String DownloadSelectionTree_Selection;
 
@@ -72,16 +60,6 @@ public final class Messages extends NLS {
 
 	/** Title of the create bootfile wizard page */
 	public static String FordiacCreateBootfilesWizard_PageTITLE;
-
-	public static String FullyCleanDeviceHandler_FullyCleanDeviceError;
-
-	public static String FullyCleanDeviceHandler_DeleteResourcesFromDevice;
-
-	public static String FullyCleanDeviceHandler_FullyCleanDevice;
-
-	public static String FullyCleanDeviceHandler_Delete;
-
-	public static String KillDeviceHandler_KillDeviceError;
 
 	/** The Log listener_ malformed error. */
 	public static String LogListener_MalformedError;

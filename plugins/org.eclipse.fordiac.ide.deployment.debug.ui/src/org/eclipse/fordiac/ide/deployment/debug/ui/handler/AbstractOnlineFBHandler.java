@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,12 +11,14 @@
  *   Jose Cabral, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.onlineedit.handlers;
+package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.deployment.ui.handlers.AbstractDeploymentCommand;
+import java.text.MessageFormat;
+
+import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.gef.EditPart;
 
 public abstract class AbstractOnlineFBHandler extends AbstractDeploymentCommand {
 
@@ -25,11 +27,12 @@ public abstract class AbstractOnlineFBHandler extends AbstractDeploymentCommand 
 	private FB resFB = null;
 
 	@Override
-	protected boolean prepareParametersToExecute(Object element) {
-		if (element instanceof FBEditPart) {
-			fb = ((FBEditPart) element).getModel();
-		} else if (element instanceof FB) {
-			fb = (FB) element;
+	protected boolean prepareParametersToExecute(final Object element) {
+		if (element instanceof final EditPart editPart) {
+			return prepareParametersToExecute(editPart.getModel());
+		}
+		if (element instanceof final FB fbElement) {
+			this.fb = fbElement;
 		}
 		if (null != fb && fb.isMapped()) {
 			resource = fb.getResource();
@@ -44,7 +47,7 @@ public abstract class AbstractOnlineFBHandler extends AbstractDeploymentCommand 
 
 	@Override
 	protected String getCurrentElementName() {
-		return "Function Block: " + fb.getName();
+		return MessageFormat.format(Messages.AbstractOnlineFBHandler_FunctionBlock, fb.getName());
 	}
 
 	public FB getResFB() {
