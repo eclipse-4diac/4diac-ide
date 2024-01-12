@@ -23,9 +23,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.deployment.data.DeviceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
-import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -34,12 +32,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 
 public final class DeploymentCoordinator {
-
-	private static final String OUTPUT_VIEW_ID = "org.eclipse.fordiac.ide.deployment.ui.views.Output"; //$NON-NLS-1$
 
 	public static void printUnsupportedDeviceProfileMessageBox(final Device device, final Resource res) {
 		Display.getDefault().asyncExec(() -> {
@@ -69,48 +64,16 @@ public final class DeploymentCoordinator {
 	 */
 	public static void performDeployment(final Object[] selection,
 			final IDeviceManagementCommunicationHandler overrideDevMgmCommHandler, final String profile) {
-		final IDeploymentListener outputView = (IDeploymentListener) PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage().findView(OUTPUT_VIEW_ID);
 		final Shell shell = Display.getDefault().getActiveShell();
 		try {
 			final DownloadRunnable download = new DownloadRunnable(createDeploymentdata(selection),
-					overrideDevMgmCommHandler, outputView, profile);
+					overrideDevMgmCommHandler, null, profile);
 			new ProgressMonitorDialog(shell).run(true, true, download);
 		} catch (final DeploymentException | InvocationTargetException ex) {
 			MessageDialog.openError(shell, Messages.DeploymentCoordinator_DepoymentError, ex.getMessage());
 		} catch (final InterruptedException ex) {
 			Thread.currentThread().interrupt(); // mark interruption
 			MessageDialog.openInformation(shell, Messages.DeploymentCoordinator_LABEL_DownloadAborted, ex.getMessage());
-		}
-	}
-
-	public static void performDeployment(final Object[] selection) {
-		performDeployment(selection, null, null);
-	}
-
-	/**
-	 * Enable output.
-	 *
-	 * @param executor the executor
-	 */
-	public static void enableOutput(final IDeviceManagementInteractor interactor) {
-		final IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.findView(OUTPUT_VIEW_ID);
-		if (null != view) {
-			interactor.addDeploymentListener((IDeploymentListener) view);
-		}
-	}
-
-	/**
-	 * Disable output.
-	 *
-	 * @param executor the executor
-	 */
-	public static void disableOutput(final IDeviceManagementInteractor interactor) {
-		final IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.findView(OUTPUT_VIEW_ID);
-		if (null != view) {
-			interactor.removeDeploymentListener((IDeploymentListener) view);
 		}
 	}
 
