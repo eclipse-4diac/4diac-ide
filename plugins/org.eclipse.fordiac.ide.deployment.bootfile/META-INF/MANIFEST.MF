@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Deployment Boot File
+Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.bootfile;singleton:=true
+Bundle-Version: 2.0.1.qualifier
+Export-Package: org.eclipse.fordiac.ide.deployment.bootfile,
+ org.eclipse.fordiac.ide.deployment.bootfile.wizard
+Bundle-Vendor: Eclipse 4diac
+Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.bootfile
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.jface,
+ org.eclipse.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.debug.ui,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.fordiac.ide.debug,
+ org.eclipse.fordiac.ide.debug.ui,
+ org.eclipse.fordiac.ide.model.eval,
+ org.eclipse.fordiac.ide.deployment,
+ org.eclipse.fordiac.ide.deployment.eval,
+ org.eclipse.fordiac.ide.deployment.debug,
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.gef

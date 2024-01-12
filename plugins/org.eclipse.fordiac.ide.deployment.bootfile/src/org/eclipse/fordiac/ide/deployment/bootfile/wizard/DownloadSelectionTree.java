@@ -11,13 +11,13 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.ui.views;
+package org.eclipse.fordiac.ide.deployment.bootfile.wizard;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.deployment.ui.Messages;
+import org.eclipse.fordiac.ide.deployment.bootfile.Messages;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -140,8 +140,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 			if (obj instanceof Device) {
 				return FordiacImage.ICON_DEVICE.getImage();
 			}
-			if (obj instanceof Resource) {
-				final Resource res = (Resource) obj;
+			if (obj instanceof final Resource res) {
 				if (res.isDeviceTypeResource()) {
 					return FordiacImage.ICON_FIRMWARE_RESOURCE.getImage();
 				}

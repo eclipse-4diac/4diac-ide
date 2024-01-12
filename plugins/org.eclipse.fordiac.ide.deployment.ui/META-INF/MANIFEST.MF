@@ -1,6 +1,5 @@
 Manifest-Version: 1.0
-Export-Package: org.eclipse.fordiac.ide.deployment.ui.views,
- org.eclipse.fordiac.ide.deployment.ui.wizard
+Export-Package: org.eclipse.fordiac.ide.deployment.ui.views
 Require-Bundle: org.eclipse.ui.ide,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.deployment,

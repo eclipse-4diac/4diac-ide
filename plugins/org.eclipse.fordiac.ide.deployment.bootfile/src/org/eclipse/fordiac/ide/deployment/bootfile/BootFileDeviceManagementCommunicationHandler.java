@@ -12,7 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.ui.wizard;
+package org.eclipse.fordiac.ide.deployment.bootfile;
 
 import java.util.List;
 

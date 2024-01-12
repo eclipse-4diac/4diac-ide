@@ -11,7 +11,7 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *               - updated bootfile exporting for new project layout
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.ui.wizard;
+package org.eclipse.fordiac.ide.deployment.bootfile.wizard;
 
 import java.util.HashSet;
 import java.util.List;
@@ -21,13 +21,14 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.deployment.ui.Messages;
-import org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTree;
+import org.eclipse.fordiac.ide.deployment.bootfile.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.DirectoryChooserControl;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -114,9 +115,9 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 	}
 
 	private List<AutomationSystem> getSelectedSystems() {
-		final SystemManager manager = SystemManager.INSTANCE;
-		return ((List<IFile>) getSelectedResources()).stream().filter(SystemManager::isSystemFile)
-				.map(manager::getSystem).filter(Objects::nonNull).toList();
+		return ((List<IFile>) getSelectedResources()).stream().map(TypeLibraryManager.INSTANCE::getTypeEntryForFile)
+				.filter(SystemEntry.class::isInstance).map(SystemEntry.class::cast).map(SystemEntry::getSystem)
+				.filter(Objects::nonNull).toList();
 	}
 
 	@Override
@@ -216,8 +217,9 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 	private static IStructuredSelection createResourceSelection(final IStructuredSelection selection) {
 		final Set<IFile> selectedASFiles = new HashSet<>();
 		selection.toList().forEach(obj -> {
-			if (SystemManager.isSystemFile(obj)) {
-				selectedASFiles.add((IFile) obj);
+			if (obj instanceof final IFile file
+					&& TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension())) {
+				selectedASFiles.add(file);
 			}
 			if (obj instanceof final EObject eo) {
 				final EObject root = EcoreUtil.getRootContainer(eo);

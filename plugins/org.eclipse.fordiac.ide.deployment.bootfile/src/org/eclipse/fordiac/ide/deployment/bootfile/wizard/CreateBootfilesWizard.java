@@ -11,7 +11,7 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *               - updated bootfile exporting for new project layout
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.ui.wizard;
+package org.eclipse.fordiac.ide.deployment.bootfile.wizard;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.fordiac.ide.deployment.ui.Messages;
+import org.eclipse.fordiac.ide.deployment.bootfile.BootFileDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.deployment.bootfile.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -80,8 +81,7 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 			for (final Entry<Device, List<Object>> entry : workLoad.entrySet()) {
 				final String fileName = MessageFormat.format(Messages.CreateBootfilesWizard_IProgressMonitorMonitor,
 						outputDirectory, Character.valueOf(File.separatorChar),
-						entry.getKey().getAutomationSystem().getName(),
-						entry.getKey().getName());
+						entry.getKey().getAutomationSystem().getName(), entry.getKey().getName());
 
 				BootFileDeviceManagementCommunicationHandler.createBootFile(entry.getValue(), fileName, getShell());
 				monitor.worked(1);
@@ -92,7 +92,7 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 		try {
 			new ProgressMonitorDialog(getShell()).run(false, false, iop);
 		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt();  // mark interruption
+			Thread.currentThread().interrupt(); // mark interruption
 			showExceptionErrorDialog(e);
 		} catch (final Exception e) {
 			showExceptionErrorDialog(e);
