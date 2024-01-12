@@ -24,14 +24,56 @@ public interface EvaluatorFactory {
 	 */
 	String DEFAULT_VARIANT = "default"; //$NON-NLS-1$
 
+	/**
+	 * Check whether this factory can handle the given source
+	 *
+	 * @param source The source
+	 * @return true if this factory can handle the source, false otherwise
+	 */
+	default boolean canHandle(final Object source) {
+		return true;
+	}
+
+	/**
+	 * Create a new evaluator
+	 *
+	 * @param source    The source
+	 * @param context   The context
+	 * @param variables The variables
+	 * @param parent    The parent evaluator
+	 * @return The new evaluator or null if no applicable evaluator could be created
+	 */
 	Evaluator createEvaluator(final Object source, final Variable<?> context, final Iterable<Variable<?>> variables,
 			final Evaluator parent);
 
+	/**
+	 * Create a new evaluator
+	 *
+	 * @param <T>         The source type
+	 * @param source      The source
+	 * @param sourceClass The source class
+	 * @param context     The context
+	 * @param variables   The variables
+	 * @param parent      The parent evaluator
+	 * @return The new evaluator or null if no applicable evaluator could be created
+	 */
 	static <T extends Object> Evaluator createEvaluator(final T source, final Class<? extends T> sourceClass,
 			final Variable<?> context, final Iterable<Variable<?>> variables, final Evaluator parent) {
 		return createEvaluator(source, sourceClass, EvaluatorFactory.DEFAULT_VARIANT, context, variables, parent);
 	}
 
+	/**
+	 * Create a new evaluator
+	 *
+	 * @param <T>         The source type
+	 * @param source      The source
+	 * @param sourceClass The source class
+	 * @param variant     The evaluator variant
+	 * @param context     The context
+	 * @param variables   The variables
+	 * @param parent      The parent evaluator
+	 * @return The new evaluator or null if no applicable evaluator could be created
+	 */
 	static <T extends Object> Evaluator createEvaluator(final T source, final Class<? extends T> sourceClass,
 			final String variant, final Variable<?> context, final Iterable<Variable<?>> variables,
 			final Evaluator parent) {
