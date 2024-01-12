@@ -228,7 +228,9 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 		}
 
 		public SignatureHashBuilder appendType(final INamedElement type) {
-			append(EcoreUtil.getURI(type).toString());
+			if (type != null) {
+				append(EcoreUtil.getURI(type).toString());
+			}
 			return this;
 		}
 
