@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.application.tools.ConnectionSelectEditPartTracker
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
@@ -399,6 +400,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 
 	@Override
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event);
 		refreshTooltip();
 	}
 
