@@ -78,15 +78,11 @@ public abstract class AbstractGoToPinHandler extends AbstractHandler {
 	}
 
 	private static IInterfaceElement getSelectedInterfaceElement(final ISelection selection) {
-		if (selection instanceof IStructuredSelection && !selection.isEmpty()) {
-			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			if ((structuredSelection.size() == 1)
-					&& (structuredSelection.getFirstElement() instanceof EditPart)) {
-				// only if only one element is selected
-				final Object model = ((EditPart) structuredSelection.getFirstElement()).getModel();
-				if (model instanceof IInterfaceElement) {
-					return (IInterfaceElement) model;
-				}
+		if ((selection instanceof final IStructuredSelection structSel && !selection.isEmpty())
+				&& ((structSel.size() == 1) && (structSel.getFirstElement() instanceof final EditPart ep))) {
+			// only if only one element is selected
+			if (ep.getModel() instanceof final IInterfaceElement ie) {
+				return ie;
 			}
 		}
 		return null;
@@ -95,23 +91,24 @@ public abstract class AbstractGoToPinHandler extends AbstractHandler {
 	protected static List<IInterfaceElement> getAllInputs(final IInterfaceElement ie) {
 		final List<IInterfaceElement> inputList = new ArrayList<>();
 		final InterfaceList interfaceList = (InterfaceList) ie.eContainer();
-		inputList.addAll(interfaceList.getEventInputs());
-		inputList.addAll(interfaceList.getInputVars());
-		inputList.addAll(interfaceList.getSockets());
+		inputList.addAll(interfaceList.getEventInputs().stream().filter(IInterfaceElement::isVisible).toList());
+		inputList.addAll(interfaceList.getInputVars().stream().filter(IInterfaceElement::isVisible).toList());
+		inputList.addAll(interfaceList.getInOutVars().stream().filter(IInterfaceElement::isVisible).toList());
+		inputList.addAll(interfaceList.getSockets().stream().filter(IInterfaceElement::isVisible).toList());
 		return inputList;
 	}
 
 	protected static List<IInterfaceElement> getAllOutputs(final IInterfaceElement ie) {
 		final List<IInterfaceElement> outputList = new ArrayList<>();
 		final InterfaceList interfaceList = (InterfaceList) ie.eContainer();
-		outputList.addAll(interfaceList.getEventOutputs());
-		outputList.addAll(interfaceList.getOutputVars());
-		outputList.addAll(interfaceList.getPlugs());
+		outputList.addAll(interfaceList.getEventOutputs().stream().filter(IInterfaceElement::isVisible).toList());
+		outputList.addAll(interfaceList.getOutputVars().stream().filter(IInterfaceElement::isVisible).toList());
+		outputList.addAll(interfaceList.getOutMappedInOutVars().stream().filter(IInterfaceElement::isVisible).toList());
+		outputList.addAll(interfaceList.getPlugs().stream().filter(IInterfaceElement::isVisible).toList());
 		return outputList;
 	}
 
-	private IInterfaceElement getFollowingPin(final IInterfaceElement ie,
-			final List<IInterfaceElement> interfaceList) {
+	private IInterfaceElement getFollowingPin(final IInterfaceElement ie, final List<IInterfaceElement> interfaceList) {
 		if (interfaceList.size() == 1) {
 			return null;
 		}

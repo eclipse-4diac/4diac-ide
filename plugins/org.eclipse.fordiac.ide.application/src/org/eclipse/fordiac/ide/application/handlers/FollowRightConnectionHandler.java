@@ -19,7 +19,6 @@ import java.util.List;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -64,8 +63,8 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 
 	@Override
 	protected IInterfaceElement getInternalOppositeEventPin(final InterfaceEditPart pin) {
-		final EList<?> eventOutputs = pin.getModel().getFBNetworkElement().getInterface().getEventOutputs();
-		final EList<?> eventInputs = pin.getModel().getFBNetworkElement().getInterface().getEventInputs();
+		final var eventOutputs = pin.getModel().getFBNetworkElement().getInterface().getEventOutputs();
+		final var eventInputs = pin.getModel().getFBNetworkElement().getInterface().getEventInputs();
 
 		if (eventOutputs.isEmpty()) {
 			return getInternalOppositeVarPin(pin);
@@ -75,10 +74,21 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 
 	@Override
 	protected IInterfaceElement getInternalOppositeVarPin(final InterfaceEditPart pin) {
-		final EList<?> varInputs = pin.getModel().getFBNetworkElement().getInterface().getInputVars();
-		final EList<?> varOutputs = pin.getModel().getFBNetworkElement().getInterface().getOutputVars();
+		final var varInputs = pin.getModel().getFBNetworkElement().getInterface().getInputVars();
+		final var varOutputs = pin.getModel().getFBNetworkElement().getInterface().getOutputVars();
 
 		if (varOutputs.isEmpty()) {
+			return getInternalOppositeVarInOutPin(pin);
+		}
+		return calcInternalOppositePin(varInputs, varOutputs, pin);
+	}
+
+	@Override
+	protected IInterfaceElement getInternalOppositeVarInOutPin(final InterfaceEditPart pin) {
+		final var varInputs = pin.getModel().getFBNetworkElement().getInterface().getInOutVars();
+		final var varOutputs = pin.getModel().getFBNetworkElement().getInterface().getOutMappedInOutVars();
+
+		if (varInputs.isEmpty()) {
 			return getInternalOppositePlugOrSocketPin(pin);
 		}
 		return calcInternalOppositePin(varInputs, varOutputs, pin);
@@ -86,8 +96,8 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 
 	@Override
 	protected IInterfaceElement getInternalOppositePlugOrSocketPin(final InterfaceEditPart pin) {
-		final EList<?> sockets = pin.getModel().getFBNetworkElement().getInterface().getSockets();
-		final EList<?> plugs = pin.getModel().getFBNetworkElement().getInterface().getPlugs();
+		final var sockets = pin.getModel().getFBNetworkElement().getInterface().getSockets();
+		final var plugs = pin.getModel().getFBNetworkElement().getInterface().getPlugs();
 
 		if (plugs.isEmpty()) {
 			return getInternalOppositeEventPin(pin);
