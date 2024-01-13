@@ -19,6 +19,7 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCommand;
@@ -77,11 +78,12 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 	public void setupOutputTable(final Group outputsGroup) {
 		outputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this) {
 			@Override
-			public Command onNameChange(final IInterfaceElement rowObject, final Object newValue) {
-				if (newValue instanceof final String text) {
-					return EditUntypedSubappInterfaceDataSection.this.onNameChange(rowObject, text);
-				}
-				return null;
+			public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
+					final Object newValue) {
+				return switch (column) {
+				case NAME -> onNameChange(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+				default -> super.createCommand(rowObject, column, newValue);
+				};
 			}
 		});
 		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputProvider,
@@ -103,11 +105,12 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 		inputProvider = new ChangeableListDataProvider<>(
 				new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VAR_CONFIG) {
 					@Override
-					public Command onNameChange(final IInterfaceElement rowObject, final Object newValue) {
-						if (newValue instanceof final String text) {
-							return EditUntypedSubappInterfaceDataSection.this.onNameChange(rowObject, text);
-						}
-						return null;
+					public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
+							final Object newValue) {
+						return switch (column) {
+						case NAME -> onNameChange(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+						default -> super.createCommand(rowObject, column, newValue);
+						};
 					}
 				});
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,

@@ -15,6 +15,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.util.Objects;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.InterfaceElementColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
@@ -33,6 +35,7 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.graphics.Image;
@@ -83,17 +86,17 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	public void setupOutputTable(final Group outputsGroup) {
 		outputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this) {
 			@Override
-			public org.eclipse.gef.commands.Command onNameChange(final IInterfaceElement rowObject,
+			public Command createCommand(final AdapterDeclaration rowObject, final TypedElementTableColumn column,
 					final Object newValue) {
-				if (newValue instanceof final String text) {
-					return AbstractEditInterfaceAdapterSection.this.onNameChange(rowObject, text);
-				}
-				return null;
+				return switch (column) {
+				case NAME -> onNameChange(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+				default -> super.createCommand(rowObject, column, newValue);
+				};
 			}
 		});
 		final DataLayer outputDataLayer = new DataLayer(outputProvider);
 		outputDataLayer.setConfigLabelAccumulator(
-				new TypedElementConfigLabelAccumulator(outputProvider, this::getAnnotationModel));
+				new TypedElementConfigLabelAccumulator<>(outputProvider, this::getAnnotationModel));
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(),
 				createTypeSelectionButton(), this, false);
@@ -103,17 +106,17 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	public void setupInputTable(final Group inputsGroup) {
 		inputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this) {
 			@Override
-			public org.eclipse.gef.commands.Command onNameChange(final IInterfaceElement rowObject,
+			public Command createCommand(final AdapterDeclaration rowObject, final TypedElementTableColumn column,
 					final Object newValue) {
-				if (newValue instanceof final String text) {
-					return AbstractEditInterfaceAdapterSection.this.onNameChange(rowObject, text);
-				}
-				return null;
+				return switch (column) {
+				case NAME -> onNameChange(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+				default -> super.createCommand(rowObject, column, newValue);
+				};
 			}
 		});
 		final DataLayer inputDataLayer = new DataLayer(inputProvider);
 		inputDataLayer.setConfigLabelAccumulator(
-				new TypedElementConfigLabelAccumulator(inputProvider, this::getAnnotationModel));
+				new TypedElementConfigLabelAccumulator<>(inputProvider, this::getAnnotationModel));
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(),
 				createTypeSelectionButton(), this, true);

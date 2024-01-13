@@ -13,11 +13,8 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
 import org.eclipse.gef.commands.Command;
@@ -58,10 +55,6 @@ public abstract class AbstractColumnAccessor<T, C extends NatTableColumn> implem
 	}
 
 	public abstract Command createCommand(final T rowObject, final C column, final Object newValue);
-
-	public Command onNameChange(final IInterfaceElement rowObject, final Object newValue) {
-		return ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
-	}
 
 	@Override
 	public String getColumnProperty(final int columnIndex) {
