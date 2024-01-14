@@ -111,4 +111,9 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 				&& pin.getModel().getFBNetworkElement().getInterface().getInputVars().isEmpty()
 				&& pin.getModel().getFBNetworkElement().getInterface().getSockets().isEmpty());
 	}
+
+	@Override
+	protected boolean isLeft() {
+		return true;
+	}
 }

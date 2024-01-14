@@ -21,6 +21,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -178,18 +179,32 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	}
 
-	protected static List<IInterfaceElement> getConnectionOposites(final ISelection selection,
-			final FBNetwork fbNetwork) {
+	protected List<IInterfaceElement> getConnectionOposites(final ISelection selection, final FBNetwork fbNetwork) {
 		if (selection instanceof final IStructuredSelection structuredSelection && !selection.isEmpty()
 				&& (structuredSelection.size() == 1)
 				&& (structuredSelection.getFirstElement() instanceof final InterfaceEditPart iep)) {
 			// only if only one element is selected
+			if (useTargetPins(iep)) {
+				return getTargetPins(iep);
+			}
 			final IInterfaceElement ie = iep.getModel();
 			final EList<Connection> connList = getConnectionList(ie, fbNetwork);
 			return connList.stream().map(con -> (con.getSource().equals(ie) ? con.getDestination() : con.getSource()))
 					.toList();
 		}
 		return Collections.emptyList();
+	}
+
+	private boolean useTargetPins(final InterfaceEditPart iep) {
+		return !iep.getChildren().isEmpty()
+				&& ((iep.getModel().isIsInput() && isLeft()) || (!iep.getModel().isIsInput() && !isLeft()));
+	}
+
+	protected abstract boolean isLeft();
+
+	private static List<IInterfaceElement> getTargetPins(final InterfaceEditPart iep) {
+		return iep.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance)
+				.map(ep -> (TargetInterfaceElementEditPart) ep).map(ep -> ep.getModel().getRefElement()).toList();
 	}
 
 	private static EList<Connection> getConnectionList(final IInterfaceElement ie, final FBNetwork fbNetwork) {
