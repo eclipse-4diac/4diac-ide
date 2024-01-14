@@ -368,6 +368,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 				connSource, connDestination);
 		connCmd.setSource(connSource);
 		connCmd.setDestination(connDestination);
+		connCmd.setVisible(connShouldBeVisible(network, connSource, connDestination));
 		if (connCmd.canExecute()) {
 			connCmd.execute();
 			commands.add(connCmd);
@@ -435,4 +436,14 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		return Stream.concat(sourceNetworks.stream(), destinationNetworks.stream())
 				.collect(Collectors.toUnmodifiableSet());
 	}
+
+	private static boolean connShouldBeVisible(final FBNetwork parentNW, final IInterfaceElement src,
+			final IInterfaceElement dst) {
+		final boolean srcHidden = (src.getFBNetworkElement() instanceof final SubApp srcSubapp)
+				&& srcSubapp.isUnfolded() && parentNW == srcSubapp.getFbNetwork();
+		final boolean dstHidden = (dst.getFBNetworkElement() instanceof final SubApp dstSubapp)
+				&& dstSubapp.isUnfolded() && parentNW == dstSubapp.getFbNetwork();
+		return !srcHidden && !dstHidden;
+	}
+
 }
