@@ -115,7 +115,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private String getLabelText() {
-		return getRefElement().getComment() + "\n" + getModel().getRefPinFullName();
+		return getModel().getRefPinFullName() + "\n" + getRefElement().getComment(); //$NON-NLS-1$
 	}
 
 	@Override
