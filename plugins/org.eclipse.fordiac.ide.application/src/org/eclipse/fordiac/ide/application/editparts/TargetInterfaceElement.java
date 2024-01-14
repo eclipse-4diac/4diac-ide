@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,13 +12,23 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class TargetInterfaceElement implements Comparable<TargetInterfaceElement> {
 	private final IInterfaceElement refElement;
 
-	public TargetInterfaceElement(final IInterfaceElement refElement) {
+	public static TargetInterfaceElement createFor(final IInterfaceElement refElement, final FBNetwork parentNW) {
+		if (refElement.getFBNetworkElement() == null || (refElement.getFBNetworkElement() instanceof final SubApp subapp
+				&& subapp.getSubAppNetwork() == parentNW)) {
+			return new SubapTargetInterfaceElement(refElement);
+		}
+		return new TargetInterfaceElement(refElement);
+	}
+
+	private TargetInterfaceElement(final IInterfaceElement refElement) {
 		this.refElement = refElement;
 	}
 
@@ -27,14 +37,46 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 	}
 
 	public String getRefPinFullName() {
+		final StringBuilder retVal = new StringBuilder();
 		final var fbelement = getRefElement().getFBNetworkElement();
-		final FBNetworkElement parent = fbelement.getOuterFBNetworkElement();
-		return parent.getName() + "." + fbelement.getName() + "." + getRefElement().getName(); //$NON-NLS-1$ //$NON-NLS-2$
+		if (fbelement != null) {
+			final FBNetworkElement parent = fbelement.getOuterFBNetworkElement();
+			if (parent != null) {
+				retVal.append(parent.getName());
+				retVal.append('.');
+			}
+			retVal.append(fbelement.getName());
+			retVal.append('.');
+		}
+		retVal.append(getRefElement().getName());
+		return retVal.toString();
 	}
 
 	@Override
 	public int compareTo(final TargetInterfaceElement other) {
+		if (other instanceof SubapTargetInterfaceElement) {
+			return 1;
+		}
 		return getRefPinFullName().compareTo(other.getRefPinFullName());
+	}
+
+	public static class SubapTargetInterfaceElement extends TargetInterfaceElement {
+		private SubapTargetInterfaceElement(final IInterfaceElement refElement) {
+			super(refElement);
+		}
+
+		@Override
+		public String getRefPinFullName() {
+			return getRefElement().getName();
+		}
+
+		@Override
+		public int compareTo(final TargetInterfaceElement other) {
+			if (other instanceof SubapTargetInterfaceElement) {
+				return getRefPinFullName().compareTo(other.getRefPinFullName());
+			}
+			return -1;
+		}
 	}
 
 }
