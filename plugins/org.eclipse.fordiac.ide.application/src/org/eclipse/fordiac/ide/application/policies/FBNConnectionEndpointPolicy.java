@@ -42,7 +42,8 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 			final org.eclipse.gef.ConnectionEditPart connectionEditPart, final int connectionLocator) {
 		final FBNetworkConnection con = (FBNetworkConnection) connectionEditPart.getFigure();
 
-		if (!con.isHidden() || isGroupCrossingEndPoint((ConnectionEditPart) connectionEditPart, connectionLocator)) {
+		if (!con.isHidden() || isGroupCrossingEndPoint((ConnectionEditPart) connectionEditPart, connectionLocator)
+				|| con.getTargetDecoration() == null) {
 			return new FBNConnectionEndPointHandle(connectionEditPart, connectionLocator);
 		}
 		return new HiddenFBNConnectionEndPointHandle(connectionEditPart, connectionLocator);
@@ -120,8 +121,12 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 				fireFigureMoved();
 			}
 		};
-		figure.add(createHidenSelectionFeedbackEndpoint(con.getSourceDecoration()));
-		figure.add(createHidenSelectionFeedbackEndpoint(con.getTargetDecoration()));
+		if (con.getSourceDecoration() != null) {
+			figure.add(createHidenSelectionFeedbackEndpoint(con.getSourceDecoration()));
+		}
+		if (con.getTargetDecoration() != null) {
+			figure.add(createHidenSelectionFeedbackEndpoint(con.getTargetDecoration()));
+		}
 		return figure;
 	}
 
@@ -131,7 +136,7 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 		newSelFeedbackFigure.setOutline(false);
 		newSelFeedbackFigure.setBounds(getSelectableFigureBounds(label));
 		newSelFeedbackFigure
-		.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+				.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 		newSelFeedbackFigure.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
 		newSelFeedbackFigure.setBackgroundColor(ModifiedMoveHandle.getSelectionColor());
 		return newSelFeedbackFigure;
@@ -143,14 +148,13 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 
 	private static boolean isGroupCrossingEndPoint(final ConnectionEditPart connectionEditPart,
 			final int connectionLocator) {
-		switch (connectionLocator) {
-		case ConnectionLocator.SOURCE:
-			return connectionEditPart.getFigure().getSourceDecoration() instanceof GroupInterfaceConnectionLabel;
-		case ConnectionLocator.TARGET:
-			return connectionEditPart.getFigure().getTargetDecoration() instanceof GroupInterfaceConnectionLabel;
-		default:
-			return false;
-		}
+		return switch (connectionLocator) {
+		case ConnectionLocator.SOURCE ->
+			connectionEditPart.getFigure().getSourceDecoration() instanceof GroupInterfaceConnectionLabel;
+		case ConnectionLocator.TARGET ->
+			connectionEditPart.getFigure().getTargetDecoration() instanceof GroupInterfaceConnectionLabel;
+		default -> false;
+		};
 	}
 
 }

@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.st;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeXtextEditor;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocument;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
@@ -54,6 +56,19 @@ public class StructuredTextFBTypeEditor extends FBTypeXtextEditor {
 		super.doSetInput(input);
 		setPartName(FordiacMessages.Algorithm);
 		setTitleImage(FordiacImage.ICON_ALGORITHM.getImage());
+	}
+
+	@Override
+	public void reloadType(final FBType type) {
+		removeFBTypeUpdater();
+		if (getDocument() instanceof final LibraryElementXtextDocument libraryElementXtextDocument) {
+			libraryElementXtextDocument.internalModify(state -> {
+				((LibraryElementXtextResource) state).setLibraryElement(type);
+				return null;
+			});
+		}
+		super.reloadType(type);
+		installFBTypeUpdater();
 	}
 
 	@Override

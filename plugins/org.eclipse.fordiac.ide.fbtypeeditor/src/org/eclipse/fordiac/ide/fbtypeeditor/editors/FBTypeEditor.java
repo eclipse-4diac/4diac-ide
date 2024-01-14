@@ -17,6 +17,8 @@
  *
  *   Daniel Lindhuber, Bianca Wiesmayr
  *     - cleanup
+ *   Patrick Aigner
+ *     - change dialog integration
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
@@ -24,7 +26,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -48,6 +52,8 @@ import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -55,9 +61,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -68,12 +76,15 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorActionBarContributor;
@@ -106,6 +117,10 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
+	private FBTypeUpdateDialog fbSaveDialog;
+	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
+	// private static final int SAVE_AS_BUTTON_INDEX = 1;
+	private static final int CANCEL_BUTTON_INDEX = 1; // 2;
 
 	private final Adapter adapter = new AdapterImpl() {
 
@@ -129,28 +144,28 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	public void doSave(final IProgressMonitor monitor) {
 		if ((null != typeEntry) && (checkTypeSaveAble())) {
 			performPresaveHooks();
-			getCommandStack().markSaveLocation();
+			createSaveDialog(monitor);
+		}
+	}
 
-			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(typeEntry.getFile().getParent()) {
+	private void createSaveDialog(final IProgressMonitor monitor) {
+		final String[] labels = { Messages.FBTypeEditor_AlteringButton_SaveAndUpdate, // Messages.StructAlteringButton_SaveAs,
+				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
-				@Override
-				protected void execute(final IProgressMonitor monitor)
-						throws CoreException, InvocationTargetException, InterruptedException {
-					// allow each editor to save back changes before saving to file
-					editors.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
-					typeEntry.save(monitor);
-				}
-			};
-			try {
-				operation.run(monitor);
-			} catch (final InvocationTargetException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			} catch (final InterruptedException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-				Thread.currentThread().interrupt();
-			}
+		fbSaveDialog = new FBTypeUpdateDialog(null, Messages.FBTypeEditor_ViewingComposite_Headline, null, "", //$NON-NLS-1$
+				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, typeEntry);
 
-			firePropertyChange(IEditorPart.PROP_DIRTY);
+		// Depending on the button clicked:
+		switch (fbSaveDialog.open()) {
+		case DEFAULT_BUTTON_INDEX:
+			doSaveInternal(monitor, fbSaveDialog.getCollectedFBs());
+			break;
+		case CANCEL_BUTTON_INDEX:
+			MessageDialog.openInformation(null, Messages.FBTypeEditor_ViewingComposite_Headline,
+					Messages.WarningDialog_FBNotSaved);
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -186,9 +201,65 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		return true;
 	}
 
+	private void doSaveInternal(final IProgressMonitor monitor, final Set<INamedElement> set) {
+		getCommandStack().markSaveLocation();
+
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(typeEntry.getFile().getParent()) {
+
+			@Override
+			protected void execute(final IProgressMonitor monitor)
+					throws CoreException, InvocationTargetException, InterruptedException {
+				// allow each editor to save back changes before saving to file
+				editors.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
+				typeEntry.save(monitor);
+			}
+		};
+		try {
+			operation.run(monitor);
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt();
+		}
+
+		firePropertyChange(IEditorPart.PROP_DIRTY);
+		updateFB(set);
+	}
+
 	@Override
 	public void doSaveAs() {
 		// TODO implement a save as new type method
+	}
+
+	private void updateFB(final Set<INamedElement> set) {
+		Command cmd = new CompoundCommand();
+		cmd = cmd.chain(getUpdateInstancesCommand(set));
+		Display.getDefault().asyncExec(cmd::execute);
+	}
+
+	private Command getUpdateInstancesCommand(final Set<INamedElement> set) {
+		final List<Command> commands = new ArrayList<>();
+		set.stream().forEach(instance -> {
+			if (instance instanceof final FBNetworkElement s) {
+				if (s.eContainer() instanceof final BaseFBType bte) {
+					if (bte.getTypeEntry().getTypeEditable() instanceof final BaseFBType bteedit) {
+						bteedit.getInternalFbs().stream()
+								.filter(fbe -> fbe.getName().equals(s.getName())
+										&& fbe.getFullTypeName().equals(s.getFullTypeName()))
+								.findAny().map(se -> new UpdateInternalFBCommand(se, fbSaveDialog.getTypeOfElement(s)))
+								.ifPresent(commands::add);
+					}
+				} else {
+					commands.add(new UpdateFBTypeCommand(s, fbSaveDialog.getTypeOfElement(s)));
+				}
+			}
+		});
+		Command cmd = new CompoundCommand();
+		for (final Command subCmd : commands) {
+			cmd = cmd.chain(subCmd);
+		}
+		return cmd;
 	}
 
 	/**

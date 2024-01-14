@@ -32,7 +32,7 @@ Export-Package: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.resource,
  org.eclipse.fordiac.ide.model.systemconfiguration,
  org.eclipse.fordiac.ide.model.typelibrary,
- org.eclipse.fordiac.ide.model.typelibrary.testmocks,
+ org.eclipse.fordiac.ide.model.util,
  org.eclipse.fordiac.ide.model.validation,
  org.eclipse.fordiac.ide.model.value
 Bundle-Vendor: %providerName

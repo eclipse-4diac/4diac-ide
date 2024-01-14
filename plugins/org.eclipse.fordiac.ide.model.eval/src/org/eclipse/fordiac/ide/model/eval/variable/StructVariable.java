@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.eval.variable;
 
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ public class StructVariable extends AbstractVariable<StructValue> implements Ite
 	public StructVariable(final String name, final StructuredType type) {
 		super(name, type);
 		members = type.getMemberVariables().stream().map(VariableOperations::newVariable)
-				.collect(Collectors.toUnmodifiableMap(Variable::getName, Function.identity()));
+				.collect(Collectors.toMap(Variable::getName, Function.identity(), (a, b) -> a, LinkedHashMap::new));
 		value = new StructValue(type, members);
 	}
 

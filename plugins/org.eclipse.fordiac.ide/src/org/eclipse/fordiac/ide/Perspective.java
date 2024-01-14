@@ -56,7 +56,6 @@ public class Perspective implements IPerspectiveFactory {
 	private static void createBottomEntries(final IPageLayout layout) {
 		final IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.78f, layout.getEditorArea()); //$NON-NLS-1$
 		bottom.addView(IPageLayout.ID_PROP_SHEET);
-		bottom.addView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
 		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
 	}
 

@@ -17,6 +17,21 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
+	public static String AbstractDeploymentCommand_ExtendedDeploymentErrorMessage;
+	public static String AbstractDeploymentCommand_SimpleDeploymentErrorMessage;
+	public static String AbstractDeviceDeploymentCommand_DeviceName;
+	public static String AbstractOnlineFBHandler_FunctionBlock;
+	public static String CleanDeviceHandler_CleanDeviceError;
+	public static String DeleteResourceHandler_DeleteResourceError;
+	public static String DeleteResourceHandler_Resource;
+	public static String FullyCleanDeviceHandler_FullyCleanDeviceError;
+	public static String FullyCleanDeviceHandler_DeleteResourcesFromDevice;
+	public static String FullyCleanDeviceHandler_FullyCleanDevice;
+	public static String FullyCleanDeviceHandler_Delete;
+	public static String KillDeviceHandler_KillDeviceError;
+	public static String OnlineCreateConnectionHandler_CreateConnectionError;
+	public static String OnlineCreateFBHandler_OnlineCreateFunctionBlockError;
+	public static String OnlineStartFBHandler_OnlineStartFunctionBlockError;
 	public static String RuntimeLaunchConfigurationTab_DeviceTypeDialogMessage;
 	public static String RuntimeLaunchConfigurationTab_DeviceTypeDialogTitle;
 	public static String RuntimeLaunchConfigurationTab_DeviceTypeLabel;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationDelegate"
+            delegateName="Deploy"
+            id="org.eclipse.fordiac.ide.deployment.debug.deployLaunch"
+            modes="run"
+            name="Deploy">
+      </launchConfigurationType>
+   </extension>
+</plugin>

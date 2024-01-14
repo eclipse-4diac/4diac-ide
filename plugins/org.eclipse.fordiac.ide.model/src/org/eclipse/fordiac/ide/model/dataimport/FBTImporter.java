@@ -582,7 +582,7 @@ public class FBTImporter extends TypeImporter {
 		DataType type = null;
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName && !typeName.isEmpty()) {
-			type = getDataTypeLibrary().getType(typeName);
+			type = addDependency(getDataTypeLibrary().getType(typeName));
 		}
 
 		Method retVal = null;
@@ -1056,7 +1056,7 @@ public class FBTImporter extends TypeImporter {
 		if (null == typeName) {
 			throw new TypeImportException(Messages.FBTImporter_ADAPTER_DECLARATION_TYPE_EXCEPTION);
 		}
-		final AdapterTypeEntry entry = getTypeLibrary().getAdapterTypeEntry(typeName);
+		final AdapterTypeEntry entry = addDependency(getTypeLibrary().getAdapterTypeEntry(typeName));
 		if (null != entry) {
 			a.setType(entry.getType());
 		}

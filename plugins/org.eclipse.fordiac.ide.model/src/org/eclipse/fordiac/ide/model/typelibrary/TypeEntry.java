@@ -15,6 +15,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
+import java.util.Set;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -64,6 +66,8 @@ public interface TypeEntry extends Notifier {
 	default String getPackageName() {
 		return PackageNameHelper.extractPackageName(getFullTypeName());
 	}
+
+	Set<TypeEntry> getDependencies();
 
 	void refresh();
 

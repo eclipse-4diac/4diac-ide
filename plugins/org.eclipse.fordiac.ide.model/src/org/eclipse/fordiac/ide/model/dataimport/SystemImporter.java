@@ -165,7 +165,7 @@ public class SystemImporter extends CommonElementImporter {
 
 		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != type) {
-			segment.setTypeEntry(getTypeLibrary().getSegmentTypeEntry(type));
+			segment.setTypeEntry(addDependency(getTypeLibrary().getSegmentTypeEntry(type)));
 		}
 
 		parseSegmentNodeChildren(segment);
@@ -235,7 +235,7 @@ public class SystemImporter extends CommonElementImporter {
 	private void parseDeviceType(final Device device) {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (typeName != null) {
-			final DeviceTypeEntry entry = getTypeLibrary().getDeviceTypeEntry(typeName);
+			final DeviceTypeEntry entry = addDependency(getTypeLibrary().getDeviceTypeEntry(typeName));
 			if (null != entry) {
 				device.setTypeEntry(entry);
 				createParameters(device);

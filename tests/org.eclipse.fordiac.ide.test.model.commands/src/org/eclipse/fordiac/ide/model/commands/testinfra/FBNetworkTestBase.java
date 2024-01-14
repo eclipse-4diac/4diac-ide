@@ -47,7 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock;
+import org.eclipse.fordiac.ide.test.model.typelibrary.FBTypeEntryMock;
 import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBase.State> {

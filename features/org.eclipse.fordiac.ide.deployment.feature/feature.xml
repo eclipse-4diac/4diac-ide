@@ -188,20 +188,6 @@ United States, other countries, or both.\n
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.fordiac.ide.deployment.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.fordiac.ide.onlineedit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.fordiac.ide.monitoring"
          download-size="0"
          install-size="0"
@@ -223,7 +209,21 @@ United States, other countries, or both.\n
          unpack="false"/>
 
    <plugin
+         id="org.eclipse.fordiac.ide.deployment.debug"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="org.eclipse.fordiac.ide.deployment.debug.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.deployment.bootfile"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
  *     - implemented special cases, handle existing pins gracefully
+ *   Fabio Gandolfi
+ *     - reuse connections if already exists between fb and subapp
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,7 +33,9 @@ import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -114,8 +119,8 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	@Override
 	public void execute() {
-		final IInterfaceElement left = buildPath(source, sourceNetworks, false);
-		final IInterfaceElement right = buildPath(destination, destinationNetworks, true);
+		final IInterfaceElement left = buildPath(source, sourceNetworks, destination, false);
+		final IInterfaceElement right = buildPath(destination, destinationNetworks, source, true);
 		createConnection(match, left, right);
 	}
 
@@ -191,26 +196,136 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	// build left or right path as seen from the matching network
 	private IInterfaceElement buildPath(final IInterfaceElement element, final List<FBNetwork> networks,
-			final boolean isRightPath) {
+			final IInterfaceElement oppositePin, final boolean isRightPath) {
 		IInterfaceElement ie = element;
 		FBNetwork network = networks.get(0);
 		int i = 0;
 
 		while (network != match) {
 			final SubApp subapp = (SubApp) network.eContainer();
-			final IInterfaceElement createdPin = createInterfaceElement(isRightPath, ie, subapp);
 
-			if (isRightPath) {
-				createConnection(network, createdPin, ie);
+			final IInterfaceElement existingConnection = existingConnection(ie, subapp, oppositePin, isRightPath);
+
+			if (existingConnection != null) {
+				ie = existingConnection;
 			} else {
-				createConnection(network, ie, createdPin);
+				final IInterfaceElement createdPin = createInterfaceElement(isRightPath, ie, subapp);
+
+				if (isRightPath) {
+					createConnection(network, createdPin, ie);
+				} else {
+					createConnection(network, ie, createdPin);
+				}
+
+				ie = createdPin;
 			}
 
-			ie = createdPin;
 			i++;
 			network = networks.get(i);
 		}
 		return ie;
+	}
+
+	private IInterfaceElement existingConnection(final IInterfaceElement ie, final SubApp subapp,
+			final IInterfaceElement oppositePin, final boolean isRightPath) {
+		if (isRightPath) {
+			final Optional<Connection> connection = ie.getInputConnections().stream()
+					.filter(con -> con.getSourceElement().equals(subapp) && compatibleTypes(ie, con.getSource()))
+					.findFirst();
+
+			if (connection.isPresent()) {
+				return connection.get().getSource();
+			}
+
+		} else {
+			final Optional<Connection> connection = ie.getOutputConnections().stream().filter(
+					con -> con.getDestinationElement().equals(subapp) && compatibleTypes(ie, con.getDestination()))
+					.findFirst();
+
+			if (connection.isPresent()) {
+				return connection.get().getDestination();
+			}
+		}
+
+		return existingSubAppPin(ie, oppositePin, isRightPath);
+	}
+
+	IInterfaceElement existingSubAppPin(final IInterfaceElement ie, final IInterfaceElement oppositePin,
+			final boolean isRightPath) {
+		final Optional<IInterfaceElement> subappPin;
+		if (isRightPath) {
+
+			if (ie.getFBNetworkElement() != null && ie.getFBNetworkElement().getOuterFBNetworkElement() != null) {
+
+				if (ie instanceof Event) {
+					subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getEventInputs()
+							.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+							.map(IInterfaceElement.class::cast);
+				} else {
+					subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getInputVars()
+							.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+							.map(IInterfaceElement.class::cast);
+				}
+
+				if (subappPin.isPresent()) {
+					createConnection(ie.getFBNetworkElement().getFbNetwork(), subappPin.get(), ie);
+					return subappPin.get();
+				}
+			}
+
+		} else if (ie.getFBNetworkElement() != null && ie.getFBNetworkElement().getOuterFBNetworkElement() != null) {
+
+			if (ie instanceof Event) {
+				subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getEventOutputs()
+						.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+						.map(IInterfaceElement.class::cast);
+			} else {
+				subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getOutputVars().stream()
+						.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+						.map(IInterfaceElement.class::cast);
+			}
+
+			if (subappPin.isPresent()) {
+				createConnection(ie.getFBNetworkElement().getFbNetwork(), subappPin.get(), ie);
+				return subappPin.get();
+			}
+		}
+		return null;
+	}
+
+	boolean isSourceTypeMatching(final IInterfaceElement ie, final IInterfaceElement subAppPin,
+			final IInterfaceElement oppositePin, final boolean isRightPath) {
+		if (isRightPath) {
+			return !subAppPin.getInputConnections().stream()
+					.filter(p -> getConnectionSourceFBInterfaceElements(p, isRightPath).contains(oppositePin)).findAny()
+					.isEmpty();
+		}
+		return !subAppPin.getOutputConnections().stream()
+				.filter(p -> getConnectionSourceFBInterfaceElements(p, isRightPath).contains(oppositePin)).findAny()
+				.isEmpty();
+	}
+
+	List<IInterfaceElement> getConnectionSourceFBInterfaceElements(final Connection con, final boolean isRightPath) {
+
+		final List<IInterfaceElement> list = new ArrayList<>();
+
+		if (isRightPath) {
+			if (!(con.getSourceElement() instanceof FB)) {
+				con.getSource().getInputConnections()
+						.forEach(s -> list.addAll(getConnectionSourceFBInterfaceElements(s, isRightPath)));
+				return list;
+			}
+			list.add(con.getSource());
+			return list;
+		}
+
+		if (!(con.getSourceElement() instanceof FB)) {
+			con.getDestination().getOutputConnections()
+					.forEach(s -> list.addAll(getConnectionSourceFBInterfaceElements(s, isRightPath)));
+			return list;
+		}
+		list.add(con.getDestination());
+		return list;
 	}
 
 	private IInterfaceElement createInterfaceElement(final boolean isRightPath, final IInterfaceElement ie,
@@ -237,10 +352,14 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 	}
 
 	private boolean compatibleTypes(final IInterfaceElement pin) {
-		if (pin.getType() == null) {
+		return compatibleTypes(source, pin);
+	}
+
+	private static boolean compatibleTypes(final IInterfaceElement pin1, final IInterfaceElement pin2) {
+		if (pin1.getType() == null || pin2.getType() == null) {
 			return false;
 		}
-		return LinkConstraints.typeCheck(source, pin);
+		return LinkConstraints.typeCheck(pin1, pin2);
 	}
 
 	private void createConnection(final FBNetwork network, final IInterfaceElement connSource,

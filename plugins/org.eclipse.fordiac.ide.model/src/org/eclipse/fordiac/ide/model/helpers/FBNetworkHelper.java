@@ -346,7 +346,12 @@ public final class FBNetworkHelper {
 					names.addFirst(MappingAnnotations.getHierarchicalName(runner));
 					break;
 				}
-				container = runner.getFbNetwork().eContainer();
+				final FBNetwork network = runner.getFbNetwork();
+				if (network != null) {
+					container = network.eContainer();
+				} else {
+					container = runner.eContainer(); // BaseFB case
+				}
 				if (!(container instanceof INamedElement)) {
 					break;
 				}

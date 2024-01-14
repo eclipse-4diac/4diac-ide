@@ -56,7 +56,7 @@
          class="org.eclipse.fordiac.ide.deployment.iec61499.handlers.CompareDeviceHandler"
          commandId="org.eclipse.fordiac.ide.deployment.iec61499.compareDevice">
       <activeWhen>
-         <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition" />
+         <reference definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
       </activeWhen>
    	</handler>
    </extension>
@@ -72,7 +72,7 @@
             <visibleWhen
                   checkEnabled="true">
                  <reference
-                       definitionId="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition">
+                       definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition">
                  </reference>
             </visibleWhen>
          </command>
@@ -89,7 +89,7 @@
 	         style="push">
 	      <visibleWhen
 	            checkEnabled="false">
-	         <reference definitionId="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition" />
+	         <reference definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
 	      </visibleWhen>
 	   </command>
 	</menuContribution>

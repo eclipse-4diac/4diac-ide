@@ -46,12 +46,17 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression;
+import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.EObjectDescription;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.Scopes;
 import org.eclipse.xtext.scoping.impl.FilteringScope;
+import org.eclipse.xtext.scoping.impl.IScopeWrapper;
+import org.eclipse.xtext.scoping.impl.ImportNormalizer;
+import org.eclipse.xtext.scoping.impl.ImportScope;
+import org.eclipse.xtext.scoping.impl.ScopeBasedSelectable;
 import org.eclipse.xtext.scoping.impl.SimpleScope;
 import org.eclipse.xtext.util.SimpleAttributeResolver;
 
@@ -84,7 +89,12 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 	}
 
 	@Inject
+	IQualifiedNameProvider qualifiedNameProvider;
+
+	@Inject
 	STStandardFunctionProvider standardFunctionProvider;
+
+	private IScopeWrapper scopeWrapper;
 
 	@Override
 	public IScope getScope(final EObject context, final EReference reference) {
@@ -111,12 +121,12 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 				final var receiverType = receiver.getResultType();
 				if (receiverType != null) {
 					if (receiverType instanceof final StructuredType structuredVarType) {
-						return scopeFor(structuredVarType.getMemberVariables());
+						return qualifiedScope(structuredVarType.getMemberVariables(), reference);
 					}
 					if (receiverType instanceof final FBType fbType) {
 						final var interfaceList = fbType.getInterfaceList();
-						return scopeFor(Iterables.concat(interfaceList.getInputVars(), interfaceList.getOutputVars(),
-								interfaceList.getEventInputs()));
+						return qualifiedScope(Iterables.concat(interfaceList.getInputVars(),
+								interfaceList.getOutputVars(), interfaceList.getEventInputs()), reference);
 					}
 				}
 				return IScope.NULLSCOPE;
@@ -136,12 +146,13 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 		if (reference == STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER) {
 			final var feature = getFeature(context);
 			if (feature instanceof final ICallable callable) {
-				return Scopes.scopeFor(Iterables.concat(callable.getInputParameters(), callable.getInOutParameters()));
+				return qualifiedScope(Iterables.concat(callable.getInputParameters(), callable.getInOutParameters()),
+						reference);
 			}
 		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__PARAMETER) {
 			final var feature = getFeature(context);
 			if (feature instanceof final ICallable callable) {
-				return Scopes.scopeFor(callable.getOutputParameters());
+				return qualifiedScope(callable.getOutputParameters(), reference);
 			}
 		} else if (reference == STCorePackage.Literals.ST_FOR_STATEMENT__VARIABLE) {
 			return filterScope(super.getScope(context, reference), this::isApplicableForVariableReference);
@@ -149,7 +160,7 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			final var container = context.eContainer();
 			if (container instanceof final STStructInitializerExpression structInitializerExpression
 					&& structInitializerExpression.getResultType() instanceof final StructuredType structType) {
-				return scopeFor(structType.getMemberVariables());
+				return qualifiedScope(structType.getMemberVariables(), reference);
 			}
 		}
 		return IScope.NULLSCOPE;
@@ -161,6 +172,27 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 
 	protected static IScope scopeFor(final Iterable<? extends EObject> elements, final IScope parent) {
 		return new SimpleScope(parent, Scopes.scopedElementsFor(elements), true);
+	}
+
+	protected IScope qualifiedScope(final Iterable<? extends EObject> elements, final EReference reference) {
+		return qualifiedScope(elements, reference, IScope.NULLSCOPE);
+	}
+
+	protected IScope qualifiedScope(final Iterable<? extends EObject> elements, final EReference reference,
+			final IScope parent) {
+		final Iterable<IEObjectDescription> descriptions = Scopes.scopedElementsFor(elements, qualifiedNameProvider);
+		final List<ImportNormalizer> importNormalizers = createImportNormalizers(descriptions);
+		final ScopeBasedSelectable importFrom = new ScopeBasedSelectable(wrap(new SimpleScope(descriptions, true)));
+		return new ImportScope(importNormalizers, parent, importFrom, reference.getEReferenceType(), true);
+	}
+
+	protected static List<ImportNormalizer> createImportNormalizers(final Iterable<IEObjectDescription> descriptions) {
+		return StreamSupport.stream(descriptions.spliterator(), false).map(IEObjectDescription::getQualifiedName)
+				.map(name -> name.skipLast(1)).distinct().map(STCoreScopeProvider::createImportNormalizer).toList();
+	}
+
+	protected static ImportNormalizer createImportNormalizer(final QualifiedName importedNamespace) {
+		return new ImportNormalizer(importedNamespace, true, true);
 	}
 
 	protected static IScope filterScope(final IScope scope, final Predicate<IEObjectDescription> filter) {
@@ -220,5 +252,15 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 
 	protected static EObjectDescription descriptionForType(final String name, final DataType type) {
 		return new EObjectDescription(QualifiedName.create(name), type, null);
+	}
+
+	@Override
+	public void setWrapper(final IScopeWrapper wrapper) {
+		super.setWrapper(wrapper);
+		this.scopeWrapper = wrapper;
+	}
+
+	protected IScope wrap(final IScope scope) {
+		return scopeWrapper != null ? scopeWrapper.wrap(scope) : scope;
 	}
 }

@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGramm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition
@@ -86,7 +87,7 @@ class STAlgorithmPartitioner implements STCorePartitioner {
 
 	def protected Optional<? extends STCorePartition> getEmergencyPartition(XtextResource resource) {
 		val stream = new ByteArrayOutputStream
-		resource.save(stream, emptyMap)
+		resource.save(stream, #{STCoreResource.OPTION_PLAIN_ST -> Boolean.TRUE})
 		val text = new String(stream.toByteArray, resource.encoding)
 		if (text.nullOrEmpty) {
 			throw new IllegalStateException("Cannot serialize contents from resource")

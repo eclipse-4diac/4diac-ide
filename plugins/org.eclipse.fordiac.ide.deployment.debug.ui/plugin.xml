@@ -1,26 +1,440 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTabs">
-      <tab
-            class="org.eclipse.fordiac.ide.deployment.debug.ui.runtime.RuntimeLaunchConfigurationTab"
-            group="org.eclipse.fordiac.ide.debug.ui.simpleFBLaunchConfigurationTabGroup"
-            id="org.eclipse.fordiac.ide.deployment.debug.ui.runtimeTab"
-            name="Runtime">
-         <placement
-               after="org.eclipse.fordiac.ide.debug.ui.mainTab">
-         </placement>
-      </tab>
-      <tab
-            class="org.eclipse.fordiac.ide.deployment.debug.ui.runtime.RuntimeLaunchConfigurationTab"
-            group="org.eclipse.fordiac.ide.debug.ui.basicFBLaunchConfigurationTabGroup"
-            id="org.eclipse.fordiac.ide.deployment.debug.ui.runtimeTab"
-            name="Runtime">
-         <placement
-               after="org.eclipse.fordiac.ide.debug.ui.mainTab">
-         </placement>
-      </tab>
-   </extension>
-
+	<extension
+		point="org.eclipse.debug.ui.launchConfigurationTabs">
+		<tab
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.runtime.RuntimeLaunchConfigurationTab"
+			group="org.eclipse.fordiac.ide.debug.ui.simpleFBLaunchConfigurationTabGroup"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.runtimeTab"
+			name="Runtime">
+			<placement
+				after="org.eclipse.fordiac.ide.debug.ui.mainTab">
+			</placement>
+		</tab>
+		<tab
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.runtime.RuntimeLaunchConfigurationTab"
+			group="org.eclipse.fordiac.ide.debug.ui.basicFBLaunchConfigurationTabGroup"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.runtimeTab"
+			name="Runtime">
+			<placement
+				after="org.eclipse.fordiac.ide.debug.ui.mainTab">
+			</placement>
+		</tab>
+	</extension>
+	<extension
+		point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+		<launchConfigurationTabGroup
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentLaunchConfigurationTabGroup"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.deploymentLaunchConfigurationTabGroup"
+			type="org.eclipse.fordiac.ide.deployment.debug.deployLaunch">
+			<launchMode
+				mode="run">
+			</launchMode>
+		</launchConfigurationTabGroup>
+	</extension>
+	<extension
+		point="org.eclipse.debug.ui.launchShortcuts">
+		<shortcut
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentLaunchShortcut"
+			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/download.gif"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.deployShortcut"
+			label="Deploy"
+			modes="run">
+			<contextualLaunch>
+				<contextLabel
+					label="Deploy"
+					mode="run">
+				</contextLabel>
+				<enablement>
+					<with
+						variable="selection">
+						<iterate>
+							<or>
+								<adapt
+									type="org.eclipse.core.resources.IResource">
+									<test
+										property="org.eclipse.core.resources.extension"
+										value="sys">
+									</test>
+								</adapt>
+								<instanceof
+									value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
+								</instanceof>
+								<instanceof
+									value="org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration">
+								</instanceof>
+								<instanceof
+									value="org.eclipse.fordiac.ide.model.libraryElement.Device">
+								</instanceof>
+								<instanceof
+									value="org.eclipse.fordiac.ide.model.libraryElement.Resource">
+								</instanceof>
+							</or>
+						</iterate>
+					</with>
+				</enablement>
+			</contextualLaunch>
+		</shortcut>
+	</extension>
+	<extension
+		point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+		<launchConfigurationTypeImage
+			configTypeID="org.eclipse.fordiac.ide.deployment.debug.deployLaunch"
+			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/download.gif"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.deploymentLaunchConfigurationTypeImage">
+		</launchConfigurationTypeImage>
+	</extension>
+	<extension
+		point="org.eclipse.core.runtime.adapters">
+		<factory
+			class=""
+			adaptableType="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
+			<adapter
+				type="org.eclipse.debug.ui.actions.ILaunchable">
+			</adapter>
+		</factory>
+		<factory
+			class=""
+			adaptableType="org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration">
+			<adapter
+				type="org.eclipse.debug.ui.actions.ILaunchable">
+			</adapter>
+		</factory>
+		<factory
+			class=""
+			adaptableType="org.eclipse.fordiac.ide.model.libraryElement.Device">
+			<adapter
+				type="org.eclipse.debug.ui.actions.ILaunchable">
+			</adapter>
+		</factory>
+		<factory
+			class=""
+			adaptableType="org.eclipse.fordiac.ide.model.libraryElement.Resource">
+			<adapter
+				type="org.eclipse.debug.ui.actions.ILaunchable">
+			</adapter>
+		</factory>
+		<factory
+			class=""
+			adaptableType="org.eclipse.gef.EditPart">
+			<adapter
+				type="org.eclipse.debug.ui.actions.ILaunchable">
+			</adapter>
+		</factory>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.cleanDevice"
+			name="Clean Device">
+		</command>
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.fullyCleanDevice"
+			name="Fully Clean Device">
+		</command>
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
+			name="Kill Device">
+		</command>
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.deleteResource"
+			name="Delete Resource">
+		</command>
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateFB"
+			name="Online Create FB">
+		</command>
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.onlineStartFB"
+			name="Online Start FB">
+		</command>
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateConnection"
+			name="Online Create Connection">
+		</command>
+	</extension>
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.CleanDeviceHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.cleanDevice">
+			<activeWhen>
+				<reference
+					definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.KillDeviceHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice">
+			<activeWhen>
+				<reference
+					definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.DeleteResourceHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.deleteResource">
+			<activeWhen>
+				<reference
+					definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.ResourceDefinition" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.FullyCleanDeviceHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.fullyCleanDevice">
+			<activeWhen>
+				<reference
+					definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.OnlineCreateFBHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateFB">
+			<activeWhen>
+				<reference
+					definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.FBDefinition" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.OnlineStartFBHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineStartFB">
+			<activeWhen>
+				<reference
+					definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.FBDefinition" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.OnlineCreateConnectionHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateConnection">
+			<activeWhen>
+				<with
+					variable="selection">
+					<iterate
+						operator="and" ifEmpty="false">
+						<instanceof
+							value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart">
+						</instanceof>
+					</iterate>
+				</with>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.menus">
+		<menuContribution
+			allPopups="false"
+			locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+			<separator
+				name="org.eclipse.fordiac.ide.deployment.debug.ui.deviceInteractions"
+				visible="true" />
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.cleanDevice"
+				icon="fordiacimage://ICON_CLEAR_DEVICE"
+				label="Clean Device"
+				style="push">
+				<visibleWhen
+					checkEnabled="false">
+					<reference
+						definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
+				</visibleWhen>
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.fullyCleanDevice"
+				icon="fordiacimage://ICON_CLEAR_DEVICE"
+				label="Fully Clean Device"
+				style="push">
+				<visibleWhen
+					checkEnabled="false">
+					<reference
+						definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
+				</visibleWhen>
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
+				icon="fordiacimage://ICON_KILL_DEVICE"
+				label="Kill Device"
+				style="push">
+				<visibleWhen
+					checkEnabled="false">
+					<reference
+						definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
+				</visibleWhen>
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.deleteResource"
+				icon="fordiacimage://ICON_DELETE_RESOURCE"
+				label="Delete Resource"
+				style="push">
+				<visibleWhen
+					checkEnabled="false">
+					<reference
+						definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.ResourceDefinition" />
+				</visibleWhen>
+			</command>
+			<separator
+				name="org.eclipse.fordiac.ide.deployment.debug.ui.onlineEdit"
+				visible="true">
+			</separator>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateFB"
+				label="Online Create FB"
+				style="push">
+				<visibleWhen
+					checkEnabled="false">
+					<reference
+						definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.FBDefinition" />
+				</visibleWhen>
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineStartFB"
+				label="Online Start FB">
+				<visibleWhen
+					checkEnabled="false">
+					<reference
+						definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.FBDefinition" />
+				</visibleWhen>
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateConnection"
+				label="Online Create Connection"
+				style="push">
+				<visibleWhen
+					checkEnabled="false">
+					<with
+						variable="selection">
+						<iterate
+							ifEmpty="false"
+							operator="and">
+							<and>
+								<instanceof
+									value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart">
+								</instanceof>
+								<not>
+									<instanceof
+										value="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.ConnectionEditPartRO">
+									</instanceof>
+								</not>
+							</and>
+						</iterate>
+					</with>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution
+			locationURI="menu:org.eclipse.ui.run?after=additions">
+			<separator
+				name="org.eclipse.fordiac.ide.deployment.debug.ui.deviceInteractions"
+				visible="true">
+			</separator>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.cleanDevice"
+				icon="fordiacimage://ICON_CLEAR_DEVICE"
+				label="Clean Device"
+				style="push">
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.fullyCleanDevice"
+				icon="fordiacimage://ICON_CLEAR_DEVICE"
+				label="Fully Clean Device"
+				style="push">
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
+				icon="fordiacimage://ICON_KILL_DEVICE"
+				label="Kill Device"
+				style="push">
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.deleteResource"
+				icon="fordiacimage://ICON_DELETE_RESOURCE"
+				label="Delete Resource"
+				style="push">
+			</command>
+			<separator
+				name="org.eclipse.fordiac.ide.deployment.debug.ui.onlineEdit"
+				visible="true">
+			</separator>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateFB"
+				label="Online Create FB"
+				style="push">
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineStartFB"
+				label="Online Start FB">
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateConnection"
+				label="Online Create Connection"
+				style="push">
+			</command>
+		</menuContribution>
+	</extension>
+	<extension
+		point="org.eclipse.core.expressions.definitions">
+		<definition
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.FBDefinition">
+			<with
+				variable="selection">
+				<iterate ifEmpty="false">
+					<or>
+						<instanceof
+							value="org.eclipse.fordiac.ide.model.libraryElement.FB">
+						</instanceof>
+						<and>
+							<instanceof
+								value="org.eclipse.fordiac.ide.application.editparts.FBEditPart">
+							</instanceof>
+							<not>
+								<or>
+									<instanceof
+										value="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.FBEditPartRO" />
+									<instanceof
+										value="org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.AdapterFBEditPart" />
+								</or>
+							</not>
+						</and>
+					</or>
+				</iterate>
+			</with>
+		</definition>
+		<definition
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.ResourceDefinition">
+			<with variable="selection">
+				<iterate ifEmpty="false">
+					<or>
+						<instanceof
+							value="org.eclipse.fordiac.ide.model.libraryElement.Resource">
+						</instanceof>
+						<instanceof
+							value="org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart">
+						</instanceof>
+					</or>
+				</iterate>
+			</with>
+		</definition>
+		<definition
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition">
+			<with variable="selection">
+				<iterate ifEmpty="false">
+					<or>
+						<instanceof
+							value="org.eclipse.fordiac.ide.model.libraryElement.Device">
+						</instanceof>
+						<instanceof
+							value="org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart">
+						</instanceof>
+					</or>
+				</iterate>
+			</with>
+		</definition>
+	</extension>
 </plugin>

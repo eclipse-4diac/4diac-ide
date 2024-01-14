@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 fortiss GmbH
- * 				 2018 - 2020 Johannes Kepler University
+ * Copyright (c) 2017, 2023 fortiss GmbH, Johannes Kepler University,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,9 +17,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import org.eclipse.draw2d.Border;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.ConnectionAnchor;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.GridData;
+import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
@@ -35,8 +44,12 @@ import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
@@ -44,8 +57,14 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.swt.SWT;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
+
+	Map<IInterfaceElement, TargetInterfaceElement> targetPinChildren = new HashMap<>();
+
+	TargetInterfaceAdapter targetInteraceAdapter = null;
+
 	public class UntypedSubappIEAdapter extends EContentAdapter {
 		@Override
 		public void notifyChanged(final Notification notification) {
@@ -75,6 +94,26 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 		public UntypedSubAppInterfaceElementEditPart getUntypedSubAppInterfaceElementEditPart() {
 			return UntypedSubAppInterfaceElementEditPart.this;
+		}
+	}
+
+	@Override
+	public void activate() {
+		if (!isActive()) {
+			super.activate();
+			if (isInExpandedSubapp()) {
+				targetInteraceAdapter = new TargetInterfaceAdapter(this);
+			}
+		}
+	}
+
+	@Override
+	public void deactivate() {
+		if (isActive()) {
+			if (targetInteraceAdapter != null) {
+				targetInteraceAdapter.deactivate();
+			}
+			super.deactivate();
 		}
 	}
 
@@ -131,7 +170,22 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 	@Override
 	protected IFigure createFigure() {
-		final IFigure figure = super.createFigure();
+		final InterfaceFigure figure = new InterfaceFigure() {
+			@Override
+			public String getSubStringText() {
+				return (getChildren().isEmpty()) ? super.getSubStringText() : "";
+			}
+
+			@Override
+			protected void paintFigure(final Graphics graphics) {
+				if (!getChildren().isEmpty()) {
+					graphics.fillRoundRectangle(getBounds(), 8, 8);
+				}
+				super.paintFigure(graphics);
+			}
+		};
+		figure.setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
+
 		figure.setBorder(new UntypedSubappConnectorBorder(getModel()));
 		return figure;
 	}
@@ -152,6 +206,57 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			return new FixedAnchor(getFigure(), !isInput());
 		}
 		return super.getTargetConnectionAnchor(connection);
+	}
+
+	@Override
+	protected List getModelChildren() {
+		if (isInExpandedSubapp()) {
+			final List<IInterfaceElement> pins = isInput() ? getSourcePins() : getTargetPins();
+
+			// remove entries from our map if they are not in the list anymore
+			targetPinChildren.keySet().removeIf(key -> !pins.contains(key));
+
+			// add any missing entries
+			pins.forEach(pin -> targetPinChildren.computeIfAbsent(pin, TargetInterfaceElement::new));
+		} else {
+			targetPinChildren.clear();
+		}
+		return targetPinChildren.values().stream().sorted().toList();
+	}
+
+	private boolean isInExpandedSubapp() {
+		return (getModel().getFBNetworkElement() instanceof final SubApp subApp) && subApp.isUnfolded();
+	}
+
+	private List<IInterfaceElement> getTargetPins() {
+		// TODO Distinguish between expanded subapp pins, fbs, and container subapp pin
+		return getModel().getOutputConnections().stream()
+				.filter(con -> (!con.isVisible() && con.getDestination() != null))
+				.flatMap(con -> con.getDestination().getOutputConnections().stream()).map(Connection::getDestination)
+				.filter(Objects::nonNull).toList();
+	}
+
+	private List<IInterfaceElement> getSourcePins() {
+		// TODO Distinguish between expanded subapp pins, fbs, and container subapp pin
+		return getModel().getInputConnections().stream().filter(con -> (!con.isVisible() && con.getSource() != null))
+				.flatMap(con -> con.getSource().getInputConnections().stream()).map(Connection::getSource)
+				.filter(Objects::nonNull).toList();
+	}
+
+	@Override
+	protected void addChildVisual(final EditPart childEditPart, final int index) {
+		final var epFigure = getFigure();
+		if (epFigure.getLayoutManager() == null) {
+			final var tbLayout = new GridLayout(1, true);
+			tbLayout.marginHeight = 2;
+			tbLayout.marginWidth = 0;
+			tbLayout.verticalSpacing = 2;
+			tbLayout.horizontalSpacing = 0;
+			epFigure.setLayoutManager(tbLayout);
+			epFigure.setBackgroundColor(ColorConstants.white);
+		}
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		getContentPane().add(child, new GridData(SWT.FILL, SWT.BEGINNING, true, false), index);
 	}
 
 }

@@ -33,6 +33,7 @@ import org.eclipse.swt.graphics.Font;
 
 public class FBNetworkConnectionLabel extends Figure implements RotatableDecoration {
 
+	public static final int HIDDEN_CON_LABEL_ALPHA = 150;
 	private final Label label;
 	private final boolean srcLabel;
 
@@ -52,7 +53,7 @@ public class FBNetworkConnectionLabel extends Figure implements RotatableDecorat
 		rect.setAntialias(1);
 		rect.setOutline(false);
 		rect.setCornerDimensions(new Dimension(10, 10));
-		rect.setAlpha(150);
+		rect.setAlpha(HIDDEN_CON_LABEL_ALPHA);
 		return rect;
 	}
 

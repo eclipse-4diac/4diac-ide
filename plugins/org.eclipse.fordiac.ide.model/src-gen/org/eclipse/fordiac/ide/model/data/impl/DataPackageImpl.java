@@ -60,7 +60,6 @@ import org.eclipse.fordiac.ide.model.data.DerivedType;
 import org.eclipse.fordiac.ide.model.data.DintType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DwordType;
-import org.eclipse.fordiac.ide.model.data.ElementaryType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 import org.eclipse.fordiac.ide.model.data.EventType;
@@ -170,13 +169,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	private EClass valueTypeEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass elementaryTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -656,6 +648,26 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getDirectlyDerivedType_BaseType() {
+		return (EReference)directlyDerivedTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDirectlyDerivedType_InitialValue() {
+		return (EAttribute)directlyDerivedTypeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getEnumeratedType() {
 		return enumeratedTypeEClass;
 	}
@@ -778,16 +790,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	@Override
 	public EClass getValueType() {
 		return valueTypeEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getElementaryType() {
-		return elementaryTypeEClass;
 	}
 
 	/**
@@ -1319,6 +1321,8 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		dataTypeEClass = createEClass(DATA_TYPE);
 
 		directlyDerivedTypeEClass = createEClass(DIRECTLY_DERIVED_TYPE);
+		createEReference(directlyDerivedTypeEClass, DIRECTLY_DERIVED_TYPE__BASE_TYPE);
+		createEAttribute(directlyDerivedTypeEClass, DIRECTLY_DERIVED_TYPE__INITIAL_VALUE);
 
 		enumeratedTypeEClass = createEClass(ENUMERATED_TYPE);
 		createEReference(enumeratedTypeEClass, ENUMERATED_TYPE__ENUMERATED_VALUE);
@@ -1338,8 +1342,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		createEReference(subrangeTypeEClass, SUBRANGE_TYPE__SUBRANGE);
 
 		valueTypeEClass = createEClass(VALUE_TYPE);
-
-		elementaryTypeEClass = createEClass(ELEMENTARY_TYPE);
 
 		derivedTypeEClass = createEClass(DERIVED_TYPE);
 		createEReference(derivedTypeEClass, DERIVED_TYPE__BASE_TYPE);
@@ -1474,12 +1476,11 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		anyDerivedTypeEClass.getESuperTypes().add(this.getAnyType());
 		arrayTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
 		dataTypeEClass.getESuperTypes().add(theLibraryElementPackage.getLibraryElement());
-		directlyDerivedTypeEClass.getESuperTypes().add(this.getDerivedType());
+		directlyDerivedTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
 		enumeratedTypeEClass.getESuperTypes().add(this.getValueType());
 		structuredTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
 		subrangeTypeEClass.getESuperTypes().add(this.getDerivedType());
 		valueTypeEClass.getESuperTypes().add(this.getDataType());
-		elementaryTypeEClass.getESuperTypes().add(this.getValueType());
 		derivedTypeEClass.getESuperTypes().add(this.getValueType());
 		eventTypeEClass.getESuperTypes().add(this.getDataType());
 		anyTypeEClass.getESuperTypes().add(this.getDataType());
@@ -1551,6 +1552,8 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(directlyDerivedTypeEClass, DirectlyDerivedType.class, "DirectlyDerivedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getDirectlyDerivedType_BaseType(), this.getDataType(), null, "baseType", null, 1, 1, DirectlyDerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getDirectlyDerivedType_InitialValue(), ecorePackage.getEString(), "initialValue", null, 0, 1, DirectlyDerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(directlyDerivedTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
@@ -1586,13 +1589,8 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		op = addEOperation(valueTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(elementaryTypeEClass, ElementaryType.class, "ElementaryType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-
-		op = addEOperation(elementaryTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
 		initEClass(derivedTypeEClass, DerivedType.class, "DerivedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getDerivedType_BaseType(), this.getElementaryType(), null, "baseType", null, 1, 1, DerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getDerivedType_BaseType(), this.getDataType(), null, "baseType", null, 1, 1, DerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(derivedTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

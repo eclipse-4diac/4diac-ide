@@ -16,7 +16,9 @@ package org.eclipse.fordiac.ide.model.dataexport;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -42,11 +44,21 @@ public class AttributeTypeExporter extends AbstractTypeExporter {
 
 		if (getType().getType() instanceof final StructuredType struct) {
 			createStructContent(struct);
+		} else if (getType().getType() instanceof final DirectlyDerivedType ddt) {
+			createDirectlyDerivedTypeContent(ddt);
 		}
 
 		if (!getType().getAttributes().isEmpty()) {
 			addAttributes(getType().getAttributes());
 		}
+	}
+
+	private void createDirectlyDerivedTypeContent(final DirectlyDerivedType type) throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.DIRECTLY_DERIVED_TYPE);
+		getWriter().writeAttribute(LibraryElementTags.BASE_TYPE_ATTRIBUTE,
+				PackageNameHelper.getFullTypeName(type.getBaseType()));
+		getWriter().writeAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, type.getInitialValue());
+		getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, type.getComment());
 	}
 
 	private void createStructContent(final StructuredType type) throws XMLStreamException {

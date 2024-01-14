@@ -11,6 +11,14 @@
   <foreignModel>xmiexport.ecore</foreignModel>
   <genPackages prefix="XMIExport" basePackage="org.eclipse.fordiac.ide.xmiexport"
       disposableProviderFactory="true" ecorePackage="xmiexport.ecore#/">
+    <genClasses ecoreClass="xmiexport.ecore#//XMIExportAttributeValues">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportAttributeValues/attributeValues"/>
+    </genClasses>
+    <genClasses ecoreClass="xmiexport.ecore#//XMIExportAttributeValue">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportAttributeValue/attribute"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportAttributeValue/expression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute xmiexport.ecore#//XMIExportAttributeValue/value"/>
+    </genClasses>
     <genClasses ecoreClass="xmiexport.ecore#//XMIExportInitialValues">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportInitialValues/initialValues"/>
     </genClasses>

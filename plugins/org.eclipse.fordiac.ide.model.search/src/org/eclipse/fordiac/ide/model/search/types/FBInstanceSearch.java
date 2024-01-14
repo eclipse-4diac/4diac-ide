@@ -32,6 +32,10 @@ public class FBInstanceSearch extends InstanceSearch {
 		super(new FBTypeInstanceSearchFilter(fbType));
 	}
 
+	public FBInstanceSearch(final String name) {
+		super(new FBTypeNameInstanceSearchFilter(name));
+	}
+
 	protected FBInstanceSearch(final SearchFilter filter) {
 		super(filter);
 	}
@@ -72,4 +76,22 @@ public class FBInstanceSearch extends InstanceSearch {
 
 	}
 
+
+	private static class FBTypeNameInstanceSearchFilter implements SearchFilter {
+
+		private final String name;
+
+		public FBTypeNameInstanceSearchFilter(final String name) {
+			this.name = name;
+		}
+
+		@Override
+		public boolean apply(final INamedElement searchCanditate) {
+			if (searchCanditate instanceof final FBNetworkElement fbn) {
+				return fbn.getType() != null && fbn.getFullTypeName().equals(name);
+			}
+			return false;
+		}
+
+	}
 }

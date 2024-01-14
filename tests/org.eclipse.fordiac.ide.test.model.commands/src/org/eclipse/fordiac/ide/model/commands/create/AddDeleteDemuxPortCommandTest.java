@@ -36,8 +36,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.typelibrary.testmocks.DataTypeEntryMock;
-import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock;
+import org.eclipse.fordiac.ide.test.model.typelibrary.DataTypeEntryMock;
+import org.eclipse.fordiac.ide.test.model.typelibrary.FBTypeEntryMock;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {

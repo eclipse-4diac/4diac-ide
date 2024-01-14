@@ -73,6 +73,10 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Attribute/attributeDeclaration"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Attribute/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Attribute/value"/>
+      <genOperations ecoreOperation="lib.ecore#//Attribute/validateName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeAnnotations.validateName(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//Attribute/validateName/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//Attribute/validateName/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AttributeDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AttributeDeclaration/type"/>
@@ -851,6 +855,8 @@
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//DirectlyDerivedType">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference data.ecore#//DirectlyDerivedType/baseType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//DirectlyDerivedType/initialValue"/>
       <genOperations ecoreOperation="data.ecore#//DirectlyDerivedType/isAssignableFrom"
           body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//DirectlyDerivedType/isAssignableFrom/other"/>
@@ -887,12 +893,6 @@
     <genClasses ecoreClass="data.ecore#//ValueType">
       <genOperations ecoreOperation="data.ecore#//ValueType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//ValueType/isAssignableFrom/other"/>
-      </genOperations>
-    </genClasses>
-    <genClasses ecoreClass="data.ecore#//ElementaryType">
-      <genOperations ecoreOperation="data.ecore#//ElementaryType/isAssignableFrom"
-          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
-        <genParameters ecoreParameter="data.ecore#//ElementaryType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//DerivedType">

@@ -8,7 +8,7 @@ Require-Bundle: org.eclipse.ui.ide,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.ui.console,
  org.eclipse.fordiac.ide.ui,
- org.eclipse.fordiac.ide.deployment.ui,
+ org.eclipse.fordiac.ide.deployment.bootfile,
  org.eclipse.swt
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy

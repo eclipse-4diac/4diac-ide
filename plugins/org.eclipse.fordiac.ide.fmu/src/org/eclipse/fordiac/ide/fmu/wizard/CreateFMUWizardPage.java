@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fmu.wizard;
 
-import org.eclipse.fordiac.ide.deployment.ui.wizard.CreateBootFilesWizardPage;
+import org.eclipse.fordiac.ide.deployment.bootfile.wizard.CreateBootFilesWizardPage;
 import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferencePage;

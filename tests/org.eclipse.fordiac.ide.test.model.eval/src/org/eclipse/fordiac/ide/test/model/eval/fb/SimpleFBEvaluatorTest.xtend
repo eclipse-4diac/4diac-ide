@@ -26,8 +26,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.model.typelibrary.testmocks.DataTypeEntryMock
-import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock
+import org.eclipse.fordiac.ide.test.model.typelibrary.DataTypeEntryMock
+import org.eclipse.fordiac.ide.test.model.typelibrary.FBTypeEntryMock
 import org.junit.jupiter.api.Test
 
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*

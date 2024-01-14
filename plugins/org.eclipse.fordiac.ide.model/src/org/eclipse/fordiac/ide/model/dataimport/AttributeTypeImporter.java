@@ -19,6 +19,8 @@ import javax.xml.stream.XMLStreamException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -72,6 +74,10 @@ public class AttributeTypeImporter extends TypeImporter {
 			case LibraryElementTags.STRUCTURED_TYPE_ELEMENT:
 				parseStructuredType(getElement());
 				break;
+			case LibraryElementTags.DIRECTLY_DERIVED_TYPE:
+				parseDirectlyDerivedType(getElement());
+				proceedToEndElementNamed(LibraryElementTags.DIRECTLY_DERIVED_TYPE);
+				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseGenericAttributeNode(getElement());
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
@@ -81,6 +87,22 @@ public class AttributeTypeImporter extends TypeImporter {
 			}
 			return true;
 		};
+	}
+
+	private void parseDirectlyDerivedType(final AttributeDeclaration attribute) {
+		final DirectlyDerivedType directlyDerivedType = DataFactory.eINSTANCE.createDirectlyDerivedType();
+
+		final String baseTypeName = getAttributeValue(LibraryElementTags.BASE_TYPE_ATTRIBUTE);
+		final DataType baseType = getDataTypeLibrary().getType(baseTypeName);
+		directlyDerivedType.setBaseType(baseType);
+
+		final String initalValue = getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE);
+		directlyDerivedType.setInitialValue(initalValue);
+
+		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+		directlyDerivedType.setComment(comment);
+
+		attribute.setType(directlyDerivedType);
 	}
 
 	private void parseStructuredType(final AttributeDeclaration attribute)
