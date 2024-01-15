@@ -91,6 +91,7 @@ public class AttributeTypeImporter extends TypeImporter {
 
 	private void parseDirectlyDerivedType(final AttributeDeclaration attribute) {
 		final DirectlyDerivedType directlyDerivedType = DataFactory.eINSTANCE.createDirectlyDerivedType();
+		directlyDerivedType.setName(attribute.getName());
 
 		final String baseTypeName = getAttributeValue(LibraryElementTags.BASE_TYPE_ATTRIBUTE);
 		final DataType baseType = getDataTypeLibrary().getType(baseTypeName);
@@ -108,6 +109,7 @@ public class AttributeTypeImporter extends TypeImporter {
 	private void parseStructuredType(final AttributeDeclaration attribute)
 			throws XMLStreamException, TypeImportException {
 		final StructuredType struct = DataFactory.eINSTANCE.createStructuredType();
+		struct.setName(attribute.getName());
 		processChildren(LibraryElementTags.STRUCTURED_TYPE_ELEMENT, name -> {
 			if (LibraryElementTags.VAR_DECLARATION_ELEMENT.equals(name)) {
 				struct.getMemberVariables().add(parseVarDeclaration());
