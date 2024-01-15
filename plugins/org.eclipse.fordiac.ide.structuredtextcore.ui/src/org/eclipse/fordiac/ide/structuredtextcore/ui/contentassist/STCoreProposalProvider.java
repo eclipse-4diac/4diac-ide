@@ -42,6 +42,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.CrossReference;
+import org.eclipse.xtext.Keyword;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
@@ -68,6 +69,18 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 
 	@Inject
 	private STCoreGrammarAccess grammarAccess;
+
+	@Override
+	public void completeKeyword(final Keyword keyword, final ContentAssistContext contentAssistContext,
+			final ICompletionProposalAcceptor acceptor) {
+		if (isKeywordWorthyToPropose(keyword)) {
+			super.completeKeyword(keyword, contentAssistContext, acceptor);
+		}
+	}
+
+	protected static boolean isKeywordWorthyToPropose(final Keyword keyword) {
+		return keyword.getValue().length() > 1 && Character.isLetter(keyword.getValue().charAt(0));
+	}
 
 	@Override
 	public void completeSTFeatureExpression_Feature(final EObject model, final Assignment assignment,
