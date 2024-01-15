@@ -444,4 +444,13 @@
 			</with>
 		</definition>
 	</extension>
+ <extension
+       point="org.eclipse.ui.perspectiveExtensions">
+    <perspectiveExtension
+          targetID="org.eclipse.fordiac.ide.SystemPerspective">
+       <actionSet
+             id="org.eclipse.debug.ui.launchActionSet">
+       </actionSet>
+    </perspectiveExtension>
+ </extension>
 </plugin>
