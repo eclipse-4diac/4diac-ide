@@ -117,7 +117,14 @@
 		</factory>
 		<factory
 			class=""
-			adaptableType="org.eclipse.gef.EditPart">
+			adaptableType="org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart">
+			<adapter
+				type="org.eclipse.debug.ui.actions.ILaunchable">
+			</adapter>
+		</factory>
+		<factory
+			class=""
+			adaptableType="org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart">
 			<adapter
 				type="org.eclipse.debug.ui.actions.ILaunchable">
 			</adapter>
