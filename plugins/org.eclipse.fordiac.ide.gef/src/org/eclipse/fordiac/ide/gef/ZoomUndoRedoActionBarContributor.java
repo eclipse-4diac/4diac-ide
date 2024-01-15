@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2012 Profactor GbmH, TU Wien ACIN
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -26,24 +26,19 @@ import org.eclipse.ui.actions.ActionFactory;
 
 /**
  * This class adds the entries for the Toolbar.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class ZoomUndoRedoActionBarContributor extends ActionBarContributor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToToolBar(org.
 	 * eclipse.jface.action.IToolBarManager)
 	 */
 	@Override
 	public void contributeToToolBar(final IToolBarManager toolBarManager) {
-
-		toolBarManager.add(getAction(ActionFactory.UNDO.getId()));
-		toolBarManager.add(getAction(ActionFactory.REDO.getId()));
-
-		toolBarManager.add(new Separator());
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_LEFT));
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_CENTER));
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_RIGHT));
@@ -55,7 +50,7 @@ public class ZoomUndoRedoActionBarContributor extends ActionBarContributor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.ui.actions.ActionBarContributor#buildActions()
 	 */
 	@Override
@@ -74,7 +69,7 @@ public class ZoomUndoRedoActionBarContributor extends ActionBarContributor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.gef.ui.actions.ActionBarContributor#declareGlobalActionKeys()
 	 */
