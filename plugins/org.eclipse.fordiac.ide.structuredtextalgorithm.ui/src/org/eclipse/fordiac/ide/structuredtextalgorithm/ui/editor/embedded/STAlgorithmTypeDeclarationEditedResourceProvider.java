@@ -12,14 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.ParserRule;
 
 public class STAlgorithmTypeDeclarationEditedResourceProvider extends STAlgorithmEditedResourceProvider {
 	public STAlgorithmTypeDeclarationEditedResourceProvider(final INamedElement element) {
-		super(EcoreUtil2.getContainerOfType(element, LibraryElement.class));
+		super(EcoreUtil.getRootContainer(element) instanceof final LibraryElement libraryElement ? libraryElement
+				: null);
 	}
 
 	@Override
