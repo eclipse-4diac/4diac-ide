@@ -79,20 +79,12 @@ public class DeploymentLaunchShortcut implements ILaunchShortcut2 {
 			return;
 		}
 		try {
-			final ILaunchConfiguration[] configurations = getLaunchConfgurations(resource);
-			if (configurations == null) {
-				return;
-			}
-			if (configurations.length == 0) {
-				final ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
-				final ILaunchConfigurationType type = manager
-						.getLaunchConfigurationType(DeploymentLaunchConfigurationAttributes.ID);
-				final ILaunchConfigurationWorkingCopy configuration = type.newInstance(null, resource.getName());
-				initializeDefaultLaunchConfiguration(configuration, resource, selection, mode);
-				configuration.launch(mode, new NullProgressMonitor());
-			} else {
-				configurations[0].launch(mode, new NullProgressMonitor());
-			}
+			final ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+			final ILaunchConfigurationType type = manager
+					.getLaunchConfigurationType(DeploymentLaunchConfigurationAttributes.ID);
+			final ILaunchConfigurationWorkingCopy configuration = type.newInstance(null, resource.getName());
+			initializeDefaultLaunchConfiguration(configuration, resource, selection, mode);
+			configuration.launch(mode, new NullProgressMonitor());
 		} catch (final CoreException e) {
 			FordiacLogHelper.logWarning(e.getMessage(), e);
 		}
