@@ -14,8 +14,10 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
@@ -36,10 +38,17 @@ public class ChangeAttributeDeclarationCommand extends AbstractChangeAttributeCo
 	public static boolean attributeDeclarationChanged(final Attribute attribute, final String newName) {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(attribute);
 
-		AttributeDeclaration newDecl = null;
-		if (typeLibrary != null && typeLibrary.getAttributeTypeEntry(newName) != null) {
-			newDecl = typeLibrary.getAttributeTypeEntry(newName).getType();
+		if (typeLibrary == null) {
+			// if we don't have a typelib (e.g., some test cases) it can only be a named
+			// attribute.
+			return false;
 		}
+
+		final AttributeDeclaration newDecl = ImportHelper.resolveImport(newName, attribute.eContainer(), name -> {
+			final AttributeTypeEntry entry = typeLibrary.getAttributeTypeEntry(name);
+			return entry != null ? entry.getType() : null;
+		}, name -> null);
+
 		final AttributeDeclaration oldDecl = attribute.getAttributeDeclaration();
 		return oldDecl != newDecl;
 	}
@@ -47,9 +56,11 @@ public class ChangeAttributeDeclarationCommand extends AbstractChangeAttributeCo
 	public static ChangeAttributeDeclarationCommand forName(final Attribute attribute, final String newName) {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(attribute);
 
-		if (typeLibrary != null && typeLibrary.getAttributeTypeEntry(newName) != null) {
-			final AttributeDeclaration newDecl = typeLibrary.getAttributeTypeEntry(newName).getType();
-			return new ChangeAttributeDeclarationCommand(attribute, newDecl, newDecl.getType());
+		final AttributeTypeEntry entry = ImportHelper.resolveImport(newName, attribute.eContainer(),
+				typeLibrary::getAttributeTypeEntry, name -> null);
+
+		if (entry != null && entry.getType() != null) {
+			return new ChangeAttributeDeclarationCommand(attribute, entry.getType(), entry.getType().getType());
 		}
 		if (attribute.getAttributeDeclaration() != null) {
 			return new ChangeAttributeDeclarationCommand(attribute, null, ElementaryTypes.STRING);

@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.Collections;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
@@ -28,10 +29,15 @@ import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.IndexUpDown;
+import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteAttributeCommand;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
@@ -184,17 +190,23 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		return type instanceof final ConfigurableObject configurableObject ? configurableObject : null;
 	}
 
-	protected static class AttributeNameCellEditor extends TextCellEditor {
+	protected class AttributeNameCellEditor extends TextCellEditor {
 
 		@Override
 		protected void configureContentProposalAdapter(final ContentProposalAdapter contentProposalAdapter) {
-			super.configureContentProposalAdapter(contentProposalAdapter);
 			contentProposalAdapter.addContentProposalListener(this::proposalAccepted);
+			super.configureContentProposalAdapter(contentProposalAdapter);
 		}
 
 		protected void proposalAccepted(final IContentProposal proposal) {
-			// TODO add import here
-			System.out.println(proposal.getContent());
+			final AttributeTypeEntry packageEntry = ImportHelper.resolveImport(
+					PackageNameHelper.extractPlainTypeName(proposal.getContent()), getType(),
+					getTypeLibrary()::getAttributeTypeEntry, name -> null);
+
+			if (packageEntry == null
+					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement) {
+				commandStack.execute(new AddNewImportCommand(libraryElement, proposal.getContent()));
+			}
 		}
 	}
 }

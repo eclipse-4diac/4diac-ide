@@ -51,6 +51,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
@@ -423,8 +424,9 @@ public abstract class CommonElementImporter {
 				attribute.setType(addDependency(getDataTypeLibrary().getType(typeName)));
 			}
 		} else {
-			final AttributeTypeEntry attributeTypeEntry = addDependency(
-					getTypeLibrary().getAttributeTypeEntry(attribute.getName()));
+			final AttributeTypeEntry entry = ImportHelper.resolveImport(attribute.getName(), confObject,
+					name -> getTypeLibrary().getAttributeTypeEntry(name), name -> null);
+			final AttributeTypeEntry attributeTypeEntry = addDependency(entry);
 			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
 				attribute.setAttributeDeclaration(attributeTypeEntry.getType());
 				attribute.setType(attributeTypeEntry.getType().getType());
