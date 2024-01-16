@@ -74,7 +74,7 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 			cmdToExecuteBefore = null;
 		}
 
-		if (!isLockedGroup()) {
+		if (!isLockedGroup() || isExpandedSubapp()) {
 			GraphicalEditPart parent = getTargetContainerEP();
 			while (parent != null) {
 				addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent, fbnetworkElements));
@@ -133,6 +133,13 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 				|| (graphicalEditPart instanceof final GroupEditPart group && group.getModel().isLocked());
 	}
 
+	private boolean isExpandedSubapp() {
+		return (graphicalEditPart instanceof final UnfoldedSubappContentEditPart subAppContent
+				&& subAppContent.getModel().getSubapp().isUnfolded())
+				|| (graphicalEditPart instanceof final SubAppForFBNetworkEditPart subAppEP
+						&& subAppEP.getModel().isUnfolded());
+	}
+
 	private GraphicalEditPart getTargetContainerEP() {
 		if (graphicalEditPart instanceof final IContainerEditPart iContainerEP) {
 			return iContainerEP.getContentEP();
@@ -156,14 +163,15 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 				&& (containerEP instanceof final AbstractContainerContentEditPart abstractContainerContentEditPart)) {
 			children = abstractContainerContentEditPart.getModel().getNetworkElements();
 		}
-
-		final Rectangle fbBounds = getFBBounds(children);
-		final Rectangle containerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(containerEP);
-		if (fbBounds != null && !containerBounds.contains(fbBounds)) {
-			fbBounds.union(containerBounds);
-			final FBNetworkElement container = getContainer(containerEP);
-			if (container != null) {
-				return ContainerContentLayoutPolicy.createChangeBoundsCommand(container, containerBounds, fbBounds);
+		if (children != null) {
+			final Rectangle fbBounds = getFBBounds(children);
+			final Rectangle containerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(containerEP);
+			if (fbBounds != null && !containerBounds.contains(fbBounds)) {
+				fbBounds.union(containerBounds);
+				final FBNetworkElement container = getContainer(containerEP);
+				if (container != null) {
+					return ContainerContentLayoutPolicy.createChangeBoundsCommand(container, containerBounds, fbBounds);
+				}
 			}
 		}
 		return null;
