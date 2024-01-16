@@ -17,10 +17,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.ColorConstants;
@@ -31,6 +28,8 @@ import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -44,8 +43,6 @@ import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.ConnectionEditPart;
@@ -61,9 +58,25 @@ import org.eclipse.swt.SWT;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
 
-	Map<IInterfaceElement, TargetInterfaceElement> targetPinChildren = new HashMap<>();
-
+	private final TargetPinManager targetPinManager = new TargetPinManager(this);
 	TargetInterfaceAdapter targetInteraceAdapter = null;
+
+	private final class SubappInternalConnAnchor extends FixedAnchor {
+		private SubappInternalConnAnchor(final IFigure owner, final boolean isInput) {
+			super(owner, isInput);
+		}
+
+		@Override
+		public Point getLocation(final Point reference) {
+			final Point location = super.getLocation(reference);
+			final IFigure subappFigure = ((GraphicalEditPart) getParent()).getFigure();
+			final Rectangle bounds = subappFigure.getBounds().getCopy();
+			subappFigure.translateToAbsolute(bounds);
+			location.y = Math.max(location.y, bounds.y);
+			location.y = Math.min(location.y, bounds.y + bounds.height);
+			return location;
+		}
+	}
 
 	public class UntypedSubappIEAdapter extends EContentAdapter {
 		@Override
@@ -194,7 +207,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		if (isInput()) {
 			// we are unfolded and this is an internal connection
-			return new FixedAnchor(getFigure(), !isInput());
+			return new SubappInternalConnAnchor(getFigure(), !isInput());
 		}
 		return new FixedAnchor(getFigure(), isInput());
 	}
@@ -203,7 +216,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
 		if (!isInput()) {
 			// we are unfolded and this is an internal connection
-			return new FixedAnchor(getFigure(), !isInput());
+			return new SubappInternalConnAnchor(getFigure(), !isInput());
 		}
 		return super.getTargetConnectionAnchor(connection);
 	}
@@ -211,36 +224,13 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	@Override
 	protected List getModelChildren() {
 		if (isInExpandedSubapp()) {
-			final List<IInterfaceElement> pins = isInput() ? getSourcePins() : getTargetPins();
-
-			// remove entries from our map if they are not in the list anymore
-			targetPinChildren.keySet().removeIf(key -> !pins.contains(key));
-
-			// add any missing entries
-			pins.forEach(pin -> targetPinChildren.computeIfAbsent(pin, TargetInterfaceElement::new));
-		} else {
-			targetPinChildren.clear();
+			return targetPinManager.getModelChildren();
 		}
-		return targetPinChildren.values().stream().sorted().toList();
+		return super.getModelChildren();
 	}
 
 	private boolean isInExpandedSubapp() {
 		return (getModel().getFBNetworkElement() instanceof final SubApp subApp) && subApp.isUnfolded();
-	}
-
-	private List<IInterfaceElement> getTargetPins() {
-		// TODO Distinguish between expanded subapp pins, fbs, and container subapp pin
-		return getModel().getOutputConnections().stream()
-				.filter(con -> (!con.isVisible() && con.getDestination() != null))
-				.flatMap(con -> con.getDestination().getOutputConnections().stream()).map(Connection::getDestination)
-				.filter(Objects::nonNull).toList();
-	}
-
-	private List<IInterfaceElement> getSourcePins() {
-		// TODO Distinguish between expanded subapp pins, fbs, and container subapp pin
-		return getModel().getInputConnections().stream().filter(con -> (!con.isVisible() && con.getSource() != null))
-				.flatMap(con -> con.getSource().getInputConnections().stream()).map(Connection::getSource)
-				.filter(Objects::nonNull).toList();
 	}
 
 	@Override

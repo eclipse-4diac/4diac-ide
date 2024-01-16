@@ -32,26 +32,26 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
 
-public class ServiceInterfaceFBEvaluator extends FBEvaluator<ServiceInterfaceFBType> {
+public class DeploymentFBEvaluator<T extends FBType> extends FBEvaluator<T> {
 
 	private DeploymentEvaluatorSharedState sharedState;
 	private FBDeploymentData deploymentData;
 	private Map<String, MonitoringElement> monitoringElements;
 	private boolean outputEvent;
 
-	public ServiceInterfaceFBEvaluator(final ServiceInterfaceFBType type, final Variable<?> context,
-			final Iterable<Variable<?>> variables, final Evaluator parent) {
+	public DeploymentFBEvaluator(final T type, final Variable<?> context, final Iterable<Variable<?>> variables,
+			final Evaluator parent) {
 		super(type, context, variables, parent);
 	}
 
@@ -76,6 +76,22 @@ public class ServiceInterfaceFBEvaluator extends FBEvaluator<ServiceInterfaceFBT
 		}
 	}
 
+	public void cleanup() {
+		if (sharedState != null) {
+			try {
+				for (final MonitoringBaseElement element : monitoringElements.values()) {
+					sharedState.getDeviceManagementInteractor().removeWatch(element);
+				}
+				sharedState.deleteFB(deploymentData);
+				sharedState.getResource().getFBNetwork().getNetworkElements().remove(deploymentData.getFb());
+			} catch (final DeploymentException e) {
+				throw new RuntimeException(e);
+			} finally {
+				sharedState = null;
+			}
+		}
+	}
+
 	protected FBDeploymentData createFBDeploymentData(final Resource resource) {
 		final FB fb = LibraryElementFactory.eINSTANCE.createFB();
 		fb.setName(getName() + "_" + UUID.randomUUID().toString()); //$NON-NLS-1$
@@ -85,12 +101,12 @@ public class ServiceInterfaceFBEvaluator extends FBEvaluator<ServiceInterfaceFBT
 		return new FBDeploymentData("", fb); //$NON-NLS-1$
 	}
 
-	protected Map<String, MonitoringElement> createMonitoringElements(final FBNetworkElement fbne) {
+	protected static Map<String, MonitoringElement> createMonitoringElements(final FBNetworkElement fbne) {
 		return fbne.getInterface().getAllInterfaceElements().stream()
-				.collect(Collectors.toMap(INamedElement::getName, this::createMonitoringElement));
+				.collect(Collectors.toMap(INamedElement::getName, DeploymentFBEvaluator::createMonitoringElement));
 	}
 
-	protected MonitoringElement createMonitoringElement(final IInterfaceElement interfaceElement) {
+	protected static MonitoringElement createMonitoringElement(final IInterfaceElement interfaceElement) {
 		final MonitoringElement monitoringElement = MonitoringFactory.eINSTANCE.createMonitoringElement();
 		monitoringElement.setPort(MonitoringManagerUtils.createPortElement(interfaceElement));
 		return monitoringElement;
@@ -149,6 +165,22 @@ public class ServiceInterfaceFBEvaluator extends FBEvaluator<ServiceInterfaceFBT
 				}
 			}
 		}
+	}
+
+	protected DeploymentEvaluatorSharedState getSharedState() {
+		return sharedState;
+	}
+
+	protected FBDeploymentData getDeploymentData() {
+		return deploymentData;
+	}
+
+	protected Map<String, MonitoringElement> getMonitoringElements() {
+		return monitoringElements;
+	}
+
+	protected void setMonitoringElements(final Map<String, MonitoringElement> monitoringElements) {
+		this.monitoringElements = monitoringElements;
 	}
 
 	@Override

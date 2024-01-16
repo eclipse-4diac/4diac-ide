@@ -55,8 +55,10 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		if (!isActive()) {
 			super.activate();
 			getRefElement().eAdapters().add(nameChangeAdapter);
-			getRefElement().getFBNetworkElement().eAdapters().add(nameChangeAdapter);
-			getRefElement().getFBNetworkElement().getOuterFBNetworkElement().eAdapters().add(nameChangeAdapter);
+			if (!isSubappInterfaceTarget()) {
+				getRefElement().getFBNetworkElement().eAdapters().add(nameChangeAdapter);
+				getRefElement().getFBNetworkElement().getOuterFBNetworkElement().eAdapters().add(nameChangeAdapter);
+			}
 		}
 	}
 
@@ -64,12 +66,14 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			getRefElement().eAdapters().remove(nameChangeAdapter);
-			final FBNetworkElement parent = getRefElement().getFBNetworkElement();
-			if (parent != null) {
-				parent.eAdapters().add(nameChangeAdapter);
-				final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
-				if (grandParent != null) {
-					grandParent.eAdapters().add(nameChangeAdapter);
+			if (!isSubappInterfaceTarget()) {
+				final FBNetworkElement parent = getRefElement().getFBNetworkElement();
+				if (parent != null) {
+					parent.eAdapters().add(nameChangeAdapter);
+					final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
+					if (grandParent != null) {
+						grandParent.eAdapters().add(nameChangeAdapter);
+					}
 				}
 			}
 			super.deactivate();
@@ -115,7 +119,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private String getLabelText() {
-		return getRefElement().getComment() + "\n" + getModel().getRefPinFullName();
+		return getModel().getRefPinFullName() + "\n" + getRefElement().getComment(); //$NON-NLS-1$
 	}
 
 	@Override
@@ -148,6 +152,10 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 			return PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
 		}
 		return PreferenceGetter.getDataColor(getRefElement().getType().getName());
+	}
+
+	private boolean isSubappInterfaceTarget() {
+		return getModel() instanceof TargetInterfaceElement.SubapTargetInterfaceElement;
 	}
 
 }

@@ -21,6 +21,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -29,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.dialogs.PopupDialog;
@@ -51,7 +53,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class FollowConnectionHandler extends AbstractHandler {
+public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	private static class OppositeSelectionDialog extends PopupDialog {
 
@@ -177,18 +179,32 @@ public class FollowConnectionHandler extends AbstractHandler {
 
 	}
 
-	protected static List<IInterfaceElement> getConnectionOposites(final ISelection selection,
-			final FBNetwork fbNetwork) {
+	protected List<IInterfaceElement> getConnectionOposites(final ISelection selection, final FBNetwork fbNetwork) {
 		if (selection instanceof final IStructuredSelection structuredSelection && !selection.isEmpty()
 				&& (structuredSelection.size() == 1)
 				&& (structuredSelection.getFirstElement() instanceof final InterfaceEditPart iep)) {
 			// only if only one element is selected
+			if (useTargetPins(iep)) {
+				return getTargetPins(iep);
+			}
 			final IInterfaceElement ie = iep.getModel();
 			final EList<Connection> connList = getConnectionList(ie, fbNetwork);
 			return connList.stream().map(con -> (con.getSource().equals(ie) ? con.getDestination() : con.getSource()))
 					.toList();
 		}
 		return Collections.emptyList();
+	}
+
+	private boolean useTargetPins(final InterfaceEditPart iep) {
+		return !iep.getChildren().isEmpty()
+				&& ((iep.getModel().isIsInput() && isLeft()) || (!iep.getModel().isIsInput() && !isLeft()));
+	}
+
+	protected abstract boolean isLeft();
+
+	private static List<IInterfaceElement> getTargetPins(final InterfaceEditPart iep) {
+		return iep.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance)
+				.map(ep -> (TargetInterfaceElementEditPart) ep).map(ep -> ep.getModel().getRefElement()).toList();
 	}
 
 	private static EList<Connection> getConnectionList(final IInterfaceElement ie, final FBNetwork fbNetwork) {
@@ -224,7 +240,10 @@ public class FollowConnectionHandler extends AbstractHandler {
 			if (pin.isEvent()) {
 				return getInternalOppositeEventPin(pin);
 			}
-			if (pin.isVariable() && !pin.isAdapter()) {
+			if (pin.isVariable()) {
+				if (((VarDeclaration) pin.getModel()).isInOutVar()) {
+					return getInternalOppositeVarInOutPin(pin);
+				}
 				return getInternalOppositeVarPin(pin);
 			}
 			return getInternalOppositePlugOrSocketPin(pin);
@@ -232,35 +251,32 @@ public class FollowConnectionHandler extends AbstractHandler {
 		return null;
 	}
 
-	@SuppressWarnings("static-method")
-	protected IInterfaceElement getInternalOppositeEventPin(final InterfaceEditPart pin) {
-		return null;
-	}
+	protected abstract IInterfaceElement getInternalOppositeEventPin(final InterfaceEditPart pin);
 
-	@SuppressWarnings("static-method")
-	protected IInterfaceElement getInternalOppositeVarPin(final InterfaceEditPart pin) {
-		return null;
-	}
+	protected abstract IInterfaceElement getInternalOppositeVarPin(final InterfaceEditPart pin);
 
-	@SuppressWarnings("static-method")
-	protected IInterfaceElement getInternalOppositePlugOrSocketPin(final InterfaceEditPart pin) {
-		return null;
-	}
+	protected abstract IInterfaceElement getInternalOppositeVarInOutPin(final InterfaceEditPart pin);
+
+	protected abstract IInterfaceElement getInternalOppositePlugOrSocketPin(final InterfaceEditPart pin);
 
 	@SuppressWarnings("static-method")
 	protected boolean hasOpposites(final InterfaceEditPart pin) {
 		return false;
 	}
 
-	protected static IInterfaceElement calcInternalOppositePin(final EList<?> source, final EList<?> destination,
-			final InterfaceEditPart pin) {
-		if (!source.contains(pin.getModel())) {
-			return (IInterfaceElement) destination.get(0);
+	protected static IInterfaceElement calcInternalOppositePin(final EList<? extends IInterfaceElement> source,
+			final EList<? extends IInterfaceElement> destination, final InterfaceEditPart pin) {
+
+		final int sourceIndex = source.stream().filter(IInterfaceElement::isVisible).toList().indexOf(pin.getModel());
+		final var visibleDestinations = destination.stream().filter(IInterfaceElement::isVisible).toList();
+
+		if (sourceIndex == -1) {
+			return visibleDestinations.get(0);
 		}
 
-		if ((destination.size() - 1) < source.indexOf(pin.getModel())) {
-			return (IInterfaceElement) destination.get(destination.size() - 1);
+		if ((visibleDestinations.size() - 1) < sourceIndex) {
+			return visibleDestinations.get(visibleDestinations.size() - 1);
 		}
-		return (IInterfaceElement) destination.get(source.indexOf(pin.getModel()));
+		return visibleDestinations.get(sourceIndex);
 	}
 }

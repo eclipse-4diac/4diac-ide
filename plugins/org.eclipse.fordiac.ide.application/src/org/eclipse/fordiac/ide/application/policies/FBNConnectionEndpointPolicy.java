@@ -43,7 +43,8 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 		final FBNetworkConnection con = (FBNetworkConnection) connectionEditPart.getFigure();
 
 		if (!con.isHidden() || isGroupCrossingEndPoint((ConnectionEditPart) connectionEditPart, connectionLocator)
-				|| con.getTargetDecoration() == null) {
+				|| (connectionLocator == ConnectionLocator.SOURCE && con.getSourceDecoration() == null)
+				|| (connectionLocator == ConnectionLocator.TARGET && con.getTargetDecoration() == null)) {
 			return new FBNConnectionEndPointHandle(connectionEditPart, connectionLocator);
 		}
 		return new HiddenFBNConnectionEndPointHandle(connectionEditPart, connectionLocator);

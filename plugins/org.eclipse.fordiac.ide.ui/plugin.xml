@@ -90,6 +90,28 @@
 				<separator name="typeGroup" visible="true"/>
 			</menu>
 		</menuContribution>
+		
+		<menuContribution
+            	locationURI="toolbar:org.eclipse.ui.workbench.navigate?after=org.eclipse.ui.window.pinEditor">
+			<command
+	            	commandId="org.eclipse.ui.window.splitEditor"
+	                icon="platform:/plugin/org.eclipse.ui.ide.application/icons/full/elcl16/split_horizontal.png"
+	                style="push">
+				<parameter
+					name="Splitter.isHorizontal"
+					value="true">
+				</parameter>
+			</command>
+			<command
+					commandId="org.eclipse.ui.window.splitEditor"
+					icon="platform:/plugin/org.eclipse.ui.ide.application/icons/full/elcl16/split_vertical.png"
+					style="push">
+				<parameter
+					name="Splitter.isHorizontal"
+					value="false">
+               </parameter>
+			</command>
+		</menuContribution>
 	</extension>
    	<extension point="org.eclipse.ui.commandImages">
     	<image

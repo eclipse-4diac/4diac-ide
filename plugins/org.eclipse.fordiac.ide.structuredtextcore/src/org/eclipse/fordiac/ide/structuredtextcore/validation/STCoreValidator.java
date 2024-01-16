@@ -50,7 +50,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
+import org.eclipse.fordiac.ide.model.data.AnySignedType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
+import org.eclipse.fordiac.ide.model.data.AnyUnsignedType;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
@@ -413,50 +415,77 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					&& expectedArgumentType instanceof final DataType expectedArgumentDataType
 					&& returnType instanceof final DataType returnDataType
 					&& expectedReturnType instanceof final DataType expectedReturnDataType) {
-				if (expectedReturnDataType.isAssignableFrom(argumentDataType)) {
-					warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryConversion,
-							expectedArgumentDataType.getName(), returnDataType.getName()),
-							STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, UNNECESSARY_CONVERSION,
-							expectedArgumentDataType.getName(), returnDataType.getName());
-				} else if (!expectedArgumentDataType.eClass().equals(argumentDataType.eClass())
-						&& expectedArgumentDataType.isAssignableFrom(argumentDataType)) {
-					warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryWideConversion,
-							expectedArgumentDataType.getName()), STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
-							UNNECESSARY_WIDE_CONVERSION, expectedArgumentDataType.getName(), argumentDataType.getName(),
-							expectedReturnDataType.getName());
-				} else if (!expectedReturnDataType.eClass().equals(returnDataType.eClass())
-						&& expectedReturnDataType.isAssignableFrom(returnDataType)) {
-					warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryNarrowConversion,
-							returnDataType.getName()), STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
-							UNNECESSARY_NARROW_CONVERSION, returnDataType.getName(), argumentDataType.getName(),
-							expectedReturnDataType.getName());
-				} else if (argument.getArgument() instanceof final STNumericLiteral numericLiteral) {
-					try {
-						final String value = ValueOperations
-								.castValue(ValueOperations.wrapValue(numericLiteral.getValue(), argumentType),
-										expectedReturnDataType)
-								.toString();
-						warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryLiteralConversion,
-								returnDataType.getName()), null, UNNECESSARY_LITERAL_CONVERSION,
-								returnDataType.getName(), expectedReturnDataType.getName(), value);
-					} catch (final ClassCastException e) {
-						// ignore (conversion is actually necessary)
-					}
-				} else if (argument.getArgument() instanceof final STStringLiteral stringLiteral) {
-					try {
-						final String value = ValueOperations
-								.castValue(ValueOperations.wrapValue(stringLiteral.getValue(), argumentType),
-										expectedReturnDataType)
-								.toString();
-						warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryLiteralConversion,
-								returnDataType.getName()), null, UNNECESSARY_LITERAL_CONVERSION,
-								returnDataType.getName(), expectedReturnDataType.getName(), value);
-					} catch (final ClassCastException e) {
-						// ignore (conversion is actually necessary)
-					}
-				}
+				checkUnnecessaryConversion(argument, argumentDataType, expectedArgumentDataType, returnDataType,
+						expectedReturnDataType);
 			}
 		}
+	}
+
+	protected void checkUnnecessaryConversion(final STCallArgument argument, final DataType argumentDataType,
+			final DataType expectedArgumentDataType, final DataType returnDataType,
+			final DataType expectedReturnDataType) {
+		if (expectedReturnDataType.isAssignableFrom(argumentDataType)
+				&& !isCastSemanticallyRelevant(argumentDataType, returnDataType)) {
+			warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryConversion,
+					expectedArgumentDataType.getName(), returnDataType.getName()),
+					STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, UNNECESSARY_CONVERSION,
+					expectedArgumentDataType.getName(), returnDataType.getName());
+		} else if (!expectedArgumentDataType.eClass().equals(argumentDataType.eClass())
+				&& expectedArgumentDataType.isAssignableFrom(argumentDataType)
+				&& isBetterCastPossible(argumentDataType, expectedReturnDataType)) {
+			warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryWideConversion,
+					expectedArgumentDataType.getName()), STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+					UNNECESSARY_WIDE_CONVERSION, expectedArgumentDataType.getName(), argumentDataType.getName(),
+					expectedReturnDataType.getName());
+		} else if (!expectedReturnDataType.eClass().equals(returnDataType.eClass())
+				&& expectedReturnDataType.isAssignableFrom(returnDataType)
+				&& isBetterCastPossible(argumentDataType, expectedReturnDataType)) {
+			warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryNarrowConversion,
+					returnDataType.getName()), STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+					UNNECESSARY_NARROW_CONVERSION, returnDataType.getName(), argumentDataType.getName(),
+					expectedReturnDataType.getName());
+		} else if (argument.getArgument() instanceof final STNumericLiteral numericLiteral) {
+			try {
+				final String value = ValueOperations
+						.castValue(ValueOperations.wrapValue(numericLiteral.getValue(), argumentDataType),
+								expectedReturnDataType)
+						.toString();
+				warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryLiteralConversion,
+						returnDataType.getName()), null, UNNECESSARY_LITERAL_CONVERSION, returnDataType.getName(),
+						expectedReturnDataType.getName(), value);
+			} catch (final ClassCastException e) {
+				// ignore (conversion is actually necessary)
+			}
+		} else if (argument.getArgument() instanceof final STStringLiteral stringLiteral) {
+			try {
+				final String value = ValueOperations
+						.castValue(ValueOperations.wrapValue(stringLiteral.getValue(), argumentDataType),
+								expectedReturnDataType)
+						.toString();
+				warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryLiteralConversion,
+						returnDataType.getName()), null, UNNECESSARY_LITERAL_CONVERSION, returnDataType.getName(),
+						expectedReturnDataType.getName(), value);
+			} catch (final ClassCastException e) {
+				// ignore (conversion is actually necessary)
+			}
+		}
+	}
+
+	private static boolean isCastSemanticallyRelevant(final DataType argumentDataType, final DataType returnDataType) {
+		// semantically relevant casts:
+		// - signed to unsigned
+		// - involves bit types
+		return (argumentDataType instanceof AnySignedType && returnDataType instanceof AnyUnsignedType)
+				|| argumentDataType instanceof AnyBitType || returnDataType instanceof AnyBitType;
+	}
+
+	protected boolean isBetterCastPossible(final DataType argumentDataType, final DataType expectedReturnDataType) {
+		// do not offer better cast involving ANY_BIT (semantically relevant)
+		if (argumentDataType instanceof AnyBitType || expectedReturnDataType instanceof AnyBitType) {
+			return false;
+		}
+		final String castName = argumentDataType.getName() + "_TO_" + expectedReturnDataType.getName(); //$NON-NLS-1$
+		return standardFunctionProvider.find(castName, List.of(argumentDataType)).isPresent();
 	}
 
 	@Check

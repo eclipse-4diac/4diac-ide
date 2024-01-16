@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2017 - 2018 fortiss GmbH
- *               2018 - 2020 Johannes Kepler University
+ * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University,
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,8 +12,11 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *               - allow navigation to parent by double-clicking on subapp
  *                 interface element
+ *               - show hidden connections in interface bar
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
+
+import java.util.List;
 
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
@@ -35,6 +38,9 @@ import org.eclipse.ui.IEditorPart;
 
 public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceElementEditPart {
 
+	private final TargetPinManager targetPinManager = new TargetPinManager(this);
+	TargetInterfaceAdapter targetInteraceAdapter = null;
+
 	@Override
 	protected IFigure createFigure() {
 		final IFigure figure = super.createFigure();
@@ -45,6 +51,24 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 			}
 		});
 		return figure;
+	}
+
+	@Override
+	public void activate() {
+		if (!isActive()) {
+			super.activate();
+			targetInteraceAdapter = new TargetInterfaceAdapter(this);
+		}
+	}
+
+	@Override
+	public void deactivate() {
+		if (isActive()) {
+			if (targetInteraceAdapter != null) {
+				targetInteraceAdapter.deactivate();
+			}
+			super.deactivate();
+		}
 	}
 
 	@Override
@@ -94,6 +118,11 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 				super.notifyChanged(notification);
 			}
 		};
+	}
+
+	@Override
+	protected List getModelChildren() {
+		return targetPinManager.getModelChildren();
 	}
 
 	private void goToParent() {

@@ -76,6 +76,10 @@ public class DeploymentEvaluatorSharedState implements Closeable {
 		deviceManagementInteractor.startFB(resource, deploymentData);
 	}
 
+	public void deleteFB(final FBDeploymentData deploymentData) throws DeploymentException {
+		deviceManagementInteractor.deleteFB(resource, deploymentData);
+	}
+
 	public void addWatch(final MonitoringBaseElement element) throws DeploymentException {
 		deviceManagementInteractor.addWatch(element);
 	}

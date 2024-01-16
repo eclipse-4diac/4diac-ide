@@ -33,7 +33,7 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 		this.type = type
 	}
 
-	override evaluate() {
+	override evaluate() throws EvaluatorException, InterruptedException {
 		var Event event
 		while ((event = eventQueue?.receiveInputEvent) !== null) {
 			if (!event.applicable) {
