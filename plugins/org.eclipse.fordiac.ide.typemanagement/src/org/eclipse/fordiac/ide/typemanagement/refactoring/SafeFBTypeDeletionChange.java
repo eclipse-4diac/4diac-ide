@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
-import org.eclipse.swt.widgets.Display;
 
 public class SafeFBTypeDeletionChange extends CompositeChange {
 
@@ -91,7 +90,7 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
 			final Command cmd = new UpdateFBTypeCommand(fb, fb.getTypeEntry());
-			Display.getDefault().syncExec(cmd::execute);
+			ChangeExecutionHelper.executeChange(cmd, fb, pm);
 			return super.perform(pm);
 		}
 
@@ -114,8 +113,7 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 		public Change perform(final IProgressMonitor pm) throws CoreException {
 			final TypeEntry typeEntry = baseFb.getTypeEntry();
 			final Command cmd = new DeleteInternalFBCommand((BaseFBType) typeEntry.getTypeEditable(), internalFb);
-			cmd.execute();
-			typeEntry.save(pm);
+			ChangeExecutionHelper.executeChange(cmd, baseFb, pm);
 			return super.perform(pm);
 		}
 
