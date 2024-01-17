@@ -227,7 +227,7 @@ public class XMIExportFilter extends ExportFilter {
 
 	protected STInitializerExpressionSource parseAttributeValue(final Attribute attribute) {
 		return StructuredTextParseUtil.parse(attribute.getValue(), attribute.eResource().getURI(), attribute.getType(),
-				EcoreUtil2.getContainerOfType(attribute, LibraryElement.class), null, getErrors(), getWarnings(),
+				EcoreUtil2.getContainerOfType(attribute, LibraryElement.class), null, getWarnings(), getWarnings(),
 				getInfos());
 	}
 
@@ -235,7 +235,7 @@ public class XMIExportFilter extends ExportFilter {
 		try {
 			return VariableOperations.newVariable(attribute).toString();
 		} catch (final Exception e) {
-			getErrors().add(MessageFormat.format(Messages.XMIExportFilter_AttributeValueError,
+			getWarnings().add(MessageFormat.format(Messages.XMIExportFilter_AttributeValueError,
 					attribute.getQualifiedName(), e.getMessage()));
 			return null;
 		}
