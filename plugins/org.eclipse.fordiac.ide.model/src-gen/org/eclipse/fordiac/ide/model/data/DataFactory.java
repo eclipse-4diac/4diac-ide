@@ -117,15 +117,6 @@ public interface DataFactory extends EFactory {
 	ValueType createValueType();
 
 	/**
-	 * Returns a new object of class '<em>Elementary Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Elementary Type</em>'.
-	 * @generated
-	 */
-	ElementaryType createElementaryType();
-
-	/**
 	 * Returns a new object of class '<em>Derived Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

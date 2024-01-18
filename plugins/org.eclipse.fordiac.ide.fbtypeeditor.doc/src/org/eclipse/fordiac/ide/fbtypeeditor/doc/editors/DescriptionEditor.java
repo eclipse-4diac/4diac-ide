@@ -165,54 +165,7 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 		GridLayoutFactory.fillDefaults().margins(0, 0).applyTo(parent);
 
 		try {
-			editor = new RichTextEditor(parent, createRichTextEditorConfiguration()) {
-				// all of this sanitization should be done by the nebula richtext widget internally
-				// FIXME: this anonymous class can be deleted when this has been fixed upstream
-				private String sanitize(final String text) {
-					// browser.evaluate will consume one layer of escaping and uses single quotes for string enclosing
-					return text.replace("\\", "\\\\").replace("\'", "\\\'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				}
-
-				private String sanitizeNewline(final String text) {
-					// browser.evaluate takes a string, a string literal can not continue across a newline
-					return text.replace("\n", "\\n").replace("\r", "\\r"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				}
-
-				private boolean isEditorLoaded() {
-					// the value of editorLoaded is not accessible by this class - we just work around that
-					boolean editorLoaded = false;
-					try {
-						var editorLoadedField = RichTextEditor.class.getDeclaredField("editorLoaded"); //$NON-NLS-1$
-						editorLoadedField.setAccessible(true);
-						editorLoaded = ((Boolean) editorLoadedField.get(this)).booleanValue();
-					} catch (Exception e) {
-						FordiacLogHelper.logInfo(e.getMessage());
-					}
-					return editorLoaded;
-				}
-				
-				@Override
-				public void setText(final String text) {
-					if (isEditorLoaded()) {
-				        super.setText(sanitize(text));
-					} else {
-						super.setText(text);
-					}
-				}
-
-				@Override
-				public void insertText(final String text) {
-					// currently unused
-					super.insertText(sanitizeNewline(sanitize(text)));
-				}
-
-				@Override
-				public void insertHTML(final String html) {
-					// currently only used to insert images, would also work without sanitization
-					super.insertHTML(sanitizeNewline(sanitize(html)));
-				}
-
-			};
+			editor = new RichTextEditor(parent, createRichTextEditorConfiguration());
 
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
 			editor.setText(getFbType().getDocumentation());

@@ -28,7 +28,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
 		final IPreferenceStore store = UIPlugin.getDefault().getPreferenceStore();
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_EVENT_CONNECTOR_COLOR, new RGB(255, 0, 0));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_EVENT_CONNECTOR_COLOR, new RGB(99, 179, 31));
 
 		PreferenceConverter.setDefault(store, PreferenceConstants.P_BOOL_CONNECTOR_COLOR, new RGB(159, 164, 138));
 		PreferenceConverter.setDefault(store, PreferenceConstants.P_ANY_BIT_CONNECTOR_COLOR, new RGB(130, 163, 169));
@@ -37,7 +37,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		PreferenceConverter.setDefault(store, PreferenceConstants.P_ANY_STRING_CONNECTOR_COLOR, new RGB(189, 134, 99));
 		PreferenceConverter.setDefault(store, PreferenceConstants.P_REMAINING_DATA_CONNECTOR_COLOR, new RGB(0, 0, 255));
 
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR, new RGB(80, 200, 120));
+		PreferenceConverter.setDefault(store, PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR, new RGB(132, 93, 175));
 
 		store.setDefault(PreferenceConstants.P_HIDE_EVENT_CON, false);
 		store.setDefault(PreferenceConstants.P_HIDE_DATA_CON, false);
@@ -46,7 +46,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		store.setDefault(PreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR,
 				PreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR_DEFAULT_VALUE);
-		
+
 		store.setDefault(PreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX,
 				PreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE);
 

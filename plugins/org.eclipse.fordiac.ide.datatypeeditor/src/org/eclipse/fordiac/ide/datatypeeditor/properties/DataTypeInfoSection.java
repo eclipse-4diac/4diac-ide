@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
 import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -87,6 +88,12 @@ public class DataTypeInfoSection extends AbstractSection {
 				return attributeDeclaration;
 			}
 			return structViewingComposite.getStruct();
+		}
+		if (input instanceof final DirectlyDerivedType directlyDerivedType) {
+			if (directlyDerivedType.eContainer() instanceof final AttributeDeclaration attributeDeclaration) {
+				return attributeDeclaration;
+			}
+			return directlyDerivedType;
 		}
 		return null;
 	}

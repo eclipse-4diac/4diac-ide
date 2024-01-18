@@ -22,12 +22,63 @@ package org.eclipse.fordiac.ide.model.data;
  * A representation of the model object '<em><b>Directly Derived Type</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * </p>
+ * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType#getBaseType <em>Base Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType#getInitialValue <em>Initial Value</em>}</li>
+ * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDirectlyDerivedType()
  * @model
  * @generated
  */
-public interface DirectlyDerivedType extends DerivedType {
+public interface DirectlyDerivedType extends AnyDerivedType {
+	/**
+	 * Returns the value of the '<em><b>Base Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Base Type</em>' reference.
+	 * @see #setBaseType(DataType)
+	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDirectlyDerivedType_BaseType()
+	 * @model required="true"
+	 * @generated
+	 */
+	DataType getBaseType();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType#getBaseType <em>Base Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Base Type</em>' reference.
+	 * @see #getBaseType()
+	 * @generated
+	 */
+	void setBaseType(DataType value);
+
+	/**
+	 * Returns the value of the '<em><b>Initial Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Initial Value</em>' attribute.
+	 * @see #setInitialValue(String)
+	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDirectlyDerivedType_InitialValue()
+	 * @model
+	 * @generated
+	 */
+	String getInitialValue();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType#getInitialValue <em>Initial Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Initial Value</em>' attribute.
+	 * @see #getInitialValue()
+	 * @generated
+	 */
+	void setInitialValue(String value);
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

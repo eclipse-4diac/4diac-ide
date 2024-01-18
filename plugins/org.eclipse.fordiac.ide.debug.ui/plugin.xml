@@ -190,8 +190,8 @@
             restorable="true">
       </view>
    </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
+	<extension
+		point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
          <view
                id="org.eclipse.fordiac.ide.debug.ui.view.FBDebugView"
@@ -200,6 +200,15 @@
                relationship="bottom"
                relative="org.eclipse.ui.navigator.ProjectExplorer">
          </view>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.fordiac.ide.typemanagement.perspective">
+         <actionSet
+               id="org.eclipse.debug.ui.launchActionSet">
+         </actionSet>
+         <actionSet
+               id="org.eclipse.debug.ui.debugActionSet">
+         </actionSet>
       </perspectiveExtension>
    </extension>
    <extension

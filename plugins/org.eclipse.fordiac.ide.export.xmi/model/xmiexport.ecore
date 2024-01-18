@@ -2,6 +2,16 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="xmiexport" nsURI="http://www.eclipse.org/fordiac/ide/xmiexport/XMIExport"
     nsPrefix="xmiexport">
+  <eClassifiers xsi:type="ecore:EClass" name="XMIExportAttributeValues">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeValues" upperBound="-1"
+        eType="#//XMIExportAttributeValue" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XMIExportAttributeValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Attribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="ecore:EClass ../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.ecore#//STInitializerExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="XMIExportInitialValues">
     <eStructuralFeatures xsi:type="ecore:EReference" name="initialValues" upperBound="-1"
         eType="#//XMIExportInitialValue" containment="true"/>

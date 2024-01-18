@@ -69,6 +69,80 @@ public interface XMIExportPackage extends EPackage {
 	XMIExportPackage eINSTANCE = org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl.init();
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportAttributeValuesImpl <em>Attribute Values</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportAttributeValuesImpl
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportAttributeValues()
+	 * @generated
+	 */
+	int XMI_EXPORT_ATTRIBUTE_VALUES = 0;
+
+	/**
+	 * The feature id for the '<em><b>Attribute Values</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_ATTRIBUTE_VALUES__ATTRIBUTE_VALUES = 0;
+
+	/**
+	 * The number of structural features of the '<em>Attribute Values</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_ATTRIBUTE_VALUES_FEATURE_COUNT = 1;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportAttributeValueImpl <em>Attribute Value</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportAttributeValueImpl
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportAttributeValue()
+	 * @generated
+	 */
+	int XMI_EXPORT_ATTRIBUTE_VALUE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Attribute</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_ATTRIBUTE_VALUE__ATTRIBUTE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Expression</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_ATTRIBUTE_VALUE__EXPRESSION = 1;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_ATTRIBUTE_VALUE__VALUE = 2;
+
+	/**
+	 * The number of structural features of the '<em>Attribute Value</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_ATTRIBUTE_VALUE_FEATURE_COUNT = 3;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportInitialValuesImpl <em>Initial Values</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -76,7 +150,7 @@ public interface XMIExportPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportInitialValues()
 	 * @generated
 	 */
-	int XMI_EXPORT_INITIAL_VALUES = 0;
+	int XMI_EXPORT_INITIAL_VALUES = 2;
 
 	/**
 	 * The feature id for the '<em><b>Initial Values</b></em>' containment reference list.
@@ -104,7 +178,7 @@ public interface XMIExportPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportInitialValue()
 	 * @generated
 	 */
-	int XMI_EXPORT_INITIAL_VALUE = 1;
+	int XMI_EXPORT_INITIAL_VALUE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Variable</b></em>' reference.
@@ -151,7 +225,7 @@ public interface XMIExportPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportTypeDeclarations()
 	 * @generated
 	 */
-	int XMI_EXPORT_TYPE_DECLARATIONS = 2;
+	int XMI_EXPORT_TYPE_DECLARATIONS = 4;
 
 	/**
 	 * The feature id for the '<em><b>Type Declarations</b></em>' containment reference list.
@@ -179,7 +253,7 @@ public interface XMIExportPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportTypeDeclaration()
 	 * @generated
 	 */
-	int XMI_EXPORT_TYPE_DECLARATION = 3;
+	int XMI_EXPORT_TYPE_DECLARATION = 5;
 
 	/**
 	 * The feature id for the '<em><b>Variable</b></em>' reference.
@@ -216,6 +290,70 @@ public interface XMIExportPackage extends EPackage {
 	 * @ordered
 	 */
 	int XMI_EXPORT_TYPE_DECLARATION_FEATURE_COUNT = 3;
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValues <em>Attribute Values</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Attribute Values</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValues
+	 * @generated
+	 */
+	EClass getXMIExportAttributeValues();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValues#getAttributeValues <em>Attribute Values</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Attribute Values</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValues#getAttributeValues()
+	 * @see #getXMIExportAttributeValues()
+	 * @generated
+	 */
+	EReference getXMIExportAttributeValues_AttributeValues();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValue <em>Attribute Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Attribute Value</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValue
+	 * @generated
+	 */
+	EClass getXMIExportAttributeValue();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValue#getAttribute <em>Attribute</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Attribute</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValue#getAttribute()
+	 * @see #getXMIExportAttributeValue()
+	 * @generated
+	 */
+	EReference getXMIExportAttributeValue_Attribute();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValue#getExpression <em>Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Expression</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValue#getExpression()
+	 * @see #getXMIExportAttributeValue()
+	 * @generated
+	 */
+	EReference getXMIExportAttributeValue_Expression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValue#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValue#getValue()
+	 * @see #getXMIExportAttributeValue()
+	 * @generated
+	 */
+	EAttribute getXMIExportAttributeValue_Value();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValues <em>Initial Values</em>}'.
@@ -367,6 +505,58 @@ public interface XMIExportPackage extends EPackage {
 	 * @generated
 	 */
 	interface Literals {
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportAttributeValuesImpl <em>Attribute Values</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportAttributeValuesImpl
+		 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportAttributeValues()
+		 * @generated
+		 */
+		EClass XMI_EXPORT_ATTRIBUTE_VALUES = eINSTANCE.getXMIExportAttributeValues();
+
+		/**
+		 * The meta object literal for the '<em><b>Attribute Values</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference XMI_EXPORT_ATTRIBUTE_VALUES__ATTRIBUTE_VALUES = eINSTANCE.getXMIExportAttributeValues_AttributeValues();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportAttributeValueImpl <em>Attribute Value</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportAttributeValueImpl
+		 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportAttributeValue()
+		 * @generated
+		 */
+		EClass XMI_EXPORT_ATTRIBUTE_VALUE = eINSTANCE.getXMIExportAttributeValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Attribute</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference XMI_EXPORT_ATTRIBUTE_VALUE__ATTRIBUTE = eINSTANCE.getXMIExportAttributeValue_Attribute();
+
+		/**
+		 * The meta object literal for the '<em><b>Expression</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference XMI_EXPORT_ATTRIBUTE_VALUE__EXPRESSION = eINSTANCE.getXMIExportAttributeValue_Expression();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute XMI_EXPORT_ATTRIBUTE_VALUE__VALUE = eINSTANCE.getXMIExportAttributeValue_Value();
+
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportInitialValuesImpl <em>Initial Values</em>}' class.
 		 * <!-- begin-user-doc -->

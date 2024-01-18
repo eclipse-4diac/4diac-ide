@@ -25,8 +25,8 @@ import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditor
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorFactory
 
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
-import static extension org.eclipse.xtext.EcoreUtil2.*
 
 final class STAlgorithmEmbeddedEditorUtil {
 	static final URI SYNTHETIC_URI = URI.createURI("__synthetic.stalg")
@@ -41,8 +41,8 @@ final class STAlgorithmEmbeddedEditorUtil {
 	}
 
 	def static void updateEditor(EmbeddedEditor editor, INamedElement element) {
-		editor.updateEditor(element?.eResource?.URI ?: SYNTHETIC_URI, element.getContainerOfType(LibraryElement), null,
-			element.featureType)
+		editor.updateEditor(element?.eResource?.URI ?: SYNTHETIC_URI,
+			switch (root : element.rootContainer) { LibraryElement: root }, null, element.featureType)
 	}
 
 	def static void updateEditor(EmbeddedEditor editor, URI uri, LibraryElement type,

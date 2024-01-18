@@ -26,8 +26,10 @@ import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,6 +60,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class CommonElementExporter {
@@ -179,12 +183,15 @@ public class CommonElementExporter {
 	private static final Pattern CDATA_END_PATTERN = Pattern.compile("\\]\\]>"); //$NON-NLS-1$
 
 	private final XMLStreamWriter writer;
-	private ByteBufferOutputStream outputStream;
+	private final ByteBufferOutputStream outputStream;
+	private final Set<TypeEntry> dependencies;
 
 	private int tabCount = 0;
 
 	protected CommonElementExporter() {
+		outputStream = new ByteBufferOutputStream();
 		writer = createEventWriter();
+		dependencies = new HashSet<>();
 	}
 
 	/**
@@ -195,6 +202,8 @@ public class CommonElementExporter {
 	 */
 	protected CommonElementExporter(final CommonElementExporter parent) {
 		writer = parent.writer;
+		outputStream = parent.outputStream;
+		dependencies = parent.dependencies;
 		tabCount = parent.tabCount;
 	}
 
@@ -204,6 +213,10 @@ public class CommonElementExporter {
 
 	protected ByteBufferOutputStream getOutputStream() {
 		return outputStream;
+	}
+
+	public Set<TypeEntry> getDependencies() {
+		return dependencies;
 	}
 
 	protected void addStartElement(final String name) throws XMLStreamException {
@@ -238,7 +251,6 @@ public class CommonElementExporter {
 	private XMLStreamWriter createEventWriter() {
 		final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
 
-		outputStream = new ByteBufferOutputStream();
 		try {
 			final XMLStreamWriter newWriter = outputFactory.createXMLStreamWriter(outputStream,
 					StandardCharsets.UTF_8.name());
@@ -267,7 +279,7 @@ public class CommonElementExporter {
 		}
 		getWriter().writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
 		if (type != null && !(type.eContainer() instanceof AttributeDeclaration)) {
-			getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, PackageNameHelper.getFullTypeName(type));
+			addTypeAttribute(type);
 		}
 		if (HelperTypes.CDATA != type) {
 			getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
@@ -393,7 +405,7 @@ public class CommonElementExporter {
 			osWriter.write(attributeValue);
 			osWriter.write("\" "); //$NON-NLS-1$
 		} catch (final IOException e) {
-			throw new XMLStreamException("Could not write raw attribute", e);
+			throw new XMLStreamException("Could not write raw attribute", e); //$NON-NLS-1$
 		}
 	}
 
@@ -416,7 +428,7 @@ public class CommonElementExporter {
 	}
 
 	protected void addTypeAttribute(final LibraryElement type) throws XMLStreamException {
-		addTypeAttribute(PackageNameHelper.getFullTypeName(type));
+		addTypeAttribute(PackageNameHelper.getFullTypeName(addDependency(type)));
 	}
 
 	protected void addTypeAttribute(final String type) throws XMLStreamException {
@@ -525,4 +537,17 @@ public class CommonElementExporter {
 		}
 	}
 
+	protected <T extends TypeEntry> T addDependency(final T entry) {
+		if (entry != null && !(entry instanceof ErrorTypeEntry)) {
+			dependencies.add(entry);
+		}
+		return entry;
+	}
+
+	protected <T extends LibraryElement> T addDependency(final T libraryElement) {
+		if (libraryElement != null) {
+			addDependency(libraryElement.getTypeEntry());
+		}
+		return libraryElement;
+	}
 }

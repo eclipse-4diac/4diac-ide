@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor;
 
 import org.eclipse.osgi.util.NLS;
 
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fbtypeeditor.messages"; //$NON-NLS-1$
 
@@ -28,6 +28,11 @@ public final class Messages extends NLS {
 	public static String FBTypeEditor_CheckTypeSaveAble;
 	public static String FBTypeEditor_CompositeContainsFunctionBlockWithoutType;
 	public static String FBTypeEditor_TypeFileDoesnotExist;
+	public static String FBTypeEditor_ViewingComposite_Headline;
+	public static String FBTypeEditor_AlteringButton_SaveAndUpdate;
+	public static String FBTypeEditor_AlteringButton_SaveAs;
+	public static String FBTypeEditor_AlteringDescription;
+	public static String WarningDialog_FBNotSaved;
 	public static String InterfaceContextMenuProvider_CreateDataInput;
 	public static String InterfaceContextMenuProvider_CreateDataOutput;
 	public static String InterfaceContextMenuProvider_CreatePlug;

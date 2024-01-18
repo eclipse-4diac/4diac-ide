@@ -79,6 +79,18 @@ public class XMIExportSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case XMIExportPackage.XMI_EXPORT_ATTRIBUTE_VALUES: {
+				XMIExportAttributeValues xmiExportAttributeValues = (XMIExportAttributeValues)theEObject;
+				T result = caseXMIExportAttributeValues(xmiExportAttributeValues);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case XMIExportPackage.XMI_EXPORT_ATTRIBUTE_VALUE: {
+				XMIExportAttributeValue xmiExportAttributeValue = (XMIExportAttributeValue)theEObject;
+				T result = caseXMIExportAttributeValue(xmiExportAttributeValue);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUES: {
 				XMIExportInitialValues xmiExportInitialValues = (XMIExportInitialValues)theEObject;
 				T result = caseXMIExportInitialValues(xmiExportInitialValues);
@@ -105,6 +117,36 @@ public class XMIExportSwitch<T> extends Switch<T> {
 			}
 			default: return defaultCase(theEObject);
 		}
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Attribute Values</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Attribute Values</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseXMIExportAttributeValues(XMIExportAttributeValues object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Attribute Value</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Attribute Value</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseXMIExportAttributeValue(XMIExportAttributeValue object) {
+		return null;
 	}
 
 	/**

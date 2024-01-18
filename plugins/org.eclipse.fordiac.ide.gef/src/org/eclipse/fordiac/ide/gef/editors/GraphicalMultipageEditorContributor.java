@@ -38,10 +38,6 @@ public class GraphicalMultipageEditorContributor extends MultiPageEditorActionBa
 	private final List<RetargetAction> retargetActions = new ArrayList<>();
 	private final List<String> globalActionKeys = new ArrayList<>();
 
-	public GraphicalMultipageEditorContributor() {
-		super();
-	}
-
 	@Override
 	public void setActiveEditor(final IEditorPart editor) {
 		setGlobalActionHandler(editor.getAdapter(ActionRegistry.class));
@@ -82,11 +78,6 @@ public class GraphicalMultipageEditorContributor extends MultiPageEditorActionBa
 
 	@Override
 	public void contributeToToolBar(final IToolBarManager toolBarManager) {
-
-		toolBarManager.add(getAction(ActionFactory.UNDO.getId()));
-		toolBarManager.add(getAction(ActionFactory.REDO.getId()));
-
-		toolBarManager.add(new Separator());
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_LEFT));
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_CENTER));
 		toolBarManager.add(getAction(GEFActionConstants.ALIGN_RIGHT));

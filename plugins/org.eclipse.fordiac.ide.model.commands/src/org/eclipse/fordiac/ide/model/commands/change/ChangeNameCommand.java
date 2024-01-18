@@ -34,15 +34,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public final class ChangeNameCommand extends Command implements ConnectionLayoutTagger, ScopedCommand {
+public class ChangeNameCommand extends Command implements ConnectionLayoutTagger, ScopedCommand {
 	private final INamedElement element;
 	private final String name;
 	private String oldName;
 	private final CompoundCommand additionalCommands = new CompoundCommand();
+	private boolean validateName;
 
 	private ChangeNameCommand(final INamedElement element, final String name) {
+		this(element, name, true);
+	}
+
+	private ChangeNameCommand(final INamedElement element, final String name, final boolean validateName) {
 		this.element = Objects.requireNonNull(element);
 		this.name = name;
+		this.validateName = validateName;
 	}
 
 	public static ChangeNameCommand forName(final INamedElement element, final String name) {
@@ -56,27 +62,34 @@ public final class ChangeNameCommand extends Command implements ConnectionLayout
 					new ChangeNameCommand(subApp.getOpposite().getInterfaceElement(interfaceElement.getName()), name));
 		}
 		if (element instanceof final AdapterDeclaration adapterDeclaration) {
-			if (adapterDeclaration.getAdapterFB() != null) {
-				result.getAdditionalCommands().add(new ChangeNameCommand(adapterDeclaration.getAdapterFB(), name));
-			}
-			if (adapterDeclaration.getAdapterNetworkFB() != null) {
-				result.getAdditionalCommands()
-						.add(new ChangeNameCommand(adapterDeclaration.getAdapterNetworkFB(), name));
-			}
+			handleAdapterDeclarationRename(name, result, adapterDeclaration);
 		}
 		if (element instanceof final AdapterFB adapterFB) {
 			result.getAdditionalCommands().add(new ChangeNameCommand(adapterFB.getAdapterDecl(), name));
 		}
-		if (element instanceof final Attribute attribute
-				&& ChangeAttributeDeclarationCommand.attributeDeclarationChanged(attribute, name)) {
-			result.getAdditionalCommands().add(ChangeAttributeDeclarationCommand.forName(attribute, name));
+		if (element instanceof final Attribute attribute) {
+			result.setValidateName(false); // do not validate attribute names (may contain FQN)
+			if (ChangeAttributeDeclarationCommand.attributeDeclarationChanged(attribute, name)) {
+				result.getAdditionalCommands().add(ChangeAttributeDeclarationCommand.forName(attribute, name));
+			}
 		}
 		return result;
 	}
 
+	private static void handleAdapterDeclarationRename(final String name, final ChangeNameCommand result,
+			final AdapterDeclaration adapterDeclaration) {
+		if (adapterDeclaration.getAdapterFB() != null) {
+			// we don't need and we can't do a name check as the parent is not an fbnetwork
+			result.getAdditionalCommands().add(new ChangeNameCommand(adapterDeclaration.getAdapterFB(), name, false));
+		}
+		if (adapterDeclaration.getAdapterNetworkFB() != null) {
+			result.getAdditionalCommands().add(new ChangeNameCommand(adapterDeclaration.getAdapterNetworkFB(), name));
+		}
+	}
+
 	@Override
 	public boolean canExecute() {
-		return NameRepository.isValidName(element, name)
+		return (!isValidateName() || NameRepository.isValidName(element, name))
 				&& (additionalCommands.isEmpty() || additionalCommands.canExecute())
 				&& !(element instanceof final FBNetworkElement fbne && fbne.isContainedInTypedInstance());
 	}
@@ -124,6 +137,14 @@ public final class ChangeNameCommand extends Command implements ConnectionLayout
 
 	public CompoundCommand getAdditionalCommands() {
 		return additionalCommands;
+	}
+
+	protected boolean isValidateName() {
+		return validateName;
+	}
+
+	protected void setValidateName(final boolean validateName) {
+		this.validateName = validateName;
 	}
 
 	@Override

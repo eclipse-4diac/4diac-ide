@@ -35,6 +35,24 @@ public interface XMIExportFactory extends EFactory {
 	XMIExportFactory eINSTANCE = org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Attribute Values</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Attribute Values</em>'.
+	 * @generated
+	 */
+	XMIExportAttributeValues createXMIExportAttributeValues();
+
+	/**
+	 * Returns a new object of class '<em>Attribute Value</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Attribute Value</em>'.
+	 * @generated
+	 */
+	XMIExportAttributeValue createXMIExportAttributeValue();
+
+	/**
 	 * Returns a new object of class '<em>Initial Values</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

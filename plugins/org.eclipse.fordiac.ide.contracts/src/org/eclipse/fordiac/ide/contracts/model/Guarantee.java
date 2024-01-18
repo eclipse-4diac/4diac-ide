@@ -132,10 +132,10 @@ public class Guarantee extends ContractElement {
 		}
 		final EList<FBNetworkElement> fBNetworkElements = ((SubApp) getContract().getOwner()).getSubAppNetwork()
 				.getNetworkElements();
-		final List<SubApp> containedSubapps = fBNetworkElements.parallelStream().filter(ContractUtils::isContractSubapp)
+		final List<SubApp> containedSubapps = fBNetworkElements.stream().filter(ContractUtils::isContractSubapp)
 				.map(el -> (SubApp) el).toList();
-		final List<FB> containedfBs = fBNetworkElements.parallelStream().filter(FB.class::isInstance)
-				.map(FB.class::cast).toList();
+		final List<FB> containedfBs = fBNetworkElements.stream().filter(FB.class::isInstance).map(FB.class::cast)
+				.toList();
 		return hasMatchingEvent(((SubApp) getContract().getOwner()), containedSubapps, containedfBs);
 	}
 
@@ -144,10 +144,9 @@ public class Guarantee extends ContractElement {
 		if (!containedSubapps.isEmpty()) {
 			final EList<Event> inputEvents = subapp.getInterface().getEventInputs();
 			final EList<Event> outputEvents = subapp.getInterface().getEventOutputs();
-			final List<Event> inputNames = inputEvents.parallelStream().filter(e -> e.getName().equals(getInputEvent()))
+			final List<Event> inputNames = inputEvents.stream().filter(e -> e.getName().equals(getInputEvent()))
 					.toList();
-			final List<Event> outputNames = outputEvents.parallelStream().filter(e -> e.getName().equals(outputEvent))
-					.toList();
+			final List<Event> outputNames = outputEvents.stream().filter(e -> e.getName().equals(outputEvent)).toList();
 			if (inputNames.size() == 1 && outputNames.size() == 1) {
 				return true;
 			}
@@ -155,9 +154,9 @@ public class Guarantee extends ContractElement {
 		if (containedfBs.size() == 1) {
 			final EList<Event> inputFBEvents = containedfBs.get(0).getInterface().getEventInputs();
 			final EList<Event> outputFBEvents = containedfBs.get(0).getInterface().getEventOutputs();
-			final List<Event> inputNames = inputFBEvents.parallelStream()
-					.filter(e -> e.getName().equals(getInputEvent())).toList();
-			final List<Event> outputNames = outputFBEvents.parallelStream().filter(e -> e.getName().equals(outputEvent))
+			final List<Event> inputNames = inputFBEvents.stream().filter(e -> e.getName().equals(getInputEvent()))
+					.toList();
+			final List<Event> outputNames = outputFBEvents.stream().filter(e -> e.getName().equals(outputEvent))
 					.toList();
 			if (inputNames.size() == 1 && outputNames.size() == 1) {
 				return true;
@@ -200,7 +199,7 @@ public class Guarantee extends ContractElement {
 		final Map<String, EList<GuaranteeTwoEvents>> mapGuaranteeTwoEvents = new HashMap<>();
 		final Consumer<Guarantee> sort = guarantee -> sortHelper(mapGuarantees, mapReactions, mapGuaranteeTwoEvents,
 				guarantee);
-		((Collection<Guarantee>) guarantees).parallelStream().forEach(sort);
+		((Collection<Guarantee>) guarantees).stream().forEach(sort);
 		if (mapGuaranteeTwoEvents.size() > 0) {
 			return GuaranteeTwoEvents.isCompatibleWith(mapGuarantees, mapReactions, mapGuaranteeTwoEvents);
 		}

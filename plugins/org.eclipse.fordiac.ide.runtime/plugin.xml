@@ -2,35 +2,5 @@
 <plugin>
 
    <extension-point id="RuntimeLauncher" name="org.eclipse.fordiac.ide.runtime.launcher" schema="schema/RuntimeLauncher.exsd"/>
-
-   <extension
-         point="org.eclipse.ui.commands">
-      <command
-            categoryId="org.eclipse.fordiac.ide.commands.category"
-            defaultHandler="org.eclipse.fordiac.ide.runtime.handlers.ShowDeviceSimulationManager"
-            id="org.eclipse.fordiac.ide.runtime.ShowDeviceSimulationManager"
-            name="Open Simulated Devices Manager">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            locationURI="menu:org.eclipse.4diac.ide.monitoring.menus.debug?after=org.eclipse.fordiac.ide.monitoring.monitoringAdditions">
-         <command
-               commandId="org.eclipse.fordiac.ide.runtime.ShowDeviceSimulationManager"
-               icon="fordiacimage://ICON_DEPLOYMENT_PERSPECTIVE"
-               label="Open Simulated Devices Manager"
-               tooltip="Manager for running simulated devices and observing their output">
-         </command>
-      </menuContribution>
-   </extension>
-   <extension
-         id="org.eclipse.fordiac.ide.runtime.fragment"
-         point="org.eclipse.e4.workbench.model">
-      <fragment
-            uri="simdevmanager.e4xmi"
-            apply="always">
-      </fragment>
-   </extension>
-
+   
 </plugin>

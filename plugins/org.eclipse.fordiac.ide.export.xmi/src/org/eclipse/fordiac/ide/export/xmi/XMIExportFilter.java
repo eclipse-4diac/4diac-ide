@@ -31,7 +31,9 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.ExportFilter;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.resource.GlobalConstantsResourceSetInitializer;
+import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -43,6 +45,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.resource.STFunctionResourceSetInitializer;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValue;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValues;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportFactory;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValues;
@@ -94,6 +98,7 @@ public class XMIExportFilter extends ExportFilter {
 		}
 		resource.getContents().add(createInitialValues(resource));
 		resource.getContents().add(createTypeDeclarations(resource));
+		resource.getContents().add(createAttributeValues(resource));
 
 		final ResourceSetImpl xmiResourceSet = new ResourceSetImpl();
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().putIfAbsent(XMI_EXTENSION,
@@ -196,5 +201,48 @@ public class XMIExportFilter extends ExportFilter {
 					varDeclaration.getQualifiedName(), e.getMessage()));
 			return null;
 		}
+	}
+
+	protected XMIExportAttributeValues createAttributeValues(final Resource resource) {
+		final var result = XMIExportFactory.eINSTANCE.createXMIExportAttributeValues();
+		StreamSupport
+				.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllProperContents(resource, true), 0), false)
+				.filter(Attribute.class::isInstance).map(Attribute.class::cast)
+				.filter(XMIExportFilter::hasAttributeValue).map(this::createAttributeValue).flatMap(Optional::stream)
+				.forEachOrdered(result.getAttributeValues()::add);
+		return result;
+	}
+
+	protected Optional<XMIExportAttributeValue> createAttributeValue(final Attribute attribute) {
+		final var source = parseAttributeValue(attribute);
+		if (source == null || source.getInitializerExpression() == null) {
+			return Optional.empty();
+		}
+		final var result = XMIExportFactory.eINSTANCE.createXMIExportAttributeValue();
+		result.setAttribute(attribute);
+		result.setExpression(source.getInitializerExpression());
+		result.setValue(evaluateAttributeValue(attribute));
+		return Optional.of(result);
+	}
+
+	protected STInitializerExpressionSource parseAttributeValue(final Attribute attribute) {
+		return StructuredTextParseUtil.parse(attribute.getValue(), attribute.eResource().getURI(), attribute.getType(),
+				EcoreUtil2.getContainerOfType(attribute, LibraryElement.class), null, getWarnings(), getWarnings(),
+				getInfos());
+	}
+
+	protected String evaluateAttributeValue(final Attribute attribute) {
+		try {
+			return VariableOperations.newVariable(attribute).toString();
+		} catch (final Exception e) {
+			getWarnings().add(MessageFormat.format(Messages.XMIExportFilter_AttributeValueError,
+					attribute.getQualifiedName(), e.getMessage()));
+			return null;
+		}
+	}
+
+	protected static boolean hasAttributeValue(final Attribute attribute) {
+		return attribute.getType() instanceof AnyType && attribute.getValue() != null
+				&& !attribute.getValue().isBlank();
 	}
 }

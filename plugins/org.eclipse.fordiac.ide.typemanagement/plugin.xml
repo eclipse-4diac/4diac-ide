@@ -623,12 +623,6 @@
             type="org.eclipse.core.resources.IResource">
       </propertyTester>
    </extension>  
-   
-   	<extension point="org.eclipse.ui.menus">
-   		<menuContribution locationURI="menu:org.eclipse.4diac.ide.refactor.menu?after=typeGroup">
-   			<command commandId="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype" />
-    	</menuContribution>
-	</extension>
 
    <extension
          point="org.eclipse.ui.activities">

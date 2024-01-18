@@ -9,6 +9,22 @@
                type="org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType">
          </source>
       </factory>
+      <factory
+            class="org.eclipse.fordiac.ide.deployment.eval.DeploymentEvaluatorFactory"
+            variant="deployment">
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.BasicFBType">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType">
+         </source>
+      </factory>
    </extension>
 
 </plugin>

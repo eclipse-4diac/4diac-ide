@@ -104,14 +104,15 @@ public class FBNetworkConnection extends HideableConnection {
 	}
 
 	public void updateConLabels() {
-		if (isHidden()) {
+		if (getSourceDecoration() != null) {
 			getSourceDecoration().getLabel().setText(createDestinationLabelText());
 			if ((getSourceDecoration() instanceof final GroupInterfaceConnectionLabel srcLabel)
 					&& (srcLabel.getGroupFigure() == null)) {
 				srcLabel.setGroupFigure(getGroupFigure(getModel().getSourceElement()));
 			}
 			updateSourceTooltip();
-
+		}
+		if (getTargetDecoration() != null) {
 			getTargetDecoration().getLabel().setText(createSourceLabelText());
 			if ((getTargetDecoration() instanceof final GroupInterfaceConnectionLabel dstLabel)
 					&& (dstLabel.getGroupFigure() == null)) {
@@ -122,31 +123,50 @@ public class FBNetworkConnection extends HideableConnection {
 	}
 
 	private RotatableDecoration createTargetLabel() {
-		FBNetworkConnectionLabel label;
-		if (isSubappCrossingConnection() && isInGroup(getModel().getDestinationElement())) {
-			label = new GroupInterfaceConnectionLabel(false, getGroupFigure(getModel().getDestinationElement()), this);
-		} else {
-			label = new FBNetworkConnectionLabel(false);
+		FBNetworkConnectionLabel label = null;
+		if (showLabel(getModel().getDestinationElement(), getModel().getSourceElement())) {
+			if (isSubappCrossingConnection() && isInGroup(getModel().getDestinationElement())) {
+				label = new GroupInterfaceConnectionLabel(false, getGroupFigure(getModel().getDestinationElement()),
+						this);
+			} else {
+				label = new FBNetworkConnectionLabel(false);
+			}
+			label.setBackgroundColor(getForegroundColor());
 		}
-		label.setBackgroundColor(getForegroundColor());
 		return label;
 	}
 
 	private RotatableDecoration createSourceLabel() {
-		FBNetworkConnectionLabel label;
-		if (isFanOut()) {
-			final EList<Connection> outputConnections = getModel().getSource().getOutputConnections();
-			if (outputConnections.indexOf(getModel()) == 0) {
-				label = new GroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()), this);
+		FBNetworkConnectionLabel label = null;
+		if (showLabel(getModel().getSourceElement(), getModel().getDestinationElement())) {
+			if (isFanOut()) {
+				final EList<Connection> outputConnections = getModel().getSource().getOutputConnections();
+				if (outputConnections.indexOf(getModel()) == 0) {
+					label = new GroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()),
+							this);
+				} else {
+					label = new FanOutGroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()),
+							this, outputConnections);
+				}
 			} else {
-				label = new FanOutGroupInterfaceConnectionLabel(true, getGroupFigure(getModel().getSourceElement()),
-						this, outputConnections);
+				label = new FBNetworkConnectionLabel(true);
 			}
-		} else {
-			label = new FBNetworkConnectionLabel(true);
+			label.setBackgroundColor(getForegroundColor());
 		}
-		label.setBackgroundColor(getForegroundColor());
 		return label;
+	}
+
+	private boolean showLabel(final FBNetworkElement toCheck, final FBNetworkElement other) {
+		if (toCheck instanceof final SubApp subApp) {
+			if (subApp.isUnfolded()) {
+				return false;
+			}
+			if (getModel().getFBNetwork() == subApp.getSubAppNetwork() && other instanceof final SubApp otherSubApp
+					&& otherSubApp.isUnfolded()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private boolean isFanOut() {

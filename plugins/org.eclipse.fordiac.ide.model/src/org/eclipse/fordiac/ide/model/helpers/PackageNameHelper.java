@@ -64,7 +64,7 @@ public final class PackageNameHelper {
 		final int lastIndex = fullTypeName.lastIndexOf(PACKAGE_NAME_DELIMITER);
 		if (lastIndex != -1) {
 			libraryElement.setName(fullTypeName.substring(lastIndex + PACKAGE_NAME_DELIMITER.length()));
-			setPackageName(libraryElement, fullTypeName.substring(lastIndex));
+			setPackageName(libraryElement, fullTypeName.substring(0, lastIndex));
 		} else {
 			libraryElement.setName(fullTypeName);
 		}

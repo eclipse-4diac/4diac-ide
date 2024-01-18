@@ -355,7 +355,8 @@ final package class ExpressionAnnotations {
 			val parameters = feature.computeInputParameters(arguments)
 			if (arguments.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
 				parameters.toInvertedMap [ parameter |
-					arguments.get(parameters.indexOf(parameter))
+					val index = parameters.indexOf(parameter)
+					index < arguments.size ? arguments.get(index) : null
 				].unmodifiableView
 			} else { // named arguments
 				val namedArguments = arguments.filter(STCallNamedInputArgument).toMap[parameter]
@@ -375,7 +376,8 @@ final package class ExpressionAnnotations {
 				val inputCount = feature.inputParameters.size
 				val inOutCount = feature.inOutParameters.size
 				parameters.toInvertedMap [ parameter |
-					arguments.get(inputCount + inOutCount + parameters.indexOf(parameter))
+					val index = inputCount + inOutCount + parameters.indexOf(parameter)
+					index < arguments.size ? arguments.get(index) : null
 				].unmodifiableView
 			} else { // named arguments
 				val namedArguments = arguments.filter(STCallNamedOutputArgument).toMap[parameter]
@@ -394,7 +396,8 @@ final package class ExpressionAnnotations {
 			if (arguments.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
 				val inputCount = feature.inputParameters.size
 				parameters.toInvertedMap [ parameter |
-					arguments.get(inputCount + parameters.indexOf(parameter))
+					val index = inputCount + parameters.indexOf(parameter)
+					index < arguments.size ? arguments.get(index) : null
 				].unmodifiableView
 			} else { // named arguments
 				val namedArguments = arguments.filter(STCallNamedInputArgument).toMap[parameter]

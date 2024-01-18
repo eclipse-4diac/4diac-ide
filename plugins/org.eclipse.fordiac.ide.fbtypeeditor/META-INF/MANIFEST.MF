@@ -28,7 +28,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.jface.text,
  org.eclipse.xtext.ui,
- org.eclipse.nebula.widgets.nattable.core
+ org.eclipse.nebula.widgets.nattable.core,
+ org.eclipse.fordiac.ide.model.search
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier

@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.model;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.systemmanagement.FordiacProjectLoader;
+import org.eclipse.fordiac.ide.test.model.FordiacProjectLoader;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.osgi.framework.Bundle;

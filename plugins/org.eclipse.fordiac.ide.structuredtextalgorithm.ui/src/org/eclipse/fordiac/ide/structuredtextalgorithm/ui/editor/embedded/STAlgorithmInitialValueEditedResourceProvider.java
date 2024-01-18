@@ -12,19 +12,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
-import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.ParserRule;
 
 public class STAlgorithmInitialValueEditedResourceProvider extends STAlgorithmEditedResourceProvider {
 	private final ITypedElement element;
 
 	public STAlgorithmInitialValueEditedResourceProvider(final ITypedElement element) {
-		super(EcoreUtil2.getContainerOfType(element, LibraryElement.class));
+		super(EcoreUtil.getRootContainer(element) instanceof final LibraryElement libraryElement ? libraryElement
+				: null);
 		this.element = element;
 	}
 

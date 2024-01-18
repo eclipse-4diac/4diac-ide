@@ -29,9 +29,9 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
-import org.eclipse.fordiac.ide.model.typelibrary.testmocks.DataTypeEntryMock
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup
+import org.eclipse.fordiac.ide.test.model.typelibrary.DataTypeEntryMock
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
@@ -355,6 +355,7 @@ class FunctionsTest {
 	@Test
 	def void testGenericTypeStruct() {
 		val structType = DataFactory.eINSTANCE.createStructuredType => [
+			name = "GenericTypeStruct"
 			memberVariables.addAll(#[
 				LibraryElementFactory.eINSTANCE.createVarDeclaration => [name = "a" type = ElementaryTypes.INT],
 				LibraryElementFactory.eINSTANCE.createVarDeclaration => [name = "b" type = ElementaryTypes.INT]

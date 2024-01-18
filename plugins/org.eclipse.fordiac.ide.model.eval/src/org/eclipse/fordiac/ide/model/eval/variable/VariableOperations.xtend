@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorCache
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -108,6 +109,17 @@ final class VariableOperations {
 
 	def static Variable<?> newVariable(FB fb) {
 		newVariable(fb.name, fb.type)
+	}
+
+	def static Variable<?> newVariable(Attribute attr) {
+		if (!attr.value.nullOrEmpty) {
+				val evaluator = attr.createEvaluator(Attribute, null, emptySet, null)
+				if (evaluator instanceof VariableEvaluator) {
+					evaluator.evaluateVariable
+				} else
+					throw new UnsupportedOperationException("No suitable evaluator for Attribute found")
+		} else
+			newVariable(attr.name, attr.type)
 	}
 
 	def static INamedElement evaluateResultType(VarDeclaration decl) {

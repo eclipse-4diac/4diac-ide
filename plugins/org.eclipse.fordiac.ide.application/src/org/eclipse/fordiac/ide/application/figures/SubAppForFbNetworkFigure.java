@@ -29,8 +29,10 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
@@ -41,15 +43,16 @@ import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 
 /** The Class SubAppForFbNetworkFigure. */
 public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 
 	private InstanceCommentFigure commentFigure;
 	private RoundedRectangle expandedMainFigure;
-	private IFigure expandedInputFigure;
+	private Shape expandedInputFigure;
 	private IFigure expandedContentArea;
-	private IFigure expandedOutputFigure;
+	private Shape expandedOutputFigure;
 
 	public SubAppForFbNetworkFigure(final SubApp model, final SubAppForFBNetworkEditPart editPart) {
 		super(model, editPart);
@@ -73,6 +76,12 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	@Override
 	protected SubApp getModel() {
 		return (SubApp) super.getModel();
+	}
+
+	@Override
+	public void setBackgroundColor(final Color bg) {
+		setInterfaceBarAlpha(bg != null ? 100 : 255);
+		super.setBackgroundColor(bg);
 	}
 
 	public RoundedRectangle getExpandedMainFigure() {
@@ -154,9 +163,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	}
 
 	private void createExpandedInputs() {
-		expandedInputFigure = new Figure();
-		expandedInputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(expandedInputFigure, new GridData(SWT.BEGINNING, SWT.TOP, false, true));
+		expandedInputFigure = createInterfaceBar(expandedMainFigure);
 		expandedInputFigure.add(getEventInputs(), createInterfaceBarGroupLayoutData());
 		expandedInputFigure.add(getDataInputs(), createInterfaceBarGroupLayoutData());
 		expandedInputFigure.add(getVarInOutInputs(), createInterfaceBarGroupLayoutData());
@@ -173,9 +180,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	}
 
 	private void createExpandedOutputs() {
-		expandedOutputFigure = new Figure();
-		expandedOutputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(expandedOutputFigure, new GridData(SWT.BEGINNING, SWT.TOP, false, true));
+		expandedOutputFigure = createInterfaceBar(expandedMainFigure);
 		expandedOutputFigure.add(getEventOutputs(), createInterfaceBarGroupLayoutData());
 		expandedOutputFigure.add(getDataOutputs(), createInterfaceBarGroupLayoutData());
 		expandedOutputFigure.add(getVarInOutOutputs(), createInterfaceBarGroupLayoutData());
@@ -183,16 +188,13 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedOutputFigure.add(getErrorMarkerOutput(), createInterfaceBarGroupLayoutData());
 	}
 
-	private static GridData createExpandedIOLayoutData() {
-		final GridData gridData = new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-		gridData.verticalAlignment = SWT.TOP;
-		return gridData;
-	}
-
-	protected static GridData createExpandedOutputLayoutData() {
-		final GridData outputsLayoutData = createExpandedIOLayoutData();
-		outputsLayoutData.horizontalAlignment = GridData.END;
-		return outputsLayoutData;
+	private static Shape createInterfaceBar(final IFigure parent) {
+		final RoundedRectangle interfaceBar = new RoundedRectangle();
+		interfaceBar.setOutline(false);
+		interfaceBar.setBackgroundColor(EditorWithInterfaceEditPart.INTERFACE_BAR_BG_COLOR);
+		interfaceBar.setLayoutManager(createInterfaceBarLayout());
+		parent.add(interfaceBar, new GridData(SWT.BEGINNING, SWT.FILL, false, true));
+		return interfaceBar;
 	}
 
 	private void removeTopMiddleBottom() {
@@ -222,9 +224,9 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		return gridData;
 	}
 
-	protected static GridLayout createExpandedIOLayout() {
+	private static GridLayout createInterfaceBarLayout() {
 		final GridLayout topLayout = new GridLayout(1, false);
-		topLayout.marginHeight = 0;
+		topLayout.marginHeight = EditorWithInterfaceEditPart.getInterfaceBarTopPadding();
 		topLayout.marginWidth = 0;
 		topLayout.verticalSpacing = 0;
 		topLayout.horizontalSpacing = 0;
@@ -237,6 +239,15 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 					expandedOutputFigure.getPreferredSize().height);
 		}
 		return -1;
+	}
+
+	private void setInterfaceBarAlpha(final int alpha) {
+		if (expandedInputFigure != null) {
+			expandedInputFigure.setAlpha(alpha);
+		}
+		if (expandedOutputFigure != null) {
+			expandedOutputFigure.setAlpha(alpha);
+		}
 	}
 
 	protected static GridLayout createExpandedMainFigureLayout() {

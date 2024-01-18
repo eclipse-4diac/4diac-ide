@@ -20,7 +20,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.ui.editor.reconciler.XtextReconciler;
@@ -72,13 +71,7 @@ public class LibraryElementXtextDocumentUpdater extends Job {
 
 	@SuppressWarnings("static-method") // subclasses may override
 	protected void doRun(final LibraryElementXtextResource resource, final IProgressMonitor monitor) {
-		final LibraryElement libraryElement = resource.getLibraryElement();
-		if (libraryElement != null) {
-			final TypeEntry typeEntry = libraryElement.getTypeEntry();
-			if (typeEntry != null) {
-				resource.setLibraryElement(typeEntry.getTypeEditable());
-			}
-		}
+		resource.updateInternalLibraryElement();
 	}
 
 	public void install(final LibraryElementXtextDocument document) {

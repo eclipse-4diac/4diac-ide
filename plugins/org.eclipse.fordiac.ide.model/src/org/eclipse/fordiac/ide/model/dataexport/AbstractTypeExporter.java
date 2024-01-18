@@ -29,14 +29,16 @@ import java.io.OutputStream;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FunctionFBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -100,17 +102,29 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	}
 
 	private static AbstractTypeExporter getTypeExporter(final TypeEntry entry) {
-		if (entry instanceof FBTypeEntry) {
-			return new FbtExporter((FBTypeEntry) entry);
+		if (entry instanceof final FunctionFBTypeEntry functionFBTypeEntry) {
+			return new FCTExporter(functionFBTypeEntry);
 		}
-		if (entry instanceof AdapterTypeEntry) {
-			return new AdapterExporter((AdapterTypeEntry) entry);
-		} else if (entry instanceof SubAppTypeEntry) {
-			return new SubApplicationTypeExporter((SubAppTypeEntry) entry);
-		} else if (entry instanceof DataTypeEntry) {
-			return new DataTypeExporter((AnyDerivedType) entry.getTypeEditable());
-		} else if (entry instanceof SystemEntry) {
-			return new SystemExporter(((SystemEntry) entry).getSystem());
+		if (entry instanceof final FBTypeEntry functionFBTypeEntry) {
+			return new FbtExporter(functionFBTypeEntry);
+		}
+		if (entry instanceof final AdapterTypeEntry adapterTypeEntry) {
+			return new AdapterExporter(adapterTypeEntry);
+		}
+		if (entry instanceof final SubAppTypeEntry subAppTypeEntry) {
+			return new SubApplicationTypeExporter(subAppTypeEntry);
+		}
+		if (entry instanceof final DataTypeEntry dataTypeEntry) {
+			return new DataTypeExporter(dataTypeEntry.getTypeEditable());
+		}
+		if (entry instanceof final SystemEntry systemEntry) {
+			return new SystemExporter(systemEntry.getSystem());
+		}
+		if (entry instanceof final GlobalConstantsEntry globalConstantsEntry) {
+			return new GlobalConstantsExporter(globalConstantsEntry.getTypeEditable());
+		}
+		if (entry instanceof final AttributeTypeEntry attributeTypeEntry) {
+			return new AttributeTypeExporter(attributeTypeEntry.getTypeEditable());
 		}
 		return null;
 	}
@@ -141,10 +155,12 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		}
 	}
 
-	/** Adds the compiler.
+	/**
+	 * Adds the compiler.
 	 *
 	 * @param compiler the compiler
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	private void addCompiler(final org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler)
 			throws XMLStreamException {
 		addEmptyStartElement(LibraryElementTags.COMPILER_ELEMENT);
@@ -158,20 +174,24 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 				(null != compiler.getVersion()) ? compiler.getVersion() : ""); //$NON-NLS-1$
 	}
 
-	/** Adds the import.
+	/**
+	 * Adds the import.
 	 *
 	 * @param imp the import
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	private void addImport(final Import imp) throws XMLStreamException {
 		addEmptyStartElement(LibraryElementTags.IMPORT_ELEMENT);
 		getWriter().writeAttribute(LibraryElementTags.DECLARATION_ATTRIBUTE,
 				(null != imp.getImportedNamespace()) ? imp.getImportedNamespace() : ""); //$NON-NLS-1$
 	}
 
-	/** Adds the variable.
+	/**
+	 * Adds the variable.
 	 *
 	 * @param varDecl the var decl
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	protected void addVarDeclaration(final VarDeclaration varDecl) throws XMLStreamException {
 		final boolean hasAttributes = !varDecl.getAttributes().isEmpty();
 		if (hasAttributes) {

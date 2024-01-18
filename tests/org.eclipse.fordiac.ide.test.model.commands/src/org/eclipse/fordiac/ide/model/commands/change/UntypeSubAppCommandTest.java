@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.typelibrary.testmocks.SubAppTypeEntryMock;
+import org.eclipse.fordiac.ide.test.model.typelibrary.SubAppTypeEntryMock;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class UntypeSubAppCommandTest extends FBNetworkTestBase {

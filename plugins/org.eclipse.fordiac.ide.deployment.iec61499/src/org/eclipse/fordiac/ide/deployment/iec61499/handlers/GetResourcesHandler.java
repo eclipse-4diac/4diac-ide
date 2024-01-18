@@ -19,7 +19,6 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.executors.DynamicTypeLoadDeploymentExecutor;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
@@ -58,7 +57,6 @@ public class GetResourcesHandler extends AbstractHandler {
 		final IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE
 				.getDeviceManagementInteractor(device);
 		if (interactor instanceof final DynamicTypeLoadDeploymentExecutor dynamicTypeLoadDeploymentExecutor) {
-			DeploymentCoordinator.enableOutput(interactor);
 			try {
 				interactor.connect();
 				dynamicTypeLoadDeploymentExecutor.queryResourcesWithNetwork(device);
@@ -71,7 +69,6 @@ public class GetResourcesHandler extends AbstractHandler {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
-			DeploymentCoordinator.disableOutput(interactor);
 		}
 	}
 }

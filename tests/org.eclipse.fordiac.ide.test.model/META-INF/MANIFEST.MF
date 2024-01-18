@@ -3,14 +3,18 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Model Tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.model
 Bundle-Version: 2.0.1.qualifier
-Fragment-Host: org.eclipse.fordiac.ide.model
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.model
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Eclipse 4diac
-Import-Package: org.eclipse.fordiac.ide.contracts.model,
- org.junit.jupiter.api,
+Import-Package: org.junit.jupiter.api,
  org.junit.jupiter.api.function,
  org.junit.jupiter.params,
  org.junit.jupiter.params.provider,
  org.opentest4j
-Require-Bundle: org.eclipse.fordiac.ide.systemmanagement
+Require-Bundle: org.eclipse.osgi,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.ui
+Export-Package: org.eclipse.fordiac.ide.test.model,
+ org.eclipse.fordiac.ide.test.model.typelibrary
