@@ -527,21 +527,35 @@ public interface Functions {
 	 * @param method             The method reference corresponding to the function
 	 * @param expectedReturnType The expected return type used to infer the expected
 	 *                           parameter type (may be null)
+	 * @param argumentTypes      The argument types used to infer the expected
+	 *                           parameter type (may contain null)
 	 * @param index              The parameter index
 	 * @return The expected parameter type of the function based on the expected
 	 *         return type
 	 */
 	static DataType inferExpectedParameterTypeFromDataType(final Method method, final DataType expectedReturnType,
-			final int index) {
+			final List<DataType> argumentTypes, final int index) {
 		try {
 			final Type parameterType = getGenericParameterValueType(method, index);
 			if (parameterType instanceof final TypeVariable<?> parameterTypeVariable) {
 				final var parameterTypeBound = ValueOperations.dataType(getCommonTypeBound(parameterTypeVariable));
 				if (parameterTypeBound != null) {
+					// try expected return type
 					final Type returnType = method.getGenericReturnType();
 					if (returnType instanceof TypeVariable<?> && parameterType.equals(returnType)
 							&& expectedReturnType != null && parameterTypeBound.isAssignableFrom(expectedReturnType)) {
 						return expectedReturnType;
+					}
+					// try other parameters
+					DataType result = null;
+					for (int i = 0; i < argumentTypes.size(); ++i) {
+						final Type parameterTypeForArgument = getGenericParameterValueType(method, i);
+						if (parameterTypeForArgument != null && parameterTypeForArgument.equals(parameterType)) {
+							result = commonSupertype(result, argumentTypes.get(i));
+						}
+					}
+					if (result != null && parameterTypeBound.isAssignableFrom(result)) {
+						return result;
 					}
 					return parameterTypeBound;
 				}
