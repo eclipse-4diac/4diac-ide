@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
@@ -92,9 +91,8 @@ public final class ConnectionRoutingHelper {
 
 	private static void addEditorPins(final ConnectionLayoutMapping mapping) {
 		final EditorWithInterfaceEditPart editor = (EditorWithInterfaceEditPart) mapping.getParentElement();
-		final List<SubAppInternalInterfaceEditPart> pins = editor.getChildren().stream()
-				.filter(SubAppInternalInterfaceEditPart.class::isInstance)
-				.map(SubAppInternalInterfaceEditPart.class::cast).toList();
+		final List<InterfaceEditPart> pins = editor.getChildren().stream().filter(InterfaceEditPart.class::isInstance)
+				.map(InterfaceEditPart.class::cast).toList();
 
 		for (final InterfaceEditPart pin : pins) {
 			addPort(pin, mapping, true);

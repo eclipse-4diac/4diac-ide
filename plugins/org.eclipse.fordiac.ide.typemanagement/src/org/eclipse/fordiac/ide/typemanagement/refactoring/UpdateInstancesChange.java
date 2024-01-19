@@ -27,8 +27,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -91,6 +94,9 @@ public class UpdateInstancesChange extends Change {
 			final LibraryElement structuredType = typeEntry.getTypeEditable();
 			Assert.isTrue(structuredType instanceof StructuredType);
 			return new ChangeStructCommand(muxer, (StructuredType) structuredType);
+		}
+		if (instance.eContainer() instanceof BaseFBType && instance instanceof final FB fb) {
+			return new UpdateInternalFBCommand(fb, typeEntry);
 		}
 
 		return new UpdateFBTypeCommand(instance, typeEntry);

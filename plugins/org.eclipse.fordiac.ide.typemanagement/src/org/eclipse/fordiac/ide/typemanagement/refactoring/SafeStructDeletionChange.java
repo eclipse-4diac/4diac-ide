@@ -44,17 +44,13 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class SafeStructDeletionChange extends CompositeChange {
 
@@ -219,7 +215,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 				.forEach(cmd::add);
 			}
 			// @formatter:on
-			SafeStructDeletionChange.executeChange(cmd, type, pm);
+			ChangeExecutionHelper.executeChange(cmd, type, pm);
 			return super.perform(pm);
 		}
 
@@ -270,7 +266,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 				.map(DeleteSubAppInterfaceElementCommand::new)
 				.forEach(cmd::add);
 			// @formatter:on
-			SafeStructDeletionChange.executeChange(cmd, subapp, pm);
+			ChangeExecutionHelper.executeChange(cmd, subapp, pm);
 			return super.perform(pm);
 		}
 
@@ -297,7 +293,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 			final Command cmd = new ChangeStructCommand(manipulator, updated);
 
-			SafeStructDeletionChange.executeChange(cmd, manipulator, pm);
+			ChangeExecutionHelper.executeChange(cmd, manipulator, pm);
 			return super.perform(pm);
 		}
 
@@ -346,32 +342,10 @@ public class SafeStructDeletionChange extends CompositeChange {
 				.map(ie -> ChangeDataTypeCommand.forDataType(ie, struct))
 				.forEach(cmd::add);
 			// @formatter:on
-			SafeStructDeletionChange.executeChange(cmd, subapp, pm);
+			ChangeExecutionHelper.executeChange(cmd, subapp, pm);
 			return super.perform(pm);
 		}
 
-	}
-
-	public static void executeChange(final Command cmd, final EObject modelObj, final IProgressMonitor pm) {
-		final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(modelObj));
-		if (rootContainer instanceof final LibraryElement elem) {
-			Display.getDefault().syncExec(() -> {
-				final TypeEntry entry = elem.getTypeEntry();
-				final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-						.findEditor(new FileEditorInput(entry.getFile()));
-				if (editor == null) {
-					cmd.execute();
-					try {
-						entry.save(pm);
-					} catch (final CoreException e) {
-						FordiacLogHelper.logError(e.getMessage(), e);
-					}
-				} else {
-					editor.getAdapter(CommandStack.class).execute(cmd);
-					editor.doSave(pm);
-				}
-			});
-		}
 	}
 
 }

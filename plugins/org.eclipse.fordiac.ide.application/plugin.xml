@@ -1202,27 +1202,33 @@
 		</visibleWhen>		
       </command>
     </menuContribution>
-    <menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.rest">
-    <command commandId="org.eclipse.fordiac.ide.application.commands.mapTo"
-               label="Map To ...">
-		<visibleWhen>
-          <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor" />
-        </visibleWhen>
-      </command> 
-      <command commandId="org.eclipse.fordiac.ide.application.unmap"
-               label="Unmap"
-               style="push">
-        <visibleWhen>
-          <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor" />
-        </visibleWhen>
-      </command>
-      <command commandId="org.eclipse.fordiac.ide.application.unmapAll"
-               label="Unmap All"
-               style="push">
-        <visibleWhen>
-          <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor" />
-        </visibleWhen>
-      </command>
+	<menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.rest">
+    	<command commandId="org.eclipse.fordiac.ide.application.commands.mapTo"
+        		label="Map To ...">
+			<visibleWhen checkEnabled="true"/>
+      	</command> 
+      	<command commandId="org.eclipse.fordiac.ide.application.unmap"
+        		label="Unmap"
+        		style="push">
+        	<visibleWhen checkEnabled="true"/>
+      	</command>
+      	<command commandId="org.eclipse.fordiac.ide.application.unmapAll"
+        		label="Unmap All"
+        		style="push">
+        	<visibleWhen>
+        		<and>
+          			<reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor" />
+					<with variable="selection">
+              			<count value="1"/>
+              			<iterate>
+	                		<or>
+	                  			<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart" />
+	                		</or>
+              			</iterate>
+            		</with>
+          		</and>	
+        	</visibleWhen>
+      	</command>
       <command
             commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"
             label="Transfer all instance comments"

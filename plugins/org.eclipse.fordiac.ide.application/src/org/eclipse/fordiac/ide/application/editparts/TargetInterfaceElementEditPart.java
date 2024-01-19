@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -104,6 +105,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		label.setOpaque(false);
 		label.setBackgroundColor(getModelColor());
 		label.setText(getLabelText());
+		label.setLabelAlignment(PositionConstants.LEFT);
 		return label;
 	}
 
