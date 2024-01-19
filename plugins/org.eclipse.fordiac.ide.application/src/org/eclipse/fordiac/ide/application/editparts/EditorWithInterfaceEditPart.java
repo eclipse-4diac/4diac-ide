@@ -48,8 +48,8 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -336,21 +336,18 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 				children.addAll(ifList.getPlugs());
 				children.addAll(ifList.getSockets());
 			}
-			if (isInstance()) {
-				children.add(getInstanceComment());
+			final InstanceComment comment = getInstanceComment();
+			if (comment != null) {
+				children.add(comment);
 			}
 			return children;
 		}
 		return Collections.emptyList();
 	}
 
-	private boolean isInstance() {
-		return getModel().eContainer() instanceof FBNetworkElement;
-	}
-
 	private InstanceComment getInstanceComment() {
-		if (null == instanceComment) {
-			instanceComment = new InstanceComment((FBNetworkElement) getModel().eContainer());
+		if (null == instanceComment && getModel().eContainer() instanceof final INamedElement namedEl) {
+			instanceComment = new InstanceComment(namedEl);
 		}
 		return instanceComment;
 	}
