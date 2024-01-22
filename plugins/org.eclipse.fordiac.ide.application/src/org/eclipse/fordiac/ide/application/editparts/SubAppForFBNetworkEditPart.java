@@ -154,8 +154,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			if (getHost().getModel() instanceof INamedElement) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ResizeGroupOrSubappCommand((GraphicalEditPart) getHost(),
-							(Command) new ChangeCommentCommand((INamedElement) getHost().getModel(), str));
+					return new ResizeGroupOrSubappCommand(getHost(),
+							new ChangeCommentCommand((INamedElement) getHost().getModel(), str));
 				}
 			}
 			return null;
@@ -307,6 +307,12 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			final GridData contentGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 					| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 			getFigure().getExpandedContentArea().add(contentFigure, contentGridData, -1);
+		} else if (childEditPart instanceof final InterfaceEditPart interfaceEditPart && getModel().isUnfolded()) {
+			if (interfaceEditPart.isInput()) {
+				getFigure().getExpandedInputFigure().getChildren().get(0).add(interfaceEditPart.getFigure());
+			} else {
+				getFigure().getExpandedOutputFigure().getChildren().get(0).add(interfaceEditPart.getFigure());
+			}
 		} else {
 			super.addChildVisual(childEditPart, index);
 		}
@@ -317,6 +323,12 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 		if (childEditPart instanceof final UnfoldedSubappContentEditPart unfoldedSubappContentEP) {
 			if (getFigure().getExpandedContentArea() != null) {
 				getFigure().getExpandedContentArea().remove(unfoldedSubappContentEP.getFigure());
+			}
+		} else if (childEditPart instanceof final InterfaceEditPart interfaceEditPart && getModel().isUnfolded()) {
+			if (interfaceEditPart.isInput()) {
+				getFigure().getExpandedInputFigure().getChildren().get(0).remove(interfaceEditPart.getFigure());
+			} else {
+				getFigure().getExpandedOutputFigure().getChildren().get(0).remove(interfaceEditPart.getFigure());
 			}
 		} else {
 			super.removeChildVisual(childEditPart);

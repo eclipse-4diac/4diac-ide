@@ -27,6 +27,7 @@ import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
+import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
@@ -126,9 +127,9 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		createExpandedMainFigure();
 		removeTopMiddleBottom();
 		addComment();
-		createExpandedInputs();
+		expandedInputFigure = createInterfaceBar(expandedMainFigure);
 		createContentContainer();
-		createExpandedOutputs();
+		expandedOutputFigure = createInterfaceBar(expandedMainFigure);
 		// ensure recalculation of the pins as they now have two connection endpoints
 		getFbFigureContainer().invalidateTree();
 	}
@@ -162,15 +163,6 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		getFbFigureContainer().add(expandedMainFigure, gridData);
 	}
 
-	private void createExpandedInputs() {
-		expandedInputFigure = createInterfaceBar(expandedMainFigure);
-		expandedInputFigure.add(getEventInputs(), createInterfaceBarGroupLayoutData());
-		expandedInputFigure.add(getDataInputs(), createInterfaceBarGroupLayoutData());
-		expandedInputFigure.add(getVarInOutInputs(), createInterfaceBarGroupLayoutData());
-		expandedInputFigure.add(getSockets(), createInterfaceBarGroupLayoutData());
-		expandedInputFigure.add(getErrorMarkerInput(), createInterfaceBarGroupLayoutData());
-	}
-
 	private void createContentContainer() {
 		expandedContentArea = new Figure();
 		expandedContentArea.setLayoutManager(new GridLayout());
@@ -179,22 +171,26 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure.add(expandedContentArea, gridData);
 	}
 
-	private void createExpandedOutputs() {
-		expandedOutputFigure = createInterfaceBar(expandedMainFigure);
-		expandedOutputFigure.add(getEventOutputs(), createInterfaceBarGroupLayoutData());
-		expandedOutputFigure.add(getDataOutputs(), createInterfaceBarGroupLayoutData());
-		expandedOutputFigure.add(getVarInOutOutputs(), createInterfaceBarGroupLayoutData());
-		expandedOutputFigure.add(getPlugs(), createInterfaceBarGroupLayoutData());
-		expandedOutputFigure.add(getErrorMarkerOutput(), createInterfaceBarGroupLayoutData());
-	}
-
 	private static Shape createInterfaceBar(final IFigure parent) {
 		final RoundedRectangle interfaceBar = new RoundedRectangle();
 		interfaceBar.setOutline(false);
 		interfaceBar.setBackgroundColor(EditorWithInterfaceEditPart.INTERFACE_BAR_BG_COLOR);
 		interfaceBar.setLayoutManager(createInterfaceBarLayout());
 		parent.add(interfaceBar, new GridData(SWT.BEGINNING, SWT.FILL, false, true));
+
+		createToolbarLayoutContainer(interfaceBar);
+
 		return interfaceBar;
+	}
+
+	private static void createToolbarLayoutContainer(final RoundedRectangle interfaceBar) {
+		final IFigure container = new Figure();
+		final ToolbarLayout layout = new ToolbarLayout(false);
+		layout.setStretchMinorAxis(true);
+		layout.setSpacing(2);
+		layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		container.setLayoutManager(layout);
+		interfaceBar.add(container, createInterfaceBarGroupLayoutData());
 	}
 
 	private void removeTopMiddleBottom() {
