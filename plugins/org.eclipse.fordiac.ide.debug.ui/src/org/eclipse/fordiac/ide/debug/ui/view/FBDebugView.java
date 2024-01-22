@@ -34,7 +34,6 @@ import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
 import org.eclipse.fordiac.ide.debug.ui.view.actions.RepeatEventAction;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
-import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
@@ -112,7 +111,6 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 
 	}
 
-
 	private GraphicalViewer viewer;
 	private ActionRegistry actionRegistry;
 	private static final int NUM_COLUMNS = 1;
@@ -163,7 +161,6 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 		initializeGraphicalViewer();
 		hookGraphicalViewer();
 	}
-
 
 	private void configureGraphicalViewer() {
 		viewer.getControl().setBackground(ColorConstants.listBackground);
@@ -255,8 +252,8 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 	}
 
 	private void contextActivated(final ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			final Object source = ((IStructuredSelection) selection).getFirstElement();
+		if (selection instanceof final IStructuredSelection structSel) {
+			final Object source = structSel.getFirstElement();
 			if (source == null) {
 				setContents(null);
 			} else {
@@ -282,27 +279,23 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 
 	private static EvaluatorProcess getFBEvaluatorDebugContext(final Object source) {
 		Object evaluatorProcess = source;
-		if (evaluatorProcess instanceof EvaluatorDebugElement) {
-			evaluatorProcess = ((EvaluatorDebugElement) evaluatorProcess).getDebugTarget();
+		if (evaluatorProcess instanceof final EvaluatorDebugElement evalDebugElem) {
+			evaluatorProcess = evalDebugElem.getDebugTarget();
 		}
-		if (evaluatorProcess instanceof EvaluatorDebugTarget) {
-			evaluatorProcess = ((EvaluatorDebugTarget) evaluatorProcess).getProcess();
+		if (evaluatorProcess instanceof final EvaluatorDebugTarget evalDebugTarget) {
+			evaluatorProcess = evalDebugTarget.getProcess();
 		}
 
-		if (evaluatorProcess instanceof EvaluatorProcess) {
-			final Evaluator evaluator = ((EvaluatorProcess) evaluatorProcess).getEvaluator();
-			if (evaluator instanceof FBEvaluator<?>) {
-				return ((EvaluatorProcess) evaluatorProcess);
-			}
+		if (evaluatorProcess instanceof final EvaluatorProcess ep && ep.getEvaluator() instanceof FBEvaluator<?>) {
+			return ep;
 		}
 		return null;
 	}
 
 	private void setScrollPosition() {
-		if (viewer.getControl() instanceof FigureCanvas) {
+		if (viewer.getControl() instanceof final FigureCanvas canvas) {
 			Display.getDefault().asyncExec(() -> {
-				final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
-				if (canvas != null && !canvas.isDisposed()) {
+				if (!canvas.isDisposed()) {
 					viewer.flush();
 					if (viewer.getSelectedEditParts().isEmpty()) {
 						final Point scrollPos = getInitialScrollPos(viewer);
@@ -334,11 +327,11 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 
 	private void updateActions() {
 		final ActionRegistry registry = getActionRegistry();
-		final Iterator<Object> actionIter = registry.getActions();
+		final Iterator<IAction> actionIter = registry.getActions();
 		while (actionIter.hasNext()) {
-			final IAction action = (IAction) actionIter.next();
-			if (action instanceof UpdateAction) {
-				((UpdateAction) action).update();
+			final IAction action = actionIter.next();
+			if (action instanceof final UpdateAction updateAction) {
+				updateAction.update();
 			}
 		}
 	}
