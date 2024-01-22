@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -16,6 +16,7 @@
  *       - externalize strings and cleanup
  *       - add unnecessary conversion quickfixes
  *       - add unused import and organize imports quickfixes
+ *       - refactor adding missing variables
  *   Ulzii Jargalsaikhan
  *   	 - add quick fixes for missing variables
  */
@@ -28,22 +29,26 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.WrappedException;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionScope;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
@@ -53,21 +58,21 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.VarDeclarationKind;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreImportValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator;
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.xtext.EcoreUtil2;
-import org.eclipse.xtext.diagnostics.Diagnostic;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
+import org.eclipse.xtext.nodemodel.INode;
+import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.XtextResource;
@@ -425,145 +430,79 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		}, 100);
 	}
 
-	@Fix(Diagnostic.LINKING_DIAGNOSTIC)
 	public void createMissingVariable(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		final IModificationContext modificationContext = getModificationContextFactory()
-				.createModificationContext(issue);
-		final IXtextDocument xtextDocument = modificationContext.getXtextDocument();
-		if (xtextDocument != null) {
-			final var resolvedElement = xtextDocument.readOnly((final XtextResource resource) -> (offsetHelper
-					.resolveContainedElementAt(resource, issue.getOffset().intValue())));
-			if (EcoreUtil2.getContainerOfType(resolvedElement, STFunction.class) != null
-					|| EcoreUtil2.getContainerOfType(resolvedElement, STMethod.class) != null) {
-				acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingInputVariable,
-						Messages.STCoreQuickfixProvider_CreateMissingInputVariable, null,
-						(final EObject element, final IModificationContext context) -> {
-							final IXtextDocument document = context.getXtextDocument();
-							if (document != null && element.eContainer() instanceof final STAssignment assignment) {
-								final var factory = STCoreFactory.eINSTANCE;
-								final var type = assignment.getRight().getResultType();
-								final var varDeclaration = factory.createSTVarDeclaration();
-								varDeclaration.setType(type);
-								varDeclaration.setName(
-										document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
-								final EObject container = EcoreUtil2.getContainerOfType(element,
-										STFunction.class) != null
-												? EcoreUtil2.getContainerOfType(element, STFunction.class)
-												: EcoreUtil2.getContainerOfType(element, STMethod.class);
-								final var inputBlocks = EcoreUtil2.getAllContentsOfType(container,
-										STVarInputDeclarationBlock.class);
-								if (inputBlocks.isEmpty()) {
-									final var block = factory.createSTVarInputDeclarationBlock();
-									block.getVarDeclarations().add(varDeclaration);
-									if (container instanceof final STFunction function) {
-										function.getVarDeclarations().add(block);
-									} else if (container instanceof final STMethod method) {
-										method.getBody().getVarDeclarations().add(block);
-									}
-								} else {
-									inputBlocks.get(inputBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
-								}
+		acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingInputVariable,
+				Messages.STCoreQuickfixProvider_CreateMissingInputVariable, null,
+				(element, context) -> createMissingVariable(element, VarDeclarationKind.INPUT));
+		acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingInOutVariable,
+				Messages.STCoreQuickfixProvider_CreateMissingInOutVariable, null,
+				(element, context) -> createMissingVariable(element, VarDeclarationKind.INOUT));
+		acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingOutputVariable,
+				Messages.STCoreQuickfixProvider_CreateMissingOutputVariable, null,
+				(element, context) -> createMissingVariable(element, VarDeclarationKind.OUTPUT));
+		acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingTempVariable,
+				Messages.STCoreQuickfixProvider_CreateMissingTempVariable, null,
+				(element, context) -> createMissingVariable(element, VarDeclarationKind.TEMP));
+	}
 
-							}
-						});
-				acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingOutputVariable,
-						Messages.STCoreQuickfixProvider_CreateMissingOutputVariable, null,
-						(final EObject element, final IModificationContext context) -> {
-
-							final IXtextDocument document = context.getXtextDocument();
-							if (document != null && element.eContainer() instanceof final STAssignment assignment) {
-								final var factory = STCoreFactory.eINSTANCE;
-								final var type = assignment.getRight().getResultType();
-								final var varDeclaration = factory.createSTVarDeclaration();
-								varDeclaration.setType(type);
-								varDeclaration.setName(
-										document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
-								final EObject container = EcoreUtil2.getContainerOfType(element,
-										STFunction.class) != null
-												? EcoreUtil2.getContainerOfType(element, STFunction.class)
-												: EcoreUtil2.getContainerOfType(element, STMethod.class);
-								final var outputBlocks = EcoreUtil2.getAllContentsOfType(container,
-										STVarOutputDeclarationBlock.class);
-								if (outputBlocks.isEmpty()) {
-									final var block = factory.createSTVarOutputDeclarationBlock();
-									block.getVarDeclarations().add(varDeclaration);
-									if (container instanceof final STFunction function) {
-										function.getVarDeclarations().add(block);
-									} else if (container instanceof final STMethod method) {
-										method.getBody().getVarDeclarations().add(block);
-									}
-								} else {
-									outputBlocks.get(outputBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
-								}
-
-							}
-						});
-				acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingInOutVariable,
-						Messages.STCoreQuickfixProvider_CreateMissingInOutVariable, null,
-						(final EObject element, final IModificationContext context) -> {
-							final IXtextDocument document = context.getXtextDocument();
-							if (document != null && element.eContainer() instanceof final STAssignment assignment) {
-								final var factory = STCoreFactory.eINSTANCE;
-								final var type = assignment.getRight().getResultType();
-								final var varDeclaration = factory.createSTVarDeclaration();
-								varDeclaration.setType(type);
-								varDeclaration.setName(
-										document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
-								final EObject container = EcoreUtil2.getContainerOfType(element,
-										STFunction.class) != null
-												? EcoreUtil2.getContainerOfType(element, STFunction.class)
-												: EcoreUtil2.getContainerOfType(element, STMethod.class);
-								final var inOutBlocks = EcoreUtil2.getAllContentsOfType(container,
-										STVarInOutDeclarationBlock.class);
-								if (inOutBlocks.isEmpty()) {
-									final var block = factory.createSTVarInOutDeclarationBlock();
-									block.getVarDeclarations().add(varDeclaration);
-									if (container instanceof final STFunction function) {
-										function.getVarDeclarations().add(block);
-									} else if (container instanceof final STMethod method) {
-										method.getBody().getVarDeclarations().add(block);
-									}
-								} else {
-									inOutBlocks.get(inOutBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
-								}
-							}
-						});
+	protected void createMissingVariable(final EObject element, final VarDeclarationKind kind) {
+		if (element instanceof final STFeatureExpression expression) {
+			final ICallable callable = EcoreUtil2.getContainerOfType(expression, ICallable.class);
+			final String name = getFeatureText(expression);
+			final INamedElement type = getExpectedFeatureType(expression);
+			if (callable != null && IdentifierVerifier.verifyIdentifier(name).isEmpty() && type != null) {
+				createMissingVariable(callable, name, type, kind);
 			}
-			acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingTempVariable,
-					Messages.STCoreQuickfixProvider_CreateMissingTempVariable, null,
-					(final EObject element, final IModificationContext context) -> {
-						final IXtextDocument document = context.getXtextDocument();
-						if (document != null && element.eContainer() instanceof final STAssignment assignment) {
-							final var factory = STCoreFactory.eINSTANCE;
-							final var type = assignment.getRight().getResultType();
-							final var varDeclaration = factory.createSTVarDeclaration();
-							varDeclaration.setType(type);
-							varDeclaration
-									.setName(document.get(issue.getOffset().intValue(), issue.getLength().intValue()));
-							EObject container = EcoreUtil2.getContainerOfType(element, STFunction.class);
-							if (container == null) {
-								container = EcoreUtil2.getContainerOfType(element, STAlgorithm.class);
-							}
-							if (container == null) {
-								container = EcoreUtil2.getContainerOfType(element, STMethod.class);
-							}
-							final var tempBlocks = EcoreUtil2.getAllContentsOfType(container,
-									STVarTempDeclarationBlock.class);
-							if (tempBlocks.isEmpty()) {
-								final var block = factory.createSTVarTempDeclarationBlock();
-								block.getVarDeclarations().add(varDeclaration);
-								if (container instanceof final STFunction function) {
-									function.getVarDeclarations().add(block);
-								} else if (container instanceof final STAlgorithm algorithm) {
-									algorithm.getBody().getVarTempDeclarations().add(block);
-								} else if (container instanceof final STMethod method) {
-									method.getBody().getVarDeclarations().add(block);
-								}
-							} else {
-								tempBlocks.get(tempBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
-							}
-						}
-					});
 		}
+	}
+
+	@SuppressWarnings("static-method") // subclasses may override
+	protected void createMissingVariable(final ICallable callable, final String name, final INamedElement type,
+			final VarDeclarationKind kind) {
+		throw new UnsupportedOperationException();
+	}
+
+	protected static void createSTVarDeclaration(final EList<STVarDeclarationBlock> blocks, final String name,
+			final INamedElement type, final VarDeclarationKind kind) {
+		final STVarDeclarationBlock block = getOrCreateSTVarDeclarationBlock(blocks, kind.getBlockClass());
+		final STVarDeclaration varDeclaration = createSTVarDeclaration(name, type);
+		block.getVarDeclarations().add(varDeclaration);
+	}
+
+	protected static STVarDeclaration createSTVarDeclaration(final String name, final INamedElement type) {
+		final STVarDeclaration varDeclaration = STCoreFactory.eINSTANCE.createSTVarDeclaration();
+		varDeclaration.setName(name);
+		varDeclaration.setType(type);
+		return varDeclaration;
+	}
+
+	protected static STVarDeclarationBlock getOrCreateSTVarDeclarationBlock(final EList<STVarDeclarationBlock> blocks,
+			final EClass eClass) {
+		return blocks.stream().filter(eClass::isInstance).filter(Predicate.not(STVarDeclarationBlock::isConstant))
+				.findFirst().orElseGet(() -> {
+					final STVarDeclarationBlock block = (STVarDeclarationBlock) STCoreFactory.eINSTANCE.create(eClass);
+					blocks.add(block);
+					return block;
+				});
+	}
+
+	protected static String getFeatureText(final STFeatureExpression element) {
+		return NodeModelUtils.findNodesForFeature(element, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE)
+				.stream().map(INode::getText).map(String::trim).collect(Collectors.joining());
+	}
+
+	protected static INamedElement getExpectedFeatureType(final STFeatureExpression element) {
+		final INamedElement expectedType = STCoreUtil.getExpectedType(element);
+		if (expectedType != null) {
+			return expectedType;
+		}
+		if (element.eContainer() instanceof final STAssignment assignment && assignment.getLeft() == element
+				&& assignment.getRight() != null) {
+			final INamedElement resultType = assignment.getRight().getResultType();
+			if (resultType != null) {
+				return resultType;
+			}
+		}
+		return ElementaryTypes.SINT;
 	}
 }
