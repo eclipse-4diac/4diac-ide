@@ -1641,5 +1641,12 @@
                     properties="isNoReadOnlyEditor"
                     type="java.lang.Object">
     </propertyTester>
+    <propertyTester
+          			class="org.eclipse.fordiac.ide.application.utilities.IsExpandedSubappPropertyTester"
+          			id="org.eclipse.fordiac.ide.application.utilities.isExpandedSubappPropertyTester"
+          			namespace="org.eclipse.fordiac.ide.application.utilities"
+          			properties="isExpandedSubapp"
+          			type="java.lang.Object">
+    </propertyTester>
   </extension>
 </plugin>

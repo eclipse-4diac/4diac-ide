@@ -20,6 +20,10 @@
         class="org.eclipse.fordiac.ide.elk.handlers.ConnectionLayoutHandler"
         commandId="org.eclipse.fordiac.ide.elk.connectionLayout">
     </handler>
+    <handler
+        class="org.eclipse.fordiac.ide.elk.handlers.ExpandedSubappConnectionLayoutHandler"
+        commandId="org.eclipse.fordiac.ide.elk.expandedSubappConnectionLayout">
+    </handler>
 </extension>
 <extension point="org.eclipse.ui.menus">
    <menuContribution
@@ -87,6 +91,21 @@
             	</with>
             </visibleWhen>
                </command>
+     	<command
+            commandId="org.eclipse.fordiac.ide.elk.expandedSubappConnectionLayout"
+            label="Layout Expanded Subapp"
+            style="push">
+            <visibleWhen checkEnabled="false">
+            	<with variable="selection">
+            			<and>
+            				<count value="1" />
+            				<iterate>
+            					<test property="org.eclipse.fordiac.ide.application.utilities.isExpandedSubapp" />
+            				</iterate>
+            			</and>
+            	</with>
+            </visibleWhen>
+          </command>
 	</menuContribution> 
 	<menuContribution
          allPopups="false"
@@ -121,6 +140,21 @@
             	</with>
             </visibleWhen>
                </command>
+        <command
+            commandId="org.eclipse.fordiac.ide.elk.expandedSubappConnectionLayout"
+            label="Layout Expanded Subapp"
+            style="push">
+            <visibleWhen checkEnabled="false">
+            	<with variable="selection">
+            			<and>
+            				<count value="1" />
+            				<iterate>
+            					<test property="org.eclipse.fordiac.ide.application.utilities.isExpandedSubapp" />
+            				</iterate>
+            			</and>
+            	</with>
+            </visibleWhen>
+          </command>
 	</menuContribution> 
 	<separator name="layouting stuff" visible="true"/>
    </extension>
@@ -135,6 +169,13 @@
           id="org.eclipse.fordiac.ide.application.utilities.viewerPropertyTester"
           namespace="org.eclipse.fordiac.ide.application.utilities"
           properties="isViewer"
+          type="java.lang.Object">
+    	</propertyTester>
+    	<propertyTester
+          class="org.eclipse.fordiac.ide.application.utilities.IsExpandedSubappPropertyTester"
+          id="org.eclipse.fordiac.ide.application.utilities.isExpandedSubappPropertyTester"
+          namespace="org.eclipse.fordiac.ide.application.utilities"
+          properties="isExpandedSubapp"
           type="java.lang.Object">
     	</propertyTester>
  </extension> 
