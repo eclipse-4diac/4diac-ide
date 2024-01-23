@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021-2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,6 +24,11 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 
 public final class StructParser {
 
+	private static final char STRUCT_LIT_START = '(';
+	private static final char STRUCT_LIT_END = ')';
+	private static final char ARRAY_LIT_START = '[';
+	private static final char ARRAY_LIT_END = ']';
+
 	public static WatchValueTreeNode createStructFromString(final String struct, final StructuredType structType,
 			final MonitoringElement monitoringElement, final WatchValueTreeNode parent) {
 
@@ -41,7 +46,7 @@ public final class StructParser {
 	private static void buildTree(final WatchValueTreeNode parent, final StructuredType type, final String struct) {
 		// do not consider outer parentheses
 		final int START = 1;
-		final int END = struct.length() - 1;
+		final int END = struct.length() - 2;
 
 		boolean insideString = false;
 		boolean process = true;
@@ -53,9 +58,9 @@ public final class StructParser {
 			final char c = struct.charAt(i);
 			switch (c) {
 			case ',':
-				if (process) {
+				if (process && !insideString) {
 					final String frame = struct.substring(frameStart, i);
-					if (frame.charAt(0) == '(') {
+					if (isArrayNode(struct, frame)) {
 						addArrayNode(frame, parent, type, arrayIndex);
 						arrayIndex++;
 					} else {
@@ -67,21 +72,22 @@ public final class StructParser {
 			case '$':
 				i++; // skip escaped chars
 				break;
-			case '\'':
-			case '\"':
+			case '\'', '\"':
 				insideString = !insideString;
-				process = !insideString;
-			case '[':
-			case '(': // start of inner struct
-				// skip the whole inner struct since this will be handled recursively
-				process = false;
-				innerCnt++;
 				break;
-			case ']':
-			case ')': // end of inner struct
-				innerCnt--;
-				if (innerCnt == 0) {
-					process = true;
+			case ARRAY_LIT_START, STRUCT_LIT_START: // start of inner struct
+				// skip the whole inner struct since this will be handled recursively
+				if (!insideString) {
+					process = false;
+					innerCnt++;
+				}
+				break;
+			case ARRAY_LIT_END, STRUCT_LIT_END: // end of inner struct
+				if (!insideString) {
+					innerCnt--;
+					if (innerCnt == 0) {
+						process = true;
+					}
 				}
 				break;
 			default:
@@ -92,13 +98,17 @@ public final class StructParser {
 		// handle last variable (no ',' triggers the node creation)
 		if (frameStart != END) {
 			final String frame = struct.substring(frameStart, END);
-			if (frame.charAt(0) == '(') {
+			if (isArrayNode(struct, frame)) {
 				addArrayNode(frame, parent, type, arrayIndex);
 			} else {
 				addNode(frame, parent, type);
 			}
 		}
+	}
 
+	private static boolean isArrayNode(final String parentFrame, final String curFrame) {
+		return curFrame.charAt(0) == STRUCT_LIT_START
+				|| (curFrame.charAt(0) == ARRAY_LIT_START && parentFrame.charAt(0) == ARRAY_LIT_START);
 	}
 
 	private static void addNode(final String frame, final WatchValueTreeNode parent, final StructuredType type) {
@@ -116,12 +126,10 @@ public final class StructParser {
 
 		final WatchValueTreeNode node = new WatchValueTreeNode(monitoringElement, type, name, value, variable, parent);
 
-		if (isStructLiteral(value)) {
-			buildTree(node, (StructuredType) variable.getType(), value);
-		} else if (isArrayLiteral(value)) {
-			buildTree(node, (StructuredType) variable.getType(), value);
+		if (variable.getType() instanceof final StructuredType structType
+				&& (isStructLiteral(value) || isArrayLiteral(value))) {
+			buildTree(node, structType, value);
 		}
-
 		parent.addChild(node);
 	}
 
@@ -135,21 +143,18 @@ public final class StructParser {
 
 		final WatchValueTreeNode node = new WatchValueTreeNode(monitoringElement, type, name, value, variable, parent);
 
-		if (isStructLiteral(value)) {
-			buildTree(node, type, value);
-		} else if (isArrayLiteral(value)) {
+		if (isStructLiteral(value) || isArrayLiteral(value)) {
 			buildTree(node, type, value);
 		}
-
 		parent.addChild(node);
 	}
 
 	private static boolean isArrayLiteral(final String value) {
-		return isDerivedTypeLiteral(value, '[', ']');
+		return isDerivedTypeLiteral(value, ARRAY_LIT_START, ARRAY_LIT_END);
 	}
 
 	private static boolean isStructLiteral(final String value) {
-		return isDerivedTypeLiteral(value, '(', ')');
+		return isDerivedTypeLiteral(value, STRUCT_LIT_START, ')');
 	}
 
 	private static boolean isDerivedTypeLiteral(final String value, final char opening, final char closing) {
@@ -169,9 +174,9 @@ public final class StructParser {
 			final WatchValueTreeNode treeNode = (WatchValueTreeNode) parent.addChild(memberVariable, element,
 					structType);
 
-			if ((memberVariable.getType() instanceof StructuredType)
-					&& (memberVariable.getType() != GenericTypes.ANY_STRUCT)) {
-				buildTree((StructuredType) memberVariable.getType(), treeNode, element);
+			if ((memberVariable.getType() instanceof final StructuredType memberStructType)
+					&& (memberStructType != GenericTypes.ANY_STRUCT)) {
+				buildTree(memberStructType, treeNode, element);
 			}
 		}
 	}
@@ -241,8 +246,8 @@ public final class StructParser {
 	}
 
 	public static String removeArrayIndexes(final String input) {
-		final String parsedInput = input.replaceAll("\\[[0-9]+\\]:=", "");
-		return "[" + parsedInput.substring(1, parsedInput.length() - 1) + "]";
+		final String parsedInput = input.replaceAll("\\[[0-9]+\\]:=", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		return "[" + parsedInput.substring(1, parsedInput.length() - 1) + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private StructParser() {
