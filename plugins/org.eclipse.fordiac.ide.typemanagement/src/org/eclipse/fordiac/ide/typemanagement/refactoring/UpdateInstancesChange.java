@@ -14,22 +14,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.StringJoiner;
-
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -38,29 +32,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class UpdateInstancesChange extends Change {
 
-	private final Collection<FBNetworkElement> instances;
+	private final FBNetworkElement instance;
 	private final TypeEntry typeEntry;
 
-	public UpdateInstancesChange(final Collection<FBNetworkElement> instances, final TypeEntry typeEntry) {
-		this.instances = instances;
-		this.typeEntry = typeEntry;
-	}
-
 	public UpdateInstancesChange(final FBNetworkElement instance, final TypeEntry typeEntry) {
-		this(new ArrayList<>(), typeEntry);
-		this.instances.add(instance);
+		this.instance = instance;
+		this.typeEntry = typeEntry;
 	}
 
 	public UpdateInstancesChange(final FBNetworkElement instance) {
@@ -69,15 +52,7 @@ public class UpdateInstancesChange extends Change {
 
 	@Override
 	public String getName() {
-		final StringJoiner fbList = new StringJoiner(", "); //$NON-NLS-1$
-		for (final FBNetworkElement fb : instances) {
-			if (fb.getTypeName() != null) {
-				fbList.add(fb.getQualifiedName() + " : " + fb.getTypeName()); //$NON-NLS-1$
-			} else {
-				fbList.add(fb.getQualifiedName());
-			}
-		}
-		return "Update FB instances - " + fbList.toString(); //$NON-NLS-1$
+		return "Update FB instances - " + FBNetworkHelper.getFullHierarchicalName(instance); //$NON-NLS-1$
 	}
 
 	@Override
@@ -109,52 +84,12 @@ public class UpdateInstancesChange extends Change {
 
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
-		Display.getDefault().syncExec(() -> {
-			instances.stream().forEach(instance -> {
-				final EObject rootContainer = EcoreUtil.getRootContainer(instance);
-				if (rootContainer instanceof final LibraryElement libElement) {
-					final Command command = getCommand(instance);
-					final IEditorPart editor = getEffectedEditor(instance);
-					executeCommand(libElement.getTypeEntry(), editor, command, pm);
-				}
-			});
-
-		});
+		ChangeExecutionHelper.executeChange(getCommand(instance), instance, pm);
 		return null;
-	}
-
-	private static void executeCommand(final TypeEntry rootTypeEntry, final IEditorPart editor, final Command cmd,
-			final IProgressMonitor pm) {
-		if (editor == null) {
-			cmd.execute();
-			try {
-				rootTypeEntry.save(pm);
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
-		} else {
-			editor.getAdapter(CommandStack.class).execute(cmd);
-			editor.doSave(pm);
-		}
 	}
 
 	@Override
 	public Object getModifiedElement() {
-		return null;
-	}
-
-	private static IEditorPart getEffectedEditor(final FBNetworkElement fbNe) {
-		final List<IEditorPart> editors = new ArrayList<>();
-		final EObject rootContainer = EcoreUtil.getRootContainer(fbNe);
-		if (rootContainer instanceof final LibraryElement elem) {
-			Display.getDefault().syncExec(() -> {
-				editors.add(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-						.findEditor(new FileEditorInput(elem.getTypeEntry().getFile())));
-			});
-		}
-		if (!editors.isEmpty()) {
-			return editors.get(0);
-		}
 		return null;
 	}
 }
