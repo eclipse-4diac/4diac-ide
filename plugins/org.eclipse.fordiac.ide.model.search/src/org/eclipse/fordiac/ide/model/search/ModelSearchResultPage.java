@@ -214,16 +214,23 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	}
 
 	private static EObject getParent(final EObject eobj) {
-		if (eobj instanceof final IInterfaceElement ie) {
-			return ie.getFBNetworkElement().eContainer().eContainer();
-		}
 		if (eobj instanceof final Device dev) {
 			return dev.getPosition().eContainer().eContainer();
 		}
 		if ((eobj instanceof Application) || (eobj instanceof FBType)) {
 			return eobj;
 		}
-		return eobj.eContainer().eContainer();
+		EObject parent = null;
+		if (eobj instanceof final IInterfaceElement ie) {
+			parent = ie.getFBNetworkElement().eContainer().eContainer();
+		} else {
+			parent = eobj.eContainer().eContainer();
+		}
+		// For unfolded subapps find the next parent that is not expanded as refElement
+		while (parent instanceof final SubApp subApp && subApp.isUnfolded()) {
+			parent = subApp.eContainer().eContainer();
+		}
+		return parent;
 	}
 
 	public static String hierarchicalName(final Object element) {
