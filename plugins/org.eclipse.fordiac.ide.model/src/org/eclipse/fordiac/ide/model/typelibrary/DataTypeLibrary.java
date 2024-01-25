@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorDataTypeEntryImpl;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class DataTypeLibrary {
@@ -53,7 +54,7 @@ public final class DataTypeLibrary {
 
 	private final Map<String, DataType> typeMap = new ConcurrentHashMap<>();
 	private final Map<String, DataTypeEntry> derivedTypes = new ConcurrentHashMap<>();
-	private final Map<String, ErrorMarkerDataType> errorTypes = new ConcurrentHashMap<>();
+	private final Map<String, ErrorDataTypeEntry> errorTypes = new ConcurrentHashMap<>();
 
 	/** Instantiates a new data type library. */
 	public DataTypeLibrary() {
@@ -63,12 +64,19 @@ public final class DataTypeLibrary {
 
 	public boolean addTypeEntry(final DataTypeEntry entry) {
 		final String uppercaseName = entry.getFullTypeName().toUpperCase();
-		errorTypes.remove(uppercaseName); // remove stale error marker data type
+		removeErrorTypeEntry(uppercaseName); // remove stale error marker data type
 		return derivedTypes.putIfAbsent(uppercaseName, entry) == null;
 	}
 
 	public void removeTypeEntry(final DataTypeEntry entry) {
 		derivedTypes.remove(entry.getFullTypeName().toUpperCase(), entry);
+	}
+
+	private void removeErrorTypeEntry(final String uppercaseName) {
+		final ErrorDataTypeEntry entry = errorTypes.remove(uppercaseName);
+		if (entry != null) {
+			entry.setTypeLibrary(null); // trigger transitive refresh
+		}
 	}
 
 	private void addToTypeMap(final DataType type) {
@@ -201,9 +209,10 @@ public final class DataTypeLibrary {
 			FordiacLogHelper.logInfo(message);
 			final ErrorMarkerDataType type = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
 			PackageNameHelper.setFullTypeName(type, typeName);
-			encloseInResource(type);
-			return type;
-		});
+			final ErrorDataTypeEntry entry = new ErrorDataTypeEntryImpl();
+			entry.setType(type);
+			return entry;
+		}).getType();
 	}
 
 	private static void encloseInResource(final DataType type) {

@@ -134,12 +134,14 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	private void setFullTypeName(final String fullTypeName) {
-		if (typeLibrary != null && fullTypeName != null) {
-			typeLibrary.removeTypeEntryNameReference(this);
-		}
-		this.fullTypeName = fullTypeName;
-		if (typeLibrary != null && fullTypeName != null) {
-			typeLibrary.addTypeEntryNameReference(this);
+		if (!Objects.equals(this.fullTypeName, fullTypeName)) {
+			if (typeLibrary != null && this.fullTypeName != null) {
+				typeLibrary.removeTypeEntryNameReference(this);
+			}
+			this.fullTypeName = fullTypeName;
+			if (typeLibrary != null && fullTypeName != null) {
+				typeLibrary.addTypeEntryNameReference(this);
+			}
 		}
 	}
 
@@ -204,7 +206,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		}
 	}
 
-	private void encloseInResource(final LibraryElement newType) {
+	protected void encloseInResource(final LibraryElement newType) {
 		if (getFile() != null) {
 			final IPath path = getFile().getFullPath();
 			if (path != null) {
@@ -277,7 +279,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 	@Override
 	public void notifyChanged(final Notification notification) {
-		if (notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_FEATURE
+		if ((notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_FEATURE
+				|| notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE)
 				&& dependencies.get().contains(notification.getNotifier())) {
 			synchronized (this) {
 				setType(null);
@@ -314,8 +317,13 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	@Override
-	public void setTypeLibrary(final TypeLibrary typeLib) {
-		typeLibrary = typeLib;
+	public void setTypeLibrary(final TypeLibrary newTypeLibrary) {
+		final TypeLibrary oldTypeLibrary = typeLibrary;
+		typeLibrary = newTypeLibrary;
+		if (eNotificationRequired()) {
+			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE,
+					oldTypeLibrary, newTypeLibrary));
+		}
 	}
 
 	@Override

@@ -31,9 +31,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -209,10 +209,8 @@ public final class TypeLibrary {
 	}
 
 	public Optional<TypeEntry> getTypeFromLinkedFile(final String filename) {
-		return fileMap.entrySet().stream()
-				.filter(entry -> entry.getKey().getName().equals(filename))
-				.map(Entry::getValue)
-				.findFirst();
+		return fileMap.entrySet().stream().filter(entry -> entry.getKey().getName().equals(filename))
+				.map(Entry::getValue).findFirst();
 	}
 
 	/** Instantiates a new fB type library. */
@@ -259,6 +257,13 @@ public final class TypeLibrary {
 		return new ErrorFBTypeEntryImpl();
 	}
 
+	private void removeErrorTypeEntry(final String typeName) {
+		final TypeEntry entry = errorTypes.remove(typeName);
+		if (entry != null) {
+			entry.setTypeLibrary(null);
+		}
+	}
+
 	public void addTypeEntry(final TypeEntry entry) {
 		if (entry.getTypeLibrary() != null) {
 			entry.getTypeLibrary().removeTypeEntry(entry);
@@ -276,7 +281,7 @@ public final class TypeLibrary {
 				handleDuplicateTypeName(entry);
 			}
 		} else {
-			errorTypes.remove(entry.getFullTypeName());
+			removeErrorTypeEntry(entry.getFullTypeName());
 			if (!addBlockTypeEntry(entry)) {
 				handleDuplicateTypeName(entry);
 			}

@@ -80,7 +80,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
@@ -872,7 +871,7 @@ public abstract class CommonElementImporter {
 	}
 
 	protected <T extends TypeEntry> T addDependency(final T entry) {
-		if (entry != null && !(entry instanceof ErrorTypeEntry)) {
+		if (entry != null) {
 			dependencies.add(entry);
 		}
 		return entry;

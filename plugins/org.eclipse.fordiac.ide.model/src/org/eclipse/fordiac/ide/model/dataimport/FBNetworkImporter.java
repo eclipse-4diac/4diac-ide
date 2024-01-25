@@ -239,8 +239,8 @@ class FBNetworkImporter extends CommonElementImporter {
 		final FBTypeEntry entry = getTypeEntry(typeFbElement);
 
 		if (null == entry) {
-			return FordiacMarkerHelper.createTypeErrorMarkerFB(typeFbElement, getTypeLibrary(),
-					LibraryElementPackage.eINSTANCE.getFBType());
+			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(typeFbElement, getTypeLibrary(),
+					LibraryElementPackage.eINSTANCE.getFBType()));
 		}
 		final FBType type = entry.getType();
 		if (type instanceof CompositeFBType) {
@@ -600,4 +600,10 @@ class FBNetworkImporter extends CommonElementImporter {
 		return null;
 	}
 
+	protected <T extends FBNetworkElement> T addDependency(final T element) {
+		if (element != null) {
+			addDependency(element.getTypeEntry());
+		}
+		return element;
+	}
 }

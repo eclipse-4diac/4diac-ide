@@ -83,8 +83,8 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 		final SubAppTypeEntry subEntry = addDependency(getTypeLibrary().getSubAppTypeEntry(type));
 		if (subEntry == null) {
-			return FordiacMarkerHelper.createTypeErrorMarkerFB(type, getTypeLibrary(),
-					LibraryElementPackage.eINSTANCE.getSubAppType());
+			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(type, getTypeLibrary(),
+					LibraryElementPackage.eINSTANCE.getSubAppType()));
 		}
 		subApp.setTypeEntry(subEntry);
 		subApp.setInterface(subEntry.getType().getInterfaceList().copy());
