@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.search;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -222,6 +223,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		EObject parent = null;
 		if (eobj instanceof final IInterfaceElement ie) {
 			parent = ie.getFBNetworkElement().eContainer().eContainer();
+		} else if (isInternalFb(eobj)) {
+			parent = eobj.eContainer();
 		} else {
 			parent = eobj.eContainer().eContainer();
 		}
@@ -230,6 +233,10 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 			parent = subApp.eContainer().eContainer();
 		}
 		return parent;
+	}
+
+	private static boolean isInternalFb(final EObject eobj) {
+		return eobj instanceof final FB fb && fb.eContainer() instanceof FBType && !fb.isContainedInTypedInstance();
 	}
 
 	protected static TableLayout createTableLayout() {

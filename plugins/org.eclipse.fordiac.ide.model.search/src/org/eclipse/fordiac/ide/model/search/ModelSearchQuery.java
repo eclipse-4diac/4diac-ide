@@ -189,6 +189,12 @@ public class ModelSearchQuery implements ISearchQuery {
 	private boolean matchTypeEntry(final LibraryElement elem) {
 		if (elem instanceof final CompositeFBType comp) {
 			searchFBNetwork(comp.getFBNetwork(), new ArrayList<>());
+		} else if (elem instanceof final BaseFBType type) {
+			for (final FB fb : type.getInternalFbs()) {
+				if (matchEObject(fb)) {
+					searchResult.addResult(fb);
+				}
+			}
 		}
 		return matchEObject(elem);
 	}

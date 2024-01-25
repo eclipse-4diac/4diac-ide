@@ -75,7 +75,12 @@ public class SearchNameDictionary {
 	// resolves the elements path through typed composites to a proper name
 	private String hierarchicalName(final FBNetworkElement element, final boolean isInternal) {
 		final var stack = map.get(element);
-		final List<FBNetworkElement> path = stack.pop();
+		if (stack == null) {
+			final String name = FBNetworkHelper.getFullHierarchicalName(element);
+			return isInternal ? name + "(internal)" : name; //$NON-NLS-1$
+		}
+
+		final var path = stack.pop();
 		if (stack.isEmpty()) {
 			map.remove(element);
 		}
