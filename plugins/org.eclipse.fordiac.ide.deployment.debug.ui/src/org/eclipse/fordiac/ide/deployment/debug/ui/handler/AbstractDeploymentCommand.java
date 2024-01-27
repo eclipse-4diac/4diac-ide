@@ -34,6 +34,8 @@ import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -164,6 +166,13 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 			return structuredSelection.toList();
 		}
 		return Collections.emptyList();
+	}
+
+	protected static String getPrefixFor(final FBNetworkElement fb) {
+		if (fb.eContainer().eContainer() instanceof final INamedElement namedEl) {
+			return namedEl.getQualifiedName() + "."; //$NON-NLS-1$
+		}
+		return ""; //$NON-NLS-1$
 	}
 
 	protected abstract boolean prepareParametersToExecute(Object element);
