@@ -47,7 +47,8 @@ public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand {
 
 	@Override
 	protected void executeCommand(final IDeviceManagementInteractor executor) throws DeploymentException {
-		executor.createConnection(res, new ConnectionDeploymentData("", conn.getSource(), "", conn.getDestination())); //$NON-NLS-1$ //$NON-NLS-2$
+		executor.createConnection(res, new ConnectionDeploymentData(getPrefixFor(conn.getSourceElement()),
+				conn.getSource(), getPrefixFor(conn.getDestinationElement()), conn.getDestination()));
 	}
 
 	private static Connection getResourceConnection(final Connection conn) {
