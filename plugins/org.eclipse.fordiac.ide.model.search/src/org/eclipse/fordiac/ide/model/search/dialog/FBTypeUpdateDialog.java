@@ -127,7 +127,8 @@ public class FBTypeUpdateDialog extends MessageDialog {
 		} else {
 			inputSet = result;
 			createfilterButtons(parent);
-
+			final Label label = new Label(parent, SWT.NONE);
+			label.setText("Number of instances of " + typeEntry.getTypeName() + " : " + inputSet.size()); //$NON-NLS-1$
 			treeViewer = createTreeViewer(searchResArea);
 			configureTableViewer(treeViewer);
 			treeViewer.setInput(result.keySet());
