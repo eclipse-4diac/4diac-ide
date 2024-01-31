@@ -16,12 +16,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -45,10 +46,10 @@ public class SearchNameDictionary {
 			if (map.containsKey(fbne)) {
 				return hierarchicalName(fbne, false);
 			}
-			final FBType root = FBNetworkHelper.getRootType(fbne);
+			final var root = EcoreUtil.getRootContainer(fbne);
 			final StringBuilder sb = new StringBuilder();
-			if (root == null) {
-				sb.append(fbne.getFbNetwork().getApplication().getAutomationSystem().getName() + ".");
+			if (root instanceof final AutomationSystem system) {
+				sb.append(system.getName() + ".");
 			}
 			return sb.toString() + FBNetworkHelper.getFullHierarchicalName(fbne);
 		}
