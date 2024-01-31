@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeValueCommand
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
@@ -41,7 +42,7 @@ public class AttributeColumnAccessor extends AbstractColumnAccessor<Attribute, A
 		return switch (column) {
 		case NAME -> rowObject.getName();
 		case TYPE -> rowObject.getFullTypeName();
-		case VALUE -> rowObject.getValue();
+		case VALUE -> InitialValueHelper.getInitialOrDefaultValue(rowObject);
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
