@@ -1,6 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2010 - 2014, 2017 Profactor Gmbh, TU Wien ACIN, fortiss GmbH
- * 				 2018, 2020 Johannes Keppler University
+ * Copyright (c) 2010, 2024 Profactor Gmbh, TU Wien ACIN, fortiss GmbH,
+ * 							Johannes Keppler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,12 +17,12 @@
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 
 public class AdapterExporter extends AbstractBlockTypeExporter {
 
-	public AdapterExporter(final AdapterTypeEntry entry) {
-		super(entry.getTypeEditable().getAdapterFBType());
+	public AdapterExporter(final AdapterType type) {
+		super(type.getAdapterFBType());
 	}
 
 	@Override

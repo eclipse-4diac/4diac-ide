@@ -15,7 +15,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataexport.SubApplicationTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
@@ -29,8 +30,8 @@ public class SubAppTypeEntryImpl extends AbstractTypeEntryImpl implements SubApp
 	@Override
 	public synchronized SubAppType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof SubAppType) {
-			return (SubAppType) type;
+		if (type instanceof final SubAppType subAppType) {
+			return subAppType;
 		}
 		return null;
 	}
@@ -38,10 +39,19 @@ public class SubAppTypeEntryImpl extends AbstractTypeEntryImpl implements SubApp
 	@Override
 	public synchronized SubAppType getType() {
 		final LibraryElement type = super.getType();
-		if (type instanceof SubAppType) {
-			return (SubAppType) type;
+		if (type instanceof final SubAppType subAppType) {
+			return subAppType;
 		}
 		return null;
+	}
+
+	@Override
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
+		if (toSave instanceof final SubAppType subAppType) {
+			doSaveInternal(new SubApplicationTypeExporter(subAppType), monitor);
+		} else {
+			FordiacLogHelper.logError("Tried to save non SubAppType for SubAppTypeEntry");//$NON-NLS-1$
+		}
 	}
 
 	@Override
@@ -59,11 +69,6 @@ public class SubAppTypeEntryImpl extends AbstractTypeEntryImpl implements SubApp
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new SubAppTImporter(getFile());
-	}
-
-	@Override
-	protected AbstractTypeExporter getExporter() {
-		return new SubApplicationTypeExporter(this);
 	}
 
 }

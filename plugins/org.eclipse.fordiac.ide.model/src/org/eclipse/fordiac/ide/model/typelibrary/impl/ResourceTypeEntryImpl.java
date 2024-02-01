@@ -15,7 +15,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -28,8 +29,8 @@ public class ResourceTypeEntryImpl extends AbstractTypeEntryImpl implements Reso
 	@Override
 	public synchronized ResourceType getType() {
 		final LibraryElement type = super.getType();
-		if (type instanceof ResourceType) {
-			return (ResourceType) type;
+		if (type instanceof final ResourceType resType) {
+			return resType;
 		}
 		return null;
 	}
@@ -37,20 +38,25 @@ public class ResourceTypeEntryImpl extends AbstractTypeEntryImpl implements Reso
 	@Override
 	public synchronized ResourceType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
-		if(type instanceof ResourceType){
-			return (ResourceType) type;
+		if (type instanceof final ResourceType resType) {
+			return resType;
 		}
 		return null;
 	}
 
 	@Override
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
+		// currently we can not save resources, but we also have no editor for it
+	}
+
+	@Override
 	public synchronized void setType(final LibraryElement type) {
-		if(type instanceof ResourceType){
+		if (type instanceof ResourceType) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
-				FordiacLogHelper .logError("tried to set no ResourceType as type entry for ResourceTypeEntry"); //$NON-NLS-1$
+			if (null != type) {
+				FordiacLogHelper.logError("tried to set no ResourceType as type entry for ResourceTypeEntry"); //$NON-NLS-1$
 			}
 		}
 	}
@@ -60,9 +66,4 @@ public class ResourceTypeEntryImpl extends AbstractTypeEntryImpl implements Reso
 		return new RESImporter(getFile());
 	}
 
-	@Override
-	protected AbstractTypeExporter getExporter() {
-		// currently we can not save resources, but we also have no editor for it
-		return null;
-	}
 }

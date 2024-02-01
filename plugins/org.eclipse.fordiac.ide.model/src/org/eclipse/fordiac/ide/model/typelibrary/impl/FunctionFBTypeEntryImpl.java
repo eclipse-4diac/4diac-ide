@@ -12,7 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataexport.FCTExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FCTImporter;
@@ -42,6 +43,15 @@ public class FunctionFBTypeEntryImpl extends FBTypeEntryImpl implements Function
 	}
 
 	@Override
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
+		if (toSave instanceof final FunctionFBType functionFBType) {
+			doSaveInternal(new FCTExporter(functionFBType), monitor);
+		} else {
+			FordiacLogHelper.logError("Tried to save non FunctionFBType for FunctionFBTypeEntry");//$NON-NLS-1$
+		}
+	}
+
+	@Override
 	public synchronized void setType(final LibraryElement type) {
 		if (type instanceof FunctionFBType) {
 			super.setType(type);
@@ -58,8 +68,4 @@ public class FunctionFBTypeEntryImpl extends FBTypeEntryImpl implements Function
 		return new FCTImporter(getFile());
 	}
 
-	@Override
-	protected AbstractTypeExporter getExporter() {
-		return new FCTExporter(this);
-	}
 }

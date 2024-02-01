@@ -15,7 +15,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
@@ -34,6 +35,15 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 	@Override
 	public AutomationSystem getSystem() {
 		return getType();
+	}
+
+	@Override
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
+		if (toSave instanceof final AutomationSystem system) {
+			doSaveInternal(new SystemExporter(system), monitor);
+		} else {
+			FordiacLogHelper.logError("Tried to save non AutomationSystem for SystemEntry");//$NON-NLS-1$
+		}
 	}
 
 	@Override
@@ -64,24 +74,21 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 
 	@Override
 	public synchronized AutomationSystem getTypeEditable() {
-		// for performance reasons the systemEntry uses only the type and not the type editable
+		// for performance reasons the systemEntry uses only the type and not the type
+		// editable
 		return getSystem();
 	}
 
 	@Override
 	public synchronized void setTypeEditable(final LibraryElement newTypeEditable) {
-		// for performance reasons the systemEntry uses only the type and not the type editable
+		// for performance reasons the systemEntry uses only the type and not the type
+		// editable
 		setSystem(newTypeEditable);
 	}
 
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new SystemImporter(getFile());
-	}
-
-	@Override
-	protected AbstractTypeExporter getExporter() {
-		return new SystemExporter(getSystem());
 	}
 
 }

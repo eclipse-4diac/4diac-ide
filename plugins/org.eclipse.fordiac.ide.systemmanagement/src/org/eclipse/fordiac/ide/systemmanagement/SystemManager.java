@@ -37,7 +37,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -47,7 +46,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
@@ -136,14 +134,9 @@ public enum SystemManager {
 			final IProgressMonitor monitor) throws CoreException {
 		final IFile systemFile = location.getFile(new Path(name + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT));
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject());
-		SystemEntry entry = (SystemEntry) typeLibrary.getTypeEntry(systemFile);
-		if (entry == null) {
-			entry = (SystemEntry) typeLibrary.createTypeEntry(systemFile);
-		}
 		final AutomationSystem system = SystemImporter.createAutomationSystem();
 		system.setName(name);
-		entry.setType(system);
-		saveSystem(entry.getSystem(), monitor);
+		typeLibrary.createTypeEntry(systemFile).save(system, monitor);
 		return system;
 	}
 
@@ -171,29 +164,6 @@ public enum SystemManager {
 					.createTypeEntry(systemFile);
 		}
 		return null;
-	}
-
-	/**
-	 * Save system.
-	 *
-	 * @param system the system
-	 * @param all    the all
-	 * @throws CoreException
-	 */
-	public static void saveSystem(final AutomationSystem system, final IProgressMonitor monitor) throws CoreException {
-		final TypeEntry typeEntry = system.getTypeEntry();
-		Assert.isNotNull(typeEntry); // there should be no system without type entry
-		typeEntry.save(monitor);
-	}
-
-	public static void saveSystem(final AutomationSystem system, final IFile file, final IProgressMonitor monitor)
-			throws CoreException {
-		final TypeEntry typeEntry = system.getTypeEntry();
-		Assert.isNotNull(typeEntry); // there should be no system without type entry
-		typeEntry.getTypeLibrary().removeTypeEntry(typeEntry);
-		typeEntry.setFile(file);
-		TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject()).addTypeEntry(typeEntry);
-		typeEntry.save(monitor);
 	}
 
 	@SuppressWarnings("static-method")

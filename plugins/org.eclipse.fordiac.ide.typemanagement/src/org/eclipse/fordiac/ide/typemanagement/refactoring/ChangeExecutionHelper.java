@@ -44,7 +44,7 @@ public final class ChangeExecutionHelper {
 				if (editor == null) {
 					cmd.execute();
 					try {
-						entry.save(pm);
+						entry.save(elem, pm);
 					} catch (final CoreException e) {
 						FordiacLogHelper.logError(e.getMessage(), e);
 					}

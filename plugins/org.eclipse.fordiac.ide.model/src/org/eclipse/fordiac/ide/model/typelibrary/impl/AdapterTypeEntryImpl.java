@@ -15,7 +15,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataexport.AdapterExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
@@ -29,8 +30,8 @@ public class AdapterTypeEntryImpl extends AbstractTypeEntryImpl implements Adapt
 	@Override
 	public synchronized AdapterType getType() {
 		final LibraryElement type = super.getType();
-		if (type instanceof AdapterType) {
-			return (AdapterType) type;
+		if (type instanceof final AdapterType adapterType) {
+			return adapterType;
 		}
 		return null;
 	}
@@ -38,21 +39,30 @@ public class AdapterTypeEntryImpl extends AbstractTypeEntryImpl implements Adapt
 	@Override
 	public synchronized AdapterType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof AdapterType) {
-			return (AdapterType) type;
+		if (type instanceof final AdapterType adapterType) {
+			return adapterType;
 		}
 		return null;
 	}
 
 	@Override
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
+		if (toSave instanceof final AdapterType adapterType) {
+			doSaveInternal(new AdapterExporter(adapterType), monitor);
+		} else {
+			FordiacLogHelper.logError("Tried to save non AdapterType for AdapterTypeEntry");//$NON-NLS-1$
+		}
+	}
+
+	@Override
 	public synchronized void setType(final LibraryElement type) {
-		if (type instanceof AdapterType) {
+		if (type instanceof final AdapterType adapterType) {
 			super.setType(type);
-			((AdapterType) type).getAdapterFBType().setTypeEntry(this);
+			adapterType.getAdapterFBType().setTypeEntry(this);
 		} else {
 			super.setType(null);
 			if (null != type) {
-				FordiacLogHelper.logError("tried to set no AdapterType as type entry for AdapterTypeEntry");  //$NON-NLS-1$
+				FordiacLogHelper.logError("tried to set no AdapterType as type entry for AdapterTypeEntry"); //$NON-NLS-1$
 			}
 		}
 	}
@@ -60,11 +70,6 @@ public class AdapterTypeEntryImpl extends AbstractTypeEntryImpl implements Adapt
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new ADPImporter(getFile());
-	}
-
-	@Override
-	protected AbstractTypeExporter getExporter() {
-		return new AdapterExporter(this);
 	}
 
 }

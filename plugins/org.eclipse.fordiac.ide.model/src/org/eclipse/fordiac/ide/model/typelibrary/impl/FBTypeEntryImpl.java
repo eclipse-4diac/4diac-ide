@@ -15,7 +15,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataexport.FbtExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
@@ -29,8 +30,8 @@ public class FBTypeEntryImpl extends AbstractTypeEntryImpl implements FBTypeEntr
 	@Override
 	public synchronized FBType getType() {
 		final LibraryElement type = super.getType();
-		if (type instanceof FBType) {
-			return (FBType) type;
+		if (type instanceof final FBType fbType) {
+			return fbType;
 		}
 		return null;
 	}
@@ -38,10 +39,19 @@ public class FBTypeEntryImpl extends AbstractTypeEntryImpl implements FBTypeEntr
 	@Override
 	public synchronized FBType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof FBType) {
-			return (FBType) type;
+		if (type instanceof final FBType fbType) {
+			return fbType;
 		}
 		return null;
+	}
+
+	@Override
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
+		if (toSave instanceof final FBType fbType) {
+			doSaveInternal(new FbtExporter(fbType), monitor);
+		} else {
+			FordiacLogHelper.logError("Tried to save non GlobalConstants for GlobalConstantsTypeEntry");//$NON-NLS-1$
+		}
 	}
 
 	@Override
@@ -59,11 +69,6 @@ public class FBTypeEntryImpl extends AbstractTypeEntryImpl implements FBTypeEntr
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new FBTImporter(getFile());
-	}
-
-	@Override
-	protected AbstractTypeExporter getExporter() {
-		return new FbtExporter(this);
 	}
 
 }

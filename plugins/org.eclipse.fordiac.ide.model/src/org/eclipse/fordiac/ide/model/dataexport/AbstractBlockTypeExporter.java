@@ -49,7 +49,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	}
 
 	@Override
-	protected FBType getType() {
+	public FBType getType() {
 		return (FBType) super.getType();
 	}
 

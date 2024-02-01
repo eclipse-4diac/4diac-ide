@@ -15,7 +15,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -28,8 +29,8 @@ public class SegmentTypeEntryImpl extends AbstractTypeEntryImpl implements Segme
 	@Override
 	public synchronized SegmentType getType() {
 		final LibraryElement type = super.getType();
-		if (type instanceof SegmentType) {
-			return (SegmentType) type;
+		if (type instanceof final SegmentType segType) {
+			return segType;
 		}
 		return null;
 	}
@@ -37,19 +38,24 @@ public class SegmentTypeEntryImpl extends AbstractTypeEntryImpl implements Segme
 	@Override
 	public synchronized SegmentType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
-		if(type instanceof SegmentType){
-			return (SegmentType) type;
+		if (type instanceof final SegmentType segType) {
+			return segType;
 		}
 		return null;
 	}
 
 	@Override
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
+		// currently we can not save segments, but we also have no editor for it
+	}
+
+	@Override
 	public synchronized void setType(final LibraryElement type) {
-		if(type instanceof SegmentType){
+		if (type instanceof SegmentType) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
+			if (null != type) {
 				FordiacLogHelper.logError("tried to set no SegmentType as type entry for SegmentTypeEntry"); //$NON-NLS-1$
 			}
 		}
@@ -60,9 +66,4 @@ public class SegmentTypeEntryImpl extends AbstractTypeEntryImpl implements Segme
 		return new SEGImporter(getFile());
 	}
 
-	@Override
-	protected AbstractTypeExporter getExporter() {
-		// currently we can not save segments, but we also have no editor for it
-		return null;
-	}
 }

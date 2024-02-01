@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeDeclarationT
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -109,6 +110,7 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 	private final List<String> propertyActions = new ArrayList<>();
 
 	private AttributeTypeEntry attributeTypeEntry;
+	private AttributeDeclaration attributeDeclaration;
 
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
@@ -189,7 +191,7 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 			@Override
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
-				attributeTypeEntry.save(monitor);
+				attributeTypeEntry.save(attributeDeclaration, monitor);
 			}
 		};
 		try {
@@ -239,15 +241,14 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 	}
 
 	private void addListenerToAttributeDeclaration() {
-		if (attributeTypeEntry != null && attributeTypeEntry.getTypeEditable() != null) {
-			attributeTypeEntry.getTypeEditable().eAdapters().add(adapter);
+		if (attributeDeclaration != null) {
+			attributeDeclaration.eAdapters().add(adapter);
 		}
 	}
 
 	private void removeListenerFromAttributeDeclaration() {
-		if (attributeTypeEntry != null && attributeTypeEntry.getTypeEditable() != null
-				&& attributeTypeEntry.getTypeEditable().eAdapters().contains(adapter)) {
-			attributeTypeEntry.getTypeEditable().eAdapters().remove(adapter);
+		if (attributeDeclaration != null && attributeDeclaration.eAdapters().contains(adapter)) {
+			attributeDeclaration.eAdapters().remove(adapter);
 		}
 	}
 
@@ -271,8 +272,9 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		// exist anymore!
 		if (file.exists()) {
 			attributeTypeEntry = (AttributeTypeEntry) TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+			attributeDeclaration = attributeTypeEntry.getTypeEditable();
 			setPartName(attributeTypeEntry.getFile().getName());
-			return attributeTypeEntry.getTypeEditable() == null;
+			return attributeDeclaration == null;
 		}
 		return true; // import failed
 	}
@@ -319,24 +321,22 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		comboBox.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				if (comboBox.getSelectionIndex() == STRUCT_EDITOR_INDEX
-						&& attributeTypeEntry.getTypeEditable().getType() instanceof DirectlyDerivedType
+				final AnyDerivedType type = attributeDeclaration.getType();
+				if (comboBox.getSelectionIndex() == STRUCT_EDITOR_INDEX && type instanceof DirectlyDerivedType
 						|| comboBox.getSelectionIndex() == DIRECTLYDERIVEDTYPE_EDITOR_INDEX
-								&& attributeTypeEntry.getTypeEditable().getType() instanceof StructuredType) {
-					commandStack
-							.execute(new ChangeAttributeDeclarationTypeCommand(attributeTypeEntry.getTypeEditable()));
+								&& type instanceof StructuredType) {
+					commandStack.execute(new ChangeAttributeDeclarationTypeCommand(attributeDeclaration));
 				}
 			}
 		});
 
-		if (attributeTypeEntry != null
-				&& attributeTypeEntry.getTypeEditable().getType() instanceof final StructuredType structType) {
+		final AnyDerivedType type = attributeDeclaration.getType();
+		if (type instanceof final StructuredType structType) {
 			structComposite = new StructEditingComposite(editorComposite, commandStack, structType, annotationModel);
 			getSite().setSelectionProvider(structComposite);
 			structComposite.setTitel(Messages.StructViewingComposite_Headline);
 			comboBox.select(STRUCT_EDITOR_INDEX);
-		} else if (attributeTypeEntry != null && attributeTypeEntry.getTypeEditable()
-				.getType() instanceof final DirectlyDerivedType directlyDerivedType) {
+		} else if (type instanceof final DirectlyDerivedType directlyDerivedType) {
 			directlyDerivedTypeComposite = new DirectlyDerivedTypeComposite(editorComposite, directlyDerivedType,
 					commandStack);
 			getSite().setSelectionProvider(directlyDerivedTypeComposite);
@@ -345,8 +345,8 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 	}
 
 	private void changeEditingComposite() {
-		if (structComposite != null && attributeTypeEntry.getTypeEditable()
-				.getType() instanceof final DirectlyDerivedType directlyDerivedType) {
+		final AnyDerivedType type = attributeDeclaration.getType();
+		if (structComposite != null && type instanceof final DirectlyDerivedType directlyDerivedType) {
 			directlyDerivedTypeComposite = new DirectlyDerivedTypeComposite(structComposite.getParent(),
 					directlyDerivedType, commandStack);
 			getSite().setSelectionProvider(directlyDerivedTypeComposite);
@@ -356,10 +356,9 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 			}
 			structComposite = null;
 			directlyDerivedTypeComposite.requestLayout();
-		} else if (directlyDerivedTypeComposite != null
-				&& attributeTypeEntry.getTypeEditable().getType() instanceof final StructuredType structuredType) {
+		} else if (directlyDerivedTypeComposite != null && type instanceof final StructuredType structType) {
 			structComposite = new StructEditingComposite(directlyDerivedTypeComposite.getParent(), commandStack,
-					structuredType, annotationModel);
+					structType, annotationModel);
 			getSite().setSelectionProvider(structComposite);
 			structComposite.setTitel(Messages.StructViewingComposite_Headline);
 
@@ -467,12 +466,11 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 			removeListenerFromAttributeDeclaration();
 			attributeTypeEntry.setTypeEditable(null);
 			importType(getEditorInput());
-			if (attributeTypeEntry.getTypeEditable() != null
-					&& attributeTypeEntry.getTypeEditable().getType() instanceof final StructuredType structType) {
+			final AnyDerivedType type = attributeDeclaration.getType();
+			if (type instanceof final StructuredType structType) {
 				structComposite.setStructType(structType);
 			}
-			if (attributeTypeEntry.getTypeEditable() != null && attributeTypeEntry.getTypeEditable()
-					.getType() instanceof final DirectlyDerivedType directlyDerivedType) {
+			if (type instanceof final DirectlyDerivedType directlyDerivedType) {
 				directlyDerivedTypeComposite.setDirectlyDerivedType(directlyDerivedType);
 			}
 			commandStack.flush();
@@ -495,4 +493,5 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		setInput(newInput);
 		firePropertyChange(IWorkbenchPart.PROP_TITLE);
 	}
+
 }

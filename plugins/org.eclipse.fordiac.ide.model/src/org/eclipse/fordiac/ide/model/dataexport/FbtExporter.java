@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
@@ -43,7 +44,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 /**
  * The Class FbtExporter.
@@ -55,8 +55,8 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 	 *
 	 * @param entry
 	 */
-	public FbtExporter(final FBTypeEntry entry) {
-		super(entry.getTypeEditable());
+	public FbtExporter(final FBType type) {
+		super(type);
 	}
 
 	@Override
@@ -254,10 +254,12 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 		addEndElement();
 	}
 
-	/** Adds the method.
+	/**
+	 * Adds the method.
 	 *
 	 * @param method the method
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	private void addICallable(final ICallable callable) throws XMLStreamException {
 		if (callable instanceof final Algorithm alg) {
 			addAlgorithm(alg);
@@ -266,10 +268,12 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 		}
 	}
 
-	/** Adds the method.
+	/**
+	 * Adds the method.
 	 *
 	 * @param method the method
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	private void addMethod(final Method method) throws XMLStreamException {
 		addStartElement(LibraryElementTags.METHOD_ELEMENT);
 
@@ -285,10 +289,12 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 		addEndElement();
 	}
 
-	/** Adds the st method.
+	/**
+	 * Adds the st method.
 	 *
 	 * @param method the method
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	private void addSTMethod(final STMethod method) throws XMLStreamException {
 		addStartElement(LibraryElementTags.ST_ELEMENT);
 		writeAlgorithmText(method.getText());
@@ -296,10 +302,12 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 		writeTextMethodParameters(method);
 	}
 
-	/** Adds the other method.
+	/**
+	 * Adds the other method.
 	 *
 	 * @param method the method
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	private void addOtherMethod(final OtherMethod method) throws XMLStreamException {
 		addStartElement(LibraryElementTags.OTHER_ELEMENT);
 		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,

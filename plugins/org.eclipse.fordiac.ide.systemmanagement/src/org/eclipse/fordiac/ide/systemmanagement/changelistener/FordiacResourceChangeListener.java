@@ -506,7 +506,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		// TODO report on error
 				(!newTypeName.equals(type.getName()))) {
 			type.setName(newTypeName);
-			saveEntryWithWorkspaceJob(entry);
+			saveEntryWithWorkspaceJob(type, entry);
 		}
 	}
 
@@ -536,16 +536,16 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			if (typeLibrary != null) {
 				typeLibrary.addTypeEntry(entry);
 			}
-			saveEntryWithWorkspaceJob(entry);
+			saveEntryWithWorkspaceJob(type, entry);
 		}
 	}
 
-	private static void saveEntryWithWorkspaceJob(final TypeEntry entry) {
+	private static void saveEntryWithWorkspaceJob(final LibraryElement type, final TypeEntry entry) {
 		final WorkspaceJob job = new WorkspaceJob("Save type file: " + entry.getFile().getName()) {
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 				try {
-					entry.save(monitor);
+					entry.save(type, monitor);
 				} catch (final CoreException e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
 					return Status.CANCEL_STATUS;

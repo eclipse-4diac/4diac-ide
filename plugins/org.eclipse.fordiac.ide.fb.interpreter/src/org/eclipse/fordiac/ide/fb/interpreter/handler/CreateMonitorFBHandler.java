@@ -81,8 +81,7 @@ public class CreateMonitorFBHandler extends AbstractHandler {
 		// if a service sequence is selected only the monitorFB for this sequence is
 		// generated
 		if (((EditPart) selection.getFirstElement() != null)
-				&& (((EditPart) selection.getFirstElement()).getModel() instanceof ServiceSequenceImpl)) {
-			final ServiceSequenceImpl s = (ServiceSequenceImpl) ((EditPart) selection.getFirstElement()).getModel();
+				&& (((EditPart) selection.getFirstElement()).getModel() instanceof final ServiceSequenceImpl s)) {
 			TestCase testCase = null;
 			for (final TestCase testC : testSuite.getTestCases()) {
 				if (testC.getName().equals(s.getName())
@@ -92,7 +91,7 @@ public class CreateMonitorFBHandler extends AbstractHandler {
 			}
 			if (testCase != null) {
 				testtype = new MonitorFBGenerator(type, testSuite, testCase).generateTestFb();
-				testtype.getTypeEntry().save(monitor);
+				testtype.getTypeEntry().save(testtype, monitor);
 
 			}
 		}
@@ -102,13 +101,13 @@ public class CreateMonitorFBHandler extends AbstractHandler {
 			for (final TestCase testCase : testSuite.getTestCases()) {
 				if (testCase.getdataSource().getServiceSequenceType().equals("FORBIDDEN")) { //$NON-NLS-1$
 					testtype = new MonitorFBGenerator(type, testSuite, testCase).generateTestFb();
-					testtype.getTypeEntry().save(monitor);
+					testtype.getTypeEntry().save(testtype, monitor);
 					monitorFBs.add(testtype);
 				}
 			}
 			final CompositeFBType compositeType = new CompositeMonitorFBGenerator(type, monitorFBs)
 					.generateCompositeFB();
-			compositeType.getTypeEntry().save(monitor);
+			compositeType.getTypeEntry().save(compositeType, monitor);
 		}
 	}
 }

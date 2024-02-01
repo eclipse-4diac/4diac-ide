@@ -18,12 +18,11 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
-import org.eclipse.fordiac.ide.model.typelibrary.FunctionFBTypeEntry;
 
 public class FCTExporter extends AbstractBlockTypeExporter {
 
-	public FCTExporter(final FunctionFBTypeEntry entry) {
-		super(entry.getTypeEditable());
+	public FCTExporter(final FunctionFBType type) {
+		super(type);
 	}
 
 	@Override
@@ -59,7 +58,7 @@ public class FCTExporter extends AbstractBlockTypeExporter {
 	}
 
 	@Override
-	protected FunctionFBType getType() {
+	public FunctionFBType getType() {
 		return (FunctionFBType) super.getType();
 	}
 }

@@ -79,20 +79,20 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 			throws CoreException {
 		// testsignal generator block
 		final FBType testType = new TestFbGenerator(type, testSuite).generateTestFb();
-		testType.getTypeEntry().save(monitor);
+		testType.getTypeEntry().save(testType, monitor);
 
 		// matches the expected with the actual behaviour
 		final FBType matchType = new MatchFBGenerator(type, testSuite).generateMatchFB();
-		matchType.getTypeEntry().save(monitor);
+		matchType.getTypeEntry().save(matchType, monitor);
 
 		// sends the outcome of the test and the testname to the outputs of the
 		// composite
 		final FBType muxType = new MuxFBGenerator(type, testSuite).generateMuxFB();
-		muxType.getTypeEntry().save(monitor);
+		muxType.getTypeEntry().save(muxType, monitor);
 
 		// generates the signals for the testsignal and mux fb
 		final FBType runAllType = new RunAllFBGenerator(type, testSuite).generateRunAllFB();
-		runAllType.getTypeEntry().save(monitor);
+		runAllType.getTypeEntry().save(runAllType, monitor);
 
 		// don't change order, generateCompositeFB won't work then
 		final List<FBType> list = new ArrayList<>();
@@ -103,6 +103,6 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 		list.add(runAllType);
 
 		final CompositeFBType compositeType = new CompositeTestFBGenerator(type, testSuite, list).generateCompositeFB();
-		compositeType.getTypeEntry().save(monitor);
+		compositeType.getTypeEntry().save(compositeType, monitor);
 	}
 }

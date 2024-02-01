@@ -26,7 +26,7 @@ public class GlobalConstantsExporter extends AbstractTypeExporter {
 	}
 
 	@Override
-	protected GlobalConstants getType() {
+	public GlobalConstants getType() {
 		return (GlobalConstants) super.getType();
 	}
 

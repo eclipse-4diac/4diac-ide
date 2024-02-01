@@ -103,7 +103,7 @@ public final class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEn
 	}
 
 	@Override
-	public void save(final IProgressMonitor monitor) {
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) {
 		// currently not needed in mock
 	}
 

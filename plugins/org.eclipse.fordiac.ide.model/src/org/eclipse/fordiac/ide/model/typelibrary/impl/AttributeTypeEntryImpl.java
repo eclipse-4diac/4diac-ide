@@ -12,7 +12,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataexport.AttributeTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.AttributeTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
@@ -42,6 +43,15 @@ public class AttributeTypeEntryImpl extends AbstractTypeEntryImpl implements Att
 	}
 
 	@Override
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
+		if (toSave instanceof final AttributeDeclaration attributeDeclaration) {
+			doSaveInternal(new AttributeTypeExporter(attributeDeclaration), monitor);
+		} else {
+			FordiacLogHelper.logError("Tried to save non AttributeDeclaration for AttributeTypeEntry");//$NON-NLS-1$
+		}
+	}
+
+	@Override
 	public synchronized void setType(final LibraryElement type) {
 		if (type instanceof AttributeDeclaration) {
 			super.setType(type);
@@ -56,10 +66,5 @@ public class AttributeTypeEntryImpl extends AbstractTypeEntryImpl implements Att
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new AttributeTypeImporter(getFile());
-	}
-
-	@Override
-	protected AbstractTypeExporter getExporter() {
-		return new AttributeTypeExporter(getTypeEditable());
 	}
 }

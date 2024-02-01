@@ -15,8 +15,9 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
@@ -29,8 +30,8 @@ public class DataTypeEntryImpl extends AbstractTypeEntryImpl implements DataType
 	@Override
 	public synchronized AnyDerivedType getType() {
 		final LibraryElement type = super.getType();
-		if (type instanceof AnyDerivedType) {
-			return (AnyDerivedType) type;
+		if (type instanceof final AnyDerivedType derivedDataType) {
+			return derivedDataType;
 		}
 		return null;
 	}
@@ -38,10 +39,19 @@ public class DataTypeEntryImpl extends AbstractTypeEntryImpl implements DataType
 	@Override
 	public synchronized AnyDerivedType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof AnyDerivedType) {
-			return (AnyDerivedType) type;
+		if (type instanceof final AnyDerivedType derivedDataType) {
+			return derivedDataType;
 		}
 		return null;
+	}
+
+	@Override
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
+		if (toSave instanceof final AnyDerivedType derivedDataType) {
+			doSaveInternal(new DataTypeExporter(derivedDataType), monitor);
+		} else {
+			FordiacLogHelper.logError("Tried to save non AnyDerivedType for DataTypeEntry");//$NON-NLS-1$
+		}
 	}
 
 	@Override
@@ -59,11 +69,6 @@ public class DataTypeEntryImpl extends AbstractTypeEntryImpl implements DataType
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new DataTypeImporter(getFile());
-	}
-
-	@Override
-	protected AbstractTypeExporter getExporter() {
-		return new DataTypeExporter(getTypeEditable());
 	}
 
 }

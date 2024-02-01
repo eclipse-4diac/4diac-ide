@@ -15,7 +15,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
@@ -28,8 +29,8 @@ public class DeviceTypeEntryImpl extends AbstractTypeEntryImpl implements Device
 	@Override
 	public synchronized DeviceType getType() {
 		final LibraryElement type = super.getType();
-		if (type instanceof DeviceType) {
-			return (DeviceType) type;
+		if (type instanceof final DeviceType devType) {
+			return devType;
 		}
 		return null;
 	}
@@ -37,20 +38,25 @@ public class DeviceTypeEntryImpl extends AbstractTypeEntryImpl implements Device
 	@Override
 	public synchronized DeviceType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
-		if(type instanceof DeviceType){
-			return (DeviceType) type;
+		if (type instanceof final DeviceType devType) {
+			return devType;
 		}
 		return null;
 	}
 
 	@Override
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
+		// currently we can not save devices, but we also have no editor for it
+	}
+
+	@Override
 	public synchronized void setType(final LibraryElement type) {
-		if(type instanceof DeviceType){
+		if (type instanceof DeviceType) {
 			super.setType(type);
-		}else{
+		} else {
 			super.setType(null);
-			if(null != type){
-				FordiacLogHelper.logError("tried to set no DeviceType as type entry for DeviceTypeEntry");  //$NON-NLS-1$
+			if (null != type) {
+				FordiacLogHelper.logError("tried to set no DeviceType as type entry for DeviceTypeEntry"); //$NON-NLS-1$
 			}
 		}
 	}
@@ -58,12 +64,6 @@ public class DeviceTypeEntryImpl extends AbstractTypeEntryImpl implements Device
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new DEVImporter(getFile());
-	}
-
-	@Override
-	protected AbstractTypeExporter getExporter() {
-		// currently we can not save devices, but we also have no editor for it
-		return null;
 	}
 
 }

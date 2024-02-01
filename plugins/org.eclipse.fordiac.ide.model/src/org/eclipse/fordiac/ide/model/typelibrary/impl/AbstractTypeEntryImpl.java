@@ -205,7 +205,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	private void encloseInResource(final LibraryElement newType) {
-		if (getFile() != null) {
+		if (getFile() != null && newType.eResource() == null) {
 			final IPath path = getFile().getFullPath();
 			if (path != null) {
 				new FordiacTypeResource(URI.createPlatformResourceURI(path.toString(), true)).getContents()
@@ -216,17 +216,20 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 	@Override
 	public synchronized LibraryElement getTypeEditable() {
-		if (typeEditableRef != null) {
-			final LibraryElement typeEditable = typeEditableRef.get();
-			if (typeEditable != null && !isFileContentChanged()) {
-				return typeEditable;
-			}
+		final LibraryElement typeEditable = getTypeEditableFromRef();
+		if (typeEditable != null && !isFileContentChanged()) {
+			return typeEditable;
 		}
+
 		// we need to get a fresh type editable in order to ensure consistency take a
 		// copy of the none editable type
 		final LibraryElement loadType = EcoreUtil.copy(getType());
 		setTypeEditable(loadType);
 		return loadType;
+	}
+
+	private LibraryElement getTypeEditableFromRef() {
+		return (typeEditableRef != null) ? typeEditableRef.get() : null;
 	}
 
 	@Override
@@ -318,23 +321,19 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		typeLibrary = typeLib;
 	}
 
-	@Override
-	public void save(final IProgressMonitor monitor) throws CoreException {
-		final AbstractTypeExporter exporter = getExporter();
-
+	protected void doSaveInternal(final AbstractTypeExporter exporter, final IProgressMonitor monitor)
+			throws CoreException {
 		if (null != exporter) {
 			final InputStream fileContent = exporter.getFileContent();
 			if (fileContent != null) {
 				try (fileContent) {
-					writeToFile(fileContent, exporter.getDependencies(), monitor);
+					writeToFile(fileContent, exporter, monitor);
 				} catch (final IOException e) {
 					throw new CoreException(Status.error(e.getMessage(), e));
 				}
 			}
 		}
 	}
-
-	protected abstract AbstractTypeExporter getExporter();
 
 	@Override
 	public synchronized void refresh() {
@@ -361,7 +360,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		this.updateTypeOnSave = updateTypeOnSave;
 	}
 
-	private synchronized void writeToFile(final InputStream fileContent, final Set<TypeEntry> dependencies,
+	private synchronized void writeToFile(final InputStream fileContent, final AbstractTypeExporter exporter,
 			final IProgressMonitor monitor) throws CoreException {
 		// writing to the file and setting the time stamp need to be atomic
 		if (getFile().exists()) {
@@ -371,14 +370,18 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			getFile().create(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
 		}
 		// "reset" the modification timestamp in the TypeEntry to avoid reload - as for
-		// this
-		// timestamp
-		// it is not necessary as the data is in memory
+		// this timestamp it is not necessary as the data is in memory
 		setLastModificationTimestamp(getFile().getModificationStamp());
-		updateDependencies(dependencies);
+		updateDependencies(exporter.getDependencies());
+
+		final LibraryElement currentTypeEditable = getTypeEditableFromRef();
+		if (exporter.getType() != currentTypeEditable) {
+			setTypeEditable(exporter.getType());
+		}
+
 		if (updateTypeOnSave) {
 			// make the edit result available for the reading entities
-			setType(EcoreUtil.copy(getTypeEditable()));
+			setType(EcoreUtil.copy(exporter.getType()));
 		}
 	}
 
