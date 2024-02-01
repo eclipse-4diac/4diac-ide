@@ -55,7 +55,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.search.dialog.FBUpdateDialog;
+import org.eclipse.fordiac.ide.model.search.dialog.StructuredDataTypeDataHandler;
+import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -110,7 +111,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	private Composite errorComposite;
 	private boolean importFailed;
 	private boolean outsideWorkspace;
-	private FBUpdateDialog structSaveDialog;
+	private FBTypeUpdateDialog<DataTypeEntry> structSaveDialog;
 	private static final int DEFAULT_BUTTON_INDEX = 0; // This would be the "Save" button
 	private static final int SAVE_AS_BUTTON_INDEX = 1;
 	private static final int CANCEL_BUTTON_INDEX = 2;
@@ -193,13 +194,13 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		final String[] labels = { Messages.StructAlteringButton_SaveAndUpdate, Messages.StructAlteringButton_SaveAs,
 				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
-		structSaveDialog = new FBUpdateDialog(null, Messages.StructViewingComposite_Headline, null, "", //$NON-NLS-1$
-				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, dataTypeEntry);
+		structSaveDialog = new FBTypeUpdateDialog<>(null, Messages.StructViewingComposite_Headline, null, "", //$NON-NLS-1$
+				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, new StructuredDataTypeDataHandler(dataTypeEntry));
 
 		// Depending on the button clicked:
 		switch (structSaveDialog.open()) {
 		case DEFAULT_BUTTON_INDEX:
-			doSaveInternal(monitor, structSaveDialog.getCollectedFBs());
+			doSaveInternal(monitor, structSaveDialog.getDataHandler().getCollectedElements());
 			break;
 		case SAVE_AS_BUTTON_INDEX:
 			doSaveAs();
@@ -255,7 +256,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	private Command getUpdateTypesCommand(final Set<INamedElement> set) {
 		final List<FBType> fbTypes = set.stream().filter(FBType.class::isInstance).map(FBType.class::cast).toList();
 		return FBUpdater.createUpdatePinInTypeDeclarationCommand(fbTypes,
-				structSaveDialog.getDataTypeOfElementList(fbTypes), null);
+				structSaveDialog.getDataHandler().getTypeOfElementList(fbTypes), null);
 	}
 
 	private Command getUpdateStructTypes(final Set<INamedElement> set) {
@@ -264,9 +265,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			if (instance instanceof final StructuredType st) {
 				for (final VarDeclaration varDeclaration : st.getMemberVariables()) {
 					final String typeName = varDeclaration.getTypeName();
-					if (typeName.equals(structSaveDialog.getDataTypeOfElement(st).getTypeName())) {
+					if (typeName.equals(structSaveDialog.getDataHandler().getTypeOfElement(st).getTypeName())) {
 						commands.add(ChangeDataTypeCommand.forDataType(varDeclaration,
-								structSaveDialog.getDataTypeOfElement(st).getTypeEditable()));
+								structSaveDialog.getDataHandler().getTypeOfElement(st).getTypeEditable()));
 					}
 				}
 				commands.add(new SaveTypeEntryCommand(st));
@@ -284,9 +285,10 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		set.stream().filter(FBNetworkElement.class::isInstance)
 				.filter(Predicate.not(StructManipulator.class::isInstance)).map(FBNetworkElement.class::cast).map(x -> {
 					if (x instanceof final SubApp subApp && !subApp.isTyped()) {
-						return new UpdateUntypedSubAppInterfaceCommand(x, structSaveDialog.getDataTypeOfElement(x));
+						return new UpdateUntypedSubAppInterfaceCommand(x,
+								structSaveDialog.getDataHandler().getTypeOfElement(x));
 					}
-					return new UpdateFBTypeCommand(x, structSaveDialog.getDataTypeOfElement(x));
+					return new UpdateFBTypeCommand(x, structSaveDialog.getDataHandler().getTypeOfElement(x));
 				}).forEachOrdered(commands::add);
 
 		Command cmd = new CompoundCommand();
@@ -300,7 +302,8 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		final List<StructManipulator> muxes = set.stream().filter(StructManipulator.class::isInstance)
 				.map(StructManipulator.class::cast).toList();
 
-		return FBUpdater.createStructManipulatorsUpdateCommand(muxes, structSaveDialog.getDataTypeOfElementList(muxes));
+		return FBUpdater.createStructManipulatorsUpdateCommand(muxes,
+				structSaveDialog.getDataHandler().getTypeOfElementList(muxes));
 	}
 
 	private static void loadAllOpenEditors() {

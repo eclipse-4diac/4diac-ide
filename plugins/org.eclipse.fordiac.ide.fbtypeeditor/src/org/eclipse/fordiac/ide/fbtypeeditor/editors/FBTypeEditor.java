@@ -65,6 +65,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -117,7 +118,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
-	private FBTypeUpdateDialog fbSaveDialog;
+	private FBTypeUpdateDialog<TypeEntry> fbSaveDialog;
 	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
 	// private static final int SAVE_AS_BUTTON_INDEX = 1;
 	private static final int CANCEL_BUTTON_INDEX = 1; // 2;
@@ -152,13 +153,13 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		final String[] labels = { Messages.FBTypeEditor_AlteringButton_SaveAndUpdate, // Messages.StructAlteringButton_SaveAs,
 				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
-		fbSaveDialog = new FBTypeUpdateDialog(null, Messages.FBTypeEditor_ViewingComposite_Headline, null, "", //$NON-NLS-1$
-				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, typeEntry);
+		fbSaveDialog = new FBTypeUpdateDialog<>(null, Messages.FBTypeEditor_ViewingComposite_Headline, null, "", //$NON-NLS-1$
+				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, new FBTypeEntryDataHandler(typeEntry));
 
 		// Depending on the button clicked:
 		switch (fbSaveDialog.open()) {
 		case DEFAULT_BUTTON_INDEX:
-			doSaveInternal(monitor, fbSaveDialog.getCollectedFBs());
+			doSaveInternal(monitor, fbSaveDialog.getDataHandler().getCollectedElements());
 			break;
 		case CANCEL_BUTTON_INDEX:
 			MessageDialog.openInformation(null, Messages.FBTypeEditor_ViewingComposite_Headline,
@@ -247,11 +248,12 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 						bteedit.getInternalFbs().stream()
 								.filter(fbe -> fbe.getName().equals(s.getName())
 										&& fbe.getFullTypeName().equals(s.getFullTypeName()))
-								.findAny().map(se -> new UpdateInternalFBCommand(se, fbSaveDialog.getTypeOfElement(s)))
+								.findAny().map(se -> new UpdateInternalFBCommand(se,
+										fbSaveDialog.getDataHandler().getTypeOfElement(s)))
 								.ifPresent(commands::add);
 					}
 				} else {
-					commands.add(new UpdateFBTypeCommand(s, fbSaveDialog.getTypeOfElement(s)));
+					commands.add(new UpdateFBTypeCommand(s, fbSaveDialog.getDataHandler().getTypeOfElement(s)));
 				}
 			}
 		});
