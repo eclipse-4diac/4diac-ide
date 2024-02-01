@@ -29,6 +29,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.fordiac.ide.model.data.BoolType;
 import org.eclipse.fordiac.ide.model.data.IntType;
+import org.eclipse.fordiac.ide.model.data.StringType;
 import org.eclipse.fordiac.ide.model.data.UintType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -190,6 +191,9 @@ public class ExportServiceSequenceToCppTest {
 		}
 		if (dataType instanceof UintType) {
 			return "CIEC_UINT";
+		}
+		if (dataType instanceof StringType) {
+			return "CIEC_STRING";
 		}
 		return "";
 	}
