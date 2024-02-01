@@ -13,8 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppBoundsCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -52,8 +54,9 @@ public class SubAppPropertySection extends InstancePropertySection {
 		lockCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
 			if (getType() != null) {
 				removeContentAdapter();
-				// executeCommand(new ChangeGroupSizeLockCommand(getType(),
+				// executeCommand(new ChangeSubAppSizeLockCommand(getType(),
 				// lockCheckbox.getSelection()));
+				// executeCommand(new ResizeGroupOrSubAppCommand())
 				addContentAdapter();
 			}
 		}));
@@ -67,13 +70,59 @@ public class SubAppPropertySection extends InstancePropertySection {
 		getWidgetFactory().createCLabel(fbSizeContainer, FordiacMessages.Height + ":"); //$NON-NLS-1$
 		heightText = createGroupText(fbSizeContainer, true);
 		heightText.setTextLimit(TEXT_INPUT_MAX_LENGTH);
+		heightText.addModifyListener(e -> {
+			if (getType() != null) {
+				// todo handle number format exception
+				final int heightDelta;
+				try {
+					heightDelta = Integer.parseInt(heightText.getText()) - getType().getHeight();
+				} catch (final NumberFormatException exception) {
+					return;
+				}
+
+				removeContentAdapter();
+				executeCommand(new ChangeSubAppBoundsCommand(getType(), 0, 0, 0, heightDelta));
+				addContentAdapter();
+			}
+		});
+
+		// heightText.addVerifyListener();
 
 		getWidgetFactory().createCLabel(fbSizeContainer, FordiacMessages.Width + ":"); //$NON-NLS-1$
 		widthText = createGroupText(fbSizeContainer, true);
 		widthText.setTextLimit(TEXT_INPUT_MAX_LENGTH);
+		widthText.addModifyListener(e -> {
+			if (getType() != null) {
 
+				final int widthDelta;
+				try {
+					widthDelta = Integer.parseInt(widthText.getText()) - getType().getWidth();
+				} catch (final NumberFormatException exception) {
+					return;
+				}
+
+				removeContentAdapter();
+				executeCommand(new ChangeSubAppBoundsCommand(getType(), 0, 0, widthDelta, 0));
+				addContentAdapter();
+			}
+		});
+
+		// widthText.addVerifyListener();
 		getWidgetFactory().createCLabel(fbSizeContainer, FordiacMessages.Subapp_Size_DisableAutoResize + ":"); //$NON-NLS-1$
 		createLockSizeCheckbox(fbSizeContainer);
+	}
+
+	@Override
+	public void refresh() {
+		super.refresh();
+		if ((getType() != null)) {
+			final CommandStack commandStackBuffer = commandStack;
+			commandStack = null;
+			heightText.setText(Integer.toString(getType().getHeight()));
+			widthText.setText(Integer.toString(getType().getWidth()));
+			// lockCheckbox.setSelection(getType().isLocked());
+			commandStack = commandStackBuffer;
+		}
 	}
 
 	@Override
