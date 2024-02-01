@@ -148,7 +148,7 @@
       <propertySection
             class="org.eclipse.fordiac.ide.application.properties.SubAppPropertySection"
             filter="org.eclipse.fordiac.ide.application.properties.SubappPropertySectionFilter"
-            id="org.eclipse.fordiac.ide.application.properties.InterfaceSection"
+            id="org.eclipse.fordiac.ide.application.properties.SubappInstanceSection"
             tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
       </propertySection>
       <propertySection
