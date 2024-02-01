@@ -579,7 +579,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				} catch (final CoreException e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
-				TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 				systemManager.notifyListeners();
 				ResourcesPlugin.getWorkspace().addResourceChangeListener(FordiacResourceChangeListener.this);
 				return Status.OK_STATUS;

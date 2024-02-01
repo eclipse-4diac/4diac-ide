@@ -22,13 +22,20 @@
  *               - add function FB type
  *               - add global constants
  *  Sebastian Hollersbacher - add attribute
+ *  Fabio Gandolfi - add loading of type libs via manifest file
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.module.ModuleDescriptor.Version;
+import java.nio.file.Paths;
 import java.text.Collator;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,16 +44,26 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.core.internal.resources.ProjectDescription;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.fordiac.ide.library.model.library.Library;
+import org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl;
+import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceImpl;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
@@ -223,6 +240,7 @@ public final class TypeLibrary {
 		if (project != null && project.isAccessible()) {
 			buildpath = BuildpathUtil.loadBuildpath(project);
 			checkAdditions(project);
+			checkManifestFile(project);
 		}
 	}
 
@@ -240,6 +258,64 @@ public final class TypeLibrary {
 			}
 		}
 		return entry;
+	}
+
+	public void checkManifestFile(final IProject project) {
+
+		final ResourceSet libraryResouceSet = new ResourceSetImpl();
+		final Map<String, Object> loadOptions = new HashMap<>();
+
+		try {
+
+			final List<IResource> resources = Arrays.asList(project.members());
+			final Optional<IResource> manifestFile = resources.stream()
+					.filter(res -> res.getName().equals("MANIFEST.MF")).findFirst(); //$NON-NLS-1$
+			if (manifestFile.isPresent()) {
+				final Resource resource = new LibraryResourceImpl(
+						URI.createURI(manifestFile.get().getLocationURI().toString()));
+				libraryResouceSet.getResources().add(resource);
+				resource.load(loadOptions);
+				final ManifestImpl manifest = (ManifestImpl) resource.getContents().get(0);
+
+				final Optional<IResource> projectFile = resources.stream()
+						.filter(res -> res.getName().equals(".project")).findFirst();
+
+				final ProjectDescription projectDescription = (ProjectDescription) ResourcesPlugin.getWorkspace()
+						.loadProjectDescription(projectFile.get().getLocation());
+
+				final List<String> projectLibNames = projectDescription.getLinks().keySet().stream()
+						.map(p -> p.lastSegment().substring(0, p.lastSegment().lastIndexOf("-")))
+						.collect(Collectors.toList());
+				final List<String> projectLibVersions = projectDescription.getLinks().keySet().stream().map(
+						p -> p.lastSegment().substring(p.lastSegment().lastIndexOf("-") + 1, p.lastSegment().length()))
+						.collect(Collectors.toList());
+
+				if (manifest.getScope() != null && manifest.getScope().equals("Project")) {
+					for (final Library lib : manifest.getLibraries().getLibrary()) {
+
+						if (projectLibNames.contains(lib.getSymbolicName())) {
+							// TODO INSERT VERSION OF MANIFEST FILE
+							if (Version.parse(projectLibVersions.get(projectLibNames.indexOf(lib.getSymbolicName())))
+									.compareTo(Version.parse("0.0.0")) < 0) {
+								// link newer version and remove old
+							}
+						} else {
+							final File libDir = new File(
+									Paths.get(ResourcesPlugin.getWorkspace().getRoot().toString(), "/.lib").toString());
+							if (libDir.exists()) {
+								libDir.listFiles();
+							}
+						}
+					}
+				}
+			}
+
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError("Problem while loading Project resources", e);
+		} catch (final IOException e) {
+			FordiacLogHelper.logError("Problem while loading Library resources", e);
+
+		}
 	}
 
 	public TypeEntry createErrorTypeEntry(final String typeName, final EClass typeClass) {
