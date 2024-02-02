@@ -63,7 +63,7 @@ public class DeploymentLaunchShortcut implements ILaunchShortcut2 {
 			final ISelectionProvider provider = site.getSelectionProvider();
 			if (provider != null) {
 				final ISelection selection = provider.getSelection();
-				if (selection instanceof IStructuredSelection) {
+				if (selection instanceof IStructuredSelection && !selection.isEmpty()) {
 					launch(getLaunchableResource(editor),
 							collectDeployableObjects(selection).collect(Collectors.toSet()), mode);
 					return;
@@ -195,6 +195,9 @@ public class DeploymentLaunchShortcut implements ILaunchShortcut2 {
 		}
 		if (object instanceof final Resource resource) {
 			return Stream.of(resource);
+		}
+		if (object instanceof final EObject eObject) {
+			return collectDeployableObjects(eObject.eContainer());
 		}
 		return Stream.empty();
 	}
