@@ -38,7 +38,7 @@ Workflow {
 				encoding = "UTF-8"
 				lineDelimiter = "\n"
 				fileHeader = "/*******************************************************************************
- * Copyright (c) 2022, 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -49,6 +49,7 @@ Workflow {
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/"
+				preferXtendStubs = false
 			}
 		}
 		language = XtextGeneratorLanguage {

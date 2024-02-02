@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies GmbH
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,12 +8,12 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Martin Melik Merkumians
- *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextcore
+package org.eclipse.fordiac.ide.structuredtextalgorithm.ide;
 
-class DTPLanguageConstants {
-	
-	public static val ORG_ECLIPSE_FORDIAC_IDE_MODEL_DATATYPE_DTP = "org.eclipse.fordiac.ide.model.datatype.dtp"
+/**
+ * Use this class to register ide components.
+ */
+public class STAlgorithmIdeModule extends AbstractSTAlgorithmIdeModule {
 }
