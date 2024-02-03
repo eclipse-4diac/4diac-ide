@@ -15,60 +15,27 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class DataTypeEntryImpl extends AbstractTypeEntryImpl implements DataTypeEntry {
+public class DataTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AnyDerivedType> implements DataTypeEntry {
 
-	@Override
-	public synchronized AnyDerivedType getType() {
-		final LibraryElement type = super.getType();
-		if (type instanceof final AnyDerivedType derivedDataType) {
-			return derivedDataType;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized AnyDerivedType getTypeEditable() {
-		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof final AnyDerivedType derivedDataType) {
-			return derivedDataType;
-		}
-		return null;
-	}
-
-	@Override
-	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
-		if (toSave instanceof final AnyDerivedType derivedDataType) {
-			doSaveInternal(new DataTypeExporter(derivedDataType), monitor);
-		} else {
-			FordiacLogHelper.logError("Tried to save non AnyDerivedType for DataTypeEntry");//$NON-NLS-1$
-		}
-	}
-
-	@Override
-	public synchronized void setType(final LibraryElement type) {
-		if (type instanceof AnyDerivedType) {
-			super.setType(type);
-		} else {
-			super.setType(null);
-			if (null != type) {
-				FordiacLogHelper.logError("tried to set no AnyDerivedType as type entry for DataTypeEntry"); //$NON-NLS-1$
-			}
-		}
+	public DataTypeEntryImpl() {
+		super(AnyDerivedType.class);
 	}
 
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new DataTypeImporter(getFile());
+	}
+
+	@Override
+	protected AbstractTypeExporter getTypeExporter(final AnyDerivedType type) {
+		return new DataTypeExporter(type);
 	}
 
 }

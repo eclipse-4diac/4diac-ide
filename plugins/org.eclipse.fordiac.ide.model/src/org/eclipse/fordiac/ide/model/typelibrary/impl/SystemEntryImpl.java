@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -15,19 +15,18 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntry {
+public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSystem> implements SystemEntry {
 
 	public SystemEntryImpl() {
+		super(AutomationSystem.class);
 		// for system entries we don't want to perform any updates on save
 		setUpdateTypeOnSave(false);
 	}
@@ -38,38 +37,8 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 	}
 
 	@Override
-	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
-		if (toSave instanceof final AutomationSystem system) {
-			doSaveInternal(new SystemExporter(system), monitor);
-		} else {
-			FordiacLogHelper.logError("Tried to save non AutomationSystem for SystemEntry");//$NON-NLS-1$
-		}
-	}
-
-	@Override
 	public void setSystem(final LibraryElement system) {
 		setType(system);
-	}
-
-	@Override
-	public synchronized AutomationSystem getType() {
-		final LibraryElement type = super.getType();
-		if (type instanceof final AutomationSystem as) {
-			return as;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized void setType(final LibraryElement newType) {
-		if (newType instanceof AutomationSystem) {
-			super.setType(newType);
-		} else {
-			super.setType(null);
-			if (null != newType) {
-				FordiacLogHelper.logError("tried to set no AutomationSystem as type entry for SystemEntry");//$NON-NLS-1$
-			}
-		}
 	}
 
 	@Override
@@ -89,6 +58,11 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new SystemImporter(getFile());
+	}
+
+	@Override
+	protected AbstractTypeExporter getTypeExporter(final AutomationSystem type) {
+		return new SystemExporter(type);
 	}
 
 }

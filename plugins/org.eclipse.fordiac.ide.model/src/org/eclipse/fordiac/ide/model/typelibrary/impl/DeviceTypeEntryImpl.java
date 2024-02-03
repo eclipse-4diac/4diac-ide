@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -17,31 +17,17 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class DeviceTypeEntryImpl extends AbstractTypeEntryImpl implements DeviceTypeEntry {
+public class DeviceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<DeviceType> implements DeviceTypeEntry {
 
-	@Override
-	public synchronized DeviceType getType() {
-		final LibraryElement type = super.getType();
-		if (type instanceof final DeviceType devType) {
-			return devType;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized DeviceType getTypeEditable() {
-		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof final DeviceType devType) {
-			return devType;
-		}
-		return null;
+	public DeviceTypeEntryImpl() {
+		super(DeviceType.class);
 	}
 
 	@Override
@@ -50,20 +36,14 @@ public class DeviceTypeEntryImpl extends AbstractTypeEntryImpl implements Device
 	}
 
 	@Override
-	public synchronized void setType(final LibraryElement type) {
-		if (type instanceof DeviceType) {
-			super.setType(type);
-		} else {
-			super.setType(null);
-			if (null != type) {
-				FordiacLogHelper.logError("tried to set no DeviceType as type entry for DeviceTypeEntry"); //$NON-NLS-1$
-			}
-		}
+	protected CommonElementImporter getImporter() {
+		return new DEVImporter(getFile());
 	}
 
 	@Override
-	protected CommonElementImporter getImporter() {
-		return new DEVImporter(getFile());
+	protected AbstractTypeExporter getTypeExporter(final DeviceType type) {
+		// currently we can not save devices, but we also have no editor for it
+		return null;
 	}
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University, Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University, Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,59 +12,27 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.AttributeTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.AttributeTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class AttributeTypeEntryImpl extends AbstractTypeEntryImpl implements AttributeTypeEntry {
+public class AttributeTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AttributeDeclaration>
+		implements AttributeTypeEntry {
 
-	@Override
-	public synchronized AttributeDeclaration getType() {
-		final LibraryElement type = super.getType();
-		if (type instanceof final AttributeDeclaration attributeDeclaration) {
-			return attributeDeclaration;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized AttributeDeclaration getTypeEditable() {
-		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof final AttributeDeclaration attributeDeclaration) {
-			return attributeDeclaration;
-		}
-		return null;
-	}
-
-	@Override
-	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
-		if (toSave instanceof final AttributeDeclaration attributeDeclaration) {
-			doSaveInternal(new AttributeTypeExporter(attributeDeclaration), monitor);
-		} else {
-			FordiacLogHelper.logError("Tried to save non AttributeDeclaration for AttributeTypeEntry");//$NON-NLS-1$
-		}
-	}
-
-	@Override
-	public synchronized void setType(final LibraryElement type) {
-		if (type instanceof AttributeDeclaration) {
-			super.setType(type);
-		} else {
-			super.setType(null);
-			if (null != type) {
-				FordiacLogHelper.logError("tried to set no AttributeDeclaration as type entry for AttributeTypeEntry"); //$NON-NLS-1$
-			}
-		}
+	public AttributeTypeEntryImpl() {
+		super(AttributeDeclaration.class);
 	}
 
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new AttributeTypeImporter(getFile());
+	}
+
+	@Override
+	protected AbstractTypeExporter getTypeExporter(final AttributeDeclaration type) {
+		return new AttributeTypeExporter(type);
 	}
 }
