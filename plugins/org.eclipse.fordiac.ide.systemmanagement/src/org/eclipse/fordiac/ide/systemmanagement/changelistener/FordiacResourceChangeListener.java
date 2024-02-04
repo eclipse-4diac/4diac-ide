@@ -120,15 +120,15 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private void handleChangedFiles() {
+		final List<TypeEntry> changedFilesCopy = new ArrayList<>(changedFiles);
+		changedFiles.clear();
 		Display.getDefault().asyncExec(() -> {
-			final List<IEditorPart> changedOpenedDirtyEditors = collectOpenedEditors(changedFiles);
+			final List<IEditorPart> changedOpenedDirtyEditors = collectOpenedEditors(changedFilesCopy);
 			final List<IEditorFileChangeListener> editorListener = changedOpenedDirtyEditors.stream()
 					.filter(IEditorFileChangeListener.class::isInstance).map(IEditorFileChangeListener.class::cast)
 					.toList();
-			changedFiles.clear();
 			handleFileRefreshWIzards(editorListener);
 		});
-
 	}
 
 	private void handleFilesToRename() {
