@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
@@ -57,8 +58,15 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 			super.activate();
 			getRefElement().eAdapters().add(nameChangeAdapter);
 			if (!isSubappInterfaceTarget()) {
-				getRefElement().getFBNetworkElement().eAdapters().add(nameChangeAdapter);
-				getRefElement().getFBNetworkElement().getOuterFBNetworkElement().eAdapters().add(nameChangeAdapter);
+				final FBNetworkElement parent = getRefElement().getFBNetworkElement();
+				if (parent instanceof final SubApp subapp && subapp.isUnfolded()) {
+					parent.eAdapters().add(nameChangeAdapter);
+					final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
+					if (grandParent instanceof SubApp) {
+						grandParent.eAdapters().add(nameChangeAdapter);
+					}
+				}
+
 			}
 		}
 	}
@@ -69,11 +77,11 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 			getRefElement().eAdapters().remove(nameChangeAdapter);
 			if (!isSubappInterfaceTarget()) {
 				final FBNetworkElement parent = getRefElement().getFBNetworkElement();
-				if (parent != null) {
-					parent.eAdapters().add(nameChangeAdapter);
+				if (parent != null && parent.eAdapters().contains(nameChangeAdapter)) {
+					parent.eAdapters().remove(nameChangeAdapter);
 					final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
-					if (grandParent != null) {
-						grandParent.eAdapters().add(nameChangeAdapter);
+					if (grandParent != null && grandParent.eAdapters().contains(nameChangeAdapter)) {
+						grandParent.eAdapters().remove(nameChangeAdapter);
 					}
 				}
 			}
