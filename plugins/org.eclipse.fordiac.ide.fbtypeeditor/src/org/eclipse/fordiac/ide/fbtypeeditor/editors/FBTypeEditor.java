@@ -234,8 +234,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	}
 
 	private void updateFB(final Set<INamedElement> set) {
-		Command cmd = new CompoundCommand();
-		cmd = cmd.chain(getUpdateInstancesCommand(set));
+		final Command cmd = getUpdateInstancesCommand(set);
 		Display.getDefault().asyncExec(cmd::execute);
 	}
 
