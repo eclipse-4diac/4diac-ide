@@ -503,6 +503,24 @@
              </and>
          </enablement>
       </renameParticipant>
+      <renameParticipant
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameElementRefactoringParticipant"
+            id="org.eclipse.fordiac.ide.typemanagement.renameElement"
+            name="Rename Model Element">
+         <enablement>
+            <with
+                  variable="processorIdentifier">
+               <or>
+                  <equals
+                        value="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.renameProcessor2">
+                  </equals>
+                  <equals
+                        value="org.eclipse.fordiac.ide.model.datatype.dtp.renameProcessor2">
+                  </equals>
+               </or>
+            </with>
+         </enablement>
+      </renameParticipant>
    </extension>
    <extension
          point="org.eclipse.ltk.core.refactoring.deleteParticipants">
