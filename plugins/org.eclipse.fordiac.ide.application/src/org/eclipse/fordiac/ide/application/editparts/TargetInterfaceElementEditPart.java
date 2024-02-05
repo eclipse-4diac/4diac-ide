@@ -19,7 +19,9 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -38,6 +40,8 @@ import org.eclipse.swt.graphics.Color;
 public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
 	public static final int LABEL_ALPHA = 120;
+	public static final int MAX_LABEL_LENGTH = Activator.getDefault().getPreferenceStore()
+			.getInt(DiagramPreferences.MAX_INTERFACE_BAR_SIZE);
 
 	private final Adapter nameChangeAdapter = new AdapterImpl() {
 		@Override
@@ -121,7 +125,8 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private String getLabelText() {
-		return getModel().getRefPinFullName() + "\n" + getRefElement().getComment(); //$NON-NLS-1$
+		return labelTruncate(getModel().getRefPinFullName()) + "\n" //$NON-NLS-1$
+				+ labelTruncate(getRefElement().getComment());
 	}
 
 	@Override
@@ -160,4 +165,10 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		return getModel() instanceof TargetInterfaceElement.SubapTargetInterfaceElement;
 	}
 
+	private static String labelTruncate(final String label) {
+		if (label.length() <= MAX_LABEL_LENGTH) {
+			return label;
+		}
+		return label.substring(0, MAX_LABEL_LENGTH) + "\u2026"; //$NON-NLS-1$
+	}
 }
