@@ -14,12 +14,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search.dialog;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -31,7 +27,6 @@ import org.eclipse.fordiac.ide.model.search.Messages;
 import org.eclipse.fordiac.ide.model.search.SearchNameDictionary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -57,9 +52,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 public class FBTypeUpdateDialog<T extends TypeEntry> extends MessageDialog {
 
@@ -67,8 +59,6 @@ public class FBTypeUpdateDialog<T extends TypeEntry> extends MessageDialog {
 
 	private static final int NUMBER_OF_COLLUMNS = 1;
 	protected static final int TABLE_COL_WIDTH = 150;
-	private static final int CHECK_BOX_COL_WIDTH = 60;
-	private boolean selectAll = true;
 
 	private static TreeViewer treeViewer;
 	private ColumnLabelProvider labelElement;
@@ -108,7 +98,6 @@ public class FBTypeUpdateDialog<T extends TypeEntry> extends MessageDialog {
 			configureTableViewer(treeViewer);
 			treeViewer.setInput(result.keySet());
 			GridLayoutFactory.fillDefaults().generateLayout(searchResArea);
-			changeSelectionState(treeViewer.getTree(), true); // check all elements per default
 		}
 		return parent;
 	}
@@ -161,11 +150,10 @@ public class FBTypeUpdateDialog<T extends TypeEntry> extends MessageDialog {
 	}
 
 	private static TreeViewer createTreeViewer(final Composite parent) {
-		return new TreeViewer(parent, SWT.CHECK);
+		return new TreeViewer(parent);
 	}
 
 	protected void configureTableViewer(final TreeViewer viewer) {
-		data.clearElements();
 		createLabelProviders();
 		viewer.setContentProvider(new ITreeContentProvider() {
 
@@ -209,43 +197,6 @@ public class FBTypeUpdateDialog<T extends TypeEntry> extends MessageDialog {
 		table.setLayout(createTableLayout());
 		table.setSortDirection(SWT.DOWN);
 
-		table.addListener(SWT.Selection, event -> {
-			if (event.detail == SWT.CHECK) {
-				final TreeItem tableItem = (TreeItem) event.item;
-				// if it's a type just add or remove it
-				if (tableItem.getData() instanceof FBType) {
-					clickTypeItem(tableItem);
-				} else if (tableItem.getData() instanceof FBNetworkElement) {
-					clickFBNetworkItem(tableItem);
-				}
-			}
-		});
-
-		// Check-box column
-		final TreeViewerColumn colCheckBox = new TreeViewerColumn(viewer, SWT.WRAP);
-		colCheckBox.getColumn().setImage(FordiacImage.ICON_EXPAND_ALL.getImage());
-		colCheckBox.getColumn().addListener(SWT.Selection, event -> {
-			changeSelectionState(table, selectAll);
-			if (selectAll) {
-				changeSelectionState(table, selectAll);
-				colCheckBox.getColumn().setImage(
-						PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_COLLAPSEALL));
-			} else {
-				changeSelectionState(table, selectAll);
-				colCheckBox.getColumn().setImage(FordiacImage.ICON_EXPAND_ALL.getImage());
-			}
-			selectAll = !selectAll;
-		});
-		colCheckBox.getColumn().addListener(SWT.Expand, event -> {
-			colCheckBox.getColumn().pack();
-		});
-
-		colCheckBox.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return ""; //$NON-NLS-1$
-			}
-		});
 		final SelectionListener sortListener = new SelectionListener() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -320,74 +271,13 @@ public class FBTypeUpdateDialog<T extends TypeEntry> extends MessageDialog {
 
 	}
 
-	private void clickTypeItem(final TreeItem item) {
-		if (item.getChecked()) {
-			data.addElement((INamedElement) item.getData());
-			if (!item.getExpanded()) {
-				item.setExpanded(true);
-				treeViewer.refresh();
-			}
-			Arrays.asList(item.getItems()).stream().forEach(e -> {
-				e.setChecked(true);
-				data.addElement((INamedElement) e.getData());
-			});
-		} else {
-			data.removeElement(item.getData());
-			Arrays.asList(item.getItems()).stream().forEach(e -> {
-				e.setChecked(false);
-				data.removeElement(e.getData());
-			});
-		}
-	}
-
-	private void clickFBNetworkItem(final TreeItem item) {
-		final TreeItem parent = item.getParentItem();
-		if (item.getChecked()) {
-			if (parent != null) {
-				parent.setChecked(true);
-				data.addElement((INamedElement) parent.getData());
-			}
-			data.addElement((INamedElement) item.getData());
-		} else {
-			data.removeElement(item.getData());
-		}
-	}
-
 	protected TableLayout createTableLayout() {
 		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(CHECK_BOX_COL_WIDTH, true));
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		return layout;
-	}
-
-	void changeSelectionState(final Tree table, final boolean state) {
-		final List<TreeItem> allItemList = new ArrayList<>();
-		getAllItems(allItemList, Arrays.asList(table.getItems()));
-		for (final TreeItem tableItem : allItemList) {
-			tableItem.setChecked(state);
-			final Object tData = tableItem.getData();
-			if (tData instanceof StructuredType || tData instanceof FBNetworkElement || tData instanceof FBType) {
-				if (state) {
-					data.addElement((INamedElement) tData);
-				} else {
-					data.removeElement(tData);
-				}
-			}
-		}
-	}
-
-	private static void getAllItems(final List<TreeItem> allItemList, final List<TreeItem> roots) {
-		allItemList.addAll(roots);
-		roots.stream().forEach(r -> {
-			if (!r.getExpanded()) {
-				r.setExpanded(true);
-				treeViewer.refresh();
-			}
-			getAllItems(allItemList, Arrays.asList(r.getItems()));
-		});
 	}
 
 	@Override

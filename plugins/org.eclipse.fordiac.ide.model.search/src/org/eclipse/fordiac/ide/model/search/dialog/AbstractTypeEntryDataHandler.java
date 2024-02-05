@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.search.dialog;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,13 +24,11 @@ public abstract class AbstractTypeEntryDataHandler<T extends TypeEntry> {
 
 	protected final T typeEntry;
 
-	protected final Set<INamedElement> collectedElements;
 	protected final Map<String, Set<INamedElement>> children;
 	protected HashMap<INamedElement, T> inputSet;
 
 	public AbstractTypeEntryDataHandler(final T typeEntry) {
 		this.typeEntry = typeEntry;
-		collectedElements = new HashSet<>();
 		children = new HashMap<>();
 		setInputSet(new HashMap<>());
 	}
@@ -61,19 +58,7 @@ public abstract class AbstractTypeEntryDataHandler<T extends TypeEntry> {
 	}
 
 	public Set<INamedElement> getCollectedElements() {
-		return collectedElements;
-	}
-
-	public boolean addElement(final INamedElement element) {
-		return collectedElements.add(element);
-	}
-
-	public boolean removeElement(final Object object) {
-		return collectedElements.remove(object);
-	}
-
-	public void clearElements() {
-		collectedElements.clear();
+		return inputSet.keySet();
 	}
 
 	public T getTypeOfElement(final Object element) {
