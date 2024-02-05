@@ -29,6 +29,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork <em>Sub App Network</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getWidth <em>Width</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getHeight <em>Height</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#isLocked <em>Locked</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp()
@@ -103,6 +104,29 @@ public interface SubApp extends FBNetworkElement {
 	 * @generated
 	 */
 	void setHeight(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Locked</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Locked</em>' attribute.
+	 * @see #setLocked(boolean)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp_Locked()
+	 * @model default="false" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated
+	 */
+	boolean isLocked();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#isLocked <em>Locked</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Locked</em>' attribute.
+	 * @see #isLocked()
+	 * @generated
+	 */
+	void setLocked(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->
