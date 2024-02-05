@@ -63,4 +63,12 @@ public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
 		return figure;
 	}
 
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == ErrorMarkerInterfaceEditPart.class) {
+			return key.cast(this);
+		}
+		return super.getAdapter(key);
+	}
+
 }
