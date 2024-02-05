@@ -116,7 +116,11 @@
     	<command
         	id="org.eclipse.fordiac.ide.typemanagement.openType"
         	name="Open Type">
-    	</command> 
+    	</command>
+     <command
+           id="org.eclipse.fordiac.ide.typemanagement.renameElement"
+           name="Rename Element">
+     </command> 
 	</extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -132,6 +136,22 @@
         	class="org.eclipse.fordiac.ide.typemanagement.handlers.OpenTypeHandler"
         	commandId="org.eclipse.fordiac.ide.typemanagement.openType">
     	</handler>
+     <handler
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameElementRefactoringHandler"
+           commandId="org.eclipse.fordiac.ide.typemanagement.renameElement">
+        <enabledWhen>
+           <with
+                 variable="selection">
+              <count
+                    value="1">
+              </count>
+              <iterate>
+                 <test
+                       property="org.eclipse.fordiac.ide.typemanagement.renameSupported">
+                 </test>
+              </iterate>
+           </with></enabledWhen>
+     </handler>
 
 	</extension>
    <extension
@@ -640,6 +660,13 @@
             properties="fbType"
             type="org.eclipse.core.resources.IResource">
       </propertyTester>
+      <propertyTester
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RefactorElementPropertyTester"
+            id="org.eclipse.fordiac.ide.typemanagement.refactorElementTester"
+            namespace="org.eclipse.fordiac.ide.typemanagement"
+            properties="renameSupported"
+            type="java.lang.Object">
+      </propertyTester>
    </extension>  
 
    <extension
@@ -703,6 +730,33 @@
          </or>
          </enablement>
       </changePreviewViewer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.4diac.ide.refactor.menu">
+         <command
+               commandId="org.eclipse.fordiac.ide.typemanagement.renameElement"
+               label="Rename Element"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.rest">
+         <menu
+               id="org.eclipse.fordiac.ide.typemanagement.refactor"
+               label="Refactor">
+            <command
+                  commandId="org.eclipse.fordiac.ide.typemanagement.renameElement"
+                  label="Rename Element"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="true">
+               </visibleWhen>
+            </command>
+         </menu>
+      </menuContribution>
    </extension>
    
 </plugin>
