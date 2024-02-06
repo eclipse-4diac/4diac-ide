@@ -331,8 +331,8 @@ public class PasteCommand extends Command implements ScopedCommand {
 		final IInterfaceElement destination = getInterfaceElement(connRef.destination(), copiedDest);
 
 		if (source != null && destination != null) {
-			final Application sourceApp = source.getFBNetworkElement().getFbNetwork().getApplication();
-			final Application destApp = destination.getFBNetworkElement().getFbNetwork().getApplication();
+			final Application sourceApp = getApplicationFromPin(source);
+			final Application destApp = getApplicationFromPin(destination);
 			if ((sourceApp != null && destApp != null && sourceApp.equals(destApp))
 					|| (FBNetworkHelper.getRootType(source) != null && FBNetworkHelper.getRootType(destination) != null
 							&& FBNetworkHelper.getRootType(source).equals(FBNetworkHelper.getRootType(destination)))) {
@@ -341,6 +341,11 @@ public class PasteCommand extends Command implements ScopedCommand {
 			}
 		}
 		return null;
+	}
+
+	private static Application getApplicationFromPin(final IInterfaceElement pin) {
+		final FBNetworkElement fbNetworkElement = pin.getFBNetworkElement();
+		return (fbNetworkElement != null) ? fbNetworkElement.getFbNetwork().getApplication() : null;
 	}
 
 	private IInterfaceElement getInterfaceElement(final IInterfaceElement orig, final FBNetworkElement copiedElement) {

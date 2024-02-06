@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -56,7 +55,7 @@ public class UpdatePinInTypeDeclarationCommand extends Command {
 					}
 				});
 		try {
-			fbType.getTypeEntry().save();
+			fbType.getTypeEntry().save(fbType);
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}

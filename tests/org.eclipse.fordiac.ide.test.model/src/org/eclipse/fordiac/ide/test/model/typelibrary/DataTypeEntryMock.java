@@ -103,7 +103,7 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 	}
 
 	@Override
-	public void save(final IProgressMonitor monitor) {
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) {
 		// currently not needed in mock
 	}
 

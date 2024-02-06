@@ -16,9 +16,18 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 
 public final class AttributeAnnotations {
 	private static final String NAMED_ELEMENTS_KEY = AttributeAnnotations.class.getName() + ".NAMED_ELEMENTS"; //$NON-NLS-1$
+
+	public static String getQualifiedName(final Attribute attribute) {
+		if (attribute.eContainer() instanceof final Connection connection) {
+			return ConnectionAnnotations.getConnectionQualifiedName(connection)
+					+ NamedElementAnnotations.QUALIFIED_NAME_DELIMITER + attribute.getName();
+		}
+		return NamedElementAnnotations.getQualifiedName(attribute);
+	}
 
 	public static boolean validateName(final Attribute attribute, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {

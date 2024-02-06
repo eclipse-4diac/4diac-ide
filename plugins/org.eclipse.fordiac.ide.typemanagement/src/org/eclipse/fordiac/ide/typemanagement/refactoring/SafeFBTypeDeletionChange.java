@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
@@ -89,9 +90,14 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
-			final Command cmd = new UpdateFBTypeCommand(fb, fb.getTypeEntry());
+			final Command cmd = new UpdateFBTypeCommand(fb, getErrorMarkerEntry());
 			ChangeExecutionHelper.executeChange(cmd, fb, pm);
 			return super.perform(pm);
+		}
+
+		private TypeEntry getErrorMarkerEntry() {
+			final TypeLibrary typeLibrary = fb.getTypeEntry().getTypeLibrary();
+			return typeLibrary.createErrorTypeEntry(fb.getTypeName(), fb.getType().eClass());
 		}
 
 	}

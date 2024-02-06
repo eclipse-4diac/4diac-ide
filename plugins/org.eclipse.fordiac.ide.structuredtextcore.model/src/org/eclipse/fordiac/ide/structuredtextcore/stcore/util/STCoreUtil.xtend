@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 - 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -178,11 +178,13 @@ final class STCoreUtil {
 			case first.anyType || second.anyType:
 				false
 			case ADD:
-				(first instanceof AnyMagnitudeType && second instanceof AnyMagnitudeType) ||
+				(first instanceof AnyNumType && second instanceof AnyNumType) ||
+					(first instanceof AnyDurationType && second instanceof AnyDurationType) ||
 					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) ||
 					(first.instanceofAnyDateAndTimeType && second instanceof AnyDurationType)
 			case SUB:
-				(first instanceof AnyMagnitudeType && second instanceof AnyMagnitudeType) ||
+				(first instanceof AnyNumType && second instanceof AnyNumType) ||
+					(first instanceof AnyDurationType && second instanceof AnyDurationType) ||
 					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) ||
 					(first.instanceofAnyDateAndTimeType && second instanceof AnyDurationType) ||
 					(first.instanceofAnySimpleDateType && second.instanceofAnySimpleDateType) ||

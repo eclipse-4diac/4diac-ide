@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -65,8 +66,8 @@ public final class InterfaceElementAnnotations {
 
 	public static boolean validateName(final IInterfaceElement element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (isErrorMarker(element)) {
-			return true; // do not check error markers
+		if (isErrorMarker(element) || isInTypedInstance(element)) {
+			return true; // do not check error markers or inside typed instances
 		}
 		if (!NamedElementAnnotations.validateName(element, diagnostics, context)) {
 			return false;
@@ -92,6 +93,11 @@ public final class InterfaceElementAnnotations {
 
 	static boolean isErrorMarker(final IInterfaceElement element) {
 		return element instanceof ErrorMarkerInterface;
+	}
+
+	static boolean isInTypedInstance(final IInterfaceElement element) {
+		final FBNetworkElement fbNetworkElement = element.getFBNetworkElement();
+		return fbNetworkElement != null && fbNetworkElement.getTypeEntry() != null;
 	}
 
 	static boolean isOutMappedInOutVar(final IInterfaceElement element) {

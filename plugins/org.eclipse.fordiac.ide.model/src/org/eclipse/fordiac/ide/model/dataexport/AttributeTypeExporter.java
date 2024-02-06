@@ -29,7 +29,7 @@ public class AttributeTypeExporter extends AbstractTypeExporter {
 	}
 
 	@Override
-	protected AttributeDeclaration getType() {
+	public AttributeDeclaration getType() {
 		return (AttributeDeclaration) super.getType();
 	}
 

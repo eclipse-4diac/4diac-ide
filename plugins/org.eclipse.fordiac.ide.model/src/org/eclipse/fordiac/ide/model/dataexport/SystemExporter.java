@@ -41,7 +41,7 @@ public class SystemExporter extends AbstractTypeExporter {
 	}
 
 	@Override
-	protected AutomationSystem getType() {
+	public AutomationSystem getType() {
 		return (AutomationSystem) super.getType();
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -20,40 +20,12 @@ import org.eclipse.fordiac.ide.model.dataexport.FbtExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class FBTypeEntryImpl extends AbstractTypeEntryImpl implements FBTypeEntry {
+public class FBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<FBType> implements FBTypeEntry {
 
-	@Override
-	public synchronized FBType getType() {
-		final LibraryElement type = super.getType();
-		if (type instanceof FBType) {
-			return (FBType) type;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized FBType getTypeEditable() {
-		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof FBType) {
-			return (FBType) type;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized void setType(final LibraryElement type) {
-		if (type instanceof FBType) {
-			super.setType(type);
-		} else {
-			super.setType(null);
-			if (null != type) {
-				FordiacLogHelper.logError("tried to set no FBType as type entry for FBTypeEntry"); //$NON-NLS-1$
-			}
-		}
+	public FBTypeEntryImpl() {
+		super(FBType.class);
 	}
 
 	@Override
@@ -62,8 +34,8 @@ public class FBTypeEntryImpl extends AbstractTypeEntryImpl implements FBTypeEntr
 	}
 
 	@Override
-	protected AbstractTypeExporter getExporter() {
-		return new FbtExporter(this);
+	protected AbstractTypeExporter getTypeExporter(final FBType type) {
+		return new FbtExporter(type);
 	}
 
 }

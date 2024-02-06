@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -262,7 +263,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		}
 	}
 
-	protected void gotoElement(final EObject element) {
+	private void gotoElement(final EObject element) {
 		final EObject toView = getFBNetworkContainer(element);
 		if (toView != null) {
 			getBreadcrumb().setInput(toView);
@@ -285,11 +286,12 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		}
 	}
 
-	static EObject getFBNetworkContainer(EObject object) {
+	private static EObject getFBNetworkContainer(EObject object) {
 		while (object != null) {
 			object = object.eContainer();
-			if (object instanceof final FBNetwork element) {
-				return element.eContainer();
+			if (object instanceof FBNetwork
+					&& !(object.eContainer() instanceof final SubApp subApp && subApp.isUnfolded())) {
+				return object.eContainer();
 			}
 		}
 		return null;

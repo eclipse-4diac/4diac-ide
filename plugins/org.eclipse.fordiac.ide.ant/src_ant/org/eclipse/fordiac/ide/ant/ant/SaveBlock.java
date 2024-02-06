@@ -16,7 +16,6 @@ import java.text.MessageFormat;
 
 import org.apache.tools.ant.BuildException;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public class SaveBlock extends AbstractBlockModelTask {
@@ -24,7 +23,7 @@ public class SaveBlock extends AbstractBlockModelTask {
 	@Override
 	protected void modifyBlock(final FBType fb) {
 		try {
-			fb.getTypeEntry().save();
+			fb.getTypeEntry().save(fb);
 			log(MessageFormat.format("Save {0}/{1}", projectname, blockname)); //$NON-NLS-1$
 		} catch (final CoreException e) {
 			throw new BuildException(e);

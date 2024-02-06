@@ -56,7 +56,7 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		type = null;
 	}
 
-	protected LibraryElement getType() {
+	public LibraryElement getType() {
 		return type;
 	}
 
@@ -103,16 +103,16 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 
 	private static AbstractTypeExporter getTypeExporter(final TypeEntry entry) {
 		if (entry instanceof final FunctionFBTypeEntry functionFBTypeEntry) {
-			return new FCTExporter(functionFBTypeEntry);
+			return new FCTExporter(functionFBTypeEntry.getTypeEditable());
 		}
 		if (entry instanceof final FBTypeEntry functionFBTypeEntry) {
-			return new FbtExporter(functionFBTypeEntry);
+			return new FbtExporter(functionFBTypeEntry.getTypeEditable());
 		}
 		if (entry instanceof final AdapterTypeEntry adapterTypeEntry) {
-			return new AdapterExporter(adapterTypeEntry);
+			return new AdapterExporter(adapterTypeEntry.getTypeEditable());
 		}
 		if (entry instanceof final SubAppTypeEntry subAppTypeEntry) {
-			return new SubApplicationTypeExporter(subAppTypeEntry);
+			return new SubApplicationTypeExporter(subAppTypeEntry.getTypeEditable());
 		}
 		if (entry instanceof final DataTypeEntry dataTypeEntry) {
 			return new DataTypeExporter(dataTypeEntry.getTypeEditable());

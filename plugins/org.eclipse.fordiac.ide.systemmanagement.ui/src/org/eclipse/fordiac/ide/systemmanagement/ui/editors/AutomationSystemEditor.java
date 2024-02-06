@@ -54,6 +54,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.model.ui.listeners.EditorTabCommandStackListener;
@@ -120,10 +121,15 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		super.init(site, input);
 		loadSystem();
 		if (system != null) {
-			annotationModel = new FordiacMarkerGraphicalAnnotationModel(system.getTypeEntry().getFile());
-			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
-			system.getTypeEntry().eAdapters().add(adapter);
+			hookSystemEntry(system.getTypeEntry());
+
 		}
+	}
+
+	private void hookSystemEntry(final TypeEntry typeEntry) {
+		annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEntry.getFile());
+		validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
+		typeEntry.eAdapters().add(adapter);
 	}
 
 	@Override
@@ -242,7 +248,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 				@Override
 				protected void execute(final IProgressMonitor monitor)
 						throws CoreException, InvocationTargetException, InterruptedException {
-					SystemManager.saveSystem(system, monitor);
+					system.getTypeEntry().save(system, monitor);
 				}
 			};
 			try {
@@ -309,7 +315,16 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			@Override
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
-				SystemManager.saveSystem(system, file, monitor);
+				final TypeEntry oldSystemEntry = system.getTypeEntry();
+
+				system.setName(TypeEntry.getTypeNameFromFile(file));
+
+				final TypeEntry newSystemEntry = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject())
+						.createTypeEntry(file);
+				newSystemEntry.save(system, monitor);
+				oldSystemEntry.eAdapters().remove(adapter);
+				oldSystemEntry.setType(null);
+				hookSystemEntry(newSystemEntry);
 			}
 		};
 		try {

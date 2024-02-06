@@ -69,7 +69,7 @@ public class StructuredTypeMemberChange extends Change {
 		}
 
 		cmd.execute();
-		structuredTypeEditable.getTypeEntry().save(pm);
+		structuredTypeEditable.getTypeEntry().save(structuredTypeEditable, pm);
 
 		return null;
 	}

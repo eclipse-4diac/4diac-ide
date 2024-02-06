@@ -46,7 +46,7 @@ public class InterfaceDataTypeChange extends Change {
 	public String getName() {
 		return "Update InterfacePins: - " + fbType.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
 				+ fbType.getTypeEntry().getFile().getFileExtension() + " - " //$NON-NLS-1$
-				+ fbType.getTypeEntry().getFile().getProject().getName() + ": " + pinNames.toString();
+				+ fbType.getTypeEntry().getFile().getProject().getName() + ": " + pinNames.toString(); //$NON-NLS-1$
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class InterfaceDataTypeChange extends Change {
 		Display.getDefault().syncExec(() -> {
 			cmd.execute();
 			try {
-				fbType.getTypeEntry().save(pm);
+				fbType.getTypeEntry().save(fbType, pm);
 			} catch (final CoreException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}

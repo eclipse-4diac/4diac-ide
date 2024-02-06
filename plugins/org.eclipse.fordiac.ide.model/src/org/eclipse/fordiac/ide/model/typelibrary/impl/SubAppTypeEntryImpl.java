@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -19,41 +19,13 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SubApplicationTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class SubAppTypeEntryImpl extends AbstractTypeEntryImpl implements SubAppTypeEntry {
+public class SubAppTypeEntryImpl extends AbstractCheckedTypeEntryImpl<SubAppType> implements SubAppTypeEntry {
 
-	@Override
-	public synchronized SubAppType getTypeEditable() {
-		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof SubAppType) {
-			return (SubAppType) type;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized SubAppType getType() {
-		final LibraryElement type = super.getType();
-		if (type instanceof SubAppType) {
-			return (SubAppType) type;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized void setType(final LibraryElement type) {
-		if (type instanceof SubAppType) {
-			super.setType(type);
-		} else {
-			super.setType(null);
-			if (null != type) {
-				FordiacLogHelper.logError("tried to set no SubAppType as type entry for SubAppTypeEntry"); //$NON-NLS-1$
-			}
-		}
+	public SubAppTypeEntryImpl() {
+		super(SubAppType.class);
 	}
 
 	@Override
@@ -62,8 +34,8 @@ public class SubAppTypeEntryImpl extends AbstractTypeEntryImpl implements SubApp
 	}
 
 	@Override
-	protected AbstractTypeExporter getExporter() {
-		return new SubApplicationTypeExporter(this);
+	protected AbstractTypeExporter getTypeExporter(final SubAppType type) {
+		return new SubApplicationTypeExporter(type);
 	}
 
 }

@@ -30,7 +30,7 @@ public class DataTypeExporter extends AbstractTypeExporter {
 	}
 
 	@Override
-	protected AnyDerivedType getType() {
+	public AnyDerivedType getType() {
 		return (AnyDerivedType) super.getType();
 	}
 
