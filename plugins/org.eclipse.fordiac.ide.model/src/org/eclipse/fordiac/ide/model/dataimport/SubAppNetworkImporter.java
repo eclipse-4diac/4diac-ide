@@ -132,6 +132,10 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 					subApp.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(heightValue));
 				}
 				break;
+			case LibraryElementTags.LOCKED_ATTRIBUTE:
+				final String isLocked = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+				subApp.setLocked(Boolean.valueOf(isLocked));
+				break;
 			default:
 				parseGenericAttributeNode(subApp);
 				break;
