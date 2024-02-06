@@ -81,9 +81,9 @@ public class VarDeclarationAnnotations {
 
 	public static boolean validateVarInOutSourceTypeIsWellDefined(@NonNull final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		if (varDeclaration.eContainer().eContainer() instanceof FB && varDeclaration.isInOutVar()
-				&& varDeclaration.isIsInput() && varDeclaration.getInputConnections().isEmpty()
-				&& (varDeclaration.isArray() && varDeclaration.getArraySize().getValue().contains("*"))) { //$NON-NLS-1$
+		if (varDeclaration.isInOutVar() && varDeclaration.isIsInput() && varDeclaration.getFBNetworkElement() != null
+				&& varDeclaration.getInputConnections().isEmpty() && varDeclaration.isArray()
+				&& varDeclaration.getArraySize().getValue().contains("*")) { //$NON-NLS-1$
 			// We have a VarInOut input on a FB instance which is an array of variable
 			// length, so its not well defined
 			if (diagnostics != null) {
@@ -100,7 +100,8 @@ public class VarDeclarationAnnotations {
 
 	public static boolean validateVarInOutIsWithed(@NonNull final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		if (varDeclaration.isInOutVar() && varDeclaration.getWiths().isEmpty()) {
+		if (varDeclaration.isInOutVar() && varDeclaration.getWiths().isEmpty()
+				&& varDeclaration.getFBNetworkElement() == null) {
 			if (diagnostics != null) {
 				final String typeName = varDeclaration.eContainer().eContainer() instanceof final FB fb ? fb.getName()
 						: ((INamedElement) varDeclaration.eContainer().eContainer()).getName();

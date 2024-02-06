@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -35,7 +34,7 @@ public class SaveTypeEntryCommand extends Command {
 	@Override
 	public void execute() {
 		try {
-			typeEntry.getTypeEntry().save();
+			typeEntry.getTypeEntry().save(typeEntry);
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}

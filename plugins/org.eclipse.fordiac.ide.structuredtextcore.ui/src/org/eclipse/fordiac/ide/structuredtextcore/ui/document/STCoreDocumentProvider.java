@@ -53,7 +53,7 @@ public class STCoreDocumentProvider extends LibraryElementXtextDocumentProvider 
 					// indicated by a FileEditorInput instead of a FBTypeEditorInput
 					if (fileEditorInput instanceof FileEditorInput) {
 						try {
-							element.getTypeEntry().save(monitor);
+							element.getTypeEntry().save(element, monitor);
 						} catch (final CoreException e) {
 							throw new RuntimeException(e);
 						}

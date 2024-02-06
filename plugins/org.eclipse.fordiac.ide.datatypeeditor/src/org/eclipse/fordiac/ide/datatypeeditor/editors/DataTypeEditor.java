@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.SaveTypeEntryCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -122,6 +123,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	private final List<String> propertyActions = new ArrayList<>();
 
 	private DataTypeEntry dataTypeEntry;
+	private AnyDerivedType dataTypeEditable;
 
 	private final Adapter adapter = new AdapterImpl() {
 
@@ -221,7 +223,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			@Override
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
-				dataTypeEntry.save(monitor);
+				dataTypeEntry.save(dataTypeEditable, monitor);
 			}
 		};
 		try {
@@ -239,7 +241,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	@Override
 	public void doSaveAs() {
-		if (dataTypeEntry.getTypeEditable() instanceof final StructuredType structuredType) {
+		if (dataTypeEditable instanceof final StructuredType structuredType) {
 			new WizardDialog(null, new SaveAsStructTypeWizard(structuredType, this)).open();
 		}
 	}
@@ -343,20 +345,20 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	}
 
 	private void addListenerToDataTypeObj() {
-		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null) {
+		if (dataTypeEntry != null && dataTypeEditable != null) {
 			dataTypeEntry.eAdapters().add(adapter);
-			dataTypeEntry.getTypeEditable().eAdapters().add(adapter);
+			dataTypeEditable.eAdapters().add(adapter);
 		}
 	}
 
 	private void removeListenerFromDataTypeObj() {
-		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null) {
+		if (dataTypeEntry != null && dataTypeEditable != null) {
 			if (dataTypeEntry.eAdapters().contains(adapter)) {
 				dataTypeEntry.eAdapters().remove(adapter);
 			}
 
-			if (dataTypeEntry.getTypeEditable().eAdapters().contains(adapter)) {
-				dataTypeEntry.getTypeEditable().eAdapters().remove(adapter);
+			if (dataTypeEditable.eAdapters().contains(adapter)) {
+				dataTypeEditable.eAdapters().remove(adapter);
 			}
 		}
 	}
@@ -381,8 +383,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		// exist anymore!
 		if (file.exists()) {
 			dataTypeEntry = (DataTypeEntry) TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+			dataTypeEditable = dataTypeEntry.getTypeEditable();
 			setPartName(dataTypeEntry.getFile().getName());
-			return !(dataTypeEntry.getTypeEditable() instanceof StructuredType);
+			return !(dataTypeEditable instanceof StructuredType);
 		}
 		return true; // import failed
 	}
@@ -411,11 +414,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	@Override
 	public void createPartControl(final Composite parent) {
-//		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() != null && (!importFailed)) {
-//			structComposite = new StructViewingComposite(parent, 1, commandStack, annotationModel, dataTypeEntry, this);
-//			structComposite.createPartControl(parent);
-		if (dataTypeEntry != null && dataTypeEntry.getTypeEditable() instanceof final StructuredType structType
-				&& (!importFailed)) {
+		if (dataTypeEditable instanceof final StructuredType structType && (!importFailed)) {
 			structComposite = new StructEditingComposite(parent, commandStack, structType, annotationModel);
 			getSite().setSelectionProvider(structComposite);
 			structComposite.setTitel(Messages.StructViewingComposite_Headline);
@@ -523,7 +522,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			removeListenerFromDataTypeObj();
 			dataTypeEntry.setTypeEditable(null);
 			importType(getEditorInput());
-			if (dataTypeEntry.getTypeEditable() instanceof final StructuredType structType) {
+			if (dataTypeEditable instanceof final StructuredType structType) {
 				structComposite.setStructType(structType);
 			}
 			commandStack.flush();

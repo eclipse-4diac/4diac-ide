@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -20,41 +20,12 @@ import org.eclipse.fordiac.ide.model.dataexport.AdapterExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class AdapterTypeEntryImpl extends AbstractTypeEntryImpl implements AdapterTypeEntry {
+public class AdapterTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AdapterType> implements AdapterTypeEntry {
 
-	@Override
-	public synchronized AdapterType getType() {
-		final LibraryElement type = super.getType();
-		if (type instanceof AdapterType) {
-			return (AdapterType) type;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized AdapterType getTypeEditable() {
-		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof AdapterType) {
-			return (AdapterType) type;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized void setType(final LibraryElement type) {
-		if (type instanceof AdapterType) {
-			super.setType(type);
-			((AdapterType) type).getAdapterFBType().setTypeEntry(this);
-		} else {
-			super.setType(null);
-			if (null != type) {
-				FordiacLogHelper.logError("tried to set no AdapterType as type entry for AdapterTypeEntry");  //$NON-NLS-1$
-			}
-		}
+	public AdapterTypeEntryImpl() {
+		super(AdapterType.class);
 	}
 
 	@Override
@@ -63,8 +34,8 @@ public class AdapterTypeEntryImpl extends AbstractTypeEntryImpl implements Adapt
 	}
 
 	@Override
-	protected AbstractTypeExporter getExporter() {
-		return new AdapterExporter(this);
+	protected AbstractTypeExporter getTypeExporter(final AdapterType type) {
+		return new AdapterExporter(type);
 	}
 
 }

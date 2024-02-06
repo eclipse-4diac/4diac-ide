@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -15,44 +15,24 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class SegmentTypeEntryImpl extends AbstractTypeEntryImpl implements SegmentTypeEntry {
+public class SegmentTypeEntryImpl extends AbstractCheckedTypeEntryImpl<SegmentType> implements SegmentTypeEntry {
 
-	@Override
-	public synchronized SegmentType getType() {
-		final LibraryElement type = super.getType();
-		if (type instanceof SegmentType) {
-			return (SegmentType) type;
-		}
-		return null;
+	public SegmentTypeEntryImpl() {
+		super(SegmentType.class);
 	}
 
 	@Override
-	public synchronized SegmentType getTypeEditable() {
-		final LibraryElement type = super.getTypeEditable();
-		if(type instanceof SegmentType){
-			return (SegmentType) type;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized void setType(final LibraryElement type) {
-		if(type instanceof SegmentType){
-			super.setType(type);
-		}else{
-			super.setType(null);
-			if(null != type){
-				FordiacLogHelper.logError("tried to set no SegmentType as type entry for SegmentTypeEntry"); //$NON-NLS-1$
-			}
-		}
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
+		// currently we can not save segments, but we also have no editor for it
 	}
 
 	@Override
@@ -61,8 +41,9 @@ public class SegmentTypeEntryImpl extends AbstractTypeEntryImpl implements Segme
 	}
 
 	@Override
-	protected AbstractTypeExporter getExporter() {
+	protected AbstractTypeExporter getTypeExporter(final SegmentType type) {
 		// currently we can not save segments, but we also have no editor for it
 		return null;
 	}
+
 }

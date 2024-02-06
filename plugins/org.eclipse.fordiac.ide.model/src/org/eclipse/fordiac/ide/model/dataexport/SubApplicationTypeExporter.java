@@ -19,12 +19,11 @@ import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 
 public class SubApplicationTypeExporter extends AbstractBlockTypeExporter {
 
-	public SubApplicationTypeExporter(final SubAppTypeEntry entry) {
-		super(entry.getTypeEditable());
+	public SubApplicationTypeExporter(final SubAppType type) {
+		super(type);
 	}
 
 	/*
@@ -36,7 +35,7 @@ public class SubApplicationTypeExporter extends AbstractBlockTypeExporter {
 	}
 
 	@Override
-	protected SubAppType getType() {
+	public SubAppType getType() {
 		return (SubAppType) super.getType();
 	}
 

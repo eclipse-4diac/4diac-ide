@@ -212,7 +212,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 					throws CoreException, InvocationTargetException, InterruptedException {
 				// allow each editor to save back changes before saving to file
 				editors.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
-				typeEntry.save(monitor);
+				typeEntry.save(fbType, monitor);
 			}
 		};
 		try {

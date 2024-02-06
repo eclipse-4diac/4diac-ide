@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
@@ -19,37 +21,17 @@ import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorDataTypeEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class ErrorDataTypeEntryImpl extends AbstractTypeEntryImpl implements ErrorDataTypeEntry {
-	@Override
-	public synchronized ErrorMarkerDataType getType() {
-		final LibraryElement type = super.getType();
-		if (type instanceof final ErrorMarkerDataType dataType) {
-			return dataType;
-		}
-		return null;
+public class ErrorDataTypeEntryImpl extends AbstractCheckedTypeEntryImpl<ErrorMarkerDataType>
+		implements ErrorDataTypeEntry {
+
+	public ErrorDataTypeEntryImpl() {
+		super(ErrorMarkerDataType.class);
 	}
 
 	@Override
-	public synchronized ErrorMarkerDataType getTypeEditable() {
-		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof final ErrorMarkerDataType dataType) {
-			return dataType;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized void setType(final LibraryElement type) {
-		if (type instanceof ErrorMarkerDataType) {
-			super.setType(type);
-		} else {
-			super.setType(null);
-			if (null != type) {
-				FordiacLogHelper.logError("tried to set no ErrorMarkerDataType as type entry for ErrorDataTypeEntry"); //$NON-NLS-1$
-			}
-		}
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -63,7 +45,7 @@ public class ErrorDataTypeEntryImpl extends AbstractTypeEntryImpl implements Err
 	}
 
 	@Override
-	protected AbstractTypeExporter getExporter() {
+	protected AbstractTypeExporter getTypeExporter(final ErrorMarkerDataType type) {
 		throw new UnsupportedOperationException();
 	}
 }

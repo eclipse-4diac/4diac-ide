@@ -93,9 +93,7 @@ public class TypeFromTemplateCreator {
 					PackageNameHelper.setPackageName(type, packageName);
 					setupIdentifcationAndVersionInfo(type);
 					performTypeSpecificSetup(type);
-					entry.setLastModificationTimestamp(targetTypeFile.getModificationStamp());
-					entry.setType(type);
-					entry.save(monitor);
+					entry.save(type, monitor);
 				}
 			};
 			try {

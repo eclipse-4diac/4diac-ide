@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -56,25 +57,24 @@ public class CreateNewTypeLibraryEntryCommand extends Command {
 
 	@Override
 	public void execute() {
-		newTypeEntryFile = getTargetTypeFile(oldTypeEntry.getType());
+		final LibraryElement newType = EcoreUtil.copy(oldTypeEntry.getType());
+		newTypeEntryFile = getTargetTypeFile(newType);
 		newTypeEntry = typeLib.createTypeEntry(newTypeEntryFile);
-		newTypeEntry.setType(oldTypeEntry.getType());
-		addNetwork(newTypeEntry);
+		addNetwork(newType);
 		if (interfaces != null) {
-			addConnections(newTypeEntry, interfaces);
+			addConnections(newType, interfaces);
 		}
 		// check back here later. might want to have some user interaction as well when
 		// creating the command
 		try {
-			newTypeEntry.save();
+			newTypeEntry.save(newType);
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError(e.getMessage());
 		}
 	}
 
-	private static void addConnections(final TypeEntry entry, final List<ErrorMarkerInterface> markers) {
-		final InterfaceList interfaceList = entry.getType() instanceof FBType
-				? ((FBType) entry.getType()).getInterfaceList()
+	private static void addConnections(final LibraryElement newType, final List<ErrorMarkerInterface> markers) {
+		final InterfaceList interfaceList = newType instanceof final FBType fbType ? fbType.getInterfaceList()
 				: LibraryElementFactory.eINSTANCE.createInterfaceList();
 		// maybe filter correct sets out to add later or something.
 		// markers.stream().filter(ErrorMarkerInterface::isIsInput).filter(Event.class::isInterface).map()
@@ -83,11 +83,11 @@ public class CreateNewTypeLibraryEntryCommand extends Command {
 			// interfaceList.getEventInputs().add(marker.getRepairedEndpoint());
 			// interfaceList.getRepairedEndpoint();
 		}
-		((FBType) entry.getType()).setInterfaceList(interfaceList);
+		((FBType) newType).setInterfaceList(interfaceList);
 	}
 
-	private static void addNetwork(final TypeEntry entry) {
-		if (entry.getType() instanceof final CompositeFBType compositeType) {
+	private static void addNetwork(final LibraryElement type) {
+		if (type instanceof final CompositeFBType compositeType) {
 			final FBNetwork network = LibraryElementFactory.eINSTANCE.createFBNetwork();
 			compositeType.setFBNetwork(network);
 			// addConnections()

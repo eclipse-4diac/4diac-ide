@@ -67,14 +67,14 @@ public class ExtractStructTypeWizard extends AbstractSaveAsWizard {
 						throws CoreException, InvocationTargetException, InterruptedException {
 					final TypeEntry entry = createTypeEntry(targetFile);
 					final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
-					entry.setType(type);
 					InterfaceListCopier.copyVarList(type.getMemberVariables(), varDecl, true);
 
 					TypeManagementPreferencesHelper.setupVersionInfo(type);
 
 					datatypeName = TypeEntry.getTypeNameFromFile(targetFile);
 					type.setName(datatypeName);
-					entry.save(monitor);
+
+					entry.save(type, monitor);
 
 					if (newFilePage.getOpenType()) {
 						OpenStructMenu.openStructEditor(targetFile);

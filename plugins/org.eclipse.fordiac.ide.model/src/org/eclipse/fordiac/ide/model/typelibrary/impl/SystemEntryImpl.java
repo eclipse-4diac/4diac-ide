@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -22,11 +22,11 @@ import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntry {
+public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSystem> implements SystemEntry {
 
 	public SystemEntryImpl() {
+		super(AutomationSystem.class);
 		// for system entries we don't want to perform any updates on save
 		setUpdateTypeOnSave(false);
 	}
@@ -42,35 +42,16 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 	}
 
 	@Override
-	public synchronized AutomationSystem getType() {
-		final LibraryElement type = super.getType();
-		if (type instanceof final AutomationSystem as) {
-			return as;
-		}
-		return null;
-	}
-
-	@Override
-	public synchronized void setType(final LibraryElement newType) {
-		if (newType instanceof AutomationSystem) {
-			super.setType(newType);
-		} else {
-			super.setType(null);
-			if (null != newType) {
-				FordiacLogHelper.logError("tried to set no AutomationSystem as type entry for SystemEntry");//$NON-NLS-1$
-			}
-		}
-	}
-
-	@Override
 	public synchronized AutomationSystem getTypeEditable() {
-		// for performance reasons the systemEntry uses only the type and not the type editable
+		// for performance reasons the systemEntry uses only the type and not the type
+		// editable
 		return getSystem();
 	}
 
 	@Override
 	public synchronized void setTypeEditable(final LibraryElement newTypeEditable) {
-		// for performance reasons the systemEntry uses only the type and not the type editable
+		// for performance reasons the systemEntry uses only the type and not the type
+		// editable
 		setSystem(newTypeEditable);
 	}
 
@@ -80,8 +61,8 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 	}
 
 	@Override
-	protected AbstractTypeExporter getExporter() {
-		return new SystemExporter(getSystem());
+	protected AbstractTypeExporter getTypeExporter(final AutomationSystem type) {
+		return new SystemExporter(type);
 	}
 
 }

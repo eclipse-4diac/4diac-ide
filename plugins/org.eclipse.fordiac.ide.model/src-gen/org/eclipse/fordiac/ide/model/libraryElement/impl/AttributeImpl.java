@@ -200,7 +200,7 @@ public class AttributeImpl extends EObjectImpl implements Attribute {
 	 */
 	@Override
 	public String getQualifiedName() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeAnnotations.getQualifiedName(this);
 	}
 
 	/**

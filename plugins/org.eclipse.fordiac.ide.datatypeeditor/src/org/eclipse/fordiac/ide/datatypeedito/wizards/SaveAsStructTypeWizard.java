@@ -127,15 +127,13 @@ public class SaveAsStructTypeWizard extends AbstractSaveAsWizard {
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
 				final String newName = TypeEntry.getTypeNameFromFile(targetFile);
-				final TypeEntry entry = createTypeEntry(targetFile);
 				final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
 				type.setName(structuredType.getName());
 				type.setComment(structuredType.getComment());
-				entry.setType(type);
 				InterfaceListCopier.copyVarList(type.getMemberVariables(), structuredType.getMemberVariables(), true);
 				TypeManagementPreferencesHelper.setupVersionInfo(type);
 				type.setName(newName);
-				entry.save(monitor);
+				createTypeEntry(targetFile).save(type, monitor);
 			}
 		};
 		try {

@@ -53,12 +53,12 @@ public interface TypeEntry extends Notifier {
 	void setTypeLibrary(TypeLibrary typeLib);
 
 	/** Save the editable type to the file associated with this type entry */
-	default void save() throws CoreException {
-		save(new NullProgressMonitor());
+	default void save(final LibraryElement toSave) throws CoreException {
+		save(toSave, new NullProgressMonitor());
 	}
 
 	/** Save the editable type to the file associated with this type entry */
-	void save(IProgressMonitor monitor) throws CoreException;
+	void save(LibraryElement toSave, IProgressMonitor monitor) throws CoreException;
 
 	String getTypeName();
 

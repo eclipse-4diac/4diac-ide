@@ -92,4 +92,5 @@ public class UpdateInstancesChange extends Change {
 	public Object getModifiedElement() {
 		return null;
 	}
+
 }
