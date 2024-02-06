@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppBoundsCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppSizeLockCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.CommandStack;
@@ -33,7 +34,6 @@ public class SubAppPropertySection extends InstancePropertySection {
 	private Button lockCheckbox;
 
 	private static final int TEXT_INPUT_MAX_LENGTH = 5;
-	private static final int WIDTH_OF_TEXT_HINT = 150;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -54,9 +54,7 @@ public class SubAppPropertySection extends InstancePropertySection {
 		lockCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
 			if (getType() != null) {
 				removeContentAdapter();
-				// executeCommand(new ChangeSubAppSizeLockCommand(getType(),
-				// lockCheckbox.getSelection()));
-				// executeCommand(new ResizeGroupOrSubAppCommand())
+				executeCommand(new ChangeSubAppSizeLockCommand(getType(), lockCheckbox.getSelection()));
 				addContentAdapter();
 			}
 		}));
@@ -72,7 +70,6 @@ public class SubAppPropertySection extends InstancePropertySection {
 		heightText.setTextLimit(TEXT_INPUT_MAX_LENGTH);
 		heightText.addModifyListener(e -> {
 			if (getType() != null) {
-				// todo handle number format exception
 				final int heightDelta;
 				try {
 					heightDelta = Integer.parseInt(heightText.getText()) - getType().getHeight();
@@ -86,7 +83,7 @@ public class SubAppPropertySection extends InstancePropertySection {
 			}
 		});
 
-		// heightText.addVerifyListener();
+		heightText.addVerifyListener(e -> e.doit = e.text.chars().allMatch(Character::isDigit));
 
 		getWidgetFactory().createCLabel(fbSizeContainer, FordiacMessages.Width + ":"); //$NON-NLS-1$
 		widthText = createGroupText(fbSizeContainer, true);
@@ -107,7 +104,8 @@ public class SubAppPropertySection extends InstancePropertySection {
 			}
 		});
 
-		// widthText.addVerifyListener();
+		widthText.addVerifyListener(e -> e.doit = e.text.chars().allMatch(Character::isDigit));
+
 		getWidgetFactory().createCLabel(fbSizeContainer, FordiacMessages.Subapp_Size_DisableAutoResize + ":"); //$NON-NLS-1$
 		createLockSizeCheckbox(fbSizeContainer);
 	}
@@ -120,7 +118,7 @@ public class SubAppPropertySection extends InstancePropertySection {
 			commandStack = null;
 			heightText.setText(Integer.toString(getType().getHeight()));
 			widthText.setText(Integer.toString(getType().getWidth()));
-			// lockCheckbox.setSelection(getType().isLocked());
+			lockCheckbox.setSelection(getType().isLocked());
 			commandStack = commandStackBuffer;
 		}
 	}
