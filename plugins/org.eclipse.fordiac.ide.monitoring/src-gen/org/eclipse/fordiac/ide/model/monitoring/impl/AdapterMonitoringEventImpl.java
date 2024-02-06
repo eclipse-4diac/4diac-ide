@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -52,22 +53,14 @@ import org.eclipse.gef.EditPart;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getName
- * <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getComment
- * <em>Comment</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getAttributes
- * <em>Attributes</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#isIsInput
- * <em>Is Input</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getInputConnections
- * <em>Input Connections</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getOutputConnections
- * <em>Output Connections</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getType
- * <em>Type</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getWith
- * <em>With</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getAttributes <em>Attributes</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#isIsInput <em>Is Input</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getInputConnections <em>Input Connections</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getOutputConnections <em>Output Connections</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterMonitoringEventImpl#getWith <em>With</em>}</li>
  * </ul>
  *
  * @generated
@@ -96,7 +89,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -106,7 +98,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -114,9 +105,8 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	protected String comment = COMMENT_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}'
-	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getAttributes()
 	 * @generated
 	 * @ordered
@@ -126,7 +116,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	/**
 	 * The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered
@@ -136,7 +125,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	/**
 	 * The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered
@@ -176,9 +164,8 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	protected DataType type;
 
 	/**
-	 * The cached value of the '{@link #getWith() <em>With</em>}' containment
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * The cached value of the '{@link #getWith() <em>With</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWith()
 	 * @generated
 	 * @ordered
@@ -187,15 +174,14 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	protected AdapterMonitoringEventImpl() {
+		super();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -205,7 +191,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -215,22 +200,18 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void setName(final String newName) {
-		final String oldName = name;
+	public void setName(String newName) {
+		String oldName = name;
 		name = newName;
-		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME,
-					oldName, name));
-		}
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME, oldName, name));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -240,36 +221,30 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void setComment(final String newComment) {
-		final String oldComment = comment;
+	public void setComment(String newComment) {
+		String oldComment = comment;
 		comment = newComment;
-		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT,
-					oldComment, comment));
-		}
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT, oldComment, comment));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<>(Attribute.class, this,
-					MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES);
+			attributes = new EObjectContainmentEList.Resolving<>(Attribute.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES);
 		}
 		return attributes;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -279,28 +254,24 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void setIsInput(final boolean newIsInput) {
-		final boolean oldIsInput = isInput;
+	public void setIsInput(boolean newIsInput) {
+		boolean oldIsInput = isInput;
 		isInput = newIsInput;
-		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT,
-					oldIsInput, isInput));
-		}
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT, oldIsInput, isInput));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public String getTypeName() {
-		final org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();
-		if (type != null) {
+		org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();
+		if(type != null){
 			return type.getName();
 		}
 		return null;
@@ -308,7 +279,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -318,69 +288,58 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public boolean validateType(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics,
-				context);
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this,
-				diagnostics, context);
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this,
-					MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS,
-					LibraryElementPackage.CONNECTION__DESTINATION);
+			inputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
 		}
 		return inputConnections;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this,
-					MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS,
-					LibraryElementPackage.CONNECTION__SOURCE);
+			outputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
 		}
 		return outputConnections;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public DataType getType() {
 		if (type != null && type.eIsProxy()) {
-			final InternalEObject oldType = (InternalEObject) type;
-			type = (DataType) eResolveProxy(oldType);
-			if ((type != oldType) && eNotificationRequired()) {
-				eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-						MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE, oldType, type));
+			InternalEObject oldType = (InternalEObject)type;
+			type = (DataType)eResolveProxy(oldType);
+			if (type != oldType) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE, oldType, type));
 			}
 		}
 		return type;
@@ -388,7 +347,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	public DataType basicGetType() {
@@ -397,36 +355,30 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void setType(final DataType newType) {
-		final DataType oldType = type;
+	public void setType(DataType newType) {
+		DataType oldType = type;
 		type = newType;
-		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE,
-					oldType, type));
-		}
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE, oldType, type));
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public EList<With> getWith() {
 		if (with == null) {
-			with = new EObjectContainmentEList<>(With.class, this,
-					MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH);
+			with = new EObjectContainmentEList<>(With.class, this, MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH);
 		}
 		return with;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -436,7 +388,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -446,7 +397,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -456,7 +406,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -466,7 +415,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -476,17 +424,15 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public void setVisible(final boolean visible) {
-		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this, visible);
+		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -496,7 +442,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -506,8 +451,17 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAttribute(final AttributeDeclaration attributeDeclaration, final String value, final String comment) {
+		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeDeclaration, value, comment);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -517,7 +471,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -527,7 +480,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -537,7 +489,6 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -547,287 +498,290 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public NotificationChain eInverseAdd(final InternalEObject otherEnd, final int featureID,
-			final NotificationChain msgs) {
-		return switch (featureID) {
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS -> ((InternalEList<InternalEObject>) (InternalEList<?>) getInputConnections()).basicAdd(otherEnd, msgs);
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS -> ((InternalEList<InternalEObject>) (InternalEList<?>) getOutputConnections()).basicAdd(otherEnd,
-							msgs);
-		default -> super.eInverseAdd(otherEnd, featureID, msgs);
-		};
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID,
-			final NotificationChain msgs) {
-		return switch (featureID) {
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES -> ((InternalEList<?>) getAttributes()).basicRemove(otherEnd, msgs);
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS -> ((InternalEList<?>) getInputConnections()).basicRemove(otherEnd, msgs);
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS -> ((InternalEList<?>) getOutputConnections()).basicRemove(otherEnd, msgs);
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH -> ((InternalEList<?>) getWith()).basicRemove(otherEnd, msgs);
-		default -> super.eInverseRemove(otherEnd, featureID, msgs);
-		};
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 */
-	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME:
-			return getName();
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT:
-			return getComment();
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES:
-			return getAttributes();
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT:
-			return isIsInput();
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS:
-			return getInputConnections();
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS:
-			return getOutputConnections();
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE:
-			if (resolve) {
-				return getType();
-			}
-			return basicGetType();
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH:
-			return getWith();
-		default:
-			return super.eGet(featureID, resolve, coreType);
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputConnections()).basicAdd(otherEnd, msgs);
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputConnections()).basicAdd(otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES:
+				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS:
+				return ((InternalEList<?>)getInputConnections()).basicRemove(otherEnd, msgs);
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS:
+				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH:
+				return ((InternalEList<?>)getWith()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+		switch (featureID) {
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME:
+				return getName();
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT:
+				return getComment();
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES:
+				return getAttributes();
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT:
+				return isIsInput();
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS:
+				return getInputConnections();
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS:
+				return getOutputConnections();
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE:
+				if (resolve) return getType();
+				return basicGetType();
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH:
+				return getWith();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME:
-			setName((String) newValue);
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT:
-			setComment((String) newValue);
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES:
-			getAttributes().clear();
-			getAttributes().addAll((Collection<? extends Attribute>) newValue);
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT:
-			setIsInput((Boolean) newValue);
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS:
-			getInputConnections().clear();
-			getInputConnections().addAll((Collection<? extends Connection>) newValue);
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS:
-			getOutputConnections().clear();
-			getOutputConnections().addAll((Collection<? extends Connection>) newValue);
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE:
-			setType((DataType) newValue);
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH:
-			getWith().clear();
-			getWith().addAll((Collection<? extends With>) newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME:
+				setName((String)newValue);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT:
+				setComment((String)newValue);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES:
+				getAttributes().clear();
+				getAttributes().addAll((Collection<? extends Attribute>)newValue);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT:
+				setIsInput((Boolean)newValue);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS:
+				getInputConnections().clear();
+				getInputConnections().addAll((Collection<? extends Connection>)newValue);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS:
+				getOutputConnections().clear();
+				getOutputConnections().addAll((Collection<? extends Connection>)newValue);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE:
+				setType((DataType)newValue);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH:
+				getWith().clear();
+				getWith().addAll((Collection<? extends With>)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME:
-			setName(NAME_EDEFAULT);
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT:
-			setComment(COMMENT_EDEFAULT);
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES:
-			getAttributes().clear();
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT:
-			setIsInput(IS_INPUT_EDEFAULT);
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS:
-			getInputConnections().clear();
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS:
-			getOutputConnections().clear();
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE:
-			setType((DataType) null);
-			return;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH:
-			getWith().clear();
-			return;
-		default:
-			super.eUnset(featureID);
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT:
+				setComment(COMMENT_EDEFAULT);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES:
+				getAttributes().clear();
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT:
+				setIsInput(IS_INPUT_EDEFAULT);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS:
+				getInputConnections().clear();
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS:
+				getOutputConnections().clear();
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE:
+				setType((DataType)null);
+				return;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH:
+				getWith().clear();
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
-		return switch (featureID) {
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME -> NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT -> COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES -> attributes != null && !attributes.isEmpty();
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT -> isInput != IS_INPUT_EDEFAULT;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS -> inputConnections != null && !inputConnections.isEmpty();
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS -> outputConnections != null && !outputConnections.isEmpty();
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE -> type != null;
-		case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH -> with != null && !with.isEmpty();
-		default -> super.eIsSet(featureID);
-		};
+	public boolean eIsSet(int featureID) {
+		switch (featureID) {
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT:
+				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES:
+				return attributes != null && !attributes.isEmpty();
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT:
+				return isInput != IS_INPUT_EDEFAULT;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS:
+				return inputConnections != null && !inputConnections.isEmpty();
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS:
+				return outputConnections != null && !outputConnections.isEmpty();
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE:
+				return type != null;
+			case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH:
+				return with != null && !with.isEmpty();
+			default:
+				return super.eIsSet(featureID);
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public int eBaseStructuralFeatureID(final int derivedFeatureID, final Class<?> baseClass) {
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == INamedElement.class) {
-			return switch (derivedFeatureID) {
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME -> LibraryElementPackage.INAMED_ELEMENT__NAME;
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT -> LibraryElementPackage.INAMED_ELEMENT__COMMENT;
-			default -> -1;
-			};
+			switch (derivedFeatureID) {
+				case MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME: return LibraryElementPackage.INAMED_ELEMENT__NAME;
+				case MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT: return LibraryElementPackage.INAMED_ELEMENT__COMMENT;
+				default: return -1;
+			}
 		}
 		if (baseClass == ITypedElement.class) {
-			return switch (derivedFeatureID) {
-			default -> -1;
-			};
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
 		}
 		if (baseClass == ConfigurableObject.class) {
-			return switch (derivedFeatureID) {
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES -> LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
-			default -> -1;
-			};
+			switch (derivedFeatureID) {
+				case MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES: return LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
+				default: return -1;
+			}
 		}
 		if (baseClass == HiddenElement.class) {
-			return switch (derivedFeatureID) {
-			default -> -1;
-			};
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
 		}
 		if (baseClass == IInterfaceElement.class) {
-			return switch (derivedFeatureID) {
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT -> LibraryElementPackage.IINTERFACE_ELEMENT__IS_INPUT;
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS -> LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS;
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS -> LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE -> LibraryElementPackage.IINTERFACE_ELEMENT__TYPE;
-			default -> -1;
-			};
+			switch (derivedFeatureID) {
+				case MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT: return LibraryElementPackage.IINTERFACE_ELEMENT__IS_INPUT;
+				case MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS: return LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS;
+				case MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS: return LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
+				case MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE: return LibraryElementPackage.IINTERFACE_ELEMENT__TYPE;
+				default: return -1;
+			}
 		}
 		if (baseClass == ICallable.class) {
-			return switch (derivedFeatureID) {
-			default -> -1;
-			};
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
 		}
 		if (baseClass == Event.class) {
-			return switch (derivedFeatureID) {
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH -> LibraryElementPackage.EVENT__WITH;
-			default -> -1;
-			};
+			switch (derivedFeatureID) {
+				case MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH: return LibraryElementPackage.EVENT__WITH;
+				default: return -1;
+			}
 		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public int eDerivedStructuralFeatureID(final int baseFeatureID, final Class<?> baseClass) {
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == INamedElement.class) {
-			return switch (baseFeatureID) {
-			case LibraryElementPackage.INAMED_ELEMENT__NAME -> MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME;
-			case LibraryElementPackage.INAMED_ELEMENT__COMMENT -> MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT;
-			default -> -1;
-			};
+			switch (baseFeatureID) {
+				case LibraryElementPackage.INAMED_ELEMENT__NAME: return MonitoringPackage.ADAPTER_MONITORING_EVENT__NAME;
+				case LibraryElementPackage.INAMED_ELEMENT__COMMENT: return MonitoringPackage.ADAPTER_MONITORING_EVENT__COMMENT;
+				default: return -1;
+			}
 		}
 		if (baseClass == ITypedElement.class) {
-			return switch (baseFeatureID) {
-			default -> -1;
-			};
+			switch (baseFeatureID) {
+				default: return -1;
+			}
 		}
 		if (baseClass == ConfigurableObject.class) {
-			return switch (baseFeatureID) {
-			case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES -> MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES;
-			default -> -1;
-			};
+			switch (baseFeatureID) {
+				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return MonitoringPackage.ADAPTER_MONITORING_EVENT__ATTRIBUTES;
+				default: return -1;
+			}
 		}
 		if (baseClass == HiddenElement.class) {
-			return switch (baseFeatureID) {
-			default -> -1;
-			};
+			switch (baseFeatureID) {
+				default: return -1;
+			}
 		}
 		if (baseClass == IInterfaceElement.class) {
-			return switch (baseFeatureID) {
-			case LibraryElementPackage.IINTERFACE_ELEMENT__IS_INPUT -> MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT;
-			case LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS -> MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS;
-			case LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS -> MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS;
-			case LibraryElementPackage.IINTERFACE_ELEMENT__TYPE -> MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE;
-			default -> -1;
-			};
+			switch (baseFeatureID) {
+				case LibraryElementPackage.IINTERFACE_ELEMENT__IS_INPUT: return MonitoringPackage.ADAPTER_MONITORING_EVENT__IS_INPUT;
+				case LibraryElementPackage.IINTERFACE_ELEMENT__INPUT_CONNECTIONS: return MonitoringPackage.ADAPTER_MONITORING_EVENT__INPUT_CONNECTIONS;
+				case LibraryElementPackage.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS: return MonitoringPackage.ADAPTER_MONITORING_EVENT__OUTPUT_CONNECTIONS;
+				case LibraryElementPackage.IINTERFACE_ELEMENT__TYPE: return MonitoringPackage.ADAPTER_MONITORING_EVENT__TYPE;
+				default: return -1;
+			}
 		}
 		if (baseClass == ICallable.class) {
-			return switch (baseFeatureID) {
-			default -> -1;
-			};
+			switch (baseFeatureID) {
+				default: return -1;
+			}
 		}
 		if (baseClass == Event.class) {
-			return switch (baseFeatureID) {
-			case LibraryElementPackage.EVENT__WITH -> MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH;
-			default -> -1;
-			};
+			switch (baseFeatureID) {
+				case LibraryElementPackage.EVENT__WITH: return MonitoringPackage.ADAPTER_MONITORING_EVENT__WITH;
+				default: return -1;
+			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuilder result = new StringBuilder(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(", comment: "); //$NON-NLS-1$

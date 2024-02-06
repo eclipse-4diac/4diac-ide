@@ -65,6 +65,14 @@ public interface ConfigurableObject extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @model valueDataType="org.eclipse.emf.ecore.xml.type.String" commentDataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @generated
+	 */
+	void setAttribute(AttributeDeclaration attributeDeclaration, String value, String comment);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @model attributeNameDataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */

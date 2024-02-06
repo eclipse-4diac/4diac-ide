@@ -171,6 +171,12 @@
         <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/value"/>
         <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/comment"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/setAttribute.1"
+          body="org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeDeclaration, value, comment);">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute.1/attributeDeclaration"/>
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute.1/value"/>
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute.1/comment"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/getAttribute"
           body="return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);">
         <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/getAttribute/attributeName"/>

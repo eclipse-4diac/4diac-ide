@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -390,6 +391,27 @@ public final class Annotations {
 			attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 			attribute.setName(attributeName);
 			attribute.setType(type);
+			attribute.setValue(value);
+			if (null != comment) {
+				attribute.setComment(comment);
+			}
+			object.getAttributes().add(attribute);
+		} else {
+			attribute.setValue(value);
+			if (null != comment) {
+				attribute.setComment(comment);
+			}
+		}
+	}
+
+	public static void setAttribute(@NonNull final ConfigurableObject object,
+			final AttributeDeclaration attributeDeclaration, final String value, final String comment) {
+		Attribute attribute = getAttribute(object, attributeDeclaration.getName());
+		if (attribute == null) {
+			attribute = LibraryElementFactory.eINSTANCE.createAttribute();
+			attribute.setName(attributeDeclaration.getName());
+			attribute.setAttributeDeclaration(attributeDeclaration);
+			attribute.setType(attributeDeclaration.getType());
 			attribute.setValue(value);
 			if (null != comment) {
 				attribute.setComment(comment);
