@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
@@ -279,6 +280,22 @@ public class ConnectionAnnotations {
 	private static boolean isDuplicateConnection(@NonNull final Connection connection) {
 		return connection.getSource().getOutputConnections().stream().anyMatch(
 				candidate -> candidate != connection && candidate.getDestination() == connection.getDestination());
+	}
+
+	static String getConnectionQualifiedName(final Connection connection) {
+		final String sourceName = connection.getSource().getQualifiedName();
+		final String destinationName = connection.getDestination().getQualifiedName();
+		final INamedElement namedContainer = NamedElementAnnotations.getNamedContainer(connection);
+		if (namedContainer != null) {
+			final String containerName = namedContainer.getQualifiedName();
+			final String sourceRelativeName = NamedElementAnnotations.removeQualifiedNamePrefix(sourceName,
+					containerName);
+			final String destinationRelativeName = NamedElementAnnotations.removeQualifiedNamePrefix(destinationName,
+					containerName);
+			return containerName + NamedElementAnnotations.QUALIFIED_NAME_DELIMITER + "(" + sourceRelativeName + "->" //$NON-NLS-1$ //$NON-NLS-2$
+					+ destinationRelativeName + ")"; //$NON-NLS-1$
+		}
+		return "(" + sourceName + "->" + destinationName + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	private ConnectionAnnotations() {

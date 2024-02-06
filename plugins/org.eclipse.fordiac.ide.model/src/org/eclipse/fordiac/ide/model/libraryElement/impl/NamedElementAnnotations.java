@@ -55,6 +55,13 @@ public final class NamedElementAnnotations {
 		return null;
 	}
 
+	static String removeQualifiedNamePrefix(final String s, final String prefix) {
+		if (s.startsWith(prefix + QUALIFIED_NAME_DELIMITER)) {
+			return s.substring(prefix.length() + QUALIFIED_NAME_DELIMITER.length());
+		}
+		return s;
+	}
+
 	public static boolean validateName(final INamedElement element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
 		if (element.getName() != null && !element.getName().isEmpty()) {
