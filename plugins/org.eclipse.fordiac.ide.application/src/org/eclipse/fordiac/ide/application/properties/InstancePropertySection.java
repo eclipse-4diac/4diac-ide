@@ -322,4 +322,10 @@ public class InstancePropertySection extends AbstractSection {
 			getType().getInterface().eAdapters().remove(interfaceAdapter);
 		}
 	}
+
+	@Override
+	protected boolean shouldRefresh() {
+		// as we have our own adapters we need our own shouldRefresh implementation
+		return (null != getType()) && getType().eAdapters().contains(fbnElementAdapter) && !blockRefresh;
+	}
 }
