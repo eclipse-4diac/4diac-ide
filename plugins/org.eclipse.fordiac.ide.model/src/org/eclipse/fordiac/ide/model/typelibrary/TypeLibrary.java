@@ -29,7 +29,6 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 import java.io.File;
 import java.io.IOException;
 import java.lang.module.ModuleDescriptor.Version;
-import java.nio.file.Paths;
 import java.text.Collator;
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -55,7 +54,12 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -300,11 +304,28 @@ public final class TypeLibrary {
 								// link newer version and remove old
 							}
 						} else {
-							final File libDir = new File(
-									Paths.get(ResourcesPlugin.getWorkspace().getRoot().toString(), "/.lib").toString());
-							if (libDir.exists()) {
-								libDir.listFiles();
+
+							final IExtensionRegistry registry = Platform.getExtensionRegistry();
+							final IExtensionPoint point = registry
+									.getExtensionPoint("org.eclipse.fordiac.ide.model.libraryLinkerExtension"); //$NON-NLS-1$
+							final IExtension[] extensions = point.getExtensions();
+
+							for (final IExtension extension : extensions) {
+								final IConfigurationElement[] elements = extension.getConfigurationElements();
+								for (final IConfigurationElement element : elements) {
+									try {
+										final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
+										if (obj instanceof final ILibraryLinker libLinker) {
+											final File[] libDir = libLinker.listExtractedFiles();
+											final int x = 0;
+										}
+									} catch (final Exception e) {
+										FordiacLogHelper.logError(e.getMessage(), e);
+									}
+								}
 							}
+
+							final int x = 0;
 						}
 					}
 				}
