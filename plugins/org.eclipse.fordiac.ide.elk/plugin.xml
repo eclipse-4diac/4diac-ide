@@ -10,6 +10,11 @@
         id="org.eclipse.fordiac.ide.elk.connectionLayout"
         name="Layout with ELK">
     </command>
+    <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            id="org.eclipse.fordiac.ide.elk.systemExplorerLayout"
+            name="Connection Layouting...">
+    </command>
 </extension>
 <extension point="org.eclipse.ui.handlers">
     <handler
@@ -24,8 +29,50 @@
         class="org.eclipse.fordiac.ide.elk.handlers.ExpandedSubappConnectionLayoutHandler"
         commandId="org.eclipse.fordiac.ide.elk.expandedSubappConnectionLayout">
     </handler>
+    <handler
+            class="org.eclipse.fordiac.ide.elk.handlers.SystemLayoutHandler"
+            commandId="org.eclipse.fordiac.ide.elk.systemExplorerLayout">
+     </handler>
 </extension>
 <extension point="org.eclipse.ui.menus">
+	<menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">
+         <command
+               commandId="org.eclipse.fordiac.ide.elk.systemExplorerLayout"
+               style="push"
+               tooltip="Layout the entire system.">
+                <visibleWhen checkEnabled="false">
+                   <with variable="selection">
+                      <iterate ifEmpty="false">
+                        <or>
+                          <adapt type="org.eclipse.core.resources.IProject" />
+                          <adapt type="org.eclipse.core.resources.IFile">
+                          	<or>
+                          	  <test
+                                forcePluginActivation="false"
+                                property="org.eclipse.core.resources.extension"
+                                value="sys">
+                              </test>
+                              <test
+                                forcePluginActivation="false"
+                                property="org.eclipse.core.resources.extension"
+                                value="sub">
+                              </test>
+                              <test
+                                forcePluginActivation="false" 
+                                property="org.eclipse.fordiac.ide.application.utilities.isCFBFile">
+                              </test>
+                          	</or>
+                          </adapt>
+                          <adapt type="org.eclipse.fordiac.ide.model.libraryElement.Application" />
+                          <adapt type="org.eclipse.fordiac.ide.model.libraryElement.SubApp" />
+                      	</or>
+                      </iterate>
+                   </with>
+                </visibleWhen>
+         </command>
+      </menuContribution>
    <menuContribution
          allPopups="false"
          locationURI="popup:org.eclipse.ui.popup.any?after=additions">  
@@ -178,5 +225,12 @@
           properties="isExpandedSubapp"
           type="java.lang.Object">
     	</propertyTester>
+    	<propertyTester
+		  class="org.eclipse.fordiac.ide.application.utilities.IsCFBFilePropertyTester"
+		  id="org.eclipse.fordiac.ide.application.utilities.isCFBFilePropertyTester"
+		  namespace="org.eclipse.fordiac.ide.application.utilities"
+		  properties="isCFBFile"
+		  type="java.lang.Object">
+    	  </propertyTester>
  </extension> 
 </plugin>

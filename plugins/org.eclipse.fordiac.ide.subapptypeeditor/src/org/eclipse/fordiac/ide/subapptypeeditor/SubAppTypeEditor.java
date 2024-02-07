@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.subapptypeeditor.editors.SubAppNetworkBreadCrumbEditor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -120,13 +121,21 @@ public class SubAppTypeEditor extends FBTypeEditor {
 		} else if ((SUBAPP_NETWORL_EDITOR_INDEX != getCurrentPage()) && (newPageIndex == SUBAPP_NETWORL_EDITOR_INDEX)) {
 			// the SubAppNetworkBreadCrumbEditor is about to open set the subappnetwork editor as multipage editor
 			getSelectionProvider()
-			.setMultiPageEditor((SubAppNetworkBreadCrumbEditor) getEditor(SUBAPP_NETWORL_EDITOR_INDEX));
+					.setMultiPageEditor((SubAppNetworkBreadCrumbEditor) getEditor(SUBAPP_NETWORL_EDITOR_INDEX));
 		}
 		super.pageChange(newPageIndex);
 	}
 
 	private SubAppTypeEditorSelectionProvider getSelectionProvider() {
 		return (SubAppTypeEditorSelectionProvider) getSite().getSelectionProvider();
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == AbstractBreadCrumbEditor.class) {
+			return key.cast(getEditor(SUBAPP_NETWORL_EDITOR_INDEX));
+		}
+		return super.getAdapter(key);
 	}
 
 }

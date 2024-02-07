@@ -242,6 +242,9 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		if (adapter == FBNetwork.class) {
 			return adapter.cast(getModel());
 		}
+		if (adapter == FBNetworkEditor.class) {
+			return adapter.cast(this);
+		}
 		return super.getAdapter(adapter);
 	}
 
