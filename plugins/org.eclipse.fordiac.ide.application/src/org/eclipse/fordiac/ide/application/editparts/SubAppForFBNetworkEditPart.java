@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.ContainerResizePolicy;
 import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkElementNonResizeableEP;
+import org.eclipse.fordiac.ide.application.utilities.ExpandedInterfacePositionMap;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
@@ -67,8 +68,10 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart implements IContainerEditPart {
+	private final ExpandedInterfacePositionMap positionMap = new ExpandedInterfacePositionMap(this);
 
 	@Override
 	public Adapter createContentAdapter() {
@@ -98,6 +101,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				// interface figures need to be manually added in order for them to be put
 				// into the right container
 				reloadInterfaceFigures();
+				if (isUnfoldedAttribute(notification.getNewValue())) {
+					Display.getDefault().asyncExec(() -> layoutExpandedInterface());
+				}
 			}
 			refreshToolTip();
 			backgroundColorChanged(getFigure());
@@ -127,6 +133,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				refreshInterfaceEditParts();
 				refreshRoot();
 			}
+			Display.getDefault().asyncExec(() -> layoutExpandedInterface());
 		}
 
 		private void handleRemove(final Notification notification) {
@@ -138,6 +145,12 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				refreshChildren();
 				refreshInterfaceEditParts();
 				refreshRoot();
+			}
+
+			if (!isUnfoldedAttribute(notification.getOldValue())) {
+				// do not layout when we collapse the subapp as the edit part is gone when it
+				// would be needed for the connection layout
+				Display.getDefault().asyncExec(() -> layoutExpandedInterface());
 			}
 		}
 
@@ -397,6 +410,25 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			return getFigure().getExpandedIOHeight();
 		}
 		return 0;
+	}
+
+	public ExpandedInterfacePositionMap getInterfacePositionMap() {
+		return positionMap;
+	}
+
+	public void layoutExpandedInterface() {
+		getFigure().layoutExpandedInterface();
+		// auto layout is currently not used as it messes with other things that rely on
+		// the display thread to an extend where the actual view is not working
+		// correctly anymore
+//		final var handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
+//		final var event = new Event();
+//		event.data = this; // pass to the handler
+//		try {
+//			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.expandedSubappConnectionLayout", event); //$NON-NLS-1$
+//		} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 }
