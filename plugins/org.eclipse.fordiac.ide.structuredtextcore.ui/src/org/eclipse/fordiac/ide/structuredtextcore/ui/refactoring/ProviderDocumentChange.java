@@ -77,7 +77,13 @@ public class ProviderDocumentChange extends TextChange {
 
 	@Override
 	public Object getModifiedElement() {
-		return editorInput.getFile();
+		// Return null here to hide the actual resource from callers. This prevents
+		// callers from inferring the content type based on the resource file extension
+		// (e.g., *.fbt) and subsequently using EMF compare. EMF compare would not work
+		// in this case, since we are only creating a text change. This forces callers
+		// to rely on the text type (e.g., "stalg") set on the change, which causes them
+		// to use the correct compare editor based on Xtext.
+		return null;
 	}
 
 	@Override
