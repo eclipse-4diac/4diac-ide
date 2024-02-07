@@ -95,6 +95,12 @@
                indented="true"
                label="Edit Data">
          </propertyTab>
+         <propertyTab afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
+               category="FB"
+               id="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut"
+               indented="true"
+               label="Edit Var In/Out">
+         </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
                category="FB"
@@ -226,6 +232,11 @@
                id="org.eclipse.fordiac.ide.application.properties.section.EditData"
                filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditData">
+         </propertySection>
+         <propertySection class="org.eclipse.fordiac.ide.application.properties.EditUntypedSubappVarInOutSection"
+               id="org.eclipse.fordiac.ide.application.properties.section.EditVarInOut"
+               filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
+               tab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut">
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.EditInterfaceAdapterSection"
