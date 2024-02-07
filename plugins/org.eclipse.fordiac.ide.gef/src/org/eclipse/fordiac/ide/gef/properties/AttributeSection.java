@@ -46,6 +46,8 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
@@ -91,7 +93,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 				this, false);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 
-		final TextCellEditor attributeNameCellEditor = new TextCellEditor();
+		final AttributeNameCellEditor attributeNameCellEditor = new AttributeNameCellEditor();
 		attributeNameCellEditor.enableContentProposal(new TextContentAdapter(),
 				new TypeSelectionProposalProvider(this::getTypeLibrary, AttributeSelectionContentProvider.INSTANCE),
 				KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
@@ -180,5 +182,19 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	@Override
 	protected ConfigurableObject getType() {
 		return type instanceof final ConfigurableObject configurableObject ? configurableObject : null;
+	}
+
+	protected static class AttributeNameCellEditor extends TextCellEditor {
+
+		@Override
+		protected void configureContentProposalAdapter(final ContentProposalAdapter contentProposalAdapter) {
+			super.configureContentProposalAdapter(contentProposalAdapter);
+			contentProposalAdapter.addContentProposalListener(this::proposalAccepted);
+		}
+
+		protected void proposalAccepted(final IContentProposal proposal) {
+			// TODO add import here
+			System.out.println(proposal.getContent());
+		}
 	}
 }
