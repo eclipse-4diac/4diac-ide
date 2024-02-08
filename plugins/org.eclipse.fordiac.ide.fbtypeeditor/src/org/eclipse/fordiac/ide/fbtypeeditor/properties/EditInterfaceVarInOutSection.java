@@ -40,25 +40,30 @@ import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.ISelectionProviderSection;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
+import org.eclipse.nebula.widgets.nattable.selection.RowPostSelectionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class EditInterfaceVarInOutSection extends AbstractSection implements I4diacNatTableUtil {
+public class EditInterfaceVarInOutSection extends AbstractSection
+		implements I4diacNatTableUtil, ISelectionProviderSection {
 
-	private IChangeableRowDataProvider<VarDeclaration> inputProvider;
 	private NatTable inputTable;
+	private IChangeableRowDataProvider<VarDeclaration> inputProvider;
+	private RowPostSelectionProvider<VarDeclaration> selectionProvider;
 	private AddDeleteReorderListWidget inputButtons;
 
 	@Override
@@ -97,6 +102,9 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.configure();
+
+		selectionProvider = new RowPostSelectionProvider<>(inputTable,
+				NatTableWidgetFactory.getSelectionLayer(inputTable), inputProvider, false);
 	}
 
 	protected void configureButtonList(final AddDeleteReorderListWidget buttons, final NatTable table) {
@@ -219,6 +227,11 @@ public class EditInterfaceVarInOutSection extends AbstractSection implements I4d
 	@SuppressWarnings("static-method") // should be overridden by subclasses
 	public boolean isShowTableEditButtons() {
 		return true;
+	}
+
+	@Override
+	public ISelectionProvider getSelectionProvider() {
+		return selectionProvider;
 	}
 
 	protected IEditableRule getSectionEditableRule() {

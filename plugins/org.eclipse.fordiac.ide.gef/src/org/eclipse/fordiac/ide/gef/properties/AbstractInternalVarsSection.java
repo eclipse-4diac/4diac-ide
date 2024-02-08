@@ -12,27 +12,50 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.ISelectionProviderSection;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.selection.RowPostSelectionProvider;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class AbstractInternalVarsSection extends AbstractSection implements I4diacNatTableUtil {
+public abstract class AbstractInternalVarsSection extends AbstractSection
+		implements I4diacNatTableUtil, ISelectionProviderSection {
 
 	IAction[] defaultCopyPasteCut = new IAction[3];
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
-	protected IChangeableRowDataProvider<VarDeclaration> provider;
 	protected NatTable table;
+	private AddDeleteReorderListWidget buttons;
+	protected IChangeableRowDataProvider<VarDeclaration> provider;
+	private RowPostSelectionProvider<VarDeclaration> selectionProvider;
 
 	@Override
 	protected BaseFBType getType() {
@@ -42,11 +65,38 @@ public abstract class AbstractInternalVarsSection extends AbstractSection implem
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createVarControl(parent);
 		this.tabbedPropertySheetPage = tabbedPropertySheetPage;
+
+		final Composite composite = getWidgetFactory().createComposite(parent);
+		composite.setLayout(new GridLayout(2, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		buttons = new AddDeleteReorderListWidget();
+		buttons.createControls(composite, getWidgetFactory());
+
+		provider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
+		final DataLayer dataLayer = new VarDeclarationDataLayer(provider, VarDeclarationTableColumn.DEFAULT_COLUMNS);
+		dataLayer.setConfigLabelAccumulator(
+				new VarDeclarationConfigLabelAccumulator(provider, this::getAnnotationModel));
+
+		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
+				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,
+				null, this, false);
+		table.addConfiguration(new InitialValueEditorConfiguration(provider));
+		table.addConfiguration(new TypeDeclarationEditorConfiguration(provider));
+		table.configure();
+
+		buttons.bindToTableViewer(table, this, this::newCreateCommand, this::newDeleteCommand,
+				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, true),
+				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, false));
+
+		selectionProvider = new RowPostSelectionProvider<>(table, NatTableWidgetFactory.getSelectionLayer(table),
+				provider, false);
 	}
 
-	public abstract void createVarControl(final Composite parent);
+	protected abstract CreationCommand newCreateCommand(Object refElement);
+
+	protected abstract Command newDeleteCommand(Object refElement);
 
 	public abstract Object getEntry(final int index);
 
@@ -126,5 +176,10 @@ public abstract class AbstractInternalVarsSection extends AbstractSection implem
 	@Override
 	public boolean isEditable() {
 		return true;
+	}
+
+	@Override
+	public ISelectionProvider getSelectionProvider() {
+		return selectionProvider;
 	}
 }

@@ -76,6 +76,7 @@ import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -104,7 +105,6 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.osgi.framework.FrameworkUtil;
 
@@ -472,7 +472,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			return adapter.cast(getCommandStack());
 		}
 		if (adapter == IPropertySheetPage.class) {
-			return adapter.cast(new TabbedPropertySheetPage(this));
+			return adapter.cast(new SelectionTabbedPropertySheetPage(this));
 		}
 		if (adapter == IGotoMarker.class) {
 			return adapter.cast(this);
