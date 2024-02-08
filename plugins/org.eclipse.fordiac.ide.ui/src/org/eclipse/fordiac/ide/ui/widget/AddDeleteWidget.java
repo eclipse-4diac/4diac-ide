@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -33,7 +34,6 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -98,10 +98,8 @@ public class AddDeleteWidget {
 
 	protected static Composite createContainer(final FormToolkit widgetFactory, final Composite parent) {
 		final Composite container = widgetFactory.createComposite(parent, SWT.NONE);
-		final GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, false);
-
-		container.setLayoutData(buttonCompLayoutData);
-		container.setLayout(new GridLayout(1, true));
+		container.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false));
+		GridLayoutFactory.fillDefaults().numColumns(1).equalWidth(true).margins(1, 0).spacing(1, 0).applyTo(container);
 		return container;
 	}
 
