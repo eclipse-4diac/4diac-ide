@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvide
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreLinkedPositionGroupCalculator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
@@ -74,6 +75,7 @@ import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
+import org.eclipse.xtext.ui.refactoring.ILinkedPositionGroupCalculator;
 import org.eclipse.xtext.ui.refactoring.impl.AbstractRenameProcessor;
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
 import org.eclipse.xtext.ui.refactoring2.ChangeConverter;
@@ -216,6 +218,11 @@ public class STCoreUiModule extends AbstractSTCoreUiModule {
 	@Override
 	public Class<? extends AbstractRenameProcessor> bindAbstractRenameProcessor() {
 		return STCoreRenameElementProcessor.class;
+	}
+
+	@Override
+	public Class<? extends ILinkedPositionGroupCalculator> bindILinkedPositionGroupCalculator() {
+		return STCoreLinkedPositionGroupCalculator.class;
 	}
 
 	public Class<? extends ISimpleNameProvider> bindISimpleNameProvider() {

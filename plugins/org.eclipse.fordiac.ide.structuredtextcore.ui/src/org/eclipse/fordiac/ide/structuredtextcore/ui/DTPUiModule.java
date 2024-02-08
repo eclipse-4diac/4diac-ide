@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreLinkedPositionGroupCalculator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameStrategy;
@@ -37,7 +38,6 @@ import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
 import org.eclipse.xtext.ui.refactoring.ILinkedPositionGroupCalculator;
 import org.eclipse.xtext.ui.refactoring.impl.AbstractRenameProcessor;
 import org.eclipse.xtext.ui.refactoring2.ChangeConverter;
-import org.eclipse.xtext.ui.refactoring2.rename.DefaultLinkedPositionGroupCalculator2;
 import org.eclipse.xtext.ui.refactoring2.rename.ISimpleNameProvider;
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
 import org.eclipse.xtext.ui.resource.generic.EmfUiModule;
@@ -75,7 +75,7 @@ public class DTPUiModule extends EmfUiModule {
 	}
 
 	public Class<? extends ILinkedPositionGroupCalculator> bindILinkedPositionGroupCalculator() {
-		return DefaultLinkedPositionGroupCalculator2.class;
+		return STCoreLinkedPositionGroupCalculator.class;
 	}
 
 	public Class<? extends ISimpleNameProvider> bindISimpleNameProvider() {
