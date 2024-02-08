@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
@@ -53,7 +53,7 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
 	protected NatTable table;
-	private AddDeleteReorderListWidget buttons;
+	private AddDeleteReorderToolbarWidget buttons;
 	protected IChangeableRowDataProvider<VarDeclaration> provider;
 	private RowPostSelectionProvider<VarDeclaration> selectionProvider;
 
@@ -71,7 +71,7 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		buttons = new AddDeleteReorderListWidget();
+		buttons = new AddDeleteReorderToolbarWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
 		provider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
@@ -181,5 +181,13 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 	@Override
 	public ISelectionProvider getSelectionProvider() {
 		return selectionProvider;
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (buttons != null) {
+			buttons.dispose();
+		}
 	}
 }

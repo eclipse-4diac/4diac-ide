@@ -36,7 +36,7 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 
 	@Override
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
-		final Composite container = createContainer(widgetFactory, parent);
+		container = createContainer(widgetFactory, parent);
 		container.setLayout(new FillLayout(SWT.VERTICAL));
 
 		createAddButton(widgetFactory, container);

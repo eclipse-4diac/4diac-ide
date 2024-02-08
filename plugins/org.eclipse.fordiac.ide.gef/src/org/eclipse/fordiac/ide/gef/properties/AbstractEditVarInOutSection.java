@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
@@ -60,7 +61,7 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 		implements I4diacNatTableUtil, ISelectionProviderSection {
 	protected IChangeableRowDataProvider<VarDeclaration> inputProvider;
 	protected NatTable inputTable;
-	protected AddDeleteReorderListWidget inputButtons;
+	protected AddDeleteReorderToolbarWidget inputButtons;
 	private RowPostSelectionProvider<VarDeclaration> inputSelectionProvider;
 
 	@Override
@@ -75,7 +76,7 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 		inputsGroup.setLayout(new GridLayout(2, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		inputButtons = new AddDeleteReorderListWidget();
+		inputButtons = new AddDeleteReorderToolbarWidget();
 
 		if (isShowTableEditButtons()) {
 			inputButtons.createControls(inputsGroup, getWidgetFactory());
@@ -144,6 +145,14 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 	@Override
 	protected void setInputInit() {
 		// nothing to do
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (inputButtons != null) {
+			inputButtons.dispose();
+		}
 	}
 
 	@Override

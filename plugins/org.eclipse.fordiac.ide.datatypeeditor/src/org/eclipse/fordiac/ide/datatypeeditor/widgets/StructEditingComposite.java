@@ -40,7 +40,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -74,6 +74,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 public class StructEditingComposite extends Composite implements CommandExecutor, I4diacNatTableUtil {
 
 	private NatTable natTable;
+	private AddDeleteReorderToolbarWidget buttons;
 	private final CommandStack cmdStack;
 	private final GraphicalAnnotationModel annotationModel;
 	private StructuredType structType;
@@ -121,7 +122,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 		setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		showLabel(this);
 
-		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+		buttons = new AddDeleteReorderToolbarWidget();
 		buttons.createControls(this, widgetFactory);
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -286,6 +287,9 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 	@Override
 	public void dispose() {
 		super.dispose();
+		if (buttons != null) {
+			buttons.dispose();
+		}
 		removeAnnotationModelListener();
 		if (getType() != null) {
 			getType().eAdapters().remove(adapter);

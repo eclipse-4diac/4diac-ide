@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.ISelectionProviderSection;
@@ -64,12 +65,12 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 
 	protected IChangeableRowDataProvider<T> inputProvider;
 	protected NatTable inputTable;
-	private AddDeleteReorderListWidget inputButtons;
+	private AddDeleteReorderToolbarWidget inputButtons;
 	private RowPostSelectionProvider<T> inputSelectionProvider;
 
 	protected IChangeableRowDataProvider<T> outputProvider;
 	protected NatTable outputTable;
-	private AddDeleteReorderListWidget outputButtons;
+	private AddDeleteReorderToolbarWidget outputButtons;
 	private RowPostSelectionProvider<T> outputSelectionProvider;
 
 	private SelectionProvider selectionProvider;
@@ -105,8 +106,8 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 		outputsGroup.setLayout(new GridLayout(2, false));
 		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		inputButtons = new AddDeleteReorderListWidget();
-		outputButtons = new AddDeleteReorderListWidget();
+		inputButtons = new AddDeleteReorderToolbarWidget();
+		outputButtons = new AddDeleteReorderToolbarWidget();
 
 		if (isShowTableEditButtons()) {
 			inputButtons.createControls(inputsGroup, getWidgetFactory());
@@ -135,6 +136,17 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 		buttons.bindToTableViewer(table, this, ref -> newCreateCommand((IInterfaceElement) ref, inputs),
 				ref -> newDeleteCommand((IInterfaceElement) ref), ref -> newOrderCommand((IInterfaceElement) ref, true),
 				ref -> newOrderCommand((IInterfaceElement) ref, false));
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (inputButtons != null) {
+			inputButtons.dispose();
+		}
+		if (outputButtons != null) {
+			outputButtons.dispose();
+		}
 	}
 
 	@Override

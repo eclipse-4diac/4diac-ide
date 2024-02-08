@@ -61,7 +61,7 @@ public class RenameElementRefactoringHandler extends AbstractHandler {
 		}
 		if (element instanceof final IInterfaceElement interfaceElement) {
 			final FBNetworkElement fbNetworkElement = interfaceElement.getFBNetworkElement();
-			if (fbNetworkElement != null) {
+			if (fbNetworkElement != null && fbNetworkElement.getTypeEntry() != null) {
 				final FBType fbType = fbNetworkElement.getType();
 				if (fbType != null) {
 					return getElementURI(fbType.getInterfaceList().getInterfaceElement(interfaceElement.getName()));

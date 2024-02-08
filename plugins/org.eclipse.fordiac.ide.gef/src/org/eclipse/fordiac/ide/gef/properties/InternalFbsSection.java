@@ -40,7 +40,7 @@ import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.model.ui.widgets.FBTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
@@ -65,6 +65,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	protected IChangeableRowDataProvider<FB> provider;
 	protected NatTable table;
 	private RowPostSelectionProvider<FB> selectionProvider;
+	private AddDeleteReorderToolbarWidget buttons;
 
 	@Override
 	protected BaseFBType getType() {
@@ -82,7 +83,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+		buttons = new AddDeleteReorderToolbarWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
 		provider = new ChangeableListDataProvider<>(new FBColumnAccessor(this));
@@ -172,6 +173,14 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		final BaseFBType currentType = getType();
 		provider.setInput(currentType != null ? currentType.getInternalFbs() : Collections.emptyList());
 		table.refresh();
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (buttons != null) {
+			buttons.dispose();
+		}
 	}
 
 	@Override

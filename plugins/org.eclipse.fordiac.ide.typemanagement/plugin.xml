@@ -757,6 +757,16 @@
             </command>
          </menu>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.fordiac.ide.toolbar.table">
+         <command
+               commandId="org.eclipse.fordiac.ide.typemanagement.renameElement"
+               icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/tricks.png"
+               label="Rename Element"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
    
 </plugin>
