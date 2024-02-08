@@ -93,8 +93,29 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			default:
 				break;
 			}
+			if (notification.getFeatureID(SubApp.class) == LibraryElementPackage.SUB_APP__ATTRIBUTES
+					&& (isUnfoldedAttribute(notification.getOldValue())
+							|| isUnfoldedAttribute(notification.getNewValue()))) {
+				// interface figures need to be manually added in order for them to be put
+				// into the right container
+				reloadInterfaceFigures();
+			}
 			refreshToolTip();
 			backgroundColorChanged(getFigure());
+		}
+
+		private static boolean isUnfoldedAttribute(final Object obj) {
+			return obj instanceof final org.eclipse.fordiac.ide.model.libraryElement.Attribute attr
+					&& attr.getName().equals("Unfolded"); //$NON-NLS-1$
+		}
+
+		private void reloadInterfaceFigures() {
+			// @formatter:off
+			getChildren().stream()
+				.filter(InterfaceEditPart.class::isInstance)
+				.map(InterfaceEditPart.class::cast)
+				.forEach(ie -> addChildVisual(ie, -1));
+			// @formatter:on
 		}
 
 		private void handleAddMove(final Notification notification) {
