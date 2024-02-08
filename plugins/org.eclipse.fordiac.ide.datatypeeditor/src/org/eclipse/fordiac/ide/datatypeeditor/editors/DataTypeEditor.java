@@ -416,7 +416,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	public void createPartControl(final Composite parent) {
 		if (dataTypeEditable instanceof final StructuredType structType && (!importFailed)) {
 			structComposite = new StructEditingComposite(parent, commandStack, structType, annotationModel);
-			getSite().setSelectionProvider(structComposite);
+			getSite().setSelectionProvider(structComposite.getSelectionProvider());
 			structComposite.setTitel(Messages.StructViewingComposite_Headline);
 		} else if (importFailed) {
 			createErrorComposite(parent, Messages.ErrorCompositeMessage);

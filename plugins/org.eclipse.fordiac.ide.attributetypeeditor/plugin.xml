@@ -48,22 +48,28 @@
             	id="org.eclipse.fordiac.ide.attributetypeeditor.properties.AttributeTypeInfoSection"
             	tab="org.eclipse.fordiac.ide.attributetypeeditor.propertyDataTypeInfoTab">
 	   			<input
-	            	type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite">
+	            	type="org.eclipse.fordiac.ide.model.data.StructuredType">
 	        	</input> 
         		<input
                   	type="org.eclipse.fordiac.ide.model.data.DirectlyDerivedType">
-        		</input> 
+        		</input>
+          <input
+                type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+          </input> 
          </propertySection>
          <propertySection
 	         	class="org.eclipse.fordiac.ide.datatypeeditor.properties.StructAttributeSection"
 	          	id="org.eclipse.fordiac.ide.attributetypeeditor.properties.AttributeAttributeSection"
 	            tab="org.eclipse.fordiac.ide.attributetypeeditor.propertyAttributeTab">
 	   			<input
-	            	type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite">
+	            	type="org.eclipse.fordiac.ide.model.data.StructuredType">
 	        	</input>  
         		<input
                   	type="org.eclipse.fordiac.ide.model.data.DirectlyDerivedType">
-        		</input> 
+        		</input>
+          <input
+                type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+          </input> 
          </propertySection>
       </propertySections>
    </extension>
