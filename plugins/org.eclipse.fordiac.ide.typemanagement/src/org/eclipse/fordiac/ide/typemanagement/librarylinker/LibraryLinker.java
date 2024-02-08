@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023 - 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -132,6 +132,12 @@ public class LibraryLinker implements ILibraryLinker {
 				typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject);
 			}
 		}
+	}
+
+	@Override
+	public void setSelectedProjectWithTypeLib(final IProject project, final TypeLibrary typeLib) {
+		selectedProject = project;
+		typeLibrary = typeLib;
 	}
 
 	@Override

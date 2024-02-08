@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 public interface ILibraryLinker {
@@ -27,6 +28,8 @@ public interface ILibraryLinker {
 	File newFile(final File destinationDir, final ZipEntry zipEntry) throws IOException;
 
 	void setSelectedProject(final StructuredSelection selection);
+
+	void setSelectedProjectWithTypeLib(final IProject project, TypeLibrary typeLib);
 
 	File[] listLibDirectories(final String directory);
 

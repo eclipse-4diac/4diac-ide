@@ -22,15 +22,15 @@
  *               - add function FB type
  *               - add global constants
  *  Sebastian Hollersbacher - add attribute
- *  Fabio Gandolfi - add loading of type libs via manifest file
+ *  Fabio Gandolfi - add loading of type library via manifest file
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.module.ModuleDescriptor.Version;
 import java.text.Collator;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,7 +43,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.internal.resources.ProjectDescription;
@@ -58,6 +57,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.URI;
@@ -282,61 +282,93 @@ public final class TypeLibrary {
 				final ManifestImpl manifest = (ManifestImpl) resource.getContents().get(0);
 
 				final Optional<IResource> projectFile = resources.stream()
-						.filter(res -> res.getName().equals(".project")).findFirst();
+						.filter(res -> ".project".equals(res.getName())).findFirst(); //$NON-NLS-1$
 
 				final ProjectDescription projectDescription = (ProjectDescription) ResourcesPlugin.getWorkspace()
 						.loadProjectDescription(projectFile.get().getLocation());
 
-				final List<String> projectLibNames = projectDescription.getLinks().keySet().stream()
-						.map(p -> p.lastSegment().substring(0, p.lastSegment().lastIndexOf("-")))
-						.collect(Collectors.toList());
-				final List<String> projectLibVersions = projectDescription.getLinks().keySet().stream().map(
-						p -> p.lastSegment().substring(p.lastSegment().lastIndexOf("-") + 1, p.lastSegment().length()))
-						.collect(Collectors.toList());
+				Map<String, List<String>> projectLibs = new HashMap<>();
+				if (projectDescription.getLinks() != null) {
+					projectLibs = parseLibraryNameAndVersion(
+							projectDescription.getLinks().keySet().stream().map(IPath::lastSegment).toList());
+				}
 
-				if (manifest.getScope() != null && manifest.getScope().equals("Project")) {
+				final String productVersion = manifest.getProduct().getVersionInfo().getVersion();
+
+				if (manifest.getScope() != null && "Project".equals(manifest.getScope())) { //$NON-NLS-1$
 					for (final Library lib : manifest.getLibraries().getLibrary()) {
-
-						if (projectLibNames.contains(lib.getSymbolicName())) {
-							// TODO INSERT VERSION OF MANIFEST FILE
-							if (Version.parse(projectLibVersions.get(projectLibNames.indexOf(lib.getSymbolicName())))
-									.compareTo(Version.parse("0.0.0")) < 0) {
-								// link newer version and remove old
-							}
-						} else {
-
-							final IExtensionRegistry registry = Platform.getExtensionRegistry();
-							final IExtensionPoint point = registry
-									.getExtensionPoint("org.eclipse.fordiac.ide.model.libraryLinkerExtension"); //$NON-NLS-1$
-							final IExtension[] extensions = point.getExtensions();
-
-							for (final IExtension extension : extensions) {
-								final IConfigurationElement[] elements = extension.getConfigurationElements();
-								for (final IConfigurationElement element : elements) {
-									try {
-										final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
-										if (obj instanceof final ILibraryLinker libLinker) {
-											final File[] libDir = libLinker.listExtractedFiles();
-											final int x = 0;
-										}
-									} catch (final Exception e) {
-										FordiacLogHelper.logError(e.getMessage(), e);
-									}
-								}
-							}
-
-							final int x = 0;
-						}
+						checkLibrary(lib, projectLibs, project, productVersion);
 					}
 				}
 			}
 
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Problem while loading Project resources", e);
+			FordiacLogHelper.logError(Messages.TypeLibrary_ProjectLoadingProblem, e);
 		} catch (final IOException e) {
-			FordiacLogHelper.logError("Problem while loading Library resources", e);
-
+			FordiacLogHelper.logError(Messages.TypeLibrary_LibraryLoadingProblem, e);
 		}
+	}
+
+	void checkLibrary(final Library lib, final Map<String, List<String>> projectLibs, final IProject project,
+			final String productVersion) {
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IExtensionPoint point = registry
+				.getExtensionPoint("org.eclipse.fordiac.ide.model.libraryLinkerExtension"); //$NON-NLS-1$
+		final IExtension[] extensions = point.getExtensions();
+		for (final IExtension extension : extensions) {
+			final IConfigurationElement[] elements = extension.getConfigurationElements();
+			for (final IConfigurationElement element : elements) {
+				try {
+					final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
+					if (obj instanceof final ILibraryLinker libLinker) {
+						libLinker.setSelectedProjectWithTypeLib(project, this);
+
+						if (projectLibs.containsKey(lib.getSymbolicName())) {
+							if (!projectLibs.get(lib.getSymbolicName()).contains(productVersion)) {
+								// TODO what to do if different version linked?
+							}
+						} else {
+							final List<File> libDir = Arrays.asList(libLinker.listExtractedFiles());
+							final Map<String, List<String>> localLibs = parseLibraryNameAndVersion(
+									libDir.stream().map(File::getName).toList());
+
+							if (localLibs.containsKey(lib.getSymbolicName())
+									&& localLibs.get(lib.getSymbolicName()).contains(productVersion)) {
+								libLinker.importLibrary(lib.getSymbolicName() + "-" + productVersion); //$NON-NLS-1$
+							} else {
+								// TODO get library from gitlab
+							}
+						}
+					}
+				} catch (final Exception e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
+				}
+			}
+		}
+	}
+
+	static Map<String, List<String>> parseLibraryNameAndVersion(final List<String> libs) {
+
+		final Map<String, List<String>> nameVersionMap = new HashMap<>();
+		String name;
+		String version;
+		for (final String lib : libs) {
+			if (lib.lastIndexOf("-") != -1) { //$NON-NLS-1$
+				name = lib.substring(0, lib.lastIndexOf("-")); //$NON-NLS-1$
+				version = lib.substring(lib.lastIndexOf("-") + 1, lib.length()); //$NON-NLS-1$
+			} else {
+				name = lib;
+				version = "0.0.0"; //$NON-NLS-1$
+			}
+
+			if (nameVersionMap.containsKey(name)) {
+				nameVersionMap.get(name).add(version);
+			} else {
+				nameVersionMap.put(name, new ArrayList<>(Arrays.asList(version)));
+			}
+		}
+
+		return nameVersionMap;
 	}
 
 	public TypeEntry createErrorTypeEntry(final String typeName, final EClass typeClass) {

@@ -94,6 +94,8 @@ public final class Messages extends NLS {
 	public static String TypedElementAnnotations_TypeNotFound;
 	public static String TypedElementAnnotations_TypeNotSet;
 	public static String TypeLibrary_TypeExists;
+	public static String TypeLibrary_ProjectLoadingProblem;
+	public static String TypeLibrary_LibraryLoadingProblem;
 	public static String VALIDATOR_ARRAY_MISSES_BRACKETS;
 	public static String VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE;
 	public static String VALIDATOR_DatatypeRequiresTypeSpecifier;
