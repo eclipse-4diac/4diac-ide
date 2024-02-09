@@ -18,6 +18,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.ITabDescriptor;
 import org.eclipse.ui.views.properties.tabbed.ITabSelectionListener;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
+import org.eclipse.ui.views.properties.tabbed.TabContents;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class SelectionTabbedPropertySheetPage extends TabbedPropertySheetPage {
@@ -47,7 +48,8 @@ public class SelectionTabbedPropertySheetPage extends TabbedPropertySheetPage {
 
 		@Override
 		public void tabSelected(final ITabDescriptor tabDescriptor) {
-			if (getTabContents(tabDescriptor)
+			final TabContents tabContents = getTabContents(tabDescriptor);
+			if (tabContents != null && tabContents
 					.getSectionAtIndex(0) instanceof final ISelectionProviderSection selectionProviderSection) {
 				setDelegate(selectionProviderSection.getSelectionProvider());
 			} else {
