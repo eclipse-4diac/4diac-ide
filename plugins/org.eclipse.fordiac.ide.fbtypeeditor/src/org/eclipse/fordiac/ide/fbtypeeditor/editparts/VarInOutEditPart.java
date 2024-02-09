@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,14 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
-import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteVarInOutCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
-import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 
 public class VarInOutEditPart extends InterfaceEditPart {
@@ -38,20 +35,6 @@ public class VarInOutEditPart extends InterfaceEditPart {
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
-		if (isDirectEditable() && !getModel().isIsInput()) {
-			// add own direct edit policy for output side
-			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
-				@Override
-				protected Command getDirectEditCommand(final DirectEditRequest request) {
-					if (getHost() instanceof final VarInOutEditPart viewEditPart) {
-						final VarDeclaration varDecl = viewEditPart.getModel();
-						return ChangeNameCommand.forName(varDecl.getInOutVarOpposite(),
-								(String) request.getCellEditor().getValue());
-					}
-					return null;
-				}
-			});
-		}
 
 		if (isInterfaceEditable()) {
 			installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteVarInOutEditPolicy());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler Unviersity Linz
  *               2023 Primetals Technologies Austria GmbHy
  *
@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -52,7 +53,17 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 	}
 
 	public static ChangeNameCommand forName(final INamedElement element, final String name) {
-		final ChangeNameCommand result = new ChangeNameCommand(element, name);
+		INamedElement toRename = element;
+		if (element instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && !varDecl.isIsInput()) {
+			toRename = varDecl.getInOutVarOpposite();
+		}
+		final ChangeNameCommand result = new ChangeNameCommand(toRename, name);
+		addAdditionalRenames(toRename, name, result);
+		return result;
+	}
+
+	private static void addAdditionalRenames(final INamedElement element, final String name,
+			final ChangeNameCommand result) {
 		if ((element instanceof final FBNetworkElement fbne) && fbne.isMapped()) {
 			result.getAdditionalCommands().add(new ChangeNameCommand(fbne.getOpposite(), name));
 		}
@@ -73,7 +84,6 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 				result.getAdditionalCommands().add(ChangeAttributeDeclarationCommand.forName(attribute, name));
 			}
 		}
-		return result;
 	}
 
 	private static void handleAdapterDeclarationRename(final String name, final ChangeNameCommand result,
