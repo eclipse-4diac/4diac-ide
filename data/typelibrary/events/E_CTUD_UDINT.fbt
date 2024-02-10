@@ -1,89 +1,119 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
-<FBType Comment="Event-Driven Up-Down Counter" Name="E_CTUD_UDINT">
-  <Identification Classification="Event-driven blocks" Description="Copyright (c) 2017 fortiss GmbH&#10;&#9;&#9;&#9;     2019 Johannes Keppler University Linz&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Function="Up-Down-counter" Standard="61499-1-A.x"/>
-  <VersionInfo Author="Alois Zoitl" Date="2017-09-22" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
-  <VersionInfo Author="Alois Zoitl" Date="2019-07-09" Organization="JKU" Remarks="fixed bug in down counting" Version="1.1"/>
-  <CompilerInfo/>
-  <InterfaceList>
-    <EventInputs>
-      <Event Comment="Count Up" Name="CU" Type="Event">
-        <With Var="PV"/>
-      </Event>
-      <Event Comment="Count Down" Name="CD" Type="Event"/>
-      <Event Comment="Reset" Name="R" Type="Event"/>
-      <Event Comment="Load" Name="LD" Type="Event">
-        <With Var="PV"/>
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="Count Output Event" Name="CO" Type="Event">
-        <With Var="QU"/>
-        <With Var="CV"/>
-        <With Var="QD"/>
-      </Event>
-      <Event Comment="Reset Output Event" Name="RO" Type="Event">
-        <With Var="QU"/>
-        <With Var="CV"/>
-        <With Var="QD"/>
-      </Event>
-      <Event Comment="" Name="LDO" Type="Event">
-        <With Var="QU"/>
-        <With Var="QD"/>
-        <With Var="CV"/>
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Comment="Preset Value" Name="PV" Type="UDINT"/>
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Comment="CV &gt;=PV" Name="QU" Type="BOOL"/>
-      <VarDeclaration Comment="CV &lt;= 0" Name="QD" Type="BOOL"/>
-      <VarDeclaration Comment="Counter Value" Name="CV" Type="UDINT"/>
-    </OutputVars>
-  </InterfaceList>
-  <BasicFB>
-    <ECC>
-      <ECState Comment="" Name="START" x="1330.0" y="950.0"/>
-      <ECState Comment="" Name="CU" x="190.0" y="570.0">
-        <ECAction Algorithm="CountUp"/>
-        <ECAction Algorithm="UpdateQUQD" Output="CO"/>
-      </ECState>
-      <ECState Comment="" Name="R" x="190.0" y="1330.0">
-        <ECAction Algorithm="Reset"/>
-        <ECAction Algorithm="UpdateQUQD" Output="RO"/>
-      </ECState>
-      <ECState Comment="" Name="CD" x="1710.0" y="570.0">
-        <ECAction Algorithm="CountDown"/>
-        <ECAction Algorithm="UpdateQUQD" Output="CO"/>
-      </ECState>
-      <ECState Comment="" Name="LD" x="1805.0" y="1330.0">
-        <ECAction Algorithm="Load"/>
-        <ECAction Algorithm="UpdateQUQD" Output="LDO"/>
-      </ECState>
-      <ECTransition Comment="" Condition="CU[(CV&lt;4294967295)]" Destination="CU" Source="START" x="145.0" y="1100.0"/>
-      <ECTransition Comment="" Condition="1" Destination="START" Source="CU" x="495.0" y="935.0"/>
-      <ECTransition Comment="" Condition="R" Destination="R" Source="START" x="710.0" y="1125.0"/>
-      <ECTransition Comment="" Condition="1" Destination="START" Source="R" x="745.0" y="1240.0"/>
-      <ECTransition Comment="" Condition="CD[(CV &gt; 0)]" Destination="CD" Source="START" x="1460.0" y="705.0"/>
-      <ECTransition Comment="" Condition="1" Destination="START" Source="CD" x="1780.0" y="925.0"/>
-      <ECTransition Comment="" Condition="LD" Destination="LD" Source="START" x="1825.0" y="1145.0"/>
-      <ECTransition Comment="" Condition="1" Destination="START" Source="LD" x="1515.0" y="1275.0"/>
-    </ECC>
-    <Algorithm Comment="Count Up" Name="CountUp">
-      <ST Text="CV := CV + 1;&#10;&#10;"/>
-    </Algorithm>
-    <Algorithm Comment="Reset" Name="Reset">
-      <ST Text="CV := 0;&#10;"/>
-    </Algorithm>
-    <Algorithm Comment="ALG" Name="Load">
-      <ST Text="CV := PV;"/>
-    </Algorithm>
-    <Algorithm Comment="ALG" Name="UpdateQUQD">
-      <ST Text="QU := (CV &gt;= PV);&#13;&#10;QD := (CV = 0);"/>
-    </Algorithm>
-    <Algorithm Comment="ALG" Name="CountDown">
-      <ST Text="CV := CV - 1;"/>
-    </Algorithm>
-  </BasicFB>
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_CTUD_UDINT" Comment="Event-Driven Up-Down Counter">
+	<Identification Standard="61499-1-A.x" Classification="Event-driven blocks" Function="Up-Down-counter" Description="Copyright (c) 2017, 2024 fortiss GmbH, JKU, HR Agrartechnik GmbH &#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation (E_CTUD)">
+	</VersionInfo>
+	<VersionInfo Organization="JKU" Version="1.1" Author="Alois Zoitl" Date="2019-07-09" Remarks="fixed bug in down counting (E_CTUD)">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.2" Author="Franz Höpfinger" Date="2024-02-10" Remarks="Copy over E_CTUD to E_CTUD_UDINT">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="CU" Type="Event" Comment="Count Up">
+				<With Var="PV"/>
+			</Event>
+			<Event Name="CD" Type="Event" Comment="Count Down">
+			</Event>
+			<Event Name="R" Type="Event" Comment="Reset">
+			</Event>
+			<Event Name="LD" Type="Event" Comment="Load">
+				<With Var="PV"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CO" Type="Event" Comment="Count Output Event">
+				<With Var="QU"/>
+				<With Var="CV"/>
+				<With Var="QD"/>
+			</Event>
+			<Event Name="RO" Type="Event" Comment="Reset Output Event">
+				<With Var="QU"/>
+				<With Var="CV"/>
+				<With Var="QD"/>
+			</Event>
+			<Event Name="LDO" Type="Event" Comment="">
+				<With Var="QU"/>
+				<With Var="QD"/>
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="PV" Type="UDINT" Comment="Preset Value"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QU" Type="BOOL" Comment="CV &amp;gt;=PV"/>
+			<VarDeclaration Name="QD" Type="BOOL" Comment="CV &amp;lt;= 0"/>
+			<VarDeclaration Name="CV" Type="UDINT" Comment="Counter Value"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="" x="1326.6666666666667" y="946.6666666666667">
+			</ECState>
+			<ECState Name="CU" Comment="" x="186.66666666666669" y="566.6666666666667">
+				<ECAction Algorithm="CountUp"/>
+				<ECAction Algorithm="UpdateQUQD" Output="CO"/>
+			</ECState>
+			<ECState Name="R" Comment="" x="186.66666666666669" y="1326.6666666666667">
+				<ECAction Algorithm="Reset"/>
+				<ECAction Algorithm="UpdateQUQD" Output="RO"/>
+			</ECState>
+			<ECState Name="CD" Comment="" x="1706.6666666666667" y="566.6666666666667">
+				<ECAction Algorithm="CountDown"/>
+				<ECAction Algorithm="UpdateQUQD" Output="CO"/>
+			</ECState>
+			<ECState Name="LD" Comment="" x="1800.0" y="1326.6666666666667">
+				<ECAction Algorithm="Load"/>
+				<ECAction Algorithm="UpdateQUQD" Output="LDO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="CU" Condition="CU[(CV&lt;4294967295)]" Comment="" x="140.0" y="1100.0"/>
+			<ECTransition Source="CU" Destination="START" Condition="1" Comment="" x="493.33333333333337" y="933.3333333333334"/>
+			<ECTransition Source="START" Destination="R" Condition="R" Comment="" x="706.6666666666667" y="1120.0"/>
+			<ECTransition Source="R" Destination="START" Condition="1" Comment="" x="740.0" y="1240.0"/>
+			<ECTransition Source="START" Destination="CD" Condition="CD[(CV &gt; 0)]" Comment="" x="1460.0" y="700.0"/>
+			<ECTransition Source="CD" Destination="START" Condition="1" Comment="" x="1780.0" y="920.0"/>
+			<ECTransition Source="START" Destination="LD" Condition="LD" Comment="" x="1820.0" y="1140.0"/>
+			<ECTransition Source="LD" Destination="START" Condition="1" Comment="" x="1513.3333333333335" y="1273.3333333333335"/>
+		</ECC>
+		<Algorithm Name="CountUp" Comment="">
+			<ST><![CDATA[ALGORITHM CountUp
+CV := CV + 1;
+
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="Reset" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM Reset
+CV := 0;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="Load" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM Load
+CV := PV;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="UpdateQUQD" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM UpdateQUQD
+QU := (CV >= PV);
+QD := (CV = 0);
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="CountDown" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM CountDown
+CV := CV - 1;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
 </FBType>
