@@ -104,6 +104,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.osgi.framework.FrameworkUtil;
@@ -452,7 +453,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	 */
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		if (this.equals(getSite().getPage().getActiveEditor())) {
+		if (this.equals(getSite().getPage().getActiveEditor()) && !(part instanceof PropertySheet)) {
 			handleContentOutlineSelection(selection);
 		}
 	}
