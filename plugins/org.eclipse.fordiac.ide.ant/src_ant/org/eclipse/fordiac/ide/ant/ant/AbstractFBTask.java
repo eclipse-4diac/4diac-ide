@@ -145,7 +145,8 @@ public abstract class AbstractFBTask extends Task {
 				TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT,//
 				TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT,//
 				TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT,//
-				TypeLibraryTags.GLOBAL_CONST_FILE_ENDING_WITH_DOT);
+				TypeLibraryTags.GLOBAL_CONST_FILE_ENDING_WITH_DOT,//
+				TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING_WITH_DOT);
 		return matchesFileExtension(file, allowedFiletypes);
 	}
 
