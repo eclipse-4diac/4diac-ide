@@ -24,8 +24,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
 
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue;
@@ -55,7 +54,7 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 * @ordered
 	 */
-	protected VarDeclaration variable;
+	protected INamedElement variable;
 
 	/**
 	 * The cached value of the '{@link #getExpression() <em>Expression</em>}' containment reference.
@@ -112,10 +111,10 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
-	public VarDeclaration getVariable() {
+	public INamedElement getVariable() {
 		if (variable != null && variable.eIsProxy()) {
 			InternalEObject oldVariable = (InternalEObject)variable;
-			variable = (VarDeclaration)eResolveProxy(oldVariable);
+			variable = (INamedElement)eResolveProxy(oldVariable);
 			if (variable != oldVariable) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__VARIABLE, oldVariable, variable));
@@ -129,7 +128,7 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VarDeclaration basicGetVariable() {
+	public INamedElement basicGetVariable() {
 		return variable;
 	}
 
@@ -139,8 +138,8 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
-	public void setVariable(VarDeclaration newVariable) {
-		VarDeclaration oldVariable = variable;
+	public void setVariable(INamedElement newVariable) {
+		INamedElement oldVariable = variable;
 		variable = newVariable;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__VARIABLE, oldVariable, variable));
@@ -258,7 +257,7 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__VARIABLE:
-				setVariable((VarDeclaration)newValue);
+				setVariable((INamedElement)newValue);
 				return;
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__EXPRESSION:
 				setExpression((STInitializerExpression)newValue);
@@ -281,7 +280,7 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__VARIABLE:
-				setVariable((VarDeclaration)null);
+				setVariable((INamedElement)null);
 				return;
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__EXPRESSION:
 				setExpression((STInitializerExpression)null);

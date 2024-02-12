@@ -12,6 +12,7 @@
  */
 package org.eclipse.fordiac.ide.model.eval.st;
 
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
@@ -55,6 +56,9 @@ public class StructuredTextEvaluatorFactory implements EvaluatorFactory {
 		if (source instanceof final Attribute attribute) {
 			return new AttributeEvaluator(attribute, context, variables, parent);
 		}
+		if (source instanceof final DirectlyDerivedType directlyDerivedType) {
+			return new DirectlyDerivedTypeEvaluator(directlyDerivedType, context, variables, parent);
+		}
 		return null;
 	}
 
@@ -74,5 +78,7 @@ public class StructuredTextEvaluatorFactory implements EvaluatorFactory {
 		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, VarDeclaration.class,
 				factory);
 		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, Attribute.class, factory);
+		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, DirectlyDerivedType.class,
+				factory);
 	}
 }
