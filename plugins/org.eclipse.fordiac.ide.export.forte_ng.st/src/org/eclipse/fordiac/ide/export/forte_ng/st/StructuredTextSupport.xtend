@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 - 2023 Martin Erich Jobst
- *               2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
+ *                          Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.data.WcharType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations
+import org.eclipse.fordiac.ide.model.eval.value.ValueOperations
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -269,7 +270,22 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''«expr.receiver.generateExpression»«FOR index : expr.index»[«index.generateExpression»]«ENDFOR»'''
 
 	def protected dispatch CharSequence generateExpression(STFeatureExpression expr) //
-	'''«expr.feature.generateFeatureName»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
+	'''«expr.feature.generateFeatureName»«expr.generateTemplateArguments»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
+
+	def protected CharSequence generateTemplateArguments(STFeatureExpression expr) {
+		switch (feature : expr.feature) {
+			STStandardFunction case feature.isGenericReturnType: '''<«expr.resultType.generateTypeName»>'''
+			default:
+				""
+		}
+	}
+
+	def protected boolean isGenericReturnType(STStandardFunction standardFunction) {
+		switch (type:standardFunction.javaMethod.genericReturnType) {
+			Class<?> case type != void && ValueOperations.dataType(type).anyType: true
+			default: false
+		}
+	}
 
 	def protected Iterable<CharSequence> generateCallArguments(STFeatureExpression expr) {
 		try {

@@ -46,6 +46,7 @@ import org.eclipse.xtext.ide.LexerIdeBindings;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.IContentAssistParser;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.Lexer;
 import org.eclipse.xtext.ide.editor.partialEditing.IPartialEditingContentAssistParser;
+import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
 import org.eclipse.xtext.parser.antlr.AntlrTokenDefProvider;
 import org.eclipse.xtext.parser.antlr.ITokenDefProvider;
 import org.eclipse.xtext.parser.antlr.LexerProvider;
@@ -82,16 +83,16 @@ import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionProvider;
 import org.eclipse.xtext.ui.editor.reconciler.IReconcileStrategyFactory;
 import org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage;
 import org.eclipse.xtext.ui.refactoring.IDependentElementsCalculator;
-import org.eclipse.xtext.ui.refactoring.IReferenceUpdater;
+import org.eclipse.xtext.ui.refactoring.ILinkedPositionGroupCalculator;
 import org.eclipse.xtext.ui.refactoring.IRenameRefactoringProvider;
-import org.eclipse.xtext.ui.refactoring.IRenameStrategy;
+import org.eclipse.xtext.ui.refactoring.impl.AbstractRenameProcessor;
 import org.eclipse.xtext.ui.refactoring.impl.DefaultDependentElementsCalculator;
-import org.eclipse.xtext.ui.refactoring.impl.DefaultReferenceUpdater;
 import org.eclipse.xtext.ui.refactoring.impl.DefaultRenameRefactoringProvider;
-import org.eclipse.xtext.ui.refactoring.impl.DefaultRenameStrategy;
 import org.eclipse.xtext.ui.refactoring.ui.DefaultRenameSupport;
 import org.eclipse.xtext.ui.refactoring.ui.IRenameSupport;
 import org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferences;
+import org.eclipse.xtext.ui.refactoring2.rename.DefaultLinkedPositionGroupCalculator2;
+import org.eclipse.xtext.ui.refactoring2.rename.RenameElementProcessor2;
 import org.eclipse.xtext.ui.resource.ResourceServiceDescriptionLabelProvider;
 import org.eclipse.xtext.ui.shared.Access;
 import org.eclipse.xtext.ui.validation.AbstractValidatorConfigurationBlock;
@@ -252,13 +253,18 @@ public abstract class AbstractGlobalConstantsUiModule extends DefaultUiModule {
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.refactoring.RefactorElementNameFragment2
-	public Class<? extends IRenameStrategy> bindIRenameStrategy() {
-		return DefaultRenameStrategy.class;
+	public Class<? extends IRenameStrategy2> bindIRenameStrategy2() {
+		return IRenameStrategy2.DefaultImpl.class;
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.refactoring.RefactorElementNameFragment2
-	public Class<? extends IReferenceUpdater> bindIReferenceUpdater() {
-		return DefaultReferenceUpdater.class;
+	public Class<? extends AbstractRenameProcessor> bindAbstractRenameProcessor() {
+		return RenameElementProcessor2.class;
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.ui.refactoring.RefactorElementNameFragment2
+	public Class<? extends ILinkedPositionGroupCalculator> bindILinkedPositionGroupCalculator() {
+		return DefaultLinkedPositionGroupCalculator2.class;
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.refactoring.RefactorElementNameFragment2

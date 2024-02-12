@@ -69,6 +69,7 @@ import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemPro
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
@@ -86,7 +87,6 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements IEditorFileChangeListener {
 
@@ -345,7 +345,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == IPropertySheetPage.class) {
-			return adapter.cast(new TabbedPropertySheetPage(this));
+			return adapter.cast(new SelectionTabbedPropertySheetPage(this));
 		}
 		if (adapter == IContentOutlinePage.class) {
 			if (null == outlinePage) {

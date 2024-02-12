@@ -690,6 +690,7 @@
           ecoreFeature="ecore:EReference lib.ecore#//SubApp/subAppNetwork"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//SubApp/width"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//SubApp/height"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//SubApp/Locked"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xD;&#xA;if(type instanceof SubAppType){&#xD;&#xA;   return (SubAppType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/isUnfolded" body="org.eclipse.fordiac.ide.model.libraryElement.Attribute attr = this.getAttribute(org.eclipse.fordiac.ide.model.LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);&#xA;return (attr != null) &amp;&amp; &quot;true&quot;.equals(attr.getValue()); //$NON-NLS-1$&#xA;"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/isTyped" body="return (getType() != null);"/>

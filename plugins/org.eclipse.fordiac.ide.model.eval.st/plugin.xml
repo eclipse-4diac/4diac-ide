@@ -32,6 +32,9 @@
          <source
                type="org.eclipse.fordiac.ide.model.libraryElement.Attribute">
          </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.data.DirectlyDerivedType">
+         </source>
       </factory>
    </extension>
 

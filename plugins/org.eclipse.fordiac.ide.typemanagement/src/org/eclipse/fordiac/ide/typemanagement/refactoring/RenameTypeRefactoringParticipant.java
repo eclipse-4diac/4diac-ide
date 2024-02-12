@@ -143,7 +143,8 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		final var search = FBTypeSearch.createFBTypeSearch(type);
 		allFBs = InstanceSearch.performProjectSearch(project, search);
 		allFBs.addAll(search.performInternalFBSearch(type.getTypeLibrary()));
-		change.add(new UpdateInstancesChange(allFBs.stream().map(FBNetworkElement.class::cast).toList(), typeEntry));
+		allFBs.stream().map(FBNetworkElement.class::cast).map(fbn -> new UpdateInstancesChange(fbn, typeEntry))
+				.forEach(change::add);
 		if (!allFBs.isEmpty()) {
 			parentChange.add(change);
 		}

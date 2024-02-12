@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 - 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -75,10 +75,13 @@ class FunctionsTest {
 		#[ElementaryTypes.INT].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("SIMPLE", ElementaryTypes.INT))
 		// expected parameter type
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 0))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 0))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, 0))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.SINT, 0))
+		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 0))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 0))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, emptyList, 0))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.SINT, emptyList, 0))
 		// invoke
 		17.toIntValue.assertEquals(SampleFunctions.invoke("SIMPLE", 17.toIntValue))
 	}
@@ -99,8 +102,9 @@ class FunctionsTest {
 		#[ElementaryTypes.LINT].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("GENERIC_PARAM", ElementaryTypes.LINT))
 		// expected parameter type
-		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 0))
-		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 0))
+		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 0))
+		GenericTypes.ANY_MAGNITUDE.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 0))
 		// invoke
 		17.toIntValue.assertEquals(SampleFunctions.invoke("GENERIC_PARAM", 17.toLIntValue))
 	}
@@ -121,10 +125,13 @@ class FunctionsTest {
 		#[ElementaryTypes.LINT].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("GENERIC_RETURN", ElementaryTypes.LINT))
 		// expected parameter type
-		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 0))
-		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(GenericTypes.ANY, 0))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 0))
-		ElementaryTypes.DINT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, 0))
+		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 0))
+		GenericTypes.ANY_MAGNITUDE.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(GenericTypes.ANY, emptyList, 0))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 0))
+		ElementaryTypes.DINT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, emptyList, 0))
 		// invoke
 		17.toLIntValue.assertEquals(SampleFunctions.invoke("GENERIC_RETURN", 17.toLIntValue))
 	}
@@ -132,7 +139,8 @@ class FunctionsTest {
 	@Test
 	def void testMultiGenericParam() {
 		// lookup
-		val method = SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT, ElementaryTypes.INT)
+		val method = SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT,
+			ElementaryTypes.INT)
 		method.assertNotNull
 		SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.LINT, ElementaryTypes.INT).
 			assertNotNull
@@ -164,10 +172,12 @@ class FunctionsTest {
 			SampleFunctions.inferParameterTypesFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT,
 				ElementaryTypes.LINT))
 		// expected parameter type
-		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 0))
-		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 1))
-		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 0))
-		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 1))
+		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 0))
+		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 1))
+		GenericTypes.ANY_MAGNITUDE.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 0))
+		GenericTypes.ANY_MAGNITUDE.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 1))
 		// invoke
 		21.toIntValue.assertEquals(SampleFunctions.invoke("MULTI_GENERIC_PARAM", 17.toIntValue, 4.toIntValue))
 		21.toIntValue.assertEquals(SampleFunctions.invoke("MULTI_GENERIC_PARAM", 17.toLIntValue, 4.toIntValue))
@@ -203,15 +213,21 @@ class FunctionsTest {
 			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS", ElementaryTypes.INT, ElementaryTypes.INT,
 				ElementaryTypes.INT))
 		// expected parameter type
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 0))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 1))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 2))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 0))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 1))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 2))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, 0))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, 1))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, 2))
+		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 0))
+		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 1))
+		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 2))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 0))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 1))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 2))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, emptyList, 0))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, emptyList, 1))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, emptyList, 2))
 		// invoke
 		SampleFunctions.invoke("VARARGS").assertNull
 		17.toIntValue.assertEquals(SampleFunctions.invoke("VARARGS", 17.toIntValue))
@@ -243,7 +259,8 @@ class FunctionsTest {
 			SampleFunctions.inferReturnTypeFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT, ElementaryTypes.INT,
 				ElementaryTypes.SINT))
 		// parameter types
-		#[GenericTypes.ANY_MAGNITUDE].assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC"))
+		#[GenericTypes.ANY_MAGNITUDE].assertIterableEquals(
+			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC"))
 		#[ElementaryTypes.LINT].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT))
 		#[ElementaryTypes.LINT, ElementaryTypes.LINT].assertIterableEquals(
@@ -253,15 +270,27 @@ class FunctionsTest {
 			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT,
 				ElementaryTypes.INT, ElementaryTypes.SINT))
 		// expected parameter type
-		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 0))
-		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 1))
-		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 2))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 0))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 1))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 2))
-		ElementaryTypes.DINT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, 0))
-		ElementaryTypes.DINT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, 1))
-		ElementaryTypes.DINT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, 2))
+		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 0))
+		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 1))
+		GenericTypes.ANY_MAGNITUDE.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 2))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(null, #[null, ElementaryTypes.INT, ElementaryTypes.INT], 0))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(null, #[ElementaryTypes.INT, null, ElementaryTypes.INT], 1))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(null, #[ElementaryTypes.INT, ElementaryTypes.INT, null], 2))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 0))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 1))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 2))
+		ElementaryTypes.DINT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, emptyList, 0))
+		ElementaryTypes.DINT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, emptyList, 1))
+		ElementaryTypes.DINT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, emptyList, 2))
 		// invoke
 		SampleFunctions.invoke("VARARGS_GENERIC").assertNull
 		17.toLIntValue.assertEquals(SampleFunctions.invoke("VARARGS_GENERIC", 17.toLIntValue))
@@ -281,10 +310,13 @@ class FunctionsTest {
 		#[ElementaryTypes.INT].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("SIMPLE_OUTPUT", ElementaryTypes.INT))
 		// expected parameter type
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 0))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 0))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, 0))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.SINT, 0))
+		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 0))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 0))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, emptyList, 0))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.SINT, emptyList, 0))
 		// invoke
 		val arg = newVariable("A", ElementaryTypes.INT)
 		SampleFunctions.invoke("SIMPLE_OUTPUT", arg)
@@ -302,8 +334,9 @@ class FunctionsTest {
 		#[ElementaryTypes.INT].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("GENERIC_OUTPUT", ElementaryTypes.INT))
 		// expected parameter type
-		GenericTypes.ANY_INT.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 0))
-		GenericTypes.ANY_INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 0))
+		GenericTypes.ANY_INT.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 0))
+		GenericTypes.ANY_INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 0))
 		// invoke
 		val arg = newVariable("A", ElementaryTypes.INT)
 		SampleFunctions.invoke("GENERIC_OUTPUT", arg)
@@ -321,10 +354,12 @@ class FunctionsTest {
 		#[GenericTypes.ANY].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("GENERIC_TYPE", GenericTypes.ANY))
 		// expected parameter type
-		GenericTypes.ANY.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 0))
-		GenericTypes.ANY.assertEquals(method.inferExpectedParameterTypeFromDataType(GenericTypes.ANY, 0))
-		ElementaryTypes.INT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, 0))
-		ElementaryTypes.DINT.assertEquals(method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, 0))
+		GenericTypes.ANY.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 0))
+		GenericTypes.ANY.assertEquals(method.inferExpectedParameterTypeFromDataType(GenericTypes.ANY, emptyList, 0))
+		ElementaryTypes.INT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.INT, emptyList, 0))
+		ElementaryTypes.DINT.assertEquals(
+			method.inferExpectedParameterTypeFromDataType(ElementaryTypes.DINT, emptyList, 0))
 		// invoke
 		val arg = newVariable("A", ElementaryTypes.INT, "21")
 		SampleFunctions.invoke("GENERIC_OUTPUT", arg)
@@ -342,9 +377,9 @@ class FunctionsTest {
 		// parameter types
 		#[arrayType].assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("GENERIC_TYPE", arrayType))
 		// expected parameter type
-		GenericTypes.ANY.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 0))
-		GenericTypes.ANY.assertEquals(method.inferExpectedParameterTypeFromDataType(GenericTypes.ANY, 0))
-		arrayType.assertEquals(method.inferExpectedParameterTypeFromDataType(arrayType, 0))
+		GenericTypes.ANY.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 0))
+		GenericTypes.ANY.assertEquals(method.inferExpectedParameterTypeFromDataType(GenericTypes.ANY, emptyList, 0))
+		arrayType.assertEquals(method.inferExpectedParameterTypeFromDataType(arrayType, emptyList, 0))
 		// invoke
 		val arg = newVariable("A", arrayType, "[17, 4]")
 		val result = SampleFunctions.invoke("GENERIC_TYPE", arg.value) as ArrayValue
@@ -372,9 +407,9 @@ class FunctionsTest {
 		// parameter types
 		#[structType].assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("GENERIC_TYPE", structType))
 		// expected parameter type
-		GenericTypes.ANY.assertEquals(method.inferExpectedParameterTypeFromDataType(null, 0))
-		GenericTypes.ANY.assertEquals(method.inferExpectedParameterTypeFromDataType(GenericTypes.ANY, 0))
-		structType.assertEquals(method.inferExpectedParameterTypeFromDataType(structType, 0))
+		GenericTypes.ANY.assertEquals(method.inferExpectedParameterTypeFromDataType(null, emptyList, 0))
+		GenericTypes.ANY.assertEquals(method.inferExpectedParameterTypeFromDataType(GenericTypes.ANY, emptyList, 0))
+		structType.assertEquals(method.inferExpectedParameterTypeFromDataType(structType, emptyList, 0))
 		// invoke
 		val arg = newVariable("A", structType, "(a := 17, b := 4)")
 		val result = SampleFunctions.invoke("GENERIC_TYPE", arg.value) as StructValue

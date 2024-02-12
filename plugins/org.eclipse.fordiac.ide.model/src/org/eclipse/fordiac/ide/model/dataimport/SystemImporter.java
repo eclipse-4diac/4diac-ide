@@ -127,7 +127,7 @@ public class SystemImporter extends CommonElementImporter {
 				getElement().setCompilerInfo(parseCompilerInfo());
 				break;
 			case LibraryElementTags.APPLICATION_ELEMENT:
-				getElement().getApplication().add(parseApplication());
+				parseApplication(getElement());
 				break;
 			case LibraryElementTags.DEVICE_ELEMENT:
 				sysConf.getDevices().add(parseDevice());
@@ -422,8 +422,10 @@ public class SystemImporter extends CommonElementImporter {
 		}
 	}
 
-	private Application parseApplication() throws TypeImportException, XMLStreamException {
+	private void parseApplication(final AutomationSystem automationSystem)
+			throws TypeImportException, XMLStreamException {
 		final Application application = LibraryElementFactory.eINSTANCE.createApplication();
+		automationSystem.getApplication().add(application);
 		readNameCommentAttributes(application);
 
 		processChildren(LibraryElementTags.APPLICATION_ELEMENT, name -> {
@@ -442,8 +444,6 @@ public class SystemImporter extends CommonElementImporter {
 			}
 			return true;
 		});
-
-		return application;
 	}
 
 }

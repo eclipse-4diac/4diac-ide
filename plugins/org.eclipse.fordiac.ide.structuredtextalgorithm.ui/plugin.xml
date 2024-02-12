@@ -515,4 +515,20 @@
           class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextalgorithm.ui.builder.STAlgorithmInitialValueBuilderParticipant">
     </participant>
  </extension>
+ <extension
+       point="org.eclipse.ltk.core.refactoring.renameParticipants">
+    <renameParticipant
+          class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementRefactoringParticpant"
+          id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.renameElementParticipant"
+          name="Rename ST References">
+       <enablement>
+          <with
+                variable="processorIdentifier">
+             <equals
+                   value="org.eclipse.fordiac.ide.typemanagement.renameElement">
+             </equals>
+          </with>
+       </enablement>
+    </renameParticipant>
+ </extension>
 </plugin>

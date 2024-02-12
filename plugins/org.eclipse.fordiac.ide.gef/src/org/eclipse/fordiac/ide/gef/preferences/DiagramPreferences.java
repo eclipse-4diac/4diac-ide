@@ -69,6 +69,8 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	public static final String MIN_PIN_LABEL_SIZE = "MinPinLabelSize"; //$NON-NLS-1$
 	public static final String MAX_PIN_LABEL_SIZE = "MaxPinLabelSize"; //$NON-NLS-1$
 
+	public static final String MAX_INTERFACE_BAR_SIZE = "MaxInterfaceBarSize"; //$NON-NLS-1$
+
 	public static final String MAX_HIDDEN_CONNECTION_LABEL_SIZE = "MaxHiddenConnectionLabelSize"; //$NON-NLS-1$
 
 	public static final String MAX_TYPE_LABEL_SIZE = "MaxTypeLabelSize"; //$NON-NLS-1$
@@ -149,7 +151,8 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 				|| sourcePrefName.equalsIgnoreCase(MAX_VALUE_LABEL_SIZE)
 				|| sourcePrefName.equalsIgnoreCase(MAX_DEFAULT_VALUE_LENGTH)
 				|| sourcePrefName.equalsIgnoreCase(MAX_HIDDEN_CONNECTION_LABEL_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(PIN_LABEL_STYLE);
+				|| sourcePrefName.equalsIgnoreCase(PIN_LABEL_STYLE)
+				|| sourcePrefName.equalsIgnoreCase(MAX_INTERFACE_BAR_SIZE);
 	}
 
 	@Override
@@ -207,6 +210,11 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 				Messages.DiagramPreferences_MaximumPinLabelSize, labelSize);
 		integerFieldEditorMaxPin.setValidRange(0, 60);
 		addField(integerFieldEditorMaxPin);
+
+		final IntegerFieldEditor integerFieldEditorInterfaceBar = new IntegerFieldEditor(MAX_INTERFACE_BAR_SIZE,
+				Messages.DiagramPreferences_MaximumInterfaceBarSize, labelSize);
+		integerFieldEditorInterfaceBar.setValidRange(0, 100);
+		addField(integerFieldEditorInterfaceBar);
 
 		final IntegerFieldEditor integerFieldEditorConnection = new IntegerFieldEditor(MAX_HIDDEN_CONNECTION_LABEL_SIZE,
 				Messages.DiagramPreferences_MaximumHiddenConnectionLabelSize, labelSize);

@@ -74,7 +74,7 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 			cmdToExecuteBefore = null;
 		}
 
-		if (!isLockedGroup() || isExpandedSubapp()) {
+		if (isUnlockedGroup() || isExpandedAndUnlockedSubapp()) {
 			GraphicalEditPart parent = getTargetContainerEP();
 			while (parent != null) {
 				addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent, fbnetworkElements));
@@ -127,17 +127,18 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 				|| !changeContainerBoundsCommandList.isEmpty();
 	}
 
-	private boolean isLockedGroup() {
+	private boolean isUnlockedGroup() {
 		return (graphicalEditPart instanceof final GroupContentEditPart groupContent
-				&& groupContent.getModel().getGroup().isLocked())
-				|| (graphicalEditPart instanceof final GroupEditPart group && group.getModel().isLocked());
+				&& !groupContent.getModel().getGroup().isLocked())
+				|| (graphicalEditPart instanceof final GroupEditPart group && !group.getModel().isLocked());
 	}
 
-	private boolean isExpandedSubapp() {
+	private boolean isExpandedAndUnlockedSubapp() {
 		return (graphicalEditPart instanceof final UnfoldedSubappContentEditPart subAppContent
-				&& subAppContent.getModel().getSubapp().isUnfolded())
+				&& subAppContent.getModel().getSubapp().isUnfolded()
+				&& !subAppContent.getModel().getSubapp().isLocked())
 				|| (graphicalEditPart instanceof final SubAppForFBNetworkEditPart subAppEP
-						&& subAppEP.getModel().isUnfolded());
+						&& subAppEP.getModel().isUnfolded() && !subAppEP.getModel().isLocked());
 	}
 
 	private GraphicalEditPart getTargetContainerEP() {

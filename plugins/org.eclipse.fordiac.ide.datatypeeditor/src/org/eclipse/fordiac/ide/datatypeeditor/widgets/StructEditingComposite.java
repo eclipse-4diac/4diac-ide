@@ -40,7 +40,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -52,16 +52,15 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.edit.event.DataUpdateEvent;
+import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.selection.RowPostSelectionProvider;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.selection.command.ClearAllSelectionsCommand;
-import org.eclipse.nebula.widgets.nattable.selection.event.RowSelectionEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -72,17 +71,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class StructEditingComposite extends Composite
-		implements CommandExecutor, I4diacNatTableUtil, ISelectionProvider {
+public class StructEditingComposite extends Composite implements CommandExecutor, I4diacNatTableUtil {
 
 	private NatTable natTable;
+	private AddDeleteReorderToolbarWidget buttons;
 	private final CommandStack cmdStack;
 	private final GraphicalAnnotationModel annotationModel;
 	private StructuredType structType;
 	private final IChangeableRowDataProvider<VarDeclaration> structMemberProvider;
+	private RowPostSelectionProvider<VarDeclaration> selectionProvider;
 
-	private ConfigurableObject currentConfigurableObject = null;
-	private ConfigurablObjectListener configObjectListener = null;
 	private boolean blockRefresh;
 	private Label titleLabel;
 
@@ -124,13 +122,12 @@ public class StructEditingComposite extends Composite
 		setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		showLabel(this);
 
-		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+		buttons = new AddDeleteReorderToolbarWidget();
 		buttons.createControls(this, widgetFactory);
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(final MouseEvent e) {
 				natTable.doCommand(new ClearAllSelectionsCommand());
-				fireConfigurablObjectChanged(getType());
 			}
 		});
 
@@ -163,32 +160,9 @@ public class StructEditingComposite extends Composite
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
 		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(structMemberProvider));
 		natTable.configure();
-		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
-		selectionLayer.addLayerListener(event -> {
-			if (event instanceof final DataUpdateEvent dataUpdateEvent && dataUpdateEvent.getColumnPosition() == 0
-					&& currentConfigurableObject instanceof final VarDeclaration varDecl) {
-				fireConfigurablObjectChanged(varDecl);
-			} else if (event instanceof final RowSelectionEvent rowSelectionEvent
-					&& rowSelectionEvent.getSelectionLayer().getSelectedRowCount() == 1) {
-				final int row = rowSelectionEvent.getRowPositionToMoveIntoViewport();
-				fireConfigurablObjectChanged(structMemberProvider.getRowObject(row));
-			}
-		});
-	}
 
-	public ConfigurableObject setConfigurablObjectListener(final ConfigurablObjectListener listener) {
-		configObjectListener = listener;
-		if (currentConfigurableObject == null) {
-			currentConfigurableObject = getStruct();
-		}
-		return currentConfigurableObject;
-	}
-
-	private void fireConfigurablObjectChanged(final ConfigurableObject newObject) {
-		currentConfigurableObject = newObject;
-		if (configObjectListener != null) {
-			configObjectListener.handleObjectChanged(newObject);
-		}
+		selectionProvider = new StructEditingCompositeSelectionProvider(natTable,
+				NatTableWidgetFactory.getSelectionLayer(natTable), structMemberProvider);
 	}
 
 	private DataType getDataType() {
@@ -290,31 +264,13 @@ public class StructEditingComposite extends Composite
 		return annotationModel;
 	}
 
-	@Override
-	public ISelection getSelection() {
-		// for now return the whole object so that property sheets and other stuff can
-		// filter on it.
-		return new StructuredSelection(this);
+	public ISelectionProvider getSelectionProvider() {
+		return selectionProvider;
 	}
 
 	@Override
 	public boolean isEditable() {
 		return true;
-	}
-
-	@Override
-	public void addSelectionChangedListener(final ISelectionChangedListener listener) {
-		// currently nothing to be done here
-	}
-
-	@Override
-	public void removeSelectionChangedListener(final ISelectionChangedListener listener) {
-		// currently nothing to be done here
-	}
-
-	@Override
-	public void setSelection(final ISelection selection) {
-		// currently nothing to be done here
 	}
 
 	@Override
@@ -331,9 +287,29 @@ public class StructEditingComposite extends Composite
 	@Override
 	public void dispose() {
 		super.dispose();
+		if (buttons != null) {
+			buttons.dispose();
+		}
 		removeAnnotationModelListener();
 		if (getType() != null) {
 			getType().eAdapters().remove(adapter);
+		}
+	}
+
+	private class StructEditingCompositeSelectionProvider extends RowPostSelectionProvider<VarDeclaration> {
+
+		public StructEditingCompositeSelectionProvider(final NatTable natTable, final SelectionLayer selectionLayer,
+				final IRowDataProvider<VarDeclaration> rowDataProvider) {
+			super(natTable, selectionLayer, rowDataProvider, false);
+		}
+
+		@Override
+		public ISelection getSelection() {
+			final ISelection selection = super.getSelection();
+			if (selection.isEmpty()) {
+				return new StructuredSelection(structType);
+			}
+			return selection;
 		}
 	}
 }

@@ -98,6 +98,39 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private TemplateInfo[] templateList;
+	private FilteredArrayContentProvider templateProvider;
+
+	private class FilteredArrayContentProvider extends ArrayContentProvider {
+		private FileFilter templateFilter;
+
+		public FilteredArrayContentProvider(final FileFilter filter) {
+			templateFilter = filter;
+		}
+
+		public void setFileFilter(final FileFilter filter) {
+			this.templateFilter = filter;
+		}
+
+		public FileFilter getFileFilter() {
+			return templateFilter;
+		}
+
+		@Override
+		public Object[] getElements(final Object inputElement) {
+			final Object[] fullList = super.getElements(inputElement);
+			if (templateFilter == null) {
+				return fullList;
+			}
+			//@formatter:off
+			return Arrays.asList(fullList)
+					.stream()
+					.filter(TemplateInfo.class::isInstance)
+					.map(TemplateInfo.class::cast)
+					.filter(t -> templateFilter.accept(t.templateFile))
+					.toArray();
+			//@formatter:on
+		}
+	}
 
 	private static class TypeTemplatesLabelProvider extends LabelProvider implements ITableLabelProvider {
 
@@ -223,6 +256,19 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		return null;
 	}
 
+	public void setTemplateFileFilter(final FileFilter filter) {
+		templateProvider.setFileFilter(filter);
+		templateTableViewer.refresh();
+	}
+
+	public FileFilter getTemplateFileFilter() {
+		return templateProvider.getFileFilter();
+	}
+
+	public TableViewer getTemplateViewer() {
+		return templateTableViewer;
+	}
+
 	@Override
 	protected String getNewFileLabel() {
 		return FordiacMessages.TypeName + ":"; //$NON-NLS-1$
@@ -279,7 +325,8 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		templateTableViewer = TableWidgetFactory.createPropertyTableViewer(parent, SWT.SINGLE);
 		configureTypeTableLayout(templateTableViewer.getTable());
 
-		templateTableViewer.setContentProvider(new ArrayContentProvider());
+		templateProvider = new FilteredArrayContentProvider(createTemplatesFileFilter());
+		templateTableViewer.setContentProvider(templateProvider);
 		templateTableViewer.setLabelProvider(new TypeTemplatesLabelProvider());
 
 		templateTableViewer.setInput(templateList);

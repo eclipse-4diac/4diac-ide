@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
@@ -61,6 +62,9 @@ public class AttributeConfigLabelAccumulator extends AbstractAnnotatedConfigLabe
 			break;
 		case VALUE:
 			configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
+			if (!InitialValueHelper.hasInitalValue(rowItem)) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
+			}
 			break;
 		case COMMENT:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);

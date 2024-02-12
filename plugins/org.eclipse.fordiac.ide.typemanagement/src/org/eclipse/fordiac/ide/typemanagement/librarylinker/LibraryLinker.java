@@ -211,7 +211,7 @@ public class LibraryLinker {
 	private void updateFBInstancesWithNewTypeVersion() {
 		Display.getDefault().syncExec(() -> FBUpdater.updateAllInstances(selectedProject, cashedTypes, typeLibrary));
 		final InstanceUpdateDialog updateDialog = new InstanceUpdateDialog(null, Messages.InstanceUpdate, null,
-				Messages.UpdatedInstances, MessageDialog.NONE, new String[] { Messages.Confirm }, 0, null,
+				Messages.UpdatedInstances, MessageDialog.NONE, new String[] { Messages.Confirm }, 0,
 				FBUpdater.getUpdatedElements());
 		updateDialog.open();
 	}

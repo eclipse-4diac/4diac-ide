@@ -333,7 +333,7 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		final AnyDerivedType type = attributeDeclaration.getType();
 		if (type instanceof final StructuredType structType) {
 			structComposite = new StructEditingComposite(editorComposite, commandStack, structType, annotationModel);
-			getSite().setSelectionProvider(structComposite);
+			getSite().setSelectionProvider(structComposite.getSelectionProvider());
 			structComposite.setTitel(Messages.StructViewingComposite_Headline);
 			comboBox.select(STRUCT_EDITOR_INDEX);
 		} else if (type instanceof final DirectlyDerivedType directlyDerivedType) {
@@ -359,7 +359,7 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		} else if (directlyDerivedTypeComposite != null && type instanceof final StructuredType structType) {
 			structComposite = new StructEditingComposite(directlyDerivedTypeComposite.getParent(), commandStack,
 					structType, annotationModel);
-			getSite().setSelectionProvider(structComposite);
+			getSite().setSelectionProvider(structComposite.getSelectionProvider());
 			structComposite.setTitel(Messages.StructViewingComposite_Headline);
 
 			if (!directlyDerivedTypeComposite.isDisposed()) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -749,6 +750,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					LITERAL_REQUIRES_TYPE_SPECIFIER);
 		} else if (expectedType instanceof final DataType expectedDataType
 				&& !IecTypes.GenericTypes.isAnyType(expectedDataType)
+				&& !(expectedDataType instanceof DirectlyDerivedType)
 				&& !type.eClass().equals(expectedDataType.eClass()) && expectedDataType.isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
 					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
@@ -776,6 +778,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					Integer.toString(expectedAnyStringType.getMaxLength())), null, TRUNCATED_LITERAL);
 		} else if (expectedType instanceof final DataType expectedDataType
 				&& !IecTypes.GenericTypes.isAnyType(expectedDataType)
+				&& !(expectedDataType instanceof DirectlyDerivedType)
 				&& !type.eClass().equals(expectedDataType.eClass()) && (expectedDataType).isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
 					expectedDataType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
@@ -916,8 +919,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	protected void checkTypeCompatibility(final DataType destination, final DataType source,
 			final EStructuralFeature feature, final int index) {
-		if (!(destination.isAssignableFrom(source)
-				|| (GenericTypes.isAnyType(source) && source.isAssignableFrom(destination)))) {
+		if (!destination.isAssignableFrom(source)) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
 					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
 					destination.getName());

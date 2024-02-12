@@ -15,13 +15,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.properties;
 
-import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
 import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.swt.SWT;
@@ -81,19 +80,10 @@ public class DataTypeInfoSection extends AbstractSection {
 	}
 
 	@Override
-	protected Object getInputType(final Object input) {
-		if (input instanceof final StructEditingComposite structViewingComposite) {
-			if (structViewingComposite.getStruct()
-					.eContainer() instanceof final AttributeDeclaration attributeDeclaration) {
-				return attributeDeclaration;
-			}
-			return structViewingComposite.getStruct();
-		}
-		if (input instanceof final DirectlyDerivedType directlyDerivedType) {
-			if (directlyDerivedType.eContainer() instanceof final AttributeDeclaration attributeDeclaration) {
-				return attributeDeclaration;
-			}
-			return directlyDerivedType;
+	protected LibraryElement getInputType(final Object input) {
+		if (input instanceof final EObject eObject
+				&& EcoreUtil.getRootContainer(eObject) instanceof final LibraryElement libraryElement) {
+			return libraryElement;
 		}
 		return null;
 	}
