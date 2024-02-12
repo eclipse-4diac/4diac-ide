@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)";resolu
  org.eclipse.e4.core.contexts,
  org.eclipse.fordiac.ide.ui.errormessages,
  org.eclipse.ui.views.properties.tabbed,
- org.eclipse.fordiac.ide.library.model
+ org.eclipse.fordiac.ide.library.model,
+ org.eclipse.fordiac.ide.gitlab
 Export-Package: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.annotations,
  org.eclipse.fordiac.ide.model.buildpath,

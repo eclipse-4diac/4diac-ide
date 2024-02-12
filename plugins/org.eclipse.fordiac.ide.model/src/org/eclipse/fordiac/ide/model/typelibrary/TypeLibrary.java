@@ -65,6 +65,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloadManager;
+import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl;
 import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceImpl;
@@ -325,7 +328,7 @@ public final class TypeLibrary {
 
 						if (projectLibs.containsKey(lib.getSymbolicName())) {
 							if (!projectLibs.get(lib.getSymbolicName()).contains(productVersion)) {
-								// TODO what to do if different version linked?
+								gitlabLibraryImport(lib.getSymbolicName(), productVersion);
 							}
 						} else {
 							final List<File> libDir = Arrays.asList(libLinker.listExtractedFiles());
@@ -336,13 +339,26 @@ public final class TypeLibrary {
 									&& localLibs.get(lib.getSymbolicName()).contains(productVersion)) {
 								libLinker.importLibrary(lib.getSymbolicName() + "-" + productVersion); //$NON-NLS-1$
 							} else {
-								// TODO get library from gitlab
+								gitlabLibraryImport(lib.getSymbolicName(), productVersion);
 							}
 						}
 					}
 				} catch (final Exception e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
+			}
+		}
+	}
+
+	static void gitlabLibraryImport(final String libSymbolicName, final String productVersion) throws IOException {
+		if (PreferenceConstants.getURL() != null && PreferenceConstants.getToken() != null) {
+			final GitLabDownloadManager downloadManager = new GitLabDownloadManager(PreferenceConstants.getURL(),
+					PreferenceConstants.getToken());
+			downloadManager.fetchProjectsAndPackages();
+			final LeafNode leafNode = downloadManager.getPackagesAndLeaves().get(libSymbolicName).stream()
+					.filter(l -> l.getVersion().equals(productVersion)).findAny().orElse(null);
+			if (leafNode != null) {
+				downloadManager.packageDownloader(leafNode.getProject(), leafNode.getPackage());
 			}
 		}
 	}

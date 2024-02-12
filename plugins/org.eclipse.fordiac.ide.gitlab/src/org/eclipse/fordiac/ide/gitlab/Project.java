@@ -13,4 +13,13 @@
 package org.eclipse.fordiac.ide.gitlab;
 
 public record Project(Long id, String name) {
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
 }

@@ -53,10 +53,17 @@ public class GitLabDownloadManager {
 	private HashMap<Project, List<Package>> projectAndPackageMap;
 	private HashMap<String, List<LeafNode>> packagesAndLeaves;
 
-	private final GitLabImportWizardPage gitLabImportPage;
+	String url;
+	String token;
 
 	public GitLabDownloadManager(final GitLabImportWizardPage gitLabImportPage) {
-		this.gitLabImportPage = gitLabImportPage;
+		this.url = gitLabImportPage.getUrl();
+		this.token = gitLabImportPage.getToken();
+	}
+
+	public GitLabDownloadManager(final String url, final String token) {
+		this.url = url;
+		this.token = token;
 	}
 
 	public Map<String, List<LeafNode>> getPackagesAndLeaves() {
@@ -98,7 +105,7 @@ public class GitLabDownloadManager {
 		final URL url = new URL(target);
 		final HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
 		httpConn.setRequestMethod(Messages.GET);
-		httpConn.setRequestProperty(Messages.Private_Token, gitLabImportPage.getToken());
+		httpConn.setRequestProperty(Messages.Private_Token, token);
 		return httpConn;
 	}
 
@@ -125,20 +132,20 @@ public class GitLabDownloadManager {
 	}
 
 	private String buildDownloadURL(final Package p, final Object project, final String filename) {
-		return gitLabImportPage.getUrl() + API_VERSION + ((Project) project).id() + PACKAGES + p.packageType() + "/"
-				+ p.name() + "/" + p.version() + "/" + filename;
+		return url + API_VERSION + ((Project) project).id() + PACKAGES + p.packageType() + "/" + p.name() + "/"
+				+ p.version() + "/" + filename;
 	}
 
 	private String buildPackageFileURL(final Package p, final Project project) {
-		return gitLabImportPage.getUrl() + API_VERSION + project.id() + PACKAGES + p.id() + PACKAGE_FILES;
+		return url + API_VERSION + project.id() + PACKAGES + p.id() + PACKAGE_FILES;
 	}
 
 	private String buildConnectionURL() {
-		return gitLabImportPage.getUrl() + API_VERSION;
+		return url + API_VERSION;
 	}
 
 	private String buildPackagesForProjectURL(final Project project) {
-		return gitLabImportPage.getUrl() + API_VERSION + project.id() + PACKAGES;
+		return url + API_VERSION + project.id() + PACKAGES;
 	}
 
 	private void getProjects() throws IOException {
