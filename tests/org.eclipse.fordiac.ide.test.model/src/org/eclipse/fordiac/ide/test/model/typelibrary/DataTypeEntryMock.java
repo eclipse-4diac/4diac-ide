@@ -18,7 +18,9 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
@@ -121,5 +123,15 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 	@Override
 	public Set<TypeEntry> getDependencies() {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public String getComment() {
+		return dataType.getComment();
+	}
+
+	@Override
+	public EClass getTypeEClass() {
+		return DataPackage.Literals.ANY_DERIVED_TYPE;
 	}
 }

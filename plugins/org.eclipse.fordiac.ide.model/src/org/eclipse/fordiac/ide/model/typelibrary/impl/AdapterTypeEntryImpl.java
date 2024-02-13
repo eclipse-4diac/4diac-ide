@@ -15,11 +15,13 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.AdapterExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 
 public class AdapterTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AdapterType> implements AdapterTypeEntry {
@@ -38,4 +40,8 @@ public class AdapterTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AdapterTy
 		return new AdapterExporter(type);
 	}
 
+	@Override
+	public EClass getTypeEClass() {
+		return LibraryElementPackage.Literals.ADAPTER_TYPE;
+	}
 }

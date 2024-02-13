@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
@@ -66,6 +67,10 @@ public interface TypeEntry extends Notifier {
 	String getTypeName();
 
 	String getFullTypeName();
+
+	String getComment();
+
+	EClass getTypeEClass();
 
 	default String getPackageName() {
 		return PackageNameHelper.extractPackageName(getFullTypeName());

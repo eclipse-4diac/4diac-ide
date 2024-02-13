@@ -79,11 +79,13 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	private static final Pattern TYPE_NAME_PATTERN = Pattern.compile("Name=\\\"(\\w*)\\\""); //$NON-NLS-1$
+	private static final Pattern TYPE_COMMENT_PATTERN = Pattern.compile("Comment=\\\"([^\"]*)\\\""); //$NON-NLS-1$
 	private static final Pattern TYPE_PACKAGE_NAME_PATTERN = Pattern.compile("packageName=\\\"([\\w:]*)\\\""); //$NON-NLS-1$
 
 	private IFile file;
 	private String typeName;
 	private String fullTypeName;
+	private final AtomicReference<String> comment = new AtomicReference<>();
 
 	private long lastModificationTimestamp = IResource.NULL_STAMP;
 
@@ -146,6 +148,17 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	@Override
+	public String getComment() {
+		String result = comment.get();
+		if (result == null) {
+			result = loadTypeCommentFromFile();
+			comment.compareAndSet(null, result); // only set if still null
+			// we do not care about a (slightly) stale result here
+		}
+		return result;
+	}
+
+	@Override
 	public final synchronized long getLastModificationTimestamp() {
 		return lastModificationTimestamp;
 	}
@@ -196,6 +209,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			newType.setTypeEntry(this);
 			setTypeName(newType.getName());
 			setFullTypeName(PackageNameHelper.getFullTypeName(newType));
+			comment.set(newType.getComment());
 			typeRef = new SoftReference<>(newType);
 		} else {
 			typeRef = null;
@@ -441,5 +455,18 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			setTypeName(""); //$NON-NLS-1$
 		}
 		setFullTypeName(typeName);
+	}
+
+	private String loadTypeCommentFromFile() {
+		if (getFile() != null && getFile().exists()) {
+			try (Scanner scanner = new Scanner(getFile().getContents())) {
+				if (scanner.findWithinHorizon(TYPE_COMMENT_PATTERN, 0) != null) {
+					return scanner.match().group(1);
+				}
+			} catch (final Exception e) {
+				FordiacLogHelper.logWarning(e.getMessage(), e);
+			}
+		}
+		return ""; //$NON-NLS-1$
 	}
 }

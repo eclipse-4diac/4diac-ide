@@ -12,11 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.FCTExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FCTImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.FunctionFBTypeEntry;
 
 public class FunctionFBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<FunctionFBType>
@@ -36,4 +38,8 @@ public class FunctionFBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Functi
 		return new FCTExporter(type);
 	}
 
+	@Override
+	public EClass getTypeEClass() {
+		return LibraryElementPackage.Literals.FUNCTION_FB_TYPE;
+	}
 }

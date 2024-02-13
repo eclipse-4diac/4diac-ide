@@ -18,6 +18,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -121,5 +122,15 @@ public final class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEn
 	@Override
 	public Set<TypeEntry> getDependencies() {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public String getComment() {
+		return fbType.getComment();
+	}
+
+	@Override
+	public EClass getTypeEClass() {
+		return fbType.eClass();
 	}
 }

@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2011, 2024 TU Wien ACIN, fortiss GmbH
+ *                          Johannes Kepler University Linz
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,24 +14,21 @@
  *   			 - cleaned up issues reported by sonarlint
  *   			 - made the getImageForFile public so it can be used by the
  *                 palette, some code cleanup
+ *   Martin Erich Jobst
+ *               - avoid loading type by using cached meta-information from type entry
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -51,6 +49,14 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
 
+	private static final Map<EClass, FordiacImage> TYPE_IMAGES = Map.of(LibraryElementPackage.Literals.ADAPTER_TYPE,
+			FordiacImage.ICON_ADAPTER_TYPE, LibraryElementPackage.Literals.SUB_APP_TYPE, FordiacImage.ICON_SUB_APP_TYPE,
+			LibraryElementPackage.Literals.BASIC_FB_TYPE, FordiacImage.ICON_BASIC_FB,
+			LibraryElementPackage.Literals.COMPOSITE_FB_TYPE, FordiacImage.ICON_COMPOSITE_FB,
+			LibraryElementPackage.Literals.SIMPLE_FB_TYPE, FordiacImage.ICON_SIMPLE_FB,
+			LibraryElementPackage.Literals.SERVICE_INTERFACE_FB_TYPE, FordiacImage.ICON_SIFB,
+			LibraryElementPackage.Literals.FUNCTION_FB_TYPE, FordiacImage.ICON_FUNCTION);
+
 	public FBTypeLabelProvider() {
 		super(FBTypeComposedAdapterFactory.getAdapterFactory());
 	}
@@ -58,73 +64,27 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	@Override
 	public Image getImage(final Object element) {
 		if (element instanceof final IFile file && file.exists()) {
-			ImageDescriptor imageDescriptor = getImageForFile((IFile) element);
+			ImageDescriptor imageDescriptor = getImageForFile(file);
 			if (imageDescriptor != null) {
-				imageDescriptor = decorateImage((IFile) element, imageDescriptor);
-				return (Image) resourceManager.get(imageDescriptor);
+				imageDescriptor = decorateImage(file, imageDescriptor);
+				return resourceManager.get(imageDescriptor);
 			}
 			return null;
 		}
 		return super.getImage(element);
 	}
 
-	public static ImageDescriptor getImageForFile(final IFile element) {
-		if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			return FordiacImage.ICON_ADAPTER_TYPE.getImageDescriptor();
-		}
-		if (TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			return FordiacImage.ICON_SUB_APP_TYPE.getImageDescriptor();
-		}
-		if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			return getImageForFBTypeFile(element);
-		}
-		if (TypeLibraryTags.FC_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			return FordiacImage.ICON_FUNCTION.getImageDescriptor();
-		}
-		return null;
-	}
-
-	private static ImageDescriptor getImageForFBTypeFile(final IFile element) {
-		final FBType type = getFBTypeFromFile(element);
-
-		if (type instanceof BasicFBType) {
-			return FordiacImage.ICON_BASIC_FB.getImageDescriptor();
-		}
-		if (type instanceof CompositeFBType) {
-			return FordiacImage.ICON_COMPOSITE_FB.getImageDescriptor();
-		}
-		if (type instanceof SimpleFBType) {
-			return FordiacImage.ICON_SIMPLE_FB.getImageDescriptor();
-		}
-		if (type instanceof ServiceInterfaceFBType) {
-			return FordiacImage.ICON_SIFB.getImageDescriptor();
-		}
-
-		// partly load file to determine type
-		return checkUnloadedFBType(element);
-	}
-
-	private static ImageDescriptor checkUnloadedFBType(final IFile element) {
-		try (Scanner scanner = new Scanner(element.getContents())) {
-			if (null != scanner.findWithinHorizon("BasicFB", 0)) { //$NON-NLS-1$
-				return FordiacImage.ICON_BASIC_FB.getImageDescriptor();
+	public static ImageDescriptor getImageForFile(final IFile file) {
+		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		if (typeEntry != null) {
+			final EClass typeEClass = typeEntry.getTypeEClass();
+			if (typeEClass != null) {
+				final FordiacImage fordiacImage = TYPE_IMAGES.get(typeEClass);
+				if (fordiacImage != null) {
+					return fordiacImage.getImageDescriptor();
+				}
 			}
-
-			scanner.reset();
-			if (null != scanner.findWithinHorizon("FBNetwork", 0)) { //$NON-NLS-1$
-				return FordiacImage.ICON_COMPOSITE_FB.getImageDescriptor();
-			}
-
-			scanner.reset();
-			if (null != scanner.findWithinHorizon("SimpleFB", 0)) { //$NON-NLS-1$
-				return FordiacImage.ICON_SIMPLE_FB.getImageDescriptor();
-			}
-
-			return FordiacImage.ICON_SIFB.getImageDescriptor();
-		} catch (final Exception e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
 		}
-
 		return null;
 	}
 
@@ -148,9 +108,8 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		try {
 			final IMarker[] problems = element.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 			if (problems.length > 0) {
-				final int problemSeverity = Arrays.stream(problems).map(p -> p.getAttribute(IMarker.SEVERITY, -1))
-						.max(Integer::compare).orElse(-1);
-
+				final int problemSeverity = Arrays.stream(problems).mapToInt(p -> p.getAttribute(IMarker.SEVERITY, -1))
+						.max().orElse(-1);
 				switch (problemSeverity) {
 				case IMarker.SEVERITY_ERROR:
 					overlay = PlatformUI.getWorkbench().getSharedImages()
@@ -179,14 +138,13 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static String getTextForFBFile(final IFile element) {
-		String text = null;
 		if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
 				|| TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
 				|| TypeLibraryTags.FC_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
 				|| TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			text = TypeEntry.getTypeNameFromFile(element);
+			return TypeEntry.getTypeNameFromFile(element);
 		}
-		return text;
+		return null;
 	}
 
 	@Override
@@ -197,43 +155,20 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		return null;
 	}
 
-	private static String getDescriptionForFBFile(final IFile fbtFile) {
-		FBType type = null;
-		if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(fbtFile.getFileExtension())
-				|| TypeLibraryTags.FC_TYPE_FILE_ENDING.equalsIgnoreCase(fbtFile.getFileExtension())) {
-			type = getFBTypeFromFile(fbtFile);
-		} else if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(fbtFile.getFileExtension())) {
-			type = getAdapterTypeForFile(fbtFile);
-		}
-
-		if (null != type) {
-			return generateTypeDescriptionString(type);
+	private static String getDescriptionForFBFile(final IFile element) {
+		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(element);
+		if (typeEntry != null) {
+			return generateTypeDescriptionString(typeEntry);
 		}
 		return null;
 	}
 
-	private static String generateTypeDescriptionString(final FBType type) {
-		String description = type.getName() + ": "; //$NON-NLS-1$
-		if (null != type.getComment()) {
-			description += type.getComment();
+	private static String generateTypeDescriptionString(final TypeEntry typeEntry) {
+		final String typeName = typeEntry.getTypeName();
+		final String comment = typeEntry.getComment();
+		if (comment != null) {
+			return typeName + ": " + comment; //$NON-NLS-1$
 		}
-		return description;
+		return typeName;
 	}
-
-	private static FBType getAdapterTypeForFile(final IFile file) {
-		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		if (entry instanceof final AdapterTypeEntry adpEntry) {
-			return adpEntry.getType().getAdapterFBType();
-		}
-		return null;
-	}
-
-	private static FBType getFBTypeFromFile(final IFile file) {
-		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		if (entry instanceof final FBTypeEntry fbEntry) {
-			return fbEntry.getType();
-		}
-		return null;
-	}
-
 }
