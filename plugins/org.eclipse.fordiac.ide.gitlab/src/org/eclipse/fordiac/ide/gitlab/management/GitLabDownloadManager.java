@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gitlab.management;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,7 +35,6 @@ import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
-import org.eclipse.fordiac.ide.gitlab.wizard.GitLabImportWizardPage;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class GitLabDownloadManager {
@@ -53,13 +53,8 @@ public class GitLabDownloadManager {
 	private HashMap<Project, List<Package>> projectAndPackageMap;
 	private HashMap<String, List<LeafNode>> packagesAndLeaves;
 
-	String url;
-	String token;
-
-	public GitLabDownloadManager(final GitLabImportWizardPage gitLabImportPage) {
-		this.url = gitLabImportPage.getUrl();
-		this.token = gitLabImportPage.getToken();
-	}
+	private final String url;
+	private final String token;
 
 	public GitLabDownloadManager(final String url, final String token) {
 		this.url = url;
@@ -109,7 +104,7 @@ public class GitLabDownloadManager {
 		return httpConn;
 	}
 
-	public void packageDownloader(final Project project, final Package p) throws IOException {
+	public File packageDownloader(final Project project, final Package p) throws IOException {
 		for (final String filename : findFilenamesInPackage(p, project)) {
 			final HttpURLConnection httpConn = createConnection(buildDownloadURL(p, project, filename));
 			try (InputStream responseStream = httpConn.getInputStream()) { // closed automatically
@@ -117,9 +112,11 @@ public class GitLabDownloadManager {
 				createPackageDir(p);
 				Files.copy(responseStream, Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename), //$NON-NLS-1$
 						StandardCopyOption.REPLACE_EXISTING);
+				httpConn.disconnect();
+				return new File(Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename).toString());
 			}
-			httpConn.disconnect();
 		}
+		return null;
 	}
 
 	private List<String> findFilenamesInPackage(final Package pack, final Project project) throws IOException {
@@ -200,7 +197,8 @@ public class GitLabDownloadManager {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
 			response = reader.readLine();
 		}
-		final String regex = "\"file_name\":\"(\\w+\\.[a-zA-Z0-9]*)"; //$NON-NLS-1$
+
+		final String regex = "\"file_name\":\"([^\"]*)\""; //$NON-NLS-1$
 		final Pattern p = Pattern.compile(regex);
 		final Matcher m = p.matcher(response);
 		while (m.find()) {

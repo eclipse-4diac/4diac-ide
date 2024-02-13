@@ -99,7 +99,9 @@ public class LibraryLinker implements ILibraryLinker {
 				entry = zipInputStream.getNextEntry();
 			}
 		}
-		setSelectedProject(selection);
+		if (selection != null) {
+			setSelectedProject(selection);
+		}
 
 		// Parent's name because we want package-version name when importing
 		importLibrary(file.getParentFile().getName());

@@ -28,6 +28,7 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.module.ModuleDescriptor.Version;
 import java.text.Collator;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -67,9 +68,9 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloadManager;
 import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
-import org.eclipse.fordiac.ide.library.model.library.Library;
-import org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl;
+import org.eclipse.fordiac.ide.library.model.library.Dependencies;
+import org.eclipse.fordiac.ide.library.model.library.Manifest;
+import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceImpl;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -268,12 +269,9 @@ public final class TypeLibrary {
 	}
 
 	public void checkManifestFile(final IProject project) {
-
 		final ResourceSet libraryResouceSet = new ResourceSetImpl();
 		final Map<String, Object> loadOptions = new HashMap<>();
-
 		try {
-
 			final List<IResource> resources = Arrays.asList(project.members());
 			final Optional<IResource> manifestFile = resources.stream()
 					.filter(res -> res.getName().equals("MANIFEST.MF")).findFirst(); //$NON-NLS-1$
@@ -282,7 +280,7 @@ public final class TypeLibrary {
 						URI.createURI(manifestFile.get().getLocationURI().toString()));
 				libraryResouceSet.getResources().add(resource);
 				resource.load(loadOptions);
-				final ManifestImpl manifest = (ManifestImpl) resource.getContents().get(0);
+				final Manifest manifest = (Manifest) resource.getContents().get(0);
 
 				final Optional<IResource> projectFile = resources.stream()
 						.filter(res -> ".project".equals(res.getName())).findFirst(); //$NON-NLS-1$
@@ -296,15 +294,14 @@ public final class TypeLibrary {
 							projectDescription.getLinks().keySet().stream().map(IPath::lastSegment).toList());
 				}
 
-				final String productVersion = manifest.getProduct().getVersionInfo().getVersion();
-
 				if (manifest.getScope() != null && "Project".equals(manifest.getScope())) { //$NON-NLS-1$
-					for (final Library lib : manifest.getLibraries().getLibrary()) {
-						checkLibrary(lib, projectLibs, project, productVersion);
+					for (final Dependencies dependency : manifest.getProduct().getDependencies()) {
+						for (final Required req : dependency.getRequired()) {
+							loadLibLinker(req, projectLibs, project);
+						}
 					}
 				}
 			}
-
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError(Messages.TypeLibrary_ProjectLoadingProblem, e);
 		} catch (final IOException e) {
@@ -312,8 +309,7 @@ public final class TypeLibrary {
 		}
 	}
 
-	void checkLibrary(final Library lib, final Map<String, List<String>> projectLibs, final IProject project,
-			final String productVersion) {
+	void loadLibLinker(final Required lib, final Map<String, List<String>> projectLibs, final IProject project) {
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
 		final IExtensionPoint point = registry
 				.getExtensionPoint("org.eclipse.fordiac.ide.model.libraryLinkerExtension"); //$NON-NLS-1$
@@ -324,24 +320,7 @@ public final class TypeLibrary {
 				try {
 					final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (obj instanceof final ILibraryLinker libLinker) {
-						libLinker.setSelectedProjectWithTypeLib(project, this);
-
-						if (projectLibs.containsKey(lib.getSymbolicName())) {
-							if (!projectLibs.get(lib.getSymbolicName()).contains(productVersion)) {
-								gitlabLibraryImport(lib.getSymbolicName(), productVersion);
-							}
-						} else {
-							final List<File> libDir = Arrays.asList(libLinker.listExtractedFiles());
-							final Map<String, List<String>> localLibs = parseLibraryNameAndVersion(
-									libDir.stream().map(File::getName).toList());
-
-							if (localLibs.containsKey(lib.getSymbolicName())
-									&& localLibs.get(lib.getSymbolicName()).contains(productVersion)) {
-								libLinker.importLibrary(lib.getSymbolicName() + "-" + productVersion); //$NON-NLS-1$
-							} else {
-								gitlabLibraryImport(lib.getSymbolicName(), productVersion);
-							}
-						}
+						checkLibrary(libLinker, lib, projectLibs, project);
 					}
 				} catch (final Exception e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
@@ -350,15 +329,52 @@ public final class TypeLibrary {
 		}
 	}
 
-	static void gitlabLibraryImport(final String libSymbolicName, final String productVersion) throws IOException {
+	void checkLibrary(final ILibraryLinker libLinker, final Required lib, final Map<String, List<String>> projectLibs,
+			final IProject project) {
+		libLinker.setSelectedProjectWithTypeLib(project, this);
+		if (projectLibs.containsKey(lib.getSymbolicName())) {
+			// check if already linked
+			if (projectLibs.get(lib.getSymbolicName()).stream().filter(p -> compareVersion(lib.getVersion(), p))
+					.count() == 0) {
+				gitlabLibraryImport(lib.getSymbolicName(), lib.getVersion(), libLinker);
+			}
+		} else {
+			// check local lib
+			final List<File> libDir = Arrays.asList(libLinker.listExtractedFiles());
+			final Map<String, List<String>> localLibs = parseLibraryNameAndVersion(
+					libDir.stream().map(File::getName).toList());
+
+			if (localLibs.containsKey(lib.getSymbolicName())) {
+				localLibs.get(lib.getSymbolicName()).forEach(v -> {
+					if (compareVersion(lib.getVersion(), v)) {
+						libLinker.importLibrary(lib.getSymbolicName() + "-" + v); //$NON-NLS-1$
+						return;
+					}
+				});
+			}
+			gitlabLibraryImport(lib.getSymbolicName(), lib.getVersion(), libLinker);
+		}
+	}
+
+	static void gitlabLibraryImport(final String libSymbolicName, final String libVersion,
+			final ILibraryLinker libLinker) {
 		if (PreferenceConstants.getURL() != null && PreferenceConstants.getToken() != null) {
 			final GitLabDownloadManager downloadManager = new GitLabDownloadManager(PreferenceConstants.getURL(),
 					PreferenceConstants.getToken());
 			downloadManager.fetchProjectsAndPackages();
-			final LeafNode leafNode = downloadManager.getPackagesAndLeaves().get(libSymbolicName).stream()
-					.filter(l -> l.getVersion().equals(productVersion)).findAny().orElse(null);
-			if (leafNode != null) {
-				downloadManager.packageDownloader(leafNode.getProject(), leafNode.getPackage());
+			if (downloadManager.getPackagesAndLeaves().containsKey(libSymbolicName)) {
+				downloadManager.getPackagesAndLeaves().get(libSymbolicName).forEach(l -> {
+					if (compareVersion(libVersion, l.getVersion())) {
+						try {
+							final File file = downloadManager.packageDownloader(l.getProject(), l.getPackage());
+							if (file != null) {
+								libLinker.extractLibrary(file, null);
+							}
+						} catch (final IOException e) {
+							FordiacLogHelper.logError(e.getMessage(), e);
+						}
+					}
+				});
 			}
 		}
 	}
@@ -385,6 +401,27 @@ public final class TypeLibrary {
 		}
 
 		return nameVersionMap;
+	}
+
+	@SuppressWarnings("nls")
+	static boolean compareVersion(final String version, final String localVersion) {
+		final Version locVersion = Version.parse(localVersion);
+		if ((version.startsWith("(") || version.startsWith("[")) && (version.endsWith(")") || version.endsWith("]"))
+				&& version.contains("-")) { // $NON-NLS
+			final Version lowerBound = Version.parse(version.substring(1, version.indexOf("-")));
+			final Version upperBound = Version.parse(version.substring(version.indexOf("-") + 1, version.length() - 1));
+			return (((version.startsWith("(") && lowerBound.compareTo(locVersion) < 0)
+					|| (version.startsWith("[") && lowerBound.compareTo(locVersion) <= 0))
+					&& ((version.endsWith(")") && upperBound.compareTo(locVersion) > 0)
+							|| (version.endsWith("]") && upperBound.compareTo(locVersion) >= 0)));
+
+		}
+		if (!(version.contains("(") || version.contains("[") || version.contains("]") || version.contains(")")
+				|| version.contains("-"))) {
+			final Version singleVersion = Version.parse(version);
+			return (singleVersion.compareTo(locVersion) == 0);
+		}
+		return false;
 	}
 
 	public TypeEntry createErrorTypeEntry(final String typeName, final EClass typeClass) {
