@@ -128,6 +128,10 @@ public final class TypeLibrary {
 		return Collections.unmodifiableSet(packages.keySet());
 	}
 
+	public Collection<TypeEntry> getAllTypes() {
+		return Collections.unmodifiableCollection(fileMap.values());
+	}
+
 	public List<CompositeFBType> getCompositeFBTypes() {
 		return getFbTypes().values().stream().filter(e -> e.getTypeEditable() instanceof CompositeFBType)
 				.map(e -> (CompositeFBType) e.getTypeEditable()).toList();

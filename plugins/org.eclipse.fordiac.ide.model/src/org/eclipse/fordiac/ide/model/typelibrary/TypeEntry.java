@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
@@ -83,5 +84,13 @@ public interface TypeEntry extends Notifier {
 			name = fileName.substring(0, index);
 		}
 		return name;
+	}
+
+	default URI getURI() {
+		final IFile file = getFile();
+		if (file != null) {
+			return URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+		}
+		return null;
 	}
 }
