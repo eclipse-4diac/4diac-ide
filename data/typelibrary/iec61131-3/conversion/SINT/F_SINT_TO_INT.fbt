@@ -25,7 +25,7 @@
 	<SimpleFB>
 		<Algorithm Name="REQ" Comment="">
 			<ST><![CDATA[ALGORITHM REQ
-OUT := SINT_TO_INT(IN);
+OUT := IN;
 END_ALGORITHM
 
 ]]></ST>
