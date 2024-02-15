@@ -16,7 +16,6 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Product#getVersionInfo <em>Version Info</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Product#getDependencies <em>Dependencies</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Product#getAttribute <em>Attribute</em>}</li>
  * </ul>
  *
@@ -47,19 +46,6 @@ public interface Product extends EObject {
 	 * @generated
 	 */
 	void setVersionInfo(VersionInfo value);
-
-	/**
-	 * Returns the value of the '<em><b>Dependencies</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.library.model.library.Dependencies}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Dependencies</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getProduct_Dependencies()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='Dependencies' namespace='##targetNamespace'"
-	 * @generated
-	 */
-	EList<Dependencies> getDependencies();
 
 	/**
 	 * Returns the value of the '<em><b>Attribute</b></em>' attribute list.

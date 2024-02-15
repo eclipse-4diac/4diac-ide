@@ -12,9 +12,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EDataTypeEList;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.library.model.library.Dependencies;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.Product;
 import org.eclipse.fordiac.ide.library.model.library.VersionInfo;
@@ -28,7 +25,6 @@ import org.eclipse.fordiac.ide.library.model.library.VersionInfo;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.ProductImpl#getVersionInfo <em>Version Info</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.ProductImpl#getDependencies <em>Dependencies</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.ProductImpl#getAttribute <em>Attribute</em>}</li>
  * </ul>
  *
@@ -44,16 +40,6 @@ public class ProductImpl extends MinimalEObjectImpl.Container implements Product
 	 * @ordered
 	 */
 	protected VersionInfo versionInfo;
-
-	/**
-	 * The cached value of the '{@link #getDependencies() <em>Dependencies</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDependencies()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Dependencies> dependencies;
 
 	/**
 	 * The cached value of the '{@link #getAttribute() <em>Attribute</em>}' attribute list.
@@ -144,19 +130,6 @@ public class ProductImpl extends MinimalEObjectImpl.Container implements Product
 	 * @generated
 	 */
 	@Override
-	public EList<Dependencies> getDependencies() {
-		if (dependencies == null) {
-			dependencies = new EObjectContainmentEList<>(Dependencies.class, this, LibraryPackage.PRODUCT__DEPENDENCIES);
-		}
-		return dependencies;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<String> getAttribute() {
 		if (attribute == null) {
 			attribute = new EDataTypeEList<>(String.class, this, LibraryPackage.PRODUCT__ATTRIBUTE);
@@ -174,8 +147,6 @@ public class ProductImpl extends MinimalEObjectImpl.Container implements Product
 		switch (featureID) {
 		case LibraryPackage.PRODUCT__VERSION_INFO:
 			return basicSetVersionInfo(null, msgs);
-		case LibraryPackage.PRODUCT__DEPENDENCIES:
-			return ((InternalEList<?>)getDependencies()).basicRemove(otherEnd, msgs);
 		default:
 			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -191,8 +162,6 @@ public class ProductImpl extends MinimalEObjectImpl.Container implements Product
 		switch (featureID) {
 		case LibraryPackage.PRODUCT__VERSION_INFO:
 			return getVersionInfo();
-		case LibraryPackage.PRODUCT__DEPENDENCIES:
-			return getDependencies();
 		case LibraryPackage.PRODUCT__ATTRIBUTE:
 			return getAttribute();
 		default:
@@ -211,10 +180,6 @@ public class ProductImpl extends MinimalEObjectImpl.Container implements Product
 		switch (featureID) {
 		case LibraryPackage.PRODUCT__VERSION_INFO:
 			setVersionInfo((VersionInfo)newValue);
-			return;
-		case LibraryPackage.PRODUCT__DEPENDENCIES:
-			getDependencies().clear();
-			getDependencies().addAll((Collection<? extends Dependencies>)newValue);
 			return;
 		case LibraryPackage.PRODUCT__ATTRIBUTE:
 			getAttribute().clear();
@@ -237,9 +202,6 @@ public class ProductImpl extends MinimalEObjectImpl.Container implements Product
 		case LibraryPackage.PRODUCT__VERSION_INFO:
 			setVersionInfo((VersionInfo)null);
 			return;
-		case LibraryPackage.PRODUCT__DEPENDENCIES:
-			getDependencies().clear();
-			return;
 		case LibraryPackage.PRODUCT__ATTRIBUTE:
 			getAttribute().clear();
 			return;
@@ -259,8 +221,6 @@ public class ProductImpl extends MinimalEObjectImpl.Container implements Product
 		switch (featureID) {
 		case LibraryPackage.PRODUCT__VERSION_INFO:
 			return versionInfo != null;
-		case LibraryPackage.PRODUCT__DEPENDENCIES:
-			return dependencies != null && !dependencies.isEmpty();
 		case LibraryPackage.PRODUCT__ATTRIBUTE:
 			return attribute != null && !attribute.isEmpty();
 		default:
@@ -280,7 +240,7 @@ public class ProductImpl extends MinimalEObjectImpl.Container implements Product
 		}
 
 		final StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (attribute: "); //$NON-NLS-1$
+		result.append(" (attribute: ");
 		result.append(attribute);
 		result.append(')');
 		return result.toString();

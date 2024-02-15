@@ -2,15 +2,15 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" >
   <xsd:complexType name="Manifest">
     <xsd:sequence>
+      <xsd:element name="Dependencies" type="Dependencies"/>
       <xsd:element name="Product" type="Product"/>
-      <xsd:element name="Libraries" type="Libraries"/>
+      <xsd:element name="Exports" type="Exports"/>
     </xsd:sequence>
     <xsd:attribute name="Scope" type="xsd:string" use="required"/>
   </xsd:complexType>
   <xsd:complexType name="Product">
     <xsd:sequence>
       <xsd:element name="VersionInfo" type="VersionInfo"/>
-      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Dependencies" type="Dependencies"/>
       <xsd:element maxOccurs="unbounded" minOccurs="0" name="Attribute" nillable="true" type="xsd:string"/>
     </xsd:sequence>
   </xsd:complexType>
@@ -28,7 +28,7 @@
     <xsd:attribute name="SymbolicName" type="xsd:string" use="required"/>
     <xsd:attribute name="Version" type="xsd:string" use="required"/>
   </xsd:complexType>
-  <xsd:complexType name="Libraries">
+  <xsd:complexType name="Exports">
     <xsd:sequence>
       <xsd:element maxOccurs="unbounded" minOccurs="0" name="Library" type="Library"/>
     </xsd:sequence>

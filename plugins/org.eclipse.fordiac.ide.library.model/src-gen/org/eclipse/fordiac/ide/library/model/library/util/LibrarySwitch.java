@@ -77,15 +77,15 @@ public class LibrarySwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryPackage.INCLUDES: {
-				Includes includes = (Includes)theEObject;
-				T result = caseIncludes(includes);
+			case LibraryPackage.EXPORTS: {
+				Exports exports = (Exports)theEObject;
+				T result = caseExports(exports);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryPackage.LIBRARIES: {
-				Libraries libraries = (Libraries)theEObject;
-				T result = caseLibraries(libraries);
+			case LibraryPackage.INCLUDES: {
+				Includes includes = (Includes)theEObject;
+				T result = caseIncludes(includes);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -160,6 +160,21 @@ public class LibrarySwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Exports</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Exports</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseExports(Exports object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Includes</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -171,21 +186,6 @@ public class LibrarySwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseIncludes(Includes object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Libraries</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Libraries</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseLibraries(Libraries object) {
 		return null;
 	}
 

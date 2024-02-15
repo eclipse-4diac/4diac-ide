@@ -40,6 +40,15 @@ public interface LibraryFactory extends EFactory {
 	Excludes createExcludes();
 
 	/**
+	 * Returns a new object of class '<em>Exports</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Exports</em>'.
+	 * @generated
+	 */
+	Exports createExports();
+
+	/**
 	 * Returns a new object of class '<em>Includes</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -47,15 +56,6 @@ public interface LibraryFactory extends EFactory {
 	 * @generated
 	 */
 	Includes createIncludes();
-
-	/**
-	 * Returns a new object of class '<em>Libraries</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Libraries</em>'.
-	 * @generated
-	 */
-	Libraries createLibraries();
 
 	/**
 	 * Returns a new object of class '<em>Library</em>'.

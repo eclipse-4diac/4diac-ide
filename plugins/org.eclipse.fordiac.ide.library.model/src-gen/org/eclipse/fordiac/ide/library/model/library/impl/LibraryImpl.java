@@ -535,18 +535,17 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 		}
 
 		final StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (attribute: "); //$NON-NLS-1$
+		result.append(" (attribute: ");
 		if (attributeESet) {
 			result.append(attribute);
+		} else {
+			result.append("<unset>");
 		}
-		else {
-			result.append("<unset>"); //$NON-NLS-1$
-		}
-		result.append(", comment: "); //$NON-NLS-1$
+		result.append(", comment: ");
 		result.append(comment);
-		result.append(", name: "); //$NON-NLS-1$
+		result.append(", name: ");
 		result.append(name);
-		result.append(", symbolicName: "); //$NON-NLS-1$
+		result.append(", symbolicName: ");
 		result.append(symbolicName);
 		result.append(')');
 		return result.toString();

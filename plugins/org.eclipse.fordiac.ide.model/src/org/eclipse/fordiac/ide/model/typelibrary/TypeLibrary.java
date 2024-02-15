@@ -68,7 +68,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloadManager;
 import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.library.model.library.Dependencies;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceImpl;
@@ -295,10 +294,8 @@ public final class TypeLibrary {
 				}
 
 				if (manifest.getScope() != null && "Project".equals(manifest.getScope())) { //$NON-NLS-1$
-					for (final Dependencies dependency : manifest.getProduct().getDependencies()) {
-						for (final Required req : dependency.getRequired()) {
-							loadLibLinker(req, projectLibs, project);
-						}
+					for (final Required req : manifest.getDependencies().getRequired()) {
+						loadLibLinker(req, projectLibs, project);
 					}
 				}
 			}

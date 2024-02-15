@@ -11,24 +11,24 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.library.model.library.Libraries;
+import org.eclipse.fordiac.ide.library.model.library.Exports;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Libraries</b></em>'.
+ * An implementation of the model object '<em><b>Exports</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.LibrariesImpl#getLibrary <em>Library</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.ExportsImpl#getLibrary <em>Library</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class LibrariesImpl extends MinimalEObjectImpl.Container implements Libraries {
+public class ExportsImpl extends MinimalEObjectImpl.Container implements Exports {
 	/**
 	 * The cached value of the '{@link #getLibrary() <em>Library</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -44,7 +44,7 @@ public class LibrariesImpl extends MinimalEObjectImpl.Container implements Libra
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected LibrariesImpl() {
+	protected ExportsImpl() {
 		super();
 	}
 
@@ -55,7 +55,7 @@ public class LibrariesImpl extends MinimalEObjectImpl.Container implements Libra
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return LibraryPackage.Literals.LIBRARIES;
+		return LibraryPackage.Literals.EXPORTS;
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class LibrariesImpl extends MinimalEObjectImpl.Container implements Libra
 	@Override
 	public EList<Library> getLibrary() {
 		if (library == null) {
-			library = new EObjectContainmentEList<>(Library.class, this, LibraryPackage.LIBRARIES__LIBRARY);
+			library = new EObjectContainmentEList<>(Library.class, this, LibraryPackage.EXPORTS__LIBRARY);
 		}
 		return library;
 	}
@@ -79,7 +79,7 @@ public class LibrariesImpl extends MinimalEObjectImpl.Container implements Libra
 	@Override
 	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryPackage.LIBRARIES__LIBRARY:
+		case LibraryPackage.EXPORTS__LIBRARY:
 			return ((InternalEList<?>)getLibrary()).basicRemove(otherEnd, msgs);
 		default:
 			return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -94,7 +94,7 @@ public class LibrariesImpl extends MinimalEObjectImpl.Container implements Libra
 	@Override
 	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-		case LibraryPackage.LIBRARIES__LIBRARY:
+		case LibraryPackage.EXPORTS__LIBRARY:
 			return getLibrary();
 		default:
 			return super.eGet(featureID, resolve, coreType);
@@ -110,7 +110,7 @@ public class LibrariesImpl extends MinimalEObjectImpl.Container implements Libra
 	@Override
 	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-		case LibraryPackage.LIBRARIES__LIBRARY:
+		case LibraryPackage.EXPORTS__LIBRARY:
 			getLibrary().clear();
 			getLibrary().addAll((Collection<? extends Library>)newValue);
 			return;
@@ -128,7 +128,7 @@ public class LibrariesImpl extends MinimalEObjectImpl.Container implements Libra
 	@Override
 	public void eUnset(final int featureID) {
 		switch (featureID) {
-		case LibraryPackage.LIBRARIES__LIBRARY:
+		case LibraryPackage.EXPORTS__LIBRARY:
 			getLibrary().clear();
 			return;
 		default:
@@ -145,11 +145,11 @@ public class LibrariesImpl extends MinimalEObjectImpl.Container implements Libra
 	@Override
 	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-		case LibraryPackage.LIBRARIES__LIBRARY:
+		case LibraryPackage.EXPORTS__LIBRARY:
 			return library != null && !library.isEmpty();
 		default:
 			return super.eIsSet(featureID);
 		}
 	}
 
-} //LibrariesImpl
+} //ExportsImpl

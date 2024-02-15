@@ -217,9 +217,9 @@ public class RequiredImpl extends MinimalEObjectImpl.Container implements Requir
 		}
 
 		final StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (symbolicName: "); //$NON-NLS-1$
+		result.append(" (symbolicName: ");
 		result.append(symbolicName);
-		result.append(", version: "); //$NON-NLS-1$
+		result.append(", version: ");
 		result.append(version);
 		result.append(')');
 		return result.toString();

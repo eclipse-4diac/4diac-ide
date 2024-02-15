@@ -8,7 +8,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.fordiac.ide.library.model.library.Libraries;
+import org.eclipse.fordiac.ide.library.model.library.Dependencies;
+import org.eclipse.fordiac.ide.library.model.library.Exports;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Product;
@@ -21,14 +22,25 @@ import org.eclipse.fordiac.ide.library.model.library.Product;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl#getDependencies <em>Dependencies</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl#getProduct <em>Product</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl#getLibraries <em>Libraries</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl#getExports <em>Exports</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl#getScope <em>Scope</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ManifestImpl extends MinimalEObjectImpl.Container implements Manifest {
+	/**
+	 * The cached value of the '{@link #getDependencies() <em>Dependencies</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDependencies()
+	 * @generated
+	 * @ordered
+	 */
+	protected Dependencies dependencies;
+
 	/**
 	 * The cached value of the '{@link #getProduct() <em>Product</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -40,14 +52,14 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	protected Product product;
 
 	/**
-	 * The cached value of the '{@link #getLibraries() <em>Libraries</em>}' containment reference.
+	 * The cached value of the '{@link #getExports() <em>Exports</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLibraries()
+	 * @see #getExports()
 	 * @generated
 	 * @ordered
 	 */
-	protected Libraries libraries;
+	protected Exports exports;
 
 	/**
 	 * The default value of the '{@link #getScope() <em>Scope</em>}' attribute.
@@ -86,6 +98,60 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryPackage.Literals.MANIFEST;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Dependencies getDependencies() {
+		return dependencies;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetDependencies(final Dependencies newDependencies, NotificationChain msgs) {
+		final Dependencies oldDependencies = dependencies;
+		dependencies = newDependencies;
+		if (eNotificationRequired()) {
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__DEPENDENCIES, oldDependencies, newDependencies);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDependencies(final Dependencies newDependencies) {
+		if (newDependencies != dependencies) {
+			NotificationChain msgs = null;
+			if (dependencies != null) {
+				msgs = ((InternalEObject)dependencies).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.MANIFEST__DEPENDENCIES, null, msgs);
+			}
+			if (newDependencies != null) {
+				msgs = ((InternalEObject)newDependencies).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.MANIFEST__DEPENDENCIES, null, msgs);
+			}
+			msgs = basicSetDependencies(newDependencies, msgs);
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		}
+		else if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__DEPENDENCIES, newDependencies, newDependencies));
+		}
 	}
 
 	/**
@@ -148,8 +214,8 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * @generated
 	 */
 	@Override
-	public Libraries getLibraries() {
-		return libraries;
+	public Exports getExports() {
+		return exports;
 	}
 
 	/**
@@ -157,11 +223,11 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetLibraries(final Libraries newLibraries, NotificationChain msgs) {
-		final Libraries oldLibraries = libraries;
-		libraries = newLibraries;
+	public NotificationChain basicSetExports(final Exports newExports, NotificationChain msgs) {
+		final Exports oldExports = exports;
+		exports = newExports;
 		if (eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__LIBRARIES, oldLibraries, newLibraries);
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__EXPORTS, oldExports, newExports);
 			if (msgs == null) {
 				msgs = notification;
 			} else {
@@ -177,22 +243,22 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * @generated
 	 */
 	@Override
-	public void setLibraries(final Libraries newLibraries) {
-		if (newLibraries != libraries) {
+	public void setExports(final Exports newExports) {
+		if (newExports != exports) {
 			NotificationChain msgs = null;
-			if (libraries != null) {
-				msgs = ((InternalEObject)libraries).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.MANIFEST__LIBRARIES, null, msgs);
+			if (exports != null) {
+				msgs = ((InternalEObject)exports).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.MANIFEST__EXPORTS, null, msgs);
 			}
-			if (newLibraries != null) {
-				msgs = ((InternalEObject)newLibraries).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.MANIFEST__LIBRARIES, null, msgs);
+			if (newExports != null) {
+				msgs = ((InternalEObject)newExports).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.MANIFEST__EXPORTS, null, msgs);
 			}
-			msgs = basicSetLibraries(newLibraries, msgs);
+			msgs = basicSetExports(newExports, msgs);
 			if (msgs != null) {
 				msgs.dispatch();
 			}
 		}
 		else if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__LIBRARIES, newLibraries, newLibraries));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__EXPORTS, newExports, newExports));
 		}
 	}
 
@@ -228,10 +294,12 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	@Override
 	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
+		case LibraryPackage.MANIFEST__DEPENDENCIES:
+			return basicSetDependencies(null, msgs);
 		case LibraryPackage.MANIFEST__PRODUCT:
 			return basicSetProduct(null, msgs);
-		case LibraryPackage.MANIFEST__LIBRARIES:
-			return basicSetLibraries(null, msgs);
+		case LibraryPackage.MANIFEST__EXPORTS:
+			return basicSetExports(null, msgs);
 		default:
 			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -245,10 +313,12 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	@Override
 	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
+		case LibraryPackage.MANIFEST__DEPENDENCIES:
+			return getDependencies();
 		case LibraryPackage.MANIFEST__PRODUCT:
 			return getProduct();
-		case LibraryPackage.MANIFEST__LIBRARIES:
-			return getLibraries();
+		case LibraryPackage.MANIFEST__EXPORTS:
+			return getExports();
 		case LibraryPackage.MANIFEST__SCOPE:
 			return getScope();
 		default:
@@ -264,11 +334,14 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	@Override
 	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
+		case LibraryPackage.MANIFEST__DEPENDENCIES:
+			setDependencies((Dependencies)newValue);
+			return;
 		case LibraryPackage.MANIFEST__PRODUCT:
 			setProduct((Product)newValue);
 			return;
-		case LibraryPackage.MANIFEST__LIBRARIES:
-			setLibraries((Libraries)newValue);
+		case LibraryPackage.MANIFEST__EXPORTS:
+			setExports((Exports)newValue);
 			return;
 		case LibraryPackage.MANIFEST__SCOPE:
 			setScope((String)newValue);
@@ -287,11 +360,14 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	@Override
 	public void eUnset(final int featureID) {
 		switch (featureID) {
+		case LibraryPackage.MANIFEST__DEPENDENCIES:
+			setDependencies((Dependencies)null);
+			return;
 		case LibraryPackage.MANIFEST__PRODUCT:
 			setProduct((Product)null);
 			return;
-		case LibraryPackage.MANIFEST__LIBRARIES:
-			setLibraries((Libraries)null);
+		case LibraryPackage.MANIFEST__EXPORTS:
+			setExports((Exports)null);
 			return;
 		case LibraryPackage.MANIFEST__SCOPE:
 			setScope(SCOPE_EDEFAULT);
@@ -310,10 +386,12 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	@Override
 	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
+		case LibraryPackage.MANIFEST__DEPENDENCIES:
+			return dependencies != null;
 		case LibraryPackage.MANIFEST__PRODUCT:
 			return product != null;
-		case LibraryPackage.MANIFEST__LIBRARIES:
-			return libraries != null;
+		case LibraryPackage.MANIFEST__EXPORTS:
+			return exports != null;
 		case LibraryPackage.MANIFEST__SCOPE:
 			return SCOPE_EDEFAULT == null ? scope != null : !SCOPE_EDEFAULT.equals(scope);
 		default:
@@ -333,7 +411,7 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 		}
 
 		final StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (scope: "); //$NON-NLS-1$
+		result.append(" (scope: ");
 		result.append(scope);
 		result.append(')');
 		return result.toString();

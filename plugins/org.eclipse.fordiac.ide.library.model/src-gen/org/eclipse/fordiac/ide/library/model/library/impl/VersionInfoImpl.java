@@ -272,11 +272,11 @@ public class VersionInfoImpl extends MinimalEObjectImpl.Container implements Ver
 		}
 
 		final StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (author: "); //$NON-NLS-1$
+		result.append(" (author: ");
 		result.append(author);
-		result.append(", date: "); //$NON-NLS-1$
+		result.append(", date: ");
 		result.append(date);
-		result.append(", version: "); //$NON-NLS-1$
+		result.append(", version: ");
 		result.append(version);
 		result.append(')');
 		return result.toString();
