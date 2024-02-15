@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.subapptypeeditor.editparts;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.VarInOutEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPart;
@@ -29,18 +28,6 @@ public class SubAppInterfaceEditPartFactory extends FBInterfaceEditPartFactory {
 
 	@Override
 	protected EditPart createInterfaceEditPart(final VarDeclaration varDecl) {
-		if (varDecl.isInOutVar()) {
-			return new VarInOutEditPart() {
-				@Override
-				protected void createEditPolicies() {
-					super.createEditPolicies();
-					// supapplications don't have a with construct therefore remove connection
-					// handles
-					removeEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE);
-				}
-			};
-		}
-
 		return new InterfaceEditPart() {
 			@Override
 			protected void createEditPolicies() {
