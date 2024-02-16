@@ -898,7 +898,8 @@ public class FBTImporter extends TypeImporter {
 		final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		TypeEntry entry = getTypeEntry(typeFbElement);
 		if (entry == null) {
-			entry = getTypeLibrary().createErrorTypeEntry(typeFbElement, LibraryElementPackage.eINSTANCE.getFBType());
+			entry = addDependency(
+					getTypeLibrary().createErrorTypeEntry(typeFbElement, LibraryElementPackage.eINSTANCE.getFBType()));
 		}
 		fb.setTypeEntry(entry);
 		fb.setInterface(fb.getType().getInterfaceList().copy());

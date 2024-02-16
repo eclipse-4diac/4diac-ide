@@ -48,6 +48,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
@@ -65,6 +66,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -75,6 +77,7 @@ import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -102,8 +105,8 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.osgi.framework.FrameworkUtil;
 
@@ -117,7 +120,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
-	private FBTypeUpdateDialog fbSaveDialog;
+	private FBTypeUpdateDialog<TypeEntry> fbSaveDialog;
 	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
 	// private static final int SAVE_AS_BUTTON_INDEX = 1;
 	private static final int CANCEL_BUTTON_INDEX = 1; // 2;
@@ -152,13 +155,13 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		final String[] labels = { Messages.FBTypeEditor_AlteringButton_SaveAndUpdate, // Messages.StructAlteringButton_SaveAs,
 				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
-		fbSaveDialog = new FBTypeUpdateDialog(null, Messages.FBTypeEditor_ViewingComposite_Headline, null, "", //$NON-NLS-1$
-				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, typeEntry);
+		fbSaveDialog = new FBTypeUpdateDialog<>(null, Messages.FBTypeEditor_ViewingComposite_Headline, null, "", //$NON-NLS-1$
+				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, new FBTypeEntryDataHandler(typeEntry));
 
 		// Depending on the button clicked:
 		switch (fbSaveDialog.open()) {
 		case DEFAULT_BUTTON_INDEX:
-			doSaveInternal(monitor, fbSaveDialog.getCollectedFBs());
+			doSaveInternal(monitor, fbSaveDialog.getDataHandler().getCollectedElements());
 			break;
 		case CANCEL_BUTTON_INDEX:
 			MessageDialog.openInformation(null, Messages.FBTypeEditor_ViewingComposite_Headline,
@@ -233,8 +236,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	}
 
 	private void updateFB(final Set<INamedElement> set) {
-		Command cmd = new CompoundCommand();
-		cmd = cmd.chain(getUpdateInstancesCommand(set));
+		final Command cmd = getUpdateInstancesCommand(set);
 		Display.getDefault().asyncExec(cmd::execute);
 	}
 
@@ -247,11 +249,12 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 						bteedit.getInternalFbs().stream()
 								.filter(fbe -> fbe.getName().equals(s.getName())
 										&& fbe.getFullTypeName().equals(s.getFullTypeName()))
-								.findAny().map(se -> new UpdateInternalFBCommand(se, fbSaveDialog.getTypeOfElement(s)))
+								.findAny().map(se -> new UpdateInternalFBCommand(se,
+										fbSaveDialog.getDataHandler().getTypeOfElement(s)))
 								.ifPresent(commands::add);
 					}
 				} else {
-					commands.add(new UpdateFBTypeCommand(s, fbSaveDialog.getTypeOfElement(s)));
+					commands.add(new UpdateFBTypeCommand(s, fbSaveDialog.getDataHandler().getTypeOfElement(s)));
 				}
 			}
 		});
@@ -451,7 +454,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	 */
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		if (this.equals(getSite().getPage().getActiveEditor())) {
+		if (this.equals(getSite().getPage().getActiveEditor()) && !(part instanceof PropertySheet)) {
 			handleContentOutlineSelection(selection);
 		}
 	}
@@ -471,7 +474,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			return adapter.cast(getCommandStack());
 		}
 		if (adapter == IPropertySheetPage.class) {
-			return adapter.cast(new TabbedPropertySheetPage(this));
+			return adapter.cast(new SelectionTabbedPropertySheetPage(this));
 		}
 		if (adapter == IGotoMarker.class) {
 			return adapter.cast(this);
@@ -494,7 +497,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	}
 
 	private static <T> boolean shouldCheckAllEditors(final Class<T> adapter) {
-		return (adapter == ITextEditor.class) || (adapter == XtextEditor.class);
+		return (adapter == ITextEditor.class) || (adapter == XtextEditor.class) || (adapter == FBNetworkEditor.class);
 	}
 
 	private boolean isEditorActive() {

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" >
+  <xsd:complexType name="Manifest">
+    <xsd:sequence>
+      <xsd:element name="Product" type="Product"/>
+      <xsd:element name="Libraries" type="Libraries"/>
+    </xsd:sequence>
+    <xsd:attribute name="Scope" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="Product">
+    <xsd:sequence>
+      <xsd:element name="VersionInfo" type="VersionInfo"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Dependencies" type="Dependencies"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Attribute" nillable="true" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VersionInfo">
+    <xsd:attribute name="Version" type="xsd:string" use="required"/>
+    <xsd:attribute name="Author" type="xsd:string" use="required"/>
+    <xsd:attribute name="Date" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="Dependencies">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Required" type="Required"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Required">
+    <xsd:attribute name="SymbolicName" type="xsd:string" use="required"/>
+    <xsd:attribute name="Version" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="Libraries">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Library" type="Library"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Library">
+    <xsd:all>
+      <xsd:element maxOccurs="1" minOccurs="0" name="Includes" type="Includes"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="Excludes" type="Excludes"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="Attribute" nillable="true" type="xsd:string"/>
+    </xsd:all>
+    <xsd:attribute name="Name" type="xsd:string" use="required"/>
+    <xsd:attribute name="SymbolicName" type="xsd:string" use="required"/>
+    <xsd:attribute name="Comment" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="Includes">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="LibraryElement" type="LibraryElement"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Excludes">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="LibraryElement" type="LibraryElement"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="LibraryElement"/>
+</xsd:schema>

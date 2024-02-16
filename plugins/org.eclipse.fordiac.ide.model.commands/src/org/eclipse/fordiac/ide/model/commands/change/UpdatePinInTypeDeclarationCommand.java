@@ -12,12 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 
 /** UpdateFBTypeCommand triggers an update of the type for an FB instance */
@@ -45,19 +42,7 @@ public class UpdatePinInTypeDeclarationCommand extends Command {
 	public void execute() {
 		fbType.getInterfaceList().getAllInterfaceElements().stream().filter(VarDeclaration.class::isInstance)
 				.map(VarDeclaration.class::cast).filter(i -> i.getTypeName().equals(oldName)).forEach(el -> {
-					if (dataTypeEntry instanceof final DataType dt) {
-						(ChangeDataTypeCommand.forDataType(el, dt)).execute();
-					} else {
-						el.setType(dataTypeEntry.getTypeEditable());
-						if (el.getValue() != null && !el.getValue().getValue().isBlank()) {
-							el.getValue().setValue(""); //$NON-NLS-1$
-						}
-					}
+					el.setType(dataTypeEntry.getTypeEditable());
 				});
-		try {
-			fbType.getTypeEntry().save(fbType);
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
 	}
 }

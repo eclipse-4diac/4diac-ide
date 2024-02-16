@@ -70,6 +70,12 @@
       </propertyTab>
       <propertyTab afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
                    category="FB"
+                   id="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut"
+                   indented="true"
+                   label="Edit Var In/Out">
+      </propertyTab>
+      <propertyTab afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
+                   category="FB"
                    image="fordiacimage://ICON_ADAPTER_LIST"
                    id="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
                    indented="true"
@@ -139,18 +145,24 @@
   </extension>
   <extension point="org.eclipse.ui.views.properties.tabbed.propertySections">
     <propertySections contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
-      <propertySection
+            <propertySection
             class="org.eclipse.fordiac.ide.application.properties.InstancePropertySection"
             filter="org.eclipse.fordiac.ide.application.properties.InstanceSectionFilter"
             id="org.eclipse.fordiac.ide.application.properties.InterfaceSection"
             tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
       </propertySection>
       <propertySection
+            class="org.eclipse.fordiac.ide.application.properties.SubAppPropertySection"
+            filter="org.eclipse.fordiac.ide.application.properties.SubappPropertySectionFilter"
+            id="org.eclipse.fordiac.ide.application.properties.SubappInstanceSection"
+            tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
+      </propertySection>
+      <propertySection
             class="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
             filter="org.eclipse.fordiac.ide.application.properties.GroupSectionFilter"
             id="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
-            tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
-      </propertySection>
+			tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
+	</propertySection>
       <propertySection
             class="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
             filter="org.eclipse.fordiac.ide.application.properties.CommentSectionFilter"
@@ -206,6 +218,11 @@
                        id="org.eclipse.fordiac.ide.application.properties.section.EditData"
                        filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
                        tab="org.eclipse.fordiac.ide.application.property.tab.EditData">
+      </propertySection>
+      <propertySection class="org.eclipse.fordiac.ide.application.properties.EditUntypedSubappVarInOutSection"
+                       id="org.eclipse.fordiac.ide.application.properties.section.EditVarInOut"
+                       filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
+                       tab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut">
       </propertySection>
       <propertySection class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceDataSection"
                        id="org.eclipse.fordiac.ide.application.properties.section.ShowData"
@@ -285,6 +302,11 @@
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor"
              name="Focus On Predecessor">
+    </command>
+     <command categoryId="org.eclipse.fordiac.ide.commands.category"
+     		defaultHandler="org.eclipse.fordiac.ide.application.handlers.RepairCommandHandler"
+             id="org.eclipse.fordiac.ide.application.commands.repair"
+             name="Repair Error Marker">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
@@ -904,6 +926,10 @@
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
         </visibleWhen>
       </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.repair"
+               label="Repair Errormarker"
+               tooltip="Attempt to repair error marker">
+      </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
                label="Group"
                tooltip="Create a new group">
@@ -1060,6 +1086,34 @@
               </and>
             </iterate>
           </with>
+        </visibleWhen>
+      </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.repair"
+               label="Repair Errormarker"
+               tooltip="Attempt to repair Errormarker">
+        <visibleWhen checkEnabled="false">
+          <and>
+            <with variable="activeEditor">
+             <or>
+              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.SubAppType" />
+             </or>
+            </with>
+            <with variable="selection">
+             <iterate ifEmpty="true">
+               <and>
+               		<or>
+               		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl"/>               			               		
+                  	<adapt type="org.eclipse.fordiac.ide.application.editparts.ErrorMarkerFBNEditPart"/>
+                  	<adapt type="org.eclipse.fordiac.ide.application.editparts.ErrorMarkerInterfaceEditPart"/>
+                  	</or>
+                  	<not>
+                  	<instanceof value="org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart"/>
+                  	</not>
+                  </and>
+              </iterate>
+           </with>
+          </and>
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
@@ -1597,6 +1651,20 @@
                     namespace="org.eclipse.fordiac.ide.application.utilities"
                     properties="isNoReadOnlyEditor"
                     type="java.lang.Object">
+    </propertyTester>
+    <propertyTester
+          			class="org.eclipse.fordiac.ide.application.utilities.IsExpandedSubappPropertyTester"
+          			id="org.eclipse.fordiac.ide.application.utilities.isExpandedSubappPropertyTester"
+          			namespace="org.eclipse.fordiac.ide.application.utilities"
+          			properties="isExpandedSubapp"
+          			type="java.lang.Object">
+    </propertyTester>
+    <propertyTester
+          			class="org.eclipse.fordiac.ide.application.utilities.IsCFBFilePropertyTester"
+          			id="org.eclipse.fordiac.ide.application.utilities.isCFBFilePropertyTester"
+          			namespace="org.eclipse.fordiac.ide.application.utilities"
+          			properties="isCFBFile"
+          			type="java.lang.Object">
     </propertyTester>
   </extension>
 </plugin>

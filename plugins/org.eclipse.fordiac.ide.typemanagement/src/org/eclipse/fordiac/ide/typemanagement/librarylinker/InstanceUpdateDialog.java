@@ -16,9 +16,8 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.search.dialog.FBUpdateDialog;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnPixelData;
@@ -37,15 +36,16 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-public class InstanceUpdateDialog extends FBUpdateDialog {
+public class InstanceUpdateDialog extends MessageDialog {
+	protected static final int TABLE_COL_WIDTH = 300;
 
 	private final Set<INamedElement> updatedInstances;
 
 	public InstanceUpdateDialog(final Shell parentShell, final String dialogTitle, final Image dialogTitleImage,
 			final String dialogMessage, final int dialogImageType, final String[] dialogButtonLabels,
-			final int defaultIndex, final DataTypeEntry dataTypeEntry, final Set<INamedElement> updatedInstances) {
+			final int defaultIndex, final Set<INamedElement> updatedInstances) {
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels,
-				defaultIndex, dataTypeEntry);
+				defaultIndex);
 		this.updatedInstances = updatedInstances;
 	}
 
@@ -60,7 +60,6 @@ public class InstanceUpdateDialog extends FBUpdateDialog {
 			final Label warningLabel = LabelFactory.newLabel(NONE).create(searchResArea);
 			warningLabel.setText("No instances have been updated!"); //$NON-NLS-1$
 		} else {
-			createfilterButtons(parent);
 
 			final TreeViewer treeViewer = new TreeViewer(searchResArea);
 			configureTableViewer(treeViewer);
@@ -70,7 +69,6 @@ public class InstanceUpdateDialog extends FBUpdateDialog {
 		return parent;
 	}
 
-	@Override
 	protected void configureTableViewer(final TreeViewer viewer) {
 		viewer.setContentProvider(new InstanceUpdateContentProvider());
 		viewer.getTree().setHeaderVisible(true);
@@ -82,10 +80,9 @@ public class InstanceUpdateDialog extends FBUpdateDialog {
 		colType.setLabelProvider(createLabelProvider());
 	}
 
-	@Override
 	protected TableLayout createTableLayout() {
 		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH + TABLE_COL_WIDTH));
+		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		return layout;
 	}
 

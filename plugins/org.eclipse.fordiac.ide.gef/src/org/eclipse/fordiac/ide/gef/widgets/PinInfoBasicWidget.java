@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -176,10 +175,5 @@ public class PinInfoBasicWidget implements CommandExecutor {
 
 	protected void onNameChange(final Text name) {
 		executeCommand(ChangeNameCommand.forName(type, name.getText()));
-	}
-
-	private boolean isSubappPin() {
-		final IInterfaceElement ie = getType();
-		return (ie != null) && (ie.getFBNetworkElement() instanceof SubApp);
 	}
 }

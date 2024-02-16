@@ -73,6 +73,11 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 				inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			}
 		}
+		for (final VarDeclaration inVar : subApp.getInterface().getInOutVars()) {
+			if (null == inVar.getValue()) {
+				inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			}
+		}
 	}
 
 	public FBNetworkElement createSubapp(final String type) {
@@ -83,8 +88,8 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 		final SubAppTypeEntry subEntry = addDependency(getTypeLibrary().getSubAppTypeEntry(type));
 		if (subEntry == null) {
-			return FordiacMarkerHelper.createTypeErrorMarkerFB(type, getTypeLibrary(),
-					LibraryElementPackage.eINSTANCE.getSubAppType());
+			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(type, getTypeLibrary(),
+					LibraryElementPackage.eINSTANCE.getSubAppType()));
 		}
 		subApp.setTypeEntry(subEntry);
 		subApp.setInterface(subEntry.getType().getInterfaceList().copy());
@@ -131,6 +136,10 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 				if (heightValue != null) {
 					subApp.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(heightValue));
 				}
+				break;
+			case LibraryElementTags.LOCKED_ATTRIBUTE:
+				final String isLocked = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+				subApp.setLocked(Boolean.valueOf(isLocked));
 				break;
 			default:
 				parseGenericAttributeNode(subApp);

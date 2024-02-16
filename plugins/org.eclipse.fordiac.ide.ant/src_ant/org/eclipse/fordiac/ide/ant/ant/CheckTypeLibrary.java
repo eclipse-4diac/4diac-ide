@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,10 +9,12 @@
  *
  * Contributors:
  *   Fabio Gandolfi - initial implementation and/or documentation
+ *   Ernst Blecha - refactoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ant.ant;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.ProjectComponent;
@@ -23,7 +25,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
 public class CheckTypeLibrary extends Task {
 
@@ -35,7 +38,6 @@ public class CheckTypeLibrary extends Task {
 
 	@Override
 	public void execute() throws BuildException {
-
 		log("=======================================================");//$NON-NLS-1$
 		log("                CHECK TYPE LIBRARY TASK                ");//$NON-NLS-1$
 		log("=======================================================");//$NON-NLS-1$
@@ -47,74 +49,64 @@ public class CheckTypeLibrary extends Task {
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		final IProject project = workspace.getRoot().getProject(projectNameString);
 		if (project == null) {
-			throw new BuildException("Project named '" + projectNameString + "' not in workspace in Workspace");//$NON-NLS-1$ //$NON-NLS-2$
+			throw new BuildException("Project named '" + projectNameString + "' not in workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		// log Markers, only visible in console output
 		try {
 			final var markers = Arrays.asList(project.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE))
-					.stream().filter(m -> !TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING
-							.equalsIgnoreCase(m.getResource().getLocation().getFileExtension()))
+					.stream().filter(m -> !SystemManager
+							.isSystemFile(workspace.getRoot().getFile(m.getResource().getLocation())))
 					.toList();
 
 			printMarkers(markers, this);
 
-			if (project.findMaxProblemSeverity(IMarker.PROBLEM, true,
-					IResource.DEPTH_INFINITE) == IMarker.SEVERITY_ERROR) {
-				throw new BuildException(
-						String.format("%d problems found in loaded project %s", Integer.valueOf(markers.size()), //$NON-NLS-1$
-								projectNameString));
+			if (markers.stream().anyMatch(m -> getIntegerAttribute(m, IMarker.SEVERITY)
+					.filter(s -> s.intValue() == IMarker.SEVERITY_ERROR).isPresent())) {
+				throw new BuildException(String.format("The project %s has %d errors or warnings!", projectNameString, //$NON-NLS-1$
+						Integer.valueOf(markers.size())));
 			}
 		} catch (final CoreException e) {
-			throw new BuildException("Cannot get markers", e);//$NON-NLS-1$
+			throw new BuildException("Cannot get markers", e); //$NON-NLS-1$
 		}
+
 	}
 
-	public static void printMarkers(final Iterable<IMarker> markers, final ProjectComponent loggingTask)
-			throws CoreException {
-		for (final IMarker marker : markers) {
-			loggingTask.log(markerToLogString(marker));
-		}
+	public static void printMarkers(final Iterable<IMarker> markers, final ProjectComponent loggingTask) {
+		markers.forEach(marker -> Optional.ofNullable(marker).ifPresent(m -> loggingTask.log(markerToLogString(m))));
 	}
 
-	private static String markerToLogString(final IMarker marker) throws CoreException {
-		String markerString = ""; //$NON-NLS-1$
-		if (marker != null) {
-			if (marker.getAttribute(IMarker.SEVERITY) instanceof final Integer i) {
-				switch (i.intValue()) {
-				case IMarker.SEVERITY_INFO:
-					markerString += "INFO: "; //$NON-NLS-1$
-					break;
-				case IMarker.SEVERITY_WARNING:
-					markerString += "WARNING: "; //$NON-NLS-1$
-					break;
-				case IMarker.SEVERITY_ERROR:
-					markerString += "ERROR: "; //$NON-NLS-1$
-					break;
-				default:
-					markerString += "PROBLEM: ";//$NON-NLS-1$
-					break;
-				}
-			} else {
-				markerString += "PROBLEM: ";//$NON-NLS-1$
+	private static String markerToLogString(final IMarker marker) { //@formatter:off
+		return getIntegerAttribute(marker, IMarker.SEVERITY).map(CheckTypeLibrary::convertToSeverity)
+						.orElse("PROBLEM: ") + //$NON-NLS-1$
+				marker.getAttribute(IMarker.MESSAGE,
+						"NO ERROR MESSAGE") + //$NON-NLS-1$
+				" | " + //$NON-NLS-1$
+				Optional.ofNullable(marker.getResource().getLocation()).map(IPath::lastSegment)
+						.orElse("NO PATH") + //$NON-NLS-1$
+				" : " + //$NON-NLS-1$
+				getIntegerAttribute(marker, IMarker.LINE_NUMBER).map(i -> i.toString())
+						.orElse("NO LINE NUMBER"); //$NON-NLS-1$
+	} //@formatter:on
+
+	private static String convertToSeverity(final Integer severity) {
+		return switch (severity.intValue()) {
+		case IMarker.SEVERITY_INFO -> "INFO: "; //$NON-NLS-1$
+		case IMarker.SEVERITY_WARNING -> "WARNING: "; //$NON-NLS-1$
+		case IMarker.SEVERITY_ERROR -> "ERROR: "; //$NON-NLS-1$
+		default -> null;
+		};
+	}
+
+	private static Optional<Integer> getIntegerAttribute(final IMarker marker, final String attributeName) {
+		try {
+			if (marker.getAttribute(attributeName) instanceof final Integer i) {
+				return Optional.of(i);
 			}
-
-			markerString += marker.getAttribute(IMarker.MESSAGE, "NO ERROR MESSAGE") + " | "; //$NON-NLS-1$//$NON-NLS-2$
-
-			if (marker.getResource().getLocation() != null) {
-				markerString += marker.getResource().getLocation().lastSegment() + " : "; //$NON-NLS-1$
-			} else {
-				markerString += "NO PATH : "; //$NON-NLS-1$
-			}
-
-			if (marker.getAttribute(IMarker.LINE_NUMBER) instanceof final Integer lineNumber) {
-				markerString += lineNumber.toString();
-			} else {
-				markerString += "NO LINE NUMBER"; //$NON-NLS-1$
-			}
-
+		} catch (final CoreException e) {
+			// The exception tells us that this attribute does not exist, return empty
 		}
-		return markerString;
+		return Optional.empty();
 	}
 
 }

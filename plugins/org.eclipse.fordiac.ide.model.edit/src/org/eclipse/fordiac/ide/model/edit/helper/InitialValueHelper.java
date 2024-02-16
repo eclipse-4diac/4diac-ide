@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.StructManipulation;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -47,6 +48,12 @@ public final class InitialValueHelper {
 		if ((element instanceof final ErrorMarkerInterface marker) && hasInitalValue(element)) {
 			return marker.getValue().getValue();
 		}
+		if (element instanceof final Attribute attr) {
+			if (hasInitalValue(element)) {
+				return attr.getValue();
+			}
+			return getDefaultValue(element);
+		}
 		// no default value for error markers
 		return ""; //$NON-NLS-1$
 	}
@@ -67,11 +74,19 @@ public final class InitialValueHelper {
 				// fall though (NO LOGGING NECESSARY!!!)
 			}
 		}
+		if ((element instanceof final Attribute attr)
+				&& ((attr.getType() instanceof AnyType) && !IecTypes.GenericTypes.isAnyType(attr.getType()))) {
+			try {
+				return VariableOperations.newVariable(attr.getName(), attr.getType()).toString();
+			} catch (final Exception exc) {
+				// fall though (NO LOGGING NECESSARY!!!)
+			}
+		}
 		return ""; //$NON-NLS-1$
 	}
 
 	public static Color getForegroundColor(final Object element) {
-		if ((element instanceof VarDeclaration) && !hasInitalValue(element)) {
+		if ((element instanceof VarDeclaration || element instanceof Attribute) && !hasInitalValue(element)) {
 
 			return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
 		}
@@ -86,6 +101,9 @@ public final class InitialValueHelper {
 		if (element instanceof final ErrorMarkerInterface marker) {
 			return (marker.getValue() != null) && (marker.getValue().getValue() != null)
 					&& !marker.getValue().getValue().isEmpty();
+		}
+		if (element instanceof final Attribute attr) {
+			return (attr.getValue() != null && !attr.getValue().equals("")); //$NON-NLS-1$
 		}
 		return false;
 	}

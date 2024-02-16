@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 - 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -456,7 +456,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				] + expr.mappedOutputArguments.entrySet.map [
 					value?.argument?.evaluateVariable
 				]).toList
-				StandardFunctions.invoke(feature.name, arguments)
+				StandardFunctions.invoke(feature.name, arguments).castValue(expr.resultType)
 			}
 			FB case expr.call: {
 				val fb = feature.findVariable as FBVariable

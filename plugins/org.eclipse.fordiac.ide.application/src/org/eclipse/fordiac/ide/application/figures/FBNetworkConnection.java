@@ -92,6 +92,23 @@ public class FBNetworkConnection extends HideableConnection {
 	}
 
 	@Override
+	public void paint(final Graphics graphics) {
+		if (isHidden()) {
+			if (getSourceDecoration() != null) {
+				getSourceDecoration().paint(graphics);
+			}
+			if (getTargetDecoration() != null) {
+				getTargetDecoration().paint(graphics);
+			}
+		} else {
+			if (getLocalForegroundColor() != null) {
+				graphics.setForegroundColor(getLocalForegroundColor());
+			}
+			paintFigure(graphics);
+		}
+	}
+
+	@Override
 	protected void outlineShape(final Graphics g) {
 		if (!isHidden()) {
 			super.outlineShape(g);

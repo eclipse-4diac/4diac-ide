@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType;
 import org.eclipse.fordiac.ide.model.data.DateType;
 import org.eclipse.fordiac.ide.model.data.DintType;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DwordType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.EventType;
@@ -84,12 +85,17 @@ final class DataTypeAnnotations {
 		return type == other || type.eClass().isSuperTypeOf(other.eClass());
 	}
 
+	static boolean isAssignableFrom(final DirectlyDerivedType type, final DataType other) {
+		return type == other || type.getBaseType().isAssignableFrom(other);
+	}
+
 	static boolean isAssignableFrom(final ArrayType type, final DataType other) {
 		if (type == other) {
 			return true;
 		}
 		if (other instanceof final ArrayType otherArray) {
-			// arrays are assignable if the base type is assignable and they have the same amount of dimensions
+			// arrays are assignable if the base type is assignable and they have the same
+			// amount of dimensions
 			return type.getBaseType().isAssignableFrom(otherArray.getBaseType())
 					&& type.getSubranges().size() == otherArray.getSubranges().size();
 		}
@@ -318,7 +324,8 @@ final class DataTypeAnnotations {
 			return true;
 		}
 		if (other instanceof final SubrangeType otherSubrange) {
-			// subranges are assignable if the base type is assignable and they have a subrange that fits
+			// subranges are assignable if the base type is assignable and they have a
+			// subrange that fits
 			return type.getBaseType().isAssignableFrom(otherSubrange.getBaseType())
 					&& (!type.getSubrange().isSetLowerLimit()
 							|| type.getSubrange().getLowerLimit() <= otherSubrange.getSubrange().getLowerLimit())

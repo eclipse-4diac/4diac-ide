@@ -122,7 +122,11 @@ public abstract class CreateVariableCommand extends CreationCommand implements S
 	 */
 	@Override
 	public void redo() {
-		getVariableList().add(index, varDecl);
+		if (index >= 0) {
+			getVariableList().add(index, varDecl);
+		} else {
+			getVariableList().add(varDecl);
+		}
 	}
 
 	@Override

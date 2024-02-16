@@ -58,4 +58,8 @@ public abstract class AbstractOnlineFBHandler extends AbstractDeploymentCommand 
 		return resource;
 	}
 
+	protected FB getFB() {
+		return fb;
+	}
+
 }

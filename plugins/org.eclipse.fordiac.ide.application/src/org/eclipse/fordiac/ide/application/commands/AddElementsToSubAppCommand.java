@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -277,6 +278,23 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 		if (reusablePin.isPresent()) {
 			// pin already exists in the target subapp (prior to command execution)
 			subAppIE = reusablePin.get();
+		} else if (source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()
+				&& con.getDestination() instanceof final VarDeclaration destVar && destVar.isInOutVar()) {
+			if (sourceToSubAppPin.containsKey(sourceVar.getInOutVarOpposite())) {
+				subAppIE = ((VarDeclaration) sourceToSubAppPin.get(sourceVar.getInOutVarOpposite()))
+						.getInOutVarOpposite();
+				sourceToSubAppPin.putIfAbsent(sourceVar, subAppIE);
+			} else if (sourceToSubAppPin.containsKey(destVar.getInOutVarOpposite())) {
+				subAppIE = ((VarDeclaration) sourceToSubAppPin.get(destVar.getInOutVarOpposite()))
+						.getInOutVarOpposite();
+				sourceToSubAppPin.putIfAbsent(sourceVar, subAppIE);
+			} else {
+				// pin has been created in the course of this command or is not present at all
+				// and needs to be created
+				subAppIE = sourceToSubAppPin.computeIfAbsent(source, k -> createInterfaceElement(ie, source.getName()));
+			}
+			sourceToSubAppPin.putIfAbsent(destVar, subAppIE);
+
 		} else {
 			// pin has been created in the course of this command or is not present at all
 			// and needs to be created
@@ -286,8 +304,9 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 	}
 
 	private IInterfaceElement createInterfaceElement(final IInterfaceElement ie, final String srcName) {
+		final boolean isInOut = ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar();
 		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(ie.getType(), srcName,
-				targetSubApp.getInterface(), ie.isIsInput(), -1);
+				targetSubApp.getInterface(), ie.isIsInput(), isInOut, -1);
 		cmd.execute();
 		changedSubAppIEs.add(cmd);
 		return cmd.getCreatedElement();

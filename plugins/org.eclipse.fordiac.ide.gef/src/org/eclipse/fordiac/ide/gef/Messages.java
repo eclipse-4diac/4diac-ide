@@ -67,7 +67,7 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_ShowPinName;
 	public static String DiagramPreferences_ShowPinComment;
 	public static String DiagramPreferences_ShowConnectedOutputPinName;
-
+	public static String DiagramPreferences_MaximumInterfaceBarSize;
 	public static String DiagramPreferences_BlockMargins;
 	public static String DiagramPreferences_TopBottom;
 	public static String DiagramPreferences_LeftRight;

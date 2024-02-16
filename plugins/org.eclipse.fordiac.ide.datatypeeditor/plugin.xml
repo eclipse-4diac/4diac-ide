@@ -6,7 +6,6 @@
       <editor
             name="Data Type Editor"
             extensions="dtp"
-            contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             default="true"
             class="org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor"
             id="org.eclipse.fordiac.ide.model.datatype.dtp"
@@ -49,16 +48,22 @@
                id="org.eclipse.fordiac.ide.datatypeeditor.properties.DataTypeInfoSection"
                tab="org.eclipse.fordiac.ide.datatypeeditor.propertyDataTypeInfoTab">
    		<input
-                  type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite">
-        </input>  
+                  type="org.eclipse.fordiac.ide.model.data.StructuredType">
+        </input>
+     <input
+           type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+     </input>  
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.datatypeeditor.properties.StructAttributeSection"
                id="org.eclipse.fordiac.ide.datatypeeditor.properties.StructAttributeSection"
                tab="org.eclipse.fordiac.ide.datatypeeditor.propertyStructAttributeTab">
    		<input
-                  type="org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite">
-        </input>  
+                  type="org.eclipse.fordiac.ide.model.data.StructuredType">
+        </input>
+     <input
+           type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+     </input>  
          </propertySection>
       </propertySections>
    </extension>

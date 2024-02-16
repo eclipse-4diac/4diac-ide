@@ -163,7 +163,7 @@ public class HideableConnection extends PolylineConnection {
 			final Point before = srcPoints.getPoint(i - 1);
 			final Point after = srcPoints.getPoint(i + 1);
 
-			final int verDistance = Math.abs(before.y - after.y);
+			final int verDistance = Math.abs(before.x - after.x);
 			final int horDistance = Math.abs(before.y - after.y);
 			int bevelSize = BEND_POINT_BEVEL_SIZE;
 			if (verDistance < (2 * BEND_POINT_BEVEL_SIZE)) {

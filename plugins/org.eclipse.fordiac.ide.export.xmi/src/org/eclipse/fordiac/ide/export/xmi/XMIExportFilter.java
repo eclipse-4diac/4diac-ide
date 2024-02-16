@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.ExportFilter;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.resource.GlobalConstantsResourceSetInitializer;
 import org.eclipse.fordiac.ide.model.data.AnyType;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -130,6 +131,11 @@ public class XMIExportFilter extends ExportFilter {
 				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
 				.filter(XMIExportFilter::hasInitialValue).map(this::createInitialValue).flatMap(Optional::stream)
 				.forEachOrdered(result.getInitialValues()::add);
+		StreamSupport
+				.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllProperContents(resource, true), 0), false)
+				.filter(DirectlyDerivedType.class::isInstance).map(DirectlyDerivedType.class::cast)
+				.filter(XMIExportFilter::hasInitialValue).map(this::createInitialValue).flatMap(Optional::stream)
+				.forEachOrdered(result.getInitialValues()::add);
 		return result;
 	}
 
@@ -165,6 +171,39 @@ public class XMIExportFilter extends ExportFilter {
 	protected static boolean hasInitialValue(final VarDeclaration varDeclaration) {
 		return varDeclaration.getValue() != null && varDeclaration.getValue().getValue() != null
 				&& !varDeclaration.getValue().getValue().isBlank();
+	}
+
+	protected Optional<XMIExportInitialValue> createInitialValue(final DirectlyDerivedType directlyDerivedType) {
+		final var source = parseInitialValue(directlyDerivedType);
+		if (source == null || source.getInitializerExpression() == null) {
+			return Optional.empty();
+		}
+		final var result = XMIExportFactory.eINSTANCE.createXMIExportInitialValue();
+		result.setVariable(directlyDerivedType);
+		result.setExpression(source.getInitializerExpression());
+		result.setValue(evaluateInitialValue(directlyDerivedType));
+		return Optional.of(result);
+	}
+
+	protected STInitializerExpressionSource parseInitialValue(final DirectlyDerivedType directlyDerivedType) {
+		return StructuredTextParseUtil.parse(directlyDerivedType.getInitialValue(),
+				directlyDerivedType.eResource().getURI(), directlyDerivedType.getBaseType(),
+				EcoreUtil2.getContainerOfType(directlyDerivedType, LibraryElement.class), null, getErrors(),
+				getWarnings(), getInfos());
+	}
+
+	protected String evaluateInitialValue(final DirectlyDerivedType directlyDerivedType) {
+		try {
+			return VariableOperations.newVariable(directlyDerivedType).toString();
+		} catch (final Exception e) {
+			getErrors().add(MessageFormat.format(Messages.XMIExportFilter_InitialValueError,
+					directlyDerivedType.getQualifiedName(), e.getMessage()));
+			return null;
+		}
+	}
+
+	protected static boolean hasInitialValue(final DirectlyDerivedType directlyDerivedType) {
+		return directlyDerivedType.getInitialValue() != null && !directlyDerivedType.getInitialValue().isBlank();
 	}
 
 	protected XMIExportTypeDeclarations createTypeDeclarations(final Resource resource) {

@@ -78,8 +78,12 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 
 	@Override
 	public Command onNameChange(final IInterfaceElement ie, final String newValue) {
-		return new ResizeGroupOrSubappCommand(
-				GetEditPartFromGraficalViewerHelper.findAbstractContainerContentEditFromInterfaceElement(ie),
-				ChangeNameCommand.forName(ie, newValue));
+		final ChangeNameCommand nameChangeCmd = ChangeNameCommand.forName(ie, newValue);
+		if (getType().isUnfolded()) {
+			return new ResizeGroupOrSubappCommand(
+					GetEditPartFromGraficalViewerHelper.findAbstractContainerContentEditFromInterfaceElement(ie),
+					nameChangeCmd);
+		}
+		return nameChangeCmd;
 	}
 }

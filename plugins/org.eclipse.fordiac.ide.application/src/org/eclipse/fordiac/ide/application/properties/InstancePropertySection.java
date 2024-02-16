@@ -54,6 +54,7 @@ import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -65,7 +66,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class InstancePropertySection extends AbstractSection {
 
 	private static final int ONE_COLUMN = 1;
-	private static final int TWO_COLUMNS = 2;
+	protected static final int TWO_COLUMNS = 2;
 
 	private Text nameText;
 	private Text commentText;
@@ -79,11 +80,37 @@ public class InstancePropertySection extends AbstractSection {
 	IAction[] defaultCopyPasteCut = new IAction[3];
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
+	protected Composite leftComposite;
+	protected Composite rightComposite;
+	protected Composite upperComposite;
+	protected Composite lowerComposite;
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createFBInfoGroup(parent);
-		createTableSection(parent);
+		createSubsectionLayout(parent);
+	}
+
+	protected void createSubsectionLayout(final Composite parent) {
+		createSingleRowLayout(parent);
+		createFBInfoGroup(upperComposite);
+		createTableSection(lowerComposite);
+	}
+
+	protected void createDoubleColumnLayout(final Composite parent) {
+		parent.setLayout(new GridLayout(2, true));
+		leftComposite = createComposite(parent);
+		rightComposite = createComposite(parent);
+		final GridData gridLayoutData = new GridData(GridData.FILL, GridData.FILL, true, false);
+		parent.setLayoutData(gridLayoutData);
+	}
+
+	protected void createSingleRowLayout(final Composite parent) {
+		parent.setLayout(new GridLayout(1, true));
+		upperComposite = createComposite(parent);
+		lowerComposite = createComposite(parent);
+		final GridData gridLayoutData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		parent.setLayoutData(gridLayoutData);
 	}
 
 	@Override
@@ -99,7 +126,7 @@ public class InstancePropertySection extends AbstractSection {
 		}
 	}
 
-	private void createTableSection(final Composite parent) {
+	protected void createTableSection(final Composite parent) {
 		final Composite tableSectionComposite = getWidgetFactory().createComposite(parent);
 		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).applyTo(tableSectionComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(tableSectionComposite);
@@ -183,7 +210,7 @@ public class InstancePropertySection extends AbstractSection {
 		});
 	}
 
-	private Command createChangeCommentCommand() {
+	protected Command createChangeCommentCommand() {
 		Command cmd = new ChangeCommentCommand(getType(), commentText.getText());
 		if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof SubApp) {
 			final Object editPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor().getEditPartRegistry()
@@ -227,7 +254,7 @@ public class InstancePropertySection extends AbstractSection {
 		super.aboutToBeHidden();
 	}
 
-	private IActionBars getActionBars() {
+	protected IActionBars getActionBars() {
 		if (tabbedPropertySheetPage != null && tabbedPropertySheetPage.getSite() != null) {
 			return tabbedPropertySheetPage.getSite().getActionBars();
 		}
@@ -241,7 +268,7 @@ public class InstancePropertySection extends AbstractSection {
 
 	@Override
 	protected FBNetworkElement getType() {
-		if (type instanceof final FBNetworkElement fbNetworkElement) {
+		if (type instanceof final FBNetworkElement fbNetworkElement && !(type instanceof SubApp)) {
 			return fbNetworkElement;
 		}
 		return null;
@@ -254,15 +281,15 @@ public class InstancePropertySection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
-
-		inputDataProvider.setInput(getType().getInterface().getInputVars());
-		outputDataProvider.setInput(getType().getInterface().getOutputVars());
-
+		if (getType() != null) {
+			inputDataProvider.setInput(getType().getInterface().getInputVars());
+			outputDataProvider.setInput(getType().getInterface().getOutputVars());
+		}
 		inputTable.refresh();
 		outputTable.refresh();
 	}
 
-	private final Adapter interfaceAdapter = new EContentAdapter() {
+	protected final Adapter interfaceAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -270,7 +297,7 @@ public class InstancePropertySection extends AbstractSection {
 		}
 	};
 
-	private final Adapter fbnElementAdapter = new AdapterImpl() {
+	protected final Adapter fbnElementAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -294,5 +321,11 @@ public class InstancePropertySection extends AbstractSection {
 			getType().eAdapters().remove(fbnElementAdapter);
 			getType().getInterface().eAdapters().remove(interfaceAdapter);
 		}
+	}
+
+	@Override
+	protected boolean shouldRefresh() {
+		// as we have our own adapters we need our own shouldRefresh implementation
+		return (null != getType()) && getType().eAdapters().contains(fbnElementAdapter) && !blockRefresh;
 	}
 }

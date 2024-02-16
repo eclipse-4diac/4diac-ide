@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 
 import static extension org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser.isSimpleTypeDeclaration
 import static extension org.eclipse.fordiac.ide.model.eval.EvaluatorFactory.*
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType
 
 final class VariableOperations {
 	private new() {
@@ -120,6 +121,17 @@ final class VariableOperations {
 					throw new UnsupportedOperationException("No suitable evaluator for Attribute found")
 		} else
 			newVariable(attr.name, attr.type)
+	}
+
+	def static Variable<?> newVariable(DirectlyDerivedType type) {
+		if (!type.initialValue.nullOrEmpty) {
+				val evaluator = type.createEvaluator(DirectlyDerivedType, null, emptySet, null)
+				if (evaluator instanceof VariableEvaluator) {
+					evaluator.evaluateVariable
+				} else
+					throw new UnsupportedOperationException("No suitable evaluator for DirectlyDerivedType found")
+		} else
+			newVariable(type.name, type.baseType)
 	}
 
 	def static INamedElement evaluateResultType(VarDeclaration decl) {

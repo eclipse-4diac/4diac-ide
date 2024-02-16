@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl#getSubAppNetwork <em>Sub App Network</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl#getWidth <em>Width</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl#getHeight <em>Height</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl#isLocked <em>Locked</em>}</li>
  * </ul>
  *
  * @generated
@@ -94,6 +95,26 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	 * @ordered
 	 */
 	protected int height = HEIGHT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isLocked() <em>Locked</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLocked()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean LOCKED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isLocked() <em>Locked</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLocked()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean locked = LOCKED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -234,6 +255,29 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	 * @generated
 	 */
 	@Override
+	public boolean isLocked() {
+		return locked;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLocked(boolean newLocked) {
+		boolean oldLocked = locked;
+		locked = newLocked;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SUB_APP__LOCKED, oldLocked, locked));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public SubAppType getType() {
 		//this cannot be moved to the annotation class because there we don't have the super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
@@ -325,6 +369,8 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 				return getWidth();
 			case LibraryElementPackage.SUB_APP__HEIGHT:
 				return getHeight();
+			case LibraryElementPackage.SUB_APP__LOCKED:
+				return isLocked();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -346,6 +392,9 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 				return;
 			case LibraryElementPackage.SUB_APP__HEIGHT:
 				setHeight((Integer)newValue);
+				return;
+			case LibraryElementPackage.SUB_APP__LOCKED:
+				setLocked((Boolean)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -370,6 +419,9 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 			case LibraryElementPackage.SUB_APP__HEIGHT:
 				setHeight(HEIGHT_EDEFAULT);
 				return;
+			case LibraryElementPackage.SUB_APP__LOCKED:
+				setLocked(LOCKED_EDEFAULT);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -390,6 +442,8 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 				return width != WIDTH_EDEFAULT;
 			case LibraryElementPackage.SUB_APP__HEIGHT:
 				return height != HEIGHT_EDEFAULT;
+			case LibraryElementPackage.SUB_APP__LOCKED:
+				return locked != LOCKED_EDEFAULT;
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -409,6 +463,8 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 		result.append(width);
 		result.append(", height: "); //$NON-NLS-1$
 		result.append(height);
+		result.append(", Locked: "); //$NON-NLS-1$
+		result.append(locked);
 		result.append(')');
 		return result.toString();
 	}

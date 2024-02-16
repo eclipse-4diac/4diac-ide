@@ -93,8 +93,29 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			default:
 				break;
 			}
+			if (notification.getFeatureID(SubApp.class) == LibraryElementPackage.SUB_APP__ATTRIBUTES
+					&& (isUnfoldedAttribute(notification.getOldValue())
+							|| isUnfoldedAttribute(notification.getNewValue()))) {
+				// interface figures need to be manually added in order for them to be put
+				// into the right container
+				reloadInterfaceFigures();
+			}
 			refreshToolTip();
 			backgroundColorChanged(getFigure());
+		}
+
+		private static boolean isUnfoldedAttribute(final Object obj) {
+			return obj instanceof final org.eclipse.fordiac.ide.model.libraryElement.Attribute attr
+					&& attr.getName().equals("Unfolded"); //$NON-NLS-1$
+		}
+
+		private void reloadInterfaceFigures() {
+			// @formatter:off
+			getChildren().stream()
+				.filter(InterfaceEditPart.class::isInstance)
+				.map(InterfaceEditPart.class::cast)
+				.forEach(ie -> addChildVisual(ie, -1));
+			// @formatter:on
 		}
 
 		private void handleAddMove(final Notification notification) {
@@ -154,8 +175,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			if (getHost().getModel() instanceof INamedElement) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ResizeGroupOrSubappCommand((GraphicalEditPart) getHost(),
-							(Command) new ChangeCommentCommand((INamedElement) getHost().getModel(), str));
+					return new ResizeGroupOrSubappCommand(getHost(),
+							new ChangeCommentCommand((INamedElement) getHost().getModel(), str));
 				}
 			}
 			return null;
@@ -307,6 +328,12 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			final GridData contentGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 					| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 			getFigure().getExpandedContentArea().add(contentFigure, contentGridData, -1);
+		} else if (childEditPart instanceof final InterfaceEditPart interfaceEditPart && getModel().isUnfolded()) {
+			if (interfaceEditPart.isInput()) {
+				getFigure().getExpandedInputFigure().getChildren().get(0).add(interfaceEditPart.getFigure());
+			} else {
+				getFigure().getExpandedOutputFigure().getChildren().get(0).add(interfaceEditPart.getFigure());
+			}
 		} else {
 			super.addChildVisual(childEditPart, index);
 		}
@@ -317,6 +344,12 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 		if (childEditPart instanceof final UnfoldedSubappContentEditPart unfoldedSubappContentEP) {
 			if (getFigure().getExpandedContentArea() != null) {
 				getFigure().getExpandedContentArea().remove(unfoldedSubappContentEP.getFigure());
+			}
+		} else if (childEditPart instanceof final InterfaceEditPart interfaceEditPart && getModel().isUnfolded()) {
+			if (interfaceEditPart.isInput()) {
+				getFigure().getExpandedInputFigure().getChildren().get(0).remove(interfaceEditPart.getFigure());
+			} else {
+				getFigure().getExpandedOutputFigure().getChildren().get(0).remove(interfaceEditPart.getFigure());
 			}
 		} else {
 			super.removeChildVisual(childEditPart);

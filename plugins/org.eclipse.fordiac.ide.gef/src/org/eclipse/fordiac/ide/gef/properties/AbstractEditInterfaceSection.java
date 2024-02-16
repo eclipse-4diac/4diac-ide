@@ -37,8 +37,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.ISelectionProviderSection;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.SelectionProviderProxy;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -46,7 +50,10 @@ import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
+import org.eclipse.nebula.widgets.nattable.selection.RowPostSelectionProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -54,15 +61,19 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> extends AbstractSection
-		implements I4diacNatTableUtil {
+		implements I4diacNatTableUtil, ISelectionProviderSection {
 
 	protected IChangeableRowDataProvider<T> inputProvider;
 	protected NatTable inputTable;
-	private AddDeleteReorderListWidget inputButtons;
+	private AddDeleteReorderToolbarWidget inputButtons;
+	private RowPostSelectionProvider<T> inputSelectionProvider;
 
 	protected IChangeableRowDataProvider<T> outputProvider;
 	protected NatTable outputTable;
-	private AddDeleteReorderListWidget outputButtons;
+	private AddDeleteReorderToolbarWidget outputButtons;
+	private RowPostSelectionProvider<T> outputSelectionProvider;
+
+	private SelectionProvider selectionProvider;
 
 	protected abstract CreationCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
@@ -95,8 +106,8 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 		outputsGroup.setLayout(new GridLayout(2, false));
 		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		inputButtons = new AddDeleteReorderListWidget();
-		outputButtons = new AddDeleteReorderListWidget();
+		inputButtons = new AddDeleteReorderToolbarWidget();
+		outputButtons = new AddDeleteReorderToolbarWidget();
 
 		if (isShowTableEditButtons()) {
 			inputButtons.createControls(inputsGroup, getWidgetFactory());
@@ -110,6 +121,14 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 			configureButtonList(inputButtons, inputTable, true);
 			configureButtonList(outputButtons, outputTable, false);
 		}
+
+		inputSelectionProvider = new RowPostSelectionProvider<>(inputTable,
+				NatTableWidgetFactory.getSelectionLayer(inputTable), inputProvider, false);
+		outputSelectionProvider = new RowPostSelectionProvider<>(outputTable,
+				NatTableWidgetFactory.getSelectionLayer(outputTable), outputProvider, false);
+		selectionProvider = new SelectionProvider();
+		inputTable.addFocusListener(selectionProvider);
+		outputTable.addFocusListener(selectionProvider);
 	}
 
 	private void configureButtonList(final AddDeleteReorderListWidget buttons, final NatTable table,
@@ -117,6 +136,17 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 		buttons.bindToTableViewer(table, this, ref -> newCreateCommand((IInterfaceElement) ref, inputs),
 				ref -> newDeleteCommand((IInterfaceElement) ref), ref -> newOrderCommand((IInterfaceElement) ref, true),
 				ref -> newOrderCommand((IInterfaceElement) ref, false));
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (inputButtons != null) {
+			inputButtons.dispose();
+		}
+		if (outputButtons != null) {
+			outputButtons.dispose();
+		}
 	}
 
 	@Override
@@ -217,8 +247,14 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 		return sectionEditableRule;
 	}
 
+	@SuppressWarnings("static-method") // subclasses may override
 	public Command onNameChange(final IInterfaceElement rowObject, final String newValue) {
 		return ChangeNameCommand.forName(rowObject, newValue);
+	}
+
+	@Override
+	public SelectionProvider getSelectionProvider() {
+		return selectionProvider;
 	}
 
 	private final IEditableRule sectionEditableRule = new IEditableRule() {
@@ -233,4 +269,21 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 			return AbstractEditInterfaceSection.this.isEditable();
 		}
 	};
+
+	private class SelectionProvider extends SelectionProviderProxy implements FocusListener {
+
+		@Override
+		public void focusGained(final FocusEvent e) {
+			if (e.widget == inputTable) {
+				setDelegate(inputSelectionProvider);
+			} else if (e.widget == outputTable) {
+				setDelegate(outputSelectionProvider);
+			}
+		}
+
+		@Override
+		public void focusLost(final FocusEvent e) {
+			// do nothing
+		}
+	}
 }

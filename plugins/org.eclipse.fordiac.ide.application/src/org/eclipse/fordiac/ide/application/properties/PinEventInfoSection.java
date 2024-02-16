@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.nat.EventTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.EventTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
@@ -62,11 +63,18 @@ public class PinEventInfoSection extends AbstractDoubleColumnSection {
 		return new PinInfoBasicWidget(parent, getWidgetFactory()) {
 			@Override
 			protected void onNameChange(final Text name) {
-				executeCommand(
-						new ResizeGroupOrSubappCommand(
-								GetEditPartFromGraficalViewerHelper
-										.findAbstractContainerContentEditFromInterfaceElement(getType()),
-								ChangeNameCommand.forName(getType(), name.getText())));
+				final ChangeNameCommand changeNameCommand = ChangeNameCommand.forName(getType(), name.getText());
+				if (isExpandedSubappPin()) {
+					executeCommand(new ResizeGroupOrSubappCommand(GetEditPartFromGraficalViewerHelper
+							.findAbstractContainerContentEditFromInterfaceElement(getType()), changeNameCommand));
+				} else {
+					executeCommand(changeNameCommand);
+				}
+			}
+
+			private boolean isExpandedSubappPin() {
+				final IInterfaceElement ie = getType();
+				return (ie != null) && (ie.getFBNetworkElement() instanceof final SubApp subapp) && subapp.isUnfolded();
 			}
 		};
 	}

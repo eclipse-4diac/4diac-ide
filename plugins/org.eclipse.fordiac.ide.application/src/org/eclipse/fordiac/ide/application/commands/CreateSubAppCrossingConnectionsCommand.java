@@ -261,6 +261,10 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 					subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getEventInputs()
 							.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 							.map(IInterfaceElement.class::cast);
+				} else if (ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
+					subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getInOutVars()
+							.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+							.map(IInterfaceElement.class::cast);
 				} else {
 					subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getInputVars()
 							.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
@@ -277,6 +281,10 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 			if (ie instanceof Event) {
 				subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getEventOutputs()
+						.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+						.map(IInterfaceElement.class::cast);
+			} else if (ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
+				subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getOutMappedInOutVars()
 						.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 						.map(IInterfaceElement.class::cast);
 			} else {
@@ -335,8 +343,9 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 			return subapp.getInterfaceElement(ie.getName());
 		}
 
+		final boolean isInOut = source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar();
 		final CreateSubAppInterfaceElementCommand pinCmd = new CreateSubAppInterfaceElementCommand(ie.getType(),
-				source.getName(), subapp.getInterface(), isRightPath, -1);
+				source.getName(), subapp.getInterface(), isRightPath, isInOut, -1);
 		pinCmd.execute();
 		commands.add(pinCmd);
 		return pinCmd.getCreatedElement();

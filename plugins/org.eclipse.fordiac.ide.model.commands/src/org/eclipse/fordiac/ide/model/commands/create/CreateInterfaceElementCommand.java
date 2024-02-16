@@ -41,6 +41,8 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 	private final String name;
 	private final DataType dataType;
 	private final boolean isInput;
+	private final boolean isInOut;
+	private boolean switchOpposite;
 	private final int index;
 	private String arraySize;
 	private String value;
@@ -61,13 +63,20 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 	 * information
 	 */
 	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
-			final boolean isInput, final int index) {
+			final boolean isInput, final boolean isInOut, final int index) {
 		this.isInput = isInput;
+		this.isInOut = isInOut;
+		this.switchOpposite = false;
 		this.dataType = dataType;
 		this.index = index;
 		this.targetInterfaceList = interfaceList;
 		this.name = ((null != name) && isValidName(name)) ? name : getNameProposal(dataType, isInput);
 		this.value = ""; //$NON-NLS-1$
+	}
+
+	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
+			final boolean isInput, final int index) {
+		this(dataType, name, interfaceList, isInput, false, index);
 	}
 
 	private static boolean isValidName(final String name) {
@@ -121,7 +130,9 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		if (dataType instanceof AdapterType) {
 			return isInput ? targetInterfaceList.getSockets() : targetInterfaceList.getPlugs();
 		}
-		return isInput ? targetInterfaceList.getInputVars() : targetInterfaceList.getOutputVars();
+		return isInOut
+				? switchOpposite ? targetInterfaceList.getOutMappedInOutVars() : targetInterfaceList.getInOutVars()
+				: isInput ? targetInterfaceList.getInputVars() : targetInterfaceList.getOutputVars();
 	}
 
 	@Override
@@ -134,6 +145,10 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		createAdapterFBCreateCommand();
 		insertElement();
 		newInterfaceElement.setName(NameRepository.createUniqueName(newInterfaceElement, name));
+		if (!isInput && isInOut) {
+			switchOpposite = true;
+			newInterfaceElement = ((VarDeclaration) newInterfaceElement).getInOutVarOpposite();
+		}
 		if (null != adapterCreateCmd) {
 			adapterCreateCmd.execute();
 		}
@@ -151,20 +166,24 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		} else {
 			final VarDeclaration varDeclaration = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			ArraySizeHelper.setArraySize(varDeclaration, arraySize);
-			if (isInput) {
+			if (isInput || isInOut) {
 				varDeclaration.setValue(LibraryElementFactory.eINSTANCE.createValue());
 				varDeclaration.getValue().setValue(value);
 			}
 			newInterfaceElement = varDeclaration;
 		}
 
-		newInterfaceElement.setIsInput(isInput);
+		newInterfaceElement.setIsInput(isInput || isInOut);
 		newInterfaceElement.setType(dataType);
 	}
 
 	@Override
 	public void redo() {
 		insertElement();
+		if (!isInput && isInOut) {
+			switchOpposite = true;
+			newInterfaceElement = ((VarDeclaration) newInterfaceElement).getInOutVarOpposite();
+		}
 		if (null != adapterCreateCmd) {
 			adapterCreateCmd.redo();
 		}
@@ -172,6 +191,10 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 
 	@Override
 	public void undo() {
+		if (switchOpposite) {
+			switchOpposite = false;
+			newInterfaceElement = ((VarDeclaration) newInterfaceElement).getInOutVarOpposite();
+		}
 		getInterfaceListContainer().remove(newInterfaceElement);
 		if ((null != adapterCreateCmd) && adapterCreateCmd.canExecute()) {
 			adapterCreateCmd.undo();

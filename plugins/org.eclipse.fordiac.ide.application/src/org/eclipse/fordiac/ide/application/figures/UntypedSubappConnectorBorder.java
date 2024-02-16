@@ -51,7 +51,7 @@ public class UntypedSubappConnectorBorder extends ConnectorBorder {
 	@Override
 	public Insets getInsets(final IFigure figure) {
 		if (getSubapp().isUnfolded()) {
-			final int lrMargin = (isAdapter()) ? LR_ADAPTER_MARGIN : LR_MARGIN;
+			final int lrMargin = getLRMargin();
 			if (allOutsideConnectionsAreHidden()) {
 				if (isInput()) {
 					return new Insets(0, 0, 0, lrMargin);

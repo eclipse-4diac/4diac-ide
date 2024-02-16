@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -163,6 +164,11 @@ public final class LinkConstraints {
 		if (source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()
 				&& target instanceof final VarDeclaration targetVar && targetVar.isInOutVar()) {
 			return targetType.isAssignableFrom(sourceType) && sourceType.isAssignableFrom(targetType);
+		}
+		// check for adapter connections
+		if (source instanceof final AdapterDeclaration sourceAdapter
+				&& target instanceof final AdapterDeclaration targetAdapter) {
+			return adapaterTypeCompatibilityCheck(sourceAdapter.getType(), targetAdapter.getType());
 		}
 		// if source has generic type, it adapts to the target, which must fall into the
 		// generic type category
@@ -363,12 +369,20 @@ public final class LinkConstraints {
 
 	public static boolean adapaterTypeCompatibilityCheck(final IInterfaceElement source,
 			final IInterfaceElement target) {
-		if (((source.getType().getName().equals(ANY_ADAPTER)) && (!target.getType().getName().equals(ANY_ADAPTER)))
-				|| ((!source.getType().getName().equals(ANY_ADAPTER))
-						&& (target.getType().getName().equals(ANY_ADAPTER)))) {
-			return true;
+		if (source instanceof final AdapterDeclaration sourceAdapter
+				&& target instanceof final AdapterDeclaration targetAdapter) {
+			return adapaterTypeCompatibilityCheck(sourceAdapter.getType(), targetAdapter.getType());
 		}
-		return source.getType().getName().equalsIgnoreCase(target.getType().getName());
+		return false;
+	}
+
+	public static boolean adapaterTypeCompatibilityCheck(final AdapterType source, final AdapterType target) {
+		return (source != null && source.getName().equalsIgnoreCase(target.getName()))
+				|| (isAnyAdapter(source) ^ isAnyAdapter(target));
+	}
+
+	public static boolean isAnyAdapter(final AdapterType type) {
+		return type != null && ANY_ADAPTER.equals(type.getName());
 	}
 
 	private LinkConstraints() {

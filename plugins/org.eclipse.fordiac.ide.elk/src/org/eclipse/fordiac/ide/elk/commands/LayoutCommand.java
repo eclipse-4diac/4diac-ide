@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.elk.FordiacLayoutData.ConnectionLayoutData;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -107,7 +108,8 @@ public class LayoutCommand extends AbstractLayoutCommand {
 		final String attrValue = y.toString();
 		final Attribute attr = ie.getAttribute(FordiacKeywords.INTERFACE_Y_POSITION);
 		if (attr == null) {
-			cmd = CreateAttributeCommand.forValues(ie, FordiacKeywords.INTERFACE_Y_POSITION, "", null, attrValue, -1); //$NON-NLS-1$
+			cmd = CreateAttributeCommand.forValues(ie, FordiacKeywords.INTERFACE_Y_POSITION, "", //$NON-NLS-1$
+					IecTypes.ElementaryTypes.DINT, attrValue, -1);
 		} else {
 			cmd = new ChangeAttributeValueCommand(attr, attrValue);
 		}

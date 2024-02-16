@@ -13,13 +13,13 @@
 
 package org.eclipse.fordiac.ide.datatypeeditor.properties;
 
-import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.properties.AttributeSection;
-import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -49,24 +49,13 @@ public class StructAttributeSection extends AttributeSection {
 	}
 
 	@Override
-	protected ConfigurableObject getInputType(Object input) {
-		if (input instanceof final StructEditingComposite structViewingComposite) {
-			input = structViewingComposite.setConfigurablObjectListener(this::setType);
+	protected ConfigurableObject getInputType(final Object input) {
+		if (input instanceof final VarDeclaration varDeclaration) {
+			return varDeclaration;
 		}
-		if (input instanceof final StructuredType structuredType) {
-			if (structuredType.eContainer() instanceof final AttributeDeclaration attributeDeclaration) {
-				return attributeDeclaration;
-			}
-			return structuredType;
-		}
-		if (input instanceof final DirectlyDerivedType directlyDerivedType) {
-			if (directlyDerivedType.eContainer() instanceof final AttributeDeclaration attributeDeclaration) {
-				return attributeDeclaration;
-			}
-			return directlyDerivedType;
-		}
-		if (input instanceof final ConfigurableObject configurableObject) {
-			return configurableObject;
+		if (input instanceof final EObject eObject
+				&& EcoreUtil.getRootContainer(eObject) instanceof final LibraryElement libraryElement) {
+			return libraryElement;
 		}
 		return null;
 	}

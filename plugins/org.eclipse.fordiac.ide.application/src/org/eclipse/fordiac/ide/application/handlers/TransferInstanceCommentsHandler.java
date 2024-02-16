@@ -36,7 +36,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.search.dialog.FBUpdateDialog;
+import org.eclipse.fordiac.ide.model.search.dialog.StructuredDataTypeDataHandler;
+import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.search.types.StructManipulatorSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.gef.commands.CommandStack;
@@ -63,36 +64,38 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		selectedItem = struct.getModel();
 		final String[] labels = { Messages.TransferInstanceComments_TransferLabel, SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
-		final FBUpdateDialog structUpdateDialog = new FBUpdateDialog(null,
+		final FBTypeUpdateDialog<DataTypeEntry> structUpdateDialog = new FBTypeUpdateDialog<>(null,
 				Messages.TransferInstanceComments_WizardTitle, null, "", MessageDialog.NONE, labels,
-				DEFAULT_BUTTON_INDEX, (DataTypeEntry) struct.getModel().getStructType().getTypeEntry()) {
-			@Override
-			protected final Set<INamedElement> performStructSearch() {
-				final StructManipulatorSearch structSearch = new StructManipulatorSearch(dataTypeEntry);
+				DEFAULT_BUTTON_INDEX,
+				new StructuredDataTypeDataHandler((DataTypeEntry) struct.getModel().getStructType().getTypeEntry()) {
+					@Override
+					public final Set<INamedElement> performStructSearch() {
+						final StructManipulatorSearch structSearch = new StructManipulatorSearch(typeEntry);
 
-				Set<INamedElement> elements = Collections.emptySet();
+						Set<INamedElement> elements = Collections.emptySet();
 
-				final EObject root = EcoreUtil.getRootContainer(struct.getModel());
-				if (root instanceof final AutomationSystem sys) {
-					elements = structSearch.performApplicationSearch(sys);
-				} else if (root instanceof final SubAppType subAppType) {
-					elements = structSearch.performFBNetworkSearch(subAppType.getFBNetwork());
-				}
-				elements.removeIf(el -> el.equals(struct.getModel()) || isTypedOrContainedInTypedInstance(el));
+						final EObject root = EcoreUtil.getRootContainer(struct.getModel());
+						if (root instanceof final AutomationSystem sys) {
+							elements = structSearch.performApplicationSearch(sys);
+						} else if (root instanceof final SubAppType subAppType) {
+							elements = structSearch.performFBNetworkSearch(subAppType.getFBNetwork());
+						}
+						elements.removeIf(el -> el.equals(struct.getModel()) || isTypedOrContainedInTypedInstance(el));
 
-				// output connected elements only searchFilter
-				if (outputConnectedOnlyBtn != null && !outputConnectedOnlyBtn.isDisposed()
-						&& outputConnectedOnlyBtn.getSelection()) {
-					final List<FBNetworkElement> connectedFbs = FBEndpointFinder.getConnectedFbs(new ArrayList<>(),
-							selectedItem);
-					elements.removeIf(res -> (res instanceof final StructManipulator structMan
-							&& (!structMan.getInterface().getEventInputs().isEmpty()
-									|| !structMan.getInterface().getInputVars().isEmpty())
-							&& !connectedFbs.contains(res)));
+						// output connected elements only searchFilter
+						if (outputConnectedOnlyBtn != null && !outputConnectedOnlyBtn.isDisposed()
+								&& outputConnectedOnlyBtn.getSelection()) {
+							final List<FBNetworkElement> connectedFbs = FBEndpointFinder
+									.getConnectedFbs(new ArrayList<>(), selectedItem);
+							elements.removeIf(res -> (res instanceof final StructManipulator structMan
+									&& (!structMan.getInterface().getEventInputs().isEmpty()
+											|| !structMan.getInterface().getInputVars().isEmpty())
+									&& !connectedFbs.contains(res)));
 
-				}
-				return elements;
-			}
+						}
+						return elements;
+					}
+				}) {
 
 			@Override
 			protected void createfilterButtons(final Composite parent) {
@@ -118,8 +121,9 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		final CommandStack commandStack = editor.getAdapter(CommandStack.class);
 		if (structUpdateDialog.open() == DEFAULT_BUTTON_INDEX) {
 			final TransferInstanceCommentsCommand cmd = new TransferInstanceCommentsCommand(struct.getModel(),
-					structUpdateDialog.getCollectedFBs().stream().filter(StructManipulator.class::isInstance)
-							.map(StructManipulator.class::cast).collect(Collectors.toSet()));
+					structUpdateDialog.getDataHandler().getCollectedElements().stream()
+							.filter(StructManipulator.class::isInstance).map(StructManipulator.class::cast)
+							.collect(Collectors.toSet()));
 			commandStack.execute(cmd);
 		}
 		return null;

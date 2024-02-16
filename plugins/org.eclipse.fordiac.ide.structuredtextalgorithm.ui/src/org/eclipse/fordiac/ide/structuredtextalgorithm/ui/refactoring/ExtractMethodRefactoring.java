@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ProviderDocumen
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
 public class ExtractMethodRefactoring extends ExtractCallableRefactoring {
@@ -33,28 +32,10 @@ public class ExtractMethodRefactoring extends ExtractCallableRefactoring {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final ProviderDocumentChange change = new ExtractMethodRefactoringChange(getName(),
+		final ProviderDocumentChange change = new ProviderDocumentChange(getName(),
 				(IFileEditorInput) getEditor().getEditorInput(), getEditor().getDocumentProvider());
 		change.setEdit(createTextEdit());
 		change.setTextType("stalg"); //$NON-NLS-1$
 		return change;
-	}
-
-	protected static class ExtractMethodRefactoringChange extends ProviderDocumentChange {
-
-		public ExtractMethodRefactoringChange(final String name, final IFileEditorInput editorInput,
-				final IDocumentProvider documentProvider) {
-			super(name, editorInput, documentProvider);
-		}
-
-		@Override
-		public Object getModifiedElement() {
-			// Return null here to hide the actual resource from callers. This prevents callers from inferring the
-			// content type based on the resource file extension (*.fbt) and subsequently using EMF compare. EMF compare
-			// would not work in this case, since we are only creating a text change for the algorithm part. This forces
-			// callers to rely on the text type ("stalg") set on the change above, which causes them to use the correct
-			// compare editor based on Xtext with ST algorithm as language.
-			return null;
-		}
 	}
 }

@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.jdt.annotation.NonNull;
@@ -101,7 +102,7 @@ public class VarDeclarationAnnotations {
 	public static boolean validateVarInOutIsWithed(@NonNull final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isInOutVar() && varDeclaration.getWiths().isEmpty()
-				&& varDeclaration.getFBNetworkElement() == null) {
+				&& varDeclaration.getFBNetworkElement() == null && !isSubappTypeInterface(varDeclaration)) {
 			if (diagnostics != null) {
 				final String typeName = varDeclaration.eContainer().eContainer() instanceof final FB fb ? fb.getName()
 						: ((INamedElement) varDeclaration.eContainer().eContainer()).getName();
@@ -133,6 +134,11 @@ public class VarDeclarationAnnotations {
 	static boolean hasValue(final VarDeclaration varDeclaration) {
 		return varDeclaration.getValue() != null && varDeclaration.getValue().getValue() != null
 				&& !varDeclaration.getValue().getValue().isEmpty();
+	}
+
+	static boolean isSubappTypeInterface(final VarDeclaration varDeclaration) {
+		return varDeclaration.eContainer() instanceof final InterfaceList interfaceList
+				&& interfaceList.eContainer() instanceof SubAppType;
 	}
 
 	private VarDeclarationAnnotations() {

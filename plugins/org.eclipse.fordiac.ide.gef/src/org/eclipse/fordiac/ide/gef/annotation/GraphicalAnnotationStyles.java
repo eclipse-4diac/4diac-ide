@@ -21,7 +21,10 @@ import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.swt.SWT;
@@ -133,6 +136,22 @@ public final class GraphicalAnnotationStyles {
 		}
 	}
 
+	public static void updateAnnotationFeedback(final PolylineConnection annonFigure, final Object target,
+			final GraphicalAnnotationModelEvent event) {
+		updateAnnotationFeedback(annonFigure, target, event, annotation -> true);
+	}
+
+	public static void updateAnnotationFeedback(final PolylineConnection annonFigure, final Object target,
+			final GraphicalAnnotationModelEvent event, final Predicate<GraphicalAnnotation> filter) {
+		final Color annotationColor = GraphicalAnnotationStyles
+				.getAnnotationColor(event.getModel().getAnnotations(target), filter);
+		if (annotationColor != null) {
+			annonFigure.setBorder(new AnnotationFeedbackConnectionBorder(annotationColor));
+		} else {
+			annonFigure.setBorder(null);
+		}
+	}
+
 	private static void setAnnotationBorder(final IFigure annonFigure, final Color annotationColor) {
 		var border = annonFigure.getBorder();
 		if (border == null || border instanceof AnnotationFeedbackBorder) {
@@ -179,7 +198,7 @@ public final class GraphicalAnnotationStyles {
 		}
 	}
 
-	public static final class AnnotationFeedbackBorder extends LineBorder {
+	public static class AnnotationFeedbackBorder extends LineBorder {
 		private static final Insets INSETS = new Insets();
 		private static final int FEEDBACK_BORDER_LINE_WIDTH = 2;
 		public static final int ANNOTATION_FILL_ALPHA = 90;
@@ -208,6 +227,75 @@ public final class GraphicalAnnotationStyles {
 			graphics.drawRoundRectangle(tempRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
 			graphics.setAlpha(ANNOTATION_FILL_ALPHA);
 			graphics.fillRoundRectangle(tempRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
+		}
+	}
+
+	public static class AnnotationFeedbackConnectionBorder extends AnnotationFeedbackBorder {
+		private static final int LINE_DISTANCE = 2;
+
+		public AnnotationFeedbackConnectionBorder(final Color color) {
+			super(color);
+		}
+
+		@Override
+		public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
+			if (figure instanceof final PolylineConnection conn) {
+				final PointList upper = new PointList();
+				final PointList lower = new PointList();
+				final PointList base = conn.getPoints();
+				final int distance = conn.getLineWidth() / 2 + LINE_DISTANCE;
+				int dx = 0;
+				int dy = 0;
+				Point p1 = base.getFirstPoint();
+				Point p2 = p1;
+				// calculate offset points for border
+				for (int i = 1; i < base.size(); i++) {
+					p1 = p2;
+					p2 = base.getPoint(i);
+					dx = calcDX(p1, p2, dx, distance);
+					dy = calcDY(p1, p2, dy, distance);
+					upper.addPoint(p1.x + dx, p1.y + dy);
+					lower.addPoint(p1.x - dx, p1.y - dy);
+				}
+				// last point
+				dx = calcDX(p2, p1, 0, distance);
+				dy = calcDY(p2, p1, 0, distance);
+				upper.addPoint(p2.x - dx, p2.y - dy);
+				lower.addPoint(p2.x + dx, p2.y + dy);
+
+				graphics.setLineStyle(Graphics.LINE_SOLID);
+				graphics.setLineWidth(getWidth());
+				graphics.setXORMode(false);
+				graphics.setForegroundColor(getColor());
+				graphics.setBackgroundColor(getColor());
+				graphics.drawPolyline(upper);
+				graphics.drawPolyline(lower);
+				graphics.setAlpha(ANNOTATION_FILL_ALPHA);
+				graphics.setLineWidth(conn.getLineWidth() * 2 + LINE_DISTANCE);
+				graphics.drawPolyline(base);
+
+			} else {
+				super.paint(figure, graphics, insets);
+			}
+		}
+
+		private static int calcDX(final Point p1, final Point p2, final int dx, final int distance) {
+			if (p2.y - p1.y < 0) {
+				return distance;
+			}
+			if (p2.y - p1.y > 0) {
+				return -distance;
+			}
+			return dx;
+		}
+
+		private static int calcDY(final Point p1, final Point p2, int dy, final int distance) {
+			if (p2.x - p1.x < 0) {
+				dy = -distance;
+			} else if (p2.x - p1.x > 0) {
+				dy = distance;
+			}
+			return dy;
 		}
 	}
 

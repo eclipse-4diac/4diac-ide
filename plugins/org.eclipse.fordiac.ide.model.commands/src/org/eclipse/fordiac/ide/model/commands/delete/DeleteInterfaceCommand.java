@@ -44,7 +44,7 @@ public class DeleteInterfaceCommand extends Command implements ScopedCommand {
 	private int oldIndex;
 
 	public DeleteInterfaceCommand(final IInterfaceElement interfaceElement) {
-		this.interfaceElement = Objects.requireNonNull(interfaceElement);
+		this.interfaceElement = getTargetElement(Objects.requireNonNull(interfaceElement));
 		parent = (InterfaceList) Objects.requireNonNull(interfaceElement.eContainer(), "container is null"); //$NON-NLS-1$
 		targetList = getTargetList(this.interfaceElement); // this has to be the adjust this.interfaceElement
 	}
@@ -53,6 +53,10 @@ public class DeleteInterfaceCommand extends Command implements ScopedCommand {
 	public void execute() {
 		handleWiths(interfaceElement);
 		handleSubAppConnections(interfaceElement);
+		if (interfaceElement instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
+			handleWiths(varDecl.getInOutVarOpposite());
+			handleSubAppConnections(varDecl.getInOutVarOpposite());
+		}
 		if ((interfaceElement instanceof final AdapterDeclaration adp)
 				&& (parent.eContainer() instanceof CompositeFBType)) {
 			cmds.add(new DeleteFBNetworkElementCommand(adp.getAdapterNetworkFB()));
@@ -113,6 +117,13 @@ public class DeleteInterfaceCommand extends Command implements ScopedCommand {
 
 	public IInterfaceElement getInterfaceElement() {
 		return interfaceElement;
+	}
+
+	private static IInterfaceElement getTargetElement(final IInterfaceElement ie) {
+		if (ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && !varDecl.isIsInput()) {
+			return varDecl.getInOutVarOpposite();
+		}
+		return ie;
 	}
 
 	private static List<? extends IInterfaceElement> getTargetList(final IInterfaceElement ie) {

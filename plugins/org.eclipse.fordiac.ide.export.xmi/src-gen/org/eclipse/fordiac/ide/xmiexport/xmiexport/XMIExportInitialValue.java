@@ -17,8 +17,7 @@ package org.eclipse.fordiac.ide.xmiexport.xmiexport;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
 
 /**
@@ -45,12 +44,12 @@ public interface XMIExportInitialValue extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Variable</em>' reference.
-	 * @see #setVariable(VarDeclaration)
+	 * @see #setVariable(INamedElement)
 	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportPackage#getXMIExportInitialValue_Variable()
 	 * @model
 	 * @generated
 	 */
-	VarDeclaration getVariable();
+	INamedElement getVariable();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue#getVariable <em>Variable</em>}' reference.
@@ -60,7 +59,7 @@ public interface XMIExportInitialValue extends EObject {
 	 * @see #getVariable()
 	 * @generated
 	 */
-	void setVariable(VarDeclaration value);
+	void setVariable(INamedElement value);
 
 	/**
 	 * Returns the value of the '<em><b>Expression</b></em>' containment reference.

@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IFilter;
 
@@ -45,6 +46,10 @@ public class InstanceSectionFilter implements IFilter {
 
 		if (element instanceof final InstanceName instanceName) {
 			candidate = instanceName.getRefElement();
+		}
+
+		if (candidate instanceof final SubApp subapp) {
+			return null;
 		}
 
 		if (candidate instanceof final FBNetworkElement fbNetworkElement

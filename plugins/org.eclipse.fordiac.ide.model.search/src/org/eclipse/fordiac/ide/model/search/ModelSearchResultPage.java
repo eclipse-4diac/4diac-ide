@@ -14,15 +14,14 @@
 package org.eclipse.fordiac.ide.model.search;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
@@ -190,7 +189,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		fullHierarchicalName.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				return hierarchicalName(element);
+				final ModelSearchResult searchResult = (ModelSearchResult) contentProvider.getSearchResult();
+				return searchResult.getDictionary().hierarchicalName(element);
 			}
 
 		});
@@ -223,6 +223,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		EObject parent = null;
 		if (eobj instanceof final IInterfaceElement ie) {
 			parent = ie.getFBNetworkElement().eContainer().eContainer();
+		} else if (isInternalFb(eobj)) {
+			parent = eobj.eContainer();
 		} else {
 			parent = eobj.eContainer().eContainer();
 		}
@@ -233,32 +235,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		return parent;
 	}
 
-	public static String hierarchicalName(final Object element) {
-		if (element instanceof final FBNetworkElement fbne) {
-			final FBType root = FBNetworkHelper.getRootType(fbne);
-			final StringBuilder sb = new StringBuilder();
-			if (root == null) {
-				sb.append(fbne.getFbNetwork().getApplication().getAutomationSystem().getName() + ".");
-			}
-			return sb.toString() + FBNetworkHelper.getFullHierarchicalName(fbne);
-		}
-		if (element instanceof final IInterfaceElement ie) {
-			final String FBName = FBNetworkHelper.getFullHierarchicalName(ie.getFBNetworkElement());
-			return FBName + "." + ie.getName(); //$NON-NLS-1$
-		}
-		if (element instanceof final Device device) {
-			// systemname.device
-			return device.getAutomationSystem().getName() + "." + device.getName(); //$NON-NLS-1$
-		}
-		if (element instanceof final Resource res) {
-			// systemname.devicename.resource
-			return res.getDevice().getAutomationSystem().getName() + "." + res.getDevice().getName() + "." //$NON-NLS-1$
-					+ res.getName();
-		}
-		if (element instanceof final INamedElement namedElement) {
-			return namedElement.getName();
-		}
-		return element.toString();
+	private static boolean isInternalFb(final EObject eobj) {
+		return eobj instanceof final FB fb && fb.eContainer() instanceof FBType && !fb.isContainedInTypedInstance();
 	}
 
 	protected static TableLayout createTableLayout() {

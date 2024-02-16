@@ -14,10 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.StringJoiner;
-
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -27,6 +23,7 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -41,17 +38,12 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class UpdateInstancesChange extends Change {
 
-	private final Collection<FBNetworkElement> instances;
+	private final FBNetworkElement instance;
 	private final TypeEntry typeEntry;
 
-	public UpdateInstancesChange(final Collection<FBNetworkElement> instances, final TypeEntry typeEntry) {
-		this.instances = instances;
-		this.typeEntry = typeEntry;
-	}
-
 	public UpdateInstancesChange(final FBNetworkElement instance, final TypeEntry typeEntry) {
-		this(new ArrayList<>(), typeEntry);
-		this.instances.add(instance);
+		this.instance = instance;
+		this.typeEntry = typeEntry;
 	}
 
 	public UpdateInstancesChange(final FBNetworkElement instance) {
@@ -60,15 +52,7 @@ public class UpdateInstancesChange extends Change {
 
 	@Override
 	public String getName() {
-		final StringJoiner fbList = new StringJoiner(", "); //$NON-NLS-1$
-		for (final FBNetworkElement fb : instances) {
-			if (fb.getTypeName() != null) {
-				fbList.add(fb.getQualifiedName() + " : " + fb.getTypeName()); //$NON-NLS-1$
-			} else {
-				fbList.add(fb.getQualifiedName());
-			}
-		}
-		return "Update FB instances - " + fbList.toString(); //$NON-NLS-1$
+		return "Update FB instances - " + FBNetworkHelper.getFullHierarchicalName(instance); //$NON-NLS-1$
 	}
 
 	@Override
@@ -100,7 +84,7 @@ public class UpdateInstancesChange extends Change {
 
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
-		instances.stream().forEach(instance -> ChangeExecutionHelper.executeChange(getCommand(instance), instance, pm));
+		ChangeExecutionHelper.executeChange(getCommand(instance), instance, pm);
 		return null;
 	}
 

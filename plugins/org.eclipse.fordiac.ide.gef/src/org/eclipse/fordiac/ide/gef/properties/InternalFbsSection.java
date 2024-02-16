@@ -40,17 +40,20 @@ import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.model.ui.widgets.FBTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.ISelectionProviderSection;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.selection.RowPostSelectionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -58,9 +61,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class InternalFbsSection extends AbstractSection implements I4diacNatTableUtil {
+public class InternalFbsSection extends AbstractSection implements I4diacNatTableUtil, ISelectionProviderSection {
 	protected IChangeableRowDataProvider<FB> provider;
 	protected NatTable table;
+	private RowPostSelectionProvider<FB> selectionProvider;
+	private AddDeleteReorderToolbarWidget buttons;
 
 	@Override
 	protected BaseFBType getType() {
@@ -78,12 +83,13 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+		buttons = new AddDeleteReorderToolbarWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
 		provider = new ChangeableListDataProvider<>(new FBColumnAccessor(this));
 		final DataLayer dataLayer = new DataLayer(provider);
-		dataLayer.setConfigLabelAccumulator(new TypedElementConfigLabelAccumulator(provider, this::getAnnotationModel));
+		dataLayer.setConfigLabelAccumulator(
+				new TypedElementConfigLabelAccumulator<>(provider, this::getAnnotationModel));
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
 				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,
 				new TypeSelectionButton(this::getTypeLibrary, FBTypeSelectionContentProvider.INSTANCE,
@@ -96,6 +102,9 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 				ref -> new DeleteInternalFBCommand(getType(), getLastSelectedFB()),
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.UP),
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.DOWN));
+
+		selectionProvider = new RowPostSelectionProvider<>(table, NatTableWidgetFactory.getSelectionLayer(table),
+				provider, false);
 	}
 
 	private FBTypeEntry getFBTypeEntry() {
@@ -167,6 +176,14 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	}
 
 	@Override
+	public void dispose() {
+		super.dispose();
+		if (buttons != null) {
+			buttons.dispose();
+		}
+	}
+
+	@Override
 	public void removeEntry(final Object entry, final CompoundCommand cmd) {
 		if (entry instanceof final FB fb) {
 			cmd.add(new DeleteInternalFBCommand(getType(), fb));
@@ -199,4 +216,8 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		}
 	}
 
+	@Override
+	public ISelectionProvider getSelectionProvider() {
+		return selectionProvider;
+	}
 }

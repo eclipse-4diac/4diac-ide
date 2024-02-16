@@ -388,7 +388,9 @@ final class STCoreUtil {
 				val expectedReturnType = switch (type: featureExpression.expectedType) { DataType: type }
 				val index = featureExpression.parameters.indexOf(argument)
 				if (index >= 0) {
-					feature.javaMethod.inferExpectedParameterTypeFromDataType(expectedReturnType, index)
+					feature.javaMethod.inferExpectedParameterTypeFromDataType(expectedReturnType,
+						featureExpression.parameters.map[switch (type:declaredResultType) { DataType: type }].toList,
+						index)
 				}
 			} else {
 				argument.parameterNoresolve.featureType

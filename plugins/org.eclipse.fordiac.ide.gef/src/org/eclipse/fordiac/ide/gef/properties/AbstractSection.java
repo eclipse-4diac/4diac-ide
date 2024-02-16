@@ -120,13 +120,17 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	};
 
 	protected void notifiyRefresh() {
-		if ((null != getType()) && getType().eAdapters().contains(contentAdapter) && !blockRefresh) {
+		if (shouldRefresh()) {
 			parent.getDisplay().asyncExec(() -> {
 				if (!parent.isDisposed()) {
 					refresh();
 				}
 			});
 		}
+	}
+
+	protected boolean shouldRefresh() {
+		return (null != getType()) && getType().eAdapters().contains(contentAdapter) && !blockRefresh;
 	}
 
 	@Override

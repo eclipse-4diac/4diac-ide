@@ -83,6 +83,9 @@ Workflow {
 			generator = {
 				generateXtendStub = true
 			}
+			renameRefactoring = {
+				useChangeSerializer = true
+			}
 			formatter = {
 				generateStub = true
 				generateXtendStub = true

@@ -27,7 +27,9 @@ import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -133,6 +135,15 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 	@Override
 	public boolean isConnectable() {
 		return true;
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == ErrorMarkerDataTypeImpl.class) {
+			final DataType marker = getModel().getType();
+			return marker instanceof ErrorMarkerDataTypeImpl ? key.cast(marker) : null;
+		}
+		return super.getAdapter(key);
 	}
 
 }
