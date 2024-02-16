@@ -643,6 +643,22 @@ final class STCoreUtil {
 			null
 	}
 
+	def static boolean isAnyVariableReference(STExpression expr) {
+		switch (expr) {
+			STFeatureExpression: expr.feature.isAnyTypeVariable
+			STMemberAccessExpression: expr.member.isAnyVariableReference
+			STArrayAccessExpression: expr.receiver.isAnyVariableReference
+			default: false
+		}
+	}
+
+	def static boolean isAnyTypeVariable(INamedElement element) {
+		switch (element) {
+			VarDeclaration: GenericTypes.isAnyType(element.type)
+			default: false
+		}
+	}
+
 	def static boolean isAnyType(INamedElement element) {
 		switch (element) {
 			DataType: GenericTypes.isAnyType(element)
