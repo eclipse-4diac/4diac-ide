@@ -213,7 +213,8 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
 				// allow each editor to save back changes before saving to file
-				editors.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
+				editors.stream().filter(IEditorPart::isDirty)
+						.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
 				typeEntry.save(fbType, monitor);
 			}
 		};
