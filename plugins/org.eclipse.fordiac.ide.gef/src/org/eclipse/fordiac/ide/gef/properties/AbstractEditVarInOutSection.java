@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteVarInOutCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -116,7 +115,7 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 	protected abstract CreationCommand newInsertCommand(final IInterfaceElement ie, final int index);
 
 	protected static DeleteInterfaceCommand newDeleteCommand(final IInterfaceElement selection) {
-		return new DeleteVarInOutCommand((VarDeclaration) selection);
+		return new DeleteInterfaceCommand(selection);
 	}
 
 	protected static ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection,
