@@ -21,6 +21,7 @@
     </genEnums>
     <genDataTypes ecoreDataType="lib.ecore#//CommandStack"/>
     <genDataTypes ecoreDataType="lib.ecore#//IFile"/>
+    <genDataTypes ecoreDataType="lib.ecore#//InterfaceElementStream"/>
     <genDataTypes ecoreDataType="lib.ecore#//IProject"/>
     <genDataTypes ecoreDataType="lib.ecore#//Point"/>
     <genDataTypes ecoreDataType="lib.ecore#//TypeEntry"/>
@@ -439,6 +440,12 @@
           body="return getWidth();"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getVisibleHeight"
           body="return getHeight();"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getInput" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getInput(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/getInput/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getOutput" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getOutput(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/getOutput/name"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/interfaceList"/>
@@ -550,6 +557,14 @@
           body="return getInputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getVisibleOutputVars"
           body="return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInputs" body="return InterfaceListAnnotations.getInputs(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getOutputs" body="return InterfaceListAnnotations.getOutputs(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInput" body="return InterfaceListAnnotations.getInputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);">
+        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInput/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getOutput" body="return InterfaceListAnnotations.getOutputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);">
+        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getOutput/name"/>
+      </genOperations>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//ITypedElement">
       <genOperations ecoreOperation="lib.ecore#//ITypedElement/getType"/>

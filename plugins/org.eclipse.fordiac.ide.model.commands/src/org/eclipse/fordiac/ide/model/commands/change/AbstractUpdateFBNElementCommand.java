@@ -373,7 +373,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	private static IInterfaceElement updateSelectedInterface(final IInterfaceElement oldInterface,
 			final FBNetworkElement newElement) {
-		IInterfaceElement updatedSelected = newElement.getInterfaceElement(oldInterface.getName());
+		IInterfaceElement updatedSelected = oldInterface.isIsInput() ? newElement.getInput(oldInterface.getName())
+				: newElement.getOutput(oldInterface.getName());
 		if ((updatedSelected == null) || (updatedSelected.isIsInput() != oldInterface.isIsInput())) {
 			updatedSelected = createMissingMarker(oldInterface, newElement);
 		}

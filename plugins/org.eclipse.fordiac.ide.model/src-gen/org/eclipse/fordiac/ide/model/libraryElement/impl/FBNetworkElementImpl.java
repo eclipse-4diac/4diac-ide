@@ -554,6 +554,26 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
+	public IInterfaceElement getInput(final String name) {
+		return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getInput(this, name);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public IInterfaceElement getOutput(final String name) {
+		return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getOutput(this, name);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void updatePosition(final int x, final int y) {
 		final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createPosition();
 		pos.setX(x);

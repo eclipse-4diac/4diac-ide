@@ -243,4 +243,20 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 */
 	int getVisibleHeight();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	IInterfaceElement getInput(String name);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	IInterfaceElement getOutput(String name);
+
 } // FBNetworkElement

@@ -7441,6 +7441,16 @@ public interface LibraryElementPackage extends EPackage {
 	int IFILE = 103;
 
 	/**
+	 * The meta object id for the '<em>Interface Element Stream</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.util.stream.Stream
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceElementStream()
+	 * @generated
+	 */
+	int INTERFACE_ELEMENT_STREAM = 104;
+
+	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7448,7 +7458,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 104;
+	int IPROJECT = 105;
 
 	/**
 	 * The meta object id for the '<em>Point</em>' data type.
@@ -7458,7 +7468,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPoint()
 	 * @generated
 	 */
-	int POINT = 105;
+	int POINT = 106;
 
 	/**
 	 * The meta object id for the '<em>Type Entry</em>' data type.
@@ -7468,7 +7478,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeEntry()
 	 * @generated
 	 */
-	int TYPE_ENTRY = 106;
+	int TYPE_ENTRY = 107;
 
 	/**
 	 * The meta object id for the '<em>Type Library</em>' data type.
@@ -7478,7 +7488,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeLibrary()
 	 * @generated
 	 */
-	int TYPE_LIBRARY = 107;
+	int TYPE_LIBRARY = 108;
 
 	/**
 	 * The meta object id for the '<em>Var Decl List</em>' data type.
@@ -7488,7 +7498,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclList()
 	 * @generated
 	 */
-	int VAR_DECL_LIST = 108;
+	int VAR_DECL_LIST = 109;
 
 
 	/**
@@ -10668,6 +10678,17 @@ public interface LibraryElementPackage extends EPackage {
 	EDataType getIFile();
 
 	/**
+	 * Returns the meta object for data type '{@link java.util.stream.Stream <em>Interface Element Stream</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Interface Element Stream</em>'.
+	 * @see java.util.stream.Stream
+	 * @model instanceClass="java.util.stream.Stream&lt;org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement&gt;"
+	 * @generated
+	 */
+	EDataType getInterfaceElementStream();
+
+	/**
 	 * Returns the meta object for data type '{@link org.eclipse.core.resources.IProject <em>IProject</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -13335,6 +13356,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EDataType IFILE = eINSTANCE.getIFile();
+
+		/**
+		 * The meta object literal for the '<em>Interface Element Stream</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.util.stream.Stream
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceElementStream()
+		 * @generated
+		 */
+		EDataType INTERFACE_ELEMENT_STREAM = eINSTANCE.getInterfaceElementStream();
 
 		/**
 		 * The meta object literal for the '<em>IProject</em>' data type.

@@ -19,6 +19,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.stream.Stream;
+
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.Annotations;
@@ -116,6 +118,16 @@ final class InterfaceListAnnotations {
 			}
 		}
 		return null;
+	}
+
+	public static Stream<IInterfaceElement> getInputs(final InterfaceList il) {
+		return Stream.concat(Stream.concat(il.getEventInputs().stream(), il.getInputVars().stream()),
+				il.getInOutVars().stream());
+	}
+
+	public static Stream<IInterfaceElement> getOutputs(final InterfaceList il) {
+		return Stream.concat(Stream.concat(il.getEventOutputs().stream(), il.getOutputVars().stream()),
+				il.getOutMappedInOutVars().stream());
 	}
 
 	private InterfaceListAnnotations() {

@@ -30,15 +30,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 public class ErrorMarkerDataTypeImpl extends DataTypeImpl implements ErrorMarkerDataType {
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	protected ErrorMarkerDataTypeImpl() {
+		super();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
