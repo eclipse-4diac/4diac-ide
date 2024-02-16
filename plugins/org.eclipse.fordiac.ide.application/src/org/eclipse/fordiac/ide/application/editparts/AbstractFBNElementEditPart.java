@@ -427,7 +427,11 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	protected void removeChildVisual(final EditPart childEditPart) {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
-			getTargetFigure(interfaceEditPart).remove(child);
+			if (getTargetFigure(interfaceEditPart).getChildren().contains(child)) {
+				getTargetFigure(interfaceEditPart).remove(child);
+			} else {
+				child.getParent().remove(child);
+			}
 		} else if (childEditPart instanceof final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart) {
 			removePinIndicatorFigure(hiddenPinIndicatorEditPart, child);
 		} else {
