@@ -49,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -353,7 +354,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			}
 			return adapter.cast(outlinePage);
 		}
-		if (adapter == AutomationSystem.class) {
+		if (adapter == AutomationSystem.class || adapter == LibraryElement.class) {
 			return adapter.cast(system);
 		}
 		if (adapter == GraphicalAnnotationModel.class) {

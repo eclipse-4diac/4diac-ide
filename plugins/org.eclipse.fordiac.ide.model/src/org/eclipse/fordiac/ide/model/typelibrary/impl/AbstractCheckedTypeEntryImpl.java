@@ -45,6 +45,15 @@ abstract class AbstractCheckedTypeEntryImpl<T extends LibraryElement> extends Ab
 	}
 
 	@Override
+	public synchronized T copyType() {
+		final LibraryElement type = super.copyType();
+		if (typeClass.isInstance(type)) {
+			return typeClass.cast(type);
+		}
+		return null;
+	}
+
+	@Override
 	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
 		if (typeClass.isInstance(toSave)) {
 			doSaveInternal(getTypeExporter(typeClass.cast(toSave)), monitor);

@@ -25,4 +25,6 @@ public interface AdapterTypeEntry extends TypeEntry {
 	@Override
 	AdapterType getTypeEditable();
 
+	@Override
+	AdapterType copyType();
 }

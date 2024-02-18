@@ -93,6 +93,12 @@ public final class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEn
 	}
 
 	@Override
+	public FBType copyType() {
+		// currently not needed in mock
+		return null;
+	}
+
+	@Override
 	public String getTypeName() {
 		return getType().getName();
 	}

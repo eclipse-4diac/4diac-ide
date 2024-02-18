@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -422,6 +423,9 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		}
 		if (key == CommandStack.class) {
 			return key.cast(getCommandStack());
+		}
+		if (key == LibraryElement.class) {
+			return key.cast(attributeDeclaration);
 		}
 		if (key == ActionRegistry.class) {
 			return key.cast(getActionRegistry());

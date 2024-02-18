@@ -53,6 +53,8 @@ public interface TypeEntry extends Notifier {
 
 	void setTypeLibrary(TypeLibrary typeLib);
 
+	LibraryElement copyType();
+
 	/** Save the editable type to the file associated with this type entry */
 	default void save(final LibraryElement toSave) throws CoreException {
 		save(toSave, new NullProgressMonitor());

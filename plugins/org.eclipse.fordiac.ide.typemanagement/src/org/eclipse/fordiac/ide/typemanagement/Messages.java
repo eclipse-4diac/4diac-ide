@@ -26,6 +26,10 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.typemanagement.messages"; //$NON-NLS-1$
 
+	public static String AbstractCommandChange_CannotExecuteCommand;
+
+	public static String AbstractCommandChange_NoSuchElement;
+
 	public static String BuildPathPropertyPage_AddExclude;
 
 	public static String BuildPathPropertyPage_AddExcludePattern;
@@ -57,6 +61,10 @@ public final class Messages extends NLS {
 	public static String BuildPathPropertyPage_SaveError;
 
 	public static String BuildPathPropertyPage_Toggle;
+
+	public static String CommandRedoChange_CannotRedoCommand;
+
+	public static String CommandUndoChange_CannotUndoCommand;
 
 	public static String Confirm;
 
@@ -91,9 +99,7 @@ public final class Messages extends NLS {
 	public static String NewFBTypeWizardPage_OpenTypeForEditingWhenDone;
 	public static String NewFBTypeWizardPage_InvalidOrNoComment;
 	public static String NewVersionOf;
-	public static String RenameElementChange_CannotExecuteCommand;
 	public static String RenameElementChange_NameChanged;
-	public static String RenameElementChange_NoSuchElement;
 	public static String RenameElementRefactoringParticipant_Name;
 	public static String RenameElementRefactoringProcessor_Name;
 	public static String RenameElementRefactoringWizardPage_Name;
