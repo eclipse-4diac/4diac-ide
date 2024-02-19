@@ -49,6 +49,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
@@ -59,6 +60,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -87,6 +89,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Display;
@@ -456,7 +459,20 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor()) && !(part instanceof PropertySheet)) {
-			handleContentOutlineSelection(selection);
+			if (selection instanceof final StructuredSelection structSel
+					&& structSel.getFirstElement() instanceof final URI uri
+					&& fbType.eResource().getEObject(uri.fragment()) instanceof final FB fb) {
+				if (fb.eContainer() instanceof FBType && !fb.isContainedInTypedInstance()) {
+					// internal fb
+					// TODO currently has the old behaviour
+					handleContentOutlineSelection(new StructuredSelection(fb));
+				} else {
+					// fb in network
+					handleContentOutlineSelection(new StructuredSelection(fb));
+				}
+			} else {
+				handleContentOutlineSelection(selection);
+			}
 		}
 	}
 
