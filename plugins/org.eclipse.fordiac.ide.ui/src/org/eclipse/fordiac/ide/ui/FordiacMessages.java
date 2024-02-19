@@ -120,7 +120,7 @@ public final class FordiacMessages extends NLS {
 	public static String TableCopyPaste_TEXT_Cut; // NOSONAR
 	public static String NatTable_TEXT_Paste; // NOSONAR
 
-	public static String Group_LABEL_LockSize; // NOSONAR
+	public static String Group_LABEL_DisableAutoResize; // NOSONAR
 	public static String Group_TOOLTIP_DisableAutoResize; // NOSONAR
 
 	public static String Subapp_Size_DisableAutoResize; // NOSONAR
