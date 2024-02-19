@@ -40,6 +40,8 @@ public final class InternalAttributeDeclarations {
 			ElementaryTypes.BOOL);
 	public static final AttributeDeclaration VISIBLE = createAttributeDeclaration(LibraryElementTags.ELEMENT_VISIBLE,
 			ElementaryTypes.BOOL);
+	public static final AttributeDeclaration UNFOLDED = createAttributeDeclaration(
+			LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE, ElementaryTypes.BOOL);
 
 	private static AttributeDeclaration createAttributeDeclaration(final String name, final DataType type) {
 		final AttributeDeclaration declaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
@@ -58,7 +60,7 @@ public final class InternalAttributeDeclarations {
 	}
 
 	public static List<AttributeDeclaration> getAllInternalAttributes() {
-		return List.of(VAR_CONFIG, VISIBLE);
+		return List.of(VAR_CONFIG, VISIBLE, UNFOLDED);
 	}
 
 	public static boolean isInternalAttribue(final AttributeDeclaration declaration) {
