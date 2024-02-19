@@ -18,7 +18,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.util;
 
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Stream;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
@@ -627,6 +627,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateCommandStack((CommandStack)value, diagnostics, context);
 			case LibraryElementPackage.IFILE:
 				return validateIFile((IFile)value, diagnostics, context);
+			case LibraryElementPackage.INTERFACE_ELEMENT_STREAM:
+				return validateInterfaceElementStream((Stream<IInterfaceElement>)value, diagnostics, context);
 			case LibraryElementPackage.IPROJECT:
 				return validateIProject((IProject)value, diagnostics, context);
 			case LibraryElementPackage.POINT:
@@ -2603,6 +2605,15 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateIFile(IFile iFile, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return true;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateInterfaceElementStream(Stream<IInterfaceElement> interfaceElementStream, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 

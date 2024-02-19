@@ -69,6 +69,20 @@ public final class FBNetworkElementAnnotations {
 		return null;
 	}
 
+	public static IInterfaceElement getInput(final FBNetworkElement fbne, final String name) {
+		if (fbne.getInterface() != null) {
+			return fbne.getInterface().getInput(name);
+		}
+		return null;
+	}
+
+	public static IInterfaceElement getOutput(final FBNetworkElement fbne, final String name) {
+		if (fbne.getInterface() != null) {
+			return fbne.getInterface().getOutput(name);
+		}
+		return null;
+	}
+
 	public static FBNetworkElement getOpposite(final FBNetworkElement fbne) {
 		// try to find the other corresponding mapped entity if this FBNetworkElement is
 		// mapped

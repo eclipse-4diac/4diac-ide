@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import java.util.List;
+import java.util.stream.Stream;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -220,6 +221,38 @@ public interface InterfaceList extends EObject {
 	 * @generated
 	 */
 	List<VarDeclaration> getVisibleOutputVars();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.InterfaceElementStream"
+	 * @generated
+	 */
+	Stream<IInterfaceElement> getInputs();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.InterfaceElementStream"
+	 * @generated
+	 */
+	Stream<IInterfaceElement> getOutputs();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	IInterfaceElement getInput(String name);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	IInterfaceElement getOutput(String name);
 
 	/**
 	 * Returns the value of the '<em><b>Out Mapped In Out Vars</b></em>' containment reference list.
