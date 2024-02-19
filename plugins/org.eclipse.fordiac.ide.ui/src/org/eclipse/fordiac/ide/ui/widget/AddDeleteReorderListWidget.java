@@ -24,32 +24,31 @@ import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class AddDeleteReorderListWidget extends AddDeleteWidget {
+	protected static final int MAJOR_BUTTON_INTERLEAVE = 6;
 	private Button upButton;
 	private Button downButton;
 
 	@Override
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
 		container = createContainer(widgetFactory, parent);
-		container.setLayout(new FillLayout(SWT.VERTICAL));
 
 		createAddButton(widgetFactory, container);
+		createDeleteButton(widgetFactory, container);
 
 		upButton = widgetFactory.createButton(container, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
 		upButton.setToolTipText("Move element(s) up");
-		upButton.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		upButton.setLayoutData(
+				GridDataFactory.fillDefaults().grab(true, false).indent(0, MAJOR_BUTTON_INTERLEAVE).create());
 
 		downButton = widgetFactory.createButton(container, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
 		downButton.setToolTipText("Move element(s) down");
 		downButton.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-
-		createDeleteButton(widgetFactory, container);
 
 		// initially nothing should be selected therefore deactivate the buttons
 		setButtonEnablement(false);

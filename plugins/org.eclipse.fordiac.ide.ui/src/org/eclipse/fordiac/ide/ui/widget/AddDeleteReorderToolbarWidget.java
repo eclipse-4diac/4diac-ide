@@ -13,8 +13,10 @@
 package org.eclipse.fordiac.ide.ui.widget;
 
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.menus.IMenuService;
@@ -29,10 +31,12 @@ public class AddDeleteReorderToolbarWidget extends AddDeleteReorderListWidget {
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
 		super.createControls(parent, widgetFactory);
 
-		toolBarManager = new ToolBarManager(SWT.VERTICAL);
+		toolBarManager = new ToolBarManager(SWT.FLAT | SWT.VERTICAL);
 		final IMenuService menuService = PlatformUI.getWorkbench().getService(IMenuService.class);
 		menuService.populateContributionManager(toolBarManager, LOCATION);
-		toolBarManager.createControl(container);
+		final ToolBar control = toolBarManager.createControl(container);
+		widgetFactory.adapt(control);
+		GridDataFactory.fillDefaults().grab(true, false).indent(0, MAJOR_BUTTON_INTERLEAVE).applyTo(control);
 	}
 
 	public void dispose() {

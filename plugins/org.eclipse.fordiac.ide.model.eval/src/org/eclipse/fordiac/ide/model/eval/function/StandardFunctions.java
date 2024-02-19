@@ -2390,6 +2390,54 @@ public interface StandardFunctions extends Functions {
 		return LRealValue.toLRealValue(value.toDuration().toNanos());
 	}
 
+	@OnlySupportedBy("4diac FORTE")
+	@Comment("Converts DURATION value in second and returns it as DINT value.")
+	static <T extends AnyDurationValue> DIntValue TIME_IN_S_TO_DINT(final T value) {
+		return DIntValue.toDIntValue((int) value.toDuration().toSeconds());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	@Comment("Converts DURATION value in millisecond and returns it as DINT value.")
+	static <T extends AnyDurationValue> DIntValue TIME_IN_MS_TO_DINT(final T value) {
+		return DIntValue.toDIntValue((int) value.toDuration().toMillis());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	@Comment("Converts DURATION value in microsecond and returns it as DINT value.")
+	static <T extends AnyDurationValue> DIntValue TIME_IN_US_TO_DINT(final T value) {
+		return DIntValue.toDIntValue((int) (value.toDuration().toNanos() / 1000));
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	@Comment("Converts DURATION value in nanosecond and returns it as DINT value.")
+	static <T extends AnyDurationValue> DIntValue TIME_IN_NS_TO_DINT(final T value) {
+		return DIntValue.toDIntValue((int) value.toDuration().toNanos());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	@Comment("Converts DURATION value in second and returns it as UDINT value.")
+	static UDIntValue TIME_IN_S_TO_UDINT(final AnyDurationValue value) {
+		return UDIntValue.toUDIntValue((int) value.toDuration().toSeconds());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	@Comment("Converts DURATION value in millisecond and returns it as UDINT value.")
+	static <T extends AnyDurationValue> UDIntValue TIME_IN_MS_TO_UDINT(final T value) {
+		return UDIntValue.toUDIntValue((int) value.toDuration().toMillis());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	@Comment("Converts DURATION value in microsecond and returns it as UDINT value.")
+	static <T extends AnyDurationValue> UDIntValue TIME_IN_US_TO_UDINT(final T value) {
+		return UDIntValue.toUDIntValue((int) value.toDuration().toNanos() / 1000);
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	@Comment("Converts DURATION value in nanosecond and returns it as UDINT value.")
+	static <T extends AnyDurationValue> UDIntValue TIME_IN_NS_TO_UDINT(final T value) {
+		return UDIntValue.toUDIntValue((int) value.toDuration().toNanos());
+	}
+
 	/* ANY_CHARS conversions */
 	@Comment("Converts WString value to String value.")
 	static StringValue WSTRING_TO_STRING(final WStringValue value) {

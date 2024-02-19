@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.ConcurrentModificationException;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -26,14 +27,19 @@ class InOutVarsEList extends EObjectContainmentEList<VarDeclaration> {
 	}
 
 	@Override
-	protected void didSet(final int index, final VarDeclaration newObject, final VarDeclaration oldObject) {
+	protected NotificationChain shadowSet(final VarDeclaration oldObject, final VarDeclaration newObject,
+			final NotificationChain notifications) {
+		final int index = indexOf(newObject);
 		checkConcurrentModification(index, oldObject);
 		getInterfaceList().getOutMappedInOutVars().set(index, OutMappedInOutVarAdapter.adapt(newObject));
+		return notifications;
 	}
 
 	@Override
-	protected void didAdd(final int index, final VarDeclaration newObject) {
+	protected NotificationChain shadowAdd(final VarDeclaration newObject, final NotificationChain notifications) {
+		final int index = indexOf(newObject);
 		getInterfaceList().getOutMappedInOutVars().add(index, OutMappedInOutVarAdapter.adapt(newObject));
+		return notifications;
 	}
 
 	@Override
@@ -56,6 +62,16 @@ class InOutVarsEList extends EObjectContainmentEList<VarDeclaration> {
 	protected void didMove(final int index, final VarDeclaration movedObject, final int oldIndex) {
 		checkConcurrentModification(oldIndex, movedObject);
 		getInterfaceList().getOutMappedInOutVars().move(index, oldIndex);
+	}
+
+	@Override
+	protected boolean hasShadow() {
+		return true;
+	}
+
+	@Override
+	protected boolean isNotificationRequired() {
+		return true;
 	}
 
 	protected void checkConcurrentModification(final int index, final VarDeclaration varDeclaration) {

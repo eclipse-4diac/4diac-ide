@@ -1659,5 +1659,12 @@
           			properties="isExpandedSubapp"
           			type="java.lang.Object">
     </propertyTester>
+    <propertyTester
+          			class="org.eclipse.fordiac.ide.application.utilities.IsCFBFilePropertyTester"
+          			id="org.eclipse.fordiac.ide.application.utilities.isCFBFilePropertyTester"
+          			namespace="org.eclipse.fordiac.ide.application.utilities"
+          			properties="isCFBFile"
+          			type="java.lang.Object">
+    </propertyTester>
   </extension>
 </plugin>

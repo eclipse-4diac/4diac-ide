@@ -21,9 +21,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.elk.alg.libavoid.server.LibavoidServerException;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
 import org.eclipse.fordiac.ide.elk.Messages;
+import org.eclipse.fordiac.ide.elk.commands.ConnectionLayoutCommand;
 import org.eclipse.fordiac.ide.elk.connection.ConnectionLayoutMapping;
 import org.eclipse.fordiac.ide.elk.connection.ConnectionRoutingHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -44,6 +46,13 @@ public class ConnectionLayoutHandler extends AbstractConnectionLayoutHandler {
 			}
 		}
 		return Status.OK_STATUS;
+	}
+
+	public static void executeManually(final IEditorPart part) {
+		final ConnectionLayoutMapping mapping = run(part);
+		final FordiacLayoutData data = ConnectionRoutingHelper.calculateConnections(mapping);
+		runSubapps(mapping, data);
+		new ConnectionLayoutCommand(data).execute();
 	}
 
 }

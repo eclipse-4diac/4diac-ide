@@ -71,12 +71,10 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 		throw createEditpartCreationException(modelElement);
 	}
 
-	// make it protected none static so that subclasses can override it and provide own interface edit parts if needed
+	// make it protected none static so that subclasses can override it and provide
+	// own interface edit parts if needed
 	@SuppressWarnings("static-method")
 	protected EditPart createInterfaceEditPart(final VarDeclaration varDecl) {
-		if (varDecl.isInOutVar()) {
-			return new VarInOutEditPart();
-		}
 		return new InterfaceEditPart();
 	}
 }

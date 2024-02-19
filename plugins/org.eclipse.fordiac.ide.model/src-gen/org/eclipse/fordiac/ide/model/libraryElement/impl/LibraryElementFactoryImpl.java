@@ -17,7 +17,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.List;
-
+import java.util.stream.Stream;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
@@ -74,6 +74,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
@@ -271,6 +272,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return createCommandStackFromString(eDataType, initialValue);
 			case LibraryElementPackage.IFILE:
 				return createIFileFromString(eDataType, initialValue);
+			case LibraryElementPackage.INTERFACE_ELEMENT_STREAM:
+				return createInterfaceElementStreamFromString(eDataType, initialValue);
 			case LibraryElementPackage.IPROJECT:
 				return createIProjectFromString(eDataType, initialValue);
 			case LibraryElementPackage.POINT:
@@ -300,6 +303,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return convertCommandStackToString(eDataType, instanceValue);
 			case LibraryElementPackage.IFILE:
 				return convertIFileToString(eDataType, instanceValue);
+			case LibraryElementPackage.INTERFACE_ELEMENT_STREAM:
+				return convertInterfaceElementStreamToString(eDataType, instanceValue);
 			case LibraryElementPackage.IPROJECT:
 				return convertIProjectToString(eDataType, instanceValue);
 			case LibraryElementPackage.POINT:
@@ -1293,6 +1298,25 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 */
 	public String convertIFileToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	public Stream<IInterfaceElement> createInterfaceElementStreamFromString(EDataType eDataType, String initialValue) {
+		return (Stream<IInterfaceElement>)super.createFromString(initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertInterfaceElementStreamToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(instanceValue);
 	}
 
 	/**

@@ -48,6 +48,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
@@ -212,7 +213,8 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
 				// allow each editor to save back changes before saving to file
-				editors.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
+				editors.stream().filter(IEditorPart::isDirty)
+						.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
 				typeEntry.save(fbType, monitor);
 			}
 		};
@@ -496,7 +498,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	}
 
 	private static <T> boolean shouldCheckAllEditors(final Class<T> adapter) {
-		return (adapter == ITextEditor.class) || (adapter == XtextEditor.class);
+		return (adapter == ITextEditor.class) || (adapter == XtextEditor.class) || (adapter == FBNetworkEditor.class);
 	}
 
 	private boolean isEditorActive() {

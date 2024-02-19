@@ -106,7 +106,7 @@ class STFunctionSupport extends StructuredTextSupport {
 		if (expr.feature === currentFunction && !expr.call)
 			"st_ret_val"
 		else
-			'''«expr.feature.generateFeatureName»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
+			super._generateExpression(expr)
 	}
 
 	override getDependencies(Map<?, ?> options) {

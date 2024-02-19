@@ -1205,6 +1205,18 @@
         <details key="body" value="return getHeight();"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getInput" eType="#//IInterfaceElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getInput(this, name);"/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getOutput" eType="#//IInterfaceElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getOutput(this, name);"/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//InterfaceList"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" eType="#//Mapping"/>
@@ -1489,6 +1501,28 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
       </eAnnotations>
+    </eOperations>
+    <eOperations name="getInputs" eType="#//InterfaceElementStream">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return InterfaceListAnnotations.getInputs(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getOutputs" eType="#//InterfaceElementStream">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return InterfaceListAnnotations.getOutputs(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInput" eType="#//IInterfaceElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return InterfaceListAnnotations.getInputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);"/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getOutput" eType="#//IInterfaceElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return InterfaceListAnnotations.getOutputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);"/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="plugs" upperBound="-1"
         eType="#//AdapterDeclaration" containment="true" resolveProxies="false">
@@ -2214,6 +2248,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="CommandStack" instanceClassName="org.eclipse.gef.commands.CommandStack"/>
   <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="InterfaceElementStream" instanceTypeName="java.util.stream.Stream&lt;org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement>"/>
   <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
   <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.draw2d.geometry.Point"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TypeEntry" instanceClassName="org.eclipse.fordiac.ide.model.typelibrary.TypeEntry"/>

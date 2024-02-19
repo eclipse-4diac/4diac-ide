@@ -161,22 +161,6 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		"" // nop
 	}
 
-	def protected boolean isAnyVariableReference(STExpression expr) {
-		switch (expr) {
-			STFeatureExpression: expr.feature.isAnyTypeVariable
-			STMemberAccessExpression: expr.member.isAnyVariableReference
-			STArrayAccessExpression: expr.receiver.isAnyVariableReference
-			default: false
-		}
-	}
-
-	def protected boolean isAnyTypeVariable(INamedElement element) {
-		switch (element) {
-			VarDeclaration: GenericTypes.isAnyType(element.type)
-			default: false
-		}
-	}
-
 	def protected dispatch CharSequence generateStatement(STIfStatement stmt) '''
 		if («stmt.condition.generateExpression») {
 		  «stmt.statements.generateStatementList»

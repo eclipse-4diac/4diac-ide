@@ -90,7 +90,7 @@ class STMethodSupport extends StructuredTextSupport {
 		if (expr.feature === parseResult && !expr.call)
 			"st_ret_val"
 		else
-			'''«expr.feature.generateFeatureName»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
+			super._generateExpression(expr)
 	}
 
 	def private getFBType() { switch (root : method.rootContainer) { BaseFBType: root } }

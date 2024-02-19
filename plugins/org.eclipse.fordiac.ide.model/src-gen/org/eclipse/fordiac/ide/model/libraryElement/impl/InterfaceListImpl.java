@@ -18,7 +18,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 import java.util.List;
-
+import java.util.stream.Stream;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -331,6 +331,46 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	@Override
 	public List<VarDeclaration> getVisibleOutputVars() {
 		return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Stream<IInterfaceElement> getInputs() {
+		return InterfaceListAnnotations.getInputs(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Stream<IInterfaceElement> getOutputs() {
+		return InterfaceListAnnotations.getOutputs(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public IInterfaceElement getInput(final String name) {
+		return InterfaceListAnnotations.getInputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public IInterfaceElement getOutput(final String name) {
+		return InterfaceListAnnotations.getOutputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);
 	}
 
 	/**

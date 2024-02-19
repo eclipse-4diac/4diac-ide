@@ -140,8 +140,12 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof final UntypedSubAppInterfaceElementEditPart editPart) {
-					return new ResizeGroupOrSubappCommand((GraphicalEditPart) editPart.getParent(),
-							ChangeNameCommand.forName(getModel(), (String) request.getCellEditor().getValue()));
+					final ChangeNameCommand changeNameCmd = ChangeNameCommand.forName(getModel(),
+							(String) request.getCellEditor().getValue());
+					if (isInExpandedSubapp()) {
+						return new ResizeGroupOrSubappCommand((GraphicalEditPart) editPart.getParent(), changeNameCmd);
+					}
+					return changeNameCmd;
 				}
 				return null;
 			}
@@ -251,7 +255,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		getContentPane().add(child, new GridData(SWT.FILL, SWT.BEGINNING, true, false), index);
 	}
-	
+
 	@Override
 	public <T> T getAdapter(final Class<T> key) {
 		if (key == UntypedSubAppInterfaceElementEditPart.class) {

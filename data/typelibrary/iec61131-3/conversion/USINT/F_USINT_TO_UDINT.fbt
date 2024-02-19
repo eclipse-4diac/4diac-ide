@@ -25,7 +25,7 @@
 	<SimpleFB>
 		<Algorithm Name="REQ" Comment="">
 			<ST><![CDATA[ALGORITHM REQ
-OUT := USINT_TO_UDINT(IN);
+OUT := IN;
 END_ALGORITHM
 
 ]]></ST>

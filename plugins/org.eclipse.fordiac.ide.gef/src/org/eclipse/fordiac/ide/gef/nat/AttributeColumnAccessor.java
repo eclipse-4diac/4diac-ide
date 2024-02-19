@@ -21,6 +21,8 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
@@ -51,7 +53,12 @@ public class AttributeColumnAccessor extends AbstractColumnAccessor<Attribute, A
 	@Override
 	public Command createCommand(final Attribute rowObject, final AttributeTableColumn column, final Object newValue) {
 		return switch (column) {
-		case NAME -> ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+		case NAME -> {
+			final String newName = ImportHelper.deresolveImport((String) newValue,
+					PackageNameHelper.getContainerPackageName(rowObject.eContainer()),
+					ImportHelper.getContainerImports(rowObject.eContainer()));
+			yield ChangeNameCommand.forName(rowObject, Objects.toString(newName, NULL_DEFAULT));
+		}
 		case TYPE -> ChangeAttributeTypeCommand.forTypeName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case VALUE -> new ChangeAttributeValueCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case COMMENT -> new ChangeCommentCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));

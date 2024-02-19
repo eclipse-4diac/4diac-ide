@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,13 +16,18 @@ package org.eclipse.fordiac.ide.elk;
 import org.eclipse.osgi.util.NLS;
 
 /** The Class Messages. */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.elk.messages"; //$NON-NLS-1$
 
 	public static String ConnectionLayout_TimeoutTitle;
-
 	public static String ConnectionLayout_TimeoutMessage;
+
+	public static String SystemLayout_ConfirmationTitle;
+	public static String SystemLayout_ConfirmationMessage;
+	public static String SystemLayout_ConfirmationFilesAffected;
+	public static String SystemLayout_ProgressTitle;
+	public static String SystemLayout_ProgressMessage;
 
 	static {
 		// initialize resource bundle

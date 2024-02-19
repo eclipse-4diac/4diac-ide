@@ -54,7 +54,7 @@ public class ImportSelectionProposalProvider implements IContentProposalProvider
 	protected static Stream<String> getImportableTypeNames(final TypeLibrary typeLibrary) {
 		return Stream
 				.of(typeLibrary.getDataTypeLibrary().getDerivedDataTypes(), typeLibrary.getAdapterTypes().values(),
-						typeLibrary.getFbTypes().values())
+						typeLibrary.getFbTypes().values(), typeLibrary.getAttributeTypes().values())
 				.flatMap(Collection::stream).map(TypeEntry::getFullTypeName)
 				.filter(fullName -> fullName.contains(PackageNameHelper.PACKAGE_NAME_DELIMITER)).distinct();
 	}

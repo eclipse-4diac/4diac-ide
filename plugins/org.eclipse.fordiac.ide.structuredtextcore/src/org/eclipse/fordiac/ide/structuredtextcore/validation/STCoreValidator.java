@@ -526,7 +526,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public void checkAssignmentTypeCompatibility(final STAssignment expression) {
 		final var leftType = expression.getLeft().getResultType();
 		final var rightType = expression.getRight().getResultType();
-		checkTypeCompatibility(leftType, rightType, STCorePackage.Literals.ST_ASSIGNMENT__RIGHT);
+		checkTypeCompatibility(leftType, rightType, STCorePackage.Literals.ST_ASSIGNMENT__RIGHT,
+				STCoreUtil.isAnyVariableReference(expression.getRight()));
 	}
 
 	@Check
@@ -681,7 +682,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			if (arg != null) {
 				checkTypeCompatibility(arg.getResultType(), getFeatureType(param),
 						STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
-						expression.getParameters().indexOf(arg));
+						expression.getParameters().indexOf(arg), STCoreUtil.isAnyTypeVariable(param));
 				if (isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
 					error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
 							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
@@ -902,14 +903,25 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	protected void checkTypeCompatibility(final INamedElement destination, final INamedElement source,
 			final EStructuralFeature feature) {
-		checkTypeCompatibility(destination, source, feature, ValidationMessageAcceptor.INSIGNIFICANT_INDEX);
+		checkTypeCompatibility(destination, source, feature, false);
 	}
 
 	protected void checkTypeCompatibility(final INamedElement destination, final INamedElement source,
 			final EStructuralFeature feature, final int index) {
+		checkTypeCompatibility(destination, source, feature, index, false);
+	}
+
+	protected void checkTypeCompatibility(final INamedElement destination, final INamedElement source,
+			final EStructuralFeature feature, final boolean allowAnyAssignment) {
+		checkTypeCompatibility(destination, source, feature, ValidationMessageAcceptor.INSIGNIFICANT_INDEX,
+				allowAnyAssignment);
+	}
+
+	protected void checkTypeCompatibility(final INamedElement destination, final INamedElement source,
+			final EStructuralFeature feature, final int index, final boolean allowAnyAssignment) {
 		if (destination instanceof final DataType destinationDataType
 				&& source instanceof final DataType sourceDataType) {
-			checkTypeCompatibility(destinationDataType, sourceDataType, feature, index);
+			checkTypeCompatibility(destinationDataType, sourceDataType, feature, index, allowAnyAssignment);
 		} else if (source != null && destination != null) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
 					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
@@ -918,8 +930,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	protected void checkTypeCompatibility(final DataType destination, final DataType source,
-			final EStructuralFeature feature, final int index) {
-		if (!destination.isAssignableFrom(source)) {
+			final EStructuralFeature feature, final int index, final boolean allowAnyAssignment) {
+		if (!destination.isAssignableFrom(source)
+				&& !(allowAnyAssignment && GenericTypes.isAnyType(source) && source.isAssignableFrom(destination))) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
 					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
 					destination.getName());
