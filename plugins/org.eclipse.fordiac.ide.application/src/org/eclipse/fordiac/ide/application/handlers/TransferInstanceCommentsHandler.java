@@ -36,18 +36,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.search.dialog.StructuredDataTypeDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
+import org.eclipse.fordiac.ide.model.search.dialog.StructuredDataTypeDataHandler;
 import org.eclipse.fordiac.ide.model.search.types.StructManipulatorSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -96,24 +93,6 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 						return elements;
 					}
 				}) {
-
-			@Override
-			protected void createfilterButtons(final Composite parent) {
-				outputConnectedOnlyBtn = new Button(parent, SWT.CHECK);
-				outputConnectedOnlyBtn.setText("Output connected only");
-				outputConnectedOnlyBtn.addSelectionListener(new SelectionListener() {
-
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						refresh();
-					}
-
-					@Override
-					public void widgetDefaultSelected(final SelectionEvent e) {
-						// do nothing
-					}
-				});
-			}
 
 		};
 
