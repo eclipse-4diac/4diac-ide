@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -375,7 +375,7 @@ public final class Annotations {
 	}
 
 	private static void setVarConfig(@NonNull final VarDeclarationImpl varDeclarationImpl, final String config) {
-		varDeclarationImpl.setAttribute(LibraryElementTags.VAR_CONFIG, ElementaryTypes.STRING, config, ""); //$NON-NLS-1$
+		varDeclarationImpl.setAttribute(InternalAttributeDeclarations.VAR_CONFIG, config, ""); //$NON-NLS-1$
 	}
 
 	public static boolean isVarConfig(@NonNull final VarDeclaration vd) {

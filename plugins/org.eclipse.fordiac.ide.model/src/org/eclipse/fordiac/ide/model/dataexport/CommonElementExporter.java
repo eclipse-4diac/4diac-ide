@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.PreferenceConstants;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -482,8 +483,8 @@ public class CommonElementExporter {
 
 		if (hasAttributes) {
 			for (final Attribute attribute : ie.getAttributes()) {
-				if (!(attribute.getName().equals(LibraryElementTags.VAR_CONFIG)
-						&& (ie instanceof final VarDeclaration varDecl) && !varDecl.isVarConfig())) {
+				if (attribute.getAttributeDeclaration() != InternalAttributeDeclarations.VAR_CONFIG
+						|| !(ie instanceof final VarDeclaration varDecl) || varDecl.isVarConfig()) {
 					addAttributeElement(attribute.getName(), attribute.getType(), attribute.getValue(),
 							attribute.getComment());
 				}
@@ -496,8 +497,9 @@ public class CommonElementExporter {
 		if (ie.getAttributes().isEmpty()) {
 			return false;
 		}
-		return ie.getAttributes().stream().anyMatch(att -> !att.getName().equals(LibraryElementTags.VAR_CONFIG)
-				|| (ie instanceof final VarDeclaration varDecl) && varDecl.isVarConfig());
+		return ie.getAttributes().stream()
+				.anyMatch(att -> att.getAttributeDeclaration() != InternalAttributeDeclarations.VAR_CONFIG
+						|| (ie instanceof final VarDeclaration varDecl) && varDecl.isVarConfig());
 	}
 
 	private void addParam(final String pinName, final Value value) throws XMLStreamException {

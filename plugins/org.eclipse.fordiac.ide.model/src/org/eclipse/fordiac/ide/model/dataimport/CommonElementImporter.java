@@ -49,9 +49,11 @@ import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -415,19 +417,28 @@ public abstract class CommonElementImporter {
 		final Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 		readNameCommentAttributes(attribute);
 
-		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (typeName != null) {
-			if (typeName.equals(HelperTypes.CDATA.getName())) {
-				attribute.setType(HelperTypes.CDATA);
-			} else {
-				attribute.setType(addDependency(getDataTypeLibrary().getType(typeName)));
-			}
+		final AttributeDeclaration internalAttributeDecl = InternalAttributeDeclarations
+				.getInternalAttributeByName(attribute.getName());
+		if (internalAttributeDecl != null) {
+			// Internal Attributes
+			attribute.setAttributeDeclaration(internalAttributeDecl);
+			attribute.setType(internalAttributeDecl.getType());
 		} else {
-			final AttributeTypeEntry attributeTypeEntry = addDependency(
-					getTypeLibrary().getAttributeTypeEntry(attribute.getName()));
-			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
-				attribute.setAttributeDeclaration(attributeTypeEntry.getType());
-				attribute.setType(attributeTypeEntry.getType().getType());
+			final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+			if (typeName != null) {
+				if (typeName.equals(HelperTypes.CDATA.getName())) {
+					attribute.setType(HelperTypes.CDATA);
+				} else {
+					attribute.setType(addDependency(getDataTypeLibrary().getType(typeName)));
+				}
+			} else {
+				// AttributeDeclarations
+				final AttributeTypeEntry attributeTypeEntry = addDependency(
+						getTypeLibrary().getAttributeTypeEntry(attribute.getName()));
+				if (attributeTypeEntry.getType() != null) {
+					attribute.setAttributeDeclaration(attributeTypeEntry.getType());
+					attribute.setType(attributeTypeEntry.getType().getType());
+				}
 			}
 		}
 

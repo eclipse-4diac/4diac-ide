@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeOrderCommand
 import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteAttributeCommand;
 import org.eclipse.fordiac.ide.model.data.InternalDataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
@@ -145,7 +146,9 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	private List<Attribute> getFilteredAttributeList() {
 		final ConfigurableObject confObject = getType();
 		return confObject != null
-				? confObject.getAttributes().stream().filter(att -> !(att.getType() instanceof InternalDataType))
+				? confObject.getAttributes().stream()
+						.filter(att -> !(att.getType() instanceof InternalDataType)
+								&& !InternalAttributeDeclarations.isInternalAttribue(att.getAttributeDeclaration()))
 						.toList()
 				: Collections.emptyList();
 	}
