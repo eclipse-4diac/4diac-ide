@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.model.annotations;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 
 public final class HiddenElementAnnotations {
@@ -21,7 +21,6 @@ public final class HiddenElementAnnotations {
 	public static void setVisible(final HiddenElement connection, final boolean visible) {
 		if (visible) {
 			// if we are visible the attribute can be removed
-
 			connection.deleteAttribute(LibraryElementTags.ELEMENT_VISIBLE);
 		} else {
 			setVisible(connection, Boolean.toString(visible));
@@ -29,7 +28,7 @@ public final class HiddenElementAnnotations {
 	}
 
 	private static void setVisible(final HiddenElement connection, final String visible) {
-		connection.setAttribute(LibraryElementTags.ELEMENT_VISIBLE, ElementaryTypes.STRING, visible, ""); //$NON-NLS-1$
+		connection.setAttribute(InternalAttributeDeclarations.VISIBLE, visible, ""); //$NON-NLS-1$
 	}
 
 	public static boolean isVisible(final HiddenElement connection) {
