@@ -24,8 +24,13 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -96,10 +101,26 @@ public class LiveSearchTypeEntry {
 	}
 
 	private IEditorPart getEditor() {
-
-		final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		final IWorkbench workbench = PlatformUI.getWorkbench();
+		final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 
 		if (activeWorkbenchWindow == null) {
+			final IWorkbenchWindow[] workbenchWindows = workbench.getWorkbenchWindows();
+			if (workbench.getWorkbenchWindows().length > 0 && workbenchWindows[0].getActivePage() != null) {
+				final IWorkbenchPage activePage = workbenchWindows[0].getActivePage();
+				for (final IEditorReference ref : activePage.getEditorReferences()) {
+					try {
+						final IEditorInput editorInput = ref.getEditorInput();
+						if (editorInput instanceof final FileEditorInput fileInput) {
+							fileInput.getFile().equals(typeEntry.getFile());
+							return ref.getEditor(true);
+						}
+					} catch (final PartInitException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
 			return null;
 		}
 
