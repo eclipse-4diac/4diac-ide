@@ -14,13 +14,17 @@ package org.eclipse.fordiac.ide.model.search;
 
 import java.util.Collection;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public interface ISearchContext {
 
-	Collection<URI> getAllTypes(IProject project);
+	Collection<URI> getAllTypes();
+
+	Collection<URI> getSubappTypes();
+
+	Collection<URI> getFBTypes();
 
 	LibraryElement getLibraryElement(URI uri);
+
 }

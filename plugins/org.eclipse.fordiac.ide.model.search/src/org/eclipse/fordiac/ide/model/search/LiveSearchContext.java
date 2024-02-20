@@ -24,20 +24,35 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public class LiveSearchContext implements ISearchContext {
 
+	private final TypeLibrary typelib;
+
+	public LiveSearchContext(final IProject project) {
+		this.typelib = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeLibrary(project));
+	}
+
+	public LiveSearchContext(final TypeLibrary typelib) {
+		this.typelib = Objects.requireNonNull(typelib);
+	}
+
 	@Override
-	public Collection<URI> getAllTypes(final IProject project) {
-		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
-		return typeLibrary.getAllTypes().stream().map(TypeEntry::getURI).filter(Objects::nonNull).toList();
+	public Collection<URI> getAllTypes() {
+		return typelib.getAllTypes().stream().map(TypeEntry::getURI).filter(Objects::nonNull).toList();
 	}
 
 	@Override
 	public LibraryElement getLibraryElement(final URI uri) {
-		// TODO search for editor and use type from editor
-		// OR use type from type entry
 		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri);
-		if (typeEntry != null) {
-			return typeEntry.getTypeEditable();
-		}
-		return null;
+		final LiveSearchTypeEntry liveEntry = new LiveSearchTypeEntry(typeEntry);
+		return liveEntry.getLiveType();
+	}
+
+	@Override
+	public Collection<URI> getSubappTypes() {
+		return typelib.getSubAppTypes().values().stream().map(TypeEntry::getURI).filter(Objects::nonNull).toList();
+	}
+
+	@Override
+	public Collection<URI> getFBTypes() {
+		return typelib.getFbTypes().values().stream().map(TypeEntry::getURI).filter(Objects::nonNull).toList();
 	}
 }

@@ -25,6 +25,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -35,12 +36,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.search.LiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
 public class InstanceSearch {
 
@@ -83,7 +84,7 @@ public class InstanceSearch {
 
 	public Set<INamedElement> performTypeLibraryNetworkSearch(final TypeLibrary library) {
 		searchResult = new HashSet<>();
-		searchTypeLibraryNetworks(library);
+		searchFBTypes(library);
 		return searchResult;
 	}
 
@@ -105,18 +106,11 @@ public class InstanceSearch {
 
 	public Set<INamedElement> performCompleteSearch() {
 		searchResult = new HashSet<>();
-		final List<AutomationSystem> searchRootSystems = new ArrayList<>();
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-
-		for (final IProject proj : root.getProjects()) {
-			if (proj.isOpen()) {
-				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj));
+		for (final IProject project : root.getProjects()) {
+			if (project.isOpen()) {
+				performProjectSearch(project);
 			}
-		}
-
-		for (final AutomationSystem sys : searchRootSystems) {
-			searchApplications(sys);
-			searchTypeLibraryNetworks(sys.getTypeLibrary());
 		}
 
 		return searchResult;
@@ -124,21 +118,57 @@ public class InstanceSearch {
 
 	public Set<INamedElement> performProjectSearch(final IProject project) {
 		searchResult = new HashSet<>();
-		final List<AutomationSystem> searchRootSystems = SystemManager.INSTANCE.getProjectSystems(project);
-		for (final AutomationSystem sys : searchRootSystems) {
-			searchApplications(sys);
-			searchTypeLibraryNetworks(sys.getTypeLibrary());
-		}
 
+		final LiveSearchContext liveSearchContext = new LiveSearchContext(project);
+
+		final Collection<URI> allTypes = liveSearchContext.getAllTypes();
+
+		for (final URI libraryElementURI : allTypes) {
+
+			final LibraryElement libraryElement = liveSearchContext.getLibraryElement(libraryElementURI);
+
+			if (libraryElement instanceof final AutomationSystem sys) {
+				searchApplications(sys);
+			}
+
+			if (libraryElement instanceof final CompositeFBType comp) {
+				searchFBNetwork(comp.getFBNetwork());
+			}
+
+		}
 		return searchResult;
+	}
+
+	private void searchFBTypes(final TypeLibrary typeLibrary) {
+		searchCFBNetworks(typeLibrary);
+		searchSubappTypesNetworks(typeLibrary);
+	}
+
+	public void searchSubappTypesNetworks(final TypeLibrary typeLibrary) {
+		for (final SubAppTypeEntry entry : typeLibrary.getSubAppTypes().values()) {
+			if (entry.getTypeEditable().getFBNetwork() != null) {
+				searchFBNetwork(entry.getTypeEditable().getFBNetwork());
+			}
+		}
+	}
+
+	public void searchCFBNetworks(final TypeLibrary typeLibrary) {
+		for (final CompositeFBType entry : typeLibrary.getCompositeFBTypes()) {
+			if (entry.getFBNetwork() != null) {
+				searchFBNetwork(entry.getFBNetwork());
+			}
+		}
 	}
 
 	public Set<INamedElement> performTypeLibBlockSearch(final TypeLibrary typeLibrary) {
 		searchResult = new HashSet<>();
-		final List<TypeEntry> allBlockTypes = new ArrayList<>();
-		allBlockTypes.addAll(typeLibrary.getSubAppTypes().values());
-		allBlockTypes.addAll(typeLibrary.getFbTypes().values());
-		allBlockTypes.parallelStream().forEach(f -> match(f.getTypeEditable()));
+		final LiveSearchContext context = new LiveSearchContext(typeLibrary);
+		final List<URI> allBlockTypes = new ArrayList<>();
+
+		allBlockTypes.addAll(context.getFBTypes());
+		allBlockTypes.addAll(context.getSubappTypes());
+
+		allBlockTypes.parallelStream().forEach(uri -> match(context.getLibraryElement(uri)));
 		return searchResult;
 	}
 
@@ -196,27 +226,6 @@ public class InstanceSearch {
 				if (element instanceof final CFBInstance cfbInstance && cfbInstance.getCfbNetwork() != null) {
 					searchFBNetwork(cfbInstance.getCfbNetwork());
 				}
-			}
-		}
-	}
-
-	private void searchTypeLibraryNetworks(final TypeLibrary typeLibrary) {
-		searchCFBNetworks(typeLibrary);
-		searchSubappTypesNetworks(typeLibrary);
-	}
-
-	public void searchSubappTypesNetworks(final TypeLibrary typeLibrary) {
-		for (final SubAppTypeEntry entry : typeLibrary.getSubAppTypes().values()) {
-			if (entry.getTypeEditable().getFBNetwork() != null) {
-				searchFBNetwork(entry.getTypeEditable().getFBNetwork());
-			}
-		}
-	}
-
-	public void searchCFBNetworks(final TypeLibrary typeLibrary) {
-		for (final CompositeFBType entry : typeLibrary.getCompositeFBTypes()) {
-			if (entry.getFBNetwork() != null) {
-				searchFBNetwork(entry.getFBNetwork());
 			}
 		}
 	}

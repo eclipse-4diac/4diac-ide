@@ -464,6 +464,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			}
 			return adapter.cast(contentOutline);
 		}
+
 		if (adapter == FBType.class || adapter == LibraryElement.class) {
 			return adapter.cast(getFBType());
 		}
