@@ -182,6 +182,22 @@ final class VariableOperations {
 			true
 	}
 
+	def static boolean validateValue(Attribute attr, List<String> errors, List<String> warnings,
+		List<String> infos) {
+		if (!attr.simpleAttributeValue) {
+			val evaluator = attr.createEvaluator(Attribute, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				try {
+					evaluator.validateVariable(errors, warnings, infos)
+				} catch (Exception e) {
+					false
+				}
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for Attribute found")
+		} else
+			true
+	}
+
 	def static String validateType(VarDeclaration decl) {
 		if (!decl.arraySize?.value.simpleTypeDeclaration) {
 			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
@@ -300,6 +316,18 @@ final class VariableOperations {
 		else
 			try {
 				new TypedValueConverter(decl.type, true).toValue(decl.declaredInitialValue)
+				true
+			} catch (Exception e) {
+				false
+			}
+	}
+
+	def private static isSimpleAttributeValue(Attribute attr) {
+		if (attr.value.nullOrEmpty || !(attr.type instanceof AnyType))
+			true
+		else
+			try {
+				new TypedValueConverter(attr.type, true).toValue(attr.value)
 				true
 			} catch (Exception e) {
 				false
