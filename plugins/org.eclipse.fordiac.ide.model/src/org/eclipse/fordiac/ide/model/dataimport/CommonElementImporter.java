@@ -465,6 +465,7 @@ public abstract class CommonElementImporter {
 			final StructuredType structType = addDependency(
 					getTypeLibrary().getDataTypeLibrary().getStructuredType(attribute.getValue()));
 			fb.setStructTypeElementsAtInterface(structType);
+			fb.getAttributes().remove(attribute);
 		} else if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(attribute.getName())) {
 			// reset type to get visible children configured
 			fb.setStructTypeElementsAtInterface(fb.getStructType());
