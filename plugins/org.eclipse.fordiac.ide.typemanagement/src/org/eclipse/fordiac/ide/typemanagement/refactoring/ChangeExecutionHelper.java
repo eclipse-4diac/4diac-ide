@@ -15,14 +15,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.search.LiveSearchTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * @deprecated Inherit from {@link AbstractCommandChange} instead.
@@ -39,9 +44,19 @@ public final class ChangeExecutionHelper {
 		if (rootContainer instanceof final LibraryElement elem) {
 			Display.getDefault().syncExec(() -> {
 				final TypeEntry entry = elem.getTypeEntry();
-				final LiveSearchTypeEntry liveEntry = new LiveSearchTypeEntry(entry);
-				liveEntry.execute(cmd);
-				liveEntry.safe();
+				final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						.findEditor(new FileEditorInput(entry.getFile()));
+				if (editor == null) {
+					cmd.execute();
+					try {
+						entry.save(elem, pm);
+					} catch (final CoreException e) {
+						FordiacLogHelper.logError(e.getMessage(), e);
+					}
+				} else {
+					editor.getAdapter(CommandStack.class).execute(cmd);
+					editor.doSave(pm);
+				}
 			});
 		}
 	}
