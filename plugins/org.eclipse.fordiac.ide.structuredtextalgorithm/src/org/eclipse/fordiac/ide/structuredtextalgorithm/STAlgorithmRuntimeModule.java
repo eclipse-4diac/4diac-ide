@@ -16,6 +16,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.naming.STAlgorithmQualifi
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResourceDescriptionManager;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResourceDescriptionStrategy;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResourceFactory;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.scoping.STAlgorithmImportedNamespaceAwareLocalScopeProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.scoping.STAlgorithmLinkingDiagnosticMessageProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmMapper;
@@ -38,6 +39,7 @@ import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
 import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy;
 import org.eclipse.xtext.resource.IResourceDescription;
+import org.eclipse.xtext.resource.IResourceFactory;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
@@ -60,6 +62,11 @@ public class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 	@Override
 	public Class<? extends XtextResource> bindXtextResource() {
 		return STAlgorithmResource.class;
+	}
+
+	@Override
+	public Class<? extends IResourceFactory> bindIResourceFactory() {
+		return STAlgorithmResourceFactory.class;
 	}
 
 	@Override

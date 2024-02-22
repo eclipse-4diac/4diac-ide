@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.validation.CheckType;
 import org.eclipse.xtext.validation.Issue;
@@ -83,7 +84,7 @@ public final class ValidationUtil {
 	}
 
 	protected static Map<String, Object> getModelMarkerAttributes(final Issue issue) {
-		final URI canonicalURI = getCanonicalURI(issue.getUriToProblem());
+		final URI canonicalURI = LibraryElementXtextResource.toExternalURI(issue.getUriToProblem());
 		if (canonicalURI != null) {
 			if (isModelValidationIssue(issue)) {
 				final String[] data = issue.getData();
@@ -101,13 +102,6 @@ public final class ValidationUtil {
 			return Map.of(FordiacErrorMarker.TARGET_URI, canonicalURI.toString());
 		}
 		return Collections.emptyMap();
-	}
-
-	public static URI getCanonicalURI(final URI uri) {
-		if (uri != null && uri.hasFragment() && uri.fragment().startsWith("/1")) { //$NON-NLS-1$
-			return uri.trimFragment().appendFragment("/" + uri.fragment().substring(2)); //$NON-NLS-1$
-		}
-		return uri;
 	}
 
 	protected static int getMarkerSeverity(final Issue issue) {

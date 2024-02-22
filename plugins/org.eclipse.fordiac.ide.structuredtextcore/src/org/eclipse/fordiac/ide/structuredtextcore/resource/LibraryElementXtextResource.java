@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -80,6 +81,42 @@ public class LibraryElementXtextResource extends LazyLinkingResource {
 		} catch (final IllegalArgumentException e) {
 			return null;
 		}
+	}
+
+	public static URI getExternalURI(final EObject object) {
+		return toExternalURI(EcoreUtil.getURI(object));
+	}
+
+	public static URI getInternalURI(final EObject object) {
+		return toInternalURI(EcoreUtil.getURI(object));
+	}
+
+	public static URI toExternalURI(final URI uri) {
+		if (uri != null && uri.hasFragment() && uri.fragment().startsWith("/1")) { //$NON-NLS-1$
+			return uri.trimQuery().trimFragment().appendFragment("/" + uri.fragment().substring(2)); //$NON-NLS-1$
+		}
+		return uri;
+	}
+
+	public static URI toInternalURI(final URI uri) {
+		if (uri != null && uri.hasFragment() && !uri.fragment().startsWith("/1")) { //$NON-NLS-1$
+			return uri.trimFragment().appendFragment("/1" + uri.fragment().substring(1)); //$NON-NLS-1$
+		}
+		return uri;
+	}
+
+	public static String toExternalFragment(final String fragment) {
+		if (fragment != null && fragment.startsWith("/1")) { //$NON-NLS-1$
+			return "/" + fragment.substring(2); //$NON-NLS-1$
+		}
+		return fragment;
+	}
+
+	public static String toInternalFragment(final String fragment) {
+		if (fragment != null && !fragment.startsWith("/1")) { //$NON-NLS-1$
+			return "/1" + fragment.substring(1); //$NON-NLS-1$
+		}
+		return fragment;
 	}
 
 	protected static LibraryElement copyLibraryElement(final LibraryElement libraryElement, final boolean shallow) {
