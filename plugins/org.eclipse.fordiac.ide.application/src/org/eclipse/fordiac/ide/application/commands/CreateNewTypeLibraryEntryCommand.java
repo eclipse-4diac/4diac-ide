@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,7 +21,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -98,7 +98,7 @@ public class CreateNewTypeLibraryEntryCommand extends Command {
 		String typeEnding = null;
 		if (element instanceof SubAppType) {
 			typeEnding = TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT;
-		} else if (element instanceof AdapterFBType) {
+		} else if (element instanceof AdapterType) {
 			typeEnding = TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING_WITH_DOT;
 		} else if (element instanceof BaseFBType || element instanceof CompositeFBType) {
 			typeEnding = TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT;

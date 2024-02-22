@@ -33,7 +33,6 @@ import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -425,8 +424,6 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateAdapterDeclaration((AdapterDeclaration)value, diagnostics, context);
 			case LibraryElementPackage.ADAPTER_FB:
 				return validateAdapterFB((AdapterFB)value, diagnostics, context);
-			case LibraryElementPackage.ADAPTER_FB_TYPE:
-				return validateAdapterFBType((AdapterFBType)value, diagnostics, context);
 			case LibraryElementPackage.ADAPTER_TYPE:
 				return validateAdapterType((AdapterType)value, diagnostics, context);
 			case LibraryElementPackage.ALGORITHM:
@@ -710,25 +707,6 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(adapterFB, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(adapterFB, diagnostics, context);
 		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(adapterFB, diagnostics, context);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateAdapterFBType(AdapterFBType adapterFBType, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(adapterFBType, diagnostics, context)) return false;
-		boolean result = validate_EveryMultiplicityConforms(adapterFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(adapterFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(adapterFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(adapterFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryProxyResolves(adapterFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_UniqueID(adapterFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryKeyUnique(adapterFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(adapterFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(adapterFBType, diagnostics, context);
 		return result;
 	}
 

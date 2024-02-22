@@ -15,13 +15,21 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.AdapterExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 
 public class AdapterTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AdapterType> implements AdapterTypeEntry {
@@ -43,5 +51,36 @@ public class AdapterTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AdapterTy
 	@Override
 	public EClass getTypeEClass() {
 		return LibraryElementPackage.Literals.ADAPTER_TYPE;
+	}
+
+	@Override
+	public synchronized void setType(final LibraryElement type) {
+		if (type instanceof final AdapterType adpType) {
+			// wenn we get a new type ensure that the plug is the mirror of the socket
+			adpType.setPlugType(createPlugType(adpType));
+		}
+		super.setType(type);
+	}
+
+	public static AdapterType createPlugType(final AdapterType adapterType) {
+		final AdapterType temp = EcoreUtil.copy(adapterType);
+		// fetch the interface to invert it
+		final List<Event> inputEvents = new ArrayList<>(temp.getInterfaceList().getEventOutputs());
+		final List<VarDeclaration> inputVars = new ArrayList<>(temp.getInterfaceList().getOutputVars());
+		Stream.concat(inputEvents.stream(), inputVars.stream()).forEach(element -> element.setIsInput(true));
+
+		final List<Event> outputEvents = new ArrayList<>(temp.getInterfaceList().getEventInputs());
+		final List<VarDeclaration> outputVars = new ArrayList<>(temp.getInterfaceList().getInputVars());
+		Stream.concat(outputEvents.stream(), outputVars.stream()).forEach(event -> event.setIsInput(false));
+
+		temp.getInterfaceList().getEventInputs().clear();
+		temp.getInterfaceList().getEventOutputs().clear();
+		temp.getInterfaceList().getInputVars().clear();
+		temp.getInterfaceList().getOutputVars().clear();
+		temp.getInterfaceList().getEventInputs().addAll(inputEvents);
+		temp.getInterfaceList().getEventOutputs().addAll(outputEvents);
+		temp.getInterfaceList().getInputVars().addAll(inputVars);
+		temp.getInterfaceList().getOutputVars().addAll(outputVars);
+		return temp;
 	}
 }

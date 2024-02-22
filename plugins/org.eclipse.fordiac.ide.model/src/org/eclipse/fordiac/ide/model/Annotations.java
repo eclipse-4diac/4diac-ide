@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  *                          Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
@@ -19,9 +19,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -30,8 +28,6 @@ import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclaratio
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -70,37 +66,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.jdt.annotation.NonNull;
 
 public final class Annotations {
-
-	// *** AdapterType ***//
-	public static InterfaceList getInterfaceList(@NonNull final AdapterType at) {
-		return at.getAdapterFBType().getInterfaceList();
-	}
-
-	public static AdapterFBType createPlugType(final AdapterFBType adapterFBType) {
-		final AdapterFBType temp = EcoreUtil.copy(adapterFBType);
-		// fetch the interface to invert it
-		final List<Event> inputEvents = new ArrayList<>(temp.getInterfaceList().getEventOutputs());
-		final List<VarDeclaration> inputVars = new ArrayList<>(temp.getInterfaceList().getOutputVars());
-		Stream.concat(inputEvents.stream(), inputVars.stream()).forEach(element -> element.setIsInput(true));
-
-		final List<Event> outputEvents = new ArrayList<>(temp.getInterfaceList().getEventInputs());
-		final List<VarDeclaration> outputVars = new ArrayList<>(temp.getInterfaceList().getInputVars());
-		Stream.concat(outputEvents.stream(), outputVars.stream()).forEach(event -> event.setIsInput(false));
-
-		temp.getInterfaceList().getEventInputs().clear();
-		temp.getInterfaceList().getEventOutputs().clear();
-		temp.getInterfaceList().getInputVars().clear();
-		temp.getInterfaceList().getOutputVars().clear();
-		temp.getInterfaceList().getEventInputs().addAll(inputEvents);
-		temp.getInterfaceList().getEventOutputs().addAll(outputEvents);
-		temp.getInterfaceList().getInputVars().addAll(inputVars);
-		temp.getInterfaceList().getOutputVars().addAll(outputVars);
-		return temp;
-	}
-
-	public static AdapterFBType getSocketType(final AdapterType at) {
-		return EcoreUtil.copy(at.getAdapterFBType());
-	}
 
 	// *** Application ***//
 	public static AutomationSystem getAutomationSystem(@NonNull final Application a) {
@@ -522,7 +487,7 @@ public final class Annotations {
 			if (afb.isPlug()) {
 				return adpTypeEntry.getType().getPlugType();
 			}
-			return adpTypeEntry.getType().getSocketType();
+			return adpTypeEntry.getType();
 		}
 		return null;
 	}

@@ -1,7 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2024 TU Wien ACIN, fortiss GmbH
- *                          Johannes Kepler University Linz
- *                          Martin Erich Jobst
+ * Copyright (c) 2011, 2024 TU Wien ACIN, fortiss GmbH,
+ * 							Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -171,4 +170,5 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		}
 		return typeName;
 	}
+
 }

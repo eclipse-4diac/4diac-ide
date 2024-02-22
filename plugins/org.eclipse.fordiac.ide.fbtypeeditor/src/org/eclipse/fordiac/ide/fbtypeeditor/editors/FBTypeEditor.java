@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 TU Wien/ACIN
- * 				 2020 Johannes Kepler University, Linz
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							Johannes Kepler University, Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -52,7 +52,7 @@ import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -297,7 +297,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			return fbtEntry.getTypeEditable();
 		}
 		if (typeEntry instanceof final AdapterTypeEntry adpTypeEntry) {
-			return adpTypeEntry.getTypeEditable().getAdapterFBType();
+			return adpTypeEntry.getTypeEditable();
 		}
 		return null;
 	}
@@ -404,7 +404,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	protected boolean checkTypeEditorType(final FBType fbType, final String editorType) {
 		return ((editorType.equals("ForAllTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllFBTypes")) || //$NON-NLS-1$
-				(editorType.equals("ForAllNonAdapterFBTypes") && !(fbType instanceof AdapterFBType)) || //$NON-NLS-1$
+				(editorType.equals("ForAllNonAdapterFBTypes") && !(fbType instanceof AdapterType)) || //$NON-NLS-1$
 				(editorType.equals("ForAllNonFunctionFBTypes") && !(fbType instanceof FunctionFBType)) || //$NON-NLS-1$
 				(editorType.equals("ForInterpretableFBTypes")) && isInterpretableType(fbType) || //$NON-NLS-1$
 				((fbType instanceof BaseFBType) && editorType.equals("base")) || //$NON-NLS-1$

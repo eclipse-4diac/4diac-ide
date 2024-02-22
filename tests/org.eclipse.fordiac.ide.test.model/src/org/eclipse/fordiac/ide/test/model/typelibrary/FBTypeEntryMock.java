@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-public final class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
+public class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
 
 	private FBType fbType;
 	private TypeLibrary typelib;

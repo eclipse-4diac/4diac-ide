@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody;
@@ -113,10 +112,6 @@ public class TypeFromTemplateCreator {
 	protected void performTypeSpecificSetup(final LibraryElement type) {
 		// hook for subclasses to perform any type specific setup, e.g.,
 		// saveassubapptype -> setup interface and network
-		if (type instanceof final AdapterType adpType) {
-			// for adapter types we need to also set the name for the adapterfbtype entry
-			adpType.getAdapterFBType().setName(type.getName());
-		}
 		if ((type instanceof final FunctionFBType functionFBType)
 				&& (functionFBType.getBody() instanceof final TextFunctionBody body)) {
 			// for function types we need to also set the name inside the body

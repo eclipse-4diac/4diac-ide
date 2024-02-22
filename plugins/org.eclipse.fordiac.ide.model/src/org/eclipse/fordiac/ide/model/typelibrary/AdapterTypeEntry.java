@@ -17,7 +17,7 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 
-public interface AdapterTypeEntry extends TypeEntry {
+public interface AdapterTypeEntry extends FBTypeEntry {
 
 	@Override
 	AdapterType getType();

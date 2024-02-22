@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 public class AdapterExporter extends AbstractBlockTypeExporter {
 
 	public AdapterExporter(final AdapterType type) {
-		super(type.getAdapterFBType());
+		super(type);
 	}
 
 	@Override

@@ -115,22 +115,13 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.ADAPTER_FB_TYPE: {
-				AdapterFBType adapterFBType = (AdapterFBType)theEObject;
-				T result = caseAdapterFBType(adapterFBType);
-				if (result == null) result = caseFBType(adapterFBType);
-				if (result == null) result = caseLibraryElement(adapterFBType);
-				if (result == null) result = caseICallable(adapterFBType);
-				if (result == null) result = caseINamedElement(adapterFBType);
-				if (result == null) result = caseConfigurableObject(adapterFBType);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case LibraryElementPackage.ADAPTER_TYPE: {
 				AdapterType adapterType = (AdapterType)theEObject;
 				T result = caseAdapterType(adapterType);
 				if (result == null) result = caseDataType(adapterType);
+				if (result == null) result = caseFBType(adapterType);
 				if (result == null) result = caseLibraryElement(adapterType);
+				if (result == null) result = caseICallable(adapterType);
 				if (result == null) result = caseINamedElement(adapterType);
 				if (result == null) result = caseConfigurableObject(adapterType);
 				if (result == null) result = defaultCase(theEObject);
@@ -1026,21 +1017,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAdapterFB(AdapterFB object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Adapter FB Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Adapter FB Type</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAdapterFBType(AdapterFBType object) {
 		return null;
 	}
 

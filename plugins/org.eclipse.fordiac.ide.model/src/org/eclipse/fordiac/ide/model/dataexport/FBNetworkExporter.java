@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2014, 2017 Profactor GmbH, fortiss GmbH
- * 				 2018 - 2020 Johannes Keppler University, Linz
+ * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
+ *  						Johannes Keppler University, Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -188,7 +188,7 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {
-		if (!(fbnElement.getType() instanceof AdapterFBType)) {
+		if (!(fbnElement.getType() instanceof AdapterType)) {
 			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB)) {
 				return LibraryElementTags.FB_ELEMENT;
 			}

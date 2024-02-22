@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -53,9 +53,10 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	// constructor to reuse this command for adapter creation
-	protected FBCreateCommand(final FBNetwork fbNetwork, final FBNetworkElement adapter, final int x, final int y) {
+	protected FBCreateCommand(final FBTypeEntry typeEntry, final FBNetwork fbNetwork, final FBNetworkElement adapter,
+			final int x, final int y) {
 		super(fbNetwork, adapter, x, y);
-		this.typeEntry = null;
+		this.typeEntry = typeEntry;
 		setLabel(Messages.FBCreateCommand_LABEL_CreateFunctionBlock);
 		getFB().setTypeEntry(typeEntry);
 	}
@@ -75,11 +76,11 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	@Override
 	public void execute() {
 		super.execute();
-		if (getFB() instanceof Multiplexer) {
-			((Multiplexer) getFB()).setStructTypeElementsAtInterface(
+		if (getFB() instanceof final Multiplexer multiplexer) {
+			multiplexer.setStructTypeElementsAtInterface(
 					(StructuredType) typeEntry.getType().getInterfaceList().getOutputVars().get(0).getType());
-		} else if (getFB() instanceof Demultiplexer) {
-			((Demultiplexer) getFB()).setStructTypeElementsAtInterface(
+		} else if (getFB() instanceof final Demultiplexer demux) {
+			demux.setStructTypeElementsAtInterface(
 					(StructuredType) typeEntry.getType().getInterfaceList().getInputVars().get(0).getType());
 		}
 	}

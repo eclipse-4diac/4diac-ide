@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 fortiss GmbH
+ * Copyright (c) 2019, 2024 fortiss GmbH
  *                          Johannes Kepler University
  *                          Martin Erich Jobst
  * 
@@ -21,14 +21,14 @@ package org.eclipse.fordiac.ide.export.forte_ng.adapter
 import java.nio.file.Path
 import java.util.List
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
-class AdapterFBImplTemplate extends ForteFBTemplate<AdapterFBType> {
+class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 
-	new(AdapterFBType type, String name, Path prefix) {
+	new(AdapterType type, String name, Path prefix) {
 		super(type, name, prefix, "CAdapter")
 	}
 
