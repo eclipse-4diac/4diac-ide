@@ -341,13 +341,12 @@ public final class TypeLibrary {
 			final Map<String, List<String>> localLibs = parseLibraryNameAndVersion(
 					libDir.stream().map(File::getName).toList());
 
-			if (localLibs.containsKey(lib.getSymbolicName())) {
-				localLibs.get(lib.getSymbolicName()).forEach(v -> {
-					if (compareVersion(lib.getVersion(), v)) {
-						libLinker.importLibrary(lib.getSymbolicName() + "-" + v); //$NON-NLS-1$
-						return;
-					}
-				});
+			if (localLibs.containsKey(lib.getSymbolicName()) && localLibs.get(lib.getSymbolicName()).stream()
+					.anyMatch(l -> compareVersion(lib.getVersion(), l))) {
+
+				libLinker.importLibrary(lib.getSymbolicName() + "-" + localLibs.get(lib.getSymbolicName()).stream() //$NON-NLS-1$
+						.filter(l -> compareVersion(lib.getVersion(), l)).findFirst().get());
+				return;
 			}
 			gitlabLibraryImport(lib.getSymbolicName(), lib.getVersion(), libLinker);
 		}
