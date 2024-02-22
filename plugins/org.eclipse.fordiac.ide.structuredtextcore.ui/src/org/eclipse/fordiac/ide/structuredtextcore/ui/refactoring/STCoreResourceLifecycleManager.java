@@ -14,31 +14,19 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.xtext.ide.serializer.impl.ChangeSerializer;
-import org.eclipse.xtext.ide.serializer.impl.RelatedResourceUpdater;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource;
 import org.eclipse.xtext.ide.serializer.impl.RelatedResourcesProvider.RelatedResource;
+import org.eclipse.xtext.ide.serializer.impl.ResourceLifecycleManager;
 
 @SuppressWarnings("restriction")
-public class STCoreChangeSerializer extends ChangeSerializer {
-
-	private ResourceSet resourceSet;
+public class STCoreResourceLifecycleManager extends ResourceLifecycleManager {
 
 	@Override
-	protected RelatedResourceUpdater createResourceUpdater(final RelatedResource relatedResource) {
-		final RelatedResourceUpdater updater = getService(relatedResource.getUri(), STCoreRelatedResourceUpdater.class);
-		updater.init(this, resourceSet, relatedResource);
-		return updater;
-	}
-
-	@Override
-	protected void beginRecordChanges(final Resource resource) {
-		super.beginRecordChanges(resource);
-		resourceSet = resource.getResourceSet();
-	}
-
-	@Override
-	protected void resetState() {
-		super.resetState();
-		resourceSet = null;
+	public Resource openAndApplyReferences(final ResourceSet resourceSet, final RelatedResource toLoad) {
+		final Resource resource = super.openAndApplyReferences(resourceSet, toLoad);
+		if (resource instanceof final STCoreResource coreResource) {
+			coreResource.updateExpectedType();
+		}
+		return resource;
 	}
 }

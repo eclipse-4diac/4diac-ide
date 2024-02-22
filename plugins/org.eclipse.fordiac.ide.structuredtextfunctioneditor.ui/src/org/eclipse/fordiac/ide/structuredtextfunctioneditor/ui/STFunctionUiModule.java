@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactori
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameStrategy;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreResourceLifecycleManager;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSimpleNameProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSyncUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceForIEditorInputFactory;
@@ -64,6 +65,7 @@ import org.eclipse.xtext.ide.refactoring.IRenameNameValidator;
 import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
 import org.eclipse.xtext.ide.serializer.IChangeSerializer;
 import org.eclipse.xtext.ide.serializer.impl.RecordingXtextResourceUpdater;
+import org.eclipse.xtext.ide.serializer.impl.ResourceLifecycleManager;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.ui.LanguageSpecific;
 import org.eclipse.xtext.ui.editor.IURIEditorOpener;
@@ -285,5 +287,9 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public Class<? extends SyncUtil> bindSyncUtil() {
 		return STCoreSyncUtil.class;
+	}
+
+	public Class<? extends ResourceLifecycleManager> bindResourceLifecycleManager() {
+		return STCoreResourceLifecycleManager.class;
 	}
 }

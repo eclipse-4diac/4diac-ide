@@ -30,6 +30,8 @@ public final class Messages extends NLS {
 
 	public static String AbstractCommandChange_NoSuchElement;
 
+	public static String AttributeValueChange_AttributeValueChanged;
+
 	public static String BuildPathPropertyPage_AddExclude;
 
 	public static String BuildPathPropertyPage_AddExcludePattern;
@@ -68,6 +70,8 @@ public final class Messages extends NLS {
 
 	public static String Confirm;
 
+	public static String DataTypeChange_TypeDeclarationChanged;
+
 	public static String DeleteFBTypeParticipant_Name;
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
 	public static String DeleteFBTypeParticipant_Change_DeleteFBTypeInterface;
@@ -86,6 +90,8 @@ public final class Messages extends NLS {
 	public static String ImportExtractedFiles;
 	public static String ImportFailed;
 	public static String ImportFailedOnLinkCreation;
+	public static String InitialValueChange_InitialValueChanged;
+
 	public static String InstanceUpdate;
 	public static String NewFBTypeWizard_TemplateNotAvailable;
 	public static String NewFBTypeWizardPage_TypeAlreadyExists;
