@@ -21,12 +21,14 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
 import org.eclipse.xtext.resource.FileExtensionProvider;
@@ -34,7 +36,7 @@ import org.eclipse.xtext.util.LazyStringInputStream;
 
 import com.google.inject.Inject;
 
-public class STCoreResource extends LibraryElementXtextResource {
+public class STCoreResource extends LibraryElementXtextResource implements STResource {
 	public static final String OPTION_PLAIN_ST = STCoreResource.class.getName() + ".PLAIN_ST"; //$NON-NLS-1$
 
 	@Inject
@@ -46,10 +48,13 @@ public class STCoreResource extends LibraryElementXtextResource {
 	@Inject
 	private STCoreReconciler reconciler;
 
+	private INamedElement expectedType;
+
 	@Override
 	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
 		final Map<?, ?> actualOptions = Objects.requireNonNullElse(options, getDefaultLoadOptions());
 		if (isLoadPlainST(actualOptions, inputStream)) {
+			setExpectedType((INamedElement) actualOptions.get(OPTION_EXPECTED_TYPE));
 			super.doLoad(inputStream, actualOptions);
 			if (getLibraryElement() == null) {
 				final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri);
@@ -136,5 +141,14 @@ public class STCoreResource extends LibraryElementXtextResource {
 			defaultLoadOptions = new HashMap<>();
 		}
 		return defaultLoadOptions;
+	}
+
+	@Override
+	public INamedElement getExpectedType() {
+		return expectedType;
+	}
+
+	protected void setExpectedType(final INamedElement expectedType) {
+		this.expectedType = expectedType;
 	}
 }

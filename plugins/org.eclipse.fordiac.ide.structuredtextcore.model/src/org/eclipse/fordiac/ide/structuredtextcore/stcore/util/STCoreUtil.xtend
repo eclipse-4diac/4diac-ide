@@ -94,6 +94,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
@@ -110,8 +111,6 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 
 final class STCoreUtil {
-	public static final String OPTION_EXPECTED_TYPE = STCoreUtil.name + ".EXPECTED_TYPE"
-
 	private new() {
 	}
 
@@ -350,7 +349,7 @@ final class STCoreUtil {
 			STCallArgument:
 				expectedType
 			STExpressionSource:
-				eResource?.resourceSet?.loadOptions?.get(OPTION_EXPECTED_TYPE) as INamedElement
+				(eResource as STResource).expectedType
 		}
 	}
 
@@ -367,7 +366,7 @@ final class STCoreUtil {
 			STStructInitializerExpression:
 				expectedType
 			STInitializerExpressionSource:
-				eResource?.resourceSet?.loadOptions?.get(OPTION_EXPECTED_TYPE) as INamedElement
+				(eResource as STResource).expectedType
 		}
 	}
 

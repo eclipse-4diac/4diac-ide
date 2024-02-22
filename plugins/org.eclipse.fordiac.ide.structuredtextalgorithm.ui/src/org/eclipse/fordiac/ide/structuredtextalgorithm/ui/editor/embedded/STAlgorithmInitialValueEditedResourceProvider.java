@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.xtext.ParserRule;
 
@@ -33,8 +34,7 @@ public class STAlgorithmInitialValueEditedResourceProvider extends STAlgorithmEd
 	public STAlgorithmResource createResource() {
 		final STAlgorithmResource resource = super.createResource();
 		final INamedElement featureType = STCoreUtil.getFeatureType(element);
-		resource.getDefaultLoadOptions().put(STCoreUtil.OPTION_EXPECTED_TYPE, featureType);
-		resource.getResourceSet().getLoadOptions().put(STCoreUtil.OPTION_EXPECTED_TYPE, featureType);
+		resource.getDefaultLoadOptions().put(STResource.OPTION_EXPECTED_TYPE, featureType);
 		return resource;
 	}
 
