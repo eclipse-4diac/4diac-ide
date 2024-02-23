@@ -7,7 +7,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.library.model.library.Dependencies;
 import org.eclipse.fordiac.ide.library.model.library.Exports;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.library.model.library.Product;
  *
  * @generated
  */
-public class ManifestImpl extends MinimalEObjectImpl.Container implements Manifest {
+public class ManifestImpl extends EObjectImpl implements Manifest {
 	/**
 	 * The cached value of the '{@link #getDependencies() <em>Dependencies</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -115,16 +115,12 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetDependencies(final Dependencies newDependencies, NotificationChain msgs) {
-		final Dependencies oldDependencies = dependencies;
+	public NotificationChain basicSetDependencies(Dependencies newDependencies, NotificationChain msgs) {
+		Dependencies oldDependencies = dependencies;
 		dependencies = newDependencies;
 		if (eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__DEPENDENCIES, oldDependencies, newDependencies);
-			if (msgs == null) {
-				msgs = notification;
-			} else {
-				msgs.add(notification);
-			}
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__DEPENDENCIES, oldDependencies, newDependencies);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
@@ -135,23 +131,18 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * @generated
 	 */
 	@Override
-	public void setDependencies(final Dependencies newDependencies) {
+	public void setDependencies(Dependencies newDependencies) {
 		if (newDependencies != dependencies) {
 			NotificationChain msgs = null;
-			if (dependencies != null) {
+			if (dependencies != null)
 				msgs = ((InternalEObject)dependencies).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.MANIFEST__DEPENDENCIES, null, msgs);
-			}
-			if (newDependencies != null) {
+			if (newDependencies != null)
 				msgs = ((InternalEObject)newDependencies).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.MANIFEST__DEPENDENCIES, null, msgs);
-			}
 			msgs = basicSetDependencies(newDependencies, msgs);
-			if (msgs != null) {
-				msgs.dispatch();
-			}
+			if (msgs != null) msgs.dispatch();
 		}
-		else if (eNotificationRequired()) {
+		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__DEPENDENCIES, newDependencies, newDependencies));
-		}
 	}
 
 	/**
@@ -169,16 +160,12 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetProduct(final Product newProduct, NotificationChain msgs) {
-		final Product oldProduct = product;
+	public NotificationChain basicSetProduct(Product newProduct, NotificationChain msgs) {
+		Product oldProduct = product;
 		product = newProduct;
 		if (eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__PRODUCT, oldProduct, newProduct);
-			if (msgs == null) {
-				msgs = notification;
-			} else {
-				msgs.add(notification);
-			}
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__PRODUCT, oldProduct, newProduct);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
@@ -189,23 +176,18 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * @generated
 	 */
 	@Override
-	public void setProduct(final Product newProduct) {
+	public void setProduct(Product newProduct) {
 		if (newProduct != product) {
 			NotificationChain msgs = null;
-			if (product != null) {
+			if (product != null)
 				msgs = ((InternalEObject)product).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.MANIFEST__PRODUCT, null, msgs);
-			}
-			if (newProduct != null) {
+			if (newProduct != null)
 				msgs = ((InternalEObject)newProduct).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.MANIFEST__PRODUCT, null, msgs);
-			}
 			msgs = basicSetProduct(newProduct, msgs);
-			if (msgs != null) {
-				msgs.dispatch();
-			}
+			if (msgs != null) msgs.dispatch();
 		}
-		else if (eNotificationRequired()) {
+		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__PRODUCT, newProduct, newProduct));
-		}
 	}
 
 	/**
@@ -223,16 +205,12 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetExports(final Exports newExports, NotificationChain msgs) {
-		final Exports oldExports = exports;
+	public NotificationChain basicSetExports(Exports newExports, NotificationChain msgs) {
+		Exports oldExports = exports;
 		exports = newExports;
 		if (eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__EXPORTS, oldExports, newExports);
-			if (msgs == null) {
-				msgs = notification;
-			} else {
-				msgs.add(notification);
-			}
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__EXPORTS, oldExports, newExports);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
@@ -243,23 +221,18 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * @generated
 	 */
 	@Override
-	public void setExports(final Exports newExports) {
+	public void setExports(Exports newExports) {
 		if (newExports != exports) {
 			NotificationChain msgs = null;
-			if (exports != null) {
+			if (exports != null)
 				msgs = ((InternalEObject)exports).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.MANIFEST__EXPORTS, null, msgs);
-			}
-			if (newExports != null) {
+			if (newExports != null)
 				msgs = ((InternalEObject)newExports).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.MANIFEST__EXPORTS, null, msgs);
-			}
 			msgs = basicSetExports(newExports, msgs);
-			if (msgs != null) {
-				msgs.dispatch();
-			}
+			if (msgs != null) msgs.dispatch();
 		}
-		else if (eNotificationRequired()) {
+		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__EXPORTS, newExports, newExports));
-		}
 	}
 
 	/**
@@ -278,12 +251,11 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * @generated
 	 */
 	@Override
-	public void setScope(final String newScope) {
-		final String oldScope = scope;
+	public void setScope(String newScope) {
+		String oldScope = scope;
 		scope = newScope;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__SCOPE, oldScope, scope));
-		}
 	}
 
 	/**
@@ -292,17 +264,16 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryPackage.MANIFEST__DEPENDENCIES:
-			return basicSetDependencies(null, msgs);
-		case LibraryPackage.MANIFEST__PRODUCT:
-			return basicSetProduct(null, msgs);
-		case LibraryPackage.MANIFEST__EXPORTS:
-			return basicSetExports(null, msgs);
-		default:
-			return super.eInverseRemove(otherEnd, featureID, msgs);
+			case LibraryPackage.MANIFEST__DEPENDENCIES:
+				return basicSetDependencies(null, msgs);
+			case LibraryPackage.MANIFEST__PRODUCT:
+				return basicSetProduct(null, msgs);
+			case LibraryPackage.MANIFEST__EXPORTS:
+				return basicSetExports(null, msgs);
 		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -311,19 +282,18 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryPackage.MANIFEST__DEPENDENCIES:
-			return getDependencies();
-		case LibraryPackage.MANIFEST__PRODUCT:
-			return getProduct();
-		case LibraryPackage.MANIFEST__EXPORTS:
-			return getExports();
-		case LibraryPackage.MANIFEST__SCOPE:
-			return getScope();
-		default:
-			return super.eGet(featureID, resolve, coreType);
+			case LibraryPackage.MANIFEST__DEPENDENCIES:
+				return getDependencies();
+			case LibraryPackage.MANIFEST__PRODUCT:
+				return getProduct();
+			case LibraryPackage.MANIFEST__EXPORTS:
+				return getExports();
+			case LibraryPackage.MANIFEST__SCOPE:
+				return getScope();
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -332,24 +302,22 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryPackage.MANIFEST__DEPENDENCIES:
-			setDependencies((Dependencies)newValue);
-			return;
-		case LibraryPackage.MANIFEST__PRODUCT:
-			setProduct((Product)newValue);
-			return;
-		case LibraryPackage.MANIFEST__EXPORTS:
-			setExports((Exports)newValue);
-			return;
-		case LibraryPackage.MANIFEST__SCOPE:
-			setScope((String)newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
+			case LibraryPackage.MANIFEST__DEPENDENCIES:
+				setDependencies((Dependencies)newValue);
+				return;
+			case LibraryPackage.MANIFEST__PRODUCT:
+				setProduct((Product)newValue);
+				return;
+			case LibraryPackage.MANIFEST__EXPORTS:
+				setExports((Exports)newValue);
+				return;
+			case LibraryPackage.MANIFEST__SCOPE:
+				setScope((String)newValue);
+				return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -358,24 +326,22 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.MANIFEST__DEPENDENCIES:
-			setDependencies((Dependencies)null);
-			return;
-		case LibraryPackage.MANIFEST__PRODUCT:
-			setProduct((Product)null);
-			return;
-		case LibraryPackage.MANIFEST__EXPORTS:
-			setExports((Exports)null);
-			return;
-		case LibraryPackage.MANIFEST__SCOPE:
-			setScope(SCOPE_EDEFAULT);
-			return;
-		default:
-			super.eUnset(featureID);
-			return;
+			case LibraryPackage.MANIFEST__DEPENDENCIES:
+				setDependencies((Dependencies)null);
+				return;
+			case LibraryPackage.MANIFEST__PRODUCT:
+				setProduct((Product)null);
+				return;
+			case LibraryPackage.MANIFEST__EXPORTS:
+				setExports((Exports)null);
+				return;
+			case LibraryPackage.MANIFEST__SCOPE:
+				setScope(SCOPE_EDEFAULT);
+				return;
 		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -384,19 +350,18 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.MANIFEST__DEPENDENCIES:
-			return dependencies != null;
-		case LibraryPackage.MANIFEST__PRODUCT:
-			return product != null;
-		case LibraryPackage.MANIFEST__EXPORTS:
-			return exports != null;
-		case LibraryPackage.MANIFEST__SCOPE:
-			return SCOPE_EDEFAULT == null ? scope != null : !SCOPE_EDEFAULT.equals(scope);
-		default:
-			return super.eIsSet(featureID);
+			case LibraryPackage.MANIFEST__DEPENDENCIES:
+				return dependencies != null;
+			case LibraryPackage.MANIFEST__PRODUCT:
+				return product != null;
+			case LibraryPackage.MANIFEST__EXPORTS:
+				return exports != null;
+			case LibraryPackage.MANIFEST__SCOPE:
+				return SCOPE_EDEFAULT == null ? scope != null : !SCOPE_EDEFAULT.equals(scope);
 		}
+		return super.eIsSet(featureID);
 	}
 
 	/**
@@ -406,12 +371,10 @@ public class ManifestImpl extends MinimalEObjectImpl.Container implements Manife
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (scope: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (scope: "); //$NON-NLS-1$
 		result.append(scope);
 		result.append(')');
 		return result.toString();

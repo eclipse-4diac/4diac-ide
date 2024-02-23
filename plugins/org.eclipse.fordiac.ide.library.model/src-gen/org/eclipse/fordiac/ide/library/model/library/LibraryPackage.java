@@ -31,7 +31,7 @@ public interface LibraryPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNAME = "Library";
+	String eNAME = "library";
 
 	/**
 	 * The package namespace URI.
@@ -39,7 +39,7 @@ public interface LibraryPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "file:/C:/Users/AK124910/git/org.eclipse.4diac.ide23/plugins/org.eclipse.fordiac.ide.library.model/model/library.xsd";
+	String eNS_URI = "platform:/resource/org.eclipse.fordiac.ide.library.model/model/library.xsd";
 
 	/**
 	 * The package namespace name.
@@ -47,7 +47,7 @@ public interface LibraryPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_PREFIX = "Library";
+	String eNS_PREFIX = "library";
 
 	/**
 	 * The singleton instance of the package.
@@ -86,15 +86,6 @@ public interface LibraryPackage extends EPackage {
 	int DEPENDENCIES_FEATURE_COUNT = 1;
 
 	/**
-	 * The number of operations of the '<em>Dependencies</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEPENDENCIES_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.ExcludesImpl <em>Excludes</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -121,15 +112,6 @@ public interface LibraryPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXCLUDES_FEATURE_COUNT = 1;
-
-	/**
-	 * The number of operations of the '<em>Excludes</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXCLUDES_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.ExportsImpl <em>Exports</em>}' class.
@@ -160,15 +142,6 @@ public interface LibraryPackage extends EPackage {
 	int EXPORTS_FEATURE_COUNT = 1;
 
 	/**
-	 * The number of operations of the '<em>Exports</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPORTS_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.IncludesImpl <em>Includes</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -195,15 +168,6 @@ public interface LibraryPackage extends EPackage {
 	 * @ordered
 	 */
 	int INCLUDES_FEATURE_COUNT = 1;
-
-	/**
-	 * The number of operations of the '<em>Includes</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INCLUDES_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.LibraryImpl <em>Library</em>}' class.
@@ -279,15 +243,6 @@ public interface LibraryPackage extends EPackage {
 	int LIBRARY_FEATURE_COUNT = 6;
 
 	/**
-	 * The number of operations of the '<em>Library</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LIBRARY_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.LibraryElementImpl <em>Element</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -305,15 +260,6 @@ public interface LibraryPackage extends EPackage {
 	 * @ordered
 	 */
 	int LIBRARY_ELEMENT_FEATURE_COUNT = 0;
-
-	/**
-	 * The number of operations of the '<em>Element</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LIBRARY_ELEMENT_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl <em>Manifest</em>}' class.
@@ -371,15 +317,6 @@ public interface LibraryPackage extends EPackage {
 	int MANIFEST_FEATURE_COUNT = 4;
 
 	/**
-	 * The number of operations of the '<em>Manifest</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MANIFEST_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.ProductImpl <em>Product</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -408,22 +345,40 @@ public interface LibraryPackage extends EPackage {
 	int PRODUCT__ATTRIBUTE = 1;
 
 	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRODUCT__COMMENT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRODUCT__NAME = 3;
+
+	/**
+	 * The feature id for the '<em><b>Symbolic Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRODUCT__SYMBOLIC_NAME = 4;
+
+	/**
 	 * The number of structural features of the '<em>Product</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRODUCT_FEATURE_COUNT = 2;
-
-	/**
-	 * The number of operations of the '<em>Product</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRODUCT_OPERATION_COUNT = 0;
+	int PRODUCT_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.RequiredImpl <em>Required</em>}' class.
@@ -461,15 +416,6 @@ public interface LibraryPackage extends EPackage {
 	 * @ordered
 	 */
 	int REQUIRED_FEATURE_COUNT = 2;
-
-	/**
-	 * The number of operations of the '<em>Required</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REQUIRED_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.VersionInfoImpl <em>Version Info</em>}' class.
@@ -516,16 +462,6 @@ public interface LibraryPackage extends EPackage {
 	 * @ordered
 	 */
 	int VERSION_INFO_FEATURE_COUNT = 3;
-
-	/**
-	 * The number of operations of the '<em>Version Info</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VERSION_INFO_OPERATION_COUNT = 0;
-
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.library.model.library.Dependencies <em>Dependencies</em>}'.
@@ -782,6 +718,39 @@ public interface LibraryPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getProduct_Attribute();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.library.model.library.Product#getComment <em>Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Comment</em>'.
+	 * @see org.eclipse.fordiac.ide.library.model.library.Product#getComment()
+	 * @see #getProduct()
+	 * @generated
+	 */
+	EAttribute getProduct_Comment();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.library.model.library.Product#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.eclipse.fordiac.ide.library.model.library.Product#getName()
+	 * @see #getProduct()
+	 * @generated
+	 */
+	EAttribute getProduct_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.library.model.library.Product#getSymbolicName <em>Symbolic Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Symbolic Name</em>'.
+	 * @see org.eclipse.fordiac.ide.library.model.library.Product#getSymbolicName()
+	 * @see #getProduct()
+	 * @generated
+	 */
+	EAttribute getProduct_SymbolicName();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.library.model.library.Required <em>Required</em>}'.
@@ -1088,6 +1057,30 @@ public interface LibraryPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PRODUCT__ATTRIBUTE = eINSTANCE.getProduct_Attribute();
+
+		/**
+		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PRODUCT__COMMENT = eINSTANCE.getProduct_Comment();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PRODUCT__NAME = eINSTANCE.getProduct_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Symbolic Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PRODUCT__SYMBOLIC_NAME = eINSTANCE.getProduct_SymbolicName();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.RequiredImpl <em>Required</em>}' class.

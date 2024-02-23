@@ -66,7 +66,7 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 			case LibraryPackage.REQUIRED: return createRequired();
 			case LibraryPackage.VERSION_INFO: return createVersionInfo();
 			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 

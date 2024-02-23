@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- after changes to xsd: library.genmodel > Reload... > next > next > finish -->
+<!-- library.ecore > properties > change Name and Ns Prefix to lower case -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" >
+  <!--xsd:element name="Manifest" type="Manifest"/-->
   <xsd:complexType name="Manifest">
     <xsd:sequence>
-      <xsd:element name="Dependencies" type="Dependencies"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="Dependencies" type="Dependencies"/>
       <xsd:element name="Product" type="Product"/>
-      <xsd:element name="Exports" type="Exports"/>
+      <xsd:element maxOccurs="1" minOccurs="0" name="Exports" type="Exports"/>
     </xsd:sequence>
     <xsd:attribute name="Scope" type="xsd:string" use="required"/>
   </xsd:complexType>
@@ -13,6 +16,9 @@
       <xsd:element name="VersionInfo" type="VersionInfo"/>
       <xsd:element maxOccurs="unbounded" minOccurs="0" name="Attribute" nillable="true" type="xsd:string"/>
     </xsd:sequence>
+    <xsd:attribute name="Name" type="xsd:string"/>
+    <xsd:attribute name="SymbolicName" type="xsd:string"/>
+    <xsd:attribute name="Comment" type="xsd:string"/>
   </xsd:complexType>
   <xsd:complexType name="VersionInfo">
     <xsd:attribute name="Version" type="xsd:string" use="required"/>

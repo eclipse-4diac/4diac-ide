@@ -31,7 +31,7 @@ public interface Manifest extends EObject {
 	 * @return the value of the '<em>Dependencies</em>' containment reference.
 	 * @see #setDependencies(Dependencies)
 	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getManifest_Dependencies()
-	 * @model containment="true" required="true"
+	 * @model containment="true"
 	 *        extendedMetaData="kind='element' name='Dependencies' namespace='##targetNamespace'"
 	 * @generated
 	 */
@@ -77,7 +77,7 @@ public interface Manifest extends EObject {
 	 * @return the value of the '<em>Exports</em>' containment reference.
 	 * @see #setExports(Exports)
 	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getManifest_Exports()
-	 * @model containment="true" required="true"
+	 * @model containment="true"
 	 *        extendedMetaData="kind='element' name='Exports' namespace='##targetNamespace'"
 	 * @generated
 	 */

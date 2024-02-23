@@ -8,7 +8,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.library.model.library.Exports;
@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
  *
  * @generated
  */
-public class ExportsImpl extends MinimalEObjectImpl.Container implements Exports {
+public class ExportsImpl extends EObjectImpl implements Exports {
 	/**
 	 * The cached value of the '{@link #getLibrary() <em>Library</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -66,7 +66,7 @@ public class ExportsImpl extends MinimalEObjectImpl.Container implements Exports
 	@Override
 	public EList<Library> getLibrary() {
 		if (library == null) {
-			library = new EObjectContainmentEList<>(Library.class, this, LibraryPackage.EXPORTS__LIBRARY);
+			library = new EObjectContainmentEList<Library>(Library.class, this, LibraryPackage.EXPORTS__LIBRARY);
 		}
 		return library;
 	}
@@ -77,13 +77,12 @@ public class ExportsImpl extends MinimalEObjectImpl.Container implements Exports
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryPackage.EXPORTS__LIBRARY:
-			return ((InternalEList<?>)getLibrary()).basicRemove(otherEnd, msgs);
-		default:
-			return super.eInverseRemove(otherEnd, featureID, msgs);
+			case LibraryPackage.EXPORTS__LIBRARY:
+				return ((InternalEList<?>)getLibrary()).basicRemove(otherEnd, msgs);
 		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -92,13 +91,12 @@ public class ExportsImpl extends MinimalEObjectImpl.Container implements Exports
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryPackage.EXPORTS__LIBRARY:
-			return getLibrary();
-		default:
-			return super.eGet(featureID, resolve, coreType);
+			case LibraryPackage.EXPORTS__LIBRARY:
+				return getLibrary();
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -108,16 +106,14 @@ public class ExportsImpl extends MinimalEObjectImpl.Container implements Exports
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryPackage.EXPORTS__LIBRARY:
-			getLibrary().clear();
-			getLibrary().addAll((Collection<? extends Library>)newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
+			case LibraryPackage.EXPORTS__LIBRARY:
+				getLibrary().clear();
+				getLibrary().addAll((Collection<? extends Library>)newValue);
+				return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -126,15 +122,13 @@ public class ExportsImpl extends MinimalEObjectImpl.Container implements Exports
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.EXPORTS__LIBRARY:
-			getLibrary().clear();
-			return;
-		default:
-			super.eUnset(featureID);
-			return;
+			case LibraryPackage.EXPORTS__LIBRARY:
+				getLibrary().clear();
+				return;
 		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -143,13 +137,12 @@ public class ExportsImpl extends MinimalEObjectImpl.Container implements Exports
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.EXPORTS__LIBRARY:
-			return library != null && !library.isEmpty();
-		default:
-			return super.eIsSet(featureID);
+			case LibraryPackage.EXPORTS__LIBRARY:
+				return library != null && !library.isEmpty();
 		}
+		return super.eIsSet(featureID);
 	}
 
 } //ExportsImpl

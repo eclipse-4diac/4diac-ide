@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="platform:/resource/org.eclipse.fordiac.ide.library.model/model/library.xsd" scope="Library">
+    <product name="Reconfiguration" symbolicName="reconfiguration" comment="4diac Standard Library - Reconfiguration">
+        <versionInfo version="1.0.0" author="Eclipse 4diac" date="2024-02-21"/>
+    </product>
+</Manifest>

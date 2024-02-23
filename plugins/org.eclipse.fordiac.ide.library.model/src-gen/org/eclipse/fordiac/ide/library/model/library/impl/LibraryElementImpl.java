@@ -3,7 +3,7 @@
 package org.eclipse.fordiac.ide.library.model.library.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 
@@ -14,7 +14,7 @@ import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
  *
  * @generated
  */
-public class LibraryElementImpl extends MinimalEObjectImpl.Container implements LibraryElement {
+public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

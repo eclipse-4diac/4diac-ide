@@ -5,7 +5,7 @@ package org.eclipse.fordiac.ide.library.model.library.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.VersionInfo;
 
@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.library.model.library.VersionInfo;
  *
  * @generated
  */
-public class VersionInfoImpl extends MinimalEObjectImpl.Container implements VersionInfo {
+public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 	/**
 	 * The default value of the '{@link #getAuthor() <em>Author</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -120,12 +120,11 @@ public class VersionInfoImpl extends MinimalEObjectImpl.Container implements Ver
 	 * @generated
 	 */
 	@Override
-	public void setAuthor(final String newAuthor) {
-		final String oldAuthor = author;
+	public void setAuthor(String newAuthor) {
+		String oldAuthor = author;
 		author = newAuthor;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.VERSION_INFO__AUTHOR, oldAuthor, author));
-		}
 	}
 
 	/**
@@ -144,12 +143,11 @@ public class VersionInfoImpl extends MinimalEObjectImpl.Container implements Ver
 	 * @generated
 	 */
 	@Override
-	public void setDate(final String newDate) {
-		final String oldDate = date;
+	public void setDate(String newDate) {
+		String oldDate = date;
 		date = newDate;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.VERSION_INFO__DATE, oldDate, date));
-		}
 	}
 
 	/**
@@ -168,12 +166,11 @@ public class VersionInfoImpl extends MinimalEObjectImpl.Container implements Ver
 	 * @generated
 	 */
 	@Override
-	public void setVersion(final String newVersion) {
-		final String oldVersion = version;
+	public void setVersion(String newVersion) {
+		String oldVersion = version;
 		version = newVersion;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.VERSION_INFO__VERSION, oldVersion, version));
-		}
 	}
 
 	/**
@@ -182,17 +179,16 @@ public class VersionInfoImpl extends MinimalEObjectImpl.Container implements Ver
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryPackage.VERSION_INFO__AUTHOR:
-			return getAuthor();
-		case LibraryPackage.VERSION_INFO__DATE:
-			return getDate();
-		case LibraryPackage.VERSION_INFO__VERSION:
-			return getVersion();
-		default:
-			return super.eGet(featureID, resolve, coreType);
+			case LibraryPackage.VERSION_INFO__AUTHOR:
+				return getAuthor();
+			case LibraryPackage.VERSION_INFO__DATE:
+				return getDate();
+			case LibraryPackage.VERSION_INFO__VERSION:
+				return getVersion();
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -201,21 +197,19 @@ public class VersionInfoImpl extends MinimalEObjectImpl.Container implements Ver
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryPackage.VERSION_INFO__AUTHOR:
-			setAuthor((String)newValue);
-			return;
-		case LibraryPackage.VERSION_INFO__DATE:
-			setDate((String)newValue);
-			return;
-		case LibraryPackage.VERSION_INFO__VERSION:
-			setVersion((String)newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
+			case LibraryPackage.VERSION_INFO__AUTHOR:
+				setAuthor((String)newValue);
+				return;
+			case LibraryPackage.VERSION_INFO__DATE:
+				setDate((String)newValue);
+				return;
+			case LibraryPackage.VERSION_INFO__VERSION:
+				setVersion((String)newValue);
+				return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -224,21 +218,19 @@ public class VersionInfoImpl extends MinimalEObjectImpl.Container implements Ver
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.VERSION_INFO__AUTHOR:
-			setAuthor(AUTHOR_EDEFAULT);
-			return;
-		case LibraryPackage.VERSION_INFO__DATE:
-			setDate(DATE_EDEFAULT);
-			return;
-		case LibraryPackage.VERSION_INFO__VERSION:
-			setVersion(VERSION_EDEFAULT);
-			return;
-		default:
-			super.eUnset(featureID);
-			return;
+			case LibraryPackage.VERSION_INFO__AUTHOR:
+				setAuthor(AUTHOR_EDEFAULT);
+				return;
+			case LibraryPackage.VERSION_INFO__DATE:
+				setDate(DATE_EDEFAULT);
+				return;
+			case LibraryPackage.VERSION_INFO__VERSION:
+				setVersion(VERSION_EDEFAULT);
+				return;
 		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -247,17 +239,16 @@ public class VersionInfoImpl extends MinimalEObjectImpl.Container implements Ver
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.VERSION_INFO__AUTHOR:
-			return AUTHOR_EDEFAULT == null ? author != null : !AUTHOR_EDEFAULT.equals(author);
-		case LibraryPackage.VERSION_INFO__DATE:
-			return DATE_EDEFAULT == null ? date != null : !DATE_EDEFAULT.equals(date);
-		case LibraryPackage.VERSION_INFO__VERSION:
-			return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
-		default:
-			return super.eIsSet(featureID);
+			case LibraryPackage.VERSION_INFO__AUTHOR:
+				return AUTHOR_EDEFAULT == null ? author != null : !AUTHOR_EDEFAULT.equals(author);
+			case LibraryPackage.VERSION_INFO__DATE:
+				return DATE_EDEFAULT == null ? date != null : !DATE_EDEFAULT.equals(date);
+			case LibraryPackage.VERSION_INFO__VERSION:
+				return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
 		}
+		return super.eIsSet(featureID);
 	}
 
 	/**
@@ -267,16 +258,14 @@ public class VersionInfoImpl extends MinimalEObjectImpl.Container implements Ver
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (author: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (author: "); //$NON-NLS-1$
 		result.append(author);
-		result.append(", date: ");
+		result.append(", date: "); //$NON-NLS-1$
 		result.append(date);
-		result.append(", version: ");
+		result.append(", version: "); //$NON-NLS-1$
 		result.append(version);
 		result.append(')');
 		return result.toString();

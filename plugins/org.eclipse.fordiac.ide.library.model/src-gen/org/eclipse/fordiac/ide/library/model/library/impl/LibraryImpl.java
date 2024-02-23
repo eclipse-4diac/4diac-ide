@@ -7,7 +7,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.library.model.library.Excludes;
 import org.eclipse.fordiac.ide.library.model.library.Includes;
 import org.eclipse.fordiac.ide.library.model.library.Library;
@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
  *
  * @generated
  */
-public class LibraryImpl extends MinimalEObjectImpl.Container implements Library {
+public class LibraryImpl extends EObjectImpl implements Library {
 	/**
 	 * The cached value of the '{@link #getIncludes() <em>Includes</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -175,16 +175,12 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetIncludes(final Includes newIncludes, NotificationChain msgs) {
-		final Includes oldIncludes = includes;
+	public NotificationChain basicSetIncludes(Includes newIncludes, NotificationChain msgs) {
+		Includes oldIncludes = includes;
 		includes = newIncludes;
 		if (eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__INCLUDES, oldIncludes, newIncludes);
-			if (msgs == null) {
-				msgs = notification;
-			} else {
-				msgs.add(notification);
-			}
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__INCLUDES, oldIncludes, newIncludes);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
@@ -195,23 +191,18 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * @generated
 	 */
 	@Override
-	public void setIncludes(final Includes newIncludes) {
+	public void setIncludes(Includes newIncludes) {
 		if (newIncludes != includes) {
 			NotificationChain msgs = null;
-			if (includes != null) {
+			if (includes != null)
 				msgs = ((InternalEObject)includes).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.LIBRARY__INCLUDES, null, msgs);
-			}
-			if (newIncludes != null) {
+			if (newIncludes != null)
 				msgs = ((InternalEObject)newIncludes).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.LIBRARY__INCLUDES, null, msgs);
-			}
 			msgs = basicSetIncludes(newIncludes, msgs);
-			if (msgs != null) {
-				msgs.dispatch();
-			}
+			if (msgs != null) msgs.dispatch();
 		}
-		else if (eNotificationRequired()) {
+		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__INCLUDES, newIncludes, newIncludes));
-		}
 	}
 
 	/**
@@ -229,16 +220,12 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetExcludes(final Excludes newExcludes, NotificationChain msgs) {
-		final Excludes oldExcludes = excludes;
+	public NotificationChain basicSetExcludes(Excludes newExcludes, NotificationChain msgs) {
+		Excludes oldExcludes = excludes;
 		excludes = newExcludes;
 		if (eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__EXCLUDES, oldExcludes, newExcludes);
-			if (msgs == null) {
-				msgs = notification;
-			} else {
-				msgs.add(notification);
-			}
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__EXCLUDES, oldExcludes, newExcludes);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
@@ -249,23 +236,18 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * @generated
 	 */
 	@Override
-	public void setExcludes(final Excludes newExcludes) {
+	public void setExcludes(Excludes newExcludes) {
 		if (newExcludes != excludes) {
 			NotificationChain msgs = null;
-			if (excludes != null) {
+			if (excludes != null)
 				msgs = ((InternalEObject)excludes).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.LIBRARY__EXCLUDES, null, msgs);
-			}
-			if (newExcludes != null) {
+			if (newExcludes != null)
 				msgs = ((InternalEObject)newExcludes).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.LIBRARY__EXCLUDES, null, msgs);
-			}
 			msgs = basicSetExcludes(newExcludes, msgs);
-			if (msgs != null) {
-				msgs.dispatch();
-			}
+			if (msgs != null) msgs.dispatch();
 		}
-		else if (eNotificationRequired()) {
+		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__EXCLUDES, newExcludes, newExcludes));
-		}
 	}
 
 	/**
@@ -284,14 +266,13 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * @generated
 	 */
 	@Override
-	public void setAttribute(final String newAttribute) {
-		final String oldAttribute = attribute;
+	public void setAttribute(String newAttribute) {
+		String oldAttribute = attribute;
 		attribute = newAttribute;
-		final boolean oldAttributeESet = attributeESet;
+		boolean oldAttributeESet = attributeESet;
 		attributeESet = true;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__ATTRIBUTE, oldAttribute, attribute, !oldAttributeESet));
-		}
 	}
 
 	/**
@@ -301,13 +282,12 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 */
 	@Override
 	public void unsetAttribute() {
-		final String oldAttribute = attribute;
-		final boolean oldAttributeESet = attributeESet;
+		String oldAttribute = attribute;
+		boolean oldAttributeESet = attributeESet;
 		attribute = ATTRIBUTE_EDEFAULT;
 		attributeESet = false;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.UNSET, LibraryPackage.LIBRARY__ATTRIBUTE, oldAttribute, ATTRIBUTE_EDEFAULT, oldAttributeESet));
-		}
 	}
 
 	/**
@@ -336,12 +316,11 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * @generated
 	 */
 	@Override
-	public void setComment(final String newComment) {
-		final String oldComment = comment;
+	public void setComment(String newComment) {
+		String oldComment = comment;
 		comment = newComment;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__COMMENT, oldComment, comment));
-		}
 	}
 
 	/**
@@ -360,12 +339,11 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * @generated
 	 */
 	@Override
-	public void setName(final String newName) {
-		final String oldName = name;
+	public void setName(String newName) {
+		String oldName = name;
 		name = newName;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__NAME, oldName, name));
-		}
 	}
 
 	/**
@@ -384,12 +362,11 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * @generated
 	 */
 	@Override
-	public void setSymbolicName(final String newSymbolicName) {
-		final String oldSymbolicName = symbolicName;
+	public void setSymbolicName(String newSymbolicName) {
+		String oldSymbolicName = symbolicName;
 		symbolicName = newSymbolicName;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__SYMBOLIC_NAME, oldSymbolicName, symbolicName));
-		}
 	}
 
 	/**
@@ -398,15 +375,14 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryPackage.LIBRARY__INCLUDES:
-			return basicSetIncludes(null, msgs);
-		case LibraryPackage.LIBRARY__EXCLUDES:
-			return basicSetExcludes(null, msgs);
-		default:
-			return super.eInverseRemove(otherEnd, featureID, msgs);
+			case LibraryPackage.LIBRARY__INCLUDES:
+				return basicSetIncludes(null, msgs);
+			case LibraryPackage.LIBRARY__EXCLUDES:
+				return basicSetExcludes(null, msgs);
 		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -415,23 +391,22 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryPackage.LIBRARY__INCLUDES:
-			return getIncludes();
-		case LibraryPackage.LIBRARY__EXCLUDES:
-			return getExcludes();
-		case LibraryPackage.LIBRARY__ATTRIBUTE:
-			return getAttribute();
-		case LibraryPackage.LIBRARY__COMMENT:
-			return getComment();
-		case LibraryPackage.LIBRARY__NAME:
-			return getName();
-		case LibraryPackage.LIBRARY__SYMBOLIC_NAME:
-			return getSymbolicName();
-		default:
-			return super.eGet(featureID, resolve, coreType);
+			case LibraryPackage.LIBRARY__INCLUDES:
+				return getIncludes();
+			case LibraryPackage.LIBRARY__EXCLUDES:
+				return getExcludes();
+			case LibraryPackage.LIBRARY__ATTRIBUTE:
+				return getAttribute();
+			case LibraryPackage.LIBRARY__COMMENT:
+				return getComment();
+			case LibraryPackage.LIBRARY__NAME:
+				return getName();
+			case LibraryPackage.LIBRARY__SYMBOLIC_NAME:
+				return getSymbolicName();
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -440,30 +415,28 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryPackage.LIBRARY__INCLUDES:
-			setIncludes((Includes)newValue);
-			return;
-		case LibraryPackage.LIBRARY__EXCLUDES:
-			setExcludes((Excludes)newValue);
-			return;
-		case LibraryPackage.LIBRARY__ATTRIBUTE:
-			setAttribute((String)newValue);
-			return;
-		case LibraryPackage.LIBRARY__COMMENT:
-			setComment((String)newValue);
-			return;
-		case LibraryPackage.LIBRARY__NAME:
-			setName((String)newValue);
-			return;
-		case LibraryPackage.LIBRARY__SYMBOLIC_NAME:
-			setSymbolicName((String)newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
+			case LibraryPackage.LIBRARY__INCLUDES:
+				setIncludes((Includes)newValue);
+				return;
+			case LibraryPackage.LIBRARY__EXCLUDES:
+				setExcludes((Excludes)newValue);
+				return;
+			case LibraryPackage.LIBRARY__ATTRIBUTE:
+				setAttribute((String)newValue);
+				return;
+			case LibraryPackage.LIBRARY__COMMENT:
+				setComment((String)newValue);
+				return;
+			case LibraryPackage.LIBRARY__NAME:
+				setName((String)newValue);
+				return;
+			case LibraryPackage.LIBRARY__SYMBOLIC_NAME:
+				setSymbolicName((String)newValue);
+				return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -472,30 +445,28 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.LIBRARY__INCLUDES:
-			setIncludes((Includes)null);
-			return;
-		case LibraryPackage.LIBRARY__EXCLUDES:
-			setExcludes((Excludes)null);
-			return;
-		case LibraryPackage.LIBRARY__ATTRIBUTE:
-			unsetAttribute();
-			return;
-		case LibraryPackage.LIBRARY__COMMENT:
-			setComment(COMMENT_EDEFAULT);
-			return;
-		case LibraryPackage.LIBRARY__NAME:
-			setName(NAME_EDEFAULT);
-			return;
-		case LibraryPackage.LIBRARY__SYMBOLIC_NAME:
-			setSymbolicName(SYMBOLIC_NAME_EDEFAULT);
-			return;
-		default:
-			super.eUnset(featureID);
-			return;
+			case LibraryPackage.LIBRARY__INCLUDES:
+				setIncludes((Includes)null);
+				return;
+			case LibraryPackage.LIBRARY__EXCLUDES:
+				setExcludes((Excludes)null);
+				return;
+			case LibraryPackage.LIBRARY__ATTRIBUTE:
+				unsetAttribute();
+				return;
+			case LibraryPackage.LIBRARY__COMMENT:
+				setComment(COMMENT_EDEFAULT);
+				return;
+			case LibraryPackage.LIBRARY__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case LibraryPackage.LIBRARY__SYMBOLIC_NAME:
+				setSymbolicName(SYMBOLIC_NAME_EDEFAULT);
+				return;
 		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -504,23 +475,22 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.LIBRARY__INCLUDES:
-			return includes != null;
-		case LibraryPackage.LIBRARY__EXCLUDES:
-			return excludes != null;
-		case LibraryPackage.LIBRARY__ATTRIBUTE:
-			return isSetAttribute();
-		case LibraryPackage.LIBRARY__COMMENT:
-			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
-		case LibraryPackage.LIBRARY__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case LibraryPackage.LIBRARY__SYMBOLIC_NAME:
-			return SYMBOLIC_NAME_EDEFAULT == null ? symbolicName != null : !SYMBOLIC_NAME_EDEFAULT.equals(symbolicName);
-		default:
-			return super.eIsSet(featureID);
+			case LibraryPackage.LIBRARY__INCLUDES:
+				return includes != null;
+			case LibraryPackage.LIBRARY__EXCLUDES:
+				return excludes != null;
+			case LibraryPackage.LIBRARY__ATTRIBUTE:
+				return isSetAttribute();
+			case LibraryPackage.LIBRARY__COMMENT:
+				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			case LibraryPackage.LIBRARY__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case LibraryPackage.LIBRARY__SYMBOLIC_NAME:
+				return SYMBOLIC_NAME_EDEFAULT == null ? symbolicName != null : !SYMBOLIC_NAME_EDEFAULT.equals(symbolicName);
 		}
+		return super.eIsSet(featureID);
 	}
 
 	/**
@@ -530,22 +500,16 @@ public class LibraryImpl extends MinimalEObjectImpl.Container implements Library
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (attribute: ");
-		if (attributeESet) {
-			result.append(attribute);
-		} else {
-			result.append("<unset>");
-		}
-		result.append(", comment: ");
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (attribute: "); //$NON-NLS-1$
+		if (attributeESet) result.append(attribute); else result.append("<unset>"); //$NON-NLS-1$
+		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
-		result.append(", name: ");
+		result.append(", name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", symbolicName: ");
+		result.append(", symbolicName: "); //$NON-NLS-1$
 		result.append(symbolicName);
 		result.append(')');
 		return result.toString();
