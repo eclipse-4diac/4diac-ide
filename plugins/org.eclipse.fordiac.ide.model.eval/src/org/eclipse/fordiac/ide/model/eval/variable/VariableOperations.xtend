@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 import org.eclipse.fordiac.ide.model.data.AnyType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser
 import org.eclipse.fordiac.ide.model.eval.EvaluatorCache
@@ -35,7 +36,6 @@ import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 
 import static extension org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser.isSimpleTypeDeclaration
 import static extension org.eclipse.fordiac.ide.model.eval.EvaluatorFactory.*
-import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType
 
 final class VariableOperations {
 	private new() {
@@ -114,22 +114,22 @@ final class VariableOperations {
 
 	def static Variable<?> newVariable(Attribute attr) {
 		if (!attr.value.nullOrEmpty) {
-				val evaluator = attr.createEvaluator(Attribute, null, emptySet, null)
-				if (evaluator instanceof VariableEvaluator) {
-					evaluator.evaluateVariable
-				} else
-					throw new UnsupportedOperationException("No suitable evaluator for Attribute found")
+			val evaluator = attr.createEvaluator(Attribute, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				evaluator.evaluateVariable
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for Attribute found")
 		} else
 			newVariable(attr.name, attr.type)
 	}
 
 	def static Variable<?> newVariable(DirectlyDerivedType type) {
 		if (!type.initialValue.nullOrEmpty) {
-				val evaluator = type.createEvaluator(DirectlyDerivedType, null, emptySet, null)
-				if (evaluator instanceof VariableEvaluator) {
-					evaluator.evaluateVariable
-				} else
-					throw new UnsupportedOperationException("No suitable evaluator for DirectlyDerivedType found")
+			val evaluator = type.createEvaluator(DirectlyDerivedType, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				evaluator.evaluateVariable
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for DirectlyDerivedType found")
 		} else
 			newVariable(type.name, type.baseType)
 	}
@@ -261,12 +261,31 @@ final class VariableOperations {
 			#{PackageNameHelper.getFullTypeName(decl.type)}
 	}
 
+	def static Set<String> getDependencies(Attribute attr) {
+		if (!attr.value.nullOrEmpty) {
+			val evaluator = attr.createEvaluator(Attribute, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				evaluator.dependencies
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for Attribute found")
+		} else if (attr.attributeDeclaration !== null)
+			#{PackageNameHelper.getFullTypeName(attr.attributeDeclaration)}
+		else
+			#{PackageNameHelper.getFullTypeName(attr.type)}
+	}
+
 	def static Set<String> getAllDependencies(EObject object) {
 		val evaluator = object.createEvaluator(object.eClass.instanceClass, null, emptySet, null);
 		if (evaluator !== null)
 			evaluator.dependencies
 		else
-			object.eAllContents.filter(VarDeclaration).flatMap[dependencies.iterator].toSet
+			object.eAllContents.toIterable.flatMap [
+				switch (it) {
+					Attribute: dependencies
+					VarDeclaration: dependencies
+					default: emptySet
+				}
+			].toSet
 	}
 
 	def static boolean hasInitialValue(VarDeclaration decl) {

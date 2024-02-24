@@ -105,6 +105,7 @@ public class FBNetworkConnection extends HideableConnection {
 				graphics.setForegroundColor(getLocalForegroundColor());
 			}
 			paintFigure(graphics);
+			paintBorder(graphics);
 		}
 	}
 

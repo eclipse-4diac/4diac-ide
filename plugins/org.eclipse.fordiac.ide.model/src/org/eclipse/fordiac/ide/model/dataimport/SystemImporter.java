@@ -166,10 +166,10 @@ public class SystemImporter extends CommonElementImporter {
 		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != type) {
 			segment.setTypeEntry(addDependency(getTypeLibrary().getSegmentTypeEntry(type)));
+			parseCommunication(segment);
 		}
 
 		parseSegmentNodeChildren(segment);
-		parseCommunication(segment);
 		return segment;
 	}
 
@@ -195,11 +195,13 @@ public class SystemImporter extends CommonElementImporter {
 
 	private static void parseCommunication(final Segment segment) {
 		final String typeName = segment.getFullTypeName();
-		final CommunicationConfigurationDetails commConfig = CommunicationConfigurationDetails
-				.getCommConfigUiFromExtensionPoint(typeName, CommunicationConfigurationDetails.COMM_EXT_ATT_ID);
-		if (commConfig != null) {
-			final CommunicationConfiguration config = commConfig.createModel(segment.getVarDeclarations());
-			segment.setCommunication(config);
+		if (typeName != null) {
+			final CommunicationConfigurationDetails commConfig = CommunicationConfigurationDetails
+					.getCommConfigUiFromExtensionPoint(typeName, CommunicationConfigurationDetails.COMM_EXT_ATT_ID);
+			if (commConfig != null) {
+				final CommunicationConfiguration config = commConfig.createModel(segment.getVarDeclarations());
+				segment.setCommunication(config);
+			}
 		}
 	}
 
