@@ -18,10 +18,8 @@
 package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -55,7 +53,6 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -90,12 +87,10 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private static final Pattern TYPE_NAME_PATTERN = Pattern.compile("Name=\\\"(\\w*)\\\""); //$NON-NLS-1$
 
 	private final SystemManager systemManager;
-	private final Collection<TypeEntry> changedFiles;
 	private final Collection<FileToRenameEntry> filesToRename;
 
 	public FordiacResourceChangeListener(final SystemManager systemManager) {
 		this.systemManager = systemManager;
-		this.changedFiles = new HashSet<>();
 		this.filesToRename = new HashSet<>();
 	}
 
@@ -106,9 +101,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			final IResourceDelta rootDelta = event.getDelta();
 			try {
 				rootDelta.accept(visitor);
-				if (!changedFiles.isEmpty()) {
-					handleChangedFiles();
-				}
 				if (!filesToRename.isEmpty()) {
 					handleFilesToRename();
 				}
@@ -119,94 +111,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private void handleChangedFiles() {
-		final List<TypeEntry> changedFilesCopy = new ArrayList<>(changedFiles);
-		changedFiles.clear();
-		Display.getDefault().asyncExec(() -> {
-			final List<IEditorPart> changedOpenedDirtyEditors = collectOpenedEditors(changedFilesCopy);
-			final List<IEditorFileChangeListener> editorListener = changedOpenedDirtyEditors.stream()
-					.filter(IEditorFileChangeListener.class::isInstance).map(IEditorFileChangeListener.class::cast)
-					.toList();
-			handleFileRefreshWIzards(editorListener);
-		});
-	}
-
 	private void handleFilesToRename() {
 		filesToRename.forEach(FordiacResourceChangeListener::autoRenameExistingType);
 		filesToRename.clear();
-	}
-
-	private static void handleFileRefreshWIzards(final List<IEditorFileChangeListener> editorListener) {
-		int code = IEditorFileChangeListener.INIT;
-		for (final IEditorFileChangeListener editor : editorListener) {
-
-			if (!((IEditorPart) editor).isDirty()) {
-				editor.reloadFile();
-				continue;
-			}
-
-			if (code == IEditorFileChangeListener.INIT) {
-				code = openFileChangedDialog(editor);
-			}
-
-			switch (code) {
-			case IEditorFileChangeListener.YES:
-				editor.reloadFile();
-				code = IEditorFileChangeListener.INIT;
-				break;
-			case IEditorFileChangeListener.YES_TO_ALL:
-				editor.reloadFile();
-				break;
-			case IEditorFileChangeListener.NO:
-				code = IEditorFileChangeListener.INIT;
-				break;
-			case IEditorFileChangeListener.NO_TO_ALL:
-				return;
-			default:
-				FordiacLogHelper.logError(code + " is not a valid dialog output"); //$NON-NLS-1$
-				break;
-			}
-		}
-	}
-
-	public static int openFileChangedDialog(final IEditorFileChangeListener editor) {
-		final IFile file = editor.getFile();
-		final String info = MessageFormat.format(Messages.AutomationSystemEditor_Info, file.getFullPath().toOSString());
-		final MessageDialog dialog = new MessageDialog(((IEditorPart) editor).getSite().getShell(),
-				Messages.AutomationSystemEditor_Title, null, info, MessageDialog.INFORMATION,
-				new String[] { Messages.FordiacResourceChangeListener_0, Messages.FordiacResourceChangeListener_1,
-						Messages.FordiacResourceChangeListener_2, Messages.FordiacResourceChangeListener_3 },
-				0);
-		return dialog.open();
-	}
-
-	public static List<IEditorPart> collectOpenedEditors(final Iterable<TypeEntry> changedFiles) {
-		final List<IEditorPart> changedOpenedDirtyEditors = new ArrayList<>();
-		IEditorPart activeEditor = null;
-
-		for (final TypeEntry entry : changedFiles) {
-			final IEditorPart findEditor = EditorUtils.findEditor((final IEditorPart editor) -> editor
-					.getEditorInput() instanceof final FileEditorInput fileEditorInput
-					&& fileEditorInput.getFile().equals(entry.getFile()));
-
-			if (findEditor != null) {
-				if (findEditor == EditorUtils.getCurrentActiveEditor()) {
-					activeEditor = findEditor;
-				} else {
-					changedOpenedDirtyEditors.add(findEditor);
-				}
-			} else {
-				// no editor is currently open purge any editable model
-				entry.setTypeEditable(null);
-				SystemManager.INSTANCE.notifyListeners();
-			}
-		}
-
-		if (activeEditor != null) {
-			changedOpenedDirtyEditors.add(0, activeEditor); // we should add the active editor in front so that always
-			// the current opened editor has the corresponding popup
-		}
-		return changedOpenedDirtyEditors;
 	}
 
 	IResourceDeltaVisitor visitor = delta -> {
@@ -253,14 +160,13 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private void refreshTypeEntry(final IResourceDelta delta) {
+	private static void refreshTypeEntry(final IResourceDelta delta) {
 		final IFile file = (IFile) delta.getResource();
 
 		final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 		if (typeEntryForFile != null
 				&& typeEntryForFile.getLastModificationTimestamp() != file.getModificationStamp()) {
 			typeEntryForFile.refresh();
-			changedFiles.add(typeEntryForFile);
 		}
 	}
 
@@ -288,7 +194,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	}
 
-	private boolean handleResourceMovedFrom(final IResourceDelta delta) throws CoreException {
+	private boolean handleResourceMovedFrom(final IResourceDelta delta) {
 		final IProject project = delta.getResource().getProject();
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
 			return false;
@@ -307,7 +213,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	}
 
-	private boolean handleResourceCopy(final IResourceDelta delta) throws CoreException {
+	private boolean handleResourceCopy(final IResourceDelta delta) {
 		final IProject project = delta.getResource().getProject();
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
 			return false;
@@ -354,7 +260,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return filesToRename.stream().filter(entry -> entry.getTypeEntry().equals(palEntry)).findAny().orElse(null);
 	}
 
-	private void handleFileCopy(final IResourceDelta delta) throws CoreException {
+	private void handleFileCopy(final IResourceDelta delta) {
 		final IFile file = (IFile) delta.getResource();
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(file.getProject())) {
 			return;
@@ -424,7 +330,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		systemManager.renameProject(oldProject, newProject);
 	}
 
-	private void handleFileMove(final IResourceDelta delta) throws CoreException {
+	private void handleFileMove(final IResourceDelta delta) {
 		final IFile src = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getMovedFromPath());
 		final IFile dst = (IFile) delta.getResource();
 
@@ -440,7 +346,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			} else {
 				handleFileMove(src, dst);
 			}
-			updateEditorInput(src, dst);
+			updateEditorInput(src);
 		}
 	}
 
@@ -468,12 +374,12 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private void handleFileRename(final IFile dst, final IFile src) throws CoreException {
+	private void handleFileRename(final IFile dst, final IFile src) {
 		handleTypeRename(src, dst);
 		systemManager.notifyListeners();
 	}
 
-	public static void handleTypeRename(final IFile src, final IFile file) throws CoreException {
+	public static void handleTypeRename(final IFile src, final IFile file) {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
 		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(src);
 		if (entry != null && src.equals(entry.getFile())) {
@@ -483,7 +389,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	public static void updateTypeEntry(final IFile newFile, final TypeEntry entry) throws CoreException {
+	public static void updateTypeEntry(final IFile newFile, final TypeEntry entry) {
 		if (entry == null) { // change to Assert ?
 			return;
 		}
@@ -510,7 +416,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	public static void updateTypeEntryByRename(final IFile newFile, final TypeEntry entry) throws CoreException {
+	public static void updateTypeEntryByRename(final IFile newFile, final TypeEntry entry) {
 		if (entry == null) { // change to Assert ?
 			return;
 		}
@@ -622,25 +528,17 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private static FordiacEditorMatchingStrategy editorMatching = new FordiacEditorMatchingStrategy();
 
-	private static void updateEditorInput(final IFile src, final IFile dst) {
+	private static void updateEditorInput(final IFile src) {
 		Display.getDefault().asyncExec(() -> {
 			final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			final IEditorReference[] editorReferences = activePage.getEditorReferences();
 
 			for (final IEditorReference editorReference : editorReferences) {
 				final IEditorPart editor = editorReference.getEditor(false);
-				if (null != editor) {
-					// the editor is loaded check if it is ours and if yes update it
-					final IEditorInput input = editor.getEditorInput();
-					if ((src.equals(((FileEditorInput) input).getFile())
-							&& editor instanceof final IEditorFileChangeListener editorFileChangeListener)) {
-						editorFileChangeListener.updateEditorInput(new FileEditorInput(dst));
-					}
-				} else // the editor is not yet loaded check if it may be ours. We can not load it as
-						// the file it is
-						// referring
-				// to is not existing anymore, therefore we can only close it
-				if (editorMatching.matches(editorReference, new FileEditorInput(src))) {
+				// the editor is not yet loaded check if it may be ours. We can not load it as
+				// the file it is referring to is not existing anymore, therefore we can only
+				// close it
+				if ((editor == null) && editorMatching.matches(editorReference, new FileEditorInput(src))) {
 					activePage.closeEditors(new IEditorReference[] { editorReference }, false);
 
 				}

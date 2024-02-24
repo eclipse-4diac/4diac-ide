@@ -30,7 +30,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -48,10 +47,10 @@ import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
+import org.eclipse.fordiac.ide.model.ui.editors.ITypeEntryEditor;
+import org.eclipse.fordiac.ide.model.ui.editors.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -71,7 +70,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
@@ -92,7 +90,7 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class AttributeTypeEditor extends EditorPart implements CommandStackEventListener,
-		ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListener {
+		ITabbedPropertySheetPageContributor, ISelectionListener, ITypeEntryEditor {
 	private static final int STRUCT_EDITOR_INDEX = 0;
 	private static final int DIRECTLYDERIVEDTYPE_EDITOR_INDEX = 1;
 
@@ -113,21 +111,11 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 	private AttributeTypeEntry attributeTypeEntry;
 	private AttributeDeclaration attributeDeclaration;
 
+	private final TypeEntryAdapter typeEntryAdapter = new TypeEntryAdapter(this);
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			final Object feature = notification.getFeature();
-			if ((null != feature)
-					&& (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass()))) {
-				Display.getDefault().asyncExec(() -> {
-					if (null != attributeTypeEntry) {
-						// input should be set before the partname
-						setInput(new FileEditorInput(attributeTypeEntry.getFile()));
-						setPartName(attributeTypeEntry.getFile().getName());
-					}
-				});
-			}
 			if (notification.getOldValue() instanceof AnyDerivedType
 					&& notification.getNewValue() instanceof AnyDerivedType) {
 				if (notification.getNewValue() instanceof StructuredType) {
@@ -245,11 +233,17 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		if (attributeDeclaration != null) {
 			attributeDeclaration.eAdapters().add(adapter);
 		}
+		if (attributeTypeEntry != null) {
+			attributeTypeEntry.eAdapters().add(typeEntryAdapter);
+		}
 	}
 
 	private void removeListenerFromAttributeDeclaration() {
 		if (attributeDeclaration != null && attributeDeclaration.eAdapters().contains(adapter)) {
 			attributeDeclaration.eAdapters().remove(adapter);
+		}
+		if (attributeTypeEntry != null && attributeTypeEntry.eAdapters().contains(typeEntryAdapter)) {
+			attributeTypeEntry.eAdapters().remove(typeEntryAdapter);
 		}
 	}
 
@@ -389,6 +383,8 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		} else if (errorComposite != null) {
 			errorComposite.setFocus();
 		}
+		// we got focus check if the content needs reload
+		typeEntryAdapter.checkFileReload();
 	}
 
 	public CommandStack getCommandStack() {
@@ -465,7 +461,7 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 	}
 
 	@Override
-	public void reloadFile() {
+	public void reloadType() {
 		try {
 			removeListenerFromAttributeDeclaration();
 			attributeTypeEntry.setTypeEditable(null);
@@ -487,15 +483,8 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 	}
 
 	@Override
-	public IFile getFile() {
-		Assert.isNotNull(((FileEditorInput) getEditorInput()).getFile());
-		return ((FileEditorInput) getEditorInput()).getFile();
-	}
-
-	@Override
-	public void updateEditorInput(final FileEditorInput newInput) {
-		setInput(newInput);
-		firePropertyChange(IWorkbenchPart.PROP_TITLE);
+	public void setInput(final IEditorInput input) {
+		setInputWithNotify(input);
 	}
 
 }

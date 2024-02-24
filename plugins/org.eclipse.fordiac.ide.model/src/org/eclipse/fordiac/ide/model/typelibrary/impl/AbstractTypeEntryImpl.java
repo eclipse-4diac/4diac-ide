@@ -370,6 +370,10 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		if (isFileContentChanged()) {
 			loadTypeNameFromFile();
 			setType(null);
+			if (eNotificationRequired()) {
+				eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE,
+						null, null));
+			}
 		}
 	}
 

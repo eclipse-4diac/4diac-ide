@@ -30,13 +30,9 @@ import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
@@ -53,16 +49,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.search.dialog.StructuredDataTypeDataHandler;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
+import org.eclipse.fordiac.ide.model.ui.editors.ITypeEntryEditor;
+import org.eclipse.fordiac.ide.model.ui.editors.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
@@ -104,7 +99,7 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class DataTypeEditor extends EditorPart implements CommandStackEventListener,
-		ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListener {
+		ITabbedPropertySheetPageContributor, ISelectionListener, ITypeEntryEditor {
 
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
@@ -126,25 +121,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	private DataTypeEntry dataTypeEntry;
 	private AnyDerivedType dataTypeEditable;
 
-	private final Adapter adapter = new AdapterImpl() {
-
-		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-			final Object feature = notification.getFeature();
-			if ((null != feature)
-					&& ((LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass()))
-							|| TypeEntry.TYPE_ENTRY_FILE_FEATURE.equals(feature))) {
-				Display.getDefault().asyncExec(() -> {
-					if (null != dataTypeEntry) {
-						// input should be set before the partname
-						setInput(new FileEditorInput(dataTypeEntry.getFile()));
-						setPartName(dataTypeEntry.getFile().getName());
-					}
-				});
-			}
-		}
-	};
+	private final TypeEntryAdapter adapter = new TypeEntryAdapter(this);
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
@@ -346,21 +323,14 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	}
 
 	private void addListenerToDataTypeObj() {
-		if (dataTypeEntry != null && dataTypeEditable != null) {
+		if (dataTypeEntry != null) {
 			dataTypeEntry.eAdapters().add(adapter);
-			dataTypeEditable.eAdapters().add(adapter);
 		}
 	}
 
 	private void removeListenerFromDataTypeObj() {
-		if (dataTypeEntry != null && dataTypeEditable != null) {
-			if (dataTypeEntry.eAdapters().contains(adapter)) {
-				dataTypeEntry.eAdapters().remove(adapter);
-			}
-
-			if (dataTypeEditable.eAdapters().contains(adapter)) {
-				dataTypeEditable.eAdapters().remove(adapter);
-			}
+		if ((dataTypeEntry != null) && dataTypeEntry.eAdapters().contains(adapter)) {
+			dataTypeEntry.eAdapters().remove(adapter);
 		}
 	}
 
@@ -445,6 +415,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		} else {
 			structComposite.setFocus();
 		}
+		adapter.checkFileReload();
 	}
 
 	public CommandStack getCommandStack() {
@@ -521,7 +492,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	}
 
 	@Override
-	public void reloadFile() {
+	public void reloadType() {
 		try {
 			removeListenerFromDataTypeObj();
 			dataTypeEntry.setTypeEditable(null);
@@ -539,14 +510,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	}
 
 	@Override
-	public IFile getFile() {
-		Assert.isNotNull(((FileEditorInput) getEditorInput()).getFile());
-		return ((FileEditorInput) getEditorInput()).getFile();
-	}
-
-	@Override
-	public void updateEditorInput(final FileEditorInput newInput) {
-		setInput(newInput);
-		firePropertyChange(IWorkbenchPart.PROP_TITLE);
+	public void setInput(final IEditorInput input) {
+		setInputWithNotify(input);
 	}
 }

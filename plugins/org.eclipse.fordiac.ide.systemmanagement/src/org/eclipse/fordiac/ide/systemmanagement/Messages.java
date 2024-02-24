@@ -15,18 +15,12 @@ package org.eclipse.fordiac.ide.systemmanagement;
 
 import org.eclipse.osgi.util.NLS;
 
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.systemmanagement.messages"; //$NON-NLS-1$
-	public static String AutomationSystemEditor_Title;
-	public static String AutomationSystemEditor_Info;
 	public static String AutomationSystemEditor_Discard_Changes;
 	public static String AutomationSystemEditor_Save_Changes;
 	public static String AutomationSystemEditor_Overwrite_Changes;
-	public static String FordiacResourceChangeListener_0;
-	public static String FordiacResourceChangeListener_1;
-	public static String FordiacResourceChangeListener_2;
-	public static String FordiacResourceChangeListener_3;
 	public static String FordiacResourceChangeListener_4;
 	public static String FordiacResourceChangeListener_7;
 	public static String FordiacResourceChangeListener_UpdateTypeLibForNewProject;

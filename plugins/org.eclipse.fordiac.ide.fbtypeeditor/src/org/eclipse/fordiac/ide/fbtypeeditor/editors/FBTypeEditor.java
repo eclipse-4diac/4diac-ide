@@ -32,7 +32,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
@@ -45,9 +44,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
@@ -66,7 +62,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
@@ -75,7 +70,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
+import org.eclipse.fordiac.ide.model.ui.editors.ITypeEntryEditor;
+import org.eclipse.fordiac.ide.model.ui.editors.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
@@ -115,7 +111,7 @@ import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.osgi.framework.FrameworkUtil;
 
 public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelectionListener, CommandStackEventListener,
-		ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INavigationLocationProvider {
+		ITabbedPropertySheetPageContributor, IGotoMarker, ITypeEntryEditor, INavigationLocationProvider {
 
 	private Collection<IFBTEditorPart> editors;
 	private TypeEntry typeEntry;
@@ -126,26 +122,9 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	private ValidationJob validationJob;
 	private FBTypeUpdateDialog<TypeEntry> fbSaveDialog;
 	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
-	// private static final int SAVE_AS_BUTTON_INDEX = 1;
-	private static final int CANCEL_BUTTON_INDEX = 1; // 2;
+	private static final int CANCEL_BUTTON_INDEX = 1;
 
-	private final Adapter adapter = new AdapterImpl() {
-
-		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(notification.getFeature())
-					|| TypeEntry.TYPE_ENTRY_FILE_FEATURE.equals(notification.getFeature())) {
-				Display.getDefault().asyncExec(() -> {
-					if (null != typeEntry) {
-						// the input should be set before the title is updated
-						setInput(new FileEditorInput(typeEntry.getFile()));
-						setPartName(typeEntry.getFile().getName());
-					}
-				});
-			}
-		}
-	};
+	private final TypeEntryAdapter adapter = new TypeEntryAdapter(this);
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
@@ -295,7 +274,6 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 
 		setPartName(typeEntry.getTypeName());
 
-		fbType.eAdapters().add(adapter);
 		typeEntry.eAdapters().add(adapter);
 
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
@@ -334,13 +312,8 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 
 	@Override
 	public void dispose() {
-		if ((fbType != null)) {
-			if (fbType.eAdapters().contains(adapter)) {
-				fbType.eAdapters().remove(adapter);
-			}
-			if (typeEntry.eAdapters().contains(adapter)) {
-				typeEntry.eAdapters().remove(adapter);
-			}
+		if ((fbType != null) && typeEntry.eAdapters().contains(adapter)) {
+			typeEntry.eAdapters().remove(adapter);
 		}
 		if (validationJob != null) {
 			validationJob.dispose();
@@ -478,6 +451,12 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	}
 
 	@Override
+	public void setFocus() {
+		super.setFocus();
+		adapter.checkFileReload();
+	}
+
+	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == IContentOutlinePage.class) {
 			if (null == contentOutline) {
@@ -567,16 +546,11 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	}
 
 	@Override
-	public void reloadFile() {
+	public void reloadType() {
 		final FBType newFBType = (FBType) typeEntry.getTypeEditable();
 		if (newFBType != fbType) {
-			if ((fbType != null)) {
-				if (fbType.eAdapters().contains(adapter)) {
-					fbType.eAdapters().remove(adapter);
-				}
-				if (typeEntry.eAdapters().contains(adapter)) {
-					typeEntry.eAdapters().remove(adapter);
-				}
+			if ((fbType != null) && typeEntry.eAdapters().contains(adapter)) {
+				typeEntry.eAdapters().remove(adapter);
 			}
 			fbType = newFBType;
 			editors.stream().forEach(e -> e.reloadType(fbType));
@@ -586,15 +560,9 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 						activeEditor.getAdapter(GraphicalViewer.class), fbtEditorPart.getSelectableEditPart()));
 			}
 			getCommandStack().flush();
-			fbType.eAdapters().add(adapter);
 			typeEntry.eAdapters().add(adapter);
 			setPartName(typeEntry.getTypeName());
 		}
-	}
-
-	@Override
-	public IFile getFile() {
-		return typeEntry != null ? typeEntry.getFile() : null;
 	}
 
 	@Override
@@ -614,9 +582,8 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	}
 
 	@Override
-	public void updateEditorInput(final FileEditorInput newInput) {
-		setInput(newInput);
-		firePropertyChange(IWorkbenchPart.PROP_TITLE);
+	public void setInput(final IEditorInput input) {
+		setInputWithNotify(input);
 	}
 
 	@Override
