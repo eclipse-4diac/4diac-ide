@@ -14,10 +14,12 @@ package org.eclipse.fordiac.ide.model.helpers;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
@@ -27,17 +29,21 @@ public final class BlockInstanceFactory {
 		if (entry == null || entry instanceof ErrorTypeEntry) {
 			return LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
 		}
-		if (entry.getTypeName().startsWith(LibraryElementTags.FB_TYPE_COMM_MESSAGE)) {
-			return LibraryElementFactory.eINSTANCE.createCommunicationChannel();
-		}
 		if (entry instanceof SubAppTypeEntry) {
 			return LibraryElementFactory.eINSTANCE.createSubApp();
 		}
 		if (entry instanceof AdapterTypeEntry) {
 			return LibraryElementFactory.eINSTANCE.createAdapterFB();
 		}
-		if (entry.getType() instanceof CompositeFBType) {
-			return LibraryElementFactory.eINSTANCE.createCFBInstance();
+		if (entry instanceof final FBTypeEntry fbEntry) {
+			return createFBInstanceForTypeEntry(fbEntry);
+		}
+		return null;
+	}
+
+	public static FB createFBInstanceForTypeEntry(final FBTypeEntry entry) {
+		if (entry.getTypeName().startsWith(LibraryElementTags.FB_TYPE_COMM_MESSAGE)) {
+			return LibraryElementFactory.eINSTANCE.createCommunicationChannel();
 		}
 		if (LibraryElementTags.TYPENAME_MUX.equals(entry.getTypeName())) {
 			return LibraryElementFactory.eINSTANCE.createMultiplexer();
@@ -47,6 +53,9 @@ public final class BlockInstanceFactory {
 		}
 		if (LibraryElementTags.TYPENAME_FMOVE.equals(entry.getTypeName())) {
 			return LibraryElementFactory.eINSTANCE.createConfigurableMoveFB();
+		}
+		if (entry.getType() instanceof CompositeFBType) {
+			return LibraryElementFactory.eINSTANCE.createCFBInstance();
 		}
 		return LibraryElementFactory.eINSTANCE.createFB();
 	}

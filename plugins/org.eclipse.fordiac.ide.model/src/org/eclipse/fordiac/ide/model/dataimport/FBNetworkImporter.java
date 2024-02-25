@@ -24,10 +24,6 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import static org.eclipse.fordiac.ide.model.LibraryElementTags.FB_TYPE_COMM_MESSAGE;
-import static org.eclipse.fordiac.ide.model.LibraryElementTags.FB_TYPE_STRUCT_DEMUX;
-import static org.eclipse.fordiac.ide.model.LibraryElementTags.FB_TYPE_STRUCT_MUX;
-
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,10 +43,10 @@ import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -59,7 +55,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -235,26 +230,13 @@ class FBNetworkImporter extends CommonElementImporter {
 	}
 
 	private FBNetworkElement createFBInstance(final String typeFbElement) {
-		FB fb = LibraryElementFactory.eINSTANCE.createFB();
 		final FBTypeEntry entry = getTypeEntry(typeFbElement);
-
 		if (null == entry) {
 			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(typeFbElement, getTypeLibrary(),
 					LibraryElementPackage.eINSTANCE.getFBType()));
 		}
-		final FBType type = entry.getType();
-		if (type instanceof CompositeFBType) {
-			fb = LibraryElementFactory.eINSTANCE.createCFBInstance();
-		} else if (FB_TYPE_STRUCT_MUX.equals(type.getName())) {
-			fb = LibraryElementFactory.eINSTANCE.createMultiplexer();
-		} else if (FB_TYPE_STRUCT_DEMUX.equals(type.getName())) {
-			fb = LibraryElementFactory.eINSTANCE.createDemultiplexer();
-		} else if (type.getName().startsWith(FB_TYPE_COMM_MESSAGE)) {
-			fb = LibraryElementFactory.eINSTANCE.createCommunicationChannel();
-		} else if (LibraryElementTags.TYPENAME_FMOVE.equals(type.getName())) {
-			fb = LibraryElementFactory.eINSTANCE.createConfigurableMoveFB();
-		}
-		fb.setInterface(type.getInterfaceList().copy());
+		final FB fb = BlockInstanceFactory.createFBInstanceForTypeEntry(entry);
+		fb.setInterface(entry.getType().getInterfaceList().copy());
 		fb.setTypeEntry(entry);
 		return fb;
 	}

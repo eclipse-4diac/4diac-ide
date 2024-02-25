@@ -13,16 +13,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
@@ -37,19 +35,7 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	private static FB createNewFb(final FBTypeEntry typeEntry) {
-		if (typeEntry.getType().getName().equals(LibraryElementTags.FB_TYPE_STRUCT_MUX)) {
-			return LibraryElementFactory.eINSTANCE.createMultiplexer();
-		}
-		if (typeEntry.getType().getName().equals(LibraryElementTags.FB_TYPE_STRUCT_DEMUX)) {
-			return LibraryElementFactory.eINSTANCE.createDemultiplexer();
-		}
-		if (typeEntry.getType().getName().startsWith(LibraryElementTags.FB_TYPE_COMM_MESSAGE)) {
-			return LibraryElementFactory.eINSTANCE.createCommunicationChannel();
-		}
-		if (typeEntry.getType() instanceof CompositeFBType) {
-			return LibraryElementFactory.eINSTANCE.createCFBInstance();
-		}
-		return LibraryElementFactory.eINSTANCE.createFB();
+		return BlockInstanceFactory.createFBInstanceForTypeEntry(typeEntry);
 	}
 
 	// constructor to reuse this command for adapter creation
