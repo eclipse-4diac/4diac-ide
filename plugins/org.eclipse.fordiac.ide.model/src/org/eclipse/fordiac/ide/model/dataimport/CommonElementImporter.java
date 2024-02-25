@@ -455,14 +455,16 @@ public abstract class CommonElementImporter {
 		}
 		attribute.setValue(value);
 
-		confObject.getAttributes().add(attribute);
 		if (confObject instanceof final ConfigurableFB fb) {
 			handleConfigurableFB(fb, attribute);
+		} else {
+			confObject.getAttributes().add(attribute);
 		}
 	}
 
 	private void handleConfigurableFB(final ConfigurableFB fb, final Attribute attribute) {
 		if (fb instanceof final StructManipulator structManipulator) {
+			fb.getAttributes().add(attribute);
 			checkStructAttribute(structManipulator, attribute);
 		} else if (LibraryElementTags.F_MOVE_CONFIG.equals(attribute.getName())) {
 			fb.loadConfiguration(attribute);

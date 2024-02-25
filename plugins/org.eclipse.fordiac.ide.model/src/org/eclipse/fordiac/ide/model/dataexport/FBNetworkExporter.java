@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -154,6 +155,9 @@ class FBNetworkExporter extends CommonElementExporter {
 					PackageNameHelper.getFullTypeName(structManipulator.getStructType()), null);
 		}
 		addAttributes(fbnElement.getAttributes());
+		if (fbnElement instanceof final ConfigurableFB configFb) {
+			addAttributes(configFb.getConfigurationAsAttributes());
+		}
 		if (!isUntypedSubapp(fbnElement) && !(fbnElement instanceof Group)) {
 			// for untyped subapp initial values are stored in the vardeclarations
 			addParamsConfig(fbnElement.getInterface());

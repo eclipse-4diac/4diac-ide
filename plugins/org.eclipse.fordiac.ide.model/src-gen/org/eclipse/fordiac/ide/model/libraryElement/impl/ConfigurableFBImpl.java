@@ -16,6 +16,8 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
@@ -46,12 +48,22 @@ public abstract class ConfigurableFBImpl extends FBImpl implements ConfigurableF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public void updateConfiguration() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void loadConfiguration(Attribute config) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
@@ -63,10 +75,8 @@ public abstract class ConfigurableFBImpl extends FBImpl implements ConfigurableF
 	 * @generated
 	 */
 	@Override
-	public void loadConfiguration(Attribute config) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+	public EList<Attribute> getConfigurationAsAttributes() {
+		return ECollections.emptyEList();
 	}
 
 } // ConfigurableFBImpl

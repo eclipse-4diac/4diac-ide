@@ -4302,6 +4302,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		op = addEOperation(configurableFBEClass, null, "loadConfiguration", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getAttribute(), "config", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		addEOperation(configurableFBEClass, this.getAttribute(), "getConfigurationAsAttributes", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(configurableMoveFBEClass, ConfigurableMoveFB.class, "ConfigurableMoveFB", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getConfigurableMoveFB_DataType(), theDataPackage.getDataType(), null, "dataType", null, 0, 1, ConfigurableMoveFB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -4309,6 +4311,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		op = addEOperation(configurableMoveFBEClass, null, "loadConfiguration", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getAttribute(), "config", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(configurableMoveFBEClass, this.getAttribute(), "getConfigurationAsAttributes", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(connectionEClass, Connection.class, "Connection", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getConnection_BrokenConnection(), theXMLTypePackage.getBoolean(), "brokenConnection", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

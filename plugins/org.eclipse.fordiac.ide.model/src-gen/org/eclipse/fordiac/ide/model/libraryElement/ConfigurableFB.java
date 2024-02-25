@@ -16,6 +16,8 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import org.eclipse.emf.common.util.EList;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -43,5 +45,13 @@ public interface ConfigurableFB extends FB {
 	 * @generated
 	 */
 	void loadConfiguration(Attribute config);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<Attribute> getConfigurationAsAttributes();
 
 } // ConfigurableFB

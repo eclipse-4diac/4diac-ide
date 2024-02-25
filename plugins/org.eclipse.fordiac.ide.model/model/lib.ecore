@@ -422,6 +422,11 @@
     <eOperations name="loadConfiguration">
       <eParameters name="config" eType="#//Attribute"/>
     </eOperations>
+    <eOperations name="getConfigurationAsAttributes" upperBound="-1" eType="#//Attribute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return ECollections.emptyEList();"/>
+      </eAnnotations>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConfigurableMoveFB" eSuperTypes="#//ConfigurableFB">
     <eOperations name="updateConfiguration">
@@ -435,6 +440,11 @@
         <details key="body" value="&#x9;&#x9;// attribute holds the name of the desired data type of input and output data&#xA;&#x9;&#x9;if ((config != null &amp;&amp; LibraryElementTags.F_MOVE_CONFIG.equals(config.getName()))&#xA;&#x9;&#x9;&#x9;&#x9;&amp;&amp; (config.getValue() != null)) {&#xA;&#x9;&#x9;&#x9;// get data type from library&#xA;&#x9;&#x9;&#x9;dataType = getTypeLibrary().getDataTypeLibrary().getTypeIfExists(config.getValue());&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;updateConfiguration();"/>
       </eAnnotations>
       <eParameters name="config" eType="#//Attribute"/>
+    </eOperations>
+    <eOperations name="getConfigurationAsAttributes" upperBound="-1" eType="#//Attribute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return ECollections.emptyEList();"/>
+      </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" eType="ecore:EClass data.ecore#//DataType"/>
   </eClassifiers>

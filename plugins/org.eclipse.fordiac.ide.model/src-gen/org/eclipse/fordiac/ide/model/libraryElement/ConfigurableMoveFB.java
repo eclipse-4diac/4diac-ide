@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.DataType;
 
 /**
@@ -73,5 +74,13 @@ public interface ConfigurableMoveFB extends ConfigurableFB {
 	 */
 	@Override
 	void loadConfiguration(Attribute config);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<Attribute> getConfigurationAsAttributes();
 
 } // ConfigurableMoveFB
