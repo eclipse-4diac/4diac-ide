@@ -55,7 +55,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		if ((null == entry) || (null == oldElement) || (null == network)) {
 			return false;
 		}
-		return FBNetworkHelper.isTypeInsertionSave((FBType) entry.getType(), network);
+		return FBNetworkHelper.isTypeInsertionSafe((FBType) entry.getType(), network);
 	}
 
 	@Override

@@ -116,6 +116,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		// Find connectionless pins which should be saved
 		handleParameters();
 
+		handleConfigurableFB();
+
 		// Find connections which should be reconnected
 		handleConnections();
 		reconnCmds.execute();
@@ -127,8 +129,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getOutputVars());
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getInputVars());
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getOutputVars());
-
-		handleConfigurableFB();
 
 		if (network != null) {
 			network.getNetworkElements().remove(oldElement);
@@ -146,7 +146,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 	}
 
-	private void handleConfigurableFB() {
+	protected void handleConfigurableFB() {
 		// for the configurable move fb we have to transfer the data type
 		if (newElement instanceof final ConfigurableMoveFB fMove
 				&& oldElement instanceof final ConfigurableMoveFB oldMove) {

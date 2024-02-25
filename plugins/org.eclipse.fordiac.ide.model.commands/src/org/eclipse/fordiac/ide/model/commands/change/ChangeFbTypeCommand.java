@@ -56,7 +56,7 @@ public class ChangeFbTypeCommand extends Command implements ScopedCommand {
 
 	@Override
 	public boolean canExecute() {
-		return FBNetworkHelper.isTypeInsertionSave(newType.getType(), fb);
+		return FBNetworkHelper.isTypeInsertionSafe(newType.getType(), fb);
 	}
 
 	@Override
