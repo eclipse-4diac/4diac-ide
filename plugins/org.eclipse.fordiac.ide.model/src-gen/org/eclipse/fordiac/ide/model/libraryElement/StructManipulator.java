@@ -71,6 +71,6 @@ public interface StructManipulator extends ConfigurableFB {
 	 * @model
 	 * @generated
 	 */
-	void updateConfiguration(Attribute config);
+	void updateConfiguration();
 
 } // StructManipulator

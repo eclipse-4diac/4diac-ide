@@ -178,7 +178,10 @@ public final class LibraryElementTags {
 	public static final String SYSTEM = "System"; //$NON-NLS-1$
 	public static final String DOCUMENTATION = "Documentation"; //$NON-NLS-1$
 
-	public static final String FB_MOVE_CONFIG = "DataType"; //$NON-NLS-1$
+	public static final String TYPENAME_FMOVE = "F_MOVE"; //$NON-NLS-1$
+	public static final String F_MOVE_CONFIG = "DataType"; //$NON-NLS-1$
+	public static final String TYPENAME_MUX = "STRUCT_MUX"; //$NON-NLS-1$
+	public static final String TYPENAME_DEMUX = "STRUCT_DEMUX"; //$NON-NLS-1$
 	public static final String STRUCT_MANIPULATOR_CONFIG = "StructuredType"; //$NON-NLS-1$
 	public static final String DEMUX_VISIBLE_CHILDREN = "VisibleChildren"; //$NON-NLS-1$
 	public static final String VARIABLE_SEPARATOR = ","; //$NON-NLS-1$

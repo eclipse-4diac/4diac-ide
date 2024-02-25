@@ -58,7 +58,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -465,9 +464,8 @@ public abstract class CommonElementImporter {
 	private void handleConfigurableFB(final ConfigurableFB fb, final Attribute attribute) {
 		if (fb instanceof final StructManipulator structManipulator) {
 			checkStructAttribute(structManipulator, attribute);
-		} else if ((fb instanceof final ConfigurableMoveFB moveFb)
-				&& LibraryElementTags.FB_MOVE_CONFIG.equals(attribute.getName())) {
-			moveFb.updateConfiguration(attribute);
+		} else if (LibraryElementTags.F_MOVE_CONFIG.equals(attribute.getName())) {
+			fb.loadConfiguration(attribute);
 		}
 	}
 

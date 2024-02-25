@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -127,6 +128,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getInputVars());
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getOutputVars());
 
+		handleConfigurableFB();
+
 		if (network != null) {
 			network.getNetworkElements().remove(oldElement);
 		}
@@ -140,6 +143,15 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 				mapCmd.execute();
 				recreateResourceConns(resourceConns);
 			}
+		}
+	}
+
+	private void handleConfigurableFB() {
+		// for the configurable move fb we have to transfer the data type
+		if (newElement instanceof final ConfigurableMoveFB fMove
+				&& oldElement instanceof final ConfigurableMoveFB oldMove) {
+			fMove.setDataType(oldMove.getDataType());
+			fMove.updateConfiguration();
 		}
 	}
 
@@ -188,6 +200,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	public void setInterface() {
 		newElement.setInterface(newElement.getType().getInterfaceList().copy());
 
+		// handle configurable fb kinds
 		if (newElement instanceof final Multiplexer multiplexer) {
 			multiplexer.setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
 					.getInterfaceList().getOutputVars().get(0).getType());

@@ -34,6 +34,14 @@ public interface ConfigurableFB extends FB {
 	 * @model
 	 * @generated
 	 */
-	void updateConfiguration(Attribute config);
+	void updateConfiguration();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void loadConfiguration(Attribute config);
 
 } // ConfigurableFB

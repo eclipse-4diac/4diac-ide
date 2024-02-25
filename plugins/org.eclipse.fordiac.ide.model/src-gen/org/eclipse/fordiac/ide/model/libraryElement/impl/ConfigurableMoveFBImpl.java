@@ -20,6 +20,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
@@ -107,21 +108,27 @@ public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements Config
 	 * @generated
 	 */
 	@Override
-	public void updateConfiguration(final Attribute config) {
-		// attribute holds the name of the desired data type of input and output data
-		if (config != null && config.getValue() != null) {
-			// get data type from library
-			final DataType dtp = getTypeLibrary().getDataTypeLibrary().getTypeIfExists(config.getValue());
-			// if data type exists, set it as the data type of the input/output data pin
-			if (dtp != null && getInterface() != null) {
-				for (final VarDeclaration input : getInterface().getInputVars()) {
-					input.setType(dtp);
-				}
-				for (final VarDeclaration output : getInterface().getOutputVars()) {
-					output.setType(dtp);
-				} // FB_MOVE has no varinouts
+	public void updateConfiguration() {
+		// if data type exists, set it as the data type of the input/output data pin
+		if (dataType != null && getInterface() != null) {
+			for (final VarDeclaration input : getInterface().getInputVars()) {
+				input.setType(dataType);
 			}
+			for (final VarDeclaration output : getInterface().getOutputVars()) {
+				output.setType(dataType);
+			} // FB_MOVE has no varinouts
 		}
+	}
+
+	@Override
+	public void loadConfiguration(final Attribute config) {
+		// attribute holds the name of the desired data type of input and output data
+		if ((config != null && LibraryElementTags.F_MOVE_CONFIG.equals(config.getName()))
+				&& (config.getValue() != null)) {
+			// get data type from library
+			dataType = getTypeLibrary().getDataTypeLibrary().getTypeIfExists(config.getValue());
+		}
+		updateConfiguration();
 	}
 
 	/**
