@@ -185,6 +185,17 @@
         <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/deleteAttribute/attributeName"/>
       </genOperations>
     </genClasses>
+    <genClasses image="false" ecoreClass="lib.ecore#//ConfigurableFB">
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableFB/updateConfiguration">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableFB/updateConfiguration/config"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ConfigurableMoveFB">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ConfigurableMoveFB/dataType"/>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableMoveFB/updateConfiguration">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableMoveFB/updateConfiguration/config"/>
+      </genOperations>
+    </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//Connection">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Connection/brokenConnection"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Connection/source"/>
@@ -718,6 +729,9 @@
       <genOperations ecoreOperation="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface"
           body="org.eclipse.fordiac.ide.model.StructManipulation.setStructTypeElementsAtInterface(this, newStruct);">
         <genParameters ecoreParameter="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface/newStruct"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//StructManipulator/updateConfiguration">
+        <genParameters ecoreParameter="lib.ecore#//StructManipulator/updateConfiguration/config"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//SubAppType"/>

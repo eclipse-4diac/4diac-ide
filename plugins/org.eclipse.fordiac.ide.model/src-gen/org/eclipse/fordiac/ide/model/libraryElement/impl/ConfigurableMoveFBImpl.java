@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,41 +23,41 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.data.DataType;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Struct Manipulator</b></em>'.
+ * An implementation of the model object '<em><b>Configurable Move FB</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl#getStructType <em>Struct Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableMoveFBImpl#getDataType <em>Data Type</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class StructManipulatorImpl extends ConfigurableFBImpl implements StructManipulator {
+public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements ConfigurableMoveFB {
 	/**
-	 * The cached value of the '{@link #getStructType() <em>Struct Type</em>}' reference.
+	 * The cached value of the '{@link #getDataType() <em>Data Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getStructType()
+	 * @see #getDataType()
 	 * @generated
 	 * @ordered
 	 */
-	protected StructuredType structType;
+	protected DataType dataType;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected StructManipulatorImpl() {
+	protected ConfigurableMoveFBImpl() {
 		super();
 	}
 
@@ -68,7 +68,7 @@ public class StructManipulatorImpl extends ConfigurableFBImpl implements StructM
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return LibraryElementPackage.Literals.STRUCT_MANIPULATOR;
+		return LibraryElementPackage.Literals.CONFIGURABLE_MOVE_FB;
 	}
 
 	/**
@@ -77,16 +77,16 @@ public class StructManipulatorImpl extends ConfigurableFBImpl implements StructM
 	 * @generated
 	 */
 	@Override
-	public StructuredType getStructType() {
-		if (structType != null && structType.eIsProxy()) {
-			InternalEObject oldStructType = (InternalEObject)structType;
-			structType = (StructuredType)eResolveProxy(oldStructType);
-			if (structType != oldStructType) {
+	public DataType getDataType() {
+		if (dataType != null && dataType.eIsProxy()) {
+			InternalEObject oldDataType = (InternalEObject)dataType;
+			dataType = (DataType)eResolveProxy(oldDataType);
+			if (dataType != oldDataType) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE, oldStructType, structType));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.CONFIGURABLE_MOVE_FB__DATA_TYPE, oldDataType, dataType));
 			}
 		}
-		return structType;
+		return dataType;
 	}
 
 	/**
@@ -94,8 +94,8 @@ public class StructManipulatorImpl extends ConfigurableFBImpl implements StructM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public StructuredType basicGetStructType() {
-		return structType;
+	public DataType basicGetDataType() {
+		return dataType;
 	}
 
 	/**
@@ -104,21 +104,11 @@ public class StructManipulatorImpl extends ConfigurableFBImpl implements StructM
 	 * @generated
 	 */
 	@Override
-	public void setStructType(StructuredType newStructType) {
-		StructuredType oldStructType = structType;
-		structType = newStructType;
+	public void setDataType(DataType newDataType) {
+		DataType oldDataType = dataType;
+		dataType = newDataType;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE, oldStructType, structType));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setStructTypeElementsAtInterface(final StructuredType newStruct) {
-		org.eclipse.fordiac.ide.model.StructManipulation.setStructTypeElementsAtInterface(this, newStruct);
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONFIGURABLE_MOVE_FB__DATA_TYPE, oldDataType, dataType));
 	}
 
 	/**
@@ -129,9 +119,9 @@ public class StructManipulatorImpl extends ConfigurableFBImpl implements StructM
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
-				if (resolve) return getStructType();
-				return basicGetStructType();
+			case LibraryElementPackage.CONFIGURABLE_MOVE_FB__DATA_TYPE:
+				if (resolve) return getDataType();
+				return basicGetDataType();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -145,8 +135,8 @@ public class StructManipulatorImpl extends ConfigurableFBImpl implements StructM
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
-				setStructType((StructuredType)newValue);
+			case LibraryElementPackage.CONFIGURABLE_MOVE_FB__DATA_TYPE:
+				setDataType((DataType)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -162,8 +152,8 @@ public class StructManipulatorImpl extends ConfigurableFBImpl implements StructM
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
-				setStructType((StructuredType)null);
+			case LibraryElementPackage.CONFIGURABLE_MOVE_FB__DATA_TYPE:
+				setDataType((DataType)null);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -179,11 +169,11 @@ public class StructManipulatorImpl extends ConfigurableFBImpl implements StructM
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.STRUCT_MANIPULATOR__STRUCT_TYPE:
-				return structType != null;
+			case LibraryElementPackage.CONFIGURABLE_MOVE_FB__DATA_TYPE:
+				return dataType != null;
 			default:
 				return super.eIsSet(featureID);
 		}
 	}
 
-} //StructManipulatorImpl
+} //ConfigurableMoveFBImpl

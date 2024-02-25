@@ -51,6 +51,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -464,6 +466,10 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateCompositeFBType((CompositeFBType)value, diagnostics, context);
 			case LibraryElementPackage.CONFIGURABLE_OBJECT:
 				return validateConfigurableObject((ConfigurableObject)value, diagnostics, context);
+			case LibraryElementPackage.CONFIGURABLE_FB:
+				return validateConfigurableFB((ConfigurableFB)value, diagnostics, context);
+			case LibraryElementPackage.CONFIGURABLE_MOVE_FB:
+				return validateConfigurableMoveFB((ConfigurableMoveFB)value, diagnostics, context);
 			case LibraryElementPackage.CONNECTION:
 				return validateConnection((Connection)value, diagnostics, context);
 			case LibraryElementPackage.CONNECTION_ROUTING_DATA:
@@ -1053,6 +1059,46 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateConfigurableObject(ConfigurableObject configurableObject, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(configurableObject, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConfigurableFB(ConfigurableFB configurableFB, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(configurableFB, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(configurableFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(configurableFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(configurableFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(configurableFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(configurableFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(configurableFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(configurableFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(configurableFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(configurableFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(configurableFB, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConfigurableMoveFB(ConfigurableMoveFB configurableMoveFB, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(configurableMoveFB, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(configurableMoveFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(configurableMoveFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(configurableMoveFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(configurableMoveFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(configurableMoveFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(configurableMoveFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(configurableMoveFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(configurableMoveFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(configurableMoveFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(configurableMoveFB, diagnostics, context);
+		return result;
 	}
 
 	/**

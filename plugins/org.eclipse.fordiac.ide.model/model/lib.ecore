@@ -417,6 +417,17 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
         eType="#//Attribute" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurableFB" abstract="true" eSuperTypes="#//FB">
+    <eOperations name="updateConfiguration">
+      <eParameters name="config" eType="#//Attribute"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurableMoveFB" eSuperTypes="#//ConfigurableFB">
+    <eOperations name="updateConfiguration">
+      <eParameters name="config" eType="#//Attribute"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" eType="ecore:EClass data.ecore#//DataType"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//ConfigurableObject #//HiddenElement">
     <eOperations name="getSourceElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -1932,12 +1943,15 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Locked" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"
         defaultValueLiteral="false"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="StructManipulator" abstract="true" eSuperTypes="#//FB">
+  <eClassifiers xsi:type="ecore:EClass" name="StructManipulator" eSuperTypes="#//ConfigurableFB">
     <eOperations name="setStructTypeElementsAtInterface">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="org.eclipse.fordiac.ide.model.StructManipulation.setStructTypeElementsAtInterface(this, newStruct);"/>
       </eAnnotations>
       <eParameters name="newStruct" eType="ecore:EClass data.ecore#//StructuredType"/>
+    </eOperations>
+    <eOperations name="updateConfiguration">
+      <eParameters name="config" eType="#//Attribute"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="structType" lowerBound="1"
         eType="ecore:EClass data.ecore#//StructuredType" transient="true"/>

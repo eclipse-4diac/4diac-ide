@@ -294,6 +294,35 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.CONFIGURABLE_FB: {
+				ConfigurableFB configurableFB = (ConfigurableFB)theEObject;
+				T result = caseConfigurableFB(configurableFB);
+				if (result == null) result = caseFB(configurableFB);
+				if (result == null) result = caseFBNetworkElement(configurableFB);
+				if (result == null) result = caseICallable(configurableFB);
+				if (result == null) result = caseTypedConfigureableObject(configurableFB);
+				if (result == null) result = casePositionableElement(configurableFB);
+				if (result == null) result = caseITypedElement(configurableFB);
+				if (result == null) result = caseConfigurableObject(configurableFB);
+				if (result == null) result = caseINamedElement(configurableFB);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.CONFIGURABLE_MOVE_FB: {
+				ConfigurableMoveFB configurableMoveFB = (ConfigurableMoveFB)theEObject;
+				T result = caseConfigurableMoveFB(configurableMoveFB);
+				if (result == null) result = caseConfigurableFB(configurableMoveFB);
+				if (result == null) result = caseFB(configurableMoveFB);
+				if (result == null) result = caseFBNetworkElement(configurableMoveFB);
+				if (result == null) result = caseICallable(configurableMoveFB);
+				if (result == null) result = caseTypedConfigureableObject(configurableMoveFB);
+				if (result == null) result = casePositionableElement(configurableMoveFB);
+				if (result == null) result = caseITypedElement(configurableMoveFB);
+				if (result == null) result = caseConfigurableObject(configurableMoveFB);
+				if (result == null) result = caseINamedElement(configurableMoveFB);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.CONNECTION: {
 				Connection connection = (Connection)theEObject;
 				T result = caseConnection(connection);
@@ -321,6 +350,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				Demultiplexer demultiplexer = (Demultiplexer)theEObject;
 				T result = caseDemultiplexer(demultiplexer);
 				if (result == null) result = caseStructManipulator(demultiplexer);
+				if (result == null) result = caseConfigurableFB(demultiplexer);
 				if (result == null) result = caseFB(demultiplexer);
 				if (result == null) result = caseFBNetworkElement(demultiplexer);
 				if (result == null) result = caseICallable(demultiplexer);
@@ -642,6 +672,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				Multiplexer multiplexer = (Multiplexer)theEObject;
 				T result = caseMultiplexer(multiplexer);
 				if (result == null) result = caseStructManipulator(multiplexer);
+				if (result == null) result = caseConfigurableFB(multiplexer);
 				if (result == null) result = caseFB(multiplexer);
 				if (result == null) result = caseFBNetworkElement(multiplexer);
 				if (result == null) result = caseICallable(multiplexer);
@@ -870,6 +901,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.STRUCT_MANIPULATOR: {
 				StructManipulator structManipulator = (StructManipulator)theEObject;
 				T result = caseStructManipulator(structManipulator);
+				if (result == null) result = caseConfigurableFB(structManipulator);
 				if (result == null) result = caseFB(structManipulator);
 				if (result == null) result = caseFBNetworkElement(structManipulator);
 				if (result == null) result = caseICallable(structManipulator);
@@ -1317,6 +1349,36 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseConfigurableObject(ConfigurableObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Configurable FB</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Configurable FB</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConfigurableFB(ConfigurableFB object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Configurable Move FB</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Configurable Move FB</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConfigurableMoveFB(ConfigurableMoveFB object) {
 		return null;
 	}
 

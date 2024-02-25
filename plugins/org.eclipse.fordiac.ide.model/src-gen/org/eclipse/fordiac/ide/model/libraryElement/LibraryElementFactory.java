@@ -225,6 +225,15 @@ public interface LibraryElementFactory extends EFactory {
 	ConfigurableObject createConfigurableObject();
 
 	/**
+	 * Returns a new object of class '<em>Configurable Move FB</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Configurable Move FB</em>'.
+	 * @generated
+	 */
+	ConfigurableMoveFB createConfigurableMoveFB();
+
+	/**
 	 * Returns a new object of class '<em>Connection Routing Data</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -718,6 +727,15 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	SubApp createSubApp();
+
+	/**
+	 * Returns a new object of class '<em>Struct Manipulator</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Struct Manipulator</em>'.
+	 * @generated
+	 */
+	StructManipulator createStructManipulator();
 
 	/**
 	 * Returns a new object of class '<em>Sub App Type</em>'.

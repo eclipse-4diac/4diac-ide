@@ -578,6 +578,29 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ConfigurableMoveFBItemProvider configurableMoveFBItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createConfigurableMoveFBAdapter() {
+		if (configurableMoveFBItemProvider == null) {
+			configurableMoveFBItemProvider = new ConfigurableMoveFBItemProvider(this);
+		}
+
+		return configurableMoveFBItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1828,6 +1851,29 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 		}
 
 		return subAppItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected StructManipulatorItemProvider structManipulatorItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createStructManipulatorAdapter() {
+		if (structManipulatorItemProvider == null) {
+			structManipulatorItemProvider = new StructManipulatorItemProvider(this);
+		}
+
+		return structManipulatorItemProvider;
 	}
 
 	/**

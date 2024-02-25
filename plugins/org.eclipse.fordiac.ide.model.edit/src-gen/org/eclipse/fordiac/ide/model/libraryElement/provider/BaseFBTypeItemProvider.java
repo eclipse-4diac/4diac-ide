@@ -42,7 +42,7 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 	 *
 	 * @generated
 	 */
-	public BaseFBTypeItemProvider(final AdapterFactory adapterFactory) {
+	public BaseFBTypeItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -53,7 +53,7 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -83,213 +83,305 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
-		// Check the type of the specified child object and return the proper feature to
-		// use for
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
 	/**
-	 * This returns BaseFBType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * This returns BaseFBType.gif.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Object getImage(final Object object) {
+	public Object getImage(Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/BaseFBType")); //$NON-NLS-1$
 	}
 
 	/**
-	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public String getText(final Object object) {
-		final String label = ((BaseFBType) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_BaseFBType_type") : //$NON-NLS-1$
-				getString("_UI_BaseFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+	public String getText(Object object) {
+		String label = ((BaseFBType)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_BaseFBType_type") : //$NON-NLS-1$
+			getString("_UI_BaseFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update
-	 * any cached children and by creating a viewer notification, which it passes to
-	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(BaseFBType.class)) {
-		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
-		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_CONST_VARS:
-		case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
-		case LibraryElementPackage.BASE_FB_TYPE__ALGORITHM:
-		case LibraryElementPackage.BASE_FB_TYPE__METHODS:
-		case LibraryElementPackage.BASE_FB_TYPE__CALLABLES:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-			return;
-		default:
-			super.notifyChanged(notification);
-			return;
-		}
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_CONST_VARS:
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
+			case LibraryElementPackage.BASE_FB_TYPE__ALGORITHM:
+			case LibraryElementPackage.BASE_FB_TYPE__METHODS:
+			case LibraryElementPackage.BASE_FB_TYPE__CALLABLES:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
+			default:
+				super.notifyChanged(notification);
+				return;
+			}
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
-	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
-				LibraryElementFactory.eINSTANCE.createVarDeclaration()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
+				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
-				LibraryElementFactory.eINSTANCE.createLocalVariable()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
+				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS,
-				LibraryElementFactory.eINSTANCE.createVarDeclaration()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS,
+				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS,
-				LibraryElementFactory.eINSTANCE.createLocalVariable()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS,
+				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
-				LibraryElementFactory.eINSTANCE.createFB()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				 LibraryElementFactory.eINSTANCE.createFB()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
-				LibraryElementFactory.eINSTANCE.createAdapterFB()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				 LibraryElementFactory.eINSTANCE.createAdapterFB()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
-				LibraryElementFactory.eINSTANCE.createCFBInstance()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				 LibraryElementFactory.eINSTANCE.createCFBInstance()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
-				LibraryElementFactory.eINSTANCE.createCommunicationChannel()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				 LibraryElementFactory.eINSTANCE.createCommunicationChannel()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
-				LibraryElementFactory.eINSTANCE.createDemultiplexer()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				 LibraryElementFactory.eINSTANCE.createConfigurableMoveFB()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
-				LibraryElementFactory.eINSTANCE.createMultiplexer()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				 LibraryElementFactory.eINSTANCE.createStructManipulator()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
-				LibraryElementFactory.eINSTANCE.createResourceTypeFB()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				 LibraryElementFactory.eINSTANCE.createDemultiplexer()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM,
-				LibraryElementFactory.eINSTANCE.createOtherAlgorithm()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				 LibraryElementFactory.eINSTANCE.createMultiplexer()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM,
-				LibraryElementFactory.eINSTANCE.createSTAlgorithm()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				 LibraryElementFactory.eINSTANCE.createResourceTypeFB()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS,
-				LibraryElementFactory.eINSTANCE.createOtherMethod()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM,
+				 LibraryElementFactory.eINSTANCE.createOtherAlgorithm()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS,
-				LibraryElementFactory.eINSTANCE.createSTMethod()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM,
+				 LibraryElementFactory.eINSTANCE.createSTAlgorithm()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createFB()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS,
+				 LibraryElementFactory.eINSTANCE.createOtherMethod()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createAdapterFB()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS,
+				 LibraryElementFactory.eINSTANCE.createSTMethod()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createAdapterType()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createFB()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createFBType()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createAdapterFB()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createBaseFBType()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createAdapterType()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createBasicFBType()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createFBType()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createCFBInstance()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createBaseFBType()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createCommunicationChannel()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createBasicFBType()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createCompositeFBType()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createCFBInstance()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createDemultiplexer()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createCommunicationChannel()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createEvent()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createCompositeFBType()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createFunctionFBType()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createConfigurableMoveFB()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createMultiplexer()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createStructManipulator()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createOtherAlgorithm()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createDemultiplexer()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createOtherMethod()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createEvent()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createResourceTypeFB()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createFunctionFBType()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createServiceInterfaceFBType()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createMultiplexer()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createSimpleFBType()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createOtherAlgorithm()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createSTAlgorithm()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createOtherMethod()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createSTFunction()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createResourceTypeFB()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createSTMethod()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createServiceInterfaceFBType()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				LibraryElementFactory.eINSTANCE.createSubAppType()));
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createSimpleFBType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createSTAlgorithm()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createSTFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createSTMethod()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createSubAppType()));
 	}
 
 	/**
-	 * This returns the label text for
-	 * {@link org.eclipse.emf.edit.command.CreateChildCommand}. <!-- begin-user-doc
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public String getCreateChildText(final Object owner, final Object feature, final Object child,
-			final Collection<?> selection) {
-		final Object childFeature = feature;
-		final Object childObject = child;
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
 
-		final boolean qualify = childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS
-				|| childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS
-				|| childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS
-				|| childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES
-				|| childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM
-				|| childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS;
+		boolean qualify =
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS ||
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS ||
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS ||
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES ||
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM ||
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS;
 
 		if (qualify) {
-			return getString("_UI_CreateChild_text2", //$NON-NLS-1$
-					new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+			return getString
+				("_UI_CreateChild_text2", //$NON-NLS-1$
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
 		}
 		return super.getCreateChildText(owner, feature, child, selection);
 	}
