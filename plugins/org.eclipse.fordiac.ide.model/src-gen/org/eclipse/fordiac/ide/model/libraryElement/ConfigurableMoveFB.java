@@ -60,6 +60,9 @@ public interface ConfigurableMoveFB extends ConfigurableFB {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Method for setting input/output data pin types to configured data type
+	 * <!-- end-model-doc -->
 	 * @model
 	 * @generated
 	 */

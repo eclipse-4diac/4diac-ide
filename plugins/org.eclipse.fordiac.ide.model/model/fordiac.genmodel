@@ -192,7 +192,8 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ConfigurableMoveFB">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ConfigurableMoveFB/dataType"/>
-      <genOperations ecoreOperation="lib.ecore#//ConfigurableMoveFB/updateConfiguration">
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableMoveFB/updateConfiguration"
+          body="// attribute holds the name of the desired data type of input and output data&#xA;if (config != null &amp;&amp; config.getValue() != null) {&#xA;&#x9;// get data type from library&#xA;&#x9;final DataType dtp = getTypeLibrary().getDataTypeLibrary().getTypeIfExists(config.getValue());&#xA;&#x9;// if data type exists, set it as the data type of the input/output data pin&#xA;&#x9;if (dtp != null &amp;&amp; getInterface() != null) {&#xA;&#x9;&#x9;for (final VarDeclaration input : getInterface().getInputVars()) {&#xA;&#x9;&#x9;&#x9;input.setType(dtp);&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;for (final VarDeclaration output : getInterface().getOutputVars()) {&#xA;&#x9;&#x9;&#x9;output.setType(dtp);&#xA;&#x9;&#x9;} // FB_MOVE has no varinouts&#xA;&#x9;}&#xA;}">
         <genParameters ecoreParameter="lib.ecore#//ConfigurableMoveFB/updateConfiguration/config"/>
       </genOperations>
     </genClasses>

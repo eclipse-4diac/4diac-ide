@@ -2,13 +2,13 @@
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *               2022-2023 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -17,21 +17,18 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.fordiac.ide.model.data.DataType;
-
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Configurable Move FB</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Configurable Move FB</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -44,8 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements ConfigurableMoveFB {
 	/**
 	 * The cached value of the '{@link #getDataType() <em>Data Type</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDataType()
 	 * @generated
 	 * @ordered
@@ -53,8 +49,7 @@ public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements Config
 	protected DataType dataType;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected ConfigurableMoveFBImpl() {
@@ -62,8 +57,7 @@ public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements Config
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -72,8 +66,7 @@ public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements Config
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -90,8 +83,7 @@ public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements Config
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public DataType basicGetDataType() {
@@ -99,8 +91,7 @@ public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements Config
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -112,8 +103,29 @@ public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements Config
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void updateConfiguration(final Attribute config) {
+		// attribute holds the name of the desired data type of input and output data
+		if (config != null && config.getValue() != null) {
+			// get data type from library
+			final DataType dtp = getTypeLibrary().getDataTypeLibrary().getTypeIfExists(config.getValue());
+			// if data type exists, set it as the data type of the input/output data pin
+			if (dtp != null && getInterface() != null) {
+				for (final VarDeclaration input : getInterface().getInputVars()) {
+					input.setType(dtp);
+				}
+				for (final VarDeclaration output : getInterface().getOutputVars()) {
+					output.setType(dtp);
+				} // FB_MOVE has no varinouts
+			}
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -128,8 +140,7 @@ public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements Config
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -145,8 +156,7 @@ public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements Config
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -162,8 +172,7 @@ public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements Config
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -175,5 +184,5 @@ public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements Config
 				return super.eIsSet(featureID);
 		}
 	}
-
-} //ConfigurableMoveFBImpl
+}
+// ConfigurableMoveFBImpl

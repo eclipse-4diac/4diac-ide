@@ -251,6 +251,8 @@ class FBNetworkImporter extends CommonElementImporter {
 			fb = LibraryElementFactory.eINSTANCE.createDemultiplexer();
 		} else if (type.getName().startsWith(FB_TYPE_COMM_MESSAGE)) {
 			fb = LibraryElementFactory.eINSTANCE.createCommunicationChannel();
+		} else if ("F_MOVE".equals(type.getName())) {
+			fb = LibraryElementFactory.eINSTANCE.createConfigurableMoveFB();
 		}
 		fb.setInterface(type.getInterfaceList().copy());
 		fb.setTypeEntry(entry);

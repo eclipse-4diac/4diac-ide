@@ -424,6 +424,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConfigurableMoveFB" eSuperTypes="#//ConfigurableFB">
     <eOperations name="updateConfiguration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// attribute holds the name of the desired data type of input and output data&#xA;if (config != null &amp;&amp; config.getValue() != null) {&#xA;&#x9;// get data type from library&#xA;&#x9;final DataType dtp = getTypeLibrary().getDataTypeLibrary().getTypeIfExists(config.getValue());&#xA;&#x9;// if data type exists, set it as the data type of the input/output data pin&#xA;&#x9;if (dtp != null &amp;&amp; getInterface() != null) {&#xA;&#x9;&#x9;for (final VarDeclaration input : getInterface().getInputVars()) {&#xA;&#x9;&#x9;&#x9;input.setType(dtp);&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;for (final VarDeclaration output : getInterface().getOutputVars()) {&#xA;&#x9;&#x9;&#x9;output.setType(dtp);&#xA;&#x9;&#x9;} // FB_MOVE has no varinouts&#xA;&#x9;}&#xA;}"/>
+        <details key="documentation" value="Method for setting input/output data pin types to configured data type"/>
+      </eAnnotations>
       <eParameters name="config" eType="#//Attribute"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" eType="ecore:EClass data.ecore#//DataType"/>

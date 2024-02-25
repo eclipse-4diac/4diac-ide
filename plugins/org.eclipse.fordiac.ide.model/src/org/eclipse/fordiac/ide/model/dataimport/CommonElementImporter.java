@@ -57,6 +57,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -455,13 +457,22 @@ public abstract class CommonElementImporter {
 		attribute.setValue(value);
 
 		confObject.getAttributes().add(attribute);
-		if (confObject instanceof final StructManipulator structManipulator) {
+		if (confObject instanceof final ConfigurableFB fb) {
+			handleConfigurableFB(fb, attribute);
+		}
+	}
+
+	private void handleConfigurableFB(final ConfigurableFB fb, final Attribute attribute) {
+		if (fb instanceof final StructManipulator structManipulator) {
 			checkStructAttribute(structManipulator, attribute);
+		} else if ((fb instanceof final ConfigurableMoveFB moveFb)
+				&& LibraryElementTags.FB_MOVE_CONFIG.equals(attribute.getName())) {
+			moveFb.updateConfiguration(attribute);
 		}
 	}
 
 	private void checkStructAttribute(final StructManipulator fb, final Attribute attribute) {
-		if (LibraryElementTags.STRUCTURED_TYPE_ELEMENT.equals(attribute.getName())) {
+		if (LibraryElementTags.STRUCT_MANIPULATOR_CONFIG.equals(attribute.getName())) {
 			final StructuredType structType = addDependency(
 					getTypeLibrary().getDataTypeLibrary().getStructuredType(attribute.getValue()));
 			fb.setStructTypeElementsAtInterface(structType);

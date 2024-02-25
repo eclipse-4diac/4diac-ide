@@ -150,7 +150,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 
 		if (fbnElement instanceof final StructManipulator structManipulator) {
-			addAttributeElement(LibraryElementTags.STRUCTURED_TYPE_ELEMENT, ElementaryTypes.STRING,
+			addAttributeElement(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG, ElementaryTypes.STRING,
 					PackageNameHelper.getFullTypeName(structManipulator.getStructType()), null);
 		}
 		addAttributes(fbnElement.getAttributes());
