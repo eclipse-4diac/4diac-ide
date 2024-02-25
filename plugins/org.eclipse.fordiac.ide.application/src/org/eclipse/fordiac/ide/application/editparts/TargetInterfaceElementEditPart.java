@@ -42,7 +42,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
 	public static final int LABEL_ALPHA = 120;
 	public static final int MAX_LABEL_LENGTH = Activator.getDefault().getPreferenceStore()
-			.getInt(DiagramPreferences.MAX_INTERFACE_BAR_SIZE);
+			.getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
 
 	private final Adapter nameChangeAdapter = new AdapterImpl() {
 		@Override

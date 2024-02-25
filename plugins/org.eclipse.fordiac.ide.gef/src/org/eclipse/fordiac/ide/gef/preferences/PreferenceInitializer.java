@@ -38,6 +38,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(DiagramPreferences.MAX_PIN_LABEL_SIZE, 12);
 		store.setDefault(DiagramPreferences.MAX_INTERFACE_BAR_SIZE, 40);
 		store.setDefault(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE, 60);
+		store.setDefault(DiagramPreferences.MIN_EXPANDED_SUBAPP_INTERFACE_BAR_WIDTH, 60);
 		store.setDefault(DiagramPreferences.MAX_TYPE_LABEL_SIZE, 15);
 	}
 }
