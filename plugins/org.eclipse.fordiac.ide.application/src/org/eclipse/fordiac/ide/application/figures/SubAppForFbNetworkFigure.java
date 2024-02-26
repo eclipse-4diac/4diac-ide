@@ -23,6 +23,7 @@ package org.eclipse.fordiac.ide.application.figures;
 
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
@@ -36,6 +37,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
+import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.FBShapeShadowBorder;
 import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
@@ -43,6 +45,8 @@ import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
@@ -172,7 +176,16 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	}
 
 	private static Shape createInterfaceBar(final IFigure parent) {
-		final RoundedRectangle interfaceBar = new RoundedRectangle();
+		final RoundedRectangle interfaceBar = new RoundedRectangle() {
+			@Override
+			public Dimension getPreferredSize(final int wHint, final int hHint) {
+				final Dimension prefSize = super.getPreferredSize(wHint, hHint);
+				// we want to have this container a minimum width
+				prefSize.union(getMinimumSize());
+				return prefSize;
+			}
+		};
+		interfaceBar.setMinimumSize(new Dimension(getMinExpandedInterfaceBarWidth(), -1));
 		interfaceBar.setOutline(false);
 		interfaceBar.setBackgroundColor(EditorWithInterfaceEditPart.INTERFACE_BAR_BG_COLOR);
 		interfaceBar.setLayoutManager(createInterfaceBarLayout());
@@ -258,4 +271,20 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	protected static GridData createInterfaceBarGroupLayoutData() {
 		return new GridData(SWT.FILL, SWT.TOP, true, false);
 	}
+
+	private static final int MIN_EXP_SUBAPP_BAR_WIDTH_CHARS = org.eclipse.fordiac.ide.gef.Activator.getDefault()
+			.getPreferenceStore().getInt(DiagramPreferences.MIN_EXPANDED_SUBAPP_INTERFACE_BAR_WIDTH);
+
+	private static int minExpSubappBarWidhtPixels = -1;
+
+	private static int getMinExpandedInterfaceBarWidth() {
+		if (minExpSubappBarWidhtPixels == -1) {
+			final Dimension singleCharLength = FigureUtilities.getStringExtents(" ", //$NON-NLS-1$
+					JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
+			minExpSubappBarWidhtPixels = singleCharLength.width * MIN_EXP_SUBAPP_BAR_WIDTH_CHARS
+					+ 2 * ConnectorBorder.LR_MARGIN;
+		}
+		return minExpSubappBarWidhtPixels;
+	}
+
 }

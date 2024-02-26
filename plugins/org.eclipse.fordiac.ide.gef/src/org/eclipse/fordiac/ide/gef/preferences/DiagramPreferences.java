@@ -72,6 +72,7 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	public static final String MAX_INTERFACE_BAR_SIZE = "MaxInterfaceBarSize"; //$NON-NLS-1$
 
 	public static final String MAX_HIDDEN_CONNECTION_LABEL_SIZE = "MaxHiddenConnectionLabelSize"; //$NON-NLS-1$
+	public static final String MIN_EXPANDED_SUBAPP_INTERFACE_BAR_WIDTH = "MinExpandedSubappInterfaceBarWidth"; //$NON-NLS-1$
 
 	public static final String MAX_TYPE_LABEL_SIZE = "MaxTypeLabelSize"; //$NON-NLS-1$
 
@@ -220,6 +221,12 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 				Messages.DiagramPreferences_MaximumHiddenConnectionLabelSize, labelSize);
 		integerFieldEditorConnection.setValidRange(0, 100);
 		addField(integerFieldEditorConnection);
+
+		final IntegerFieldEditor integerFieldEditorMinInterfaceBarWidth = new IntegerFieldEditor(
+				MIN_EXPANDED_SUBAPP_INTERFACE_BAR_WIDTH,
+				Messages.DiagramPreferences_MinimumExpandedSubappInterfaceBarSize, labelSize);
+		integerFieldEditorMinInterfaceBarWidth.setValidRange(0, 100);
+		addField(integerFieldEditorMinInterfaceBarWidth);
 
 		configGroup(labelSize);
 	}
