@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EClassifier
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyDurationType
+import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType
 import org.eclipse.fordiac.ide.model.data.DateType
 import org.eclipse.fordiac.ide.model.data.DintType
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType
 import org.eclipse.fordiac.ide.model.data.DwordType
 import org.eclipse.fordiac.ide.model.data.IntType
 import org.eclipse.fordiac.ide.model.data.LdateType
@@ -63,10 +65,12 @@ import org.eclipse.fordiac.ide.model.eval.function.Comment
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
@@ -677,5 +681,35 @@ final class STCoreUtil {
 			true
 		else
 			clazz.isAncestor(object.eContainer)
+	}
+
+	def static boolean isSimpleInitialValue(VarDeclaration decl) {
+		switch(type : decl.type) {
+			case decl.value?.value.nullOrEmpty: true
+			case decl.array: false
+			AnyElementaryType: isSimpleValue(decl.value.value, type)
+			DirectlyDerivedType: isSimpleValue(decl.value.value, type.baseType)
+			default: false
+		}
+	}
+
+	def static boolean isSimpleAttributeValue(Attribute attr) {
+		switch(type : attr.type) {
+			AnyElementaryType: isSimpleValue(attr.value, type)
+			DirectlyDerivedType: isSimpleValue(attr.value, type.baseType)
+			default: false
+		}
+	}
+
+	def static boolean isSimpleValue(String value, DataType type) {
+		if (value.nullOrEmpty)
+			true
+		else
+			try {
+				new TypedValueConverter(type, true).toValue(value)
+				true
+			} catch (Exception e) {
+				false
+			}
 	}
 }
