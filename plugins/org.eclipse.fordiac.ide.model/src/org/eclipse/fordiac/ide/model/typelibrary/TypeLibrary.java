@@ -53,14 +53,19 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -333,7 +338,20 @@ public final class TypeLibrary {
 			// check if already linked
 			if (projectLibs.get(lib.getSymbolicName()).stream().filter(p -> compareVersion(lib.getVersion(), p))
 					.count() == 0) {
-				gitlabLibraryImport(lib.getSymbolicName(), lib.getVersion(), libLinker);
+
+				final WorkspaceJob job = new WorkspaceJob(
+						"Download Gitlab package: " + lib.getSymbolicName() + " - " + lib.getVersion()) { //$NON-NLS-1$//$NON-NLS-2$
+
+					@Override
+					public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+						gitlabLibraryImport(lib.getSymbolicName(), lib.getVersion(), libLinker);
+						return Status.OK_STATUS;
+					}
+				};
+				job.setRule(project);
+				job.setPriority(Job.LONG);
+				job.schedule();
+
 			}
 		} else {
 			// check local lib
