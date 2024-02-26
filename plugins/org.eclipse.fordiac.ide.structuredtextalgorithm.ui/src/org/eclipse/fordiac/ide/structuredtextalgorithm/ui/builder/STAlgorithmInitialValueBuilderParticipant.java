@@ -43,20 +43,23 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.ModelIssueListValidationMesageAcceptor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.ValidationUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreImportValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
-import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IResourceDescription;
+import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
+import org.eclipse.xtext.util.CancelIndicator;
+import org.eclipse.xtext.validation.CheckMode;
+import org.eclipse.xtext.validation.IResourceValidator;
 import org.eclipse.xtext.validation.Issue;
 
 import com.google.inject.Inject;
@@ -105,11 +108,11 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				if (target instanceof SystemConfiguration) {
 					allContents.prune();
 				} else if (target instanceof final Attribute attribute) {
-					validateType(attribute, delta, typeUsageCollector, ignoreWarnings, monitor);
-					validateValue(attribute, delta, typeUsageCollector, ignoreWarnings, monitor);
+					validateType(attribute, delta, typeUsageCollector, ignoreWarnings, context, monitor);
+					validateValue(attribute, delta, typeUsageCollector, ignoreWarnings, context, monitor);
 				} else if (target instanceof final VarDeclaration varDeclaration) {
-					validateType(varDeclaration, delta, typeUsageCollector, ignoreWarnings, monitor);
-					validateValue(varDeclaration, delta, typeUsageCollector, ignoreWarnings, monitor);
+					validateType(varDeclaration, delta, typeUsageCollector, ignoreWarnings, context, monitor);
+					validateValue(varDeclaration, delta, typeUsageCollector, ignoreWarnings, context, monitor);
 				} else if (target instanceof STSource) {
 					typeUsageCollector.collectUsedTypes(target);
 				}
@@ -138,10 +141,10 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 
 	protected void validateType(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
 			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
-			final IProgressMonitor monitor) throws CoreException {
+			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
 		final List<Issue> issues = new ArrayList<>();
 		if (varDeclaration.isArray()) {
-			typeUsageCollector.collectUsedTypes(StructuredTextParseUtil.validateType(varDeclaration, issues));
+			typeUsageCollector.collectUsedTypes(validate(varDeclaration.getArraySize(), delta, issues, context));
 			issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getArraySize()));
 		} else {
 			typeUsageCollector.addUsedType(varDeclaration.getType());
@@ -159,7 +162,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 
 	protected void validateValue(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
 			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
-			final IProgressMonitor monitor) throws CoreException {
+			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(varDeclaration);
 		final List<Issue> issues = new ArrayList<>();
 		if (!value.isBlank()) { // do not parse value if blank
@@ -167,8 +170,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			try {
 				new TypedValueConverter((DataType) featureType, true).toValue(value);
 			} catch (final Exception e) {
-				typeUsageCollector.collectUsedTypes(StructuredTextParseUtil.validate(value, delta.getUri(), featureType,
-						EcoreUtil2.getContainerOfType(varDeclaration, LibraryElement.class), null, issues));
+				typeUsageCollector.collectUsedTypes(validate(varDeclaration.getValue(), delta, issues, context));
 				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getValue()));
 			}
 		}
@@ -186,7 +188,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	@SuppressWarnings("unused")
 	protected static void validateType(final Attribute attribute, final IResourceDescription.Delta delta,
 			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
-			final IProgressMonitor monitor) {
+			final IBuildContext context, final IProgressMonitor monitor) {
 		if (attribute.getAttributeDeclaration() != null) {
 			typeUsageCollector.addUsedType(attribute.getAttributeDeclaration());
 		} else if (attribute.getType() instanceof AnyType) {
@@ -196,7 +198,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 
 	protected void validateValue(final Attribute attribute, final IResourceDescription.Delta delta,
 			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
-			final IProgressMonitor monitor) throws CoreException {
+			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(attribute);
 		final List<Issue> issues = new ArrayList<>();
 		if (!value.isBlank() && attribute.getType() instanceof AnyType
@@ -205,8 +207,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			try {
 				new TypedValueConverter(featureType, true).toValue(value);
 			} catch (final Exception e) {
-				typeUsageCollector.collectUsedTypes(StructuredTextParseUtil.validate(value, delta.getUri(), featureType,
-						EcoreUtil2.getContainerOfType(attribute, LibraryElement.class), null, issues));
+				typeUsageCollector.collectUsedTypes(validate(attribute, delta, issues, context));
 				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, attribute,
 						LibraryElementPackage.Literals.ATTRIBUTE__VALUE));
 			}
@@ -239,6 +240,20 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				createMarkers(file, FordiacErrorMarker.IMPORT_MARKER, acceptor.getIssues(), ignoreWarnings, monitor);
 			}
 		}
+	}
+
+	protected static EObject validate(final EObject element, final IResourceDescription.Delta delta,
+			final List<Issue> issues, final IBuildContext context) {
+		final String fragment = LibraryElementXtextResource
+				.toExternalFragment(element.eResource().getURIFragment(element));
+		final URI uri = delta.getUri().appendQuery(fragment);
+		final Resource resource = context.getResourceSet().getResource(uri, true);
+		if (resource instanceof final XtextResource xtextResource) {
+			EcoreUtil.resolveAll(xtextResource);
+			final IResourceValidator validator = xtextResource.getResourceServiceProvider().getResourceValidator();
+			issues.addAll(validator.validate(xtextResource, CheckMode.FAST_ONLY, CancelIndicator.NullImpl));
+		}
+		return resource.getContents().isEmpty() ? null : resource.getContents().get(0);
 	}
 
 	protected void createMarkers(final IFile file, final String type, final List<Issue> issues,
@@ -279,8 +294,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	}
 
 	protected boolean isRelevantDelta(final IResourceDescription.Delta delta) {
-		final IFile file = getFile(delta.getUri());
-		return file != null && TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) != null;
+		return STAlgorithmResource.isValidUri(delta.getUri()) && !delta.getUri().hasQuery();
 	}
 
 	protected static IFile getFile(final URI uri) {

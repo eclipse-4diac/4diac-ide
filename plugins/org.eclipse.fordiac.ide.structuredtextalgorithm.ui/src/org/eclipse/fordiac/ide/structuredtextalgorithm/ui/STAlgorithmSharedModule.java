@@ -12,15 +12,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui;
 
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.builder.STAlgorithmToBeBuiltComputerContribution;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceSetInitializer;
+import org.eclipse.xtext.builder.impl.IToBeBuiltComputerContribution;
 import org.eclipse.xtext.ui.resource.IResourceSetInitializer;
 
 import com.google.inject.Binder;
 
+@SuppressWarnings("restriction")
 public class STAlgorithmSharedModule implements com.google.inject.Module {
 
 	@Override
 	public void configure(final Binder binder) {
 		binder.bind(IResourceSetInitializer.class).to(STAlgorithmResourceSetInitializer.class);
+		binder.bind(IToBeBuiltComputerContribution.class).to(STAlgorithmToBeBuiltComputerContribution.class);
 	}
 }

@@ -28,7 +28,8 @@ public class STCoreResourceValidator extends ResourceValidatorImpl {
 	@Override
 	protected void validate(final Resource resource, final CheckMode mode, final CancelIndicator monitor,
 			final IAcceptor<Issue> acceptor) {
-		if (resource instanceof STCoreResource && !mode.shouldCheck(CheckType.NORMAL)) {
+		if (resource instanceof STCoreResource
+				&& (!mode.shouldCheck(CheckType.NORMAL) || resource.getURI().hasQuery())) {
 			final List<EObject> contents = resource.getContents();
 			if (!contents.isEmpty()) {
 				getOperationCanceledManager().checkCanceled(monitor);
