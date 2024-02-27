@@ -539,16 +539,14 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
              commandId="org.eclipse.ui.edit.text.goto.wordPrevious">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
@@ -557,16 +555,14 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
              commandId="org.eclipse.ui.edit.text.goto.wordNext">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
@@ -575,16 +571,14 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.GotoPinAboveHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.gotopinabove">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
     <handler class="org.eclipse.fordiac.ide.application.handlers.GotoPinAboveHandler"
              commandId="org.eclipse.ui.edit.text.scroll.lineUp">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
@@ -592,16 +586,14 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.GotoPinUnderHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.gotopinunder">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
     <handler class="org.eclipse.fordiac.ide.application.handlers.GotoPinUnderHandler"
              commandId="org.eclipse.ui.edit.text.scroll.lineDown">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
   
@@ -910,10 +902,11 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
-      <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent" />
+      <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent" >
         <visibleWhen checkEnabled="false">
 	      <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
         </visibleWhen>
+      </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"/>
@@ -1115,7 +1108,6 @@
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
-                  <instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
                 </or>
               </iterate>
             </with>
@@ -1184,7 +1176,6 @@
                   </and>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
-                  <instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
                 </or>
               </iterate>
             </with>
@@ -1359,48 +1350,12 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection" >
         <visibleWhen checkEnabled="true">
-          <and>
-            <with variable="selection">
-              <count value="1"/>
-              <iterate>
-                <or>
-                  <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
-                </or>
-              </iterate>
-            </with>
-            <!-- we are in an application or subapp editor or in a subapp/cfb viewer -->
-            <or>
-              <with variable="activeEditor">
-                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
-              </with>
-              <with variable="activeEditor">
-                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
-              </with>
-            </or>
-          </and>
+          <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection" >
         <visibleWhen checkEnabled="true">
-          <and>
-            <with variable="selection">
-              <count value="1"/>
-              <iterate>
-                <or>
-                  <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
-                </or>
-              </iterate>
-            </with>
-            <!-- we are in an application or subapp editor or in a subapp/cfb viewer -->
-            <or>
-              <with variable="activeEditor">
-                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
-              </with>
-              <with variable="activeEditor">
-                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
-              </with>
-            </or>
-          </and>
+          <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.createConnectionAtSubappInterface" >
@@ -1655,6 +1610,27 @@
           </with>
         </not>
       </and>
+    </definition>
+    <definition id="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection">
+      <and>
+            <with variable="selection">
+              <count value="1"/>
+              <iterate>
+                <or>
+                  <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+                </or>
+              </iterate>
+            </with>
+            <!-- we are in an application or subapp editor or in a subapp/cfb viewer -->
+            <or>
+              <with variable="activeEditor">
+                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+              </with>
+              <with variable="activeEditor">
+                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+              </with>
+            </or>
+          </and>
     </definition>
   </extension>
   <extension point="org.eclipse.core.expressions.propertyTesters">

@@ -19,7 +19,9 @@ import java.util.List;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.GraphicalViewer;
@@ -35,22 +37,21 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		final List<IInterfaceElement> opposites = getConnectionOposites(selection, getFBNetwork(editor));
-		final GotoParentHandler gotoParentHandler = new GotoParentHandler();
 
-		if (isInsideSubappOrViewer(
-				((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement()).getModel(),
-				getFBNetwork(editor))
-				&& ((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement()).getModel().isIsInput()) {
-			gotoParentHandler.execute(event);
+		final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) ((IStructuredSelection) selection)
+				.getFirstElement();
+		if (isEditorBorderPin(interfaceEditPart.getModel(), getFBNetwork(editor))
+				&& interfaceEditPart.getModel().isIsInput()) {
+			gotoParent(event);
 			return Status.OK_STATUS;
 		}
 
-		if (!((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement()).isInput()) {
+		if (!interfaceEditPart.isInput() && !isExpandedSubappPin(interfaceEditPart.getModel())) {
 			HandlerHelper.selectElement(getInternalOppositePin(selection), viewer);
 			return Status.OK_STATUS;
 		}
 
+		final List<IInterfaceElement> opposites = getConnectionOposites(interfaceEditPart);
 		if (!opposites.isEmpty()) {
 			if (opposites.size() == 1) {
 				HandlerHelper.selectElement(opposites.get(0), viewer);
@@ -115,5 +116,10 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 	@Override
 	protected boolean isLeft() {
 		return true;
+	}
+
+	@Override
+	protected EList<Connection> getConnectionList(final IInterfaceElement ie) {
+		return ie.getInputConnections();
 	}
 }

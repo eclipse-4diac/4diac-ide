@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -27,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -179,20 +177,14 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	}
 
-	protected List<IInterfaceElement> getConnectionOposites(final ISelection selection, final FBNetwork fbNetwork) {
-		if (selection instanceof final IStructuredSelection structuredSelection && !selection.isEmpty()
-				&& (structuredSelection.size() == 1)
-				&& (structuredSelection.getFirstElement() instanceof final InterfaceEditPart iep)) {
-			// only if only one element is selected
-			if (useTargetPins(iep)) {
-				return getTargetPins(iep);
-			}
-			final IInterfaceElement ie = iep.getModel();
-			final EList<Connection> connList = getConnectionList(ie, fbNetwork);
-			return connList.stream().map(con -> (con.getSource().equals(ie) ? con.getDestination() : con.getSource()))
-					.toList();
+	protected List<IInterfaceElement> getConnectionOposites(final InterfaceEditPart iep) {
+		if (useTargetPins(iep)) {
+			return getTargetPins(iep);
 		}
-		return Collections.emptyList();
+		final IInterfaceElement ie = iep.getModel();
+		final EList<Connection> connList = getConnectionList(ie);
+		return connList.stream().map(con -> (con.getSource().equals(ie) ? con.getDestination() : con.getSource()))
+				.toList();
 	}
 
 	private boolean useTargetPins(final InterfaceEditPart iep) {
@@ -202,21 +194,11 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	protected abstract boolean isLeft();
 
+	protected abstract EList<Connection> getConnectionList(final IInterfaceElement ie);
+
 	private static List<IInterfaceElement> getTargetPins(final InterfaceEditPart iep) {
 		return iep.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance)
 				.map(ep -> (TargetInterfaceElementEditPart) ep).map(ep -> ep.getModel().getRefElement()).toList();
-	}
-
-	private static EList<Connection> getConnectionList(final IInterfaceElement ie, final FBNetwork fbNetwork) {
-		if (isInsideSubappOrViewer(ie, fbNetwork) || isInsideTopType(ie)) {
-			// we have a subapp/cfb interface element and we are inside of the subapp/cfb
-			return ie.isIsInput() ? ie.getOutputConnections() : ie.getInputConnections();
-		}
-		return ie.isIsInput() ? ie.getInputConnections() : ie.getOutputConnections();
-	}
-
-	private static boolean isInsideTopType(final IInterfaceElement ie) {
-		return ie.eContainer().eContainer() instanceof FBType;
 	}
 
 	protected static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
@@ -278,5 +260,26 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			return visibleDestinations.get(visibleDestinations.size() - 1);
 		}
 		return visibleDestinations.get(sourceIndex);
+	}
+
+	protected static void gotoParent(final ExecutionEvent event) throws ExecutionException {
+		final GotoParentHandler gotoParentHandler = new GotoParentHandler();
+		gotoParentHandler.execute(event);
+	}
+
+	protected static boolean isEditorBorderPin(final IInterfaceElement ie, final FBNetwork fbNetwork) {
+		final FBNetworkElement fbnElement = ie.getFBNetworkElement();
+		FBNetwork containedNetwork = null;
+		if (fbnElement instanceof final SubApp subapp) {
+			containedNetwork = subapp.getSubAppNetwork();
+		} else if (fbnElement instanceof final CFBInstance cfb) {
+			containedNetwork = cfb.getCfbNetwork();
+		}
+
+		return (containedNetwork != null) && containedNetwork.equals(fbNetwork);
+	}
+
+	protected static boolean isExpandedSubappPin(final IInterfaceElement pin) {
+		return pin.getFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded();
 	}
 }
