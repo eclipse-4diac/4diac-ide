@@ -230,6 +230,10 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		return index;
 	}
 
+	public InterfaceList getTargetInterfaceList() {
+		return targetInterfaceList;
+	}
+
 	@Override
 	public Set<EObject> getAffectedObjects() {
 		if (targetInterfaceList != null) {

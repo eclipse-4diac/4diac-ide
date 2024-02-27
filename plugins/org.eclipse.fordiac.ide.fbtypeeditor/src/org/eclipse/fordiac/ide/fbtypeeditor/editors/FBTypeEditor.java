@@ -50,8 +50,12 @@ import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
+import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
+import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -123,6 +127,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	private FBTypeUpdateDialog<TypeEntry> fbSaveDialog;
 	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
 	private static final int CANCEL_BUTTON_INDEX = 1;
+	private int interfaceChanges = 0; // number of interface changes happend since the last save
 
 	private final TypeEntryAdapter adapter = new TypeEntryAdapter(this);
 
@@ -130,7 +135,11 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	public void doSave(final IProgressMonitor monitor) {
 		if ((null != typeEntry) && (checkTypeSaveAble())) {
 			performPresaveHooks();
-			createSaveDialog(monitor);
+			if (interfaceChanges != 0) {
+				createSaveDialog(monitor);
+			} else {
+				doSaveInternal(monitor);
+			}
 		}
 	}
 
@@ -144,7 +153,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		// Depending on the button clicked:
 		switch (fbSaveDialog.open()) {
 		case DEFAULT_BUTTON_INDEX:
-			doSaveInternal(monitor, fbSaveDialog.getDataHandler().getCollectedElements());
+			doSaveWithUpdate(monitor, fbSaveDialog.getDataHandler().getCollectedElements());
 			break;
 		case CANCEL_BUTTON_INDEX:
 			MessageDialog.openInformation(null, Messages.FBTypeEditor_ViewingComposite_Headline,
@@ -187,11 +196,10 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		return true;
 	}
 
-	private void doSaveInternal(final IProgressMonitor monitor, final Set<INamedElement> set) {
+	private void doSaveInternal(final IProgressMonitor monitor) {
 		getCommandStack().markSaveLocation();
 
 		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(typeEntry.getFile().getParent()) {
-
 			@Override
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
@@ -211,6 +219,11 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		}
 
 		firePropertyChange(IEditorPart.PROP_DIRTY);
+		interfaceChanges = 0;
+	}
+
+	private void doSaveWithUpdate(final IProgressMonitor monitor, final Set<INamedElement> set) {
+		doSaveInternal(monitor);
 		updateFB(set);
 	}
 
@@ -526,6 +539,18 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
+
+		if (isInterfaceChangeCommand(event.getCommand())) {
+			switch (event.getDetail()) {
+			case CommandStack.POST_EXECUTE, CommandStack.POST_REDO:
+				interfaceChanges++;
+				break;
+			case CommandStack.POST_UNDO:
+				interfaceChanges--;
+			default:
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -591,4 +616,30 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	protected IEditorSite createSite(final IEditorPart editor) {
 		return new FBTypeMultiPageEditorSite(this, editor);
 	}
+
+	private boolean isInterfaceChangeCommand(final Command cmd) {
+		if (cmd instanceof final CompoundCommand compoundCmd) {
+			for (final Command childCmd : compoundCmd.getCommands()) {
+				if (isInterfaceChangeCommand(childCmd)) {
+					// for compound commands it is sufficient to know that at least one of the
+					// children is an interface command of our type
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// we need to check not only for the four commands but also if the element is
+		// an interface element of the FBtype and not of any child (e.g., pin of a
+		// subapp in a typed subapp)
+		return ((cmd instanceof final CreateInterfaceElementCommand createIFCmd
+				&& fbType.getInterfaceList().equals(createIFCmd.getTargetInterfaceList()))
+				|| (cmd instanceof final DeleteInterfaceCommand delIFCmd
+						&& fbType.getInterfaceList().equals(delIFCmd.getParent()))
+				|| (cmd instanceof final AbstractChangeInterfaceElementCommand changeIFCmd
+						&& fbType.getInterfaceList().equals(changeIFCmd.getInterfaceElement().eContainer()))
+				|| (cmd instanceof final ChangeNameCommand chgNameCmd
+						&& fbType.getInterfaceList().equals(chgNameCmd.getElement().eContainer())));
+	}
+
 }
