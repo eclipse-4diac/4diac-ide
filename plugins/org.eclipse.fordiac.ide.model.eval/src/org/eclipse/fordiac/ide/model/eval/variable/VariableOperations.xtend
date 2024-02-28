@@ -16,8 +16,10 @@ import java.util.List
 import java.util.Set
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType
 import org.eclipse.fordiac.ide.model.data.AnyType
 import org.eclipse.fordiac.ide.model.data.ArrayType
+import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType
 import org.eclipse.fordiac.ide.model.data.StructuredType
@@ -45,6 +47,7 @@ final class VariableOperations {
 		switch (type) {
 			ArrayType: new ArrayVariable(name, type)
 			StructuredType: new StructVariable(name, type)
+			DirectlyDerivedType: new DirectlyDerivedVariable(name, type)
 			AnyType: new ElementaryVariable(name, type)
 			FBType: new FBVariable(name, type)
 			default: throw new UnsupportedOperationException('''Cannot instanciate variable '«name ?: "null"»' of type «type?.name ?: "null"»''')
@@ -55,6 +58,7 @@ final class VariableOperations {
 		switch (type) {
 			ArrayType: new ArrayVariable(name, type, value)
 			StructuredType: new StructVariable(name, type, value)
+			DirectlyDerivedType: new DirectlyDerivedVariable(name, type, value)
 			AnyType: new ElementaryVariable(name, type, value)
 			FBType: new FBVariable(name, type, value)
 			default: throw new UnsupportedOperationException('''Cannot instanciate variable '«name ?: "null"»' of type «type?.name ?: "null"»''')
@@ -65,6 +69,7 @@ final class VariableOperations {
 		switch (type) {
 			ArrayType: new ArrayVariable(name, type, value)
 			StructuredType: new StructVariable(name, type, value)
+			DirectlyDerivedType: new DirectlyDerivedVariable(name, type, value)
 			AnyType: new ElementaryVariable(name, type, value)
 			FBType: new FBVariable(name, type, value)
 			default: throw new UnsupportedOperationException('''Cannot instanciate variable '«name ?: "null"»' of type «type?.name ?: "null"»''')
@@ -166,6 +171,19 @@ final class VariableOperations {
 			""
 	}
 
+	def static String validateValue(DirectlyDerivedType type) {
+		if (!type.initialValue.nullOrEmpty) {
+			val evaluator = type.createEvaluator(DirectlyDerivedType, null, emptySet, null)
+			try {
+				evaluator?.prepare
+				""
+			} catch (Exception e) {
+				e.message;
+			}
+		} else
+			""
+	}
+
 	def static boolean validateValue(VarDeclaration decl, List<String> errors, List<String> warnings,
 		List<String> infos) {
 		if (!decl.simpleInitialValue) {
@@ -235,19 +253,11 @@ final class VariableOperations {
 	}
 
 	def static String validateValue(DataType dataType, String initialValue) {
-		(LibraryElementFactory.eINSTANCE.createVarDeclaration => [
-			name = "dummy"
-			type = dataType
-			value = LibraryElementFactory.eINSTANCE.createValue => [value = initialValue]
-		]).validateValue
+		dataType.withValue(initialValue).validateValue
 	}
 
 	def static Value evaluateValue(DataType dataType, String initialValue) {
-		(LibraryElementFactory.eINSTANCE.createVarDeclaration => [
-			name = "dummy"
-			type = dataType
-			value = LibraryElementFactory.eINSTANCE.createValue => [value = initialValue]
-		]).newVariable.value
+		dataType.withValue(initialValue).newVariable.value
 	}
 
 	def static Set<String> getDependencies(VarDeclaration decl) {
@@ -323,6 +333,18 @@ final class VariableOperations {
 		]
 		if (decl.eResource !== null) {
 			new ResourceImpl(decl.eResource.URI).contents.add(copy)
+		}
+		copy
+	}
+
+	def private static withValue(DataType type, String valueString) {
+		val copy = DataFactory.eINSTANCE.createDirectlyDerivedType => [
+			name = type.name
+			baseType = type
+			initialValue = valueString
+		]
+		if (type instanceof AnyDerivedType && type.eResource !== null) {
+			new ResourceImpl(type.eResource.URI).contents.add(copy)
 		}
 		copy
 	}
