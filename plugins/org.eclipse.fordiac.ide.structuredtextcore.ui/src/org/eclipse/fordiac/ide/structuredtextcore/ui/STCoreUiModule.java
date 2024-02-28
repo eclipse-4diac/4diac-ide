@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameEle
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSimpleNameProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSyncUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceForIEditorInputFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceUIServiceProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper;
@@ -80,6 +81,7 @@ import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
 import org.eclipse.xtext.ui.refactoring.ILinkedPositionGroupCalculator;
 import org.eclipse.xtext.ui.refactoring.impl.AbstractRenameProcessor;
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
+import org.eclipse.xtext.ui.refactoring.ui.SyncUtil;
 import org.eclipse.xtext.ui.refactoring2.ChangeConverter;
 import org.eclipse.xtext.ui.refactoring2.rename.ISimpleNameProvider;
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
@@ -250,5 +252,9 @@ public class STCoreUiModule extends AbstractSTCoreUiModule {
 
 	public Class<? extends RecordingXtextResourceUpdater> bindRecordingXtextResourceUpdater() {
 		return STCoreRecordingXtextResourceUpdater.class;
+	}
+
+	public Class<? extends SyncUtil> bindSyncUtil() {
+		return STCoreSyncUtil.class;
 	}
 }
