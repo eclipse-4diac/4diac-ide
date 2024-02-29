@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallable
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreLinkedPositionGroupCalculator;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRecordingXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
@@ -64,6 +65,7 @@ import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculat
 import org.eclipse.xtext.ide.refactoring.IRenameNameValidator;
 import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
 import org.eclipse.xtext.ide.serializer.IChangeSerializer;
+import org.eclipse.xtext.ide.serializer.impl.RecordingXtextResourceUpdater;
 import org.eclipse.xtext.resource.IContainer;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.resource.containers.StateBasedContainerManager;
@@ -297,5 +299,9 @@ public class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	public Class<? extends ChangeConverter.Factory> bindChangeConverter$Factory() {
 		return STCoreChangeConverter.Factory.class;
+	}
+
+	public Class<? extends RecordingXtextResourceUpdater> bindRecordingXtextResourceUpdater() {
+		return STCoreRecordingXtextResourceUpdater.class;
 	}
 }
