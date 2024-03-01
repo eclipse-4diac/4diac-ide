@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -44,9 +45,7 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	private final URI elementURI;
 	private final Class<T> elementClass;
 
-	private Command command;
 	private IEditorPart editor;
-	private LibraryElement libraryElement;
 
 	protected AbstractCommandChange(final URI elementURI, final Class<T> elementClass) {
 		this(elementURI.lastSegment(), elementURI, elementClass);
@@ -58,58 +57,42 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		this.elementClass = Objects.requireNonNull(elementClass);
 	}
 
-	protected AbstractCommandChange(final String name, final URI elementURI, final Class<T> elementClass,
-			final Command command, final IEditorPart editor, final LibraryElement libraryElement) {
-		this(name, elementURI, elementClass);
-		this.command = command;
-		this.editor = editor;
-		this.libraryElement = libraryElement;
-	}
-
-	protected abstract Command createCommand(T element);
-
 	@Override
-	public void initializeValidationData(final IProgressMonitor pm) {
-		// get library element
-		if (libraryElement == null) {
-			editor = findEditor(new FileEditorInput(getModifiedElement()));
-			if (editor != null) { // from the editor (and save via editor later)
-				libraryElement = Adapters.adapt(editor, LibraryElement.class);
-			} else { // or a copy from the type entry
-				final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
-				if (typeEntry != null) {
-					libraryElement = typeEntry.copyType();
-				}
-			}
-		}
-		// create command from library element
-		if (command == null) {
-			final T element = getElement();
-			if (element != null) {
-				command = Objects.requireNonNull(createCommand(element));
-			}
+	public final void initializeValidationData(final IProgressMonitor pm) {
+		editor = findEditor(new FileEditorInput(getModifiedElement()));
+		final LibraryElement libraryElement = acquireLibraryElement(false);
+		final T element = getElement(libraryElement);
+		if (element != null) {
+			initializeValidationData(element, pm);
 		}
 	}
 
+	public abstract void initializeValidationData(T element, final IProgressMonitor pm);
+
 	@Override
-	public RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+	public final RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
-		if (libraryElement == null) {
+		final LibraryElement libraryElement = acquireLibraryElement(false);
+		final T element = getElement(libraryElement);
+		if (element == null) {
 			status.addFatalError(Messages.AbstractCommandChange_NoSuchElement);
-		} else if (command == null || !command.canExecute()) {
-			status.addFatalError(Messages.AbstractCommandChange_CannotExecuteCommand);
+		} else {
+			status.merge(isValid(element, pm));
 		}
 		return status;
 	}
 
+	public abstract RefactoringStatus isValid(T element, final IProgressMonitor pm)
+			throws CoreException, OperationCanceledException;
+
 	@Override
 	public final Change perform(final IProgressMonitor pm) throws CoreException {
 		if (performInUIThread() && Display.getCurrent() == null) {
+			final Change[] change = new Change[1];
 			final CoreException[] coreException = new CoreException[1];
 			Display.getDefault().syncExec(() -> {
 				try {
-					performCommand();
-					commit(pm);
+					change[0] = doPerform(pm);
 				} catch (final CoreException e) {
 					coreException[0] = e;
 				}
@@ -117,23 +100,50 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 			if (coreException[0] != null) {
 				throw coreException[0];
 			}
-		} else {
-			performCommand();
-			commit(pm);
+			return change[0];
 		}
-		return createUndoChange();
+		return doPerform(pm);
 	}
 
-	protected void performCommand() {
+	private Change doPerform(final IProgressMonitor pm) throws CoreException {
+		final LibraryElement libraryElement = acquireLibraryElement(true);
+		final T element = getElement(libraryElement);
+		if (element == null) {
+			throw new CoreException(Status.error(Messages.AbstractCommandChange_NoSuchElement));
+		}
+		final Command command = performCommand(element);
+		commit(libraryElement, pm);
+		return createUndoChange(command, libraryElement);
+	}
+
+	protected Command performCommand(final T element) throws CoreException {
+		final Command command = Objects.requireNonNull(createCommand(element));
+		if (!command.canExecute()) {
+			throw new CoreException(Status.error(Messages.AbstractCommandChange_CannotExecuteCommand));
+		}
 		final CommandStack commandStack = getCommandStack();
 		if (commandStack != null) {
 			commandStack.execute(command);
 		} else {
 			command.execute();
 		}
+		return command;
 	}
 
-	protected void commit(final IProgressMonitor pm) throws CoreException {
+	protected abstract Command createCommand(T element);
+
+	protected LibraryElement acquireLibraryElement(final boolean editable) {
+		if (editor != null) {
+			return Adapters.adapt(editor, LibraryElement.class);
+		}
+		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
+		if (typeEntry != null) {
+			return editable ? typeEntry.copyType() : typeEntry.getType();
+		}
+		return null;
+	}
+
+	protected void commit(final LibraryElement libraryElement, final IProgressMonitor pm) throws CoreException {
 		if (editor != null) {
 			editor.doSave(pm);
 		} else {
@@ -141,8 +151,8 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		}
 	}
 
-	protected Change createUndoChange() {
-		return new CommandUndoChange<>(name, elementURI, elementClass, command, editor, libraryElement);
+	protected Change createUndoChange(final Command command, final LibraryElement libraryElement) {
+		return new CommandUndoChange<>(name, elementURI, elementClass, command, libraryElement);
 	}
 
 	@Override
@@ -175,19 +185,11 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		return elementClass;
 	}
 
-	public Command getCommand() {
-		return command;
-	}
-
 	public IEditorPart getEditor() {
 		return editor;
 	}
 
-	public LibraryElement getLibraryElement() {
-		return libraryElement;
-	}
-
-	protected T getElement() {
+	private T getElement(final LibraryElement libraryElement) {
 		if (libraryElement != null && libraryElement.eResource() != null) {
 			final EObject element;
 			if (elementURI.hasFragment()) {

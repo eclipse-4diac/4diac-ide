@@ -40,22 +40,16 @@ public class DataTypeChange extends AbstractCommandChange<IInterfaceElement> {
 	}
 
 	@Override
-	public void initializeValidationData(final IProgressMonitor pm) {
-		super.initializeValidationData(pm);
-		final IInterfaceElement element = getElement();
-		if (element != null) {
-			oldTypeDeclaration = element.getFullTypeName();
-		}
+	public void initializeValidationData(final IInterfaceElement element, final IProgressMonitor pm) {
+		oldTypeDeclaration = element.getFullTypeName();
 	}
 
 	@Override
-	public RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = super.isValid(pm);
-		if (!status.hasFatalError()) {
-			final IInterfaceElement element = getElement();
-			if (element != null && !Objects.equals(element.getFullTypeName(), oldTypeDeclaration)) {
-				status.addFatalError(Messages.DataTypeChange_TypeDeclarationChanged);
-			}
+	public RefactoringStatus isValid(final IInterfaceElement element, final IProgressMonitor pm)
+			throws CoreException, OperationCanceledException {
+		final RefactoringStatus status = new RefactoringStatus();
+		if (!Objects.equals(element.getFullTypeName(), oldTypeDeclaration)) {
+			status.addFatalError(Messages.DataTypeChange_TypeDeclarationChanged);
 		}
 		return status;
 	}

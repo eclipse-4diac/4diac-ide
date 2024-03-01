@@ -105,6 +105,8 @@ public final class Messages extends NLS {
 	public static String NewFBTypeWizardPage_OpenTypeForEditingWhenDone;
 	public static String NewFBTypeWizardPage_InvalidOrNoComment;
 	public static String NewVersionOf;
+	public static String RenameElementChange_InvalidName;
+
 	public static String RenameElementChange_NameChanged;
 	public static String RenameElementRefactoringParticipant_Name;
 	public static String RenameElementRefactoringProcessor_Name;

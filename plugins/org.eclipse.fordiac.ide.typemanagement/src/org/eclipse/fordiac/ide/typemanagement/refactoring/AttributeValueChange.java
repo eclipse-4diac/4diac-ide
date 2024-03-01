@@ -40,22 +40,16 @@ public class AttributeValueChange extends AbstractCommandChange<Attribute> {
 	}
 
 	@Override
-	public void initializeValidationData(final IProgressMonitor pm) {
-		super.initializeValidationData(pm);
-		final Attribute element = getElement();
-		if (element != null) {
-			oldValue = element.getValue();
-		}
+	public void initializeValidationData(final Attribute element, final IProgressMonitor pm) {
+		oldValue = element.getValue();
 	}
 
 	@Override
-	public RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = super.isValid(pm);
-		if (!status.hasFatalError()) {
-			final Attribute element = getElement();
-			if (element != null && !Objects.equals(element.getValue(), oldValue)) {
-				status.addFatalError(Messages.AttributeValueChange_AttributeValueChanged);
-			}
+	public RefactoringStatus isValid(final Attribute element, final IProgressMonitor pm)
+			throws CoreException, OperationCanceledException {
+		final RefactoringStatus status = new RefactoringStatus();
+		if (!Objects.equals(element.getValue(), oldValue)) {
+			status.addFatalError(Messages.AttributeValueChange_AttributeValueChanged);
 		}
 		return status;
 	}

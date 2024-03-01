@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
@@ -40,22 +41,18 @@ public class RenameElementChange extends AbstractCommandChange<INamedElement> {
 	}
 
 	@Override
-	public void initializeValidationData(final IProgressMonitor pm) {
-		super.initializeValidationData(pm);
-		final INamedElement element = getElement();
-		if (element != null) {
-			oldName = element.getName();
-		}
+	public void initializeValidationData(final INamedElement element, final IProgressMonitor pm) {
+		oldName = element.getName();
 	}
 
 	@Override
-	public RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = super.isValid(pm);
-		if (!status.hasFatalError()) {
-			final INamedElement element = getElement();
-			if (element != null && !Objects.equals(element.getName(), oldName)) {
-				status.addFatalError(Messages.RenameElementChange_NameChanged);
-			}
+	public RefactoringStatus isValid(final INamedElement element, final IProgressMonitor pm)
+			throws CoreException, OperationCanceledException {
+		final RefactoringStatus status = new RefactoringStatus();
+		if (!Objects.equals(element.getName(), oldName)) {
+			status.addFatalError(Messages.RenameElementChange_NameChanged);
+		} else if (!NameRepository.isValidName(element, newName)) {
+			status.addFatalError(Messages.RenameElementChange_InvalidName);
 		}
 		return status;
 	}

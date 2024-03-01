@@ -40,22 +40,16 @@ public class InitialValueChange extends AbstractCommandChange<VarDeclaration> {
 	}
 
 	@Override
-	public void initializeValidationData(final IProgressMonitor pm) {
-		super.initializeValidationData(pm);
-		final VarDeclaration element = getElement();
-		if (element != null) {
-			oldValue = getInitialValue(element);
-		}
+	public void initializeValidationData(final VarDeclaration element, final IProgressMonitor pm) {
+		oldValue = getInitialValue(element);
 	}
 
 	@Override
-	public RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = super.isValid(pm);
-		if (!status.hasFatalError()) {
-			final VarDeclaration element = getElement();
-			if (element != null && !Objects.equals(getInitialValue(element), oldValue)) {
-				status.addFatalError(Messages.InitialValueChange_InitialValueChanged);
-			}
+	public RefactoringStatus isValid(final VarDeclaration element, final IProgressMonitor pm)
+			throws CoreException, OperationCanceledException {
+		final RefactoringStatus status = new RefactoringStatus();
+		if (!Objects.equals(getInitialValue(element), oldValue)) {
+			status.addFatalError(Messages.InitialValueChange_InitialValueChanged);
 		}
 		return status;
 	}

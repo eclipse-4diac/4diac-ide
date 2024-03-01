@@ -25,19 +25,28 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
-import org.eclipse.ui.IEditorPart;
 
 public class CommandUndoChange<T extends EObject> extends AbstractCommandChange<T> {
 
+	private final Command command;
+	private final LibraryElement libraryElement;
+
 	public CommandUndoChange(final String name, final URI elementURI, final Class<T> elementClass,
-			final Command command, final IEditorPart editor, final LibraryElement libraryElement) {
-		super(name, elementURI, elementClass, Objects.requireNonNull(command), editor, libraryElement);
+			final Command command, final LibraryElement libraryElement) {
+		super(name, elementURI, elementClass);
+		this.command = Objects.requireNonNull(command);
+		this.libraryElement = Objects.requireNonNull(libraryElement);
 	}
 
 	@Override
-	public RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+	public void initializeValidationData(final T element, final IProgressMonitor pm) {
+		// do nothing
+	}
+
+	@Override
+	public RefactoringStatus isValid(final T element, final IProgressMonitor pm)
+			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
-		final Command command = getCommand();
 		final CommandStack commandStack = getCommandStack();
 		if ((commandStack != null && commandStack.getUndoCommand() != command) || !command.canUndo()) {
 			status.addFatalError(Messages.CommandUndoChange_CannotUndoCommand);
@@ -52,19 +61,23 @@ public class CommandUndoChange<T extends EObject> extends AbstractCommandChange<
 	}
 
 	@Override
-	protected void performCommand() {
-		final Command command = getCommand();
+	protected Command performCommand(final T element) {
 		final CommandStack commandStack = getCommandStack();
 		if (commandStack != null) {
 			commandStack.undo();
 		} else {
 			command.undo();
 		}
+		return command;
 	}
 
 	@Override
-	protected Change createUndoChange() {
-		return new CommandRedoChange<>(getName(), getElementURI(), getElementClass(), getCommand(), getEditor(),
-				getLibraryElement());
+	protected LibraryElement acquireLibraryElement(final boolean editable) {
+		return libraryElement;
+	}
+
+	@Override
+	protected Change createUndoChange(final Command command, final LibraryElement libraryElement) {
+		return new CommandRedoChange<>(getName(), getElementURI(), getElementClass(), command, libraryElement);
 	}
 }
