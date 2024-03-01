@@ -41,7 +41,11 @@ public class AddDeleteReorderToolbarWidget extends AddDeleteReorderListWidget {
 
 	public void dispose() {
 		if (toolBarManager != null) {
+			final IMenuService menuService = PlatformUI.getWorkbench().getService(IMenuService.class);
+			menuService.releaseContributions(toolBarManager);
 			toolBarManager.dispose();
+			toolBarManager.removeAll();
+			toolBarManager = null;
 		}
 	}
 }
