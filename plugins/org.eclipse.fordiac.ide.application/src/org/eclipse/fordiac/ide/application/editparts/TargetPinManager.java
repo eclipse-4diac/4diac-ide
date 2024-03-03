@@ -42,7 +42,7 @@ public class TargetPinManager {
 		// add any missing entries
 		final FBNetwork parentNW = getModel().getFBNetworkElement().getFbNetwork();
 		pins.forEach(pin -> targetPinChildren.computeIfAbsent(pin,
-				newEntry -> TargetInterfaceElement.createFor(newEntry, parentNW)));
+				newEntry -> TargetInterfaceElement.createFor(getModel(), newEntry, parentNW)));
 		return targetPinChildren.values().stream().sorted().toList();
 	}
 

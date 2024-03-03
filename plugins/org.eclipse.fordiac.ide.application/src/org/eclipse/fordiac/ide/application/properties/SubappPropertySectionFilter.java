@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.InstanceComment;
 import org.eclipse.fordiac.ide.application.editparts.InstanceName;
+import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
@@ -32,19 +33,24 @@ public class SubappPropertySectionFilter implements IFilter {
 			candidate = editPart.getModel();
 		}
 
-		if (element instanceof final FBNetwork fbNetwork) {
+		if (candidate instanceof final FBNetwork fbNetwork) {
 			candidate = fbNetwork.eContainer();
 		}
 
-		if (element instanceof final InstanceComment instanceComment) {
+		if (candidate instanceof final InstanceComment instanceComment) {
 			candidate = instanceComment.getRefElement();
 		}
 
-		if (element instanceof final InstanceName instanceName) {
+		if (candidate instanceof final InstanceName instanceName) {
 			candidate = instanceName.getRefElement();
 		}
 
 		if (candidate instanceof final SubApp subapp) {
+			return subapp;
+		}
+
+		if (candidate instanceof final TargetInterfaceElement targetIE
+				&& targetIE.getHost().eContainer().eContainer() instanceof final SubApp subapp) {
 			return subapp;
 		}
 

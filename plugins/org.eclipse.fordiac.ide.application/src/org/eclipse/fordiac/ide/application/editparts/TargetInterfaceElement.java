@@ -19,21 +19,28 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class TargetInterfaceElement implements Comparable<TargetInterfaceElement> {
 	private final IInterfaceElement refElement;
+	private final IInterfaceElement host;
 
-	public static TargetInterfaceElement createFor(final IInterfaceElement refElement, final FBNetwork parentNW) {
+	public static TargetInterfaceElement createFor(final IInterfaceElement host, final IInterfaceElement refElement,
+			final FBNetwork parentNW) {
 		if (refElement.getFBNetworkElement() == null || (refElement.getFBNetworkElement() instanceof final SubApp subapp
 				&& subapp.getSubAppNetwork() == parentNW)) {
-			return new SubapTargetInterfaceElement(refElement);
+			return new SubapTargetInterfaceElement(host, refElement);
 		}
-		return new TargetInterfaceElement(refElement);
+		return new TargetInterfaceElement(host, refElement);
 	}
 
-	private TargetInterfaceElement(final IInterfaceElement refElement) {
+	private TargetInterfaceElement(final IInterfaceElement host, final IInterfaceElement refElement) {
+		this.host = host;
 		this.refElement = refElement;
 	}
 
 	public IInterfaceElement getRefElement() {
 		return refElement;
+	}
+
+	public IInterfaceElement getHost() {
+		return host;
 	}
 
 	public String getRefPinFullName() {
@@ -61,8 +68,8 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 	}
 
 	public static class SubapTargetInterfaceElement extends TargetInterfaceElement {
-		private SubapTargetInterfaceElement(final IInterfaceElement refElement) {
-			super(refElement);
+		private SubapTargetInterfaceElement(final IInterfaceElement host, final IInterfaceElement refElement) {
+			super(host, refElement);
 		}
 
 		@Override
