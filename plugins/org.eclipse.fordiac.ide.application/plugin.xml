@@ -492,6 +492,11 @@
           id="org.eclipse.fordiac.ide.application.commands.convertToSubapp"
           name="Convert Group to Untyped Subapp">
     </command>
+	<command
+          categoryId="org.eclipse.fordiac.ide.commands.category"
+          id="org.eclipse.fordiac.ide.application.commands.aggressiveConDelete"
+          name="Aggressive Connection Delete">
+    </command>
 
   </extension>
   
@@ -753,6 +758,17 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.TrimHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.trim">
     </handler>
+    <handler class="org.eclipse.fordiac.ide.application.handlers.AggressiveDeleteConnection"
+             commandId="org.eclipse.fordiac.ide.application.commands.aggressiveConDelete">
+      <activeWhen>
+        <with variable="selection">
+          <count value="1" />
+          <iterate operator="and" ifEmpty="false">
+              <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+          </iterate>
+        </with>
+      </activeWhen>
+    </handler>
   </extension>
   <extension point="org.eclipse.ui.bindings">
     <key commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
@@ -811,6 +827,12 @@
           contextId="org.eclipse.ui.contexts.window"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
           sequence="M1+M2+F">
+    </key>
+    <key
+          commandId="org.eclipse.fordiac.ide.application.commands.aggressiveConDelete"
+          contextId="org.eclipse.ui.contexts.window"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M2+DEL">
     </key>
   </extension>
   <extension point="org.eclipse.ui.menus">

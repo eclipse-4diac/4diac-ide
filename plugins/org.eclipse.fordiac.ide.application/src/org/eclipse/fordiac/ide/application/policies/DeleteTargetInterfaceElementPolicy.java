@@ -31,7 +31,7 @@ public class DeleteTargetInterfaceElementPolicy extends ComponentEditPolicy {
 			if (host.isIsInput()) {
 				return createInputSideDeleteCommands(host);
 			}
-			return createOutputSideDeleteCommand(targetIE);
+			return createOutputSideDeleteCommand(targetIE.getRefElement());
 		}
 		return null;
 	}
@@ -45,15 +45,15 @@ public class DeleteTargetInterfaceElementPolicy extends ComponentEditPolicy {
 					&& source.getOutputConnections().size() == 1) {
 				// The other end of the connection is an interface element of an expanded subapp
 				// and there is only one connection left. So we also need to delete that pin.
-				cmd = cmd.chain(new DeleteSubAppInterfaceElementCommand(source));
+				cmd = new DeleteSubAppInterfaceElementCommand(source).chain(cmd);
 			}
 		}
 
 		return cmd;
 	}
 
-	private static Command createOutputSideDeleteCommand(final TargetInterfaceElement targetIE) {
-		final Connection connection = targetIE.getRefElement().getInputConnections().get(0);
+	public static Command createOutputSideDeleteCommand(final IInterfaceElement targetIE) {
+		final Connection connection = targetIE.getInputConnections().get(0);
 
 		if (connection.getSource().getOutputConnections().size() == 1) {
 			// we are the last connection to this pin remove all
