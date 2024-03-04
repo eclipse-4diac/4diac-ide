@@ -12,18 +12,30 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.xtext.ide.serializer.IEmfResourceChange;
 import org.eclipse.xtext.ide.serializer.impl.EObjectDescriptionDeltaProvider.Deltas;
 import org.eclipse.xtext.ide.serializer.impl.RelatedXtextResourceUpdater;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.util.IAcceptor;
 
+import com.google.inject.Inject;
+
 @SuppressWarnings("restriction")
 public class STCoreRelatedResourceUpdater extends RelatedXtextResourceUpdater {
 
+	@Inject
+	private STCoreReferenceUpdater referenceUpdater;
+
 	@Override
 	public void applyChange(final Deltas deltas, final IAcceptor<IEmfResourceChange> changeAcceptor) {
-		if (getResourceSet().getResource(getResource().getUri(), true) instanceof XtextResource) {
+		final Resource resource = getResourceSet().getResource(getResource().getUri(), true);
+		if (resource instanceof final LibraryElementXtextResource libResource) {
+			referenceUpdater.updateImports(deltas, libResource.getInternalLibraryElement(),
+					(imp, value) -> changeAcceptor.accept(new ImportedNamespaceChange(imp, value)));
+		}
+		if (resource instanceof XtextResource) {
 			super.applyChange(deltas, changeAcceptor);
 		}
 	}

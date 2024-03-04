@@ -87,6 +87,8 @@ public final class Messages extends NLS {
 	public static String DirsWithUnzippedTypeLibs;
 	public static String ExtractedLibraryImportWizard;
 	public static String FBTypeComposedAdapterFactory_FBTypecomposedAdapterFactoryShouldNotBeInsantiated;
+	public static String ImportChange_ImportedNamespaceChanged;
+
 	public static String ImportExtractedFiles;
 	public static String ImportFailed;
 	public static String ImportFailedOnLinkCreation;

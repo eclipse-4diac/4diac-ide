@@ -21,12 +21,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.AttributeValueChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ImportChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.InitialValueChange;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
@@ -100,6 +102,11 @@ public class STCoreChangeConverter extends ChangeConverter {
 	protected void _handleReplacements(final IEmfResourceChange change) {
 		// ignore pure-EMF changes
 		// those are handled via a separate participant
+		if (change instanceof final ImportedNamespaceChange importedNamespaceChange) {
+			final Import imp = importedNamespaceChange.getImport();
+			addChange(new ImportChange(getSourceElementName(imp), LibraryElementXtextResource.getExternalURI(imp),
+					importedNamespaceChange.getImportedNamespace()));
+		}
 	}
 
 	@Override
