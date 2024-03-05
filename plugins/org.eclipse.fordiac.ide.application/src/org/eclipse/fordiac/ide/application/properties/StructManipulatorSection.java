@@ -21,6 +21,7 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.AbstractStructManipulatorEditPart;
 import org.eclipse.fordiac.ide.application.editparts.StructInterfaceEditPart;
@@ -31,9 +32,13 @@ import org.eclipse.fordiac.ide.model.CheckableStructTree;
 import org.eclipse.fordiac.ide.model.StructTreeContentProvider;
 import org.eclipse.fordiac.ide.model.StructTreeLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.nat.StructuredTypeSelectionTreeContentProvider;
@@ -117,6 +122,17 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 	protected void handleStructSelectionChanged(final String newStructName) {
 		if (null != getType() && newStructSelected(newStructName)) {
+			final StructuredType packageStruct = ImportHelper
+					.resolveImport(PackageNameHelper.extractPlainTypeName(newStructName), getType(), name -> {
+						final StructuredType temp = getDataTypeLib().getStructuredType(name);
+						return GenericTypes.isAnyType(temp) ? null : temp;
+					}, name -> null);
+
+			if (packageStruct == null
+					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement) {
+				commandStack.execute(new AddNewImportCommand(libraryElement, newStructName));
+			}
+
 			final StructuredType newStruct = getDataTypeLib().getStructuredType(newStructName);
 			final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
 			commandStack.execute(cmd);
