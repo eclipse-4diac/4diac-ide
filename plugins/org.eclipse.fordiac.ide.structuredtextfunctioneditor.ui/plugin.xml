@@ -573,4 +573,10 @@
        </keywordReference>
     </page>
  </extension>
+ <extension
+       point="org.eclipse.xtext.ui.resourceRelocationStrategy">
+    <strategy
+          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionResourceRelocationStrategy">
+    </strategy>
+ </extension>
 </plugin>
