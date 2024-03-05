@@ -26,7 +26,6 @@ package org.eclipse.fordiac.ide.systemmanagement;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -46,7 +45,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
@@ -105,7 +103,7 @@ public enum SystemManager {
 
 	@SuppressWarnings("static-method")
 	public IProject createNew4diacProject(final String projectName, final IPath location,
-			final boolean importDefaultTypeLibrary, final IProgressMonitor monitor) throws CoreException {
+			final Map<String, URI> includedLibraries, final IProgressMonitor monitor) throws CoreException {
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 		final IProject project = root.getProject(projectName);
@@ -128,14 +126,9 @@ public enum SystemManager {
 		project.open(monitor);
 
 		// configure type lib
-		if (importDefaultTypeLibrary) {
-			final Map<Manifest, URI> libs = SystemPaletteManagement.getStandardLibraries(project);
-			final Map<String, URI> includes = new HashMap<>();
-			libs.forEach((key, value) -> {
-				includes.put(key.getProduct().getSymbolicName(), value);
-			});
-			SystemPaletteManagement.linkToolTypeLibsToDestination(includes, project.getFolder(TYPE_LIB_FOLDER_NAME));
-		}
+		SystemPaletteManagement.linkToolTypeLibsToDestination(includedLibraries,
+				project.getFolder(TYPE_LIB_FOLDER_NAME));
+
 		TypeLibraryManager.INSTANCE.getTypeLibrary(project); // insert the project into the project list
 		return project;
 	}

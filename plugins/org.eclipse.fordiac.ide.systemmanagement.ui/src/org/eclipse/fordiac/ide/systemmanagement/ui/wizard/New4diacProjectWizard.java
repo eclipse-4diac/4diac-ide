@@ -41,8 +41,9 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
  */
 public class New4diacProjectWizard extends Wizard implements INewWizard {
 
-	/** The page. */
+	/** The pages. */
 	private New4diacProjectPage page;
+	private New4diacProjectLibraryPage libPage;
 
 	/**
 	 * Instantiates a new new system wizard.
@@ -62,7 +63,12 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 		page.setTitle(Messages.New4diacProjectWizard_WizardName);
 		page.setDescription(Messages.New4diacProjectWizard_WizardDesc);
 
+		libPage = new New4diacProjectLibraryPage(Messages.New4diacProjectWizard_WizardName);
+		libPage.setTitle(Messages.New4diacProjectWizard_WizardName);
+		libPage.setDescription(Messages.New4diacProjectWizard_WizardDesc);
+
 		addPage(page);
+		addPage(libPage);
 	}
 
 	/*
@@ -84,7 +90,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 			FordiacLogHelper.logError(e.getMessage(), e);
 			return false;
 		} catch (final InterruptedException x) {
-			Thread.currentThread().interrupt();  // mark interruption
+			Thread.currentThread().interrupt(); // mark interruption
 			return false;
 		}
 		// everything worked fine
@@ -100,7 +106,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 		try {
 
 			final IProject newProject = SystemManager.INSTANCE.createNew4diacProject(page.getProjectName(),
-					page.getLocationPath(), page.importDefaultTypeLibrary(), monitor);
+					page.getLocationPath(), libPage.getChosenLibraries(), monitor);
 			final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(newProject,
 					page.getInitialSystemName(), monitor);
 			TypeManagementPreferencesHelper.setupVersionInfo(system);

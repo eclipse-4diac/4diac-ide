@@ -56,13 +56,11 @@ public final class SystemPaletteManagement {
 			libs.forEach((name, loc) -> {
 				final IFolder link = destination.getFolder(new Path(name));
 
-				// if (ResourcesPlugin.getWorkspace().validateLinkLocation(link, loc).isOK()) {
 				try {
 					link.createLink(loc, IResource.NONE, monitor);
 				} catch (final CoreException e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
-				// }
 			});
 
 		} catch (final Exception e) {
