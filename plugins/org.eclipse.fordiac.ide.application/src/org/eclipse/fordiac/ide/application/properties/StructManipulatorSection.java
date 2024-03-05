@@ -264,7 +264,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 	public void initTree(final StructManipulator manipulator, final TreeViewer viewer) {
 		final StructuredType struct = manipulator.getTypeEntry().getTypeLibrary().getDataTypeLibrary()
-				.getStructuredType(manipulator.getStructType().getName());
+				.getStructuredType(PackageNameHelper.getFullTypeName(manipulator.getStructType()));
 
 		final CheckableStructTree tree;
 		if (viewer != null) {
