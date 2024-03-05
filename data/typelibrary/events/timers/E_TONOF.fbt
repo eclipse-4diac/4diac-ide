@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_TONOF" Comment="standard timer function block (on/off-delay timing)">
+	<Identification Standard="61499-2" Classification="standard timer function block">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Hoepfinger" Date="2024-03-04">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+				<With Var="PT_ON"/>
+				<With Var="PT_OFF"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="Q"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="BOOL" Comment="Input"/>
+			<VarDeclaration Name="PT_ON" Type="TIME" Comment="Process time ON Delay"/>
+			<VarDeclaration Name="PT_OFF" Type="TIME" Comment="Process time OFF Delay"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="Output"/>
+		</OutputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="E_SWITCH" Type="E_SWITCH" Comment="" x="-846.6666666666667" y="-986.6666666666667">
+		</FB>
+		<FB Name="E_DELAY_ON" Type="E_DELAY" Comment="" x="353.33333333333337" y="-233.33333333333334">
+		</FB>
+		<FB Name="E_RS" Type="E_RS" Comment="" x="1506.6666666666667" y="-986.6666666666667">
+		</FB>
+		<FB Name="E_DELAY_OFF" Type="E_DELAY" Comment="" x="353.33333333333337" y="-986.6666666666667">
+		</FB>
+		<EventConnections>
+			<Connection Source="REQ" Destination="E_SWITCH.EI" Comment="" dx1="286.6666666666667"/>
+			<Connection Source="E_SWITCH.EO1" Destination="E_DELAY_ON.START" Comment="" dx1="360.0"/>
+			<Connection Source="E_SWITCH.EO0" Destination="E_DELAY_ON.STOP" Comment="" dx1="246.66666666666669"/>
+			<Connection Source="E_DELAY_ON.EO" Destination="E_RS.S" Comment="" dx1="253.33333333333334"/>
+			<Connection Source="E_RS.EO" Destination="CNF" Comment="" dx1="966.6666666666667"/>
+			<Connection Source="E_DELAY_OFF.EO" Destination="E_RS.R" Comment=""/>
+			<Connection Source="E_SWITCH.EO0" Destination="E_DELAY_OFF.START" Comment=""/>
+			<Connection Source="E_SWITCH.EO1" Destination="E_DELAY_OFF.STOP" Comment=""/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="IN" Destination="E_SWITCH.G" Comment="" dx1="253.33333333333334"/>
+			<Connection Source="PT_ON" Destination="E_DELAY_ON.DT" Comment="" dx1="186.66666666666669"/>
+			<Connection Source="E_RS.Q" Destination="Q" Comment="" dx1="1000.0"/>
+			<Connection Source="PT_OFF" Destination="E_DELAY_OFF.DT" Comment="" dx1="220.0" dx2="480.0" dy="333.33333333333337"/>
+		</DataConnections>
+	</FBNetwork>
+</FBType>
