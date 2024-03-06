@@ -35,7 +35,7 @@ public class ChangeFbTypeCommand extends Command implements ScopedCommand {
 	private final FBTypeEntry newType;
 	private final CompoundCommand additionalCommands = new CompoundCommand();
 
-	protected ChangeFbTypeCommand(final FB fb, final FBTypeEntry newType) {
+	public ChangeFbTypeCommand(final FB fb, final FBTypeEntry newType) {
 		this.fb = Objects.requireNonNull(fb);
 		this.newType = Objects.requireNonNull(newType);
 	}

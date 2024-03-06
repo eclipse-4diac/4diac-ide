@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
-import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.ui.refactoring.ChangePreviewViewerInput;
 import org.eclipse.ltk.ui.refactoring.IChangePreviewViewer;
 import org.eclipse.swt.SWT;
@@ -32,7 +31,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-public class DeleteStructChangeViewer implements IChangePreviewViewer {
+public class ChangeConfigurationViewer implements IChangePreviewViewer {
 	private Composite control;
 	private IFordiacPreviewChange change;
 
@@ -45,11 +44,6 @@ public class DeleteStructChangeViewer implements IChangePreviewViewer {
 		control.setLayout(new FillLayout());
 
 		table = new Table(control, SWT.CHECK | SWT.BORDER);
-		for (final ChangeState s : ChangeState.values()) {
-			final TableItem ti = new TableItem(table, SWT.NONE);
-			ti.setText(s.toString());
-			choices.put(ti, s);
-		}
 
 		table.setSize(100, 100);
 
@@ -60,17 +54,15 @@ public class DeleteStructChangeViewer implements IChangePreviewViewer {
 				if (e.detail == SWT.CHECK) {
 					final TableItem item = (TableItem) e.item;
 					final ChangeState cs = choices.get(item);
+					// do not allow de-selection of currently selected choice.
 					if (change.getState().contains(cs)) {
-						change.getState().clear();
-						item.setChecked(false);
+						item.setChecked(true);
 						return;
 					}
 					change.addState(cs);
 					change.getState().removeIf(state -> !state.equals(cs));
-					choices.keySet()
-					        .stream()
-					        .filter(anyItem -> !anyItem.equals(item))
-					        .forEach(otherItem -> otherItem.setChecked(false));
+					choices.keySet().stream().filter(anyItem -> !anyItem.equals(item))
+							.forEach(otherItem -> otherItem.setChecked(false));
 				}
 			}
 		});
@@ -84,16 +76,32 @@ public class DeleteStructChangeViewer implements IChangePreviewViewer {
 
 	@Override
 	public void setInput(final ChangePreviewViewerInput input) {
-		final Change change = input.getChange();
-		if (change instanceof final IFordiacPreviewChange deleteChange) {
-			choices.keySet().stream().forEach(i -> i.setChecked(false));
-			this.change = deleteChange;
-			// initialize UI from change state
-			choices.entrySet()
-			        .stream()
-			        .filter(entry -> deleteChange.getState().contains(entry.getValue()))
-			        .forEach(entry -> entry.getKey().setChecked(true));
+		if (choices.isEmpty()) {
+			initializeChoices(input);
 		}
+		if (input.getChange() instanceof final IFordiacPreviewChange deleteChange) {
+			setSelection(deleteChange);
+		}
+	}
+
+	private void setSelection(final IFordiacPreviewChange delChange) {
+		choices.keySet().stream().forEach(i -> i.setChecked(false));
+		change = delChange;
+
+		// initialize UI from change state
+		choices.entrySet().stream().filter(entry -> delChange.getState().contains(entry.getValue()))
+				.forEach(entry -> entry.getKey().setChecked(true));
+	}
+
+	private void initializeChoices(final ChangePreviewViewerInput input) {
+		if (input.getChange() instanceof final IFordiacPreviewChange previewChange) {
+			previewChange.getAllowedChoices().forEach(s -> {
+				final TableItem ti = new TableItem(table, SWT.NONE);
+				ti.setText(s.toString());
+				choices.put(ti, s);
+			});
+		}
+
 	}
 
 }

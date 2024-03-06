@@ -20,7 +20,8 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 public interface IFordiacPreviewChange {
 
 	public enum ChangeState {
-		DELETE(Messages.DeleteStructChange_DeleteChoice), CHANGE_TO_ANY(Messages.DeleteStructChange_ChangeToAnyStruct);
+		DELETE(Messages.PreviewChange_DeleteChoice), CHANGE_TO_ANY(Messages.PreviewChange_ChangeToAnyStruct),
+		REPLACE_WITH_MARKER(Messages.PreviewChange_ReplaceWithMarker);
 
 		private final String descriptor;
 
@@ -36,5 +37,9 @@ public interface IFordiacPreviewChange {
 
 	EnumSet<ChangeState> getState();
 
+	EnumSet<ChangeState> getAllowedChoices();
+
 	void addState(final ChangeState newState);
+
+	EnumSet<ChangeState> getDefaultSelection();
 }

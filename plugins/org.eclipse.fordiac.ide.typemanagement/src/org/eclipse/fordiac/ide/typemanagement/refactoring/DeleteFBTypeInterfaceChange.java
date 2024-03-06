@@ -44,6 +44,7 @@ public class DeleteFBTypeInterfaceChange extends CompositeChange implements IFor
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteFBTypeInterface, type.getName()));
 		this.type = type;
 		this.struct = struct;
+		this.state.addAll(getDefaultSelection());
 		if (!SafeStructDeletionChange.hasOpenEditor(type)) {
 			SafeFBTypeDeletionChange.addUpdateChanges(this, type, false);
 		}
@@ -90,5 +91,15 @@ public class DeleteFBTypeInterfaceChange extends CompositeChange implements IFor
 	@Override
 	public void addState(final ChangeState newState) {
 		state.add(newState);
+	}
+
+	@Override
+	public EnumSet<ChangeState> getAllowedChoices() {
+		return EnumSet.of(ChangeState.CHANGE_TO_ANY, ChangeState.DELETE);
+	}
+
+	@Override
+	public EnumSet<ChangeState> getDefaultSelection() {
+		return EnumSet.of(ChangeState.CHANGE_TO_ANY);
 	}
 }
