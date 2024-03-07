@@ -205,7 +205,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				&& !InternalAttributeDeclarations.isInternalAttribue(attribute.getAttributeDeclaration())) {
 			final DataType featureType = getActualType(attribute);
 			try {
-				new TypedValueConverter(featureType, true).toValue(value);
+				new TypedValueConverter(featureType, attribute.getAttributeDeclaration() != null).toValue(value);
 			} catch (final Exception e) {
 				typeUsageCollector.collectUsedTypes(validate(attribute, delta, issues, context));
 				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, attribute,
