@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -57,7 +58,11 @@ public class LibraryElementXtextResource extends LazyLinkingResource {
 	}
 
 	public LibraryElement getInternalLibraryElement() {
-		return getContents().stream().filter(LibraryElement.class::isInstance).map(LibraryElement.class::cast)
+		return findInternalLibraryElement(this);
+	}
+
+	protected static LibraryElement findInternalLibraryElement(final Resource resource) {
+		return resource.getContents().stream().filter(LibraryElement.class::isInstance).map(LibraryElement.class::cast)
 				.findFirst().orElse(null);
 	}
 

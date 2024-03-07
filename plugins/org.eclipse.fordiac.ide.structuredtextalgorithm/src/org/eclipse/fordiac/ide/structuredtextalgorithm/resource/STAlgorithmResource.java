@@ -15,6 +15,10 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.resource;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource;
 
@@ -42,5 +46,13 @@ public class STAlgorithmResource extends STCoreResource {
 
 	public static boolean isValidAdditionalUri(final URI uri) {
 		return uri.isPlatformResource() && isValidAdditionalFileExtension(uri.fileExtension());
+	}
+
+	@Override
+	protected boolean needsInternalLibraryElement(final LibraryElement libraryElement, final EObject sourceElement) {
+		// we also need an internal library element for variables in a base FB type
+		// for proper linking (not necessary for attributes)
+		return super.needsInternalLibraryElement(libraryElement, sourceElement)
+				|| (libraryElement instanceof BaseFBType && sourceElement.eContainer() instanceof VarDeclaration);
 	}
 }

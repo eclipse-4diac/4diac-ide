@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -77,36 +78,56 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 			}
 		} else { // inputStream contains full XML for library element
 			// chain load library element from inputStream
-			final LibraryElement libraryElement;
-			try {
-				final FordiacTypeResource typeResource = new FordiacTypeResource(uri);
-				typeResource.load(inputStream, Collections.emptyMap());
-				getErrors().addAll(typeResource.getErrors());
-				getWarnings().addAll(typeResource.getWarnings());
-				if (typeResource.getContents().isEmpty()) {
-					return;
-				}
-				libraryElement = (LibraryElement) typeResource.getContents().get(0);
-			} catch (final Exception e) {
-				handleTypeLoadException(e);
+			final LibraryElement libraryElement = loadLibraryElement(inputStream);
+			if (libraryElement == null) {
 				return;
 			}
 			// then load from combined source
 			final String text = getSource(libraryElement);
 			super.doLoad(new LazyStringInputStream(text, getEncoding()), actualOptions);
-			// and directly add loaded library element to contents
-			// (move from typeResource instead of copying)
-			if (contents != null && !contents.isEmpty()) {
-				contents.add(libraryElement);
-				contents.addAll(EcoreUtil.copyAll(getAdditionalContent()));
-				relink();
+			// and add library element to contents
+			addInternalLibraryElement(libraryElement);
+		}
+	}
+
+	protected LibraryElement loadLibraryElement(final InputStream inputStream) {
+		try {
+			final Resource typeResource;
+			if (uri.hasQuery() && resourceSet != null) {
+				typeResource = resourceSet.getResource(uri.trimQuery(), true);
+			} else {
+				typeResource = new FordiacTypeResource(uri);
+				typeResource.load(inputStream, Collections.emptyMap());
 			}
+			getErrors().addAll(typeResource.getErrors());
+			getWarnings().addAll(typeResource.getWarnings());
+			return findInternalLibraryElement(typeResource);
+		} catch (final Exception e) {
+			handleTypeLoadException(e);
+		}
+		return null;
+	}
+
+	protected void addInternalLibraryElement(final LibraryElement libraryElement) {
+		if (contents != null && !contents.isEmpty()) {
+			if (libraryElement.eResource().getResourceSet() != null) {
+				// copy library element if we loaded from the resource set
+				contents.add(copyLibraryElement(libraryElement, !isIncludeInternalLibraryElement()));
+			} else {
+				// or directly add loaded library element to contents
+				// (move from typeResource instead of copying)
+				// if we chain loaded using a temporary resource
+				contents.add(libraryElement);
+			}
+			contents.addAll(EcoreUtil.copyAll(getAdditionalContent()));
+			relink();
 		}
 	}
 
 	protected String getSource(final LibraryElement libraryElement) throws IOException {
 		if (uri.hasQuery()) {
-			final EObject sourceElement = libraryElement.eResource().getEObject(uri.query());
+			final EObject sourceElement = getSourceElement(libraryElement);
+			setIncludeInternalLibraryElement(needsInternalLibraryElement(libraryElement, sourceElement));
 			if (sourceElement instanceof final Attribute attribute) {
 				setEntryPoint(grammarAccess.getSTInitializerExpressionSourceRule());
 				setExpectedType(STCoreUtil.getFeatureType(attribute));
@@ -126,7 +147,16 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 			throw new IOException("Invalid query in ST resource: " + uri.query()); //$NON-NLS-1$
 		}
 		setEntryPoint(null);
+		setIncludeInternalLibraryElement(needsInternalLibraryElement(libraryElement, libraryElement));
 		return partitioner.combine(libraryElement);
+	}
+
+	@SuppressWarnings("static-method") // subclasses may override
+	protected boolean needsInternalLibraryElement(final LibraryElement libraryElement, final EObject sourceElement) {
+		// we need an internal library element only if it is the source element itself
+		// (meaning there is no query) for chain loading of resources with a query and
+		// also for proper validation during build
+		return sourceElement == libraryElement;
 	}
 
 	@Override
@@ -158,7 +188,7 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 			final ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			super.doSave(stream, Collections.emptyMap());
 			final String text = new String(stream.toByteArray(), getEncoding());
-			final EObject sourceElement = getInternalSourceElement();
+			final EObject sourceElement = getSourceElement(libraryElement);
 			if (sourceElement instanceof final Attribute attribute) {
 				attribute.setValue(text);
 			} else if (sourceElement instanceof final ArraySize arraySize) {
@@ -186,7 +216,7 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 	}
 
 	public void updateExpectedType() {
-		final EObject sourceElement = getInternalSourceElement();
+		final EObject sourceElement = getSourceElement();
 		if (sourceElement instanceof final Attribute attribute) {
 			setExpectedType(STCoreUtil.getFeatureType(attribute));
 		} else if (sourceElement instanceof final Value value
@@ -214,6 +244,31 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 			defaultLoadOptions = new HashMap<>();
 		}
 		return defaultLoadOptions;
+	}
+
+	public EObject getSourceElement() {
+		// try source element from current resource
+		final EObject sourceElement = getInternalSourceElement();
+		if (sourceElement == null && uri.hasQuery() && resourceSet != null) {
+			// OR attempt source element from resource set if present
+			// (e.g., if we only have a shallow internal library element)
+			return getSourceElement(findInternalLibraryElement(resourceSet.getResource(uri.trimQuery(), true)));
+		}
+		return sourceElement;
+	}
+
+	protected EObject getSourceElement(final LibraryElement libraryElement) {
+		if (libraryElement != null && uri.hasQuery()) {
+			final Resource resource = libraryElement.eResource();
+			final String fragment;
+			if (resource instanceof STCoreResource) {
+				fragment = toInternalFragment(uri.query());
+			} else {
+				fragment = toExternalFragment(uri.query());
+			}
+			return resource.getEObject(fragment);
+		}
+		return libraryElement;
 	}
 
 	public EObject getInternalSourceElement() {

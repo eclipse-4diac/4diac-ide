@@ -132,7 +132,7 @@ public class STCoreChangeConverter extends ChangeConverter {
 
 	protected void handleReplacements(final ITextDocumentChange change, final TextEdit textEdit) {
 		if (change.getResource() instanceof final STCoreResource coreResource && coreResource.getURI().hasQuery()) {
-			final EObject sourceElement = coreResource.getInternalSourceElement();
+			final EObject sourceElement = coreResource.getSourceElement();
 			final String sourceElementName = getSourceElementName(sourceElement);
 			if (sourceElement instanceof final Attribute attribute) {
 				addChange(new AttributeValueChange(sourceElementName,
