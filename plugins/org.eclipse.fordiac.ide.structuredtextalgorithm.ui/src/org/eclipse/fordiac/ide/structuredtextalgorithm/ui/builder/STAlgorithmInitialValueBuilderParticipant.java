@@ -144,7 +144,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
 		final List<Issue> issues = new ArrayList<>();
 		if (varDeclaration.isArray()) {
-			typeUsageCollector.collectUsedTypes(validate(varDeclaration.getArraySize(), delta, issues, context));
+			validate(varDeclaration.getArraySize(), delta, typeUsageCollector, issues, context);
 			issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getArraySize()));
 		} else {
 			typeUsageCollector.addUsedType(varDeclaration.getType());
@@ -170,7 +170,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			try {
 				new TypedValueConverter((DataType) featureType, true).toValue(value);
 			} catch (final Exception e) {
-				typeUsageCollector.collectUsedTypes(validate(varDeclaration.getValue(), delta, issues, context));
+				validate(varDeclaration.getValue(), delta, typeUsageCollector, issues, context);
 				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getValue()));
 			}
 		}
@@ -207,7 +207,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			try {
 				new TypedValueConverter(featureType, attribute.getAttributeDeclaration() != null).toValue(value);
 			} catch (final Exception e) {
-				typeUsageCollector.collectUsedTypes(validate(attribute, delta, issues, context));
+				validate(attribute, delta, typeUsageCollector, issues, context);
 				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, attribute,
 						LibraryElementPackage.Literals.ATTRIBUTE__VALUE));
 			}
@@ -242,8 +242,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		}
 	}
 
-	protected static EObject validate(final EObject element, final IResourceDescription.Delta delta,
-			final List<Issue> issues, final IBuildContext context) {
+	protected static void validate(final EObject element, final IResourceDescription.Delta delta,
+			final STCoreTypeUsageCollector typeUsageCollector, final List<Issue> issues, final IBuildContext context) {
 		final String fragment = LibraryElementXtextResource
 				.toExternalFragment(element.eResource().getURIFragment(element));
 		final URI uri = delta.getUri().appendQuery(fragment);
@@ -253,7 +253,11 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final IResourceValidator validator = xtextResource.getResourceServiceProvider().getResourceValidator();
 			issues.addAll(validator.validate(xtextResource, CheckMode.FAST_ONLY, CancelIndicator.NullImpl));
 		}
-		return resource.getContents().isEmpty() ? null : resource.getContents().get(0);
+		if (!resource.getContents().isEmpty()) {
+			typeUsageCollector.collectUsedTypes(resource.getContents().get(0));
+		}
+		resource.unload();
+		context.getResourceSet().getResources().remove(resource);
 	}
 
 	protected void createMarkers(final IFile file, final String type, final List<Issue> issues,
