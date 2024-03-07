@@ -50,7 +50,13 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.handlers.IHandlerService;
 
 public abstract class FollowConnectionHandler extends AbstractHandler {
 
@@ -140,6 +146,12 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 						dialogArea.getShell().removeListener(SWT.Close, closeListener);
 						dialogArea.getShell().close();
 					}
+					if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_RIGHT) {
+						// todo call handler
+						invokeFollowRightConnectionHandler();
+						dialogArea.getShell().removeListener(SWT.Close, closeListener);
+						dialogArea.getShell().close();
+					}
 				}
 			});
 
@@ -150,6 +162,22 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 			listViewer.setSelection(new StructuredSelection(listViewer.getElementAt(0)), true);
 			return dialogArea;
+		}
+
+		private void invokeFollowRightConnectionHandler() {
+			final IWorkbench wb = PlatformUI.getWorkbench();
+			final IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
+			final IWorkbenchPage page = window.getActivePage();
+
+			final IWorkbenchPart active = page.getActivePart();
+			final IHandlerService handlerService = active.getSite().getService(IHandlerService.class);
+
+			try {
+				handlerService.executeCommand("org.eclipse.fordiac.ide.application.commands.followRightConnection", //$NON-NLS-1$
+						null);
+			} catch (final Exception e) {
+				throw new RuntimeException("followRightConnection.command not found");
+			}
 		}
 
 	}
