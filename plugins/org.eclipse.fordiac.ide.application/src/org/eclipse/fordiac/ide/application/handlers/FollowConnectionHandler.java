@@ -129,6 +129,11 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 					if (e.character == SWT.CR) {
 						dialogArea.getShell().close();
 					}
+
+					if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_LEFT)) {
+						HandlerHelper.selectElement(originPin, viewer);
+						dialogArea.getShell().close();
+					}
 				}
 			});
 
