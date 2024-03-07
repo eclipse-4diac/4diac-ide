@@ -17,6 +17,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.text.MessageFormat
 import java.util.List
+import java.util.regex.Pattern
 import org.eclipse.emf.ecore.EClassifier
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.data.AnyBitType
@@ -682,33 +683,42 @@ final class STCoreUtil {
 			clazz.isAncestor(object.eContainer)
 	}
 
-	def static boolean isSimpleInitialValue(VarDeclaration decl) {
-		switch(type : decl.type) {
+	def static boolean isSimpleInitialValue(VarDeclaration decl, boolean strict) {
+		switch (type : decl.type) {
 			case decl.value?.value.nullOrEmpty: true
-			case decl.array: false
-			AnyElementaryType: isSimpleValue(decl.value.value, type)
-			DirectlyDerivedType: isSimpleValue(decl.value.value, type.baseType)
+			case decl.array: isSimpleArrayValue(decl.value.value, strict)
+			AnyElementaryType: isSimpleValue(decl.value.value, type, strict)
+			DirectlyDerivedType: isSimpleValue(decl.value.value, type.baseType, strict)
 			default: false
 		}
 	}
 
-	def static boolean isSimpleAttributeValue(Attribute attr) {
-		switch(type : attr.type) {
-			AnyElementaryType: isSimpleValue(attr.value, type)
-			DirectlyDerivedType: isSimpleValue(attr.value, type.baseType)
+	def static boolean isSimpleAttributeValue(Attribute attr, boolean strict) {
+		switch (type : attr.type) {
+			AnyElementaryType: isSimpleValue(attr.value, type, strict)
+			DirectlyDerivedType: isSimpleValue(attr.value, type.baseType, strict)
 			default: false
 		}
 	}
 
-	def static boolean isSimpleValue(String value, DataType type) {
+	def static boolean isSimpleValue(String value, DataType type, boolean strict) {
 		if (value.nullOrEmpty)
 			true
 		else
 			try {
-				new TypedValueConverter(type, true).toValue(value)
+				new TypedValueConverter(type, strict).toValue(value)
 				true
 			} catch (Exception e) {
 				false
 			}
+	}
+
+	static final Pattern SIMPLE_ARRAY_PATTERN = Pattern.compile("[^a-zA-Z]*")
+
+	def static boolean isSimpleArrayValue(String value, boolean strict) {
+		if (value.nullOrEmpty)
+			true
+		else
+			!strict && SIMPLE_ARRAY_PATTERN.matcher(value).matches
 	}
 }

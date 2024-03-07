@@ -83,7 +83,7 @@ public class STAlgorithmResourceDescription extends DefaultResourceDescription {
 		if (fullTypeName != null && !fullTypeName.isEmpty()) {
 			result.add(nameConverter.toQualifiedName(fullTypeName).toLowerCase());
 		}
-		if (!STCoreUtil.isSimpleAttributeValue(attr)) {
+		if (!STCoreUtil.isSimpleAttributeValue(attr, false)) {
 			final STInitializerExpressionSource source = StructuredTextParseUtil.validate(attr.getValue(), getURI(),
 					STCoreUtil.getFeatureType(attr), EcoreUtil2.getContainerOfType(attr, LibraryElement.class), null,
 					null);
@@ -104,7 +104,7 @@ public class STAlgorithmResourceDescription extends DefaultResourceDescription {
 				result.addAll(getImportedNames(source.eResource()));
 			}
 		}
-		if (!STCoreUtil.isSimpleInitialValue(decl)) {
+		if (!STCoreUtil.isSimpleInitialValue(decl, false)) {
 			final STInitializerExpressionSource source = StructuredTextParseUtil.validate(decl.getValue().getValue(),
 					getURI(), STCoreUtil.getFeatureType(decl),
 					EcoreUtil2.getContainerOfType(decl, LibraryElement.class), null, null);

@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
+import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -106,16 +107,17 @@ public class STAlgorithmToBeBuiltComputerContribution implements IToBeBuiltCompu
 	protected static void updateAttribute(final ToBeBuilt toBeBuilt, final Attribute attribute) {
 		if (attribute.getType() instanceof AnyType
 				&& !InternalAttributeDeclarations.isInternalAttribue(attribute.getAttributeDeclaration())
-				&& !STCoreUtil.isSimpleAttributeValue(attribute)) {
+				&& !STCoreUtil.isSimpleAttributeValue(attribute, false)) {
 			updateElement(toBeBuilt, attribute);
 		}
 	}
 
 	protected static void updateVarDeclaration(final ToBeBuilt toBeBuilt, final VarDeclaration varDeclaration) {
-		if (varDeclaration.isArray()) {
+		if (varDeclaration.isArray()
+				&& !TypeDeclarationParser.isSimpleTypeDeclaration(varDeclaration.getArraySize().getValue())) {
 			updateElement(toBeBuilt, varDeclaration.getArraySize());
 		}
-		if (!STCoreUtil.isSimpleInitialValue(varDeclaration)) {
+		if (!STCoreUtil.isSimpleInitialValue(varDeclaration, false)) {
 			updateElement(toBeBuilt, varDeclaration.getValue());
 		}
 	}
