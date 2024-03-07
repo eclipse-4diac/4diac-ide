@@ -57,13 +57,15 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 		private final List<IInterfaceElement> opposites;
 		private final GraphicalViewer viewer;
+		private final IInterfaceElement originPin;
 
 		public OppositeSelectionDialog(final Shell parent, final List<IInterfaceElement> opposites,
-				final GraphicalViewer viewer) {
+				final GraphicalViewer viewer, final IInterfaceElement originPin) {
 			super(parent, INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false,
 					Messages.FBPaletteViewer_SelectConnectionEnd, null);
 			this.opposites = opposites;
 			this.viewer = viewer;
+			this.originPin = originPin;
 		}
 
 		@Override
@@ -208,10 +210,11 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	protected static void showOppositeSelectionDialog(final List<IInterfaceElement> opposites,
-			final ExecutionEvent event, final GraphicalViewer viewer) throws ExecutionException {
+			final ExecutionEvent event, final GraphicalViewer viewer, final IInterfaceElement originPin)
+			throws ExecutionException {
 
 		final OppositeSelectionDialog dialog = new OppositeSelectionDialog(HandlerUtil.getActiveShellChecked(event),
-				opposites, viewer);
+				opposites, viewer, originPin);
 		dialog.open();
 	}
 

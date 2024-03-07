@@ -56,7 +56,7 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 			if (opposites.size() == 1) {
 				HandlerHelper.selectElement(opposites.get(0), viewer);
 			} else {
-				showOppositeSelectionDialog(opposites, event, viewer);
+				showOppositeSelectionDialog(opposites, event, viewer, null);
 			}
 		}
 		return Status.OK_STATUS;
