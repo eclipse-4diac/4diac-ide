@@ -46,6 +46,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
@@ -95,6 +96,10 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		protected Control createDialogArea(final Composite parent) {
 
 			final Composite dialogArea = (Composite) super.createDialogArea(parent);
+
+			final Listener closeListener = event -> HandlerHelper.selectElement(originPin, viewer);
+			dialogArea.getShell().addListener(SWT.Close, closeListener);
+
 			final ListViewer listViewer = new ListViewer(dialogArea, SWT.SIMPLE);
 			listViewer.setContentProvider(new ArrayContentProvider());
 			listViewer.setLabelProvider(new LabelProvider() {
@@ -127,11 +132,12 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				@Override
 				public void keyPressed(final KeyEvent e) {
 					if (e.character == SWT.CR) {
+						dialogArea.getShell().removeListener(SWT.Close, closeListener);
 						dialogArea.getShell().close();
 					}
-
 					if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_LEFT)) {
 						HandlerHelper.selectElement(originPin, viewer);
+						dialogArea.getShell().removeListener(SWT.Close, closeListener);
 						dialogArea.getShell().close();
 					}
 				}
