@@ -55,9 +55,7 @@ public class CheckTypeLibrary extends Task {
 		// log Markers, only visible in console output
 		try {
 			final var markers = Arrays.asList(project.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE))
-					.stream().filter(m -> !SystemManager
-							.isSystemFile(workspace.getRoot().getFile(m.getResource().getLocation())))
-					.toList();
+					.stream().filter(m -> !SystemManager.isSystemFile(m.getResource().getLocation())).toList();
 
 			printMarkers(markers, this);
 

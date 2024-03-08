@@ -93,8 +93,10 @@ public enum SystemManager {
 	}
 
 	public static boolean isSystemFile(final Object entry) {
-		return ((entry instanceof final IFile file)
-				&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase((file).getFileExtension()));
+		return (entry instanceof final IPath path
+				&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase((path).getFileExtension()))
+				|| (entry instanceof final IFile file
+						&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase((file).getFileExtension()));
 	}
 
 	@SuppressWarnings("static-method")
