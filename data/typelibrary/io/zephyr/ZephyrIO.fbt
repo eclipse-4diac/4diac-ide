@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="ZephyrIO" Comment="Template for Modular IO with boards running Zephyr OS">
+	<Identification Standard="61499-2" Description="Copyright (c) 2024 KT Elektronik GmbH &#10;This program and the accompanying materials are made available &#10;under the terms of the Eclipse Public License 2.0 which is available &#10;at http://www.eclipse.org/legal/epl-2.0. &#10; &#10;SPDX-License-Identifier: EPL-2.0 &#10; &#10;Contributors: &#10;Dirk Kaar" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="Dirk Kaar" Date="2024-01-12">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Service Initialization">
+				<With Var="QI"/>
+				<With Var="UpdateInterval"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="UpdateInterval" Type="TIME" Comment="Update interval" InitialValue="T#40ms"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="STRING" Comment="Service Status"/>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Template for Modular IO with boards running Zephyr OS">
+	</Service>
+</FBType>
