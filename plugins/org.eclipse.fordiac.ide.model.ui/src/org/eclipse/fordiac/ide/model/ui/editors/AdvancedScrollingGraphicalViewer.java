@@ -59,8 +59,8 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 		// do not correct viewport for connections
 		if (!(part instanceof ConnectionEditPart)) {
 			super.reveal(part);
-			if (part instanceof GraphicalEditPart) {
-				centerPartPositionInViewport((GraphicalEditPart) part);
+			if (part instanceof final GraphicalEditPart graphicalEP) {
+				centerPartPositionInViewport(graphicalEP);
 			}
 		}
 	}
@@ -79,7 +79,7 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 		final int dx = currentCenter.x - partCenter.x;
 		final int dy = currentCenter.y - partCenter.y;
 
-		getFigureCanvas().scrollSmoothTo(getViewLocation().x - dx, getViewLocation().y - dy);
+		getFigureCanvas().scrollTo(getViewLocation().x - dx, getViewLocation().y - dy);
 	}
 
 	private Point getTranslatedPartCenter(final IFigure partFigure) {
@@ -118,7 +118,8 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 	 */
 	public void checkScrollPositionDuringDrag(final MouseEvent me) {
 		final org.eclipse.swt.graphics.Rectangle controlBounds = getControl().getBounds();
-		// mousecoordinates are given releativ to control origin, translate for correct handling
+		// mouse coordinates are given relative to control origin, translate for
+		// correct handling
 		final Point relativePos = new Point(me.x + controlBounds.x, me.y + controlBounds.y);
 		if (!controlBounds.contains(relativePos.x, relativePos.y)) {
 			final Point newLocation = getNewScrollPosition(relativePos);
