@@ -18,7 +18,7 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.systemmanagement.ui.messages"; //$NON-NLS-1$
 
@@ -54,11 +54,14 @@ public final class Messages extends NLS {
 	public static String New4diacProjectWizard_SystemNameNotValid;
 	public static String New4diacProjectWizard_DirectoryWithProjectNameAlreadyExistsInWorkspace;
 
+	public static String New4diacProjectWizard_Library_SelectAll;
+	public static String New4diacProjectWizard_Library_DeselectAll;
+	public static String New4diacProjectWizard_Library_Name;
+	public static String New4diacProjectWizard_Library_Version;
+	public static String New4diacProjectWizard_Library_Comment;
+	public static String New4diacProjectWizard_Library_SymbolicName;
+
 	public static String NewSystemWizardPage_CreateNewSystem;
-
-	/** The Palette management page_ labe l_ default palette. */
-	public static String PaletteManagementPage_LABEL_DefaultTypeLibrary;
-
 
 	static {
 		// initialize resource bundle

@@ -23,8 +23,6 @@ import java.util.List;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -40,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  */
 public final class StructManipulation {
 
-	public static final String STRUCT_ATTRIBUTE = "StructuredType"; //$NON-NLS-1$
 	public static final String CHILDREN_ATTRIBUTE = "VisibleChildren"; //$NON-NLS-1$
 	public static final String DEMUX_NAME = "STRUCT_DEMUX"; //$NON-NLS-1$
 	public static final String MUX_NAME = "STRUCT_MUX"; //$NON-NLS-1$
@@ -48,18 +45,7 @@ public final class StructManipulation {
 	public static void setStructTypeElementsAtInterface(final StructManipulator muxer,
 			final StructuredType newStructType) {
 		muxer.setStructType(newStructType);
-		configureAttributes(muxer);
 		setMemberVariablesAsPorts(muxer, newStructType);
-	}
-
-	private static void configureAttributes(final StructManipulator muxer) {
-		final StructuredType struct = muxer.getStructType();
-		if (null == struct) {
-			muxer.deleteAttribute(STRUCT_ATTRIBUTE);
-		} else {
-			muxer.setAttribute(STRUCT_ATTRIBUTE, ElementaryTypes.STRING, PackageNameHelper.getFullTypeName(struct),
-					null);
-		}
 	}
 
 	public static void setMemberVariablesAsPorts(final StructManipulator muxer, final StructuredType newStructType) {

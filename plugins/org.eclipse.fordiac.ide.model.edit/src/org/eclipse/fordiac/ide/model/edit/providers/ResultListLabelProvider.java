@@ -16,7 +16,7 @@
 package org.eclipse.fordiac.ide.model.edit.providers;
 
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -83,11 +83,12 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 		}
 		if (type instanceof SimpleFBType) {
 			return FordiacImage.ICON_SIMPLE_FB.getImage();
-		} else if (type instanceof CompositeFBType) {
+		}
+		if (type instanceof CompositeFBType) {
 			return FordiacImage.ICON_COMPOSITE_FB.getImage();
 		} else if (type instanceof StructuredType) {
 			return FordiacImage.ICON_DATA_TYPE.getImage();
-		} else if (type instanceof AdapterFBType) {
+		} else if (type instanceof AdapterType) {
 			return FordiacImage.ICON_ADAPTER_TYPE.getImage();
 		} else if (type instanceof FunctionFBType) {
 			return FordiacImage.ICON_FUNCTION.getImage();

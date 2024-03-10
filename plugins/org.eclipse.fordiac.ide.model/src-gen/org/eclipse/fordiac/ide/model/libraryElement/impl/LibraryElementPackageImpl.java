@@ -72,12 +72,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass adapterFBTypeEClass = null;
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass adapterTypeEClass = null;
 
 	/**
@@ -193,6 +187,20 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass configurableObjectEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass configurableFBEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass configurableMoveFBEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -865,35 +873,18 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EClass getAdapterFBType() {
-		return adapterFBTypeEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getAdapterType() {
 		return adapterTypeEClass;
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getAdapterType_AdapterFBType() {
-		return (EReference)adapterTypeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public EReference getAdapterType_PlugType() {
-		return (EReference)adapterTypeEClass.getEStructuralFeatures().get(1);
+		return (EReference)adapterTypeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1398,6 +1389,36 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EReference getConfigurableObject_Attributes() {
 		return (EReference)configurableObjectEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getConfigurableFB() {
+		return configurableFBEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getConfigurableMoveFB() {
+		return configurableMoveFBEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getConfigurableMoveFB_DataType() {
+		return (EReference)configurableMoveFBEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -3572,10 +3593,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		adapterFBEClass = createEClass(ADAPTER_FB);
 		createEReference(adapterFBEClass, ADAPTER_FB__ADAPTER_DECL);
 
-		adapterFBTypeEClass = createEClass(ADAPTER_FB_TYPE);
-
 		adapterTypeEClass = createEClass(ADAPTER_TYPE);
-		createEReference(adapterTypeEClass, ADAPTER_TYPE__ADAPTER_FB_TYPE);
 		createEReference(adapterTypeEClass, ADAPTER_TYPE__PLUG_TYPE);
 
 		algorithmEClass = createEClass(ALGORITHM);
@@ -3652,6 +3670,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		configurableObjectEClass = createEClass(CONFIGURABLE_OBJECT);
 		createEReference(configurableObjectEClass, CONFIGURABLE_OBJECT__ATTRIBUTES);
+
+		configurableFBEClass = createEClass(CONFIGURABLE_FB);
+
+		configurableMoveFBEClass = createEClass(CONFIGURABLE_MOVE_FB);
+		createEReference(configurableMoveFBEClass, CONFIGURABLE_MOVE_FB__DATA_TYPE);
 
 		connectionEClass = createEClass(CONNECTION);
 		createEAttribute(connectionEClass, CONNECTION__BROKEN_CONNECTION);
@@ -4006,8 +4029,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		adapterConnectionEClass.getESuperTypes().add(this.getConnection());
 		adapterDeclarationEClass.getESuperTypes().add(this.getIInterfaceElement());
 		adapterFBEClass.getESuperTypes().add(this.getFB());
-		adapterFBTypeEClass.getESuperTypes().add(this.getFBType());
 		adapterTypeEClass.getESuperTypes().add(theDataPackage.getDataType());
+		adapterTypeEClass.getESuperTypes().add(this.getFBType());
 		algorithmEClass.getESuperTypes().add(this.getICallable());
 		applicationEClass.getESuperTypes().add(this.getINamedElement());
 		applicationEClass.getESuperTypes().add(this.getConfigurableObject());
@@ -4022,6 +4045,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		communicationChannelEClass.getESuperTypes().add(this.getFB());
 		communicationMappingTargetEClass.getESuperTypes().add(this.getMappingTarget());
 		compositeFBTypeEClass.getESuperTypes().add(this.getFBType());
+		configurableFBEClass.getESuperTypes().add(this.getFB());
+		configurableMoveFBEClass.getESuperTypes().add(this.getConfigurableFB());
 		connectionEClass.getESuperTypes().add(this.getConfigurableObject());
 		connectionEClass.getESuperTypes().add(this.getHiddenElement());
 		dataConnectionEClass.getESuperTypes().add(this.getConnection());
@@ -4088,7 +4113,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		stFunctionBodyEClass.getESuperTypes().add(this.getTextFunctionBody());
 		stMethodEClass.getESuperTypes().add(this.getTextMethod());
 		subAppEClass.getESuperTypes().add(this.getFBNetworkElement());
-		structManipulatorEClass.getESuperTypes().add(this.getFB());
+		structManipulatorEClass.getESuperTypes().add(this.getConfigurableFB());
 		subAppTypeEClass.getESuperTypes().add(this.getCompositeFBType());
 		textAlgorithmEClass.getESuperTypes().add(this.getAlgorithm());
 		textFunctionEClass.getESuperTypes().add(this.getFunction());
@@ -4121,17 +4146,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(adapterFBEClass, theXMLTypePackage.getBoolean(), "isPlug", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(adapterFBTypeEClass, AdapterFBType.class, "AdapterFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-
-		addEOperation(adapterFBTypeEClass, this.getAdapterType(), "getAdapterType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
 		initEClass(adapterTypeEClass, AdapterType.class, "AdapterType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getAdapterType_AdapterFBType(), this.getAdapterFBType(), null, "adapterFBType", null, 0, 1, AdapterType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getAdapterType_PlugType(), this.getAdapterFBType(), null, "plugType", null, 0, 1, AdapterType.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-
-		addEOperation(adapterTypeEClass, this.getInterfaceList(), "getInterfaceList", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		addEOperation(adapterTypeEClass, this.getAdapterFBType(), "getSocketType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getAdapterType_PlugType(), this.getAdapterType(), null, "plugType", null, 0, 1, AdapterType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(algorithmEClass, Algorithm.class, "Algorithm", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
@@ -4265,6 +4281,11 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEParameter(op, theXMLTypePackage.getString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theXMLTypePackage.getString(), "comment", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		op = addEOperation(configurableObjectEClass, null, "setAttribute", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getAttributeDeclaration(), "attributeDeclaration", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getString(), "comment", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		op = addEOperation(configurableObjectEClass, this.getAttribute(), "getAttribute", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theXMLTypePackage.getString(), "attributeName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -4273,6 +4294,25 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		op = addEOperation(configurableObjectEClass, theXMLTypePackage.getBoolean(), "deleteAttribute", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theXMLTypePackage.getString(), "attributeName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(configurableFBEClass, ConfigurableFB.class, "ConfigurableFB", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		addEOperation(configurableFBEClass, null, "updateConfiguration", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(configurableFBEClass, null, "loadConfiguration", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getAttribute(), "config", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(configurableFBEClass, this.getAttribute(), "getConfigurationAsAttributes", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(configurableMoveFBEClass, ConfigurableMoveFB.class, "ConfigurableMoveFB", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getConfigurableMoveFB_DataType(), theDataPackage.getDataType(), null, "dataType", null, 0, 1, ConfigurableMoveFB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(configurableMoveFBEClass, null, "updateConfiguration", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(configurableMoveFBEClass, null, "loadConfiguration", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getAttribute(), "config", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(configurableMoveFBEClass, this.getAttribute(), "getConfigurationAsAttributes", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(connectionEClass, Connection.class, "Connection", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getConnection_BrokenConnection(), theXMLTypePackage.getBoolean(), "brokenConnection", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -4968,11 +5008,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(subAppEClass, theXMLTypePackage.getInt(), "getVisibleHeight", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(structManipulatorEClass, StructManipulator.class, "StructManipulator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEClass(structManipulatorEClass, StructManipulator.class, "StructManipulator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getStructManipulator_StructType(), theDataPackage.getStructuredType(), null, "structType", null, 1, 1, StructManipulator.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(structManipulatorEClass, null, "setStructTypeElementsAtInterface", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theDataPackage.getStructuredType(), "newStruct", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(structManipulatorEClass, null, "updateConfiguration", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(subAppTypeEClass, SubAppType.class, "SubAppType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
@@ -5145,22 +5187,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 */
 	protected void createExtendedMetaDataAnnotations() {
 		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
-		addAnnotation
-		  (getAdapterType_AdapterFBType(),
-		   source,
-		   new String[] {
-			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
-			   "name", "Service", //$NON-NLS-1$ //$NON-NLS-2$
-			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
-		   });
-		addAnnotation
-		  (getAdapterType_PlugType(),
-		   source,
-		   new String[] {
-			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
-			   "name", "Service", //$NON-NLS-1$ //$NON-NLS-2$
-			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
-		   });
 		addAnnotation
 		  (getApplication_FBNetwork(),
 		   source,

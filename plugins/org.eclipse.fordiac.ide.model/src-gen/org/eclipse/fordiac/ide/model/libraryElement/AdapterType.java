@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getAdapterFBType <em>Adapter FB Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getPlugType <em>Plug Type</em>}</li>
  * </ul>
  *
@@ -35,56 +34,28 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * @model
  * @generated
  */
-public interface AdapterType extends DataType {
-	/**
-	 * Returns the value of the '<em><b>Adapter FB Type</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Adapter FB Type</em>' containment reference.
-	 * @see #setAdapterFBType(AdapterFBType)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterType_AdapterFBType()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='Service' namespace='##targetNamespace'"
-	 * @generated
-	 */
-	AdapterFBType getAdapterFBType();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getAdapterFBType <em>Adapter FB Type</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Adapter FB Type</em>' containment reference.
-	 * @see #getAdapterFBType()
-	 * @generated
-	 */
-	void setAdapterFBType(AdapterFBType value);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	InterfaceList getInterfaceList();
+public interface AdapterType extends DataType, FBType {
 
 	/**
 	 * Returns the value of the '<em><b>Plug Type</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Plug Type</em>' containment reference.
+	 * @see #setPlugType(AdapterType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterType_PlugType()
-	 * @model containment="true" changeable="false" derived="true"
-	 *        extendedMetaData="kind='element' name='Service' namespace='##targetNamespace'"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	AdapterFBType getPlugType();
+	AdapterType getPlugType();
 
 	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getPlugType <em>Plug Type</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * @param value the new value of the '<em>Plug Type</em>' containment reference.
+	 * @see #getPlugType()
 	 * @generated
 	 */
-	AdapterFBType getSocketType();
+	void setPlugType(AdapterType value);
 
 } // AdapterType

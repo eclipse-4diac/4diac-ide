@@ -65,6 +65,7 @@ public class AttributeConfigLabelAccumulator extends AbstractAnnotatedConfigLabe
 			if (!InitialValueHelper.hasInitalValue(rowItem)) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
 			}
+			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTargetValue);
 			break;
 		case COMMENT:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);

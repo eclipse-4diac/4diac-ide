@@ -25,5 +25,6 @@ public interface SegmentTypeEntry extends TypeEntry {
 	@Override
 	SegmentType getTypeEditable();
 
-
+	@Override
+	SegmentType copyType();
 }

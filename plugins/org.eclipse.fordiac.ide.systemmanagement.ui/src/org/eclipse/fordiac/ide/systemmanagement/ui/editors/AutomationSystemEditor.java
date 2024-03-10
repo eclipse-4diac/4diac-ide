@@ -26,9 +26,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -49,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -57,6 +55,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.model.ui.editors.ITypeEntryEditor;
+import org.eclipse.fordiac.ide.model.ui.editors.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.ui.listeners.EditorTabCommandStackListener;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
@@ -64,7 +64,6 @@ import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -79,7 +78,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
@@ -88,7 +86,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements IEditorFileChangeListener {
+public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements ITypeEntryEditor {
 
 	private AutomationSystem system;
 	private DiagramOutlinePage outlinePage;
@@ -100,21 +98,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		subEditorCommandStackListener = new EditorTabCommandStackListener(this);
 	}
 
-	private final Adapter adapter = new AdapterImpl() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-			if (TypeEntry.TYPE_ENTRY_FILE_FEATURE.equals(notification.getFeature())) {
-				Display.getDefault().asyncExec(() -> {
-					if (null != system) {
-						// the input should be set before the title is updated
-						setInput(new FileEditorInput(system.getTypeEntry().getFile()));
-						setPartName(system.getName());
-					}
-				});
-			}
-		}
-	};
+	private final TypeEntryAdapter adapter = new TypeEntryAdapter(this);
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -129,6 +113,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	private void hookSystemEntry(final TypeEntry typeEntry) {
 		annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEntry.getFile());
 		validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
+
 		typeEntry.eAdapters().add(adapter);
 	}
 
@@ -353,7 +338,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			}
 			return adapter.cast(outlinePage);
 		}
-		if (adapter == AutomationSystem.class) {
+		if (adapter == AutomationSystem.class || adapter == LibraryElement.class) {
 			return adapter.cast(system);
 		}
 		if (adapter == GraphicalAnnotationModel.class) {
@@ -372,8 +357,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		return DiagramEditorWithFlyoutPalette.PROPERTY_CONTRIBUTOR_ID;
 	}
 
-	@Override
-	public IFile getFile() {
+	private IFile getFile() {
 		return system.getTypeEntry().getFile();
 	}
 
@@ -405,7 +389,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	@Override
-	public void reloadFile() {
+	public void reloadType() {
 		final CommandStack commandStack = system.getCommandStack();
 
 		final String path = getBreadcrumb().serializePath();
@@ -435,6 +419,18 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		selectRootModelOfEditor();
 	}
 
+	@Override
+	public void setInput(final IEditorInput input) {
+		setInputWithNotify(input);
+	}
+
+	@Override
+	public void setFocus() {
+		super.setFocus();
+		// we got focus check if the content needs reload
+		adapter.checkFileReload();
+	}
+
 	private void selectRootModelOfEditor() {
 		Display.getDefault().asyncExec(() -> {
 			final GraphicalViewer viewer = getAdapter(GraphicalViewer.class);
@@ -455,12 +451,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			selection = viewer.getRootEditPart();
 		}
 		return selection;
-	}
-
-	@Override
-	public void updateEditorInput(final FileEditorInput newInput) {
-		setInput(newInput);
-		firePropertyChange(IWorkbenchPart.PROP_TITLE);
 	}
 
 }

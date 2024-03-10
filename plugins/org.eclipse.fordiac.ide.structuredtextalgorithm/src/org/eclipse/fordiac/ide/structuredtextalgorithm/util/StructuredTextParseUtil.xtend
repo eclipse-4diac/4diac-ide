@@ -29,8 +29,8 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResou
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector
 import org.eclipse.xtext.ParserRule
 import org.eclipse.xtext.naming.IQualifiedNameConverter
@@ -179,15 +179,12 @@ class StructuredTextParseUtil {
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("FCT", SERVICE_PROVIDER_FCT.get(IResourceFactory))
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("gcf", SERVICE_PROVIDER_GCF.get(IResourceFactory))
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("GCF", SERVICE_PROVIDER_GCF.get(IResourceFactory))
-		resourceSet.loadOptions.putAll(#{
-			STCoreUtil.OPTION_EXPECTED_TYPE -> expectedType
-		})
 		SERVICE_PROVIDER_FBT.parse(resourceSet, text, entryPoint, type, additionalContent, issues,
 			uri ?: SYNTHETIC_URI_FBT, #{
 				XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
 				ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE,
 				STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
-				STCoreUtil.OPTION_EXPECTED_TYPE -> expectedType
+				STResource.OPTION_EXPECTED_TYPE -> expectedType
 			})
 	}
 	

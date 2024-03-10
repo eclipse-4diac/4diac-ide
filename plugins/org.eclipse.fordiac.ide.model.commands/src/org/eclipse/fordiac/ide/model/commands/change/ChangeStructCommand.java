@@ -60,7 +60,6 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	private void copyUnrelatedAttributes() {
 		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
 		newElement.deleteAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
-		newElement.deleteAttribute(LibraryElementTags.STRUCTURED_TYPE_ELEMENT);
 	}
 
 	public StructManipulator getNewMux() {

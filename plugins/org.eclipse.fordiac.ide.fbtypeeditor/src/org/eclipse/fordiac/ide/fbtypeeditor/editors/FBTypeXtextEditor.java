@@ -27,9 +27,15 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
+import com.google.inject.Inject;
+
 public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEditorPart {
+
+	@Inject
+	private AbstractUIPlugin languageUIPlugin;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -108,7 +114,17 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
-		return false;
+		try {
+			return marker.getType().startsWith(
+					languageUIPlugin.getBundle().getSymbolicName() + "." + getLanguageShortName().toLowerCase()); //$NON-NLS-1$
+		} catch (final CoreException e) {
+			return false;// marker does not exist
+		}
+	}
+
+	protected String getLanguageShortName() {
+		final String languageName = getLanguageName();
+		return languageName.substring(languageName.lastIndexOf('.') + 1);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
@@ -37,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.ConnectionEditPart;
@@ -182,6 +184,19 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 			return new VarInputConnAnchor(this);
 		}
 		return super.getTargetConnectionAnchor(connection);
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == ErrorMarkerDataTypeImpl.class) {
+			final Adapter a = getContentAdapter();
+			if (a.getTarget() instanceof final VarDeclaration vd
+					&& vd.getType() instanceof final ErrorMarkerDataTypeImpl em) {
+				return key.cast(em);
+			}
+		}
+
+		return super.getAdapter(key);
 	}
 
 }

@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.validation;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -21,6 +20,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
 import org.eclipse.fordiac.ide.model.buildpath.BuildpathAttributes;
@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.validation.CheckType;
 import org.eclipse.xtext.validation.Issue;
@@ -56,7 +57,8 @@ public final class ValidationUtil {
 				.map(TypeLibrary::getBuildpath);
 	}
 
-	public static Issue createModelIssue(final Severity severity, final String message, final EObject target) {
+	public static Issue createModelIssue(final Severity severity, final String message, final EObject target,
+			final EStructuralFeature feature) {
 		final IssueImpl issue = new IssueImpl();
 		issue.setMessage(message);
 		issue.setSeverity(severity);
@@ -66,22 +68,23 @@ public final class ValidationUtil {
 			issue.setUriToProblem(EcoreUtil.getURI(target));
 			issue.setData(new String[] { FordiacMarkerHelper.getLocation(target), // [0] LOCATION
 					EcoreUtil.getURI(target).toString(), // [1] TARGET_URI
-					EcoreUtil.getURI(target.eClass()).toString() // [2] TARGET_TYPE
+					EcoreUtil.getURI(target.eClass()).toString(), // [2] TARGET_TYPE
+					feature != null ? EcoreUtil.getURI(feature).toString() : null // [3] TARGET_FEATURE
 			});
 		}
 		return issue;
 	}
 
-	public static List<Issue> convertToModelIssues(final List<Issue> issues, final EObject target) {
-		return issues.stream().map(issue -> convertToModelIssue(issue, target)).toList();
+	public static Issue convertToModelIssue(final Issue issue, final EObject target) {
+		return convertToModelIssue(issue, target, null);
 	}
 
-	public static Issue convertToModelIssue(final Issue issue, final EObject target) {
-		return createModelIssue(issue.getSeverity(), issue.getMessage(), target);
+	public static Issue convertToModelIssue(final Issue issue, final EObject target, final EStructuralFeature feature) {
+		return createModelIssue(issue.getSeverity(), issue.getMessage(), target, feature);
 	}
 
 	protected static Map<String, Object> getModelMarkerAttributes(final Issue issue) {
-		final URI canonicalURI = getCanonicalURI(issue.getUriToProblem());
+		final URI canonicalURI = LibraryElementXtextResource.toExternalURI(issue.getUriToProblem());
 		if (canonicalURI != null) {
 			if (isModelValidationIssue(issue)) {
 				final String[] data = issue.getData();
@@ -99,13 +102,6 @@ public final class ValidationUtil {
 			return Map.of(FordiacErrorMarker.TARGET_URI, canonicalURI.toString());
 		}
 		return Collections.emptyMap();
-	}
-
-	public static URI getCanonicalURI(final URI uri) {
-		if (uri != null && uri.hasFragment() && uri.fragment().startsWith("/1")) { //$NON-NLS-1$
-			return uri.trimFragment().appendFragment("/" + uri.fragment().substring(2)); //$NON-NLS-1$
-		}
-		return uri;
 	}
 
 	protected static int getMarkerSeverity(final Issue issue) {

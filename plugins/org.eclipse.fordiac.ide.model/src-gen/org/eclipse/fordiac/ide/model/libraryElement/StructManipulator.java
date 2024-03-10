@@ -31,10 +31,10 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getStructManipulator()
- * @model abstract="true"
+ * @model
  * @generated
  */
-public interface StructManipulator extends FB {
+public interface StructManipulator extends ConfigurableFB {
 	/**
 	 * Returns the value of the '<em><b>Struct Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -64,5 +64,13 @@ public interface StructManipulator extends FB {
 	 * @generated
 	 */
 	void setStructTypeElementsAtInterface(StructuredType newStruct);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void updateConfiguration();
 
 } // StructManipulator

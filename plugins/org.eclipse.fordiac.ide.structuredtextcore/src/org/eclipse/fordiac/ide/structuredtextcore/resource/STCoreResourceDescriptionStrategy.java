@@ -194,7 +194,7 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 
 	@Override
 	protected boolean isResolvedAndExternal(final EObject from, final EObject to) {
-		if (to instanceof final LibraryElement libraryElement
+		if (to instanceof final LibraryElement libraryElement && !to.eIsProxy()
 				&& (libraryElement.getTypeEntry() == null || libraryElement.getTypeEntry() instanceof ErrorTypeEntry)) {
 			return false;
 		}

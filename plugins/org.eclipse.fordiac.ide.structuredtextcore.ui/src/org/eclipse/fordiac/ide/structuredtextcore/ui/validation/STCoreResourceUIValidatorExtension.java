@@ -18,12 +18,22 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.xtext.ui.validation.DefaultResourceUIValidatorExtension;
 import org.eclipse.xtext.validation.CheckMode;
 import org.eclipse.xtext.validation.Issue;
 
 public class STCoreResourceUIValidatorExtension extends DefaultResourceUIValidatorExtension {
+
+	@Override
+	public void updateValidationMarkers(final IFile file, final Resource resource, final CheckMode mode,
+			final IProgressMonitor monitor) throws OperationCanceledException {
+		if (!resource.getURI().hasQuery()) { // do not validate resource with query
+			super.updateValidationMarkers(file, resource, mode, monitor);
+		}
+	}
 
 	@Override
 	protected void createMarkers(final IFile file, final List<Issue> list, final IProgressMonitor monitor)

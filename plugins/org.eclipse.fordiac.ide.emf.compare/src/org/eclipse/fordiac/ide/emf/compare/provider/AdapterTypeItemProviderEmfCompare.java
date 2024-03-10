@@ -37,9 +37,15 @@ public class AdapterTypeItemProviderEmfCompare extends AdapterTypeItemProvider {
 
 	@Override
 	public Collection<?> getChildren(final Object object) {
+		final AdapterType adt = (AdapterType) object;
 		final Collection<Object> children = new ArrayList<>();
-		children.add(((AdapterType) object).getAdapterFBType());
+		children.add(adt.getName());
+		children.add(adt.getComment());
+		children.add(adt.getVersionInfo());
+		children.add(adt.getCompilerInfo());
+		children.add(adt.getInterfaceList());
+		children.add(adt.getService());
+		children.add(adt.getReturnType());
 		return children;
 	}
-
 }

@@ -131,7 +131,7 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 
 	@Override
 	protected SubApp getInputType(final Object input) {
-		return EditInterfaceAdapterSection.getSubAppFromInput(input);
+		return SubappPropertySectionFilter.getFBNetworkElementFromSelectedElement(input);
 	}
 
 	@Override

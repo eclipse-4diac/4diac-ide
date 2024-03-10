@@ -19,17 +19,21 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.impl.DataTypeImpl;
-
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Service;
 
 /**
  * <!-- begin-user-doc -->
@@ -39,7 +43,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl#getAdapterFBType <em>Adapter FB Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl#getInterfaceList <em>Interface List</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl#getService <em>Service</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl#getPlugType <em>Plug Type</em>}</li>
  * </ul>
  *
@@ -47,14 +52,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  */
 public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	/**
-	 * The cached value of the '{@link #getAdapterFBType() <em>Adapter FB Type</em>}' containment reference.
+	 * The cached value of the '{@link #getInterfaceList() <em>Interface List</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAdapterFBType()
+	 * @see #getInterfaceList()
 	 * @generated
 	 * @ordered
 	 */
-	protected AdapterFBType adapterFBType;
+	protected InterfaceList interfaceList;
+
+	/**
+	 * The cached value of the '{@link #getService() <em>Service</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getService()
+	 * @generated
+	 * @ordered
+	 */
+	protected Service service;
 
 	/**
 	 * The cached value of the '{@link #getPlugType() <em>Plug Type</em>}' containment reference.
@@ -64,7 +79,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 * @ordered
 	 */
-	protected AdapterFBType plugType;
+	protected AdapterType plugType;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -91,8 +106,8 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	@Override
-	public AdapterFBType getAdapterFBType() {
-		return adapterFBType;
+	public InterfaceList getInterfaceList() {
+		return interfaceList;
 	}
 
 	/**
@@ -100,11 +115,11 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetAdapterFBType(AdapterFBType newAdapterFBType, NotificationChain msgs) {
-		AdapterFBType oldAdapterFBType = adapterFBType;
-		adapterFBType = newAdapterFBType;
+	public NotificationChain basicSetInterfaceList(InterfaceList newInterfaceList, NotificationChain msgs) {
+		InterfaceList oldInterfaceList = interfaceList;
+		interfaceList = newInterfaceList;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE, oldAdapterFBType, newAdapterFBType);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_TYPE__INTERFACE_LIST, oldInterfaceList, newInterfaceList);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -113,22 +128,21 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
-	public void setAdapterFBType(AdapterFBType newAdapterFBType) {
-		if (newAdapterFBType != adapterFBType) {
+	public void setInterfaceList(InterfaceList newInterfaceList) {
+		if (newInterfaceList != interfaceList) {
 			NotificationChain msgs = null;
-			if (adapterFBType != null)
-				msgs = ((InternalEObject)adapterFBType).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE, null, msgs);
-			if (newAdapterFBType != null)
-				msgs = ((InternalEObject)newAdapterFBType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE, null, msgs);
-			msgs = basicSetAdapterFBType(newAdapterFBType, msgs);
-			msgs = updatePlugType(newAdapterFBType, msgs);
+			if (interfaceList != null)
+				msgs = ((InternalEObject)interfaceList).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__INTERFACE_LIST, null, msgs);
+			if (newInterfaceList != null)
+				msgs = ((InternalEObject)newInterfaceList).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__INTERFACE_LIST, null, msgs);
+			msgs = basicSetInterfaceList(newInterfaceList, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE, newAdapterFBType, newAdapterFBType));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_TYPE__INTERFACE_LIST, newInterfaceList, newInterfaceList));
 	}
 
 	/**
@@ -137,18 +151,21 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	@Override
-	public AdapterFBType getPlugType() {
-		return plugType;
+	public Service getService() {
+		return service;
 	}
 
-	private NotificationChain updatePlugType(AdapterFBType newAdapterFBType, NotificationChain msgs) {
-		AdapterFBType newPlugType = (newAdapterFBType != null) ? org.eclipse.fordiac.ide.model.Annotations.createPlugType(newAdapterFBType) : null;
-		if (newPlugType != plugType) {
-			if (plugType != null)
-				msgs = ((InternalEObject)plugType).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, null, msgs);
-			if (newPlugType != null)
-				msgs = ((InternalEObject)newPlugType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, null, msgs);
-			msgs = basicSetPlugType(newPlugType, msgs);
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetService(Service newService, NotificationChain msgs) {
+		Service oldService = service;
+		service = newService;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_TYPE__SERVICE, oldService, newService);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
@@ -158,8 +175,61 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetPlugType(AdapterFBType newPlugType, NotificationChain msgs) {
-		AdapterFBType oldPlugType = plugType;
+	@Override
+	public void setService(Service newService) {
+		if (newService != service) {
+			NotificationChain msgs = null;
+			if (service != null)
+				msgs = ((InternalEObject)service).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__SERVICE, null, msgs);
+			if (newService != null)
+				msgs = ((InternalEObject)newService).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__SERVICE, null, msgs);
+			msgs = basicSetService(newService, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_TYPE__SERVICE, newService, newService));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AdapterType getPlugType() {
+		if (plugType != null && plugType.eIsProxy()) {
+			InternalEObject oldPlugType = (InternalEObject)plugType;
+			plugType = (AdapterType)eResolveProxy(oldPlugType);
+			if (plugType != oldPlugType) {
+				InternalEObject newPlugType = (InternalEObject)plugType;
+				NotificationChain msgs = oldPlugType.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, null, null);
+				if (newPlugType.eInternalContainer() == null) {
+					msgs = newPlugType.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, oldPlugType, plugType));
+			}
+		}
+		return plugType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AdapterType basicGetPlugType() {
+		return plugType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPlugType(AdapterType newPlugType, NotificationChain msgs) {
+		AdapterType oldPlugType = plugType;
 		plugType = newPlugType;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, oldPlugType, newPlugType);
@@ -174,8 +244,18 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	@Override
-	public InterfaceList getInterfaceList() {
-		return org.eclipse.fordiac.ide.model.Annotations.getInterfaceList(this);
+	public void setPlugType(AdapterType newPlugType) {
+		if (newPlugType != plugType) {
+			NotificationChain msgs = null;
+			if (plugType != null)
+				msgs = ((InternalEObject)plugType).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, null, msgs);
+			if (newPlugType != null)
+				msgs = ((InternalEObject)newPlugType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, null, msgs);
+			msgs = basicSetPlugType(newPlugType, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, newPlugType, newPlugType));
 	}
 
 	/**
@@ -184,9 +264,58 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	@Override
-	public AdapterFBType getSocketType() {
-		//the socket form is the form how adapter types are edited and stored
-		return getAdapterFBType();
+	public EList<INamedElement> getInputParameters() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<INamedElement> getOutputParameters() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<INamedElement> getInOutParameters() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DataType getReturnType() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDocumentation(final String value) {
+		org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.setDocumentation(this, value);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getDocumentation() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.getDocumentation(this);
 	}
 
 	/**
@@ -197,8 +326,10 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
-				return basicSetAdapterFBType(null, msgs);
+			case LibraryElementPackage.ADAPTER_TYPE__INTERFACE_LIST:
+				return basicSetInterfaceList(null, msgs);
+			case LibraryElementPackage.ADAPTER_TYPE__SERVICE:
+				return basicSetService(null, msgs);
 			case LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE:
 				return basicSetPlugType(null, msgs);
 			default:
@@ -214,10 +345,13 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
-				return getAdapterFBType();
+			case LibraryElementPackage.ADAPTER_TYPE__INTERFACE_LIST:
+				return getInterfaceList();
+			case LibraryElementPackage.ADAPTER_TYPE__SERVICE:
+				return getService();
 			case LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE:
-				return getPlugType();
+				if (resolve) return getPlugType();
+				return basicGetPlugType();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -231,8 +365,14 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
-				setAdapterFBType((AdapterFBType)newValue);
+			case LibraryElementPackage.ADAPTER_TYPE__INTERFACE_LIST:
+				setInterfaceList((InterfaceList)newValue);
+				return;
+			case LibraryElementPackage.ADAPTER_TYPE__SERVICE:
+				setService((Service)newValue);
+				return;
+			case LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE:
+				setPlugType((AdapterType)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -248,8 +388,14 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
-				setAdapterFBType((AdapterFBType)null);
+			case LibraryElementPackage.ADAPTER_TYPE__INTERFACE_LIST:
+				setInterfaceList((InterfaceList)null);
+				return;
+			case LibraryElementPackage.ADAPTER_TYPE__SERVICE:
+				setService((Service)null);
+				return;
+			case LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE:
+				setPlugType((AdapterType)null);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -265,13 +411,59 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
-				return adapterFBType != null;
+			case LibraryElementPackage.ADAPTER_TYPE__INTERFACE_LIST:
+				return interfaceList != null;
+			case LibraryElementPackage.ADAPTER_TYPE__SERVICE:
+				return service != null;
 			case LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE:
 				return plugType != null;
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == ICallable.class) {
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
+		}
+		if (baseClass == FBType.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.ADAPTER_TYPE__INTERFACE_LIST: return LibraryElementPackage.FB_TYPE__INTERFACE_LIST;
+				case LibraryElementPackage.ADAPTER_TYPE__SERVICE: return LibraryElementPackage.FB_TYPE__SERVICE;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == ICallable.class) {
+			switch (baseFeatureID) {
+				default: return -1;
+			}
+		}
+		if (baseClass == FBType.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.FB_TYPE__INTERFACE_LIST: return LibraryElementPackage.ADAPTER_TYPE__INTERFACE_LIST;
+				case LibraryElementPackage.FB_TYPE__SERVICE: return LibraryElementPackage.ADAPTER_TYPE__SERVICE;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 } //AdapterTypeImpl

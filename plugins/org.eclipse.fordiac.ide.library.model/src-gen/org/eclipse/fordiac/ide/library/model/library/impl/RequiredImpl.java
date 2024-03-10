@@ -5,7 +5,7 @@ package org.eclipse.fordiac.ide.library.model.library.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 
@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.library.model.library.Required;
  *
  * @generated
  */
-public class RequiredImpl extends MinimalEObjectImpl.Container implements Required {
+public class RequiredImpl extends EObjectImpl implements Required {
 	/**
 	 * The default value of the '{@link #getSymbolicName() <em>Symbolic Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -99,12 +99,11 @@ public class RequiredImpl extends MinimalEObjectImpl.Container implements Requir
 	 * @generated
 	 */
 	@Override
-	public void setSymbolicName(final String newSymbolicName) {
-		final String oldSymbolicName = symbolicName;
+	public void setSymbolicName(String newSymbolicName) {
+		String oldSymbolicName = symbolicName;
 		symbolicName = newSymbolicName;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.REQUIRED__SYMBOLIC_NAME, oldSymbolicName, symbolicName));
-		}
 	}
 
 	/**
@@ -123,12 +122,11 @@ public class RequiredImpl extends MinimalEObjectImpl.Container implements Requir
 	 * @generated
 	 */
 	@Override
-	public void setVersion(final String newVersion) {
-		final String oldVersion = version;
+	public void setVersion(String newVersion) {
+		String oldVersion = version;
 		version = newVersion;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.REQUIRED__VERSION, oldVersion, version));
-		}
 	}
 
 	/**
@@ -137,15 +135,14 @@ public class RequiredImpl extends MinimalEObjectImpl.Container implements Requir
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryPackage.REQUIRED__SYMBOLIC_NAME:
-			return getSymbolicName();
-		case LibraryPackage.REQUIRED__VERSION:
-			return getVersion();
-		default:
-			return super.eGet(featureID, resolve, coreType);
+			case LibraryPackage.REQUIRED__SYMBOLIC_NAME:
+				return getSymbolicName();
+			case LibraryPackage.REQUIRED__VERSION:
+				return getVersion();
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -154,18 +151,16 @@ public class RequiredImpl extends MinimalEObjectImpl.Container implements Requir
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryPackage.REQUIRED__SYMBOLIC_NAME:
-			setSymbolicName((String)newValue);
-			return;
-		case LibraryPackage.REQUIRED__VERSION:
-			setVersion((String)newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
+			case LibraryPackage.REQUIRED__SYMBOLIC_NAME:
+				setSymbolicName((String)newValue);
+				return;
+			case LibraryPackage.REQUIRED__VERSION:
+				setVersion((String)newValue);
+				return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -174,18 +169,16 @@ public class RequiredImpl extends MinimalEObjectImpl.Container implements Requir
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.REQUIRED__SYMBOLIC_NAME:
-			setSymbolicName(SYMBOLIC_NAME_EDEFAULT);
-			return;
-		case LibraryPackage.REQUIRED__VERSION:
-			setVersion(VERSION_EDEFAULT);
-			return;
-		default:
-			super.eUnset(featureID);
-			return;
+			case LibraryPackage.REQUIRED__SYMBOLIC_NAME:
+				setSymbolicName(SYMBOLIC_NAME_EDEFAULT);
+				return;
+			case LibraryPackage.REQUIRED__VERSION:
+				setVersion(VERSION_EDEFAULT);
+				return;
 		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -194,15 +187,14 @@ public class RequiredImpl extends MinimalEObjectImpl.Container implements Requir
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.REQUIRED__SYMBOLIC_NAME:
-			return SYMBOLIC_NAME_EDEFAULT == null ? symbolicName != null : !SYMBOLIC_NAME_EDEFAULT.equals(symbolicName);
-		case LibraryPackage.REQUIRED__VERSION:
-			return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
-		default:
-			return super.eIsSet(featureID);
+			case LibraryPackage.REQUIRED__SYMBOLIC_NAME:
+				return SYMBOLIC_NAME_EDEFAULT == null ? symbolicName != null : !SYMBOLIC_NAME_EDEFAULT.equals(symbolicName);
+			case LibraryPackage.REQUIRED__VERSION:
+				return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
 		}
+		return super.eIsSet(featureID);
 	}
 
 	/**
@@ -212,11 +204,9 @@ public class RequiredImpl extends MinimalEObjectImpl.Container implements Requir
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuilder result = new StringBuilder(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (symbolicName: "); //$NON-NLS-1$
 		result.append(symbolicName);
 		result.append(", version: "); //$NON-NLS-1$

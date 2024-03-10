@@ -22,9 +22,14 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EValidator;
+import org.eclipse.fordiac.ide.model.data.AnyType;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 
@@ -43,36 +48,47 @@ public class VariableDiagnostician extends CancelableDiagnostician {
 					varDeclaration.getArraySize());
 			result &= validate(varDeclaration, VariableOperations::validateValue, diagnostics,
 					varDeclaration.getValue());
+		} else if (eObject instanceof final Attribute attribute && attribute.getType() instanceof AnyType
+				&& !InternalAttributeDeclarations.isInternalAttribue(attribute.getAttributeDeclaration())) {
+			result &= validate(attribute, VariableOperations::validateValue, diagnostics, attribute,
+					LibraryElementPackage.Literals.ATTRIBUTE__VALUE);
 		}
 		return result;
 	}
 
-	protected static boolean validate(final VarDeclaration varDeclaration, final VariableValidator validator,
+	protected static <T> boolean validate(final T element, final VariableValidator<? super T> validator,
 			final DiagnosticChain diagnostics, final EObject context) {
+		return validate(element, validator, diagnostics, context, null);
+	}
+
+	protected static <T> boolean validate(final T element, final VariableValidator<? super T> validator,
+			final DiagnosticChain diagnostics, final EObject context, final EStructuralFeature feature) {
 		final List<String> errors = new ArrayList<>();
 		final List<String> warnings = new ArrayList<>();
 		final List<String> infos = new ArrayList<>();
-		final boolean result = validator.validate(varDeclaration, errors, warnings, infos);
+		final boolean result = validator.validate(element, errors, warnings, infos);
 		if (diagnostics != null) {
-			createDiagnostics(Diagnostic.ERROR, errors, context, diagnostics);
-			createDiagnostics(Diagnostic.WARNING, warnings, context, diagnostics);
-			createDiagnostics(Diagnostic.INFO, infos, context, diagnostics);
+			createDiagnostics(Diagnostic.ERROR, errors, context, feature, diagnostics);
+			createDiagnostics(Diagnostic.WARNING, warnings, context, feature, diagnostics);
+			createDiagnostics(Diagnostic.INFO, infos, context, feature, diagnostics);
 		}
 		return result;
 	}
 
 	protected static void createDiagnostics(final int severity, final List<String> messages, final EObject object,
-			final DiagnosticChain diagnostics) {
-		messages.stream().map(message -> createDiagnostic(severity, message, object)).forEachOrdered(diagnostics::add);
+			final EStructuralFeature feature, final DiagnosticChain diagnostics) {
+		messages.stream().map(message -> createDiagnostic(severity, message, object, feature))
+				.forEachOrdered(diagnostics::add);
 	}
 
-	protected static Diagnostic createDiagnostic(final int severity, final String message, final EObject object) {
+	protected static Diagnostic createDiagnostic(final int severity, final String message, final EObject object,
+			final EStructuralFeature feature) {
 		return new BasicDiagnostic(severity, LibraryElementValidator.DIAGNOSTIC_SOURCE, 0, message,
-				FordiacMarkerHelper.getDiagnosticData(object));
+				FordiacMarkerHelper.getDiagnosticData(object, feature));
 	}
 
 	@FunctionalInterface
-	public interface VariableValidator {
-		boolean validate(VarDeclaration varDeclaration, List<String> errors, List<String> warnings, List<String> infos);
+	public interface VariableValidator<T> {
+		boolean validate(T element, List<String> errors, List<String> warnings, List<String> infos);
 	}
 }

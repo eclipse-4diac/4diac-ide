@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2017 TU Wien ACIN, Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2012, 2024 TU Wien ACIN, Profactor GmbH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,27 +18,22 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 class AdapterFBCreateCommand extends FBCreateCommand {
 	final AdapterDeclaration adapterDecl;
 
 	AdapterFBCreateCommand(final int x, final int y, final AdapterDeclaration adapterDecl, final FBType parent) {
-		super(getFBNetwork(parent), LibraryElementFactory.eINSTANCE.createAdapterFB(), x, y);
+		super((FBTypeEntry) adapterDecl.getType().getTypeEntry(), getFBNetwork(parent),
+				LibraryElementFactory.eINSTANCE.createAdapterFB(), x, y);
 		this.adapterDecl = adapterDecl;
-		getAdapterFB().setTypeEntry(adapterDecl.getType().getTypeEntry());
 		getAdapterFB().setAdapterDecl(adapterDecl);
 	}
 
 	private AdapterFB getAdapterFB() {
 		return (AdapterFB) getElement();
-	}
-
-	@Override
-	protected InterfaceList createInterfaceList() {
-		return getAdapterFB().getType().getInterfaceList().copy();
 	}
 
 	@Override

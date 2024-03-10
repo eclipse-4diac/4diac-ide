@@ -12,12 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
 import org.eclipse.xtext.ide.serializer.impl.ChangeSerializer;
-import org.eclipse.xtext.ide.serializer.impl.RelatedEmfResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.RelatedResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.RelatedResourcesProvider.RelatedResource;
 
@@ -28,13 +25,9 @@ public class STCoreChangeSerializer extends ChangeSerializer {
 
 	@Override
 	protected RelatedResourceUpdater createResourceUpdater(final RelatedResource relatedResource) {
-		final URI uri = relatedResource.getUri();
-		if (resourceSet.getResourceFactoryRegistry().getFactory(uri) instanceof FordiacTypeResourceFactory) {
-			final RelatedResourceUpdater updater = getService(uri, RelatedEmfResourceUpdater.class);
-			updater.init(this, resourceSet, relatedResource);
-			return updater;
-		}
-		return super.createResourceUpdater(relatedResource);
+		final RelatedResourceUpdater updater = getService(relatedResource.getUri(), STCoreRelatedResourceUpdater.class);
+		updater.init(this, resourceSet, relatedResource);
+		return updater;
 	}
 
 	@Override

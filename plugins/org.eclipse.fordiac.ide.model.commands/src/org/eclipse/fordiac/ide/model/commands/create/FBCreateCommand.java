@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,16 +13,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
@@ -37,25 +35,14 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	private static FB createNewFb(final FBTypeEntry typeEntry) {
-		if (typeEntry.getType().getName().equals(LibraryElementTags.FB_TYPE_STRUCT_MUX)) {
-			return LibraryElementFactory.eINSTANCE.createMultiplexer();
-		}
-		if (typeEntry.getType().getName().equals(LibraryElementTags.FB_TYPE_STRUCT_DEMUX)) {
-			return LibraryElementFactory.eINSTANCE.createDemultiplexer();
-		}
-		if (typeEntry.getType().getName().startsWith(LibraryElementTags.FB_TYPE_COMM_MESSAGE)) {
-			return LibraryElementFactory.eINSTANCE.createCommunicationChannel();
-		}
-		if (typeEntry.getType() instanceof CompositeFBType) {
-			return LibraryElementFactory.eINSTANCE.createCFBInstance();
-		}
-		return LibraryElementFactory.eINSTANCE.createFB();
+		return BlockInstanceFactory.createFBInstanceForTypeEntry(typeEntry);
 	}
 
 	// constructor to reuse this command for adapter creation
-	protected FBCreateCommand(final FBNetwork fbNetwork, final FBNetworkElement adapter, final int x, final int y) {
+	protected FBCreateCommand(final FBTypeEntry typeEntry, final FBNetwork fbNetwork, final FBNetworkElement adapter,
+			final int x, final int y) {
 		super(fbNetwork, adapter, x, y);
-		this.typeEntry = null;
+		this.typeEntry = typeEntry;
 		setLabel(Messages.FBCreateCommand_LABEL_CreateFunctionBlock);
 		getFB().setTypeEntry(typeEntry);
 	}
@@ -75,11 +62,11 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	@Override
 	public void execute() {
 		super.execute();
-		if (getFB() instanceof Multiplexer) {
-			((Multiplexer) getFB()).setStructTypeElementsAtInterface(
+		if (getFB() instanceof final Multiplexer multiplexer) {
+			multiplexer.setStructTypeElementsAtInterface(
 					(StructuredType) typeEntry.getType().getInterfaceList().getOutputVars().get(0).getType());
-		} else if (getFB() instanceof Demultiplexer) {
-			((Demultiplexer) getFB()).setStructTypeElementsAtInterface(
+		} else if (getFB() instanceof final Demultiplexer demux) {
+			demux.setStructTypeElementsAtInterface(
 					(StructuredType) typeEntry.getType().getInterfaceList().getInputVars().get(0).getType());
 		}
 	}

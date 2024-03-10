@@ -141,139 +141,165 @@
                    indented="false"
                    label="Struct Element">
       </propertyTab>
+      <propertyTab
+            category="FB"
+            id="org.eclipse.fordiac.ide.application.propertyConfigurableFBTab"
+            label="Config">
+      </propertyTab>
     </propertyTabs>
   </extension>
-  <extension point="org.eclipse.ui.views.properties.tabbed.propertySections">
-    <propertySections contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
-            <propertySection
-            class="org.eclipse.fordiac.ide.application.properties.InstancePropertySection"
-            filter="org.eclipse.fordiac.ide.application.properties.InstanceSectionFilter"
-            id="org.eclipse.fordiac.ide.application.properties.InterfaceSection"
-            tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
-      </propertySection>
-      <propertySection
-            class="org.eclipse.fordiac.ide.application.properties.SubAppPropertySection"
-            filter="org.eclipse.fordiac.ide.application.properties.SubappPropertySectionFilter"
-            id="org.eclipse.fordiac.ide.application.properties.SubappInstanceSection"
-            tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
-      </propertySection>
-      <propertySection
-            class="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
-            filter="org.eclipse.fordiac.ide.application.properties.GroupSectionFilter"
-            id="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
-			tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
-	</propertySection>
-      <propertySection
-            class="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
-            filter="org.eclipse.fordiac.ide.application.properties.CommentSectionFilter"
-            id="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
-            tab="org.eclipse.fordiac.ide.application.propertyCommentTab">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
-                       id="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
-                       tab="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"
-                       filter="org.eclipse.fordiac.ide.application.properties.DemultiplexerFilter">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.StructManipulatorSection"
-                       id="org.eclipse.fordiac.ide.application.properties.StructManipulatorSection"
-                       tab="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab"
-                       filter="org.eclipse.fordiac.ide.application.properties.MultiplexerFilter">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-      				   filter="org.eclipse.fordiac.ide.application.properties.StructInterfacePinFilter"
-                       id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-                       tab="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab">
-      </propertySection>
-      <propertySection enablesFor="1"
-                       class="org.eclipse.fordiac.ide.application.properties.FBTypeInfoSection"
-                       id="org.eclipse.fordiac.ide.application.properties.FBTypeInfoSection"
-                       tab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
-                       filter="org.eclipse.fordiac.ide.application.properties.FBNetworkElementTypeFilter">
-      </propertySection>
-      <propertySection
-            class="org.eclipse.fordiac.ide.gef.properties.ConnectionSection"
-            enablesFor="1"
-            filter="org.eclipse.fordiac.ide.application.properties.ConnectionFilter"
-            id="org.eclipse.fordiac.ide.application.properties.ConnectionSection"
-            tab="org.eclipse.fordiac.ide.application.propertyConnectionTab">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-                       id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-                       tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
-                       filter="org.eclipse.fordiac.ide.application.properties.TypedInterfacePinFilter">
-      </propertySection>
-      <propertySection
-            class="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
-            enablesFor="2"
-            filter="org.eclipse.fordiac.ide.application.properties.CreateConnectionFilter"
-            id="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
-            tab="org.eclipse.fordiac.ide.application.CreateConnection">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.EditInterfaceEventSection"
-                       id="org.eclipse.fordiac.ide.application.properties.section.EditEvents"
-                       filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
-                       tab="org.eclipse.fordiac.ide.application.property.tab.EditEvents">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.EditUntypedSubappInterfaceDataSection"
-                       id="org.eclipse.fordiac.ide.application.properties.section.EditData"
-                       filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
-                       tab="org.eclipse.fordiac.ide.application.property.tab.EditData">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.EditUntypedSubappVarInOutSection"
-                       id="org.eclipse.fordiac.ide.application.properties.section.EditVarInOut"
-                       filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
-                       tab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceDataSection"
-                       id="org.eclipse.fordiac.ide.application.properties.section.ShowData"
-                       filter="org.eclipse.fordiac.ide.application.properties.TypedFBNetworkElementFilter"
-                       tab="org.eclipse.fordiac.ide.application.property.tab.ShowData">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceEventSection"
-                       id="org.eclipse.fordiac.ide.application.properties.section.ShowEvent"
-                       filter="org.eclipse.fordiac.ide.application.properties.TypedFBNetworkElementFilter"
-                       tab="org.eclipse.fordiac.ide.application.property.tab.ShowEvent">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceAdapterSection"
-                       id="org.eclipse.fordiac.ide.application.properties.section.ShowAdapter"
-                       filter="org.eclipse.fordiac.ide.application.properties.TypedFBNetworkElementFilter"
-                       tab="org.eclipse.fordiac.ide.application.property.tab.ShowAdapter">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.EditInterfaceAdapterSection"
-                       id="org.eclipse.fordiac.ide.application.properties.section.EditAdapters"
-                       filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
-                       tab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.gef.properties.AttributeSection"
-      				   filter="org.eclipse.fordiac.ide.gef.filters.AttributeFilter"
-                       id="org.eclipse.fordiac.ide.application.properties.AttributeSection"
-                       tab="org.eclipse.fordiac.ide.application.propertyAttributeTab">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.VarConfigurationSection"
-                       id="org.eclipse.fordiac.ide.application.properties.VarConfigSection"
-                       filter="org.eclipse.fordiac.ide.application.properties.VarConfigurationFilter"
-                       tab="org.eclipse.fordiac.ide.application.propertyVarConfigTab">
-      </propertySection>
-      
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.PinEventInfoSection"
-                   id="org.eclipse.fordiac.ide.application.pins.PinEventSection"
-                   tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
-                   filter="org.eclipse.fordiac.ide.gef.filters.PinEventInfoFilter">
-      </propertySection>
-        
-	<propertySection class="org.eclipse.fordiac.ide.application.properties.PinDataInfoSection"
-                   id="org.eclipse.fordiac.ide.application.pins.PinDataSection"
-                   tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
-                   filter="org.eclipse.fordiac.ide.gef.filters.PinDataInfoFilter">
-      </propertySection>
-      
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.PinAdapterInfoSection"
-                   id="org.eclipse.fordiac.ide.application.pins.PinAdapterSection"
-                   tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
-                   filter="org.eclipse.fordiac.ide.gef.filters.PinAdapterInfoFilter">
-      </propertySection>
-      
-    </propertySections>
+  <extension
+        point="org.eclipse.ui.views.properties.tabbed.propertySections">
+     <propertySections
+           contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.InstancePropertySection"
+              filter="org.eclipse.fordiac.ide.application.properties.InstanceSectionFilter"
+              id="org.eclipse.fordiac.ide.application.properties.InterfaceSection"
+              tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.SubAppPropertySection"
+              filter="org.eclipse.fordiac.ide.application.properties.SubappPropertySectionFilter"
+              id="org.eclipse.fordiac.ide.application.properties.SubappInstanceSection"
+              tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
+              filter="org.eclipse.fordiac.ide.application.properties.GroupSectionFilter"
+              id="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
+              tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
+              filter="org.eclipse.fordiac.ide.application.properties.CommentSectionFilter"
+              id="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
+              tab="org.eclipse.fordiac.ide.application.propertyCommentTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
+              filter="org.eclipse.fordiac.ide.application.properties.DemultiplexerFilter"
+              id="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
+              tab="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.StructManipulatorSection"
+              filter="org.eclipse.fordiac.ide.application.properties.MultiplexerFilter"
+              id="org.eclipse.fordiac.ide.application.properties.StructManipulatorSection"
+              tab="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+              filter="org.eclipse.fordiac.ide.application.properties.StructInterfacePinFilter"
+              id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+              tab="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.FBTypeInfoSection"
+              enablesFor="1"
+              filter="org.eclipse.fordiac.ide.application.properties.FBNetworkElementTypeFilter"
+              id="org.eclipse.fordiac.ide.application.properties.FBTypeInfoSection"
+              tab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.gef.properties.ConnectionSection"
+              enablesFor="1"
+              filter="org.eclipse.fordiac.ide.application.properties.ConnectionFilter"
+              id="org.eclipse.fordiac.ide.application.properties.ConnectionSection"
+              tab="org.eclipse.fordiac.ide.application.propertyConnectionTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+              filter="org.eclipse.fordiac.ide.application.properties.TypedInterfacePinFilter"
+              id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
+              tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
+              enablesFor="2"
+              filter="org.eclipse.fordiac.ide.application.properties.CreateConnectionFilter"
+              id="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
+              tab="org.eclipse.fordiac.ide.application.CreateConnection">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.EditInterfaceEventSection"
+              filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
+              id="org.eclipse.fordiac.ide.application.properties.section.EditEvents"
+              tab="org.eclipse.fordiac.ide.application.property.tab.EditEvents">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.EditUntypedSubappInterfaceDataSection"
+              filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
+              id="org.eclipse.fordiac.ide.application.properties.section.EditData"
+              tab="org.eclipse.fordiac.ide.application.property.tab.EditData">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.EditUntypedSubappVarInOutSection"
+              filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
+              id="org.eclipse.fordiac.ide.application.properties.section.EditVarInOut"
+              tab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceDataSection"
+              filter="org.eclipse.fordiac.ide.application.properties.TypedFBNetworkElementFilter"
+              id="org.eclipse.fordiac.ide.application.properties.section.ShowData"
+              tab="org.eclipse.fordiac.ide.application.property.tab.ShowData">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceEventSection"
+              filter="org.eclipse.fordiac.ide.application.properties.TypedFBNetworkElementFilter"
+              id="org.eclipse.fordiac.ide.application.properties.section.ShowEvent"
+              tab="org.eclipse.fordiac.ide.application.property.tab.ShowEvent">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceAdapterSection"
+              filter="org.eclipse.fordiac.ide.application.properties.TypedFBNetworkElementFilter"
+              id="org.eclipse.fordiac.ide.application.properties.section.ShowAdapter"
+              tab="org.eclipse.fordiac.ide.application.property.tab.ShowAdapter">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.EditInterfaceAdapterSection"
+              filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
+              id="org.eclipse.fordiac.ide.application.properties.section.EditAdapters"
+              tab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.gef.properties.AttributeSection"
+              filter="org.eclipse.fordiac.ide.gef.filters.AttributeFilter"
+              id="org.eclipse.fordiac.ide.application.properties.AttributeSection"
+              tab="org.eclipse.fordiac.ide.application.propertyAttributeTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.VarConfigurationSection"
+              filter="org.eclipse.fordiac.ide.application.properties.VarConfigurationFilter"
+              id="org.eclipse.fordiac.ide.application.properties.VarConfigSection"
+              tab="org.eclipse.fordiac.ide.application.propertyVarConfigTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.PinEventInfoSection"
+              filter="org.eclipse.fordiac.ide.gef.filters.PinEventInfoFilter"
+              id="org.eclipse.fordiac.ide.application.pins.PinEventSection"
+              tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.PinDataInfoSection"
+              filter="org.eclipse.fordiac.ide.gef.filters.PinDataInfoFilter"
+              id="org.eclipse.fordiac.ide.application.pins.PinDataSection"
+              tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.PinAdapterInfoSection"
+              filter="org.eclipse.fordiac.ide.gef.filters.PinAdapterInfoFilter"
+              id="org.eclipse.fordiac.ide.application.pins.PinAdapterSection"
+              tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.ConfigurableMoveFBSection"
+              filter="org.eclipse.fordiac.ide.application.properties.ConfigurableMoveFBFilter"
+              id="org.eclipse.fordiac.ide.application.properties.ConfigurableFBSection"
+              tab="org.eclipse.fordiac.ide.application.propertyConfigurableFBTab">
+        </propertySection>
+     </propertySections>
   </extension>
   <extension point="org.eclipse.fordiac.ide.model.ui.openListener">
     <openListener class="org.eclipse.fordiac.ide.application.actions.OpenApplicationEditorAction"
@@ -492,6 +518,11 @@
           id="org.eclipse.fordiac.ide.application.commands.convertToSubapp"
           name="Convert Group to Untyped Subapp">
     </command>
+	<command
+          categoryId="org.eclipse.fordiac.ide.commands.category"
+          id="org.eclipse.fordiac.ide.application.commands.aggressiveConDelete"
+          name="Aggressive Connection Delete">
+    </command>
 
   </extension>
   
@@ -508,16 +539,14 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
              commandId="org.eclipse.ui.edit.text.goto.wordPrevious">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
@@ -526,16 +555,14 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
              commandId="org.eclipse.ui.edit.text.goto.wordNext">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
@@ -544,16 +571,14 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.GotoPinAboveHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.gotopinabove">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
     <handler class="org.eclipse.fordiac.ide.application.handlers.GotoPinAboveHandler"
              commandId="org.eclipse.ui.edit.text.scroll.lineUp">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
@@ -561,16 +586,14 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.GotoPinUnderHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.gotopinunder">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
     
     <handler class="org.eclipse.fordiac.ide.application.handlers.GotoPinUnderHandler"
              commandId="org.eclipse.ui.edit.text.scroll.lineDown">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
-        </reference>
+        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
       </activeWhen>
     </handler>
   
@@ -753,6 +776,17 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.TrimHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.trim">
     </handler>
+    <handler class="org.eclipse.fordiac.ide.application.handlers.AggressiveDeleteConnection"
+             commandId="org.eclipse.fordiac.ide.application.commands.aggressiveConDelete">
+      <activeWhen>
+        <with variable="selection">
+          <count value="1" />
+          <iterate operator="and" ifEmpty="false">
+              <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+          </iterate>
+        </with>
+      </activeWhen>
+    </handler>
   </extension>
   <extension point="org.eclipse.ui.bindings">
     <key commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
@@ -812,6 +846,12 @@
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
           sequence="M1+M2+F">
     </key>
+    <key
+          commandId="org.eclipse.fordiac.ide.application.commands.aggressiveConDelete"
+          contextId="org.eclipse.ui.contexts.window"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M2+DEL">
+    </key>
   </extension>
   <extension point="org.eclipse.ui.menus">
     <menuContribution locationURI="menu:navigate?after=additions">
@@ -862,10 +902,11 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.untypeSubApp" />
-      <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent" />
+      <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent" >
         <visibleWhen checkEnabled="false">
 	      <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
         </visibleWhen>
+      </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"/>
@@ -1067,7 +1108,6 @@
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
-                  <instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
                 </or>
               </iterate>
             </with>
@@ -1136,7 +1176,6 @@
                   </and>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
-                  <instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
                 </or>
               </iterate>
             </with>
@@ -1311,48 +1350,12 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection" >
         <visibleWhen checkEnabled="true">
-          <and>
-            <with variable="selection">
-              <count value="1"/>
-              <iterate>
-                <or>
-                  <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
-                </or>
-              </iterate>
-            </with>
-            <!-- we are in an application or subapp editor or in a subapp/cfb viewer -->
-            <or>
-              <with variable="activeEditor">
-                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
-              </with>
-              <with variable="activeEditor">
-                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
-              </with>
-            </or>
-          </and>
+          <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection" >
         <visibleWhen checkEnabled="true">
-          <and>
-            <with variable="selection">
-              <count value="1"/>
-              <iterate>
-                <or>
-                  <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
-                </or>
-              </iterate>
-            </with>
-            <!-- we are in an application or subapp editor or in a subapp/cfb viewer -->
-            <or>
-              <with variable="activeEditor">
-                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
-              </with>
-              <with variable="activeEditor">
-                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
-              </with>
-            </or>
-          </and>
+          <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.createConnectionAtSubappInterface" >
@@ -1607,6 +1610,27 @@
           </with>
         </not>
       </and>
+    </definition>
+    <definition id="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection">
+      <and>
+            <with variable="selection">
+              <count value="1"/>
+              <iterate>
+                <or>
+                  <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+                </or>
+              </iterate>
+            </with>
+            <!-- we are in an application or subapp editor or in a subapp/cfb viewer -->
+            <or>
+              <with variable="activeEditor">
+                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+              </with>
+              <with variable="activeEditor">
+                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+              </with>
+            </or>
+          </and>
     </definition>
   </extension>
   <extension point="org.eclipse.core.expressions.propertyTesters">

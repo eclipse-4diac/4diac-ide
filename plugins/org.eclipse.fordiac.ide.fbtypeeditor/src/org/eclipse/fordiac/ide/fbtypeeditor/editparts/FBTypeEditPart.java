@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.figures.FBTypeFigure;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.EditPart;
@@ -194,7 +194,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		containerChildren.add(new VarInOutOutputContainer(getModel()));
 
 		// adapter types cannot have plugs or sockets
-		if (!(getModel() instanceof AdapterFBType)) {
+		if (!(getModel() instanceof AdapterType)) {
 			containerChildren.add(new SocketContainer(getModel()));
 			containerChildren.add(new PlugContainer(getModel()));
 		}

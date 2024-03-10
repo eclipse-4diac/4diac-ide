@@ -21,18 +21,12 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -61,7 +55,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		if ((null == entry) || (null == oldElement) || (null == network)) {
 			return false;
 		}
-		return FBNetworkHelper.isTypeInsertionSave((FBType) entry.getType(), network);
+		return FBNetworkHelper.isTypeInsertionSafe((FBType) entry.getType(), network);
 	}
 
 	@Override
@@ -85,41 +79,12 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
 		entry = reloadTypeEntry(entry, srcElement);
 
-		FBNetworkElement copy;
-		if (entry == null || entry instanceof ErrorTypeEntry) {
-			copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
-		} else if (entry.getTypeName().startsWith(LibraryElementTags.FB_TYPE_COMM_MESSAGE)) {
-			copy = LibraryElementFactory.eINSTANCE.createCommunicationChannel();
-		} else if (entry instanceof SubAppTypeEntry) {
-			copy = LibraryElementFactory.eINSTANCE.createSubApp();
-		} else if (entry instanceof AdapterTypeEntry) {
-			copy = LibraryElementFactory.eINSTANCE.createAdapterFB();
+		final FBNetworkElement copy = BlockInstanceFactory.createBlockInstanceForTypeEntry(entry);
+		if (srcElement instanceof final AdapterFB adp) {
 			((AdapterFB) copy).setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
-		} else if (entry.getType() instanceof CompositeFBType) {
-			copy = LibraryElementFactory.eINSTANCE.createCFBInstance();
-		} else if (isMultiplexer()) { // $NON-NLS-1$
-			copy = createMultiplexer();
-		} else {
-			copy = LibraryElementFactory.eINSTANCE.createFB();
 		}
-
 		copy.setTypeEntry(entry);
 		return copy;
-	}
-
-	private FBNetworkElement createMultiplexer() {
-		StructManipulator structManipulator;
-		if ("STRUCT_MUX".equals(entry.getType().getName())) { //$NON-NLS-1$
-			structManipulator = LibraryElementFactory.eINSTANCE.createMultiplexer();
-		} else {
-			structManipulator = LibraryElementFactory.eINSTANCE.createDemultiplexer();
-		}
-		return structManipulator;
-	}
-
-	private boolean isMultiplexer() {
-		return (entry instanceof FBTypeEntry) && (entry.getType() instanceof ServiceInterfaceFBType)
-				&& entry.getType().getName().startsWith("STRUCT"); //$NON-NLS-1$
 	}
 
 	private static TypeEntry reloadTypeEntry(final TypeEntry entry, final FBNetworkElement context) {

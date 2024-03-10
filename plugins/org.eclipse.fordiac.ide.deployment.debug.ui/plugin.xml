@@ -37,7 +37,7 @@
 		point="org.eclipse.debug.ui.launchShortcuts">
 		<shortcut
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentLaunchShortcut"
-			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/download.gif"
+			icon="platform:/plugin/org.eclipse.debug.ui/icons/full/etool16/run_exc.png"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.deployShortcut"
 			label="Deploy"
 			modes="run">
@@ -81,7 +81,7 @@
 		point="org.eclipse.debug.ui.launchConfigurationTypeImages">
 		<launchConfigurationTypeImage
 			configTypeID="org.eclipse.fordiac.ide.deployment.debug.deployLaunch"
-			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/download.gif"
+			icon="platform:/plugin/org.eclipse.debug.ui/icons/full/etool16/run_exc.png"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.deploymentLaunchConfigurationTypeImage">
 		</launchConfigurationTypeImage>
 	</extension>

@@ -17,7 +17,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppEditPartFactory;
-import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -49,13 +49,11 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 		}
 
 		private boolean isSubAppToggledToExpanded(final Notification msg) {
-			return msg.getOldValue() == null && msg.getNewValue() instanceof Attribute
-					&& ((Attribute) msg.getNewValue()).getName()
-							.equals(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE)
-					&& "true".equals(((Attribute) msg.getNewValue()).getValue()); //$NON-NLS-1$
+			return msg.getOldValue() == null && msg.getNewValue() instanceof final Attribute att
+					&& att.getAttributeDeclaration() == InternalAttributeDeclarations.UNFOLDED
+					&& "true".equals(att.getValue()); //$NON-NLS-1$
 		}
 	};
-
 
 	private Adapter fbNetworkAdapter;
 
@@ -75,8 +73,7 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 
 	@Override
 	protected void setModel(final IEditorInput input) {
-		if (input instanceof SubApplicationEditorInput) {
-			final SubApplicationEditorInput subAppInput = (SubApplicationEditorInput) input;
+		if (input instanceof final SubApplicationEditorInput subAppInput) {
 			setModel(subAppInput.getSubApp().getSubAppNetwork());
 			// register Adapter to be informed on changes of the subapplication name
 			getSubApp().eAdapters().add(adapter);

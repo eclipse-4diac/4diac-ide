@@ -46,7 +46,7 @@ public class EditUntypedSubappVarInOutSection extends AbstractEditVarInOutSectio
 
 	@Override
 	protected SubApp getInputType(final Object input) {
-		return EditInterfaceAdapterSection.getSubAppFromInput(input);
+		return SubappPropertySectionFilter.getFBNetworkElementFromSelectedElement(input);
 	}
 
 }

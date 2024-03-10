@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Johannes Kepler University Linz, fortiss GmbH.
- *               2022 Martin Erich Jobst
+ * Copyright (c) 2020, 2024 Johannes Kepler University Linz, fortiss GmbH,
+ * 							Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -120,13 +120,15 @@ public abstract class ExporterTestBase<T extends FBType> {
 		StructuredTextSupportFactory.register();
 	}
 
-	/** generate code from an algorithm stored in a function block
+	/**
+	 * generate code from an algorithm stored in a function block
 	 *
 	 * @param fb            reference to the function block
 	 * @param algorithmName name of the algorithm stored in the function block
 	 * @param errorList     reference to List where error messages are stored
 	 *
-	 * @return the generated code or null on error */
+	 * @return the generated code or null on error
+	 */
 	@SuppressWarnings("static-method")
 	public CharSequence generateAlgorithm(final FBType fb, final String algorithmName, final List<String> errorList) {
 		CharSequence result = null;
@@ -145,13 +147,15 @@ public abstract class ExporterTestBase<T extends FBType> {
 		return result;
 	}
 
-	/** generate code from an expression with variables attached to a functionblock
+	/**
+	 * generate code from an expression with variables attached to a functionblock
 	 *
 	 * @param fb         reference to the function block
 	 * @param expression expression to generate from
 	 * @param errorList  reference to List where error messages are stored
 	 *
-	 * @return the generated code or null on error */
+	 * @return the generated code or null on error
+	 */
 	public CharSequence generateExpression(final FBType fb, final String expression, final List<String> errorList) {
 		CharSequence result = null;
 		final ECC ecc = ((BasicFBType) functionBlock).getECC();
@@ -207,11 +211,13 @@ public abstract class ExporterTestBase<T extends FBType> {
 		}
 	}
 
-	/** generate code from a functionblock using ng generator
+	/**
+	 * generate code from a functionblock using ng generator
 	 *
 	 * @param fb reference to the function block
 	 *
-	 * @return the generated code or null on error */
+	 * @return the generated code or null on error
+	 */
 	public List<FileObject> generateFunctionBlock(final LibraryElement fb) {
 		final Set<IExportTemplate> templates = (new ForteNgExportFilter() {
 			Set<IExportTemplate> getTemplateSet(final LibraryElement type) {
@@ -239,25 +245,31 @@ public abstract class ExporterTestBase<T extends FBType> {
 		return result;
 	}
 
-	/** generates lua code from a function block
+	/**
+	 * generates lua code from a function block
 	 *
 	 * @param fb reference to the function block
 	 *
-	 * @return the generated code or null on error */
+	 * @return the generated code or null on error
+	 */
 	public static String generateLuaString(final LibraryElement fb) {
 		return new ForteLuaExportFilter().createLUA(fb);
 	}
 
-	/** retrieve a reference to the function block
+	/**
+	 * retrieve a reference to the function block
 	 *
-	 * @return function block object */
+	 * @return function block object
+	 */
 	public T getFunctionBlock() {
 		return functionBlock;
 	}
 
-	/** retrieve a reference to an error list
+	/**
+	 * retrieve a reference to an error list
 	 *
-	 * @return error list object */
+	 * @return error list object
+	 */
 	public List<String> getErrors() {
 		return errors;
 	}
@@ -278,12 +290,14 @@ public abstract class ExporterTestBase<T extends FBType> {
 		return new FBTypeEntryMock(null, TypeLibraryManager.INSTANCE.getTypeLibrary(null), null);
 	}
 
-	/** create a VarDeclaration with given name and data-type
+	/**
+	 * create a VarDeclaration with given name and data-type
 	 *
 	 * @param variableName name of the variable to be created
 	 * @param dataType     data-type of the variable to be created
 	 *
-	 * @return the created variable-object */
+	 * @return the created variable-object
+	 */
 	protected static VarDeclaration createVarDeclaration(final String variableName, final String dataType) {
 		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		variable.setName(variableName);
@@ -291,9 +305,11 @@ public abstract class ExporterTestBase<T extends FBType> {
 		return variable;
 	}
 
-	/** check if an error-list is empty and raise an assertion if not empty
+	/**
+	 * check if an error-list is empty and raise an assertion if not empty
 	 *
-	 * @param errors list of errormessages */
+	 * @param errors list of errormessages
+	 */
 	protected static void assertNoErrors(final List<String> errors) {
 		assertTrue(errors.isEmpty(),
 				(MessageFormat.format("No error messages expected. First error message received: {0}.", //$NON-NLS-1$
@@ -301,19 +317,23 @@ public abstract class ExporterTestBase<T extends FBType> {
 				));
 	}
 
-	/** check if an error-list is not empty and raise an assertion if empty
+	/**
+	 * check if an error-list is not empty and raise an assertion if empty
 	 *
-	 * @param errors list of errormessages */
+	 * @param errors list of errormessages
+	 */
 	protected static void assertErrors(final List<String> errors) {
 		assertFalse(errors.isEmpty(), "Error messages expected."); //$NON-NLS-1$
 	}
 
-	/** create a STAlgorithm with given name and content
+	/**
+	 * create a STAlgorithm with given name and content
 	 *
 	 * @param algorithmName name of the algorithm to be created
 	 * @param algorithmText content of the algorithm to be created
 	 *
-	 * @return the created algorithm-object */
+	 * @return the created algorithm-object
+	 */
 	protected static STAlgorithm createSTAlgorithm(final String algorithmName, final String algorithmText) {
 		final STAlgorithm stAlg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		stAlg.setName(algorithmName);
@@ -321,13 +341,15 @@ public abstract class ExporterTestBase<T extends FBType> {
 		return stAlg;
 	}
 
-	/** create a OtherAlgorithm with given name, language and content
+	/**
+	 * create a OtherAlgorithm with given name, language and content
 	 *
 	 * @param algorithmName     name of the algorithm to be created
 	 * @param algorithmText     content of the algorithm to be created
 	 * @param algorithmLanguage language of the algorithm to be created
 	 *
-	 * @return the created algorithm-object */
+	 * @return the created algorithm-object
+	 */
 	protected static OtherAlgorithm createOtherAlgorithm(final String algorithmName, final String algorithmText,
 			final String algorithmLanguage) {
 		final OtherAlgorithm alg = LibraryElementFactory.eINSTANCE.createOtherAlgorithm();
@@ -337,20 +359,26 @@ public abstract class ExporterTestBase<T extends FBType> {
 		return alg;
 	}
 
-	/** cast a given algorithm to STAlgorithm, but check first if it's the right type of object
+	/**
+	 * cast a given algorithm to STAlgorithm, but check first if it's the right type
+	 * of object
 	 *
 	 * @param algorithm
 	 *
-	 * @return the cast algorithm-object */
+	 * @return the cast algorithm-object
+	 */
 	protected static STAlgorithm castAlgorithm(final Algorithm algorithm) {
 		assertTrue(algorithm instanceof STAlgorithm);
 		return (STAlgorithm) algorithm;
 	}
 
-	/** check if an error-list contains a set of error messages; raise an assertion if emtpy
+	/**
+	 * check if an error-list contains a set of error messages; raise an assertion
+	 * if emtpy
 	 *
 	 * @param errors   list of errormessages
-	 * @param messages list of messages to check for */
+	 * @param messages list of messages to check for
+	 */
 	protected static void assertErrorMessages(final List<String> errors, final String... messages) {
 		for (final String message : messages) {
 			boolean contained = false;
@@ -361,26 +389,32 @@ public abstract class ExporterTestBase<T extends FBType> {
 		}
 	}
 
-	/** add export prefix to name
+	/**
+	 * add export prefix to name
 	 *
 	 * @param name name to add the prefix to
-	 * @return name with prefix added */
+	 * @return name with prefix added
+	 */
 	protected static String addExportPrefix(final String name) {
 		return ForteNgExportUtil.VARIABLE_EXPORT_PREFIX + name;
 	}
 
-	/** syntactic sugar: create a Object[] for a test case
+	/**
+	 * syntactic sugar: create a Object[] for a test case
 	 *
 	 * @param obj... vararg to create a Object[]
-	 * @return the created Object[] */
+	 * @return the created Object[]
+	 */
 	protected static Object[] testCase(final Object... a) {
 		return a;
 	}
 
-	/** retrieve the size of datatypes with defined bit representation
+	/**
+	 * retrieve the size of datatypes with defined bit representation
 	 *
 	 * @param type name of the datatype
-	 * @return number of bits in the representation */
+	 * @return number of bits in the representation
+	 */
 	static int getSize(final String type) {
 		return switch (type) {
 		case FordiacKeywords.LWORD -> SIZE_LWORD;
@@ -392,12 +426,14 @@ public abstract class ExporterTestBase<T extends FBType> {
 		};
 	}
 
-	/** compute the number of elements of a datatype with defined bit representation can fit inside another datatype
-	 * with defined bit representation
+	/**
+	 * compute the number of elements of a datatype with defined bit representation
+	 * can fit inside another datatype with defined bit representation
 	 *
 	 * @param name of the source-datatype
 	 * @param name of the accessing datatype
-	 * @return number elements */
+	 * @return number elements
+	 */
 	protected static int indexStop(final String sourceType, final String accessType) {
 		final int sourceSize = getSize(sourceType);
 		final int accessSize = getSize(accessType);
@@ -422,11 +458,9 @@ public abstract class ExporterTestBase<T extends FBType> {
 		functionBlock.getInterfaceList().getOutputVars().add(outputData);
 
 		final AdapterDeclaration adapterSocketDecl = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
-		final AdapterType adapterType = LibraryElementFactory.eINSTANCE.createAdapterType();
 		final ExporterTestAdapterFBType adapterFBType = new ExporterTestAdapterFBType();
 		adapterFBType.setupFunctionBlock();
-		adapterType.setAdapterFBType(adapterFBType.getFunctionBlock());
-		adapterType.setName(adapterFBType.getFunctionBlock().getName());
+		final AdapterType adapterType = adapterFBType.getFunctionBlock();
 		adapterSocketDecl.setType(adapterType);
 		adapterSocketDecl.setName(ADAPTER_SOCKET_NAME);
 		adapterSocketDecl.setIsInput(true);

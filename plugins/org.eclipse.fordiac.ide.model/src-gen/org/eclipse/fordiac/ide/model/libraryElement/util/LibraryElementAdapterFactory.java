@@ -95,10 +95,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createAdapterFBAdapter();
 			}
 			@Override
-			public Adapter caseAdapterFBType(AdapterFBType object) {
-				return createAdapterFBTypeAdapter();
-			}
-			@Override
 			public Adapter caseAdapterType(AdapterType object) {
 				return createAdapterTypeAdapter();
 			}
@@ -177,6 +173,14 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseConfigurableObject(ConfigurableObject object) {
 				return createConfigurableObjectAdapter();
+			}
+			@Override
+			public Adapter caseConfigurableFB(ConfigurableFB object) {
+				return createConfigurableFBAdapter();
+			}
+			@Override
+			public Adapter caseConfigurableMoveFB(ConfigurableMoveFB object) {
+				return createConfigurableMoveFBAdapter();
 			}
 			@Override
 			public Adapter caseConnection(Connection object) {
@@ -553,20 +557,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType <em>Adapter FB Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
-	 * @generated
-	 */
-	public Adapter createAdapterFBTypeAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType <em>Adapter Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -843,6 +833,34 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createConfigurableObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB <em>Configurable FB</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB
+	 * @generated
+	 */
+	public Adapter createConfigurableFBAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB <em>Configurable Move FB</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB
+	 * @generated
+	 */
+	public Adapter createConfigurableMoveFBAdapter() {
 		return null;
 	}
 

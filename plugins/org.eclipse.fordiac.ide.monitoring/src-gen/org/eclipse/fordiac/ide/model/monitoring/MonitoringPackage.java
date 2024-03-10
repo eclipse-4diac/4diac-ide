@@ -509,7 +509,7 @@ public interface MonitoringPackage extends EPackage {
 	int SUB_APP_PORT_ELEMENT__RESOURCE = MonitoringBasePackage.PORT_ELEMENT__RESOURCE;
 
 	/**
-	 * The feature id for the '<em><b>Hierarchy</b></em>' attribute list.
+	 * The feature id for the '<em><b>Hierarchy</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 fortiss GmbH
+ * Copyright (c) 2018, 2024 fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -32,7 +31,7 @@ public final class TypeManagementPreferencesHelper {
 		// do nothing
 	}
 
-	public static void setupVersionInfo(LibraryElement type) {
+	public static void setupVersionInfo(final LibraryElement type) {
 		final VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
 		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 				PreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
@@ -52,9 +51,6 @@ public final class TypeManagementPreferencesHelper {
 		// Remarks
 		setupRemarks(versionInfo, store);
 
-		if (type instanceof AdapterType) {
-			type = ((AdapterType) type).getAdapterFBType();
-		}
 		type.getVersionInfo().clear();
 		type.getVersionInfo().add(versionInfo);
 	}
@@ -64,8 +60,7 @@ public final class TypeManagementPreferencesHelper {
 	}
 
 	private static void setupOrganization(final VersionInfo versionInfo, final IPreferenceStore store) {
-		versionInfo.setOrganization(
-				store.getString(PreferenceConstants.P_ORGANIZATION));
+		versionInfo.setOrganization(store.getString(PreferenceConstants.P_ORGANIZATION));
 	}
 
 	private static void setupAuthor(final VersionInfo versionInfo, final IPreferenceStore store) {
@@ -80,13 +75,9 @@ public final class TypeManagementPreferencesHelper {
 		versionInfo.setRemarks(store.getString(PreferenceConstants.P_REMARKS));
 	}
 
-	public static void setupIdentification(LibraryElement type) {
+	public static void setupIdentification(final LibraryElement type) {
 
 		Identification identification = type.getIdentification();
-		if (type instanceof AdapterType) {
-			type = ((AdapterType) type).getAdapterFBType();
-			identification = type.getIdentification();
-		}
 
 		if (type.getIdentification() == null) {
 			identification = LibraryElementFactory.eINSTANCE.createIdentification();
@@ -119,8 +110,7 @@ public final class TypeManagementPreferencesHelper {
 	public static void setupStandard(final Identification identification, final IPreferenceStore store) {
 		// If the standard is defined and the preference is empty, don't load it
 		if (!(store.getString(PreferenceConstants.P_STANDARD).isEmpty())) {
-			identification
-					.setStandard(store.getString(PreferenceConstants.P_STANDARD));
+			identification.setStandard(store.getString(PreferenceConstants.P_STANDARD));
 		}
 	}
 

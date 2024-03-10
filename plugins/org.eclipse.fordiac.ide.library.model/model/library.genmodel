@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.fordiac.ide.library.model/src-gen"
-    editDirectory="/org.eclipse.fordiac.ide.library.model.edit/src-gen" modelPluginID="org.eclipse.fordiac.ide.library.model"
-    modelName="library" editPluginClass="org.eclipse.fordiac.ide.library.model.library.provider.LibraryEditPlugin"
-    editorPluginClass="org.eclipse.fordiac.ide.library.model.library.presentation.libraryEditorPlugin"
-    nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    testSuiteClass="org.eclipse.fordiac.ide.library.tests.libraryAllTests" importerID="org.eclipse.xsd.ecore.importer"
-    complianceLevel="17.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+    creationSubmenus="true" editDirectory="/org.eclipse.fordiac.ide.library.model.edit/src-gen"
+    editorDirectory="/org.eclipse.fordiac.ide.library.model.editor/src-gen" modelPluginID="org.eclipse.fordiac.ide.library.model"
+    modelName="library" nonNLSMarkers="true" commentFormatting="true" testsDirectory="/org.eclipse.fordiac.ide.library.model.tests/src-gen"
+    importerID="org.eclipse.xsd.ecore.importer" containmentProxies="true" complianceLevel="17.0"
+    copyrightFields="false" importOrganizing="true">
   <foreignModel>library.xsd</foreignModel>
-  <genPackages prefix="Library" resource="XML" disposableProviderFactory="true" ecorePackage="library.ecore#/">
+  <genPackages prefix="Library" basePackage="org.eclipse.fordiac.ide.library.model"
+      resource="XML" disposableProviderFactory="true" ecorePackage="library.ecore#/">
     <genClasses ecoreClass="library.ecore#//Dependencies">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Dependencies/required"/>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Excludes">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Excludes/libraryElement"/>
     </genClasses>
+    <genClasses ecoreClass="library.ecore#//Exports">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Exports/library"/>
+    </genClasses>
     <genClasses ecoreClass="library.ecore#//Includes">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Includes/libraryElement"/>
-    </genClasses>
-    <genClasses ecoreClass="library.ecore#//Libraries">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Libraries/library"/>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Library">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Library/includes"/>
@@ -31,14 +31,17 @@
     </genClasses>
     <genClasses ecoreClass="library.ecore#//LibraryElement"/>
     <genClasses ecoreClass="library.ecore#//Manifest">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/dependencies"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/product"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/libraries"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/exports"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Manifest/scope"/>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Product">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Product/versionInfo"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Product/dependencies"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Product/attribute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Product/comment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Product/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Product/symbolicName"/>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Required">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Required/symbolicName"/>

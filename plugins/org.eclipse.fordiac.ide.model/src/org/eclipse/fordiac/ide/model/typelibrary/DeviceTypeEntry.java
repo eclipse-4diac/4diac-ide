@@ -19,11 +19,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 
 public interface DeviceTypeEntry extends TypeEntry {
 
-
 	@Override
 	DeviceType getType();
 
 	@Override
 	DeviceType getTypeEditable();
 
+	@Override
+	DeviceType copyType();
 }

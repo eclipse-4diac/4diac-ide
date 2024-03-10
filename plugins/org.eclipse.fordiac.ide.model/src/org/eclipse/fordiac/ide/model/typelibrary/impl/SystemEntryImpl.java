@@ -15,12 +15,14 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 
 public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSystem> implements SystemEntry {
@@ -65,4 +67,8 @@ public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSyst
 		return new SystemExporter(type);
 	}
 
+	@Override
+	public EClass getTypeEClass() {
+		return LibraryElementPackage.Literals.AUTOMATION_SYSTEM;
+	}
 }

@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.FBTypeSearch;
 import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
@@ -140,9 +139,13 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		Set<INamedElement> allFBs;
 		final CompositeChange change = new CompositeChange(Messages.Refactoring_AffectedInstancesOfFB);
 		final IProject project = type.getTypeEntry().getFile().getProject();
-		final var search = FBTypeSearch.createFBTypeSearch(type);
-		allFBs = InstanceSearch.performProjectSearch(project, search);
+
+		final var search = new FBInstanceSearch(type);
+
+		allFBs = search.performProjectSearch(project);
+
 		allFBs.addAll(search.performInternalFBSearch(type.getTypeLibrary()));
+
 		allFBs.stream().map(FBNetworkElement.class::cast).map(fbn -> new UpdateInstancesChange(fbn, typeEntry))
 				.forEach(change::add);
 		if (!allFBs.isEmpty()) {

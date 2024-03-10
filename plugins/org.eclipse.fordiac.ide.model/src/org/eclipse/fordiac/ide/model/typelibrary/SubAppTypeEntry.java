@@ -25,4 +25,6 @@ public interface SubAppTypeEntry extends TypeEntry {
 	@Override
 	SubAppType getTypeEditable();
 
+	@Override
+	SubAppType copyType();
 }

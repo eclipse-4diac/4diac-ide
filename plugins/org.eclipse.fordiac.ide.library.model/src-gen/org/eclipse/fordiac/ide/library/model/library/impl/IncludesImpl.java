@@ -8,7 +8,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.library.model.library.Includes;
@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
  *
  * @generated
  */
-public class IncludesImpl extends MinimalEObjectImpl.Container implements Includes {
+public class IncludesImpl extends EObjectImpl implements Includes {
 	/**
 	 * The cached value of the '{@link #getLibraryElement() <em>Library Element</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -66,7 +66,7 @@ public class IncludesImpl extends MinimalEObjectImpl.Container implements Includ
 	@Override
 	public EList<LibraryElement> getLibraryElement() {
 		if (libraryElement == null) {
-			libraryElement = new EObjectContainmentEList<>(LibraryElement.class, this, LibraryPackage.INCLUDES__LIBRARY_ELEMENT);
+			libraryElement = new EObjectContainmentEList<LibraryElement>(LibraryElement.class, this, LibraryPackage.INCLUDES__LIBRARY_ELEMENT);
 		}
 		return libraryElement;
 	}
@@ -77,13 +77,12 @@ public class IncludesImpl extends MinimalEObjectImpl.Container implements Includ
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
-			return ((InternalEList<?>)getLibraryElement()).basicRemove(otherEnd, msgs);
-		default:
-			return super.eInverseRemove(otherEnd, featureID, msgs);
+			case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
+				return ((InternalEList<?>)getLibraryElement()).basicRemove(otherEnd, msgs);
 		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -92,13 +91,12 @@ public class IncludesImpl extends MinimalEObjectImpl.Container implements Includ
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
-			return getLibraryElement();
-		default:
-			return super.eGet(featureID, resolve, coreType);
+			case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
+				return getLibraryElement();
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -108,16 +106,14 @@ public class IncludesImpl extends MinimalEObjectImpl.Container implements Includ
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
-			getLibraryElement().clear();
-			getLibraryElement().addAll((Collection<? extends LibraryElement>)newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
+			case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
+				getLibraryElement().clear();
+				getLibraryElement().addAll((Collection<? extends LibraryElement>)newValue);
+				return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -126,15 +122,13 @@ public class IncludesImpl extends MinimalEObjectImpl.Container implements Includ
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
-			getLibraryElement().clear();
-			return;
-		default:
-			super.eUnset(featureID);
-			return;
+			case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
+				getLibraryElement().clear();
+				return;
 		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -143,13 +137,12 @@ public class IncludesImpl extends MinimalEObjectImpl.Container implements Includ
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
-			return libraryElement != null && !libraryElement.isEmpty();
-		default:
-			return super.eIsSet(featureID);
+			case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
+				return libraryElement != null && !libraryElement.isEmpty();
 		}
+		return super.eIsSet(featureID);
 	}
 
 } //IncludesImpl

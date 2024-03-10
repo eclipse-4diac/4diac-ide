@@ -35,11 +35,15 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSim
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreLinkedPositionGroupCalculator;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRecordingXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreReferenceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameStrategy;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreResourceLifecycleManager;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSimpleNameProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSyncUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceForIEditorInputFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceUIServiceProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper;
@@ -55,6 +59,9 @@ import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculat
 import org.eclipse.xtext.ide.refactoring.IRenameNameValidator;
 import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
 import org.eclipse.xtext.ide.serializer.IChangeSerializer;
+import org.eclipse.xtext.ide.serializer.impl.RecordingXtextResourceUpdater;
+import org.eclipse.xtext.ide.serializer.impl.ReferenceUpdater;
+import org.eclipse.xtext.ide.serializer.impl.ResourceLifecycleManager;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.ui.LanguageSpecific;
 import org.eclipse.xtext.ui.editor.IURIEditorOpener;
@@ -78,6 +85,7 @@ import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
 import org.eclipse.xtext.ui.refactoring.ILinkedPositionGroupCalculator;
 import org.eclipse.xtext.ui.refactoring.impl.AbstractRenameProcessor;
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
+import org.eclipse.xtext.ui.refactoring.ui.SyncUtil;
 import org.eclipse.xtext.ui.refactoring2.ChangeConverter;
 import org.eclipse.xtext.ui.refactoring2.rename.ISimpleNameProvider;
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
@@ -244,5 +252,21 @@ public class STCoreUiModule extends AbstractSTCoreUiModule {
 
 	public Class<? extends ChangeConverter.Factory> bindChangeConverter$Factory() {
 		return STCoreChangeConverter.Factory.class;
+	}
+
+	public Class<? extends RecordingXtextResourceUpdater> bindRecordingXtextResourceUpdater() {
+		return STCoreRecordingXtextResourceUpdater.class;
+	}
+
+	public Class<? extends ReferenceUpdater> bindReferenceUpdater() {
+		return STCoreReferenceUpdater.class;
+	}
+
+	public Class<? extends SyncUtil> bindSyncUtil() {
+		return STCoreSyncUtil.class;
+	}
+
+	public Class<? extends ResourceLifecycleManager> bindResourceLifecycleManager() {
+		return STCoreResourceLifecycleManager.class;
 	}
 }

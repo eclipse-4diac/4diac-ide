@@ -64,7 +64,7 @@ public class CreateAttributeCommand extends CreationCommand implements ScopedCom
 					template.getType(), template.getValue(), index);
 		}
 		return CreateAttributeCommand.forValues(configurableObject, DEFAULT_ATTRIBUTE_NAME, "", ElementaryTypes.STRING, //$NON-NLS-1$
-				"''", index); //$NON-NLS-1$
+				"", index); //$NON-NLS-1$
 	}
 
 	public static CreateAttributeCommand forValues(final ConfigurableObject configurableObject, final String name,

@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue
 import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
@@ -81,14 +82,25 @@ class FBEvaluatorTest {
 	}
 
 	def static newVarDeclaration(String name, DataType type, boolean input, String defaultValue) {
-		val decl = LibraryElementFactory.eINSTANCE.createVarDeclaration
-		decl.name = name;
-		decl.type = type;
-		decl.isInput = input
+		val decl = newVarDeclaration(name, type, input)
 		decl.value = LibraryElementFactory.eINSTANCE.createValue => [
 			value = defaultValue
 		]
 		return decl
+	}
+
+	def static newAttribute(AttributeDeclaration attributeDeclaration) {
+		val attr = LibraryElementFactory.eINSTANCE.createAttribute
+		attr.name = attributeDeclaration.name;
+		attr.type = attributeDeclaration.type;
+		attr.attributeDeclaration = attributeDeclaration
+		return attr
+	}
+
+	def static newAttribute(AttributeDeclaration attributeDeclaration, String value) {
+		val attr = newAttribute(attributeDeclaration)
+		attr.value = value
+		return attr
 	}
 
 	def static newSTAlgorithm(CharSequence text, String name) {

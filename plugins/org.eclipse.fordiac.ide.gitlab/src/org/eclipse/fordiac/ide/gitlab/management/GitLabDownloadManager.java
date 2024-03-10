@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gitlab.management;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,7 +35,6 @@ import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
-import org.eclipse.fordiac.ide.gitlab.wizard.GitLabImportWizardPage;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class GitLabDownloadManager {
@@ -53,10 +53,12 @@ public class GitLabDownloadManager {
 	private HashMap<Project, List<Package>> projectAndPackageMap;
 	private HashMap<String, List<LeafNode>> packagesAndLeaves;
 
-	private final GitLabImportWizardPage gitLabImportPage;
+	private final String url;
+	private final String token;
 
-	public GitLabDownloadManager(final GitLabImportWizardPage gitLabImportPage) {
-		this.gitLabImportPage = gitLabImportPage;
+	public GitLabDownloadManager(final String url, final String token) {
+		this.url = url;
+		this.token = token;
 	}
 
 	public Map<String, List<LeafNode>> getPackagesAndLeaves() {
@@ -98,11 +100,11 @@ public class GitLabDownloadManager {
 		final URL url = new URL(target);
 		final HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
 		httpConn.setRequestMethod(Messages.GET);
-		httpConn.setRequestProperty(Messages.Private_Token, gitLabImportPage.getToken());
+		httpConn.setRequestProperty(Messages.Private_Token, token);
 		return httpConn;
 	}
 
-	public void packageDownloader(final Project project, final Package p) throws IOException {
+	public File packageDownloader(final Project project, final Package p) throws IOException {
 		for (final String filename : findFilenamesInPackage(p, project)) {
 			final HttpURLConnection httpConn = createConnection(buildDownloadURL(p, project, filename));
 			try (InputStream responseStream = httpConn.getInputStream()) { // closed automatically
@@ -110,9 +112,11 @@ public class GitLabDownloadManager {
 				createPackageDir(p);
 				Files.copy(responseStream, Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename), //$NON-NLS-1$
 						StandardCopyOption.REPLACE_EXISTING);
+				httpConn.disconnect();
+				return new File(Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename).toString());
 			}
-			httpConn.disconnect();
 		}
+		return null;
 	}
 
 	private List<String> findFilenamesInPackage(final Package pack, final Project project) throws IOException {
@@ -125,20 +129,20 @@ public class GitLabDownloadManager {
 	}
 
 	private String buildDownloadURL(final Package p, final Object project, final String filename) {
-		return gitLabImportPage.getUrl() + API_VERSION + ((Project) project).id() + PACKAGES + p.packageType() + "/"
-				+ p.name() + "/" + p.version() + "/" + filename;
+		return url + API_VERSION + ((Project) project).id() + PACKAGES + p.packageType() + "/" + p.name() + "/"
+				+ p.version() + "/" + filename;
 	}
 
 	private String buildPackageFileURL(final Package p, final Project project) {
-		return gitLabImportPage.getUrl() + API_VERSION + project.id() + PACKAGES + p.id() + PACKAGE_FILES;
+		return url + API_VERSION + project.id() + PACKAGES + p.id() + PACKAGE_FILES;
 	}
 
 	private String buildConnectionURL() {
-		return gitLabImportPage.getUrl() + API_VERSION;
+		return url + API_VERSION;
 	}
 
 	private String buildPackagesForProjectURL(final Project project) {
-		return gitLabImportPage.getUrl() + API_VERSION + project.id() + PACKAGES;
+		return url + API_VERSION + project.id() + PACKAGES;
 	}
 
 	private void getProjects() throws IOException {
@@ -193,7 +197,8 @@ public class GitLabDownloadManager {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
 			response = reader.readLine();
 		}
-		final String regex = "\"file_name\":\"(\\w+\\.[a-zA-Z0-9]*)"; //$NON-NLS-1$
+
+		final String regex = "\"file_name\":\"([^\"]*)\""; //$NON-NLS-1$
 		final Pattern p = Pattern.compile(regex);
 		final Matcher m = p.matcher(response);
 		while (m.find()) {

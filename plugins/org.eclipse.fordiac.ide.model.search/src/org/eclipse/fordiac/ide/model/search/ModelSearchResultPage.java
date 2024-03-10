@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.model.search;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -47,6 +48,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.ISelectionListener;
 
 public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
@@ -209,8 +211,13 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	private static void jumpHelper(final EObject jumpingTo) {
 		final IEditorPart editor = OpenListenerManager.openEditor(getParent(jumpingTo));
-		final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
-		HandlerHelper.selectElement(jumpingTo, viewer);
+		if (editor instanceof final ISelectionListener listener) {
+			// fb type editor
+			listener.selectionChanged(editor, new StructuredSelection(EcoreUtil.getURI(jumpingTo)));
+		} else {
+			final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
+			HandlerHelper.selectElement(jumpingTo, viewer);
+		}
 	}
 
 	private static EObject getParent(final EObject eobj) {

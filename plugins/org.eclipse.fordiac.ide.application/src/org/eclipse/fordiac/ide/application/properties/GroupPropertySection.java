@@ -37,6 +37,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class GroupPropertySection extends AbstractDoubleColumnSection {
 
 	private static final int MAX_INPUT_LENGTH = 5;
+	private static final int TWO_COLUMNS = 2;
 
 	private Text nameText;
 	private Text commentText;
@@ -56,7 +57,7 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		final Composite hwGroup = createHeightAndWidthGroup(sizeGroup);
 		createHeightEntry(hwGroup);
 		createWidthEntry(hwGroup);
-		createLockGroupCheckbox(sizeGroup);
+		createLockGroupCheckbox(hwGroup);
 	}
 
 	@Override
@@ -94,8 +95,8 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		final var composite = new Composite(parent, SWT.SHADOW_NONE);
 		getWidgetFactory().adapt(composite);
 
-		GridLayoutFactory.fillDefaults().numColumns(4).applyTo(composite);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, false).applyTo(composite);
+		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).margins(10, 5).applyTo(composite);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(composite);
 		return composite;
 	}
 
@@ -150,7 +151,8 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 	}
 
 	private void createLockGroupCheckbox(final Composite parent) {
-		lockCheckbox = getWidgetFactory().createButton(parent, FordiacMessages.Group_LABEL_LockSize, SWT.CHECK);
+		getWidgetFactory().createCLabel(parent, FordiacMessages.Group_LABEL_DisableAutoResize);
+		lockCheckbox = getWidgetFactory().createButton(parent, null, SWT.CHECK);
 		lockCheckbox.setToolTipText(FordiacMessages.Group_TOOLTIP_DisableAutoResize);
 		lockCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
 			if (getType() != null) {

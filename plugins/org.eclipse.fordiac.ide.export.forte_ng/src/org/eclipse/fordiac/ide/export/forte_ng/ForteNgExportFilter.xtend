@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
- *               2020 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2024 fortiss GmbH, Johannes Kepler University Linz
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -80,8 +79,8 @@ class ForteNgExportFilter extends TemplateExportFilter {
 				}
 			AdapterType:
 				#{
-					new AdapterFBHeaderTemplate(source.adapterFBType, source.generateTypeInclude, Paths.get(source.generateTypePath)),
-					new AdapterFBImplTemplate(source.adapterFBType, source.generateTypeSource, Paths.get(source.generateTypePath))
+					new AdapterFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
+					new AdapterFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
 				}
 			ServiceInterfaceFBType:
 				#{

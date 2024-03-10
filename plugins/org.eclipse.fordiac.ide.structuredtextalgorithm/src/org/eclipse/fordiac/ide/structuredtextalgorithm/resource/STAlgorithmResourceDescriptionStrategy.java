@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.resource;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
@@ -24,6 +25,9 @@ public class STAlgorithmResourceDescriptionStrategy extends STCoreResourceDescri
 
 	@Override
 	public boolean createEObjectDescriptions(final EObject eObject, final IAcceptor<IEObjectDescription> acceptor) {
+		if (eObject instanceof LibraryElement && eObject.eResource().getURI().hasQuery()) {
+			return false; // do not export library element from resource with query
+		}
 		if (eObject instanceof STAlgorithmBody || eObject instanceof STMethodBody || eObject instanceof FBNetwork) {
 			return false; // do not export anything inside of an algorithm or FB network
 		}

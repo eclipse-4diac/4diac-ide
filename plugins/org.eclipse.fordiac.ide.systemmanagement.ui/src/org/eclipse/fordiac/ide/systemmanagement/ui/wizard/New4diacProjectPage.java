@@ -37,7 +37,6 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 
 	public static final String APPLICATION_NAME_POSTFIX = "App"; //$NON-NLS-1$
 
-	private boolean importDefaultTypeLib = true;
 	private boolean openApplication = true;
 
 	private Button advancedButton;
@@ -45,7 +44,10 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 	private InitialNameGroup systemName;
 	private InitialNameGroup applicationName;
 
-	/** Height of the "advanced" linked resource group. Set when the advanced group is first made visible. */
+	/**
+	 * Height of the "advanced" linked resource group. Set when the advanced group
+	 * is first made visible.
+	 */
 	private int linkedResourceGroupHeight = -1;
 
 	/** Container for the advanced section in the creation wizard */
@@ -61,9 +63,11 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		}
 	};
 
-	/** Creates a new project creation wizard page.
+	/**
+	 * Creates a new project creation wizard page.
 	 *
-	 * @param pageName the name of this page */
+	 * @param pageName the name of this page
+	 */
 	public New4diacProjectPage(final String pageName) {
 		super(pageName);
 		setPageComplete(false);
@@ -106,13 +110,13 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 				return false;
 			}
 
-			if (super.validatePage()) {
-				// if we are in the default project location area check if there is no directory with given name
-				if (useDefaults() && projectNameExistsinWSPath(getProjectName())) {
-					setErrorMessage(Messages.New4diacProjectWizard_DirectoryWithProjectNameAlreadyExistsInWorkspace);
-					return false;
-				}
-			} else {
+			if (!super.validatePage()) {
+				return false;
+			}
+			// if we are in the default project location area check if there is no directory
+			// with given name
+			if (useDefaults() && projectNameExistsinWSPath(getProjectName())) {
+				setErrorMessage(Messages.New4diacProjectWizard_DirectoryWithProjectNameAlreadyExistsInWorkspace);
 				return false;
 			}
 		} finally {
@@ -179,21 +183,6 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		advancedGroupContainer.setLayout(new GridLayout());
 		advancedGroupContainer.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 
-		final Button importDefaultTypeLibButton = new Button(advancedGroupContainer, SWT.CHECK);
-		importDefaultTypeLibButton.setSelection(importDefaultTypeLib);
-		importDefaultTypeLibButton.setText(Messages.PaletteManagementPage_LABEL_DefaultTypeLibrary);
-		importDefaultTypeLibButton.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				importDefaultTypeLib = true;
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-				importDefaultTypeLib = false;
-			}
-		});
-
 		final Button openApplicationCheckbox = new Button(advancedGroupContainer, SWT.CHECK);
 		openApplicationCheckbox.setText(Messages.NewApplicationPage_OpenApplicationForEditing);
 		openApplicationCheckbox.setSelection(openApplication);
@@ -208,10 +197,6 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 				openApplication = false;
 			}
 		});
-	}
-
-	public boolean importDefaultTypeLibrary() {
-		return importDefaultTypeLib;
 	}
 
 	private boolean projectNameExistsinWSPath(final String projectName) {

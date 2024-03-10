@@ -16,8 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import java.util.List;
-
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
@@ -37,9 +35,6 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.ui.IEditorPart;
 
 public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceElementEditPart {
-
-	private final TargetPinManager targetPinManager = new TargetPinManager(this);
-	TargetInterfaceAdapter targetInteraceAdapter = null;
 
 	@Override
 	protected IFigure createFigure() {
@@ -118,11 +113,6 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 				super.notifyChanged(notification);
 			}
 		};
-	}
-
-	@Override
-	protected List getModelChildren() {
-		return targetPinManager.getModelChildren();
 	}
 
 	private void goToParent() {

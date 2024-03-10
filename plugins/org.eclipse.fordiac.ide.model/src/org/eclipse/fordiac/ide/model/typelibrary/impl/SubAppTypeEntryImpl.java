@@ -15,10 +15,12 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SubApplicationTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 
@@ -38,4 +40,8 @@ public class SubAppTypeEntryImpl extends AbstractCheckedTypeEntryImpl<SubAppType
 		return new SubApplicationTypeExporter(type);
 	}
 
+	@Override
+	public EClass getTypeEClass() {
+		return LibraryElementPackage.Literals.SUB_APP_TYPE;
+	}
 }

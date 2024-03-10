@@ -27,6 +27,11 @@ public class ChangeAttributeOrderCommand extends AbstractChangeListElementOrderC
 		super(attribute, isMoveUp(updown), configurableObject.getAttributes());
 	}
 
+	public ChangeAttributeOrderCommand(final ConfigurableObject configurableObject, final Attribute attribute,
+			final Attribute ref) {
+		super(attribute, ref, false, configurableObject.getAttributes());
+	}
+
 	private static boolean isMoveUp(final IndexUpDown updown) {
 		return updown == IndexUpDown.UP;
 	}

@@ -57,8 +57,8 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 		switch (eClass.getClassifierID()) {
 			case LibraryPackage.DEPENDENCIES: return createDependencies();
 			case LibraryPackage.EXCLUDES: return createExcludes();
+			case LibraryPackage.EXPORTS: return createExports();
 			case LibraryPackage.INCLUDES: return createIncludes();
-			case LibraryPackage.LIBRARIES: return createLibraries();
 			case LibraryPackage.LIBRARY: return createLibrary();
 			case LibraryPackage.LIBRARY_ELEMENT: return createLibraryElement();
 			case LibraryPackage.MANIFEST: return createManifest();
@@ -98,9 +98,9 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 	 * @generated
 	 */
 	@Override
-	public Includes createIncludes() {
-		IncludesImpl includes = new IncludesImpl();
-		return includes;
+	public Exports createExports() {
+		ExportsImpl exports = new ExportsImpl();
+		return exports;
 	}
 
 	/**
@@ -109,9 +109,9 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 	 * @generated
 	 */
 	@Override
-	public Libraries createLibraries() {
-		LibrariesImpl libraries = new LibrariesImpl();
-		return libraries;
+	public Includes createIncludes() {
+		IncludesImpl includes = new IncludesImpl();
+		return includes;
 	}
 
 	/**

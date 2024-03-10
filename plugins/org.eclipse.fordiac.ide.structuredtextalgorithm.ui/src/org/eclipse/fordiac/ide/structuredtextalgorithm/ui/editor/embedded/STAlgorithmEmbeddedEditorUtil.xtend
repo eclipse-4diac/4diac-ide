@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditor
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorFactory
@@ -47,7 +47,7 @@ final class STAlgorithmEmbeddedEditorUtil {
 
 	def static void updateEditor(EmbeddedEditor editor, URI uri, LibraryElement type,
 		Collection<? extends EObject> additionalContent, INamedElement expectedType) {
-		editor.updateEditor(uri, type, additionalContent, #{STCoreUtil.OPTION_EXPECTED_TYPE -> expectedType})
+		editor.updateEditor(uri, type, additionalContent, #{STResource.OPTION_EXPECTED_TYPE -> expectedType})
 	}
 
 	def static void updateEditor(EmbeddedEditor editor, URI uri, LibraryElement type,

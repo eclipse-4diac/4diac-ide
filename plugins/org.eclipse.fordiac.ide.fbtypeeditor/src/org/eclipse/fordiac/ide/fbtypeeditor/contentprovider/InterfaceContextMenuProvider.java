@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2017 fortiss GmbH
+ * Copyright (c) 2014, 2024 fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.actions.CreatePlugAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.actions.CreateSocketAction;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -51,8 +51,8 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 
 	private final DataTypeLibrary dataTypeLib;
 
-	public InterfaceContextMenuProvider(final EditPartViewer viewer, final ZoomManager zoomManager, final ActionRegistry registry,
-			final DataTypeLibrary dataTypeLib) {
+	public InterfaceContextMenuProvider(final EditPartViewer viewer, final ZoomManager zoomManager,
+			final ActionRegistry registry, final DataTypeLibrary dataTypeLib) {
 		super(viewer, zoomManager, registry);
 		this.dataTypeLib = dataTypeLib;
 	}
@@ -109,16 +109,15 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 			}
 			submenu.add(action);
 		}
-		if (!(fbType instanceof AdapterFBType)) {
+		if (!(fbType instanceof AdapterType)) {
 			buildAdapterMenuEntries(menu, registry, part, fbType);
 		}
 	}
 
-	private static void buildAdapterMenuEntries(final IMenuManager menu, final ActionRegistry registry, final IWorkbenchPart part,
-			final FBType fbType) {
+	private static void buildAdapterMenuEntries(final IMenuManager menu, final ActionRegistry registry,
+			final IWorkbenchPart part, final FBType fbType) {
 
-		if (((EditorPart) part).getEditorInput() instanceof FBTypeEditorInput) {
-			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) ((EditorPart) part).getEditorInput();
+		if (((EditorPart) part).getEditorInput() instanceof final FBTypeEditorInput untypedInput) {
 			final TypeLibrary typeLib = untypedInput.getTypeEntry().getTypeLibrary();
 			if (null != typeLib) {
 				final MenuManager socketEntry = new MenuManager(CREATE_SOCKET);
@@ -175,7 +174,7 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 		action = new CreateOutputEventAction(workBenchPart, fbType);
 		registry.registerAction(action);
 
-		if (!(fbType instanceof AdapterFBType)) {
+		if (!(fbType instanceof AdapterType)) {
 			action = new CreateNewPlugAction(workBenchPart, fbType);
 			registry.registerAction(action);
 

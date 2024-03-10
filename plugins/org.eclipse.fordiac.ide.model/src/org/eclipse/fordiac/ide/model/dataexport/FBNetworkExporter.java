@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2014, 2017 Profactor GmbH, fortiss GmbH
- * 				 2018 - 2020 Johannes Keppler University, Linz
+ * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
+ *  						Johannes Keppler University, Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,8 +24,11 @@ import javax.xml.stream.XMLStreamException;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -39,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.SubAppTypeEntryImpl;
@@ -146,7 +150,14 @@ class FBNetworkExporter extends CommonElementExporter {
 			createUntypedSubAppContents((SubApp) fbnElement);
 		}
 
+		if (fbnElement instanceof final StructManipulator structManipulator) {
+			addAttributeElement(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG, ElementaryTypes.STRING,
+					PackageNameHelper.getFullTypeName(structManipulator.getStructType()), null);
+		}
 		addAttributes(fbnElement.getAttributes());
+		if (fbnElement instanceof final ConfigurableFB configFb) {
+			addAttributes(configFb.getConfigurationAsAttributes());
+		}
 		if (!isUntypedSubapp(fbnElement) && !(fbnElement instanceof Group)) {
 			// for untyped subapp initial values are stored in the vardeclarations
 			addParamsConfig(fbnElement.getInterface());
@@ -181,7 +192,7 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {
-		if (!(fbnElement.getType() instanceof AdapterFBType)) {
+		if (!(fbnElement.getType() instanceof AdapterType)) {
 			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB)) {
 				return LibraryElementTags.FB_ELEMENT;
 			}

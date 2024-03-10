@@ -17,9 +17,26 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.AttributeValueChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ImportChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.InitialValueChange;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.TextChange;
 import org.eclipse.ltk.core.refactoring.TextFileChange;
+import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
@@ -63,8 +80,6 @@ public class STCoreChangeConverter extends ChangeConverter {
 		}
 	}
 
-	private final String name;
-
 	private final RefactoringIssueAcceptor issues;
 
 	private final ResourceURIConverter resourceUriConverter;
@@ -77,7 +92,6 @@ public class STCoreChangeConverter extends ChangeConverter {
 			final RefactoringIssueAcceptor issues, final ResourceURIConverter uriConverter, final IWorkbench workbench,
 			final IGlobalServiceProvider globalServiceProvider) {
 		super(name, changeFilter, issues, uriConverter, workbench);
-		this.name = name;
 		this.issues = issues;
 		this.resourceUriConverter = uriConverter;
 		this.workbench = workbench;
@@ -88,6 +102,11 @@ public class STCoreChangeConverter extends ChangeConverter {
 	protected void _handleReplacements(final IEmfResourceChange change) {
 		// ignore pure-EMF changes
 		// those are handled via a separate participant
+		if (change instanceof final ImportedNamespaceChange importedNamespaceChange) {
+			final Import imp = importedNamespaceChange.getImport();
+			addChange(new ImportChange(getSourceElementName(imp), LibraryElementXtextResource.getExternalURI(imp),
+					importedNamespaceChange.getImportedNamespace()));
+		}
 	}
 
 	@Override
@@ -108,13 +127,40 @@ public class STCoreChangeConverter extends ChangeConverter {
 
 		final MultiTextEdit textEdit = new MultiTextEdit();
 		textEdit.addChildren(textEdits.toArray(new TextEdit[textEdits.size()]));
-		final TextChange ltkChange = createChange(change);
-		ltkChange.setEdit(textEdit);
-		ltkChange.setTextType(change.getOldURI().fileExtension());
-		addChange(ltkChange);
+		handleReplacements(change, textEdit);
 	}
 
-	protected TextChange createChange(final ITextDocumentChange change) {
+	protected void handleReplacements(final ITextDocumentChange change, final TextEdit textEdit) {
+		if (change.getResource() instanceof final STCoreResource coreResource && coreResource.getURI().hasQuery()) {
+			final EObject sourceElement = coreResource.getSourceElement();
+			final String sourceElementName = getSourceElementName(sourceElement);
+			if (sourceElement instanceof final Attribute attribute) {
+				addChange(new AttributeValueChange(sourceElementName,
+						LibraryElementXtextResource.getExternalURI(attribute),
+						getEditedText(attribute.getValue(), textEdit)));
+			} else if (sourceElement instanceof final ArraySize arraySize
+					&& arraySize.eContainer() instanceof final VarDeclaration varDeclaration) {
+				addChange(new DataTypeChange(sourceElementName,
+						LibraryElementXtextResource.getExternalURI(varDeclaration),
+						getEditedText(varDeclaration.getFullTypeName(), textEdit)));
+			} else if (sourceElement instanceof final Value value
+					&& value.eContainer() instanceof final VarDeclaration varDeclaration) {
+				addChange(new InitialValueChange(sourceElementName,
+						LibraryElementXtextResource.getExternalURI(varDeclaration),
+						getEditedText(value.getValue(), textEdit)));
+			} else {
+				issues.add(RefactoringIssueAcceptor.Severity.FATAL,
+						"Invalid query in ST resource: " + change.getOldURI().query()); //$NON-NLS-1$
+			}
+		} else {
+			final TextChange ltkChange = createDocumentChange(change);
+			ltkChange.setEdit(textEdit);
+			ltkChange.setTextType(change.getOldURI().fileExtension());
+			addChange(ltkChange);
+		}
+	}
+
+	protected TextChange createDocumentChange(final ITextDocumentChange change) {
 		final IFile file = resourceUriConverter.toFile(change.getOldURI());
 		final FileEditorInput editorInput = new FileEditorInput(file);
 		final ITextEditor editor = findOpenEditor(editorInput);
@@ -155,5 +201,23 @@ public class STCoreChangeConverter extends ChangeConverter {
 				return Adapters.adapt(editorPart, ITextEditor.class);
 			}
 		}.syncExec();
+	}
+
+	protected static String getSourceElementName(final EObject element) {
+		if (element != null) {
+			return element.eResource().getURI().lastSegment() + ": " + FordiacMarkerHelper.getLocation(element); //$NON-NLS-1$
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	protected String getEditedText(final String original, final TextEdit textEdit) {
+		final IDocument document = new Document(original);
+		try {
+			textEdit.apply(document);
+		} catch (MalformedTreeException | BadLocationException e) {
+			issues.add(RefactoringIssueAcceptor.Severity.FATAL, e.getMessage());
+			return null;
+		}
+		return document.get();
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 fortiss GmbH.
+ * Copyright (c) 2020, 2024 fortiss GmbH.
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,7 +14,6 @@
 
 package org.eclipse.fordiac.ide.test.export.lua
 
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.test.export.ExporterTestAdapterFBType
 import org.junit.jupiter.api.Test
 
@@ -26,9 +25,7 @@ class ForteLuaAdapterFBTest extends ExporterTestAdapterFBType {
 	@Test
 	def exportValidBasicFB() {
 
-		val adt = LibraryElementFactory.eINSTANCE.createAdapterType;
-		adt.adapterFBType = functionBlock;
-		val luaString = generateLuaString(adt);
+		val luaString = generateLuaString(functionBlock);
 
 		assertEquals('''
 			local interfaceSpec = {

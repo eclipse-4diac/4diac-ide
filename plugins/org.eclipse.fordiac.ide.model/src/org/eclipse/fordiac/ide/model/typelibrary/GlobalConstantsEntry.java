@@ -20,4 +20,7 @@ public interface GlobalConstantsEntry extends TypeEntry {
 
 	@Override
 	GlobalConstants getTypeEditable();
+
+	@Override
+	GlobalConstants copyType();
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_TON" Comment="standard timer function block (on-delay timing)">
+	<Identification Standard="61499-2" Classification="standard timer function block">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Hoepfinger" Date="2024-03-04">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+				<With Var="PT"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="Q"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="BOOL" Comment="Input"/>
+			<VarDeclaration Name="PT" Type="TIME" Comment="Process time"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="Output"/>
+		</OutputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="E_SWITCH" Type="E_SWITCH" Comment="" x="-980.0" y="-986.6666666666667">
+		</FB>
+		<FB Name="E_DELAY" Type="E_DELAY" Comment="" x="220.0" y="-840.0">
+		</FB>
+		<FB Name="E_RS" Type="E_RS" Comment="" x="1373.3333333333335" y="-953.3333333333334">
+		</FB>
+		<EventConnections>
+			<Connection Source="REQ" Destination="E_SWITCH.EI" Comment="" dx1="200.0"/>
+			<Connection Source="E_SWITCH.EO1" Destination="E_DELAY.START" Comment="" dx1="273.33333333333337"/>
+			<Connection Source="E_SWITCH.EO0" Destination="E_DELAY.STOP" Comment="" dx1="240.0"/>
+			<Connection Source="E_DELAY.EO" Destination="E_RS.S" Comment=""/>
+			<Connection Source="E_SWITCH.EO0" Destination="E_RS.R" Comment="" dx1="253.33333333333334" dx2="260.0" dy="-106.66666666666667"/>
+			<Connection Source="E_RS.EO" Destination="CNF" Comment="" dx1="1033.3333333333335"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="IN" Destination="E_SWITCH.G" Comment="" dx1="166.66666666666669"/>
+			<Connection Source="PT" Destination="E_DELAY.DT" Comment="" dx1="133.33333333333334" dx2="253.33333333333334" dy="433.33333333333337"/>
+			<Connection Source="E_RS.Q" Destination="Q" Comment="" dx1="1066.6666666666667"/>
+		</DataConnections>
+	</FBNetwork>
+</FBType>

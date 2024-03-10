@@ -32,7 +32,7 @@ public class AttributeCommandTest extends FBNetworkTestBase {
 
 	private static final String ATTRIBUTE_DEFAULT_NAME = "Attribute1"; //$NON-NLS-1$
 	private static final String ATTRIBUTE_DEFAULT_NAME2 = "Attribute2"; //$NON-NLS-1$
-	private static final String ATTRIBUTE_DEFAULT_VALUE = "''"; //$NON-NLS-1$
+	private static final String ATTRIBUTE_DEFAULT_VALUE = ""; //$NON-NLS-1$
 	private static final String ATTRIBUTE_DEFAULT_COMMENT = ""; //$NON-NLS-1$
 
 	private static final String ATTRIBUTE_NAME = "testattribute"; //$NON-NLS-1$
