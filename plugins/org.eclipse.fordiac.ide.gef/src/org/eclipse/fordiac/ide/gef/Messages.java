@@ -56,7 +56,6 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_MinimumPinLabelSize;
 	public static String DiagramPreferences_MaximumPinLabelSize;
 	public static String DiagramPreferences_MaximumHiddenConnectionLabelSize;
-	public static String DiagramPreferences_MinimumExpandedSubappInterfaceBarSize;
 	public static String DiagramPreferences_MaximumTypeLabelSize;
 	public static String DiagramPreferences_FieldEditors_GridSpacingInPixels;
 	public static String DiagramPreferences_FieldEditors_RulerAndGrid;
@@ -69,6 +68,7 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_ShowPinComment;
 	public static String DiagramPreferences_ShowConnectedOutputPinName;
 	public static String DiagramPreferences_MaximumInterfaceBarSize;
+	public static String DiagramPreferences_MinimumInterfaceBarSize;
 	public static String DiagramPreferences_BlockMargins;
 	public static String DiagramPreferences_TopBottom;
 	public static String DiagramPreferences_LeftRight;

@@ -23,7 +23,6 @@ package org.eclipse.fordiac.ide.application.figures;
 
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
@@ -45,8 +44,6 @@ import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -284,17 +281,12 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		return new GridData(SWT.FILL, SWT.TOP, true, false);
 	}
 
-	private static final int MIN_EXP_SUBAPP_BAR_WIDTH_CHARS = org.eclipse.fordiac.ide.gef.Activator.getDefault()
-			.getPreferenceStore().getInt(DiagramPreferences.MIN_EXPANDED_SUBAPP_INTERFACE_BAR_WIDTH);
-
 	private static int minExpSubappBarWidhtPixels = -1;
 
 	private static int getMinExpandedInterfaceBarWidth() {
 		if (minExpSubappBarWidhtPixels == -1) {
-			final Dimension singleCharLength = FigureUtilities.getStringExtents(" ", //$NON-NLS-1$
-					JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
-			minExpSubappBarWidhtPixels = singleCharLength.width * MIN_EXP_SUBAPP_BAR_WIDTH_CHARS
-					+ 2 * ConnectorBorder.LR_MARGIN;
+			minExpSubappBarWidhtPixels = EditorWithInterfaceEditPart.getMinInterfaceBarWidth()
+					+ ConnectorBorder.LR_MARGIN; // we have connectors on both sides
 		}
 		return minExpSubappBarWidhtPixels;
 	}

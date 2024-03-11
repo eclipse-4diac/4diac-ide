@@ -30,6 +30,7 @@ import java.util.List;
 import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.GridLayout;
@@ -41,9 +42,11 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -53,6 +56,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -60,6 +64,7 @@ import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.requests.SelectionRequest;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Color;
 
@@ -67,9 +72,10 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	public static final Color INTERFACE_BAR_BG_COLOR = new Color(235, 245, 255);
 	public static final Color INTERFACE_BAR_BORDER_COLOR = new Color(190, 199, 225);
 
-	private static final int MIN_INTERFACE_BAR_WIDTH = 200;
+	private static final int MIN_EXP_SUBAPP_BAR_WIDTH_CHARS = org.eclipse.fordiac.ide.gef.Activator.getDefault()
+			.getPreferenceStore().getInt(DiagramPreferences.MIN_INTERFACE_BAR_SIZE);
 	private static final int TOP_BOTTOM_MARGIN = 1;
-	private static final int LEFT_RIGHT_MARGIN = 10;
+	private static final int LEFT_RIGHT_MARGIN = 5;
 	private static final Insets RIGHT_LIST_BORDER_INSET = new Insets(TOP_BOTTOM_MARGIN, 0, TOP_BOTTOM_MARGIN,
 			LEFT_RIGHT_MARGIN); // no left margin to have interface directly at inner border
 	private static final Insets LEFT_LIST_BORDER_INSET = new Insets(TOP_BOTTOM_MARGIN, LEFT_RIGHT_MARGIN,
@@ -245,7 +251,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 
 	private static Figure createInnerContainer(final IFigure parent, final Insets borderInset) {
 		final Figure innerContainer = new MinSizeFigure();
-		innerContainer.setMinimumSize(new Dimension(MIN_INTERFACE_BAR_WIDTH, -1));
+		innerContainer.setMinimumSize(new Dimension(getMinInterfaceBarWidth(), -1));
 		final ToolbarLayout innerLayout = new ToolbarLayout(false);
 		innerContainer.setLayoutManager(innerLayout);
 		innerContainer.setBorder(new MarginBorder(borderInset));
@@ -530,6 +536,18 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 						contentEP.refresh();
 					}
 				});
+	}
+
+	private static int minSubappBarWidhtPixels = -1;
+
+	public static int getMinInterfaceBarWidth() {
+		if (minSubappBarWidhtPixels == -1) {
+			final Dimension singleCharLength = FigureUtilities.getStringExtents(" ", //$NON-NLS-1$
+					JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
+			minSubappBarWidhtPixels = singleCharLength.width * MIN_EXP_SUBAPP_BAR_WIDTH_CHARS
+					+ ConnectorBorder.LR_MARGIN + LEFT_RIGHT_MARGIN;
+		}
+		return minSubappBarWidhtPixels;
 	}
 
 }
