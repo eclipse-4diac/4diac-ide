@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 
 import org.eclipse.core.resources.IContainer;
@@ -41,7 +41,7 @@ public interface ILibraryLinker {
 
 	void updateFBInstancesWithNewTypeVersion();
 
-	Map<String, TypeEntry> cashOldTypes(final String oldVersion);
+	Set<TypeEntry> cacheOldTypes(final String oldVersion);
 
 	List<String> findLinkedLibs();
 

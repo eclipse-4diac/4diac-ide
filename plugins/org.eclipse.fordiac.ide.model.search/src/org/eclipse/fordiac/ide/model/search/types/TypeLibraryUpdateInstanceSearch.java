@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search.types;
 
-import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -22,23 +22,23 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class TypeLibraryUpdateInstanceSearch extends FBInstanceSearch {
 
-	public TypeLibraryUpdateInstanceSearch(final Map<String, TypeEntry> typeEntries, final TypeLibrary typeLib) {
+	public TypeLibraryUpdateInstanceSearch(final Set<TypeEntry> typeEntries, final TypeLibrary typeLib) {
 		super(new TypeLibUpdateSearchFilter(typeEntries, typeLib));
 	}
 
 	private static class TypeLibUpdateSearchFilter implements SearchFilter {
 
-		private final Map<String, TypeEntry> typeEntries;
+		private final Set<TypeEntry> typeEntries;
 		private final TypeLibrary typeLib;
 
-		public TypeLibUpdateSearchFilter(final Map<String, TypeEntry> typeEntries, final TypeLibrary typeLib) {
+		public TypeLibUpdateSearchFilter(final Set<TypeEntry> typeEntries, final TypeLibrary typeLib) {
 			this.typeEntries = typeEntries;
 			this.typeLib = typeLib;
 		}
 
 		@Override
 		public boolean apply(final INamedElement searchCandidate) {
-			return searchCandidate instanceof final FB fb && typeEntries.containsKey(fb.getFullTypeName())
+			return searchCandidate instanceof final FB fb && typeEntries.contains(fb.getTypeEntry())
 					|| searchCandidate instanceof final ErrorMarkerFBNElement errorMarker
 							&& typeLib.getFBTypeEntry(errorMarker.getFullTypeName()) != null;
 		}
