@@ -13,14 +13,12 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -57,7 +55,7 @@ public final class TargetInterfaceAdapter extends AdapterImpl {
 	}
 
 	private void refreshSecondaryTargets() {
-		final List<EObject> currentTargets = getCurrentTargets();
+		final Set<EObject> currentTargets = getCurrentTargets();
 
 		// remove entries from our set if they are not in the list anymore
 		secondaryTargets.removeIf(target -> {
@@ -74,17 +72,28 @@ public final class TargetInterfaceAdapter extends AdapterImpl {
 		});
 	}
 
-	private List<EObject> getCurrentTargets() {
+	private Set<EObject> getCurrentTargets() {
 		final IInterfaceElement model = refEditPart.getModel();
-		final Stream<HiddenElement> elements = (refEditPart.isInput())
-				? model.getInputConnections().stream().filter(con -> (!con.isVisible() && con.getSource() != null))
-						.flatMap(con -> Stream.concat(Stream.of(con.getSource()),
-								con.getSource().getInputConnections().stream()))
-				: model.getOutputConnections().stream()
-						.filter(con -> (!con.isVisible() && con.getDestination() != null))
-						.flatMap(con -> Stream.concat(Stream.of(con.getDestination()),
-								con.getDestination().getOutputConnections().stream()));
-		return elements.filter(EObject.class::isInstance).map(EObject.class::cast).distinct().toList();
+		final Set<EObject> currTargets = new HashSet<>();
+
+		if (refEditPart.isInput()) {
+			for (final Connection con : model.getInputConnections()) {
+				currTargets.add(con);
+				if (con.getSource() != null) {
+					currTargets.add(con.getSource());
+				}
+			}
+		} else {
+			for (final Connection con : model.getOutputConnections()) {
+				currTargets.add(con);
+				final IInterfaceElement dest = con.getDestination();
+				if (dest != null) {
+					currTargets.add(dest);
+					currTargets.addAll(dest.getOutputConnections()); // needed for correctly handling undo
+				}
+			}
+		}
+		return currTargets;
 	}
 
 }
