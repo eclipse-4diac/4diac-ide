@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.library.model.library.Required;
+import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
@@ -103,9 +105,10 @@ public class New4diacProjectLibraryPage extends WizardPage {
 		libGroupings = libraries.stream().collect(Collectors.groupingBy(lib -> lib.symbolicName));
 	}
 
-	public Map<String, URI> getChosenLibraries() {
-		final Map<String, URI> libs = new HashMap<>();
-		libraries.stream().filter(LibDisplay::isSelected).forEach(lib -> libs.put(lib.getSymbolicName(), lib.getUri()));
+	public Map<Required, URI> getChosenLibraries() {
+		final Map<Required, URI> libs = new HashMap<>();
+		libraries.stream().filter(LibDisplay::isSelected).forEach(
+				lib -> libs.put(ManifestHelper.createRequired(lib.getSymbolicName(), lib.getVersion()), lib.getUri()));
 		return libs;
 	}
 

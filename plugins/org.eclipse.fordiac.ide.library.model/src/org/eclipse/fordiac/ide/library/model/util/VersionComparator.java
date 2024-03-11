@@ -19,8 +19,8 @@ public class VersionComparator implements Comparator<String> {
 
 	@Override
 	public int compare(String o1, String o2) {
-		if (o1 == o2) return 0;
-		if (o1 == null) return -1;
+		if (o1 == null) return (o2 == null) ? 0 : -1;
+		if (o1.equals(o2)) return 0;
 		if (o2 == null) return 1;
 		
 		String[] v1 = o1.split("\\.");

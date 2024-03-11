@@ -34,7 +34,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
-import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceImpl;
+import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -70,35 +70,27 @@ public final class SystemPaletteManagement {
 
 	public static Map<Manifest, java.net.URI> getStandardLibraries(final IProject project) {
 		final Map<Manifest, java.net.URI> libraries = new HashMap<>();
-		final Map<String, Object> loadOptions = new HashMap<>();
 		final FilenameFilter filter = (file, name) -> name.equals("MANIFEST.MF"); //$NON-NLS-1$
 
-		try {
-			final java.net.URI typeLibURI = new java.net.URI("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
-			final IPathVariableManager varMan = project.getPathVariableManager();
-			final java.net.URI typeLibURIResolved = varMan.resolveURI(typeLibURI);
-			final File typeLib = new File(typeLibURIResolved);
+		final java.net.URI typeLibURI = java.net.URI.create("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
+		final IPathVariableManager varMan = project.getPathVariableManager();
+		final java.net.URI typeLibURIResolved = varMan.resolveURI(typeLibURI);
+		final File typeLib = new File(typeLibURIResolved);
 
-			if (typeLib.isDirectory()) {
-				for (final File file : typeLib.listFiles()) {
-					if (!file.getName().startsWith(".") && file.isDirectory()) { //$NON-NLS-1$
-						final File[] manifestArr = file.listFiles(filter);
-						if (manifestArr.length > 0) {
-							final LibraryResourceImpl res = new LibraryResourceImpl(
-									URI.createURI(manifestArr[0].toURI().toString()));
-							res.load(loadOptions);
-							final Manifest manifest = (Manifest) res.getContents().get(0);
-							if ("Library".equals(manifest.getScope()) && manifest.getProduct() != null //$NON-NLS-1$
-									&& manifest.getProduct().getSymbolicName() != null) {
-								libraries.put(manifest, URIUtil.append(typeLibURI, file.getName()));
-							}
+		if (typeLib.isDirectory()) {
+			for (final File file : typeLib.listFiles()) {
+				if (!file.getName().startsWith(".") && file.isDirectory()) { //$NON-NLS-1$
+					final File[] manifestArr = file.listFiles(filter);
+					if (manifestArr.length > 0) {
+						final Manifest manifest = ManifestHelper
+								.getManifest(URI.createURI(manifestArr[0].toURI().toString()));
+						if (manifest != null && ManifestHelper.isLibrary(manifest) && manifest.getProduct() != null
+								&& manifest.getProduct().getSymbolicName() != null) {
+							libraries.put(manifest, URIUtil.append(typeLibURI, file.getName()));
 						}
 					}
 				}
 			}
-
-		} catch (final Exception e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
 		return libraries;

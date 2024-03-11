@@ -47,20 +47,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
-import org.eclipse.core.internal.resources.ProjectDescription;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -69,14 +66,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloadManager;
 import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
-import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceImpl;
+import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
@@ -283,45 +277,38 @@ public final class TypeLibrary {
 	}
 
 	public void checkManifestFile(final IProject project) {
-		final ResourceSet libraryResouceSet = new ResourceSetImpl();
-		final Map<String, Object> loadOptions = new HashMap<>();
 		try {
 			final List<IResource> resources = Arrays.asList(project.members());
 			final Optional<IResource> manifestFile = resources.stream()
 					.filter(res -> res.getName().equals("MANIFEST.MF")).findFirst(); //$NON-NLS-1$
 			if (manifestFile.isPresent()) {
-				final Resource resource = new LibraryResourceImpl(
-						URI.createURI(manifestFile.get().getLocationURI().toString()));
-				libraryResouceSet.getResources().add(resource);
-				resource.load(loadOptions);
-				final Manifest manifest = (Manifest) resource.getContents().get(0);
+				final Manifest manifest = ManifestHelper
+						.getManifest(URI.createURI(manifestFile.get().getLocationURI().toString()));
+				Map<String, List<String>> projectLibs;
 
-				final Optional<IResource> projectFile = resources.stream()
-						.filter(res -> ".project".equals(res.getName())).findFirst(); //$NON-NLS-1$
-
-				final ProjectDescription projectDescription = (ProjectDescription) ResourcesPlugin.getWorkspace()
-						.loadProjectDescription(projectFile.get().getLocation());
-
-				Map<String, List<String>> projectLibs = new HashMap<>();
-				if (projectDescription.getLinks() != null) {
-					projectLibs = parseLibraryNameAndVersion(
-							projectDescription.getLinks().keySet().stream().map(IPath::lastSegment).toList());
+				final IResource typeLib = project.findMember("Type Library"); //$NON-NLS-1$
+				if (typeLib != null && typeLib instanceof final IFolder typeLibFolder) {
+					projectLibs = parseLibraryNameAndVersion(Arrays.asList(typeLibFolder.members()).stream()
+							.filter(fol -> fol.isLinked() && fol instanceof IFolder).map(IFolder.class::cast).toList());
+				} else {
+					projectLibs = new HashMap<>();
 				}
 
-				if (manifest.getScope() != null && "Project".equals(manifest.getScope())) { //$NON-NLS-1$
-					for (final Required req : manifest.getDependencies().getRequired()) {
-						loadLibLinker(req, projectLibs, project);
+				if (manifest != null && ManifestHelper.isProject(manifest) && manifest.getDependencies() != null) {
+					final ILibraryLinker libLinker = loadLibLinker();
+					if (libLinker != null) {
+						for (final Required req : manifest.getDependencies().getRequired()) {
+							checkLibrary(libLinker, req, projectLibs, project);
+						}
 					}
 				}
 			}
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError(Messages.TypeLibrary_ProjectLoadingProblem, e);
-		} catch (final IOException e) {
-			FordiacLogHelper.logError(Messages.TypeLibrary_LibraryLoadingProblem, e);
 		}
 	}
 
-	void loadLibLinker(final Required lib, final Map<String, List<String>> projectLibs, final IProject project) {
+	static ILibraryLinker loadLibLinker() {
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
 		final IExtensionPoint point = registry
 				.getExtensionPoint("org.eclipse.fordiac.ide.model.libraryLinkerExtension"); //$NON-NLS-1$
@@ -332,13 +319,14 @@ public final class TypeLibrary {
 				try {
 					final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (obj instanceof final ILibraryLinker libLinker) {
-						checkLibrary(libLinker, lib, projectLibs, project);
+						return libLinker;
 					}
 				} catch (final Exception e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
 		}
+		return null;
 	}
 
 	void checkLibrary(final ILibraryLinker libLinker, final Required lib, final Map<String, List<String>> projectLibs,
@@ -366,8 +354,7 @@ public final class TypeLibrary {
 		} else {
 			// check local lib
 			final List<File> libDir = Arrays.asList(libLinker.listExtractedFiles());
-			final Map<String, List<String>> localLibs = parseLibraryNameAndVersion(
-					libDir.stream().map(File::getName).toList());
+			final Map<String, List<String>> localLibs = parseLocalLibraryNameAndVersion(libDir);
 
 			if (localLibs.containsKey(lib.getSymbolicName()) && localLibs.get(lib.getSymbolicName()).stream()
 					.anyMatch(l -> compareVersion(lib.getVersion(), l))) {
@@ -404,19 +391,37 @@ public final class TypeLibrary {
 		}
 	}
 
-	static Map<String, List<String>> parseLibraryNameAndVersion(final List<String> libs) {
-
+	static Map<String, List<String>> parseLibraryNameAndVersion(final List<IFolder> libs) {
 		final Map<String, List<String>> nameVersionMap = new HashMap<>();
-		String name;
-		String version;
-		for (final String lib : libs) {
-			if (lib.lastIndexOf("-") != -1) { //$NON-NLS-1$
-				name = lib.substring(0, lib.lastIndexOf("-")); //$NON-NLS-1$
-				version = lib.substring(lib.lastIndexOf("-") + 1, lib.length()); //$NON-NLS-1$
-			} else {
-				name = lib;
-				version = "0.0.0"; //$NON-NLS-1$
+		for (final IFolder lib : libs) {
+			final Manifest manifest = ManifestHelper.getContainerManifest(lib);
+			if (manifest == null || !ManifestHelper.isLibrary(manifest)) {
+				continue;
 			}
+
+			final String name = manifest.getProduct().getName();
+			final String version = manifest.getProduct().getVersionInfo().getVersion();
+
+			if (nameVersionMap.containsKey(name)) {
+				nameVersionMap.get(name).add(version);
+			} else {
+				nameVersionMap.put(name, new ArrayList<>(Arrays.asList(version)));
+			}
+		}
+
+		return nameVersionMap;
+	}
+
+	static Map<String, List<String>> parseLocalLibraryNameAndVersion(final List<File> libs) {
+		final Map<String, List<String>> nameVersionMap = new HashMap<>();
+		for (final File lib : libs) {
+			final Manifest manifest = ManifestHelper.getFolderManifest(lib);
+			if (manifest == null || !ManifestHelper.isLibrary(manifest)) {
+				continue;
+			}
+
+			final String name = manifest.getProduct().getName();
+			final String version = manifest.getProduct().getVersionInfo().getVersion();
 
 			if (nameVersionMap.containsKey(name)) {
 				nameVersionMap.get(name).add(version);
