@@ -62,11 +62,6 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 	}
 
 	@Override
-	public GraphicalEditPart getHost() {
-		return (GraphicalEditPart) super.getHost();
-	}
-
-	@Override
 	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
 		final Command cmd = super.createChangeConstraintCommand(request, child, constraint);
@@ -83,7 +78,8 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 	protected Rectangle getNewContentBounds(final List<EditPart> editParts) {
 		Rectangle selectionExtend = null;
 		for (final EditPart selElem : editParts) {
-			if (selElem instanceof final GraphicalEditPart gep && selElem.getModel() instanceof FBNetworkElement) {
+			if (selElem instanceof final GraphicalEditPart gep
+					&& selElem.getModel() instanceof final FBNetworkElement fbnElm) {
 				// only consider the selected FBNetworkElements
 				final Rectangle fbBounds = gep.getFigure().getBounds();
 				if (selectionExtend == null) {
@@ -91,7 +87,7 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 				} else {
 					selectionExtend.union(fbBounds);
 				}
-				addValueBounds((FBNetworkElement) selElem.getModel(), selectionExtend);
+				addValueBounds(fbnElm, selectionExtend);
 			}
 		}
 		return (selectionExtend != null) ? selectionExtend : new Rectangle();
@@ -100,8 +96,8 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 	private void addValueBounds(final FBNetworkElement model, final Rectangle selectionExtend) {
 		final Map<Object, Object> editPartRegistry = getHost().getViewer().getEditPartRegistry();
 		model.getInterface().getInputVars().stream().filter(Objects::nonNull)
-		.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
-		.forEach(ep -> selectionExtend.union(((GraphicalEditPart) ep).getFigure().getBounds()));
+				.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
+				.forEach(ep -> selectionExtend.union(((GraphicalEditPart) ep).getFigure().getBounds()));
 	}
 
 	public static Rectangle getContainerAreaBounds(final GraphicalEditPart containerContentEP) {

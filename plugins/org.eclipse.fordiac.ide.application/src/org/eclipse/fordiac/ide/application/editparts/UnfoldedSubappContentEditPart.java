@@ -21,13 +21,13 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.policies.SubAppContentLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
 
 public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditPart {
-
 
 	@Override
 	protected void createEditPolicies() {
@@ -38,19 +38,19 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 			@Override
 			protected Command getElementCreateCommand(final TypeEntry value, final Point refPoint) {
 				return new ResizeGroupOrSubappCommand(getHost(), AbstractCreateFBNetworkElementCommand
-						.createCreateCommand(value, getModel().getSubappContent(), refPoint.x, refPoint.y));
+						.createCreateCommand(value, getModel(), refPoint.x, refPoint.y));
 			}
 		});
 	}
 
 	@Override
-	public UnfoldedSubappContentNetwork getModel() {
-		return (UnfoldedSubappContentNetwork) super.getModel();
+	public FBNetwork getModel() {
+		return super.getModel();
 	}
 
 	@Override
 	public SubApp getContainerElement() {
-		return getModel().getSubapp();
+		return (SubApp) getModel().eContainer();
 	}
 
 	@Override

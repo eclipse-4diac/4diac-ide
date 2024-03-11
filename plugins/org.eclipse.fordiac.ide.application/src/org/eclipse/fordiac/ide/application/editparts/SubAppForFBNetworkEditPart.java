@@ -69,7 +69,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart implements IContainerEditPart {
-	private UnfoldedSubappContentNetwork subappContents;
 
 	@Override
 	public Adapter createContentAdapter() {
@@ -199,16 +198,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	protected List<Object> getModelChildren() {
 		final List<Object> children = super.getModelChildren();
 		if (getModel().isUnfolded()) {
-			children.add(getSubappContents());
+			children.add(getModel().getSubAppNetwork());
 		}
 		return children;
-	}
-
-	private UnfoldedSubappContentNetwork getSubappContents() {
-		if (null == subappContents) {
-			subappContents = new UnfoldedSubappContentNetwork(getModel());
-		}
-		return subappContents;
 	}
 
 	public SubAppForFBNetworkEditPart() {
