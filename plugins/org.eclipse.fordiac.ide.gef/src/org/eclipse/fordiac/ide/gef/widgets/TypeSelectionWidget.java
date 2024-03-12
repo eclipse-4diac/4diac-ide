@@ -19,6 +19,8 @@ import java.util.function.Consumer;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -146,19 +148,22 @@ public class TypeSelectionWidget {
 		this.contentProvider = contentProvider;
 		this.treeContentProvider = treeContentProvider;
 
-		if (type instanceof StructManipulator) {
+		if (type instanceof final StructManipulator structManipulator) {
+			final String newName = ImportHelper.deresolveImport(
+					PackageNameHelper.getFullTypeName(structManipulator.getStructType()),
+					PackageNameHelper.getContainerPackageName(type), ImportHelper.getContainerImports(type));
+			tableViewer.setInput(new String[] { newName });
 			resizeTextField();
-			tableViewer.setInput(new String[] { ((StructManipulator) configurableObject).getStructType().getName() });
 		} else if (type instanceof IInterfaceElement) {
 			tableViewer.setInput(new String[] { ((IInterfaceElement) configurableObject).getType().getName() });
 		} else if (type instanceof final ConfigurableMoveFB moveFb) {
-			resizeTextField();
 			if (moveFb.getDataType() == null) {
 				tableViewer.setInput(new String[] { IecTypes.GenericTypes.ANY.getName() });
 			} else {
 				tableViewer
 						.setInput(new String[] { ((ConfigurableMoveFB) configurableObject).getDataType().getName() });
 			}
+			resizeTextField();
 		}
 
 		disableOpenEditorForAnyType();
@@ -197,7 +202,10 @@ public class TypeSelectionWidget {
 		table.getColumn(0).dispose();
 		table.setLayout(new TableLayout());
 		table.setLayoutData(new GridData(SWT.FILL, 0, false, false));
-		new TableColumn(table, SWT.NONE).setWidth(150);
+
+		new TableColumn(table, SWT.NONE)
+				.setWidth(table.getItemCount() > 0 ? table.getItem(0).getBounds().width + 30 : 150);
+		table.requestLayout();
 	}
 
 	private void disableOpenEditorForAnyType() {
