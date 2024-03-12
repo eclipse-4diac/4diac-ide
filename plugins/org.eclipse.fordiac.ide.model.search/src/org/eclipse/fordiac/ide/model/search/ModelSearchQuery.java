@@ -14,10 +14,8 @@
 package org.eclipse.fordiac.ide.model.search;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -26,7 +24,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
@@ -36,15 +34,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.search2.internal.ui.SearchView;
@@ -62,7 +58,7 @@ public class ModelSearchQuery implements ISearchQuery {
 	@Override
 	public IStatus run(final IProgressMonitor monitor) throws OperationCanceledException {
 		getSearchResult().clear();
-		final List<AutomationSystem> searchRootSystems = getRootSystems();
+		final List<ISearchContext> searchRootSystems = getSearchContexts();
 		performSearch(searchRootSystems);
 
 		Display.getDefault()
@@ -71,38 +67,37 @@ public class ModelSearchQuery implements ISearchQuery {
 		return Status.OK_STATUS;
 	}
 
-	private List<AutomationSystem> getRootSystems() {
-		final List<AutomationSystem> searchRootSystems = new ArrayList<>();
-
+	private List<ISearchContext> getSearchContexts() {
 		if (modelQuerySpec.getScope() == SearchScope.PROJECT && modelQuerySpec.getProject() != null) {
-			searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(modelQuerySpec.getProject()));
-		} else {
-			// workspace scope
-			final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			for (final IProject proj : root.getProjects()) {
-				if (proj.isOpen()) {
-					searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj));
+			return Arrays.asList(new LiveSearchContext(modelQuerySpec.getProject()));
+		}
+		// workspace scope
+		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		return Arrays.stream(root.getProjects()).filter(IProject::isOpen).map(LiveSearchContext::new)
+				.map(ISearchContext.class::cast).toList();
+	}
+
+	private void performSearch(final List<ISearchContext> searchContexts) {
+		for (final ISearchContext context : searchContexts) {
+			for (final URI libraryElementURI : context.getAllTypes()) {
+				final LibraryElement libraryElement = context.getLibraryElement(libraryElementURI);
+				if (libraryElement instanceof final AutomationSystem sys) {
+					searchSystem(sys);
+				} else if (matchTypeEntry(libraryElement)) {
+					searchResult.addResult(libraryElement);
 				}
 			}
 		}
-		return searchRootSystems;
 	}
 
-	private void performSearch(final List<AutomationSystem> searchRootSystems) {
-		for (final AutomationSystem sys : searchRootSystems) {
-			searchApplications(sys);
-			searchResources(sys);
-			searchTypeLibrary(sys);
-		}
-	}
-
-	public void searchApplications(final AutomationSystem sys) {
+	private void searchSystem(final AutomationSystem sys) {
 		for (final Application app : sys.getApplication()) {
 			searchApplication(app);
 		}
+		searchResources(sys);
 	}
 
-	public void searchApplication(final Application app) {
+	private void searchApplication(final Application app) {
 		if (matchEObject(app)) {
 			searchResult.addResult(app);
 		}
@@ -137,9 +132,8 @@ public class ModelSearchQuery implements ISearchQuery {
 				}
 			}
 			if (modelQuerySpec.isCheckedPinName() && fbnetworkElement.getInterface() != null) {
-				final List<EObject> matchingPins = fbnetworkElement.getInterface().getAllInterfaceElements().stream()
-						.filter(pin -> pin.getName() != null && compareStrings(pin.getName()))
-						.collect(Collectors.toList());
+				final List<IInterfaceElement> matchingPins = fbnetworkElement.getInterface().getAllInterfaceElements()
+						.stream().filter(pin -> pin.getName() != null && compareStrings(pin.getName())).toList();
 				if (!matchingPins.isEmpty()) {
 					if (!path.isEmpty()) {
 						searchResult.getDictionary().addEntry(fbnetworkElement, path);
@@ -170,22 +164,6 @@ public class ModelSearchQuery implements ISearchQuery {
 		}
 	}
 
-	private void searchTypeLibrary(final AutomationSystem sys) {
-		final TypeLibrary lib = sys.getTypeLibrary();
-		searchTypeEntryList(lib.getFbTypes().values());
-		searchTypeEntryList(lib.getAdapterTypes().values());
-		searchTypeEntryList(lib.getDeviceTypes().values());
-		searchTypeEntryList(lib.getResourceTypes().values());
-		searchTypeEntryList(lib.getSegmentTypes().values());
-		searchTypeEntryList(lib.getSubAppTypes().values());
-	}
-
-	private void searchTypeEntryList(final Collection<? extends TypeEntry> entries) {
-		final List<EObject> directMatches = entries.stream().map(TypeEntry::getType).filter(Objects::nonNull)
-				.filter(this::matchTypeEntry).collect(Collectors.toList());
-		searchResult.addResults(directMatches);
-	}
-
 	private boolean matchTypeEntry(final LibraryElement elem) {
 		if (elem instanceof final CompositeFBType comp) {
 			searchFBNetwork(comp.getFBNetwork(), new ArrayList<>());
@@ -199,16 +177,16 @@ public class ModelSearchQuery implements ISearchQuery {
 		return matchEObject(elem);
 	}
 
-	private boolean matchEObject(final EObject modelElement) {
-		if (modelQuerySpec.isCheckedInstanceName() && modelElement instanceof INamedElement) {
-			final String name = ((INamedElement) modelElement).getName();
+	private boolean matchEObject(final INamedElement modelElement) {
+		if (modelQuerySpec.isCheckedInstanceName()) {
+			final String name = modelElement.getName();
 			final boolean matchInstanceName = name != null && compareStrings(name);
 			if (matchInstanceName) {
 				return true;
 			}
 		}
-		if (modelQuerySpec.isCheckedComment() && modelElement instanceof INamedElement) {
-			final String comment = ((INamedElement) modelElement).getComment();
+		if (modelQuerySpec.isCheckedComment()) {
+			final String comment = modelElement.getComment();
 			final boolean matchComment = comment != null && compareStrings(comment);
 			if (matchComment) {
 				return true;

@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -127,29 +128,32 @@ public class LiveSearchContext implements ISearchContext {
 
 	private static IEditorPart getEditor(final TypeEntry typeEntry) {
 		final IWorkbench workbench = PlatformUI.getWorkbench();
-		final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 
-		if (activeWorkbenchWindow == null) {
-			final IWorkbenchWindow[] workbenchWindows = workbench.getWorkbenchWindows();
-			if (workbench.getWorkbenchWindows().length > 0 && workbenchWindows[0].getActivePage() != null) {
-				final IWorkbenchPage activePage = workbenchWindows[0].getActivePage();
-				for (final IEditorReference ref : activePage.getEditorReferences()) {
-					try {
-						final IEditorInput editorInput = ref.getEditorInput();
-						if (editorInput instanceof final FileEditorInput fileInput) {
-							fileInput.getFile().equals(typeEntry.getFile());
-							return ref.getEditor(true);
+		return Display.getCurrent().syncCall(() -> {
+			final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+
+			if (activeWorkbenchWindow == null) {
+				final IWorkbenchWindow[] workbenchWindows = workbench.getWorkbenchWindows();
+				if (workbench.getWorkbenchWindows().length > 0 && workbenchWindows[0].getActivePage() != null) {
+					final IWorkbenchPage activePage = workbenchWindows[0].getActivePage();
+					for (final IEditorReference ref : activePage.getEditorReferences()) {
+						try {
+							final IEditorInput editorInput = ref.getEditorInput();
+							if (editorInput instanceof final FileEditorInput fileInput
+									&& fileInput.getFile().equals(typeEntry.getFile())) {
+								return ref.getEditor(true);
+							}
+						} catch (final PartInitException e) {
+							e.printStackTrace();
 						}
-					} catch (final PartInitException e) {
-						e.printStackTrace();
 					}
 				}
+
+				return null;
 			}
 
-			return null;
-		}
-
-		return activeWorkbenchWindow.getActivePage().findEditor(new FileEditorInput(typeEntry.getFile()));
+			return activeWorkbenchWindow.getActivePage().findEditor(new FileEditorInput(typeEntry.getFile()));
+		});
 	}
 
 }
