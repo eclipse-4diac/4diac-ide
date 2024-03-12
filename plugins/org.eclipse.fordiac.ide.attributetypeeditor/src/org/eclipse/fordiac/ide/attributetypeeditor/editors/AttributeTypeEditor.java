@@ -151,6 +151,12 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		if (annotationModel != null) {
 			annotationModel.dispose();
 		}
+		if (structComposite != null) {
+			structComposite.dispose();
+		}
+		if (directlyDerivedTypeComposite != null) {
+			directlyDerivedTypeComposite.dispose();
+		}
 		super.dispose();
 		if (dirty && attributeTypeEntry != null) {
 			// purge editable type from type entry after super.dispose() so that no
