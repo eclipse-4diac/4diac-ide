@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -51,7 +51,7 @@ import com.google.inject.Inject;
 
 public class STFunctionPartitioner implements STCorePartitioner {
 
-	protected static final String LOST_AND_FOUND_NAME = "LOST_AND_FOUND_%s"; //$NON-NLS-1$
+	protected static final String LOST_AND_FOUND_PATTERN = STFunctionPartition.LOST_AND_FOUND_NAME + "_%s"; //$NON-NLS-1$
 
 	@Inject
 	private STFunctionGrammarAccess grammarAccess;
@@ -159,8 +159,7 @@ public class STFunctionPartitioner implements STCorePartitioner {
 			final var imports = source.getImports().stream().map(this::convertSourceElement).filter(Objects::nonNull)
 					.collect(Collectors.<Import, EList<Import>>toCollection(ECollections::newBasicEList));
 			final var callables = source.getFunctions().stream().map(this::convertSourceElement)
-					.filter(Objects::nonNull)
-					.collect(Collectors.<ICallable, EList<ICallable>>toCollection(ECollections::newBasicEList));
+					.filter(Objects::nonNull).collect(Collectors.toCollection(ECollections::newBasicEList));
 			handleLostAndFound(source, callables);
 			return Optional.of(new STFunctionPartition(source.getName(), imports, text, callables));
 		} catch (final Exception e) {
@@ -264,7 +263,8 @@ public class STFunctionPartitioner implements STCorePartitioner {
 				.range(1, duplicates.size()).forEach(index -> duplicates.get(index).setName(name + "_" + index))); //$NON-NLS-1$
 	}
 
-	protected static void handleLostAndFound(final STFunctionSource source, final EList<ICallable> result) {
+	protected static void handleLostAndFound(final STFunctionSource source,
+			final EList<org.eclipse.fordiac.ide.model.libraryElement.STFunction> result) {
 		final ICompositeNode rootNode = NodeModelUtils.getNode(source).getRootNode();
 		var lastOffset = 0;
 		for (int index = 0; index < source.getFunctions().size(); index++) {
@@ -287,22 +287,22 @@ public class STFunctionPartitioner implements STCorePartitioner {
 	}
 
 	protected static void handleLostAndFound(final ICompositeNode rootNode, final int index, final int start,
-			final int end, final EList<ICallable> result) {
+			final int end, final EList<org.eclipse.fordiac.ide.model.libraryElement.STFunction> result) {
 		final String text = rootNode.getText().substring(start, end);
 		if (!text.trim().isEmpty()) {
 			result.add(index, newLostAndFound(text, index));
 		}
 	}
 
-	protected static void appendText(final ICallable callable, final String text) {
-		if (callable instanceof final org.eclipse.fordiac.ide.model.libraryElement.STFunction function) {
-			function.setText(function.getText() + text);
-		}
+	protected static void appendText(final org.eclipse.fordiac.ide.model.libraryElement.STFunction function,
+			final String text) {
+		function.setText(function.getText() + text);
 	}
 
-	protected static ICallable newLostAndFound(final String text, final int index) {
+	protected static org.eclipse.fordiac.ide.model.libraryElement.STFunction newLostAndFound(final String text,
+			final int index) {
 		final var function = LibraryElementFactory.eINSTANCE.createSTFunction();
-		function.setName(String.format(LOST_AND_FOUND_NAME, Integer.valueOf(index)));
+		function.setName(String.format(LOST_AND_FOUND_PATTERN, Integer.valueOf(index)));
 		function.setText(text);
 		return function;
 	}
