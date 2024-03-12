@@ -283,7 +283,8 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 		return expectedType;
 	}
 
-	protected void setExpectedType(final INamedElement expectedType) {
+	@Override
+	public void setExpectedType(final INamedElement expectedType) {
 		this.expectedType = expectedType;
 	}
 }
