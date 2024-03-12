@@ -18,6 +18,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
@@ -65,23 +66,24 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		private final List<IInterfaceElement> opposites;
 		private final GraphicalViewer viewer;
 		private final IInterfaceElement originPin;
+		private final Point popupPosition;
 
 		public OppositeSelectionDialog(final Shell parent, final List<IInterfaceElement> opposites,
-				final GraphicalViewer viewer, final IInterfaceElement originPin) {
+				final GraphicalViewer viewer, final IInterfaceElement originPin, final Point popupPostion) {
 			super(parent, INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false,
 					Messages.FBPaletteViewer_SelectConnectionEnd, null);
 			this.opposites = opposites;
 			this.viewer = viewer;
 			this.originPin = originPin;
+			this.popupPosition = popupPostion;
 		}
 
 		@Override
 		protected void adjustBounds() {
 			super.adjustBounds();
-			final Point pt = getShell().getDisplay().getCursorLocation();
 			final Rectangle rect = getShell().getBounds();
-			rect.x = pt.x;
-			rect.y = pt.y;
+			rect.x = popupPosition.x;
+			rect.y = popupPosition.y;
 			rect.width += 6;
 			rect.height += 6;
 			getShell().setBounds(rect);
@@ -164,7 +166,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			return dialogArea;
 		}
 
-		private void invokeFollowRightConnectionHandler() {
+		private static void invokeFollowRightConnectionHandler() {
 			final IWorkbench wb = PlatformUI.getWorkbench();
 			final IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
 			final IWorkbenchPage page = window.getActivePage();
@@ -252,8 +254,19 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			final ExecutionEvent event, final GraphicalViewer viewer, final IInterfaceElement originPin)
 			throws ExecutionException {
 
+		HandlerHelper.selectElement(opposites.get(0), viewer);
+		viewer.flush();
+		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
+		final IFigure figure = ((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement()).getFigure();
+
+		final org.eclipse.draw2d.geometry.Point pinLocation = figure.getLocation();
+		pinLocation.y += figure.getBounds().height * 1.5f;
+		figure.translateToAbsolute(pinLocation);
+		final Point pinLocationDisplayCoordinates = viewer.getControl()
+				.toDisplay(new Point(pinLocation.x, pinLocation.y));
+
 		final OppositeSelectionDialog dialog = new OppositeSelectionDialog(HandlerUtil.getActiveShellChecked(event),
-				opposites, viewer, originPin);
+				opposites, viewer, originPin, pinLocationDisplayCoordinates);
 		dialog.open();
 	}
 
