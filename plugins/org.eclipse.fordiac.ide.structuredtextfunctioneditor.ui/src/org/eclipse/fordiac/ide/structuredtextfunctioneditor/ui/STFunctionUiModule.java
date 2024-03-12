@@ -41,6 +41,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreLinkedPos
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRecordingXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreReferenceUpdater;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedEmfResourceUpdater;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameStrategy;
@@ -67,6 +69,8 @@ import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
 import org.eclipse.xtext.ide.serializer.IChangeSerializer;
 import org.eclipse.xtext.ide.serializer.impl.RecordingXtextResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ReferenceUpdater;
+import org.eclipse.xtext.ide.serializer.impl.RelatedEmfResourceUpdater;
+import org.eclipse.xtext.ide.serializer.impl.RelatedXtextResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ResourceLifecycleManager;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.ui.LanguageSpecific;
@@ -285,6 +289,14 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public Class<? extends RecordingXtextResourceUpdater> bindRecordingXtextResourceUpdater() {
 		return STCoreRecordingXtextResourceUpdater.class;
+	}
+
+	public Class<? extends RelatedXtextResourceUpdater> bindRelatedXtextResourceUpdater() {
+		return STCoreRelatedXtextResourceUpdater.class;
+	}
+
+	public Class<? extends RelatedEmfResourceUpdater> bindRelatedEmfResourceUpdater() {
+		return STCoreRelatedEmfResourceUpdater.class;
 	}
 
 	public Class<? extends ReferenceUpdater> bindReferenceUpdater() {

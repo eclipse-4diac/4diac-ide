@@ -23,16 +23,16 @@ import org.eclipse.xtext.util.IAcceptor;
 import com.google.inject.Inject;
 
 @SuppressWarnings("restriction")
-public class STCoreRelatedResourceUpdater extends RelatedXtextResourceUpdater {
+public class STCoreRelatedXtextResourceUpdater extends RelatedXtextResourceUpdater {
 
 	@Inject
-	private STCoreReferenceUpdater referenceUpdater;
+	private STCoreImportUpdater importUpdater;
 
 	@Override
 	public void applyChange(final Deltas deltas, final IAcceptor<IEmfResourceChange> changeAcceptor) {
 		final Resource resource = getResourceSet().getResource(getResource().getUri(), true);
 		if (resource instanceof final LibraryElementXtextResource libResource) {
-			referenceUpdater.updateImports(deltas, libResource.getInternalLibraryElement(),
+			importUpdater.updateImports(deltas, libResource.getInternalLibraryElement(),
 					(imp, value) -> changeAcceptor.accept(new ImportedNamespaceChange(imp, value)));
 		}
 		if (resource instanceof XtextResource) {
