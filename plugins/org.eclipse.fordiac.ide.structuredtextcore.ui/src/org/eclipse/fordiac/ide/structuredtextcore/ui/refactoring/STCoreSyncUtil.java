@@ -12,11 +12,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.xtext.ui.refactoring.ui.SyncUtil;
 
 @SuppressWarnings("restriction")
 public class STCoreSyncUtil extends SyncUtil {
+
+	@Override
+	public void totalSync(final boolean saveAll, final boolean useProgressDialog, final boolean fork)
+			throws InvocationTargetException, InterruptedException {
+		// always save all before refactoring
+		super.totalSync(true, useProgressDialog, fork);
+	}
 
 	@Override
 	@SuppressWarnings("deprecation")
