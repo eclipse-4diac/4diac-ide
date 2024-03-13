@@ -129,7 +129,7 @@ public class LiveSearchContext implements ISearchContext {
 	private static IEditorPart getEditor(final TypeEntry typeEntry) {
 		final IWorkbench workbench = PlatformUI.getWorkbench();
 
-		return Display.getCurrent().syncCall(() -> {
+		return Display.getDefault().syncCall(() -> {
 			final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 
 			if (activeWorkbenchWindow == null) {
@@ -144,7 +144,7 @@ public class LiveSearchContext implements ISearchContext {
 								return ref.getEditor(true);
 							}
 						} catch (final PartInitException e) {
-							e.printStackTrace();
+							FordiacLogHelper.logWarning("Could not open Editor for type entry in search", e); //$NON-NLS-1$
 						}
 					}
 				}
