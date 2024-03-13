@@ -43,7 +43,7 @@ import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
+import org.eclipse.fordiac.ide.model.edit.providers.TypeImageProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -440,7 +440,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		changeTypeLabelText((null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
 		typeLabel.setOpaque(true);
-		typeLabel.setIcon(ResultListLabelProvider.getTypeImage(type));
+		typeLabel.setIcon(TypeImageProvider.getImageForTypeEntry((null != type) ? type.getTypeEntry() : null));
 		typeLabel.setIconTextGap(2);
 		middle.add(typeLabel);
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));

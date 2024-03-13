@@ -19,15 +19,13 @@
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
 import java.util.Arrays;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.edit.providers.TypeImageProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -47,14 +45,6 @@ import org.eclipse.ui.navigator.IDescriptionProvider;
 public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements IDescriptionProvider {
 
 	ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
-
-	private static final Map<EClass, FordiacImage> TYPE_IMAGES = Map.of(LibraryElementPackage.Literals.ADAPTER_TYPE,
-			FordiacImage.ICON_ADAPTER_TYPE, LibraryElementPackage.Literals.SUB_APP_TYPE, FordiacImage.ICON_SUB_APP_TYPE,
-			LibraryElementPackage.Literals.BASIC_FB_TYPE, FordiacImage.ICON_BASIC_FB,
-			LibraryElementPackage.Literals.COMPOSITE_FB_TYPE, FordiacImage.ICON_COMPOSITE_FB,
-			LibraryElementPackage.Literals.SIMPLE_FB_TYPE, FordiacImage.ICON_SIMPLE_FB,
-			LibraryElementPackage.Literals.SERVICE_INTERFACE_FB_TYPE, FordiacImage.ICON_SIFB,
-			LibraryElementPackage.Literals.FUNCTION_FB_TYPE, FordiacImage.ICON_FUNCTION);
 
 	public FBTypeLabelProvider() {
 		super(FBTypeComposedAdapterFactory.getAdapterFactory());
@@ -76,12 +66,9 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	public static ImageDescriptor getImageForFile(final IFile file) {
 		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 		if (typeEntry != null) {
-			final EClass typeEClass = typeEntry.getTypeEClass();
-			if (typeEClass != null) {
-				final FordiacImage fordiacImage = TYPE_IMAGES.get(typeEClass);
-				if (fordiacImage != null) {
-					return fordiacImage.getImageDescriptor();
-				}
+			final FordiacImage fordiacImage = TypeImageProvider.get4diacImageForTypeEntry(typeEntry);
+			if (fordiacImage != null) {
+				return fordiacImage.getImageDescriptor();
 			}
 		}
 		return null;

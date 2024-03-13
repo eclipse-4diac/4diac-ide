@@ -41,7 +41,6 @@ import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.FBShapeShadowBorder;
 import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.SWT;
@@ -75,7 +74,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		if (!model.isTyped()) {
 			getTypeLabel().setIcon(FordiacImage.ICON_SUB_APP.getImage());
 		} else {
-			getTypeLabel().setIcon(ResultListLabelProvider.getTypeImage(model.getType()));
+			getTypeLabel().setIcon(FordiacImage.ICON_SUB_APP_TYPE.getImage());
 		}
 	}
 
