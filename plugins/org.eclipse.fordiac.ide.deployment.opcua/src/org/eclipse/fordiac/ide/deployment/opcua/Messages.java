@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Markus Meingast, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,11 +16,37 @@ package org.eclipse.fordiac.ide.deployment.opcua;
 import org.eclipse.osgi.util.NLS;
 
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.opcua.messages";
+	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.opcua.messages"; //$NON-NLS-1$
+	public static String OPCUADeploymentExecutor_CreateClientFailed;
 	public static String OPCUADeploymentExecutor_CreateResourceFailed;
 	public static String OPCUADeploymentExecutor_CreateFBInstanceFailed;
 	public static String OPCUADeploymentExecutor_CreateFBInstanceFailedNoTypeFound;
 	public static String OPCUADeploymentExecutor_CreateConnectionFailed;
+	public static String OPCUADeploymentExecutor_CreateConnectionFailedNoDataFound;
+
+	public static String OPCUADeploymentExecutor_WriteDeviceFailed;
+	public static String OPCUADeploymentExecutor_WriteResourceFailed;
+
+	public static String OPCUADeploymentExecutor_StartDeviceFailed;
+	public static String OPCUADeploymentExecutor_StartResourceFailed;
+	public static String OPCUADeploymentExecutor_StartFBFailed;
+	public static String OPCUADeploymentExecutor_KillDeviceFailed;
+	public static String OPCUADeploymentExecutor_KillResourceFailed;
+	public static String OPCUADeploymentExecutor_KillFBFailed;
+	public static String OPCUADeploymentExecutor_DeleteDeviceFailed;
+	public static String OPCUADeploymentExecutor_DeleteResourceFailed;
+	public static String OPCUADeploymentExecutor_DeleteFBFailed;
+	public static String OPCUADeploymentExecutor_DeleteConnectionFailed;
+
+	public static String OPCUADeploymentExecutor_BrowseOPCUAFailed;
+
+	public static String OPCUADeploymentExecutor_DeviceConnectionClosed;
+	public static String OPCUADeploymentExecutor_RequestFailed;
+	public static String OPCUADeploymentExecutor_RequestInterrupted;
+
+	public static String OPCUADeploymentExecutor_CouldNotConnectToDevice;
+	public static String OPCUADeploymentExecutor_CouldNotDisconnectFromDevice;
+	public static String OPCUADeploymentExecutor_UnknownResponseCode;
 
 	static {
 		// initialize resource bundle
