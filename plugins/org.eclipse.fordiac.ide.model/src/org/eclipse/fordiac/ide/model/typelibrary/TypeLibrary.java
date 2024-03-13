@@ -363,7 +363,8 @@ public final class TypeLibrary {
 					.anyMatch(l -> compareVersion(lib.getVersion(), l))) {
 
 				libLinker.importLibrary(lib.getSymbolicName() + "-" + localLibs.get(lib.getSymbolicName()).stream() //$NON-NLS-1$
-						.filter(l -> compareVersion(lib.getVersion(), l)).findFirst().get());
+						.filter(l -> compareVersion(lib.getVersion(), l))
+						.sorted((o1, o2) -> -Version.parse(o1).compareTo(Version.parse(o2))).findFirst().get());
 				return;
 			}
 			gitlabLibraryImport(lib.getSymbolicName(), lib.getVersion(), libLinker);
