@@ -277,7 +277,7 @@ public class ExtractCallableRefactoring extends Refactoring {
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final ProviderDocumentChange change = new ProviderDocumentChange(getName(),
-				(IFileEditorInput) editor.getEditorInput(), editor.getDocumentProvider());
+				(IFileEditorInput) editor.getEditorInput(), editor.getDocumentProvider(), false);
 		change.setEdit(createTextEdit());
 		change.setTextType(editor.getDocument().getResourceURI().fileExtension());
 		return change;

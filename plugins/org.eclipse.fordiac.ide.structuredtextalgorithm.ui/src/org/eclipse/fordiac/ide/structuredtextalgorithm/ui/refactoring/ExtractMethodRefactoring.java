@@ -16,10 +16,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallableRefactoring;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ProviderDocumentChange;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.Change;
-import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ltk.core.refactoring.TextChange;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
 public class ExtractMethodRefactoring extends ExtractCallableRefactoring {
@@ -32,10 +31,10 @@ public class ExtractMethodRefactoring extends ExtractCallableRefactoring {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final ProviderDocumentChange change = new ProviderDocumentChange(getName(),
-				(IFileEditorInput) getEditor().getEditorInput(), getEditor().getDocumentProvider());
-		change.setEdit(createTextEdit());
-		change.setTextType("stalg"); //$NON-NLS-1$
+		final Change change = super.createChange(pm);
+		if (change instanceof final TextChange textChange) {
+			textChange.setTextType("stalg"); //$NON-NLS-1$
+		}
 		return change;
 	}
 }

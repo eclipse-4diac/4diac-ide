@@ -27,13 +27,20 @@ public class ProviderDocumentChange extends TextChange {
 
 	private final IFileEditorInput editorInput;
 	private final IDocumentProvider documentProvider;
+	private final boolean doSave;
 	private long modificationStamp = -1L;
 
 	public ProviderDocumentChange(final String name, final IFileEditorInput editorInput,
 			final IDocumentProvider documentProvider) {
+		this(name, editorInput, documentProvider, true);
+	}
+
+	public ProviderDocumentChange(final String name, final IFileEditorInput editorInput,
+			final IDocumentProvider documentProvider, final boolean doSave) {
 		super(name);
 		this.editorInput = editorInput;
 		this.documentProvider = documentProvider;
+		this.doSave = doSave;
 	}
 
 	@Override
@@ -48,7 +55,9 @@ public class ProviderDocumentChange extends TextChange {
 
 	@Override
 	protected void commit(final IDocument document, final IProgressMonitor pm) throws CoreException {
-		documentProvider.saveDocument(pm, editorInput, document, false);
+		if (doSave) {
+			documentProvider.saveDocument(pm, editorInput, document, false);
+		}
 	}
 
 	@Override
@@ -58,7 +67,7 @@ public class ProviderDocumentChange extends TextChange {
 
 	@Override
 	protected Change createUndoChange(final UndoEdit edit) {
-		return new ProviderDocumentUndoChange(getName(), editorInput, documentProvider, edit);
+		return new ProviderDocumentUndoChange(getName(), editorInput, documentProvider, edit, doSave);
 	}
 
 	@Override
