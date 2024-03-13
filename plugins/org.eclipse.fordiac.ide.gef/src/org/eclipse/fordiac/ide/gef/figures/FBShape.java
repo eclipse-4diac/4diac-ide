@@ -440,7 +440,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		changeTypeLabelText((null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
 		typeLabel.setOpaque(true);
-		typeLabel.setIcon(TypeImageProvider.getImageForTypeEntry((null != type) ? type.getTypeEntry() : null));
+		typeLabel.setIcon((null != type) ? TypeImageProvider.getImageForTypeEntry(type.getTypeEntry()) : null);
 		typeLabel.setIconTextGap(2);
 		middle.add(typeLabel);
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));

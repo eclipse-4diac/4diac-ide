@@ -37,8 +37,11 @@ public class TypeImageProvider {
 			DataPackage.Literals.DATA_TYPE, FordiacImage.ICON_DATA_TYPE);
 
 	public static FordiacImage get4diacImageForTypeEntry(final TypeEntry typeEntry) {
-		final EClass typeEClass = typeEntry.getTypeEClass();
-		return (typeEClass != null) ? TYPE_IMAGES.get(typeEClass) : null;
+		if (typeEntry != null) {
+			final EClass typeEClass = typeEntry.getTypeEClass();
+			return (typeEClass != null) ? TYPE_IMAGES.get(typeEClass) : null;
+		}
+		return null;
 	}
 
 	public static Image getImageForTypeEntry(final TypeEntry typeEntry) {
