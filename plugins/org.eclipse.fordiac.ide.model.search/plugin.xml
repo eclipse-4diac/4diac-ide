@@ -31,6 +31,12 @@
           id="org.eclipse.fordiac.ide.model.search.openModelSearchPage"
           name="IEC 61499 Model... ">
     </command>
+    <command
+          categoryId="org.eclipse.fordiac.ide.commands.category"
+          defaultHandler="org.eclipse.fordiac.ide.model.search.handlers.SearchTypeReferences"
+          id="org.eclipse.fordiac.ide.model.search.typeReferences"
+          name="References">
+    </command>
  </extension>
  <extension
        point="org.eclipse.ui.menus">
@@ -56,6 +62,29 @@
           locationURI="menu:org.eclipse.search.menu?after=dialogGroup">
        <command commandId="org.eclipse.fordiac.ide.model.search.openModelSearchPage" />          
     </menuContribution>
- </extension>
+    <menuContribution
+          locationURI="menu:org.eclipse.search.menu?after=extraSearchGroup">
+       <command commandId="org.eclipse.fordiac.ide.model.search.typeReferences" />          
+    </menuContribution>
+    <menuContribution
+			locationURI="popup:org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer?after=group.search">
+		<command commandId="org.eclipse.fordiac.ide.model.search.typeReferences" >
+       		<visibleWhen checkEnabled="false">
+       			<with variable="selection">
+       				<count value="1"/>
+                	<iterate>
+                    	<adapt type="org.eclipse.core.resources.IFile">
+                    	<or>
+                            <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="fbt" />
+                            <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="sub" />
+                            <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="dtd" />
+                        </or>    
+                        </adapt>
+                  	</iterate>
+               	</with>
+        	</visibleWhen>
+		</command>          
+	</menuContribution>
+</extension>
 	
 </plugin>
