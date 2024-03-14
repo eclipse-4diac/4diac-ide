@@ -29,7 +29,7 @@
         <OutputPrimitive Event="TimeOut" Interface="PLUG"/>
       </ServiceTransaction>
     </ServiceSequence>
-    <ServiceSequence Comment="" Name="normal operation">
+    <ServiceSequence Comment="" Name="NormalOperation">
       <ServiceTransaction>
         <InputPrimitive Event="Start" Interface="PLUG" Parameters="TD"/>
         <OutputPrimitive Event="Start" Interface="SOCKET" Parameters="TD"/>

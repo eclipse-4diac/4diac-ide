@@ -26,11 +26,12 @@ public class STAlgorithmResource extends STCoreResource {
 
 	private static final Set<String> FILE_EXTENSIONS = Set.of(TypeLibraryTags.FB_TYPE_FILE_ENDING,
 			TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING, TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING,
-			TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING, TypeLibraryTags.DATA_TYPE_FILE_ENDING);
+			TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING, TypeLibraryTags.DATA_TYPE_FILE_ENDING,
+			TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING);
 
 	private static final Set<String> ADDITIONAL_FILE_EXTENSIONS = Set.of(TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING,
 			TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING, TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING,
-			TypeLibraryTags.DATA_TYPE_FILE_ENDING);
+			TypeLibraryTags.DATA_TYPE_FILE_ENDING, TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING);
 
 	public static boolean isValidFileExtension(final String fileExtension) {
 		return fileExtension != null && FILE_EXTENSIONS.contains(fileExtension.toUpperCase());

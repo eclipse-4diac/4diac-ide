@@ -25,11 +25,9 @@ import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 public class InstanceCommentFigure extends Figure implements IFontUpdateListener {
 
 	public static final String EMPTY_COMMENT = "[" + Messages.InstanceCommentEditPart_EMPTY_COMMENT + "]"; //$NON-NLS-1$ //$NON-NLS-2$
-	TextFlow textFlow;
+	private final TextFlow textFlow;
 
 	public InstanceCommentFigure() {
-		super();
-
 		final FlowPage flowPage = new FlowPage();
 		textFlow = new TextFlow();
 		textFlow.setLayoutManager(new ParagraphTextLayout(textFlow, ParagraphTextLayout.WORD_WRAP_SOFT));

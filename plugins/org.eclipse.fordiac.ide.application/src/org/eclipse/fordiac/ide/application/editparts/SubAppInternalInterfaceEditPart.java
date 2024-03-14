@@ -131,4 +131,9 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
+	@Override
+	protected int getMaxWidth() {
+		// we always want the max width of the interface bar
+		return getInterfaceBarMaxWidth();
+	}
 }

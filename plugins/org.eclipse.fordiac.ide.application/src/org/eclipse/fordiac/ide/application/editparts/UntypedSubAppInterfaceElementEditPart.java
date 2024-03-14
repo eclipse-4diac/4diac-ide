@@ -36,12 +36,14 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.figures.UntypedSubappConnectorBorder;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
+import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -57,12 +59,14 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
 
 	private final TargetPinManager targetPinManager = new TargetPinManager(this);
-	TargetInterfaceAdapter targetInteraceAdapter = null;
+	protected TargetInterfaceAdapter targetInteraceAdapter = null;
+	protected static int subappInterfaceBarMaxWidth = -1;
 
 	private final class SubappInternalConnAnchor extends FixedAnchor {
 		private SubappInternalConnAnchor(final IFigure owner, final boolean isInput) {
@@ -270,6 +274,22 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		}
 
 		return super.getAdapter(key);
+	}
+
+	@Override
+	protected int getMaxWidth() {
+		if (isInExpandedSubapp()) {
+			return getInterfaceBarMaxWidth();
+		}
+		return super.getMaxWidth();
+	}
+
+	protected static int getInterfaceBarMaxWidth() {
+		if (-1 == subappInterfaceBarMaxWidth) {
+			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
+			subappInterfaceBarMaxWidth = pf.getInt(DiagramPreferences.MAX_INTERFACE_BAR_SIZE);
+		}
+		return subappInterfaceBarMaxWidth;
 	}
 
 }

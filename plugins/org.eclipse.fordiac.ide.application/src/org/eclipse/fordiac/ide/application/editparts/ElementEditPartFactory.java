@@ -55,13 +55,13 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 	 */
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-		if (modelElement instanceof UnfoldedSubappContentNetwork) {
-			return new UnfoldedSubappContentEditPart();
-		}
 		if (modelElement instanceof GroupContentNetwork) {
 			return new GroupContentEditPart();
 		}
 		if (modelElement instanceof final FBNetwork network) {
+			if (context instanceof SubAppForFBNetworkEditPart) {
+				return new UnfoldedSubappContentEditPart();
+			}
 			return getPartForFBNetwork(network);
 		}
 		if (modelElement instanceof final FBNetworkElement fbnel) {

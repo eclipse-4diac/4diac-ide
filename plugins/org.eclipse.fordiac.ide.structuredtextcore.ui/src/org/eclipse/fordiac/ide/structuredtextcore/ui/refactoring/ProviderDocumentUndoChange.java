@@ -34,13 +34,15 @@ public class ProviderDocumentUndoChange extends Change {
 	private final IFileEditorInput editorInput;
 	private final IDocumentProvider documentProvider;
 	private final UndoEdit undoEdit;
+	private final boolean doSave;
 
 	public ProviderDocumentUndoChange(final String name, final IFileEditorInput editorInput,
-			final IDocumentProvider documentProvider, final UndoEdit undoEdit) {
+			final IDocumentProvider documentProvider, final UndoEdit undoEdit, final boolean doSave) {
 		this.name = name;
 		this.editorInput = editorInput;
 		this.documentProvider = documentProvider;
 		this.undoEdit = undoEdit;
+		this.doSave = doSave;
 	}
 
 	@Override
@@ -109,7 +111,9 @@ public class ProviderDocumentUndoChange extends Change {
 	}
 
 	protected void commit(final IDocument document, final IProgressMonitor pm) throws CoreException {
-		documentProvider.saveDocument(pm, editorInput, document, false);
+		if (doSave) {
+			documentProvider.saveDocument(pm, editorInput, document, false);
+		}
 	}
 
 	protected void releaseDocument() {
@@ -117,6 +121,6 @@ public class ProviderDocumentUndoChange extends Change {
 	}
 
 	protected Change createUndoChange(final UndoEdit edit) {
-		return new ProviderDocumentUndoChange(name, editorInput, documentProvider, edit);
+		return new ProviderDocumentUndoChange(name, editorInput, documentProvider, edit, doSave);
 	}
 }

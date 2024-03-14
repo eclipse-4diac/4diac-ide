@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH,
+ * Copyright (c) 2020, 2024 Primetals Technologies Germany GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -18,16 +18,56 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.policies.SubAppContentLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.swt.widgets.Display;
 
 public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditPart {
 
+	private final Adapter adapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			final Object feature = notification.getFeature();
+			if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getConnection_RoutingData().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getFBNetwork_NetworkElements().equals(feature)) {
+				Display.getDefault().asyncExec(() -> getParent().layoutExpandedInterface());
+			}
+			super.notifyChanged(notification);
+		}
+	};
+
+	@Override
+	public void activate() {
+		if (!isActive()) {
+			super.activate();
+			((Notifier) getModel()).eAdapters().add(adapter);
+		}
+	}
+
+	@Override
+	public void deactivate() {
+		if (isActive()) {
+			super.deactivate();
+			((Notifier) getModel()).eAdapters().remove(adapter);
+		}
+	}
+
+	@Override
+	public SubAppForFBNetworkEditPart getParent() {
+		return (SubAppForFBNetworkEditPart) super.getParent();
+	}
 
 	@Override
 	protected void createEditPolicies() {
@@ -38,19 +78,19 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 			@Override
 			protected Command getElementCreateCommand(final TypeEntry value, final Point refPoint) {
 				return new ResizeGroupOrSubappCommand(getHost(), AbstractCreateFBNetworkElementCommand
-						.createCreateCommand(value, getModel().getSubappContent(), refPoint.x, refPoint.y));
+						.createCreateCommand(value, getModel(), refPoint.x, refPoint.y));
 			}
 		});
 	}
 
 	@Override
-	public UnfoldedSubappContentNetwork getModel() {
-		return (UnfoldedSubappContentNetwork) super.getModel();
+	public FBNetwork getModel() {
+		return super.getModel();
 	}
 
 	@Override
 	public SubApp getContainerElement() {
-		return getModel().getSubapp();
+		return (SubApp) getModel().eContainer();
 	}
 
 	@Override

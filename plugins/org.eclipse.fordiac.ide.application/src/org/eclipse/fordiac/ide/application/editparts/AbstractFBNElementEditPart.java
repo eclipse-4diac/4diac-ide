@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.gef.tools.ScrollingDragEditPartsTracker;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -341,7 +342,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			}
 			return getFigure().getDataInputs();
 		}
-		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
+		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart
+				|| interfaceEditPart.getModel() instanceof ErrorMarkerInterface) {
 			return getFigure().getErrorMarkerInput();
 		}
 		return getFigure();
@@ -360,7 +362,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			}
 			return getFigure().getDataOutputs();
 		}
-		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
+		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart
+				|| interfaceEditPart.getModel() instanceof ErrorMarkerInterface) {
 			return getFigure().getErrorMarkerOutput();
 		}
 		return getFigure();

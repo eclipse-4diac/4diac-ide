@@ -146,9 +146,15 @@ public final class StructManipulation {
 	}
 
 	private static VarDeclaration findVarDeclarationInStruct(final StructuredType struct, final String name) {
+		// if struct is already configured, we find the variable there
+		VarDeclaration found = struct.getMemberVariables().stream().filter(memVar -> memVar.getName().equals(name))
+				.findFirst().orElse(null);
+		if (found != null) {
+			return found;
+		}
+		// else we have to check each element separately
 		final String[] subnames = name.split("\\."); //$NON-NLS-1$
 		List<VarDeclaration> members = struct.getMemberVariables();
-		VarDeclaration found = null;
 		for (final String subname : subnames) { //
 			final Object[] findings = members.stream().filter(memVar -> memVar.getName().equals(subname)).toArray();
 			if (findings.length > 0) {

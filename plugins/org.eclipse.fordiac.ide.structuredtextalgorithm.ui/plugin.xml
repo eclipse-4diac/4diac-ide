@@ -226,22 +226,46 @@
 			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
 			uriExtension="stalg">
 		</resourceServiceProvider>
-  <resourceServiceProvider
-        class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
-        uriExtension="fbt">
-  </resourceServiceProvider>
-  <resourceServiceProvider
-        class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
-        uriExtension="sys">
-  </resourceServiceProvider>
-  <resourceServiceProvider
-        class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
-        uriExtension="sub">
-  </resourceServiceProvider>
-  <resourceServiceProvider
-        class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
-        uriExtension="atp">
-  </resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="fbt">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="sys">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="sub">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="atp">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="adp">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="FBT">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="SYS">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="SUB">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="ATP">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="ADP">
+		</resourceServiceProvider>
 	</extension>
 	<!-- Quick Outline -->
 	<extension
@@ -440,7 +464,7 @@
  </extension>
  <extension
        point="org.eclipse.ui.editorActions">
-    <!-- extension point is generally deprecated but still valid for rulerActions in the editor gutter, according to bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=455985 -->
+		<!-- extension point is generally deprecated but still valid for rulerActions in the editor gutter, according to bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=455985 -->
     <editorContribution
           id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithm.rulerActions"
           targetID="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm">
@@ -455,7 +479,7 @@
  </extension>
  <extension
        point="org.eclipse.ui.popupMenus">
-    <!-- extension point is generally deprecated but still valid for rulerActions in the editor gutter, according to bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=455985 -->
+		<!-- extension point is generally deprecated but still valid for rulerActions in the editor gutter, according to bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=455985 -->
     <viewerContribution
           id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithm.RulerPopupActions"
           targetID="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.RulerContext">

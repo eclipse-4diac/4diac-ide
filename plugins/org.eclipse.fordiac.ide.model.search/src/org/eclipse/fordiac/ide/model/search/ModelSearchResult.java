@@ -66,7 +66,7 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 		fireChange(getSearchResultEvent(res, ModelSearchResultEvent.ADDED));
 	}
 
-	public void addResults(final List<EObject> res) {
+	public void addResults(final List<? extends EObject> res) {
 		results.addAll(res);
 		if (!res.isEmpty()) {
 			fireChange(getSearchResultEvent(res.get(0), ModelSearchResultEvent.ADDED));

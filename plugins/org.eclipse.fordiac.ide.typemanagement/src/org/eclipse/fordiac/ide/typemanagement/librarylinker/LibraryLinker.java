@@ -23,8 +23,8 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -68,7 +68,7 @@ public class LibraryLinker implements ILibraryLinker {
 			.append(EXTRACTED_LIB_DIRECTORY);
 
 	private IProject selectedProject;
-	private Map<String, TypeEntry> cashedTypes;
+	private Set<TypeEntry> cachedTypes;
 	private TypeLibrary typeLibrary;
 	private boolean isNewVersion;
 
@@ -193,12 +193,12 @@ public class LibraryLinker implements ILibraryLinker {
 						Messages.NewVersionOf + nameAndVersionSplit[0] + " " + Messages.WillBeImported); //$NON-NLS-1$
 				final IFolder oldFolder = selectedProject.getFolder(TYPE_LIB).getFolder(nameOfImportedLib);
 				try {
-					cashedTypes = cashOldTypes(nameOfImportedLib);
+					cachedTypes = cacheOldTypes(nameOfImportedLib);
 					// Should only remove the link but keep the resource on disk
 					oldFolder.delete(true, null);
 					// Remove the entries manually
-					cashedTypes.values().forEach(typeEntry -> TypeLibraryManager.INSTANCE
-							.getTypeLibrary(selectedProject).removeTypeEntry(typeEntry));
+					cachedTypes.forEach(typeEntry -> TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject)
+							.removeTypeEntry(typeEntry));
 				} catch (final CoreException e) {
 					MessageDialog.openWarning(null, Messages.Warning, Messages.OldTypeLibVersionCouldNotBeDeleted);
 				}
@@ -226,7 +226,7 @@ public class LibraryLinker implements ILibraryLinker {
 
 	@Override
 	public void updateFBInstancesWithNewTypeVersion() {
-		Display.getDefault().syncExec(() -> FBUpdater.updateAllInstances(selectedProject, cashedTypes, typeLibrary));
+		Display.getDefault().syncExec(() -> FBUpdater.updateAllInstances(selectedProject, cachedTypes, typeLibrary));
 		final InstanceUpdateDialog updateDialog = new InstanceUpdateDialog(null, Messages.InstanceUpdate, null,
 				Messages.UpdatedInstances, MessageDialog.NONE, new String[] { Messages.Confirm }, 0,
 				FBUpdater.getUpdatedElements());
@@ -234,7 +234,7 @@ public class LibraryLinker implements ILibraryLinker {
 	}
 
 	@Override
-	public Map<String, TypeEntry> cashOldTypes(final String oldVersion) {
+	public Set<TypeEntry> cacheOldTypes(final String oldVersion) {
 		try (final Stream<java.nio.file.Path> stream = Files
 				.walk(Paths.get(WORKSPACE_ROOT, EXTRACTED_LIB_DIRECTORY, oldVersion))) {
 
@@ -265,12 +265,11 @@ public class LibraryLinker implements ILibraryLinker {
 					.filter(fbt.or(adp).or(atp).or(dev).or(dtp).or(res).or(seg).or(sub).or(sys).or(fct).or(gcf))
 					.map(path -> TypeLibraryManager.INSTANCE.getTypeFromLinkedFile(selectedProject,
 							path.getFileName().toString()))
-					.filter(Optional::isPresent).map(Optional::get)
-					.collect(Collectors.toMap(TypeEntry::getFullTypeName, typeEntry -> typeEntry));
+					.filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-		return Collections.emptyMap();
+		return Collections.emptySet();
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -48,12 +48,9 @@ public class STFunctionReconciler implements STCoreReconciler {
 
 	protected static void reconcile(final FunctionFBType dest, final STFunctionPartition source) {
 		// check duplicates in source (very bad)
-		if (checkDuplicates(source.getCallables())) {
+		if (checkDuplicates(source.getFunctions())) {
 			return; // don't even try to attempt this or risk screwing dest up
 		}
-		// initialize
-		dest.setComment(""); //$NON-NLS-1$
-		dest.setBody(LibraryElementFactory.eINSTANCE.createSTFunctionBody());
 		// update package & imports
 		CompilerInfo compilerInfo = dest.getCompilerInfo();
 		if (compilerInfo == null) {
@@ -62,18 +59,21 @@ public class STFunctionReconciler implements STCoreReconciler {
 		}
 		compilerInfo.setPackageName(source.getPackageName());
 		ECollections.setEList(compilerInfo.getImports(), source.getImports());
-		// merge body
-		source.getCallables().forEach(callable -> merge(dest, callable));
-		// reconcile interface
-		reconcileInterface(dest, source);
+		// update body
+		final STFunctionBody body = LibraryElementFactory.eINSTANCE.createSTFunctionBody();
+		body.setText(source.getOriginalSource());
+		dest.setBody(body);
+		// reconcile type
+		reconcileType(dest, source);
 	}
 
-	protected static void reconcileInterface(final FunctionFBType dest, final STFunctionPartition source) {
-		if (!source.getCallables().isEmpty()
-				&& source.getCallables().stream().filter(callable -> dest.getName().equals(callable.getName()))
-						.findFirst().orElse(source.getCallables().get(0)) instanceof final STFunction function) {
-			reconcileInterface(dest.getInterfaceList(), function);
-		}
+	protected static void reconcileType(final FunctionFBType dest, final STFunctionPartition source) {
+		findPrimaryFunction(dest, source).ifPresent(function -> reconcileType(dest, function));
+	}
+
+	protected static void reconcileType(final FunctionFBType dest, final STFunction source) {
+		dest.setComment(source.getComment());
+		reconcileInterface(dest.getInterfaceList(), source);
 	}
 
 	protected static void reconcileInterface(final InterfaceList interfaceList, final STFunction source) {
@@ -116,21 +116,11 @@ public class STFunctionReconciler implements STCoreReconciler {
 		return with;
 	}
 
-	protected static void merge(final FunctionFBType dest, final ICallable source) {
-		if (source instanceof final STFunction sourceFunction) {
-			merge(dest, sourceFunction);
-		}
-	}
-
-	protected static void merge(final FunctionFBType dest, final STFunction source) {
-		dest.setComment(dest.getComment() + source.getComment());
-		if (dest.getBody() instanceof final STFunctionBody body) {
-			if (body.getText() != null) {
-				body.setText(body.getText() + source.getText());
-			} else {
-				body.setText(source.getText());
-			}
-		}
+	protected static Optional<STFunction> findPrimaryFunction(final FunctionFBType dest,
+			final STFunctionPartition source) {
+		return source.getFunctions().stream().filter(callable -> dest.getName().equals(callable.getName())).findFirst()
+				.or(source.getFunctions().stream().filter(callable -> !callable.getName()
+						.startsWith(STFunctionPartition.LOST_AND_FOUND_NAME))::findFirst);
 	}
 
 	protected static boolean checkDuplicates(final EList<? extends ICallable> list) {

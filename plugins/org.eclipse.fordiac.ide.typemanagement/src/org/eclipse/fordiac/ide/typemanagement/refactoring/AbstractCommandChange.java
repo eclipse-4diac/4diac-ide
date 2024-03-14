@@ -59,7 +59,7 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 
 	@Override
 	public final void initializeValidationData(final IProgressMonitor pm) {
-		editor = findEditor(new FileEditorInput(getModifiedElement()));
+		initializeEditor();
 		final LibraryElement libraryElement = acquireLibraryElement(false);
 		final T element = getElement(libraryElement);
 		if (element != null) {
@@ -212,9 +212,14 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		return editor != null;
 	}
 
-	protected static IEditorPart findEditor(final IEditorInput editorInput) {
-		return Stream.of(PlatformUI.getWorkbench().getWorkbenchWindows())
-				.flatMap(window -> Stream.of(window.getPages())).map(page -> page.findEditor(editorInput))
-				.filter(Objects::nonNull).findAny().orElse(null);
+	protected void initializeEditor() {
+		final IEditorInput editorInput = new FileEditorInput(getModifiedElement());
+		// need sync exec because IWorkbenchPage.findEditor(IEditorInput) may
+		// instantiate the editor if it is not loaded (e.g., open editor after a
+		// restart), which requires to be in the UI thread
+		Display.getDefault()
+				.syncExec(() -> editor = Stream.of(PlatformUI.getWorkbench().getWorkbenchWindows())
+						.flatMap(window -> Stream.of(window.getPages())).map(page -> page.findEditor(editorInput))
+						.filter(Objects::nonNull).findAny().orElse(null));
 	}
 }

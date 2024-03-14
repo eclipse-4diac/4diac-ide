@@ -149,6 +149,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		if (annotationModel != null) {
 			annotationModel.dispose();
 		}
+		if (structComposite != null) {
+			structComposite.dispose();
+		}
 		super.dispose();
 		if (dirty && dataTypeEntry != null) {
 			// purge editable type from type entry after super.dispose() so that no

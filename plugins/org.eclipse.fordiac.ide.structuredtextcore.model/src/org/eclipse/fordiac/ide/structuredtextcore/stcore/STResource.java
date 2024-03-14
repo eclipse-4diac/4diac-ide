@@ -19,4 +19,6 @@ public interface STResource {
 	String OPTION_EXPECTED_TYPE = STResource.class.getName() + ".EXPECTED_TYPE"; //$NON-NLS-1$
 
 	INamedElement getExpectedType();
+
+	void setExpectedType(INamedElement expectedType);
 }

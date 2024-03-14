@@ -176,7 +176,7 @@ public class InstanceSearch {
 		searchResult = new HashSet<>();
 		// @formatter:off
 		typeLibrary.getFbTypes().values().parallelStream()
-			.map(FBTypeEntry::getType)
+			.map(FBTypeEntry::getTypeEditable)
 			.filter(BaseFBType.class::isInstance)
 			.map(BaseFBType.class::cast)
 			.map(BaseFBType::getInternalFbs)

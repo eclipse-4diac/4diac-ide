@@ -137,8 +137,9 @@ public final class Messages extends NLS {
 
 	public static String UpdatedInstances;
 
-	public static String DeleteStructChange_DeleteChoice;
-	public static String DeleteStructChange_ChangeToAnyStruct;
+	public static String PreviewChange_DeleteChoice;
+	public static String PreviewChange_ChangeToAnyStruct;
+	public static String PreviewChange_ReplaceWithMarker;
 
 	static {
 		// initialize resource bundle

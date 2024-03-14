@@ -142,6 +142,11 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	protected void validateType(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
 			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
 			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
+		if (ValidationUtil.isContainedInTypedInstance(varDeclaration)) {
+			// do not validate type declarations inside typed instances, since those are
+			// declared in the context of the type
+			return;
+		}
 		final List<Issue> issues = new ArrayList<>();
 		if (varDeclaration.isArray()) {
 			validate(varDeclaration.getArraySize(), delta, typeUsageCollector, issues, context);

@@ -28,6 +28,8 @@ import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -115,6 +117,11 @@ public final class ValidationUtil {
 
 	public static boolean isModelValidationIssue(final Issue issue) {
 		return issue.getCode() != null && issue.getCode().startsWith(LibraryElementValidator.DIAGNOSTIC_SOURCE);
+	}
+
+	public static boolean isContainedInTypedInstance(final IInterfaceElement element) {
+		final FBNetworkElement fbNetworkElement = element.getFBNetworkElement();
+		return fbNetworkElement != null && fbNetworkElement.getTypeEntry() != null;
 	}
 
 	private ValidationUtil() {

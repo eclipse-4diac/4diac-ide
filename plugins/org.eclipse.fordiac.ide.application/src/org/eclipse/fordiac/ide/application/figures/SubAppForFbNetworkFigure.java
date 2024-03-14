@@ -23,12 +23,10 @@ package org.eclipse.fordiac.ide.application.figures;
 
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
@@ -36,19 +34,18 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.utilities.ExpandedInterfacePositionMap;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.FBShapeShadowBorder;
 import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 
 /** The Class SubAppForFbNetworkFigure. */
 public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
@@ -59,8 +56,11 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	private IFigure expandedContentArea;
 	private Shape expandedOutputFigure;
 
+	private final ExpandedInterfacePositionMap interfacePositions;
+
 	public SubAppForFbNetworkFigure(final SubApp model, final SubAppForFBNetworkEditPart editPart) {
 		super(model, editPart);
+		interfacePositions = editPart.getInterfacePositionMap();
 		updateTypeLabel(model);
 		updateExpandedFigure();
 	}
@@ -74,7 +74,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		if (!model.isTyped()) {
 			getTypeLabel().setIcon(FordiacImage.ICON_SUB_APP.getImage());
 		} else {
-			getTypeLabel().setIcon(ResultListLabelProvider.getTypeImage(model.getType()));
+			getTypeLabel().setIcon(FordiacImage.ICON_SUB_APP_TYPE.getImage());
 		}
 	}
 
@@ -111,11 +111,22 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		}
 	}
 
+	/**
+	 * Calls the layout manager for both the input and output interface containers.
+	 * It has to be noted that this only affects interface positions but not
+	 * connections.
+	 */
+	public void layoutExpandedInterface() {
+		expandedInputFigure.getChildren().get(0).getLayoutManager().layout(expandedInputFigure.getChildren().get(0));
+		expandedOutputFigure.getChildren().get(0).getLayoutManager().layout(expandedOutputFigure.getChildren().get(0));
+	}
+
 	public final void updateExpandedFigure() {
 		if (getModel().isUnfolded()) {
 			if (expandedMainFigure == null) {
 				transformToExpandedSubapp();
 			}
+			Display.getDefault().asyncExec(this::layoutExpandedInterface); // initial interface layout
 		} else if (expandedMainFigure != null) {
 			transformToCollapsedSubapp();
 		}
@@ -131,9 +142,9 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		createExpandedMainFigure();
 		removeTopMiddleBottom();
 		addComment();
-		expandedInputFigure = createInterfaceBar(expandedMainFigure);
+		expandedInputFigure = createInterfaceBar(expandedMainFigure, true);
 		createContentContainer();
-		expandedOutputFigure = createInterfaceBar(expandedMainFigure);
+		expandedOutputFigure = createInterfaceBar(expandedMainFigure, false);
 		// ensure recalculation of the pins as they now have two connection endpoints
 		getFbFigureContainer().invalidateTree();
 	}
@@ -175,7 +186,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure.add(expandedContentArea, gridData);
 	}
 
-	private static Shape createInterfaceBar(final IFigure parent) {
+	private Shape createInterfaceBar(final IFigure parent, final boolean isInput) {
 		final RoundedRectangle interfaceBar = new RoundedRectangle() {
 			@Override
 			public Dimension getPreferredSize(final int wHint, final int hHint) {
@@ -191,17 +202,14 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		interfaceBar.setLayoutManager(createInterfaceBarLayout());
 		parent.add(interfaceBar, new GridData(SWT.BEGINNING, SWT.FILL, false, true));
 
-		createToolbarLayoutContainer(interfaceBar);
+		createToolbarLayoutContainer(interfaceBar, isInput);
 
 		return interfaceBar;
 	}
 
-	private static void createToolbarLayoutContainer(final RoundedRectangle interfaceBar) {
+	private void createToolbarLayoutContainer(final RoundedRectangle interfaceBar, final boolean isInput) {
 		final IFigure container = new Figure();
-		final ToolbarLayout layout = new ToolbarLayout(false);
-		layout.setStretchMinorAxis(true);
-		layout.setSpacing(2);
-		layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		final ExpandedSubappInterfaceLayout layout = new ExpandedSubappInterfaceLayout(interfacePositions, isInput);
 		container.setLayoutManager(layout);
 		interfaceBar.add(container, createInterfaceBarGroupLayoutData());
 	}
@@ -235,7 +243,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 
 	private static GridLayout createInterfaceBarLayout() {
 		final GridLayout topLayout = new GridLayout(1, false);
-		topLayout.marginHeight = EditorWithInterfaceEditPart.getInterfaceBarTopPadding();
+		topLayout.marginHeight = 0;
 		topLayout.marginWidth = 0;
 		topLayout.verticalSpacing = 0;
 		topLayout.horizontalSpacing = 0;
@@ -272,17 +280,12 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		return new GridData(SWT.FILL, SWT.TOP, true, false);
 	}
 
-	private static final int MIN_EXP_SUBAPP_BAR_WIDTH_CHARS = org.eclipse.fordiac.ide.gef.Activator.getDefault()
-			.getPreferenceStore().getInt(DiagramPreferences.MIN_EXPANDED_SUBAPP_INTERFACE_BAR_WIDTH);
-
 	private static int minExpSubappBarWidhtPixels = -1;
 
 	private static int getMinExpandedInterfaceBarWidth() {
 		if (minExpSubappBarWidhtPixels == -1) {
-			final Dimension singleCharLength = FigureUtilities.getStringExtents(" ", //$NON-NLS-1$
-					JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
-			minExpSubappBarWidhtPixels = singleCharLength.width * MIN_EXP_SUBAPP_BAR_WIDTH_CHARS
-					+ 2 * ConnectorBorder.LR_MARGIN;
+			minExpSubappBarWidhtPixels = EditorWithInterfaceEditPart.getMinInterfaceBarWidth()
+					+ ConnectorBorder.LR_MARGIN; // we have connectors on both sides
 		}
 		return minExpSubappBarWidhtPixels;
 	}

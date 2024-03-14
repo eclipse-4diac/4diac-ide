@@ -63,22 +63,20 @@ public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 
 	private Command createFBNetworkElementCreateCommand() {
 		final Point pt = getPositionInViewer((IEditorPart) getWorkbenchPart());
-		final AbstractContainerContentEditPart abstractContainerContentEditPart = GetEditPartFromGraficalViewerHelper
+		final AbstractContainerContentEditPart containerEP = GetEditPartFromGraficalViewerHelper
 				.findAbstractContainerContentEditPartAtPosition((IEditorPart) getWorkbenchPart(), pt, fbNetwork);
 
-		if (abstractContainerContentEditPart instanceof GroupContentEditPart) {
-			return new ResizeGroupOrSubappCommand(abstractContainerContentEditPart,
-					new CreateFBElementInGroupCommand(typeEntry,
-							((GroupContentEditPart) abstractContainerContentEditPart).getModel().getGroup(),
-							pt.x - abstractContainerContentEditPart.getFigure().getBounds().x,
-							pt.y - abstractContainerContentEditPart.getFigure().getBounds().y));
+		if (containerEP instanceof final GroupContentEditPart groupContentEP) {
+			return new ResizeGroupOrSubappCommand(containerEP,
+					new CreateFBElementInGroupCommand(typeEntry, groupContentEP.getModel().getGroup(),
+							pt.x - containerEP.getFigure().getBounds().x,
+							pt.y - containerEP.getFigure().getBounds().y));
 		}
-		if (abstractContainerContentEditPart instanceof UnfoldedSubappContentEditPart) {
-			return new ResizeGroupOrSubappCommand(abstractContainerContentEditPart,
-					AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry,
-							abstractContainerContentEditPart.getModel(),
-							pt.x - abstractContainerContentEditPart.getFigure().getBounds().x,
-							pt.y - abstractContainerContentEditPart.getFigure().getBounds().y));
+		if (containerEP instanceof final UnfoldedSubappContentEditPart subappContentEP) {
+			return new ResizeGroupOrSubappCommand(containerEP,
+					AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, subappContentEP.getModel(),
+							pt.x - containerEP.getFigure().getBounds().x,
+							pt.y - containerEP.getFigure().getBounds().y));
 		}
 		return AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, fbNetwork, pt.x, pt.y);
 	}

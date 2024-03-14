@@ -37,6 +37,8 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 	@Inject
 	private AbstractUIPlugin languageUIPlugin;
 
+	private boolean restoringSelection;
+
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
@@ -69,7 +71,11 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 	@Override
 	protected void selectAndReveal(final int selectionStart, final int selectionLength, final int revealStart,
 			final int revealLength) {
-		revealEditor();
+		// do not reveal editor when restoring a selection to avoid unintended switch of
+		// the editor tab
+		if (!restoringSelection) {
+			revealEditor();
+		}
 		super.selectAndReveal(selectionStart, selectionLength, revealStart, revealLength);
 	}
 
@@ -79,6 +85,16 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 			if (multiPageEditor.getSelectedPage() != this) {
 				multiPageEditor.setActiveEditor(this);
 			}
+		}
+	}
+
+	@Override
+	protected void restoreSelection() {
+		restoringSelection = true;
+		try {
+			super.restoreSelection();
+		} finally {
+			restoringSelection = false;
 		}
 	}
 
