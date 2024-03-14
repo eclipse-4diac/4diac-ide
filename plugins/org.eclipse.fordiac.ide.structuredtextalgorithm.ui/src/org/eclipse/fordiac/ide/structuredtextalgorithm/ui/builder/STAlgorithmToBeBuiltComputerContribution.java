@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.ValidationUtil;
 import org.eclipse.xtext.builder.builderState.IBuilderState;
 import org.eclipse.xtext.builder.impl.IToBeBuiltComputerContribution;
 import org.eclipse.xtext.builder.impl.ToBeBuilt;
@@ -113,7 +114,7 @@ public class STAlgorithmToBeBuiltComputerContribution implements IToBeBuiltCompu
 	}
 
 	protected static void updateVarDeclaration(final ToBeBuilt toBeBuilt, final VarDeclaration varDeclaration) {
-		if (varDeclaration.isArray()
+		if (varDeclaration.isArray() && !ValidationUtil.isContainedInTypedInstance(varDeclaration)
 				&& !TypeDeclarationParser.isSimpleTypeDeclaration(varDeclaration.getArraySize().getValue())) {
 			updateElement(toBeBuilt, varDeclaration.getArraySize());
 		}
