@@ -45,12 +45,11 @@ public class SubappPropertySectionFilter implements IFilter {
 			candidate = instanceName.getRefElement();
 		}
 
-		if (candidate instanceof final SubApp subapp) {
-			return subapp;
+		if (candidate instanceof final TargetInterfaceElement targetIE) {
+			candidate = targetIE.getHost().eContainer().eContainer();
 		}
 
-		if (candidate instanceof final TargetInterfaceElement targetIE
-				&& targetIE.getHost().eContainer().eContainer() instanceof final SubApp subapp) {
+		if (candidate instanceof final SubApp subapp && !subapp.isTyped()) {
 			return subapp;
 		}
 

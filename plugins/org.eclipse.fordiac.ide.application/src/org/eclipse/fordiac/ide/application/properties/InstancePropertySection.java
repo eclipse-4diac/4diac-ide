@@ -106,8 +106,11 @@ public class InstancePropertySection extends AbstractSection {
 	}
 
 	protected void createSingleRowLayout(final Composite parent) {
-		parent.setLayout(new GridLayout(1, true));
+		parent.setLayout(new GridLayout(1, false));
 		upperComposite = createComposite(parent);
+		// the upper composite should not grab vertical space as it has always the same
+		// size and give the rest to the tables below
+		upperComposite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false));
 		lowerComposite = createComposite(parent);
 		final GridData gridLayoutData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		parent.setLayoutData(gridLayoutData);
@@ -268,7 +271,7 @@ public class InstancePropertySection extends AbstractSection {
 
 	@Override
 	protected FBNetworkElement getType() {
-		if (type instanceof final FBNetworkElement fbNetworkElement && !(type instanceof SubApp)) {
+		if (type instanceof final FBNetworkElement fbNetworkElement) {
 			return fbNetworkElement;
 		}
 		return null;
