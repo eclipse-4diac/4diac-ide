@@ -580,4 +580,17 @@
        </keywordReference>
     </page>
  </extension>
+ <extension
+       point="org.eclipse.ltk.core.refactoring.renameParticipants">
+    <renameParticipant
+          class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring2.participant.XtextRenameResourceParticipant"
+          id="org.eclipse.fordiac.ide.structuredtextcore.ui.renameParticipant"
+          name="ST Rename Resource Participant">
+       <enablement>
+          <adapt
+                type="org.eclipse.core.resources.IFile">
+          </adapt>
+       </enablement>
+    </renameParticipant>
+ </extension>
 </plugin>

@@ -191,6 +191,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 					entry.getTypeName()));
 			this.entry = entry;
 			this.deleteName = deleteName;
+			this.state.addAll(getDefaultSelection());
 			if (!hasOpenEditor(entry.getType())) {
 				SafeStructDeletionChange.addUpdateChanges(this, entry);
 			}
@@ -227,6 +228,16 @@ public class SafeStructDeletionChange extends CompositeChange {
 		@Override
 		public void addState(final ChangeState newState) {
 			state.add(newState);
+		}
+
+		@Override
+		public EnumSet<ChangeState> getAllowedChoices() {
+			return EnumSet.of(ChangeState.DELETE, ChangeState.CHANGE_TO_ANY);
+		}
+
+		@Override
+		public EnumSet<ChangeState> getDefaultSelection() {
+			return EnumSet.of(ChangeState.CHANGE_TO_ANY);
 		}
 
 	}

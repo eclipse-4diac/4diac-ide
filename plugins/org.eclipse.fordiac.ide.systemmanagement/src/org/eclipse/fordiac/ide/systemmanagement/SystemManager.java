@@ -24,8 +24,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.ICommand;
@@ -93,13 +95,15 @@ public enum SystemManager {
 	}
 
 	public static boolean isSystemFile(final Object entry) {
-		return ((entry instanceof final IFile file)
-				&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase((file).getFileExtension()));
+		return (entry instanceof final IPath path
+				&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase((path).getFileExtension()))
+				|| (entry instanceof final IFile file
+						&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase((file).getFileExtension()));
 	}
 
 	@SuppressWarnings("static-method")
 	public IProject createNew4diacProject(final String projectName, final IPath location,
-			final boolean importDefaultTypeLibrary, final IProgressMonitor monitor) throws CoreException {
+			final Map<String, URI> includedLibraries, final IProgressMonitor monitor) throws CoreException {
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 		final IProject project = root.getProject(projectName);
@@ -122,9 +126,9 @@ public enum SystemManager {
 		project.open(monitor);
 
 		// configure type lib
-		if (importDefaultTypeLibrary) {
-			SystemPaletteManagement.copyToolTypeLibToDestination(project.getFolder(TYPE_LIB_FOLDER_NAME));
-		}
+		SystemPaletteManagement.linkToolTypeLibsToDestination(includedLibraries,
+				project.getFolder(TYPE_LIB_FOLDER_NAME));
+
 		TypeLibraryManager.INSTANCE.getTypeLibrary(project); // insert the project into the project list
 		return project;
 	}

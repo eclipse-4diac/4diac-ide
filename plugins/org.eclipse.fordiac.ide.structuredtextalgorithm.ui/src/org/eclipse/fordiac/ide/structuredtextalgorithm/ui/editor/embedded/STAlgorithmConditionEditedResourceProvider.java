@@ -18,7 +18,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource;
 import org.eclipse.xtext.ParserRule;
 
 public class STAlgorithmConditionEditedResourceProvider extends STAlgorithmEditedResourceProvider {
@@ -36,8 +36,7 @@ public class STAlgorithmConditionEditedResourceProvider extends STAlgorithmEdite
 	@Override
 	public STAlgorithmResource createResource() {
 		final STAlgorithmResource resource = super.createResource();
-		resource.getDefaultLoadOptions().put(STCoreUtil.OPTION_EXPECTED_TYPE, expectedType);
-		resource.getResourceSet().getLoadOptions().put(STCoreUtil.OPTION_EXPECTED_TYPE, expectedType);
+		resource.getDefaultLoadOptions().put(STResource.OPTION_EXPECTED_TYPE, expectedType);
 		resource.getAdditionalContent().addAll(additionalContent);
 		return resource;
 	}

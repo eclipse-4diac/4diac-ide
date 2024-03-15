@@ -22,4 +22,6 @@ public interface AttributeTypeEntry extends TypeEntry {
 	@Override
 	AttributeDeclaration getTypeEditable();
 
+	@Override
+	AttributeDeclaration copyType();
 }

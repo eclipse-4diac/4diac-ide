@@ -22,10 +22,10 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
@@ -66,6 +66,8 @@ public class STAlgorithmResourceDescription extends DefaultResourceDescription {
 			final EObject target = allContents.next();
 			if (target instanceof STSource) {
 				allContents.prune();
+			} else if (target instanceof final Attribute attribute) {
+				computeImportedNames(attribute, result);
 			} else if (target instanceof final VarDeclaration varDeclaration) {
 				computeImportedNames(varDeclaration, result);
 			} else if (target instanceof final TypedConfigureableObject typedConfigureableObject) {
@@ -74,6 +76,21 @@ public class STAlgorithmResourceDescription extends DefaultResourceDescription {
 		}
 		super.getImportedNames().forEach(result::add);
 		return result;
+	}
+
+	protected void computeImportedNames(final Attribute attr, final Set<QualifiedName> result) {
+		final String fullTypeName = PackageNameHelper.getFullTypeName(attr.getType());
+		if (fullTypeName != null && !fullTypeName.isEmpty()) {
+			result.add(nameConverter.toQualifiedName(fullTypeName).toLowerCase());
+		}
+		if (!STCoreUtil.isSimpleAttributeValue(attr, false)) {
+			final STInitializerExpressionSource source = StructuredTextParseUtil.validate(attr.getValue(), getURI(),
+					STCoreUtil.getFeatureType(attr), EcoreUtil2.getContainerOfType(attr, LibraryElement.class), null,
+					null);
+			if (source != null) {
+				result.addAll(getImportedNames(source.eResource()));
+			}
+		}
 	}
 
 	protected void computeImportedNames(final VarDeclaration decl, final Set<QualifiedName> result) {
@@ -87,7 +104,7 @@ public class STAlgorithmResourceDescription extends DefaultResourceDescription {
 				result.addAll(getImportedNames(source.eResource()));
 			}
 		}
-		if (!isSimpleInitialValue(decl)) {
+		if (!STCoreUtil.isSimpleInitialValue(decl, false)) {
 			final STInitializerExpressionSource source = StructuredTextParseUtil.validate(decl.getValue().getValue(),
 					getURI(), STCoreUtil.getFeatureType(decl),
 					EcoreUtil2.getContainerOfType(decl, LibraryElement.class), null, null);
@@ -102,21 +119,6 @@ public class STAlgorithmResourceDescription extends DefaultResourceDescription {
 		if (fullTypeName != null && !fullTypeName.isEmpty()) {
 			result.add(nameConverter.toQualifiedName(fullTypeName).toLowerCase());
 		}
-	}
-
-	protected static boolean isSimpleInitialValue(final VarDeclaration decl) {
-		if (decl.getValue() == null || decl.getValue().getValue() == null || decl.getValue().getValue().isBlank()) {
-			return true;
-		}
-		if (decl.isArray()) {
-			return false;
-		}
-		try {
-			new TypedValueConverter(decl.getType()).toValue(decl.getValue().getValue());
-		} catch (final Exception e) {
-			return false;
-		}
-		return true;
 	}
 
 	protected static Set<QualifiedName> getImportedNames(final Resource resource) {

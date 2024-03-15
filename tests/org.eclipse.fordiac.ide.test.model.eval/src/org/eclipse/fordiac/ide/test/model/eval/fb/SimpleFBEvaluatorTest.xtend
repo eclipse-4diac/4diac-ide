@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.fordiac.ide.test.model.typelibrary.AttributeTypeEntryMock
 import org.eclipse.fordiac.ide.test.model.typelibrary.DataTypeEntryMock
 import org.eclipse.fordiac.ide.test.model.typelibrary.FBTypeEntryMock
 import org.junit.jupiter.api.Test
@@ -704,6 +705,46 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 				DO1.b := 42;
 			'''.newSTAlgorithm("REQ")
 		].evaluateSimpleFB("REQ", #[inputVar], outputVarDecl).variables.get("DO1").value as StructValue)
+	}
+
+	@Test
+	def void testStructAttribute() {
+		val structType = DataFactory.eINSTANCE.createStructuredType => [
+			name = "TestStructAttribute"
+			memberVariables += newVarDeclaration("a", ElementaryTypes.INT, false, "17")
+			memberVariables += newVarDeclaration("b", ElementaryTypes.INT, false, "4")
+		]
+		val attributeDeclaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration => [
+			name = structType.name
+			type = structType
+		]
+		typeLib.addTypeEntry(new AttributeTypeEntryMock(attributeDeclaration, typeLib, null))
+		val attributeDeclarationResource = new ResourceImpl
+		attributeDeclarationResource.contents.add(attributeDeclaration)
+		val attr1 = newAttribute(attributeDeclaration)
+		#[17.toIntValue, 4.toIntValue].assertIterableEquals(newVariable(attr1).value as StructValue)
+		val attr2 = newAttribute(attributeDeclaration, "(a:=21, b:=42)")
+		#[21.toIntValue, 42.toIntValue].assertIterableEquals(newVariable(attr2).value as StructValue)
+	}
+
+	@Test
+	def void testDirectlyDerivedAttribute() {
+		val derivedType = DataFactory.eINSTANCE.createDirectlyDerivedType => [
+			name = "TestDerivedAttribute"
+			baseType = ElementaryTypes.INT
+			initialValue = "17"
+		]
+		val attributeDeclaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration => [
+			name = derivedType.name
+			type = derivedType
+		]
+		typeLib.addTypeEntry(new AttributeTypeEntryMock(attributeDeclaration, typeLib, null))
+		val attributeDeclarationResource = new ResourceImpl
+		attributeDeclarationResource.contents.add(attributeDeclaration)
+		val attr1 = newAttribute(attributeDeclaration)
+		17.toIntValue.assertEquals(newVariable(attr1).value)
+		val attr2 = newAttribute(attributeDeclaration, "4")
+		4.toIntValue.assertEquals(newVariable(attr2).value)
 	}
 
 	@Test

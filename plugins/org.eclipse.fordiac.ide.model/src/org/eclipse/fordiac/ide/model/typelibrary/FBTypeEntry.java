@@ -25,4 +25,6 @@ public interface FBTypeEntry extends TypeEntry {
 	@Override
 	FBType getTypeEditable();
 
+	@Override
+	FBType copyType();
 }

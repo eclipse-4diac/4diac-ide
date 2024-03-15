@@ -68,7 +68,13 @@ public class DeleteDemuxPortCommand extends Command implements ScopedCommand {
 		configuredStruct.getMemberVariables()
 				.addAll(EcoreUtil.copyAll(CheckableStructTreeNode.getVarDeclarations(visibleChildrenNames, node)));
 		configuredStruct.setTypeEntry(type.getStructType().getTypeEntry());
-		cmd = new ChangeStructCommand(type, configuredStruct);
+		cmd = new ChangeStructCommand(type, configuredStruct) {
+			@Override
+			protected void copyAttributes() {
+				super.copyAttributes();
+				getNewMux().setAttribute(DEMUX_VISIBLE_CHILDREN, ElementaryTypes.STRING, newVisibleChildren, ""); //$NON-NLS-1$
+			}
+		};
 	}
 
 	@Override

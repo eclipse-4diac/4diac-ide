@@ -29,6 +29,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
+/**
+ * @deprecated Inherit from {@link AbstractCommandChange} instead.
+ */
+@Deprecated(forRemoval = true)
 public final class ChangeExecutionHelper {
 	private ChangeExecutionHelper() {
 		throw new UnsupportedOperationException();
@@ -36,6 +40,7 @@ public final class ChangeExecutionHelper {
 
 	public static void executeChange(final Command cmd, final EObject modelObj, final IProgressMonitor pm) {
 		final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(modelObj));
+
 		if (rootContainer instanceof final LibraryElement elem) {
 			Display.getDefault().syncExec(() -> {
 				final TypeEntry entry = elem.getTypeEntry();

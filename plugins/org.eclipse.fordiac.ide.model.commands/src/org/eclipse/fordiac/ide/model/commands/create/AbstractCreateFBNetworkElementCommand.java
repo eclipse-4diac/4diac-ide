@@ -52,7 +52,7 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 	@Override
 	public boolean canExecute() {
 		return fbNetwork != null && element != null
-				&& FBNetworkHelper.isTypeInsertionSave(element.getType(), fbNetwork);
+				&& FBNetworkHelper.isTypeInsertionSafe(element.getType(), fbNetwork);
 	}
 
 	@Override

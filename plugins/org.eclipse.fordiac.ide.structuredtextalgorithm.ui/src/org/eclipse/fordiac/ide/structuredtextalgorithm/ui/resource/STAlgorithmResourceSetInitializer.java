@@ -30,6 +30,14 @@ public class STAlgorithmResourceSetInitializer implements IResourceSetInitialize
 			final IResourceFactory resourceFactory = getInjector().getInstance(IResourceFactory.class);
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("fbt", resourceFactory); //$NON-NLS-1$
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("FBT", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("sys", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("SYS", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("sub", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("SUB", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("atp", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ATP", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("dtp", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("DTP", resourceFactory); //$NON-NLS-1$
 		}
 	}
 

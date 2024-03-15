@@ -106,12 +106,14 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 
 	@Override
 	public boolean canRedo() {
-		return super.canRedo() && (additionalCommands.isEmpty() || additionalCommands.canRedo());
+		return super.canRedo() && Objects.equals(oldName, element.getName())
+				&& (additionalCommands.isEmpty() || additionalCommands.canRedo());
 	}
 
 	@Override
 	public boolean canUndo() {
-		return super.canUndo() && (additionalCommands.isEmpty() || additionalCommands.canUndo());
+		return super.canUndo() && Objects.equals(name, element.getName())
+				&& (additionalCommands.isEmpty() || additionalCommands.canUndo());
 	}
 
 	@Override

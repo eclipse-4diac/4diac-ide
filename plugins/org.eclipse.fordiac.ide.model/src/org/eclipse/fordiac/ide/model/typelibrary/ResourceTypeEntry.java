@@ -25,4 +25,6 @@ public interface ResourceTypeEntry extends TypeEntry {
 	@Override
 	ResourceType getTypeEditable();
 
+	@Override
+	ResourceType copyType();
 }

@@ -77,7 +77,7 @@ public final class InitialValueHelper {
 		if ((element instanceof final Attribute attr)
 				&& ((attr.getType() instanceof AnyType) && !IecTypes.GenericTypes.isAnyType(attr.getType()))) {
 			try {
-				return VariableOperations.newVariable(attr.getName(), attr.getType()).toString();
+				return VariableOperations.newVariable(attr).toString();
 			} catch (final Exception exc) {
 				// fall though (NO LOGGING NECESSARY!!!)
 			}

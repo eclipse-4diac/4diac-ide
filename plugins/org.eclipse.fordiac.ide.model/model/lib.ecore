@@ -45,40 +45,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterDecl" lowerBound="1"
         eType="#//AdapterDeclaration"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AdapterFBType" eSuperTypes="#//FBType">
-    <eOperations name="getAdapterType" eType="#//AdapterType">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return (AdapterType)eContainer();"/>
-      </eAnnotations>
-    </eOperations>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AdapterType" eSuperTypes="data.ecore#//DataType">
-    <eOperations name="getInterfaceList" eType="#//InterfaceList">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getInterfaceList(this);"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="getSocketType" eType="#//AdapterFBType">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="//the socket form is the form how adapter types are edited and stored&#xA;return getAdapterFBType();"/>
-      </eAnnotations>
-    </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterFBType" eType="#//AdapterFBType"
-        containment="true" resolveProxies="false">
-      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
-        <details key="kind" value="element"/>
-        <details key="name" value="Service"/>
-        <details key="namespace" value="##targetNamespace"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="plugType" eType="#//AdapterFBType"
-        changeable="false" derived="true" containment="true" resolveProxies="false">
-      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
-        <details key="kind" value="element"/>
-        <details key="name" value="Service"/>
-        <details key="namespace" value="##targetNamespace"/>
-      </eAnnotations>
-    </eStructuralFeatures>
+  <eClassifiers xsi:type="ecore:EClass" name="AdapterType" eSuperTypes="data.ecore#//DataType #//FBType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plugType" eType="#//AdapterType"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Algorithm" abstract="true" eSuperTypes="#//ICallable">
     <eOperations name="getInputParameters" upperBound="-1" eType="#//INamedElement">
@@ -411,11 +380,19 @@
   <eClassifiers xsi:type="ecore:EClass" name="ConfigurableObject">
     <eOperations name="setAttribute">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value=" searches for an existing Parameter with the specified parameterName. it is&#xD;&#xA; NOT case sensitive! If there is no Parameter available a new one will be created. "/>
+        <details key="documentation" value=" searches for an existing Parameter with the specified parameterName. it is&#xA; NOT case sensitive! If there is no Parameter available a new one will be created. "/>
         <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);"/>
       </eAnnotations>
       <eParameters name="attributeName" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
       <eParameters name="type" eType="ecore:EClass data.ecore#//DataType"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+      <eParameters name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+    </eOperations>
+    <eOperations name="setAttribute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeDeclaration, value, comment);"/>
+      </eAnnotations>
+      <eParameters name="attributeDeclaration" eType="#//AttributeDeclaration"/>
       <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
       <eParameters name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eOperations>
@@ -439,6 +416,37 @@
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
         eType="#//Attribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurableFB" abstract="true" eSuperTypes="#//FB">
+    <eOperations name="updateConfiguration"/>
+    <eOperations name="loadConfiguration">
+      <eParameters name="config" eType="#//Attribute"/>
+    </eOperations>
+    <eOperations name="getConfigurationAsAttributes" upperBound="-1" eType="#//Attribute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return ECollections.emptyEList();"/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurableMoveFB" eSuperTypes="#//ConfigurableFB">
+    <eOperations name="updateConfiguration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// if data type exists, set it as the data type of the input/output data pin&#xA;if (dataType != null &amp;&amp; getInterface() != null) {&#xA;&#x9;for (final VarDeclaration input : getInterface().getInputVars()) {&#xA;&#x9;&#x9;input.setType(dataType);&#xA;&#x9;}&#xA;&#x9;for (final VarDeclaration output : getInterface().getOutputVars()) {&#xA;&#x9;&#x9;output.setType(dataType);&#xA;&#x9;} // FB_MOVE has no varinouts&#xA;}"/>
+        <details key="documentation" value="Method for setting input/output data pin types to configured data type"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="loadConfiguration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&#x9;&#x9;// attribute holds the name of the desired data type of input and output data&#xA;&#x9;&#x9;if ((config != null &amp;&amp; LibraryElementTags.F_MOVE_CONFIG.equals(config.getName()))&#xA;&#x9;&#x9;&#x9;&#x9;&amp;&amp; (config.getValue() != null)) {&#xA;&#x9;&#x9;&#x9;// get data type from library&#xA;&#x9;&#x9;&#x9;dataType = getTypeLibrary().getDataTypeLibrary().getTypeIfExists(config.getValue());&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;updateConfiguration();"/>
+      </eAnnotations>
+      <eParameters name="config" eType="#//Attribute"/>
+    </eOperations>
+    <eOperations name="getConfigurationAsAttributes" upperBound="-1" eType="#//Attribute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return ECollections.emptyEList();"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" eType="ecore:EClass data.ecore#//DataType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//ConfigurableObject #//HiddenElement">
     <eOperations name="getSourceElement" lowerBound="1" eType="#//FBNetworkElement">
@@ -1955,13 +1963,14 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Locked" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"
         defaultValueLiteral="false"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="StructManipulator" abstract="true" eSuperTypes="#//FB">
+  <eClassifiers xsi:type="ecore:EClass" name="StructManipulator" eSuperTypes="#//ConfigurableFB">
     <eOperations name="setStructTypeElementsAtInterface">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="org.eclipse.fordiac.ide.model.StructManipulation.setStructTypeElementsAtInterface(this, newStruct);"/>
       </eAnnotations>
       <eParameters name="newStruct" eType="ecore:EClass data.ecore#//StructuredType"/>
     </eOperations>
+    <eOperations name="updateConfiguration"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="structType" lowerBound="1"
         eType="ecore:EClass data.ecore#//StructuredType" transient="true"/>
   </eClassifiers>

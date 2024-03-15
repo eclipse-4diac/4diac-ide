@@ -8,7 +8,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.library.model.library.Dependencies;
@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.library.model.library.Required;
  *
  * @generated
  */
-public class DependenciesImpl extends MinimalEObjectImpl.Container implements Dependencies {
+public class DependenciesImpl extends EObjectImpl implements Dependencies {
 	/**
 	 * The cached value of the '{@link #getRequired() <em>Required</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -66,7 +66,7 @@ public class DependenciesImpl extends MinimalEObjectImpl.Container implements De
 	@Override
 	public EList<Required> getRequired() {
 		if (required == null) {
-			required = new EObjectContainmentEList<>(Required.class, this, LibraryPackage.DEPENDENCIES__REQUIRED);
+			required = new EObjectContainmentEList<Required>(Required.class, this, LibraryPackage.DEPENDENCIES__REQUIRED);
 		}
 		return required;
 	}
@@ -77,13 +77,12 @@ public class DependenciesImpl extends MinimalEObjectImpl.Container implements De
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryPackage.DEPENDENCIES__REQUIRED:
-			return ((InternalEList<?>)getRequired()).basicRemove(otherEnd, msgs);
-		default:
-			return super.eInverseRemove(otherEnd, featureID, msgs);
+			case LibraryPackage.DEPENDENCIES__REQUIRED:
+				return ((InternalEList<?>)getRequired()).basicRemove(otherEnd, msgs);
 		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -92,13 +91,12 @@ public class DependenciesImpl extends MinimalEObjectImpl.Container implements De
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryPackage.DEPENDENCIES__REQUIRED:
-			return getRequired();
-		default:
-			return super.eGet(featureID, resolve, coreType);
+			case LibraryPackage.DEPENDENCIES__REQUIRED:
+				return getRequired();
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -108,16 +106,14 @@ public class DependenciesImpl extends MinimalEObjectImpl.Container implements De
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryPackage.DEPENDENCIES__REQUIRED:
-			getRequired().clear();
-			getRequired().addAll((Collection<? extends Required>)newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
+			case LibraryPackage.DEPENDENCIES__REQUIRED:
+				getRequired().clear();
+				getRequired().addAll((Collection<? extends Required>)newValue);
+				return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -126,15 +122,13 @@ public class DependenciesImpl extends MinimalEObjectImpl.Container implements De
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.DEPENDENCIES__REQUIRED:
-			getRequired().clear();
-			return;
-		default:
-			super.eUnset(featureID);
-			return;
+			case LibraryPackage.DEPENDENCIES__REQUIRED:
+				getRequired().clear();
+				return;
 		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -143,13 +137,12 @@ public class DependenciesImpl extends MinimalEObjectImpl.Container implements De
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryPackage.DEPENDENCIES__REQUIRED:
-			return required != null && !required.isEmpty();
-		default:
-			return super.eIsSet(featureID);
+			case LibraryPackage.DEPENDENCIES__REQUIRED:
+				return required != null && !required.isEmpty();
 		}
+		return super.eIsSet(featureID);
 	}
 
 } //DependenciesImpl

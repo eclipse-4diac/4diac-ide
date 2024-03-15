@@ -13,8 +13,9 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Manifest#getDependencies <em>Dependencies</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Manifest#getProduct <em>Product</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Manifest#getLibraries <em>Libraries</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Manifest#getExports <em>Exports</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Manifest#getScope <em>Scope</em>}</li>
  * </ul>
  *
@@ -23,6 +24,29 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface Manifest extends EObject {
+	/**
+	 * Returns the value of the '<em><b>Dependencies</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Dependencies</em>' containment reference.
+	 * @see #setDependencies(Dependencies)
+	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getManifest_Dependencies()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='Dependencies' namespace='##targetNamespace'"
+	 * @generated
+	 */
+	Dependencies getDependencies();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.library.model.library.Manifest#getDependencies <em>Dependencies</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Dependencies</em>' containment reference.
+	 * @see #getDependencies()
+	 * @generated
+	 */
+	void setDependencies(Dependencies value);
+
 	/**
 	 * Returns the value of the '<em><b>Product</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
@@ -47,27 +71,27 @@ public interface Manifest extends EObject {
 	void setProduct(Product value);
 
 	/**
-	 * Returns the value of the '<em><b>Libraries</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Exports</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Libraries</em>' containment reference.
-	 * @see #setLibraries(Libraries)
-	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getManifest_Libraries()
-	 * @model containment="true" required="true"
-	 *        extendedMetaData="kind='element' name='Libraries' namespace='##targetNamespace'"
+	 * @return the value of the '<em>Exports</em>' containment reference.
+	 * @see #setExports(Exports)
+	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getManifest_Exports()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='Exports' namespace='##targetNamespace'"
 	 * @generated
 	 */
-	Libraries getLibraries();
+	Exports getExports();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.library.model.library.Manifest#getLibraries <em>Libraries</em>}' containment reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.library.model.library.Manifest#getExports <em>Exports</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Libraries</em>' containment reference.
-	 * @see #getLibraries()
+	 * @param value the new value of the '<em>Exports</em>' containment reference.
+	 * @see #getExports()
 	 * @generated
 	 */
-	void setLibraries(Libraries value);
+	void setExports(Exports value);
 
 	/**
 	 * Returns the value of the '<em><b>Scope</b></em>' attribute.

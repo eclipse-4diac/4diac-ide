@@ -20,9 +20,11 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -53,13 +55,13 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 	 */
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-		if (modelElement instanceof UnfoldedSubappContentNetwork) {
-			return new UnfoldedSubappContentEditPart();
-		}
 		if (modelElement instanceof GroupContentNetwork) {
 			return new GroupContentEditPart();
 		}
 		if (modelElement instanceof final FBNetwork network) {
+			if (context instanceof SubAppForFBNetworkEditPart) {
+				return new UnfoldedSubappContentEditPart();
+			}
 			return getPartForFBNetwork(network);
 		}
 		if (modelElement instanceof final FBNetworkElement fbnel) {
@@ -102,12 +104,15 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		if (element instanceof CommunicationChannel) {
 			return new CommunicationChannelEditPart();
 		}
+		if (element instanceof ConfigurableMoveFB) {
+			return new ConfigurableMoveFBEditPart();
+		}
 		if (element instanceof final FB fb) {
-			if (null != fb.getType()) {
-				if (fb.getType().getName().contentEquals("STRUCT_MUX")) { //$NON-NLS-1$
+			if (null != fb.getType() && null != fb.getType().getName()) {
+				if (fb.getType().getName().contentEquals(LibraryElementTags.TYPENAME_MUX)) {
 					return new MultiplexerEditPart();
 				}
-				if (fb.getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
+				if (fb.getType().getName().contentEquals(LibraryElementTags.TYPENAME_DEMUX)) {
 					return new DemultiplexerEditPart();
 				}
 			}

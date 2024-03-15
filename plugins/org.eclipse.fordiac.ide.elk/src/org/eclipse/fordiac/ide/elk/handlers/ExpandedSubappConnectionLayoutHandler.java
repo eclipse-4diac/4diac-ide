@@ -17,27 +17,44 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.elk.commands.ConnectionLayoutCommand;
 import org.eclipse.fordiac.ide.elk.connection.ConnectionRoutingHelper;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class ExpandedSubappConnectionLayoutHandler extends AbstractConnectionLayoutHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final var part = HandlerUtil.getActiveEditor(event);
-		assert part != null;
-		final var viewer = part.getAdapter(GraphicalViewer.class);
+		if (event.getTrigger() instanceof final Event ev && ev.widget == null) {
+			// programmatic trigger
+			final var subappEp = (SubAppForFBNetworkEditPart) ((Event) event.getTrigger()).data;
+			final var mapping = run(subappEp.getContentEP());
+			final var data = ConnectionRoutingHelper.calculateConnections(mapping);
+			runSubapps(mapping, data);
+			new ConnectionLayoutCommand(data).execute();
+		} else {
+			// menu trigger
+			final var part = HandlerUtil.getActiveEditor(event);
+			assert part != null;
+			final var viewer = part.getAdapter(GraphicalViewer.class);
 
-		// property tester ensures type and size == 1
-		final var subappEp = (SubAppForFBNetworkEditPart) viewer.getSelectedEditParts().get(0);
+			// property tester ensures type and size == 1
+			final var subappEp = (SubAppForFBNetworkEditPart) viewer.getSelectedEditParts().get(0);
 
-		final var mapping = run(subappEp.getContentEP());
-		final var data = ConnectionRoutingHelper.calculateConnections(mapping);
-		runSubapps(mapping, data);
-		executeCommand(event, part, data);
+			final var mapping = run(subappEp.getContentEP());
+			final var data = ConnectionRoutingHelper.calculateConnections(mapping);
+			runSubapps(mapping, data);
+			executeCommand(event, part, data);
+		}
 
 		return Status.OK_STATUS;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 
 }

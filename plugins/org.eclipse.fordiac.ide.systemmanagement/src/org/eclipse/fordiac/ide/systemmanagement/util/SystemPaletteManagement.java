@@ -14,25 +14,95 @@
 package org.eclipse.fordiac.ide.systemmanagement.util;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IPathVariableManager;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.URIUtil;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.fordiac.ide.library.model.library.Manifest;
+import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /**
  * The Class SystemPaletteManagement.
  */
 public final class SystemPaletteManagement {
+
+	public static void linkToolTypeLibsToDestination(final Map<String, java.net.URI> libs, final IFolder destination) {
+		try {
+			final IProgressMonitor monitor = new NullProgressMonitor();
+
+			if (!destination.exists()) {
+				destination.create(true, true, monitor);
+				destination.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			}
+
+			libs.forEach((name, loc) -> {
+				final IFolder link = destination.getFolder(new Path(name));
+
+				try {
+					link.createLink(loc, IResource.NONE, monitor);
+				} catch (final CoreException e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
+				}
+			});
+
+		} catch (final Exception e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
+	}
+
+	public static Map<Manifest, java.net.URI> getStandardLibraries(final IProject project) {
+		final Map<Manifest, java.net.URI> libraries = new HashMap<>();
+		final Map<String, Object> loadOptions = new HashMap<>();
+		final FilenameFilter filter = (file, name) -> name.equals("MANIFEST.MF"); //$NON-NLS-1$
+
+		try {
+			final java.net.URI typeLibURI = new java.net.URI("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
+			final IPathVariableManager varMan = project.getPathVariableManager();
+			final java.net.URI typeLibURIResolved = varMan.resolveURI(typeLibURI);
+			final File typeLib = new File(typeLibURIResolved);
+
+			if (typeLib.isDirectory()) {
+				for (final File file : typeLib.listFiles()) {
+					if (!file.getName().startsWith(".") && file.isDirectory()) { //$NON-NLS-1$
+						final File[] manifestArr = file.listFiles(filter);
+						if (manifestArr.length > 0) {
+							final LibraryResourceImpl res = new LibraryResourceImpl(
+									URI.createURI(manifestArr[0].toURI().toString()));
+							res.load(loadOptions);
+							final Manifest manifest = (Manifest) res.getContents().get(0);
+							if ("Library".equals(manifest.getScope()) && manifest.getProduct() != null //$NON-NLS-1$
+									&& manifest.getProduct().getSymbolicName() != null) {
+								libraries.put(manifest, URIUtil.append(typeLibURI, file.getName()));
+							}
+						}
+					}
+				}
+			}
+
+		} catch (final Exception e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
+
+		return libraries;
+	}
 
 	/**
 	 * Copy tool type lib to project.

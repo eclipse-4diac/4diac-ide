@@ -12,13 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -51,7 +50,13 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.handlers.IHandlerService;
 
 public abstract class FollowConnectionHandler extends AbstractHandler {
 
@@ -59,22 +64,25 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 		private final List<IInterfaceElement> opposites;
 		private final GraphicalViewer viewer;
+		private final IInterfaceElement originPin;
+		private final Point popupPosition;
 
 		public OppositeSelectionDialog(final Shell parent, final List<IInterfaceElement> opposites,
-				final GraphicalViewer viewer) {
+				final GraphicalViewer viewer, final IInterfaceElement originPin, final Point popupPostion) {
 			super(parent, INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false,
 					Messages.FBPaletteViewer_SelectConnectionEnd, null);
 			this.opposites = opposites;
 			this.viewer = viewer;
+			this.originPin = originPin;
+			this.popupPosition = popupPostion;
 		}
 
 		@Override
 		protected void adjustBounds() {
 			super.adjustBounds();
-			final Point pt = getShell().getDisplay().getCursorLocation();
 			final Rectangle rect = getShell().getBounds();
-			rect.x = pt.x;
-			rect.y = pt.y;
+			rect.x = popupPosition.x;
+			rect.y = popupPosition.y;
 			rect.width += 6;
 			rect.height += 6;
 			getShell().setBounds(rect);
@@ -95,6 +103,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		protected Control createDialogArea(final Composite parent) {
 
 			final Composite dialogArea = (Composite) super.createDialogArea(parent);
+
 			final ListViewer listViewer = new ListViewer(dialogArea, SWT.SIMPLE);
 			listViewer.setContentProvider(new ArrayContentProvider());
 			listViewer.setLabelProvider(new LabelProvider() {
@@ -129,6 +138,14 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 					if (e.character == SWT.CR) {
 						dialogArea.getShell().close();
 					}
+					if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_LEFT)) {
+						HandlerHelper.selectElement(originPin, viewer);
+						dialogArea.getShell().close();
+					}
+					if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_RIGHT) {
+						invokeFollowRightConnectionHandler();
+						dialogArea.getShell().close();
+					}
 				}
 			});
 
@@ -139,6 +156,22 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 			listViewer.setSelection(new StructuredSelection(listViewer.getElementAt(0)), true);
 			return dialogArea;
+		}
+
+		private static void invokeFollowRightConnectionHandler() {
+			final IWorkbench wb = PlatformUI.getWorkbench();
+			final IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
+			final IWorkbenchPage page = window.getActivePage();
+
+			final IWorkbenchPart active = page.getActivePart();
+			final IHandlerService handlerService = active.getSite().getService(IHandlerService.class);
+
+			try {
+				handlerService.executeCommand("org.eclipse.fordiac.ide.application.commands.followRightConnection", //$NON-NLS-1$
+						null);
+			} catch (final Exception e) {
+				throw new RuntimeException("followRightConnection.command not found");
+			}
 		}
 
 	}
@@ -179,20 +212,14 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	}
 
-	protected List<IInterfaceElement> getConnectionOposites(final ISelection selection, final FBNetwork fbNetwork) {
-		if (selection instanceof final IStructuredSelection structuredSelection && !selection.isEmpty()
-				&& (structuredSelection.size() == 1)
-				&& (structuredSelection.getFirstElement() instanceof final InterfaceEditPart iep)) {
-			// only if only one element is selected
-			if (useTargetPins(iep)) {
-				return getTargetPins(iep);
-			}
-			final IInterfaceElement ie = iep.getModel();
-			final EList<Connection> connList = getConnectionList(ie, fbNetwork);
-			return connList.stream().map(con -> (con.getSource().equals(ie) ? con.getDestination() : con.getSource()))
-					.toList();
+	protected List<IInterfaceElement> getConnectionOposites(final InterfaceEditPart iep) {
+		if (useTargetPins(iep)) {
+			return getTargetPins(iep);
 		}
-		return Collections.emptyList();
+		final IInterfaceElement ie = iep.getModel();
+		final EList<Connection> connList = getConnectionList(ie);
+		return connList.stream().map(con -> (con.getSource().equals(ie) ? con.getDestination() : con.getSource()))
+				.toList();
 	}
 
 	private boolean useTargetPins(final InterfaceEditPart iep) {
@@ -202,21 +229,11 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	protected abstract boolean isLeft();
 
+	protected abstract EList<Connection> getConnectionList(final IInterfaceElement ie);
+
 	private static List<IInterfaceElement> getTargetPins(final InterfaceEditPart iep) {
 		return iep.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance)
 				.map(ep -> (TargetInterfaceElementEditPart) ep).map(ep -> ep.getModel().getRefElement()).toList();
-	}
-
-	private static EList<Connection> getConnectionList(final IInterfaceElement ie, final FBNetwork fbNetwork) {
-		if (isInsideSubappOrViewer(ie, fbNetwork) || isInsideTopType(ie)) {
-			// we have a subapp/cfb interface element and we are inside of the subapp/cfb
-			return ie.isIsInput() ? ie.getOutputConnections() : ie.getInputConnections();
-		}
-		return ie.isIsInput() ? ie.getInputConnections() : ie.getOutputConnections();
-	}
-
-	private static boolean isInsideTopType(final IInterfaceElement ie) {
-		return ie.eContainer().eContainer() instanceof FBType;
 	}
 
 	protected static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
@@ -226,10 +243,22 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	protected static void showOppositeSelectionDialog(final List<IInterfaceElement> opposites,
-			final ExecutionEvent event, final GraphicalViewer viewer) throws ExecutionException {
+			final ExecutionEvent event, final GraphicalViewer viewer, final IInterfaceElement originPin)
+			throws ExecutionException {
+
+		HandlerHelper.selectElement(opposites.get(0), viewer);
+		viewer.flush();
+		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
+		final IFigure figure = ((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement()).getFigure();
+
+		final org.eclipse.draw2d.geometry.Point pinLocation = figure.getLocation();
+		pinLocation.y += figure.getBounds().height * 1.5f;
+		figure.translateToAbsolute(pinLocation);
+		final Point pinLocationDisplayCoordinates = viewer.getControl()
+				.toDisplay(new Point(pinLocation.x, pinLocation.y));
 
 		final OppositeSelectionDialog dialog = new OppositeSelectionDialog(HandlerUtil.getActiveShellChecked(event),
-				opposites, viewer);
+				opposites, viewer, originPin, pinLocationDisplayCoordinates);
 		dialog.open();
 	}
 
@@ -278,5 +307,26 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			return visibleDestinations.get(visibleDestinations.size() - 1);
 		}
 		return visibleDestinations.get(sourceIndex);
+	}
+
+	protected static void gotoParent(final ExecutionEvent event) throws ExecutionException {
+		final GotoParentHandler gotoParentHandler = new GotoParentHandler();
+		gotoParentHandler.execute(event);
+	}
+
+	protected static boolean isEditorBorderPin(final IInterfaceElement ie, final FBNetwork fbNetwork) {
+		final FBNetworkElement fbnElement = ie.getFBNetworkElement();
+		FBNetwork containedNetwork = null;
+		if (fbnElement instanceof final SubApp subapp) {
+			containedNetwork = subapp.getSubAppNetwork();
+		} else if (fbnElement instanceof final CFBInstance cfb) {
+			containedNetwork = cfb.getCfbNetwork();
+		}
+
+		return (containedNetwork != null) && containedNetwork.equals(fbNetwork);
+	}
+
+	protected static boolean isExpandedSubappPin(final IInterfaceElement pin) {
+		return pin.getFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded();
 	}
 }

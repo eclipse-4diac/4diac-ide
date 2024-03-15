@@ -17,36 +17,36 @@
 
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="4diac User Guide" topic="html/startHere/startHere.html">
+<toc label="Eclipse 4diac User Guide" topic="html/index.html">
 
 <!--********************************************************************************************-->
 
-   <topic label="Getting Started" href="html/startHere/startHere.html">
+   <topic label="Getting Started" href="html/index.html">
 <!--********************-->	
-      <topic href="html/before4DIAC/iec61499.html" label="IEC 61499 101">
-      	<topic href="html/before4DIAC/iec61499.html#PLC" label="PLC Programming according to IEC 61131-3">
-      		<topic href="html/before4DIAC/iec61499.html#programmingPLC" label="Programming PLCs">
+      <topic href="html/intro/iec61499.html" label="IEC 61499 101">
+      	<topic href="html/intro/iec61499.html#PLC" label="PLC Programming according to IEC 61131-3">
+      		<topic href="html/intro/iec61499.html#programmingPLC" label="Programming PLCs">
       		</topic>
-      	</topic>
-		<topic href="html/before4DIAC/iec61499.html#IEC61499" label="IEC 61499">
+  		</topic>
+		<topic href="html/intro/iec61499.html#IEC61499" label="IEC 61499">
 		</topic>
-		<topic href="html/before4DIAC/iec61499.html#MainPartsOfIEC61499" label="Main parts of IEC 61499">
-			<topic href="html/before4DIAC/iec61499.html#FBInterface" label="FB Interface">
+		<topic href="html/intro/iec61499.html#MainPartsOfIEC61499" label="Main parts of IEC 61499">
+			<topic href="html/intro/iec61499.html#FBInterface" label="FB Interface">
 			</topic>
-			<topic href="html/before4DIAC/iec61499.html#FBInternalSequence" label="FB Internal Sequence">
+			<topic href="html/intro/iec61499.html#FBInternalSequence" label="FB Internal Sequence">
 			</topic>
-			<topic href="html/before4DIAC/iec61499.html#DistributedApplicaton" label="Distributed Application">
+			<topic href="html/intro/iec61499.html#DistributedApplicaton" label="Distributed Application">
 			</topic>
-			<topic href="html/before4DIAC/iec61499.html#brokenConnection" label="Broken Connections">
+			<topic href="html/intro/iec61499.html#brokenConnection" label="Broken Connections">
 			</topic>
-			<topic href="html/before4DIAC/iec61499.html#FBTypes" label="Types of Function Blocks">
+			<topic href="html/intro/iec61499.html#FBTypes" label="Types of Function Blocks">
 			</topic>
-			<topic href="html/before4DIAC/iec61499.html#iec61499ComplianceProfiles" label="Compliance Profiles">
+			<topic href="html/intro/iec61499.html#iec61499ComplianceProfiles" label="Compliance Profiles">
 			</topic>
 		</topic>
       </topic>
 <!--********************-->	
-      <topic href="html/before4DIAC/4diacFramework.html" label="4diac Framework">
+      <topic href="html/intro/4diacFramework.html" label="4diac Framework">
       </topic>
    </topic>
    
@@ -73,7 +73,6 @@
           <topic href="html/installation/visualStudio.html" label="Use Visual Studio"/>
           <topic href="html/installation/visualStudioCode.html" label="Use Visual Studio Code"/>
           <topic href="html/installation/eclipse.html" label="Use Eclipse"/>
-          <topic href="html/installation/cygwin.html" label="Windows - Cygwin compiler"/>
           <topic href="html/installation/minGW.html" label="Windows - MinGW-w64 compiler"/>
         </topic>
         <topic href="html/installation/docker.html" label="4diac FORTE as docker">
@@ -82,132 +81,132 @@
 
 <!--********************************************************************************************-->	
 
-   	<topic label="Tutorials - A Step by Step Guide">
+   	<topic label="Tutorials - A Step by Step Guide" href="html/tutorials/overview.html" >
 <!--********************-->	
-       <topic href="html/4diacIDE/overview.html" label="Step 0 - 4diac IDE Overview">
-          <topic href="html/4diacIDE/overview.html#startingUp" label="Starting up 4diac IDE">
+       <topic href="html/tutorials/overview.html" label="Step 0 - 4diac IDE Overview">
+          <topic href="html/tutorials/overview.html#startingUp" label="Starting up 4diac IDE">
           </topic>  
-          <topic href="html/4diacIDE/overview.html#elements" label="4diac IDE Elements">
+          <topic href="html/tutorials/overview.html#elements" label="4diac IDE Elements">
           </topic>
-          <topic href="html/4diacIDE/overview.html#perspectives" label="4diac IDE Perspectives"> 
-          	<topic href="html/4diacIDE/overview.html#systemPerspective" label="System Perspective">
+          <topic href="html/tutorials/overview.html#perspectives" label="4diac IDE Perspectives"> 
+          	<topic href="html/tutorials/overview.html#systemPerspective" label="System Perspective">
           	</topic>
-            <topic href="html/4diacIDE/overview.html#deploymentPerspective" label="Deployment Perspective">
+            <topic href="html/tutorials/overview.html#deploymentPerspective" label="Deployment Perspective">
             </topic>
-            <topic href="html/4diacIDE/overview.html#debugPerspective" label="Debug Perspective">
+            <topic href="html/tutorials/overview.html#debugPerspective" label="Debug Perspective">
             </topic>
           </topic>
-          <topic href="html/4diacIDE/overview.html#preferences" label="4diac IDE Preferences">
+          <topic href="html/tutorials/overview.html#preferences" label="4diac IDE Preferences">
           </topic>
-          <topic href="html/4diacIDE/overview.html#toolbar" label="Toolbar">
+          <topic href="html/tutorials/overview.html#toolbar" label="Toolbar">
           </topic>
 <!--********************-->	          
      </topic>
-       <topic href="html/4diacIDE/use4diacLocally.html" label="Step 1 - Use 4diac Locally (Blinking Tutorial)">
-          <topic href="html/4diacIDE/use4diacLocally.html#createSystem" label="Create a new IEC 61499 System">
+       <topic href="html/tutorials/use4diacLocally.html" label="Step 1 - Use 4diac Locally (Blinking Tutorial)">
+          <topic href="html/tutorials/use4diacLocally.html#createSystem" label="Create a new IEC 61499 System">
           </topic>
-          <topic href="html/4diacIDE/use4diacLocally.html#createNetwork" label="Create a FB Network for the Blink Application">
+          <topic href="html/tutorials/use4diacLocally.html#createNetwork" label="Create a FB Network for the Blink Application">
           </topic>
-          <topic href="html/4diacIDE/use4diacLocally.html#configureHardware" label="Configuration of the Automation Hardware">
-          	<topic href="html/4diacIDE/use4diacLocally.html#deviceProfileConfiguration" label="Configuration of the Device's Configuration Profile">
+          <topic href="html/tutorials/use4diacLocally.html#configureHardware" label="Configuration of the Automation Hardware">
+          	<topic href="html/tutorials/use4diacLocally.html#deviceProfileConfiguration" label="Configuration of the Device's Configuration Profile">
           	</topic>
           </topic>
-           <topic href="html/4diacIDE/use4diacLocally.html#mapNetworks" label="Mapping of Function Block Networks to Devices/Resources">
+           <topic href="html/tutorials/use4diacLocally.html#mapNetworks" label="Mapping of Function Block Networks to Devices/Resources">
           </topic>
-          <topic href="html/4diacIDE/use4diacLocally.html#configureResource" label="Configure the Resource">
+          <topic href="html/tutorials/use4diacLocally.html#configureResource" label="Configure the Resource">
           </topic>
-          <topic href="html/4diacIDE/use4diacLocally.html#overviewEditors" label="Overview of the Editors">
+          <topic href="html/tutorials/use4diacLocally.html#overviewEditors" label="Overview of the Editors">
           </topic>
-          <topic href="html/4diacIDE/use4diacLocally.html#deployingToForte" label="Deploying Application to 4diac FORTE">
+          <topic href="html/tutorials/use4diacLocally.html#deployingToForte" label="Deploying Application to 4diac FORTE">
           </topic>
-          <topic href="html/4diacIDE/use4diacLocally.html#monitoringApplication" label="Monitoring the Application">
+          <topic href="html/tutorials/use4diacLocally.html#monitoringApplication" label="Monitoring the Application">
           </topic>
        </topic>
 <!--********************-->	
-       <topic href="html/4diacIDE/distribute4diac.html" label="Step 2 - Distribute 4diac Applications">
-          <topic href="html/4diacIDE/distribute4diac.html#extendApplication" label="Extend the Application">
+       <topic href="html/tutorials/distribute4diac.html" label="Step 2 - Distribute 4diac Applications">
+          <topic href="html/tutorials/distribute4diac.html#extendApplication" label="Extend the Application">
           </topic>               
-          <topic href="html/4diacIDE/distribute4diac.html#AddAnotherDevice" label="Add Another Device">
+          <topic href="html/tutorials/distribute4diac.html#AddAnotherDevice" label="Add Another Device">
           </topic>
-          <topic href="html/4diacIDE/distribute4diac.html#SetUpCommunication" label="Set up the Communication Between Both Devices">
-          	<topic href="html/4diacIDE/distribute4diac.html#SetUpBlinking" label="Set up the Blinking Part of the Application">
+          <topic href="html/tutorials/distribute4diac.html#SetUpCommunication" label="Set up the Communication Between Both Devices">
+          	<topic href="html/tutorials/distribute4diac.html#SetUpBlinking" label="Set up the Blinking Part of the Application">
           	</topic>
-          	<topic href="html/4diacIDE/distribute4diac.html#SetUpCounting" label="Set up the Counting Part of the Application">
+          	<topic href="html/tutorials/distribute4diac.html#SetUpCounting" label="Set up the Counting Part of the Application">
           	</topic>
-          	<topic href="html/4diacIDE/distribute4diac.html#BackgroundCommunicationFBs" label="Background of the Communication FBs">
+          	<topic href="html/tutorials/distribute4diac.html#BackgroundCommunicationFBs" label="Background of the Communication FBs">
           	</topic>
           </topic>
-          <topic href="html/4diacIDE/distribute4diac.html#startDevices" label="Start Both Devices">
+          <topic href="html/tutorials/distribute4diac.html#startDevices" label="Start Both Devices">
           </topic>
-          <topic href="html/4diacIDE/distribute4diac.html#testApplication" label="Test it!">
+          <topic href="html/tutorials/distribute4diac.html#testApplication" label="Test it!">
           </topic>
        </topic>
 <!--********************-->	
-       <topic href="html/4diacIDE/use4diacRemotely.html" label="Step 3 - Deploy Applications Remotely">
-          <topic href="html/4diacIDE/use4diacRemotely.html#stepsToDeployRem" label="Steps to Deploy Remotely">
+       <topic href="html/tutorials/use4diacRemotely.html" label="Step 3 - Deploy Applications Remotely">
+          <topic href="html/tutorials/use4diacRemotely.html#stepsToDeployRem" label="Steps to Deploy Remotely">
           </topic>
-          <topic href="html/4diacIDE/use4diacRemotely.html#troubleshooting" label="Troubleshooting">
+          <topic href="html/tutorials/use4diacRemotely.html#troubleshooting" label="Troubleshooting">
           </topic>
        </topic>
 <!--********************-->	
-      <topic href="html/4diacIDE/createOwnTypes.html" label="Step 4 - Create Your own Function Block Types">
-         <topic href="html/4diacIDE/createOwnTypes.html#createBasic" label="Create a Basic Function Block">
-         	<topic href="html/4diacIDE/createOwnTypes.html#changeInterface" label="Change the Interface">
+      <topic href="html/tutorials/createOwnTypes.html" label="Step 4 - Create Your own Function Block Types">
+         <topic href="html/tutorials/createOwnTypes.html#createBasic" label="Create a Basic Function Block">
+         	<topic href="html/tutorials/createOwnTypes.html#changeInterface" label="Change the Interface">
           	</topic>
-          	<topic href="html/4diacIDE/createOwnTypes.html#changeECC" label="Change the ECC">
+          	<topic href="html/tutorials/createOwnTypes.html#changeECC" label="Change the ECC">
           	</topic>
          </topic>
-         <topic href="html/4diacIDE/createOwnTypes.html#createSimple" label="Create a Simple Function Block">
+         <topic href="html/tutorials/createOwnTypes.html#createSimple" label="Create a Simple Function Block">
          </topic>         
-         <topic href="html/4diacIDE/createOwnTypes.html#createComposite" label="Create a Composite Function Block">
+         <topic href="html/tutorials/createOwnTypes.html#createComposite" label="Create a Composite Function Block">
          </topic>
-         <topic href="html/4diacIDE/createOwnTypes.html#createService" label="Create a Service Function Block">
+         <topic href="html/tutorials/createOwnTypes.html#createService" label="Create a Service Function Block">
          </topic>
-         <topic href="html/4diacIDE/createOwnTypes.html#exportTypes" label="Export Function Block Types">
-	         <topic href="html/4diacIDE/createOwnTypes.html#finishService" label="Finish the Service Interface Test">
+         <topic href="html/tutorials/createOwnTypes.html#exportTypes" label="Export Function Block Types">
+	         <topic href="html/tutorials/createOwnTypes.html#finishService" label="Finish the Service Interface Test">
     	     </topic>
          </topic>
-         <topic href="html/4diacIDE/createOwnTypes.html#OtherEditors" label="Other Type Editors">
+         <topic href="html/tutorials/createOwnTypes.html#OtherEditors" label="Other Type Editors">
          </topic>
-         <topic href="html/4diacIDE/createOwnTypes.html#testFunctionBlock" label="Test Function Block">
+         <topic href="html/tutorials/createOwnTypes.html#testFunctionBlock" label="Test Function Block">
          </topic>
       </topic>
 <!--********************-->	
-      <topic href="html/4diacIDE/otherUseful.html" label="Step 5 - Other Basic Features" >
-        <topic href="html/4diacIDE/otherUseful.html#ImportSystem" label="Import an Existing System">
+      <topic href="html/tutorials/otherUseful.html" label="Step 5 - Other Basic Features" >
+        <topic href="html/tutorials/otherUseful.html#ImportSystem" label="Import an Existing System">
         </topic>
-        <topic href="html/4diacIDE/otherUseful.html#ImportType" label="Import Existing IEC 61499 Types">
+        <topic href="html/tutorials/otherUseful.html#ImportType" label="Import Existing IEC 61499 Types">
         </topic>
-        <topic href="html/4diacIDE/otherUseful.html#CreateBootfiles" label="Creating Boot-Files">
+        <topic href="html/tutorials/otherUseful.html#CreateBootfiles" label="Creating Boot-Files">
         </topic>
       </topic>
 <!--********************-->	
-      <topic href="html/4diacIDE/advancedFeatures.html" label="Step 6 - Advanced Features">
-         <topic href="html/4diacIDE/advancedFeatures.html#adaptersUsage" label="Adapter Usage">
-         	<topic href="html/4diacIDE/advancedFeatures.html#newAdapterType" label="Create a new Adapter Type">
+      <topic href="html/tutorials/advancedFeatures.html" label="Step 6 - Advanced Features">
+         <topic href="html/tutorials/advancedFeatures.html#adaptersUsage" label="Adapter Usage">
+         	<topic href="html/tutorials/advancedFeatures.html#newAdapterType" label="Create a new Adapter Type">
          	</topic>
-         	<topic href="html/4diacIDE/advancedFeatures.html#useAdapterType" label="Use Your new Adapter Type">
+         	<topic href="html/tutorials/advancedFeatures.html#useAdapterType" label="Use Your new Adapter Type">
          	</topic>
          </topic>
-         <topic href="html/4diacIDE/advancedFeatures.html" label="Subapplications (NOT READY YET)">
+         <topic href="html/tutorials/advancedFeatures.html" label="Subapplications (NOT READY YET)">
          </topic>
       </topic>
-      <topic href="html/4diacIDE/dynamicTypeLoader.html" label="Step 7 - Deploying new FBs with the Dynamic Type Loader">
-         <topic href="html/4diacIDE/dynamicTypeLoader.html#getCCompiler" label="Downloading the Compiler">
+      <topic href="html/tutorials/dynamicTypeLoader.html" label="Step 7 - Deploying new FBs with the Dynamic Type Loader">
+         <topic href="html/tutorials/dynamicTypeLoader.html#getCCompiler" label="Downloading the Compiler">
          </topic>
-         <topic href="html/4diacIDE/dynamicTypeLoader.html#getLua" label="Downloading Lua">
+         <topic href="html/tutorials/dynamicTypeLoader.html#getLua" label="Downloading Lua">
          </topic>
-         <topic href="html/4diacIDE/dynamicTypeLoader.html#CompileForte" label="Compiling 4diac FORTE with the LuaJit">
+         <topic href="html/tutorials/dynamicTypeLoader.html#CompileForte" label="Compiling 4diac FORTE with the LuaJit">
          </topic>
-         <topic href="html/4diacIDE/dynamicTypeLoader.html#enableDTL" label="Enabling the Dynmic Type Loader">
+         <topic href="html/tutorials/dynamicTypeLoader.html#enableDTL" label="Enabling the Dynmic Type Loader">
          </topic>
       </topic>  
     </topic>
 
 <!--********************************************************************************************-->    
 
-    <topic href="html/examples/examplesIndex.html" label="4diac Examples">
-      <topic href="html/examples/examplesIndex.html#noHardwareRequired" label="General Examples">
+    <topic href="html/examples/index.html" label="4diac Examples">
+      <topic href="html/examplesindex.html#noHardwareRequired" label="General Examples">
          <topic href="html/examples/xplus3.html" label="X+3">
          </topic>
       </topic>
@@ -221,46 +220,45 @@
 
 <!--********************************************************************************************-->
  
-    <topic href="html/parameters/parameters.html" label="Use I/O From Different Platforms">
-      <topic href="html/parameters/parameters.html#sysfs" label="SysFs">
+    <topic href="html/io_config/io_config.html" label="Use I/O From Different Platforms">
+      <topic href="html/io_config/io_config.html#sysfs" label="SysFs">
       </topic>
-      <topic href="html/parameters/parameters.html#rpi-sps" label="Raspberry-SPS">
+      <topic href="html/io_config/io_config.html#rpi-sps" label="Raspberry-SPS">
       </topic>
-      <topic href="html/parameters/parameters.html#odroid" label="Odroid">
+      <topic href="html/io_config/io_config.html#odroid" label="Odroid">
       </topic>
-      <topic href="html/parameters/parameters.html#piface" label="PiFace Digital 2">
+      <topic href="html/io_config/io_config.html#piface" label="PiFace Digital 2">
       </topic>
-      <topic href="html/parameters/parameters.html#umic" label="uMIC.200">
+      <topic href="html/io_config/io_config.html#umic" label="uMIC.200">
       </topic>
-      <topic href="html/parameters/parameters.html#mlpi" label="Bosch Rexroth PLC (MLPI)">
+      <topic href="html/io_config/io_config.html#mlpi" label="Bosch Rexroth PLC (MLPI)">
       </topic>
-      <topic href="html/parameters/plc01a1.html" label="PLC01A1">
+      <topic href="html/io_config/plc01a1.html" label="PLC01A1">
       </topic>
-      <topic href="html/parameters/parameters.html#ev3" label="Lego Mindstorms EV3">
-		<topic href="html/parameters/parameters.html#ev3_standard_parameters" label="Standard Access">
+      <topic href="html/io_config/io_config.html#ev3" label="Lego Mindstorms EV3">
+		<topic href="html/io_config/io_config.html#ev3_standard_io_config" label="Standard Access">
 		</topic>
-		<topic href="html/parameters/parameters.html#ev3_cheatsheet" label="I/O Cheatsheet">
+		<topic href="html/io_config/io_config.html#ev3_cheatsheet" label="I/O Cheat sheet">
 		</topic>
-		<topic href="html/parameters/parameters.html#ev3_custom_parameters" label="Custom Access">
+		<topic href="html/io_config/io_config.html#ev3_custom_io_config" label="Custom Access">
 		</topic>
       </topic>
     </topic>
    
 <!--********************************************************************************************-->
 	
-  <topic href="html/communication/communicationIndex.html" label="Supported Communication Protocols">
-    <topic label="OPC UA"  href="html/communication/opc_ua_version1.html">
-      <topic label="Build 4diac FORTE with OPC UA" href="html/communication/opc_ua_version1.html#build" />
-      <topic label="General Overview" href="html/communication/opc_ua_version1.html#general" />
-      <topic label="OPC UA Variables" href="html/communication/opc_ua_version1.html#variables" />
-      <topic label="OPC UA Methods" href="html/communication/opc_ua_version1.html#methods" />
-      <topic label="OPC UA Method Call" href="html/communication/opc_ua_version1.html#methodCall"/>
-      <topic label="OPC UA Subscription" href="html/communication/opc_ua_version1.html#subscription"/>
-      <topic label="Connect to secure servers" href="html/communication/opc_ua_version1.html#securityClients"/>
+  <topic href="html/communication/index.html" label="Supported Communication Protocols">
+    <topic label="OPC UA"  href="html/communication/opcUA.html">
+      <topic label="Build 4diac FORTE with OPC UA" href="html/communication/opcUA.html#build" />
+      <topic label="General Overview" href="html/communication/opcUA.html#general" />
+      <topic label="OPC UA Variables" href="html/communication/opcUA.html#variables" />
+      <topic label="OPC UA Methods" href="html/communication/opcUA.html#methods" />
+      <topic label="OPC UA Method Call" href="html/communication/opcUA.html#methodCall"/>
+      <topic label="OPC UA Subscription" href="html/communication/opcUA.html#subscription"/>
+      <topic label="Connect to secure servers" href="html/communication/opcUA.html#securityClients"/>
     </topic>
- <topic href="html/communication/http.html" label="HTTP">
- </topic>
-	<topic href="html/communication/ros.html" label="ROS"/>
+	 <topic href="html/communication/http.html" label="HTTP">
+	 </topic>
     <topic label="MQTT with Eclipse Paho" href="html/communication/mqttPaho.html"/>
     <topic href="html/communication/simulation.html" label="Communicating with Simulation Tools">
        <topic label="Matlab" href="html/communication/simulation.html#matlab" />
@@ -280,7 +278,7 @@
     <topic href="html/communication/openPOWERLINK.html" label="openPOWERLINK">
     </topic>
     <topic href="html/communication/xqueries.html" label="Access BaseX Database with XQuery">
-       <topic href="html/communication/xqueries.html#build" label="Build 4diac&nbsp;FORTE to run an Application which sends XQueries">
+       <topic href="html/communication/xqueries.html#build" label="Build 4diac FORTE to run an Application which sends XQueries">
        </topic>
        <topic href="html/communication/xqueries.html#basex" label="Setup your BaseX Database">
        </topic>
@@ -291,12 +289,12 @@
     </topic>
   </topic>  
 		
-	<topic href="html/faq/faq.html" label="Frequently Asked Questions"> 
+	<topic href="html/faq.html" label="Frequently Asked Questions"> 
 	</topic>  
 
 <!--********************************************************************************************-->
 	
-	 <topic href="html/development/developmentIndex.html" label="Development Documentation"> 
+	 <topic href="html/development/index.html" label="Development Documentation"> 
     <topic label="4diac IDE">
       <topic label="Building and Running 4diac IDE from Source" href="html/development/building4diac.html#buildFromSource"> 
       </topic>
@@ -305,7 +303,6 @@
       <topic label="SWTBot testing" href="html/development/swtBotTestsDocumentation.html" />
     </topic>
     <topic label="4diac FORTE">
-      <topic label="Structured Datatypes" href="html/development/forte_struct.html"/>
       <topic label="Monitoring" href="html/development/forte_monitoring.html"/>
       <topic href="html/development/forte_communicationArchitecture.html" label="Communication Architecture">
          <topic href="html/development/forte_communicationArchitecture.html#networkLayer" label="Network Layer">

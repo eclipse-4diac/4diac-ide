@@ -37,7 +37,7 @@ public class ConnectorBorder extends AbstractBorder {
 	private static final int CONNECTOR_HEIGHT_HALF = CONNECTOR_HEIGHT / 2;
 	private static final int ADAPTER_SIZE = 9;
 
-	protected static final int LR_MARGIN = CONNECTOR_WIDTH + 1;
+	public static final int LR_MARGIN = CONNECTOR_WIDTH + 1;
 	protected static final int LR_ADAPTER_MARGIN = 11;
 
 	private static final int[] TRIANGLE_POINTS = { 0, 0, CONNECTOR_WIDTH, CONNECTOR_HEIGHT_HALF, 0, CONNECTOR_HEIGHT };

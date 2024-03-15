@@ -135,8 +135,7 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 
 	private boolean isExpandedAndUnlockedSubapp() {
 		return (graphicalEditPart instanceof final UnfoldedSubappContentEditPart subAppContent
-				&& subAppContent.getModel().getSubapp().isUnfolded()
-				&& !subAppContent.getModel().getSubapp().isLocked())
+				&& subAppContent.getContainerElement().isUnfolded() && !subAppContent.getContainerElement().isLocked())
 				|| (graphicalEditPart instanceof final SubAppForFBNetworkEditPart subAppEP
 						&& subAppEP.getModel().isUnfolded() && !subAppEP.getModel().isLocked());
 	}
@@ -199,13 +198,9 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 	}
 
 	private static FBNetworkElement getContainer(final GraphicalEditPart containerEP) {
-		if (containerEP instanceof final UnfoldedSubappContentEditPart unfoldedSubappContentEP) {
-			return unfoldedSubappContentEP.getModel().getSubapp();
-		}
-		if (containerEP instanceof final GroupContentEditPart groupContentEp) {
-			return groupContentEp.getModel().getGroup();
-		}
-		return null;
+		return (containerEP instanceof final AbstractContainerContentEditPart abstractContainerEP)
+				? abstractContainerEP.getContainerElement()
+				: null;
 	}
 
 	private static FBNetworkElement getSubappContainer(final GraphicalEditPart containerEP) {

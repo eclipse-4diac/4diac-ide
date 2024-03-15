@@ -122,8 +122,8 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		if (null != request) {
 			final Object childClass = request.getNewObjectType();
 			final Rectangle constraint = (Rectangle) getConstraintFor(request);
-			if ((getHost().getModel() instanceof final FBNetwork fbNetwork)
-					&& (childClass instanceof final TypeEntry typeEntry)) {
+			final FBNetwork fbNetwork = getFBNetwork();
+			if ((fbNetwork != null) && (childClass instanceof final TypeEntry typeEntry)) {
 				return AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, fbNetwork,
 						constraint.getLocation().x, constraint.getLocation().y);
 			}
@@ -222,8 +222,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	private FBNetwork getFBNetwork() {
-		final Object model = getHost().getModel();
-		return (model instanceof final FBNetwork fbNetwork) ? fbNetwork : null;
+		return (getHost().getModel() instanceof final FBNetwork fbNetwork) ? fbNetwork : null;
 	}
 
 	private Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request,

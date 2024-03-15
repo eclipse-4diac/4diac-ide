@@ -721,12 +721,13 @@
    <extension
          point="org.eclipse.ltk.ui.refactoring.changePreviewViewers">
       <changePreviewViewer
-            class="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteStructChangeViewer"
+            class="org.eclipse.fordiac.ide.typemanagement.wizards.ChangeConfigurationViewer"
             id="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteStructChangeViewer">
          <enablement>
          <or>
          <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeInterfaceChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeStructDeletionChange$DeleteMemberVariableChange"/>  
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeStructDeletionChange$DeleteMemberVariableChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>   
          </or>
          </enablement>
       </changePreviewViewer>
@@ -768,5 +769,10 @@
          </command>
       </menuContribution>
    </extension>
-   
+       <extension
+          point="org.eclipse.fordiac.ide.model.libraryLinkerExtension">
+       <client
+             class="org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryLinker">
+       </client>
+    </extension>   
 </plugin>

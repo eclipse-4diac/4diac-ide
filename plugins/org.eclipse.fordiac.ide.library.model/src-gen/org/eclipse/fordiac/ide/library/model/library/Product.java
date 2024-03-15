@@ -16,8 +16,10 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Product#getVersionInfo <em>Version Info</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Product#getDependencies <em>Dependencies</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Product#getAttribute <em>Attribute</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Product#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Product#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Product#getSymbolicName <em>Symbolic Name</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getProduct()
@@ -49,19 +51,6 @@ public interface Product extends EObject {
 	void setVersionInfo(VersionInfo value);
 
 	/**
-	 * Returns the value of the '<em><b>Dependencies</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.library.model.library.Dependencies}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Dependencies</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getProduct_Dependencies()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='Dependencies' namespace='##targetNamespace'"
-	 * @generated
-	 */
-	EList<Dependencies> getDependencies();
-
-	/**
 	 * Returns the value of the '<em><b>Attribute</b></em>' attribute list.
 	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
@@ -73,5 +62,74 @@ public interface Product extends EObject {
 	 * @generated
 	 */
 	EList<String> getAttribute();
+
+	/**
+	 * Returns the value of the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Comment</em>' attribute.
+	 * @see #setComment(String)
+	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getProduct_Comment()
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        extendedMetaData="kind='attribute' name='Comment' namespace='##targetNamespace'"
+	 * @generated
+	 */
+	String getComment();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.library.model.library.Product#getComment <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Comment</em>' attribute.
+	 * @see #getComment()
+	 * @generated
+	 */
+	void setComment(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Name</em>' attribute.
+	 * @see #setName(String)
+	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getProduct_Name()
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        extendedMetaData="kind='attribute' name='Name' namespace='##targetNamespace'"
+	 * @generated
+	 */
+	String getName();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.library.model.library.Product#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * @see #getName()
+	 * @generated
+	 */
+	void setName(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Symbolic Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Symbolic Name</em>' attribute.
+	 * @see #setSymbolicName(String)
+	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getProduct_SymbolicName()
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        extendedMetaData="kind='attribute' name='SymbolicName' namespace='##targetNamespace'"
+	 * @generated
+	 */
+	String getSymbolicName();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.library.model.library.Product#getSymbolicName <em>Symbolic Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Symbolic Name</em>' attribute.
+	 * @see #getSymbolicName()
+	 * @generated
+	 */
+	void setSymbolicName(String value);
 
 } // Product

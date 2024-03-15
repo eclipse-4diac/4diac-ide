@@ -49,12 +49,15 @@ import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -416,20 +419,29 @@ public abstract class CommonElementImporter {
 		final Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 		readNameCommentAttributes(attribute);
 
-		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (typeName != null) {
-			if (typeName.equals(HelperTypes.CDATA.getName())) {
-				attribute.setType(HelperTypes.CDATA);
-			} else {
-				attribute.setType(addDependency(getDataTypeLibrary().getType(typeName)));
-			}
+		final AttributeDeclaration internalAttributeDecl = InternalAttributeDeclarations
+				.getInternalAttributeByName(attribute.getName());
+		if (internalAttributeDecl != null) {
+			// Internal Attributes
+			attribute.setAttributeDeclaration(internalAttributeDecl);
+			attribute.setType(internalAttributeDecl.getType());
 		} else {
-			final AttributeTypeEntry entry = ImportHelper.resolveImport(attribute.getName(), confObject,
-					name -> getTypeLibrary().getAttributeTypeEntry(name), name -> null);
-			final AttributeTypeEntry attributeTypeEntry = addDependency(entry);
-			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
-				attribute.setAttributeDeclaration(attributeTypeEntry.getType());
-				attribute.setType(attributeTypeEntry.getType().getType());
+			final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+			if (typeName != null) {
+				if (typeName.equals(HelperTypes.CDATA.getName())) {
+					attribute.setType(HelperTypes.CDATA);
+				} else {
+					attribute.setType(addDependency(getDataTypeLibrary().getType(typeName)));
+				}
+			} else {
+				// AttributeDeclarations
+				final AttributeTypeEntry entry = ImportHelper.resolveImport(attribute.getName(), confObject,
+						name -> getTypeLibrary().getAttributeTypeEntry(name), name -> null);
+				final AttributeTypeEntry attributeTypeEntry = addDependency(entry);
+				if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
+					attribute.setAttributeDeclaration(attributeTypeEntry.getType());
+					attribute.setType(attributeTypeEntry.getType().getType());
+				}
 			}
 		}
 
@@ -443,17 +455,28 @@ public abstract class CommonElementImporter {
 		}
 		attribute.setValue(value);
 
-		confObject.getAttributes().add(attribute);
-		if (confObject instanceof final StructManipulator structManipulator) {
+		if (confObject instanceof final ConfigurableFB fb) {
+			handleConfigurableFB(fb, attribute);
+		} else {
+			confObject.getAttributes().add(attribute);
+		}
+	}
+
+	private void handleConfigurableFB(final ConfigurableFB fb, final Attribute attribute) {
+		if (fb instanceof final StructManipulator structManipulator) {
+			fb.getAttributes().add(attribute);
 			checkStructAttribute(structManipulator, attribute);
+		} else if (LibraryElementTags.F_MOVE_CONFIG.equals(attribute.getName())) {
+			fb.loadConfiguration(attribute);
 		}
 	}
 
 	private void checkStructAttribute(final StructManipulator fb, final Attribute attribute) {
-		if (LibraryElementTags.STRUCTURED_TYPE_ELEMENT.equals(attribute.getName())) {
+		if (LibraryElementTags.STRUCT_MANIPULATOR_CONFIG.equals(attribute.getName())) {
 			final StructuredType structType = addDependency(
 					getTypeLibrary().getDataTypeLibrary().getStructuredType(attribute.getValue()));
 			fb.setStructTypeElementsAtInterface(structType);
+			fb.getAttributes().remove(attribute);
 		} else if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(attribute.getName())) {
 			// reset type to get visible children configured
 			fb.setStructTypeElementsAtInterface(fb.getStructType());

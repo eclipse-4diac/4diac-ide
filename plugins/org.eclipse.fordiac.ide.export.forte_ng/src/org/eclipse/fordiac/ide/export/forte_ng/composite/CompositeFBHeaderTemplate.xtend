@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 fortiss GmbH, Johannes Kepler University
+ * Copyright (c) 2019, 2024 fortiss GmbH, Johannes Kepler University
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -18,7 +18,7 @@ package org.eclipse.fordiac.ide.export.forte_ng.composite
 
 import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 
 class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
@@ -70,7 +70,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 	'''
 
 	def protected generateFBNetwork() '''
-		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterFBType)]»
+		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterType)]»
 			static const SCFB_FBInstanceData scmInternalFBs[];
 		«ENDIF»
 		static const SCFB_FBParameter scmParamters[];

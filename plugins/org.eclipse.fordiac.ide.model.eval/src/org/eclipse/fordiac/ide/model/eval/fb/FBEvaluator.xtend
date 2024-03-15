@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -73,9 +74,13 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	}
 
 	override getDependencies() {
-		(type.eAllContents.toIterable.filter(VarDeclaration).flatMap [
-			VariableOperations.getDependencies(it)
-		]).toSet
+		type.eAllContents.toIterable.flatMap [
+			switch (it) {
+				Attribute: VariableOperations.getDependencies(it)
+				VarDeclaration: VariableOperations.getDependencies(it)
+				default: emptySet
+			}
+		].toSet
 	}
 
 	override getVariables() {

@@ -22,7 +22,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -59,8 +61,14 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 	public static Command getUpdateCommand(final FBNetworkElement element) {
 		if (element instanceof final StructManipulator mux) {
 			final DataTypeLibrary lib = mux.getType().getTypeLibrary().getDataTypeLibrary();
-			final StructuredType updated = (StructuredType) lib.getType(mux.getStructType().getName());
-			return new ChangeStructCommand(mux, updated);
+			// check type entry for reference to original struct even for configured mux:
+			final String fullTypeName = mux.getStructType().getTypeEntry().getFullTypeName();
+			final DataType datatype = lib.getType(fullTypeName);
+			if (datatype instanceof final StructuredType updated) {
+				return new ChangeStructCommand(mux, updated);
+			}
+			// structured type not found:
+			return new ChangeStructCommand(mux, GenericTypes.ANY_STRUCT);
 		}
 		return new UpdateFBTypeCommand(element);
 	}

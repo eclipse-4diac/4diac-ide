@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeDocumentationCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -58,16 +59,17 @@ import org.osgi.framework.Bundle;
 public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 	// @formatter:off
 	private static final String TOOLBAR_GROUP_CONFIGURATION =
-			"[" 	 																	//$NON-NLS-1$
-			+ "{ name: 'clipboard', groups: [ 'undo', 'clipboard'] },"					//$NON-NLS-1$
-			+ "{ name: 'colors' },"  													//$NON-NLS-1$
-			+ "{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] }," 			//$NON-NLS-1$
-			+ "{ name: 'styles' }, " 													//$NON-NLS-1$
-			+ "{ name: 'paragraph', groups: [ 'align', 'list', 'indent' ] }," 			//$NON-NLS-1$
-			+ "{ name: 'find'}," 														//$NON-NLS-1$
-			+ "{ name: 'insert' }," 													//$NON-NLS-1$
-			+ "{ name: 'links' }," 														//$NON-NLS-1$
-			+ "]"; 																		//$NON-NLS-1$
+				"""
+		[\
+		{ name: 'clipboard', groups: [ 'undo', 'clipboard'] },\
+		{ name: 'colors' },\
+		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },\
+		{ name: 'styles' },\s\
+		{ name: 'paragraph', groups: [ 'align', 'list', 'indent' ] },\
+		{ name: 'find'},\
+		{ name: 'insert' },\
+		{ name: 'links' },\
+		]"""; 																		//$NON-NLS-1$
 
 	// @formatter:on
 
@@ -98,6 +100,7 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 		setInput(input);
 		setSite(site);
 		setPartName("Description"); //$NON-NLS-1$
+		setTitleImage(FordiacImage.ICON_DOCUMENTATION_EDITOR.getImage());
 	}
 
 	@Override
@@ -194,12 +197,13 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 		final RichTextEditorConfiguration editorConfig = new RichTextEditorConfiguration();
 
 		editorConfig.setOption("toolbarGroups", TOOLBAR_GROUP_CONFIGURATION); //$NON-NLS-1$
-		editorConfig.removeDefaultToolbarButton("Flash", "HorizontalRule", "SpecialChar" + "", "Smiley",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$//$NON-NLS-5$
+		editorConfig.removeDefaultToolbarButton("Flash", "HorizontalRule", "SpecialChar" + "", "Smiley", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$//$NON-NLS-5$
 				"PageBreak", "Iframe"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		editorConfig.setRemoveFormat(false);
 
-		// FIXME disable custom button on Gtk/WebKit, which causes the UI to hang for 10s
+		// FIXME disable custom button on Gtk/WebKit, which causes the UI to hang for
+		// 10s
 		// until https://bugs.eclipse.org/bugs/show_bug.cgi?id=581144 is fixed
 		if (!"gtk".equals(SWT.getPlatform())) { //$NON-NLS-1$
 			final InsertConvertedImageButton base64ImageInsert = new InsertConvertedImageButton();

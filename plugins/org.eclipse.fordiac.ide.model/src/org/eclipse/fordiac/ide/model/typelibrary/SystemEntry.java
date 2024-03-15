@@ -24,4 +24,6 @@ public interface SystemEntry extends TypeEntry {
 
 	void setSystem(LibraryElement system);
 
+	@Override
+	AutomationSystem copyType();
 }

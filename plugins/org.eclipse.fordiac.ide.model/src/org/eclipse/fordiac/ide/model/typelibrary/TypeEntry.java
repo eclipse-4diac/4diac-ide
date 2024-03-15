@@ -22,12 +22,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public interface TypeEntry extends Notifier {
 
 	String TYPE_ENTRY_FILE_FEATURE = "TYPE_ENTRY_FILE_FEATURE"; //$NON-NLS-1$
+	String TYPE_ENTRY_FILE_CONTENT_FEATURE = "TYPE_ENTRY_FILE_CONTENT_FEATURE"; //$NON-NLS-1$
 	String TYPE_ENTRY_TYPE_FEATURE = "TYPE_ENTRY_TYPE_FEATURE"; //$NON-NLS-1$
 	String TYPE_ENTRY_TYPE_EDITABLE_FEATURE = "TYPE_ENTRY_TYPE_EDITABLE_FEATURE"; //$NON-NLS-1$
 	String TYPE_ENTRY_TYPE_LIBRARY_FEATURE = "TYPE_ENTRY_TYPE_LIBRARY"; //$NON-NLS-1$
@@ -52,6 +55,8 @@ public interface TypeEntry extends Notifier {
 
 	void setTypeLibrary(TypeLibrary typeLib);
 
+	LibraryElement copyType();
+
 	/** Save the editable type to the file associated with this type entry */
 	default void save(final LibraryElement toSave) throws CoreException {
 		save(toSave, new NullProgressMonitor());
@@ -63,6 +68,10 @@ public interface TypeEntry extends Notifier {
 	String getTypeName();
 
 	String getFullTypeName();
+
+	String getComment();
+
+	EClass getTypeEClass();
 
 	default String getPackageName() {
 		return PackageNameHelper.extractPackageName(getFullTypeName());
@@ -83,5 +92,13 @@ public interface TypeEntry extends Notifier {
 			name = fileName.substring(0, index);
 		}
 		return name;
+	}
+
+	default URI getURI() {
+		final IFile file = getFile();
+		if (file != null) {
+			return URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+		}
+		return null;
 	}
 }

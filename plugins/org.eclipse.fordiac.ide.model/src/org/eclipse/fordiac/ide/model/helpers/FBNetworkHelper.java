@@ -220,7 +220,7 @@ public final class FBNetworkHelper {
 		return true;
 	}
 
-	public static boolean isTypeInsertionSave(final FBType type, final EObject element) {
+	public static boolean isTypeInsertionSafe(final FBType type, final EObject element) {
 		if ((type == null) || (element == null)) {
 			return true;
 		}

@@ -75,12 +75,12 @@ public class LibraryAdapterFactory extends AdapterFactoryImpl {
 				return createExcludesAdapter();
 			}
 			@Override
-			public Adapter caseIncludes(Includes object) {
-				return createIncludesAdapter();
+			public Adapter caseExports(Exports object) {
+				return createExportsAdapter();
 			}
 			@Override
-			public Adapter caseLibraries(Libraries object) {
-				return createLibrariesAdapter();
+			public Adapter caseIncludes(Includes object) {
+				return createIncludesAdapter();
 			}
 			@Override
 			public Adapter caseLibrary(Library object) {
@@ -155,6 +155,20 @@ public class LibraryAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.library.model.library.Exports <em>Exports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.library.model.library.Exports
+	 * @generated
+	 */
+	public Adapter createExportsAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.library.model.library.Includes <em>Includes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -165,20 +179,6 @@ public class LibraryAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createIncludesAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.library.model.library.Libraries <em>Libraries</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.library.model.library.Libraries
-	 * @generated
-	 */
-	public Adapter createLibrariesAdapter() {
 		return null;
 	}
 

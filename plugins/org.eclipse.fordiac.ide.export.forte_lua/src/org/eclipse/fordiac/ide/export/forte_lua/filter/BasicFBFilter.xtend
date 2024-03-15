@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 fortiss GmbH
+ * Copyright (c) 2015, 2024 fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -77,18 +77,18 @@ class BasicFBFilter {
 		  local «luaStateVariable()» = «luaFBStateVariable()»
 		  «variables.luaFBVariablesPrefix»
 		  «FOR adapter : adapterSocketsVariables.keySet»
-		  	«FOR input: adapter.getType.adapterFBType.interfaceList.inputVars» 
+		  	«FOR input: adapter.getType.interfaceList.inputVars» 
 		  		«input.luaFBAdapterInECCVariablesPrefix(adapter.name, false)»
 		  	«ENDFOR»
-		  	«FOR output: adapter.getType.adapterFBType.interfaceList.outputVars» 
+		  	«FOR output: adapter.getType.interfaceList.outputVars» 
 		  		«output.luaFBAdapterInECCVariablesPrefix(adapter.name, false)»
 		  	«ENDFOR»
 		  «ENDFOR»
 		  «FOR adapter : adapterPlugsVariables.keySet»
-		  	«FOR input: adapter.getType.adapterFBType.interfaceList.inputVars» 
+		  	«FOR input: adapter.getType.interfaceList.inputVars» 
 		  		«input.luaFBAdapterInECCVariablesPrefix(adapter.name, true)»
 		  	«ENDFOR»
-		  	«FOR output: adapter.getType.adapterFBType.interfaceList.outputVars» 
+		  	«FOR output: adapter.getType.interfaceList.outputVars» 
 		  		«output.luaFBAdapterInECCVariablesPrefix(adapter.name, true)»
 		  	«ENDFOR»
 		  «ENDFOR»

@@ -34,6 +34,12 @@ public final class FordiacAnnotationUtil {
 				|| targetFeature == LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type();
 	}
 
+	public static boolean showOnTargetValue(final GraphicalAnnotation annotation) {
+		final EStructuralFeature targetFeature = getTargetFeature(annotation);
+		return targetFeature == LibraryElementPackage.eINSTANCE.getAttribute_Value()
+				|| targetFeature == LibraryElementPackage.eINSTANCE.getVarDeclaration_Value();
+	}
+
 	public static EStructuralFeature getTargetFeature(final GraphicalAnnotation annotation)
 			throws IllegalArgumentException {
 		final String targetFeatureAttribute = (String) annotation.getAttribute(FordiacErrorMarker.TARGET_FEATURE);

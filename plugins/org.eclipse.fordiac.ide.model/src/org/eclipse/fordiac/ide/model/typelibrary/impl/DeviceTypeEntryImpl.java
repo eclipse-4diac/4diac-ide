@@ -17,11 +17,13 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 
 public class DeviceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<DeviceType> implements DeviceTypeEntry {
@@ -46,4 +48,8 @@ public class DeviceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<DeviceType
 		return null;
 	}
 
+	@Override
+	public EClass getTypeEClass() {
+		return LibraryElementPackage.Literals.DEVICE_TYPE;
+	}
 }

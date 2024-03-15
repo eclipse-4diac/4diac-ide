@@ -2,6 +2,7 @@
 <?eclipse version="3.2"?>
 <plugin>
   <extension-point id="TypeEntryCreator" name="TypeEntryCreator" schema="schema/TypeEntryCreator.exsd"/>
+  <extension-point id="libraryLinkerExtension" name="Extension for the Library Linker" schema="schema/libraryLinkerExtension.exsd"/>
 
   <extension point="org.eclipse.emf.ecore.generated_package">
     <package 
@@ -264,5 +265,5 @@
     <persistent
           value="false">
     </persistent>
- </extension> 
+ </extension>  
 </plugin>

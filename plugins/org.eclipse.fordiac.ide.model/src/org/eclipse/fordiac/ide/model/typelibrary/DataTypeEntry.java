@@ -25,5 +25,6 @@ public interface DataTypeEntry extends TypeEntry {
 	@Override
 	AnyDerivedType getTypeEditable();
 
-
+	@Override
+	AnyDerivedType copyType();
 }

@@ -15,9 +15,11 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.EnumSet;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeFbTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalFBCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
@@ -27,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -90,20 +93,14 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
-			final Command cmd = new UpdateFBTypeCommand(fb, getErrorMarkerEntry());
+			final Command cmd = new UpdateFBTypeCommand(fb, getErrorMarkerEntry(fb));
 			ChangeExecutionHelper.executeChange(cmd, fb, pm);
 			return super.perform(pm);
 		}
-
-		private TypeEntry getErrorMarkerEntry() {
-			final TypeLibrary typeLibrary = fb.getTypeEntry().getTypeLibrary();
-			return typeLibrary.createErrorTypeEntry(fb.getTypeName(), fb.getType().eClass());
-		}
-
 	}
 
-	private static class DeleteInternalFBChange extends CompositeChange {
-
+	private static class DeleteInternalFBChange extends CompositeChange implements IFordiacPreviewChange {
+		private final EnumSet<ChangeState> state = EnumSet.noneOf(ChangeState.class);
 		final BaseFBType baseFb;
 		final FB internalFb;
 
@@ -112,17 +109,49 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 					internalFb.getQualifiedName()));
 			this.baseFb = baseFb;
 			this.internalFb = internalFb;
-			SafeFBTypeDeletionChange.addUpdateChanges(this, baseFb, false);
+			state.addAll(this.getDefaultSelection());
+			SafeFBTypeDeletionChange.addUpdateChanges(this, baseFb, true);
 		}
 
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
 			final TypeEntry typeEntry = baseFb.getTypeEntry();
-			final Command cmd = new DeleteInternalFBCommand((BaseFBType) typeEntry.getTypeEditable(), internalFb);
+			Command cmd = null;
+			if (state.contains(ChangeState.DELETE)) {
+				cmd = new DeleteInternalFBCommand((BaseFBType) typeEntry.getTypeEditable(), internalFb);
+			} else if (state.contains(ChangeState.REPLACE_WITH_MARKER)) {
+				// use empty string to force errormarker
+				cmd = new ChangeFbTypeCommand(internalFb, getErrorMarkerEntry(internalFb));
+			}
 			ChangeExecutionHelper.executeChange(cmd, baseFb, pm);
 			return super.perform(pm);
 		}
 
+		@Override
+		public EnumSet<ChangeState> getState() {
+			return state;
+		}
+
+		@Override
+		public void addState(final ChangeState newState) {
+			state.add(newState);
+		}
+
+		@Override
+		public EnumSet<ChangeState> getAllowedChoices() {
+			return EnumSet.of(ChangeState.DELETE, ChangeState.REPLACE_WITH_MARKER);
+		}
+
+		@Override
+		public EnumSet<ChangeState> getDefaultSelection() {
+			return EnumSet.of(ChangeState.REPLACE_WITH_MARKER);
+		}
+
+	}
+
+	private static FBTypeEntry getErrorMarkerEntry(final FBNetworkElement fb) {
+		final TypeLibrary typeLibrary = fb.getTypeEntry().getTypeLibrary();
+		return (FBTypeEntry) typeLibrary.createErrorTypeEntry(fb.getTypeName(), fb.getType().eClass());
 	}
 
 }

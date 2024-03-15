@@ -148,6 +148,7 @@ public class ConnectionDisplayWidget {
 			connectionSection.setText(Messages.InterfaceElementSection_OutConnections);
 		}
 		connectionsViewer.setInput(type);
+		connectionsViewer.getTable().requestLayout();
 	}
 
 	public void setEditable(final boolean edit) {

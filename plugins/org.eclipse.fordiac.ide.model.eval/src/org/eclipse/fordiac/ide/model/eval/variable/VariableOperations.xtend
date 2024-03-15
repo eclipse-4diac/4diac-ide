@@ -16,9 +16,12 @@ import java.util.List
 import java.util.Set
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType
 import org.eclipse.fordiac.ide.model.data.AnyType
 import org.eclipse.fordiac.ide.model.data.ArrayType
+import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser
 import org.eclipse.fordiac.ide.model.eval.EvaluatorCache
@@ -35,7 +38,6 @@ import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 
 import static extension org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser.isSimpleTypeDeclaration
 import static extension org.eclipse.fordiac.ide.model.eval.EvaluatorFactory.*
-import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType
 
 final class VariableOperations {
 	private new() {
@@ -45,6 +47,7 @@ final class VariableOperations {
 		switch (type) {
 			ArrayType: new ArrayVariable(name, type)
 			StructuredType: new StructVariable(name, type)
+			DirectlyDerivedType: new DirectlyDerivedVariable(name, type)
 			AnyType: new ElementaryVariable(name, type)
 			FBType: new FBVariable(name, type)
 			default: throw new UnsupportedOperationException('''Cannot instanciate variable '«name ?: "null"»' of type «type?.name ?: "null"»''')
@@ -55,6 +58,7 @@ final class VariableOperations {
 		switch (type) {
 			ArrayType: new ArrayVariable(name, type, value)
 			StructuredType: new StructVariable(name, type, value)
+			DirectlyDerivedType: new DirectlyDerivedVariable(name, type, value)
 			AnyType: new ElementaryVariable(name, type, value)
 			FBType: new FBVariable(name, type, value)
 			default: throw new UnsupportedOperationException('''Cannot instanciate variable '«name ?: "null"»' of type «type?.name ?: "null"»''')
@@ -65,6 +69,7 @@ final class VariableOperations {
 		switch (type) {
 			ArrayType: new ArrayVariable(name, type, value)
 			StructuredType: new StructVariable(name, type, value)
+			DirectlyDerivedType: new DirectlyDerivedVariable(name, type, value)
 			AnyType: new ElementaryVariable(name, type, value)
 			FBType: new FBVariable(name, type, value)
 			default: throw new UnsupportedOperationException('''Cannot instanciate variable '«name ?: "null"»' of type «type?.name ?: "null"»''')
@@ -114,22 +119,22 @@ final class VariableOperations {
 
 	def static Variable<?> newVariable(Attribute attr) {
 		if (!attr.value.nullOrEmpty) {
-				val evaluator = attr.createEvaluator(Attribute, null, emptySet, null)
-				if (evaluator instanceof VariableEvaluator) {
-					evaluator.evaluateVariable
-				} else
-					throw new UnsupportedOperationException("No suitable evaluator for Attribute found")
+			val evaluator = attr.createEvaluator(Attribute, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				evaluator.evaluateVariable
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for Attribute found")
 		} else
 			newVariable(attr.name, attr.type)
 	}
 
 	def static Variable<?> newVariable(DirectlyDerivedType type) {
 		if (!type.initialValue.nullOrEmpty) {
-				val evaluator = type.createEvaluator(DirectlyDerivedType, null, emptySet, null)
-				if (evaluator instanceof VariableEvaluator) {
-					evaluator.evaluateVariable
-				} else
-					throw new UnsupportedOperationException("No suitable evaluator for DirectlyDerivedType found")
+			val evaluator = type.createEvaluator(DirectlyDerivedType, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				evaluator.evaluateVariable
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for DirectlyDerivedType found")
 		} else
 			newVariable(type.name, type.baseType)
 	}
@@ -166,6 +171,19 @@ final class VariableOperations {
 			""
 	}
 
+	def static String validateValue(DirectlyDerivedType type) {
+		if (!type.initialValue.nullOrEmpty) {
+			val evaluator = type.createEvaluator(DirectlyDerivedType, null, emptySet, null)
+			try {
+				evaluator?.prepare
+				""
+			} catch (Exception e) {
+				e.message;
+			}
+		} else
+			""
+	}
+
 	def static boolean validateValue(VarDeclaration decl, List<String> errors, List<String> warnings,
 		List<String> infos) {
 		if (!decl.simpleInitialValue) {
@@ -178,6 +196,22 @@ final class VariableOperations {
 				}
 			} else
 				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+		} else
+			true
+	}
+
+	def static boolean validateValue(Attribute attr, List<String> errors, List<String> warnings,
+		List<String> infos) {
+		if (!attr.simpleAttributeValue) {
+			val evaluator = attr.createEvaluator(Attribute, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				try {
+					evaluator.validateVariable(errors, warnings, infos)
+				} catch (Exception e) {
+					false
+				}
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for Attribute found")
 		} else
 			true
 	}
@@ -219,19 +253,11 @@ final class VariableOperations {
 	}
 
 	def static String validateValue(DataType dataType, String initialValue) {
-		(LibraryElementFactory.eINSTANCE.createVarDeclaration => [
-			name = "dummy"
-			type = dataType
-			value = LibraryElementFactory.eINSTANCE.createValue => [value = initialValue]
-		]).validateValue
+		dataType.withValue(initialValue).validateValue
 	}
 
 	def static Value evaluateValue(DataType dataType, String initialValue) {
-		(LibraryElementFactory.eINSTANCE.createVarDeclaration => [
-			name = "dummy"
-			type = dataType
-			value = LibraryElementFactory.eINSTANCE.createValue => [value = initialValue]
-		]).newVariable.value
+		dataType.withValue(initialValue).newVariable.value
 	}
 
 	def static Set<String> getDependencies(VarDeclaration decl) {
@@ -245,12 +271,31 @@ final class VariableOperations {
 			#{PackageNameHelper.getFullTypeName(decl.type)}
 	}
 
+	def static Set<String> getDependencies(Attribute attr) {
+		if (!attr.value.nullOrEmpty) {
+			val evaluator = attr.createEvaluator(Attribute, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				evaluator.dependencies
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for Attribute found")
+		} else if (attr.attributeDeclaration !== null)
+			#{PackageNameHelper.getFullTypeName(attr.attributeDeclaration)}
+		else
+			#{PackageNameHelper.getFullTypeName(attr.type)}
+	}
+
 	def static Set<String> getAllDependencies(EObject object) {
 		val evaluator = object.createEvaluator(object.eClass.instanceClass, null, emptySet, null);
 		if (evaluator !== null)
 			evaluator.dependencies
 		else
-			object.eAllContents.filter(VarDeclaration).flatMap[dependencies.iterator].toSet
+			object.eAllContents.toIterable.flatMap [
+				switch (it) {
+					Attribute: dependencies
+					VarDeclaration: dependencies
+					default: emptySet
+				}
+			].toSet
 	}
 
 	def static boolean hasInitialValue(VarDeclaration decl) {
@@ -292,6 +337,18 @@ final class VariableOperations {
 		copy
 	}
 
+	def private static withValue(DataType type, String valueString) {
+		val copy = DataFactory.eINSTANCE.createDirectlyDerivedType => [
+			name = type.name
+			baseType = type
+			initialValue = valueString
+		]
+		if (type instanceof AnyDerivedType && type.eResource !== null) {
+			new ResourceImpl(type.eResource.URI).contents.add(copy)
+		}
+		copy
+	}
+
 	def private static isSimpleInitialValue(VarDeclaration decl) {
 		if (!decl.hasDeclaredInitialValue)
 			true
@@ -300,6 +357,18 @@ final class VariableOperations {
 		else
 			try {
 				new TypedValueConverter(decl.type, true).toValue(decl.declaredInitialValue)
+				true
+			} catch (Exception e) {
+				false
+			}
+	}
+
+	def private static isSimpleAttributeValue(Attribute attr) {
+		if (attr.value.nullOrEmpty || !(attr.type instanceof AnyType))
+			true
+		else
+			try {
+				new TypedValueConverter(attr.type, true).toValue(attr.value)
 				true
 			} catch (Exception e) {
 				false

@@ -26,6 +26,12 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.typemanagement.messages"; //$NON-NLS-1$
 
+	public static String AbstractCommandChange_CannotExecuteCommand;
+
+	public static String AbstractCommandChange_NoSuchElement;
+
+	public static String AttributeValueChange_AttributeValueChanged;
+
 	public static String BuildPathPropertyPage_AddExclude;
 
 	public static String BuildPathPropertyPage_AddExcludePattern;
@@ -58,7 +64,13 @@ public final class Messages extends NLS {
 
 	public static String BuildPathPropertyPage_Toggle;
 
+	public static String CommandRedoChange_CannotRedoCommand;
+
+	public static String CommandUndoChange_CannotUndoCommand;
+
 	public static String Confirm;
+
+	public static String DataTypeChange_TypeDeclarationChanged;
 
 	public static String DeleteFBTypeParticipant_Name;
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
@@ -75,9 +87,13 @@ public final class Messages extends NLS {
 	public static String DirsWithUnzippedTypeLibs;
 	public static String ExtractedLibraryImportWizard;
 	public static String FBTypeComposedAdapterFactory_FBTypecomposedAdapterFactoryShouldNotBeInsantiated;
+	public static String ImportChange_ImportedNamespaceChanged;
+
 	public static String ImportExtractedFiles;
 	public static String ImportFailed;
 	public static String ImportFailedOnLinkCreation;
+	public static String InitialValueChange_InitialValueChanged;
+
 	public static String InstanceUpdate;
 	public static String NewFBTypeWizard_TemplateNotAvailable;
 	public static String NewFBTypeWizardPage_TypeAlreadyExists;
@@ -91,9 +107,9 @@ public final class Messages extends NLS {
 	public static String NewFBTypeWizardPage_OpenTypeForEditingWhenDone;
 	public static String NewFBTypeWizardPage_InvalidOrNoComment;
 	public static String NewVersionOf;
-	public static String RenameElementChange_CannotExecuteCommand;
+	public static String RenameElementChange_InvalidName;
+
 	public static String RenameElementChange_NameChanged;
-	public static String RenameElementChange_NoSuchElement;
 	public static String RenameElementRefactoringParticipant_Name;
 	public static String RenameElementRefactoringProcessor_Name;
 	public static String RenameElementRefactoringWizardPage_Name;
@@ -121,8 +137,9 @@ public final class Messages extends NLS {
 
 	public static String UpdatedInstances;
 
-	public static String DeleteStructChange_DeleteChoice;
-	public static String DeleteStructChange_ChangeToAnyStruct;
+	public static String PreviewChange_DeleteChoice;
+	public static String PreviewChange_ChangeToAnyStruct;
+	public static String PreviewChange_ReplaceWithMarker;
 
 	static {
 		// initialize resource bundle

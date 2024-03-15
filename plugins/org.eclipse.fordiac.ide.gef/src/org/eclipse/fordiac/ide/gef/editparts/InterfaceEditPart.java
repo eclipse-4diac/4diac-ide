@@ -99,17 +99,22 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	private static int getMinWidth() {
 		if (-1 == minWidth) {
 			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-			return pf.getInt(DiagramPreferences.MIN_PIN_LABEL_SIZE);
+			minWidth = pf.getInt(DiagramPreferences.MIN_PIN_LABEL_SIZE);
 		}
 		return minWidth;
 	}
 
-	private static int getMaxWidth() {
+	@SuppressWarnings("static-method") // allow subclasses to overload and provide different max widths
+	protected int getMaxWidth() {
 		if (-1 == maxWidth) {
-			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-			return pf.getInt(DiagramPreferences.MAX_PIN_LABEL_SIZE);
+			loadMaxWidth();
 		}
 		return maxWidth;
+	}
+
+	private static synchronized void loadMaxWidth() {
+		final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
+		maxWidth = pf.getInt(DiagramPreferences.MAX_PIN_LABEL_SIZE);
 	}
 
 	@Override
@@ -196,8 +201,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	private boolean isSubAppPin(final FBNetworkElement connSource) {
-		if (connSource instanceof SubApp && getModel().getFBNetworkElement() != null) {
-			return ((SubApp) connSource).getSubAppNetwork() == getModel().getFBNetworkElement().getFbNetwork();
+		if (connSource instanceof final SubApp subapp && getModel().getFBNetworkElement() != null) {
+			return subapp.getSubAppNetwork() == getModel().getFBNetworkElement().getFbNetwork();
 		}
 		return false;
 	}
@@ -382,7 +387,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		// don't show any children
 	}
 
-	private Adapter getContentAdapter() {
+	protected Adapter getContentAdapter() {
 		if (null == contentAdapter) {
 			contentAdapter = createContentAdapter();
 		}

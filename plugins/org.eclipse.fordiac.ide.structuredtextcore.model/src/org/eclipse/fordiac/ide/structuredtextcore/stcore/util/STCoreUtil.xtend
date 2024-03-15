@@ -17,10 +17,12 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.text.MessageFormat
 import java.util.List
+import java.util.regex.Pattern
 import org.eclipse.emf.ecore.EClassifier
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyDurationType
+import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
@@ -36,6 +38,7 @@ import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType
 import org.eclipse.fordiac.ide.model.data.DateType
 import org.eclipse.fordiac.ide.model.data.DintType
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType
 import org.eclipse.fordiac.ide.model.data.DwordType
 import org.eclipse.fordiac.ide.model.data.IntType
 import org.eclipse.fordiac.ide.model.data.LdateType
@@ -63,10 +66,12 @@ import org.eclipse.fordiac.ide.model.eval.function.Comment
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
@@ -90,6 +95,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
@@ -106,8 +112,6 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 
 final class STCoreUtil {
-	public static final String OPTION_EXPECTED_TYPE = STCoreUtil.name + ".EXPECTED_TYPE"
-
 	private new() {
 	}
 
@@ -346,7 +350,7 @@ final class STCoreUtil {
 			STCallArgument:
 				expectedType
 			STExpressionSource:
-				eResource?.resourceSet?.loadOptions?.get(OPTION_EXPECTED_TYPE) as INamedElement
+				(eResource as STResource).expectedType
 		}
 	}
 
@@ -363,7 +367,7 @@ final class STCoreUtil {
 			STStructInitializerExpression:
 				expectedType
 			STInitializerExpressionSource:
-				eResource?.resourceSet?.loadOptions?.get(OPTION_EXPECTED_TYPE) as INamedElement
+				(eResource as STResource).expectedType
 		}
 	}
 
@@ -677,5 +681,44 @@ final class STCoreUtil {
 			true
 		else
 			clazz.isAncestor(object.eContainer)
+	}
+
+	def static boolean isSimpleInitialValue(VarDeclaration decl, boolean strict) {
+		switch (type : decl.type) {
+			case decl.value?.value.nullOrEmpty: true
+			case decl.array: isSimpleArrayValue(decl.value.value, strict)
+			AnyElementaryType: isSimpleValue(decl.value.value, type, strict)
+			DirectlyDerivedType: isSimpleValue(decl.value.value, type.baseType, strict)
+			default: false
+		}
+	}
+
+	def static boolean isSimpleAttributeValue(Attribute attr, boolean strict) {
+		switch (type : attr.type) {
+			AnyElementaryType: isSimpleValue(attr.value, type, strict)
+			DirectlyDerivedType: isSimpleValue(attr.value, type.baseType, strict)
+			default: false
+		}
+	}
+
+	def static boolean isSimpleValue(String value, DataType type, boolean strict) {
+		if (value.nullOrEmpty)
+			true
+		else
+			try {
+				new TypedValueConverter(type, strict).toValue(value)
+				true
+			} catch (Exception e) {
+				false
+			}
+	}
+
+	static final Pattern SIMPLE_ARRAY_PATTERN = Pattern.compile("[^a-zA-Z]*")
+
+	def static boolean isSimpleArrayValue(String value, boolean strict) {
+		if (value.nullOrEmpty)
+			true
+		else
+			!strict && SIMPLE_ARRAY_PATTERN.matcher(value).matches
 	}
 }

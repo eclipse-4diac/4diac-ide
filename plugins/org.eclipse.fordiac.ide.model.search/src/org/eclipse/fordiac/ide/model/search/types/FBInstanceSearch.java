@@ -58,7 +58,7 @@ public class FBInstanceSearch extends InstanceSearch {
 		}
 	}
 
-	private static class FBTypeInstanceSearchFilter implements SearchFilter {
+	public static class FBTypeInstanceSearchFilter implements SearchFilter {
 
 		private final FBType fbType;
 
@@ -76,8 +76,7 @@ public class FBInstanceSearch extends InstanceSearch {
 
 	}
 
-
-	private static class FBTypeNameInstanceSearchFilter implements SearchFilter {
+	public static class FBTypeNameInstanceSearchFilter implements SearchFilter {
 
 		private final String name;
 

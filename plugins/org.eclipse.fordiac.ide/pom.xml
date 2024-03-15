@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <relativePath>../../pom.xml</relativePath>
+    <groupId>org.eclipse.fordiac</groupId>
+    <artifactId>parent</artifactId>
+    <version>2.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>org.eclipse.fordiac.ide</artifactId>
+  <packaging>eclipse-plugin</packaging>
+  
+  <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <asciidoctor.maven.plugin.version>2.2.6</asciidoctor.maven.plugin.version>
+        <asciidoctorj.version>2.5.11</asciidoctorj.version>
+	</properties>
+	<build>
+		<defaultGoal>process-resources</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>${asciidoctor.maven.plugin.version}</version>				
+				<configuration>
+					<enableVerbose>true</enableVerbose>
+				</configuration>
+				<executions>
+					<execution>
+						<id>asciidoc-to-html</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+						 	<sourceDirectory>doc-src/src</sourceDirectory>
+                            <backend>html5</backend>
+                            <preserveDirectories>true</preserveDirectories> 
+                            <outputDirectory>html</outputDirectory>                           
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>			
+		</plugins>		
+	</build>
+  
+  
+</project> 

@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.application.editparts.GroupContentNetwork;
-import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentNetwork;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
@@ -31,7 +30,6 @@ import org.eclipse.fordiac.ide.gef.editparts.IChildrenProvider;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
-
 
 public class MonitoringChildren implements IMonitoringListener, IChildrenProvider {
 
@@ -54,9 +52,6 @@ public class MonitoringChildren implements IMonitoringListener, IChildrenProvide
 			if (element.getPort().getFb().getGroup() != null) {
 				return checkGroup(element, fbNetwork);
 			}
-			if (fbNetwork instanceof UnfoldedSubappContentNetwork) {
-				return checkExpandedSubApp(element, fbNetwork);
-			}
 			if (element.getPort().getFb().getFbNetwork().equals(fbNetwork)) {
 				return true;
 			}
@@ -64,14 +59,9 @@ public class MonitoringChildren implements IMonitoringListener, IChildrenProvide
 		return false;
 	}
 
-	private static boolean checkExpandedSubApp(final MonitoringBaseElement element, final FBNetwork fbNetwork) {
-		final FBNetwork content = ((UnfoldedSubappContentNetwork) fbNetwork).getSubappContent();
-		return element.getPort().getFb().getFbNetwork() == content;
-	}
-
 	private static boolean checkGroup(final MonitoringBaseElement element, final FBNetwork fbNetwork) {
-		if (fbNetwork instanceof GroupContentNetwork) {
-			final Group group = ((GroupContentNetwork) fbNetwork).getGroup();
+		if (fbNetwork instanceof final GroupContentNetwork groupContentNW) {
+			final Group group = groupContentNW.getGroup();
 			if (element.getPort().getFb().getGroup() == group) {
 				return true;
 			}

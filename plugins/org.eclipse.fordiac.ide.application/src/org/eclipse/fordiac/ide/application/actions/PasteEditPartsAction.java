@@ -95,12 +95,11 @@ public class PasteEditPartsAction extends SelectionAction {
 		return new CompoundCommand();
 	}
 
-	private Command createPasteCommandForSubApp(final UnfoldedSubappContentEditPart subApp) {
-		final Rectangle subAppContentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(subApp);
+	private Command createPasteCommandForSubApp(final UnfoldedSubappContentEditPart subAppContentEP) {
+		final Rectangle subAppContentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(subAppContentEP);
 		final Point pastePointInSubApp = new Point(pasteRefPosition.x - subAppContentBounds.x,
 				pasteRefPosition.y - subAppContentBounds.y);
-		return new PasteCommand(getClipboardContents(), subApp.getModel().getSubapp().getSubAppNetwork(),
-				pastePointInSubApp);
+		return new PasteCommand(getClipboardContents(), subAppContentEP.getModel(), pastePointInSubApp);
 	}
 
 	private Command createPasteCommandForGroup(final GroupContentEditPart group) {

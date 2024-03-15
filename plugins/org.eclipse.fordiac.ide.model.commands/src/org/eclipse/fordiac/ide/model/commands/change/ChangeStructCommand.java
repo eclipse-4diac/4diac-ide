@@ -19,7 +19,6 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -50,17 +49,15 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 		newElement.setName(oldElement.getName());
 
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
-		copyUnrelatedAttributes();
 		updateStruct(newStruct);
+		copyAttributes();
 		((StructManipulator) newElement).setStructTypeElementsAtInterface(newStruct);
 		createValues();
 		transferInstanceComments();
 	}
 
-	private void copyUnrelatedAttributes() {
+	protected void copyAttributes() {
 		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
-		newElement.deleteAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
-		newElement.deleteAttribute(LibraryElementTags.STRUCTURED_TYPE_ELEMENT);
 	}
 
 	public StructManipulator getNewMux() {

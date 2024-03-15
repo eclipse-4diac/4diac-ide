@@ -1,5 +1,5 @@
 /**********************************************************************************
- * Copyright (c) 2019, 2023 fortiss GmbH, Johannes Kepler University Linz, 
+ * Copyright (c) 2019, 2024 fortiss GmbH, Johannes Kepler University Linz, 
  *                          Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,7 @@ import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Connection
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection
@@ -48,7 +48,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	new(CompositeFBType type, String name, Path prefix) {
 		super(type, name, prefix, "CCompositeFB")
-		fbs.addAll(type.FBNetwork.networkElements.filter[!(it.type instanceof AdapterFBType)])
+		fbs.addAll(type.FBNetwork.networkElements.filter[!(it.type instanceof AdapterType)])
 	}
 
 	override generate() '''
@@ -104,7 +104,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	'''
 
 	def protected generateFBNetwork() '''
-		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterFBType)]»
+		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterType)]»
 			const SCFB_FBInstanceData «FBClassName»::scmInternalFBs[] = {
 			  «FOR elem : fbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.generateTypeSpec»}«ENDFOR»
 			};

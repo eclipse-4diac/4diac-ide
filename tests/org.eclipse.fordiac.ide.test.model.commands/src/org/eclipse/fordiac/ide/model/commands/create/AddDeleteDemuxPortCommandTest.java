@@ -22,7 +22,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CheckableStructTree;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.StructManipulation;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteDemuxPortCommand;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateMemberVariableCommandTestBase.State;
@@ -156,17 +155,15 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		}
 	}
 
-	protected static Collection<Arguments> describeCommand(final String description, final StateInitializer<?> initializer,
-			final StateVerifier<?> initialVerifier, final List<ExecutionDescription<?>> commands) {
+	protected static Collection<Arguments> describeCommand(final String description,
+			final StateInitializer<?> initializer, final StateVerifier<?> initialVerifier,
+			final List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, s -> undoCommand((State) s),
 				s -> redoCommand((State) s));
 	}
 
-
 	protected static void verifyDefaultInitialValues(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getDemultiplexer());
-		t.test(state.getDemultiplexer().getAttributeValue(StructManipulation.STRUCT_ATTRIBUTE)
-				.equals(state.getStruct().getName()));
 		t.test(state.getStruct().getMemberVariables().size(),
 				state.getDemultiplexer().getInterface().getOutputVars().size());
 	}
@@ -240,7 +237,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 				State::new, //
 				(StateVerifier<State>) AddDeleteDemuxPortCommandTest::verifyDefaultInitialValues, //
 				executionDescriptions //
-				));
+		));
 		return commands;
 	}
 
@@ -314,8 +311,8 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t, VARIABLE6)),
 				new ExecutionDescription<>("Delete all: innerstruct1", // //$NON-NLS-1$
 						(final State s) -> executeDeleteCommand(s, INNER_STRUCT_OBJECT1),
-						(final State s, final State o, final TestFunction t) -> verifyDeleted(s, t,
-								INNER_STRUCT_OBJECT1)),
+						(final State s, final State o,
+								final TestFunction t) -> verifyDeleted(s, t, INNER_STRUCT_OBJECT1)),
 				new ExecutionDescription<>("Delete all: innerstruct2", // //$NON-NLS-1$
 						(final State s) -> executeDeleteCommand(s, INNER_STRUCT_OBJECT2),
 						(final State s, final State o, final TestFunction t) -> { //
@@ -332,7 +329,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 						(final State s) -> executeAddCommand(s, INNER_STRUCT_OBJECT1 + SEP + VARIABLE1),
 						(final State s, final State o, final TestFunction t) -> verifyAdded(s, t,
 								INNER_STRUCT_OBJECT1 + SEP + VARIABLE1)) //
-				); //
+		); //
 
 		return createCommands(executionDescriptions);
 	}

@@ -12,12 +12,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class TypeDecorator implements ILightweightLabelDecorator {
 
@@ -44,12 +50,29 @@ public class TypeDecorator implements ILightweightLabelDecorator {
 
 	@Override
 	public void decorate(final Object element, final IDecoration decoration) {
-		if (element instanceof IFile) {
-			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) element);
-			if (null != entry) {
-				decoration.addSuffix(" [" + entry.getTypeEditable().getComment() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+		if (element instanceof final IFile file) {
+			final String comment = getComment(file);
+			if (comment != null) {
+				decoration.addSuffix(" [" + comment + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}
 
+	private static String getComment(final IFile file) {
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		if (entry != null) {
+			// try to load comment from editor
+			final String[] editorComment = new String[1];
+			Display.getDefault().syncExec(() -> {
+				final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						.findEditor(new FileEditorInput(file));
+				if (editor != null) {
+					editorComment[0] = entry.getTypeEditable().getComment();
+				}
+			});
+			// fall back to (cached) comment from type entry
+			return Objects.requireNonNullElse(editorComment[0], entry.getComment());
+		}
+		return null;
+	}
 }

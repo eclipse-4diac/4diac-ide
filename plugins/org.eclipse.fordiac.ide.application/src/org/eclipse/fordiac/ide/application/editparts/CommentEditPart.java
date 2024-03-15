@@ -26,6 +26,9 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.text.FlowPage;
+import org.eclipse.draw2d.text.ParagraphTextLayout;
+import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -61,18 +64,21 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 	public static final class StickyNoteCommentFigure extends Figure {
 
 		private static final Color STICKY_NOTE_YELLOW = new Color(255, 255, 210);
-		private final InstanceCommentFigure comment;
+		private final TextFlow textFlow;
 
 		public StickyNoteCommentFigure() {
 			setupFigure();
 			setupRootLayout();
-			comment = new InstanceCommentFigure();
-			comment.setCursor(Cursors.SIZEALL);
-			add(comment, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
-		}
 
-		public InstanceCommentFigure getComment() {
-			return comment;
+			textFlow = new TextFlow();
+			textFlow.setLayoutManager(new ParagraphTextLayout(textFlow, ParagraphTextLayout.WORD_WRAP_SOFT));
+
+			final FlowPage flowPage = new FlowPage();
+			flowPage.setCursor(Cursors.SIZEALL);
+			flowPage.add(textFlow);
+
+			add(flowPage, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+					| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL));
 		}
 
 		private void setupFigure() {
@@ -89,7 +95,7 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 		}
 
 		public void setCommentText(final String newCommentTest) {
-			comment.setText(newCommentTest);
+			textFlow.setText(newCommentTest);
 		}
 
 		@Override
@@ -105,7 +111,6 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 			pl.addPoint(r.getBottomRight());
 			pl.addPoint(r.getBottomLeft());
 			g.fillPolygon(pl);
-
 		}
 	}
 
@@ -118,8 +123,10 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 			return INSETS;
 		}
 
-		/** @see org.eclipse.draw2d.Border#paint(org.eclipse.draw2d.IFigure, org.eclipse.draw2d.Graphics,
-		 *      org.eclipse.draw2d.geometry.Insets) */
+		/**
+		 * @see org.eclipse.draw2d.Border#paint(org.eclipse.draw2d.IFigure,
+		 *      org.eclipse.draw2d.Graphics, org.eclipse.draw2d.geometry.Insets)
+		 */
 		@Override
 		public void paint(final IFigure figure, final Graphics g, final Insets insets) {
 			final Rectangle r = getPaintRectangle(figure, insets);
@@ -207,7 +214,7 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 
 	@Override
 	protected void performDirectEdit() {
-		new TextDirectEditManager(this, new FigureCellEditorLocator(getFigure().getComment())) {
+		new TextDirectEditManager(this, new FigureCellEditorLocator(getFigure())) {
 			@Override
 			protected CellEditor createCellEditorOn(final Composite composite) {
 				return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP);

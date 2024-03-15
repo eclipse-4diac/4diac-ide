@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 TU Wien/ACIN
- * 				 2020 Johannes Kepler University, Linz
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							Johannes Kepler University, Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -32,7 +32,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
@@ -45,25 +44,28 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
+import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
@@ -72,7 +74,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
+import org.eclipse.fordiac.ide.model.ui.editors.ITypeEntryEditor;
+import org.eclipse.fordiac.ide.model.ui.editors.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
@@ -87,6 +90,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Display;
@@ -111,7 +115,7 @@ import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.osgi.framework.FrameworkUtil;
 
 public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelectionListener, CommandStackEventListener,
-		ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INavigationLocationProvider {
+		ITabbedPropertySheetPageContributor, IGotoMarker, ITypeEntryEditor, INavigationLocationProvider {
 
 	private Collection<IFBTEditorPart> editors;
 	private TypeEntry typeEntry;
@@ -122,32 +126,20 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	private ValidationJob validationJob;
 	private FBTypeUpdateDialog<TypeEntry> fbSaveDialog;
 	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
-	// private static final int SAVE_AS_BUTTON_INDEX = 1;
-	private static final int CANCEL_BUTTON_INDEX = 1; // 2;
+	private static final int CANCEL_BUTTON_INDEX = 1;
+	private int interfaceChanges = 0; // number of interface changes happend since the last save
 
-	private final Adapter adapter = new AdapterImpl() {
-
-		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(notification.getFeature())
-					|| TypeEntry.TYPE_ENTRY_FILE_FEATURE.equals(notification.getFeature())) {
-				Display.getDefault().asyncExec(() -> {
-					if (null != typeEntry) {
-						// the input should be set before the title is updated
-						setInput(new FileEditorInput(typeEntry.getFile()));
-						setPartName(typeEntry.getFile().getName());
-					}
-				});
-			}
-		}
-	};
+	private final TypeEntryAdapter adapter = new TypeEntryAdapter(this);
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		if ((null != typeEntry) && (checkTypeSaveAble())) {
 			performPresaveHooks();
-			createSaveDialog(monitor);
+			if (interfaceChanges != 0) {
+				createSaveDialog(monitor);
+			} else {
+				doSaveInternal(monitor);
+			}
 		}
 	}
 
@@ -161,7 +153,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		// Depending on the button clicked:
 		switch (fbSaveDialog.open()) {
 		case DEFAULT_BUTTON_INDEX:
-			doSaveInternal(monitor, fbSaveDialog.getDataHandler().getCollectedElements());
+			doSaveWithUpdate(monitor, fbSaveDialog.getDataHandler().getCollectedElements());
 			break;
 		case CANCEL_BUTTON_INDEX:
 			MessageDialog.openInformation(null, Messages.FBTypeEditor_ViewingComposite_Headline,
@@ -204,11 +196,10 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		return true;
 	}
 
-	private void doSaveInternal(final IProgressMonitor monitor, final Set<INamedElement> set) {
+	private void doSaveInternal(final IProgressMonitor monitor) {
 		getCommandStack().markSaveLocation();
 
 		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(typeEntry.getFile().getParent()) {
-
 			@Override
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
@@ -228,6 +219,11 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		}
 
 		firePropertyChange(IEditorPart.PROP_DIRTY);
+		interfaceChanges = 0;
+	}
+
+	private void doSaveWithUpdate(final IProgressMonitor monitor, final Set<INamedElement> set) {
+		doSaveInternal(monitor);
 		updateFB(set);
 	}
 
@@ -291,7 +287,6 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 
 		setPartName(typeEntry.getTypeName());
 
-		fbType.eAdapters().add(adapter);
 		typeEntry.eAdapters().add(adapter);
 
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
@@ -315,7 +310,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			return fbtEntry.getTypeEditable();
 		}
 		if (typeEntry instanceof final AdapterTypeEntry adpTypeEntry) {
-			return adpTypeEntry.getTypeEditable().getAdapterFBType();
+			return adpTypeEntry.getTypeEditable();
 		}
 		return null;
 	}
@@ -330,13 +325,8 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 
 	@Override
 	public void dispose() {
-		if ((fbType != null)) {
-			if (fbType.eAdapters().contains(adapter)) {
-				fbType.eAdapters().remove(adapter);
-			}
-			if (typeEntry.eAdapters().contains(adapter)) {
-				typeEntry.eAdapters().remove(adapter);
-			}
+		if ((fbType != null) && typeEntry.eAdapters().contains(adapter)) {
+			typeEntry.eAdapters().remove(adapter);
 		}
 		if (validationJob != null) {
 			validationJob.dispose();
@@ -427,7 +417,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	protected boolean checkTypeEditorType(final FBType fbType, final String editorType) {
 		return ((editorType.equals("ForAllTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllFBTypes")) || //$NON-NLS-1$
-				(editorType.equals("ForAllNonAdapterFBTypes") && !(fbType instanceof AdapterFBType)) || //$NON-NLS-1$
+				(editorType.equals("ForAllNonAdapterFBTypes") && !(fbType instanceof AdapterType)) || //$NON-NLS-1$
 				(editorType.equals("ForAllNonFunctionFBTypes") && !(fbType instanceof FunctionFBType)) || //$NON-NLS-1$
 				(editorType.equals("ForInterpretableFBTypes")) && isInterpretableType(fbType) || //$NON-NLS-1$
 				((fbType instanceof BaseFBType) && editorType.equals("base")) || //$NON-NLS-1$
@@ -456,8 +446,27 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor()) && !(part instanceof PropertySheet)) {
-			handleContentOutlineSelection(selection);
+			if (selection instanceof final StructuredSelection structSel
+					&& structSel.getFirstElement() instanceof final URI uri
+					&& fbType.eResource().getEObject(uri.fragment()) instanceof final FB fb) {
+				if (fb.eContainer() instanceof FBType && !fb.isContainedInTypedInstance()) {
+					// internal fb
+					// TODO currently has the old behaviour
+					handleContentOutlineSelection(new StructuredSelection(fb));
+				} else {
+					// fb in network
+					handleContentOutlineSelection(new StructuredSelection(fb));
+				}
+			} else {
+				handleContentOutlineSelection(selection);
+			}
 		}
+	}
+
+	@Override
+	public void setFocus() {
+		super.setFocus();
+		adapter.checkFileReload();
 	}
 
 	@Override
@@ -468,7 +477,8 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			}
 			return adapter.cast(contentOutline);
 		}
-		if (adapter == FBType.class) {
+
+		if (adapter == FBType.class || adapter == LibraryElement.class) {
 			return adapter.cast(getFBType());
 		}
 		if (adapter == CommandStack.class) {
@@ -529,6 +539,18 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
+
+		if (isInterfaceChangeCommand(event.getCommand())) {
+			switch (event.getDetail()) {
+			case CommandStack.POST_EXECUTE, CommandStack.POST_REDO:
+				interfaceChanges++;
+				break;
+			case CommandStack.POST_UNDO:
+				interfaceChanges--;
+			default:
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -550,16 +572,11 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	}
 
 	@Override
-	public void reloadFile() {
+	public void reloadType() {
 		final FBType newFBType = (FBType) typeEntry.getTypeEditable();
 		if (newFBType != fbType) {
-			if ((fbType != null)) {
-				if (fbType.eAdapters().contains(adapter)) {
-					fbType.eAdapters().remove(adapter);
-				}
-				if (typeEntry.eAdapters().contains(adapter)) {
-					typeEntry.eAdapters().remove(adapter);
-				}
+			if ((fbType != null) && typeEntry.eAdapters().contains(adapter)) {
+				typeEntry.eAdapters().remove(adapter);
 			}
 			fbType = newFBType;
 			editors.stream().forEach(e -> e.reloadType(fbType));
@@ -569,15 +586,9 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 						activeEditor.getAdapter(GraphicalViewer.class), fbtEditorPart.getSelectableEditPart()));
 			}
 			getCommandStack().flush();
-			fbType.eAdapters().add(adapter);
 			typeEntry.eAdapters().add(adapter);
 			setPartName(typeEntry.getTypeName());
 		}
-	}
-
-	@Override
-	public IFile getFile() {
-		return typeEntry != null ? typeEntry.getFile() : null;
 	}
 
 	@Override
@@ -597,13 +608,38 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	}
 
 	@Override
-	public void updateEditorInput(final FileEditorInput newInput) {
-		setInput(newInput);
-		firePropertyChange(IWorkbenchPart.PROP_TITLE);
+	public void setInput(final IEditorInput input) {
+		setInputWithNotify(input);
 	}
 
 	@Override
 	protected IEditorSite createSite(final IEditorPart editor) {
 		return new FBTypeMultiPageEditorSite(this, editor);
 	}
+
+	private boolean isInterfaceChangeCommand(final Command cmd) {
+		if (cmd instanceof final CompoundCommand compoundCmd) {
+			for (final Command childCmd : compoundCmd.getCommands()) {
+				if (isInterfaceChangeCommand(childCmd)) {
+					// for compound commands it is sufficient to know that at least one of the
+					// children is an interface command of our type
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// we need to check not only for the four commands but also if the element is
+		// an interface element of the FBtype and not of any child (e.g., pin of a
+		// subapp in a typed subapp)
+		return ((cmd instanceof final CreateInterfaceElementCommand createIFCmd
+				&& fbType.getInterfaceList().equals(createIFCmd.getTargetInterfaceList()))
+				|| (cmd instanceof final DeleteInterfaceCommand delIFCmd
+						&& fbType.getInterfaceList().equals(delIFCmd.getParent()))
+				|| (cmd instanceof final AbstractChangeInterfaceElementCommand changeIFCmd
+						&& fbType.getInterfaceList().equals(changeIFCmd.getInterfaceElement().eContainer()))
+				|| (cmd instanceof final ChangeNameCommand chgNameCmd
+						&& fbType.getInterfaceList().equals(chgNameCmd.getElement().eContainer())));
+	}
+
 }

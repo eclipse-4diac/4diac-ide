@@ -1,0 +1,3 @@
+[submodule "plugins/org.eclipse.fordiac.ide/doc-src"]
+	path = plugins/org.eclipse.fordiac.ide/doc-src
+	url = https://github.com/eclipse-4diac/4diac-documentation.git

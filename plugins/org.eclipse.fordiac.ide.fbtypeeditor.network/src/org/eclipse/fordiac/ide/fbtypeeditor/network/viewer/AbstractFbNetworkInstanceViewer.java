@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.application.editors.FBNElemEditorCloser;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
-import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -64,7 +64,7 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 
 		private boolean isSubAppToggledToCollapsed(final Notification msg) {
 			return msg.getNewValue() == null && msg.getOldValue() instanceof final Attribute attr
-					&& attr.getName().equals(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE)
+					&& attr.getAttributeDeclaration() == InternalAttributeDeclarations.UNFOLDED
 					&& "true".equals(attr.getValue()); //$NON-NLS-1$
 		}
 

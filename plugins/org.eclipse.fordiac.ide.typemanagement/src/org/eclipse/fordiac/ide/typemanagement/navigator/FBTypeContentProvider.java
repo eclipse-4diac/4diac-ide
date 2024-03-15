@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2011 - 2024 TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,8 +24,6 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -66,15 +64,11 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof IFile) {
-			final IFile element = (IFile) parentElement;
+		if (parentElement instanceof final IFile element) {
 			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(element);
 			if (null != entry) {
 				hookToTypeEntry(entry);
 				parentElement = entry.getTypeEditable();
-				if (parentElement instanceof AdapterType) {
-					parentElement = ((AdapterType) parentElement).getAdapterFBType();
-				}
 			}
 		}
 		if ((parentElement instanceof AutomationSystem) || (parentElement instanceof Application)
@@ -105,12 +99,12 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 		if (element instanceof IFile) {
 			return ((IResource) element).getParent();
 		}
-		if (element instanceof FBType) {
-			return ((FBType) element).getTypeEntry().getFile();
+		if (element instanceof final FBType fbtype) {
+			return fbtype.getTypeEntry().getFile();
 		}
 		final Object retval = super.getParent(element);
-		if (retval instanceof FBType) {
-			return ((FBType) retval).getTypeEntry().getFile();
+		if (retval instanceof final FBType fbtype) {
+			return fbtype.getTypeEntry().getFile();
 		}
 		return retval;
 	}
@@ -132,10 +126,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 	public void notifyChanged(final Notification notification) {
 		if (notification.getNotifier() instanceof FBType) {
 			// as the automation system is changed we need to perform a special refresh here
-			LibraryElement type = (LibraryElement) notification.getNotifier();
-			if (type instanceof AdapterFBType) {
-				type = ((AdapterFBType) type).getAdapterType();
-			}
+			final LibraryElement type = (LibraryElement) notification.getNotifier();
 			super.notifyChanged(new ViewerNotification(notification, type.getTypeEntry().getFile()));
 		} else {
 			super.notifyChanged(notification);

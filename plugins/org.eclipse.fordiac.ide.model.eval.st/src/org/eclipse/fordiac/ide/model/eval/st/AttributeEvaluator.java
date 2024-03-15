@@ -116,6 +116,9 @@ public class AttributeEvaluator extends StructuredTextEvaluator implements Varia
 	}
 
 	protected Set<String> getTypeDependencies() {
+		if (attribute.getAttributeDeclaration() != null) {
+			return Set.of(PackageNameHelper.getFullTypeName(attribute.getAttributeDeclaration()));
+		}
 		if (attribute.getType() instanceof AnyType) {
 			return Set.of(PackageNameHelper.getFullTypeName(attribute.getType()));
 		}

@@ -84,7 +84,13 @@ public class AddDemuxPortCommand extends Command implements ScopedCommand {
 		}
 		configuredStruct.getMemberVariables().addAll(varDecls);
 		configuredStruct.setTypeEntry(type.getStructType().getTypeEntry());
-		cmd = new ChangeStructCommand(type, configuredStruct);
+		cmd = new ChangeStructCommand(type, configuredStruct) {
+			@Override
+			protected void copyAttributes() {
+				super.copyAttributes();
+				getNewMux().setAttribute(DEMUX_VISIBLE_CHILDREN, ElementaryTypes.STRING, newVisibleChildren, ""); //$NON-NLS-1$
+			}
+		};
 	}
 
 	@Override

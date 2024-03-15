@@ -105,6 +105,7 @@ public class FBNetworkConnection extends HideableConnection {
 				graphics.setForegroundColor(getLocalForegroundColor());
 			}
 			paintFigure(graphics);
+			paintBorder(graphics);
 		}
 	}
 
@@ -141,7 +142,7 @@ public class FBNetworkConnection extends HideableConnection {
 
 	private RotatableDecoration createTargetLabel() {
 		FBNetworkConnectionLabel label = null;
-		if (showLabel(getModel().getDestinationElement(), getModel().getSourceElement())) {
+		if (showLabel(getModel().getDestinationElement())) {
 			if (isSubappCrossingConnection() && isInGroup(getModel().getDestinationElement())) {
 				label = new GroupInterfaceConnectionLabel(false, getGroupFigure(getModel().getDestinationElement()),
 						this);
@@ -155,7 +156,7 @@ public class FBNetworkConnection extends HideableConnection {
 
 	private RotatableDecoration createSourceLabel() {
 		FBNetworkConnectionLabel label = null;
-		if (showLabel(getModel().getSourceElement(), getModel().getDestinationElement())) {
+		if (showLabel(getModel().getSourceElement())) {
 			if (isFanOut()) {
 				final EList<Connection> outputConnections = getModel().getSource().getOutputConnections();
 				if (outputConnections.indexOf(getModel()) == 0) {
@@ -173,17 +174,8 @@ public class FBNetworkConnection extends HideableConnection {
 		return label;
 	}
 
-	private boolean showLabel(final FBNetworkElement toCheck, final FBNetworkElement other) {
-		if (toCheck instanceof final SubApp subApp) {
-			if (subApp.isUnfolded()) {
-				return false;
-			}
-			if (getModel().getFBNetwork() == subApp.getSubAppNetwork() && other instanceof final SubApp otherSubApp
-					&& otherSubApp.isUnfolded()) {
-				return false;
-			}
-		}
-		return true;
+	private static boolean showLabel(final FBNetworkElement toCheck) {
+		return !((toCheck instanceof final SubApp subApp) && subApp.isUnfolded());
 	}
 
 	private boolean isFanOut() {

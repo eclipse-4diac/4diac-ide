@@ -19,8 +19,6 @@ import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCo
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.commands.ResizingSubappInterfaceCreationCommand;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalViewerHelper;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceAdapterSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
@@ -54,20 +52,7 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 
 	@Override
 	protected SubApp getInputType(final Object input) {
-		return getSubAppFromInput(input);
-	}
-
-	public static SubApp getSubAppFromInput(final Object input) {
-		if (input instanceof final SubAppForFBNetworkEditPart subAppEP) {
-			return subAppEP.getModel();
-		}
-		if (input instanceof final UISubAppNetworkEditPart uiSubAppNEP) {
-			return uiSubAppNEP.getSubApp();
-		}
-		if (input instanceof final SubApp subApp) {
-			return subApp;
-		}
-		return null;
+		return SubappPropertySectionFilter.getFBNetworkElementFromSelectedElement(input);
 	}
 
 	@Override

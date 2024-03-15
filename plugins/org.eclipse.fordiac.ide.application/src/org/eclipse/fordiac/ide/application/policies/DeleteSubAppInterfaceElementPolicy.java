@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,8 +23,8 @@ public class DeleteSubAppInterfaceElementPolicy extends ComponentEditPolicy {
 
 	@Override
 	protected Command createDeleteCommand(final GroupRequest request) {
-		if (getHost().getModel() instanceof IInterfaceElement) {
-			return new DeleteSubAppInterfaceElementCommand((IInterfaceElement) getHost().getModel());
+		if (getHost().getModel() instanceof final IInterfaceElement ie) {
+			return new DeleteSubAppInterfaceElementCommand(ie);
 		}
 		return null;
 	}

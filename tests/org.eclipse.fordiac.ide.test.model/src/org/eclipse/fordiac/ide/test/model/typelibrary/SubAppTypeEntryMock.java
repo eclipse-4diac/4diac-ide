@@ -18,8 +18,10 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -93,6 +95,12 @@ public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubA
 	}
 
 	@Override
+	public SubAppType copyType() {
+		// currently not needed in mock
+		return null;
+	}
+
+	@Override
 	public String getTypeName() {
 		return getType().getName();
 	}
@@ -115,5 +123,15 @@ public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubA
 	@Override
 	public Set<TypeEntry> getDependencies() {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public String getComment() {
+		return subAppType.getComment();
+	}
+
+	@Override
+	public EClass getTypeEClass() {
+		return LibraryElementPackage.Literals.SUB_APP_TYPE;
 	}
 }

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
@@ -47,5 +48,10 @@ public class ErrorDataTypeEntryImpl extends AbstractCheckedTypeEntryImpl<ErrorMa
 	@Override
 	protected AbstractTypeExporter getTypeExporter(final ErrorMarkerDataType type) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public EClass getTypeEClass() {
+		return getType().eClass();
 	}
 }

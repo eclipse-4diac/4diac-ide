@@ -12,11 +12,13 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.AttributeTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.AttributeTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 
 public class AttributeTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AttributeDeclaration>
@@ -34,5 +36,10 @@ public class AttributeTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Attribu
 	@Override
 	protected AbstractTypeExporter getTypeExporter(final AttributeDeclaration type) {
 		return new AttributeTypeExporter(type);
+	}
+
+	@Override
+	public EClass getTypeEClass() {
+		return LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION;
 	}
 }

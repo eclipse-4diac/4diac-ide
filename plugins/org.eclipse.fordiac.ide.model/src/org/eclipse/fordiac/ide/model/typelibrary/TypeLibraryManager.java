@@ -157,7 +157,7 @@ public enum TypeLibraryManager {
 	 *
 	 * @return the tool library project of the 4diac-ide instance
 	 */
-	private static IProject getToolLibProject() {
+	public static IProject getToolLibProject() {
 		final IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		return myWorkspaceRoot.getProject(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME);
 	}

@@ -35,7 +35,6 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
@@ -52,6 +51,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -111,6 +111,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -172,7 +173,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.ADAPTER_CONNECTION: return createAdapterConnection();
 			case LibraryElementPackage.ADAPTER_DECLARATION: return createAdapterDeclaration();
 			case LibraryElementPackage.ADAPTER_FB: return createAdapterFB();
-			case LibraryElementPackage.ADAPTER_FB_TYPE: return createAdapterFBType();
 			case LibraryElementPackage.ADAPTER_TYPE: return createAdapterType();
 			case LibraryElementPackage.APPLICATION: return createApplication();
 			case LibraryElementPackage.ARRAY_SIZE: return createArraySize();
@@ -191,6 +191,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.COMPILER_INFO: return createCompilerInfo();
 			case LibraryElementPackage.COMPOSITE_FB_TYPE: return createCompositeFBType();
 			case LibraryElementPackage.CONFIGURABLE_OBJECT: return createConfigurableObject();
+			case LibraryElementPackage.CONFIGURABLE_MOVE_FB: return createConfigurableMoveFB();
 			case LibraryElementPackage.CONNECTION_ROUTING_DATA: return createConnectionRoutingData();
 			case LibraryElementPackage.DATA_CONNECTION: return createDataConnection();
 			case LibraryElementPackage.DEMULTIPLEXER: return createDemultiplexer();
@@ -246,6 +247,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.ST_FUNCTION_BODY: return createSTFunctionBody();
 			case LibraryElementPackage.ST_METHOD: return createSTMethod();
 			case LibraryElementPackage.SUB_APP: return createSubApp();
+			case LibraryElementPackage.STRUCT_MANIPULATOR: return createStructManipulator();
 			case LibraryElementPackage.SUB_APP_TYPE: return createSubAppType();
 			case LibraryElementPackage.SYSTEM_CONFIGURATION: return createSystemConfiguration();
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT: return createTypedConfigureableObject();
@@ -351,17 +353,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public AdapterFB createAdapterFB() {
 		AdapterFBImpl adapterFB = new AdapterFBImpl();
 		return adapterFB;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public AdapterFBType createAdapterFBType() {
-		AdapterFBTypeImpl adapterFBType = new AdapterFBTypeImpl();
-		return adapterFBType;
 	}
 
 	/**
@@ -560,6 +551,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public ConfigurableObject createConfigurableObject() {
 		ConfigurableObjectImpl configurableObject = new ConfigurableObjectImpl();
 		return configurableObject;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ConfigurableMoveFB createConfigurableMoveFB() {
+		ConfigurableMoveFBImpl configurableMoveFB = new ConfigurableMoveFBImpl();
+		return configurableMoveFB;
 	}
 
 	/**
@@ -1165,6 +1167,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public SubApp createSubApp() {
 		SubAppImpl subApp = new SubAppImpl();
 		return subApp;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public StructManipulator createStructManipulator() {
+		StructManipulatorImpl structManipulator = new StructManipulatorImpl();
+		return structManipulator;
 	}
 
 	/**

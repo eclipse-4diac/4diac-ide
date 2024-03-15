@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.typemanagement.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -122,18 +121,18 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static void updateAllInstances(final IProject project, final Map<String, TypeEntry> typeEntries,
+	public static void updateAllInstances(final IProject project, final Set<TypeEntry> typeEntries,
 			final TypeLibrary typeLib) {
 		final Command cmd = collectUpdateInstanceCommands(project, typeEntries, typeLib);
 		executeCommand(cmd);
 	}
 
-	private static Command collectUpdateInstanceCommands(final IProject project,
-			final Map<String, TypeEntry> typeEntries, final TypeLibrary typeLib) {
+	private static Command collectUpdateInstanceCommands(final IProject project, final Set<TypeEntry> typeEntries,
+			final TypeLibrary typeLib) {
 		final CompoundCommand cmd = new CompoundCommand();
 		updatedElements = new TypeLibraryUpdateInstanceSearch(typeEntries, typeLib).performProjectSearch(project);
-		updatedElements.forEach(elem -> cmd.add(new UpdateFBTypeCommand((FBNetworkElement) elem,
-				typeEntries.get(((FBNetworkElement) elem).getFullTypeName()))));
+		updatedElements.stream().map(FBNetworkElement.class::cast). //
+				forEach(elem -> cmd.add(new UpdateFBTypeCommand(elem, typeLib.getFBTypeEntry(elem.getFullTypeName()))));
 		return cmd;
 	}
 

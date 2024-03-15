@@ -44,6 +44,7 @@ public class ChangeAttributeDeclarationTypeCommand extends Command implements Sc
 		} else if (attributeDeclaration.getType() instanceof DirectlyDerivedType) {
 			newType = DataFactory.eINSTANCE.createStructuredType();
 		}
+		newType.setName(attributeDeclaration.getName());
 	}
 
 	@Override

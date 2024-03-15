@@ -27,9 +27,17 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
+import com.google.inject.Inject;
+
 public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEditorPart {
+
+	@Inject
+	private AbstractUIPlugin languageUIPlugin;
+
+	private boolean restoringSelection;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -63,7 +71,11 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 	@Override
 	protected void selectAndReveal(final int selectionStart, final int selectionLength, final int revealStart,
 			final int revealLength) {
-		revealEditor();
+		// do not reveal editor when restoring a selection to avoid unintended switch of
+		// the editor tab
+		if (!restoringSelection) {
+			revealEditor();
+		}
 		super.selectAndReveal(selectionStart, selectionLength, revealStart, revealLength);
 	}
 
@@ -73,6 +85,16 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 			if (multiPageEditor.getSelectedPage() != this) {
 				multiPageEditor.setActiveEditor(this);
 			}
+		}
+	}
+
+	@Override
+	protected void restoreSelection() {
+		restoringSelection = true;
+		try {
+			super.restoreSelection();
+		} finally {
+			restoringSelection = false;
 		}
 	}
 
@@ -108,7 +130,17 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
-		return false;
+		try {
+			return marker.getType().startsWith(
+					languageUIPlugin.getBundle().getSymbolicName() + "." + getLanguageShortName().toLowerCase()); //$NON-NLS-1$
+		} catch (final CoreException e) {
+			return false;// marker does not exist
+		}
+	}
+
+	protected String getLanguageShortName() {
+		final String languageName = getLanguageName();
+		return languageName.substring(languageName.lastIndexOf('.') + 1);
 	}
 
 	@Override
