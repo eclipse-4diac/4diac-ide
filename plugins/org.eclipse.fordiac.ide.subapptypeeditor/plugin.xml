@@ -35,15 +35,15 @@
          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
       <propertyContributor
             contributorId="property.contributor.fb">
+          <propertyCategory
+               category="Interface">
+         </propertyCategory>
          <propertyCategory
                category="FB">
          </propertyCategory>
          <propertyCategory
                category="Connection">
-         </propertyCategory>
-         <propertyCategory
-               category="Interface">
-         </propertyCategory>
+         </propertyCategory>        
          <propertyCategory
                category="Device">
          </propertyCategory>
@@ -61,6 +61,11 @@
             contributorId="property.contributor.fb">
          <propertyTab
                category="FB"
+               id="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
+               label="Instance">
+         </propertyTab>
+         <propertyTab
+               category="FB-Network"
                id="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
                label="Instance">
          </propertyTab>
@@ -102,7 +107,7 @@
                label="Edit Var In/Out">
          </propertyTab>
          <propertyTab
-               afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
+               afterTab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut"
                category="FB"
                image="fordiacimage://ICON_ADAPTER_LIST"
                id="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
@@ -110,7 +115,7 @@
                label="Edit Adapters">
          </propertyTab>
          <propertyTab
-               afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
+               afterTab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
                category="FB"
                id="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
                image="fordiacimage://ICON_FB_TYPE"
@@ -179,6 +184,12 @@
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections
             contributorId="property.contributor.fb">
+          <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.SubAppPropertySection"
+              filter="org.eclipse.fordiac.ide.application.properties.SubappPropertySectionFilter"
+              id="org.eclipse.fordiac.ide.application.properties.SubappInstanceSection"
+              tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab">
+         </propertySection>   
          <propertySection
          	class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
          	id="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
