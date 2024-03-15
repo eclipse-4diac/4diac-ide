@@ -166,9 +166,11 @@ class FBNetworkExporter extends CommonElementExporter {
 
 		if (fbnElement instanceof final SubApp subApp && isUntypedSubapp(fbnElement)) {
 			addSubappHeightAndWidthAttributes(subApp);
-			// adds subapp locked attribute
-			addAttributeElement(LibraryElementTags.LOCKED_ATTRIBUTE, IecTypes.ElementaryTypes.BOOL,
-					Boolean.toString(subApp.isLocked()), null);
+			if (subApp.isLocked()) {
+				// only add subapp locked attribute if it is set
+				addAttributeElement(LibraryElementTags.LOCKED_ATTRIBUTE, IecTypes.ElementaryTypes.BOOL,
+						Boolean.toString(subApp.isLocked()), null);
+			}
 		}
 
 		if (fbnElement.isInGroup()) {
