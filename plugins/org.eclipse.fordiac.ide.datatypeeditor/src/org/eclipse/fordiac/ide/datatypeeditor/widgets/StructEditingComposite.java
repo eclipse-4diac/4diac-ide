@@ -69,6 +69,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class StructEditingComposite extends Composite implements CommandExecutor, I4diacNatTableUtil {
@@ -80,6 +81,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 	private StructuredType structType;
 	private final IChangeableRowDataProvider<VarDeclaration> structMemberProvider;
 	private RowPostSelectionProvider<VarDeclaration> selectionProvider;
+	private final IWorkbenchSite site;
 
 	private boolean blockRefresh;
 	private Label titleLabel;
@@ -106,11 +108,12 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 	private final GraphicalAnnotationModelListener annotationModelListener = event -> notifyRefresh();
 
 	public StructEditingComposite(final Composite parent, final CommandStack cmdStack, final StructuredType structType,
-			final GraphicalAnnotationModel annotationModel) {
+			final GraphicalAnnotationModel annotationModel, final IWorkbenchSite site) {
 		super(parent, SWT.NONE);
 		structMemberProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
 		this.cmdStack = cmdStack;
 		this.annotationModel = annotationModel;
+		this.site = site;
 		setStructType(structType);
 		createPartControl();
 		addAnnotationModelListener();
@@ -123,7 +126,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 		showLabel(this);
 
 		buttons = new AddDeleteReorderToolbarWidget();
-		buttons.createControls(this, widgetFactory);
+		buttons.createControls(this, widgetFactory, site);
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(final MouseEvent e) {

@@ -128,14 +128,15 @@ public class StructManipulatorSection extends AbstractSection implements Command
 						return GenericTypes.isAnyType(temp) ? null : temp;
 					}, name -> null);
 
-			if (packageStruct == null
-					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement) {
-				commandStack.execute(new AddNewImportCommand(libraryElement, newStructName));
-			}
-
 			final StructuredType newStruct = getDataTypeLib().getStructuredType(newStructName);
+			AddNewImportCommand importCommand = null;
+			if (packageStruct == null && newStruct != GenericTypes.ANY_STRUCT
+					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement) {
+				importCommand = new AddNewImportCommand(libraryElement, newStructName);
+			}
+			
 			final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
-			commandStack.execute(cmd);
+			commandStack.execute(cmd.chain(importCommand));
 			updateStructManipulatorFB(cmd.getNewMux());
 		}
 	}

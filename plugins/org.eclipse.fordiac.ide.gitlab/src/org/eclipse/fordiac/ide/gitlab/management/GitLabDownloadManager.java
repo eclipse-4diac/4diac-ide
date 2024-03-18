@@ -47,11 +47,15 @@ public class GitLabDownloadManager {
 	private static final String PROJECT_ID = "projectID"; //$NON-NLS-1$
 	private static final String PATH = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toPortableString();
 	private static final String ROOT_DIRECTORY = ".download"; //$NON-NLS-1$
-	private static final String API_VERSION = "api/v4/projects/"; //$NON-NLS-1$
+	private static final String API_VERSION = "api/v4/projects"; //$NON-NLS-1$
 	private static final String PACKAGES = "/packages/"; //$NON-NLS-1$
 	private static final String PACKAGE_FILES = "/package_files"; //$NON-NLS-1$
 	private HashMap<Project, List<Package>> projectAndPackageMap;
 	private HashMap<String, List<LeafNode>> packagesAndLeaves;
+	private static final String URL_PARAMETERS = "?per_page=20"; //$NON-NLS-1$
+	private static final String CUSTOM_PARAMETERS = "&membership=true"; //$NON-NLS-1$
+	private static final String URL_PAGE_PARAMETER = "&page="; //$NON-NLS-1$
+	private static final String NEXT_PAGE_HEADER = "X-Next-Page"; //$NON-NLS-1$
 
 	private final String url;
 	private final String token;
@@ -113,7 +117,7 @@ public class GitLabDownloadManager {
 				Files.copy(responseStream, Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename), //$NON-NLS-1$
 						StandardCopyOption.REPLACE_EXISTING);
 				httpConn.disconnect();
-				return new File(Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename).toString());
+				return new File(Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename).toString()); //$NON-NLS-1$
 			}
 		}
 		return null;
@@ -129,66 +133,76 @@ public class GitLabDownloadManager {
 	}
 
 	private String buildDownloadURL(final Package p, final Object project, final String filename) {
-		return url + API_VERSION + ((Project) project).id() + PACKAGES + p.packageType() + "/" + p.name() + "/"
-				+ p.version() + "/" + filename;
+		return url + API_VERSION + "/" + ((Project) project).id() + PACKAGES + p.packageType() + "/" + p.name() + "/" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+				+ p.version() + "/" + filename; //$NON-NLS-1$
 	}
 
 	private String buildPackageFileURL(final Package p, final Project project) {
-		return url + API_VERSION + project.id() + PACKAGES + p.id() + PACKAGE_FILES;
+		return url + API_VERSION + "/" + project.id() + PACKAGES + p.id() + PACKAGE_FILES; //$NON-NLS-1$
 	}
 
-	private String buildConnectionURL() {
-		return url + API_VERSION;
+	private String buildConnectionURL(final String page) {
+		return url + API_VERSION + URL_PARAMETERS + CUSTOM_PARAMETERS + URL_PAGE_PARAMETER + page;
 	}
 
-	private String buildPackagesForProjectURL(final Project project) {
-		return url + API_VERSION + project.id() + PACKAGES;
+	private String buildPackagesForProjectURL(final Project project, final String page) {
+		return url + API_VERSION + "/" + project.id() + PACKAGES + URL_PARAMETERS + CUSTOM_PARAMETERS //$NON-NLS-1$
+				+ URL_PAGE_PARAMETER + page;
 	}
 
 	private void getProjects() throws IOException {
-		final HttpURLConnection httpConn = createConnection(buildConnectionURL());
-		try (InputStream responseStream = httpConn.getInputStream()) {
-			String response = ""; //$NON-NLS-1$
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
-				response = reader.readLine();
-			}
-			final String regex = "(?<projectID>[\\w\\s-]*),(?:\\\"|\\')?(?:description)(?:\\\"|\\')?(?:\\:\\s*)(?:[\\w\\s-]*|\\\"\\\"|\\\"[\\w\\s-]*\\\"),(?:\\\"|\\')?(?:name)(?:\\\"|\\')(?:\\:\\s*)(?:\\\"|\\')?(?<projectName>[\\w\\s-]*)(?:\\\"|\\')?(?:,\\\"name_with_namespace\\\")"; //$NON-NLS-1$
-			final Pattern p = Pattern.compile(regex);
-			final Matcher m = p.matcher(response);
-			Project project = null;
-			while (m.find()) {
-				project = new Project(Long.valueOf(m.group(PROJECT_ID)), m.group(PROJECT_NAME));
-				projectAndPackageMap.put(project, new ArrayList<>());
+		String page = "1"; //$NON-NLS-1$
+		final String regex = "\\{\\\"id\\\"\\s*:\\s*(?<projectID>\\d+)\\s*,\\s*\\\"description\\\".*?,\\s*\\\"name\\\"\\s*:\\s*\\\"(?<projectName>[\\w\\s\\-\\.]+)\\\"\\s*,\\s*\\\"name_with_namespace\\\"[^\\}]*+\\}"; //$NON-NLS-1$
+		final Pattern p = Pattern.compile(regex);
+
+		while (page != null && !"".equals(page)) { //$NON-NLS-1$
+			final HttpURLConnection httpConn = createConnection(buildConnectionURL(page));
+			try (InputStream responseStream = httpConn.getInputStream()) {
+				String response = ""; //$NON-NLS-1$
+				try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
+					response = reader.readLine();
+				}
+				page = httpConn.getHeaderField(NEXT_PAGE_HEADER);
+				final Matcher m = p.matcher(response);
+				Project project = null;
+				while (m.find()) {
+					project = new Project(Long.valueOf(m.group(PROJECT_ID)), m.group(PROJECT_NAME));
+					projectAndPackageMap.put(project, new ArrayList<>());
+				}
 			}
 		}
+
 	}
 
 	private void getPackages(final Project project) throws IOException {
-		final HttpURLConnection httpConn = createConnection(buildPackagesForProjectURL(project));
-		String response = ""; //$NON-NLS-1$
-		try (InputStream responseStream = httpConn.getInputStream()) {
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
-				response = reader.readLine();
-			}
-			final String regex = "(?<packageID>[\\w\\s-]*),(?:\\\"|\\')(?:name)(?:\\\"|\\')?:(?:\\\"|\\')(?<packageName>[\\w\\s-]*)\",\"version\":\"(?<packageVersion>[\\w\\s-.]*)\",\"package_type\":\"(?<packageType>[\\w\\s-]*)"; //$NON-NLS-1$
-			final Pattern p = Pattern.compile(regex);
-			final Matcher m = p.matcher(response);
-			Package pack;
-			while (m.find()) {
-				pack = new Package(Long.valueOf(m.group(PACKAGE_ID)), m.group(PACKAGE_NAME), m.group(PACKAGE_VERSION),
-						m.group(PACKAGE_TYPE));
-				projectAndPackageMap.get(project).add(pack);
-				if (!packagesAndLeaves.containsKey(pack.name())) {
-					packagesAndLeaves.put(pack.name(), new ArrayList<>());
+		String page = "1"; //$NON-NLS-1$
+		final String regex = "(?<packageID>\\d+),\\\"name\\\":\\\"(?<packageName>[\\w\\s\\-\\.]*)\\\",\\\"version\\\":\\\"(?<packageVersion>[\\w\\s\\-\\.]*)\\\",\\\"package_type\\\":\\\"(?<packageType>[\\w\\s\\-\\.]*)"; //$NON-NLS-1$
+		final Pattern p = Pattern.compile(regex);
+		while (page != null && !"".equals(page)) { //$NON-NLS-1$
+			final HttpURLConnection httpConn = createConnection(buildPackagesForProjectURL(project, page));
+			try (InputStream responseStream = httpConn.getInputStream()) {
+				String response = ""; //$NON-NLS-1$
+				try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
+					response = reader.readLine();
 				}
-				packagesAndLeaves.get(pack.name()).add(new LeafNode(project, pack, pack.version()));
+				page = httpConn.getHeaderField(NEXT_PAGE_HEADER);
+				final Matcher m = p.matcher(response);
+				Package pack;
+				while (m.find()) {
+					pack = new Package(Long.valueOf(m.group(PACKAGE_ID)), m.group(PACKAGE_NAME),
+							m.group(PACKAGE_VERSION), m.group(PACKAGE_TYPE));
+					projectAndPackageMap.get(project).add(pack);
+					if (!packagesAndLeaves.containsKey(pack.name())) {
+						packagesAndLeaves.put(pack.name(), new ArrayList<>());
+					}
+					packagesAndLeaves.get(pack.name()).add(new LeafNode(project, pack, pack.version()));
+				}
+			} catch (final IOException e) {
+				httpConn.disconnect();
+				return;
 			}
-		} catch (final IOException e) {
 			httpConn.disconnect();
-			FordiacLogHelper.logError("Problem with GitLab import", e);
-			return;
 		}
-		httpConn.disconnect();
 	}
 
 	private static List<String> parseResponse(final InputStream responseStream) throws IOException {

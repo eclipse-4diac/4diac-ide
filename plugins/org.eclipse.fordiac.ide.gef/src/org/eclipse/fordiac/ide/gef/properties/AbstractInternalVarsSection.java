@@ -1,5 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2015 - 2024 fortiss GmbH, Johannes Kepler University Linz,
+ * 							 Primetals Technologies Germany GmbH,
+ * 							 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,10 +10,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Prankur Agarwal  - initial implementation and/or initial documentation
+ *   Prankur Agarwal  - extracted from InternalVarsSection
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.util.Collections;
+
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -19,6 +24,7 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
+import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -87,8 +93,8 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 		table.configure();
 
 		buttons.bindToTableViewer(table, this, this::newCreateCommand, this::newDeleteCommand,
-				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, true),
-				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, false));
+				ref -> new ChangeVariableOrderCommand(getVarList(), (VarDeclaration) ref, true),
+				ref -> new ChangeVariableOrderCommand(getVarList(), (VarDeclaration) ref, false));
 
 		selectionProvider = new RowPostSelectionProvider<>(table, NatTableWidgetFactory.getSelectionLayer(table),
 				provider, false);
@@ -98,7 +104,11 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 
 	protected abstract Command newDeleteCommand(Object refElement);
 
-	public abstract Object getEntry(final int index);
+	protected abstract EList<VarDeclaration> getVarList();
+
+	protected Object getEntry(final int index) {
+		return getVarList().get(index);
+	}
 
 	protected DataType getDataType() {
 		final VarDeclaration varConst = getLastSelectedVariable();
@@ -158,6 +168,13 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 	}
 
 	@Override
+	protected void setInputInit() {
+		final BaseFBType currentType = getType();
+		provider.setInput(currentType != null ? getVarList() : Collections.emptyList());
+		table.refresh();
+	}
+
+	@Override
 	protected void setInputCode() {
 		// nothing to do here
 	}
@@ -190,4 +207,20 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 			buttons.dispose();
 		}
 	}
+
+	@Override
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
+		if (entry instanceof final VarDeclaration varEntry) {
+			cmd.add(new InsertVariableCommand(getType(), getVarList(), varEntry, index));
+		}
+	}
+
+	protected int getInsertionIndex() {
+		final VarDeclaration varConst = getLastSelectedVariable();
+		if (null == varConst) {
+			return getVarList().size();
+		}
+		return getVarList().indexOf(varConst) + 1;
+	}
+
 }

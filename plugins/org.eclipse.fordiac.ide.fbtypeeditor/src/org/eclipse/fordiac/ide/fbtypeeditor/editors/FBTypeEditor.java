@@ -285,8 +285,6 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 					Messages.FBTypeEditor_TypeFileDoesnotExist));
 		}
 
-		setPartName(typeEntry.getTypeName());
-
 		typeEntry.eAdapters().add(adapter);
 
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
@@ -609,6 +607,9 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 
 	@Override
 	public void setInput(final IEditorInput input) {
+		if (input != null) {
+			setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
+		}
 		setInputWithNotify(input);
 	}
 

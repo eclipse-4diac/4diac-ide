@@ -1,8 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
- * 				 2020 Primetals Technologies Germany GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2015 - 2024 fortiss GmbH, Johannes Kepler University Linz,
+ * 							 Primetals Technologies Germany GmbH,
+ * 							 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -28,25 +27,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.Collections;
-
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public class InternalVarsSection extends AbstractInternalVarsSection {
-
-	@Override
-	protected void setInputInit() {
-		final BaseFBType currentType = getType();
-		provider.setInput(currentType != null ? currentType.getInternalVars() : Collections.emptyList());
-		table.refresh();
-	}
 
 	@Override
 	protected CreationCommand newCreateCommand(final Object refElement) {
@@ -58,24 +47,14 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 		return new DeleteInternalVariableCommand(getType(), (VarDeclaration) refElement);
 	}
 
-	private int getInsertionIndex() {
-		final VarDeclaration varInternal = getLastSelectedVariable();
-		if (null == varInternal) {
-			return getType().getInternalVars().size();
-		}
-		return getType().getInternalVars().indexOf(varInternal) + 1;
+	@Override
+	protected EList<VarDeclaration> getVarList() {
+		return getType().getInternalVars();
 	}
 
 	@Override
 	public Object getEntry(final int index) {
 		return getType().getInternalVars().get(index);
-	}
-
-	@Override
-	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
-		if (entry instanceof final VarDeclaration varEntry) {
-			cmd.add(new InsertVariableCommand(getType(), getType().getInternalVars(), varEntry, index));
-		}
 	}
 
 	@Override

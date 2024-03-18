@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2012, 2024 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz,
- *                          Primetals Technologies Austria GmbH
+ *                          Primetals Technologies Austria GmbH,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - New Project Explorer layout
  *               - Fixed handing of project renameing
+ *   Martin Erich Jobst
+ *     - fix handling of delta flags, file reload, and project open/close
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
@@ -123,7 +126,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		case IResourceDelta.REMOVED:
 			return handleResourceRemoved(delta);
 		case IResourceDelta.ADDED:
-			if (IResourceDelta.MOVED_FROM == (delta.getFlags() & IResourceDelta.MOVED_FROM)) {
+			if (testFlags(delta, IResourceDelta.MOVED_FROM)) {
 				return handleResourceMovedFrom(delta);
 			}
 			return handleResourceCopy(delta);
@@ -134,30 +137,29 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	};
 
 	private boolean handleResourceChanged(final IResourceDelta delta) {
-		if (isFileChange(delta)) {
-			refreshTypeEntry(delta);
-		} else if (IResourceDelta.OPEN == delta.getFlags()) {
-			// project is opened oder closed
-			if (0 != delta.getAffectedChildren(IResourceDelta.ADDED).length) {
-				handleProjectAdd(delta);
+		switch (delta.getResource().getType()) {
+		case IResource.FILE:
+			if (testFlags(delta, IResourceDelta.CONTENT)) {
+				refreshTypeEntry(delta);
+			}
+			break;
+		case IResource.PROJECT:
+			if (testFlags(delta, IResourceDelta.OPEN)) {
+				if (delta.getResource().isAccessible()) {
+					handleProjectAdd(delta);
+				} else {
+					handleProjectRemove(delta);
+				}
 				return false;
 			}
-			if (0 != delta.getAffectedChildren(IResourceDelta.REMOVED).length) {
-				handleProjectRemove(delta);
-				return false;
-			}
-		} else if (delta.getResource().getType() == IResource.PROJECT) {
-			checkForErrorMarkerChanges(delta);
+			break;
+		default:
+			break;
+		}
+		if (testFlags(delta, IResourceDelta.MARKERS)) {
+			systemManager.notifyListeners();
 		}
 		return true;
-	}
-
-	public void checkForErrorMarkerChanges(final IResourceDelta delta) {
-		for (final IResourceDelta d : delta.getAffectedChildren()) {
-			if (IResourceDelta.MARKERS == (d.getFlags() & IResourceDelta.MARKERS)) {
-				systemManager.notifyListeners();
-			}
-		}
 	}
 
 	private static void refreshTypeEntry(final IResourceDelta delta) {
@@ -170,13 +172,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private static boolean isFileChange(final IResourceDelta delta) {
-		return delta.getResource().getType() == IResource.FILE && delta.getFlags() != IResourceDelta.MARKERS;
-	}
-
 	private boolean handleResourceRemoved(final IResourceDelta delta) {
 		final IProject project = delta.getResource().getProject();
-		if (delta.getFlags() == IResourceDelta.MOVED_TO || !TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
+		if (testFlags(delta, IResourceDelta.MOVED_TO) || !TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
 			// we will handle movement only on the add side
 			return false;
 		}
@@ -219,20 +217,17 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			return false;
 		}
 
-		switch (delta.getResource().getType()) {
-		case IResource.FILE:
+		return switch (delta.getResource().getType()) {
+		case IResource.FILE -> {
 			handleFileCopy(delta);
-			break;
-		case IResource.FOLDER:
-			// if a folder has been moved we need to update the IFile of the children
-			return true;
-		case IResource.PROJECT:
-			handleProjectAdd(delta);
-			break;
-		default:
-			break;
+			yield true;
 		}
-		return false;
+		case IResource.PROJECT -> {
+			handleProjectAdd(delta);
+			yield false;
+		}
+		default -> true;
+		};
 	}
 
 	private void handleFileDelete(final IResourceDelta delta) {
@@ -559,4 +554,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	}
 
+	private static boolean testFlags(final IResourceDelta delta, final int flags) {
+		return (delta.getFlags() & flags) == flags;
+	}
 }

@@ -55,6 +55,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -171,8 +172,11 @@ public class PackageInfoWidget extends TypeInfoWidget {
 								? GraphicalAnnotationStyles
 										.getAnnotationStyle(annotationModel.getAnnotations(compilerInfo))
 								: null);
+
+				final Point nameTextSelection = nameText.getSelection();
 				nameText.setText(nameStyledString.toString());
 				nameText.setStyleRanges(nameStyledString.getStyleRanges());
+				nameText.setSelection(nameTextSelection);
 				packageViewer.setInput(getType());
 			}
 			setCommandExecutor(commandExecutorBuffer);

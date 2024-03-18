@@ -147,7 +147,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			if (null != system) {
 				getCommandStack().addCommandStackEventListener(this);
 				getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
-				setPartName(system.getName());
 			}
 		}
 	}
@@ -421,6 +420,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public void setInput(final IEditorInput input) {
+		if (input != null) {
+			setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
+		}
 		setInputWithNotify(input);
 	}
 

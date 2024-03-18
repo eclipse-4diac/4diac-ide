@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.search.dialog.StructuredDataTypeDataHandler;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.ui.editors.TypeEntryAdapter;
@@ -358,7 +359,6 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		if (file.exists()) {
 			dataTypeEntry = (DataTypeEntry) TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			dataTypeEditable = dataTypeEntry.getTypeEditable();
-			setPartName(dataTypeEntry.getFile().getName());
 			return !(dataTypeEditable instanceof StructuredType);
 		}
 		return true; // import failed
@@ -389,7 +389,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	@Override
 	public void createPartControl(final Composite parent) {
 		if (dataTypeEditable instanceof final StructuredType structType && (!importFailed)) {
-			structComposite = new StructEditingComposite(parent, commandStack, structType, annotationModel);
+			structComposite = new StructEditingComposite(parent, commandStack, structType, annotationModel, getSite());
 			getSite().setSelectionProvider(structComposite.getSelectionProvider());
 			structComposite.setTitel(Messages.StructViewingComposite_Headline);
 		} else if (importFailed) {
@@ -514,6 +514,9 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 
 	@Override
 	public void setInput(final IEditorInput input) {
+		if (input != null) {
+			setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
+		}
 		setInputWithNotify(input);
 	}
 }
