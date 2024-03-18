@@ -15,6 +15,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.editors;
 
+import java.util.Objects;
+import java.util.stream.Stream;
+
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
@@ -80,15 +83,9 @@ public final class EditorUtils {
 	}
 
 	public static void forEachOpenEditorFiltered(final EditorFilter filter, final EditorAction action) {
-		final IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getEditorReferences();
-
-		for (final IEditorReference editorReference : editorReferences) {
-			final IEditorPart editor = editorReference.getEditor(false);
-			if (null != editor && filter.filter(editor)) {
-				action.run(editor);
-			}
-		}
+		Stream.of(PlatformUI.getWorkbench().getWorkbenchWindows()).flatMap(window -> Stream.of(window.getPages()))
+				.flatMap(page -> Stream.of(page.getEditorReferences())).map(ref -> ref.getEditor(false))
+				.filter(Objects::nonNull).filter(filter::filter).forEach(action::run);
 	}
 
 	public static void closeEditorsFiltered(final EditorFilter filter) {
