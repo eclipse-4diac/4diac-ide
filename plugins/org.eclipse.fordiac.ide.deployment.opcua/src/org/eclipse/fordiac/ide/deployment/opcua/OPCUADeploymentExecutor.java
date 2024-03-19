@@ -517,8 +517,22 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public void addWatch(final MonitoringBaseElement element) throws DeploymentException {
-		// TODO Auto-generated method stub
-
+		if (availableResources.isEmpty() && !getResourcesHandle()) {
+			return;
+		}
+		final String fullFbName = element.getQualifiedString();
+		final String resName = element.getResourceString();
+		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
+				Constants.ADD_WATCH_NODE, new Variant[] { new Variant(fullFbName) });
+		final String message = MessageFormat.format(Constants.ADD_WATCH, fullFbName);
+		CallMethodResult result;
+		try {
+			result = sendREQ(resName, request, message).get();
+		} catch (final IOException | InterruptedException | ExecutionException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_AddWatchFailed, fullFbName), e);
+		}
+		element.setOffline(Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(result.getStatusCode())));
 	}
 
 	@Override

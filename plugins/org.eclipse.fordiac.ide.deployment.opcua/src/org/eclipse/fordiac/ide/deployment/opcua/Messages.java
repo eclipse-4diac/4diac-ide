@@ -37,6 +37,7 @@ public final class Messages extends NLS {
 	public static String OPCUADeploymentExecutor_DeleteResourceFailed;
 	public static String OPCUADeploymentExecutor_DeleteFBFailed;
 	public static String OPCUADeploymentExecutor_DeleteConnectionFailed;
+	public static String OPCUADeploymentExecutor_AddWatchFailed;
 
 	public static String OPCUADeploymentExecutor_BrowseOPCUAFailed;
 

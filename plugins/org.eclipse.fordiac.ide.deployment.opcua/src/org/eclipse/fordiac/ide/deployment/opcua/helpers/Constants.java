@@ -40,6 +40,7 @@ public class Constants {
 	public static final NodeId DELETE_RESOURCE_NODE = new NodeId(1, "deleteResource"); //$NON-NLS-1$
 	public static final NodeId DELETE_FB_NODE = new NodeId(1, "deleteFB"); //$NON-NLS-1$
 	public static final NodeId DELETE_CONNECTION_NODE = new NodeId(1, "deleteConnection"); //$NON-NLS-1$
+	public static final NodeId ADD_WATCH_NODE = new NodeId(1, "addWatch"); //$NON-NLS-1$
 
 	/** Deployment Console Messages **/
 	public static final String CREATE_RESOURCE_INSTANCE = "<Request Action=\"CREATE RESOURCE\"><FB Name=\"{0}\" Type=\"{1}\" /></Request>"; //$NON-NLS-1$
@@ -56,6 +57,7 @@ public class Constants {
 	public static final String DELETE_RESOURCE = "<Request Action=\"DELETE RESOURCE\"><FB Name=\"{0}\" Type=\"{1}\" /></Request>"; //$NON-NLS-1$
 	public static final String DELETE_FB_INSTANCE = "<Request Action=\"DELETE FB\"><FB Name=\"{0}\" /></Request>"; //$NON-NLS-1$
 	public static final String DELETE_CONNECTION = "<Request Action=\"DELETE CONNECTION\"><Connection Destination=\"{0}\" Source=\"{1}\" /></Request>"; //$NON-NLS-1$
+	public static final String ADD_WATCH = "<Request Action=\"ADD WATCH\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
 
 	public static final String RESPONSE = "<Response Reason=\"{0}\" />\n"; //$NON-NLS-1$
 
