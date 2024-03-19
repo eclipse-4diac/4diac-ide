@@ -17,6 +17,7 @@ import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.
 import static org.eclipse.milo.opcua.stack.core.util.ConversionUtil.toList;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,11 +27,15 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.opcua.helpers.Constants;
@@ -62,6 +67,7 @@ import org.eclipse.milo.opcua.stack.core.types.structured.CallMethodResult;
 import org.eclipse.milo.opcua.stack.core.types.structured.CallResponse;
 import org.eclipse.milo.opcua.stack.core.types.structured.EndpointDescription;
 import org.eclipse.milo.opcua.stack.core.types.structured.ReferenceDescription;
+import org.xml.sax.InputSource;
 
 public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
@@ -79,9 +85,11 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	private final List<IDeploymentListener> listeners = new ArrayList<>();
 
 	/* Future for Resource NodeId */
-	CompletableFuture<NodeId> fResourceNode;
+	private CompletableFuture<NodeId> fResourceNode;
 
-	HashMap<String, NodeId> availableResources = new HashMap<>();
+	private final HashMap<String, NodeId> availableResources = new HashMap<>();
+
+	private final ResponseMapping respMapping = new ResponseMapping();
 
 	public OPCUADeploymentExecutor(final Device dev, final IDeviceManagementCommunicationHandler overrideHandler) {
 		this.device = dev;
@@ -511,8 +519,14 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public Response readWatches() throws DeploymentException {
-		// TODO Auto-generated method stub
-		return null;
+		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.READ_WATCHES_NODE,
+				new Variant[] {});
+		final String message = Constants.READ_WATCHES;
+		try {
+			return parseWatchesResponse(sendREQ("", request, message).get()); //$NON-NLS-1$
+		} catch (final IOException | ExecutionException | InterruptedException e) {
+			throw new DeploymentException(Messages.OPCUADeploymentExecutor_ReadWatchesFailed, e);
+		}
 	}
 
 	@Override
@@ -598,6 +612,28 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 		}
 		return info;
+	}
+
+	private Response parseWatchesResponse(final CallMethodResult result) throws IOException {
+		if ((result != null && result.getStatusCode().isGood())
+				&& (result.getOutputArguments()[0].getValue() instanceof final String response)) {
+			return parseXMLResponse(MessageFormat.format(Constants.WATCHES_RESPONSE, response));
+		}
+		return Constants.EMPTY_WATCHES_RESPONSE;
+	}
+
+	private Response parseXMLResponse(final String encodedResponse) throws IOException {
+		if (null != encodedResponse) {
+			final InputSource source = new InputSource(new StringReader(encodedResponse));
+			final XMLResource xmlResource = new XMLResourceImpl();
+			xmlResource.load(source, respMapping.getLoadOptions());
+			for (final EObject object : xmlResource.getContents()) {
+				if (object instanceof final Response response) {
+					return response;
+				}
+			}
+		}
+		return Constants.EMPTY_WATCHES_RESPONSE;
 	}
 
 	private static NodeId processResult(final CallMethodResult result) {

@@ -16,6 +16,8 @@ package org.eclipse.fordiac.ide.deployment.opcua.helpers;
 import java.util.AbstractMap;
 import java.util.Map;
 
+import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
+import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.milo.opcua.stack.core.StatusCodes;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.builtin.StatusCode;
@@ -41,6 +43,7 @@ public class Constants {
 	public static final NodeId DELETE_FB_NODE = new NodeId(1, "deleteFB"); //$NON-NLS-1$
 	public static final NodeId DELETE_CONNECTION_NODE = new NodeId(1, "deleteConnection"); //$NON-NLS-1$
 	public static final NodeId ADD_WATCH_NODE = new NodeId(1, "addWatch"); //$NON-NLS-1$
+	public static final NodeId READ_WATCHES_NODE = new NodeId(1, "readWatches"); //$NON-NLS-1$
 
 	/** Deployment Console Messages **/
 	public static final String CREATE_RESOURCE_INSTANCE = "<Request Action=\"CREATE RESOURCE\"><FB Name=\"{0}\" Type=\"{1}\" /></Request>"; //$NON-NLS-1$
@@ -58,8 +61,12 @@ public class Constants {
 	public static final String DELETE_FB_INSTANCE = "<Request Action=\"DELETE FB\"><FB Name=\"{0}\" /></Request>"; //$NON-NLS-1$
 	public static final String DELETE_CONNECTION = "<Request Action=\"DELETE CONNECTION\"><Connection Destination=\"{0}\" Source=\"{1}\" /></Request>"; //$NON-NLS-1$
 	public static final String ADD_WATCH = "<Request Action=\"ADD WATCH\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
+	public static final String READ_WATCHES = "<Request Action=\"READ\"><Watches/></Request>"; //$NON-NLS-1$
 
 	public static final String RESPONSE = "<Response Reason=\"{0}\" />\n"; //$NON-NLS-1$
+
+	public static final String WATCHES_RESPONSE = "<Response>\n  <Watches>\n    {0}\n  </Watches>\n</Response>"; //$NON-NLS-1$
+	public static final Response EMPTY_WATCHES_RESPONSE;
 
 	/* IEC61499 Status Codes */
 	public static final String MGM_RESPONSE_READY = "Ready"; //$NON-NLS-1$
@@ -89,6 +96,14 @@ public class Constants {
 			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_RequestNotAllowed, MGM_RESPONSE_INVALID_OPERATION),
 			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_InvalidState, MGM_RESPONSE_INVALID_STATE),
 			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_TcpNotEnoughResources, MGM_RESPONSE_OVERFLOW));
+
+	static {
+		// ensure that all entries in the empty response return appropriate empty values
+		EMPTY_WATCHES_RESPONSE = DevResponseFactory.eINSTANCE.createResponse();
+		EMPTY_WATCHES_RESPONSE.setFblist(DevResponseFactory.eINSTANCE.createFBList());
+		EMPTY_WATCHES_RESPONSE.setID("0"); //$NON-NLS-1$
+		EMPTY_WATCHES_RESPONSE.setWatches(DevResponseFactory.eINSTANCE.createWatches());
+	}
 
 	private Constants() {
 		// empty private constructor
