@@ -100,6 +100,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
+import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -609,6 +610,11 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	public void setInput(final IEditorInput input) {
 		if (input != null) {
 			setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
+			if (editors != null) {
+				final FBTypeEditorInput subInput = getFBTypeEditorInput();
+				editors.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
+						.forEach(e -> e.setInput(subInput));
+			}
 		}
 		setInputWithNotify(input);
 	}

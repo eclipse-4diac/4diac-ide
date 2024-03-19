@@ -579,4 +579,23 @@
           class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionResourceRelocationStrategy">
     </strategy>
  </extension>
+ <extension
+       point="org.eclipse.ltk.core.refactoring.renameParticipants">
+    <renameParticipant
+          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionRenameTypeRefactoringParticipant"
+          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.renameFunctionParticipant"
+          name="Rename Function">
+       <enablement>
+          <adapt
+                type="org.eclipse.xtext.ui.refactoring.ui.IRenameElementContext">
+             <with
+                   variable="processorIdentifier">
+                <equals
+                      value="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.renameProcessor2">
+                </equals>
+             </with>
+          </adapt>
+       </enablement>
+    </renameParticipant>
+ </extension>
 </plugin>

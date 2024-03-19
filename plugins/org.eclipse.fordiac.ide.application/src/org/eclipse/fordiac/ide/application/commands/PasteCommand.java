@@ -36,10 +36,8 @@ import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateComm
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -283,18 +281,11 @@ public class PasteCommand extends Command implements ScopedCommand {
 				// Only copy if one end of the connection is copied as well otherwise we will
 				// get a duplicate connection
 
-				if ((dstFBNetwork.isSubApplicationNetwork() || copyPasteData.srcNetwork().isSubApplicationNetwork())) {
-					final Command cmd = copyConnectionToSubApp(connRef, copiedSrc, copiedDest);
-					if (cmd != null && cmd.canExecute()) { // checks if the resulting connection is valid
+				final AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(connRef.source());
+				if (null != cmd) {
+					copyConnection(connRef, copiedSrc, copiedDest, cmd);
+					if (cmd.canExecute()) { // checks if the resulting connection is valid
 						connCreateCmds.add(cmd);
-					}
-				} else {
-					final AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(connRef.source());
-					if (null != cmd) {
-						copyConnection(connRef, copiedSrc, copiedDest, cmd);
-						if (cmd.canExecute()) { // checks if the resulting connection is valid
-							connCreateCmds.add(cmd);
-						}
 					}
 				}
 			}
@@ -323,29 +314,6 @@ public class PasteCommand extends Command implements ScopedCommand {
 		cmd.setDestination(destination);
 		cmd.setArrangementConstraints(connRef.routingData());
 		cmd.setVisible(connRef.visible());
-	}
-
-	private Command copyConnectionToSubApp(final ConnectionReference connRef, final FBNetworkElement copiedSrc,
-			final FBNetworkElement copiedDest) {
-		final IInterfaceElement source = getInterfaceElement(connRef.source(), copiedSrc);
-		final IInterfaceElement destination = getInterfaceElement(connRef.destination(), copiedDest);
-
-		if (source != null && destination != null) {
-			final Application sourceApp = getApplicationFromPin(source);
-			final Application destApp = getApplicationFromPin(destination);
-			if ((sourceApp != null && destApp != null && sourceApp.equals(destApp))
-					|| (FBNetworkHelper.getRootType(source) != null && FBNetworkHelper.getRootType(destination) != null
-							&& FBNetworkHelper.getRootType(source).equals(FBNetworkHelper.getRootType(destination)))) {
-				return CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source,
-						destination);
-			}
-		}
-		return null;
-	}
-
-	private static Application getApplicationFromPin(final IInterfaceElement pin) {
-		final FBNetworkElement fbNetworkElement = pin.getFBNetworkElement();
-		return (fbNetworkElement != null) ? fbNetworkElement.getFbNetwork().getApplication() : null;
 	}
 
 	private IInterfaceElement getInterfaceElement(final IInterfaceElement orig, final FBNetworkElement copiedElement) {
