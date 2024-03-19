@@ -87,6 +87,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.AccessMode
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.xtend.lib.annotations.Accessors
 
@@ -345,7 +346,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //
-	'''partial<«expr.specifier.generateMultiBitAccessSpecifier»>(«IF expr.expression !== null»«expr.expression.generateExpression»«ELSE»«expr.index»«ENDIF»)'''
+	'''«IF expr.accessMode != AccessMode.WRITE»c«ENDIF»partial<«expr.specifier.generateMultiBitAccessSpecifier»>(«IF expr.expression !== null»«expr.expression.generateExpression»«ELSE»«expr.index»«ENDIF»)'''
 
 	def protected CharSequence generateMultiBitAccessSpecifier(STMultiBitAccessSpecifier spec) {
 		switch (spec) {
