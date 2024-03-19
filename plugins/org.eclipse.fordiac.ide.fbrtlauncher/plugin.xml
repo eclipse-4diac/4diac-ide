@@ -22,5 +22,29 @@
             class="org.eclipse.fordiac.ide.fbrtlauncher.preferences.PreferenceInitializer">
       </initializer>
    </extension>
-
+   
+   <extension point="org.eclipse.debug.core.launchConfigurationTypes">
+		<launchConfigurationType
+    		name="Local FBRT"
+    		delegate="org.eclipse.core.externaltools.internal.launchConfigurations.ProgramLaunchDelegate"
+    		modes="run"               
+    		id="org.eclipse.fordiac.ide.runLocalFBRT">        
+		</launchConfigurationType>
+	</extension>
+	<extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+		<launchConfigurationTabGroup
+			type="org.eclipse.fordiac.ide.runLocalFBRT"
+			class="org.eclipse.fordiac.ide.fbrtlauncher.FBRTLaunchGroup"
+			id="org.eclipse.fordiac.ide.fbrtlauncher.launchConfigurationTabGroup">
+		</launchConfigurationTabGroup>
+	</extension>
+	
+	<extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.fordiac.ide.runLocalFBRT"
+			icon="platform:/plugin/org.eclipse.ui/icons/full/obj16/elements_obj.png"
+            id="org.eclipse.fordiac.ide.launchConfigurationTypeImage.runLocalFBRT">
+      </launchConfigurationTypeImage>
+   </extension>
 </plugin>

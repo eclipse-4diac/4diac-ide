@@ -33,7 +33,6 @@ public final class Messages extends NLS {
 
 	public static String ForteLaunchTab_TabTitle;
 	public static String ForteLaunchTab_WorkingDirectory;
-	public static String ForteLaunchTab_Port;
 
 	public static String ForteLaunchTabError_No4diacFORTEExecutableSet;
 
