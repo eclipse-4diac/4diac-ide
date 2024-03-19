@@ -26,7 +26,7 @@ public class CopyDataFromTableAction implements IKeyAction {
 	@Override
 	public void run(final NatTable natTable, final KeyEvent event) {
 		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
-		if (selectionLayer != null) {
+		if (selectionLayer != null && selectionLayer.hasRowSelection()) {
 			final int[] rows = selectionLayer.getFullySelectedRowPositions();
 
 			if (rows.length > 0) {
@@ -36,7 +36,8 @@ public class CopyDataFromTableAction implements IKeyAction {
 				int i = 0;
 				final Object[] objects = new Object[rows.length];
 				for (final int row : rows) {
-					objects[i++] = provider.getRowObject(row);
+					objects[i] = provider.getRowObject(row);
+					i++;
 				}
 
 				Clipboard.getDefault().setContents(objects);
