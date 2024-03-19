@@ -94,7 +94,9 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 
 				// timeout action for wait state
 				final ECAction waitAct = TestEccGenerator.createAction();
-				waitAct.setOutput(plug.getAdapterFB().getInterface().getEventInputs().get(0));
+
+				// plug.getAdapterFB().getInterface().getEventInputs().get(0)
+				waitAct.setOutput(plug.getType().getInterfaceList().getEventInputs().get(0));
 				waitAct.setAlgorithm(createTimeOutAlg(destinationFB));
 				eccGen.getLastState().getECAction().add(waitAct);
 
@@ -112,8 +114,9 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 				eccGen.createState("ERROR", i); //$NON-NLS-1$
 				eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "ERROR_1")); //$NON-NLS-1$
 				createErrorTransitions(eccGen, splitName[i]);
+				// plug.getAdapterFB().getInterface().getEventOutputs().get(0)
 				eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
-						plug.getAdapterFB().getInterface().getEventOutputs().get(0));
+						plug.getType().getInterfaceList().getEventOutputs().get(0));
 				eccGen.createTransitionFromTo(eccGen.getLastState(), errState, null);
 				eccGen.decreaseCaseCount();
 
@@ -138,7 +141,8 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 		eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "WAIT_1")); //$NON-NLS-1$
 		// action
 		final ECAction waitAct = TestEccGenerator.createAction();
-		waitAct.setOutput(plug.getAdapterFB().getInterface().getEventInputs().get(0));
+		// plug.getAdapterFB().getInterface().getEventInputs().get(0)
+		waitAct.setOutput(plug.getType().getInterfaceList().getEventInputs().get(0));
 		// algorithm
 		waitAct.setAlgorithm(createTimeOutAlg(destinationFB));
 		eccGen.getLastState().getECAction().add(waitAct);
@@ -170,8 +174,9 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 					destinationFB.getInterfaceList().getOutputVars().get(0).getName());
 			sucAct.setAlgorithm(alg);
 		}
+		// plug.getAdapterFB().getInterface().getEventOutputs().get(0))
 		eccGen.createTransitionFromTo(eccGen.getNTimesLast(2), eccGen.getLastState(),
-				plug.getAdapterFB().getInterface().getEventOutputs().get(0));
+				plug.getType().getInterfaceList().getEventOutputs().get(0));
 
 		eccGen.createTransitionFromTo(eccGen.getLastState(), sucState, null);
 		eccGen.createTransitionFromTo(eccGen.getLastState(), errState, null);
@@ -190,13 +195,15 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 		eccGen.createTransitionFromTo(eccGen.getEcc().getStart(), eccGen.getLastState(), getEventInput("expected")); //$NON-NLS-1$
 		final ECAction act = TestEccGenerator.createAction();
 		act.setAlgorithm(createTimeOutAlg(destinationFB));
-		act.setOutput(plug.getAdapterFB().getInterface().getEventInputs().get(0));
+		// plug.getAdapterFB().getInterface().getEventInputs().get(0)
+		act.setOutput(plug.getType().getInterfaceList().getEventInputs().get(0));
 		eccGen.getLastState().getECAction().add(act);
 
 		eccGen.createState("S1", 1); //$NON-NLS-1$
 		eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
+		// plug.getAdapterFB().getInterface().getEventOutputs().get(0)
 		eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
-				plug.getAdapterFB().getInterface().getEventOutputs().get(0));
+				plug.getType().getInterfaceList().getEventOutputs().get(0));
 		eccGen.createTransitionFromTo(eccGen.getLastState(), eccGen.getEcc().getStart(), null);
 		final ECAction actSuc = TestEccGenerator.createAction();
 		actSuc.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(1));
@@ -219,7 +226,15 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 		final AdapterTypeEntry timeOutEntry = typelib.getAdapterTypeEntry("ATimeOut"); //$NON-NLS-1$
 		final CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(timeOutEntry.getType(), "timeOut", //$NON-NLS-1$
 				sourceType.getInterfaceList(), false, -1);
-		cmd.execute();
+		//
+		try {
+			cmd.execute();
+		} catch (final Exception e) {
+			System.out.print(e.getMessage());
+		}
+		// Display.getDefault().syncExec(() -> cmd.execute());
+
+		//
 		final AdapterDeclaration timeOutPlug = (AdapterDeclaration) cmd.getCreatedElement();
 		timeOutPlug.setType(timeOutEntry.getType());
 		destinationFB.getInterfaceList().getPlugs().add(timeOutPlug);
@@ -227,7 +242,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 	}
 
 	public static Algorithm createTimeOutAlg(final BasicFBType fb) {
-		final String algText = "timeOut.DT := TIME#1000ms; \n";//$NON-NLS-1$
+		final String algText = "timeOut.DT1 := TIME#1000ms; \n";//$NON-NLS-1$
 		return TestEccGenerator.createAlgorithm(fb, "TimeOutAlg", algText); //$NON-NLS-1$
 	}
 

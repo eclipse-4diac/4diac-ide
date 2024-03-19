@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.fb.interpreter.testappgen;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractCompositeFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
@@ -79,7 +78,8 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 					x = 50 + 400 * j;
 					y = 50 + 250 * i;
 				}
-				final FB addedBlock = addFBToNetwork(net, blocksToAdd.get(j).getTypeEntry(), x, y);
+
+				final FB addedBlock = addFBToNetwork(net, blocksToAdd.get(j), x, y);
 				// the actual instance of the added blocks get saved to a list for easier access
 				// when creating connections
 				addBlockToAccordingList(addedBlock, i, j);
@@ -113,18 +113,19 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 		compEl.setTypeEntry(compType);
 		addPosition(compEl, x + 200, y + 150);
 
-		compEl.setInterface(EcoreUtil.copy(compEl.getType().getInterfaceList()));
+		compEl.setInterface(compEl.getType().getInterfaceList().copy());
 
 		net.getNetworkElements().add(compEl);
 		final String name = NameRepository.createUniqueName(compEl, "TESTAPPFB1");//$NON-NLS-1$
 		compEl.setName(name);
 
 		// connection between matchFB and timeOut
+
 		final AdapterConnection a = createAdapterConnection(
 				matchFBs.get(matchFBs.size() - 1).getInterface().getPlugs().get(0),
 				compositeFB.getFBNetwork().getFBNamed(name).getInterface().getSockets().get(0));
 		compositeFB.getFBNetwork().getAdapterConnections().add(a);
-	}
+}
 
 	private static AdapterConnection createAdapterConnection(final AdapterDeclaration source,
 			final AdapterDeclaration dest) {
@@ -188,9 +189,11 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 		compositeFB.getFBNetwork().getEventConnections()
 				.add(createEventConnection(matchFBs.get(index).getInterface().getEventOutputs().get(0),
 						muxFB.getInterface().getEventInputs().get(muxFB.getInterface().getEventInputs().size() - 2)));
-		compositeFB.getFBNetwork().getEventConnections()
-				.add(createEventConnection(matchFBs.get(index).getInterface().getEventOutputs().get(1),
-						muxFB.getInterface().getEventInputs().get(muxFB.getInterface().getEventInputs().size() - 1)));
+
+		final Event dest = matchFBs.get(index).getInterface().getEventOutputs().get(1);
+		final Event source = muxFB.getInterface().getEventInputs()
+				.get(muxFB.getInterface().getEventInputs().size() - 1);
+		compositeFB.getFBNetwork().getEventConnections().add(createEventConnection(dest, source));
 		compositeFB.getFBNetwork().getEventConnections()
 				.add(createEventConnection(runAllFB.getInterface().getEventOutputs().get(index),
 						muxFB.getInterface().getEventInputs().get(index)));

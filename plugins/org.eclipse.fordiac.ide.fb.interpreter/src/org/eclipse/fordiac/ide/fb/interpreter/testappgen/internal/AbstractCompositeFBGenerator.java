@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -26,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public abstract class AbstractCompositeFBGenerator extends AbstractBlockGenerator {
 	protected CompositeFBType compositeFB;
@@ -45,7 +43,7 @@ public abstract class AbstractCompositeFBGenerator extends AbstractBlockGenerato
 		createEvents();
 		createData();
 		createConnections();
-		createWiths();
+		// createWiths();
 	}
 
 	protected static void setValue(final EList<VarDeclaration> vars) {
@@ -73,15 +71,18 @@ public abstract class AbstractCompositeFBGenerator extends AbstractBlockGenerato
 		return con;
 	}
 
-	protected static FB addFBToNetwork(final FBNetwork net, final TypeEntry blockToAdd, final int x, final int y) {
+	protected static FB addFBToNetwork(final FBNetwork net, final FBType blockToAdd, final int x, final int y) {
+
 		final FBNetworkElement el = LibraryElementFactory.eINSTANCE.createFB();
-		el.setTypeEntry(blockToAdd);
+		el.setTypeEntry(blockToAdd.getTypeEntry());
 		addPosition(el, x, y);
-		el.setInterface(EcoreUtil.copy(el.getType().getInterfaceList()));
+		el.setInterface(blockToAdd.getInterfaceList().copy());
+
 		net.getNetworkElements().add(el);
 		final String name = NameRepository.createUniqueName(el, "TESTAPPFB1"); //$NON-NLS-1$
 		el.setName(name);
 		return net.getFBNamed(name);
+
 	}
 
 	// some values might be null, so to be sure every value gets set again
