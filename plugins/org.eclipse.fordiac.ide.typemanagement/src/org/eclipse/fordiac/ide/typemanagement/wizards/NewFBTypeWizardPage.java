@@ -40,7 +40,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -181,13 +180,12 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 							getTypeTemplatesFolder().toString()));
 			return false;
 		}
-		if (super.getFileName().isEmpty()) {
+		if (getTypeName().isEmpty()) {
 			setErrorMessage(Messages.NewFBTypeWizardPage_EmptyTypenameIsNotValid);
 			return false;
 		}
 
-		// use super.getFileName here to get the type name without extension
-		final Optional<String> errorMessage = IdentifierVerifier.verifyIdentifier(super.getFileName());
+		final Optional<String> errorMessage = IdentifierVerifier.verifyIdentifier(getTypeName());
 		if (errorMessage.isPresent()) {
 			setErrorMessage(errorMessage.get());
 			return false;
@@ -204,9 +202,8 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			return false;
 		}
 
-		// Check for duplicates in typelib if a project is selected
-		if (null != getContainerFullPath() && isDuplicate()) {
-			setErrorMessage(MessageFormat.format(Messages.NewFBTypeWizardPage_TypeAlreadyExists, getFileName()));
+		if (isDuplicate()) {
+			setErrorMessage(MessageFormat.format(Messages.NewFBTypeWizardPage_TypeAlreadyExists, getFullTypeName()));
 			return false;
 		}
 
@@ -214,38 +211,21 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private boolean isDuplicate() {
-		// here: getContainerFullPath().segment(0) --> name of the selected project
-		final TypeLibrary lib = TypeLibraryManager.INSTANCE
-				.getTypeLibrary(ResourcesPlugin.getWorkspace().getRoot().getProject(getContainerFullPath().segment(0)));
-
-		final String[] s = getTemplate().getName().split("\\."); //$NON-NLS-1$
-		final String fileExtension = s[s.length - 1].toUpperCase();
-		if (fileExtension.equals(TypeLibraryTags.DATA_TYPE_FILE_ENDING)) {
-			return isDtpDuplicate(lib);
+		final TypeLibrary lib = getTypeLibrary();
+		if (lib == null) {
+			return false;
 		}
-		if (fileExtension.equals(TypeLibraryTags.GLOBAL_CONST_FILE_ENDING)) {
-			return isGcfDuplicate(lib);
+
+		final String fileExtension = IPath.fromFile(getTemplate()).getFileExtension();
+		final Map<String, ?> types;
+		if (TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING.equalsIgnoreCase(fileExtension)) {
+			types = lib.getAttributeTypes();
+		} else if (TypeLibraryTags.GLOBAL_CONST_FILE_ENDING.equalsIgnoreCase(fileExtension)) {
+			types = lib.getGlobalConstants();
+		} else {
+			types = lib.getProgramTypes();
 		}
-		return isSubFbtAdpDuplicate(lib, fileExtension);
-	}
-
-	private boolean isSubFbtAdpDuplicate(final TypeLibrary lib, final String fileExtension) {
-		final Map<String, ? extends TypeEntry> map = switch (fileExtension) {
-		case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING -> lib.getSubAppTypes();
-		case TypeLibraryTags.FB_TYPE_FILE_ENDING, TypeLibraryTags.FC_TYPE_FILE_ENDING -> lib.getFbTypes();
-		case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING -> lib.getAdapterTypes();
-		default -> null;
-		};
-		return (null != map) && (map.containsKey(super.getFileName()));
-	}
-
-	private boolean isDtpDuplicate(final TypeLibrary lib) {
-		return lib.getDataTypeLibrary().getTypeIfExists(super.getFileName()) != null;
-	}
-
-	private boolean isGcfDuplicate(final TypeLibrary lib) {
-		final Map<String, ?> map = lib.getGlobalConstants();
-		return map.containsKey(super.getFileName());
+		return types.containsKey(getFullTypeName());
 	}
 
 	public File getTemplate() {
@@ -284,6 +264,19 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			}
 		}
 		return retval;
+	}
+
+	public String getTypeName() {
+		// use super.getFileName here to get the type name without extension
+		return super.getFileName();
+	}
+
+	public String getFullTypeName() {
+		final String packageName = getPackageName();
+		if (!packageName.isBlank()) {
+			return packageName + PackageNameHelper.PACKAGE_NAME_DELIMITER + getTypeName();
+		}
+		return getTypeName();
 	}
 
 	public boolean getOpenType() {
