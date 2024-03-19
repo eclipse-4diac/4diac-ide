@@ -44,7 +44,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import org.eclipse.core.internal.resources.ProjectDescription;
 import org.eclipse.core.resources.IContainer;
@@ -107,6 +106,7 @@ public final class TypeLibrary {
 	private final Map<String, SubAppTypeEntry> subAppTypes = new ConcurrentHashMap<>();
 	private final Map<String, SystemEntry> systems = new ConcurrentHashMap<>();
 	private final Map<String, GlobalConstantsEntry> globalConstants = new ConcurrentHashMap<>();
+	private final Map<String, TypeEntry> programTypes = new ConcurrentHashMap<>();
 	private final Map<String, TypeEntry> errorTypes = new ConcurrentHashMap<>();
 	private final Map<IFile, TypeEntry> fileMap = new ConcurrentHashMap<>();
 	private final Map<String, AtomicInteger> packages = new ConcurrentHashMap<>();
@@ -151,6 +151,10 @@ public final class TypeLibrary {
 
 	public Map<String, GlobalConstantsEntry> getGlobalConstants() {
 		return globalConstants;
+	}
+
+	public Map<String, TypeEntry> getProgramTypes() {
+		return Collections.unmodifiableMap(programTypes);
 	}
 
 	public Set<String> getPackages() {
@@ -222,6 +226,7 @@ public final class TypeLibrary {
 		getSystems().clear();
 		getGlobalConstants().clear();
 		dataTypeLib.clear();
+		programTypes.clear();
 		fileMap.clear();
 		packages.clear();
 		deleteTypeLibraryMarkers(project);
@@ -487,6 +492,9 @@ public final class TypeLibrary {
 				handleDuplicateTypeName(entry);
 			}
 		}
+		if (isProgramTypeEntry(entry) && programTypes.putIfAbsent(entry.getFullTypeName(), entry) != null) {
+			handleDuplicateTypeName(entry);
+		}
 		addPackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
 	}
 
@@ -512,6 +520,9 @@ public final class TypeLibrary {
 			dataTypeLib.removeTypeEntry(dtEntry);
 		} else {
 			removeBlockTypeEntry(entry);
+		}
+		if (isProgramTypeEntry(entry)) {
+			programTypes.remove(entry.getFullTypeName(), entry);
 		}
 		removePackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
 		deleteTypeLibraryMarkers(entry.getFile());
@@ -587,30 +598,12 @@ public final class TypeLibrary {
 	}
 
 	public TypeEntry find(final String name) {
-		TypeEntry entry = getSubAppTypeEntry(name);
-		if (entry != null) {
-			return entry;
-		}
-
-		entry = getFBTypeEntry(name);
-		if (entry != null) {
-			return entry;
-		}
-
-		entry = dataTypeLib.getDerivedTypeEntry(name);
-		if (entry != null) {
-			return entry;
-		}
-
-		return getAdapterTypeEntry(name);
+		return programTypes.get(name);
 	}
 
 	public List<TypeEntry> findUnqualified(final String name) {
 		final String unqualifiedName = PackageNameHelper.extractPlainTypeName(name);
-		return Stream
-				.of(getSubAppTypes().values(), getFbTypes().values(), dataTypeLib.getDerivedDataTypes(),
-						getAdapterTypes().values())
-				.<TypeEntry>flatMap(Collection::stream).filter(entry -> unqualifiedName.equals(entry.getTypeName()))
+		return programTypes.values().stream().filter(entry -> unqualifiedName.equalsIgnoreCase(entry.getTypeName()))
 				.toList();
 	}
 
@@ -668,6 +661,10 @@ public final class TypeLibrary {
 		} else {
 			FordiacLogHelper.logError("Unknown type entry to be removed from library: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
+	}
+
+	private static boolean isProgramTypeEntry(final TypeEntry entry) {
+		return entry instanceof FBTypeEntry || entry instanceof SubAppTypeEntry || entry instanceof DataTypeEntry;
 	}
 
 	private static void createTypeLibraryMarker(final IResource resource, final String message) {
