@@ -42,7 +42,8 @@ public final class Messages extends NLS {
 	public static String OPCUADeploymentExecutor_AddWatchFailed;
 	public static String OPCUADeploymentExecutor_ReadWatchesFailed;
 	public static String OPCUADeploymentExecutor_RemoveWatchFailed;
-	public static String OPCUADeploymentExecutor_ErrorOnWatch;
+	public static String OPCUADeploymentExecutor_TriggerEventFailed;
+	public static String OPCUADeploymentExecutor_ErrorOnRequest;
 
 	public static String OPCUADeploymentExecutor_BrowseOPCUAFailed;
 

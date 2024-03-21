@@ -575,7 +575,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			return;
 		}
 		final StatusCode opcuaStatus = result.getStatusCode();
-		logWatchStatus(opcuaStatus, resName, fullFbName);
+		logResponseStatus(opcuaStatus, resName, fullFbName);
 		element.setOffline(Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(opcuaStatus)));
 	}
 
@@ -602,14 +602,34 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			return;
 		}
 		final StatusCode opcuaStatus = result.getStatusCode();
-		logWatchStatus(opcuaStatus, resName, fullFbName);
+		logResponseStatus(opcuaStatus, resName, fullFbName);
 		element.setOffline(Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(opcuaStatus)));
 	}
 
 	@Override
 	public void triggerEvent(final MonitoringBaseElement element) throws DeploymentException {
 		// TODO Auto-generated method stub
-
+		if (availableResources.isEmpty() && !getResourcesHandle()) {
+			return;
+		}
+		final String fullFbName = element.getQualifiedString();
+		final String resName = element.getResourceString();
+		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
+				Constants.TRIGGER_EVENT_NODE, new Variant[] { new Variant(fullFbName) });
+		final String message = MessageFormat.format(Constants.TRIGGER_EVENT, fullFbName);
+		CallMethodResult result;
+		try {
+			result = sendREQ(resName, request, message).get();
+		} catch (final ExecutionException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_AddWatchFailed, fullFbName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			return;
+		}
+		logResponseStatus(result.getStatusCode(), resName, fullFbName);
 	}
 
 	@Override
@@ -738,10 +758,10 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		}
 	}
 
-	private static void logWatchStatus(final StatusCode opcuaStatus, final String resourceName,
+	private static void logResponseStatus(final StatusCode opcuaStatus, final String resourceName,
 			final String monitoringElement) {
 		if (!opcuaStatus.isGood()) {
-			FordiacLogHelper.logInfo(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnWatch,
+			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnRequest,
 					getIEC61499Status(opcuaStatus), resourceName, monitoringElement));
 		}
 	}
