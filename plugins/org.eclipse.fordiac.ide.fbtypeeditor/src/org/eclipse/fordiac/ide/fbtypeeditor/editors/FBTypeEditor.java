@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
+import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
@@ -121,7 +122,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	private Collection<IFBTEditorPart> editors;
 	private TypeEntry typeEntry;
 	private FBType fbType;
-	private FBTypeContentOutline contentOutline = null;
+	private IContentOutlinePage contentOutline = null;
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
@@ -471,12 +472,8 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == IContentOutlinePage.class) {
-			if (null == contentOutline) {
-				contentOutline = new FBTypeContentOutline(fbType, this);
-			}
-			return adapter.cast(contentOutline);
+			return adapter.cast(getOutlinePage());
 		}
-
 		if (adapter == FBType.class || adapter == LibraryElement.class) {
 			return adapter.cast(getFBType());
 		}
@@ -504,6 +501,15 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			return result;
 		}
 		return null;
+	}
+
+	protected IContentOutlinePage getOutlinePage() {
+		if (null == contentOutline) {
+			contentOutline = (fbType instanceof CompositeFBType)
+					? new DiagramOutlinePage(getActiveEditor().getAdapter(GraphicalViewer.class))
+					: new FBTypeContentOutline(fbType, this);
+		}
+		return contentOutline;
 	}
 
 	private static <T> boolean shouldCheckAllEditors(final Class<T> adapter) {
@@ -594,6 +600,14 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	protected void pageChange(final int newPageIndex) {
 		super.pageChange(newPageIndex);
 		getSite().getPage().getNavigationHistory().markLocation(this);
+		updateOutline(newPageIndex);
+	}
+
+	protected void updateOutline(final int newPageIndex) {
+		if ((newPageIndex != -1) && (contentOutline instanceof final DiagramOutlinePage diagOutline)) {
+			final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
+			diagOutline.viewerChanged(viewer);
+		}
 	}
 
 	@Override

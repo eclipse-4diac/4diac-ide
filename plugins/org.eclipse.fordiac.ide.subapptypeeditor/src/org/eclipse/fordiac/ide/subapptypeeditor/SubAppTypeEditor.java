@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.subapptypeeditor.editors.SubAppNetworkBreadCrumbEditor;
+import org.eclipse.jface.dialogs.IPageChangeProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -35,8 +36,11 @@ public class SubAppTypeEditor extends FBTypeEditor {
 
 	private static final int SUBAPP_NETWORL_EDITOR_INDEX = 1;
 
-	/** reworked FormEditorSelection provider allowing to change the current multipage editor see
-	 * {@link org.eclipse.ui.forms.editor.FormEditor.FormEditorSelectionProvider} */
+	/**
+	 * reworked FormEditorSelection provider allowing to change the current
+	 * multipage editor see
+	 * {@link org.eclipse.ui.forms.editor.FormEditor.FormEditorSelectionProvider}
+	 */
 	private static class SubAppTypeEditorSelectionProvider extends MultiPageSelectionProvider {
 		private ISelection globalSelection;
 
@@ -94,9 +98,18 @@ public class SubAppTypeEditor extends FBTypeEditor {
 	}
 
 	@Override
+	protected void addPages() {
+		super.addPages();
+		final IEditorPart subAppNetworkEditor = getEditor(SUBAPP_NETWORL_EDITOR_INDEX);
+		if (subAppNetworkEditor instanceof final IPageChangeProvider pageChangeProvider) {
+			pageChangeProvider.addPageChangedListener(ev -> updateOutline(SUBAPP_NETWORL_EDITOR_INDEX));
+		}
+	}
+
+	@Override
 	protected FBType getFBType(final TypeEntry typeEntry) {
-		if (typeEntry instanceof SubAppTypeEntry) {
-			return ((SubAppTypeEntry) typeEntry).getTypeEditable();
+		if (typeEntry instanceof final SubAppTypeEntry subappEntry) {
+			return subappEntry.getTypeEditable();
 		}
 		return null;
 	}
@@ -116,10 +129,12 @@ public class SubAppTypeEditor extends FBTypeEditor {
 	@Override
 	protected void pageChange(final int newPageIndex) {
 		if ((SUBAPP_NETWORL_EDITOR_INDEX == getCurrentPage()) && (newPageIndex != SUBAPP_NETWORL_EDITOR_INDEX)) {
-			// the SubAppNetworkBreadCrumbEditor is open restore our editor as the selection editor
+			// the SubAppNetworkBreadCrumbEditor is open restore our editor as the selection
+			// editor
 			getSelectionProvider().setMultiPageEditor(this);
 		} else if ((SUBAPP_NETWORL_EDITOR_INDEX != getCurrentPage()) && (newPageIndex == SUBAPP_NETWORL_EDITOR_INDEX)) {
-			// the SubAppNetworkBreadCrumbEditor is about to open set the subappnetwork editor as multipage editor
+			// the SubAppNetworkBreadCrumbEditor is about to open set the subappnetwork
+			// editor as multipage editor
 			getSelectionProvider()
 					.setMultiPageEditor((SubAppNetworkBreadCrumbEditor) getEditor(SUBAPP_NETWORL_EDITOR_INDEX));
 		}
