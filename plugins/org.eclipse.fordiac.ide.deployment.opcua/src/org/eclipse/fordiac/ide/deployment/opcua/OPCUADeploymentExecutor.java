@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
+import org.eclipse.fordiac.ide.deployment.interactors.ForteTypeNameCreator;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.opcua.helpers.Constants;
@@ -46,7 +47,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
@@ -300,10 +300,11 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		if (resourceNode == null) {
 			return;
 		}
-		final String fbType = getValidType(fbData.getFb());
+		final String fbType = ForteTypeNameCreator.getForteTypeName(fbData.getFb());
 		final String fullFbName = MessageFormat.format(Constants.FB_NAME_FORMAT, fbData.getPrefix(),
 				fbData.getFb().getName());
-		if ("".equals(fbType)) { //$NON-NLS-1$
+		if (fbType.isEmpty()) {
+
 			throw new DeploymentException(MessageFormat
 					.format(Messages.OPCUADeploymentExecutor_CreateFBInstanceFailedNoTypeFound, fullFbName));
 		}
@@ -846,14 +847,4 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		return Constants.MGM_RESPONSE_UNKNOWN;
 	}
 
-	private static String getValidType(final FBNetworkElement fb) {
-		if (fb != null && fb.getTypeEntry() != null) {
-			if (fb instanceof final StructManipulator structManipulator) {
-				return MessageFormat.format("{0}_1{1}", fb.getTypeName(), //$NON-NLS-1$
-						structManipulator.getStructType().getName());
-			}
-			return fb.getTypeName();
-		}
-		return null;
-	}
 }

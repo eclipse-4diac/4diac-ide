@@ -37,14 +37,12 @@ import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
 import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.deployment.iec61499.handlers.EthernetDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.interactors.ForteTypeNameCreator;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.xml.sax.InputSource;
 
@@ -108,32 +106,6 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		// currently we only have the ability to connect via Ethernet to our devices, if
 		// this changes add here according factories
 		return new EthernetDeviceManagementCommunicationHandler();
-	}
-
-	private static String getValidType(final FBNetworkElement fb) {
-		if (fb != null && fb.getTypeEntry() != null) {
-			if (fb instanceof final StructManipulator structMan) {
-				// the _1 is needed for 4diac FORTE to separate type name from configuration
-				// part
-				return fb.getTypeName() + "_1" + getFullForteEncodedTypeName(structMan.getStructType()); //$NON-NLS-1$
-			}
-			if (fb.getType() != null) {
-				return getFullForteEncodedTypeName(fb.getType());
-			}
-			return fb.getTypeName();
-		}
-		return null;
-	}
-
-	private static String getFullForteEncodedTypeName(final LibraryElement libEl) {
-		final CompilerInfo compilerInfo = libEl.getCompilerInfo();
-		if (compilerInfo != null) {
-			final String packageName = compilerInfo.getPackageName();
-			if (packageName != null && !packageName.isEmpty()) {
-				return packageName.replace(':', '_') + "__" + libEl.getName(); //$NON-NLS-1$
-			}
-		}
-		return libEl.getName();
 	}
 
 	@Override
@@ -305,9 +277,9 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws DeploymentException {
-		final String fbType = getValidType(fbData.getFb());
+		final String fbType = ForteTypeNameCreator.getForteTypeName(fbData.getFb());
 		final String fullFbInstanceName = fbData.getPrefix() + fbData.getFb().getName();
-		if ("".equals(fbType)) { //$NON-NLS-1$
+		if (fbType.isEmpty()) {
 			throw new DeploymentException((MessageFormat
 					.format(Messages.DeploymentExecutor_CreateFBInstanceFailedNoTypeFound, fullFbInstanceName)));
 		}
