@@ -35,6 +35,6 @@ public class OPCUADevMgmtInteractorProvider implements IDeviceManagementInteract
 	@Override
 	public IDeviceManagementInteractor createInteractor(final Device dev,
 			final IDeviceManagementCommunicationHandler overrideHandler) {
-		return new OPCUADeploymentExecutor(dev, overrideHandler);
+		return new OPCUADeploymentExecutor(dev);
 	}
 }

@@ -15,8 +15,10 @@ package org.eclipse.fordiac.ide.deployment.opcua;
 
 import org.eclipse.osgi.util.NLS;
 
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.opcua.messages"; //$NON-NLS-1$
+	public static String OPCUADeploymentExecutor_GetMgrIDFailed;
 	public static String OPCUADeploymentExecutor_CreateClientFailed;
 	public static String OPCUADeploymentExecutor_CreateResourceFailed;
 	public static String OPCUADeploymentExecutor_CreateFBInstanceFailed;
@@ -44,7 +46,6 @@ public final class Messages extends NLS {
 
 	public static String OPCUADeploymentExecutor_BrowseOPCUAFailed;
 
-	public static String OPCUADeploymentExecutor_DeviceConnectionClosed;
 	public static String OPCUADeploymentExecutor_RequestFailed;
 	public static String OPCUADeploymentExecutor_RequestInterrupted;
 

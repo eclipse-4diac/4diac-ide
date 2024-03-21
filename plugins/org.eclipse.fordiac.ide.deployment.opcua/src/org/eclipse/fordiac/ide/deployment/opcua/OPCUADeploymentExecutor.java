@@ -30,7 +30,6 @@ import java.util.concurrent.ExecutionException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
-import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
@@ -55,6 +54,7 @@ import org.eclipse.milo.opcua.sdk.client.api.UaSession;
 import org.eclipse.milo.opcua.sdk.client.api.config.OpcUaClientConfigBuilder;
 import org.eclipse.milo.opcua.stack.client.DiscoveryClient;
 import org.eclipse.milo.opcua.stack.core.Identifiers;
+import org.eclipse.milo.opcua.stack.core.UaException;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.builtin.StatusCode;
 import org.eclipse.milo.opcua.stack.core.types.builtin.Variant;
@@ -84,14 +84,11 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	private final List<String> requestMessages = new ArrayList<>();
 	private final List<IDeploymentListener> listeners = new ArrayList<>();
 
-	/* Future for Resource NodeId */
-	private CompletableFuture<NodeId> fResourceNode;
-
 	private final HashMap<String, NodeId> availableResources = new HashMap<>();
 
 	private final ResponseMapping respMapping = new ResponseMapping();
 
-	public OPCUADeploymentExecutor(final Device dev, final IDeviceManagementCommunicationHandler overrideHandler) {
+	public OPCUADeploymentExecutor(final Device dev) {
 		this.device = dev;
 		this.client = createClient();
 		this.resourceNode = null;
@@ -122,10 +119,16 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 				}
 			});
 			return newClient;
-		} catch (final Exception e) {
-			FordiacLogHelper.logInfo(e.toString());
-			e.printStackTrace();
-			FordiacLogHelper.logError(Messages.OPCUADeploymentExecutor_CreateClientFailed, e);
+		} catch (final DeploymentException e) {
+			FordiacLogHelper
+					.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_GetMgrIDFailed, e.getMessage()), e);
+		} catch (final ExecutionException | UaException e) {
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_CreateClientFailed, e.getMessage()), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 		return null;
 	}
@@ -146,10 +149,12 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			for (final IDeploymentListener listener : listeners) {
 				listener.connectionOpened(device);
 			}
-		} catch (final Exception e) {
-			FordiacLogHelper.logInfo(e.getMessage());
-			e.printStackTrace();
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_CouldNotConnectToDevice, e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 	}
 
@@ -161,10 +166,12 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 				for (final IDeploymentListener listener : listeners) {
 					listener.connectionClosed(device);
 				}
-			} catch (final Exception e) {
-				FordiacLogHelper.logInfo(e.getMessage());
-				e.printStackTrace();
+			} catch (final ExecutionException e) {
 				throw new DeploymentException(Messages.OPCUADeploymentExecutor_CouldNotDisconnectFromDevice, e);
+			} catch (final InterruptedException e) {
+				Thread.currentThread().interrupt();
+				FordiacLogHelper.logError(
+						MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 			}
 		}
 	}
@@ -175,7 +182,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	 * @param destination - Only needed for displaying on Deployment Console
 	 **/
 	private synchronized CompletableFuture<CallMethodResult> sendREQ(final String destination,
-			final CallMethodRequest request, final String message) throws IOException {
+			final CallMethodRequest request, final String message) {
 		return client.call(request).thenCompose(result -> {
 			if (!result.getStatusCode().isGood()) {
 				displayCommand(result.getStatusCode(), destination, message);
@@ -196,8 +203,10 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		} catch (final ExecutionException e) {
 			throw new IOException(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestFailed, destination), e);
 		} catch (final InterruptedException e) {
-			throw new IOException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, destination), e);
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			return Collections.emptyList();
 		}
 		return handleResponse(response, destination);
 	}
@@ -234,17 +243,17 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		CallMethodResult result = null;
 		try {
 			result = sendREQ(resName, request, message).get();
-		} catch (final IOException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_CreateResourceFailed, resName), e);
-		} catch (final Exception e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeviceConnectionClosed, resName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
-		if (result == null) {
-			return;
+		if (result != null) {
+			resourceNode = processResult(result);
 		}
-		resourceNode = processResult(result);
 	}
 
 	@Override
@@ -256,12 +265,13 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final String message = MessageFormat.format(Constants.WRITE_RESOURCE_PARAMETER, value);
 		try {
 			sendREQ(resName, request, message).get();
-		} catch (final IOException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_WriteResourceFailed, resName), e);
-		} catch (final Exception e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeviceConnectionClosed, resName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 	}
 
@@ -274,12 +284,13 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final String message = MessageFormat.format(Constants.WRITE_DEVICE_PARAMETER, value);
 		try {
 			sendREQ(devName, request, message).get();
-		} catch (final IOException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_WriteDeviceFailed, devName), e);
-		} catch (final Exception e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeviceConnectionClosed, devName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 	}
 
@@ -289,8 +300,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			return;
 		}
 		final String fbType = getValidType(fbData.getFb());
-		final String fullFbName = MessageFormat.format("{0}{1}", fbData.getPrefix(), fbData.getFb().getName()); //$NON-NLS-1$
-		if ("".equals(fbType)) {
+		final String fullFbName = MessageFormat.format(Constants.FB_NAME_FORMAT, fbData.getPrefix(),
+				fbData.getFb().getName());
+		if ("".equals(fbType)) { //$NON-NLS-1$
 			throw new DeploymentException(MessageFormat
 					.format(Messages.OPCUADeploymentExecutor_CreateFBInstanceFailedNoTypeFound, fullFbName));
 		}
@@ -307,8 +319,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		if (resourceNode == null) {
 			return;
 		}
-		final String destination = MessageFormat.format("{0}{1}.{2}", fbData.getPrefix(), fbData.getFb().getName(), //$NON-NLS-1$
-				varDecl.getName());
+		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, fbData.getPrefix(),
+				fbData.getFb().getName(), varDecl.getName());
 		final CallMethodRequest request = new CallMethodRequest(resourceNode, Constants.WRITE_FB_NODE,
 				new Variant[] { new Variant(destination), new Variant(value) });
 		final String message = MessageFormat.format(Constants.WRITE_FB_PARAMETER, destination, value);
@@ -333,9 +345,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 		final FBNetworkElement sourceFB = sourceData.getFBNetworkElement();
 		final FBNetworkElement destinationFB = destinationData.getFBNetworkElement();
-		final String source = MessageFormat.format("{0}{1}.{2}", connData.getSourcePrefix(), sourceFB.getName(), //$NON-NLS-1$
-				sourceData.getName());
-		final String destination = MessageFormat.format("{0}{1}.{2}", connData.getDestinationPrefix(), //$NON-NLS-1$
+		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.getSourcePrefix(),
+				sourceFB.getName(), sourceData.getName());
+		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.getDestinationPrefix(),
 				destinationFB.getName(), destinationData.getName());
 		final CallMethodRequest request = new CallMethodRequest(resourceNode, Constants.CREATE_CONNECTION_NODE,
 				new Variant[] { new Variant(source), new Variant(destination) });
@@ -349,18 +361,20 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		if (resourceNode == null) {
 			return;
 		}
-		final String fullFbName = MessageFormat.format("{0}{1}", fbData.getPrefix(), fbData.getFb().getName()); //$NON-NLS-1$
+		final String fullFbName = MessageFormat.format(Constants.FB_NAME_FORMAT, fbData.getPrefix(),
+				fbData.getFb().getName());
 		final CallMethodRequest request = new CallMethodRequest(resourceNode, Constants.START_FB_NODE,
 				new Variant[] { new Variant(fullFbName) });
 		final String message = MessageFormat.format(Constants.START_FB, fullFbName);
 		try {
 			sendREQ(res.getName(), request, message).get();
-		} catch (final IOException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_StartFBFailed, fullFbName), e);
-		} catch (final Exception e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeviceConnectionClosed, fullFbName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 	}
 
@@ -381,9 +395,6 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		} catch (final IOException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_StartResourceFailed, resourceName), e);
-		} catch (final Exception e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeviceConnectionClosed, resourceName), e);
 		}
 		requests.clear();
 		requestMessages.clear();
@@ -397,12 +408,13 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final String message = MessageFormat.format(Constants.START_DEVICE, devName);
 		try {
 			sendREQ(devName, request, message).get();
-		} catch (final IOException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_StartDeviceFailed, devName), e);
-		} catch (final Exception e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeviceConnectionClosed, devName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 	}
 
@@ -413,12 +425,13 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		String message = MessageFormat.format(Constants.KILL_RESOURCE, resName);
 		try {
 			sendREQ(resName, killRequest, message).get();
-		} catch (final IOException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_KillResourceFailed, resName), e);
-		} catch (final Exception e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeviceConnectionClosed, resName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 
 		final CallMethodRequest deleteRequest = new CallMethodRequest(Constants.MGMT_NODE,
@@ -426,12 +439,13 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		message = MessageFormat.format(Constants.DELETE_RESOURCE, resName);
 		try {
 			sendREQ(resName, deleteRequest, message).get();
-		} catch (final IOException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeleteResourceFailed, resName), e);
-		} catch (final Exception e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeviceConnectionClosed, resName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 	}
 
@@ -441,19 +455,21 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			return;
 		}
 
-		final String fullFbName = MessageFormat.format("{0}{1}", fbData.getPrefix(), fbData.getFb().getName()); //$NON-NLS-1$
+		final String fullFbName = MessageFormat.format(Constants.FB_NAME_FORMAT, fbData.getPrefix(),
+				fbData.getFb().getName());
 		final String resName = res.getName();
 		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
 				Constants.DELETE_FB_NODE, new Variant[] { new Variant(fullFbName), });
 		final String message = MessageFormat.format(Constants.DELETE_FB_INSTANCE, fullFbName);
 		try {
 			sendREQ(resName, request, message).get();
-		} catch (final IOException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeleteFBFailed, fullFbName), e);
-		} catch (final Exception e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeviceConnectionClosed, fullFbName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 	}
 
@@ -474,9 +490,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 		final FBNetworkElement sourceFB = sourceData.getFBNetworkElement();
 		final FBNetworkElement destinationFB = destinationData.getFBNetworkElement();
-		final String source = MessageFormat.format("{0}{1}.{2}", connData.getSourcePrefix(), sourceFB.getName(), //$NON-NLS-1$
-				sourceData.getName());
-		final String destination = MessageFormat.format("{0}{1}.{2}", connData.getDestinationPrefix(), //$NON-NLS-1$
+		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.getSourcePrefix(),
+				sourceFB.getName(), sourceData.getName());
+		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.getDestinationPrefix(),
 				destinationFB.getName(), destinationData.getName());
 		final String resName = res.getName();
 		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
@@ -484,13 +500,14 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final String message = MessageFormat.format(Constants.DELETE_CONNECTION, destination, source);
 		try {
 			sendREQ(resName, request, message).get();
-		} catch (final IOException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeleteConnectionFailed, destination, source),
 					e);
-		} catch (final Exception e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeviceConnectionClosed, destination), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 	}
 
@@ -502,12 +519,13 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final String message = MessageFormat.format(Constants.KILL_DEVICE, devName);
 		try {
 			sendREQ(devName, request, message).get();
-		} catch (final IOException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_KillDeviceFailed, devName), e);
-		} catch (final Exception e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeviceConnectionClosed, devName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 	}
 
@@ -524,8 +542,13 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final String message = Constants.READ_WATCHES;
 		try {
 			return parseWatchesResponse(sendREQ("", request, message).get()); //$NON-NLS-1$
-		} catch (final IOException | ExecutionException | InterruptedException e) {
+		} catch (final IOException | ExecutionException e) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_ReadWatchesFailed, e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			return Constants.EMPTY_WATCHES_RESPONSE;
 		}
 	}
 
@@ -542,9 +565,14 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		CallMethodResult result;
 		try {
 			result = sendREQ(resName, request, message).get();
-		} catch (final IOException | InterruptedException | ExecutionException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_AddWatchFailed, fullFbName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			return;
 		}
 		final StatusCode opcuaStatus = result.getStatusCode();
 		logWatchStatus(opcuaStatus, resName, fullFbName);
@@ -564,9 +592,14 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		CallMethodResult result;
 		try {
 			result = sendREQ(resName, request, message).get();
-		} catch (final IOException | InterruptedException | ExecutionException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RemoveWatchFailed, fullFbName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			return;
 		}
 		final StatusCode opcuaStatus = result.getStatusCode();
 		logWatchStatus(opcuaStatus, resName, fullFbName);
@@ -602,7 +635,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	 */
 	private CompletableFuture<StatusCode> browseResources() {
 		final BrowseDescription browse = new BrowseDescription(Constants.MGMT_NODE, BrowseDirection.Forward,
-				Identifiers.References, true, uint(NodeClass.Object.getValue()), uint(BrowseResultMask.All.getValue()));
+				Identifiers.References, Boolean.TRUE, uint(NodeClass.Object.getValue()),
+				uint(BrowseResultMask.All.getValue()));
 		return client.browse(browse).thenCompose(result -> {
 			final List<ReferenceDescription> references = toList(result.getReferences());
 			for (final ReferenceDescription rd : references) {
@@ -617,8 +651,12 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		StatusCode status = StatusCode.BAD;
 		try {
 			status = browseResources().get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (final ExecutionException e) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_BrowseOPCUAFailed);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 		return status.isGood() && !availableResources.isEmpty();
 	}
@@ -662,8 +700,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final StatusCode[] inputArgumentResults = result.getInputArgumentResults();
 		if (inputArgumentResults != null) {
 			for (int i = 0; i < inputArgumentResults.length; i++) {
-				FordiacLogHelper
-						.logInfo(MessageFormat.format("Input Argument Result {0}: {1}", i, inputArgumentResults[i])); //$NON-NLS-1$
+				FordiacLogHelper.logInfo(MessageFormat.format("Input Argument Result {0}: {1}", Integer.valueOf(i), //$NON-NLS-1$
+						inputArgumentResults[i]));
 			}
 		}
 		return null;
@@ -709,7 +747,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	}
 
 	private static String getIEC61499Status(final StatusCode opcuaStatus) {
-		final String status = Constants.RESPONSE_MAP.get(opcuaStatus.getValue());
+		final String status = Constants.RESPONSE_MAP.get(Long.valueOf(opcuaStatus.getValue()));
 		if (status != null) {
 			return status;
 		}
@@ -720,9 +758,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	private static String getValidType(final FBNetworkElement fb) {
 		if (fb != null && fb.getTypeEntry() != null) {
-			if (fb instanceof StructManipulator) {
-				return MessageFormat.format("{0}_1{2}", fb.getTypeName(), //$NON-NLS-1$
-						((StructManipulator) fb).getStructType().getName());
+			if (fb instanceof final StructManipulator structManipulator) {
+				return MessageFormat.format("{0}_1{1}", fb.getTypeName(), //$NON-NLS-1$
+						structManipulator.getStructType().getName());
 			}
 			return fb.getTypeName();
 		}

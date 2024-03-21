@@ -70,6 +70,9 @@ public class Constants {
 	public static final String WATCHES_RESPONSE = "<Response>\n  <Watches>\n    {0}\n  </Watches>\n</Response>"; //$NON-NLS-1$
 	public static final Response EMPTY_WATCHES_RESPONSE;
 
+	public static final String FB_NAME_FORMAT = "{0}{1}"; //$NON-NLS-1$
+	public static final String FB_PORT_NAME_FORMAT = "{0}{1}.{2}"; //$NON-NLS-1$
+
 	/* IEC61499 Status Codes */
 	public static final String MGM_RESPONSE_READY = "Ready"; //$NON-NLS-1$
 	public static final String MGM_RESPONSE_BAD_PARAMS = "BadParams"; //$NON-NLS-1$
@@ -86,18 +89,18 @@ public class Constants {
 	public static final String MGM_RESPONSE_UNKNOWN = "Unknown"; //$NON-NLS-1$
 
 	public static final Map<Long, String> RESPONSE_MAP = Map.ofEntries(
-			new AbstractMap.SimpleEntry<>(StatusCode.GOOD.getValue(), MGM_RESPONSE_READY),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_InvalidArgument, MGM_RESPONSE_BAD_PARAMS),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_Shutdown, MGM_RESPONSE_LOCAL_TERMINATION),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_ResourceUnavailable, MGM_RESPONSE_SYSTEM_TERMINATION),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_StateNotActive, MGM_RESPONSE_NOT_READY),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_NotImplemented, MGM_RESPONSE_UNSUPPORTED_CMD),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_DataTypeIdUnknown, MGM_RESPONSE_UNSUPPORTED_TYPE),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_NotFound, MGM_RESPONSE_NO_SUCH_OBJECT),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_NotSupported, MGM_RESPONSE_INVALID_OBJECT),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_RequestNotAllowed, MGM_RESPONSE_INVALID_OPERATION),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_InvalidState, MGM_RESPONSE_INVALID_STATE),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_TcpNotEnoughResources, MGM_RESPONSE_OVERFLOW));
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCode.GOOD.getValue()), MGM_RESPONSE_READY),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_InvalidArgument), MGM_RESPONSE_BAD_PARAMS),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_Shutdown), MGM_RESPONSE_LOCAL_TERMINATION),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_ResourceUnavailable), MGM_RESPONSE_SYSTEM_TERMINATION),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_StateNotActive), MGM_RESPONSE_NOT_READY),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_NotImplemented), MGM_RESPONSE_UNSUPPORTED_CMD),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_DataTypeIdUnknown), MGM_RESPONSE_UNSUPPORTED_TYPE),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_NotFound), MGM_RESPONSE_NO_SUCH_OBJECT),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_NotSupported), MGM_RESPONSE_INVALID_OBJECT),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_RequestNotAllowed), MGM_RESPONSE_INVALID_OPERATION),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_InvalidState), MGM_RESPONSE_INVALID_STATE),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_TcpNotEnoughResources), MGM_RESPONSE_OVERFLOW));
 
 	static {
 		// ensure that all entries in the empty response return appropriate empty values
