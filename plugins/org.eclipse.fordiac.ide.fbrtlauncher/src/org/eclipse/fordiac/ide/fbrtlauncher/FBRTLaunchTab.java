@@ -163,6 +163,9 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 
 	private static void updateLaunchArguments(final ILaunchConfigurationWorkingCopy configuration) {
 		try {
+			// update java executable attribute, e.g., using it on a new machine.
+			configuration.setAttribute(ATTR_LOCATION, getJavaRte());
+
 			final File runtimeFile = getRuntimeFile(configuration);
 			final String portNum = configuration.getAttribute(ATTR_FBRT_PORT, DEFAULT_FBRT_PORT);
 			final String devType = configuration.getAttribute(ATTR_FBRT_DEV_TYPE, DEFAULT_FBRT_DEV_TYPE);
