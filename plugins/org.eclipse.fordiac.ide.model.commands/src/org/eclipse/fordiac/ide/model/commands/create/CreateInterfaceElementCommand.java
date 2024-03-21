@@ -142,6 +142,7 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		} else {
 			finalizeCopyInterfaceElement();
 		}
+		createValue();
 		createAdapterFBCreateCommand();
 		insertElement();
 		newInterfaceElement.setName(NameRepository.createUniqueName(newInterfaceElement, name));
@@ -152,6 +153,14 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		if (null != adapterCreateCmd) {
 			adapterCreateCmd.execute();
 		}
+	}
+
+	private void createValue() {
+		if (newInterfaceElement instanceof final VarDeclaration varDecl && (isInput || isInOut)) {
+			varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			varDecl.getValue().setValue(value);
+		}
+
 	}
 
 	private void finalizeCopyInterfaceElement() {
@@ -166,10 +175,6 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		} else {
 			final VarDeclaration varDeclaration = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			ArraySizeHelper.setArraySize(varDeclaration, arraySize);
-			if (isInput || isInOut) {
-				varDeclaration.setValue(LibraryElementFactory.eINSTANCE.createValue());
-				varDeclaration.getValue().setValue(value);
-			}
 			newInterfaceElement = varDeclaration;
 		}
 

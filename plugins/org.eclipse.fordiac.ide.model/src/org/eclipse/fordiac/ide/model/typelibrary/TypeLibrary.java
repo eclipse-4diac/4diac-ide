@@ -83,10 +83,12 @@ import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorAdapterTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorFBTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorSubAppTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
@@ -457,6 +459,9 @@ public final class TypeLibrary {
 	}
 
 	private static TypeEntry createErrorTypeEntry(final FBType fbType) {
+		if (fbType instanceof AdapterType) {
+			return new ErrorAdapterTypeEntryImpl();
+		}
 		if (fbType instanceof SubAppType) {
 			return new ErrorSubAppTypeEntryImpl();
 		}
