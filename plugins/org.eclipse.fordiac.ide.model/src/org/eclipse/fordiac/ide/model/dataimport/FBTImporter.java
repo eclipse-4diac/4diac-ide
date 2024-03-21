@@ -1057,10 +1057,12 @@ public class FBTImporter extends TypeImporter {
 		if (null == typeName) {
 			throw new TypeImportException(Messages.FBTImporter_ADAPTER_DECLARATION_TYPE_EXCEPTION);
 		}
-		final AdapterTypeEntry entry = addDependency(getTypeLibrary().getAdapterTypeEntry(typeName));
-		if (null != entry) {
-			a.setType(entry.getType());
+		AdapterTypeEntry entry = addDependency(getTypeLibrary().getAdapterTypeEntry(typeName));
+		if (entry == null) {
+			entry = (AdapterTypeEntry) addDependency(
+					getTypeLibrary().createErrorTypeEntry(typeName, LibraryElementPackage.Literals.ADAPTER_TYPE));
 		}
+		a.setType(entry.getType());
 
 		createAdapterFB(a);
 		getXandY(a.getAdapterFB());
