@@ -546,7 +546,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_AddWatchFailed, fullFbName), e);
 		}
-		element.setOffline(Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(result.getStatusCode())));
+		final StatusCode opcuaStatus = result.getStatusCode();
+		logWatchStatus(opcuaStatus, resName, fullFbName);
+		element.setOffline(Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(opcuaStatus)));
 	}
 
 	@Override
@@ -566,7 +568,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RemoveWatchFailed, fullFbName), e);
 		}
-		element.setOffline(Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(result.getStatusCode())));
+		final StatusCode opcuaStatus = result.getStatusCode();
+		logWatchStatus(opcuaStatus, resName, fullFbName);
+		element.setOffline(Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(opcuaStatus)));
 	}
 
 	@Override
@@ -693,6 +697,14 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			} else {
 				listener.postResponseReceived(responseMessage, destination);
 			}
+		}
+	}
+
+	private static void logWatchStatus(final StatusCode opcuaStatus, final String resourceName,
+			final String monitoringElement) {
+		if (!opcuaStatus.isGood()) {
+			FordiacLogHelper.logInfo(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnWatch,
+					getIEC61499Status(opcuaStatus), resourceName, monitoringElement));
 		}
 	}
 
