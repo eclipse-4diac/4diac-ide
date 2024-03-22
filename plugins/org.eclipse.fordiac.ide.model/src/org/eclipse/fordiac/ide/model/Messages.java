@@ -120,6 +120,12 @@ public final class Messages extends NLS {
 
 	public static String VarDeclarationAnnotations_ShouldSpecifyValueForGenericVariableInInstance;
 
+	public static String VarDeclarationAnnotations_VarInOutLeftNotConnected;
+
+	public static String VarDeclarationAnnotations_VarInOutRightNotConnected;
+
+	public static String VarDeclarationAnnotations_VarInOutSubappNetwork;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

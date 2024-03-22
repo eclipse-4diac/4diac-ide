@@ -21,6 +21,8 @@ package org.eclipse.fordiac.ide.model.commands.delete;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.Messages;
@@ -171,9 +173,7 @@ public class DeleteConnectionCommand extends Command implements ScopedCommand {
 
 	@Override
 	public Set<EObject> getAffectedObjects() {
-		if (connectionParent != null) {
-			return Set.of(connectionParent);
-		}
-		return Set.of(connection);
+		return Stream.of(connectionParent, connection, source, destination).filter(Objects::nonNull)
+				.collect(Collectors.toUnmodifiableSet());
 	}
 }

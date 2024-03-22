@@ -834,6 +834,16 @@
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutIsWithed/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutIsWithed/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateVarInOutSubappInterface"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutSubappInterface(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSubappInterface/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSubappInterface/context"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateVarInOutSubappNetwork"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutSubappNetwork(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSubappNetwork/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSubappNetwork/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VersionInfo/author"/>
