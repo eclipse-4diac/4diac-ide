@@ -38,7 +38,10 @@ public class ExpandedSubappInterfaceLayout extends ToolbarLayout {
 
 	@Override
 	public void layout(final IFigure parent) {
-		positions.calculate(isInput);
+		if (positions.inputPositions == null || positions.outputPositions == null) {
+			// initial layout
+			positions.calculate();
+		}
 
 		final List<? extends IFigure> children = parent.getChildren();
 		final int numChildren = children.size();
@@ -93,12 +96,18 @@ public class ExpandedSubappInterfaceLayout extends ToolbarLayout {
 			final int minWidth = minSizes[i].width;
 			child = children.get(i);
 
-			final var entry = positions.positions.get(child);
+			final var entry = isInput ? positions.inputPositions.get(child) : positions.outputPositions.get(child);
 			final Rectangle newBounds;
-			if (entry.intValue() == Integer.MAX_VALUE) {
+
+			if (entry == null) {
+				// direct connections
+				newBounds = new Rectangle(x, positions.directPositions.get(child).intValue(), prefWidth, prefHeight);
+			} else if (entry.intValue() == Integer.MAX_VALUE) {
+				// unconnected pins
 				newBounds = new Rectangle(x, y, prefWidth, prefHeight);
-				y += newBounds.height + getSpacing();
+				y += newBounds.height;
 			} else {
+				// normal connections
 				newBounds = new Rectangle(x, entry.intValue(), prefWidth, prefHeight);
 			}
 
