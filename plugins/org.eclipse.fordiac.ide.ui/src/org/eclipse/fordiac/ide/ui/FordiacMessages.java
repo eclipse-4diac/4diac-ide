@@ -96,6 +96,7 @@ public final class FordiacMessages extends NLS {
 	public static String Width; // NOSONAR
 	public static String With; // NOSONAR
 	public static String Constants; // NOSONAR
+	public static String Retain; // NOSONAR
 
 	public static String DirectoryChooserControl_LABEL_Browse; // NOSONAR
 	public static String DirectoryChooserControl_LABEL_ChooseDirectory; // NOSONAR
