@@ -20,6 +20,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
+import java.util.Arrays;
+
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -36,12 +38,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
+import org.eclipse.fordiac.ide.ui.widget.DropdownSelectionWidget;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.widgets.Group;
 
 public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
+	final static String[] options = { "RETAIN", "NON_RETAIN", "" }; //$NON-NLS-1$
+
 	@Override
 	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement,
 			final boolean isInput) {
@@ -67,6 +72,8 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
+		outputTable.addConfiguration(new DropdownSelectionWidget(Arrays.asList(options)));
+		outputTable.configure();
 		outputTable.configure();
 	}
 
@@ -86,6 +93,7 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
+		inputTable.addConfiguration(new DropdownSelectionWidget(Arrays.asList(options)));
 		inputTable.configure();
 	}
 
