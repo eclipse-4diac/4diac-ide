@@ -46,6 +46,7 @@ public class Constants {
 	public static final NodeId READ_WATCHES_NODE = new NodeId(1, "readWatches"); //$NON-NLS-1$
 	public static final NodeId REMOVE_WATCH_NODE = new NodeId(1, "removeWatch"); //$NON-NLS-1$
 	public static final NodeId TRIGGER_EVENT_NODE = new NodeId(1, "triggerEvent"); //$NON-NLS-1$
+	public static final NodeId FORCE_VALUE_NODE = new NodeId(1, "forceValue"); //$NON-NLS-1$
 
 	/** Deployment Console Messages **/
 	public static final String CREATE_RESOURCE_INSTANCE = "<Request Action=\"CREATE RESOURCE\"><FB Name=\"{0}\" Type=\"{1}\" /></Request>"; //$NON-NLS-1$
@@ -66,6 +67,7 @@ public class Constants {
 	public static final String READ_WATCHES = "<Request Action=\"READ\"><Watches/></Request>"; //$NON-NLS-1$
 	public static final String REMOVE_WATCH = "<Request Action=\"REMOVE WATCH\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
 	public static final String TRIGGER_EVENT = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
+	public static final String FORCE_VALUE = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" Value=\"{1}\" /></Request>"; //$NON-NLS-1$
 
 	public static final String RESPONSE = "<Response Reason=\"{0}\" />\n"; //$NON-NLS-1$
 

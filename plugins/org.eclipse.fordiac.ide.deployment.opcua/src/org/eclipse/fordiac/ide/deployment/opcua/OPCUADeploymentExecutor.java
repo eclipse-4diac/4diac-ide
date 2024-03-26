@@ -608,7 +608,6 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public void triggerEvent(final MonitoringBaseElement element) throws DeploymentException {
-		// TODO Auto-generated method stub
 		if (availableResources.isEmpty() && !getResourcesHandle()) {
 			return;
 		}
@@ -622,7 +621,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			result = sendREQ(resName, request, message).get();
 		} catch (final ExecutionException e) {
 			throw new DeploymentException(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_AddWatchFailed, fullFbName), e);
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_TriggerEventFailed, fullFbName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 			FordiacLogHelper.logError(
@@ -634,8 +633,27 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public void forceValue(final MonitoringBaseElement element, final String value) throws DeploymentException {
-		// TODO Auto-generated method stub
-
+		if (availableResources.isEmpty() && !getResourcesHandle()) {
+			return;
+		}
+		final String fullFbName = element.getQualifiedString();
+		final String resName = element.getResourceString();
+		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
+				Constants.FORCE_VALUE_NODE, new Variant[] { new Variant(fullFbName), new Variant(value) });
+		final String message = MessageFormat.format(Constants.FORCE_VALUE, fullFbName);
+		CallMethodResult result;
+		try {
+			result = sendREQ(resName, request, message).get();
+		} catch (final ExecutionException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_ForceValueFailed, fullFbName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			return;
+		}
+		logResponseStatus(result.getStatusCode(), resName, fullFbName);
 	}
 
 	@Override
