@@ -658,8 +658,27 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public void clearForce(final MonitoringBaseElement element) throws DeploymentException {
-		// TODO Auto-generated method stub
-
+		if (availableResources.isEmpty() && !getResourcesHandle()) {
+			return;
+		}
+		final String fullFbName = element.getQualifiedString();
+		final String resName = element.getResourceString();
+		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
+				Constants.CLEAR_FORCE_NODE, new Variant[] { new Variant(fullFbName) });
+		final String message = MessageFormat.format(Constants.CLEAR_FORCE, fullFbName);
+		CallMethodResult result;
+		try {
+			result = sendREQ(resName, request, message).get();
+		} catch (final ExecutionException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_ClearForceFailed, fullFbName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			return;
+		}
+		logResponseStatus(result.getStatusCode(), resName, fullFbName);
 	}
 
 	/**************************************************************************
