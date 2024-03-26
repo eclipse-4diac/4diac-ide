@@ -45,6 +45,8 @@ public final class InternalAttributeDeclarations {
 	public static final AttributeDeclaration RETAIN = createAttributeDeclaration(LibraryElementTags.RETAIN_ATTRIBUTE,
 			ElementaryTypes.USINT);
 
+	private static final List<AttributeDeclaration> allAttributes = List.of(VAR_CONFIG, VISIBLE, UNFOLDED, RETAIN);
+
 	private static AttributeDeclaration createAttributeDeclaration(final String name, final DataType type) {
 		final AttributeDeclaration declaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
 		declaration.setName(name);
@@ -62,7 +64,7 @@ public final class InternalAttributeDeclarations {
 	}
 
 	public static List<AttributeDeclaration> getAllInternalAttributes() {
-		return List.of(VAR_CONFIG, VISIBLE, UNFOLDED, RETAIN);
+		return allAttributes;
 	}
 
 	public static boolean isInternalAttribue(final AttributeDeclaration declaration) {
