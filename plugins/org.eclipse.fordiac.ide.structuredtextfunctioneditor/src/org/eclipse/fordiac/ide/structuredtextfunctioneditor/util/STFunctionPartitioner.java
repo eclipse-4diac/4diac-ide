@@ -21,6 +21,7 @@ import java.util.stream.IntStream;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -81,8 +82,8 @@ public class STFunctionPartitioner implements STCorePartitioner {
 			builder.append("PACKAGE "); //$NON-NLS-1$
 			builder.append(packageName);
 			builder.append(";"); //$NON-NLS-1$
-			builder.append(System.lineSeparator());
-			builder.append(System.lineSeparator());
+			builder.append(CommonElementExporter.LINE_END);
+			builder.append(CommonElementExporter.LINE_END);
 		}
 		builder.append("FUNCTION "); //$NON-NLS-1$
 		builder.append(fbType.getName());
@@ -91,12 +92,12 @@ public class STFunctionPartitioner implements STCorePartitioner {
 			builder.append(" : "); //$NON-NLS-1$
 			builder.append(returnType.getName());
 		}
-		builder.append(System.lineSeparator());
+		builder.append(CommonElementExporter.LINE_END);
 		generateFunctionParameters("INPUT", fbType.getInputParameters(), builder); //$NON-NLS-1$
 		generateFunctionParameters("IN_OUT", fbType.getInOutParameters(), builder); //$NON-NLS-1$
 		generateFunctionParameters("OUTPUT", fbType.getOutputParameters(), builder); //$NON-NLS-1$
 		builder.append("END_FUNCTION"); //$NON-NLS-1$
-		builder.append(System.lineSeparator());
+		builder.append(CommonElementExporter.LINE_END);
 		return builder.toString();
 	}
 
@@ -107,17 +108,17 @@ public class STFunctionPartitioner implements STCorePartitioner {
 		}
 		builder.append("VAR_"); //$NON-NLS-1$
 		builder.append(type);
-		builder.append(System.lineSeparator());
+		builder.append(CommonElementExporter.LINE_END);
 		parameters.stream().forEach(param -> {
 			builder.append("    "); //$NON-NLS-1$
 			builder.append(param.getName());
 			builder.append(" : "); //$NON-NLS-1$
 			builder.append(STCoreUtil.getFeatureType(param).getName());
 			builder.append(";"); //$NON-NLS-1$
-			builder.append(System.lineSeparator());
+			builder.append(CommonElementExporter.LINE_END);
 		});
 		builder.append("END_VAR"); //$NON-NLS-1$
-		builder.append(System.lineSeparator());
+		builder.append(CommonElementExporter.LINE_END);
 	}
 
 	protected static String generateFunctionVariable(final VarDeclaration varDeclaration) {

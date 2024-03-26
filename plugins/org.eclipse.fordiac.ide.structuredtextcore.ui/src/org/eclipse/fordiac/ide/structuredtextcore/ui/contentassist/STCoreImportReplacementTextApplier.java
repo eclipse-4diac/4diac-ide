@@ -23,6 +23,7 @@ import org.eclipse.jface.text.DocumentRewriteSession;
 import org.eclipse.jface.text.DocumentRewriteSessionType;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension4;
+import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.XtextResource;
@@ -33,10 +34,13 @@ public class STCoreImportReplacementTextApplier implements IReplacementTextAppli
 
 	private final XtextResource resource;
 	private final String importedNamespace;
+	private final IWhitespaceInformationProvider whitespaceInformationProvider;
 
-	public STCoreImportReplacementTextApplier(final XtextResource resource, final String importedNamespace) {
+	public STCoreImportReplacementTextApplier(final XtextResource resource, final String importedNamespace,
+			final IWhitespaceInformationProvider whitespaceInformationProvider) {
 		this.resource = resource;
 		this.importedNamespace = importedNamespace;
+		this.whitespaceInformationProvider = whitespaceInformationProvider;
 	}
 
 	@Override
@@ -68,15 +72,16 @@ public class STCoreImportReplacementTextApplier implements IReplacementTextAppli
 			throws BadLocationException {
 		final STSource source = getSource();
 		final StringBuilder importString = getImportString();
+		final String lineSeparator = getLineSeparator();
 		int offset = findImportOffset(source);
 		if (offset > 0) {
-			importString.insert(0, System.lineSeparator());
+			importString.insert(0, lineSeparator);
 		} else if ((offset = findPackageOffset(source)) > 0) {
-			importString.insert(0, System.lineSeparator());
-			importString.insert(0, System.lineSeparator());
+			importString.insert(0, lineSeparator);
+			importString.insert(0, lineSeparator);
 		} else {
-			importString.append(System.lineSeparator());
-			importString.append(System.lineSeparator());
+			importString.append(lineSeparator);
+			importString.append(lineSeparator);
 		}
 		document.replace(offset, 0, importString.toString());
 		proposal.shiftOffset(importString.length());
@@ -129,6 +134,10 @@ public class STCoreImportReplacementTextApplier implements IReplacementTextAppli
 			return importsFeature;
 		}
 		return null;
+	}
+
+	protected String getLineSeparator() {
+		return whitespaceInformationProvider.getLineSeparatorInformation(resource.getURI()).getLineSeparator();
 	}
 
 	protected STSource getSource() {
