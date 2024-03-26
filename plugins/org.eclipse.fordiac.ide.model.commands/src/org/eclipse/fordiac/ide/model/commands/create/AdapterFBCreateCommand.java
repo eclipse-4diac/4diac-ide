@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -43,11 +42,8 @@ class AdapterFBCreateCommand extends FBCreateCommand {
 			// we are creating the adapter FB in a CFB we need to set the adapter network fb
 			// field here, nothing needs to be done in undo or redo
 			adapterDecl.setAdapterNetworkFB(getAdapterFB());
-		} else {
-			adapterDecl.setAdapterFB(getAdapterFB());
 		}
 		super.execute();
-
 	}
 
 	@Override
@@ -63,11 +59,6 @@ class AdapterFBCreateCommand extends FBCreateCommand {
 			return cFBType.getFBNetwork();
 		}
 		return null;
-	}
-
-	@Override
-	protected InterfaceList createInterfaceList() {
-		return getAdapterFB().getType().getInterfaceList().copy();
 	}
 
 }

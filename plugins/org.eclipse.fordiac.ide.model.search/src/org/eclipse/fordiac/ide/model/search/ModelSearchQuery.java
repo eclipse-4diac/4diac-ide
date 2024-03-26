@@ -96,13 +96,7 @@ public class ModelSearchQuery implements ISearchQuery {
 		searchResources(sys);
 	}
 
-	/**
-	 * (mis)used for search in 4diac Analytics until this functionality is
-	 * refactored out of this class
-	 *
-	 * @param app
-	 */
-	public void searchApplication(final Application app) {
+	private void searchApplication(final Application app) {
 		if (matchEObject(app)) {
 			searchResult.addResult(app);
 		}

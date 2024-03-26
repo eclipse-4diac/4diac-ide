@@ -23,31 +23,5 @@
             class="org.eclipse.fordiac.ide.fortelauncher.preferences.PreferenceInitializer">
       </initializer>
    </extension>
-   
-	<extension point="org.eclipse.debug.core.launchConfigurationTypes">
-		<launchConfigurationType
-    		name="Local 4diac FORTE"
-    		delegate="org.eclipse.core.externaltools.internal.launchConfigurations.ProgramLaunchDelegate"
-    		modes="run"               
-    		id="org.eclipse.fordiac.ide.runLocalFORTE">        
-		</launchConfigurationType>
-	</extension>
-
-	<extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
-		<launchConfigurationTabGroup
-			type="org.eclipse.fordiac.ide.runLocalFORTE"
-			class="org.eclipse.fordiac.ide.fortelauncher.ForteLaunchGroup"
-			id="org.eclipse.fordiac.ide.fortelauncher.launchConfigurationTabGroup">
-		</launchConfigurationTabGroup>
-	</extension>
-	
-	<extension
-         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
-      <launchConfigurationTypeImage
-            configTypeID="org.eclipse.fordiac.ide.runLocalFORTE"
-			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/4diacFORTE.png"
-            id="org.eclipse.fordiac.ide.launchConfigurationTypeImage.runLocalFORTE">
-      </launchConfigurationTypeImage>
-   </extension>
 
 </plugin>

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -30,16 +30,11 @@ public abstract class AbstractVariable<T extends Value> implements Variable<T> {
 
 	@Override
 	public String toString() {
-		return toString(true);
-	}
-
-	@Override
-	public String toString(final boolean pretty) {
 		if (type instanceof final DataType dataType && IecTypes.GenericTypes.isAnyType(dataType)
 				&& !(getValue().getType() instanceof AnyDurationType || getValue().getType() instanceof AnyDateType)) {
-			return getValue().getType().getName() + '#' + getValue().toString(pretty);
+			return getValue().getType().getName() + '#' + getValue();
 		}
-		return getValue().toString(pretty);
+		return getValue().toString();
 	}
 
 	@Override

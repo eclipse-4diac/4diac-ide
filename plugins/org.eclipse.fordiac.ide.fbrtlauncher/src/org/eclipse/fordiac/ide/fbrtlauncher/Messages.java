@@ -20,7 +20,7 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fbrtlauncher.messages"; //$NON-NLS-1$
 
@@ -44,12 +44,6 @@ public final class Messages extends NLS {
 	public static String FBRTPreferencePage_FBRTLocation;
 
 	public static String FBRTPreferencePage_FBRTPreferencePage;
-
-	public static String FBRTLaunchTab_TabName;
-	public static String FBRTLaunchTab_DeviceType;
-	public static String FBRTLaunchTab_Port;
-
-	public static String FBRTLaunchTab_NoFBRTJarSet;
 
 	static {
 		// initialize resource bundle

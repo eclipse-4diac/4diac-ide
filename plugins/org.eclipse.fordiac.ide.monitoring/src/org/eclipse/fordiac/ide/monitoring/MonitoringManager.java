@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2024 Profactor GmbH, AIT, TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University
- *                          Martin Erich Jobst
+ * Copyright (c) 2012 - 2023 Profactor GmbH, AIT, TU Wien ACIN, fortiss GmbH,
+ * 							 Johannes Kepler University
+ * 							 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -209,14 +209,15 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	}
 
 	public Collection<MonitoringBaseElement> getElementsToMonitor(final AutomationSystem sys) {
-		if (sys != null) {
+		if(sys != null) {
 			final SystemMonitoringData sysData = systemMonitoringData.get(sys);
-			if (sysData != null) {
+			if(sysData != null) {
 				return sysData.getMonitoredElements();
 			}
 		}
 		return Collections.emptyList();
 	}
+
 
 	/**
 	 * Enable system.
@@ -268,13 +269,11 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		return getSystemMonitoringData(system).isMonitoringForSystemEnabled();
 	}
 
-	/**
-	 * Contains system.
+	/** Contains system.
 	 *
 	 * @param system the system
 	 *
-	 * @return true, if successful
-	 */
+	 * @return true, if successful */
 	public boolean monitoringForSystemEnabled(final AutomationSystem system) {
 		final SystemMonitoringData data = getSystemMonitoringData(system);
 		return data.isMonitoringForSystemEnabled();
@@ -292,7 +291,9 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	public void triggerEvent(final IInterfaceElement interfaceElement) {
 		final MonitoringBaseElement element = getMonitoringElement(interfaceElement);
 
-		if (element instanceof final MonitoringElement monitoringElement) {
+		if (element instanceof MonitoringElement) {
+			final MonitoringElement monitoringElement = (MonitoringElement) element;
+
 			final List<MonitoringElement> elements = new ArrayList<>();
 			final SystemMonitoringData data = getSystemMonitoringData(monitoringElement.getPort().getSystem());
 
@@ -310,6 +311,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 			} else {
 				elements.add((MonitoringElement) element);
 			}
+
 
 			for (final MonitoringElement me : elements) {
 				final IDeviceManagementInteractor devMgmInteractor = data.getDevMgmInteractor(me.getPort().getDevice());
@@ -342,7 +344,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		final IInterfaceElement interfaceElement = element.getPort().getInterfaceElement();
 		if (interfaceElement instanceof VarDeclaration) {
 			try {
-				value = VariableOperations.newVariable((VarDeclaration) interfaceElement, value).toString(false);
+				value = VariableOperations.newVariable((VarDeclaration) interfaceElement, value).toString();
 			} catch (final Exception e) {
 				showInvalidValueErrorMsg(element, value);
 				return;
@@ -350,7 +352,8 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		}
 
 		final SystemMonitoringData data = getSystemMonitoringData(automationSystem);
-		final IDeviceManagementInteractor devMgmInteractor = data.getDevMgmInteractor(device);
+		final IDeviceManagementInteractor devMgmInteractor = data
+				.getDevMgmInteractor(device);
 
 		if (devMgmInteractor != null) {
 			writeElements(element, value, devMgmInteractor);
@@ -442,7 +445,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 	private static void showSystemNotFoundErrorMsg(final MonitoringElement element) {
 		MessageDialog.openError(Display.getDefault().getActiveShell(), "Error", //$NON-NLS-1$
-				"System could not be found for FB port: " + element.getPort() + "."); //$NON-NLS-1$//$NON-NLS-2$
+				"System could not be found for FB port: " + element.getPort() + ".");  //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	private static void showInvalidValueErrorMsg(final MonitoringElement element, final String value) {

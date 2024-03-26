@@ -23,7 +23,6 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -105,7 +104,7 @@ public class ConnectionAnnotations {
 		if (isDuplicateConnection(connection)) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-						LibraryElementValidator.CONNECTION__VALIDATE_DUPLICATE,
+						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_DESTINATION_ENDPOINT,
 						MessageFormat.format(Messages.ConnectionAnnotations_DuplicateConnection,
 								connection.getSource().getQualifiedName(),
 								connection.getDestination().getQualifiedName()),
@@ -121,23 +120,8 @@ public class ConnectionAnnotations {
 		if (!LinkConstraints.typeCheck(connection.getSource(), connection.getDestination())) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-						LibraryElementValidator.CONNECTION__VALIDATE_TYPE_MISMATCH,
+						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_DESTINATION_ENDPOINT,
 						MessageFormat.format(Messages.ConnectionAnnotations_TypeMismatch,
-								connection.getSource().getQualifiedName(), connection.getSource().getFullTypeName(),
-								connection.getDestination().getQualifiedName(),
-								connection.getDestination().getFullTypeName()),
-						FordiacMarkerHelper.getDiagnosticData(connection)));
-			}
-			return false;
-		}
-		if (connection.getSource() != null && connection.getDestination() != null
-				&& GenericTypes.isAnyType(connection.getSource().getType())
-				&& GenericTypes.isAnyType(connection.getDestination().getType())) {
-			if (diagnostics != null) {
-				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-						LibraryElementValidator.CONNECTION__VALIDATE_TYPE_MISMATCH,
-						MessageFormat.format(
-								Messages.ConnectionAnnotations_GenericEndpoints,
 								connection.getSource().getQualifiedName(), connection.getSource().getFullTypeName(),
 								connection.getDestination().getQualifiedName(),
 								connection.getDestination().getFullTypeName()),

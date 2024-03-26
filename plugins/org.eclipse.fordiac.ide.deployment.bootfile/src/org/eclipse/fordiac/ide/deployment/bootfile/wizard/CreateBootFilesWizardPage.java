@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.ui.widget.DirectoryChooserControl;
+import org.eclipse.fordiac.ide.ui.DirectoryChooserControl;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -99,7 +99,7 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 		stretch.horizontalAlignment = SWT.FILL;
 
 		dcc = new DirectoryChooserControl(composite, SWT.NONE, Messages.CreateBootFilesWizardPage_Destination);
-		dcc.addChooserValueChangedListener(newDirectory -> updatePageCompletion());
+		dcc.addDirectoryChangedListener(newDirectory -> updatePageCompletion());
 		dcc.setLayoutData(stretch);
 	}
 
@@ -131,7 +131,7 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 
 	@Override
 	protected boolean validateDestinationGroup() {
-		if (dcc.getValue() == null || "".equals(dcc.getValue())) { //$NON-NLS-1$
+		if (dcc.getDirectory() == null || "".equals(dcc.getDirectory())) { //$NON-NLS-1$
 			setErrorMessage(Messages.CreateBootFilesWizardPage_DestinationNotSelected);
 			return false;
 		}
@@ -172,11 +172,11 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 	 * @param dir the new directory
 	 */
 	public void setDirectory(final String dir) {
-		dcc.setValue(dir);
+		dcc.setDirectory(dir);
 	}
 
 	public String getDirectory() {
-		return dcc.getValue();
+		return dcc.getDirectory();
 	}
 
 	private void checkSelectedElements() {

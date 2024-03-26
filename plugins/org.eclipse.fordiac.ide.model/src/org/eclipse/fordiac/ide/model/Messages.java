@@ -30,8 +30,6 @@ public final class Messages extends NLS {
 	public static String ConnectionAnnotations_DestinationElementMissing;
 	public static String ConnectionAnnotations_DestinationEndpointMissing;
 	public static String ConnectionAnnotations_DuplicateConnection;
-
-	public static String ConnectionAnnotations_GenericEndpoints;
 	public static String ConnectionAnnotations_SourceElementMissing;
 	public static String ConnectionAnnotations_SourceEndpointMissing;
 	public static String ConnectionAnnotations_TypeMismatch;

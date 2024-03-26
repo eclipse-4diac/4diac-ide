@@ -29,7 +29,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.fordiac.ide.model.data.BoolType;
 import org.eclipse.fordiac.ide.model.data.IntType;
-import org.eclipse.fordiac.ide.model.data.StringType;
 import org.eclipse.fordiac.ide.model.data.UintType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -84,12 +83,6 @@ public class ExportServiceSequenceToCppTest {
 		for (final ServiceSequence sequence : serviceSeq) {
 			writer.append(MessageFormat.format(CppBoostTestConstants.testCase, sequence.getName()));
 			writer.newLine();
-			final int stateID = fb.getECC().getECState().indexOf(fb.getECC().getECState().stream()
-					.filter(state -> state.getName().equals(sequence.getStartState())).findFirst().orElse(null));
-			if (stateID > 0) {
-				writer.append(MessageFormat.format(CppBoostTestConstants.setECCState, stateID));
-				writer.newLine();
-			}
 			for (final ServiceTransaction transaction : sequence.getServiceTransaction()) {
 				parseAndAddParameters(writer, transaction.getInputPrimitive().getParameters());
 
@@ -121,7 +114,7 @@ public class ExportServiceSequenceToCppTest {
 									param.subSequence(param.indexOf("=") + 1, param.indexOf("(")).toString()));
 					writer.append(MessageFormat.format(CppBoostTestConstants.boostAssertEQUAL,
 							param.subSequence(0, param.indexOf(":")),
-							param.subSequence(param.indexOf("=") + 1, param.length()).toString().replace("'", "\"")));
+							param.subSequence(param.indexOf("=") + 1, param.length())));
 					writer.newLine();
 				}
 			}
@@ -198,9 +191,6 @@ public class ExportServiceSequenceToCppTest {
 		if (dataType instanceof UintType) {
 			return "CIEC_UINT";
 		}
-		if (dataType instanceof StringType) {
-			return "CIEC_STRING";
-		}
 		return "";
 	}
 
@@ -209,7 +199,6 @@ public class ExportServiceSequenceToCppTest {
 		case "BOOL" -> "CIEC_BOOL";
 		case "UINT" -> "CIEC_UINT";
 		case "INT" -> "CIEC_INT";
-		case "STRING" -> "CIEC_STRING";
 		default -> "";
 		};
 	}

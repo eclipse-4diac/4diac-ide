@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.eclipse.fordiac.ide.model.data.ArrayType;
@@ -84,50 +83,40 @@ public final class ArrayValue implements AnyDerivedValue, Iterable<Value> {
 
 	@Override
 	public String toString() {
-		return toString(true);
-	}
-
-	@Override
-	public String toString(final boolean pretty) {
 		if (elements.size() > getCollapseElementsSize()) {
-			return toCollapsedString(pretty);
+			return toCollapsedString();
 		}
-		return elements.stream().map(element -> element.toString(pretty))
-				.collect(Collectors.joining(pretty ? ", " : ",", "[", "]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		return elements.toString();
 	}
 
 	public String toCollapsedString() {
-		return toCollapsedString(true);
-	}
-
-	public String toCollapsedString(final boolean pretty) {
-		final StringJoiner result = new StringJoiner(pretty ? ", " : ",", "[", "]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		final StringJoiner result = new StringJoiner(", ", "[", "]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		int count = 0;
 		Value lastValue = null;
 		for (final Variable<?> element : elements) {
 			if (lastValue != null && !Objects.equals(lastValue, element.getValue())) {
-				result.add(toElementString(lastValue, count, pretty));
+				result.add(toElementString(lastValue, count));
 				count = 0;
 			}
 			lastValue = element.getValue();
 			count++;
 		}
 		if (lastValue != null) {
-			result.add(toElementString(lastValue, count, pretty));
+			result.add(toElementString(lastValue, count));
 		}
 		return result.toString();
 	}
 
-	protected static CharSequence toElementString(final Value value, final int count, final boolean pretty) {
+	protected static CharSequence toElementString(final Value value, final int count) {
 		if (count > 1) {
 			final StringBuilder builder = new StringBuilder();
 			builder.append(count);
 			builder.append("("); //$NON-NLS-1$
-			builder.append(value.toString(pretty));
+			builder.append(value);
 			builder.append(")"); //$NON-NLS-1$
 			return builder;
 		}
-		return value.toString(pretty);
+		return value.toString();
 	}
 
 	@SuppressWarnings("static-method")

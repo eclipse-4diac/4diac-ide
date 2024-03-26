@@ -211,9 +211,6 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 				if (selectedElement instanceof final FB fb) {
 					refElement = fb;
 					selectedElement = refElement.eContainer().eContainer();
-				} else if (selectedElement instanceof final SubApp subApp) {
-					refElement = subApp;
-					selectedElement = refElement.eContainer().eContainer();
 				}
 				getBreadcrumb().setInput(selectedElement);
 				if (null != refElement) {
