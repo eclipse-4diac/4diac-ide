@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.ui.editors.TypeEntryAdapter;
@@ -274,7 +275,6 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		if (file.exists()) {
 			attributeTypeEntry = (AttributeTypeEntry) TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			attributeDeclaration = attributeTypeEntry.getTypeEditable();
-			setPartName(attributeTypeEntry.getFile().getName());
 			return attributeDeclaration == null;
 		}
 		return true; // import failed
@@ -333,7 +333,8 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 
 		final AnyDerivedType type = attributeDeclaration.getType();
 		if (type instanceof final StructuredType structType) {
-			structComposite = new StructEditingComposite(editorComposite, commandStack, structType, annotationModel);
+			structComposite = new StructEditingComposite(editorComposite, commandStack, structType, annotationModel,
+					getSite());
 			getSite().setSelectionProvider(structComposite.getSelectionProvider());
 			structComposite.setTitel(Messages.StructViewingComposite_Headline);
 			comboBox.select(STRUCT_EDITOR_INDEX);
@@ -359,7 +360,7 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 			directlyDerivedTypeComposite.requestLayout();
 		} else if (directlyDerivedTypeComposite != null && type instanceof final StructuredType structType) {
 			structComposite = new StructEditingComposite(directlyDerivedTypeComposite.getParent(), commandStack,
-					structType, annotationModel);
+					structType, annotationModel, getSite());
 			getSite().setSelectionProvider(structComposite.getSelectionProvider());
 			structComposite.setTitel(Messages.StructViewingComposite_Headline);
 
@@ -490,6 +491,9 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 
 	@Override
 	public void setInput(final IEditorInput input) {
+		if (input != null) {
+			setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
+		}
 		setInputWithNotify(input);
 	}
 

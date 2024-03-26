@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2017 fortiss GmbH
+ * Copyright (c) 2014, 2024 fortiss GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +12,8 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Daniel Lindhuber - safe type deletion
+ *   Martin Erich Jobst
+ *     - participate only if a type entry exists
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
@@ -28,15 +31,15 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.DeleteParticipant;
 
-public class DeleteFBTypeParticipant extends DeleteParticipant {
+public class DeleteTypeRefactoringParticipant extends DeleteParticipant {
 
-	IFile file = null;
+	private TypeEntry typeEntry;
 
 	@Override
 	protected boolean initialize(final Object element) {
-		if (element instanceof final IFile targetFile) {
-			this.file = targetFile;
-			return true;
+		if (element instanceof final IFile file) {
+			typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+			return typeEntry != null;
 		}
 		return false;
 	}
@@ -56,7 +59,6 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		try {
 			pm.beginTask("Creating change...", 1); //$NON-NLS-1$
-			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 
 			if (typeEntry.getType() instanceof final StructuredType struct) {
 				return new SafeStructDeletionChange(struct);

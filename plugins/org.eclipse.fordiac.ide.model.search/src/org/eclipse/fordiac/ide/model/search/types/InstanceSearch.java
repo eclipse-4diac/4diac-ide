@@ -168,14 +168,14 @@ public class InstanceSearch {
 		allBlockTypes.addAll(context.getFBTypes());
 		allBlockTypes.addAll(context.getSubappTypes());
 
-		allBlockTypes.parallelStream().forEach(uri -> match(context.getLibraryElement(uri)));
+		allBlockTypes.stream().forEach(uri -> match(context.getLibraryElement(uri)));
 		return searchResult;
 	}
 
 	public Set<INamedElement> performInternalFBSearch(final TypeLibrary typeLibrary) {
 		searchResult = new HashSet<>();
 		// @formatter:off
-		typeLibrary.getFbTypes().values().parallelStream()
+		typeLibrary.getFbTypes().values().stream()
 			.map(FBTypeEntry::getTypeEditable)
 			.filter(BaseFBType.class::isInstance)
 			.map(BaseFBType.class::cast)

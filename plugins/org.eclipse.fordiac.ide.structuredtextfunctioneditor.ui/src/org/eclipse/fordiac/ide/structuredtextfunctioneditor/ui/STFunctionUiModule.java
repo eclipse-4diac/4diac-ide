@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvide
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreLinkedPositionGroupCalculator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRecordingXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreReferenceUpdater;
@@ -45,7 +44,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedEm
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreResourceLifecycleManager;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSimpleNameProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSyncUtil;
@@ -60,6 +58,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreResourceUI
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocument;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocumentUpdaterChangeAdapterFilter;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionLinkedPositionGroupCalculator;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionRenameStrategy;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
@@ -263,7 +263,7 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	@Override
 	public Class<? extends ILinkedPositionGroupCalculator> bindILinkedPositionGroupCalculator() {
-		return STCoreLinkedPositionGroupCalculator.class;
+		return STFunctionLinkedPositionGroupCalculator.class;
 	}
 
 	public Class<? extends ISimpleNameProvider> bindISimpleNameProvider() {
@@ -272,7 +272,7 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	@Override
 	public Class<? extends IRenameStrategy2> bindIRenameStrategy2() {
-		return STCoreRenameStrategy.class;
+		return STFunctionRenameStrategy.class;
 	}
 
 	public Class<? extends IRenameNameValidator> bindIRenameNameValidator() {

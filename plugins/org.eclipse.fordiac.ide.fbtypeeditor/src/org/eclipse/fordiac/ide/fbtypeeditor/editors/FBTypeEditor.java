@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
+import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
@@ -100,6 +101,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
+import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -120,7 +122,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	private Collection<IFBTEditorPart> editors;
 	private TypeEntry typeEntry;
 	private FBType fbType;
-	private FBTypeContentOutline contentOutline = null;
+	private IContentOutlinePage contentOutline = null;
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
@@ -284,8 +286,6 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			throw new PartInitException(new Status(IStatus.ERROR, FrameworkUtil.getBundle(getClass()).getSymbolicName(),
 					Messages.FBTypeEditor_TypeFileDoesnotExist));
 		}
-
-		setPartName(typeEntry.getTypeName());
 
 		typeEntry.eAdapters().add(adapter);
 
@@ -472,12 +472,8 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == IContentOutlinePage.class) {
-			if (null == contentOutline) {
-				contentOutline = new FBTypeContentOutline(fbType, this);
-			}
-			return adapter.cast(contentOutline);
+			return adapter.cast(getOutlinePage());
 		}
-
 		if (adapter == FBType.class || adapter == LibraryElement.class) {
 			return adapter.cast(getFBType());
 		}
@@ -505,6 +501,15 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			return result;
 		}
 		return null;
+	}
+
+	protected IContentOutlinePage getOutlinePage() {
+		if (null == contentOutline) {
+			contentOutline = (fbType instanceof CompositeFBType)
+					? new DiagramOutlinePage(getActiveEditor().getAdapter(GraphicalViewer.class))
+					: new FBTypeContentOutline(fbType, this);
+		}
+		return contentOutline;
 	}
 
 	private static <T> boolean shouldCheckAllEditors(final Class<T> adapter) {
@@ -595,6 +600,14 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	protected void pageChange(final int newPageIndex) {
 		super.pageChange(newPageIndex);
 		getSite().getPage().getNavigationHistory().markLocation(this);
+		updateOutline(newPageIndex);
+	}
+
+	protected void updateOutline(final int newPageIndex) {
+		if ((newPageIndex != -1) && (contentOutline instanceof final DiagramOutlinePage diagOutline)) {
+			final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
+			diagOutline.viewerChanged(viewer);
+		}
 	}
 
 	@Override
@@ -609,6 +622,14 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 
 	@Override
 	public void setInput(final IEditorInput input) {
+		if (input != null) {
+			setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
+			if (editors != null) {
+				final FBTypeEditorInput subInput = getFBTypeEditorInput();
+				editors.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
+						.forEach(e -> e.setInput(subInput));
+			}
+		}
 		setInputWithNotify(input);
 	}
 

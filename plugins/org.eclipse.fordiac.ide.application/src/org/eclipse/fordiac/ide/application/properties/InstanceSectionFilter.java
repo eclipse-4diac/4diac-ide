@@ -48,7 +48,7 @@ public class InstanceSectionFilter implements IFilter {
 			candidate = instanceName.getRefElement();
 		}
 
-		if (candidate instanceof final SubApp subapp) {
+		if (candidate instanceof final SubApp subapp && !subapp.isTyped()) {
 			return null;
 		}
 

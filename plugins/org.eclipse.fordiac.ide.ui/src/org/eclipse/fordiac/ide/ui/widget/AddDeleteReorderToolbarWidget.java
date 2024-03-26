@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.menus.IMenuService;
+import org.eclipse.ui.services.IServiceLocator;
 
 public class AddDeleteReorderToolbarWidget extends AddDeleteReorderListWidget {
 
@@ -29,14 +30,19 @@ public class AddDeleteReorderToolbarWidget extends AddDeleteReorderListWidget {
 
 	@Override
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
+		createControls(parent, widgetFactory, PlatformUI.getWorkbench());
+	}
+
+	public void createControls(final Composite parent, final FormToolkit widgetFactory,
+			final IServiceLocator serviceLocator) {
 		super.createControls(parent, widgetFactory);
 
 		toolBarManager = new ToolBarManager(SWT.FLAT | SWT.VERTICAL);
-		final IMenuService menuService = PlatformUI.getWorkbench().getService(IMenuService.class);
-		menuService.populateContributionManager(toolBarManager, LOCATION);
 		final ToolBar control = toolBarManager.createControl(container);
 		widgetFactory.adapt(control);
 		GridDataFactory.fillDefaults().grab(true, false).indent(0, MAJOR_BUTTON_INTERLEAVE).applyTo(control);
+		final IMenuService menuService = serviceLocator.getService(IMenuService.class);
+		menuService.populateContributionManager(toolBarManager, LOCATION);
 	}
 
 	public void dispose() {

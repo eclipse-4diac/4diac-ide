@@ -194,7 +194,7 @@ public class ModelSearchQuery implements ISearchQuery {
 		}
 		if (modelQuerySpec.isCheckedType()) {
 			if (modelElement instanceof final TypedConfigureableObject config) {
-				return compareStrings(config.getFullTypeName());
+				return compareStrings(config.getTypeName());
 			}
 			if (modelElement instanceof final LibraryElement namElem) {
 				return compareStrings(namElem.getName());
@@ -240,9 +240,13 @@ public class ModelSearchQuery implements ISearchQuery {
 	@Override
 	public ModelSearchResult getSearchResult() {
 		if (searchResult == null) {
-			searchResult = new ModelSearchResult(this);
+			searchResult = createModelSearchResult();
 		}
 		return searchResult;
+	}
+
+	protected ModelSearchResult createModelSearchResult() {
+		return new ModelSearchResult(this);
 	}
 
 }

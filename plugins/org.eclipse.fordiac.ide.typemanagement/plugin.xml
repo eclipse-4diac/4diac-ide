@@ -545,7 +545,7 @@
    <extension
          point="org.eclipse.ltk.core.refactoring.deleteParticipants">
       <deleteParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeParticipant"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteTypeRefactoringParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.deleteFBType"
             name="Delete FB Type Handler">
      	<enablement>

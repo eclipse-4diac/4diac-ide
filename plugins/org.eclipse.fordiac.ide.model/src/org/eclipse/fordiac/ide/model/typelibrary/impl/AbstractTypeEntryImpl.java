@@ -33,14 +33,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.NotificationImpl;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.ConcurrentNotifierImpl;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
@@ -221,12 +219,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	protected void encloseInResource(final LibraryElement newType) {
-		if (getFile() != null && newType.eResource() == null) {
-			final IPath path = getFile().getFullPath();
-			if (path != null) {
-				new FordiacTypeResource(URI.createPlatformResourceURI(path.toString(), true)).getContents()
-						.add(newType);
-			}
+		if (newType.eResource() == null) {
+			new FordiacTypeResource(getURI()).getContents().add(newType);
 		}
 	}
 

@@ -315,7 +315,7 @@ public interface StandardFunctions extends Functions {
 
 	@SuppressWarnings("unchecked")
 	@Comment("Identifies if a value is equal to another value and operator can be cascaded to operate on 2 or more parameters.")
-	static <T extends AnyElementaryValue> BoolValue EQ(final T... values) {
+	static <T extends AnyValue> BoolValue EQ(final T... values) {
 		T last = null;
 		for (final T element : values) {
 			if (last != null && !ValueOperations.equals(last, element)) {
@@ -353,7 +353,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Identifies if a value is unequal to another value.")
-	static <T extends AnyElementaryValue> BoolValue NE(final T first, final T second) {
+	static <T extends AnyValue> BoolValue NE(final T first, final T second) {
 		return ValueOperations.equals(first, second) ? BoolValue.FALSE : BoolValue.TRUE;
 	}
 

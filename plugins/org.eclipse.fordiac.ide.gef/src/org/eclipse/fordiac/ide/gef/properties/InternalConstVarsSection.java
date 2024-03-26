@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,25 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.Collections;
-
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalConstVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalConstVariableCommand;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public class InternalConstVarsSection extends AbstractInternalVarsSection {
-
-	@Override
-	protected void setInputInit() {
-		final BaseFBType currentType = getType();
-		provider.setInput(currentType != null ? currentType.getInternalConstVars() : Collections.emptyList());
-		table.refresh();
-	}
 
 	@Override
 	protected CreationCommand newCreateCommand(final Object refElement) {
@@ -42,24 +32,9 @@ public class InternalConstVarsSection extends AbstractInternalVarsSection {
 		return new DeleteInternalConstVariableCommand(getType(), (VarDeclaration) refElement);
 	}
 
-	private int getInsertionIndex() {
-		final VarDeclaration varConst = getLastSelectedVariable();
-		if (null == varConst) {
-			return getType().getInternalConstVars().size();
-		}
-		return getType().getInternalConstVars().indexOf(varConst) + 1;
-	}
-
 	@Override
-	public Object getEntry(final int index) {
-		return getType().getInternalConstVars().get(index);
-	}
-
-	@Override
-	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
-		if (entry instanceof final VarDeclaration varEntry) {
-			cmd.add(new InsertVariableCommand(getType(), getType().getInternalConstVars(), varEntry, index));
-		}
+	protected EList<VarDeclaration> getVarList() {
+		return getType().getInternalConstVars();
 	}
 
 	@Override
