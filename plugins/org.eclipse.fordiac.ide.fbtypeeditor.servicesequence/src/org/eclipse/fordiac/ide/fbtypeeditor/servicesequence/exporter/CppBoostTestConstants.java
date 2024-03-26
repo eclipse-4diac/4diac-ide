@@ -18,19 +18,20 @@ public final class CppBoostTestConstants {
 	static String newLine = System.getProperty("line.separator");
 
 	public static String testIncludeString = """
-			#include "../../core/fbtests/fbtestfixture.h"
+			#include "core/fbtests/fbtestfixture.h"
 			#include <forte_uint.h>
 			#include <forte_bool.h>\n""";
 
 	public static String tester_genString = """
 			#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-			#include "{0}_tester_gen.cpp"
+			#include "{0}_ServiceSeq_gen.cpp"
 			#endif
 			""";
 
 	public static String testFixtureStruct = "struct {0}_TestFixture : public CFBTestFixtureBase '{'";
 
-	public static String testFixtureBase = "{0}_TestFixture() : " + newLine + "CFBTestFixtureBase(g_nStringId{0}) '{'";
+	public static String testFixtureBase = "{0}_TestFixture() : " + newLine
+			+ "CFBTestFixtureBase(g_nStringIdservSeq__{0}) '{'";
 
 	public static String testFixtureSetup = "CFBTestFixtureBase::setup();" + newLine + "}";
 
@@ -45,11 +46,13 @@ public final class CppBoostTestConstants {
 
 	public static String testCase = "BOOST_AUTO_TEST_CASE({0}) '{'";
 
+	public static String setECCState = "setECCState(CIEC_STATE({0}));";
+
 	public static String triggerEvent = "triggerEvent({0});";
 	public static String triggerEventByID = "triggerEvent(CFBTestFixtureBase::getFB()->getEIID(CStringDictionary::getInstance().getId(\"{0}\")));";
 
-	public static String boostAssertEQUAL = "BOOST_ASSERT(func_EQ({0},{1}));";
-	public static String boostAssertNOTEQUAL = "BOOST_ASSERT(func_NE({0},{1}));";
+	public static String boostAssertEQUAL = "BOOST_TEST({0} == {1});";
+	public static String boostAssertNOTEQUAL = "BOOST_TEST({0} != {1});";
 
 	private CppBoostTestConstants() {
 		// empty private constructor

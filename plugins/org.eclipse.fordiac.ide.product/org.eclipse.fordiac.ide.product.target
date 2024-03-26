@@ -51,6 +51,7 @@
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/releases/2023-12"/>
+			<unit id="javax.activation" version="1.2.2.v20221203-1659"/>
 			<unit id="org.eclipse.egit.feature.group" version="6.8.0.202311291450-r"/>
 			<unit id="org.eclipse.emf.sdk.feature.group" version="2.36.0.v20231107-0612"/>
 			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.19.0.v20231129-1236"/>
@@ -63,6 +64,43 @@
 			<unit id="org.eclipse.swtbot.feature.group" version="4.1.0.202306071420"/>
 			<unit id="org.eclipse.swtbot.ide.feature.group" version="4.1.0.202306071420"/>
 			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.33.0.v20231121-0955"/>
+		</location>
+		<location includeDependencyDepth="infinite" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+
+			<feature id="org.eclipse.fordiac.ide.milo" label="Milo Dependencies" provider-name="Eclipse 4diac" version="2.0.1.qualifier">
+
+   
+
+   
+
+   
+
+   
+				<description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+				<copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+				<license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+				<plugin id="javax.activation" version="0.0.0"/>
+			</feature>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.milo</groupId>
+					<artifactId>sdk-client</artifactId>
+					<version>0.6.12</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-simple</artifactId>
+					<version>1.7.32</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
 		</location>
 	</locations>
 </target>

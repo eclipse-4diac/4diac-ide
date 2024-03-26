@@ -115,6 +115,10 @@
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createMaxCoverageSequences">
       </handler> 
       <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.LoadServiceSequencesHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.loadSequences">
+      </handler> 
+      <handler
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.GetCoverageHandler"
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.getCoverage">
       </handler> 
@@ -166,8 +170,12 @@
             name="Create max Coverage Sequences">
       </command>
       <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.loadSequences"
+            name="Load Service Sequences from File">
+      </command>
+      <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.getCoverage"
-            name="get Coverage">
+            name="Get Coverage">
       </command>
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.exportServiceSequencesAsTest"
@@ -352,6 +360,21 @@
        <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createMaxCoverageSequences"
             label="create max Coverage Sequences"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.loadSequences"
+            label="Load Service Sequences from File"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">

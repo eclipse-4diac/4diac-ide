@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2018 fortiss GmbH, Johannes Kepler University
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2018, 2024 fortiss GmbH, Johannes Kepler University
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -26,20 +26,18 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public interface DeploymentHelper {
 
-	String MGR_ID = "MGR_ID";  //$NON-NLS-1$
-
+	String MGR_ID = "MGR_ID"; //$NON-NLS-1$
 
 	static String getVariableValue(final VarDeclaration varDecl) throws DeploymentException {
 		if (hasInitalValue(varDecl)) {
 			try {
-				return VariableOperations.newVariable(varDecl).toString();
+				return VariableOperations.newVariable(varDecl).toString(false);
 			} catch (final Exception e) {
 				if (forceDeployement()) {
 					return varDecl.getValue().getValue();
-				} else {
-					throw new DeploymentException(MessageFormat.format(Messages.DeploymentHelper_VariableValueError,
-							varDecl.getValue().getValue(), varDecl.getQualifiedName(), e.getMessage()), e);
 				}
+				throw new DeploymentException(MessageFormat.format(Messages.DeploymentHelper_VariableValueError,
+						varDecl.getValue().getValue(), varDecl.getQualifiedName(), e.getMessage()), e);
 			}
 		}
 		return null;

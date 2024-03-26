@@ -79,7 +79,8 @@ public class DeleteDemuxPortCommand extends Command implements ScopedCommand {
 
 	@Override
 	public boolean canExecute() {
-		return (variable != null) && !(variable instanceof ErrorMarkerInterface);
+		return (variable != null) && !(variable instanceof ErrorMarkerInterface)
+				&& variable.getOutputConnections().isEmpty();
 	}
 
 	@Override

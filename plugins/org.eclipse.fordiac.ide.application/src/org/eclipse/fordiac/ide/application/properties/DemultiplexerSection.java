@@ -64,9 +64,13 @@ public class DemultiplexerSection extends StructManipulatorSection {
 			public void checkStateChanged(final CheckStateChangedEvent event) {
 				final CheckableStructTreeNode node = (CheckableStructTreeNode) event.getElement();
 				final Command cmd = createDemuxPortCommand(node);
-				executeCommand(cmd);
-				selectStructManipulator(cmd);
-
+				if (cmd.canExecute()) {
+					executeCommand(cmd);
+					selectStructManipulator(cmd);
+				} else {
+					// reset checkmark as command was not executed
+					node.updateNode(!event.getChecked());
+				}
 			}
 
 			private Command createDemuxPortCommand(final CheckableStructTreeNode node) {
