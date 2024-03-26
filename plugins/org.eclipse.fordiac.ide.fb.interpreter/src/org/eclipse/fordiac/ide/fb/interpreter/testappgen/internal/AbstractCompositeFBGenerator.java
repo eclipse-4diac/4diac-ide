@@ -43,7 +43,7 @@ public abstract class AbstractCompositeFBGenerator extends AbstractBlockGenerato
 		createEvents();
 		createData();
 		createConnections();
-		// createWiths();
+		createWiths();
 	}
 
 	protected static void setValue(final EList<VarDeclaration> vars) {
