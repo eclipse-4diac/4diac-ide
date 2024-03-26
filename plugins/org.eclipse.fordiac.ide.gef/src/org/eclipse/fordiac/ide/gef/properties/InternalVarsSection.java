@@ -27,15 +27,32 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.util.Arrays;
+
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.DropdownSelectionWidget;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.swt.widgets.Composite;
 
 public class InternalVarsSection extends AbstractInternalVarsSection {
+
+	final static String[] options = { "RETAIN", "NON_RETAIN", "" }; //$NON-NLS-1$
 
 	@Override
 	protected CreationCommand newCreateCommand(final Object refElement) {
@@ -63,4 +80,26 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 			cmd.add(new DeleteInternalVariableCommand(getType(), varEntry));
 		}
 	}
+
+	@Override
+	public void createNatTable(final Composite composite) {
+		provider = new ChangeableListDataProvider<>(
+				new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN));
+		final DataLayer dataLayer = new VarDeclarationDataLayer(provider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN);
+		final VarDeclarationConfigLabelAccumulator acc = new VarDeclarationConfigLabelAccumulator(provider,
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN);
+
+		dataLayer.setConfigLabelAccumulator(acc);
+
+		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
+				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN),
+				IEditableRule.ALWAYS_EDITABLE, null, this, false);
+
+		table.addConfiguration(new InitialValueEditorConfiguration(provider));
+		table.addConfiguration(new TypeDeclarationEditorConfiguration(provider));
+		table.addConfiguration(new DropdownSelectionWidget(Arrays.asList(options)));
+		table.configure();
+	}
+
 }
