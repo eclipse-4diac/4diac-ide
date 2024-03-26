@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts;
 
-import org.eclipse.fordiac.ide.application.utilities.IntervalVerifyListener;
 import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -82,7 +81,6 @@ public class DefineFBReactionOnePinDialog extends ContractElementDialog {
 		label.setText(ContractKeywords.OCCURS + " " + ContractKeywords.EVERY); //$NON-NLS-1$
 
 		inputTimeText = new Text(group, SWT.RIGHT);
-		inputTimeText.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTimeText));
 		inputTimeText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		label = new Label(group, SWT.None);
@@ -93,8 +91,6 @@ public class DefineFBReactionOnePinDialog extends ContractElementDialog {
 		labelOffset.setVisible(false);
 
 		offset = new Text(group, SWT.RIGHT);
-		offset.addListener(SWT.KeyDown, new IntervalVerifyListener(offset));
-
 		offset.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		offset.setVisible(false);
 		final Label labelOffsetMs = new Label(group, SWT.None);
@@ -131,8 +127,9 @@ public class DefineFBReactionOnePinDialog extends ContractElementDialog {
 			offsetText = offset.getText();
 		}
 		inputTime = inputTimeText.getText();
+
 		final String[] strInputTime = DefineContractUtils.getTimeIntervalFromString(inputTime);
-		String[] strOffset = { "0", "0" };  //$NON-NLS-1$//$NON-NLS-2$
+		String[] strOffset = { "0", "0" }; //$NON-NLS-1$//$NON-NLS-2$
 		if (offset.isVisible()) {
 			strOffset = DefineContractUtils.getTimeIntervalFromString(offsetText);
 		}
