@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeRefactoringParticipant;
@@ -34,7 +35,8 @@ public class STFunctionRenameTypeRefactoringParticipant extends RenameTypeRefact
 	}
 
 	protected static boolean isRelevant(final IRenameElementContext context) {
-		return STFunctionPackage.Literals.ST_FUNCTION.isSuperTypeOf(context.getTargetElementEClass());
+		return STFunctionPackage.Literals.ST_FUNCTION.isSuperTypeOf(context.getTargetElementEClass())
+				|| LibraryElementPackage.Literals.FUNCTION_FB_TYPE.isSuperTypeOf(context.getTargetElementEClass());
 	}
 
 	@Override

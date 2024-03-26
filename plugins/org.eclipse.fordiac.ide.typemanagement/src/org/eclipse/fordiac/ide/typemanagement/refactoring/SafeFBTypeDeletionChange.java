@@ -151,7 +151,7 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 
 	private static FBTypeEntry getErrorMarkerEntry(final FBNetworkElement fb) {
 		final TypeLibrary typeLibrary = fb.getTypeEntry().getTypeLibrary();
-		return (FBTypeEntry) typeLibrary.createErrorTypeEntry(fb.getTypeName(), fb.getType().eClass());
+		return (FBTypeEntry) typeLibrary.createErrorTypeEntry(fb.getFullTypeName(), fb.getType().eClass());
 	}
 
 }
