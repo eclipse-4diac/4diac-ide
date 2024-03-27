@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
+import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
@@ -531,7 +532,24 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources() throws DeploymentException {
-		// TODO Auto-generated method stub
+		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.QUERY_RESOURCES_NODE,
+				new Variant[] {});
+		final String message = Constants.QUERY_RESOURCES;
+		try {
+			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
+			final Response response = parseResponse(result, Constants.QUERY_RESPONSE);
+			if (response != Constants.EMPTY_RESPONSE) {
+				return getQueryElements(response);
+			}
+			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryResources,
+					getIEC61499Status(result.getStatusCode())));
+		} catch (final IOException | ExecutionException e) {
+			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryResourcesFailed, e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+		}
 		return Collections.emptyList();
 	}
 
@@ -541,14 +559,15 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 				new Variant[] {});
 		final String message = Constants.READ_WATCHES;
 		try {
-			return parseWatchesResponse(sendREQ("", request, message).get()); //$NON-NLS-1$
+			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
+			return parseResponse(result, Constants.WATCHES_RESPONSE);
 		} catch (final IOException | ExecutionException e) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_ReadWatchesFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 			FordiacLogHelper.logError(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
-			return Constants.EMPTY_WATCHES_RESPONSE;
+			return Constants.EMPTY_RESPONSE;
 		}
 	}
 
@@ -727,12 +746,26 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		return info;
 	}
 
-	private Response parseWatchesResponse(final CallMethodResult result) throws IOException {
+	private static List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> getQueryElements(
+			final Response response) {
+		if (null == response.getFblist() || null == response.getFblist().getFbs()) {
+			return Collections.emptyList();
+		}
+		return response.getFblist().getFbs().stream().map(fb -> {
+			final org.eclipse.fordiac.ide.deployment.devResponse.Resource res = DevResponseFactory.eINSTANCE
+					.createResource();
+			res.setName(fb.getName());
+			res.setType(fb.getType());
+			return res;
+		}).toList();
+	}
+
+	private Response parseResponse(final CallMethodResult result, final String responseType) throws IOException {
 		if ((result != null && result.getStatusCode().isGood())
 				&& (result.getOutputArguments()[0].getValue() instanceof final String response)) {
-			return parseXMLResponse(MessageFormat.format(Constants.WATCHES_RESPONSE, response));
+			return parseXMLResponse(MessageFormat.format(responseType, response));
 		}
-		return Constants.EMPTY_WATCHES_RESPONSE;
+		return Constants.EMPTY_RESPONSE;
 	}
 
 	private Response parseXMLResponse(final String encodedResponse) throws IOException {
@@ -746,7 +779,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 				}
 			}
 		}
-		return Constants.EMPTY_WATCHES_RESPONSE;
+		return Constants.EMPTY_RESPONSE;
 	}
 
 	private static NodeId processResult(final CallMethodResult result) {
@@ -798,7 +831,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	private static void logResponseStatus(final StatusCode opcuaStatus, final String resourceName,
 			final String monitoringElement) {
 		if (!opcuaStatus.isGood()) {
-			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnRequest,
+			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnMonitoringRequest,
 					getIEC61499Status(opcuaStatus), resourceName, monitoringElement));
 		}
 	}

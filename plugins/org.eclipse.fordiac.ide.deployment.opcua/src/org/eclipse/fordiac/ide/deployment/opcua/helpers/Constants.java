@@ -48,6 +48,7 @@ public class Constants {
 	public static final NodeId TRIGGER_EVENT_NODE = new NodeId(1, "triggerEvent"); //$NON-NLS-1$
 	public static final NodeId FORCE_VALUE_NODE = new NodeId(1, "forceValue"); //$NON-NLS-1$
 	public static final NodeId CLEAR_FORCE_NODE = new NodeId(1, "clearForce"); //$NON-NLS-1$
+	public static final NodeId QUERY_RESOURCES_NODE = new NodeId(1, "queryResources"); //$NON-NLS-1$
 
 	/** Deployment Console Messages **/
 	public static final String CREATE_RESOURCE_INSTANCE = "<Request Action=\"CREATE RESOURCE\"><FB Name=\"{0}\" Type=\"{1}\" /></Request>"; //$NON-NLS-1$
@@ -70,11 +71,13 @@ public class Constants {
 	public static final String TRIGGER_EVENT = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
 	public static final String FORCE_VALUE = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" Value=\"{1}\" /></Request>"; //$NON-NLS-1$
 	public static final String CLEAR_FORCE = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_RESOURCES = "<Request Action=\"QUERY\"></Request>"; //$NON-NLS-1$
 
 	public static final String RESPONSE = "<Response Reason=\"{0}\" />\n"; //$NON-NLS-1$
 
 	public static final String WATCHES_RESPONSE = "<Response>\n  <Watches>\n    {0}\n  </Watches>\n</Response>"; //$NON-NLS-1$
-	public static final Response EMPTY_WATCHES_RESPONSE;
+	public static final String QUERY_RESPONSE = "<Response>\n  <FBList>\n    {0}\n  </FBList>\n</Response>"; //$NON-NLS-1$
+	public static final Response EMPTY_RESPONSE;
 
 	public static final String FB_NAME_FORMAT = "{0}{1}"; //$NON-NLS-1$
 	public static final String FB_PORT_NAME_FORMAT = "{0}{1}.{2}"; //$NON-NLS-1$
@@ -113,10 +116,10 @@ public class Constants {
 
 	static {
 		// ensure that all entries in the empty response return appropriate empty values
-		EMPTY_WATCHES_RESPONSE = DevResponseFactory.eINSTANCE.createResponse();
-		EMPTY_WATCHES_RESPONSE.setFblist(DevResponseFactory.eINSTANCE.createFBList());
-		EMPTY_WATCHES_RESPONSE.setID("0"); //$NON-NLS-1$
-		EMPTY_WATCHES_RESPONSE.setWatches(DevResponseFactory.eINSTANCE.createWatches());
+		EMPTY_RESPONSE = DevResponseFactory.eINSTANCE.createResponse();
+		EMPTY_RESPONSE.setFblist(DevResponseFactory.eINSTANCE.createFBList());
+		EMPTY_RESPONSE.setID("0"); //$NON-NLS-1$
+		EMPTY_RESPONSE.setWatches(DevResponseFactory.eINSTANCE.createWatches());
 	}
 
 	private Constants() {
