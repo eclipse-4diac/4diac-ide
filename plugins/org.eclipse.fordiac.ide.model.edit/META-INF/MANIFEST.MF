@@ -8,7 +8,7 @@ Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.model.buildpath.provider,
  org.eclipse.fordiac.ide.model.data.provider,
  org.eclipse.fordiac.ide.model.edit.helper,

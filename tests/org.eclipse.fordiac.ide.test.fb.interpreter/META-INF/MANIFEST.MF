@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  junit-jupiter-api,
  junit-jupiter-params,
  org.eclipse.fordiac.ide.test.model
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.fb.interpreter
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.fordiac.ide.test.fb.interpreter.infra

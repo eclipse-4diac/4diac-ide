@@ -4,7 +4,7 @@
     creationSubmenus="true" editDirectory="/org.eclipse.fordiac.ide.library.model.edit/src-gen"
     editorDirectory="/org.eclipse.fordiac.ide.library.model.editor/src-gen" modelPluginID="org.eclipse.fordiac.ide.library.model"
     modelName="library" nonNLSMarkers="true" commentFormatting="true" testsDirectory="/org.eclipse.fordiac.ide.library.model.tests/src-gen"
-    importerID="org.eclipse.xsd.ecore.importer" containmentProxies="true" complianceLevel="17.0"
+    importerID="org.eclipse.xsd.ecore.importer" containmentProxies="true" complianceLevel="21.0"
     copyrightFields="false" importOrganizing="true">
   <foreignModel>library.xsd</foreignModel>
   <genPackages prefix="Library" basePackage="org.eclipse.fordiac.ide.library.model"
