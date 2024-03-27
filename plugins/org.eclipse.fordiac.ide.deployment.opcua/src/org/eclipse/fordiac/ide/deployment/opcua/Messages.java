@@ -28,6 +28,8 @@ public final class Messages extends NLS {
 
 	public static String OPCUADeploymentExecutor_WriteDeviceFailed;
 	public static String OPCUADeploymentExecutor_WriteResourceFailed;
+	public static String OPCUADeploymentExecutor_WriteFBFailed;
+	public static String OPCUADeploymentExecutor_ErrorOnWriteRequest;
 
 	public static String OPCUADeploymentExecutor_StartDeviceFailed;
 	public static String OPCUADeploymentExecutor_StartResourceFailed;

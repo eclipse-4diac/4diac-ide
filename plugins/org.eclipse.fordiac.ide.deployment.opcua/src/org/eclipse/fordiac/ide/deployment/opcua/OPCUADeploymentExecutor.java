@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -83,9 +84,10 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	private final List<CallMethodRequest> requests = new ArrayList<>();
 	private final List<String> requestMessages = new ArrayList<>();
-	private final List<IDeploymentListener> listeners = new ArrayList<>();
+	private boolean combinedRequest = false;
 
-	private final HashMap<String, NodeId> availableResources = new HashMap<>();
+	private final List<IDeploymentListener> listeners = new ArrayList<>();
+	private final Map<String, NodeId> availableResources = new HashMap<>();
 
 	private final ResponseMapping respMapping = new ResponseMapping();
 
@@ -239,6 +241,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public void createResource(final Resource resource) throws DeploymentException {
+		combinedRequest = true;
 		final String resName = resource.getName();
 		final String resType = resource.getTypeName();
 		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.CREATE_RESOURCE_NODE,
@@ -321,16 +324,14 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	@Override
 	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fbData,
 			final VarDeclaration varDecl) throws DeploymentException {
-		if (resourceNode == null) {
-			return;
-		}
 		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, fbData.getPrefix(),
 				fbData.getFb().getName(), varDecl.getName());
-		final CallMethodRequest request = new CallMethodRequest(resourceNode, Constants.WRITE_FB_NODE,
-				new Variant[] { new Variant(destination), new Variant(value) });
 		final String message = MessageFormat.format(Constants.WRITE_FB_PARAMETER, destination, value);
-		requests.add(request);
-		requestMessages.add(message);
+		if (combinedRequest) { // Add request to list of requests
+			writeFBParameterCombined(destination, value, message);
+		} else { // Execute single request
+			writeFBParameterSingle(resource.getName(), destination, value, message);
+		}
 	}
 
 	@Override
@@ -403,6 +404,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		}
 		requests.clear();
 		requestMessages.clear();
+		combinedRequest = false;
 	}
 
 	@Override
@@ -598,7 +600,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			return;
 		}
 		final StatusCode opcuaStatus = result.getStatusCode();
-		logResponseStatus(opcuaStatus, resName, fullFbName);
+		logResponseStatus(opcuaStatus, resName, fullFbName, Messages.OPCUADeploymentExecutor_ErrorOnMonitoringRequest);
 		element.setOffline(Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(opcuaStatus)));
 	}
 
@@ -625,7 +627,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			return;
 		}
 		final StatusCode opcuaStatus = result.getStatusCode();
-		logResponseStatus(opcuaStatus, resName, fullFbName);
+		logResponseStatus(opcuaStatus, resName, fullFbName, Messages.OPCUADeploymentExecutor_ErrorOnMonitoringRequest);
 		element.setOffline(Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(opcuaStatus)));
 	}
 
@@ -651,7 +653,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 			return;
 		}
-		logResponseStatus(result.getStatusCode(), resName, fullFbName);
+		logResponseStatus(result.getStatusCode(), resName, fullFbName,
+				Messages.OPCUADeploymentExecutor_ErrorOnMonitoringRequest);
 	}
 
 	@Override
@@ -676,7 +679,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 			return;
 		}
-		logResponseStatus(result.getStatusCode(), resName, fullFbName);
+		logResponseStatus(result.getStatusCode(), resName, fullFbName,
+				Messages.OPCUADeploymentExecutor_ErrorOnMonitoringRequest);
 	}
 
 	@Override
@@ -701,7 +705,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 			return;
 		}
-		logResponseStatus(result.getStatusCode(), resName, fullFbName);
+		logResponseStatus(result.getStatusCode(), resName, fullFbName,
+				Messages.OPCUADeploymentExecutor_ErrorOnMonitoringRequest);
 	}
 
 	/**************************************************************************
@@ -739,6 +744,39 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 		return status.isGood() && !availableResources.isEmpty();
+	}
+
+	private void writeFBParameterCombined(final String destination, final String value, final String message) {
+		if (resourceNode == null) {
+			return;
+		}
+		final CallMethodRequest request = new CallMethodRequest(resourceNode, Constants.WRITE_FB_NODE,
+				new Variant[] { new Variant(destination), new Variant(value) });
+		requests.add(request);
+		requestMessages.add(message);
+	}
+
+	private void writeFBParameterSingle(final String resName, final String destination, final String value,
+			final String message) throws DeploymentException {
+		if (!availableResources.containsKey(resName) && !getResourcesHandle()) {
+			return;
+		}
+		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
+				Constants.WRITE_FB_NODE, new Variant[] { new Variant(destination), new Variant(value) });
+		CallMethodResult result;
+		try {
+			result = sendREQ(resName, request, message).get();
+		} catch (final ExecutionException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_WriteFBFailed, destination, value), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			return;
+		}
+		logResponseStatus(result.getStatusCode(), resName, destination,
+				Messages.OPCUADeploymentExecutor_ErrorOnWriteRequest);
 	}
 
 	private String getDestinationInfo(final String destination) {
@@ -833,10 +871,10 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	}
 
 	private static void logResponseStatus(final StatusCode opcuaStatus, final String resourceName,
-			final String monitoringElement) {
+			final String errorElement, final String messageTemplate) {
 		if (!opcuaStatus.isGood()) {
-			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnMonitoringRequest,
-					getIEC61499Status(opcuaStatus), resourceName, monitoringElement));
+			FordiacLogHelper.logError(
+					MessageFormat.format(messageTemplate, getIEC61499Status(opcuaStatus), resourceName, errorElement));
 		}
 	}
 
