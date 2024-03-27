@@ -145,6 +145,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public void connect() throws DeploymentException {
+		if (client == null) {
+			throw new DeploymentException(Messages.OPCUADeploymentExecutor_CouldNotConnectToDevice);
+		}
 		try {
 			client.connect().get();
 			for (final IDeploymentListener listener : listeners) {
