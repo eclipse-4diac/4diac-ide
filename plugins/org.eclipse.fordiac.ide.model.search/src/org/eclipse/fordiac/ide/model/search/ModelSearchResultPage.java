@@ -233,6 +233,9 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		} else if (isInternalFb(eobj)) {
 			parent = eobj.eContainer();
 		} else {
+			if (eobj.eContainer() == null) {
+				return eobj;
+			}
 			parent = eobj.eContainer().eContainer();
 		}
 		// For unfolded subapps find the next parent that is not expanded as refElement

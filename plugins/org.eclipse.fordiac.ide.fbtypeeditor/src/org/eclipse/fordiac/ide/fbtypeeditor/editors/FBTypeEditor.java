@@ -69,6 +69,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
@@ -447,15 +448,11 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor()) && !(part instanceof PropertySheet)) {
 			if (selection instanceof final StructuredSelection structSel
-					&& structSel.getFirstElement() instanceof final URI uri
-					&& fbType.eResource().getEObject(uri.fragment()) instanceof final FB fb) {
-				if (fb.eContainer() instanceof FBType && !fb.isContainedInTypedInstance()) {
-					// internal fb
-					// TODO currently has the old behaviour
+					&& structSel.getFirstElement() instanceof final URI uri) {
+				if (fbType.eResource().getEObject(uri.fragment()) instanceof final FB fb) {
 					handleContentOutlineSelection(new StructuredSelection(fb));
-				} else {
-					// fb in network
-					handleContentOutlineSelection(new StructuredSelection(fb));
+				} else if (fbType.eResource().getEObject(uri.fragment()) instanceof final SubApp subApp) {
+					handleContentOutlineSelection(new StructuredSelection(subApp));
 				}
 			} else {
 				handleContentOutlineSelection(selection);
